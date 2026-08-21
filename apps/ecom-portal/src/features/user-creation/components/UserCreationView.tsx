@@ -1,10 +1,10 @@
-// Modified by Antigravity (2026-08-21)
-import React, { useState } from 'react';
-import { Card, Tag, Switch, Typography, Space, Progress, Alert, Input, Row, Col, Checkbox, theme } from 'antd';
-import { UserAddOutlined, TeamOutlined, UserOutlined, MailOutlined, PhoneOutlined, KeyOutlined, SolutionOutlined } from '@ant-design/icons';
+// Modified by sekar nagarajan (2026-08-21)
+import { KeyOutlined, MailOutlined, PhoneOutlined, SolutionOutlined, TeamOutlined, UserAddOutlined, UserOutlined } from '@ant-design/icons';
 import { AppButton, AppModal } from '@solverminds/shared-ui';
 import { DataView, DataViewColumn } from '@solverminds/shared-ui/data-view';
 import { useToast } from '@solverminds/shared-ui/hooks';
+import { Alert, Card, Checkbox, Col, Input, Progress, Row, Space, Switch, Tag, theme, Typography } from 'antd';
+import { useState } from 'react';
 import { useUserCreationController } from '../hooks/use-user-creation-controller';
 import type { SubUser } from '../types/user-creation.types';
 

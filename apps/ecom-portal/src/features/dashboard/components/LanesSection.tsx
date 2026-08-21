@@ -1,5 +1,5 @@
 // Section 2: Top Active Lanes + Section 3: Lane Opportunity Visibility
-// Modified by Antigravity (2026-08-21)
+// Modified by sekar nagarajan (2026-08-21)
 
 import { ArrowRightOutlined, EyeOutlined, ThunderboltOutlined } from '@ant-design/icons';
 import { AppButton } from '@solverminds/shared-ui';

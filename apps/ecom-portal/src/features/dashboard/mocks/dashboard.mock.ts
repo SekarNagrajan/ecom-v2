@@ -1,6 +1,6 @@
 // Extended mock data for the rich logistics dashboard design
 // Parity: enhancedDashboard.jsp + shipping intelligence business logic
-// Modified by Antigravity (2026-08-21)
+// Modified by sekar nagarajan (2026-08-21)
 
 export interface VolumeKpi {
   label: string;

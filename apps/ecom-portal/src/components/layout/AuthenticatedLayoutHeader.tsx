@@ -1,31 +1,31 @@
-// Modified by Antigravity (2026-08-21)
-import { useState } from 'react';
+// Modified by sekar nagarajan (2026-08-21)
 import {
   BellOutlined,
   BgColorsOutlined,
   CompressOutlined,
+  CreditCardOutlined,
+  CrownOutlined,
+  EditOutlined,
   ExpandOutlined,
   LockOutlined,
   LogoutOutlined,
-  ShopOutlined,
-  UserOutlined,
-  TeamOutlined,
-  CrownOutlined,
   PhoneOutlined,
-  EditOutlined,
-  CreditCardOutlined,
+  ShopOutlined,
+  TeamOutlined,
   UserAddOutlined,
+  UserOutlined,
 } from '@ant-design/icons';
-import { useAuthStore, useTenantStore, PRECONFIGURED_TENANTS } from '@solverminds/auth';
+import { PRECONFIGURED_TENANTS, useAuthStore, useTenantStore } from '@solverminds/auth';
 import { useNavigate } from '@tanstack/react-router';
 import type { MenuProps } from 'antd';
-import { Avatar, Badge, Button, Dropdown, Layout, Modal, Select, Space, Tag, Tooltip, Typography, message, theme } from 'antd';
-import { AccountPreferencesDrawer } from './account-preferences-drawer';
+import { Avatar, Button, Dropdown, Layout, Modal, Select, Space, Tag, Tooltip, Typography, message, theme } from 'antd';
+import { useState } from 'react';
+import { ContactUsDrawer } from '../../features/contact-us/components/ContactUsDrawer';
 import { useThemePreferencesController } from '../../features/theme/hooks/use-theme-preferences-controller';
-import { ProfileView } from '../../features/user-modules/components/ProfileView';
 import { ChangePasswordView } from '../../features/user-modules/components/ChangePasswordView';
 import { MyAlertsView } from '../../features/user-modules/components/MyAlertsView';
-import { ContactUsDrawer } from '../../features/contact-us/components/ContactUsDrawer';
+import { ProfileView } from '../../features/user-modules/components/ProfileView';
+import { AccountPreferencesDrawer } from './account-preferences-drawer';
 
 const { Header } = Layout;
 const { Text } = Typography;
@@ -52,11 +52,11 @@ export function AuthenticatedLayoutHeader({ onLogout }: AuthenticatedLayoutHeade
 
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch(() => {});
+      document.documentElement.requestFullscreen().catch(() => { });
       setIsFullscreen(true);
     } else {
       if (document.exitFullscreen) {
-        document.exitFullscreen().catch(() => {});
+        document.exitFullscreen().catch(() => { });
         setIsFullscreen(false);
       }
     }
@@ -119,8 +119,8 @@ export function AuthenticatedLayoutHeader({ onLogout }: AuthenticatedLayoutHeade
   const userRoleDisplay = user?.isSessionAdmin
     ? 'Superuser (Customer Admin)'
     : user?.role === 'ADMIN'
-    ? 'System Administrator'
-    : 'Customer Account';
+      ? 'System Administrator'
+      : 'Customer Account';
   const initials = userNameDisplay
     .split(' ')
     .map((n) => n[0])

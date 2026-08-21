@@ -1,10 +1,10 @@
-// Modified by Antigravity (2026-08-21)
-import React, { useEffect, useState } from 'react';
-import { Card, Tag, Space, Typography, DatePicker, Row, Col, Statistic, theme } from 'antd';
-import { CreditCardOutlined, DownloadOutlined, CheckCircleOutlined, SyncOutlined, DollarOutlined } from '@ant-design/icons';
+// Modified by sekar nagarajan (2026-08-21)
+import { CheckCircleOutlined, CreditCardOutlined, DollarOutlined, DownloadOutlined } from '@ant-design/icons';
 import { AppButton } from '@solverminds/shared-ui';
 import { DataView, DataViewColumn } from '@solverminds/shared-ui/data-view';
 import { useToast } from '@solverminds/shared-ui/hooks';
+import { Card, Col, DatePicker, Row, Space, Statistic, Tag, theme, Typography } from 'antd';
+import { useEffect, useState } from 'react';
 import { userModulesApi } from '../api/user-modules.api';
 import type { PaymentHistoryRecord } from '../types/user-modules.types';
 

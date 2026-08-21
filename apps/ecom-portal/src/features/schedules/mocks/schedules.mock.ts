@@ -1,6 +1,6 @@
 // Comprehensive mock data for Vessel Schedules & Routes
 // Parity with legacy eCommSchedules.jsp, SchedulebetweenlocationView.jsp & VesselDetails.jsp
-// Modified by Antigravity (2026-08-21)
+// Modified by sekar nagarajan (2026-08-21)
 
 import type { CarbonCalculationResult, ScheduleItem, VesselParticulars } from '../types/schedules.types';
 

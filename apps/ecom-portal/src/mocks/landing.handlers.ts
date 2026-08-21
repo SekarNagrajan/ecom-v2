@@ -1,8 +1,8 @@
-// Modified by Antigravity (2026-08-21)
-import { http, HttpResponse } from 'msw';
+// Modified by sekar nagarajan (2026-08-21)
 import { PRECONFIGURED_TENANTS } from '@solverminds/auth';
-import type { EquipmentType, PortOption, TabConfig } from '../features/landing/types/landing.types';
+import { http, HttpResponse } from 'msw';
 import type { LoginSuccessResponse } from '../features/auth/types/auth.types';
+import type { EquipmentType, PortOption, TabConfig } from '../features/landing/types/landing.types';
 
 // ---------------------------------------------------------------------------
 // Mock data

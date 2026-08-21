@@ -1,7 +1,7 @@
 // Schedule Route Cards List Component
 // Parity with SchedulebetweenlocationView.jsp detailed route panels
 // Redesigned with icon-driven UI actions and rich layout per user feedback
-// Modified by Antigravity (2026-08-21)
+// Modified by sekar nagarajan (2026-08-21)
 
 import {
   ArrowRightOutlined,

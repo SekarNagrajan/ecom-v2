@@ -1,6 +1,6 @@
 // Booking, BL, SI status charts — parity with DashBoardCharts.jsp (AmCharts → ECharts)
 // ECharts is available in the monorepo workspace (echarts ^6.0.0)
-// Modified by Antigravity (2026-08-21)
+// Modified by sekar nagarajan (2026-08-21)
 
 import { Card, Col, Empty, Row, theme } from 'antd';
 import * as echarts from 'echarts';
@@ -31,52 +31,52 @@ function EChartsCanvas({ data, type, height = 240 }: ChartProps) {
     const option =
       type === 'bar'
         ? {
-            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
-            grid: { left: 8, right: 8, top: 12, bottom: 8, containLabel: true },
-            xAxis: {
-              type: 'category',
-              data: data.map((d) => d.status),
-              axisLine: { show: false },
-              axisTick: { show: false },
-              axisLabel: { fontSize: 11, color: token.colorTextSecondary },
+          tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+          grid: { left: 8, right: 8, top: 12, bottom: 8, containLabel: true },
+          xAxis: {
+            type: 'category',
+            data: data.map((d) => d.status),
+            axisLine: { show: false },
+            axisTick: { show: false },
+            axisLabel: { fontSize: 11, color: token.colorTextSecondary },
+          },
+          yAxis: {
+            type: 'value',
+            minInterval: 1,
+            axisLine: { show: false },
+            axisTick: { show: false },
+            axisLabel: { fontSize: 11, color: token.colorTextSecondary },
+            splitLine: { lineStyle: { color: token.colorBorderSecondary } },
+          },
+          series: [
+            {
+              type: 'bar',
+              data: data.map((d) => ({
+                value: d.count,
+                itemStyle: { color: d.color, borderRadius: [4, 4, 0, 0] },
+              })),
+              label: { show: true, position: 'top', fontSize: 11 },
             },
-            yAxis: {
-              type: 'value',
-              minInterval: 1,
-              axisLine: { show: false },
-              axisTick: { show: false },
-              axisLabel: { fontSize: 11, color: token.colorTextSecondary },
-              splitLine: { lineStyle: { color: token.colorBorderSecondary } },
-            },
-            series: [
-              {
-                type: 'bar',
-                data: data.map((d) => ({
-                  value: d.count,
-                  itemStyle: { color: d.color, borderRadius: [4, 4, 0, 0] },
-                })),
-                label: { show: true, position: 'top', fontSize: 11 },
-              },
-            ],
-          }
+          ],
+        }
         : {
-            tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
-            legend: { orient: 'horizontal', bottom: 0, textStyle: { fontSize: 11, color: token.colorTextSecondary } },
-            series: [
-              {
-                type: 'pie',
-                radius: ['35%', '65%'],
-                center: ['50%', '45%'],
-                data: data.map((d) => ({
-                  value: d.count,
-                  name: d.status,
-                  itemStyle: { color: d.color },
-                })),
-                label: { show: false },
-                emphasis: { itemStyle: { shadowBlur: 10, shadowOffsetX: 0, shadowColor: 'rgba(0,0,0,0.15)' } },
-              },
-            ],
-          };
+          tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+          legend: { orient: 'horizontal', bottom: 0, textStyle: { fontSize: 11, color: token.colorTextSecondary } },
+          series: [
+            {
+              type: 'pie',
+              radius: ['35%', '65%'],
+              center: ['50%', '45%'],
+              data: data.map((d) => ({
+                value: d.count,
+                name: d.status,
+                itemStyle: { color: d.color },
+              })),
+              label: { show: false },
+              emphasis: { itemStyle: { shadowBlur: 10, shadowOffsetX: 0, shadowColor: 'rgba(0,0,0,0.15)' } },
+            },
+          ],
+        };
     chartRef.current.setOption(option);
   }, [data, type, token]);
 

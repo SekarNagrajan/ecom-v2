@@ -1,14 +1,14 @@
-// Modified by Antigravity (2026-08-21)
+// Modified by sekar nagarajan (2026-08-21)
 import type {
-  MenuConfig,
-  SpecialPrivilege,
-  EmailTemplate,
-  GlobalConfig,
-  FieldConfig,
-  ServiceRestriction,
   BannerConfig,
   CustomerAdvisory,
   CutoffConfig,
+  EmailTemplate,
+  FieldConfig,
+  GlobalConfig,
+  MenuConfig,
+  ServiceRestriction,
+  SpecialPrivilege,
 } from '../types/admin.types';
 
 export const adminApi = {

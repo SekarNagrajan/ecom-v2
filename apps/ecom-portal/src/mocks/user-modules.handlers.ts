@@ -1,11 +1,11 @@
-// Modified by Antigravity (2026-08-21)
+// Modified by sekar nagarajan (2026-08-21)
 import { http, HttpResponse } from 'msw';
 import type {
-  CustomerProfile,
-  QuoteItem,
-  AlertPreference,
   AlertHistoryLog,
+  AlertPreference,
+  CustomerProfile,
   PaymentHistoryRecord,
+  QuoteItem,
 } from '../features/user-modules/types/user-modules.types';
 
 let mockProfile: CustomerProfile = {

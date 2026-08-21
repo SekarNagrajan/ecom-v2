@@ -1,7 +1,7 @@
 // EnhancedDashboardView — main dashboard page
 // CRM UI Architecture: Per-section independent Spin overlay loading matching DashboardSectionQuery
 // 50:50 Ratio layout for sections + Redesigned Upcoming Shipment Planning
-// Modified by Antigravity (2026-08-21 18:48)
+// Modified by sekar nagarajan (2026-08-21 18:48)
 
 import { PlusOutlined, ReloadOutlined } from '@ant-design/icons';
 import { AppButton } from '@solverminds/shared-ui';

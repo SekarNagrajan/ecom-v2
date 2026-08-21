@@ -1,16 +1,16 @@
-// Modified by Antigravity (2026-08-21)
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+// Modified by sekar nagarajan (2026-08-21)
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { adminApi } from '../api/admin.api';
 import type {
-  MenuConfig,
-  SpecialPrivilege,
-  EmailTemplate,
-  GlobalConfig,
-  FieldConfig,
-  ServiceRestriction,
   BannerConfig,
   CustomerAdvisory,
   CutoffConfig,
+  EmailTemplate,
+  FieldConfig,
+  GlobalConfig,
+  MenuConfig,
+  ServiceRestriction,
+  SpecialPrivilege,
 } from '../types/admin.types';
 
 export const ADMIN_KEYS = {

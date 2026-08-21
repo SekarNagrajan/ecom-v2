@@ -1,20 +1,20 @@
-// Modified by Antigravity (2026-08-21)
-import { createRootRoute, createRoute, createRouter, Outlet, redirect } from '@tanstack/react-router';
+// Modified by sekar nagarajan (2026-08-21)
 import { useAuthStore } from '@solverminds/auth';
-import { PublicLayout } from '../components/layout/PublicLayout';
+import { createRootRoute, createRoute, createRouter, Outlet, redirect } from '@tanstack/react-router';
 import { AuthenticatedLayout } from '../components/layout/AuthenticatedLayout';
-import { RegistrationRoute } from '../features/registration/registration-route';
+import { PublicLayout } from '../components/layout/PublicLayout';
+import { AdminRoute } from '../features/admin/admin-route';
 import { ActivationRoute } from '../features/auth/activation-route';
 import { ContactUsRoute } from '../features/contact-us/contact-us-route';
+import { RegistrationRoute } from '../features/registration/registration-route';
 import { SchedulesRoute } from '../features/schedules/schedules-route';
-import { AdminRoute } from '../features/admin/admin-route';
 import { userCreationRoute } from '../features/user-creation/user-creation-route';
-import { vendorApprovalsRoute } from '../features/vendor-approvals/vendor-approvals-route';
-import { ProfileView } from '../features/user-modules/components/ProfileView';
 import { ChangePasswordView } from '../features/user-modules/components/ChangePasswordView';
-import { QuotesView } from '../features/user-modules/components/QuotesView';
 import { MyAlertsView } from '../features/user-modules/components/MyAlertsView';
 import { PaymentHistoryView } from '../features/user-modules/components/PaymentHistoryView';
+import { ProfileView } from '../features/user-modules/components/ProfileView';
+import { QuotesView } from '../features/user-modules/components/QuotesView';
+import { vendorApprovalsRoute } from '../features/vendor-approvals/vendor-approvals-route';
 
 // 1. Root Route
 const rootRoute = createRootRoute({
@@ -138,13 +138,14 @@ const paymentsRoute = createRoute({
   component: () => <PaymentHistoryView />,
 });
 
-import { TrackingRoute } from '../features/tracking/tracking-route';
 
-// 3.9 Cargo & Container Tracking
-const trackingRoute = createRoute({
+import { RatesRoute } from '../features/rates/rates-route';
+
+// 3.10 Rate Engine & Tariffs
+const ratesRoute = createRoute({
   getParentRoute: () => appRoute,
-  path: '/tracking',
-  component: () => <TrackingRoute />,
+  path: '/rates',
+  component: () => <RatesRoute />,
 });
 
 // 4. Route Tree
@@ -154,6 +155,7 @@ const routeTree = rootRoute.addChildren([
     dashboardRoute,
     schedulesRoute,
     trackingRoute,
+    ratesRoute,
     adminRoute,
     userCreationRoute,
     vendorApprovalsRoute,
@@ -164,6 +166,7 @@ const routeTree = rootRoute.addChildren([
     paymentsRoute,
   ]),
 ]);
+
 
 // 5. Create Router
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

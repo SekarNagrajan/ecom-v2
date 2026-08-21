@@ -1,9 +1,9 @@
-// Modified by Antigravity (2026-08-21)
+// Modified by sekar nagarajan (2026-08-21)
 import { EyeInvisibleOutlined, EyeTwoTone, LockOutlined, SafetyCertificateOutlined, ShopOutlined, UserOutlined } from '@ant-design/icons';
+import { PRECONFIGURED_TENANTS } from '@solverminds/auth';
+import { useNavigate } from '@tanstack/react-router';
 import { Alert, Button, Checkbox, Divider, Drawer, Flex, Input, Select, Spin, Typography, theme } from 'antd';
 import { Controller } from 'react-hook-form';
-import { useNavigate } from '@tanstack/react-router';
-import { PRECONFIGURED_TENANTS } from '@solverminds/auth';
 
 import type { useLoginController } from '../../auth/hooks/use-login-controller';
 
@@ -214,7 +214,7 @@ export function PublicLoginPanel({ open, onClose, controller }: PublicLoginPanel
                 control={control}
                 name={"remember" as any}
                 render={({ field: { value, onChange, ...field } }) => (
-                  <Checkbox 
+                  <Checkbox
                     {...field}
                     checked={!!value}
                     onChange={(e) => onChange(e.target.checked)}
@@ -276,13 +276,13 @@ export function PublicLoginPanel({ open, onClose, controller }: PublicLoginPanel
           <Text type="secondary" style={{ fontSize: token.fontSizeSM }}>Don't have an account?</Text>
         </Divider>
 
-        <Button 
-          block 
-          size="large" 
+        <Button
+          block
+          size="large"
           onClick={() => {
             onClose();
             navigate({ to: '/register' });
-          }} 
+          }}
           style={{ borderRadius: token.borderRadius, fontWeight: 500 }}
         >
           Register Now

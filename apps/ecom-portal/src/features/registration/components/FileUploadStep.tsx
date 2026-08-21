@@ -1,7 +1,7 @@
-// Modified by Antigravity (2026-08-21)
-import { Flex, Typography, Upload, Button } from 'antd';
-import { InboxOutlined, UploadOutlined } from '@ant-design/icons';
+// Modified by sekar nagarajan (2026-08-21)
+import { InboxOutlined } from '@ant-design/icons';
 import { useToast } from '@solverminds/shared-ui/hooks';
+import { Flex, Typography, Upload } from 'antd';
 import { Controller, useFormContext } from 'react-hook-form';
 import { RegistrationFormData } from '../types/registration.schema';
 
@@ -38,7 +38,7 @@ export function FileUploadStep() {
                   toast.error('File must be smaller than 10MB!');
                   return Upload.LIST_IGNORE;
                 }
-                
+
                 // Allow user to upload any standard document format
                 const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
                 if (!allowedTypes.includes(file.type)) {

@@ -1,6 +1,6 @@
 // Domain definitions for Vessel Schedules & Routes
 // Parity with legacy eCommSchedules.jsp & SchedulebetweenlocationView.jsp
-// Modified by Antigravity (2026-08-21)
+// Modified by sekar nagarajan (2026-08-21)
 
 export type ScheduleSearchType = 'POINT_TO_POINT' | 'VESSEL_SCHEDULE' | 'PORT_SCHEDULE';
 

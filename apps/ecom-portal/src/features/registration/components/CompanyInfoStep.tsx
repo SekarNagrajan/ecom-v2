@@ -1,10 +1,10 @@
-// Modified by Antigravity (2026-08-21)
-import { Col, Flex, Input, Radio, Row, Select, Typography, AutoComplete } from 'antd';
+// Modified by sekar nagarajan (2026-08-21)
 import { useToast } from '@solverminds/shared-ui/hooks';
+import { AutoComplete, Col, Flex, Input, Radio, Row, Select, Typography } from 'antd';
+import { useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import { useState, useEffect } from 'react';
+import { checkCustomerCode, searchAddress } from '../api/registration.api';
 import { RegistrationFormData } from '../types/registration.schema';
-import { searchAddress, checkCustomerCode } from '../api/registration.api';
 
 const { Text } = Typography;
 
@@ -13,7 +13,7 @@ export function CompanyInfoStep() {
   const [addressOptions, setAddressOptions] = useState<{ value: string; label: string; payload: unknown }[]>([]);
   const [isCheckingCode, setIsCheckingCode] = useState(false);
   const toast = useToast();
-  
+
   const customerType = watch('customerType');
 
   // Debounced search for Google Address lookup

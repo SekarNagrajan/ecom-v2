@@ -1,12 +1,12 @@
-// Modified by Antigravity (2026-08-21)
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { QueryClientProvider } from '@tanstack/react-query';
+// Modified by sekar nagarajan (2026-08-21)
 import { queryClient } from '@solverminds/platform';
 import { AppConfigProvider } from '@solverminds/shared-ui/providers';
-import { useAppConfigStore } from './features/theme/stores/app-config.store';
-import { ThemePreferencesProvider } from './features/theme/providers/theme-preferences-provider';
+import { QueryClientProvider } from '@tanstack/react-query';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
 import { TenantThemeProvider } from './components/providers/TenantThemeProvider';
+import { ThemePreferencesProvider } from './features/theme/providers/theme-preferences-provider';
+import { useAppConfigStore } from './features/theme/stores/app-config.store';
 
 // Import shared stylesheet as required by Step 13
 import '@solverminds/shared-ui/styles.css';

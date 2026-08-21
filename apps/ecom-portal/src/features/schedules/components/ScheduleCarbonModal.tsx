@@ -1,6 +1,6 @@
 // Schedule Carbon Footprint Eco Calculator Side Drawer Component
 // Parity with eCommSchedules.jsp carbon-modal & user-modules AppDrawer standard
-// Modified by Antigravity (2026-08-21)
+// Modified by sekar nagarajan (2026-08-21)
 
 import { CalculatorOutlined, EnvironmentOutlined, GlobalOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { AppButton, AppDrawer } from '@solverminds/shared-ui';

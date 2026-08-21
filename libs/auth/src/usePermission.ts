@@ -1,4 +1,4 @@
-// Modified by Antigravity (2026-08-21)
+// Modified by sekar nagarajan (2026-08-21)
 import { useAuthStore } from './auth.store';
 
 export function usePermission() {

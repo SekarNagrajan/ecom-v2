@@ -1,7 +1,7 @@
-// Modified by Antigravity (2026-08-21)
+// Modified by sekar nagarajan (2026-08-21)
 import { createRoute } from '@tanstack/react-router';
-import { VendorApprovalsView } from './components/VendorApprovalsView';
 import { appRoute } from '../../app/router';
+import { VendorApprovalsView } from './components/VendorApprovalsView';
 
 export const vendorApprovalsRoute = createRoute({
   getParentRoute: () => appRoute,

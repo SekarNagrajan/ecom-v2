@@ -1,30 +1,30 @@
-// Modified by Antigravity (2026-08-21)
+// Modified by sekar nagarajan (2026-08-21)
 import {
-  DashboardOutlined,
-  CalendarOutlined,
-  CompassOutlined,
-  DollarOutlined,
-  TagOutlined,
-  BookOutlined,
   AuditOutlined,
-  SafetyCertificateOutlined,
-  FileProtectOutlined,
-  DeliveredProcedureOutlined,
-  NotificationOutlined,
-  BarcodeOutlined,
   BankOutlined,
-  SolutionOutlined,
-  CloudOutlined,
-  CustomerServiceOutlined,
-  EllipsisOutlined,
-  SettingOutlined,
-  UserAddOutlined,
+  BarcodeOutlined,
+  BookOutlined,
+  CalendarOutlined,
   CheckSquareOutlined,
+  CloudOutlined,
+  CompassOutlined,
+  CustomerServiceOutlined,
+  DashboardOutlined,
+  DeliveredProcedureOutlined,
+  DollarOutlined,
+  EllipsisOutlined,
+  FileProtectOutlined,
+  NotificationOutlined,
+  SafetyCertificateOutlined,
+  SettingOutlined,
+  SolutionOutlined,
+  TagOutlined,
+  UserAddOutlined,
 } from '@ant-design/icons';
-import { Layout, Menu, theme } from 'antd';
+import { useAuthStore, usePermission, useTenantStore } from '@solverminds/auth';
+import { useLocation, useNavigate } from '@tanstack/react-router';
 import type { MenuProps } from 'antd';
-import { usePermission, useTenantStore, useAuthStore } from '@solverminds/auth';
-import { useNavigate, useLocation } from '@tanstack/react-router';
+import { Layout, Menu, theme } from 'antd';
 
 const { Sider } = Layout;
 
@@ -147,10 +147,13 @@ export function AuthenticatedSidebar({ collapsed, onCollapse }: AuthenticatedSid
   const onMenuSelect: MenuProps['onSelect'] = ({ key }) => {
     if (key === 'contact-us') {
       navigate({ to: '/contact-us' });
+    } else if (key === 'rates' || key === 'tariff') {
+      navigate({ to: '/app/rates' });
     } else {
       navigate({ to: `/app/${key}` });
     }
   };
+
 
   return (
     <Sider

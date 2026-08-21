@@ -1,6 +1,6 @@
 // Tracking Route Overview & Milestone Timeline Component
 // Redesigned with custom maritime/shipping icons for logistics milestones
-// Modified by Antigravity (2026-08-21 18:37)
+// Modified by sekar nagarajan (2026-08-21 18:37)
 
 import {
   CalendarOutlined,
@@ -235,14 +235,14 @@ export function TrackingOverview({ data }: TrackingOverviewProps) {
               const iconBg = isCompleted
                 ? token.colorSuccess
                 : isCurrent
-                ? token.colorPrimary
-                : token.colorBgContainer;
+                  ? token.colorPrimary
+                  : token.colorBgContainer;
 
               const iconBorder = isCompleted
                 ? token.colorSuccess
                 : isCurrent
-                ? token.colorPrimary
-                : token.colorBorder;
+                  ? token.colorPrimary
+                  : token.colorBorder;
 
               const iconColor = isCompleted || isCurrent ? '#ffffff' : token.colorTextQuaternary;
 
@@ -264,8 +264,8 @@ export function TrackingOverview({ data }: TrackingOverviewProps) {
                       boxShadow: isCurrent
                         ? `0 0 0 4px ${token.colorPrimaryBg}`
                         : isCompleted
-                        ? `0 0 0 3px ${token.colorSuccessBg}`
-                        : '0 2px 6px rgba(0,0,0,0.04)',
+                          ? `0 0 0 3px ${token.colorSuccessBg}`
+                          : '0 2px 6px rgba(0,0,0,0.04)',
                       transition: 'all 0.3s ease',
                     }}
                   >
@@ -295,8 +295,8 @@ export function TrackingOverview({ data }: TrackingOverviewProps) {
                       color: isCompleted
                         ? token.colorSuccess
                         : isCurrent
-                        ? token.colorPrimary
-                        : token.colorTextQuaternary,
+                          ? token.colorPrimary
+                          : token.colorTextQuaternary,
                     }}
                   >
                     {m.timestamp}

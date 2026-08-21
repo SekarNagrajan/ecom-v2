@@ -1,7 +1,7 @@
 // Schedule Freight Rates Estimator Side Drawer Component
 // Parity with legacy eCommSchedules.jsp view_rates & view_rates_details modals
 // Standardized using user-modules AppDrawer architecture
-// Modified by Antigravity (2026-08-21)
+// Modified by sekar nagarajan (2026-08-21)
 
 import { DollarOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { AppButton, AppDrawer } from '@solverminds/shared-ui';

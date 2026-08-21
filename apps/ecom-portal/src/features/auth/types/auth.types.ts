@@ -1,6 +1,6 @@
-// Modified by Antigravity (2026-08-21)
-import { z } from 'zod';
+// Modified by sekar nagarajan (2026-08-21)
 import type { UserProfile } from '@solverminds/auth';
+import { z } from 'zod';
 
 // ---------------------------------------------------------------------------
 // Login form schema — parity with JSP jQuery Validate + sha256 encryption

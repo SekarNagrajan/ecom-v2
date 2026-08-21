@@ -1,4 +1,4 @@
-// Modified by Antigravity (2026-08-21)
+// Modified by sekar nagarajan (2026-08-21)
 import { create } from 'zustand';
 
 export interface SubCustomerAccount {
@@ -49,9 +49,9 @@ export const useAuthStore = create<AuthState>((set) => ({
     set((state) => ({
       user: state.user
         ? {
-            ...state.user,
-            activeSubCustomer: custCode,
-          }
+          ...state.user,
+          activeSubCustomer: custCode,
+        }
         : null,
     }));
   },

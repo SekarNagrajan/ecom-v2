@@ -67,6 +67,7 @@ The legacy codebase is a **read-only reference for behaviour**, never a spec to 
     - All remaining modules (Payment History, Customer Statement, Carbon Calculator, Contact Us) MUST be placed inside an overflow item labelled **More** with an 3-dots icon (`EllipsisOutlined`).
 11. **Sidebar Custom Scrollbar.** The sidebar `<Sider>` container across all layout components (`PublicLayout`, `AuthenticatedSidebar`) MUST apply the `custom-scroll` class with `overflowY: 'auto'` (standardized thin 6px scrollbar, `#d9d9d9` thumb, `#bfbfbf` hover, transparent track) to guarantee clean, smooth scrollability without browser default scrollbar drift.
 12. **AG-Grid & Table Actions Column Position & Icon Styling.** In all AG-Grid (`DataView`) and Ant Design `<Table>` instances across all modules, the **Actions column MUST be positioned as the FIRST column on the far left**. Action buttons must render domain-specific colored icons wrapped in descriptive `<Tooltip>` components (e.g. Primary Blue `#1677ff` for View/Details, Success Green `#52c41a` for BL/Approve, Warning Amber `#faad14` for SI, Purple `#722ed1` for Live Map/Tracking) for optimal UX.
+13. **Documentation Attachment Cheat Sheet.** When working with AI coding assistants (Antigravity, Cursor, Claude), developers and AI agents MUST follow the documentation attachment strategy outlined in [`WHICH-DOCS-TO-ATTACH.md`](../../WHICH-DOCS-TO-ATTACH.md) and the root `README.md` documentation map. Always attach `agenct.md` + 1 to 3 relevant `.md` files for your specific task to avoid context pollution.
 
 ## Per-module process (run all 12 steps, in order)
 
@@ -97,4 +98,4 @@ The legacy codebase is a **read-only reference for behaviour**, never a spec to 
 
 ## When unsure
 
-Stop and ask. If the request conflicts with the generated types, the API contract, or these rules, surface the mismatch — do NOT create workarounds, shims, or hand-written type stubs to paper over it.
+Stop and ask. Refer to [`WHICH-DOCS-TO-ATTACH.md`](../../WHICH-DOCS-TO-ATTACH.md) for the documentation checklist. If the request conflicts with the generated types, the API contract, or these rules, surface the mismatch — do NOT create workarounds, shims, or hand-written type stubs to paper over it.

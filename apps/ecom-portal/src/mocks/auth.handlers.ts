@@ -1,0 +1,54 @@
+import { http, delay, HttpResponse } from 'msw';
+import { LoginForm, LoginSuccessResponse } from '../features/auth/types/auth.types';
+
+export const authHandlers = [
+  // 1. Mock Login API
+  http.post('/api/auth/login', async ({ request }) => {
+    await delay(800); // Simulate network latency
+
+    const body = (await request.json()) as LoginForm;
+
+    // Enforce test credentials: test / test
+    if (body.userName === 'test' && body.password === 'test') {
+      const successResponse: LoginSuccessResponse = {
+        token: 'mock-jwt-token-xyz-123',
+        user: {
+          id: 'user_123',
+          name: 'Test User',
+          email: 'test@example.com',
+          company: 'Test Company',
+          role: 'CUSTOMER',
+          capabilities: ['VIEW_DASHBOARD', 'CREATE_BOOKING'],
+        },
+      };
+
+      return HttpResponse.json({ data: successResponse });
+    }
+
+    // Invalid credentials
+    return HttpResponse.json(
+      { message: 'Invalid username or password. Please try again.' },
+      { status: 401 }
+    );
+  }),
+
+  // 2. Mock Activation API
+  http.post('/api/auth/activate', async ({ request }) => {
+    await delay(1500); // Simulate network latency
+
+    const body = (await request.json()) as { token: string };
+
+    // Simple validation: Any token that isn't 'invalid' or empty works
+    if (!body.token || body.token === 'invalid') {
+      return HttpResponse.json(
+        { message: 'Invalid or expired activation link.' },
+        { status: 400 }
+      );
+    }
+
+    return HttpResponse.json({
+      message: 'Account successfully activated!',
+      status: 'success'
+    });
+  }),
+];

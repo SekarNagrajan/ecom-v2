@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "useDefineForClassFields": true,
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noFallthroughCasesInSwitch": true,
+    "baseUrl": ".",
+    "types": ["vite/client", "node"],
+    "paths": {
+      "@solverminds/platform": ["libs/platform/src/index.ts"],
+      "@solverminds/auth": ["libs/auth/src/index.ts"],
+      "@solverminds/theme": ["libs/theme/src/index.ts"],
+      "@solverminds/shared-ui": ["libs/shared/ui/src/index.ts"],
+      "@solverminds/shared-ui/providers": ["libs/shared/ui/src/providers/index.ts"],
+      "@solverminds/shared-ui/hooks": ["libs/shared/ui/src/hooks/index.ts"],
+      "@solverminds/shared-ui/utils": ["libs/shared/ui/src/utils/index.ts"],
+      "@solverminds/shared-ui/schemas": ["libs/shared/ui/src/schemas/index.ts"],
+      "@solverminds/shared-ui/data-view": ["libs/shared/ui/src/components/data-view/index.ts"],
+      "@solverminds/shared-ui/*": ["libs/shared/ui/src/*"],
+      "@solverminds/shared-util": ["libs/shared-util/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "dist"]
+}

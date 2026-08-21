@@ -1,0 +1,45 @@
+.top-loading-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  overflow: hidden;
+  z-index: 2;
+  pointer-events: none;
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+
+  /*
+   * Stay invisible until the configurable delay elapses, then snap to fully
+   * visible. animation-delay is provided inline by the React component.
+   */
+  opacity: 0;
+  animation-name: top-loading-bar-show;
+  animation-duration: 0s;
+  animation-fill-mode: forwards;
+}
+
+.top-loading-bar__bar {
+  position: absolute;
+  inset-block: 0;
+  width: 35%;
+  border-radius: 999px;
+  animation: top-loading-bar-slide 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  will-change: transform;
+}
+
+@keyframes top-loading-bar-show {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes top-loading-bar-slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(285%);
+  }
+}

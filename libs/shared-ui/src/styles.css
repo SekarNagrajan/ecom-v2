@@ -1,0 +1,19 @@
+/* @solverminds/shared-ui Core Stylesheet */
+:root {
+  --sm-brand-primary: #0072CE;
+  --sm-brand-navy: #002B49;
+  --sm-border-radius: 6px;
+}
+
+.sm-shared-container {
+  box-sizing: border-box;
+}
+
+.sm-app-button {
+  font-weight: 500;
+}
+
+.sm-data-view-card {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}

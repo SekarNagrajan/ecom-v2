@@ -1,0 +1,17 @@
+{
+  "name": "@solverminds/ecom-portal",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.9.1",
+    "dayjs": "^1.11.23",
+    "msw": "^2.15.0",
+    "zod": "^4.4.3"
+  }
+}

@@ -1,0 +1,484 @@
+/* ============================================================
+   Clause Design System — Core tokens
+   Source of truth for tokens (colors, type, spacing, radius,
+   shadow, transitions, z-index) used across the Nova/Clause
+   shipping & logistics platform.
+
+   All tokens are mirrored from the Nova-Frontend codebase at
+   src/assets/css/variables.css. Keep them in sync.
+   ============================================================ */
+
+/* ---------- Inter web font ---------- */
+@font-face {
+    font-family: 'Inter';
+    src: url('fonts/Inter_18pt-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Inter';
+    src: url('fonts/Inter_18pt-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Inter';
+    src: url('fonts/Inter_18pt-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Inter';
+    src: url('fonts/Inter_18pt-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Inter';
+    src: url('fonts/Inter_18pt-Italic.ttf') format('truetype');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+
+:root {
+    /* ============ FONT FAMILIES ============ */
+    --sm-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --sm-font-mono: 'SF Mono', Menlo, Consolas, 'Roboto Mono', monospace;
+
+    /* ============ TYPE SCALE (1rem = 16px) ============ */
+    --sm-font-size-10: 0.625rem;   /* 10 — chips, tree nav */
+    --sm-font-size-11: 0.6875rem;  /* 11 — sub-labels, fine detail */
+    --sm-font-size-12: 0.75rem;    /* 12 — body text, table cells (most common) */
+    --sm-font-size-13: 0.8125rem;  /* 13 — column headers, toolbar labels */
+    --sm-font-size-14: 0.875rem;   /* 14 — subheadings, emphasis */
+    --sm-font-size-16: 1rem;       /* 16 — default base */
+    --sm-font-size-18: 1.125rem;   /* 18 — section headings */
+    --sm-font-size-20: 1.25rem;    /* 20 — page headings */
+    --sm-font-size-24: 1.5rem;     /* 24 — display headings */
+
+    /* ============ FONT WEIGHTS ============ */
+    --sm-font-weight-normal: 400;
+    --sm-font-weight-medium: 500;
+    --sm-font-weight-semibold: 600;
+    --sm-font-weight-bold: 700;
+
+    /* ============ BRAND BLUE ============ */
+    --sm-primary: #3b7ddd;          /* brand primary */
+    --sm-primary-light: #e9f2ff;    /* primary surface */
+    --sm-primary-dark: #0077d4;     /* primary hover */
+    --sm-actionblue: #0a91ff;       /* CTAs, focus rings, required asterisks */
+    --sm-actionblue-surface: #eef6ff;
+    --sm-svmblue: #ecf7ff;          /* grid header bg */
+
+    /* ============ TEXT ============ */
+    --sm-txt-1: #0e0e0e;            /* primary text */
+    --sm-dark: #333333;             /* body text */
+    --sm-white: #ffffff;
+    --sm-black: #000000;
+
+    /* ============ GRAY SCALE (9-stop) ============ */
+    --sm-gray-50:  #f9fafb;
+    --sm-gray-100: #f3f4f6;
+    --sm-gray-200: #e9ecef;
+    --sm-gray-300: #dee2e6;
+    --sm-gray-400: #ced4da;
+    --sm-gray-500: #a1a1a1;
+    --sm-gray-600: #717171;
+    --sm-gray-700: #495057;
+    --sm-gray-800: #343a40;
+    --sm-gray-900: #212529;
+
+    /* ============ SEMANTIC COLORS ============ */
+    --sm-success: #1cbb8c;
+    --sm-success-light: #f4fff9;
+    --sm-error: #ef4444;
+    --sm-error-light: #fef2f2;
+    --sm-warning: #fcb92c;
+    --sm-warning-light: #fffdf7;
+    --sm-warning-border: #e7a336;
+    --sm-danger: #dc3545;
+    --sm-info: #2196f3;
+
+    /* utility/surface variants */
+    --sm-bg-lightgreenshade: #d8fad8;
+    --sm-bg-lightyellowshade: #fffecc;
+
+    /* ============ DASHBOARD-SPECIFIC (widgets) ============ */
+    --sm-dashboard-page-bg: #f4f5f7;
+    --sm-dashboard-text-primary: #181d27;
+    --sm-dashboard-text-secondary: #717680;
+    --sm-dashboard-border: #c9c9c9;
+    --sm-dashboard-divider-subtle: rgba(24, 29, 39, 0.08);
+    --sm-dashboard-kpi-section-bg: #eef2f7;
+    --sm-dashboard-widget-body-bg: #f9fafb;
+    --sm-dashboard-accent-vessel: #1565c0;
+    --sm-dashboard-accent-agency: #6a1b9a;
+    --sm-dashboard-accent-load: #f57c00;
+    --sm-dashboard-accent-demurrage: #c62828;
+    --sm-dashboard-accent-teal: #0d9488;
+
+    /* ============ APP CHROME ============ */
+    --sm-app-header-bg: rgb(13, 33, 136);  /* dark navy */
+    --sm-app-header-height: 45px;
+    --sm-app-toolbar-height: 27px;
+
+    /* ============ RADIUS ============ */
+    --sm-radius-sm: 4px;     /* inputs, chips, AG cells */
+    --sm-radius-md: 6px;     /* secondary containers */
+    --sm-radius-lg: 8px;     /* cards, panels, modals, grids (PRIMARY) */
+    --sm-radius-xl: 12px;    /* large modals, dashboard cards */
+    --sm-radius-2xl: 16px;   /* feature cards */
+    --sm-radius-full: 9999px;/* pills, avatars, toggles, round buttons */
+
+    /* ============ SPACING (4px base) ============ */
+    --sm-spacing-1: 0.25rem;  /* 4  */
+    --sm-spacing-2: 0.5rem;   /* 8  — STANDARD gap */
+    --sm-spacing-3: 0.75rem;  /* 12 — spacious gap */
+    --sm-spacing-4: 1rem;     /* 16 */
+    --sm-spacing-5: 1.25rem;  /* 20 */
+    --sm-spacing-6: 1.5rem;   /* 24 */
+    --sm-spacing-8: 2rem;     /* 32 */
+    --sm-spacing-10: 2.5rem;  /* 40 */
+
+    /* ============ SHADOWS ============ */
+    --sm-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 5%);
+    --sm-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 10%), 0 2px 4px -2px rgb(0 0 0 / 10%);
+    --sm-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
+    --sm-shadow-button: inset 0 1px 0 rgba(255,255,255,0.15), 0 1px 2px rgba(0,0,0,0.12);
+    --sm-shadow-button-hover: 0 2px 8px rgba(0,0,0,0.18);
+    --sm-shadow-dashboard-card: 0 1px 2px rgba(24, 29, 39, 0.05), 0 6px 20px rgba(24, 29, 39, 0.04);
+    --sm-shadow-right-drawer: -4px 0 16px rgba(0,0,0,0.08);
+
+    /* ============ BORDERS ============ */
+    --sm-border-default: 1px solid #d1d5db; /* @kind other */
+    --sm-border-subtle: 1.5px solid #e5e7eb; /* @kind other */
+    --sm-border-aggrid-row: 1px solid rgba(0,0,0,0.06); /* @kind other */
+    --sm-border-aggrid-wrap: 1px solid #e0e0e0; /* @kind other */
+    --sm-border-focus-bar: inset 3px 0 0 var(--sm-actionblue); /* @kind other */
+    --sm-border-upload-dashed: 1.5px dashed var(--sm-gray-300); /* @kind other */
+
+    /* ============ TRANSITIONS ============ */
+    --sm-transition-fast: 150ms ease-in-out; /* @kind other */
+    --sm-transition-normal: 200ms ease-in-out; /* @kind other */
+    --sm-transition-slow: 300ms ease-in-out; /* @kind other */
+
+    /* ============ Z-INDEX ============ */
+    --sm-z-dropdown: 1000; /* @kind other */
+    --sm-z-modal: 1050; /* @kind other */
+    --sm-z-popover: 1060; /* @kind other */
+    --sm-z-tooltip: 1070; /* @kind other */
+
+    /* ---- semantic text role aliases ---- */
+    --fg-1: var(--sm-txt-1);
+    --fg-2: var(--sm-dark);
+    --fg-muted: var(--sm-gray-600);
+    --fg-subtle: var(--sm-gray-500);
+    --bg-page: var(--sm-white);
+    --bg-surface: var(--sm-white);
+    --bg-canvas: var(--sm-dashboard-page-bg);
+    --border-default: var(--sm-gray-300);
+    --link: var(--sm-actionblue);
+}
+
+/* ============================================================
+   Semantic element styles — use these on raw html if you want
+   instant-correct typography without classes.
+   ============================================================ */
+
+html, body {
+    font-family: var(--sm-font-sans);
+    color: var(--sm-dark);
+    background: var(--sm-white);
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, .sm-text-h1 { font-size: var(--sm-font-size-24); font-weight: var(--sm-font-weight-bold);     line-height: 1.25; color: var(--sm-txt-1); margin: 0; }
+h2, .sm-text-h2 { font-size: var(--sm-font-size-20); font-weight: var(--sm-font-weight-bold);     line-height: 1.3;  color: var(--sm-txt-1); margin: 0; }
+h3, .sm-text-h3 { font-size: var(--sm-font-size-18); font-weight: var(--sm-font-weight-semibold); line-height: 1.35; color: var(--sm-txt-1); margin: 0; }
+h4, .sm-text-h4 { font-size: var(--sm-font-size-16); font-weight: var(--sm-font-weight-semibold); line-height: 1.4;  color: var(--sm-txt-1); margin: 0; }
+h5, .sm-text-h5 { font-size: var(--sm-font-size-14); font-weight: var(--sm-font-weight-semibold); line-height: 1.4;  color: var(--sm-txt-1); margin: 0; }
+h6, .sm-text-h6 { font-size: var(--sm-font-size-13); font-weight: var(--sm-font-weight-semibold); line-height: 1.4;  color: var(--sm-txt-1); margin: 0; text-transform: uppercase; letter-spacing: 0.04em; }
+
+p, .sm-text-p   { font-size: var(--sm-font-size-12); font-weight: var(--sm-font-weight-normal);   line-height: 1.55; color: var(--sm-dark); margin: 0; }
+small           { font-size: var(--sm-font-size-11); color: var(--sm-gray-600); }
+code, kbd, samp { font-family: var(--sm-font-mono); font-size: 0.9em; background: var(--sm-gray-100); padding: 1px 4px; border-radius: var(--sm-radius-sm); }
+a               { color: var(--sm-actionblue); text-decoration: none; }
+a:hover         { text-decoration: underline; }
+
+/* ============================================================
+   sm-primary-button (v3 CTA)
+   Use `<SButton className="btn sm-primary-button" />` for the single
+   primary blue CTA on a screen. Without `sm-primary-button`, the `btn`
+   class renders as a white/outlined fallback.
+   ============================================================ */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-family: var(--sm-font-sans);
+    font-size: var(--sm-font-size-13);
+    font-weight: var(--sm-font-weight-medium);
+    line-height: 1.4;
+    padding: 6px 16px;
+    border-radius: var(--sm-radius-md);
+    border: 1px solid #d1d5db;
+    background: #ffffff;
+    color: #495057;
+    cursor: pointer;
+    text-transform: none;
+    transition: background var(--sm-transition-normal), box-shadow var(--sm-transition-normal), transform 20ms ease;
+    box-shadow: var(--sm-shadow-sm);
+}
+.btn:hover { background: var(--sm-gray-100); }
+.btn:active { transform: translateY(0.5px); }
+.btn:disabled,
+.btn[disabled] { background:#fff; color:#999; border-color:#e0e0e0; cursor:not-allowed; box-shadow:none; }
+
+.sm-primary-button {
+    background-color: var(--sm-actionblue);
+    color: #ffffff;
+    border: none;
+}
+.sm-primary-button:hover { background-color: var(--sm-actionblue); filter: brightness(0.96); box-shadow: var(--sm-shadow-button-hover); }
+.sm-primary-button:disabled,
+.sm-primary-button[disabled],
+.btn.sm-primary-button[disabled] {
+    background-color: var(--sm-actionblue);
+    opacity: 0.5;
+    color: #ffffff;
+    cursor: not-allowed;
+    border: none;
+}
+
+/* form-label specimen — matches SLabel */
+.sm-field-label {
+    display: inline-block;
+    font-size: var(--sm-font-size-12);
+    font-weight: var(--sm-font-weight-medium);
+    color: #717680;
+    margin-bottom: 3px;
+}
+.sm-required-asterisk {
+    color: var(--sm-actionblue);
+    font-size: var(--sm-font-size-14);
+    margin-left: 5px;
+}
+
+/* ============================================================
+   Class-based label / value utility classes
+   Used heavily in summary / detail / edit-summary views.
+   ============================================================ */
+.sm-title-text-12-7f { color: #707070;            font-size: 0.75rem;  font-weight: 400; }
+.sm-title-text-12    { color: var(--sm-txt-1);    font-size: 0.75rem;  font-weight: 400; }
+.sm-title-text-14    { color: var(--sm-txt-1);    font-size: 0.875rem; font-weight: 400; }
+.sm-title-text-14-bold { color: var(--sm-txt-1);  font-size: 0.875rem; font-weight: 600; }
+.sm-title-text-14-gray { color: #707070;          font-size: 0.875rem; font-weight: 400; }
+.sm-title-text-16    { color: var(--sm-txt-1);    font-size: 1rem;     font-weight: 600; }
+
+.sm-font-size-10 { font-size: var(--sm-font-size-10); }
+.sm-font-size-11 { font-size: var(--sm-font-size-11); }
+.sm-font-size-12 { font-size: var(--sm-font-size-12); }
+.sm-font-size-13 { font-size: var(--sm-font-size-13); }
+.sm-font-size-14 { font-size: var(--sm-font-size-14); }
+.sm-font-size-16 { font-size: var(--sm-font-size-16); }
+.sm-font-size-18 { font-size: var(--sm-font-size-18); }
+.sm-font-size-20 { font-size: var(--sm-font-size-20); }
+.sm-font-size-24 { font-size: var(--sm-font-size-24); }
+
+/* ============================================================
+   sm-nova-container (v3 root scope)
+   When you wrap a page in `<SMainCard className="sm-nova-container">`,
+   every form control inside takes the v3 pill treatment automatically:
+   36px height, 24px radius, #d5d7da border. Dialogs that need the same
+   form chrome (right-drawer panels, edit modals) also pass
+   `className="sm-nova-container"` to SDialog so children inherit.
+   ============================================================ */
+.sm-nova-container,
+.sm-nova-container-card {
+    background-color: var(--sm-white);
+}
+
+/* Inputs (text/numeric/etc), basic-search bar, smart-search bar — all become 36px pills */
+.sm-nova-container .sm-input-form-control,
+.sm-nova-container .sm-input,
+.sm-nova-container input.sm-input,
+.sm-nova-container input[type="text"],
+.sm-nova-container input[type="number"],
+.sm-nova-container input[type="email"],
+.sm-nova-container input[type="password"],
+.sm-nova-container input[type="search"],
+.sm-nova-container input[type="date"],
+.sm-nova-container .sm-select-combo,
+.sm-nova-container .sm-amount-input,
+.sm-nova-container .sm-transit-days-hrs {
+    box-sizing: border-box;
+    height: 36px;
+    line-height: 36px;
+    padding: 0 14px;
+    width: 100%;
+    color: var(--sm-txt-1);
+    font-size: var(--sm-font-size-14);
+    font-family: var(--sm-font-sans);
+    border-radius: 24px;
+    border: 1px solid #d5d7da;
+    background-color: var(--sm-white);
+    outline: none;
+    transition: border-color var(--sm-transition-fast), box-shadow var(--sm-transition-fast);
+}
+.sm-nova-container .sm-input-form-control:focus,
+.sm-nova-container .sm-input:focus,
+.sm-nova-container .sm-select-combo:focus,
+.sm-nova-container input:focus {
+    border-color: var(--sm-actionblue);
+    box-shadow: 0 0 0 3px rgba(10, 145, 255, 0.18);
+}
+
+/* Textarea inside nova container — softer 12px corner */
+.sm-nova-container .sm-textarea-field,
+.sm-nova-container textarea.sm-input-form-control {
+    border-radius: 12px;
+    border: 1px solid #d5d7da;
+    padding: 10px 14px;
+    width: 100%;
+    font-family: var(--sm-font-sans);
+    font-size: var(--sm-font-size-14);
+    background-color: var(--sm-white);
+    resize: vertical;
+}
+
+/* Basic-search pill stays consistent */
+.sm-basic-search input,
+.sm-search-com-sec .MuiOutlinedInput-input {
+    border-radius: 24px;
+}
+
+/* ============================================================
+   sm-section-card  · sm-nova-container-card
+   White section card used inside the nova container (form sections,
+   review sections). Lower-elevation, 8px corner, soft border.
+   ============================================================ */
+.sm-section-card,
+.sm-nova-container-card {
+    background-color: var(--sm-white);
+    border: 1px solid #eeeeee;
+    border-radius: var(--sm-radius-lg);
+    padding: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+/* ============================================================
+   sm-info-strip · sm-info-card · sm-info-item
+   Horizontal key/value strip pinned to the top of detail pages
+   (under WizardHeader) — shows the record context at a glance.
+   ============================================================ */
+.sm-info-strip {
+    flex-shrink: 0;
+    border-bottom: 1px solid var(--sm-gray-200);
+    background-color: var(--sm-white);
+    padding: 4px 24px;
+}
+.sm-info-card {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: var(--sm-radius-lg);
+    border: 1px solid var(--sm-gray-200);
+    background-color: var(--sm-gray-50);
+}
+.sm-info-card-body {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: nowrap;
+    padding: 6px 12px;
+    overflow-x: auto;
+}
+.sm-info-card-body::-webkit-scrollbar { display: none; }
+.sm-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex-shrink: 0;
+}
+.sm-info-item-label {
+    font-size: var(--sm-font-size-11);
+    font-weight: var(--sm-font-weight-medium);
+    color: #717680;
+    line-height: 1.3;
+}
+.sm-info-item.sm-mandatory .sm-info-item-label::after,
+.sm-mandatory .sm-field-label::after {
+    content: ' *';
+    color: var(--sm-actionblue);
+    font-weight: 600;
+}
+.sm-info-item-value {
+    font-size: var(--sm-font-size-13);
+    font-weight: var(--sm-font-weight-medium);
+    color: var(--sm-txt-1);
+    line-height: 1.4;
+}
+.sm-info-item-sep {
+    width: 1px;
+    align-self: stretch;
+    background-color: var(--sm-gray-400);
+    flex-shrink: 0;
+}
+
+/* ============================================================
+   sm-badge  · capsule badge for compact key/value pairs in toolbars
+   ============================================================ */
+.sm-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 12px;
+    background-color: #edfaff;
+    border: 1px solid #b9ebff;
+    border-radius: 12px;
+    font-size: var(--sm-font-size-13);
+    color: var(--sm-actionblue);
+    white-space: nowrap;
+}
+.sm-badge strong { font-weight: var(--sm-font-weight-semibold); color: var(--sm-txt-1); }
+
+/* ============================================================
+   sm-status family  · canonical status pills
+   ============================================================ */
+.sm-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: var(--sm-font-size-12);
+    font-weight: var(--sm-font-weight-medium);
+    line-height: 1.6;
+    white-space: nowrap;
+}
+.sm-status-approve { background: #dcfce7; color: #15803d; }
+.sm-status-reject  { background: #fee2e2; color: #b91c1c; }
+.sm-status-draft   { background: #eff6ff; color: var(--sm-actionblue); }
+.sm-status-pending { background: #fef3c7; color: #a52a2a; }
+
+/* sm-action-btn — inline blue action text used inside tables / forms */
+.sm-action-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+    cursor: pointer; transition: color var(--sm-transition-normal);
+    color: var(--sm-actionblue); font-size: 0.75rem;
+    background: transparent; border: none; padding: 0;
+}
+.sm-action-btn:hover { color: var(--sm-primary); }
+.sm-action-btn-icon { font-size: 16px; width: 18px; height: 18px; color: var(--sm-actionblue); }
+.sm-action-btn-text {
+    font-size: 12px; font-weight: 500; color: var(--sm-actionblue);
+    cursor: pointer; text-transform: uppercase;
+}

@@ -1,0 +1,6 @@
+/* ============================================================
+   Clause Design System — Root stylesheet
+   Consumers link this single file to get all tokens and base styles.
+   ============================================================ */
+
+@import url('colors_and_type.css');

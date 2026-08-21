@@ -1,0 +1,75 @@
+@layer theme, base, antd, components, utilities;
+
+@import 'tailwindcss';
+
+/* nx-tailwind-sources:start */
+/* nx-tailwind-sources:end */
+
+/* Modernized scrollbars for Kanban columns */
+.kanban-column-scroll-container {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.1) transparent;
+}
+
+.kanban-column-scroll-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.kanban-column-scroll-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.kanban-column-scroll-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.kanban-column-scroll-container::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.app-tabs-full-width .ant-tabs-nav-list {
+  display: flex;
+  width: max(
+    100%,
+    calc(var(--app-tabs-count) * var(--app-tabs-min-width, 0px))
+  );
+}
+
+.app-tabs-full-width .ant-tabs-tab {
+  flex: 0 0 auto;
+  width: max(
+    calc(100% / var(--app-tabs-count)),
+    var(--app-tabs-min-width, 0px)
+  );
+  min-width: var(--app-tabs-min-width, 0px);
+  margin: 0 !important;
+  justify-content: center;
+}
+
+.app-tabs-full-width .ant-tabs-ink-bar {
+  width: max(
+    calc(100% / var(--app-tabs-count)),
+    var(--app-tabs-min-width, 0px)
+  ) !important;
+}
+
+/*
+ * AntD v6 ships the tooltip body (`.ant-tooltip-container`, see
+ * `@rc-component/tooltip/lib/Popup.js`) with `min-height: controlHeight`
+ * (32px in our theme) and the natural `display: block`, which leaves
+ * single-line text top-aligned against the floor of the box — visually
+ * it looks like the bottom has more padding than the top. Switching to
+ * a flex container with `align-items: center` vertically centers the
+ * content for short labels (the common case) and is a no-op for
+ * tooltips whose natural content height already exceeds the min-height.
+ *
+ * Specificity is intentionally `.ant-tooltip .ant-tooltip-container` so
+ * we tie or beat AntD's CSS-in-JS hash-namespaced rule
+ * (`.ant-tooltip.css-<hash> .ant-tooltip-container`).
+ */
+.ant-tooltip .ant-tooltip-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}

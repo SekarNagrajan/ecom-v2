@@ -1,0 +1,19 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "jsx": "react-jsx"
+  },
+  "include": ["src/**/*", "../../libs/**/*"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "../../libs/**/*.stories.ts",
+    "../../libs/**/*.stories.tsx",
+    "../../libs/**/*.spec.ts",
+    "../../libs/**/*.spec.tsx",
+    "../../libs/**/*.test.ts",
+    "../../libs/**/*.test.tsx"
+  ]
+}

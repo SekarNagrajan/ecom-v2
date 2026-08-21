@@ -1,0 +1,95 @@
+{
+  "name": "@solverminds/shared-ui",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "@solverminds/source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./providers": {
+      "@solverminds/source": "./src/providers/index.ts",
+      "types": "./dist/providers/index.d.ts",
+      "import": "./dist/providers.js"
+    },
+    "./hooks": {
+      "@solverminds/source": "./src/hooks/index.ts",
+      "types": "./dist/hooks/index.d.ts",
+      "import": "./dist/hooks.js"
+    },
+    "./utils": {
+      "@solverminds/source": "./src/utils/index.ts",
+      "types": "./dist/utils/index.d.ts",
+      "import": "./dist/utils.js"
+    },
+    "./schemas": {
+      "@solverminds/source": "./src/schemas/index.ts",
+      "types": "./dist/schemas/index.d.ts",
+      "import": "./dist/schemas.js"
+    },
+    "./editor": {
+      "@solverminds/source": "./src/components/ui/rich-text-editor/index.ts",
+      "types": "./dist/components/ui/rich-text-editor/index.d.ts",
+      "import": "./dist/editor.js"
+    },
+    "./form-editor": {
+      "@solverminds/source": "./src/components/form-fields/rich-text-editor/index.ts",
+      "types": "./dist/components/form-fields/rich-text-editor/index.d.ts",
+      "import": "./dist/form-editor.js"
+    },
+    "./email": {
+      "@solverminds/source": "./src/components/email/index.ts",
+      "types": "./dist/components/email/index.d.ts",
+      "import": "./dist/email.js"
+    },
+    "./calendar": {
+      "@solverminds/source": "./src/components/ui/calendar/index.ts",
+      "types": "./dist/components/ui/calendar/index.d.ts",
+      "import": "./dist/calendar.js"
+    },
+    "./chart": {
+      "@solverminds/source": "./src/components/chart/index.ts",
+      "types": "./dist/components/chart/index.d.ts",
+      "import": "./dist/chart.js"
+    },
+    "./data-view": {
+      "@solverminds/source": "./src/components/data-view/index.ts",
+      "types": "./dist/components/data-view/index.d.ts",
+      "import": "./dist/data-view.js"
+    },
+    "./data-view/utils": {
+      "@solverminds/source": "./src/components/data-view/utils/index.ts",
+      "types": "./dist/components/data-view/utils/index.d.ts",
+      "import": "./dist/components/data-view/utils/index.js"
+    },
+    "./data-view/ag-grid-license": {
+      "@solverminds/source": "./src/components/data-view/ag-grid-license.ts",
+      "types": "./dist/components/data-view/ag-grid-license.d.ts",
+      "import": "./dist/components/data-view/ag-grid-license.js"
+    },
+    "./data-view/list-view": {
+      "@solverminds/source": "./src/components/data-view/list-view/index.ts",
+      "types": "./dist/components/data-view/list-view/index.d.ts",
+      "import": "./dist/data-view/list-view.js"
+    },
+    "./data-view/kanban-view": {
+      "@solverminds/source": "./src/components/data-view/kanban-view/index.ts",
+      "types": "./dist/components/data-view/kanban-view/index.d.ts",
+      "import": "./dist/data-view/kanban-view.js"
+    },
+    "./data-view/card-view": {
+      "@solverminds/source": "./src/components/data-view/card-view/index.ts",
+      "types": "./dist/components/data-view/card-view/index.d.ts",
+      "import": "./dist/data-view/card-view.js"
+    }
+  }
+}

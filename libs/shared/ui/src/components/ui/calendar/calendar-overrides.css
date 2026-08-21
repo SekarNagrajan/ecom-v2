@@ -1,0 +1,59 @@
+/* FullCalendar v6 Overrides using CSS Variables */
+
+.fc a {
+  color: inherit !important;
+  text-decoration: none;
+}
+
+.fc .fc-col-header-cell-cushion,
+.fc .fc-daygrid-day-number,
+.fc .fc-list-day-text,
+.fc .fc-list-day-side-text {
+  color: var(--fc-neutral-text-color) !important;
+  font-weight: 500;
+}
+
+.fc .fc-daygrid-day-number {
+  padding: var(--fc-day-number-padding, 8px) !important;
+  opacity: var(--fc-day-number-opacity, 0.8);
+  font-size: var(--fc-day-number-font-size, 0.9em);
+}
+
+.fc .fc-col-header-cell {
+  padding: var(--fc-header-padding, 12px 0) !important;
+  background: var(--fc-header-bg, transparent);
+  border-bottom: var(
+    --fc-header-border-bottom,
+    1px solid var(--fc-border-color)
+  ) !important;
+}
+
+.fc .fc-daygrid-day.fc-day-today .fc-daygrid-day-number {
+  color: var(--fc-today-text-color, inherit) !important;
+  font-weight: bold;
+  opacity: 1;
+}
+
+.fc .fc-scrollgrid {
+  border: var(--fc-grid-border, none) !important;
+}
+
+.fc .fc-daygrid-week-number {
+  background: var(--fc-week-number-bg, transparent) !important;
+  color: var(--fc-week-number-color, inherit) !important;
+  font-size: var(--fc-week-number-font-size, 10px) !important;
+  font-weight: 600 !important;
+  padding: 4px !important;
+  border-radius: 4px !important;
+  margin: 4px !important;
+}
+
+.fc td,
+.fc th {
+  border-color: var(--fc-border-color) !important;
+}
+
+/* Tooltip Z-Index handling */
+.ant-tooltip {
+  z-index: var(--fc-tooltip-z-index, 1070) !important;
+}

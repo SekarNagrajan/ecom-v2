@@ -1,0 +1,131 @@
+
+New E-Com project — step-by-step setup
+A practical, ordered guide to standing up the new React project on the same platform as the CRM portal — workspace, shared libs, theme, config, API, auth, routing, and the first feature module. Follow the steps top to bottom; each lists its goal, commands, and the definition of done.
+React 19 + TypeScript · Ant Design 6 · TanStack Router + Query · Zustand · React Hook Form + Zod · Nx + pnpm + Vite · Vitest + Playwright + Storybook + MSW. Node 24 LTS, pnpm 10.
+This guide adds step 13 · Use the @solverminds/shared-ui library covering how to consume the shared component library in the ecom app.
+Prerequisites
+Goal — a machine that can build the workspace reproducibly.
+Node 24 LTS via a version manager (nvm); pin it in .nvmrc.
+pnpm 10+ (Corepack: corepack enable).
+Git + access to the private artifact repository (for the backend JARs — never local filesystem paths).
+Access to the backend OpenAPI spec URL (for type generation) and the CRM shared-ui / theme libs.
+Create the workspace
+Goal — an empty Nx + pnpm monorepo. Prefer adding to the existing CRM workspace so libs are shared; otherwise create a new one and import the libs.
+npx create-nx-workspace@latest solverminds --preset=apps --pm=pnpm
+cd solverminds
+node -v > .nvmrc            # pin Node
+pnpm add -D nx @nx/react @nx/vite @nx/eslint @nx/vitest @nx/playwright @nx/storybook
+Apps & shared libs
+Goal — the app plus the reusable platform libs. Reuse the CRM libs where they exist; scaffold only what's missing.
+pnpm nx g @nx/react:app apps/ecom-portal --bundler=vite --routing=false --style=none
+pnpm nx g @nx/react:lib  libs/platform     # api-client, query-client, env
+pnpm nx g @nx/react:lib  libs/auth         # store, interceptors, guards, RBAC
+pnpm nx g @nx/react:lib  libs/theme        # ConfigProvider, tokens
+pnpm nx g @nx/react:lib  libs/shared-ui    # AntD-wrapped components + Form* fields
+pnpm nx g @nx/react:lib  libs/shared-util  # dates, formatting, helpers
+Add Nx module-boundary tags in each project (scope:ecom, type:feature|ui|util) and enforce with the @nx/enforce-module-boundaries lint rule so features can't import each other.
+Tooling & conventions
+Goal — the same guardrails as the CRM portal so both codebases feel identical.
+TypeScript strict (strict, noUncheckedIndexedAccess, verbatimModuleSyntax); no any.
+Type-aware ESLint + Prettier; enable the React Compiler babel plugin.
+Husky + commitlint (Conventional Commits); kebab-case file naming.
+Copy the CRM AGENTS.md/coding-rules doc so conventions are shared.
+Design system & theme
+Goal — one AntD theme from tokens, wired at the root. Reuse the CRM token engine in libs/theme.
+pnpm add antd @ant-design/cssinjs
+// libs/theme: buildAntdTheme(config) → ThemeConfig (tokens + light/dark algorithm)
+// apps/ecom-portal root:
+const appTheme = buildAntdTheme(appConfig)
+<ConfigProvider theme={appTheme}><App><RouterProvider /></App></ConfigProvider>
+Environment & config
+Goal — typed, per-environment config; secrets stay server-side (the legacy mistake to avoid).
+// libs/platform/env.ts — validate at boot, fail fast
+const Env = z.object({ VITE_API_URL: z.string().url(), VITE_API_MODE: z.enum(['mock','real']) })
+export const env = Env.parse(import.meta.env)
+// .env.development / .env.production — only PUBLIC values; never DB creds or keys
+API client & types
+Goal — one axios client with the Stripe-style envelope and OpenAPI-generated types from the REST facade.
+pnpm add axios @tanstack/react-query
+pnpm add -D openapi-typescript
+# generate types from the backend spec into libs/platform/types/api-schema.d.ts
+openapi-typescript $VITE_API_URL/v3/api-docs -o libs/platform/types/api-schema.d.ts
+// libs/platform/api-client.ts — baseURL, auth header, 401→refresh interceptor, extractApiError()
+State & data layer
+Goal — React Query for server state, Zustand for client state, MSW for mocks. Establish the per-feature key/query conventions.
+pnpm add zustand
+pnpm add -D msw
+// query-client.ts (singleton) + optional IndexedDB persistence
+// per feature: <feature>.keys.ts (key factory) · <feature>.queries.ts (queryOptions + staleTime)
+// mocks: MSW handlers run in dev, tests, and Storybook — one mock set
+Auth & guards
+Goal — token auth + RBAC replacing the session/systemid model.
+Auth store (Zustand): user, in-memory access token, permission set (module codes from RegMenus).
+Axios interceptor: attach bearer, 401 → single-flight refresh (httpOnly cookie) → retry.
+Login / registration / forgot-password flows + reCAPTCHA v3.
+Capability hooks (can('BKG')) + route-gate authorization.
+Routing & app shell
+Goal — file-based routing with two gate layers and the AntD Layout shell.
+pnpm add @tanstack/react-router
+pnpm add -D @tanstack/router-plugin   # add to vite.config, autoCodeSplitting: true
+// routes/__root.tsx  → session + app config
+// routes/_app.tsx    → auth gate + RBAC + Layout(Sider/Header/Content), server-driven Menu
+First feature module
+Goal — one vertical slice end-to-end as the reference. Start with a read-mostly module (Schedules or Tracking) to prove the stack before tackling Booking.
+features/schedules/
+├── schedules-list.tsx          # route entry (thin)
+├── api/  schedules.api.ts · .keys.ts · .queries.ts
+├── hooks/  use-schedules-controller.ts
+├── types/  (from generated schema)
+└── components/  list/  details/  upsert/
+Testing
+Goal — test scaffolding wired into CI from day one, not deferred.
+pnpm nx g @nx/playwright:configuration --project=ecom-portal-e2e
+# Vitest + RTL for hooks/components · MSW for integration · Playwright for e2e
+pnpm nx test ecom-portal      # unit
+pnpm nx e2e ecom-portal-e2e   # critical flows: schedules search, then booking
+Build & deploy
+Goal — reproducible CI build, static SPA to CDN, containerized REST API.
+pnpm nx build ecom-portal        # → dist/ static assets
+# CI: pnpm nx affected -t lint test build  (bundle budget check)
+# deploy dist/ to CDN; REST facade as a container; per-env config injected at deploy
+Use the @solverminds/shared-ui library
+Goal — consume the existing CRM component library (AppButton, Form* fields, DataView, dialogs, hooks) in the ecom app instead of rebuilding them. The library ships sub-path entry points so heavy deps stay lazy.
+Option A — same monorepo (recommended)
+Drop libs/shared/ui into the workspace (it already exists as a project). Nx + the @solverminds/source export condition resolve it directly to src/ at dev time — no build step, instant HMR.
+// tsconfig.base.json — path mapping (Nx adds this automatically for workspace libs)
+"paths": { "@solverminds/shared-ui": ["libs/shared/ui/src/index.ts"] }
+// vite.config.mts — resolve the source condition so dev uses src/, not dist/
+resolve: { conditions: ['@solverminds/source'] }
+Option B — separate repo
+If the ecom app lives in its own repo, build the lib (nx build shared-ui → dist/) and publish to your private npm registry, then pnpm add @solverminds/shared-ui. Consumers use the compiled import/types conditions from the same export map. Best kept in one monorepo, though — Option A avoids version-lag.
+Import discipline — use the right entry point
+
+Import from
+What's inside
+@solverminds/shared-ui
+Core UI + Form* fields (AppButton, AppModal, AppDrawer, AppTabs, useToast, useConfirm).
+…/providers
+AppConfigProvider, mergeAppConfig, default config.
+…/hooks · …/utils · …/schemas
+Reusable hooks, utilities, and Zod schemas.
+…/data-view (+ /list-view, /kanban-view, /card-view)
+DataView orchestrator + AG Grid views (heavy — separate chunk).
+…/chart · …/calendar · …/editor · …/email
+ECharts / FullCalendar / Tiptap / email — each behind its own sub-path.
+Rule: import light components from the root; import anything that pulls a heavy dep (AG Grid, ECharts, Tiptap, FullCalendar) from its sub-path so the ecom bundle only pays for what a screen uses.
+Required wiring (once, at the app root)
+Wrap the app in AppConfigProvider (from /providers) inside AntD ConfigProvider + <App> so components read the theme + toast/modal context.
+Import the library stylesheet once: import '@solverminds/shared-ui/styles.css' (the lib marks CSS as a side-effect).
+Ensure peer deps exist in the app: react, antd, react-hook-form, zod.
+For any data-view screen, call initAgGridLicense() once at startup (AG Grid Enterprise key).
+import '@solverminds/shared-ui/styles.css'
+import { AppButton, FormInput, FormSelect, useToast } from '@solverminds/shared-ui'
+import { AppConfigProvider } from '@solverminds/shared-ui/providers'
+import { DataView } from '@solverminds/shared-ui/data-view'
+ 
+const form = useForm({ resolver: zodResolver(bookingSchema) })
+<FormSelect control={form.control} name="pol" label="Port of loading" options={ports} />
+<AppButton type="primary" onClick={save}>Save</AppButton>
+An ecom screen renders a shared-ui AppButton + Form* fields styled by the app theme, a useToast() fires, and a data-view grid loads only on its route (separate chunk).
+Setup checklist
+Companion to the architecture analysis. Once steps 00–10 are green, migrate remaining modules by the strangler-fig order (schedules → rates → booking → SI → BL/VGM → tracking → payments → statements → admin).

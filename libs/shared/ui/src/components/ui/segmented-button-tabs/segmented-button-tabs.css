@@ -1,0 +1,77 @@
+.segmented-button-tabs__bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--seg-tabs-gap, 8px);
+}
+
+.segmented-button-tabs__item {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  background-color: var(--seg-tabs-bg, transparent);
+  color: var(--seg-tabs-text, currentColor);
+  border: 1px solid var(--seg-tabs-border, currentColor);
+  border-radius: var(--seg-tabs-radius, 8px);
+  padding: var(--seg-tabs-padding-block, 8px)
+    var(--seg-tabs-padding-inline, 16px);
+  font-size: var(--seg-tabs-font-size, inherit);
+  font-weight: var(--seg-tabs-font-weight, 400);
+  line-height: var(--seg-tabs-line-height, 1.5);
+  transition: background-color var(--seg-tabs-transition, 150ms ease),
+    color var(--seg-tabs-transition, 150ms ease),
+    border-color var(--seg-tabs-transition, 150ms ease);
+}
+
+.segmented-button-tabs__item:hover {
+  background-color: var(--seg-tabs-hover-bg, transparent);
+}
+
+.segmented-button-tabs__item--active {
+  background-color: var(--seg-tabs-active-bg, transparent);
+  color: var(--seg-tabs-active-text, currentColor);
+  border-color: var(--seg-tabs-active-border, currentColor);
+  font-weight: var(--seg-tabs-active-font-weight, 600);
+}
+
+.segmented-button-tabs__item--active:hover {
+  background-color: var(--seg-tabs-active-hover-bg, var(--seg-tabs-active-bg));
+}
+
+.segmented-button-tabs__item--disabled {
+  cursor: not-allowed;
+  background-color: var(--seg-tabs-disabled-bg, transparent);
+  color: var(--seg-tabs-disabled-text, currentColor);
+  border-color: var(--seg-tabs-disabled-border, currentColor);
+}
+
+.segmented-button-tabs__item--disabled:hover {
+  background-color: var(--seg-tabs-disabled-bg, transparent);
+}
+
+.segmented-button-tabs__item:has(
+    > .segmented-button-tabs__input:focus-visible
+  ) {
+  outline: 2px solid var(--seg-tabs-focus-color, currentColor);
+  outline-offset: 2px;
+}
+
+.segmented-button-tabs__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.segmented-button-tabs__label {
+  display: inline-flex;
+  align-items: center;
+}

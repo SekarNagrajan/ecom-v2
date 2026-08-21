@@ -139,7 +139,15 @@ const paymentsRoute = createRoute({
 });
 
 
+import { TrackingRoute } from '../features/tracking/tracking-route';
 import { RatesRoute } from '../features/rates/rates-route';
+
+// 3.9 Cargo & Container Tracking
+const trackingRoute = createRoute({
+  getParentRoute: () => appRoute,
+  path: '/tracking',
+  component: () => <TrackingRoute />,
+});
 
 // 3.10 Rate Engine & Tariffs
 const ratesRoute = createRoute({
@@ -147,6 +155,7 @@ const ratesRoute = createRoute({
   path: '/rates',
   component: () => <RatesRoute />,
 });
+
 
 // 4. Route Tree
 const routeTree = rootRoute.addChildren([

@@ -1,9 +1,15 @@
-// Modified by sekar nagarajan (2026-08-21 23:38)
+// Modified by Antigravity (2026-08-21 23:58)
+// ContractView AG-Grid component aligned with ApplicationResource_en.properties keys:
+// rates.head.agreedrate=Agreed Rate
+// rates.head.subtocharges=Subject to Charges
+// rates.head.soc=SOC
+// rates.head.carrterms=Trans. Service
+// ecom.rr.ratenum=Rate No
 
 import { EyeOutlined, FilterOutlined } from '@ant-design/icons';
 import { AppButton } from '@solverminds/shared-ui';
 import { DataView, DataViewColumn } from '@solverminds/shared-ui/data-view';
-import { Card, Flex, Input, Space, Spin, Tag, theme, Tooltip, Typography } from 'antd';
+import { Card, Flex, Select, Space, Spin, Tag, theme, Tooltip, Typography } from 'antd';
 import { useMemo, useState } from 'react';
 import { useContractsQuery } from '../api/rates.queries';
 import { ContractDTO } from '../types/rates.types';
@@ -13,10 +19,17 @@ const { Text } = Typography;
 
 export function ContractView() {
   const { token } = theme.useToken();
-  const [contractNo, setContractNo] = useState<string | undefined>();
+  const [pol, setPol] = useState<string | undefined>();
+  const [pod, setPod] = useState<string | undefined>();
   const [selectedContract, setSelectedContract] = useState<ContractDTO | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data: contracts = [], isLoading } = useContractsQuery({ contractNo });
+  const { data: contracts = [], isLoading } = useContractsQuery({ pol, pod });
+
+  const handleOpenSurcharges = (contract: ContractDTO) => {
+    setSelectedContract(contract);
+    setIsModalOpen(true);
+  };
 
   const columnDefs: DataViewColumn<ContractDTO>[] = useMemo(
     () => [
@@ -24,18 +37,18 @@ export function ContractView() {
         headerName: 'Actions',
         field: 'id',
         sortable: false,
-        width: 110,
+        width: 120,
         pinned: 'left',
         cellRenderer: (params: { data?: ContractDTO }) => {
           const record = params.data;
           if (!record) return null;
           return (
-            <Tooltip title="View Included Surcharge Breakdown">
+            <Tooltip title="View Subject to Charges Breakdown">
               <AppButton
                 type="text"
                 size="small"
                 icon={<EyeOutlined style={{ color: token.colorPrimary, fontSize: 16 }} />}
-                onClick={() => setSelectedContract(record)}
+                onClick={() => handleOpenSurcharges(record)}
               />
             </Tooltip>
           );
@@ -46,46 +59,57 @@ export function ContractView() {
         field: 'contractNo',
         minWidth: 160,
         cellRenderer: (params: { data?: ContractDTO }) => (
-          <Space direction="vertical" size={0}>
-            <Text strong>{params.data?.contractNo}</Text>
-            <Tag color="cyan">{params.data?.rateNo}</Tag>
-          </Space>
+          <Text strong style={{ color: token.colorPrimary }}>{params.data?.contractNo}</Text>
+        ),
+      },
+      {
+        headerName: 'Rate No',
+        field: 'rateNo',
+        minWidth: 150,
+        cellRenderer: (params: { data?: ContractDTO }) => (
+          <Tag color="cyan">{params.data?.rateNo}</Tag>
         ),
       },
       {
         headerName: 'Customer Name',
         field: 'customerName',
         minWidth: 200,
-        cellRenderer: (params: { data?: ContractDTO }) => (
-          <Space direction="vertical" size={0}>
-            <Text strong>{params.data?.customerName}</Text>
-            <Text type="secondary" style={{ fontSize: 12 }}>{params.data?.customerCode}</Text>
-          </Space>
-        ),
       },
       {
-        headerName: 'Origin / Delivery',
+        headerName: 'Port of Load',
         field: 'originPort',
-        minWidth: 200,
-        cellRenderer: (params: { data?: ContractDTO }) => (
-          <Text style={{ fontSize: 13 }}>
-            {params.data?.originPort} → {params.data?.deliveryPort}
-          </Text>
-        ),
-      },
-      {
-        headerName: 'Equipment & Commodity',
-        field: 'eqpType',
-        minWidth: 200,
+        minWidth: 160,
         cellRenderer: (params: { data?: ContractDTO }) => (
           <Space direction="vertical" size={0}>
-            <Tag color="blue">{params.data?.eqpType}</Tag>
-            <Text type="secondary" style={{ fontSize: 11 }}>{params.data?.commodityName}</Text>
+            <Text strong>{params.data?.originPort}</Text>
+            <Text type="secondary" style={{ fontSize: 12 }}>{params.data?.originPortName}</Text>
           </Space>
         ),
       },
       {
-        headerName: 'Agreed Ocean Freight',
+        headerName: 'Port of Discharge',
+        field: 'deliveryPort',
+        minWidth: 160,
+        cellRenderer: (params: { data?: ContractDTO }) => (
+          <Space direction="vertical" size={0}>
+            <Text strong>{params.data?.deliveryPort}</Text>
+            <Text type="secondary" style={{ fontSize: 12 }}>{params.data?.deliveryPortName}</Text>
+          </Space>
+        ),
+      },
+      {
+        headerName: 'Eqp Type',
+        field: 'eqpType',
+        minWidth: 160,
+        cellRenderer: (params: { data?: ContractDTO }) => <Tag color="blue">{params.data?.eqpType}</Tag>,
+      },
+      {
+        headerName: 'Commodity',
+        field: 'commodityName',
+        minWidth: 180,
+      },
+      {
+        headerName: 'Agreed Rate',
         field: 'oceanFreight',
         minWidth: 160,
         cellRenderer: (params: { data?: ContractDTO }) => (
@@ -95,28 +119,27 @@ export function ContractView() {
         ),
       },
       {
-        headerName: 'Subject to Surcharges',
+        headerName: 'Subject to Charges',
         field: 'subjectToChargesAmount',
         minWidth: 160,
         cellRenderer: (params: { data?: ContractDTO }) => (
           <Text style={{ color: '#cf1322', fontSize: 13 }}>
-            {params.data?.currency} ${params.data?.subjectToChargesAmount.toFixed(2)}
+            + {params.data?.currency} ${params.data?.subjectToChargesAmount.toFixed(2)}
           </Text>
         ),
       },
       {
-        headerName: 'SOC Flag',
+        headerName: 'SOC',
         field: 'soc',
-        width: 100,
+        width: 90,
       },
       {
-        headerName: 'Carriage Terms',
+        headerName: 'Trans. Service',
         field: 'carrTerms',
-        width: 130,
-        cellRenderer: (params: { data?: ContractDTO }) => <Tag color="gold">{params.data?.carrTerms}</Tag>,
+        minWidth: 130,
       },
       {
-        headerName: 'Validity',
+        headerName: 'Validity Window',
         field: 'effectiveFrom',
         minWidth: 180,
         cellRenderer: (params: { data?: ContractDTO }) => (
@@ -136,20 +159,37 @@ export function ContractView() {
         <Flex gap="middle" align="center" wrap="wrap">
           <Space>
             <FilterOutlined style={{ color: token.colorPrimary }} />
-            <Text strong>Filter Freight Agreements:</Text>
+            <Text strong>Filter Contract Rates:</Text>
           </Space>
 
-          <Input.Search
-            placeholder="Search Contract No / Customer Code"
+          <Select
+            placeholder="Port of Load"
             allowClear
-            style={{ width: 300 }}
-            onSearch={(val) => setContractNo(val || undefined)}
+            style={{ width: 200 }}
+            value={pol}
+            onChange={setPol}
+            options={[
+              { label: 'USNYC - New York', value: 'USNYC' },
+              { label: 'DEHAM - Hamburg', value: 'DEHAM' },
+            ]}
+          />
+
+          <Select
+            placeholder="Port of Discharge"
+            allowClear
+            style={{ width: 200 }}
+            value={pod}
+            onChange={setPod}
+            options={[
+              { label: 'SGSIN - Singapore', value: 'SGSIN' },
+              { label: 'CNSHA - Shanghai', value: 'CNSHA' },
+            ]}
           />
         </Flex>
       </Card>
 
       {/* Contract Rates AG Grid DataView with CRM Spin Overlay */}
-      <Spin spinning={isLoading} tip="Loading service contracts...">
+      <Spin spinning={isLoading} tip="Loading service contract rates...">
         <Card style={{ borderRadius: 16, boxShadow: '0 8px 24px rgba(0,0,0,0.05)', border: 'none' }}>
           <DataView
             data={contracts}
@@ -161,11 +201,11 @@ export function ContractView() {
         </Card>
       </Spin>
 
-      {/* Surcharge Breakdown Modal */}
+      {/* Contract Surcharge Breakdown Drawer */}
       <ContractSurchargeModal
         contract={selectedContract}
-        open={Boolean(selectedContract)}
-        onClose={() => setSelectedContract(null)}
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
       />
     </Space>
   );

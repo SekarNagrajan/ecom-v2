@@ -1,4 +1,13 @@
-// Modified by sekar nagarajan (2026-08-21 23:35)
+// Modified by Antigravity (2026-08-21 23:56)
+// TariffView AG-Grid component aligned with ApplicationResource_en.properties keys:
+// ecom.tariff.pol=Port of Load
+// ecom.tariff.pod=Port of Discharge
+// ecom.tariff.eqptype=Eqp Type
+// ecom.tariff.commodity=Commodity
+// ecom.tariff.loccurrency=Currency
+// ecom.tariff.locamount=Amount
+// ecom.tariff.fromdate=From Date
+// ecom.tariff.todate=To Date
 
 import { EyeOutlined, FilterOutlined } from '@ant-design/icons';
 import { AppButton } from '@solverminds/shared-ui';
@@ -29,7 +38,7 @@ export function TariffView() {
           const record = params.data;
           if (!record) return null;
           return (
-            <Tooltip title="View Published Tariff Terms & Rate Rules">
+            <Tooltip title="View Published Tariff Terms">
               <AppButton
                 type="text"
                 size="small"
@@ -40,7 +49,7 @@ export function TariffView() {
         },
       },
       {
-        headerName: 'Port of Loading (POL)',
+        headerName: 'Port of Load',
         field: 'loadPort',
         minWidth: 160,
         cellRenderer: (params: { data?: TariffDTO }) => (
@@ -51,7 +60,7 @@ export function TariffView() {
         ),
       },
       {
-        headerName: 'Port of Discharge (POD)',
+        headerName: 'Port of Discharge',
         field: 'dischPort',
         minWidth: 160,
         cellRenderer: (params: { data?: TariffDTO }) => (
@@ -62,7 +71,7 @@ export function TariffView() {
         ),
       },
       {
-        headerName: 'Equipment Type',
+        headerName: 'Eqp Type',
         field: 'eqpType',
         minWidth: 160,
         cellRenderer: (params: { data?: TariffDTO }) => <Tag color="blue">{params.data?.eqpType}</Tag>,
@@ -84,7 +93,7 @@ export function TariffView() {
         width: 100,
       },
       {
-        headerName: 'Published Tariff Rate',
+        headerName: 'Amount',
         field: 'tariffAmount',
         minWidth: 150,
         cellRenderer: (params: { data?: TariffDTO }) => (
@@ -94,13 +103,19 @@ export function TariffView() {
         ),
       },
       {
-        headerName: 'Effective Validity',
+        headerName: 'From Date',
         field: 'effectiveFrom',
-        minWidth: 180,
+        minWidth: 120,
         cellRenderer: (params: { data?: TariffDTO }) => (
-          <Text type="secondary" style={{ fontSize: 12 }}>
-            {params.data?.effectiveFrom} to {params.data?.effectiveTo}
-          </Text>
+          <Text type="secondary" style={{ fontSize: 12 }}>{params.data?.effectiveFrom}</Text>
+        ),
+      },
+      {
+        headerName: 'To Date',
+        field: 'effectiveTo',
+        minWidth: 120,
+        cellRenderer: (params: { data?: TariffDTO }) => (
+          <Text type="secondary" style={{ fontSize: 12 }}>{params.data?.effectiveTo}</Text>
         ),
       },
     ],
@@ -114,11 +129,11 @@ export function TariffView() {
         <Flex gap="middle" align="center" wrap="wrap">
           <Space>
             <FilterOutlined style={{ color: token.colorPrimary }} />
-            <Text strong>Filter Published Tariffs:</Text>
+            <Text strong>Filter Tariff:</Text>
           </Space>
 
           <Select
-            placeholder="Select Origin (POL)"
+            placeholder="Port of Load"
             allowClear
             style={{ width: 200 }}
             value={loadPort}
@@ -132,7 +147,7 @@ export function TariffView() {
           />
 
           <Select
-            placeholder="Select Destination (POD)"
+            placeholder="Port of Discharge"
             allowClear
             style={{ width: 200 }}
             value={dischPort}

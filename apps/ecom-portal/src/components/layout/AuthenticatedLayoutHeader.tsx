@@ -273,7 +273,7 @@ export function AuthenticatedLayoutHeader({ onLogout }: AuthenticatedLayoutHeade
         </Dropdown>
 
         {/* Standalone Logout Icon Button with Tooltip */}
-        <Tooltip title="Log Out of Portal" placement="bottom">
+        <Tooltip title="Log Out" placement="bottom">
           <Button
             type="text"
             shape="circle"

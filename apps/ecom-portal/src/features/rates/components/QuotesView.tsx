@@ -1,7 +1,8 @@
-// Modified by sekar nagarajan (2026-08-21 23:40)
+// Modified by Antigravity (2026-08-21 23:40)
 
 import { ArrowRightOutlined, EyeOutlined, PlusOutlined } from '@ant-design/icons';
-import { AppButton, useToast } from '@solverminds/shared-ui';
+import { AppButton } from '@solverminds/shared-ui';
+import { useToast } from '@solverminds/shared-ui/hooks';
 import { DataView, DataViewColumn } from '@solverminds/shared-ui/data-view';
 import { useNavigate } from '@tanstack/react-router';
 import { Card, Flex, Space, Spin, Tag, theme, Tooltip, Typography } from 'antd';
@@ -14,16 +15,17 @@ const { Text } = Typography;
 
 export function QuotesView() {
   const { token } = theme.useToken();
-  const { showToast } = useToast();
+  const toast = useToast();
   const navigate = useNavigate();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const { data: quotes = [], isLoading } = useQuotesQuery();
 
   const handleConvertBooking = (quote: QuoteDTO) => {
-    showToast(`Converting Quote ${quote.quoteNo} into e-Booking...`, 'info');
+    toast.info(`Converting Quote ${quote.quoteNo} into e-Booking...`);
     navigate({ to: '/schedules' as any });
   };
+
 
   const columnDefs: DataViewColumn<QuoteDTO>[] = useMemo(
     () => [

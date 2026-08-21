@@ -32,7 +32,7 @@ The legacy codebase is a **read-only reference for behaviour**, never a spec to 
 9. **RBAC on routes AND backend.** Gate `/admin/*` and protected routes via `beforeLoad` capability checks; the backend re-enforces every endpoint. Client gate is UX only.
 10. **No secrets in the client bundle.** Config via typed (Zod-validated) env + backend. Never `VITE_*` DB creds or keys.
 11. **React Compiler & Optimization.** NO `memo`, `useCallback`, or `useMemo` by default. Do NOT use `useEffect` to synchronously derive or normalize state.
-12. **Change Attribution.** When modifying or creating files, add a single-line comment at the top: `// Modified by [Your Name] (YYYY-MM-DD HH:mm)`.
+12. **Change Attribution.** When modifying or creating files, add a single-line comment at the top: `// Modified by [Sekar Nagarajan] (YYYY-MM-DD HH:mm)`.
 13. **Ship behind a feature flag / route switch.** Keep the legacy JSP live until the module is proven; rollback = flip the switch (no redeploy).
 14. **Mirror the pinned reference module** (first migrated slice, e.g. Schedules) for structure every time.
 

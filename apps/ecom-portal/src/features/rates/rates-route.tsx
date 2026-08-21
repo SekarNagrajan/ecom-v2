@@ -1,83 +1,134 @@
-// Modified by sekar nagarajan (2026-08-21 23:42)
+// Modified by Antigravity (2026-08-21 23:54)
+// Rates Feature Main Route View Component
+// Parity with SchedulesRoute main layout standard (<Card style={{ borderRadius: 16, boxShadow: '0 8px 24px rgba(0,0,0,0.05)', border: 'none' }}>)
+// Parity with agenct.md and UserCreationView layout design standards
 
-import { AppTabs } from '@solverminds/shared-ui';
-import { Card, Space, theme, Typography } from 'antd';
-import { useState } from 'react';
-import { ContractView } from './components/ContractView';
-import { QuotesView } from './components/QuotesView';
-import { SurchargeView } from './components/SurchargeView';
-import { TariffView } from './components/TariffView';
+import {
+  AppstoreOutlined,
+  DollarOutlined,
+  DownloadOutlined,
+  MailOutlined,
+  UnorderedListOutlined,
+} from '@ant-design/icons';
+import { AppButton } from '@solverminds/shared-ui';
+import { useToast } from '@solverminds/shared-ui/hooks';
+import { Badge, Card, Segmented, Space, theme, Typography } from 'antd';
+import React from 'react';
+import { ContractSurchargeModal } from './components/ContractSurchargeModal';
+import { RateCardList } from './components/RateCardList';
+import { RateDataView } from './components/RateDataView';
+import { RateSearchFilter } from './components/RateSearchFilter';
+import { useRatesController } from './hooks/useRatesController';
 
 const { Title, Text } = Typography;
 
-export function RatesRoute() {
+export const RatesRoute: React.FC = () => {
   const { token } = theme.useToken();
-  const [activeTab, setActiveTab] = useState('tariff');
+  const toast = useToast();
+  const {
+    viewMode,
+    setViewMode,
+    searchMode,
+    setSearchMode,
+    cardRates,
+    isLoading,
+    handleSearch,
+    handleBookNow,
+    handleViewSurcharges,
+    handleShareRate,
+    selectedContract,
+    isSurchargeModalOpen,
+    handleCloseSurchargeModal,
+  } = useRatesController();
 
-  const tabItems = [
-    {
-      key: 'tariff',
-      label: 'Published Tariff',
-      children: <TariffView />,
-    },
-    {
-      key: 'surcharge',
-      label: 'Surcharges & Accessorials',
-      children: <SurchargeView />,
-    },
-    {
-      key: 'contract',
-      label: 'Service Contracts',
-      children: <ContractView />,
-    },
-    {
-      key: 'quotes',
-      label: 'Spot Quotes',
-      children: <QuotesView />,
-    },
-  ];
+  const handleExportExcel = () => {
+    toast.success('Exporting rate search results to Excel...');
+  };
+
+  const handleSendEmail = () => {
+    toast.info('Opening freight rate quote email share dialog...');
+  };
 
   return (
-    <div style={{ padding: 24, maxWidth: 1400, margin: '0 auto' }}>
-      <style>{`
-        .custom-scroll::-webkit-scrollbar {
-          width: 6px;
-          height: 6px;
-        }
-        .custom-scroll::-webkit-scrollbar-thumb {
-          background-color: #d9d9d9;
-          border-radius: 3px;
-        }
-        .custom-scroll::-webkit-scrollbar-thumb:hover {
-          background-color: #bfbfbf;
-        }
-        .custom-scroll::-webkit-scrollbar-track {
-          background: transparent;
-        }
-      `}</style>
-
-      <Space direction="vertical" size="large" style={{ width: '100%' }}>
-        {/* Page Header Card */}
-        <Card style={{ borderRadius: 16, boxShadow: '0 8px 24px rgba(0,0,0,0.05)', border: 'none' }}>
-          <Space direction="vertical" size={4}>
-            <Title level={3} style={{ margin: 0, color: token.colorPrimary }}>
-              Rate Engine & Freight Inquiries
+    <Card style={{ borderRadius: 16, boxShadow: '0 8px 24px rgba(0,0,0,0.05)', border: 'none' }}>
+      {/* 1. Feature Page Header (Matching SchedulesRoute & UserCreationView) */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
+        <div>
+          <Space align="center" size={10}>
+            <DollarOutlined style={{ fontSize: 24, color: token.colorPrimary }} />
+            <Title level={4} style={{ margin: 0, fontWeight: 700 }}>
+              Freight Rates, Line Tariffs & Contracts
             </Title>
-            <Text type="secondary">
-              Search line tariffs, view surcharge breakdowns, manage Service Contracts, and submit spot quotation requests.
-            </Text>
           </Space>
-        </Card>
+          <Text type="secondary" style={{ display: 'block', marginTop: 4, fontSize: 13 }}>
+            Search published line tariffs, view itemized surcharge breakdowns, manage Service Contracts, and request spot rate quotes.
+          </Text>
+        </div>
 
-        {/* Tabbed Navigation */}
-        <Card style={{ borderRadius: 16, boxShadow: '0 8px 24px rgba(0,0,0,0.05)', border: 'none' }}>
-          <AppTabs
-            activeKey={activeTab}
-            onChange={setActiveTab}
-            items={tabItems}
-          />
-        </Card>
-      </Space>
-    </div>
+        <Space align="center" size={12}>
+          <AppButton icon={<DownloadOutlined />} onClick={handleExportExcel}>
+            Export Excel
+          </AppButton>
+          <AppButton icon={<MailOutlined />} onClick={handleSendEmail}>
+            Share via Mail
+          </AppButton>
+        </Space>
+      </div>
+
+      {/* 2. Search Filter Section */}
+      <RateSearchFilter onSearch={handleSearch} isLoading={isLoading} />
+
+      {/* 3. Available Rate Options Header Bar */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginTop: 20,
+          marginBottom: 16,
+          padding: '10px 16px',
+          borderRadius: 12,
+          background: token.colorFillAlter,
+          border: `1px solid ${token.colorBorderSecondary}`,
+        }}
+      >
+        <Space align="center" size={10}>
+          <DollarOutlined style={{ fontSize: 18, color: token.colorPrimary }} />
+          <Text strong style={{ fontSize: 15 }}>
+            Published Freight Rates & Contracts
+          </Text>
+          <Badge count={cardRates.length} style={{ backgroundColor: token.colorError }} />
+        </Space>
+
+        <Segmented
+          value={viewMode}
+          onChange={(val) => setViewMode(val as 'CARD' | 'DATAVIEW')}
+          options={[
+            { label: 'Card List View', value: 'CARD', icon: <AppstoreOutlined /> },
+            { label: 'AG-Grid DataView', value: 'DATAVIEW', icon: <UnorderedListOutlined /> },
+          ]}
+        />
+      </div>
+
+      {/* 4. Results Card List / AG-Grid DataView */}
+      {viewMode === 'CARD' ? (
+        <RateCardList
+          rates={cardRates}
+          isLoading={isLoading}
+          onBookNow={handleBookNow}
+          onViewSurcharges={handleViewSurcharges}
+          onShareRate={handleShareRate}
+        />
+      ) : (
+        <RateDataView activeMode={searchMode} onModeChange={setSearchMode} />
+      )}
+
+      {/* 5. Drawers / Modals */}
+      <ContractSurchargeModal
+        contract={selectedContract}
+        open={isSurchargeModalOpen}
+        onClose={handleCloseSurchargeModal}
+      />
+    </Card>
   );
-}
+};

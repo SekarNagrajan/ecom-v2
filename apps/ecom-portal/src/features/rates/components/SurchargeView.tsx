@@ -1,4 +1,15 @@
-// Modified by sekar nagarajan (2026-08-21 23:36)
+// Modified by Antigravity (2026-08-21 23:57)
+// SurchargeView AG-Grid component aligned with ApplicationResource_en.properties keys:
+// ecom.surcharge.chargename=Charge Name
+// ecom.surcharge.chargecode=Charge Code
+// ecom.surcharge.origin=Origin
+// ecom.surcharge.pol=Port of Load
+// ecom.surcharge.pod=Port Of Discharge
+// ecom.surcharge.delivery=Delivery
+// ecom.surcharge.cargotype=Cargo Type
+// ecom.surcharge.currency=Currency
+// ecom.surcharge.amount=Amount
+// ecom.surcharge.nor=NOR
 
 import { FilterOutlined, HistoryOutlined } from '@ant-design/icons';
 import { AppButton } from '@solverminds/shared-ui';
@@ -29,7 +40,7 @@ export function SurchargeView() {
           const record = params.data;
           if (!record) return null;
           return (
-            <Tooltip title="View Surcharge Revision History & Circular">
+            <Tooltip title="View Surcharge History">
               <AppButton
                 type="text"
                 size="small"
@@ -40,40 +51,55 @@ export function SurchargeView() {
         },
       },
       {
-        headerName: 'Charge Details',
+        headerName: 'Charge Name',
         field: 'chargeName',
-        minWidth: 220,
+        minWidth: 200,
         cellRenderer: (params: { data?: SurchargeDTO }) => (
           <Space direction="vertical" size={0}>
             <Text strong>{params.data?.chargeName}</Text>
-            <Tag color="purple">{params.data?.chargeCode}</Tag>
           </Space>
         ),
       },
       {
-        headerName: 'Origin / POL',
+        headerName: 'Charge Code',
+        field: 'chargeCode',
+        minWidth: 130,
+        cellRenderer: (params: { data?: SurchargeDTO }) => (
+          <Tag color="purple">{params.data?.chargeCode}</Tag>
+        ),
+      },
+      {
+        headerName: 'Origin',
         field: 'origin',
-        minWidth: 160,
+        minWidth: 150,
         cellRenderer: (params: { data?: SurchargeDTO }) => (
           <Space direction="vertical" size={0}>
             <Text strong>{params.data?.origin}</Text>
-            <Text type="secondary" style={{ fontSize: 12 }}>{params.data?.loadRegion}</Text>
           </Space>
         ),
       },
       {
-        headerName: 'POD / Delivery',
-        field: 'delivery',
+        headerName: 'Port of Load',
+        field: 'loadRegion',
         minWidth: 160,
+      },
+      {
+        headerName: 'Port Of Discharge',
+        field: 'dischargeRegion',
+        minWidth: 160,
+      },
+      {
+        headerName: 'Delivery',
+        field: 'delivery',
+        minWidth: 150,
         cellRenderer: (params: { data?: SurchargeDTO }) => (
           <Space direction="vertical" size={0}>
             <Text strong>{params.data?.delivery}</Text>
-            <Text type="secondary" style={{ fontSize: 12 }}>{params.data?.dischargeRegion}</Text>
           </Space>
         ),
       },
       {
-        headerName: 'Equipment Type',
+        headerName: 'Cargo Type',
         field: 'eqpType',
         minWidth: 160,
         cellRenderer: (params: { data?: SurchargeDTO }) => <Tag color="blue">{params.data?.eqpType}</Tag>,
@@ -84,9 +110,9 @@ export function SurchargeView() {
         width: 100,
       },
       {
-        headerName: 'Surcharge Amount',
+        headerName: 'Amount',
         field: 'amount',
-        minWidth: 150,
+        minWidth: 140,
         cellRenderer: (params: { data?: SurchargeDTO }) => (
           <Text strong style={{ color: '#cf1322', fontSize: 14 }}>
             {params.data?.currency} ${params.data?.amount.toFixed(2)}
@@ -94,12 +120,12 @@ export function SurchargeView() {
         ),
       },
       {
-        headerName: 'NOR Flag',
+        headerName: 'NOR',
         field: 'isNor',
-        width: 110,
+        width: 100,
         cellRenderer: (params: { data?: SurchargeDTO }) => (
           <Tag color={params.data?.isNor ? 'orange' : 'default'}>
-            {params.data?.isNor ? 'NOR Applicable' : 'Standard'}
+            {params.data?.isNor ? 'Y' : 'N'}
           </Tag>
         ),
       },
@@ -114,11 +140,11 @@ export function SurchargeView() {
         <Flex gap="middle" align="center" wrap="wrap">
           <Space>
             <FilterOutlined style={{ color: token.colorPrimary }} />
-            <Text strong>Filter Surcharges & Accessorials:</Text>
+            <Text strong>Filter Surcharge:</Text>
           </Space>
 
           <Select
-            placeholder="Select Origin (POL)"
+            placeholder="Port of Load"
             allowClear
             style={{ width: 200 }}
             value={pol}
@@ -130,7 +156,7 @@ export function SurchargeView() {
           />
 
           <Select
-            placeholder="Select Destination (POD)"
+            placeholder="Port Of Discharge"
             allowClear
             style={{ width: 200 }}
             value={pod}

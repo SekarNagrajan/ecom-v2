@@ -1,4 +1,4 @@
-// Modified by sekar nagarajan (2026-08-21)
+// Modified by Sekar Nagarajan (2026-08-22 00:06)
 import { CalendarOutlined, EnvironmentOutlined, SearchOutlined, SwapOutlined } from '@ant-design/icons';
 import { AutoComplete, Button, DatePicker, Input, theme } from 'antd';
 import dayjs from 'dayjs';
@@ -175,6 +175,7 @@ export function ScheduleSearchTab({ form, onSubmit }: ScheduleSearchTabProps) {
 
       <Button
         htmlType="submit"
+        onClick={(e) => onSubmit(e as any)}
         type="primary"
         icon={<SearchOutlined />}
         style={{

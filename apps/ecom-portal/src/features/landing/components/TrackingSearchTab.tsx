@@ -1,4 +1,4 @@
-// Modified by sekar nagarajan (2026-08-21)
+// Modified by Sekar Nagarajan (2026-08-22 00:06)
 import { SearchOutlined } from '@ant-design/icons';
 import { Button, Input, theme } from 'antd';
 import { Controller, type UseFormReturn } from 'react-hook-form';
@@ -80,6 +80,7 @@ export function TrackingSearchTab({
 
       <Button
         htmlType="submit"
+        onClick={(e) => onSubmit(e as any)}
         id="tracking-search-btn"
         type="primary"
         icon={<SearchOutlined />}

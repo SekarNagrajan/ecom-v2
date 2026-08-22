@@ -28,17 +28,17 @@ export function AccountPreferencesDrawer({
     preferencesController.saveStatus === 'saving'
       ? 'Saving...'
       : preferencesController.saveStatus === 'dirty'
-      ? 'Not saved'
-      : preferencesController.saveStatus === 'error'
-      ? 'Save failed'
-      : null;
+        ? 'Not saved'
+        : preferencesController.saveStatus === 'error'
+          ? 'Save failed'
+          : null;
 
   const statusColor =
     preferencesController.saveStatus === 'error'
       ? token.colorError
       : preferencesController.saveStatus === 'dirty'
-      ? token.colorWarning
-      : token.colorTextSecondary;
+        ? token.colorWarning
+        : token.colorTextSecondary;
 
   return (
     <AppDrawer

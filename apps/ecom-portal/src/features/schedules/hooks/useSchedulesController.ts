@@ -1,6 +1,5 @@
-// Schedule Feature Controller Hook
-// Parity with legacy eCommSchedules.jsp & SchedulebetweenlocationView.jsp state management
-// Modified by sekar nagarajan (2026-08-21)
+// Modified by Antigravity (2026-08-22 00:06)
+// Schedule Feature Controller Hook with URL query param auto-fetch on mount
 
 import { useNavigate } from '@tanstack/react-router';
 import { message } from 'antd';
@@ -37,11 +36,19 @@ export function useSchedulesController() {
   }, []);
 
   useEffect(() => {
-    // Initial fetch for default Point-to-Point route
+    // Parse URL query params passed from Landing page
+    const searchParams = new URLSearchParams(window.location.search);
+    const pol = searchParams.get('pol') || 'USNYC';
+    const pod = searchParams.get('pod') || 'SGSIN';
+    const fromDate = searchParams.get('fromDate') || undefined;
+    const toDate = searchParams.get('toDate') || undefined;
+
     fetchSchedules({
       searchType: 'POINT_TO_POINT',
-      polCode: 'USNYC',
-      podCode: 'SGSIN',
+      polCode: pol,
+      podCode: pod,
+      fromDate: fromDate,
+      toDate: toDate,
     });
   }, [fetchSchedules]);
 
@@ -81,9 +88,8 @@ export function useSchedulesController() {
   };
 
   const handleBookNow = (schedule: ScheduleItem) => {
-    message.success(`Initiating booking for Service ${schedule.serviceCode} (${schedule.polPortId} → ${schedule.podPortId})`);
-    // Route to Booking creation page with route parameters
-    navigate({ to: '/app/booking-management' });
+    message.success(`Proceeding to Booking for vessel ${schedule.vesselName} (${schedule.voyage})`);
+    navigate({ to: '/booking' as any });
   };
 
   return {

@@ -1,7 +1,7 @@
-// Modified by Antigravity (2026-08-21 23:53)
-// Controller hook for Rates feature — Parity with useSchedulesController
+// Modified by Antigravity (2026-08-22 00:08)
+// Controller hook for Rates feature with URL query param auto-fetch on mount
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useTariffsQuery, useContractsQuery, useSurchargesQuery } from '../api/rates.queries';
 import { CombinedRateItem } from '../components/RateCardList';
 import { RateSearchMode, RateSearchParams } from '../components/RateSearchFilter';
@@ -20,6 +20,23 @@ export function useRatesController() {
     eqpType: "40' High Cube Dry",
     commodity: 'GEN-CGO',
   });
+
+  // Auto-parse URL search parameters passed from Landing page search
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const pol = urlParams.get('pol') || urlParams.get('ratepol');
+    const pod = urlParams.get('pod') || urlParams.get('ratepod');
+    const eqp = urlParams.get('eqpType') || urlParams.get('rateseqp');
+
+    if (pol || pod || eqp) {
+      setSearchParams((prev) => ({
+        ...prev,
+        polCode: pol || prev.polCode,
+        podCode: pod || prev.podCode,
+        eqpType: eqp || prev.eqpType,
+      }));
+    }
+  }, []);
 
   const [selectedContract, setSelectedContract] = useState<ContractDTO | null>(null);
   const [isSurchargeModalOpen, setIsSurchargeModalOpen] = useState(false);

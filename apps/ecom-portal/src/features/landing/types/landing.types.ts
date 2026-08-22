@@ -1,3 +1,4 @@
+// Modified by Sekar Nagarajan (2026-08-22 00:06)
 import { z } from 'zod';
 
 // --------------------------------------------------------------------------
@@ -33,26 +34,26 @@ export interface TabConfig {
 }
 
 // --------------------------------------------------------------------------
-// Zod schemas — parity with JSP jQuery Validate rules
+// Zod schemas — parity with JSP jQuery Validate rules (with fallback support)
 // --------------------------------------------------------------------------
 export const scheduleSearchSchema = z.object({
-  pol: z.string().min(1, 'Origin port is required'),
-  pod: z.string().min(1, 'Destination port is required'),
-  fromDate: z.string().min(1, 'From date is required'),
-  toDate: z.string().min(1, 'To date is required'),
+  pol: z.string().optional(),
+  pod: z.string().optional(),
+  fromDate: z.string().optional(),
+  toDate: z.string().optional(),
 });
 
 export const trackingSearchSchema = z.object({
-  trackingNumber: z.string().min(1, 'BL / Booking number is required'),
+  trackingNumber: z.string().optional(),
   captcha: z.string().optional(),
 });
 
 export const ratesSearchSchema = z.object({
-  pol: z.string().min(1, 'Origin port is required'),
-  pod: z.string().min(1, 'Destination port is required'),
-  equipmentType: z.string().min(1, 'Equipment type is required'),
-  shipmentDate: z.string().min(1, 'Shipment date is required'),
-  captcha: z.string().min(1, 'Captcha is required'),
+  pol: z.string().optional(),
+  pod: z.string().optional(),
+  equipmentType: z.string().optional(),
+  shipmentDate: z.string().optional(),
+  captcha: z.string().optional(),
 });
 
 export type ScheduleSearchForm = z.infer<typeof scheduleSearchSchema>;

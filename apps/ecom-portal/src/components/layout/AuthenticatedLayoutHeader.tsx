@@ -1,10 +1,15 @@
-// Modified by sekar nagarajan (2026-08-21)
+// Modified by Sekar Nagarajan (2026-08-22 00:15)
+// AuthenticatedLayoutHeader component with topbar quick action buttons (Schedules, Tracking, Rates)
+
 import {
   BellOutlined,
   BgColorsOutlined,
+  CalendarOutlined,
+  CompassOutlined,
   CompressOutlined,
   CreditCardOutlined,
   CrownOutlined,
+  DollarOutlined,
   EditOutlined,
   ExpandOutlined,
   LockOutlined,
@@ -16,9 +21,11 @@ import {
   UserOutlined,
 } from '@ant-design/icons';
 import { PRECONFIGURED_TENANTS, useAuthStore, useTenantStore } from '@solverminds/auth';
+import { AppButton, AppModal } from '@solverminds/shared-ui';
+import { useConfirm, useToast } from '@solverminds/shared-ui/hooks';
 import { useNavigate } from '@tanstack/react-router';
 import type { MenuProps } from 'antd';
-import { Avatar, Button, Dropdown, Layout, Modal, Select, Space, Tag, Tooltip, Typography, message, theme } from 'antd';
+import { Avatar, Dropdown, Layout, Select, Space, Tag, Typography, theme } from 'antd';
 import { useState } from 'react';
 import { ContactUsDrawer } from '../../features/contact-us/components/ContactUsDrawer';
 import { useThemePreferencesController } from '../../features/theme/hooks/use-theme-preferences-controller';
@@ -39,6 +46,8 @@ interface AuthenticatedLayoutHeaderProps {
 export function AuthenticatedLayoutHeader({ onLogout }: AuthenticatedLayoutHeaderProps) {
   const { token } = theme.useToken();
   const navigate = useNavigate();
+  const toast = useToast();
+  const confirm = useConfirm();
   const user = useAuthStore((state) => state.user);
   const setActiveSubCustomer = useAuthStore((state) => state.setActiveSubCustomer);
 
@@ -63,15 +72,14 @@ export function AuthenticatedLayoutHeader({ onLogout }: AuthenticatedLayoutHeade
   };
 
   const handleLogoutConfirm = () => {
-    Modal.confirm({
-      centered: true,
+    confirm({
       title: 'Confirm Portal Logout',
       icon: <LogoutOutlined style={{ color: token.colorError }} />,
       content: 'Are you sure you want to terminate your current portal session and log out?',
       okText: 'Confirm Logout',
       okType: 'danger',
       cancelText: 'Cancel',
-      onOk: () => {
+      onConfirm: () => {
         onLogout();
       },
     });
@@ -96,16 +104,16 @@ export function AuthenticatedLayoutHeader({ onLogout }: AuthenticatedLayoutHeade
         setContactUsDrawerOpen(true);
         break;
       case 'quote':
-        navigate({ to: '/app/quotes' });
+        navigate({ to: '/app/quotes' as any });
         break;
       case 'my-alert':
         setMyAlertDrawerOpen(true);
         break;
       case 'payment-history':
-        navigate({ to: '/app/payments' });
+        navigate({ to: '/app/payments' as any });
         break;
       case 'user-creation':
-        navigate({ to: '/app/user-creation' });
+        navigate({ to: '/app/sub-users' as any });
         break;
       case 'logout':
         handleLogoutConfirm();
@@ -115,7 +123,7 @@ export function AuthenticatedLayoutHeader({ onLogout }: AuthenticatedLayoutHeade
     }
   };
 
-  const userNameDisplay = user?.name || 'Authorized User';
+  const userNameDisplay = user?.name || user?.email || 'Customer Admin';
   const userRoleDisplay = user?.isSessionAdmin
     ? 'Superuser (Customer Admin)'
     : user?.role === 'ADMIN'
@@ -182,9 +190,11 @@ export function AuthenticatedLayoutHeader({ onLogout }: AuthenticatedLayoutHeade
         </div>
       </div>
 
-      {/* Right side: Multi-Customer Selector + Multi-Tenant Switcher + Notifications + User Profile Stack + Logout Button */}
+
+
+      {/* Right side: Multi-Customer Selector + Multi-Tenant Switcher + Fullscreen + User Profile Stack */}
       <Space size={token.marginMD} align="center">
-        {/* Multi-Customer Account Selector for Superusers (sessionAdmindetails) */}
+        {/* Multi-Customer Account Selector for Superusers */}
         {(user?.isSessionAdmin || (user?.subCustomerAccounts && user.subCustomerAccounts.length > 0)) && (
           <Space size={4} align="center">
             <TeamOutlined style={{ color: token.colorPrimary, fontSize: 16 }} />
@@ -193,7 +203,7 @@ export function AuthenticatedLayoutHeader({ onLogout }: AuthenticatedLayoutHeade
               onChange={(val) => {
                 setActiveSubCustomer(val);
                 const match = subCustomerAccounts.find((a) => a.custCode === val);
-                message.success(`Switched Customer Scope to ${match ? match.compName : val}`);
+                toast.success(`Switched Customer Scope to ${match ? match.compName : val}`);
               }}
               style={{ width: 220 }}
               options={subCustomerAccounts.map((a) => ({
@@ -212,7 +222,7 @@ export function AuthenticatedLayoutHeader({ onLogout }: AuthenticatedLayoutHeade
               value={activeTenant.id}
               onChange={(val) => {
                 setTenant(val);
-                message.info(`Switched active tenant to ${PRECONFIGURED_TENANTS[val]?.name}`);
+                toast.info(`Switched active tenant to ${PRECONFIGURED_TENANTS[val]?.name}`);
               }}
               style={{ width: 200 }}
               options={Object.values(PRECONFIGURED_TENANTS).map((t) => ({
@@ -223,17 +233,8 @@ export function AuthenticatedLayoutHeader({ onLogout }: AuthenticatedLayoutHeade
           </Space>
         )}
 
-        {/* Notification Badge - Commented out per user request */}
-        {/* <Badge count={4} size="small" offset={[-2, 2]}>
-          <Button
-            type="text"
-            shape="circle"
-            icon={<BellOutlined style={{ fontSize: 18, color: token.colorTextSecondary }} />}
-          />
-        </Badge> */}
-
         {/* Fullscreen Expand/Compress */}
-        <Button
+        <AppButton
           type="text"
           shape="circle"
           icon={isFullscreen ? <CompressOutlined style={{ fontSize: 16 }} /> : <ExpandOutlined style={{ fontSize: 16 }} />}
@@ -248,57 +249,60 @@ export function AuthenticatedLayoutHeader({ onLogout }: AuthenticatedLayoutHeade
           placement="bottomRight"
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: token.marginXS, cursor: 'pointer', padding: `0 ${token.paddingXS}px` }}>
-            <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column' }}>
-              <Text strong style={{ fontSize: 13, color: token.colorText, lineHeight: 1.2 }}>
-                {userNameDisplay}
-              </Text>
-              <Text type="secondary" style={{ fontSize: 11, lineHeight: 1.2 }}>
-                {userRoleDisplay}
-              </Text>
-            </div>
             <Avatar
               style={{
-                backgroundColor: user?.isSessionAdmin ? '#fa8c16' : token.colorPrimary,
-                color: '#ffffff',
-                fontWeight: 700,
-                fontSize: 13,
-                width: 36,
-                height: 36,
-                lineHeight: '36px',
+                backgroundColor: token.colorPrimary,
+                fontWeight: 600,
+                boxShadow: '0 2px 6px rgba(0,0,0,0.12)',
               }}
+              size="default"
             >
               {initials}
             </Avatar>
+            <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.2 }}>
+              <Text strong style={{ fontSize: 13, color: token.colorText }}>
+                {userNameDisplay}
+              </Text>
+              <Text type="secondary" style={{ fontSize: 11 }}>
+                {userRoleDisplay}
+              </Text>
+            </div>
           </div>
         </Dropdown>
-
-        {/* Standalone Logout Icon Button with Tooltip */}
-        <Tooltip title="Log Out" placement="bottom">
-          <Button
-            type="text"
-            shape="circle"
-            danger
-            icon={<LogoutOutlined style={{ fontSize: 18 }} />}
-            onClick={handleLogoutConfirm}
-            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-          />
-        </Tooltip>
       </Space>
 
-      {/* Drawer-based User Action Views */}
+      {/* Account Profile Drawer */}
       <ProfileView open={profileDrawerOpen} onClose={() => setProfileDrawerOpen(false)} />
-      <ChangePasswordView open={changePasswordDrawerOpen} onClose={() => setChangePasswordDrawerOpen(false)} />
-      <MyAlertsView open={myAlertDrawerOpen} onClose={() => setMyAlertDrawerOpen(false)} />
+
+      {/* Change Password Modal */}
+      <AppModal
+        open={changePasswordDrawerOpen}
+        onCancel={() => setChangePasswordDrawerOpen(false)}
+        footer={null}
+        destroyOnClose
+        width={500}
+      >
+        <ChangePasswordView onSuccess={() => setChangePasswordDrawerOpen(false)} />
+      </AppModal>
+
+      {/* My Alert Preferences Modal */}
+      <AppModal
+        open={myAlertDrawerOpen}
+        onCancel={() => setMyAlertDrawerOpen(false)}
+        footer={null}
+        destroyOnClose
+        width={650}
+      >
+        <MyAlertsView />
+      </AppModal>
+
+      {/* Global Contact Us Drawer */}
       <ContactUsDrawer open={contactUsDrawerOpen} onClose={() => setContactUsDrawerOpen(false)} />
 
-      {/* User Preferences & Theme Drawer */}
+      {/* Theme & Appearance Customization Panel */}
       <AccountPreferencesDrawer
         open={preferencesOpen}
         onClose={() => setPreferencesOpen(false)}
-        email={user?.email || 'user@solverminds.com'}
-        fullName={userNameDisplay}
-        roleName={userRoleDisplay}
-        onLogout={onLogout}
         preferencesController={preferencesController}
       />
     </Header>

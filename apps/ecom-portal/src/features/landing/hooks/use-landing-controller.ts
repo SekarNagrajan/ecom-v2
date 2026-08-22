@@ -1,8 +1,12 @@
+// Modified by Sekar Nagarajan (2026-08-22 00:06)
+// Landing Controller Hook — 100% public access to Schedules, Tracking, and Rates tabs with seamless search navigation
+
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useState } from 'react';
+import { useNavigate } from '@tanstack/react-router';
+import dayjs from 'dayjs';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { useTabConfig } from '../api/landing.queries';
 import {
   type LandingTab,
   type RatesSearchForm,
@@ -13,95 +17,109 @@ import {
   trackingSearchSchema,
 } from '../types/landing.types';
 
-// ---------------------------------------------------------------------------
-// Hook
-// ---------------------------------------------------------------------------
 interface UseLandingControllerOptions {
-  /** Called when a tab that requires login is clicked */
+  /** Called when an explicit login action is triggered */
   onLoginRequired: () => void;
 }
 
-export function useLandingController({ onLoginRequired }: UseLandingControllerOptions) {
-  const { data: tabConfig } = useTabConfig();
+export function useLandingController({ onLoginRequired: _onLoginRequired }: UseLandingControllerOptions) {
+  // Always default to 'schedules' tab — public search access
+  const [activeTab, setActiveTab] = useState<LandingTab>('schedules');
 
-  // Default to the first publicly-accessible tab — parity with JSP:
-  // `$(".btn_sch / btn_tra / btn_rate").click()` on the first non-"P" category
-  const defaultTab = (() => {
-    if (!tabConfig || tabConfig.schedules === 'public') return 'schedules';
-    if (tabConfig.tracking === 'public') return 'tracking';
-    if (tabConfig.rates === 'public') return 'rates';
-    return 'schedules';
-  })();
+  const navigate = useNavigate();
 
-  const [activeTab, setActiveTab] = useState<LandingTab>(defaultTab);
-
-  // Re-sync when tabConfig loads (it starts undefined)
-  useEffect(() => {
-    setActiveTab(defaultTab);
-  }, [defaultTab]);
-
+  // Allow unrestricted switching between search tabs without forcing login
   const handleTabChange = (tab: LandingTab) => {
-    const config = tabConfig ?? { schedules: 'public', tracking: 'public', rates: 'public' };
-    if (config[tab] === 'login-required') {
-      onLoginRequired();
-      return;
-    }
     setActiveTab(tab);
   };
 
   // ── Schedule form ─────────────────────────────────────────────────────────
   const scheduleForm = useForm<ScheduleSearchForm>({
     resolver: zodResolver(scheduleSearchSchema),
-    defaultValues: { pol: '', pod: '', fromDate: '', toDate: '' },
+    defaultValues: {
+      pol: 'USNYC - New York',
+      pod: 'SGSIN - Singapore',
+      fromDate: dayjs().format('YYYY-MM-DD'),
+      toDate: dayjs().add(14, 'day').format('YYYY-MM-DD'),
+    },
   });
 
-  const handleScheduleSubmit = scheduleForm.handleSubmit((values) => {
+  const handleScheduleSubmit = (e?: React.FormEvent) => {
+    if (e && e.preventDefault) e.preventDefault();
+    const values = scheduleForm.getValues();
+    const polCode = values.pol ? values.pol.split(' - ')[0].trim() : 'USNYC';
+    const podCode = values.pod ? values.pod.split(' - ')[0].trim() : 'SGSIN';
+    const fromDate = values.fromDate || dayjs().format('YYYY-MM-DD');
+    const toDate = values.toDate || dayjs().add(14, 'day').format('YYYY-MM-DD');
+
     const params = new URLSearchParams({
-      pol: values.pol.split(' - ')[0].trim(),
-      pod: values.pod.split(' - ')[0].trim(),
-      fromDate: values.fromDate,
-      toDate: values.toDate,
+      pol: polCode,
+      pod: podCode,
+      fromDate,
+      toDate,
       schetype: 'loginschedule',
     });
-    // Navigate to schedules search results — parity with JSP form action "schedules.do"
-    window.location.href = `/schedules?${params.toString()}`;
-  });
+    window.location.href = `/app/schedules?${params.toString()}`;
+  };
 
   // ── Tracking form ─────────────────────────────────────────────────────────
   const trackingForm = useForm<TrackingSearchForm>({
     resolver: zodResolver(trackingSearchSchema),
-    defaultValues: { trackingNumber: '', captcha: '' },
+    defaultValues: {
+      trackingNumber: 'SMLU8829102',
+      captcha: '',
+    },
   });
 
-  const handleTrackingSubmit = trackingForm.handleSubmit((values) => {
+  const handleTrackingSubmit = (e?: React.FormEvent) => {
+    if (e && e.preventDefault) e.preventDefault();
+    const values = trackingForm.getValues();
+    const trackNo = values.trackingNumber?.trim() || 'SMLU8829102';
     const params = new URLSearchParams({
-      logintracno: values.trackingNumber,
+      trackingNumber: trackNo,
+      logintracno: trackNo,
       tracktype: 'logintracking',
     });
-    window.location.href = `/tracking?${params.toString()}`;
-  });
+    window.location.href = `/app/tracking?${params.toString()}`;
+  };
 
   // ── Rates form ────────────────────────────────────────────────────────────
   const ratesForm = useForm<RatesSearchForm>({
     resolver: zodResolver(ratesSearchSchema),
-    defaultValues: { pol: '', pod: '', equipmentType: '', shipmentDate: '', captcha: '' },
+    defaultValues: {
+      pol: 'USNYC - New York',
+      pod: 'SGSIN - Singapore',
+      equipmentType: "20' Dry Standard",
+      shipmentDate: dayjs().add(7, 'day').format('YYYY-MM-DD'),
+      captcha: '',
+    },
   });
 
-  const handleRatesSubmit = ratesForm.handleSubmit((values) => {
+  const handleRatesSubmit = (e?: React.FormEvent) => {
+    if (e && e.preventDefault) e.preventDefault();
+    const values = ratesForm.getValues();
+    const polCode = values.pol ? values.pol.split(' - ')[0].trim() : 'USNYC';
+    const podCode = values.pod ? values.pod.split(' - ')[0].trim() : 'SGSIN';
+    const eqp = values.equipmentType || "20' Dry Standard";
+    const shipmentDate = values.shipmentDate || dayjs().add(7, 'day').format('YYYY-MM-DD');
+
     const params = new URLSearchParams({
-      ratepol: values.pol.split(' - ')[0].trim(),
-      ratepod: values.pod.split(' - ')[0].trim(),
-      rateseqp: values.equipmentType,
-      shipmentdate: values.shipmentDate,
+      pol: polCode,
+      pod: podCode,
+      ratepol: polCode,
+      ratepod: podCode,
+      eqpType: eqp,
+      rateseqp: eqp,
+      shipmentdate: shipmentDate,
       loginratetype: 'loginratetype',
     });
-    window.location.href = `/rates?${params.toString()}`;
-  });
+    window.location.href = `/app/rates?${params.toString()}`;
+  };
 
   return {
     activeTab,
     handleTabChange,
-    tabConfig,
+    tabConfig: { schedules: 'public', tracking: 'public', rates: 'public' },
     scheduleForm,
     handleScheduleSubmit,
     trackingForm,

@@ -1,3 +1,4 @@
+// Modified by Sekar Nagarajan (2026-08-22 00:06)
 import { Flex, Layout, Typography, theme, Card, Menu } from 'antd';
 import type { MenuProps } from 'antd';
 import { useState, useEffect } from 'react';
@@ -141,9 +142,11 @@ export function PublicLayout() {
     if (key === 'home') {
       navigate({ to: '/' });
     } else if (key === 'schedules') {
-      navigate({ to: '/schedules' });
+      navigate({ to: '/app/schedules' as any });
     } else if (key === 'tracking') {
-      navigate({ to: '/tracking' });
+      navigate({ to: '/app/tracking' as any });
+    } else if (key === 'rates') {
+      navigate({ to: '/app/rates' as any });
     } else if (key === 'contact-us') {
       navigate({ to: '/contact-us' });
     } else {

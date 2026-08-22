@@ -1,4 +1,4 @@
-// Modified by sekar nagarajan (2026-08-21)
+// Modified by Sekar Nagarajan (2026-08-22 00:06)
 import { useAuthStore } from '@solverminds/auth';
 import { createRootRoute, createRoute, createRouter, Outlet, redirect } from '@tanstack/react-router';
 import { AuthenticatedLayout } from '../components/layout/AuthenticatedLayout';
@@ -72,8 +72,13 @@ export const appRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/app',
   component: () => <AuthenticatedLayout />,
-  beforeLoad: () => {
-    if (!useAuthStore.getState().isAuthenticated) {
+  beforeLoad: ({ location }) => {
+    const isPublicSearchModule =
+      location.pathname.startsWith('/app/schedules') ||
+      location.pathname.startsWith('/app/tracking') ||
+      location.pathname.startsWith('/app/rates');
+
+    if (!useAuthStore.getState().isAuthenticated && !isPublicSearchModule) {
       throw redirect({ to: '/', search: { login: true } as any });
     }
   },
@@ -139,8 +144,8 @@ const paymentsRoute = createRoute({
 });
 
 
-import { TrackingRoute } from '../features/tracking/tracking-route';
 import { RatesRoute } from '../features/rates/rates-route';
+import { TrackingRoute } from '../features/tracking/tracking-route';
 
 // 3.9 Cargo & Container Tracking
 const trackingRoute = createRoute({

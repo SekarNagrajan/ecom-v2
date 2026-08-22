@@ -1,6 +1,5 @@
-// Tracking Feature State Controller Hook
-// Parity with Tracking.js & TrackingDetails.jsp state management
-// Modified by sekar nagarajan (2026-08-21)
+// Modified by Antigravity (2026-08-22 00:07)
+// Tracking Feature State Controller Hook with URL query param auto-fetch on mount
 
 import { message } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
@@ -36,9 +35,15 @@ export function useTrackingController() {
     }
   }, []);
 
-  // Initial load
+  // Initial load auto-fetching URL parameters passed from Landing page
   useEffect(() => {
-    executeSearch(searchParams);
+    const urlParams = new URLSearchParams(window.location.search);
+    const trackingNo = urlParams.get('trackingNumber') || urlParams.get('logintracno') || 'SMLU8829102';
+    const initParams: TrackingSearchParams = {
+      searchType: 'CONTAINER',
+      searchValue: trackingNo,
+    };
+    executeSearch(initParams);
   }, [executeSearch]);
 
   const handleOpenMovements = (container: ContainerEquipment) => {

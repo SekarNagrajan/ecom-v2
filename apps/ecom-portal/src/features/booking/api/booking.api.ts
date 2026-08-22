@@ -1,6 +1,6 @@
 // Created by Antigravity (2026-08-22 09:25)
 
-import type { BookingPayload, SubmitBookingResponse } from '../types/booking.types';
+import type { BookingPayload, SubmitBookingResponse, BookingTemplate } from '../types/booking.types';
 
 export const bookingApi = {
   submitBooking: async (payload: BookingPayload): Promise<SubmitBookingResponse> => {
@@ -28,5 +28,15 @@ export const bookingApi = {
     }
     
     return await res.json();
+  },
+  getTemplates: async (): Promise<BookingTemplate[]> => {
+    const res = await fetch('/api/booking/templates');
+    if (!res.ok) throw new Error('Failed to fetch templates');
+    const json = await res.json();
+    return json.data;
+  },
+  deleteTemplate: async (id: string): Promise<void> => {
+    const res = await fetch(`/api/booking/templates/${id}`, { method: 'DELETE' });
+    if (!res.ok) throw new Error('Failed to delete template');
   },
 };

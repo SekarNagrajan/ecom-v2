@@ -8,6 +8,7 @@ import { useBookingStore } from '../stores/booking.store';
 import { masterDetailsSchema, type MasterDetailsData } from '../types/booking.types';
 import { useEffect, useState } from 'react';
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
+import { SelectTemplateModal } from './SelectTemplateModal';
 
 const { Text } = Typography;
 
@@ -15,6 +16,7 @@ export function MasterDetailsStep() {
   const { token } = theme.useToken();
   const { payload, updateMasterDetails, nextStep } = useBookingStore();
   const [showAdditional, setShowAdditional] = useState(false);
+  const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
   
   const { control, handleSubmit, formState: { errors }, reset } = useForm<any>({
     resolver: zodResolver(masterDetailsSchema),
@@ -49,7 +51,7 @@ export function MasterDetailsStep() {
     <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
       <Card
         style={{ border: `1px solid ${token.colorBorderSecondary}`, borderRadius: 8 }}
-        title={<div style={{ textAlign: 'right' }}><AppButton type="primary" style={{ background: '#faad14' }}>Select Template</AppButton></div>}
+        title={<div style={{ textAlign: 'right' }}><AppButton type="primary" style={{ background: '#faad14' }} onClick={() => setIsTemplateModalOpen(true)}>Select Template</AppButton></div>}
       >
         <Row gutter={[24, 24]}>
           <Col xs={24} md={8}>
@@ -312,6 +314,11 @@ export function MasterDetailsStep() {
         <AppButton>Previous</AppButton>
         <AppButton type="primary" htmlType="submit" style={{ marginLeft: 8 }}>Next</AppButton>
       </div>
+
+      <SelectTemplateModal 
+        open={isTemplateModalOpen} 
+        onCancel={() => setIsTemplateModalOpen(false)} 
+      />
     </form>
   );
 }

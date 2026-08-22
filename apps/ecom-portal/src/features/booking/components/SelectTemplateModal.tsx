@@ -1,18 +1,17 @@
-// Created by Antigravity (2026-08-22 10:10)
 import { AppModal } from '@solverminds/shared-ui';
-import { Button, Space, Table, Input, Select, message, Popconfirm } from 'antd';
-import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { Button, Space, Table, Input, Select, message } from 'antd';
+import { useQuery } from '@tanstack/react-query';
 import { bookingApi } from '../api/booking.api';
 import type { BookingTemplate } from '../types/booking.types';
+import { useBookingStore } from '../stores/booking.store';
 
-interface ManageTemplateModalProps {
+interface SelectTemplateModalProps {
   open: boolean;
   onCancel: () => void;
 }
 
-export function ManageTemplateModal({ open, onCancel }: ManageTemplateModalProps) {
-  const queryClient = useQueryClient();
+export function SelectTemplateModal({ open, onCancel }: SelectTemplateModalProps) {
+  const { initializeFromBooking } = useBookingStore();
 
   const { data: templates = [], isLoading } = useQuery({
     queryKey: ['booking-templates'],
@@ -20,16 +19,11 @@ export function ManageTemplateModal({ open, onCancel }: ManageTemplateModalProps
     enabled: open,
   });
 
-  const deleteMutation = useMutation({
-    mutationFn: bookingApi.deleteTemplate,
-    onSuccess: () => {
-      message.success('Template deleted successfully');
-      queryClient.invalidateQueries({ queryKey: ['booking-templates'] });
-    },
-    onError: () => {
-      message.error('Failed to delete template');
-    }
-  });
+  const handleSelect = (template: BookingTemplate) => {
+    initializeFromBooking(template.payload);
+    message.success(`Applied template: ${template.templateName}`);
+    onCancel();
+  };
 
   const columns = [
     { title: 'S.No', key: 'sno', width: 80, render: (_: any, __: any, index: number) => index + 1 },
@@ -40,26 +34,16 @@ export function ManageTemplateModal({ open, onCancel }: ManageTemplateModalProps
       title: 'Action', 
       key: 'action',
       render: (_: any, record: BookingTemplate) => (
-        <Space size="small">
-          <Button type="text" icon={<EyeOutlined style={{ color: '#1677ff' }} />} size="small" />
-          <Button type="text" icon={<EditOutlined style={{ color: '#faad14' }} />} size="small" />
-          <Popconfirm
-            title="Delete the template"
-            description="Are you sure to delete this template?"
-            onConfirm={() => deleteMutation.mutate(record.id)}
-            okText="Yes"
-            cancelText="No"
-          >
-            <Button type="text" icon={<DeleteOutlined style={{ color: '#ff4d4f' }} />} size="small" loading={deleteMutation.isPending} />
-          </Popconfirm>
-        </Space>
+        <Button type="primary" size="small" onClick={() => handleSelect(record)}>
+          Select
+        </Button>
       )
     },
   ];
 
   return (
     <AppModal
-      title={<div style={{ color: '#fff' }}>Manage Template</div>}
+      title={<div style={{ color: '#fff' }}>Select Template</div>}
       open={open}
       onCancel={onCancel}
       dialogSize="lg"
@@ -92,7 +76,7 @@ export function ManageTemplateModal({ open, onCancel }: ManageTemplateModalProps
         }}
         bordered
         size="small"
-        locale={{ emptyText: 'No data available in table' }}
+        locale={{ emptyText: 'No templates available' }}
       />
     </AppModal>
   );

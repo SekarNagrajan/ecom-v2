@@ -68,7 +68,7 @@ export function BookingWizardRoute() {
       ) : (
         <>
           <div style={{ padding: '24px', background: token.colorFillAlter, borderRadius: 12, marginBottom: 32 }}>
-            <Steps current={currentStep} items={steps} size="small" />
+            <Steps current={currentStep} items={steps} size="small" labelPlacement="vertical" />
           </div>
 
           <div style={{ padding: '0 24px' }}>

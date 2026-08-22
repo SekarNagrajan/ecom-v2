@@ -188,3 +188,11 @@ export interface BookingConfirmation {
 }
 
 export type SubmitBookingResponse = ApiResponse<BookingConfirmation>;
+
+export interface BookingTemplate {
+  id: string;
+  templateName: string;
+  origin: string;
+  delivery: string;
+  payload: BookingPayload;
+}

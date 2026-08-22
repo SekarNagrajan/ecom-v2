@@ -45,6 +45,35 @@ const mockBookings = [
   }
 ];
 
+let mockTemplates = [
+  {
+    id: 'tmpl-1',
+    templateName: 'Standard Electronics Export',
+    origin: 'AEJEA-JEBEL ALI, UAE',
+    delivery: 'SGSIN-SINGAPORE',
+    payload: {
+      masterDetails: { origin: 'AEJEA-JEBEL ALI, UAE', delivery: 'SGSIN-SINGAPORE', cargoReadyDate: '2026-09-01', haulageOriginType: 'Merchant', haulageDestinationType: 'Merchant' },
+      parties: { shipperName: 'Electronics Trading LLC', consigneeName: 'Tech Hub Pte Ltd', siSubmittingParty: 'Logistics Partner', agreementParty: 'Logistics Partner' },
+      cargo: { commodity: 'GEN-CGO', containerType: "20' Standard Dry", containerCount: 1, totalWeightKg: 5000, isLcl: false, isDangerousGoods: false, isReefer: false, isOog: false },
+      ens: null,
+      insurance: null,
+    }
+  },
+  {
+    id: 'tmpl-2',
+    templateName: 'Auto Parts to Europe',
+    origin: 'AEJEA-JEBEL ALI, UAE',
+    delivery: 'NLRTM-ROTTERDAM',
+    payload: {
+      masterDetails: { origin: 'AEJEA-JEBEL ALI, UAE', delivery: 'NLRTM-ROTTERDAM', cargoReadyDate: '2026-09-15', haulageOriginType: 'Carrier', haulageDestinationType: 'Carrier' },
+      parties: { shipperName: 'Auto Parts FZE', consigneeName: 'Euro Spares B.V.', siSubmittingParty: 'Auto Parts FZE', agreementParty: 'Auto Parts FZE' },
+      cargo: { commodity: 'AUTO-PARTS', containerType: "40' High Cube Dry", containerCount: 2, totalWeightKg: 12000, isLcl: false, isDangerousGoods: false, isReefer: false, isOog: false },
+      ens: { euCustomsZone: true, blType: 'Straight BL', ensFilingType: 'Single Filing', paymentMethod: 'Wire Transfer' },
+      insurance: null,
+    }
+  }
+];
+
 export const bookingHandlers = [
   http.get('/api/booking/list', async () => {
     await delay(500);
@@ -77,5 +106,15 @@ export const bookingHandlers = [
         submittedAt: new Date().toISOString(),
       },
     });
+  }),
+  http.get('/api/booking/templates', async () => {
+    await delay(300);
+    return HttpResponse.json({ data: mockTemplates });
+  }),
+  http.delete('/api/booking/templates/:id', async ({ params }) => {
+    await delay(300);
+    const { id } = params;
+    mockTemplates = mockTemplates.filter(t => t.id !== id);
+    return new HttpResponse(null, { status: 200 });
   }),
 ];

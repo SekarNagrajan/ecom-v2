@@ -22,7 +22,8 @@ export type LoginForm = z.infer<typeof loginSchema>;
 // Forgot password form schema
 // ---------------------------------------------------------------------------
 export const forgotPasswordSchema = z.object({
-  email: z.string().min(1, 'Email is required').email('Enter a valid email address'),
+  userName: z.string().min(1, 'Username is required'),
+  captcha: z.string().min(1, 'Enter captcha code'),
 });
 
 export type ForgotPasswordForm = z.infer<typeof forgotPasswordSchema>;

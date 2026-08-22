@@ -1,0 +1,4883 @@
+{
+  "version": "6.0",
+  "nxVersion": "22.3.3",
+  "pathMappings": {
+    "@solverminds/platform": [
+      "libs/platform/src/index.ts"
+    ],
+    "@solverminds/auth": [
+      "libs/auth/src/index.ts"
+    ],
+    "@solverminds/theme": [
+      "libs/theme/src/index.ts"
+    ],
+    "@solverminds/shared-ui": [
+      "libs/shared/ui/src/index.ts"
+    ],
+    "@solverminds/shared-ui/providers": [
+      "libs/shared/ui/src/providers/index.ts"
+    ],
+    "@solverminds/shared-ui/hooks": [
+      "libs/shared/ui/src/hooks/index.ts"
+    ],
+    "@solverminds/shared-ui/utils": [
+      "libs/shared/ui/src/utils/index.ts"
+    ],
+    "@solverminds/shared-ui/schemas": [
+      "libs/shared/ui/src/schemas/index.ts"
+    ],
+    "@solverminds/shared-ui/data-view": [
+      "libs/shared/ui/src/components/data-view/index.ts"
+    ],
+    "@solverminds/shared-ui/data-view/list-view": [
+      "libs/shared/ui/src/components/data-view/list-view/index.ts"
+    ],
+    "@solverminds/shared-ui/data-view/kanban-view": [
+      "libs/shared/ui/src/components/data-view/kanban-view/index.ts"
+    ],
+    "@solverminds/shared-ui/data-view/card-view": [
+      "libs/shared/ui/src/components/data-view/card-view/index.ts"
+    ],
+    "@solverminds/shared-ui/*": [
+      "libs/shared/ui/src/*"
+    ],
+    "@solverminds/shared-util": [
+      "libs/shared-util/src/index.ts"
+    ]
+  },
+  "nxJsonPlugins": [],
+  "fileMap": {
+    "projectFileMap": {
+      "@solverminds/shared-ui": [
+        {
+          "file": "libs/shared/ui/.babelrc",
+          "hash": "2946678488919325452"
+        },
+        {
+          "file": "libs/shared/ui/.storybook/main.ts",
+          "hash": "11422799539726989285",
+          "deps": [
+            "npm:@storybook/react-vite"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/.storybook/preview.tsx",
+          "hash": "9119774087512137913",
+          "deps": [
+            "npm:@storybook/react",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/README.md",
+          "hash": "12385339426883449268"
+        },
+        {
+          "file": "libs/shared/ui/eslint.config.mjs",
+          "hash": "10057383091860445071",
+          "deps": [
+            "npm:@nx/eslint-plugin"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/package.json",
+          "hash": "13979259945433115109"
+        },
+        {
+          "file": "libs/shared/ui/src/base/antd-luxon-date-picker.tsx",
+          "hash": "1508560995190751197",
+          "deps": [
+            "npm:@rc-component/picker",
+            "npm:antd",
+            "npm:luxon"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/base/antd-luxon-date-range-picker.tsx",
+          "hash": "12689653178560662214",
+          "deps": [
+            "npm:@rc-component/picker",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/base/antd-luxon-time-picker.tsx",
+          "hash": "17249220470490445019",
+          "deps": [
+            "npm:@rc-component/picker",
+            "npm:antd",
+            "npm:luxon",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/base/antd-luxon-time-range-picker.tsx",
+          "hash": "17059751209284966404",
+          "deps": [
+            "npm:@rc-component/picker",
+            "npm:antd",
+            "npm:luxon",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/chart/app-chart.tsx",
+          "hash": "7626697085725080029",
+          "deps": [
+            "npm:echarts",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/chart/chart-empty-state.tsx",
+          "hash": "7980838567907328047",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/chart/chart-loading-state.tsx",
+          "hash": "11871876793155913531",
+          "deps": [
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/chart/chart-types.ts",
+          "hash": "2047026848787869439",
+          "deps": [
+            "npm:echarts",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/chart/create-base-chart-theme.ts",
+          "hash": "13585232182030593874",
+          "deps": [
+            "npm:echarts"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/chart/echarts-registry.ts",
+          "hash": "18053182172661397984",
+          "deps": [
+            "npm:echarts"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/chart/index.ts",
+          "hash": "4408288292312589387"
+        },
+        {
+          "file": "libs/shared/ui/src/components/chart/patch-passive-pointer-listeners.ts",
+          "hash": "8348345140011526219"
+        },
+        {
+          "file": "libs/shared/ui/src/components/chart/use-chart-tokens.ts",
+          "hash": "704346633068148711",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/common/editable-field.tsx",
+          "hash": "5730745228916290338",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/common/form-section-header.tsx",
+          "hash": "15526465993176295091",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/common/index.ts",
+          "hash": "6922620588067295907"
+        },
+        {
+          "file": "libs/shared/ui/src/components/common/top-loading-bar.css",
+          "hash": "14120274918795805036"
+        },
+        {
+          "file": "libs/shared/ui/src/components/common/top-loading-bar.tsx",
+          "hash": "6907708437977527692",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/README.md",
+          "hash": "12203494767484403384"
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/ag-grid-license.ts",
+          "hash": "9793167786951028940"
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/card-view/card-view.stories.tsx",
+          "hash": "4143816255954440658",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:@storybook/react",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/card-view/card-view.tsx",
+          "hash": "151217830423422258",
+          "deps": [
+            "npm:@tanstack/react-virtual",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/card-view/components/card-item-utils.ts",
+          "hash": "9300429490515578003"
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/card-view/components/card-item.tsx",
+          "hash": "9383142430036631909",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/card-view/components/card-skeleton.tsx",
+          "hash": "14787185236024475420",
+          "deps": [
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/card-view/components/index.ts",
+          "hash": "11809866191365598942"
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/card-view/hooks/use-card-gestures.ts",
+          "hash": "3203033158731144740",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/card-view/index.ts",
+          "hash": "6400261400000554667"
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/card-view/types.ts",
+          "hash": "4620244930582560618",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/column-types.ts",
+          "hash": "11079240908803678615",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/components/data-view-grid-surface.tsx",
+          "hash": "17857664934237422483",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/components/data-view-header.tsx",
+          "hash": "10241538499420751044",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/components/filter-bar/filter-bar.tsx",
+          "hash": "10326228429668278534",
+          "deps": [
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/components/filter-bar/filter-chips.tsx",
+          "hash": "3461649570194517980",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/components/filter-bar/filter-controls.tsx",
+          "hash": "13775939692819782222",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/components/filter-bar/filter-drawer.tsx",
+          "hash": "4832984419321207872",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/components/filter-bar/filter-section.tsx",
+          "hash": "15509719261925698309",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/components/filter-bar/index.ts",
+          "hash": "11735409548385498888"
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/components/filter-bar/sort-chips.tsx",
+          "hash": "13640925297737868899",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/components/filter-bar/sort-section.tsx",
+          "hash": "5922198847932545182",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/components/filters/boolean-filter-control.tsx",
+          "hash": "13563503188780113606",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/components/filters/date-filter-control.tsx",
+          "hash": "953175221386940603",
+          "deps": [
+            "npm:antd",
+            "npm:luxon",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/components/filters/daterange-filter-control.tsx",
+          "hash": "9913358940608731195",
+          "deps": [
+            "npm:antd",
+            "npm:luxon",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/components/filters/filter-control-types.ts",
+          "hash": "14684225702158965267"
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/components/filters/filter-control.tsx",
+          "hash": "11469417922891248225"
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/components/filters/index.ts",
+          "hash": "17099352647007611725"
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/components/filters/multiselect-filter-control.tsx",
+          "hash": "13064363634641101424"
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/components/filters/number-filter-control.tsx",
+          "hash": "5588431010529296944",
+          "deps": [
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/components/filters/number-filter-utils.ts",
+          "hash": "8727736504402373988"
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/components/filters/number-operator-options.tsx",
+          "hash": "4281369708803150638"
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/components/filters/operator-select.tsx",
+          "hash": "16313681137540140464",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/components/filters/select-filter-control.tsx",
+          "hash": "2966671031724181990"
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/components/filters/text-filter-control.tsx",
+          "hash": "15148225111603605925",
+          "deps": [
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/components/filters/use-filter-options.ts",
+          "hash": "7931698601933804768",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/components/filters/use-number-filter.ts",
+          "hash": "9858003377491202200",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/context/data-view-context.tsx",
+          "hash": "18173239636309810289",
+          "deps": [
+            "npm:react",
+            "npm:zustand"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/context/index.ts",
+          "hash": "3890950230996483683"
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/data-view-item.ts",
+          "hash": "15013976738149643487"
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/data-view-render-helpers.tsx",
+          "hash": "7534487761022521925",
+          "deps": [
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/data-view.stories.tsx",
+          "hash": "14201766551485864816",
+          "deps": [
+            "npm:@storybook/react",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/data-view.tsx",
+          "hash": "14474313513758808913",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/hooks/index.ts",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/hooks/use-data-processing.ts",
+          "hash": "18395470133745181798"
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/index.ts",
+          "hash": "892730630744355116"
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/kanban-view/components/card-content.tsx",
+          "hash": "5137955464620402098",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/kanban-view/components/kanban-board-types.ts",
+          "hash": "9066019287400659059",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/kanban-view/components/kanban-board.tsx",
+          "hash": "16862791135973515669",
+          "deps": [
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/kanban-view/components/kanban-card-list.tsx",
+          "hash": "18119771391513039351",
+          "deps": [
+            "npm:@tanstack/react-virtual",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/kanban-view/components/kanban-card-types.ts",
+          "hash": "4734259550354178512",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/kanban-view/components/kanban-card.tsx",
+          "hash": "8181980829327217184"
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/kanban-view/components/kanban-column-wrapper.tsx",
+          "hash": "18315146246140975939"
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/kanban-view/components/kanban-column.tsx",
+          "hash": "2584379706647396664",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/kanban-view/components/kanban-drag-overlay.tsx",
+          "hash": "7159082546473993496",
+          "deps": [
+            "npm:@dnd-kit/core",
+            "npm:react",
+            "npm:react-dom"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/kanban-view/components/kanban-drag-provider.tsx",
+          "hash": "10911934861138537966",
+          "deps": [
+            "npm:@dnd-kit/core",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/kanban-view/components/kanban-drop-indicator.tsx",
+          "hash": "13050962501518403833",
+          "deps": [
+            "npm:@dnd-kit/core",
+            "npm:antd",
+            "npm:react",
+            "npm:react-dom"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/kanban-view/components/kanban-drop-zone.tsx",
+          "hash": "13446838974277514271",
+          "deps": [
+            "npm:@dnd-kit/core",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/kanban-view/components/kanban-store-context.tsx",
+          "hash": "18414360308701898904",
+          "deps": [
+            "npm:react",
+            "npm:zustand"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/kanban-view/components/sortable-card.tsx",
+          "hash": "14133054907175294718",
+          "deps": [
+            "npm:@dnd-kit/core",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/kanban-view/index.ts",
+          "hash": "7075932866602619332"
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/kanban-view/kanban-view.tsx",
+          "hash": "14808311179301479936",
+          "deps": [
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/kanban-view/stores/kanban-store-types.ts",
+          "hash": "13455554957249159642"
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/kanban-view/stores/kanban-store.ts",
+          "hash": "8061344799800537480",
+          "deps": [
+            "npm:zustand"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/kanban-view/types.ts",
+          "hash": "10544787332921406745",
+          "deps": [
+            "npm:@dnd-kit/core",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/list-view/components/ag-grid-date-component.tsx",
+          "hash": "416600769292202239",
+          "deps": [
+            "npm:ag-grid-react",
+            "npm:luxon",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/list-view/components/ag-grid-host.tsx",
+          "hash": "8344835820160662129",
+          "deps": [
+            "npm:ag-grid-community",
+            "npm:ag-grid-react",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/list-view/components/ag-grid-loading-overlay.tsx",
+          "hash": "3288125965750657836",
+          "deps": [
+            "npm:ag-grid-community",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/list-view/components/ag-grid-number-floating-filter.tsx",
+          "hash": "12476827429329003487",
+          "deps": [
+            "npm:ag-grid-community",
+            "npm:ag-grid-react",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/list-view/components/ag-grid-set-floating-filter.tsx",
+          "hash": "6209739681112627182",
+          "deps": [
+            "npm:ag-grid-community",
+            "npm:ag-grid-react",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/list-view/components/ag-grid-text-floating-filter.tsx",
+          "hash": "1992601859393808533",
+          "deps": [
+            "npm:ag-grid-community",
+            "npm:ag-grid-react",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/list-view/components/floating-filter-shell.tsx",
+          "hash": "17136411577727259136",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/list-view/components/list-view-grid.tsx",
+          "hash": "4949323208403696521",
+          "deps": [
+            "npm:ag-grid-community",
+            "npm:ag-grid-react",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/list-view/components/list-view-pagination.tsx",
+          "hash": "8232124347321794016",
+          "deps": [
+            "npm:ag-grid-community",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/list-view/components/list-view-toolbar.tsx",
+          "hash": "3719124973594444196",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/list-view/components/profile-bar.tsx",
+          "hash": "10259804180402736179",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/list-view/components/save-profile-modal.tsx",
+          "hash": "1018347401581265855",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "npm:antd",
+            "npm:react-hook-form",
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/list-view/components/settings-menu.tsx",
+          "hash": "3707325300291074539",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/list-view/components/types.ts",
+          "hash": "5964056665216012374"
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/list-view/context.tsx",
+          "hash": "3135145285495200621",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/list-view/hooks/use-list-view-logic.ts",
+          "hash": "12407806048108817362",
+          "deps": [
+            "npm:ag-grid-community",
+            "npm:ag-grid-react",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/list-view/index.ts",
+          "hash": "3320659727146666267"
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/list-view/init-ag-grid-license.ts",
+          "hash": "16487310804577873829",
+          "deps": [
+            "npm:ag-grid-enterprise"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/list-view/list-view.tsx",
+          "hash": "1213014554256215541",
+          "deps": [
+            "npm:ag-grid-community",
+            "npm:ag-grid-enterprise",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/list-view/types.ts",
+          "hash": "4162839689559419279",
+          "deps": [
+            "npm:ag-grid-community",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/stores/data-view-store.ts",
+          "hash": "904034947587560000",
+          "deps": [
+            "npm:zustand"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/stores/data-view-types.ts",
+          "hash": "840903060026617220"
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/theme-utils.ts",
+          "hash": "8676275267451346530",
+          "deps": [
+            "npm:ag-grid-community",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/types.ts",
+          "hash": "15938064221337252187",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/utils/data-utils.ts",
+          "hash": "6650796224375311620"
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/utils/filter-utils.ts",
+          "hash": "8919884770321842660",
+          "deps": [
+            "npm:luxon"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/utils/index.ts",
+          "hash": "14784053034451722873"
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/utils/infer-filters.ts",
+          "hash": "8725329456365814985"
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/utils/search-utils.ts",
+          "hash": "1435414221945026420"
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/utils/sort-utils.ts",
+          "hash": "8031164641380291870"
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/utils/url-utils.ts",
+          "hash": "16919464758495336356"
+        },
+        {
+          "file": "libs/shared/ui/src/components/data-view/view-loaders.tsx",
+          "hash": "6490694215418275221",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/email/app-email-center.tsx",
+          "hash": "5169659876101123440"
+        },
+        {
+          "file": "libs/shared/ui/src/components/email/components/email-center-content.tsx",
+          "hash": "6981675489801373527",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/email/components/email-composer-form-schema.ts",
+          "hash": "995348466960799465",
+          "deps": [
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/email/components/email-composer-form.tsx",
+          "hash": "14427771512802712649",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "npm:antd",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/email/components/email-composer-form.types.ts",
+          "hash": "10729651471925009921"
+        },
+        {
+          "file": "libs/shared/ui/src/components/email/components/email-composer-modal.tsx",
+          "hash": "4650744769614749072"
+        },
+        {
+          "file": "libs/shared/ui/src/components/email/components/email-composer-modal.types.ts",
+          "hash": "12116752315519689011"
+        },
+        {
+          "file": "libs/shared/ui/src/components/email/components/email-sidebar.tsx",
+          "hash": "3366598676209011334",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/email/components/email-sidebar.types.ts",
+          "hash": "8942336878955958834",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/email/components/email-thread-list-item-default.tsx",
+          "hash": "18080625372424800448",
+          "deps": [
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/email/components/email-thread-message-default.tsx",
+          "hash": "7194104237862479443",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/email/components/email-thread-message-default.types.ts",
+          "hash": "3367066068938061894"
+        },
+        {
+          "file": "libs/shared/ui/src/components/email/components/email-thread-view.tsx",
+          "hash": "5249766302186426379",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/email/components/email-thread-view.types.ts",
+          "hash": "5035217227617503646",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/email/constants.ts",
+          "hash": "16335256605623339599"
+        },
+        {
+          "file": "libs/shared/ui/src/components/email/context/email-center-store-context.tsx",
+          "hash": "14814313684164233182",
+          "deps": [
+            "npm:react",
+            "npm:zustand"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/email/index.ts",
+          "hash": "8772650609525783971"
+        },
+        {
+          "file": "libs/shared/ui/src/components/email/stores/email-center-store.ts",
+          "hash": "17347360318848208106",
+          "deps": [
+            "npm:zustand"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/email/types.ts",
+          "hash": "11884305699394133402",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/email/utils/email-client-helpers.ts",
+          "hash": "7869332194610585168",
+          "deps": [
+            "npm:luxon"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/email/utils/email-compose-helpers.ts",
+          "hash": "1747989569949625684"
+        },
+        {
+          "file": "libs/shared/ui/src/components/email/utils/email-composer-key.ts",
+          "hash": "15358237978853270199"
+        },
+        {
+          "file": "libs/shared/ui/src/components/email/utils/email-query-helpers.ts",
+          "hash": "10822543550426173162"
+        },
+        {
+          "file": "libs/shared/ui/src/components/email/utils/email-thread-view-helpers.ts",
+          "hash": "12299445914372941601"
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/common/form-field-wrapper.tsx",
+          "hash": "14420696236557969663",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/common/helper.ts",
+          "hash": "2585001615939543808",
+          "deps": [
+            "npm:antd",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/common/index.ts",
+          "hash": "11744831488352145548"
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/common/types.ts",
+          "hash": "13483871991126813204",
+          "deps": [
+            "npm:antd",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-autocomplete-deprecated/autocomplete-field.tsx",
+          "hash": "18115154938808833557",
+          "deps": [
+            "npm:antd",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-autocomplete-deprecated/form-autocomplete.stories.tsx",
+          "hash": "999802329773311087",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:@hookform/resolvers",
+            "npm:@storybook/react",
+            "npm:antd",
+            "npm:react-hook-form",
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-autocomplete-deprecated/form-autocomplete.tsx",
+          "hash": "2655883732670947164",
+          "deps": [
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-autocomplete-deprecated/helpers/highlight-text.tsx",
+          "hash": "7850208871408123460",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-autocomplete-deprecated/helpers/use-select-all.ts",
+          "hash": "18018008210923776715",
+          "deps": [
+            "npm:antd",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-autocomplete-deprecated/hooks/use-async-options.ts",
+          "hash": "13460665526700547204",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-autocomplete-deprecated/hooks/use-grouped-options.ts",
+          "hash": "73872252714934225",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-autocomplete-deprecated/hooks/use-hydrated-value.ts",
+          "hash": "6239628588786633565",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-autocomplete-deprecated/hooks/use-max-limit.ts",
+          "hash": "5850202994757296680",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-autocomplete-deprecated/hooks/use-select-all.ts",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-autocomplete-deprecated/index.ts",
+          "hash": "9609140731811878327"
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-autocomplete-deprecated/select-all-header.tsx",
+          "hash": "10397755307823608289",
+          "deps": [
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-autocomplete-deprecated/selected-items-footer.tsx",
+          "hash": "15804797299351085187",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-autocomplete-deprecated/types.ts",
+          "hash": "16702820345016079285",
+          "deps": [
+            "npm:antd",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-autocomplete/form-autocomplete.tsx",
+          "hash": "1241662631749146662",
+          "deps": [
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-autocomplete/index.ts",
+          "hash": "4637666899333413686"
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-autocomplete/types.ts",
+          "hash": "4088246431928191677",
+          "deps": [
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-checkbox-group/form-checkbox-group.stories.tsx",
+          "hash": "8544075846860486424",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "npm:@storybook/react",
+            "npm:antd",
+            "npm:react-hook-form",
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-checkbox-group/form-checkbox-group.tsx",
+          "hash": "5490194182235032004",
+          "deps": [
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-checkbox-group/index.ts",
+          "hash": "5537516112499290032"
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-checkbox-group/types.ts",
+          "hash": "11440060254670348598",
+          "deps": [
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-checkbox/form-checkbox.stories.tsx",
+          "hash": "13352998571702211369",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "npm:@storybook/react",
+            "npm:antd",
+            "npm:react-hook-form",
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-checkbox/form-checkbox.tsx",
+          "hash": "12170914573058832511",
+          "deps": [
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-checkbox/index.ts",
+          "hash": "1914476773930080525"
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-checkbox/types.ts",
+          "hash": "10115382344778315932",
+          "deps": [
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-country-select/country-code-select.tsx",
+          "hash": "8875076230471746181",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-country-select/country-flag.tsx",
+          "hash": "700115748442920960",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-country-select/country-options.ts",
+          "hash": "7541524005545055443",
+          "deps": [
+            "npm:antd",
+            "npm:libphonenumber-js"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-country-select/form-country-select.tsx",
+          "hash": "10371286760560041359",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-country-select/index.ts",
+          "hash": "10418136759679007680"
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-custom-select/components/select-all-header.tsx",
+          "hash": "7783940990248154148",
+          "deps": [
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-custom-select/custom-select-field.tsx",
+          "hash": "6533935296786119598",
+          "deps": [
+            "npm:antd",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-custom-select/form-custom-select.stories.tsx",
+          "hash": "5517503452280974150",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:@hookform/resolvers",
+            "npm:@storybook/react",
+            "npm:antd",
+            "npm:react-hook-form",
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-custom-select/form-custom-select.tsx",
+          "hash": "3635976024720832442",
+          "deps": [
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-custom-select/hooks/use-async-options.ts",
+          "hash": "13850409532213503657",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-custom-select/hooks/use-grouped-options.tsx",
+          "hash": "8091234750109504324",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-custom-select/hooks/use-hydrated-value.ts",
+          "hash": "11915308474751796074",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-custom-select/hooks/use-max-limit.ts",
+          "hash": "10588123118936784958",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-custom-select/hooks/use-select-all.ts",
+          "hash": "9168442340012337468",
+          "deps": [
+            "npm:antd",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-custom-select/index.ts",
+          "hash": "10619018405139385299"
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-custom-select/types.ts",
+          "hash": "902659379426814411",
+          "deps": [
+            "npm:antd",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-date-picker/form-date-picker.stories.tsx",
+          "hash": "1920184714888627779",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "npm:@storybook/react",
+            "npm:antd",
+            "npm:luxon",
+            "npm:react-hook-form",
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-date-picker/form-date-picker.tsx",
+          "hash": "3393465512945057465",
+          "deps": [
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-date-picker/helpers/presets.ts",
+          "hash": "9626144329676245574",
+          "deps": [
+            "npm:luxon"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-date-picker/index.ts",
+          "hash": "15310789547598794634"
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-date-picker/types.ts",
+          "hash": "14364227969856987834",
+          "deps": [
+            "npm:luxon",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-date-range-picker/form-date-range-picker.stories.tsx",
+          "hash": "1257350926852125479",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "npm:@storybook/react",
+            "npm:antd",
+            "npm:luxon",
+            "npm:react-hook-form",
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-date-range-picker/form-date-range-picker.tsx",
+          "hash": "17783966575440057726",
+          "deps": [
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-date-range-picker/index.ts",
+          "hash": "9349454787715299438"
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-date-range-picker/types.ts",
+          "hash": "2247256583520069850",
+          "deps": [
+            "npm:luxon",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-input-number/form-input-number.stories.tsx",
+          "hash": "16455993447261286914",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "npm:@storybook/react",
+            "npm:antd",
+            "npm:react-hook-form",
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-input-number/form-input-number.tsx",
+          "hash": "13422353297021312527",
+          "deps": [
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-input-number/index.ts",
+          "hash": "1847003302732324919"
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-input-number/input-number-field.tsx",
+          "hash": "6146220585285496962",
+          "deps": [
+            "npm:antd",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-input-number/number-formatter.tsx",
+          "hash": "7921159881475990494",
+          "deps": [
+            "npm:antd",
+            "npm:react",
+            "npm:react-hook-form",
+            "npm:react-number-format"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-input-number/types.ts",
+          "hash": "17452856616118180597",
+          "deps": [
+            "npm:antd",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-input/form-input.stories.tsx",
+          "hash": "18028264059247190203",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:@hookform/resolvers",
+            "npm:@storybook/react",
+            "npm:antd",
+            "npm:react-hook-form",
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-input/form-input.tsx",
+          "hash": "7412429647917746351",
+          "deps": [
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-input/index.ts",
+          "hash": "5728586739536211506"
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-input/input-field.tsx",
+          "hash": "6455916187802144282",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-input/types.ts",
+          "hash": "14708945627520547499",
+          "deps": [
+            "npm:antd",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-otp/form-otp.tsx",
+          "hash": "1766495293721701251",
+          "deps": [
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-otp/index.ts",
+          "hash": "2889947012960018749"
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-otp/otp-field.tsx",
+          "hash": "9567516173974580832",
+          "deps": [
+            "npm:antd",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-otp/types.ts",
+          "hash": "12242238138404284360",
+          "deps": [
+            "npm:antd",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-phone-input/country-select-options.tsx",
+          "hash": "7840098158992016750",
+          "deps": [
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-phone-input/country-select.tsx",
+          "hash": "15347482729741268333",
+          "deps": [
+            "npm:antd",
+            "npm:libphonenumber-js"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-phone-input/form-phone-input.stories.tsx",
+          "hash": "14033707190598221605",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "npm:@storybook/react",
+            "npm:antd",
+            "npm:react-hook-form",
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-phone-input/form-phone-input.tsx",
+          "hash": "2448688567759291631",
+          "deps": [
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-phone-input/helper.ts",
+          "hash": "12112518733121403166",
+          "deps": [
+            "npm:libphonenumber-js"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-phone-input/index.ts",
+          "hash": "2917747789871238374"
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-phone-input/phone-input-field.tsx",
+          "hash": "15035340883578072331",
+          "deps": [
+            "npm:antd",
+            "npm:libphonenumber-js",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-phone-input/schema.ts",
+          "hash": "17910710080576628135",
+          "deps": [
+            "npm:libphonenumber-js",
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-phone-input/types.ts",
+          "hash": "9438469431813020698",
+          "deps": [
+            "npm:antd",
+            "npm:libphonenumber-js",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-radio-group/form-radio-group.stories.tsx",
+          "hash": "13638779047143850717",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "npm:@storybook/react",
+            "npm:antd",
+            "npm:react-hook-form",
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-radio-group/form-radio-group.tsx",
+          "hash": "8564397884098294472",
+          "deps": [
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-radio-group/index.ts",
+          "hash": "13963998228733264279"
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-radio-group/types.ts",
+          "hash": "1769626288755536829",
+          "deps": [
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-radio/form-radio.stories.tsx",
+          "hash": "4178447114258662113",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "npm:@storybook/react",
+            "npm:antd",
+            "npm:react-hook-form",
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-radio/form-radio.tsx",
+          "hash": "12253524351905511560",
+          "deps": [
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-radio/index.ts",
+          "hash": "5437984082624984499"
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-radio/types.ts",
+          "hash": "11908134246358424927",
+          "deps": [
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-segmented/form-segmented.tsx",
+          "hash": "686167416953642187",
+          "deps": [
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-segmented/index.ts",
+          "hash": "10180854120829494313"
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-segmented/types.ts",
+          "hash": "7481059776373543939",
+          "deps": [
+            "npm:antd",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-select/form-select.stories.tsx",
+          "hash": "10527640544107136660",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "npm:@storybook/react",
+            "npm:antd",
+            "npm:react",
+            "npm:react-hook-form",
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-select/form-select.tsx",
+          "hash": "5953646463584078463",
+          "deps": [
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-select/index.ts",
+          "hash": "12854412833777647567"
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-select/types.ts",
+          "hash": "17118590387620261240",
+          "deps": [
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-switch/form-switch.tsx",
+          "hash": "7387789396942576750",
+          "deps": [
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-switch/index.ts",
+          "hash": "15833805999879600707"
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-switch/types.ts",
+          "hash": "4234552360293794594",
+          "deps": [
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-textarea/form-textarea.stories.tsx",
+          "hash": "9282052453614939137",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "npm:@storybook/react",
+            "npm:antd",
+            "npm:react-hook-form",
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-textarea/form-textarea.tsx",
+          "hash": "13013283021551924942",
+          "deps": [
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-textarea/index.ts",
+          "hash": "8765220508555696766"
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-textarea/textarea-field.tsx",
+          "hash": "14269886270709612295",
+          "deps": [
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-textarea/types.ts",
+          "hash": "16621042543720816379",
+          "deps": [
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-time-picker/form-time-picker.stories.tsx",
+          "hash": "16685947931810517008",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "npm:@storybook/react",
+            "npm:antd",
+            "npm:react-hook-form",
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-time-picker/form-time-picker.tsx",
+          "hash": "16213818499470067061",
+          "deps": [
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-time-picker/helpers/presets.ts",
+          "hash": "11263855957715715794",
+          "deps": [
+            "npm:luxon"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-time-picker/helpers/time-restrictions.ts",
+          "hash": "5682902359935183509",
+          "deps": [
+            "npm:luxon"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-time-picker/index.ts",
+          "hash": "5912154001579776366"
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-time-picker/time-picker-field.tsx",
+          "hash": "2607669172080409026",
+          "deps": [
+            "npm:antd",
+            "npm:luxon",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-time-picker/types.ts",
+          "hash": "3261680488542895823",
+          "deps": [
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-time-range-picker/form-time-range-picker.stories.tsx",
+          "hash": "7951288523804445240",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "npm:@storybook/react",
+            "npm:antd",
+            "npm:luxon",
+            "npm:react-hook-form",
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-time-range-picker/form-time-range-picker.tsx",
+          "hash": "7315954131383561774",
+          "deps": [
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-time-range-picker/helpers/time-range-restrictions.ts",
+          "hash": "4605536103278165",
+          "deps": [
+            "npm:luxon"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-time-range-picker/index.ts",
+          "hash": "17009223379603060711"
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-time-range-picker/time-range-picker-field.tsx",
+          "hash": "17700390797367957377",
+          "deps": [
+            "npm:luxon",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-time-range-picker/types.ts",
+          "hash": "3986612856512319325",
+          "deps": [
+            "npm:luxon",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-tree-select/form-tree-select.tsx",
+          "hash": "9121325956793408481",
+          "deps": [
+            "npm:antd",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-tree-select/index.ts",
+          "hash": "2079604629534529844"
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/form-tree-select/types.ts",
+          "hash": "18441470344711786150",
+          "deps": [
+            "npm:antd",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/inline-field/index.ts",
+          "hash": "3756386013613220938"
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/inline-field/inline-field.tsx",
+          "hash": "9415736506248317414",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/inline-phone-edit/index.ts",
+          "hash": "16082438604933782419"
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/inline-phone-edit/inline-phone-edit.tsx",
+          "hash": "3011349781615314937",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "npm:antd",
+            "npm:react-hook-form",
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/inline-text-edit/index.ts",
+          "hash": "28008523368353289"
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/inline-text-edit/inline-text-edit.tsx",
+          "hash": "15838606814870530976",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "npm:antd",
+            "npm:react-hook-form",
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/rich-text-editor/form-rich-text-editor.tsx",
+          "hash": "15924673376660120446",
+          "deps": [
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/rich-text-editor/index.ts",
+          "hash": "6338489917716449774"
+        },
+        {
+          "file": "libs/shared/ui/src/components/form-fields/rich-text-editor/types.ts",
+          "hash": "8350261890298108084",
+          "deps": [
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/formatted-date/formatted-date.tsx",
+          "hash": "8665103080179161262",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/formatted-date/index.ts",
+          "hash": "906164309810034188"
+        },
+        {
+          "file": "libs/shared/ui/src/components/formatted-date/types.ts",
+          "hash": "14911843156576223771",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/formatted-number/formatted-currency.tsx",
+          "hash": "7516603060334259420",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/formatted-number/formatted-number.tsx",
+          "hash": "6542814950888033755",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/formatted-number/index.ts",
+          "hash": "14493093872443892650"
+        },
+        {
+          "file": "libs/shared/ui/src/components/formatted-number/types.ts",
+          "hash": "152130888164068473",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/index.ts",
+          "hash": "11986228932226110014"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/app-textarea/app-textarea.tsx",
+          "hash": "10697882473273779705",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/app-textarea/index.ts",
+          "hash": "606297711328083554"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/app-textarea/types.ts",
+          "hash": "17819127114335708544",
+          "deps": [
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/audio-dictation-button/append-transcript.ts",
+          "hash": "679357926751553574"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/audio-dictation-button/audio-dictation-button.tsx",
+          "hash": "511907236919445603",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/audio-dictation-button/index.ts",
+          "hash": "4450022943328700056"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/audio-dictation-button/types.ts",
+          "hash": "11333210551565562496"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/autocomplete/app-autocomplete.tsx",
+          "hash": "5392997444658412910"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/autocomplete/index.ts",
+          "hash": "6485952707301193995"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/autocomplete/types.ts",
+          "hash": "12566001557416209257",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/button/app-button.stories.tsx",
+          "hash": "13970154548080486343",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:@storybook/react",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/button/app-button.tsx",
+          "hash": "7904230151795300594",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/button/helper.ts",
+          "hash": "10878102503100657196",
+          "deps": [
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/button/index.ts",
+          "hash": "5022473822627729907"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/button/types.ts",
+          "hash": "5318683159968799970",
+          "deps": [
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/calendar/app-calendar.stories.tsx",
+          "hash": "7929324465934812968",
+          "deps": [
+            "npm:@storybook/react",
+            "npm:luxon"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/calendar/app-calendar.tsx",
+          "hash": "15316685010565501172",
+          "deps": [
+            "npm:@fullcalendar/core",
+            "npm:@fullcalendar/daygrid",
+            "npm:@fullcalendar/interaction",
+            "npm:@fullcalendar/list",
+            "npm:@fullcalendar/luxon3",
+            "npm:@fullcalendar/react",
+            "npm:@fullcalendar/timegrid",
+            "npm:antd",
+            "npm:luxon",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/calendar/calendar-constants.ts",
+          "hash": "13254782645654161196"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/calendar/calendar-overrides.css",
+          "hash": "16438372744657830400"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/calendar/calendar-schema.ts",
+          "hash": "3777909084868822109",
+          "deps": [
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/calendar/calendar-types.ts",
+          "hash": "5159764015524696075",
+          "deps": [
+            "npm:@fullcalendar/core",
+            "npm:luxon",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/calendar/components/calendar-event.tsx",
+          "hash": "2372075539748785904",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/calendar/components/calendar-header.tsx",
+          "hash": "1095124467129788389",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/calendar/hooks/use-calendar-filters.ts",
+          "hash": "1888759210250505511",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/calendar/hooks/use-calendar-state.ts",
+          "hash": "11461521809344020432",
+          "deps": [
+            "npm:luxon",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/calendar/hooks/use-calendar-theme.ts",
+          "hash": "11683237418064910962",
+          "deps": [
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/calendar/index.ts",
+          "hash": "13168793248592726663"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/checkbox-group/app-checkbox-group.stories.tsx",
+          "hash": "1965974697288179578",
+          "deps": [
+            "npm:@storybook/react",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/checkbox-group/app-checkbox-group.tsx",
+          "hash": "1744314311669110143",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/checkbox-group/index.ts",
+          "hash": "10530474334806798486"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/checkbox-group/types.ts",
+          "hash": "5737091468014631322",
+          "deps": [
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/checkbox/app-checkbox.stories.tsx",
+          "hash": "14458644443996291937",
+          "deps": [
+            "npm:@storybook/react",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/checkbox/app-checkbox.tsx",
+          "hash": "5128599976232467047",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/checkbox/index.ts",
+          "hash": "1337839091125410860"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/checkbox/types.ts",
+          "hash": "13112613513455328398",
+          "deps": [
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/combobox/app-combobox.tsx",
+          "hash": "9852831547773207038",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/combobox/index.ts",
+          "hash": "6352842478508597975"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/combobox/types.ts",
+          "hash": "7990486226567638311",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/date-picker/app-date-picker.tsx",
+          "hash": "11826510521210149709",
+          "deps": [
+            "npm:antd",
+            "npm:luxon"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/date-picker/app-time-picker.tsx",
+          "hash": "11589662025694077254",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/date-picker/helpers/date-picker-format.ts",
+          "hash": "8637808218704151050"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/date-picker/index.ts",
+          "hash": "8842888420781881633"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/date-picker/types.ts",
+          "hash": "17337642676812626867",
+          "deps": [
+            "npm:luxon"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/date-picker/utils.ts",
+          "hash": "2440313693135159282",
+          "deps": [
+            "npm:luxon"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/date-range-picker/app-date-range-picker.tsx",
+          "hash": "7592256280031731200",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/date-range-picker/desktop-date-range-picker.tsx",
+          "hash": "7960641053115884099",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/date-range-picker/helpers/date-range-picker-format.ts",
+          "hash": "14024652674878128294"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/date-range-picker/index.ts",
+          "hash": "3269589661681829257"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/date-range-picker/mobile-date-range-picker.tsx",
+          "hash": "44152079721434380",
+          "deps": [
+            "npm:antd",
+            "npm:luxon",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/date-range-picker/types.ts",
+          "hash": "6751915730923050957"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/date-range-picker/utils.ts",
+          "hash": "7434454661536901182",
+          "deps": [
+            "npm:luxon"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/dialog/app-drawer.tsx",
+          "hash": "17948145272431405359",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/dialog/app-modal.tsx",
+          "hash": "5802156712003750078",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/dialog/app-popover.tsx",
+          "hash": "10809841940776005923",
+          "deps": [
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/dialog/constants.ts",
+          "hash": "5158675110930714464"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/dialog/dialog.stories.tsx",
+          "hash": "18195973582533906280",
+          "deps": [
+            "npm:@storybook/react",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/dialog/index.ts",
+          "hash": "5833567550524666432"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/grammar-improve-button/grammar-improve-button.tsx",
+          "hash": "10693179372450666585",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/grammar-improve-button/index.ts",
+          "hash": "9612047835813197403"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/grammar-improve-button/types.ts",
+          "hash": "2506388634517328101"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/radio-group/app-radio-group.stories.tsx",
+          "hash": "10843610398247227212",
+          "deps": [
+            "npm:@storybook/react",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/radio-group/app-radio-group.tsx",
+          "hash": "16692991103199515560",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/radio-group/index.ts",
+          "hash": "512419560213493677"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/radio-group/types.ts",
+          "hash": "13402520289879740812",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/radio/app-radio.stories.tsx",
+          "hash": "6501408396561600671",
+          "deps": [
+            "npm:@storybook/react",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/radio/app-radio.tsx",
+          "hash": "7227852302808656536",
+          "deps": [
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/radio/index.ts",
+          "hash": "1793256632306378056"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/radio/types.ts",
+          "hash": "5683571373651565021",
+          "deps": [
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/rich-text-editor/README.md",
+          "hash": "289942257359282908"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/rich-text-editor/attachment-chip-bar.tsx",
+          "hash": "1013488992938589903",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/rich-text-editor/custom-image-node.tsx",
+          "hash": "9519146894236321377",
+          "deps": [
+            "npm:@tiptap/react",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/rich-text-editor/editor-footer.tsx",
+          "hash": "17842337844042233798",
+          "deps": [
+            "npm:@tiptap/react",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/rich-text-editor/editor-toolbar.tsx",
+          "hash": "1149377886759003821",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:@tiptap/react",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/rich-text-editor/extensions/custom-image.ts",
+          "hash": "12071725440558004092",
+          "deps": [
+            "npm:@tiptap/extension-image",
+            "npm:@tiptap/react",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/rich-text-editor/extensions/file-attachment.ts",
+          "hash": "4587311603318404709",
+          "deps": [
+            "npm:@tiptap/core",
+            "npm:@tiptap/react",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/rich-text-editor/extensions/index.ts",
+          "hash": "10352948284999776607"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/rich-text-editor/extensions/upload-placeholder.ts",
+          "hash": "1830518661192592343",
+          "deps": [
+            "npm:@tiptap/core",
+            "npm:@tiptap/pm"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/rich-text-editor/file-attachment-node.tsx",
+          "hash": "3511744655242639276",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:@tiptap/react",
+            "npm:antd",
+            "npm:luxon"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/rich-text-editor/hooks/index.ts",
+          "hash": "10340424361589923341"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/rich-text-editor/hooks/use-editor-drop-zone.ts",
+          "hash": "17452952526648685602",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/rich-text-editor/hooks/use-editor-file-uploads.ts",
+          "hash": "5796690436264776366",
+          "deps": [
+            "npm:@tiptap/react",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/rich-text-editor/hooks/use-editor-theme.ts",
+          "hash": "725098635593230314",
+          "deps": [
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/rich-text-editor/hooks/use-file-upload.ts",
+          "hash": "13077314831987474081",
+          "deps": [
+            "npm:@tiptap/react",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/rich-text-editor/index.ts",
+          "hash": "9557809280787053351"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/rich-text-editor/link-modal.tsx",
+          "hash": "11512244565372134804",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "npm:@tiptap/react",
+            "npm:antd",
+            "npm:react-hook-form",
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/rich-text-editor/rich-text-editor.css",
+          "hash": "16206823780345841028"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/rich-text-editor/rich-text-editor.stories.tsx",
+          "hash": "17252713781682120349",
+          "deps": [
+            "npm:@storybook/react",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/rich-text-editor/rich-text-editor.tsx",
+          "hash": "4797885600118123010",
+          "deps": [
+            "npm:@tiptap/extension-character-count",
+            "npm:@tiptap/extension-file-handler",
+            "npm:@tiptap/extension-link",
+            "npm:@tiptap/extension-placeholder",
+            "npm:@tiptap/extension-text-align",
+            "npm:@tiptap/extension-underline",
+            "npm:@tiptap/react",
+            "npm:@tiptap/starter-kit",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/rich-text-editor/toolbar/index.ts",
+          "hash": "8874087528992123765"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/rich-text-editor/toolbar/toolbar-button.tsx",
+          "hash": "12651962444030812608",
+          "deps": [
+            "npm:@tiptap/react",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/rich-text-editor/toolbar/toolbar-config.tsx",
+          "hash": "4959090652282802696",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:@tiptap/react",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/rich-text-editor/toolbar/upload-buttons.tsx",
+          "hash": "6675317553009356708",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:@tiptap/react",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/rich-text-editor/types.ts",
+          "hash": "1216409972310007583",
+          "deps": [
+            "npm:@tiptap/react",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/rich-text-editor/utils/content-serializer.ts",
+          "hash": "15075896661265547774",
+          "deps": [
+            "npm:@tiptap/react",
+            "npm:turndown"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/rich-text-editor/utils/index.ts",
+          "hash": "479223400892406323"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/rich-text-editor/utils/inline-image-display.ts",
+          "hash": "6720229285082360467",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/rich-text-editor/utils/upload-type-presets.ts",
+          "hash": "12346805119851876569"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/rich-text-editor/utils/upload-validator.ts",
+          "hash": "10213188389298618653"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/segmented-button-tabs/app-segmented-button-tabs.tsx",
+          "hash": "15669985716300390054",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/segmented-button-tabs/index.ts",
+          "hash": "17844555887992724713"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/segmented-button-tabs/segmented-button-tabs.css",
+          "hash": "12792544366131403399"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/segmented/app-segmented-utils.tsx",
+          "hash": "1214082162248339477",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/segmented/app-segmented.tsx",
+          "hash": "8170665992702784564",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/segmented/index.ts",
+          "hash": "15776789118832730632"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/segmented/types.ts",
+          "hash": "12832015478507255294",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/select/app-select.tsx",
+          "hash": "1978167485712807097",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/select/helpers.ts",
+          "hash": "11701348951894114893",
+          "deps": [
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/select/index.ts",
+          "hash": "8055061016109417694"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/select/types.ts",
+          "hash": "1770689128102379257",
+          "deps": [
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/switch/app-switch.tsx",
+          "hash": "1934508124071527423",
+          "deps": [
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/switch/index.ts",
+          "hash": "593817907757674612"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/switch/types.ts",
+          "hash": "8330782112427110843",
+          "deps": [
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/tabs/app-tabs.stories.tsx",
+          "hash": "3945104373029723414",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:@dnd-kit/core",
+            "npm:@dnd-kit/sortable",
+            "npm:@storybook/react",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/tabs/app-tabs.tsx",
+          "hash": "7477299388475900404",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/tabs/components/draggable-tab-bar.tsx",
+          "hash": "3378865358166578241",
+          "deps": [
+            "npm:@dnd-kit/core",
+            "npm:@dnd-kit/sortable",
+            "npm:@dnd-kit/utilities",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/tabs/hooks/use-tabs-state.tsx",
+          "hash": "9245827583579336768",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/tabs/index.ts",
+          "hash": "2070535566093174131"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/tabs/types.ts",
+          "hash": "11345057447879037588",
+          "deps": [
+            "npm:@dnd-kit/core",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/tone-rewrite-button/index.ts",
+          "hash": "8250698188535476097"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/tone-rewrite-button/tone-rewrite-button.tsx",
+          "hash": "7828583876560518933",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/tone-rewrite-button/types.ts",
+          "hash": "15888750818778479790",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/upload/app-file-upload.tsx",
+          "hash": "9671425970388100067",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/upload/helpers.ts",
+          "hash": "16783146645162390943"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/upload/index.ts",
+          "hash": "11503386130876063799"
+        },
+        {
+          "file": "libs/shared/ui/src/components/ui/upload/types.ts",
+          "hash": "8041470617397104263",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/hooks/index.ts",
+          "hash": "1180703405169130881"
+        },
+        {
+          "file": "libs/shared/ui/src/hooks/use-antd-breakpoint.ts",
+          "hash": "4036096741544469865",
+          "deps": [
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/hooks/use-app-config.ts",
+          "hash": "3304537688906999352",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/hooks/use-audio-recorder.ts",
+          "hash": "8042198903567536478",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/hooks/use-confirm.ts",
+          "hash": "12565944671498155482",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/hooks/use-date-format.ts",
+          "hash": "17134969985314423175"
+        },
+        {
+          "file": "libs/shared/ui/src/hooks/use-debounced-callback.ts",
+          "hash": "17237168389104039999",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/hooks/use-number-format.ts",
+          "hash": "2376314058175768334",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/hooks/use-popup-container.ts",
+          "hash": "14612743976581229766"
+        },
+        {
+          "file": "libs/shared/ui/src/hooks/use-resend-timer.ts",
+          "hash": "17702422546360002135",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/hooks/use-system-theme.ts",
+          "hash": "6911660254402543566",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/hooks/use-toast.ts",
+          "hash": "17055899246610904596",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/hooks/use-viewport-size.ts",
+          "hash": "3194613292805841009",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/index.ts",
+          "hash": "9508277622476884989"
+        },
+        {
+          "file": "libs/shared/ui/src/providers/app-config-context.tsx",
+          "hash": "14816577097321365227",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/providers/app-config-provider.tsx",
+          "hash": "12471411204407108041",
+          "deps": [
+            "npm:@ant-design/cssinjs",
+            "npm:antd",
+            "npm:luxon",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/providers/config-utils.ts",
+          "hash": "14407584667724612012"
+        },
+        {
+          "file": "libs/shared/ui/src/providers/constants.ts",
+          "hash": "10531029848815642129"
+        },
+        {
+          "file": "libs/shared/ui/src/providers/defaults.ts",
+          "hash": "17209082507784379584"
+        },
+        {
+          "file": "libs/shared/ui/src/providers/index.ts",
+          "hash": "4986729322715085388"
+        },
+        {
+          "file": "libs/shared/ui/src/providers/popup-container-context.tsx",
+          "hash": "1381842590369111635",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/providers/theme-builder.ts",
+          "hash": "12610355988755350121",
+          "deps": [
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/providers/types.ts",
+          "hash": "13384154062363541179",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/schemas/email.ts",
+          "hash": "2048812360839397895",
+          "deps": [
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/schemas/helpers.ts",
+          "hash": "13841774424491968359",
+          "deps": [
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/schemas/index.ts",
+          "hash": "10473773683749957345"
+        },
+        {
+          "file": "libs/shared/ui/src/schemas/otp.ts",
+          "hash": "1551073159399525584",
+          "deps": [
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/stores/index.ts",
+          "hash": "9432017911001491622"
+        },
+        {
+          "file": "libs/shared/ui/src/styles.css",
+          "hash": "4218581340576683457"
+        },
+        {
+          "file": "libs/shared/ui/src/types/luxon.ts",
+          "hash": "18265485067806334816"
+        },
+        {
+          "file": "libs/shared/ui/src/utils/cn.ts",
+          "hash": "15456290709904554663",
+          "deps": [
+            "npm:clsx",
+            "npm:tailwind-merge"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/utils/datetime.ts",
+          "hash": "2498626520381634417",
+          "deps": [
+            "npm:luxon"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/utils/helpers.ts",
+          "hash": "2248270976954085804"
+        },
+        {
+          "file": "libs/shared/ui/src/utils/html-sanitizer.ts",
+          "hash": "12941480901796813827",
+          "deps": [
+            "npm:dompurify"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/utils/i18n/currency-helpers.ts",
+          "hash": "6558592091970966528"
+        },
+        {
+          "file": "libs/shared/ui/src/utils/i18n/index.ts",
+          "hash": "14048614781468449583"
+        },
+        {
+          "file": "libs/shared/ui/src/utils/i18n/locale-config.ts",
+          "hash": "4678487585921069946",
+          "deps": [
+            "npm:antd",
+            [
+              "npm:antd",
+              "dynamic"
+            ]
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/utils/i18n/locale-helpers.ts",
+          "hash": "10576120662023079846"
+        },
+        {
+          "file": "libs/shared/ui/src/utils/index.ts",
+          "hash": "17510285023802886918"
+        },
+        {
+          "file": "libs/shared/ui/tsconfig.json",
+          "hash": "16901160954898335392"
+        },
+        {
+          "file": "libs/shared/ui/tsconfig.lib.json",
+          "hash": "545647879478967321"
+        },
+        {
+          "file": "libs/shared/ui/tsconfig.spec.json",
+          "hash": "9795294119456608907"
+        },
+        {
+          "file": "libs/shared/ui/tsconfig.storybook.json",
+          "hash": "4373427737954697523"
+        },
+        {
+          "file": "libs/shared/ui/vite.config.mts",
+          "hash": "10453854569442763719",
+          "deps": [
+            "npm:@tailwindcss/vite",
+            "npm:@vitejs/plugin-react",
+            "npm:vite",
+            "npm:vite-plugin-dts"
+          ]
+        }
+      ],
+      "@solverminds/ecom-portal": [
+        {
+          "file": "apps/ecom-portal/ECOM-PORTAL-FEATURE-BLUEPRINT.md",
+          "hash": "1639621350123015659"
+        },
+        {
+          "file": "apps/ecom-portal/README.md",
+          "hash": "7384636327375426075"
+        },
+        {
+          "file": "apps/ecom-portal/feature-api-guide.md",
+          "hash": "9862287851902852887"
+        },
+        {
+          "file": "apps/ecom-portal/index.html",
+          "hash": "2866531986744727985"
+        },
+        {
+          "file": "apps/ecom-portal/package.json",
+          "hash": "5203296398553932545",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "npm:dayjs",
+            "npm:msw",
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/public/hero-bg.jpg",
+          "hash": "15940009112226838207"
+        },
+        {
+          "file": "apps/ecom-portal/public/hero-bg.png",
+          "hash": "13057982098084091004"
+        },
+        {
+          "file": "apps/ecom-portal/public/hero_bg.png",
+          "hash": "1030125187511485780"
+        },
+        {
+          "file": "apps/ecom-portal/public/logo.png",
+          "hash": "4380857612946339418"
+        },
+        {
+          "file": "apps/ecom-portal/public/logos/tenant_01.png",
+          "hash": "9451944638709911913"
+        },
+        {
+          "file": "apps/ecom-portal/public/logos/tenant_02.png",
+          "hash": "9071425553433750805"
+        },
+        {
+          "file": "apps/ecom-portal/public/logos/tenant_03.png",
+          "hash": "2745984419793729225"
+        },
+        {
+          "file": "apps/ecom-portal/public/logos/tenant_04.png",
+          "hash": "13082431622258143539"
+        },
+        {
+          "file": "apps/ecom-portal/public/logos/tenant_05.png",
+          "hash": "15819089275227461032"
+        },
+        {
+          "file": "apps/ecom-portal/public/logos/tenant_06.png",
+          "hash": "804633309987333237"
+        },
+        {
+          "file": "apps/ecom-portal/public/logos/tenant_07.png",
+          "hash": "16453721020734089159"
+        },
+        {
+          "file": "apps/ecom-portal/public/logos/tenant_08.png",
+          "hash": "15849023086320017014"
+        },
+        {
+          "file": "apps/ecom-portal/public/logos/tenant_09.png",
+          "hash": "1029625818036118599"
+        },
+        {
+          "file": "apps/ecom-portal/public/logos/tenant_10.png",
+          "hash": "11919452939488900725"
+        },
+        {
+          "file": "apps/ecom-portal/public/mockServiceWorker.js",
+          "hash": "11710429898096167168"
+        },
+        {
+          "file": "apps/ecom-portal/src/app/router.tsx",
+          "hash": "11863371913673290528",
+          "deps": [
+            "npm:@tanstack/react-router"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/components/form-section/form-section.tsx",
+          "hash": "9909016478297915950",
+          "deps": [
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/components/layout/AppFooter.tsx",
+          "hash": "11766639934018366426",
+          "deps": [
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/components/layout/AuthenticatedLayout.tsx",
+          "hash": "13103119825850923423",
+          "deps": [
+            "npm:antd",
+            "npm:react",
+            "npm:@tanstack/react-router"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/components/layout/AuthenticatedLayoutHeader.tsx",
+          "hash": "7894759774472504252",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:@tanstack/react-router",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/components/layout/AuthenticatedSidebar.tsx",
+          "hash": "15486600048373894143",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:@tanstack/react-router",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/components/layout/PublicLayout.tsx",
+          "hash": "17322998019312113091",
+          "deps": [
+            "npm:antd",
+            "npm:react",
+            "npm:@ant-design/icons",
+            "npm:@tanstack/react-router"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/components/layout/PublicLayoutHeader.tsx",
+          "hash": "13692934829825118354",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:@tanstack/react-router"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/components/layout/account-preferences-drawer.tsx",
+          "hash": "8850986690118481049",
+          "deps": [
+            "@solverminds/shared-ui",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/components/layout/header-theme-toggle.tsx",
+          "hash": "9073036179750226223",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/components/layout/layout-header.tsx",
+          "hash": "5150903032303512500",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/components/layout/user-menu.tsx",
+          "hash": "6897207751955200939",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/components/providers/TenantThemeProvider.tsx",
+          "hash": "12293987696739776301",
+          "deps": [
+            "npm:react",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/components/shared/user-avatar.tsx",
+          "hash": "2625792405568027370",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/components/shared/user-name.utils.ts",
+          "hash": "16341670320758962560"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/admin/admin-route.tsx",
+          "hash": "16336949206514312754"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/admin/api/admin.api.ts",
+          "hash": "4912622726283326452"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/admin/components/AdminLayout.tsx",
+          "hash": "5802171382714255984",
+          "deps": [
+            "npm:react",
+            "npm:antd",
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/admin/components/AdminPasswordResetView.tsx",
+          "hash": "11200631376611356516",
+          "deps": [
+            "npm:react",
+            "npm:antd",
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/admin/components/BannerManagerView.tsx",
+          "hash": "4036396490447594702",
+          "deps": [
+            "npm:react",
+            "npm:antd",
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/admin/components/CustomerAdvisoryView.tsx",
+          "hash": "9864038826476273013",
+          "deps": [
+            "npm:react",
+            "npm:antd",
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/admin/components/CutoffConfigView.tsx",
+          "hash": "7695508074334071952",
+          "deps": [
+            "npm:react",
+            "npm:antd",
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/admin/components/EmailTemplateEditorView.tsx",
+          "hash": "12086383803206156537",
+          "deps": [
+            "npm:react",
+            "npm:antd",
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/admin/components/FieldConfigView.tsx",
+          "hash": "1515326925921828255",
+          "deps": [
+            "npm:react",
+            "npm:antd",
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/admin/components/GlobalConfigAdminView.tsx",
+          "hash": "3768025236526222019",
+          "deps": [
+            "npm:react",
+            "npm:antd",
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/admin/components/MenuManagementView.tsx",
+          "hash": "5087281766539566851",
+          "deps": [
+            "npm:react",
+            "npm:antd",
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/admin/components/ServiceRestrictionsView.tsx",
+          "hash": "13889968105130927782",
+          "deps": [
+            "npm:react",
+            "npm:antd",
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/admin/components/SpecialPrivilegesView.tsx",
+          "hash": "11584193133827395445",
+          "deps": [
+            "npm:react",
+            "npm:antd",
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/admin/hooks/use-admin-controller.ts",
+          "hash": "1765690039473405042",
+          "deps": [
+            "npm:@tanstack/react-query"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/admin/types/admin.types.ts",
+          "hash": "13428377025787764848",
+          "deps": [
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/auth/activation-route.tsx",
+          "hash": "13185868489215205231",
+          "deps": [
+            "npm:react",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/auth/api/auth.api.ts",
+          "hash": "5165585076314670177"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/auth/components/ForgotPasswordPanelContent.tsx",
+          "hash": "17838679317067431959",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/auth/hooks/use-forgot-password-controller.ts",
+          "hash": "3134971018903053722",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "npm:@tanstack/react-query",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/auth/hooks/use-login-controller.ts",
+          "hash": "12335109137775568734",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "npm:@tanstack/react-query",
+            "npm:react",
+            "npm:react-hook-form",
+            "npm:zustand"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/auth/types/auth.types.ts",
+          "hash": "9798887288473374971",
+          "deps": [
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/api/booking.api.ts",
+          "hash": "3899394573907882210"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/booking-amend-route.tsx",
+          "hash": "4992214543786145559",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "@solverminds/shared-ui",
+            "npm:@tanstack/react-router",
+            "npm:react",
+            "npm:@tanstack/react-query"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/booking-dashboard-route.tsx",
+          "hash": "8865082124168096908",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react",
+            "npm:@tanstack/react-router",
+            "npm:@tanstack/react-query"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/booking-view-route.tsx",
+          "hash": "88500028318305650",
+          "deps": [
+            "npm:antd",
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:@tanstack/react-router"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/booking-wizard-route.tsx",
+          "hash": "100019478368999988",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "@solverminds/shared-ui",
+            "npm:@tanstack/react-router"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/components/CargoStep.tsx",
+          "hash": "8008006778036236895",
+          "deps": [
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react-hook-form",
+            "npm:@hookform/resolvers",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/components/CustomerDetailsStep.tsx",
+          "hash": "80387925274351721",
+          "deps": [
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react-hook-form",
+            "npm:@hookform/resolvers",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/components/ENSStep.tsx",
+          "hash": "9080173189040754916",
+          "deps": [
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react-hook-form",
+            "npm:@hookform/resolvers",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/components/FileUploadStep.tsx",
+          "hash": "18174637916313400029",
+          "deps": [
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:@ant-design/icons"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/components/InsuranceStep.tsx",
+          "hash": "15322761477648702322",
+          "deps": [
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react-hook-form",
+            "npm:@hookform/resolvers",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/components/ManageTemplateModal.tsx",
+          "hash": "5991967301306500299",
+          "deps": [
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:@ant-design/icons"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/components/MasterDetailsStep.tsx",
+          "hash": "3324376051157957929",
+          "deps": [
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:dayjs",
+            "npm:react-hook-form",
+            "npm:@hookform/resolvers",
+            "npm:react",
+            "npm:@ant-design/icons"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/components/PreviewStep.tsx",
+          "hash": "4849015936053602067",
+          "deps": [
+            "@solverminds/shared-ui",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/components/view/BookingDetailsViewer.tsx",
+          "hash": "6620181198966570847",
+          "deps": [
+            "npm:antd",
+            "npm:@tanstack/react-query",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/components/view/HaulageTrackingGrid.tsx",
+          "hash": "3748119718919556094",
+          "deps": [
+            "npm:antd",
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/hooks/use-booking-wizard.ts",
+          "hash": "8313238759092232608",
+          "deps": [
+            "npm:@tanstack/react-query",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/stores/booking.store.ts",
+          "hash": "4758937905252066313",
+          "deps": [
+            "npm:zustand"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/types/booking-list.types.ts",
+          "hash": "16463570815984912533",
+          "deps": [
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/types/booking.types.ts",
+          "hash": "11432649920198415781",
+          "deps": [
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/contact-us/api/contact-us.api.ts",
+          "hash": "3967655161365645156"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/contact-us/api/contact-us.keys.ts",
+          "hash": "9597665896532198869"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/contact-us/components/ContactUsDrawer.tsx",
+          "hash": "15783187078955629868",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/contact-us/components/ContactUsForm.tsx",
+          "hash": "13814293851381767798",
+          "deps": [
+            "npm:antd",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/contact-us/contact-us-route.tsx",
+          "hash": "5680517743531370652",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:@tanstack/react-router",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/contact-us/hooks/use-contact-us-controller.ts",
+          "hash": "4424302520910080564",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "@solverminds/shared-ui",
+            "npm:@tanstack/react-query",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/contact-us/types/contact-us.schema.ts",
+          "hash": "9486810398525721586",
+          "deps": [
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/dashboard/api/dashboard.api.ts",
+          "hash": "9654000944072610625"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/dashboard/components/AgencyHotlineWidget.tsx",
+          "hash": "7538265184307012987",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/dashboard/components/DashboardCharts.tsx",
+          "hash": "5435710475532527944",
+          "deps": [
+            "npm:antd",
+            "npm:echarts",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/dashboard/components/DashboardKpiCards.tsx",
+          "hash": "7446459901972205244",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/dashboard/components/DashboardOngoingTable.tsx",
+          "hash": "17270619720537370318",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/dashboard/components/EnhancedDashboardView.tsx",
+          "hash": "4813750903198103054",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:@tanstack/react-router",
+            "npm:antd",
+            "npm:dayjs",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/dashboard/components/LanesSection.tsx",
+          "hash": "16776228216504263281",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/dashboard/components/ShipmentIntelligenceSection.tsx",
+          "hash": "9870173897412223080",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:echarts",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/dashboard/components/ShipmentPlanningSection.tsx",
+          "hash": "4546097251460353336",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/dashboard/components/VolumeAnalyticsSection.tsx",
+          "hash": "2274260614053013382",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:echarts",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/dashboard/mocks/dashboard.mock.ts",
+          "hash": "5978087074766213634"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/landing/api/landing.api.ts",
+          "hash": "5205790136837919070"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/landing/api/landing.keys.ts",
+          "hash": "2640298486732065857"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/landing/api/landing.queries.ts",
+          "hash": "11847224782045750756",
+          "deps": [
+            "npm:@tanstack/react-query"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/landing/components/HeroSearchPanel.tsx",
+          "hash": "5267610255621686424",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/landing/components/ImageCaptcha.tsx",
+          "hash": "1050181653142807590",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/landing/components/PublicLoginPanel.tsx",
+          "hash": "1041503232065702452",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:@tanstack/react-router",
+            "npm:antd",
+            "npm:react-hook-form",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/landing/components/RatesSearchTab.tsx",
+          "hash": "2529134506984195737",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:dayjs",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/landing/components/ScheduleSearchTab.tsx",
+          "hash": "8280614836499921998",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:dayjs",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/landing/components/TrackingSearchTab.tsx",
+          "hash": "8844912096182222742",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/landing/hooks/use-landing-controller.ts",
+          "hash": "8436641741663171988",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "npm:@tanstack/react-router",
+            "npm:dayjs",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/landing/types/landing.types.ts",
+          "hash": "6589923658212619721",
+          "deps": [
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/rates/api/rates.api.ts",
+          "hash": "2075079761819492203"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/rates/api/rates.keys.ts",
+          "hash": "7728250629320965034"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/rates/api/rates.queries.ts",
+          "hash": "15176018184340819025",
+          "deps": [
+            "npm:@tanstack/react-query"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/rates/components/ContractSurchargeModal.tsx",
+          "hash": "3251874838669730831",
+          "deps": [
+            "@solverminds/shared-ui",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/rates/components/ContractView.tsx",
+          "hash": "3861020133885995865",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/rates/components/QuoteRequestDrawer.tsx",
+          "hash": "1502764303468319829",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react-hook-form",
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/rates/components/QuotesView.tsx",
+          "hash": "4501413443957626692",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:@tanstack/react-router",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/rates/components/RateCardList.tsx",
+          "hash": "1460771597662095346",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/rates/components/RateDataView.tsx",
+          "hash": "2315358124009370467",
+          "deps": [
+            "@solverminds/shared-ui",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/rates/components/RateSearchFilter.tsx",
+          "hash": "9894895337060298925",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:dayjs"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/rates/components/SurchargeView.tsx",
+          "hash": "14723049160374835146",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/rates/components/TariffView.tsx",
+          "hash": "1644673148008665746",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/rates/hooks/useRatesController.ts",
+          "hash": "5952754270469067819",
+          "deps": [
+            "npm:react",
+            "npm:@tanstack/react-router",
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/rates/rates-route.tsx",
+          "hash": "14294758273860932661",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/rates/types/rates.types.ts",
+          "hash": "8258271481625499547"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/registration/api/registration.api.ts",
+          "hash": "16269763879042950229"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/registration/components/CompanyInfoStep.tsx",
+          "hash": "11202697687101628635",
+          "deps": [
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/registration/components/FileUploadStep.tsx",
+          "hash": "7702090327326687022",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/registration/components/TermsStep.tsx",
+          "hash": "2858638362949611859",
+          "deps": [
+            "npm:antd",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/registration/components/UserInfoStep.tsx",
+          "hash": "3865526950055907376",
+          "deps": [
+            "npm:antd",
+            "npm:react-hook-form",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/registration/hooks/use-registration-controller.ts",
+          "hash": "13709195527067162631",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "@solverminds/shared-ui",
+            "npm:@tanstack/react-query",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/registration/registration-route.tsx",
+          "hash": "6361903532146003530",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/registration/types/registration.schema.ts",
+          "hash": "106684356511046898",
+          "deps": [
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/schedules/api/schedules.api.ts",
+          "hash": "11167264996290129110"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/schedules/api/schedules.keys.ts",
+          "hash": "8373989757380601361"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/schedules/api/schedules.queries.ts",
+          "hash": "4284858991592616106",
+          "deps": [
+            "npm:@tanstack/react-query"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/schedules/components/ScheduleCalendarView.tsx",
+          "hash": "8854852109045086727",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:dayjs",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/schedules/components/ScheduleCarbonModal.tsx",
+          "hash": "16022612015982748312",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/schedules/components/ScheduleCardList.tsx",
+          "hash": "8235199941771791035",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/schedules/components/ScheduleDetailsDrawer.tsx",
+          "hash": "1347297470832461334",
+          "deps": [
+            "npm:react",
+            "npm:antd",
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/schedules/components/ScheduleFilter.tsx",
+          "hash": "12497649443961361992",
+          "deps": [
+            "npm:react",
+            "npm:antd",
+            "npm:react-hook-form",
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/schedules/components/ScheduleList.tsx",
+          "hash": "2453526116065248898",
+          "deps": [
+            "npm:react",
+            "npm:antd",
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:ag-grid-community"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/schedules/components/ScheduleRatesModal.tsx",
+          "hash": "6348422040847743613",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/schedules/components/ScheduleSearchFilter.tsx",
+          "hash": "16958073577320425485",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:dayjs"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/schedules/components/VesselDetailsModal.tsx",
+          "hash": "5437591863900893238",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/schedules/hooks/useSchedulesController.ts",
+          "hash": "2556430588831771255",
+          "deps": [
+            "npm:@tanstack/react-router",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/schedules/mocks/schedules.mock.ts",
+          "hash": "12985226054857480387"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/schedules/schedules-route.tsx",
+          "hash": "13831571754882347200",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/schedules/types/schedules.types.ts",
+          "hash": "5781470227231962175"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/theme/components/theme-preferences-panel.tsx",
+          "hash": "16563599943911255117",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/theme/components/timezone-select-option.tsx",
+          "hash": "396082013753330146",
+          "deps": [
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/theme/constants.ts",
+          "hash": "12977933943161799333",
+          "deps": [
+            "@solverminds/shared-ui",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/theme/hooks/use-theme-preferences-controller.ts",
+          "hash": "10523729250626603504",
+          "deps": [
+            "@solverminds/shared-ui",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/theme/providers/theme-preferences-provider.tsx",
+          "hash": "11444200038438322139",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/theme/stores/app-config.store.ts",
+          "hash": "13284853866157750603",
+          "deps": [
+            "npm:zustand",
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/theme/utils/config-mapper.ts",
+          "hash": "12179185098659509817",
+          "deps": [
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/theme/utils/density-theme-fields.ts",
+          "hash": "8783950202271698277",
+          "deps": [
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/theme/utils/timezone-options.tsx",
+          "hash": "381942528791976137",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/tracking/api/tracking.api.ts",
+          "hash": "6535159766146170126"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/tracking/components/TrackingContainersTable.tsx",
+          "hash": "2693630524725087692",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/tracking/components/TrackingMovementDrawer.tsx",
+          "hash": "15382136981149700339",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/tracking/components/TrackingOverview.tsx",
+          "hash": "3254219835982704713",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/tracking/components/TrackingSearchFilter.tsx",
+          "hash": "12398993152751091461",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/tracking/hooks/useTrackingController.ts",
+          "hash": "9166231823657307839",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/tracking/mocks/tracking.mock.ts",
+          "hash": "1729949441576984383"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/tracking/tracking-route.tsx",
+          "hash": "7902541939840963734",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/tracking/types/tracking.types.ts",
+          "hash": "5085430797157070035"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/user-creation/api/user-creation.api.ts",
+          "hash": "4319380983145657102"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/user-creation/components/SubUserAgGridTable.tsx",
+          "hash": "17781784290417505320",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:ag-grid-community",
+            "npm:ag-grid-react",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/user-creation/components/UserCreationView.tsx",
+          "hash": "3381692640849456378",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/user-creation/hooks/use-user-creation-controller.ts",
+          "hash": "17658889467046733122",
+          "deps": [
+            "npm:@tanstack/react-query"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/user-creation/types/user-creation.types.ts",
+          "hash": "5959129055768047733",
+          "deps": [
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/user-creation/user-creation-route.tsx",
+          "hash": "4762047495573327080",
+          "deps": [
+            "npm:@tanstack/react-router"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/user-modules/api/user-modules.api.ts",
+          "hash": "368198559628038465"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/user-modules/components/ChangePasswordView.tsx",
+          "hash": "2308174880046343349",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/user-modules/components/MyAlertsView.tsx",
+          "hash": "648423822852921646",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/user-modules/components/PaymentHistoryView.tsx",
+          "hash": "1916534538488070586",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/user-modules/components/ProfileView.tsx",
+          "hash": "3334516470837245031",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/user-modules/components/QuotesView.tsx",
+          "hash": "9882242242323507356",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:@tanstack/react-router",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/user-modules/types/user-modules.types.ts",
+          "hash": "5420621984064153989",
+          "deps": [
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/vendor-approvals/components/VendorApprovalsView.tsx",
+          "hash": "17058397446146576884",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/vendor-approvals/vendor-approvals-route.tsx",
+          "hash": "10279985528824121000",
+          "deps": [
+            "npm:@tanstack/react-router"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/main.tsx",
+          "hash": "16837121825449959366",
+          "deps": [
+            "@solverminds/shared-ui",
+            "npm:@tanstack/react-query",
+            "npm:react",
+            "npm:react-dom",
+            "npm:@tanstack/react-router"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/mocks/admin.handlers.ts",
+          "hash": "10587316648669505302",
+          "deps": [
+            "npm:msw"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/mocks/auth.handlers.ts",
+          "hash": "12880412705835382533",
+          "deps": [
+            "npm:msw"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/mocks/booking.handlers.ts",
+          "hash": "15203616608073383302",
+          "deps": [
+            "npm:msw"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/mocks/browser.ts",
+          "hash": "16218403236287777938",
+          "deps": [
+            "npm:msw"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/mocks/contact-us.handlers.ts",
+          "hash": "6060136889393577898",
+          "deps": [
+            "npm:msw"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/mocks/landing.handlers.ts",
+          "hash": "2015273575229169093",
+          "deps": [
+            "npm:msw"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/mocks/rates.handlers.ts",
+          "hash": "3802180624711530515",
+          "deps": [
+            "npm:msw"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/mocks/registration.handlers.ts",
+          "hash": "17133927249160855397",
+          "deps": [
+            "npm:msw"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/mocks/user-creation.handlers.ts",
+          "hash": "12261739837453398489",
+          "deps": [
+            "npm:msw"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/mocks/user-modules.handlers.ts",
+          "hash": "4465116603136644372",
+          "deps": [
+            "npm:msw"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/types/api.types.ts",
+          "hash": "3695438975771040902"
+        },
+        {
+          "file": "apps/ecom-portal/tsconfig.json",
+          "hash": "12678449601996202400"
+        },
+        {
+          "file": "apps/ecom-portal/vite.config.ts",
+          "hash": "3212264134923085718",
+          "deps": [
+            "npm:vite",
+            "npm:@vitejs/plugin-react"
+          ]
+        }
+      ]
+    },
+    "nonProjectFiles": [
+      {
+        "file": ".cursor/rules/agenct.md",
+        "hash": "15167323613335325491"
+      },
+      {
+        "file": ".gitignore",
+        "hash": "8441282357212141150"
+      },
+      {
+        "file": ".nvmrc",
+        "hash": "786091999266269469"
+      },
+      {
+        "file": "CRM codebase analysis request/.cursor/rules/jsp-to-react-migration.md",
+        "hash": "13114467953184528071"
+      },
+      {
+        "file": "CRM codebase analysis request/.thumbnail",
+        "hash": "2956091510949352320"
+      },
+      {
+        "file": "CRM codebase analysis request/E-Com Architecture Diagram.docx",
+        "hash": "16716605485819998058"
+      },
+      {
+        "file": "CRM codebase analysis request/E-Com Development Kickoff.docx",
+        "hash": "11073322158465338184"
+      },
+      {
+        "file": "CRM codebase analysis request/E-Com JSP to React Migration Playbook.docx",
+        "hash": "560602618608917498"
+      },
+      {
+        "file": "CRM codebase analysis request/E-Com Project Setup Guide.docx",
+        "hash": "16158122583924355757"
+      },
+      {
+        "file": "CRM codebase analysis request/E-Com UI Architecture Analysis.docx",
+        "hash": "9849061309596799786"
+      },
+      {
+        "file": "CRM codebase analysis request/LRP V2 Architecture & Business Flow.md",
+        "hash": "15846127532903301215"
+      },
+      {
+        "file": "CRM codebase analysis request/_ds/claude-nova-design-system-82cf0dd8-d9d0-4e78-ae13-2ab3c07b04f6/README.md",
+        "hash": "14273137547319031991"
+      },
+      {
+        "file": "CRM codebase analysis request/_ds/claude-nova-design-system-82cf0dd8-d9d0-4e78-ae13-2ab3c07b04f6/_adherence.oxlintrc.json",
+        "hash": "12104578836416816208"
+      },
+      {
+        "file": "CRM codebase analysis request/_ds/claude-nova-design-system-82cf0dd8-d9d0-4e78-ae13-2ab3c07b04f6/_ds_bundle.js",
+        "hash": "2459054729295509694"
+      },
+      {
+        "file": "CRM codebase analysis request/_ds/claude-nova-design-system-82cf0dd8-d9d0-4e78-ae13-2ab3c07b04f6/_ds_manifest.json",
+        "hash": "14197229243561419131"
+      },
+      {
+        "file": "CRM codebase analysis request/_ds/claude-nova-design-system-82cf0dd8-d9d0-4e78-ae13-2ab3c07b04f6/colors_and_type.css",
+        "hash": "16602261542710584677"
+      },
+      {
+        "file": "CRM codebase analysis request/_ds/claude-nova-design-system-82cf0dd8-d9d0-4e78-ae13-2ab3c07b04f6/fonts/Inter_18pt-Bold.ttf",
+        "hash": "5410696215893396565"
+      },
+      {
+        "file": "CRM codebase analysis request/_ds/claude-nova-design-system-82cf0dd8-d9d0-4e78-ae13-2ab3c07b04f6/fonts/Inter_18pt-Italic.ttf",
+        "hash": "2788492899252262893"
+      },
+      {
+        "file": "CRM codebase analysis request/_ds/claude-nova-design-system-82cf0dd8-d9d0-4e78-ae13-2ab3c07b04f6/fonts/Inter_18pt-Medium.ttf",
+        "hash": "15658514694113229933"
+      },
+      {
+        "file": "CRM codebase analysis request/_ds/claude-nova-design-system-82cf0dd8-d9d0-4e78-ae13-2ab3c07b04f6/fonts/Inter_18pt-Regular.ttf",
+        "hash": "10847648745911464553"
+      },
+      {
+        "file": "CRM codebase analysis request/_ds/claude-nova-design-system-82cf0dd8-d9d0-4e78-ae13-2ab3c07b04f6/fonts/Inter_18pt-SemiBold.ttf",
+        "hash": "42551834228948669"
+      },
+      {
+        "file": "CRM codebase analysis request/_ds/claude-nova-design-system-82cf0dd8-d9d0-4e78-ae13-2ab3c07b04f6/styles.css",
+        "hash": "11319920281225517043"
+      },
+      {
+        "file": "CRM codebase analysis request/extracted/E-Com Architecture Diagram.txt",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "CRM codebase analysis request/extracted/E-Com Development Kickoff.txt",
+        "hash": "15356179882250630628"
+      },
+      {
+        "file": "CRM codebase analysis request/extracted/E-Com JSP to React Migration Playbook.txt",
+        "hash": "13077066787216559908"
+      },
+      {
+        "file": "CRM codebase analysis request/extracted/E-Com Project Setup Guide.txt",
+        "hash": "1665427799288454997"
+      },
+      {
+        "file": "CRM codebase analysis request/extracted/E-Com UI Architecture Analysis.txt",
+        "hash": "1254542792139710982"
+      },
+      {
+        "file": "CRM codebase analysis request/support.js",
+        "hash": "14640174182844953874"
+      },
+      {
+        "file": "CRM codebase analysis request/uploads/CRM_Feature_Code_Flow_access-groups.docx",
+        "hash": "3771763085241564887"
+      },
+      {
+        "file": "CRM codebase analysis request/uploads/CRM_Portal_Engineering_Reference.docx",
+        "hash": "7187685077264025936"
+      },
+      {
+        "file": "CRM codebase analysis request/uploads/CRM_Release_Guide.docx",
+        "hash": "441590511806148175"
+      },
+      {
+        "file": "CRM codebase analysis request/uploads/CRM_Workspace_Setup_and_Handover.docx",
+        "hash": "895136517078360808"
+      },
+      {
+        "file": "README.md",
+        "hash": "12255578211636348741"
+      },
+      {
+        "file": "WHICH-DOCS-TO-ATTACH.md",
+        "hash": "13786224989063790588"
+      },
+      {
+        "file": "apps/E-com v2.code-workspace",
+        "hash": "17265488866073409660"
+      },
+      {
+        "file": "libs/auth/src/auth.store.ts",
+        "hash": "6892384370742297304"
+      },
+      {
+        "file": "libs/auth/src/index.ts",
+        "hash": "17172260669376568066"
+      },
+      {
+        "file": "libs/auth/src/tenant.store.ts",
+        "hash": "8657484561647124245"
+      },
+      {
+        "file": "libs/auth/src/usePermission.ts",
+        "hash": "14160266459148602303"
+      },
+      {
+        "file": "libs/platform/src/api-client.ts",
+        "hash": "5611210280525332441"
+      },
+      {
+        "file": "libs/platform/src/env.ts",
+        "hash": "5099456147302669917"
+      },
+      {
+        "file": "libs/platform/src/index.ts",
+        "hash": "3034102702441441794"
+      },
+      {
+        "file": "libs/platform/src/query-client.ts",
+        "hash": "16101925654069397010"
+      },
+      {
+        "file": "libs/shared-ui/src/AppButton.tsx",
+        "hash": "6990208547724371706"
+      },
+      {
+        "file": "libs/shared-ui/src/AppModal.tsx",
+        "hash": "327196580915978872"
+      },
+      {
+        "file": "libs/shared-ui/src/DataView.tsx",
+        "hash": "2869634610086299379"
+      },
+      {
+        "file": "libs/shared-ui/src/FormInput.tsx",
+        "hash": "16604806365611178492"
+      },
+      {
+        "file": "libs/shared-ui/src/FormSelect.tsx",
+        "hash": "7895740507237284450"
+      },
+      {
+        "file": "libs/shared-ui/src/index.ts",
+        "hash": "10711485342353112736"
+      },
+      {
+        "file": "libs/shared-ui/src/providers.tsx",
+        "hash": "9536603757217179011"
+      },
+      {
+        "file": "libs/shared-ui/src/styles.css",
+        "hash": "9065576106005399385"
+      },
+      {
+        "file": "libs/shared-util/src/formatters.ts",
+        "hash": "12806658154853566561"
+      },
+      {
+        "file": "libs/shared-util/src/index.ts",
+        "hash": "11835964056349337176"
+      },
+      {
+        "file": "libs/theme/src/index.ts",
+        "hash": "1671045318156994765"
+      },
+      {
+        "file": "package.json",
+        "hash": "15233351002099853213"
+      },
+      {
+        "file": "pnpm-lock.yaml",
+        "hash": "5526417408467397093"
+      },
+      {
+        "file": "pnpm-workspace.yaml",
+        "hash": "12716423682152476719"
+      },
+      {
+        "file": "tsconfig.base.json",
+        "hash": "15249812210773237376"
+      }
+    ]
+  },
+  "externalNodesHash": "8522495138065666818"
+}

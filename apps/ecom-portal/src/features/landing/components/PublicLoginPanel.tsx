@@ -4,8 +4,10 @@ import { PRECONFIGURED_TENANTS } from '@solverminds/auth';
 import { useNavigate } from '@tanstack/react-router';
 import { Alert, Button, Checkbox, Divider, Drawer, Flex, Input, Select, Spin, Typography, theme } from 'antd';
 import { Controller } from 'react-hook-form';
+import { useState } from 'react';
 
 import type { useLoginController } from '../../auth/hooks/use-login-controller';
+import { ForgotPasswordPanelContent } from '../../auth/components/ForgotPasswordPanelContent';
 
 const { Text, Title } = Typography;
 
@@ -19,6 +21,8 @@ interface PublicLoginPanelProps {
 export function PublicLoginPanel({ open, onClose, controller }: PublicLoginPanelProps) {
   const { token } = theme.useToken();
   const navigate = useNavigate();
+  const [view, setView] = useState<'login' | 'forgot-password'>('login');
+  
   const {
     form,
     handleSubmit,
@@ -105,14 +109,21 @@ export function PublicLoginPanel({ open, onClose, controller }: PublicLoginPanel
           color: ${token.colorText} !important;
         }
       `}</style>
-      <Flex vertical style={{ marginBottom: token.marginLG, marginTop: token.marginMD }}>
-        <Title level={2} style={{ margin: 0, fontWeight: 700, letterSpacing: '-0.5px' }}>
-          Login to your Account
-        </Title>
-        <Text type="secondary" style={{ fontSize: token.fontSize, marginTop: token.marginXS }}>
-          Welcome to E-COM PORTAL. Select a tenant account or enter your credentials.
-        </Text>
-      </Flex>
+
+      {view === 'forgot-password' ? (
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', marginTop: token.marginMD }}>
+          <ForgotPasswordPanelContent onBack={() => setView('login')} />
+        </div>
+      ) : (
+        <>
+          <Flex vertical style={{ marginBottom: token.marginLG, marginTop: token.marginMD }}>
+            <Title level={2} style={{ margin: 0, fontWeight: 700, letterSpacing: '-0.5px' }}>
+              Login to your Account
+            </Title>
+            <Text type="secondary" style={{ fontSize: token.fontSize, marginTop: token.marginXS }}>
+              Welcome to E-COM PORTAL. Select a tenant account or enter your credentials.
+            </Text>
+          </Flex>
 
       {/* Quick Tenant Credential Auto-Fill Selector */}
       <div style={{ marginBottom: token.marginLG, background: token.colorBgLayout, padding: token.padding, borderRadius: token.borderRadius, border: `1px solid ${token.colorBorderSecondary}` }}>
@@ -225,7 +236,14 @@ export function PublicLoginPanel({ open, onClose, controller }: PublicLoginPanel
                 )}
               />
             </div>
-            <a href="/forgot-password" style={{ fontSize: token.fontSize, fontWeight: 500, color: token.colorPrimary }}>
+            <a 
+              href="#" 
+              onClick={(e) => {
+                e.preventDefault();
+                setView('forgot-password');
+              }}
+              style={{ fontSize: token.fontSize, fontWeight: 500, color: token.colorPrimary }}
+            >
               Forgot Password?
             </a>
           </Flex>
@@ -288,6 +306,8 @@ export function PublicLoginPanel({ open, onClose, controller }: PublicLoginPanel
           Register Now
         </Button>
       </div>
+      </>
+      )}
     </Drawer>
   );
 }

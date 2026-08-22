@@ -5,6 +5,8 @@ import { AuthenticatedLayout } from '../components/layout/AuthenticatedLayout';
 import { PublicLayout } from '../components/layout/PublicLayout';
 import { AdminRoute } from '../features/admin/admin-route';
 import { ActivationRoute } from '../features/auth/activation-route';
+import { BookingDashboardRoute } from '../features/booking/booking-dashboard-route';
+import { BookingWizardRoute } from '../features/booking/booking-wizard-route';
 import { ContactUsRoute } from '../features/contact-us/contact-us-route';
 import { RegistrationRoute } from '../features/registration/registration-route';
 import { SchedulesRoute } from '../features/schedules/schedules-route';
@@ -162,6 +164,33 @@ const ratesRoute = createRoute({
 });
 
 
+// 3.9 Booking
+const bookingDashboardRoute = createRoute({
+  getParentRoute: () => appRoute,
+  path: '/booking',
+  component: () => <BookingDashboardRoute />,
+});
+
+const bookingWizardRoute = createRoute({
+  getParentRoute: () => appRoute,
+  path: '/booking/new',
+  component: () => <BookingWizardRoute />,
+});
+
+import { BookingViewRoute } from '../features/booking/booking-view-route';
+const bookingViewRoute = createRoute({
+  getParentRoute: () => appRoute,
+  path: '/booking/$bookingId',
+  component: () => <BookingViewRoute />,
+});
+
+import { BookingAmendRoute } from '../features/booking/booking-amend-route';
+const bookingAmendRoute = createRoute({
+  getParentRoute: () => appRoute,
+  path: '/booking/$bookingId/amend',
+  component: () => <BookingAmendRoute />,
+});
+
 // 4. Route Tree
 const routeTree = rootRoute.addChildren([
   publicRoute.addChildren([indexRoute, registerRoute, activationRoute, contactUsRoute]),
@@ -170,6 +199,10 @@ const routeTree = rootRoute.addChildren([
     schedulesRoute,
     trackingRoute,
     ratesRoute,
+    bookingDashboardRoute,
+    bookingWizardRoute,
+    bookingViewRoute,
+    bookingAmendRoute,
     adminRoute,
     userCreationRoute,
     vendorApprovalsRoute,

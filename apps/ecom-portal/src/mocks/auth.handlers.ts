@@ -51,4 +51,29 @@ export const authHandlers = [
       status: 'success'
     });
   }),
+
+  // 3. Mock Forgot Password API
+  http.post('/api/auth/forgot-password', async ({ request }) => {
+    await delay(1200); // Simulate network latency
+
+    const body = (await request.json()) as { userName: string; captcha: string };
+
+    // Simple validation
+    if (!body.userName || !body.captcha) {
+      return HttpResponse.json(
+        { message: 'Username and captcha are required.' },
+        { status: 400 }
+      );
+    }
+
+    if (body.captcha.toLowerCase() !== 'abcd') {
+      // Allow any captcha for test purposes, except if it's strictly empty or invalid in a specific way.
+      // We'll just accept anything for the mock unless we want to enforce 'abcd'. Let's accept anything.
+    }
+
+    return HttpResponse.json({
+      message: 'Password reset instructions have been sent to your registered email.',
+      status: 'success'
+    });
+  }),
 ];

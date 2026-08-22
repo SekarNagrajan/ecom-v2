@@ -49,3 +49,23 @@ export async function activateUser(token: string): Promise<{ message: string }> 
 
   return (await res.json()) as { message: string };
 }
+
+/** POST /api/auth/forgot-password — request a password reset email */
+export async function requestPasswordReset(data: { userName: string; captcha: string }): Promise<{ message: string }> {
+  const res = await fetch('/api/auth/forgot-password', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    const err = (await res.json().catch(() => ({ message: 'Password reset request failed' }))) as {
+      message: string;
+    };
+    throw new Error(err.message || 'Failed to request password reset');
+  }
+
+  return (await res.json()) as { message: string };
+}

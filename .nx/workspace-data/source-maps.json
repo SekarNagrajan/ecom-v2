@@ -1,0 +1,210 @@
+{
+  "apps/ecom-portal": {
+    "root": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ],
+    "name": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ],
+    "tags": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ],
+    "tags.npm:private": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ],
+    "metadata.targetGroups": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ],
+    "metadata.targetGroups.NPM Scripts": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ],
+    "metadata.targetGroups.NPM Scripts.0": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ],
+    "metadata.targetGroups.NPM Scripts.1": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ],
+    "metadata.targetGroups.NPM Scripts.2": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ],
+    "metadata.js": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ],
+    "metadata.js.packageName": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ],
+    "metadata.js.packageVersion": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ],
+    "metadata.js.isInPackageManagerWorkspaces": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ],
+    "targets": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.dev": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.dev.executor": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.dev.options": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.dev.metadata": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.dev.options.script": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.dev.metadata.scriptContent": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.dev.metadata.runCommand": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.build": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.build.executor": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.build.options": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.build.metadata": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.build.options.script": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.build.metadata.scriptContent": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.build.metadata.runCommand": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.preview": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.preview.executor": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.preview.options": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.preview.metadata": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.preview.options.script": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.preview.metadata.scriptContent": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.preview.metadata.runCommand": [
+      "apps/ecom-portal/package.json",
+      "nx/core/package-json"
+    ]
+  },
+  "libs/shared/ui": {
+    "root": [
+      "libs/shared/ui/package.json",
+      "nx/core/package-json"
+    ],
+    "name": [
+      "libs/shared/ui/package.json",
+      "nx/core/package-json"
+    ],
+    "tags": [
+      "libs/shared/ui/package.json",
+      "nx/core/package-json"
+    ],
+    "tags.npm:public": [
+      "libs/shared/ui/package.json",
+      "nx/core/package-json"
+    ],
+    "metadata.targetGroups": [
+      "libs/shared/ui/package.json",
+      "nx/core/package-json"
+    ],
+    "metadata.js": [
+      "libs/shared/ui/package.json",
+      "nx/core/package-json"
+    ],
+    "metadata.js.packageName": [
+      "libs/shared/ui/package.json",
+      "nx/core/package-json"
+    ],
+    "metadata.js.packageVersion": [
+      "libs/shared/ui/package.json",
+      "nx/core/package-json"
+    ],
+    "metadata.js.packageExports": [
+      "libs/shared/ui/package.json",
+      "nx/core/package-json"
+    ],
+    "metadata.js.packageMain": [
+      "libs/shared/ui/package.json",
+      "nx/core/package-json"
+    ],
+    "metadata.js.isInPackageManagerWorkspaces": [
+      "libs/shared/ui/package.json",
+      "nx/core/package-json"
+    ],
+    "targets": [
+      "libs/shared/ui/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.nx-release-publish": [
+      "libs/shared/ui/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.nx-release-publish.executor": [
+      "libs/shared/ui/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.nx-release-publish.dependsOn": [
+      "libs/shared/ui/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.nx-release-publish.options": [
+      "libs/shared/ui/package.json",
+      "nx/core/package-json"
+    ]
+  }
+}

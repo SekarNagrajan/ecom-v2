@@ -2,7 +2,8 @@
 import { EyeInvisibleOutlined, EyeTwoTone, LockOutlined, SafetyCertificateOutlined, ShopOutlined, UserOutlined } from '@ant-design/icons';
 import { PRECONFIGURED_TENANTS } from '@solverminds/auth';
 import { useNavigate } from '@tanstack/react-router';
-import { Alert, Button, Checkbox, Divider, Drawer, Flex, Input, Select, Spin, Typography, theme } from 'antd';
+import { Alert, Button, Checkbox, Divider, Flex, Input, Select, Spin, Typography, theme } from 'antd';
+import { AppDrawer } from '@solverminds/shared-ui';
 import { Controller } from 'react-hook-form';
 import { useState } from 'react';
 
@@ -58,7 +59,7 @@ export function PublicLoginPanel({ open, onClose, controller }: PublicLoginPanel
   };
 
   return (
-    <Drawer
+    <AppDrawer
       title={null}
       open={open}
       onClose={onClose}
@@ -308,6 +309,6 @@ export function PublicLoginPanel({ open, onClose, controller }: PublicLoginPanel
       </div>
       </>
       )}
-    </Drawer>
+    </AppDrawer>
   );
 }

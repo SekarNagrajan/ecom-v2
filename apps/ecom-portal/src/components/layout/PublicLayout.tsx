@@ -1,5 +1,5 @@
 // Modified by Sekar Nagarajan (2026-08-22 00:06)
-import { Flex, Layout, Typography, theme, Card, Menu } from 'antd';
+import { Flex, Layout, Typography, theme, Card, Menu, Grid } from 'antd';
 import type { MenuProps } from 'antd';
 import { useState, useEffect } from 'react';
 import {
@@ -42,6 +42,9 @@ export function PublicLayout() {
   const location = useLocation();
   const [loginPanelOpen, setLoginPanelOpen] = useState(!!search.login);
   const [collapsed, setCollapsed] = useState(true);
+  const screens = Grid.useBreakpoint();
+  const isMobile = !screens.md; // < 768px
+  const isStacked = !screens.xl; // < 1200px
 
   useEffect(() => {
     if (search.login) {
@@ -246,10 +249,20 @@ export function PublicLayout() {
               <Outlet />
             </div>
           ) : (
-            <div style={{ flex: 1, display: 'flex', zIndex: 2, padding: '40px 60px' }}>
+            <div
+              style={{
+                flex: 1,
+                display: 'flex',
+                flexDirection: isStacked ? 'column' : 'row',
+                zIndex: 2,
+                padding: isMobile ? '24px 16px' : isStacked ? '32px 32px' : '40px 60px',
+                gap: 40,
+                overflowY: 'auto'
+              }}
+            >
               <Outlet />
               {/* Left side text and cards (Landing page content) */}
-              <Flex vertical justify="center" style={{ flex: 1, paddingRight: 40, maxWidth: 650 }}>
+              <Flex vertical justify="center" style={{ flex: 1, paddingRight: isStacked ? 0 : 40, maxWidth: isStacked ? '100%' : 650 }}>
                   <div
                     style={{
                     display: 'inline-block',
@@ -267,16 +280,16 @@ export function PublicLayout() {
                 >
                   E-COMMERCE ONLINE PORTAL
                 </div>
-                <h1 style={{ fontSize: '3.5rem', fontWeight: 800, margin: '0 0 16px 0', lineHeight: 1.1, color: '#1a1a1a' }}>
+                <h1 style={{ fontSize: isMobile ? '2.5rem' : '3.5rem', fontWeight: 800, margin: '0 0 16px 0', lineHeight: 1.1, color: '#1a1a1a' }}>
                   SCHEDULES, TRACKING & RATES
                 </h1>
                 <Text style={{ fontSize: '1.25rem', color: '#444', marginBottom: 40, lineHeight: 1.6, maxWidth: 550 }}>
                   Search sailings, track shipments, and request rates in seconds — all from one quick-action workspace in the Carrier Portal.
                 </Text>
-                <Flex gap={16}>
+                <Flex gap={16} wrap="wrap">
                   <Card 
                     size="small" 
-                    style={{ borderRadius: 16, flex: 1, boxShadow: '0 4px 12px rgba(0,0,0,0.05)', border: `1px solid ${token.colorPrimary}`, cursor: 'pointer' }} 
+                    style={{ borderRadius: 16, flex: '1 1 140px', minWidth: 140, boxShadow: '0 4px 12px rgba(0,0,0,0.05)', border: `1px solid ${token.colorPrimary}`, cursor: 'pointer' }} 
                     styles={{ body: { padding: '16px', display: 'flex', alignItems: 'center', gap: 12 } }}
                     onClick={() => landingController.handleTabChange('schedules')}
                   >
@@ -287,7 +300,7 @@ export function PublicLayout() {
                   </Card>
                   <Card 
                     size="small" 
-                    style={{ borderRadius: 16, flex: 1, boxShadow: '0 4px 12px rgba(0,0,0,0.05)', cursor: 'pointer' }} 
+                    style={{ borderRadius: 16, flex: '1 1 140px', minWidth: 140, boxShadow: '0 4px 12px rgba(0,0,0,0.05)', cursor: 'pointer' }} 
                     styles={{ body: { padding: '16px', display: 'flex', alignItems: 'center', gap: 12 } }}
                     onClick={() => landingController.handleTabChange('tracking')}
                   >
@@ -298,7 +311,7 @@ export function PublicLayout() {
                   </Card>
                   <Card 
                     size="small" 
-                    style={{ borderRadius: 16, flex: 1, boxShadow: '0 4px 12px rgba(0,0,0,0.05)', cursor: 'pointer' }} 
+                    style={{ borderRadius: 16, flex: '1 1 140px', minWidth: 140, boxShadow: '0 4px 12px rgba(0,0,0,0.05)', cursor: 'pointer' }} 
                     styles={{ body: { padding: '16px', display: 'flex', alignItems: 'center', gap: 12 } }}
                     onClick={() => landingController.handleTabChange('rates')}
                   >
@@ -311,7 +324,7 @@ export function PublicLayout() {
               </Flex>
 
                 {/* Right side search panel */}
-                <Flex align="center" justify="flex-end" style={{ width: 600, minWidth: 550 }}>
+                <Flex align={isStacked ? "stretch" : "center"} justify={isStacked ? "center" : "flex-end"} style={{ width: isStacked ? '100%' : 600, minWidth: isStacked ? 0 : 550 }}>
                   <HeroSearchPanel controller={landingController} />
                 </Flex>
             </div>

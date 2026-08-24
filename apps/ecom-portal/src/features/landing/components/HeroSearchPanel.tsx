@@ -3,7 +3,7 @@ import {
   CodeSandboxOutlined,
   DollarOutlined,
 } from '@ant-design/icons';
-import { Flex, Tabs, theme } from 'antd';
+import { Flex, Tabs, theme, Grid } from 'antd';
 
 import type { LandingTab, TabConfig } from '../types/landing.types';
 import type { useLandingController } from '../hooks/use-landing-controller';
@@ -18,6 +18,8 @@ interface HeroSearchPanelProps {
 
 export function HeroSearchPanel({ controller }: HeroSearchPanelProps) {
   const { token } = theme.useToken();
+  const screens = Grid.useBreakpoint();
+  const isMobile = !screens.md;
 
   const tabLabelStyle = {
     fontSize: 16,
@@ -89,14 +91,14 @@ export function HeroSearchPanel({ controller }: HeroSearchPanelProps) {
         onChange={(key) => controller.handleTabChange(key as LandingTab)}
         items={tabItems}
         size="large"
-        style={{ padding: '16px 32px 0' }}
+        style={{ padding: isMobile ? '16px 16px 0' : '16px 32px 0' }}
         tabBarStyle={{
           marginBottom: 24,
           borderBottom: `2px solid ${token.colorBorderSecondary}`,
         }}
-        tabBarGutter={32}
+        tabBarGutter={isMobile ? 16 : 32}
       />
-      <div style={{ padding: '0 32px 32px' }}>
+      <div style={{ padding: isMobile ? '0 16px 24px' : '0 32px 32px' }}>
         {/* Tab content is rendered by the Tabs component items above */}
       </div>
     </div>

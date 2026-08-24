@@ -1,6 +1,6 @@
 // Modified by Sekar Nagarajan (2026-08-22 00:06)
 import { CalendarOutlined, EnvironmentOutlined, SearchOutlined, SwapOutlined } from '@ant-design/icons';
-import { AutoComplete, Button, DatePicker, Input, Select, Skeleton, theme } from 'antd';
+import { AutoComplete, Button, DatePicker, Input, Select, Skeleton, theme, Flex } from 'antd';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 import { Controller, type UseFormReturn } from 'react-hook-form';
@@ -64,8 +64,8 @@ export function RatesSearchTab({ form, onSubmit }: RatesSearchTabProps) {
       onSubmit={onSubmit}
       style={{ width: '100%' }}
     >
-      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginBottom: 16 }}>
-        <div style={{ margin: 0, flex: 1, display: 'flex', flexDirection: 'column' }}>
+      <Flex wrap="wrap" gap={16} align="flex-start" style={{ marginBottom: 16 }}>
+        <div style={{ flex: '1 1 200px', minWidth: 200, display: 'flex', flexDirection: 'column' }}>
           <label style={labelStyle}>Origin <span style={asteriskStyle}>*</span></label>
           <Controller
             control={control}
@@ -93,14 +93,16 @@ export function RatesSearchTab({ form, onSubmit }: RatesSearchTabProps) {
           )}
         </div>
 
-        <Button
-          icon={<SwapOutlined style={{ color: token.colorPrimary, fontSize: 16 }} />}
-          onClick={handleSwap}
-          shape="circle"
-          style={{ width: 36, height: 36, borderColor: token.colorPrimaryBgHover, boxShadow: '0 2px 8px rgba(0,0,0,0.06)', marginTop: 32, flexShrink: 0 }}
-        />
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>
+          <Button
+            icon={<SwapOutlined style={{ color: token.colorPrimary, fontSize: 16 }} />}
+            onClick={handleSwap}
+            shape="circle"
+            style={{ width: 36, height: 36, borderColor: token.colorPrimaryBgHover, boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}
+          />
+        </div>
 
-        <div style={{ margin: 0, flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <div style={{ flex: '1 1 200px', minWidth: 200, display: 'flex', flexDirection: 'column' }}>
           <label style={labelStyle}>Delivery <span style={asteriskStyle}>*</span></label>
           <Controller
             control={control}
@@ -127,10 +129,10 @@ export function RatesSearchTab({ form, onSubmit }: RatesSearchTabProps) {
             </div>
           )}
         </div>
-      </div>
+      </Flex>
 
-      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, marginBottom: 16 }}>
-        <div style={{ margin: 0, flex: 1, display: 'flex', flexDirection: 'column' }}>
+      <Flex wrap="wrap" gap={16} align="flex-start" style={{ marginBottom: 16 }}>
+        <div style={{ flex: '1 1 200px', minWidth: 200, display: 'flex', flexDirection: 'column' }}>
           <label style={labelStyle}>Equipment <span style={asteriskStyle}>*</span></label>
           {eqpLoading ? (
             <Skeleton.Input active style={{ width: '100%', height: 52 }} />
@@ -156,7 +158,7 @@ export function RatesSearchTab({ form, onSubmit }: RatesSearchTabProps) {
           )}
         </div>
 
-        <div style={{ margin: 0, flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <div style={{ flex: '1 1 200px', minWidth: 200, display: 'flex', flexDirection: 'column' }}>
           <label style={labelStyle}>Date <span style={asteriskStyle}>*</span></label>
           <Controller
             control={control}
@@ -178,7 +180,7 @@ export function RatesSearchTab({ form, onSubmit }: RatesSearchTabProps) {
             </div>
           )}
         </div>
-      </div>
+      </Flex>
 
       <div style={{ marginBottom: 24 }}>
         <div style={{ margin: 0, display: 'flex', flexDirection: 'column' }}>

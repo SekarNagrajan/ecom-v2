@@ -48,1640 +48,6 @@
   "nxJsonPlugins": [],
   "fileMap": {
     "projectFileMap": {
-      "@solverminds/ecom-portal": [
-        {
-          "file": "apps/ecom-portal/ECOM-PORTAL-FEATURE-BLUEPRINT.md",
-          "hash": "1639621350123015659"
-        },
-        {
-          "file": "apps/ecom-portal/README.md",
-          "hash": "7384636327375426075"
-        },
-        {
-          "file": "apps/ecom-portal/feature-api-guide.md",
-          "hash": "9862287851902852887"
-        },
-        {
-          "file": "apps/ecom-portal/index.html",
-          "hash": "2866531986744727985"
-        },
-        {
-          "file": "apps/ecom-portal/package.json",
-          "hash": "5203296398553932545",
-          "deps": [
-            "npm:@hookform/resolvers",
-            "npm:dayjs",
-            "npm:msw",
-            "npm:zod"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/public/hero-bg.jpg",
-          "hash": "15940009112226838207"
-        },
-        {
-          "file": "apps/ecom-portal/public/hero-bg.png",
-          "hash": "13057982098084091004"
-        },
-        {
-          "file": "apps/ecom-portal/public/hero_bg.png",
-          "hash": "1030125187511485780"
-        },
-        {
-          "file": "apps/ecom-portal/public/logo.png",
-          "hash": "4380857612946339418"
-        },
-        {
-          "file": "apps/ecom-portal/public/logos/tenant_01.png",
-          "hash": "9451944638709911913"
-        },
-        {
-          "file": "apps/ecom-portal/public/logos/tenant_02.png",
-          "hash": "9071425553433750805"
-        },
-        {
-          "file": "apps/ecom-portal/public/logos/tenant_03.png",
-          "hash": "2745984419793729225"
-        },
-        {
-          "file": "apps/ecom-portal/public/logos/tenant_04.png",
-          "hash": "13082431622258143539"
-        },
-        {
-          "file": "apps/ecom-portal/public/logos/tenant_05.png",
-          "hash": "15819089275227461032"
-        },
-        {
-          "file": "apps/ecom-portal/public/logos/tenant_06.png",
-          "hash": "804633309987333237"
-        },
-        {
-          "file": "apps/ecom-portal/public/logos/tenant_07.png",
-          "hash": "16453721020734089159"
-        },
-        {
-          "file": "apps/ecom-portal/public/logos/tenant_08.png",
-          "hash": "15849023086320017014"
-        },
-        {
-          "file": "apps/ecom-portal/public/logos/tenant_09.png",
-          "hash": "1029625818036118599"
-        },
-        {
-          "file": "apps/ecom-portal/public/logos/tenant_10.png",
-          "hash": "11919452939488900725"
-        },
-        {
-          "file": "apps/ecom-portal/public/mockServiceWorker.js",
-          "hash": "11710429898096167168"
-        },
-        {
-          "file": "apps/ecom-portal/src/app/router.tsx",
-          "hash": "12245435598449479384",
-          "deps": [
-            "npm:@tanstack/react-router"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/components/form-section/form-section.tsx",
-          "hash": "9909016478297915950",
-          "deps": [
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/components/layout/AppFooter.tsx",
-          "hash": "11766639934018366426",
-          "deps": [
-            "npm:antd"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/components/layout/AuthenticatedLayout.tsx",
-          "hash": "13103119825850923423",
-          "deps": [
-            "npm:antd",
-            "npm:react",
-            "npm:@tanstack/react-router"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/components/layout/AuthenticatedLayoutHeader.tsx",
-          "hash": "7894759774472504252",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:@tanstack/react-router",
-            "npm:antd",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/components/layout/AuthenticatedSidebar.tsx",
-          "hash": "15442670417620217791",
-          "deps": [
-            "npm:@ant-design/icons",
-            "npm:@tanstack/react-router",
-            "npm:antd"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/components/layout/PublicLayout.tsx",
-          "hash": "17322998019312113091",
-          "deps": [
-            "npm:antd",
-            "npm:react",
-            "npm:@ant-design/icons",
-            "npm:@tanstack/react-router"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/components/layout/PublicLayoutHeader.tsx",
-          "hash": "13692934829825118354",
-          "deps": [
-            "npm:@ant-design/icons",
-            "npm:antd",
-            "npm:@tanstack/react-router"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/components/layout/account-preferences-drawer.tsx",
-          "hash": "8850986690118481049",
-          "deps": [
-            "@solverminds/shared-ui",
-            "npm:antd"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/components/layout/header-theme-toggle.tsx",
-          "hash": "9073036179750226223",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/components/layout/layout-header.tsx",
-          "hash": "5150903032303512500",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/components/layout/user-menu.tsx",
-          "hash": "6897207751955200939",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/components/providers/TenantThemeProvider.tsx",
-          "hash": "12293987696739776301",
-          "deps": [
-            "npm:react",
-            "npm:antd"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/components/shared/build-actions-column.tsx",
-          "hash": "4083305113600878244",
-          "deps": [
-            "@solverminds/shared-ui"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/components/shared/list-action-button.tsx",
-          "hash": "15877989305483051033",
-          "deps": [
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/components/shared/user-avatar.tsx",
-          "hash": "2625792405568027370",
-          "deps": [
-            "npm:@ant-design/icons",
-            "npm:antd"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/components/shared/user-name.utils.ts",
-          "hash": "16341670320758962560"
-        },
-        {
-          "file": "apps/ecom-portal/src/features/admin/admin-route.tsx",
-          "hash": "16336949206514312754"
-        },
-        {
-          "file": "apps/ecom-portal/src/features/admin/api/admin.api.ts",
-          "hash": "4912622726283326452"
-        },
-        {
-          "file": "apps/ecom-portal/src/features/admin/components/AdminLayout.tsx",
-          "hash": "5802171382714255984",
-          "deps": [
-            "npm:react",
-            "npm:antd",
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/admin/components/AdminPasswordResetView.tsx",
-          "hash": "11200631376611356516",
-          "deps": [
-            "npm:react",
-            "npm:antd",
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/admin/components/BannerManagerView.tsx",
-          "hash": "4036396490447594702",
-          "deps": [
-            "npm:react",
-            "npm:antd",
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/admin/components/CustomerAdvisoryView.tsx",
-          "hash": "9864038826476273013",
-          "deps": [
-            "npm:react",
-            "npm:antd",
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/admin/components/CutoffConfigView.tsx",
-          "hash": "7695508074334071952",
-          "deps": [
-            "npm:react",
-            "npm:antd",
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/admin/components/EmailTemplateEditorView.tsx",
-          "hash": "12086383803206156537",
-          "deps": [
-            "npm:react",
-            "npm:antd",
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/admin/components/FieldConfigView.tsx",
-          "hash": "1515326925921828255",
-          "deps": [
-            "npm:react",
-            "npm:antd",
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/admin/components/GlobalConfigAdminView.tsx",
-          "hash": "3768025236526222019",
-          "deps": [
-            "npm:react",
-            "npm:antd",
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/admin/components/MenuManagementView.tsx",
-          "hash": "5087281766539566851",
-          "deps": [
-            "npm:react",
-            "npm:antd",
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/admin/components/ServiceRestrictionsView.tsx",
-          "hash": "13889968105130927782",
-          "deps": [
-            "npm:react",
-            "npm:antd",
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/admin/components/SpecialPrivilegesView.tsx",
-          "hash": "11584193133827395445",
-          "deps": [
-            "npm:react",
-            "npm:antd",
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/admin/hooks/use-admin-controller.ts",
-          "hash": "1765690039473405042",
-          "deps": [
-            "npm:@tanstack/react-query"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/admin/types/admin.types.ts",
-          "hash": "13428377025787764848",
-          "deps": [
-            "npm:zod"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/auth/activation-route.tsx",
-          "hash": "13185868489215205231",
-          "deps": [
-            "npm:react",
-            "npm:antd"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/auth/api/auth.api.ts",
-          "hash": "5165585076314670177"
-        },
-        {
-          "file": "apps/ecom-portal/src/features/auth/components/ForgotPasswordPanelContent.tsx",
-          "hash": "17838679317067431959",
-          "deps": [
-            "npm:@ant-design/icons",
-            "npm:antd",
-            "npm:react-hook-form"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/auth/hooks/use-forgot-password-controller.ts",
-          "hash": "3134971018903053722",
-          "deps": [
-            "npm:@hookform/resolvers",
-            "npm:@tanstack/react-query",
-            "npm:react",
-            "npm:react-hook-form"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/auth/hooks/use-login-controller.ts",
-          "hash": "12335109137775568734",
-          "deps": [
-            "npm:@hookform/resolvers",
-            "npm:@tanstack/react-query",
-            "npm:react",
-            "npm:react-hook-form",
-            "npm:zustand"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/auth/types/auth.types.ts",
-          "hash": "9798887288473374971",
-          "deps": [
-            "npm:zod"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/booking/api/booking.api.ts",
-          "hash": "5358618018574925539"
-        },
-        {
-          "file": "apps/ecom-portal/src/features/booking/booking-amend-route.tsx",
-          "hash": "17122115322591007202",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:@tanstack/react-query",
-            "npm:@tanstack/react-router",
-            "npm:antd",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/booking/booking-dashboard-route.tsx",
-          "hash": "4162439042381971576",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:@tanstack/react-query",
-            "npm:@tanstack/react-router",
-            "npm:antd",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/booking/booking-view-route.tsx",
-          "hash": "14466317236354421763",
-          "deps": [
-            "npm:antd",
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:@tanstack/react-router"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/booking/booking-wizard-route.tsx",
-          "hash": "15114509077524253028",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:@tanstack/react-router",
-            "npm:antd"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/booking/components/CargoStep.tsx",
-          "hash": "6737766216318107661",
-          "deps": [
-            "npm:@hookform/resolvers",
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:react",
-            "npm:react-hook-form"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/booking/components/CustomerDetailsStep.tsx",
-          "hash": "2517275869875949858",
-          "deps": [
-            "npm:@hookform/resolvers",
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:react",
-            "npm:react-hook-form"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/booking/components/ENSStep.tsx",
-          "hash": "2703159324686308322",
-          "deps": [
-            "npm:@hookform/resolvers",
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:react",
-            "npm:react-hook-form"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/booking/components/FileUploadStep.tsx",
-          "hash": "7431197948272735409",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:antd"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/booking/components/InsuranceStep.tsx",
-          "hash": "8536544569977465920",
-          "deps": [
-            "npm:@hookform/resolvers",
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:react",
-            "npm:react-hook-form"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/booking/components/ManageTemplateModal.tsx",
-          "hash": "3708125329514120254",
-          "deps": [
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:@ant-design/icons",
-            "npm:@tanstack/react-query"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/booking/components/MasterDetailsStep.tsx",
-          "hash": "16135813708868392929",
-          "deps": [
-            "npm:@ant-design/icons",
-            "npm:@hookform/resolvers",
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:dayjs",
-            "npm:react",
-            "npm:react-hook-form"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/booking/components/PreviewStep.tsx",
-          "hash": "13175974103781037692",
-          "deps": [
-            "@solverminds/shared-ui",
-            "npm:antd"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/booking/components/SelectTemplateModal.tsx",
-          "hash": "11094465089458373820",
-          "deps": [
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:@tanstack/react-query"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/booking/components/view/BookingDetailsViewer.tsx",
-          "hash": "15294670556243253278",
-          "deps": [
-            "npm:antd",
-            "npm:@tanstack/react-query",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/booking/components/view/HaulageTrackingGrid.tsx",
-          "hash": "15838357866449737740",
-          "deps": [
-            "npm:antd",
-            "@solverminds/shared-ui",
-            "npm:ag-grid-community"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/booking/hooks/use-booking-wizard.ts",
-          "hash": "8313238759092232608",
-          "deps": [
-            "npm:@tanstack/react-query",
-            "npm:antd",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/booking/stores/booking.store.ts",
-          "hash": "4758937905252066313",
-          "deps": [
-            "npm:zustand"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/booking/types/booking-list.types.ts",
-          "hash": "16463570815984912533",
-          "deps": [
-            "npm:zod"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/booking/types/booking.types.ts",
-          "hash": "17894037788575571376",
-          "deps": [
-            "npm:zod"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/contact-us/api/contact-us.api.ts",
-          "hash": "3967655161365645156"
-        },
-        {
-          "file": "apps/ecom-portal/src/features/contact-us/api/contact-us.keys.ts",
-          "hash": "9597665896532198869"
-        },
-        {
-          "file": "apps/ecom-portal/src/features/contact-us/components/ContactUsDrawer.tsx",
-          "hash": "15783187078955629868",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:antd"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/contact-us/components/ContactUsForm.tsx",
-          "hash": "13814293851381767798",
-          "deps": [
-            "npm:antd",
-            "npm:react-hook-form"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/contact-us/contact-us-route.tsx",
-          "hash": "5680517743531370652",
-          "deps": [
-            "npm:@ant-design/icons",
-            "npm:@tanstack/react-router",
-            "npm:antd"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/contact-us/hooks/use-contact-us-controller.ts",
-          "hash": "4424302520910080564",
-          "deps": [
-            "npm:@hookform/resolvers",
-            "@solverminds/shared-ui",
-            "npm:@tanstack/react-query",
-            "npm:react-hook-form"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/contact-us/types/contact-us.schema.ts",
-          "hash": "9486810398525721586",
-          "deps": [
-            "npm:zod"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/dashboard/api/dashboard.api.ts",
-          "hash": "9654000944072610625"
-        },
-        {
-          "file": "apps/ecom-portal/src/features/dashboard/components/AgencyHotlineWidget.tsx",
-          "hash": "7538265184307012987",
-          "deps": [
-            "npm:@ant-design/icons",
-            "npm:antd",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/dashboard/components/DashboardCharts.tsx",
-          "hash": "5435710475532527944",
-          "deps": [
-            "npm:antd",
-            "npm:echarts",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/dashboard/components/DashboardKpiCards.tsx",
-          "hash": "7446459901972205244",
-          "deps": [
-            "npm:@ant-design/icons",
-            "npm:antd"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/dashboard/components/DashboardOngoingTable.tsx",
-          "hash": "17270619720537370318",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/dashboard/components/EnhancedDashboardView.tsx",
-          "hash": "4813750903198103054",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:@tanstack/react-router",
-            "npm:antd",
-            "npm:dayjs",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/dashboard/components/LanesSection.tsx",
-          "hash": "16776228216504263281",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:antd"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/dashboard/components/ShipmentIntelligenceSection.tsx",
-          "hash": "9870173897412223080",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:echarts",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/dashboard/components/ShipmentPlanningSection.tsx",
-          "hash": "4546097251460353336",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:antd"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/dashboard/components/VolumeAnalyticsSection.tsx",
-          "hash": "2274260614053013382",
-          "deps": [
-            "npm:@ant-design/icons",
-            "npm:antd",
-            "npm:echarts",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/dashboard/mocks/dashboard.mock.ts",
-          "hash": "5978087074766213634"
-        },
-        {
-          "file": "apps/ecom-portal/src/features/landing/api/landing.api.ts",
-          "hash": "5205790136837919070"
-        },
-        {
-          "file": "apps/ecom-portal/src/features/landing/api/landing.keys.ts",
-          "hash": "2640298486732065857"
-        },
-        {
-          "file": "apps/ecom-portal/src/features/landing/api/landing.queries.ts",
-          "hash": "11847224782045750756",
-          "deps": [
-            "npm:@tanstack/react-query"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/landing/components/HeroSearchPanel.tsx",
-          "hash": "5267610255621686424",
-          "deps": [
-            "npm:@ant-design/icons",
-            "npm:antd"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/landing/components/ImageCaptcha.tsx",
-          "hash": "1050181653142807590",
-          "deps": [
-            "npm:@ant-design/icons",
-            "npm:antd",
-            "npm:react",
-            "npm:react-hook-form"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/landing/components/PublicLoginPanel.tsx",
-          "hash": "1041503232065702452",
-          "deps": [
-            "npm:@ant-design/icons",
-            "npm:@tanstack/react-router",
-            "npm:antd",
-            "npm:react-hook-form",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/landing/components/RatesSearchTab.tsx",
-          "hash": "2529134506984195737",
-          "deps": [
-            "npm:@ant-design/icons",
-            "npm:antd",
-            "npm:dayjs",
-            "npm:react",
-            "npm:react-hook-form"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/landing/components/ScheduleSearchTab.tsx",
-          "hash": "8280614836499921998",
-          "deps": [
-            "npm:@ant-design/icons",
-            "npm:antd",
-            "npm:dayjs",
-            "npm:react",
-            "npm:react-hook-form"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/landing/components/TrackingSearchTab.tsx",
-          "hash": "8844912096182222742",
-          "deps": [
-            "npm:@ant-design/icons",
-            "npm:antd",
-            "npm:react-hook-form"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/landing/hooks/use-landing-controller.ts",
-          "hash": "8436641741663171988",
-          "deps": [
-            "npm:@hookform/resolvers",
-            "npm:@tanstack/react-router",
-            "npm:dayjs",
-            "npm:react",
-            "npm:react-hook-form"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/landing/types/landing.types.ts",
-          "hash": "6589923658212619721",
-          "deps": [
-            "npm:zod"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/rates/api/rates.api.ts",
-          "hash": "2075079761819492203"
-        },
-        {
-          "file": "apps/ecom-portal/src/features/rates/api/rates.keys.ts",
-          "hash": "7728250629320965034"
-        },
-        {
-          "file": "apps/ecom-portal/src/features/rates/api/rates.queries.ts",
-          "hash": "15176018184340819025",
-          "deps": [
-            "npm:@tanstack/react-query"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/rates/components/ContractSurchargeModal.tsx",
-          "hash": "3251874838669730831",
-          "deps": [
-            "@solverminds/shared-ui",
-            "npm:antd"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/rates/components/ContractView.tsx",
-          "hash": "3861020133885995865",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/rates/components/QuoteRequestDrawer.tsx",
-          "hash": "1502764303468319829",
-          "deps": [
-            "npm:@hookform/resolvers",
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:react-hook-form",
-            "npm:zod"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/rates/components/QuotesView.tsx",
-          "hash": "4501413443957626692",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:@tanstack/react-router",
-            "npm:antd",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/rates/components/RateCardList.tsx",
-          "hash": "1460771597662095346",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/rates/components/RateDataView.tsx",
-          "hash": "2315358124009370467",
-          "deps": [
-            "@solverminds/shared-ui",
-            "npm:antd"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/rates/components/RateSearchFilter.tsx",
-          "hash": "9894895337060298925",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:dayjs"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/rates/components/SurchargeView.tsx",
-          "hash": "14723049160374835146",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/rates/components/TariffView.tsx",
-          "hash": "1644673148008665746",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/rates/hooks/useRatesController.ts",
-          "hash": "5952754270469067819",
-          "deps": [
-            "npm:react",
-            "npm:@tanstack/react-router",
-            "@solverminds/shared-ui"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/rates/rates-route.tsx",
-          "hash": "14294758273860932661",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/rates/types/rates.types.ts",
-          "hash": "8258271481625499547"
-        },
-        {
-          "file": "apps/ecom-portal/src/features/registration/api/registration.api.ts",
-          "hash": "16269763879042950229"
-        },
-        {
-          "file": "apps/ecom-portal/src/features/registration/components/CompanyInfoStep.tsx",
-          "hash": "11202697687101628635",
-          "deps": [
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:react",
-            "npm:react-hook-form"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/registration/components/FileUploadStep.tsx",
-          "hash": "7702090327326687022",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:react-hook-form"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/registration/components/TermsStep.tsx",
-          "hash": "2858638362949611859",
-          "deps": [
-            "npm:antd",
-            "npm:react-hook-form"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/registration/components/UserInfoStep.tsx",
-          "hash": "3865526950055907376",
-          "deps": [
-            "npm:antd",
-            "npm:react-hook-form",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/registration/hooks/use-registration-controller.ts",
-          "hash": "13709195527067162631",
-          "deps": [
-            "npm:@hookform/resolvers",
-            "@solverminds/shared-ui",
-            "npm:@tanstack/react-query",
-            "npm:react",
-            "npm:react-hook-form"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/registration/registration-route.tsx",
-          "hash": "6361903532146003530",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:react",
-            "npm:react-hook-form"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/registration/types/registration.schema.ts",
-          "hash": "106684356511046898",
-          "deps": [
-            "npm:zod"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/schedules/api/schedules.api.ts",
-          "hash": "11167264996290129110"
-        },
-        {
-          "file": "apps/ecom-portal/src/features/schedules/api/schedules.keys.ts",
-          "hash": "8373989757380601361"
-        },
-        {
-          "file": "apps/ecom-portal/src/features/schedules/api/schedules.queries.ts",
-          "hash": "4284858991592616106",
-          "deps": [
-            "npm:@tanstack/react-query"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/schedules/components/ScheduleCalendarView.tsx",
-          "hash": "8854852109045086727",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:dayjs",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/schedules/components/ScheduleCarbonModal.tsx",
-          "hash": "16022612015982748312",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/schedules/components/ScheduleCardList.tsx",
-          "hash": "8235199941771791035",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/schedules/components/ScheduleDetailsDrawer.tsx",
-          "hash": "1347297470832461334",
-          "deps": [
-            "npm:react",
-            "npm:antd",
-            "@solverminds/shared-ui"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/schedules/components/ScheduleFilter.tsx",
-          "hash": "12497649443961361992",
-          "deps": [
-            "npm:react",
-            "npm:antd",
-            "npm:react-hook-form",
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/schedules/components/ScheduleList.tsx",
-          "hash": "2453526116065248898",
-          "deps": [
-            "npm:react",
-            "npm:antd",
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:ag-grid-community"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/schedules/components/ScheduleRatesModal.tsx",
-          "hash": "6348422040847743613",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/schedules/components/ScheduleSearchFilter.tsx",
-          "hash": "16958073577320425485",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:dayjs"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/schedules/components/VesselDetailsModal.tsx",
-          "hash": "5437591863900893238",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:antd"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/schedules/hooks/useSchedulesController.ts",
-          "hash": "2556430588831771255",
-          "deps": [
-            "npm:@tanstack/react-router",
-            "npm:antd",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/schedules/mocks/schedules.mock.ts",
-          "hash": "12985226054857480387"
-        },
-        {
-          "file": "apps/ecom-portal/src/features/schedules/schedules-route.tsx",
-          "hash": "13831571754882347200",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/schedules/types/schedules.types.ts",
-          "hash": "5781470227231962175"
-        },
-        {
-          "file": "apps/ecom-portal/src/features/shipping-instruction/api/si.api.ts",
-          "hash": "12161631930535091011"
-        },
-        {
-          "file": "apps/ecom-portal/src/features/shipping-instruction/components/CargoStep.tsx",
-          "hash": "14291742274968497315",
-          "deps": [
-            "@solverminds/shared-ui",
-            "npm:antd"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/shipping-instruction/components/ChargesStep.tsx",
-          "hash": "13789467402904784642",
-          "deps": [
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:@ant-design/icons"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/shipping-instruction/components/MasterDetailsStep.tsx",
-          "hash": "8536838543082139517",
-          "deps": [
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:react-hook-form"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/shipping-instruction/components/PartiesStep.tsx",
-          "hash": "5463649811573895529",
-          "deps": [
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:react-hook-form"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/shipping-instruction/components/PreviewStep.tsx",
-          "hash": "13160900676537152808",
-          "deps": [
-            "@solverminds/shared-ui",
-            "npm:antd"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/shipping-instruction/shipping-instruction-dashboard-route.tsx",
-          "hash": "17775429921248011351",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:@tanstack/react-query",
-            "npm:@tanstack/react-router",
-            "npm:antd"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/shipping-instruction/shipping-instruction-view-route.tsx",
-          "hash": "10028422887691981821",
-          "deps": [
-            "npm:antd",
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:@tanstack/react-router",
-            "npm:@tanstack/react-query"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/shipping-instruction/shipping-instruction-wizard-route.tsx",
-          "hash": "11035198743376486723",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:@tanstack/react-router",
-            "npm:antd",
-            "npm:react",
-            "npm:@tanstack/react-query"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/shipping-instruction/types/si.types.ts",
-          "hash": "17299960265605672397"
-        },
-        {
-          "file": "apps/ecom-portal/src/features/theme/components/theme-preferences-panel.tsx",
-          "hash": "16563599943911255117",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:antd"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/theme/components/timezone-select-option.tsx",
-          "hash": "396082013753330146",
-          "deps": [
-            "npm:antd"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/theme/constants.ts",
-          "hash": "12977933943161799333",
-          "deps": [
-            "@solverminds/shared-ui",
-            "npm:antd"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/theme/hooks/use-theme-preferences-controller.ts",
-          "hash": "10523729250626603504",
-          "deps": [
-            "@solverminds/shared-ui",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/theme/providers/theme-preferences-provider.tsx",
-          "hash": "11444200038438322139",
-          "deps": [
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/theme/stores/app-config.store.ts",
-          "hash": "13284853866157750603",
-          "deps": [
-            "npm:zustand",
-            "@solverminds/shared-ui"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/theme/utils/config-mapper.ts",
-          "hash": "12179185098659509817",
-          "deps": [
-            "@solverminds/shared-ui"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/theme/utils/density-theme-fields.ts",
-          "hash": "8783950202271698277",
-          "deps": [
-            "@solverminds/shared-ui"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/theme/utils/timezone-options.tsx",
-          "hash": "381942528791976137",
-          "deps": [
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/tracking/api/tracking.api.ts",
-          "hash": "6535159766146170126"
-        },
-        {
-          "file": "apps/ecom-portal/src/features/tracking/components/TrackingContainersTable.tsx",
-          "hash": "2693630524725087692",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/tracking/components/TrackingMovementDrawer.tsx",
-          "hash": "15382136981149700339",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:antd"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/tracking/components/TrackingOverview.tsx",
-          "hash": "3254219835982704713",
-          "deps": [
-            "npm:@ant-design/icons",
-            "npm:antd"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/tracking/components/TrackingSearchFilter.tsx",
-          "hash": "12398993152751091461",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:antd"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/tracking/hooks/useTrackingController.ts",
-          "hash": "9166231823657307839",
-          "deps": [
-            "npm:antd",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/tracking/mocks/tracking.mock.ts",
-          "hash": "1729949441576984383"
-        },
-        {
-          "file": "apps/ecom-portal/src/features/tracking/tracking-route.tsx",
-          "hash": "7902541939840963734",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/tracking/types/tracking.types.ts",
-          "hash": "5085430797157070035"
-        },
-        {
-          "file": "apps/ecom-portal/src/features/user-creation/api/user-creation.api.ts",
-          "hash": "4319380983145657102"
-        },
-        {
-          "file": "apps/ecom-portal/src/features/user-creation/components/SubUserAgGridTable.tsx",
-          "hash": "17781784290417505320",
-          "deps": [
-            "npm:@ant-design/icons",
-            "npm:ag-grid-community",
-            "npm:ag-grid-react",
-            "npm:antd",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/user-creation/components/UserCreationView.tsx",
-          "hash": "3381692640849456378",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/user-creation/hooks/use-user-creation-controller.ts",
-          "hash": "17658889467046733122",
-          "deps": [
-            "npm:@tanstack/react-query"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/user-creation/types/user-creation.types.ts",
-          "hash": "5959129055768047733",
-          "deps": [
-            "npm:zod"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/user-creation/user-creation-route.tsx",
-          "hash": "4762047495573327080",
-          "deps": [
-            "npm:@tanstack/react-router"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/user-modules/api/user-modules.api.ts",
-          "hash": "368198559628038465"
-        },
-        {
-          "file": "apps/ecom-portal/src/features/user-modules/components/ChangePasswordView.tsx",
-          "hash": "2308174880046343349",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/user-modules/components/MyAlertsView.tsx",
-          "hash": "648423822852921646",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/user-modules/components/PaymentHistoryView.tsx",
-          "hash": "1916534538488070586",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/user-modules/components/ProfileView.tsx",
-          "hash": "3334516470837245031",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/user-modules/components/QuotesView.tsx",
-          "hash": "9882242242323507356",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:@tanstack/react-router",
-            "npm:antd",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/user-modules/types/user-modules.types.ts",
-          "hash": "5420621984064153989",
-          "deps": [
-            "npm:zod"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/vendor-approvals/components/VendorApprovalsView.tsx",
-          "hash": "17058397446146576884",
-          "deps": [
-            "npm:@ant-design/icons",
-            "@solverminds/shared-ui",
-            "npm:antd",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/vendor-approvals/vendor-approvals-route.tsx",
-          "hash": "10279985528824121000",
-          "deps": [
-            "npm:@tanstack/react-router"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/features/vgm/api/vgm.api.ts",
-          "hash": "830310498431504926"
-        },
-        {
-          "file": "apps/ecom-portal/src/features/vgm/types/vgm.types.ts",
-          "hash": "7509186156245208197"
-        },
-        {
-          "file": "apps/ecom-portal/src/features/vgm/vgm-dashboard-route.tsx",
-          "hash": "10379437273566215540",
-          "deps": [
-            "npm:@ant-design/icons",
-            "npm:@hookform/resolvers",
-            "@solverminds/shared-ui",
-            "npm:@tanstack/react-query",
-            "npm:antd",
-            "npm:luxon",
-            "npm:react",
-            "npm:react-hook-form",
-            "npm:zod"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/main.tsx",
-          "hash": "16837121825449959366",
-          "deps": [
-            "@solverminds/shared-ui",
-            "npm:@tanstack/react-query",
-            "npm:react",
-            "npm:react-dom",
-            "npm:@tanstack/react-router"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/mocks/admin.handlers.ts",
-          "hash": "10587316648669505302",
-          "deps": [
-            "npm:msw"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/mocks/auth.handlers.ts",
-          "hash": "12880412705835382533",
-          "deps": [
-            "npm:msw"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/mocks/booking.handlers.ts",
-          "hash": "8448158322804219683",
-          "deps": [
-            "npm:msw"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/mocks/browser.ts",
-          "hash": "16218403236287777938",
-          "deps": [
-            "npm:msw"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/mocks/contact-us.handlers.ts",
-          "hash": "6060136889393577898",
-          "deps": [
-            "npm:msw"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/mocks/landing.handlers.ts",
-          "hash": "2015273575229169093",
-          "deps": [
-            "npm:msw"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/mocks/rates.handlers.ts",
-          "hash": "3802180624711530515",
-          "deps": [
-            "npm:msw"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/mocks/registration.handlers.ts",
-          "hash": "17133927249160855397",
-          "deps": [
-            "npm:msw"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/mocks/user-creation.handlers.ts",
-          "hash": "12261739837453398489",
-          "deps": [
-            "npm:msw"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/mocks/user-modules.handlers.ts",
-          "hash": "4465116603136644372",
-          "deps": [
-            "npm:msw"
-          ]
-        },
-        {
-          "file": "apps/ecom-portal/src/types/api.types.ts",
-          "hash": "3695438975771040902"
-        },
-        {
-          "file": "apps/ecom-portal/tsconfig.json",
-          "hash": "12678449601996202400"
-        },
-        {
-          "file": "apps/ecom-portal/vite.config.ts",
-          "hash": "3212264134923085718",
-          "deps": [
-            "npm:vite",
-            "npm:@vitejs/plugin-react"
-          ]
-        }
-      ],
       "@solverminds/shared-ui": [
         {
           "file": "libs/shared/ui/.babelrc",
@@ -4692,7 +3058,7 @@
         },
         {
           "file": "libs/shared/ui/src/styles.css",
-          "hash": "4218581340576683457"
+          "hash": "13860026938916474367"
         },
         {
           "file": "libs/shared/ui/src/types/luxon.ts",
@@ -4775,6 +3141,1641 @@
             "npm:@vitejs/plugin-react",
             "npm:vite",
             "npm:vite-plugin-dts"
+          ]
+        }
+      ],
+      "@solverminds/ecom-portal": [
+        {
+          "file": "apps/ecom-portal/ECOM-PORTAL-FEATURE-BLUEPRINT.md",
+          "hash": "1639621350123015659"
+        },
+        {
+          "file": "apps/ecom-portal/README.md",
+          "hash": "7384636327375426075"
+        },
+        {
+          "file": "apps/ecom-portal/feature-api-guide.md",
+          "hash": "9862287851902852887"
+        },
+        {
+          "file": "apps/ecom-portal/index.html",
+          "hash": "2866531986744727985"
+        },
+        {
+          "file": "apps/ecom-portal/package.json",
+          "hash": "5203296398553932545",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "npm:dayjs",
+            "npm:msw",
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/public/hero-bg.jpg",
+          "hash": "15940009112226838207"
+        },
+        {
+          "file": "apps/ecom-portal/public/hero-bg.png",
+          "hash": "13057982098084091004"
+        },
+        {
+          "file": "apps/ecom-portal/public/hero_bg.png",
+          "hash": "1030125187511485780"
+        },
+        {
+          "file": "apps/ecom-portal/public/logo.png",
+          "hash": "4380857612946339418"
+        },
+        {
+          "file": "apps/ecom-portal/public/logos/tenant_01.png",
+          "hash": "9451944638709911913"
+        },
+        {
+          "file": "apps/ecom-portal/public/logos/tenant_02.png",
+          "hash": "9071425553433750805"
+        },
+        {
+          "file": "apps/ecom-portal/public/logos/tenant_03.png",
+          "hash": "2745984419793729225"
+        },
+        {
+          "file": "apps/ecom-portal/public/logos/tenant_04.png",
+          "hash": "13082431622258143539"
+        },
+        {
+          "file": "apps/ecom-portal/public/logos/tenant_05.png",
+          "hash": "15819089275227461032"
+        },
+        {
+          "file": "apps/ecom-portal/public/logos/tenant_06.png",
+          "hash": "804633309987333237"
+        },
+        {
+          "file": "apps/ecom-portal/public/logos/tenant_07.png",
+          "hash": "16453721020734089159"
+        },
+        {
+          "file": "apps/ecom-portal/public/logos/tenant_08.png",
+          "hash": "15849023086320017014"
+        },
+        {
+          "file": "apps/ecom-portal/public/logos/tenant_09.png",
+          "hash": "1029625818036118599"
+        },
+        {
+          "file": "apps/ecom-portal/public/logos/tenant_10.png",
+          "hash": "11919452939488900725"
+        },
+        {
+          "file": "apps/ecom-portal/public/mockServiceWorker.js",
+          "hash": "11710429898096167168"
+        },
+        {
+          "file": "apps/ecom-portal/src/app/router.tsx",
+          "hash": "12245435598449479384",
+          "deps": [
+            "npm:@tanstack/react-router"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/components/form-section/form-section.tsx",
+          "hash": "9909016478297915950",
+          "deps": [
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/components/layout/AppFooter.tsx",
+          "hash": "11766639934018366426",
+          "deps": [
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/components/layout/AuthenticatedLayout.tsx",
+          "hash": "13103119825850923423",
+          "deps": [
+            "npm:antd",
+            "npm:react",
+            "npm:@tanstack/react-router"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/components/layout/AuthenticatedLayoutHeader.tsx",
+          "hash": "4495213129130798627",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:@tanstack/react-router",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/components/layout/AuthenticatedSidebar.tsx",
+          "hash": "15442670417620217791",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:@tanstack/react-router",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/components/layout/PublicLayout.tsx",
+          "hash": "14576245802592630695",
+          "deps": [
+            "npm:antd",
+            "npm:react",
+            "npm:@ant-design/icons",
+            "npm:@tanstack/react-router"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/components/layout/PublicLayoutHeader.tsx",
+          "hash": "13692934829825118354",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:@tanstack/react-router"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/components/layout/account-preferences-drawer.tsx",
+          "hash": "8850986690118481049",
+          "deps": [
+            "@solverminds/shared-ui",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/components/layout/header-theme-toggle.tsx",
+          "hash": "9073036179750226223",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/components/layout/layout-header.tsx",
+          "hash": "5150903032303512500",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/components/layout/user-menu.tsx",
+          "hash": "6897207751955200939",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/components/providers/TenantThemeProvider.tsx",
+          "hash": "12293987696739776301",
+          "deps": [
+            "npm:react",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/components/shared/build-actions-column.tsx",
+          "hash": "4083305113600878244",
+          "deps": [
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/components/shared/list-action-button.tsx",
+          "hash": "15877989305483051033",
+          "deps": [
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/components/shared/user-avatar.tsx",
+          "hash": "2625792405568027370",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/components/shared/user-name.utils.ts",
+          "hash": "16341670320758962560"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/admin/admin-route.tsx",
+          "hash": "16336949206514312754"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/admin/api/admin.api.ts",
+          "hash": "4912622726283326452"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/admin/components/AdminLayout.tsx",
+          "hash": "5802171382714255984",
+          "deps": [
+            "npm:react",
+            "npm:antd",
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/admin/components/AdminPasswordResetView.tsx",
+          "hash": "11200631376611356516",
+          "deps": [
+            "npm:react",
+            "npm:antd",
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/admin/components/BannerManagerView.tsx",
+          "hash": "4036396490447594702",
+          "deps": [
+            "npm:react",
+            "npm:antd",
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/admin/components/CustomerAdvisoryView.tsx",
+          "hash": "9864038826476273013",
+          "deps": [
+            "npm:react",
+            "npm:antd",
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/admin/components/CutoffConfigView.tsx",
+          "hash": "7695508074334071952",
+          "deps": [
+            "npm:react",
+            "npm:antd",
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/admin/components/EmailTemplateEditorView.tsx",
+          "hash": "12086383803206156537",
+          "deps": [
+            "npm:react",
+            "npm:antd",
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/admin/components/FieldConfigView.tsx",
+          "hash": "1515326925921828255",
+          "deps": [
+            "npm:react",
+            "npm:antd",
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/admin/components/GlobalConfigAdminView.tsx",
+          "hash": "3768025236526222019",
+          "deps": [
+            "npm:react",
+            "npm:antd",
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/admin/components/MenuManagementView.tsx",
+          "hash": "5087281766539566851",
+          "deps": [
+            "npm:react",
+            "npm:antd",
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/admin/components/ServiceRestrictionsView.tsx",
+          "hash": "13889968105130927782",
+          "deps": [
+            "npm:react",
+            "npm:antd",
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/admin/components/SpecialPrivilegesView.tsx",
+          "hash": "11584193133827395445",
+          "deps": [
+            "npm:react",
+            "npm:antd",
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/admin/hooks/use-admin-controller.ts",
+          "hash": "1765690039473405042",
+          "deps": [
+            "npm:@tanstack/react-query"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/admin/types/admin.types.ts",
+          "hash": "13428377025787764848",
+          "deps": [
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/auth/activation-route.tsx",
+          "hash": "13185868489215205231",
+          "deps": [
+            "npm:react",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/auth/api/auth.api.ts",
+          "hash": "5165585076314670177"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/auth/components/ForgotPasswordPanelContent.tsx",
+          "hash": "17838679317067431959",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/auth/hooks/use-forgot-password-controller.ts",
+          "hash": "3134971018903053722",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "npm:@tanstack/react-query",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/auth/hooks/use-login-controller.ts",
+          "hash": "12335109137775568734",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "npm:@tanstack/react-query",
+            "npm:react",
+            "npm:react-hook-form",
+            "npm:zustand"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/auth/types/auth.types.ts",
+          "hash": "9798887288473374971",
+          "deps": [
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/api/booking.api.ts",
+          "hash": "5358618018574925539"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/booking-amend-route.tsx",
+          "hash": "17122115322591007202",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:@tanstack/react-query",
+            "npm:@tanstack/react-router",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/booking-dashboard-route.tsx",
+          "hash": "4162439042381971576",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:@tanstack/react-query",
+            "npm:@tanstack/react-router",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/booking-view-route.tsx",
+          "hash": "14466317236354421763",
+          "deps": [
+            "npm:antd",
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:@tanstack/react-router"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/booking-wizard-route.tsx",
+          "hash": "15114509077524253028",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:@tanstack/react-router",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/components/CargoStep.tsx",
+          "hash": "6737766216318107661",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/components/CustomerDetailsStep.tsx",
+          "hash": "2517275869875949858",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/components/ENSStep.tsx",
+          "hash": "2703159324686308322",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/components/FileUploadStep.tsx",
+          "hash": "7431197948272735409",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/components/InsuranceStep.tsx",
+          "hash": "8536544569977465920",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/components/ManageTemplateModal.tsx",
+          "hash": "3708125329514120254",
+          "deps": [
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:@ant-design/icons",
+            "npm:@tanstack/react-query"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/components/MasterDetailsStep.tsx",
+          "hash": "16135813708868392929",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:@hookform/resolvers",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:dayjs",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/components/PreviewStep.tsx",
+          "hash": "13175974103781037692",
+          "deps": [
+            "@solverminds/shared-ui",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/components/SelectTemplateModal.tsx",
+          "hash": "11094465089458373820",
+          "deps": [
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:@tanstack/react-query"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/components/view/BookingDetailsViewer.tsx",
+          "hash": "15294670556243253278",
+          "deps": [
+            "npm:antd",
+            "npm:@tanstack/react-query",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/components/view/HaulageTrackingGrid.tsx",
+          "hash": "15838357866449737740",
+          "deps": [
+            "npm:antd",
+            "@solverminds/shared-ui",
+            "npm:ag-grid-community"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/hooks/use-booking-wizard.ts",
+          "hash": "8313238759092232608",
+          "deps": [
+            "npm:@tanstack/react-query",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/stores/booking.store.ts",
+          "hash": "4758937905252066313",
+          "deps": [
+            "npm:zustand"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/types/booking-list.types.ts",
+          "hash": "16463570815984912533",
+          "deps": [
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/booking/types/booking.types.ts",
+          "hash": "17894037788575571376",
+          "deps": [
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/contact-us/api/contact-us.api.ts",
+          "hash": "3967655161365645156"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/contact-us/api/contact-us.keys.ts",
+          "hash": "9597665896532198869"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/contact-us/components/ContactUsDrawer.tsx",
+          "hash": "15783187078955629868",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/contact-us/components/ContactUsForm.tsx",
+          "hash": "13814293851381767798",
+          "deps": [
+            "npm:antd",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/contact-us/contact-us-route.tsx",
+          "hash": "5680517743531370652",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:@tanstack/react-router",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/contact-us/hooks/use-contact-us-controller.ts",
+          "hash": "4424302520910080564",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "@solverminds/shared-ui",
+            "npm:@tanstack/react-query",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/contact-us/types/contact-us.schema.ts",
+          "hash": "9486810398525721586",
+          "deps": [
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/dashboard/api/dashboard.api.ts",
+          "hash": "9654000944072610625"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/dashboard/components/AgencyHotlineWidget.tsx",
+          "hash": "7538265184307012987",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/dashboard/components/DashboardCharts.tsx",
+          "hash": "5435710475532527944",
+          "deps": [
+            "npm:antd",
+            "npm:echarts",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/dashboard/components/DashboardKpiCards.tsx",
+          "hash": "7446459901972205244",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/dashboard/components/DashboardOngoingTable.tsx",
+          "hash": "17270619720537370318",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/dashboard/components/EnhancedDashboardView.tsx",
+          "hash": "4813750903198103054",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:@tanstack/react-router",
+            "npm:antd",
+            "npm:dayjs",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/dashboard/components/LanesSection.tsx",
+          "hash": "16776228216504263281",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/dashboard/components/ShipmentIntelligenceSection.tsx",
+          "hash": "9870173897412223080",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:echarts",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/dashboard/components/ShipmentPlanningSection.tsx",
+          "hash": "4546097251460353336",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/dashboard/components/VolumeAnalyticsSection.tsx",
+          "hash": "2274260614053013382",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:echarts",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/dashboard/mocks/dashboard.mock.ts",
+          "hash": "5978087074766213634"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/landing/api/landing.api.ts",
+          "hash": "5205790136837919070"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/landing/api/landing.keys.ts",
+          "hash": "2640298486732065857"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/landing/api/landing.queries.ts",
+          "hash": "11847224782045750756",
+          "deps": [
+            "npm:@tanstack/react-query"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/landing/components/HeroSearchPanel.tsx",
+          "hash": "1275127123011753008",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/landing/components/ImageCaptcha.tsx",
+          "hash": "1050181653142807590",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/landing/components/PublicLoginPanel.tsx",
+          "hash": "4056378497917860215",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:@tanstack/react-router",
+            "npm:antd",
+            "@solverminds/shared-ui",
+            "npm:react-hook-form",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/landing/components/RatesSearchTab.tsx",
+          "hash": "14100839139031847430",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:dayjs",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/landing/components/ScheduleSearchTab.tsx",
+          "hash": "1435928404668776158",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:dayjs",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/landing/components/TrackingSearchTab.tsx",
+          "hash": "8844912096182222742",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/landing/hooks/use-landing-controller.ts",
+          "hash": "8436641741663171988",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "npm:@tanstack/react-router",
+            "npm:dayjs",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/landing/types/landing.types.ts",
+          "hash": "6589923658212619721",
+          "deps": [
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/rates/api/rates.api.ts",
+          "hash": "2075079761819492203"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/rates/api/rates.keys.ts",
+          "hash": "7728250629320965034"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/rates/api/rates.queries.ts",
+          "hash": "15176018184340819025",
+          "deps": [
+            "npm:@tanstack/react-query"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/rates/components/ContractSurchargeModal.tsx",
+          "hash": "3251874838669730831",
+          "deps": [
+            "@solverminds/shared-ui",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/rates/components/ContractView.tsx",
+          "hash": "3861020133885995865",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/rates/components/QuoteRequestDrawer.tsx",
+          "hash": "1502764303468319829",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react-hook-form",
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/rates/components/QuotesView.tsx",
+          "hash": "4501413443957626692",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:@tanstack/react-router",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/rates/components/RateCardList.tsx",
+          "hash": "1460771597662095346",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/rates/components/RateDataView.tsx",
+          "hash": "2315358124009370467",
+          "deps": [
+            "@solverminds/shared-ui",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/rates/components/RateSearchFilter.tsx",
+          "hash": "9894895337060298925",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:dayjs"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/rates/components/SurchargeView.tsx",
+          "hash": "14723049160374835146",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/rates/components/TariffView.tsx",
+          "hash": "1644673148008665746",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/rates/hooks/useRatesController.ts",
+          "hash": "5952754270469067819",
+          "deps": [
+            "npm:react",
+            "npm:@tanstack/react-router",
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/rates/rates-route.tsx",
+          "hash": "14294758273860932661",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/rates/types/rates.types.ts",
+          "hash": "8258271481625499547"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/registration/api/registration.api.ts",
+          "hash": "16269763879042950229"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/registration/components/CompanyInfoStep.tsx",
+          "hash": "11202697687101628635",
+          "deps": [
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/registration/components/FileUploadStep.tsx",
+          "hash": "7702090327326687022",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/registration/components/TermsStep.tsx",
+          "hash": "2858638362949611859",
+          "deps": [
+            "npm:antd",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/registration/components/UserInfoStep.tsx",
+          "hash": "3865526950055907376",
+          "deps": [
+            "npm:antd",
+            "npm:react-hook-form",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/registration/hooks/use-registration-controller.ts",
+          "hash": "13709195527067162631",
+          "deps": [
+            "npm:@hookform/resolvers",
+            "@solverminds/shared-ui",
+            "npm:@tanstack/react-query",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/registration/registration-route.tsx",
+          "hash": "6361903532146003530",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/registration/types/registration.schema.ts",
+          "hash": "106684356511046898",
+          "deps": [
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/schedules/api/schedules.api.ts",
+          "hash": "11167264996290129110"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/schedules/api/schedules.keys.ts",
+          "hash": "8373989757380601361"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/schedules/api/schedules.queries.ts",
+          "hash": "4284858991592616106",
+          "deps": [
+            "npm:@tanstack/react-query"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/schedules/components/ScheduleCalendarView.tsx",
+          "hash": "8854852109045086727",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:dayjs",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/schedules/components/ScheduleCarbonModal.tsx",
+          "hash": "16022612015982748312",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/schedules/components/ScheduleCardList.tsx",
+          "hash": "8235199941771791035",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/schedules/components/ScheduleDetailsDrawer.tsx",
+          "hash": "1347297470832461334",
+          "deps": [
+            "npm:react",
+            "npm:antd",
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/schedules/components/ScheduleFilter.tsx",
+          "hash": "12497649443961361992",
+          "deps": [
+            "npm:react",
+            "npm:antd",
+            "npm:react-hook-form",
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/schedules/components/ScheduleList.tsx",
+          "hash": "2453526116065248898",
+          "deps": [
+            "npm:react",
+            "npm:antd",
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:ag-grid-community"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/schedules/components/ScheduleRatesModal.tsx",
+          "hash": "6348422040847743613",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/schedules/components/ScheduleSearchFilter.tsx",
+          "hash": "16958073577320425485",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:dayjs"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/schedules/components/VesselDetailsModal.tsx",
+          "hash": "5437591863900893238",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/schedules/hooks/useSchedulesController.ts",
+          "hash": "2556430588831771255",
+          "deps": [
+            "npm:@tanstack/react-router",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/schedules/mocks/schedules.mock.ts",
+          "hash": "12985226054857480387"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/schedules/schedules-route.tsx",
+          "hash": "13831571754882347200",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/schedules/types/schedules.types.ts",
+          "hash": "5781470227231962175"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/shipping-instruction/api/si.api.ts",
+          "hash": "12161631930535091011"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/shipping-instruction/components/CargoStep.tsx",
+          "hash": "14291742274968497315",
+          "deps": [
+            "@solverminds/shared-ui",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/shipping-instruction/components/ChargesStep.tsx",
+          "hash": "13789467402904784642",
+          "deps": [
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:@ant-design/icons"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/shipping-instruction/components/MasterDetailsStep.tsx",
+          "hash": "8536838543082139517",
+          "deps": [
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/shipping-instruction/components/PartiesStep.tsx",
+          "hash": "5463649811573895529",
+          "deps": [
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/shipping-instruction/components/PreviewStep.tsx",
+          "hash": "13160900676537152808",
+          "deps": [
+            "@solverminds/shared-ui",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/shipping-instruction/shipping-instruction-dashboard-route.tsx",
+          "hash": "17775429921248011351",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:@tanstack/react-query",
+            "npm:@tanstack/react-router",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/shipping-instruction/shipping-instruction-view-route.tsx",
+          "hash": "10028422887691981821",
+          "deps": [
+            "npm:antd",
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:@tanstack/react-router",
+            "npm:@tanstack/react-query"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/shipping-instruction/shipping-instruction-wizard-route.tsx",
+          "hash": "11035198743376486723",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:@tanstack/react-router",
+            "npm:antd",
+            "npm:react",
+            "npm:@tanstack/react-query"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/shipping-instruction/types/si.types.ts",
+          "hash": "17299960265605672397"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/theme/components/theme-preferences-panel.tsx",
+          "hash": "16563599943911255117",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/theme/components/timezone-select-option.tsx",
+          "hash": "396082013753330146",
+          "deps": [
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/theme/constants.ts",
+          "hash": "12977933943161799333",
+          "deps": [
+            "@solverminds/shared-ui",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/theme/hooks/use-theme-preferences-controller.ts",
+          "hash": "10523729250626603504",
+          "deps": [
+            "@solverminds/shared-ui",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/theme/providers/theme-preferences-provider.tsx",
+          "hash": "11444200038438322139",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/theme/stores/app-config.store.ts",
+          "hash": "13284853866157750603",
+          "deps": [
+            "npm:zustand",
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/theme/utils/config-mapper.ts",
+          "hash": "12179185098659509817",
+          "deps": [
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/theme/utils/density-theme-fields.ts",
+          "hash": "8783950202271698277",
+          "deps": [
+            "@solverminds/shared-ui"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/theme/utils/timezone-options.tsx",
+          "hash": "381942528791976137",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/tracking/api/tracking.api.ts",
+          "hash": "6535159766146170126"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/tracking/components/TrackingContainersTable.tsx",
+          "hash": "2693630524725087692",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/tracking/components/TrackingMovementDrawer.tsx",
+          "hash": "15382136981149700339",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/tracking/components/TrackingOverview.tsx",
+          "hash": "3254219835982704713",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/tracking/components/TrackingSearchFilter.tsx",
+          "hash": "12398993152751091461",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/tracking/hooks/useTrackingController.ts",
+          "hash": "9166231823657307839",
+          "deps": [
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/tracking/mocks/tracking.mock.ts",
+          "hash": "1729949441576984383"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/tracking/tracking-route.tsx",
+          "hash": "7902541939840963734",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/tracking/types/tracking.types.ts",
+          "hash": "5085430797157070035"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/user-creation/api/user-creation.api.ts",
+          "hash": "4319380983145657102"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/user-creation/components/SubUserAgGridTable.tsx",
+          "hash": "17781784290417505320",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:ag-grid-community",
+            "npm:ag-grid-react",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/user-creation/components/UserCreationView.tsx",
+          "hash": "3381692640849456378",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/user-creation/hooks/use-user-creation-controller.ts",
+          "hash": "17658889467046733122",
+          "deps": [
+            "npm:@tanstack/react-query"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/user-creation/types/user-creation.types.ts",
+          "hash": "5959129055768047733",
+          "deps": [
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/user-creation/user-creation-route.tsx",
+          "hash": "4762047495573327080",
+          "deps": [
+            "npm:@tanstack/react-router"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/user-modules/api/user-modules.api.ts",
+          "hash": "368198559628038465"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/user-modules/components/ChangePasswordView.tsx",
+          "hash": "2308174880046343349",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/user-modules/components/MyAlertsView.tsx",
+          "hash": "648423822852921646",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/user-modules/components/PaymentHistoryView.tsx",
+          "hash": "1916534538488070586",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/user-modules/components/ProfileView.tsx",
+          "hash": "3334516470837245031",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/user-modules/components/QuotesView.tsx",
+          "hash": "9882242242323507356",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:@tanstack/react-router",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/user-modules/types/user-modules.types.ts",
+          "hash": "5420621984064153989",
+          "deps": [
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/vendor-approvals/components/VendorApprovalsView.tsx",
+          "hash": "17058397446146576884",
+          "deps": [
+            "npm:@ant-design/icons",
+            "@solverminds/shared-ui",
+            "npm:antd",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/vendor-approvals/vendor-approvals-route.tsx",
+          "hash": "10279985528824121000",
+          "deps": [
+            "npm:@tanstack/react-router"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/features/vgm/api/vgm.api.ts",
+          "hash": "830310498431504926"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/vgm/types/vgm.types.ts",
+          "hash": "7509186156245208197"
+        },
+        {
+          "file": "apps/ecom-portal/src/features/vgm/vgm-dashboard-route.tsx",
+          "hash": "4047718749295656085",
+          "deps": [
+            "npm:@ant-design/icons",
+            "npm:@hookform/resolvers",
+            "@solverminds/shared-ui",
+            "npm:@tanstack/react-query",
+            "npm:antd",
+            "npm:luxon",
+            "npm:react",
+            "npm:react-hook-form",
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/main.tsx",
+          "hash": "16837121825449959366",
+          "deps": [
+            "@solverminds/shared-ui",
+            "npm:@tanstack/react-query",
+            "npm:react",
+            "npm:react-dom",
+            "npm:@tanstack/react-router"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/mocks/admin.handlers.ts",
+          "hash": "10587316648669505302",
+          "deps": [
+            "npm:msw"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/mocks/auth.handlers.ts",
+          "hash": "12880412705835382533",
+          "deps": [
+            "npm:msw"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/mocks/booking.handlers.ts",
+          "hash": "8448158322804219683",
+          "deps": [
+            "npm:msw"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/mocks/browser.ts",
+          "hash": "16218403236287777938",
+          "deps": [
+            "npm:msw"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/mocks/contact-us.handlers.ts",
+          "hash": "6060136889393577898",
+          "deps": [
+            "npm:msw"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/mocks/landing.handlers.ts",
+          "hash": "2015273575229169093",
+          "deps": [
+            "npm:msw"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/mocks/rates.handlers.ts",
+          "hash": "3802180624711530515",
+          "deps": [
+            "npm:msw"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/mocks/registration.handlers.ts",
+          "hash": "17133927249160855397",
+          "deps": [
+            "npm:msw"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/mocks/user-creation.handlers.ts",
+          "hash": "12261739837453398489",
+          "deps": [
+            "npm:msw"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/mocks/user-modules.handlers.ts",
+          "hash": "4465116603136644372",
+          "deps": [
+            "npm:msw"
+          ]
+        },
+        {
+          "file": "apps/ecom-portal/src/types/api.types.ts",
+          "hash": "3695438975771040902"
+        },
+        {
+          "file": "apps/ecom-portal/tsconfig.json",
+          "hash": "12678449601996202400"
+        },
+        {
+          "file": "apps/ecom-portal/vite.config.ts",
+          "hash": "3212264134923085718",
+          "deps": [
+            "npm:vite",
+            "npm:@vitejs/plugin-react"
           ]
         }
       ]

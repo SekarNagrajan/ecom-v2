@@ -72,14 +72,13 @@ export function AuthenticatedLayoutHeader({ onLogout }: AuthenticatedLayoutHeade
   };
 
   const handleLogoutConfirm = () => {
-    confirm({
+    confirm.danger({
       title: 'Confirm Portal Logout',
       icon: <LogoutOutlined style={{ color: token.colorError }} />,
       content: 'Are you sure you want to terminate your current portal session and log out?',
       okText: 'Confirm Logout',
-      okType: 'danger',
       cancelText: 'Cancel',
-      onConfirm: () => {
+      onOk: () => {
         onLogout();
       },
     });

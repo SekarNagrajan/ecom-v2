@@ -213,6 +213,14 @@ const shippingInstructionViewRoute = createRoute({
   component: () => <ShippingInstructionViewRoute />,
 });
 
+// 3.11 VGM
+import { VgmDashboardRoute } from '../features/vgm/vgm-dashboard-route';
+const vgmDashboardRoute = createRoute({
+  getParentRoute: () => appRoute,
+  path: '/vgm',
+  component: () => <VgmDashboardRoute />,
+});
+
 // 4. Route Tree
 const routeTree = rootRoute.addChildren([
   publicRoute.addChildren([indexRoute, registerRoute, activationRoute, contactUsRoute]),
@@ -228,6 +236,7 @@ const routeTree = rootRoute.addChildren([
     shippingInstructionDashboardRoute,
     shippingInstructionWizardRoute,
     shippingInstructionViewRoute,
+    vgmDashboardRoute,
     adminRoute,
     userCreationRoute,
     vendorApprovalsRoute,

@@ -1,18 +1,18 @@
 // Created by Antigravity (2026-08-22 10:15)
-import { AppButton } from '@solverminds/shared-ui';
-import { Card, Col, Input, Row, Select, Typography, theme, Checkbox, Radio, Divider } from 'antd';
-import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { AppButton } from '@solverminds/shared-ui';
+import { Card, Col, Input, Radio, Row, Select, Typography, theme } from 'antd';
+import { useEffect } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { useBookingStore } from '../stores/booking.store';
 import { ensSchema } from '../types/booking.types';
-import { useEffect } from 'react';
 
 const { Text, Title } = Typography;
 
 export function ENSStep() {
   const { token } = theme.useToken();
   const { payload, updateEns, nextStep, prevStep } = useBookingStore();
-  
+
   const { control, handleSubmit, watch, formState: { errors }, reset } = useForm<any>({
     resolver: zodResolver(ensSchema),
     defaultValues: payload.ens || {
@@ -51,7 +51,8 @@ export function ENSStep() {
   const labelStyle: React.CSSProperties = { fontWeight: 600, fontSize: 13, color: token.colorTextSecondary, marginBottom: 6, display: 'block' };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+    <form onSubmit={handleSubmit(onSubmit)} autoComplete="off" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <div className="custom-scroll" style={{ flex: 1, overflowY: 'auto', padding: '0 24px 24px 24px' }}>
       <Card size="small" style={{ marginBottom: 24 }}>
         <Row gutter={[24, 24]}>
           <Col xs={24} md={6}>
@@ -67,21 +68,21 @@ export function ENSStep() {
           <Col xs={24} md={6}>
             <label style={labelStyle}>Type of BL</label>
             <Controller control={control} name="blType" render={({ field }) => (
-              <Select {...field} options={[{value: 'Straight BL', label: 'Straight BL'}, {value: 'Master BL', label: 'Master BL'}]} style={{ width: '100%', height: 40 }} />
+              <Select {...field} options={[{ value: 'Straight BL', label: 'Straight BL' }, { value: 'Master BL', label: 'Master BL' }]} style={{ width: '100%', height: 40 }} />
             )} />
           </Col>
 
           <Col xs={24} md={6}>
             <label style={labelStyle}>Type of ENS Filing</label>
             <Controller control={control} name="ensFilingType" render={({ field }) => (
-              <Select {...field} options={[{value: 'Single Filing', label: 'Single Filing'}, {value: 'Multiple Filing', label: 'Multiple Filing'}]} style={{ width: '100%', height: 40 }} />
+              <Select {...field} options={[{ value: 'Single Filing', label: 'Single Filing' }, { value: 'Multiple Filing', label: 'Multiple Filing' }]} style={{ width: '100%', height: 40 }} />
             )} />
           </Col>
 
           <Col xs={24} md={6}>
             <label style={labelStyle}>Method of Payment</label>
             <Controller control={control} name="paymentMethod" render={({ field }) => (
-              <Select {...field} options={[{value: 'Wire Transfer', label: 'Wire Transfer'}, {value: 'Not Prepaid', label: 'Not Prepaid'}]} style={{ width: '100%', height: 40 }} />
+              <Select {...field} options={[{ value: 'Wire Transfer', label: 'Wire Transfer' }, { value: 'Not Prepaid', label: 'Not Prepaid' }]} style={{ width: '100%', height: 40 }} />
             )} />
           </Col>
         </Row>
@@ -198,10 +199,12 @@ export function ENSStep() {
           </Row>
         </>
       )}
+      </div>
 
-      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 32 }}>
+      <div style={{ flexShrink: 0, padding: '16px 24px', borderTop: `1px solid ${token.colorBorderSecondary}`, display: 'flex', justifyContent: 'flex-end', backgroundColor: token.colorBgContainer }}>
         <AppButton onClick={prevStep}>Previous</AppButton>
         <AppButton type="primary" htmlType="submit" style={{ marginLeft: 8 }}>Next</AppButton>
+        <AppButton type="link" onClick={() => nextStep()}>Skip</AppButton>
       </div>
     </form>
   );

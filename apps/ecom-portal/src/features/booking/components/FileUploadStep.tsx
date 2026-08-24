@@ -1,7 +1,7 @@
 // Created by Antigravity (2026-08-22 10:20)
+import { InboxOutlined } from '@ant-design/icons';
 import { AppButton } from '@solverminds/shared-ui';
 import { Card, Typography, Upload, message, theme } from 'antd';
-import { InboxOutlined } from '@ant-design/icons';
 import { useBookingStore } from '../stores/booking.store';
 
 const { Title, Text } = Typography;
@@ -32,7 +32,8 @@ export function FileUploadStep() {
   };
 
   return (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <div className="custom-scroll" style={{ flex: 1, overflowY: 'auto', padding: '0 24px 24px 24px' }}>
       <Card title="Upload Supporting Documents" style={{ border: `1px solid ${token.colorBorderSecondary}`, borderRadius: 8 }}>
         <Text type="secondary" style={{ display: 'block', marginBottom: 16 }}>
           Please upload any relevant documentation such as MSDS for hazardous cargo, VGM certificates, or specific packing lists.
@@ -48,10 +49,11 @@ export function FileUploadStep() {
           </p>
         </Dragger>
       </Card>
+      </div>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 32 }}>
+      <div style={{ flexShrink: 0, padding: '16px 24px', borderTop: `1px solid ${token.colorBorderSecondary}`, display: 'flex', justifyContent: 'flex-end', backgroundColor: token.colorBgContainer }}>
         <AppButton onClick={prevStep}>Previous</AppButton>
-        <AppButton type="primary" onClick={nextStep}>Next</AppButton>
+        <AppButton type="primary" onClick={nextStep} style={{ marginLeft: 8 }}>Next</AppButton>
       </div>
     </div>
   );

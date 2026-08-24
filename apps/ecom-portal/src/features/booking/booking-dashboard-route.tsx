@@ -1,18 +1,22 @@
-// Created by Antigravity (2026-08-22 10:00)
-import { BookOutlined, PlusOutlined, SettingOutlined } from '@ant-design/icons';
+import { BookOutlined, CloseCircleFilled, EditFilled, EyeFilled, PlusOutlined, SettingOutlined } from '@ant-design/icons';
 import { AppButton } from '@solverminds/shared-ui';
 import { ListView } from '@solverminds/shared-ui/data-view/list-view';
+import { useConfirm } from '@solverminds/shared-ui/hooks';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
-import { Card, Space, Tag, Typography } from 'antd';
+import { Card, message, Space, Tag, theme, Typography } from 'antd';
 import { useState } from 'react';
+import { buildActionsColumn } from '../../components/shared/build-actions-column';
+import { ListActionButton, ListActionsRow } from '../../components/shared/list-action-button';
 import { ManageTemplateModal } from './components/ManageTemplateModal';
 import type { BookingListDTO } from './types/booking-list.types';
 
 const { Title, Text } = Typography;
 
 export function BookingDashboardRoute() {
+  const { token } = theme.useToken();
   const navigate = useNavigate();
+  const confirm = useConfirm();
   const [fromDate, setFromDate] = useState<string>('');
   const [toDate, setToDate] = useState<string>('');
   const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
@@ -49,12 +53,49 @@ export function BookingDashboardRoute() {
 
 
       <Card style={{ padding: 0 }} bodyStyle={{ padding: 0 }}>
-        <div className="ag-theme-alpine" style={{ height: 600, width: '100%' }}>
+        <div className="ag-theme-alpine" style={{ height: 500, width: '100%' }}>
           <ListView
             rowData={bookings}
             loading={isLoading}
             defaultColDef={{ filter: true }}
             columnDefs={[
+              buildActionsColumn<any>({
+                field: 'id',
+                width: 150,
+                cellRenderer: (params: any) => (
+                  <ListActionsRow>
+                    <ListActionButton
+                      title="View"
+                      icon={<EyeFilled />}
+                      color="#1677ff"
+                      onClick={(e) => { e.stopPropagation(); navigate({ to: `/app/booking/${params.data.id}` }); }}
+                    />
+                    <ListActionButton
+                      title="Amendment (Edit)"
+                      icon={<EditFilled />}
+                      color="#fa8c16"
+                      onClick={(e) => { e.stopPropagation(); navigate({ to: `/app/booking/amend` }); }}
+                    />
+                    <ListActionButton
+                      title="Cancel Booking"
+                      icon={<CloseCircleFilled />}
+                      danger
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        confirm.danger({
+                          title: 'Cancel Booking',
+                          content: 'Are you sure you want to cancel this booking?',
+                          okText: 'Yes',
+                          cancelText: 'No',
+                          onOk: () => {
+                            message.success(`Booking ${params.data.bookingNo} cancelled.`);
+                          }
+                        });
+                      }}
+                    />
+                  </ListActionsRow>
+                )
+              }),
               { field: 'bookingNo', headerName: 'Booking No', flex: 1 },
               { field: 'onlineRefNo', headerName: 'Online Reference Number', flex: 1 },
               { field: 'agencyRefNo', headerName: 'Agency Ref No.', flex: 1 },

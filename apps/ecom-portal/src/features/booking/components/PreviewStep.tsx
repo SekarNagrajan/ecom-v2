@@ -25,7 +25,8 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
   }
 
   return (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <div className="custom-scroll" style={{ flex: 1, overflowY: 'auto', padding: '0 24px 24px 24px' }}>
       <Card title={<Title level={5} style={{ margin: 0 }}>Master Details</Title>} style={{ marginBottom: 20 }}>
         <Descriptions column={{ xs: 1, sm: 2, md: 3 }}>
           <Descriptions.Item label="Origin">{payload.masterDetails.origin}</Descriptions.Item>
@@ -111,10 +112,11 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
           </Descriptions>
         </Card>
       )}
+      </div>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 32 }}>
+      <div style={{ flexShrink: 0, padding: '16px 24px', borderTop: `1px solid ${token.colorBorderSecondary}`, display: 'flex', justifyContent: 'flex-end', backgroundColor: token.colorBgContainer }}>
         <AppButton onClick={prevStep} disabled={isSubmitting}>Previous</AppButton>
-        <AppButton type="primary" onClick={onSubmit} loading={isSubmitting}>
+        <AppButton type="primary" onClick={onSubmit} loading={isSubmitting} style={{ marginLeft: 8 }}>
           Submit Booking
         </AppButton>
       </div>

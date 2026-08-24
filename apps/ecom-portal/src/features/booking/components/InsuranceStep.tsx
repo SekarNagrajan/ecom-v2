@@ -1,18 +1,18 @@
 // Created by Antigravity (2026-08-22 10:20)
-import { AppButton } from '@solverminds/shared-ui';
-import { Card, Col, InputNumber, Row, Select, Typography, theme, Checkbox, Radio, Alert } from 'antd';
-import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { AppButton } from '@solverminds/shared-ui';
+import { Alert, Card, Checkbox, Col, InputNumber, Radio, Row, Select, Typography, theme } from 'antd';
+import { useEffect } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { useBookingStore } from '../stores/booking.store';
 import { insuranceSchema } from '../types/booking.types';
-import { useEffect } from 'react';
 
 const { Text } = Typography;
 
 export function InsuranceStep() {
   const { token } = theme.useToken();
   const { payload, updateInsurance, nextStep, prevStep } = useBookingStore();
-  
+
   const { control, handleSubmit, watch, formState: { errors }, reset } = useForm<any>({
     resolver: zodResolver(insuranceSchema),
     defaultValues: payload.insurance || {
@@ -37,7 +37,8 @@ export function InsuranceStep() {
   const labelStyle: React.CSSProperties = { fontWeight: 600, fontSize: 13, color: token.colorTextSecondary, marginBottom: 6, display: 'block' };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+    <form onSubmit={handleSubmit(onSubmit)} autoComplete="off" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <div className="custom-scroll" style={{ flex: 1, overflowY: 'auto', padding: '0 24px 24px 24px' }}>
       <Card size="small" style={{ marginBottom: 24 }}>
         <Row gutter={[24, 24]}>
           <Col span={24}>
@@ -58,7 +59,7 @@ export function InsuranceStep() {
             <Col xs={24} md={12}>
               <label style={labelStyle}>Currency <Text type="danger">*</Text></label>
               <Controller control={control} name="currency" render={({ field }) => (
-                <Select {...field} options={[{value: 'USD', label: 'USD'}, {value: 'EUR', label: 'EUR'}]} style={{ width: '100%', height: 40 }} />
+                <Select {...field} options={[{ value: 'USD', label: 'USD' }, { value: 'EUR', label: 'EUR' }]} style={{ width: '100%', height: 40 }} />
               )} />
               {errors.currency && <Text type="danger" style={{ fontSize: 12, marginTop: 4 }}>{errors.currency.message as string}</Text>}
             </Col>
@@ -72,11 +73,11 @@ export function InsuranceStep() {
             </Col>
 
             <Col span={24}>
-              <Alert 
-                message="Insurance Terms & Conditions" 
-                description="By requesting cargo insurance, you agree to the carrier's standard terms and conditions of insurance which will be applied to your final booking confirmation. The premium will be added to your freight invoice." 
-                type="info" 
-                showIcon 
+              <Alert
+                message="Insurance Terms & Conditions"
+                description="By requesting cargo insurance, you agree to the carrier's standard terms and conditions of insurance which will be applied to your final booking confirmation. The premium will be added to your freight invoice."
+                type="info"
+                showIcon
                 style={{ marginBottom: 16 }}
               />
               <Controller control={control} name="termsAccepted" render={({ field: { value, onChange, ...field } }) => (
@@ -89,10 +90,12 @@ export function InsuranceStep() {
           </Row>
         </Card>
       )}
+      </div>
 
-      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 32 }}>
+      <div style={{ flexShrink: 0, padding: '16px 24px', borderTop: `1px solid ${token.colorBorderSecondary}`, display: 'flex', justifyContent: 'flex-end', backgroundColor: token.colorBgContainer }}>
         <AppButton onClick={prevStep}>Previous</AppButton>
         <AppButton type="primary" htmlType="submit" style={{ marginLeft: 8 }}>Next</AppButton>
+        <AppButton type="link" onClick={() => nextStep()}>Skip</AppButton>
       </div>
     </form>
   );

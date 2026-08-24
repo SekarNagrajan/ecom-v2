@@ -40,7 +40,10 @@ export function AuthenticatedSidebar({ collapsed, onCollapse }: AuthenticatedSid
   const activeTenant = useTenantStore((state) => state.activeTenant);
   const navigate = useNavigate();
   const location = useLocation();
-  const currentRoute = location.pathname.split('/').pop() || 'dashboard';
+  let currentRoute = location.pathname.split('/')[2] || 'dashboard';
+  if (currentRoute === 'Dashboard ') {
+    currentRoute = 'dashboard';
+  }
 
   const isSuperUser = Boolean(user?.isSessionAdmin || user?.role === 'ADMIN');
   const tenantModules = [...(activeTenant.features.allowedModules || []), 'admin', 'user-creation', 'vendor-approvals', 'tracking'];
@@ -149,6 +152,8 @@ export function AuthenticatedSidebar({ collapsed, onCollapse }: AuthenticatedSid
       navigate({ to: '/contact-us' });
     } else if (key === 'rates' || key === 'tariff') {
       navigate({ to: '/app/rates' });
+    } else if (key === 'si') {
+      navigate({ to: '/app/shipping-instruction' });
     } else {
       navigate({ to: `/app/${key}` });
     }

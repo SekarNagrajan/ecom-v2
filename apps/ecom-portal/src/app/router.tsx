@@ -191,6 +191,28 @@ const bookingAmendRoute = createRoute({
   component: () => <BookingAmendRoute />,
 });
 
+// 3.10 Shipping Instruction
+import { ShippingInstructionDashboardRoute } from '../features/shipping-instruction/shipping-instruction-dashboard-route';
+const shippingInstructionDashboardRoute = createRoute({
+  getParentRoute: () => appRoute,
+  path: '/shipping-instruction',
+  component: () => <ShippingInstructionDashboardRoute />,
+});
+
+import { ShippingInstructionWizardRoute } from '../features/shipping-instruction/shipping-instruction-wizard-route';
+const shippingInstructionWizardRoute = createRoute({
+  getParentRoute: () => appRoute,
+  path: '/shipping-instruction/wizard/$id',
+  component: () => <ShippingInstructionWizardRoute />,
+});
+
+import { ShippingInstructionViewRoute } from '../features/shipping-instruction/shipping-instruction-view-route';
+const shippingInstructionViewRoute = createRoute({
+  getParentRoute: () => appRoute,
+  path: '/shipping-instruction/$siId',
+  component: () => <ShippingInstructionViewRoute />,
+});
+
 // 4. Route Tree
 const routeTree = rootRoute.addChildren([
   publicRoute.addChildren([indexRoute, registerRoute, activationRoute, contactUsRoute]),
@@ -203,6 +225,9 @@ const routeTree = rootRoute.addChildren([
     bookingWizardRoute,
     bookingViewRoute,
     bookingAmendRoute,
+    shippingInstructionDashboardRoute,
+    shippingInstructionWizardRoute,
+    shippingInstructionViewRoute,
     adminRoute,
     userCreationRoute,
     vendorApprovalsRoute,

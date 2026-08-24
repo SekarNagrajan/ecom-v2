@@ -154,6 +154,8 @@ export function AuthenticatedSidebar({ collapsed, onCollapse }: AuthenticatedSid
       navigate({ to: '/app/rates' });
     } else if (key === 'si') {
       navigate({ to: '/app/shipping-instruction' });
+    } else if (key === 'do') {
+      navigate({ to: '/app/delivery-order' });
     } else {
       navigate({ to: `/app/${key}` });
     }

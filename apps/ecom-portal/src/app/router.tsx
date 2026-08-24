@@ -17,6 +17,7 @@ import { PaymentHistoryView } from '../features/user-modules/components/PaymentH
 import { ProfileView } from '../features/user-modules/components/ProfileView';
 import { QuotesView } from '../features/user-modules/components/QuotesView';
 import { vendorApprovalsRoute } from '../features/vendor-approvals/vendor-approvals-route';
+import { DeliveryOrderRoute } from '../features/delivery-order/delivery-order-route';
 
 // 1. Root Route
 const rootRoute = createRootRoute({
@@ -145,6 +146,13 @@ const paymentsRoute = createRoute({
   component: () => <PaymentHistoryView />,
 });
 
+// 3.8 Delivery Order
+const deliveryOrderRoute = createRoute({
+  getParentRoute: () => appRoute,
+  path: '/delivery-order',
+  component: DeliveryOrderRoute,
+});
+
 
 import { RatesRoute } from '../features/rates/rates-route';
 import { TrackingRoute } from '../features/tracking/tracking-route';
@@ -237,6 +245,7 @@ const routeTree = rootRoute.addChildren([
     shippingInstructionWizardRoute,
     shippingInstructionViewRoute,
     vgmDashboardRoute,
+    deliveryOrderRoute,
     adminRoute,
     userCreationRoute,
     vendorApprovalsRoute,

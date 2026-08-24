@@ -8,6 +8,7 @@ import { userCreationHandlers } from './user-creation.handlers';
 import { userModulesHandlers } from './user-modules.handlers';
 import { ratesHandlers } from './rates.handlers';
 import { bookingHandlers } from './booking.handlers';
+import { deliveryOrderHandlers } from './delivery-order.handlers';
 
 /**
  * MSW browser service worker — active in development only.
@@ -22,6 +23,7 @@ export const worker = setupWorker(
   ...userCreationHandlers,
   ...userModulesHandlers,
   ...ratesHandlers,
-  ...bookingHandlers
+  ...bookingHandlers,
+  ...deliveryOrderHandlers
 );
 

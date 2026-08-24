@@ -4,7 +4,7 @@
 // Follows agenct.md and shared-ui data-view rules
 // Modified by sekar nagarajan (2026-08-21)
 
-import { ArrowRightOutlined, EyeOutlined, FileAddOutlined, FileTextOutlined, SearchOutlined } from '@ant-design/icons';
+import { ArrowRightOutlined, EyeFilled, FileAddOutlined, FileTextOutlined, SearchOutlined } from '@ant-design/icons';
 import { AppButton } from '@solverminds/shared-ui';
 import { DataView, DataViewColumn } from '@solverminds/shared-ui/data-view';
 import { Flex, Input, Space, Tag, theme, Tooltip, Typography } from 'antd';
@@ -85,7 +85,7 @@ export function DashboardOngoingTable({
                   <AppButton
                     type="text"
                     size="small"
-                    icon={<EyeOutlined style={{ color: token.colorPrimary, fontSize: 16 }} />}
+                    icon={<EyeFilled style={{ color: token.colorPrimary, fontSize: 16 }} />}
                     onClick={() => onViewBooking?.(rec.bookNo, rec.onlineRefNo)}
                   />
                 </Tooltip>

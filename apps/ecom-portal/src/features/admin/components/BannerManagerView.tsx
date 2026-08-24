@@ -1,9 +1,9 @@
 // Modified by Sekar Nagarajan (2026-08-21 14:55)
-import React from 'react';
-import { Table, Switch, Tag, Typography, Card, Space, Image, Input, InputNumber } from 'antd';
 import { PictureOutlined, UploadOutlined } from '@ant-design/icons';
 import { AppButton, AppModal } from '@solverminds/shared-ui';
 import { useToast } from '@solverminds/shared-ui/hooks';
+import { Card, Image, Input, InputNumber, Space, Switch, Table, Tag, Typography } from 'antd';
+import React from 'react';
 import type { BannerConfig } from '../types/admin.types';
 
 const { Text, Title } = Typography;
@@ -17,7 +17,7 @@ export function BannerManagerView({ banners, onCreate }: BannerManagerViewProps)
   const [data, setData] = React.useState<BannerConfig[]>(banners);
   const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
   const [title, setTitle] = React.useState<string>('');
-  const [imageUrl, setImageUrl] = React.useState<string>('/hero_bg.png');
+  const [imageUrl, setImageUrl] = React.useState<string>('/hero-bg.png');
   const [sortOrder, setSortOrder] = React.useState<number>(1);
   const toast = useToast();
 

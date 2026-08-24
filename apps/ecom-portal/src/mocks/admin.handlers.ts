@@ -85,7 +85,7 @@ let MOCK_SERVICE_RESTRICTIONS: ServiceRestriction[] = [
 ];
 
 let MOCK_BANNERS: BannerConfig[] = [
-  { id: 'BN_01', title: 'Global Maritime Logistics Network 2026', imageUrl: '/hero_bg.png', linkUrl: '/schedules', sortOrder: 1, isActive: true },
+  { id: 'BN_01', title: 'Global Maritime Logistics Network 2026', imageUrl: '/hero-bg.png', linkUrl: '/schedules', sortOrder: 1, isActive: true },
   { id: 'BN_02', title: 'SOLAS VGM Electronic Filing Portal', imageUrl: '/hero_shipping_bg.png', linkUrl: '/vgm', sortOrder: 2, isActive: true },
 ];
 

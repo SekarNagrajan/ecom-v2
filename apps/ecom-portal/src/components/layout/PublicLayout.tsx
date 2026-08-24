@@ -1,36 +1,36 @@
 // Modified by Sekar Nagarajan (2026-08-22 00:06)
-import { Flex, Layout, Typography, theme, Card, Menu, Grid } from 'antd';
-import type { MenuProps } from 'antd';
-import { useState, useEffect } from 'react';
 import {
-  HomeOutlined,
-  CalendarOutlined,
-  CompassOutlined,
-  EnvironmentOutlined,
-  TagOutlined,
-  DollarOutlined,
-  BookOutlined,
   AuditOutlined,
-  SafetyCertificateOutlined,
-  FileProtectOutlined,
-  DeliveredProcedureOutlined,
-  NotificationOutlined,
-  BarcodeOutlined,
   BankOutlined,
-  SolutionOutlined,
+  BarcodeOutlined,
+  BookOutlined,
+  CalendarOutlined,
   CloudOutlined,
+  CompassOutlined,
   CustomerServiceOutlined,
+  DeliveredProcedureOutlined,
+  DollarOutlined,
   EllipsisOutlined,
+  EnvironmentOutlined,
+  FileProtectOutlined,
+  HomeOutlined,
+  NotificationOutlined,
+  SafetyCertificateOutlined,
+  SolutionOutlined,
+  TagOutlined,
 } from '@ant-design/icons';
+import type { MenuProps } from 'antd';
+import { Card, Flex, Grid, Layout, Menu, Typography, theme } from 'antd';
+import { useEffect, useState } from 'react';
 
 import { useLoginController } from '../../features/auth/hooks/use-login-controller';
-import { useLandingController } from '../../features/landing/hooks/use-landing-controller';
 import { HeroSearchPanel } from '../../features/landing/components/HeroSearchPanel';
 import { PublicLoginPanel } from '../../features/landing/components/PublicLoginPanel';
+import { useLandingController } from '../../features/landing/hooks/use-landing-controller';
 import { AppFooter } from './AppFooter';
 import { PublicLayoutHeader } from './PublicLayoutHeader';
 
-import { Outlet, useNavigate, useSearch, useLocation } from '@tanstack/react-router';
+import { Outlet, useLocation, useNavigate, useSearch } from '@tanstack/react-router';
 
 const { Sider, Content } = Layout;
 const { Text } = Typography;
@@ -63,11 +63,11 @@ export function PublicLayout() {
     onLoginRequired: () => setLoginPanelOpen(true),
   });
 
-  const activeRouteKey = 
+  const activeRouteKey =
     location.pathname === '/' ? 'home' :
-    location.pathname.startsWith('/schedules') ? 'schedules' :
-    location.pathname.startsWith('/tracking') ? 'tracking' :
-    location.pathname.startsWith('/contact-us') ? 'contact-us' : 'home';
+      location.pathname.startsWith('/schedules') ? 'schedules' :
+        location.pathname.startsWith('/tracking') ? 'tracking' :
+          location.pathname.startsWith('/contact-us') ? 'contact-us' : 'home';
 
   const menuItems: MenuProps['items'] = [
     {
@@ -226,7 +226,7 @@ export function PublicLayout() {
             style={{
               position: 'absolute',
               inset: 0,
-              backgroundImage: 'url(/hero_bg.png)',
+              backgroundImage: 'url(/hero-bg.png)',
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',
@@ -263,8 +263,8 @@ export function PublicLayout() {
               <Outlet />
               {/* Left side text and cards (Landing page content) */}
               <Flex vertical justify="center" style={{ flex: 1, paddingRight: isStacked ? 0 : 40, maxWidth: isStacked ? '100%' : 650 }}>
-                  <div
-                    style={{
+                <div
+                  style={{
                     display: 'inline-block',
                     padding: '6px 20px',
                     borderRadius: 24,
@@ -287,46 +287,46 @@ export function PublicLayout() {
                   Search sailings, track shipments, and request rates in seconds — all from one quick-action workspace in the Carrier Portal.
                 </Text>
                 <Flex gap={16} wrap="wrap">
-                  <Card 
-                    size="small" 
-                    style={{ borderRadius: 16, flex: '1 1 140px', minWidth: 140, boxShadow: '0 4px 12px rgba(0,0,0,0.05)', border: `1px solid ${token.colorPrimary}`, cursor: 'pointer' }} 
+                  <Card
+                    size="small"
+                    style={{ borderRadius: 16, flex: '1 1 140px', minWidth: 140, boxShadow: '0 4px 12px rgba(0,0,0,0.05)', border: `1px solid ${token.colorPrimary}`, cursor: 'pointer' }}
                     styles={{ body: { padding: '16px', display: 'flex', alignItems: 'center', gap: 12 } }}
                     onClick={() => landingController.handleTabChange('schedules')}
                   >
                     <div style={{ background: token.colorPrimaryBg, padding: 8, borderRadius: 8, color: token.colorPrimary }}>
                       <CalendarOutlined style={{ fontSize: 20 }} />
                     </div>
-                    <Text strong style={{ fontSize: 13, lineHeight: 1.2 }}>Live sailing<br/>schedules</Text>
+                    <Text strong style={{ fontSize: 13, lineHeight: 1.2 }}>Live sailing<br />schedules</Text>
                   </Card>
-                  <Card 
-                    size="small" 
-                    style={{ borderRadius: 16, flex: '1 1 140px', minWidth: 140, boxShadow: '0 4px 12px rgba(0,0,0,0.05)', cursor: 'pointer' }} 
+                  <Card
+                    size="small"
+                    style={{ borderRadius: 16, flex: '1 1 140px', minWidth: 140, boxShadow: '0 4px 12px rgba(0,0,0,0.05)', cursor: 'pointer' }}
                     styles={{ body: { padding: '16px', display: 'flex', alignItems: 'center', gap: 12 } }}
                     onClick={() => landingController.handleTabChange('tracking')}
                   >
                     <div style={{ background: token.colorPrimaryBg, padding: 8, borderRadius: 8, color: token.colorPrimary }}>
                       <EnvironmentOutlined style={{ fontSize: 20 }} />
                     </div>
-                    <Text strong style={{ fontSize: 13, lineHeight: 1.2 }}>Real-time<br/>tracking</Text>
+                    <Text strong style={{ fontSize: 13, lineHeight: 1.2 }}>Real-time<br />tracking</Text>
                   </Card>
-                  <Card 
-                    size="small" 
-                    style={{ borderRadius: 16, flex: '1 1 140px', minWidth: 140, boxShadow: '0 4px 12px rgba(0,0,0,0.05)', cursor: 'pointer' }} 
+                  <Card
+                    size="small"
+                    style={{ borderRadius: 16, flex: '1 1 140px', minWidth: 140, boxShadow: '0 4px 12px rgba(0,0,0,0.05)', cursor: 'pointer' }}
                     styles={{ body: { padding: '16px', display: 'flex', alignItems: 'center', gap: 12 } }}
                     onClick={() => landingController.handleTabChange('rates')}
                   >
                     <div style={{ background: token.colorPrimaryBg, padding: 8, borderRadius: 8, color: token.colorPrimary }}>
                       <DollarOutlined style={{ fontSize: 20 }} />
                     </div>
-                    <Text strong style={{ fontSize: 13, lineHeight: 1.2 }}>Instant spot-<br/>rate quotes</Text>
+                    <Text strong style={{ fontSize: 13, lineHeight: 1.2 }}>Instant spot-<br />rate quotes</Text>
                   </Card>
                 </Flex>
               </Flex>
 
-                {/* Right side search panel */}
-                <Flex align={isStacked ? "stretch" : "center"} justify={isStacked ? "center" : "flex-end"} style={{ width: isStacked ? '100%' : 600, minWidth: isStacked ? 0 : 550 }}>
-                  <HeroSearchPanel controller={landingController} />
-                </Flex>
+              {/* Right side search panel */}
+              <Flex align={isStacked ? "stretch" : "center"} justify={isStacked ? "center" : "flex-end"} style={{ width: isStacked ? '100%' : 600, minWidth: isStacked ? 0 : 550 }}>
+                <HeroSearchPanel controller={landingController} />
+              </Flex>
             </div>
           )}
 

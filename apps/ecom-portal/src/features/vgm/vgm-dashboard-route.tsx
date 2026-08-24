@@ -248,7 +248,7 @@ export function VgmDashboardRoute() {
       {/* Main Content Area */}
       {vgmData?.data && (
         <form onSubmit={vgmForm.handleSubmit(onSubmitVgm as any)} style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
-          <div style={{ flex: 1, overflowY: 'auto', padding: 24, backgroundColor: token.colorBgLayout }}>
+          <div className="custom-scrollbar" style={{ flex: 1, overflowY: 'auto', padding: 24, backgroundColor: token.colorBgLayout }}>
             <Flex vertical gap={24}>
 
               {/* Read Only Details */}
@@ -328,19 +328,19 @@ export function VgmDashboardRoute() {
               padding: '16px 24px',
               background: token.colorBgContainer,
               borderTop: `1px solid ${token.colorBorderSecondary}`,
-              display: 'flex',
-              justifyContent: 'flex-end',
-              gap: 16,
               boxShadow: '0 -2px 8px rgba(0,0,0,0.05)',
-              zIndex: 10
+              zIndex: 10,
+              flexShrink: 0
             }}
           >
-            <AppButton onClick={() => { setActiveReference(null); searchForm.reset(); vgmForm.reset(); }}>
-              Cancel
-            </AppButton>
-            <AppButton type="primary" htmlType="submit" loading={isSubmitting}>
-              Save
-            </AppButton>
+            <Flex justify="flex-end" gap={16} wrap="wrap">
+              <AppButton onClick={() => { setActiveReference(null); searchForm.reset(); vgmForm.reset(); }}>
+                Cancel
+              </AppButton>
+              <AppButton type="primary" htmlType="submit" loading={isSubmitting}>
+                Save
+              </AppButton>
+            </Flex>
           </div>
         </form>
       )}

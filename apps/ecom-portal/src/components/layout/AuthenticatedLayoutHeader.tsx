@@ -273,27 +273,17 @@ export function AuthenticatedLayoutHeader({ onLogout }: AuthenticatedLayoutHeade
       {/* Account Profile Drawer */}
       <ProfileView open={profileDrawerOpen} onClose={() => setProfileDrawerOpen(false)} />
 
-      {/* Change Password Modal */}
-      <AppModal
+      {/* Change Password Drawer */}
+      <ChangePasswordView
         open={changePasswordDrawerOpen}
-        onCancel={() => setChangePasswordDrawerOpen(false)}
-        footer={null}
-        destroyOnClose
-        width={500}
-      >
-        <ChangePasswordView onSuccess={() => setChangePasswordDrawerOpen(false)} />
-      </AppModal>
+        onClose={() => setChangePasswordDrawerOpen(false)}
+      />
 
-      {/* My Alert Preferences Modal */}
-      <AppModal
+      {/* My Alert Preferences Drawer */}
+      <MyAlertsView
         open={myAlertDrawerOpen}
-        onCancel={() => setMyAlertDrawerOpen(false)}
-        footer={null}
-        destroyOnClose
-        width={650}
-      >
-        <MyAlertsView />
-      </AppModal>
+        onClose={() => setMyAlertDrawerOpen(false)}
+      />
 
       {/* Global Contact Us Drawer */}
       <ContactUsDrawer open={contactUsDrawerOpen} onClose={() => setContactUsDrawerOpen(false)} />

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 16:35)
+// Modified by Sekar Nagarajan (2026-08-26 17:01)
 import { useTenantStore } from "@solverminds/auth";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import type { LucideIcon } from "lucide-react";
@@ -185,10 +185,7 @@ export function AdminLayout() {
         />
 
         <div className="admin-workspace">
-          <aside
-            className="admin-workspace__nav custom-scroll"
-            aria-label="Admin sections"
-          >
+          <aside className="admin-workspace__nav" aria-label="Admin sections">
             <p className="admin-workspace__nav-title">Admin Sections</p>
             <nav className="admin-workspace__nav-list">
               {ADMIN_NAV_ITEMS.map((item) => {
@@ -217,7 +214,7 @@ export function AdminLayout() {
           </aside>
 
           <section
-            className="admin-workspace__content custom-scroll"
+            className="admin-workspace__content"
             aria-label={activeNav.label}
           >
             {sectionContent[activeSection]}

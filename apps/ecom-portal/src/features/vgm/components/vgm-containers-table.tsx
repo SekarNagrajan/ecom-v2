@@ -1,4 +1,4 @@
-// Created by Sekar Nagarajan (2026-08-26 12:48)
+// Modified by Sekar Nagarajan (2026-08-26 17:19)
 import {
   FormDatePicker,
   FormInput,
@@ -10,6 +10,7 @@ import type { Control, FieldArrayWithId } from "react-hook-form";
 import { Table } from "antd";
 
 import type { VgmFormValues } from "../types/vgm.types";
+import { VGM_FIELD_ITEM_PROPS } from "../utils/vgm-form-labels";
 
 const { Text } = Typography;
 
@@ -40,6 +41,7 @@ export function VgmContainersTable({
               control={control}
               name={`containers.${index}.vgmWeight`}
               size="large"
+              formItemProps={VGM_FIELD_ITEM_PROPS}
             />
           </div>
         ),
@@ -58,6 +60,7 @@ export function VgmContainersTable({
               control={control}
               name={`containers.${index}.vgmUnit`}
               size="large"
+              formItemProps={VGM_FIELD_ITEM_PROPS}
               options={[
                 { label: "Kgs", value: "K" },
                 { label: "Tons", value: "T" },
@@ -80,6 +83,7 @@ export function VgmContainersTable({
               control={control}
               name={`containers.${index}.method`}
               size="large"
+              formItemProps={VGM_FIELD_ITEM_PROPS}
               options={[
                 { label: "SM1", value: "SM1" },
                 { label: "SM2", value: "SM2" },
@@ -102,6 +106,7 @@ export function VgmContainersTable({
               control={control}
               name={`containers.${index}.date`}
               size="large"
+              formItemProps={VGM_FIELD_ITEM_PROPS}
             />
           </div>
         ),

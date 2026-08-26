@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-25 19:10)
+// Modified by Sekar Nagarajan (2026-08-26 17:15)
 import { useAuthStore, usePermission, useTenantStore } from "@solverminds/auth";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import type { MenuProps } from "antd";
@@ -22,7 +22,6 @@ function navIcon(Icon: LucideIcon, size = 18, locked = false) {
       icon={Icon}
       size={size}
       variant={locked ? "navLocked" : "nav"}
-      className="app-icon"
     />
   );
 }
@@ -272,6 +271,8 @@ export function AuthenticatedSidebar({
       items={menuItems}
       onSelect={onMenuSelect}
       className="app-sidebar-menu"
+      // Collapsed "More" flyout renders in a portal — keep icon contrast there too
+      classNames={{ popup: { root: "app-sidebar-menu-popup" } }}
     />
   );
 

@@ -1,70 +1,158 @@
-// Modified by Sekar Nagarajan (2026-08-24 19:14)
-import { AppButton, AppDrawer } from '@solverminds/shared-ui';
-import { useToast } from '@solverminds/shared-ui/hooks';
-import { Input, Select, Space, Table, Tag, Typography } from 'antd';
-import React from 'react';
+// Modified by Sekar Nagarajan (2026-08-26 16:57)
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  AppButton,
+  AppDrawer,
+  FormInput,
+  FormSelect,
+  FormTextarea,
+} from "@solverminds/shared-ui";
+import { useToast } from "@solverminds/shared-ui/hooks";
+import { Table, Tag, Typography } from "antd";
+import type { ColumnsType } from "antd/es/table";
+import { useState } from "react";
+import { useForm, type Resolver } from "react-hook-form";
+import { z } from "zod";
 
-import { AppIcon, Icons } from '../../../components/icons';
-import type { CustomerAdvisory } from '../types/admin.types';
-import { AdminPanelShell } from './AdminPanelShell';
+import { AppIcon, Icons } from "../../../components/icons";
+import type { CustomerAdvisory } from "../types/admin.types";
+import { AdminPanelShell } from "./AdminPanelShell";
 
 const { Text } = Typography;
-const { TextArea } = Input;
+
+const FIELD_ITEM_PROPS = {
+  layout: "vertical" as const,
+  colon: false,
+};
+
+const SEVERITY_OPTIONS = [
+  { label: "Info (General Update)", value: "INFO" },
+  { label: "Warning (Operational Delay)", value: "WARNING" },
+  { label: "Urgent (Port Closure / Severe Weather)", value: "URGENT" },
+] as const;
+
+const advisoryCreateSchema = z.object({
+  severity: z.enum(["INFO", "WARNING", "URGENT"]),
+  title: z.string().min(1, "Advisory headline is required"),
+  message: z.string().min(1, "Announcement message is required"),
+});
+
+type AdvisoryCreateForm = z.infer<typeof advisoryCreateSchema>;
+
+const DEFAULT_ADVISORY_FORM: AdvisoryCreateForm = {
+  severity: "WARNING",
+  title: "",
+  message: "",
+};
 
 interface CustomerAdvisoryViewProps {
   advisories: CustomerAdvisory[];
-  onCreate: (adv: Omit<CustomerAdvisory, 'id'>) => Promise<CustomerAdvisory>;
+  onCreate: (adv: Omit<CustomerAdvisory, "id">) => Promise<CustomerAdvisory>;
 }
 
-export function CustomerAdvisoryView({ advisories, onCreate }: CustomerAdvisoryViewProps) {
-  const [data, setData] = React.useState<CustomerAdvisory[]>(advisories);
-  const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
-  const [title, setTitle] = React.useState('');
-  const [message, setMessage] = React.useState('');
-  const [severity, setSeverity] = React.useState<'INFO' | 'WARNING' | 'URGENT'>('WARNING');
-  const [submitting, setSubmitting] = React.useState(false);
-  const toast = useToast();
+function advisoriesSignature(items: CustomerAdvisory[]) {
+  return items
+    .map(
+      (item) =>
+        `${item.id}:${item.isActive}:${item.severity}:${item.title}:${item.message}`,
+    )
+    .join("|");
+}
 
-  React.useEffect(() => {
-    setData(advisories);
-  }, [advisories]);
+function reqLabel(label: string) {
+  return (
+    <span className="form-field-label">
+      {label} <Text type="danger">*</Text>
+    </span>
+  );
+}
+
+function optLabel(label: string) {
+  return <span className="form-field-label">{label}</span>;
+}
+
+export function CustomerAdvisoryView({
+  advisories,
+  onCreate,
+}: CustomerAdvisoryViewProps) {
+  const toast = useToast();
+  const [draft, setDraft] = useState<CustomerAdvisory[]>(advisories);
+  const [appliedSignature, setAppliedSignature] = useState(() =>
+    advisoriesSignature(advisories),
+  );
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+
+  const nextSignature = advisoriesSignature(advisories);
+  if (nextSignature !== appliedSignature) {
+    setAppliedSignature(nextSignature);
+    setDraft(advisories);
+  }
+
+  const form = useForm<AdvisoryCreateForm>({
+    resolver: zodResolver(advisoryCreateSchema) as Resolver<AdvisoryCreateForm>,
+    defaultValues: DEFAULT_ADVISORY_FORM,
+    mode: "onChange",
+  });
+
+  const activeCount = draft.filter((item) => item.isActive).length;
+  const urgentCount = draft.filter((item) => item.severity === "URGENT").length;
 
   const closeDrawer = () => {
     setIsDrawerOpen(false);
-    setTitle('');
-    setMessage('');
-    setSeverity('WARNING');
+    form.reset(DEFAULT_ADVISORY_FORM);
   };
 
-  const handleCreateAdvisory = async () => {
-    if (!title.trim() || !message.trim()) return;
-    setSubmitting(true);
+  const handleSave = form.handleSubmit(async (values) => {
+    setIsSaving(true);
     try {
       await onCreate({
-        title,
-        message,
-        severity,
-        effectiveFrom: new Date().toISOString().split('T')[0],
-        effectiveTo: '2026-12-31',
+        title: values.title.trim(),
+        message: values.message.trim(),
+        severity: values.severity,
+        effectiveFrom: new Date().toISOString().split("T")[0],
+        effectiveTo: "2026-12-31",
         isActive: true,
       });
-      toast.success('Operational advisory published successfully');
+      toast.success("Operational advisory published successfully");
       closeDrawer();
     } catch {
-      toast.error('Failed to publish advisory');
+      toast.error("Failed to publish advisory");
     } finally {
-      setSubmitting(false);
+      setIsSaving(false);
     }
-  };
+  });
 
-  const columns = [
+  const columns: ColumnsType<CustomerAdvisory> = [
     {
-      title: 'Severity',
-      dataIndex: 'severity',
-      key: 'severity',
-      render: (sev: 'INFO' | 'WARNING' | 'URGENT') => {
-        const colorMap = { INFO: 'blue', WARNING: 'orange', URGENT: 'red' } as const;
-        const labelMap = { INFO: 'Info', WARNING: 'Warning', URGENT: 'Urgent' } as const;
+      title: "Actions",
+      key: "actions",
+      width: 110,
+      fixed: "left",
+      render: (_: unknown, record: CustomerAdvisory) => (
+        <Tag
+          className="admin-status-tag"
+          color={record.isActive ? "success" : "default"}
+        >
+          {record.isActive ? "Active" : "Expired"}
+        </Tag>
+      ),
+    },
+    {
+      title: "Severity",
+      dataIndex: "severity",
+      key: "severity",
+      render: (sev: CustomerAdvisory["severity"]) => {
+        const colorMap = {
+          INFO: "blue",
+          WARNING: "orange",
+          URGENT: "red",
+        } as const;
+        const labelMap = {
+          INFO: "Info",
+          WARNING: "Warning",
+          URGENT: "Urgent",
+        } as const;
         return (
           <Tag className="admin-status-tag" color={colorMap[sev]}>
             {labelMap[sev]}
@@ -73,44 +161,23 @@ export function CustomerAdvisoryView({ advisories, onCreate }: CustomerAdvisoryV
       },
     },
     {
-      title: 'Advisory Title',
-      dataIndex: 'title',
-      key: 'title',
-      render: (val: string) => <strong>{val}</strong>,
-    },
-    { title: 'Announcement Content', dataIndex: 'message', key: 'message' },
-    {
-      title: 'Effective Period',
-      key: 'period',
-      render: (_: unknown, r: CustomerAdvisory) => `${r.effectiveFrom} ~ ${r.effectiveTo}`,
+      title: "Advisory Title",
+      dataIndex: "title",
+      key: "title",
+      render: (val: string) => <Text strong>{val}</Text>,
     },
     {
-      title: 'Status',
-      dataIndex: 'isActive',
-      key: 'isActive',
-      render: (active: boolean) => (
-        <Tag className="admin-status-tag" color={active ? 'success' : 'default'}>
-          {active ? 'Active' : 'Expired'}
-        </Tag>
-      ),
+      title: "Announcement Content",
+      dataIndex: "message",
+      key: "message",
+    },
+    {
+      title: "Effective Period",
+      key: "period",
+      render: (_: unknown, record: CustomerAdvisory) =>
+        `${record.effectiveFrom} ~ ${record.effectiveTo}`,
     },
   ];
-
-  const drawerActions = (
-    <Space size="middle" className="admin-drawer-actions">
-      <AppButton onClick={closeDrawer} disabled={submitting}>
-        Cancel
-      </AppButton>
-      <AppButton
-        type="primary"
-        icon={<AppIcon icon={Icons.plus} size={16} tone="create" />}
-        loading={submitting}
-        onClick={handleCreateAdvisory}
-      >
-        Submit
-      </AppButton>
-    </Space>
-  );
 
   return (
     <AdminPanelShell
@@ -121,15 +188,41 @@ export function CustomerAdvisoryView({ advisories, onCreate }: CustomerAdvisoryV
         <AppButton
           type="primary"
           size="large"
-          icon={<AppIcon icon={Icons.plus} size={16} tone="create" />}
+          icon={<AppIcon icon={Icons.plus} size={16} />}
           onClick={() => setIsDrawerOpen(true)}
         >
           Publish New Advisory
         </AppButton>
       }
     >
-      <div className="responsive-table-wrap">
-        <Table dataSource={data} columns={columns} rowKey="id" pagination={false} scroll={{ x: true }} />
+      <div className="admin-advisory-form">
+        <div className="admin-menu-summary" aria-label="Advisory summary">
+          <span className="admin-menu-summary__chip">
+            <AppIcon icon={Icons.bell} size={14} />
+            <Text>
+              {draft.length} Advisor{draft.length === 1 ? "y" : "ies"}
+            </Text>
+          </span>
+          <span className="admin-menu-summary__chip admin-menu-summary__chip--success">
+            <AppIcon icon={Icons.checkCircle} size={14} />
+            <Text>{activeCount} Active</Text>
+          </span>
+          <span className="admin-menu-summary__chip admin-menu-summary__chip--warning">
+            <AppIcon icon={Icons.stopCircle} size={14} />
+            <Text>{urgentCount} Urgent</Text>
+          </span>
+        </div>
+
+        <div className="responsive-table-wrap custom-scroll">
+          <Table<CustomerAdvisory>
+            dataSource={draft}
+            columns={columns}
+            rowKey="id"
+            pagination={false}
+            scroll={{ x: true }}
+            size="middle"
+          />
+        </div>
       </div>
 
       <AppDrawer
@@ -139,44 +232,54 @@ export function CustomerAdvisoryView({ advisories, onCreate }: CustomerAdvisoryV
         placement="right"
         dialogSize="md"
         destroyOnClose
-        maskClosable={!submitting}
-        keyboard={!submitting}
-        footer={drawerActions}
+        maskClosable={!isSaving}
+        keyboard={!isSaving}
+        classNames={{
+          body: "custom-scroll",
+          footer: "admin-drawer-footer-bar",
+        }}
+        footer={
+          <div className="admin-drawer-actions form-step-footer">
+            <AppButton onClick={closeDrawer} disabled={isSaving}>
+              Cancel
+            </AppButton>
+            <AppButton
+              type="primary"
+              icon={<AppIcon icon={Icons.save} size={16} />}
+              loading={isSaving}
+              onClick={handleSave}
+            >
+              Save
+            </AppButton>
+          </div>
+        }
       >
         <div className="admin-drawer-body">
-          <div>
-            <span className="form-field-label">Alert Severity</span>
-            <Select
-              size="large"
-              style={{ width: '100%' }}
-              value={severity}
-              onChange={(val) => setSeverity(val)}
-              options={[
-                { label: 'Info (General Update)', value: 'INFO' },
-                { label: 'Warning (Operational Delay)', value: 'WARNING' },
-                { label: 'Urgent (Port Closure / Severe Weather)', value: 'URGENT' },
-              ]}
-            />
-          </div>
-
-          <div>
-            <span className="form-field-label">
-              Advisory Headline <Text type="danger">*</Text>
-            </span>
-            <Input
-              size="large"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="e.g. Typhoon Delay at Shanghai Port"
-            />
-          </div>
-
-          <div>
-            <span className="form-field-label">
-              Detailed Announcement Message <Text type="danger">*</Text>
-            </span>
-            <TextArea rows={4} value={message} onChange={(e) => setMessage(e.target.value)} />
-          </div>
+          <FormSelect
+            control={form.control}
+            name="severity"
+            label={optLabel("Alert Severity")}
+            size="large"
+            options={[...SEVERITY_OPTIONS]}
+            className="admin-stack-full"
+            formItemProps={FIELD_ITEM_PROPS}
+          />
+          <FormInput
+            control={form.control}
+            name="title"
+            label={reqLabel("Advisory Headline")}
+            size="large"
+            placeholder="e.g. Typhoon Delay at Shanghai Port"
+            formItemProps={FIELD_ITEM_PROPS}
+          />
+          <FormTextarea
+            control={form.control}
+            name="message"
+            label={reqLabel("Detailed Announcement Message")}
+            rows={4}
+            className="custom-scroll"
+            formItemProps={FIELD_ITEM_PROPS}
+          />
         </div>
       </AppDrawer>
     </AdminPanelShell>

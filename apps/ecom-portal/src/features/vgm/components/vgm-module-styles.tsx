@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 12:48)
+// Modified by Sekar Nagarajan (2026-08-26 17:24)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -51,14 +51,47 @@ export function VgmModuleStyles() {
       .vgm-search-form .ant-form-item {
         margin-bottom: 0;
       }
+      /* Keep inputs aligned when validation text appears (tracking/ARN pattern) */
+      .vgm-search-form .ant-form-item .ant-form-item-control,
+      .vgm-section-card .ant-form-item .ant-form-item-control,
+      .vgm-field-cell .ant-form-item .ant-form-item-control {
+        position: relative;
+        padding-bottom: ${
+          token.fontSize * token.lineHeight + token.marginXXS
+        }px;
+      }
+      .vgm-search-form .ant-form-item .ant-form-item-explain,
+      .vgm-section-card .ant-form-item .ant-form-item-explain,
+      .vgm-field-cell .ant-form-item .ant-form-item-explain {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        min-height: ${token.fontSize * token.lineHeight}px;
+        font-size: ${token.fontSizeSM}px;
+        line-height: ${token.lineHeight};
+        margin: 0;
+      }
+      .vgm-section-card .ant-form-item {
+        margin-bottom: 0;
+      }
+      .vgm-field-cell .ant-form-item {
+        margin-bottom: 0;
+      }
       .vgm-search-actions-field {
         display: flex;
         flex-direction: column;
         width: 100%;
+        /* Match reserved error slot under inputs so Search stays level */
+        padding-bottom: ${
+          token.fontSize * token.lineHeight + token.marginXXS
+        }px;
       }
       .vgm-search-actions-label {
         visibility: hidden;
-        margin-bottom: ${token.marginSM}px;
+        display: block;
+        margin-bottom: ${token.marginXXS}px;
+        min-height: ${token.fontSizeSM * token.lineHeight}px;
       }
       .vgm-search-actions {
         display: flex;

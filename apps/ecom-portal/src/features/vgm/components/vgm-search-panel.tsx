@@ -1,11 +1,11 @@
-// Created by Sekar Nagarajan (2026-08-26 12:48)
+// Modified by Sekar Nagarajan (2026-08-26 17:24)
 import { AppButton, FormInput, FormSelect } from "@solverminds/shared-ui";
 import { Col, Row } from "antd";
 import type { UseFormReturn } from "react-hook-form";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import type { VgmSearchValues } from "../types/vgm.types";
-import { vgmReqLabel } from "../utils/vgm-form-labels";
+import { VGM_FIELD_ITEM_PROPS, vgmReqLabel } from "../utils/vgm-form-labels";
 
 interface VgmSearchPanelProps {
   form: UseFormReturn<VgmSearchValues>;
@@ -33,6 +33,7 @@ export function VgmSearchPanel({
                 name="submissionBy"
                 label={vgmReqLabel("Submission By")}
                 size="large"
+                formItemProps={VGM_FIELD_ITEM_PROPS}
                 options={[
                   { label: "Booking No.", value: "bookno" },
                   { label: "B/L No.", value: "blno" },
@@ -46,6 +47,7 @@ export function VgmSearchPanel({
                 label={vgmReqLabel("Reference Number")}
                 placeholder="e.g. BKG-123456"
                 size="large"
+                formItemProps={VGM_FIELD_ITEM_PROPS}
               />
             </Col>
             <Col xs={24} md={6} lg={6}>

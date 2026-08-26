@@ -1,4 +1,4 @@
-// Created by Sekar Nagarajan (2026-08-26 12:48)
+// Modified by Sekar Nagarajan (2026-08-26 17:19)
 import {
   FormDatePicker,
   FormInput,
@@ -9,7 +9,11 @@ import type { Control } from "react-hook-form";
 
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import type { VgmFormValues } from "../types/vgm.types";
-import { vgmOptionalLabel, vgmReqLabel } from "../utils/vgm-form-labels";
+import {
+  VGM_FIELD_ITEM_PROPS,
+  vgmOptionalLabel,
+  vgmReqLabel,
+} from "../utils/vgm-form-labels";
 
 interface VgmDeclarationFieldsProps {
   control: Control<VgmFormValues>;
@@ -29,6 +33,7 @@ export function VgmDeclarationFields({ control }: VgmDeclarationFieldsProps) {
             name="companyName"
             label={vgmOptionalLabel("Company Name")}
             size="large"
+            formItemProps={VGM_FIELD_ITEM_PROPS}
           />
         </Col>
         <Col {...RESPONSIVE_COL.quarter}>
@@ -37,6 +42,7 @@ export function VgmDeclarationFields({ control }: VgmDeclarationFieldsProps) {
             name="orderNo"
             label={vgmOptionalLabel("Reference / Order No")}
             size="large"
+            formItemProps={VGM_FIELD_ITEM_PROPS}
           />
         </Col>
         <Col {...RESPONSIVE_COL.quarter}>
@@ -45,6 +51,7 @@ export function VgmDeclarationFields({ control }: VgmDeclarationFieldsProps) {
             name="addr1"
             label={vgmOptionalLabel("Address 1")}
             size="large"
+            formItemProps={VGM_FIELD_ITEM_PROPS}
           />
         </Col>
         <Col {...RESPONSIVE_COL.quarter}>
@@ -53,6 +60,7 @@ export function VgmDeclarationFields({ control }: VgmDeclarationFieldsProps) {
             name="addr2"
             label={vgmOptionalLabel("Address 2")}
             size="large"
+            formItemProps={VGM_FIELD_ITEM_PROPS}
           />
         </Col>
 
@@ -62,6 +70,7 @@ export function VgmDeclarationFields({ control }: VgmDeclarationFieldsProps) {
             name="obtainDate"
             label={vgmReqLabel("Obtained Date")}
             size="large"
+            formItemProps={VGM_FIELD_ITEM_PROPS}
           />
         </Col>
         <Col {...RESPONSIVE_COL.quarter}>
@@ -70,6 +79,7 @@ export function VgmDeclarationFields({ control }: VgmDeclarationFieldsProps) {
             name="obtainMethod"
             label={vgmReqLabel("Obtained Method")}
             size="large"
+            formItemProps={VGM_FIELD_ITEM_PROPS}
             options={[
               { label: "SM1", value: "SM1" },
               { label: "SM2", value: "SM2" },
@@ -82,6 +92,7 @@ export function VgmDeclarationFields({ control }: VgmDeclarationFieldsProps) {
             name="authPerson"
             label={vgmReqLabel("Authorized Person")}
             size="large"
+            formItemProps={VGM_FIELD_ITEM_PROPS}
           />
         </Col>
         <Col {...RESPONSIVE_COL.quarter}>
@@ -90,6 +101,7 @@ export function VgmDeclarationFields({ control }: VgmDeclarationFieldsProps) {
             name="country"
             label={vgmOptionalLabel("Country")}
             size="large"
+            formItemProps={VGM_FIELD_ITEM_PROPS}
           />
         </Col>
 
@@ -99,6 +111,7 @@ export function VgmDeclarationFields({ control }: VgmDeclarationFieldsProps) {
             name="city"
             label={vgmOptionalLabel("City")}
             size="large"
+            formItemProps={VGM_FIELD_ITEM_PROPS}
           />
         </Col>
         <Col {...RESPONSIVE_COL.quarter}>
@@ -107,6 +120,7 @@ export function VgmDeclarationFields({ control }: VgmDeclarationFieldsProps) {
             name="zipcode"
             label={vgmOptionalLabel("Zip Code")}
             size="large"
+            formItemProps={VGM_FIELD_ITEM_PROPS}
           />
         </Col>
         <Col {...RESPONSIVE_COL.quarter}>
@@ -115,6 +129,7 @@ export function VgmDeclarationFields({ control }: VgmDeclarationFieldsProps) {
             name="phone"
             label={vgmOptionalLabel("Telephone")}
             size="large"
+            formItemProps={VGM_FIELD_ITEM_PROPS}
           />
         </Col>
         <Col {...RESPONSIVE_COL.quarter}>
@@ -123,6 +138,7 @@ export function VgmDeclarationFields({ control }: VgmDeclarationFieldsProps) {
             name="fax"
             label={vgmOptionalLabel("Fax")}
             size="large"
+            formItemProps={VGM_FIELD_ITEM_PROPS}
           />
         </Col>
 
@@ -132,6 +148,7 @@ export function VgmDeclarationFields({ control }: VgmDeclarationFieldsProps) {
             name="email"
             label={vgmOptionalLabel("Email")}
             size="large"
+            formItemProps={VGM_FIELD_ITEM_PROPS}
           />
         </Col>
       </Row>

@@ -1,68 +1,136 @@
-// Modified by Sekar Nagarajan (2026-08-24 19:14)
-import { AppButton, AppDrawer } from '@solverminds/shared-ui';
-import { useToast } from '@solverminds/shared-ui/hooks';
-import { Image, Input, InputNumber, Space, Switch, Table, Tag, Typography } from 'antd';
-import React from 'react';
+// Modified by Sekar Nagarajan (2026-08-26 16:57)
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  AppButton,
+  AppDrawer,
+  FormInput,
+  FormInputNumber,
+} from "@solverminds/shared-ui";
+import { useToast } from "@solverminds/shared-ui/hooks";
+import { Image, Table, Tag, Typography } from "antd";
+import type { ColumnsType } from "antd/es/table";
+import { useState } from "react";
+import { useForm, type Resolver } from "react-hook-form";
+import { z } from "zod";
 
-import { AppIcon, Icons } from '../../../components/icons';
-import type { BannerConfig } from '../types/admin.types';
-import { AdminPanelShell } from './AdminPanelShell';
+import { AppIcon, Icons } from "../../../components/icons";
+import type { BannerConfig } from "../types/admin.types";
+import { AdminPanelShell } from "./AdminPanelShell";
 
 const { Text } = Typography;
 
+const FIELD_ITEM_PROPS = {
+  layout: "vertical" as const,
+  colon: false,
+};
+
+const bannerCreateSchema = z.object({
+  title: z.string().min(1, "Banner title is required"),
+  imageUrl: z.string().min(1, "Image URL is required"),
+  sortOrder: z.number().min(1),
+});
+
+type BannerCreateForm = z.infer<typeof bannerCreateSchema>;
+
+const DEFAULT_BANNER_FORM: BannerCreateForm = {
+  title: "",
+  imageUrl: "/hero-bg.png",
+  sortOrder: 1,
+};
+
 interface BannerManagerViewProps {
   banners: BannerConfig[];
-  onCreate: (banner: Omit<BannerConfig, 'id'>) => Promise<BannerConfig>;
+  onCreate: (banner: Omit<BannerConfig, "id">) => Promise<BannerConfig>;
 }
 
-export function BannerManagerView({ banners, onCreate }: BannerManagerViewProps) {
-  const [data, setData] = React.useState<BannerConfig[]>(banners);
-  const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
-  const [title, setTitle] = React.useState('');
-  const [imageUrl, setImageUrl] = React.useState('/hero-bg.png');
-  const [sortOrder, setSortOrder] = React.useState(1);
-  const [submitting, setSubmitting] = React.useState(false);
-  const toast = useToast();
+function bannersSignature(items: BannerConfig[]) {
+  return items
+    .map((item) => `${item.id}:${item.isActive}:${item.sortOrder}:${item.title}`)
+    .join("|");
+}
 
-  React.useEffect(() => {
-    setData(banners);
-  }, [banners]);
+function reqLabel(label: string) {
+  return (
+    <span className="form-field-label">
+      {label} <Text type="danger">*</Text>
+    </span>
+  );
+}
+
+function optLabel(label: string) {
+  return <span className="form-field-label">{label}</span>;
+}
+
+export function BannerManagerView({
+  banners,
+  onCreate,
+}: BannerManagerViewProps) {
+  const toast = useToast();
+  const [draft, setDraft] = useState<BannerConfig[]>(banners);
+  const [appliedSignature, setAppliedSignature] = useState(() =>
+    bannersSignature(banners),
+  );
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+
+  const nextSignature = bannersSignature(banners);
+  if (nextSignature !== appliedSignature) {
+    setAppliedSignature(nextSignature);
+    setDraft(banners);
+  }
+
+  const form = useForm<BannerCreateForm>({
+    resolver: zodResolver(bannerCreateSchema) as Resolver<BannerCreateForm>,
+    defaultValues: DEFAULT_BANNER_FORM,
+    mode: "onChange",
+  });
+
+  const activeCount = draft.filter((item) => item.isActive).length;
+  const sortedDraft = [...draft].sort((a, b) => a.sortOrder - b.sortOrder);
 
   const closeDrawer = () => {
     setIsDrawerOpen(false);
-    setTitle('');
-    setImageUrl('/hero-bg.png');
-    setSortOrder(1);
+    form.reset(DEFAULT_BANNER_FORM);
   };
 
-  const handleAddBanner = async () => {
-    if (!title.trim()) return;
-    setSubmitting(true);
+  const handleSave = form.handleSubmit(async (values) => {
+    setIsSaving(true);
     try {
-      await onCreate({ title, imageUrl, sortOrder, isActive: true });
-      toast.success('Banner uploaded successfully');
+      await onCreate({
+        title: values.title.trim(),
+        imageUrl: values.imageUrl.trim(),
+        sortOrder: values.sortOrder,
+        isActive: true,
+      });
+      toast.success("Banner uploaded successfully");
       closeDrawer();
     } catch {
-      toast.error('Failed to create banner');
+      toast.error("Failed to create banner");
     } finally {
-      setSubmitting(false);
+      setIsSaving(false);
     }
-  };
+  });
 
-  const columns = [
+  const columns: ColumnsType<BannerConfig> = [
     {
-      title: 'Actions',
-      key: 'actions',
-      width: 100,
-      fixed: 'left' as const,
+      title: "Actions",
+      key: "actions",
+      width: 110,
+      fixed: "left",
       render: (_: unknown, record: BannerConfig) => (
-        <Switch checked={record.isActive} disabled />
+        <Tag
+          className="admin-status-tag"
+          color={record.isActive ? "success" : "default"}
+        >
+          {record.isActive ? "Active" : "Inactive"}
+        </Tag>
       ),
     },
     {
-      title: 'Sort',
-      dataIndex: 'sortOrder',
-      key: 'sortOrder',
+      title: "Sort",
+      dataIndex: "sortOrder",
+      key: "sortOrder",
+      width: 80,
       render: (val: number) => (
         <Tag className="admin-code-tag" color="blue">
           #{val}
@@ -70,47 +138,26 @@ export function BannerManagerView({ banners, onCreate }: BannerManagerViewProps)
       ),
     },
     {
-      title: 'Preview',
-      dataIndex: 'imageUrl',
-      key: 'imageUrl',
+      title: "Preview",
+      dataIndex: "imageUrl",
+      key: "imageUrl",
       render: (url: string) => (
-        <Image src={url} width={100} height={45} className="admin-banner-thumb" />
+        <Image
+          src={url}
+          width={100}
+          height={45}
+          className="admin-banner-thumb"
+        />
       ),
     },
-    { title: 'Banner Title', dataIndex: 'title', key: 'title' },
+    { title: "Banner Title", dataIndex: "title", key: "title" },
     {
-      title: 'Image Asset Path',
-      dataIndex: 'imageUrl',
-      key: 'path',
-      render: (val: string) => <code>{val}</code>,
-    },
-    {
-      title: 'Status',
-      dataIndex: 'isActive',
-      key: 'isActive',
-      render: (active: boolean) => (
-        <Tag className="admin-status-tag" color={active ? 'success' : 'default'}>
-          {active ? 'Active' : 'Inactive'}
-        </Tag>
-      ),
+      title: "Image Asset Path",
+      dataIndex: "imageUrl",
+      key: "path",
+      render: (val: string) => <Text code>{val}</Text>,
     },
   ];
-
-  const drawerActions = (
-    <Space size="middle" className="admin-drawer-actions">
-      <AppButton onClick={closeDrawer} disabled={submitting}>
-        Cancel
-      </AppButton>
-      <AppButton
-        type="primary"
-        icon={<AppIcon icon={Icons.upload} size={16} />}
-        loading={submitting}
-        onClick={handleAddBanner}
-      >
-        Submit
-      </AppButton>
-    </Space>
-  );
 
   return (
     <AdminPanelShell
@@ -128,8 +175,30 @@ export function BannerManagerView({ banners, onCreate }: BannerManagerViewProps)
         </AppButton>
       }
     >
-      <div className="responsive-table-wrap">
-        <Table dataSource={data} columns={columns} rowKey="id" pagination={false} scroll={{ x: true }} />
+      <div className="admin-banner-form">
+        <div className="admin-menu-summary" aria-label="Banner summary">
+          <span className="admin-menu-summary__chip">
+            <AppIcon icon={Icons.image} size={14} />
+            <Text>
+              {draft.length} Banner{draft.length === 1 ? "" : "s"}
+            </Text>
+          </span>
+          <span className="admin-menu-summary__chip admin-menu-summary__chip--success">
+            <AppIcon icon={Icons.checkCircle} size={14} />
+            <Text>{activeCount} Active</Text>
+          </span>
+        </div>
+
+        <div className="responsive-table-wrap custom-scroll">
+          <Table<BannerConfig>
+            dataSource={sortedDraft}
+            columns={columns}
+            rowKey="id"
+            pagination={false}
+            scroll={{ x: true }}
+            size="middle"
+          />
+        </div>
       </div>
 
       <AppDrawer
@@ -139,37 +208,54 @@ export function BannerManagerView({ banners, onCreate }: BannerManagerViewProps)
         placement="right"
         dialogSize="md"
         destroyOnClose
-        maskClosable={!submitting}
-        keyboard={!submitting}
-        footer={drawerActions}
+        maskClosable={!isSaving}
+        keyboard={!isSaving}
+        classNames={{
+          body: "custom-scroll",
+          footer: "admin-drawer-footer-bar",
+        }}
+        footer={
+          <div className="admin-drawer-actions form-step-footer">
+            <AppButton onClick={closeDrawer} disabled={isSaving}>
+              Cancel
+            </AppButton>
+            <AppButton
+              type="primary"
+              icon={<AppIcon icon={Icons.save} size={16} />}
+              loading={isSaving}
+              onClick={handleSave}
+            >
+              Save
+            </AppButton>
+          </div>
+        }
       >
         <div className="admin-drawer-body">
-          <div>
-            <span className="form-field-label">
-              Banner Title <Text type="danger">*</Text>
-            </span>
-            <Input
-              size="large"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="e.g. SOLAS VGM Digital Filing"
-            />
-          </div>
-
-          <div>
-            <span className="form-field-label">Image Asset URL</span>
-            <Input size="large" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} />
-          </div>
-
-          <div>
-            <span className="form-field-label">Carousel Sequence Rank</span>
-            <InputNumber
-              size="large"
-              min={1}
-              value={sortOrder}
-              onChange={(val) => setSortOrder(val || 1)}
-            />
-          </div>
+          <FormInput
+            control={form.control}
+            name="title"
+            label={reqLabel("Banner Title")}
+            size="large"
+            placeholder="e.g. SOLAS VGM Digital Filing"
+            formItemProps={FIELD_ITEM_PROPS}
+          />
+          <FormInput
+            control={form.control}
+            name="imageUrl"
+            label={optLabel("Image Asset URL")}
+            size="large"
+            formItemProps={FIELD_ITEM_PROPS}
+          />
+          <FormInputNumber
+            control={form.control}
+            name="sortOrder"
+            label={reqLabel("Carousel Sequence Rank")}
+            size="large"
+            min={1}
+            numericMode="positive-integer"
+            className="admin-stack-full"
+            formItemProps={FIELD_ITEM_PROPS}
+          />
         </div>
       </AppDrawer>
     </AdminPanelShell>

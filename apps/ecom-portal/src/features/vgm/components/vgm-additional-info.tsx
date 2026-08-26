@@ -1,10 +1,10 @@
-// Created by Sekar Nagarajan (2026-08-26 12:48)
+// Modified by Sekar Nagarajan (2026-08-26 17:19)
 import { FormInput } from "@solverminds/shared-ui";
 import { Alert, Card, Col, Row } from "antd";
 import type { Control } from "react-hook-form";
 
 import type { VgmFormValues } from "../types/vgm.types";
-import { vgmReqLabel } from "../utils/vgm-form-labels";
+import { VGM_FIELD_ITEM_PROPS, vgmReqLabel } from "../utils/vgm-form-labels";
 
 interface VgmAdditionalInfoProps {
   control: Control<VgmFormValues>;
@@ -25,6 +25,7 @@ export function VgmAdditionalInfo({ control }: VgmAdditionalInfoProps) {
             label={vgmReqLabel("Acknowledgement Email ID")}
             placeholder="Comma separated for multiple emails"
             size="large"
+            formItemProps={VGM_FIELD_ITEM_PROPS}
           />
         </Col>
         <Col xs={24} md={14}>

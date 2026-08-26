@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 12:19)
+// Modified by Sekar Nagarajan (2026-08-26 17:15)
 import { theme } from "antd";
 
 import { tokenMix } from "../../features/theme/utils/token-mix";
@@ -831,13 +831,13 @@ export function GlobalThemeStyles() {
         padding-top: ${token.paddingXS}px;
         background: transparent !important;
       }
-      /* Selected rail item: soft primary tint + left accent (agenct nav) */
+      /* Selected rail item: solid primary plate + light icons (readable on primary) */
       .app-sidebar-menu.ant-menu-light .ant-menu-item-selected,
       .app-sidebar-menu.ant-menu .ant-menu-item-selected,
       .pub-layout-sider__menu.ant-menu-light .ant-menu-item-selected,
       .pub-layout-sider__menu.ant-menu .ant-menu-item-selected {
-        background: ${token.colorPrimaryBg} !important;
-        color: ${token.colorPrimary} !important;
+        background: ${token.colorPrimary} !important;
+        color: ${token.colorTextLightSolid} !important;
         font-weight: ${token.fontWeightStrong};
         border-inline-start: 3px solid ${token.colorPrimary};
       }
@@ -845,7 +845,7 @@ export function GlobalThemeStyles() {
       .app-sidebar-menu .ant-menu-item-selected .app-icon-nav,
       .pub-layout-sider__menu .ant-menu-item-selected .app-icon,
       .pub-layout-sider__menu .ant-menu-item-selected .app-icon-nav {
-        color: ${token.colorPrimary} !important;
+        color: ${token.colorTextLightSolid} !important;
       }
       .app-sidebar-menu .ant-menu-item:not(.ant-menu-item-selected):hover,
       .pub-layout-sider__menu .ant-menu-item:not(.ant-menu-item-selected):hover {
@@ -864,6 +864,33 @@ export function GlobalThemeStyles() {
       .app-sidebar-menu .ant-menu-submenu-selected > .ant-menu-submenu-title .app-icon-nav,
       .pub-layout-sider__menu .ant-menu-submenu-selected > .ant-menu-submenu-title .app-icon-nav {
         color: ${token.colorPrimary} !important;
+      }
+      /* Collapsed icon-rail: active parent (e.g. More) must use light icons on primary */
+      .app-sidebar-menu.ant-menu-inline-collapsed > .ant-menu-submenu-selected > .ant-menu-submenu-title,
+      .pub-layout-sider__menu.ant-menu-inline-collapsed > .ant-menu-submenu-selected > .ant-menu-submenu-title {
+        background: ${token.colorPrimary} !important;
+        color: ${token.colorTextLightSolid} !important;
+      }
+      .app-sidebar-menu.ant-menu-inline-collapsed > .ant-menu-submenu-selected > .ant-menu-submenu-title .app-icon,
+      .app-sidebar-menu.ant-menu-inline-collapsed > .ant-menu-submenu-selected > .ant-menu-submenu-title .app-icon-nav,
+      .pub-layout-sider__menu.ant-menu-inline-collapsed > .ant-menu-submenu-selected > .ant-menu-submenu-title .app-icon,
+      .pub-layout-sider__menu.ant-menu-inline-collapsed > .ant-menu-submenu-selected > .ant-menu-submenu-title .app-icon-nav {
+        color: ${token.colorTextLightSolid} !important;
+      }
+      /* More / Schedules / Rates flyout (portal) — same contrast rules */
+      .app-sidebar-menu-popup.ant-menu-submenu-popup .ant-menu-item .app-icon-nav {
+        color: ${token.colorText} !important;
+      }
+      .app-sidebar-menu-popup.ant-menu-submenu-popup .ant-menu-item:hover:not(.ant-menu-item-selected) .app-icon-nav {
+        color: ${token.colorPrimary} !important;
+      }
+      .app-sidebar-menu-popup.ant-menu-submenu-popup .ant-menu-item-selected {
+        background: ${token.colorPrimary} !important;
+        color: ${token.colorTextLightSolid} !important;
+      }
+      .app-sidebar-menu-popup.ant-menu-submenu-popup .ant-menu-item-selected .app-icon,
+      .app-sidebar-menu-popup.ant-menu-submenu-popup .ant-menu-item-selected .app-icon-nav {
+        color: ${token.colorTextLightSolid} !important;
       }
       .app-sidebar-drawer-body {
         padding: 0 !important;

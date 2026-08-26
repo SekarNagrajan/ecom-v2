@@ -1,3 +1,4 @@
+// Modified by Sekar Nagarajan (2026-08-25 13:00)
 import { http, delay, HttpResponse } from 'msw';
 import { LoginForm, LoginSuccessResponse } from '../features/auth/types/auth.types';
 
@@ -18,7 +19,7 @@ export const authHandlers = [
           email: 'test@example.com',
           company: 'Test Company',
           role: 'CUSTOMER',
-          capabilities: ['VIEW_DASHBOARD', 'CREATE_BOOKING'],
+          capabilities: ['VIEW_DASHBOARD', 'CREATE_BOOKING', 'BL', 'SI', 'BKG', 'CRO', 'ARN', 'STMT', 'CO2'],
         },
       };
 

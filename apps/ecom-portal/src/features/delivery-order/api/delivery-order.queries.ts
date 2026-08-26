@@ -1,21 +1,18 @@
-// Created by Sekar Nagarajan (2026-08-24 14:46)
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { getDOSummary, downloadDODocument } from './delivery-order.api';
-import { useToast } from '@solverminds/shared-ui/hooks';
+// Modified by Sekar Nagarajan (2026-08-26 14:26)
+import { useToast } from "@solverminds/shared-ui/hooks";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export const doKeys = {
-  all: ['delivery-orders'] as const,
-  lists: () => [...doKeys.all, 'list'] as const,
-  list: (fromDate?: string, toDate?: string) => [...doKeys.lists(), { fromDate, toDate }] as const,
-};
+import { doApi } from "./delivery-order.api";
+import { doKeys } from "./delivery-order.keys";
+import type { DOListFilters } from "../types/delivery-order.types";
 
-export function useDOSummaryQuery(fromDate?: string, toDate?: string) {
+export function useDOSummaryQuery(filters: DOListFilters = {}) {
   return useQuery({
-    queryKey: doKeys.list(fromDate, toDate),
+    queryKey: doKeys.list(filters),
     queryFn: async () => {
-      const res = await getDOSummary(fromDate, toDate);
-      if (res.error) throw new Error(res.error.message || 'Failed to fetch DO summary');
-      return res.data;
+      const res = await doApi.fetchList(filters);
+      if (res.error) throw new Error(res.error.message);
+      return res.data ?? [];
     },
   });
 }
@@ -26,22 +23,24 @@ export function useDODownloadMutation() {
 
   return useMutation({
     mutationFn: async (delOrdNo: string) => {
-      const res = await downloadDODocument(delOrdNo);
-      if (res.error) throw new Error(res.error.message || 'Failed to download DO document');
+      const res = await doApi.downloadDocument(delOrdNo);
+      if (res.error) throw new Error(res.error.message);
       return { blob: res.data, delOrdNo };
     },
     onSuccess: ({ blob, delOrdNo }) => {
       if (!blob) return;
       const url = URL.createObjectURL(blob);
-      const a = Object.assign(document.createElement('a'), { href: url, download: `${delOrdNo}.pdf` });
+      const a = Object.assign(document.createElement("a"), {
+        href: url,
+        download: `${delOrdNo}.pdf`,
+      });
       a.click();
       URL.revokeObjectURL(url);
-
-      // Invalidate the list to refresh the print status
+      toast.success(`Delivery Order ${delOrdNo} downloaded.`);
       queryClient.invalidateQueries({ queryKey: doKeys.lists() });
     },
-    onError: (error) => {
-      toast.error(error.message);
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to download Delivery Order.");
     },
   });
 }

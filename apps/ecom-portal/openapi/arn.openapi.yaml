@@ -1,0 +1,149 @@
+openapi: 3.0.3
+info:
+  title: E-Com Portal Arrival Notice API
+  version: 1.0.0
+paths:
+  /api/ecom/imp/arrival-notices:
+    get:
+      summary: Arrival notice list by date range
+      parameters:
+        - name: fromDate
+          in: query
+          schema: { type: string, format: date }
+        - name: toDate
+          in: query
+          schema: { type: string, format: date }
+      responses:
+        '200':
+          description: Arrival notice list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrivalNoticeListResponse'
+  /api/ecom/imp/arrival-notices/{anNo}:
+    get:
+      summary: Arrival notice detail
+      parameters:
+        - name: anNo
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Arrival notice detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrivalNoticeDetailResponse'
+  /api/ecom/imp/arrival-notices/{anNo}/document:
+    get:
+      summary: Print arrival notice PDF
+      parameters:
+        - name: anNo
+          in: path
+          required: true
+          schema: { type: string }
+        - name: format
+          in: query
+          schema: { type: string, enum: [pdf] }
+      responses:
+        '200':
+          description: PDF blob
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+components:
+  schemas:
+    ArrivalNoticeContainerRow:
+      type: object
+      required: [containerNo, eqpSize]
+      properties:
+        containerNo: { type: string }
+        eqpSize: { type: string }
+        sealNo: { type: string }
+    ArrivalNoticeChargeLine:
+      type: object
+      required: [chargeCode, description, amount, currency]
+      properties:
+        chargeCode: { type: string }
+        description: { type: string }
+        amount: { type: number }
+        currency: { type: string }
+    ArrivalNoticeFreeTime:
+      type: object
+      required: [days, lastFreeDay]
+      properties:
+        days: { type: integer }
+        lastFreeDay: { type: string }
+    ArrivalNoticeListDTO:
+      type: object
+      required:
+        - anNo
+        - blNumber
+        - vessel
+        - voyage
+        - dischargePort
+        - terminal
+        - etaDate
+        - arrivalDate
+        - chargesDue
+        - currency
+        - printStatus
+      properties:
+        anNo: { type: string }
+        blNumber: { type: string }
+        vessel: { type: string }
+        voyage: { type: string }
+        dischargePort: { type: string }
+        terminal: { type: string }
+        etaDate: { type: string }
+        arrivalDate: { type: string }
+        lastFreeDay: { type: string }
+        chargesDue: { type: number }
+        currency: { type: string }
+        printStatus: { type: string, enum: [Y, N] }
+    ArrivalNoticeDTO:
+      allOf:
+        - $ref: '#/components/schemas/ArrivalNoticeListDTO'
+        - type: object
+          required: [notifyParty, consignee, containers, chargeLines]
+          properties:
+            notifyParty: { type: string }
+            consignee: { type: string }
+            manifestRef: { type: string }
+            igmNo: { type: string }
+            containers:
+              type: array
+              items:
+                $ref: '#/components/schemas/ArrivalNoticeContainerRow'
+            chargeLines:
+              type: array
+              items:
+                $ref: '#/components/schemas/ArrivalNoticeChargeLine'
+            freeTime:
+              $ref: '#/components/schemas/ArrivalNoticeFreeTime'
+            demurrageFrom: { type: string }
+    ArrivalNoticeListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArrivalNoticeListDTO'
+        error:
+          type: object
+          properties:
+            code: { type: string }
+            message: { type: string }
+    ArrivalNoticeDetailResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/ArrivalNoticeDTO'
+        error:
+          type: object
+          properties:
+            code: { type: string }
+            message: { type: string }

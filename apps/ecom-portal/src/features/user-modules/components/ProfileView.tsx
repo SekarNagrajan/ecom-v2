@@ -1,5 +1,5 @@
-// Modified by sekar nagarajan (2026-08-21)
-import { EnvironmentOutlined, MailOutlined, PhoneOutlined, SafetyCertificateOutlined, SaveOutlined, UserOutlined } from '@ant-design/icons';
+// Modified by Sekar Nagarajan (2026-08-24 16:05)
+import { AppIcon, Icons } from '../../../components/icons';
 import { AppButton, AppDrawer } from '@solverminds/shared-ui';
 import { useToast } from '@solverminds/shared-ui/hooks';
 import { Col, Form, Input, Row, Select, Space, Spin, Tag, theme, Typography } from 'antd';
@@ -66,7 +66,7 @@ export function ProfileView({ open = true, onClose }: ProfileViewProps) {
       <Row gutter={24}>
         <Col span={12}>
           <Form.Item label="Login Account ID" name="loginName">
-            <Input prefix={<UserOutlined style={{ color: token.colorTextQuaternary }} />} disabled />
+            <Input prefix={<AppIcon icon={Icons.user} size={16} />} disabled />
           </Form.Item>
         </Col>
         <Col span={12}>
@@ -92,12 +92,12 @@ export function ProfileView({ open = true, onClose }: ProfileViewProps) {
       <Row gutter={24}>
         <Col span={12}>
           <Form.Item label="Primary Email Address" name="email" rules={[{ required: true, type: 'email', message: 'Valid email is required' }]}>
-            <Input prefix={<MailOutlined style={{ color: token.colorTextQuaternary }} />} placeholder="Enter email address" />
+            <Input prefix={<AppIcon icon={Icons.mail} size={16} />} placeholder="Enter email address" />
           </Form.Item>
         </Col>
         <Col span={12}>
           <Form.Item label="Telephone Number" name="phoneNo" rules={[{ required: true, message: 'Phone number is required' }]}>
-            <Input prefix={<PhoneOutlined style={{ color: token.colorTextQuaternary }} />} placeholder="Enter contact phone" />
+            <Input prefix={<AppIcon icon={Icons.phone} size={16} />} placeholder="Enter contact phone" />
           </Form.Item>
         </Col>
       </Row>
@@ -105,7 +105,7 @@ export function ProfileView({ open = true, onClose }: ProfileViewProps) {
       <Row gutter={24}>
         <Col span={12}>
           <Form.Item label="Country" name="country">
-            <Input prefix={<EnvironmentOutlined style={{ color: token.colorTextQuaternary }} />} />
+            <Input prefix={<AppIcon icon={Icons.mapPin} size={16} />} />
           </Form.Item>
         </Col>
         <Col span={12}>
@@ -144,7 +144,7 @@ export function ProfileView({ open = true, onClose }: ProfileViewProps) {
 
       {!onClose && (
         <Form.Item style={{ marginTop: 12, textAlign: 'right' }}>
-          <AppButton type="primary" size="large" icon={<SaveOutlined />} loading={saving} htmlType="submit">
+          <AppButton type="primary" size="large" icon={<AppIcon icon={Icons.save} size={16} />} loading={saving} htmlType="submit">
             Save Profile Updates
           </AppButton>
         </Form.Item>
@@ -156,7 +156,7 @@ export function ProfileView({ open = true, onClose }: ProfileViewProps) {
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
       <div>
         <Space align="center">
-          <UserOutlined style={{ fontSize: 24, color: token.colorPrimary }} />
+          <AppIcon icon={Icons.user} size={24} />
           <Title level={4} style={{ margin: 0, fontWeight: 700 }}>
             Customer Profile Details
           </Title>
@@ -166,7 +166,7 @@ export function ProfileView({ open = true, onClose }: ProfileViewProps) {
         </Text>
       </div>
 
-      <Tag icon={<SafetyCertificateOutlined />} color="green" style={{ fontSize: 13, padding: '4px 12px' }}>
+      <Tag icon={<AppIcon icon={Icons.shieldCheck} size={16} />} color="green" style={{ fontSize: 13, padding: '4px 12px' }}>
         VERIFIED CUSTOMER ({profile?.customerCode || 'CUST-001'})
       </Tag>
     </div>
@@ -200,7 +200,7 @@ export function ProfileView({ open = true, onClose }: ProfileViewProps) {
         footer={
           <Space style={{ width: '100%', justifyContent: 'flex-end' }} size={8}>
             <AppButton danger onClick={onClose}>Cancel</AppButton>
-            <AppButton type="primary" icon={<SaveOutlined />} loading={saving} onClick={() => form.submit()}>
+            <AppButton type="primary" icon={<AppIcon icon={Icons.save} size={16} />} loading={saving} onClick={() => form.submit()}>
               Save Profile Updates
             </AppButton>
           </Space>

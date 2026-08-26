@@ -1,180 +1,268 @@
-// Created by Antigravity (2026-08-24 11:18)
-import { CloseCircleFilled, EditFilled, EyeFilled, FileTextOutlined, PlusSquareFilled, SyncOutlined, LockFilled } from '@ant-design/icons';
-import { ListView } from '@solverminds/shared-ui/data-view/list-view';
-import { useConfirm } from '@solverminds/shared-ui/hooks';
-import { useQuery } from '@tanstack/react-query';
-import { useNavigate } from '@tanstack/react-router';
-import { Card, message, Space, Tag, theme, Typography } from 'antd';
-import { buildActionsColumn } from '../../components/shared/build-actions-column';
-import { ListActionButton, ListActionsRow } from '../../components/shared/list-action-button';
-import { fetchSIList } from './api/si.api';
-import type { SIListDTO } from './types/si.types';
+// Modified by Sekar Nagarajan (2026-08-26 12:19)
+import { ListView } from "@solverminds/shared-ui/data-view/list-view";
+import { useConfirm, useToast } from "@solverminds/shared-ui/hooks";
+import { useNavigate } from "@tanstack/react-router";
+import type { RowDoubleClickedEvent } from "ag-grid-community";
+import { Card, Space, Tag } from "antd";
+import { useState } from "react";
 
-const { Title } = Typography;
+import { AppIcon, Icons } from "../../components/icons";
+import { buildActionsColumn } from "../../components/shared/build-actions-column";
+import { FeaturePageShell } from "../../components/shared/feature-page-shell";
+import {
+  ListActionButton,
+  ListActionsRow,
+} from "../../components/shared/list-action-button";
+import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
+import { MODULE_TITLES } from "../../constants/module-titles";
+import {
+  useCancelSiMutation,
+  useSiListQuery,
+} from "./api/si.queries";
+import { SiModuleStyles } from "./components/si-module-styles";
+import { SiViewDrawer } from "./components/view/SiViewDrawer";
+import type { SIListDTO } from "./types/si.types";
+import { getSiStatusTagColor } from "./utils/si-status";
 
 export function ShippingInstructionDashboardRoute() {
-  const { token } = theme.useToken();
   const navigate = useNavigate();
   const confirm = useConfirm();
+  const toast = useToast();
+  const [selectedRecord, setSelectedRecord] = useState<SIListDTO | null>(null);
 
-  const { data: siList = [], isLoading } = useQuery({
-    queryKey: ['siList'],
-    queryFn: async () => {
-      const res = await fetchSIList();
-      return res.data;
-    }
-  });
+  const { data: siList = [], isLoading } = useSiListQuery();
+  const cancelMutation = useCancelSiMutation();
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'Submitted': return 'success';
-      case 'Draft': return 'processing';
-      case 'Create SI': return 'cyan';
-      case 'Accepted': return 'green';
-      case 'Declined': return 'error';
-      default: return 'default';
+  const openWizard = (id: string) => {
+    navigate({ to: `/app/shipping-instruction/wizard/${id}` });
+  };
+
+  const handleView = (record: SIListDTO) => {
+    setSelectedRecord(record);
+  };
+
+  const handleRowDoubleClick = (
+    event: RowDoubleClickedEvent<SIListDTO>,
+  ) => {
+    const record = event.data;
+    if (!record) return;
+    if (record.status === "Create SI" || record.status === "Draft") {
+      openWizard(record.id);
+      return;
     }
+    handleView(record);
+  };
+
+  const handleCancel = (record: SIListDTO) => {
+    confirm.danger({
+      title: "Cancel Shipping Instruction",
+      content: "Are you sure you want to cancel this Shipping Instruction?",
+      okText: "Yes",
+      cancelText: "No",
+      onOk: async () => {
+        try {
+          await cancelMutation.mutateAsync(record.id);
+          toast.success(
+            `Shipping Instruction ${record.siNo || record.id} cancelled.`,
+          );
+        } catch {
+          toast.error("Failed to cancel Shipping Instruction.");
+        }
+      },
+    });
   };
 
   return (
-    <Space direction="vertical" size="large" style={{ width: '100%' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Space align="center" size={10}>
-          <FileTextOutlined style={{ fontSize: 24, color: token.colorPrimary }} />
-          <Title level={4} style={{ margin: 0, fontWeight: 700 }}>
-            SHIPPING INSTRUCTIONS
-          </Title>
-        </Space>
-      </div>
+    <FeaturePageShell>
+      <SiModuleStyles />
+      <Space direction="vertical" size="large" className="feature-page-stack">
+        <ModuleScreenHeader
+          icon={Icons.clipboardList}
+          title={MODULE_TITLES.shippingInstructions}
+        />
 
-      <Card style={{ padding: 0 }} bodyStyle={{ padding: 0 }}>
-        <div className="ag-theme-alpine" style={{ height: 500, width: '100%' }}>
-          <ListView
-            rowData={siList}
-            loading={isLoading}
-            defaultColDef={{ filter: true }}
-            columnDefs={[
-              buildActionsColumn<SIListDTO>({
-                field: 'id',
-                width: 150,
-                cellRenderer: (params: any) => {
-                  const data = params.data as SIListDTO;
-                  return (
-                    <ListActionsRow>
-                      {/* Locked */}
-                      {data.status === 'Accepted' && (
-                        <ListActionButton
-                          title="Locked"
-                          icon={<LockFilled />}
-                          danger
-                          onClick={(e) => { e.stopPropagation(); }}
-                        />
-                      )}
-
-                      {/* Create SI */}
-                      {data.status === 'Create SI' && (
-                        <ListActionButton
-                          title="Create SI"
-                          icon={<PlusSquareFilled />}
-                          color={token.colorSuccess}
-                          onClick={(e) => { e.stopPropagation(); navigate({ to: `/app/shipping-instruction/wizard/${data.id}` }); }}
-                        />
-                      )}
-
-                      {/* Draft (Edit) */}
-                      {data.status === 'Draft' && (
-                        <ListActionButton
-                          title="Edit Draft"
-                          icon={<EditFilled />}
-                          color={token.colorWarning}
-                          onClick={(e) => { e.stopPropagation(); navigate({ to: `/app/shipping-instruction/wizard/${data.id}` }); }}
-                        />
-                      )}
-
-                      {/* View */}
-                      {['Submitted', 'Accepted', 'Declined'].includes(data.status) && (
-                        <ListActionButton
-                          title="View"
-                          icon={<EyeFilled />}
-                          color={token.colorPrimary}
-                          onClick={(e) => { e.stopPropagation(); navigate({ to: `/app/shipping-instruction/${data.id}` }); }}
-                        />
-                      )}
-
-                      {/* Edit (Submitted) */}
-                      {data.status === 'Submitted' && (
-                        <ListActionButton
-                          title="Edit"
-                          icon={<EditFilled />}
-                          color={token.colorWarning}
-                          onClick={(e) => { e.stopPropagation(); navigate({ to: `/app/shipping-instruction/wizard/${data.id}` }); }}
-                        />
-                      )}
-
-                      {/* Resubmit */}
-                      {(data.status === 'Declined' || data.blStatus === 'Cancelled') && (
-                        <ListActionButton
-                          title="Resubmit"
-                          icon={<SyncOutlined />}
-                          color={token.colorSuccess}
-                          onClick={(e) => { 
-                            e.stopPropagation(); 
-                            if (data.status === 'Declined') {
-                              confirm.warning({
-                                title: 'Carrier Remarks',
-                                content: 'Please review and correct the reported discrepancies before resubmitting.',
-                                onOk: () => navigate({ to: `/app/shipping-instruction/wizard/${data.id}` })
-                              });
-                            } else {
-                              navigate({ to: `/app/shipping-instruction/wizard/${data.id}` });
+        <Card className="si-list-card feature-page-card" bordered={false}>
+          <div className="si-list-grid responsive-table-wrap custom-scroll ag-theme-alpine">
+            <ListView
+              rowData={siList}
+              loading={isLoading}
+              defaultColDef={{ filter: true }}
+              columnDefs={[
+                buildActionsColumn<SIListDTO>({
+                  field: "id",
+                  width: 150,
+                  cellRenderer: (params: { data?: SIListDTO }) => {
+                    const data = params.data;
+                    if (!data) return null;
+                    return (
+                      <ListActionsRow>
+                        {data.status === "Accepted" ? (
+                          <ListActionButton
+                            title="Locked"
+                            icon={
+                              <AppIcon
+                                icon={Icons.lock}
+                                size={16}
+                                tone="muted"
+                              />
                             }
-                          }}
-                        />
-                      )}
+                            danger
+                            onClick={(e) => {
+                              e.stopPropagation();
+                            }}
+                          />
+                        ) : null}
 
-                      {/* Cancel */}
-                      {data.status === 'Submitted' && (
-                        <ListActionButton
-                          title="Cancel"
-                          icon={<CloseCircleFilled />}
-                          danger
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            confirm.danger({
-                              title: 'Cancel Shipping Instruction',
-                              content: 'Are you sure you want to cancel this Shipping Instruction?',
-                              okText: 'Yes',
-                              cancelText: 'No',
-                              onOk: () => {
-                                message.success(`Shipping Instruction ${data.siNo || data.id} cancelled.`);
+                        {data.status === "Create SI" ? (
+                          <ListActionButton
+                            title="Create SI"
+                            icon={
+                              <AppIcon
+                                icon={Icons.plus}
+                                size={16}
+                                tone="create"
+                              />
+                            }
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openWizard(data.id);
+                            }}
+                          />
+                        ) : null}
+
+                        {data.status === "Draft" ? (
+                          <ListActionButton
+                            title="Edit Draft"
+                            icon={
+                              <AppIcon
+                                icon={Icons.edit}
+                                size={16}
+                                tone="edit"
+                              />
+                            }
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openWizard(data.id);
+                            }}
+                          />
+                        ) : null}
+
+                        {["Submitted", "Accepted", "Declined"].includes(
+                          data.status,
+                        ) ? (
+                          <ListActionButton
+                            title="View Details"
+                            icon={
+                              <AppIcon
+                                icon={Icons.eye}
+                                size={16}
+                                tone="view"
+                              />
+                            }
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleView(data);
+                            }}
+                          />
+                        ) : null}
+
+                        {data.status === "Submitted" ? (
+                          <ListActionButton
+                            title="Edit SI"
+                            icon={
+                              <AppIcon
+                                icon={Icons.edit}
+                                size={16}
+                                tone="edit"
+                              />
+                            }
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openWizard(data.id);
+                            }}
+                          />
+                        ) : null}
+
+                        {data.status === "Declined" ||
+                        data.blStatus === "Cancelled" ? (
+                          <ListActionButton
+                            title="Resubmit"
+                            icon={
+                              <AppIcon
+                                icon={Icons.refreshCw}
+                                size={16}
+                                tone="history"
+                              />
+                            }
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (data.status === "Declined") {
+                                confirm.warning({
+                                  title: "Carrier Remarks",
+                                  content:
+                                    "Please review and correct the reported discrepancies before resubmitting.",
+                                  onOk: () => openWizard(data.id),
+                                });
+                              } else {
+                                openWizard(data.id);
                               }
-                            });
-                          }}
-                        />
-                      )}
-                    </ListActionsRow>
-                  );
-                }
-              }),
-              {
-                field: 'status',
-                headerName: 'Status',
-                cellRenderer: (params: any) => (
-                  <Tag color={getStatusColor(params.value)}>{params.value}</Tag>
-                )
-              },
-              { field: 'bookingNo', headerName: 'Booking No' },
-              { field: 'blNo', headerName: 'B/L No' },
-              { field: 'siNo', headerName: 'SI No' },
-              { field: 'agencyRefNo', headerName: 'Agency Ref No' },
-              { field: 'origin', headerName: 'Origin' },
-              { field: 'delivery', headerName: 'Delivery' },
-              { field: 'createdDate', headerName: 'Created Date' },
-              { field: 'submittedDate', headerName: 'Submitted Date' }
-            ]}
+                            }}
+                          />
+                        ) : null}
+
+                        {data.status === "Submitted" ? (
+                          <ListActionButton
+                            title="Cancel SI"
+                            icon={
+                              <AppIcon
+                                icon={Icons.circleX}
+                                size={16}
+                                tone="reject"
+                              />
+                            }
+                            danger
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleCancel(data);
+                            }}
+                          />
+                        ) : null}
+                      </ListActionsRow>
+                    );
+                  },
+                }),
+                {
+                  field: "status",
+                  headerName: "Status",
+                  cellRenderer: (params: { value?: string }) => (
+                    <Tag color={getSiStatusTagColor(params.value ?? "")}>
+                      {params.value}
+                    </Tag>
+                  ),
+                },
+                { field: "bookingNo", headerName: "Booking No" },
+                { field: "blNo", headerName: "B/L No" },
+                { field: "siNo", headerName: "SI No" },
+                { field: "agencyRefNo", headerName: "Agency Ref No" },
+                { field: "origin", headerName: "Origin" },
+                { field: "delivery", headerName: "Delivery" },
+                { field: "createdDate", headerName: "Created Date" },
+                { field: "submittedDate", headerName: "Submitted Date" },
+              ]}
+              gridOptions={{
+                onRowDoubleClicked: handleRowDoubleClick,
+              }}
+            />
+          </div>
+        </Card>
+
+        {selectedRecord ? (
+          <SiViewDrawer
+            record={selectedRecord}
+            onClose={() => setSelectedRecord(null)}
           />
-        </div>
-      </Card>
-    </Space>
+        ) : null}
+      </Space>
+    </FeaturePageShell>
   );
 }

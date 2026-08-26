@@ -1,4 +1,4 @@
-// Modified by sekar nagarajan (2026-08-21)
+// Modified by Sekar Nagarajan (2026-08-25 12:45)
 import { http, HttpResponse } from 'msw';
 import type {
   BannerConfig,
@@ -21,10 +21,11 @@ let MOCK_MENU_CONFIGS: MenuConfig[] = [
   { refNo: 'BKG', labelValue: 'ecom.booking', category: 'P', classValue: 'icon-book', attrValue: '/app/booking', orderNo: 4, isEnabled: true },
   { refNo: 'SHI', labelValue: 'ecom.shippingins', category: 'P', classValue: 'icon-file-text', attrValue: '/app/shipping-instruction', orderNo: 5, isEnabled: true },
   { refNo: 'VGM', labelValue: 'ecom.vgm', category: 'P', classValue: 'icon-shield', attrValue: '/app/vgm', orderNo: 6, isEnabled: true },
-  { refNo: 'BOL', labelValue: 'ecom.billoflading', category: 'P', classValue: 'icon-file-check', attrValue: '/app/bill-of-lading', orderNo: 7, isEnabled: true },
+  { refNo: 'BOL', labelValue: 'ecom.billoflading', category: 'P', classValue: 'icon-file-check', attrValue: '/app/bl', orderNo: 7, isEnabled: true },
   { refNo: 'DEO', labelValue: 'ecom.deliveryorder', category: 'P', classValue: 'icon-truck', attrValue: '/app/delivery-order', orderNo: 8, isEnabled: true },
-  { refNo: 'CRO', labelValue: 'ecom.containerrelease', category: 'P', classValue: 'icon-box', attrValue: '/app/container-release', orderNo: 9, isEnabled: true },
+  { refNo: 'CRO', labelValue: 'ecom.containerrelease', category: 'P', classValue: 'icon-box', attrValue: '/app/cro', orderNo: 9, isEnabled: true },
   { refNo: 'ARN', labelValue: 'ecom.arrival', category: 'P', classValue: 'icon-bell', attrValue: '/app/arrival-notice', orderNo: 10, isEnabled: true },
+  { refNo: 'STMT', labelValue: 'ecom.statement', category: 'P', classValue: 'icon-contact', attrValue: '/app/customer-stmt', orderNo: 11, isEnabled: true },
 ];
 
 let MOCK_SPECIAL_PRIVILEGES: SpecialPrivilege[] = [

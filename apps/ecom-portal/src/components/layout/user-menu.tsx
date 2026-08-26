@@ -1,9 +1,10 @@
-import { UserOutlined } from '@ant-design/icons';
+// Modified by Sekar Nagarajan (2026-08-24 16:05)
 import { useAntdBreakpoint } from '@solverminds/shared-ui/hooks';
 import { theme } from 'antd';
 import React, { useState } from 'react';
 
 import { useThemePreferences } from '../../features/theme/providers/theme-preferences-provider';
+import { AppIcon, Icons } from '../icons';
 import { UserAvatar } from '../shared/user-avatar';
 import { getUserFullName, getUserInitials } from '../shared/user-name.utils';
 import { AccountPreferencesDrawer } from './account-preferences-drawer';
@@ -111,7 +112,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({
         >
           <UserAvatar
             initials={initials}
-            icon={<UserOutlined />}
+            icon={<AppIcon icon={Icons.user} size={18} />}
             style={{ cursor: 'pointer' }}
           />
           {showStatusDot ? (

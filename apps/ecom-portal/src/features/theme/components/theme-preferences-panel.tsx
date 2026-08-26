@@ -1,22 +1,26 @@
-// Modified by Sekar Nagarajan (2026-08-21 15:35) - Modern Appearance UI Redesign
-import {
-  CheckOutlined,
-  BlockOutlined,
-  ColumnWidthOutlined,
-  ExpandOutlined,
-} from '@ant-design/icons';
+// Modified by Sekar Nagarajan (2026-08-24 16:05)
+import type { LucideIcon } from 'lucide-react';
+import { AppIcon, Icons } from '../../../components/icons';
 import { AppButton, AppSelect } from '@solverminds/shared-ui';
 import { Alert, Card, Col, Flex, Row, Space, Typography, theme } from 'antd';
 
 import { FormSection } from '../../../components/form-section/form-section';
 import {
+  BASE_FONT_SIZE_OPTIONS,
   COLOR_OPTIONS,
   DENSITY_LEVEL_OPTIONS,
   FONT_FAMILY_OPTIONS,
+  INTER_FONT_STACK,
 } from '../constants';
 import { type useThemePreferencesController } from '../hooks/use-theme-preferences-controller';
 
 const { Text } = Typography;
+
+function getDensityIcon(value: string): LucideIcon {
+  if (value === 'compact') return Icons.rows;
+  if (value === 'comfortable') return Icons.expand;
+  return Icons.layoutList;
+}
 
 function PreferenceField({
   label,
@@ -86,12 +90,7 @@ export function ThemePreferencesPanel({
                 {DENSITY_LEVEL_OPTIONS.map((option) => {
                   const isSelected = currentConfig.density === option.value;
                   const labelDisplay = option.label === 'Normal' ? 'Standard' : option.label;
-                  const IconComp =
-                    option.value === 'compact'
-                      ? BlockOutlined
-                      : option.value === 'comfortable'
-                      ? ExpandOutlined
-                      : ColumnWidthOutlined;
+                  const densityIcon = getDensityIcon(option.value);
 
                   return (
                     <Col xs={8} key={option.value}>
@@ -116,9 +115,10 @@ export function ThemePreferencesPanel({
                         bodyStyle={{ padding: `${token.paddingXS}px` }}
                       >
                         <Flex vertical align="center" gap={token.marginXXS}>
-                          <IconComp
+                          <AppIcon
+                            icon={densityIcon}
+                            size={18}
                             style={{
-                              fontSize: 18,
                               color: isSelected ? token.colorPrimary : token.colorTextSecondary,
                             }}
                           />
@@ -149,18 +149,37 @@ export function ThemePreferencesPanel({
                   label: <span style={{ fontFamily: opt.value }}>{opt.label}</span>,
                 }))}
                 value={currentConfig.fontFamily}
-                onChange={(value) =>
+                onChange={(value) => {
                   controller.updatePreference(
                     'fontFamily',
                     value as typeof currentConfig.fontFamily
-                  )
+                  );
+                  if (value === INTER_FONT_STACK) {
+                    controller.updatePreference('baseFontSize', 28);
+                  }
+                }}
+              />
+            </PreferenceField>
+          </Col>
+
+          {/* Base Font Size */}
+          <Col xs={24} md={12}>
+            <PreferenceField label="Base Font Size">
+              <AppSelect
+                options={BASE_FONT_SIZE_OPTIONS.map((opt) => ({
+                  label: opt.label,
+                  value: opt.value,
+                }))}
+                value={currentConfig.baseFontSize}
+                onChange={(value) =>
+                  controller.updatePreference('baseFontSize', value as number)
                 }
               />
             </PreferenceField>
           </Col>
 
           {/* Primary Color Swatches */}
-          <Col xs={24} md={12}>
+          <Col xs={24}>
             <PreferenceField label="Primary Color">
               <Flex gap={token.marginXS} wrap="wrap" align="center" style={{ paddingTop: token.marginXXS }}>
                 {COLOR_OPTIONS.map((option) => {
@@ -170,6 +189,7 @@ export function ThemePreferencesPanel({
                     <button
                       key={option.value}
                       type="button"
+                      className="app-icon-inherit primary-surface"
                       aria-label={option.label}
                       title={option.label}
                       onClick={() =>
@@ -198,7 +218,7 @@ export function ThemePreferencesPanel({
                         transform: isSelected ? 'scale(1.1)' : 'scale(1)',
                       }}
                     >
-                      {isSelected ? <CheckOutlined style={{ fontSize: 13, fontWeight: 'bold' }} /> : null}
+                      {isSelected ? <AppIcon icon={Icons.check} size={13} /> : null}
                     </button>
                   );
                 })}

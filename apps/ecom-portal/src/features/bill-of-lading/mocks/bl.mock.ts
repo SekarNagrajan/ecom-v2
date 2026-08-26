@@ -1,0 +1,418 @@
+// Modified by Sekar Nagarajan (2026-08-26 13:04)
+import type {
+  BLChargesDTO,
+  BLDTO,
+  BLListDTO,
+  BLRowStatus,
+  MCNDTO,
+  MCNListDTO,
+} from "../types/bl.types";
+import { BL_STATUS_LABELS } from "../types/bl.types";
+
+function listRow(
+  partial: Omit<BLListDTO, 'statusLabel'> & { status: BLRowStatus }
+): BLListDTO {
+  return {
+    ...partial,
+    statusLabel: BL_STATUS_LABELS[partial.status],
+  };
+}
+
+const sharedContainers = [
+  {
+    id: 'CONT-BL-1',
+    containerNo: 'MSKU1234567',
+    eqpSize: '40HC',
+    carrierSeal: 'SEAL9988',
+    shipperSeal: 'SHP1122',
+    cargoLines: [
+      {
+        id: 'CARGO-BL-1',
+        marksAndNumbers: 'N/M',
+        description: 'ELECTRONICS AND SPARE PARTS',
+        commodityCode: 'ELEC',
+        hsCode: '8517.12.00',
+        packageCount: 120,
+        packageType: 'Cartons',
+        grossWeight: 4500,
+        volume: 24.5,
+      },
+    ],
+  },
+];
+
+const sharedParties = {
+  shipper: {
+    name: 'Global Logistics Corp',
+    address: '123 Export Ave, Suite 400',
+    city: 'Singapore',
+    country: 'SG',
+    printOnBl: true,
+  },
+  consignee: {
+    name: 'Tokyo Imports Ltd',
+    address: '456 Import St, Chiyoda',
+    city: 'Tokyo',
+    country: 'JP',
+    printOnBl: true,
+    toOrder: false,
+  },
+  notify: {
+    name: 'Customs Brokers Inc',
+    address: '789 Clearance Blvd',
+    city: 'Tokyo',
+    country: 'JP',
+    printOnBl: false,
+  },
+};
+
+export const mockBLListSeed: BLListDTO[] = [
+  listRow({
+    blNo: 'BL-998824',
+    mcnNo: 'MCN-2026-001',
+    bookingNo: 'BKG-778901',
+    siNo: 'SIN998285',
+    status: 'D',
+    agencyRefNo: 'AGY-4457',
+    origin: 'SGSIN - SINGAPORE',
+    loadPort: 'SGSIN - SINGAPORE',
+    dischargePort: 'JPTYO - TOKYO',
+    delivery: 'JPTYO - TOKYO',
+    confirmedDate: null,
+    createdDate: '2026-08-24T08:00:00Z',
+    printStatus: 'N',
+    appVersion: '2',
+    isLocked: false,
+    paymentEligible: true,
+    paymentCompleted: false,
+    payAmountUsd: 125,
+    fcnNo: 'FCN-001',
+  }),
+  listRow({
+    blNo: 'BL-998825',
+    mcnNo: null,
+    bookingNo: 'BKG-778902',
+    siNo: 'SIN998286',
+    status: 'S',
+    agencyRefNo: 'AGY-4458',
+    origin: 'USNYC - NEW YORK',
+    loadPort: 'USNYC - NEW YORK',
+    dischargePort: 'GBFEL - FELIXSTOWE',
+    delivery: 'GBFEL - FELIXSTOWE',
+    confirmedDate: null,
+    createdDate: '2026-08-21T10:00:00Z',
+    printStatus: 'N',
+    appVersion: '2',
+    isLocked: false,
+  }),
+  listRow({
+    blNo: 'BL-998822',
+    mcnNo: 'MCN-2026-002',
+    bookingNo: 'BKG-778899',
+    siNo: 'SIN998283',
+    status: 'C',
+    agencyRefNo: 'AGY-4455',
+    origin: 'USNYC - NEW YORK',
+    loadPort: 'USNYC - NEW YORK',
+    dischargePort: 'GBFEL - FELIXSTOWE',
+    delivery: 'GBFEL - FELIXSTOWE',
+    confirmedDate: '2026-08-23T14:00:00Z',
+    createdDate: '2026-08-20T14:30:00Z',
+    printStatus: 'Y',
+    appVersion: '2',
+    isLocked: false,
+  }),
+  listRow({
+    blNo: 'BL-998826',
+    mcnNo: null,
+    bookingNo: 'BKG-778903',
+    siNo: 'SIN998287',
+    status: 'I',
+    agencyRefNo: 'AGY-4459',
+    origin: 'CNSHA - SHANGHAI',
+    loadPort: 'CNSHA - SHANGHAI',
+    dischargePort: 'USLAX - LOS ANGELES',
+    delivery: 'USLAX - LOS ANGELES',
+    confirmedDate: '2026-08-19T10:00:00Z',
+    createdDate: '2026-08-18T14:30:00Z',
+    printStatus: 'Y',
+    appVersion: '2',
+    isLocked: false,
+    hasInsurance: true,
+    policyNo: 'POL-998826',
+  }),
+  listRow({
+    blNo: 'ESLSIN123456',
+    mcnNo: 'MCN-2026-003',
+    bookingNo: 'BKG-778904',
+    siNo: 'SIN998288',
+    status: 'C',
+    agencyRefNo: 'AGY-4460',
+    origin: 'SGSIN - SINGAPORE',
+    loadPort: 'SGSIN - SINGAPORE',
+    dischargePort: 'INNSA - NHAVA SHEVA',
+    delivery: 'INNSA - NHAVA SHEVA',
+    confirmedDate: '2026-08-22T08:00:00Z',
+    createdDate: '2026-08-22T08:00:00Z',
+    printStatus: 'Y',
+    appVersion: '2',
+    isLocked: false,
+  }),
+  listRow({
+    blNo: 'BL-V1-001',
+    mcnNo: null,
+    bookingNo: 'BKG-778905',
+    siNo: 'SIN998288',
+    status: 'D',
+    agencyRefNo: 'AGY-4461',
+    origin: 'AEJEA - JEBEL ALI',
+    loadPort: 'AEJEA - JEBEL ALI',
+    dischargePort: 'SGSIN - SINGAPORE',
+    delivery: 'SGSIN - SINGAPORE',
+    confirmedDate: null,
+    createdDate: '2026-08-23T09:00:00Z',
+    printStatus: 'N',
+    appVersion: '1',
+    isLocked: false,
+  }),
+  listRow({
+    blNo: 'BL-LOCKED-01',
+    mcnNo: null,
+    bookingNo: 'BKG-778906',
+    siNo: null,
+    status: 'D',
+    agencyRefNo: 'AGY-4462',
+    origin: 'SGSIN - SINGAPORE',
+    loadPort: 'SGSIN - SINGAPORE',
+    dischargePort: 'HKHKG - HONG KONG',
+    delivery: 'HKHKG - HONG KONG',
+    confirmedDate: null,
+    createdDate: '2026-08-22T11:00:00Z',
+    printStatus: 'N',
+    appVersion: '2',
+    isLocked: true,
+  }),
+  listRow({
+    blNo: 'BL-VOY-CLOSED',
+    mcnNo: null,
+    bookingNo: 'BKG-778907',
+    siNo: 'SIN998289',
+    status: 'C',
+    agencyRefNo: 'AGY-4463',
+    origin: 'INNSA - NHAVA SHEVA',
+    loadPort: 'INNSA - NHAVA SHEVA',
+    dischargePort: 'DEHAM - HAMBURG',
+    delivery: 'DEHAM - HAMBURG',
+    confirmedDate: '2026-08-20T12:00:00Z',
+    createdDate: '2026-08-19T08:00:00Z',
+    printStatus: 'N',
+    appVersion: '2',
+    isLocked: false,
+  }),
+  listRow({
+    blNo: 'BL-BATCH-01',
+    mcnNo: null,
+    bookingNo: 'BKG-779001',
+    siNo: 'SIN999001',
+    status: 'C',
+    agencyRefNo: 'AGY-4501',
+    origin: 'SGSIN - SINGAPORE',
+    loadPort: 'SGSIN - SINGAPORE',
+    dischargePort: 'JPTYO - TOKYO',
+    delivery: 'JPTYO - TOKYO',
+    confirmedDate: '2026-08-24T10:00:00Z',
+    createdDate: '2026-08-23T10:00:00Z',
+    printStatus: 'Y',
+    appVersion: '2',
+    isLocked: false,
+  }),
+  listRow({
+    blNo: 'BL-BATCH-02',
+    mcnNo: null,
+    bookingNo: 'BKG-779002',
+    siNo: 'SIN999002',
+    status: 'C',
+    agencyRefNo: 'AGY-4502',
+    origin: 'CNSHA - SHANGHAI',
+    loadPort: 'CNSHA - SHANGHAI',
+    dischargePort: 'USLAX - LOS ANGELES',
+    delivery: 'USLAX - LOS ANGELES',
+    confirmedDate: '2026-08-24T11:00:00Z',
+    createdDate: '2026-08-23T11:00:00Z',
+    printStatus: 'Y',
+    appVersion: '2',
+    isLocked: false,
+  }),
+  listRow({
+    blNo: 'BL-BATCH-03',
+    mcnNo: null,
+    bookingNo: 'BKG-779003',
+    siNo: 'SIN999003',
+    status: 'C',
+    agencyRefNo: 'AGY-4503',
+    origin: 'HKHKG - HONG KONG',
+    loadPort: 'HKHKG - HONG KONG',
+    dischargePort: 'SGSIN - SINGAPORE',
+    delivery: 'SGSIN - SINGAPORE',
+    confirmedDate: '2026-08-24T12:00:00Z',
+    createdDate: '2026-08-23T12:00:00Z',
+    printStatus: 'Y',
+    appVersion: '2',
+    isLocked: false,
+  }),
+];
+
+function buildDetailFromList(row: BLListDTO, overrides: Partial<BLDTO> = {}): BLDTO {
+  return {
+    id: row.blNo,
+    blNo: row.blNo,
+    siNo: row.siNo ?? '',
+    bookingNo: row.bookingNo,
+    status: row.status,
+    blType: 'Original',
+    releaseType: 'O',
+    freightOption: 'PREPAID',
+    appVersion: row.appVersion,
+    printCount: row.printStatus === 'Y' ? 1 : 0,
+    issuedAt: row.status === 'I' ? row.confirmedDate : null,
+    mcnNo: row.mcnNo,
+    agencyRefNo: row.agencyRefNo,
+    origin: row.origin,
+    loadPort: row.loadPort,
+    dischargePort: row.dischargePort,
+    delivery: row.delivery,
+    parties: { ...sharedParties },
+    containers: sharedContainers.map((c) => ({
+      ...c,
+      cargoLines: c.cargoLines.map((l) => ({ ...l })),
+    })),
+    ...overrides,
+  };
+}
+
+export const mockBLDetailsSeed: Record<string, BLDTO> = {
+  'BL-998824': buildDetailFromList(mockBLListSeed[0], { printCount: 0 }),
+  'BL-998822': buildDetailFromList(mockBLListSeed[2], { printCount: 1 }),
+  'BL-998826': buildDetailFromList(mockBLListSeed[3], {
+    blType: 'Seaway',
+    printCount: 1,
+    issuedAt: '2026-08-19T12:00:00Z',
+    parties: {
+      ...sharedParties,
+      consignee: { ...sharedParties.consignee, toOrder: true },
+    },
+  }),
+};
+
+export function getMockBLDetail(blNo: string): BLDTO | undefined {
+  if (mockBLDetailsSeed[blNo]) {
+    return structuredClone(mockBLDetailsSeed[blNo]);
+  }
+  const row = mockBLListSeed.find((r) => r.blNo === blNo);
+  if (!row) return undefined;
+  return buildDetailFromList(row);
+}
+
+export const mockBLChargesSeed: Record<string, BLChargesDTO> = {
+  'BL-998824': {
+    blNo: 'BL-998824',
+    lines: [
+      {
+        chargeCode: 'OFR',
+        description: 'Ocean Freight',
+        amount: 850,
+        currency: 'USD',
+        prepaidCollect: 'PREPAID',
+      },
+      {
+        chargeCode: 'THC',
+        description: 'Terminal Handling',
+        amount: 120,
+        currency: 'USD',
+        prepaidCollect: 'COLLECT',
+      },
+    ],
+    totals: [{ currency: 'USD', prepaid: 850, collect: 120, grandTotal: 970 }],
+  },
+  'BL-998822': {
+    blNo: 'BL-998822',
+    lines: [
+      {
+        chargeCode: 'OFR',
+        description: 'Ocean Freight',
+        amount: 1200,
+        currency: 'USD',
+        prepaidCollect: 'PREPAID',
+      },
+    ],
+    totals: [{ currency: 'USD', prepaid: 1200, collect: 0, grandTotal: 1200 }],
+  },
+};
+
+export const mockMCNListSeed: MCNListDTO[] = [
+  {
+    mcnId: 'MCN-2026-001',
+    blNo: 'BL-998824',
+    bookingNo: 'BKG-778901',
+    status: 'Draft',
+    origin: 'SGSIN - SINGAPORE',
+    delivery: 'JPTYO - TOKYO',
+  },
+  {
+    mcnId: 'MCN-2026-002',
+    blNo: 'BL-998822',
+    bookingNo: 'BKG-778899',
+    status: 'Confirmed',
+    origin: 'USNYC - NEW YORK',
+    delivery: 'GBFEL - FELIXSTOWE',
+  },
+  {
+    mcnId: 'MCN-2026-003',
+    blNo: 'ESLSIN123456',
+    bookingNo: 'BKG-778904',
+    status: 'Submitted',
+    origin: 'SGSIN - SINGAPORE',
+    delivery: 'INNSA - NHAVA SHEVA',
+  },
+];
+
+export const mockMCNDetailsSeed: Record<string, MCNDTO> = {
+  'MCN-2026-001': {
+    mcnId: 'MCN-2026-001',
+    blNo: 'BL-998824',
+    bookingNo: 'BKG-778901',
+    status: 'Draft',
+    vessel: 'MSC ELARA',
+    voyage: 'EL042N',
+    loadPort: 'SGSIN - SINGAPORE',
+    dischargePort: 'JPTYO - TOKYO',
+    containerCount: 1,
+    remarks: 'Draft manifest for review',
+  },
+  'MCN-2026-002': {
+    mcnId: 'MCN-2026-002',
+    blNo: 'BL-998822',
+    bookingNo: 'BKG-778899',
+    status: 'Confirmed',
+    vessel: 'EVER GIVEN',
+    voyage: 'EV001E',
+    loadPort: 'USNYC - NEW YORK',
+    dischargePort: 'GBFEL - FELIXSTOWE',
+    containerCount: 2,
+  },
+  'MCN-2026-003': {
+    mcnId: 'MCN-2026-003',
+    blNo: 'ESLSIN123456',
+    bookingNo: 'BKG-778904',
+    status: 'Submitted',
+    vessel: 'APL SENTOSA',
+    voyage: 'AS088W',
+    loadPort: 'SGSIN - SINGAPORE',
+    dischargePort: 'INNSA - NHAVA SHEVA',
+    containerCount: 3,
+    remarks: 'Awaiting carrier confirmation',
+  },
+};
+
+export const VOYAGE_CLOSED_BL_NOS = new Set(['BL-VOY-CLOSED']);
+export const REPRINT_BLOCKED_BL_NOS = new Set(['BL-998826']);

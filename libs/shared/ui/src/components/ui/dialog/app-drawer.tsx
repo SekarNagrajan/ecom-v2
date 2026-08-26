@@ -1,3 +1,4 @@
+// Modified by Sekar Nagarajan (2026-08-25 15:05)
 import { Drawer, theme } from 'antd';
 import { useEffect } from 'react';
 
@@ -189,7 +190,7 @@ export function AppDrawer({
         placement={placement}
         {...props}
         closable={resolvedClosable}
-        width={drawerWidth}
+        size={drawerWidth}
         styles={drawerStyles}
       >
         {children}

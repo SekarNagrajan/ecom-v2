@@ -1,8 +1,12 @@
+// Modified by Sekar Nagarajan (2026-08-24 15:42)
 import { type AppCustomConfig } from '@solverminds/shared-ui/providers';
 import { type ColorPickerProps } from 'antd';
 
 import { BE_COLOR_MAP } from './utils/config-mapper';
 import { getDensityThemeFields } from './utils/density-theme-fields';
+
+export const INTER_FONT_STACK =
+  "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" as const;
 
 export const THEME_MODE_OPTIONS = [
   { label: 'Light', value: 'light' },
@@ -17,10 +21,18 @@ export const DENSITY_LEVEL_OPTIONS = [
 ] as const;
 
 export const FONT_FAMILY_OPTIONS = [
-  { label: 'Inter', value: 'Inter, sans-serif' },
+  { label: 'Inter (28px)', value: INTER_FONT_STACK },
   { label: 'Roboto', value: "'Roboto Flex', sans-serif" },
   { label: 'Open Sans', value: "'Open Sans', sans-serif" },
   { label: 'Poppins', value: "'Poppins', sans-serif" },
+] as const;
+
+export const BASE_FONT_SIZE_OPTIONS = [
+  { label: '12px', value: 12 },
+  { label: '14px', value: 14 },
+  { label: '16px', value: 16 },
+  { label: '18px', value: 18 },
+  { label: '28px', value: 28 },
 ] as const;
 
 export const DATE_FORMAT_OPTIONS = [
@@ -56,6 +68,7 @@ export const CURRENCY_FORMAT_OPTIONS = [
 ] as const;
 
 export const COLOR_OPTIONS = [
+  { label: 'Maritime Blue', value: BE_COLOR_MAP.MARITIME },
   { label: 'Ocean Blue', value: BE_COLOR_MAP.BLUE },
   { label: 'Sunlit Gold', value: BE_COLOR_MAP.GOLD },
   { label: 'Forest Green', value: BE_COLOR_MAP.GREEN },
@@ -107,11 +120,11 @@ export const DEFAULT_APP_CONFIG: AppCustomConfig = {
 
   // Typography
   fontFamily: FONT_FAMILY_OPTIONS[0].value,
-  baseFontSize: DEFAULT_DENSITY_FIELDS.baseFontSize,
+  baseFontSize: 28,
   lineHeight: DEFAULT_DENSITY_FIELDS.lineHeight,
 
   // Colors
-  primaryColor: BE_COLOR_MAP.BLUE,
+  primaryColor: BE_COLOR_MAP.MARITIME,
   successColor: BE_COLOR_MAP.GREEN,
   warningColor: BE_COLOR_MAP.GOLD,
   errorColor: BE_COLOR_MAP.RED,

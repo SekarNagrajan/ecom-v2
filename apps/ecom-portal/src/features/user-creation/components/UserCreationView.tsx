@@ -1,131 +1,196 @@
-// Modified by sekar nagarajan (2026-08-21)
-import { KeyOutlined, MailOutlined, PhoneOutlined, SolutionOutlined, TeamOutlined, UserAddOutlined, UserOutlined } from '@ant-design/icons';
-import { AppButton, AppModal } from '@solverminds/shared-ui';
-import { DataView, DataViewColumn } from '@solverminds/shared-ui/data-view';
-import { useToast } from '@solverminds/shared-ui/hooks';
-import { Alert, Card, Checkbox, Col, Input, Progress, Row, Space, Switch, Tag, theme, Typography } from 'antd';
-import { useState } from 'react';
-import { useUserCreationController } from '../hooks/use-user-creation-controller';
-import type { SubUser } from '../types/user-creation.types';
+// Modified by Sekar Nagarajan (2026-08-24 19:09)
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AppButton, AppDrawer, FormInput } from "@solverminds/shared-ui";
+import { DataView, DataViewColumn } from "@solverminds/shared-ui/data-view";
+import { useToast } from "@solverminds/shared-ui/hooks";
+import {
+  Alert,
+  Card,
+  Checkbox,
+  Col,
+  Input,
+  Progress,
+  Row,
+  Space,
+  Switch,
+  Tag,
+  Tooltip,
+  Typography,
+} from "antd";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+
+import { AppIcon, Icons } from "../../../components/icons";
+import { FeaturePageShell } from "../../../components/shared/feature-page-shell";
+import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
+import { MODULE_TITLES } from "../../../constants/module-titles";
+import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
+import { useUserCreationController } from "../hooks/use-user-creation-controller";
+import {
+  createSubUserSchema,
+  type CreateSubUserPayload,
+  type SubUser,
+} from "../types/user-creation.types";
+import { UserCreationModuleStyles } from "./user-creation-module-styles";
 
 const { Title, Text } = Typography;
 
+const MODULE_OPTIONS = [
+  { label: "Schedules (SCH)", value: "SCH" },
+  { label: "Tracking (TRK)", value: "TRK" },
+  { label: "e-Booking (BKG)", value: "BKG" },
+  { label: "Shipping Instruction (SI)", value: "SI" },
+  { label: "VGM Filing", value: "VGM" },
+  { label: "Bill of Lading (BL)", value: "BL" },
+];
+
+const CREATE_DEFAULTS: CreateSubUserPayload = {
+  loginName: "",
+  password: "",
+  firstName: "",
+  lastName: "",
+  email: "",
+  companyName: "Apex Shipping Logistics",
+  custCountryCode: "+1",
+  custPhoneCode: "212",
+  custPhoneNo: "",
+  mobileCode: "+1",
+  defLanguage: "en",
+  prefLanguage: "en",
+  allowedModules: ["SCH", "TRK", "BKG", "SI"],
+};
+
+function reqLabel(label: string) {
+  return (
+    <span className="form-field-label">
+      {label} <Text type="danger">*</Text>
+    </span>
+  );
+}
+
 export function UserCreationView() {
-  const { token } = theme.useToken();
   const toast = useToast();
   const controller = useUserCreationController();
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
+  const createForm = useForm({
+    resolver: zodResolver(createSubUserSchema),
+    defaultValues: CREATE_DEFAULTS,
+  });
 
-  // Form fields
-  const [loginName, setLoginName] = useState('');
-  const [password, setPassword] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [companyName, setCompanyName] = useState('Apex Shipping Logistics');
-  const [custPhoneNo, setCustPhoneNo] = useState('');
-  const [selectedModules, setSelectedModules] = useState<string[]>(['SCH', 'TRK', 'BKG', 'SI']);
+  const openCreateDrawer = () => {
+    createForm.reset(CREATE_DEFAULTS);
+    setIsDrawerOpen(true);
+  };
 
-  const handleCreate = async () => {
-    if (!loginName || !password || !firstName || !lastName || !email || !custPhoneNo) {
-      toast.error('Please fill in all mandatory sub-user details');
-      return;
-    }
+  const closeCreateDrawer = () => {
+    setIsDrawerOpen(false);
+    createForm.reset(CREATE_DEFAULTS);
+  };
 
+  const handleCreate = createForm.handleSubmit(async (values) => {
     if (controller.limitInfo.limitReached) {
-      toast.error('Creation of user profile limit has been reached');
+      toast.error("Creation of user profile limit has been reached");
       return;
     }
 
     try {
-      await controller.createSubUser({
-        loginName,
-        password,
-        firstName,
-        lastName,
-        email,
-        companyName,
-        custPhoneNo,
-        custCountryCode: '+1',
-        custPhoneCode: '212',
-        mobileCode: '+1',
-        defLanguage: 'en',
-        prefLanguage: 'en',
-        allowedModules: selectedModules,
-      });
-      toast.success('Sub-user profile created successfully');
-      setIsModalOpen(false);
-      // Reset form
-      setLoginName('');
-      setPassword('');
-      setFirstName('');
-      setLastName('');
-      setEmail('');
-      setCustPhoneNo('');
+      await controller.createSubUser(values as CreateSubUserPayload);
+      toast.success("Sub-user profile created successfully");
+      closeCreateDrawer();
     } catch (err: unknown) {
-      const errorMsg = err instanceof Error ? err.message : 'Failed to create sub-user profile';
+      const errorMsg =
+        err instanceof Error
+          ? err.message
+          : "Failed to create sub-user profile";
       toast.error(errorMsg);
     }
-  };
+  });
 
   const filteredUsers = controller.subUsers.filter(
     (u) =>
       u.loginName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       u.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       u.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      u.email.toLowerCase().includes(searchTerm.toLowerCase())
+      u.email.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const columnDefs: DataViewColumn<SubUser>[] = [
     {
-      headerName: 'Login Username',
-      field: 'loginName',
+      headerName: "Actions",
+      field: "id" as keyof SubUser,
+      width: 110,
+      pinned: "left",
+      sortable: false,
+      cellRenderer: (params: { data?: SubUser }) => {
+        const record = params.data;
+        if (!record) return null;
+        return (
+          <Tooltip
+            title={record.isActive ? "Disable account" : "Enable account"}
+          >
+            <Switch
+              size="small"
+              checked={record.isActive}
+              onChange={(checked) =>
+                controller.toggleSubUserStatus({
+                  id: record.id,
+                  active: checked,
+                })
+              }
+            />
+          </Tooltip>
+        );
+      },
+    },
+    {
+      headerName: "Login Username",
+      field: "loginName",
       sortable: true,
       cellRenderer: (params: { data?: SubUser }) => {
         const record = params.data;
         if (!record) return null;
         return (
           <Space>
-            <UserOutlined style={{ color: token.colorPrimary }} />
+            <AppIcon icon={Icons.user} size={16} />
             <strong>{record.loginName}</strong>
           </Space>
         );
       },
     },
     {
-      headerName: 'Full Name',
-      field: 'firstName',
+      headerName: "Full Name",
+      field: "firstName",
       sortable: true,
       valueGetter: (params: { data?: SubUser }) =>
-        params.data ? `${params.data.firstName} ${params.data.lastName}` : '',
+        params.data ? `${params.data.firstName} ${params.data.lastName}` : "",
     },
     {
-      headerName: 'Email Address',
-      field: 'email',
+      headerName: "Email Address",
+      field: "email",
       sortable: true,
     },
     {
-      headerName: 'Company Name',
-      field: 'companyName',
+      headerName: "Company Name",
+      field: "companyName",
       sortable: true,
     },
     {
-      headerName: 'Contact Phone',
-      field: 'custPhoneNo',
+      headerName: "Contact Phone",
+      field: "custPhoneNo",
       sortable: true,
     },
     {
-      headerName: 'Allowed Capabilities',
-      field: 'allowedModules',
+      headerName: "Allowed Capabilities",
+      field: "allowedModules",
       sortable: false,
       cellRenderer: (params: { data?: SubUser }) => {
         const mods = params.data?.allowedModules || [];
         return (
           <Space wrap size={[2, 4]}>
             {mods.map((m) => (
-              <Tag color="blue" key={m}>
+              <Tag className="usc-module-tag" color="blue" key={m}>
                 {m}
               </Tag>
             ))}
@@ -134,212 +199,263 @@ export function UserCreationView() {
       },
     },
     {
-      headerName: 'Account Status',
-      field: 'isActive',
+      headerName: "Account Status",
+      field: "isActive",
       sortable: true,
       cellRenderer: (params: { data?: SubUser }) => {
         const record = params.data;
         if (!record) return null;
         return (
-          <Space>
-            <Switch
-              checked={record.isActive}
-              onChange={(checked) => controller.toggleSubUserStatus({ id: record.id, active: checked })}
-            />
-            <Tag color={record.isActive ? 'green' : 'red'}>{record.isActive ? 'ACTIVE' : 'DISABLED'}</Tag>
-          </Space>
+          <Tag
+            className="usc-status-tag"
+            color={record.isActive ? "success" : "error"}
+          >
+            {record.isActive ? "Active" : "Disabled"}
+          </Tag>
         );
       },
     },
   ];
 
   const percentUsed = Math.round(
-    (controller.limitInfo.currentlyAllocated / controller.limitInfo.allowedUserLimit) * 100
+    (controller.limitInfo.currentlyAllocated /
+      controller.limitInfo.allowedUserLimit) *
+      100,
+  );
+
+  const drawerActions = (
+    <Space size="middle" className="usc-drawer-actions">
+      <AppButton onClick={closeCreateDrawer} disabled={controller.isCreating}>
+        Cancel
+      </AppButton>
+      <AppButton
+        type="primary"
+        icon={<AppIcon icon={Icons.userPlus} size={16} />}
+        loading={controller.isCreating}
+        onClick={handleCreate}
+      >
+        Submit
+      </AppButton>
+    </Space>
   );
 
   return (
-    <Card style={{ borderRadius: 16, boxShadow: '0 8px 24px rgba(0,0,0,0.05)', border: 'none' }}>
-      {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-        <div>
-          <Space align="center">
-            <TeamOutlined style={{ fontSize: 22, color: token.colorPrimary }} />
-            <Title level={4} style={{ margin: 0, fontWeight: 700 }}>
-              Sub-User Creation & Account Management (USC)
-            </Title>
-          </Space>
-          <Text type="secondary" style={{ display: 'block', marginTop: 4 }}>
-            Create and manage sub-user profile credentials for company employees, agents, and delegates
-          </Text>
+    <FeaturePageShell>
+      <UserCreationModuleStyles />
+      <Card className="feature-page-card" bordered={false}>
+        <div className="usc-page">
+          <ModuleScreenHeader
+            icon={Icons.users}
+            title={MODULE_TITLES.userCreation}
+            subtitle="Create and manage sub-user credentials for company employees, agents, and delegates."
+            extra={
+              <AppButton
+                type="primary"
+                size="large"
+                icon={<AppIcon icon={Icons.userPlus} size={16} />}
+                disabled={controller.limitInfo.limitReached}
+                onClick={openCreateDrawer}
+              >
+                Create New Sub-User
+              </AppButton>
+            }
+          />
+
+          <Card className="usc-limit-card" bordered={false}>
+            <Row gutter={[16, 16]} align="middle">
+              <Col {...RESPONSIVE_COL.third}>
+                <span className="usc-limit-card__label">
+                  Customer user profile limit
+                </span>
+                <Title level={3} className="usc-limit-card__count">
+                  {controller.limitInfo.currentlyAllocated} /{" "}
+                  {controller.limitInfo.allowedUserLimit} Users
+                </Title>
+              </Col>
+              <Col {...RESPONSIVE_COL.twoThirds} lg={10}>
+                <span className="usc-limit-card__label">
+                  Account allocation ({controller.limitInfo.remainingSlots}{" "}
+                  slots remaining)
+                </span>
+                <Progress
+                  percent={percentUsed}
+                  status={
+                    controller.limitInfo.limitReached ? "exception" : "active"
+                  }
+                />
+              </Col>
+              <Col xs={24} lg={6}>
+                <div className="usc-limit-card__status">
+                  <Tag
+                    className="usc-status-tag"
+                    color={
+                      controller.limitInfo.limitReached ? "error" : "success"
+                    }
+                  >
+                    {controller.limitInfo.limitReached
+                      ? "Limit Reached"
+                      : "Slots Available"}
+                  </Tag>
+                </div>
+              </Col>
+            </Row>
+          </Card>
+
+          {controller.limitInfo.limitReached ? (
+            <Alert
+              className="usc-alert"
+              message="Creation Limit Exceeded"
+              description="Creation of user profile limit has been reached. Please contact system admin to expand your allowed user quota."
+              type="warning"
+              showIcon
+            />
+          ) : null}
+
+          <div className="usc-search-panel">
+            <Input
+              size="large"
+              allowClear
+              prefix={<AppIcon icon={Icons.search} size={16} />}
+              placeholder="Search sub-users by login name, name, or email..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+
+          <div className="usc-grid-wrap responsive-table-wrap">
+            <DataView
+              columnDefs={columnDefs}
+              rowData={filteredUsers}
+              loading={controller.isLoadingUsers}
+              allowedViewModes={["list"]}
+              listOptions={{
+                gridOptions: {
+                  domLayout: "autoHeight",
+                },
+              }}
+            />
+          </div>
         </div>
 
-        <AppButton
-          type="primary"
-          size="large"
-          icon={<UserAddOutlined />}
-          disabled={controller.limitInfo.limitReached}
-          onClick={() => setIsModalOpen(true)}
+        <AppDrawer
+          open={isDrawerOpen}
+          onClose={closeCreateDrawer}
+          title="Create Sub-User Account"
+          placement="right"
+          dialogSize="md"
+          destroyOnClose
+          maskClosable={!controller.isCreating}
+          keyboard={!controller.isCreating}
+          footer={drawerActions}
         >
-          Create New Sub-User
-        </AppButton>
-      </div>
+          <div className="usc-drawer-body custom-scroll">
+            <div className="usc-form-section">
+              <Title level={5} className="usc-form-section__title">
+                Credentials
+              </Title>
+              <Row gutter={[16, 16]}>
+                <Col {...RESPONSIVE_COL.formHalf}>
+                  <FormInput
+                    control={createForm.control}
+                    name="loginName"
+                    label={reqLabel("Login Username")}
+                    size="large"
+                    prefix={<AppIcon icon={Icons.user} size={16} />}
+                    placeholder="e.g. SUB_EMP_01"
+                  />
+                </Col>
+                <Col {...RESPONSIVE_COL.formHalf}>
+                  <FormInput
+                    control={createForm.control}
+                    name="password"
+                    type="password"
+                    label={reqLabel("Initial Password")}
+                    size="large"
+                    prefix={<AppIcon icon={Icons.key} size={16} />}
+                    placeholder="Enter password"
+                  />
+                </Col>
+              </Row>
+            </div>
 
-      {/* User Limit Allocation Bar */}
-      <Card type="inner" style={{ marginBottom: 20, borderRadius: 12, background: token.colorFillAlter }}>
-        <Row gutter={24} align="middle">
-          <Col span={8}>
-            <Text type="secondary" style={{ fontSize: 12 }}>
-              CUSTOMER USER PROFILE LIMIT:
-            </Text>
-            <Title level={3} style={{ margin: 0, color: token.colorPrimary }}>
-              {controller.limitInfo.currentlyAllocated} / {controller.limitInfo.allowedUserLimit} Users
-            </Title>
-          </Col>
-          <Col span={10}>
-            <Text type="secondary" style={{ fontSize: 12, display: 'block', marginBottom: 4 }}>
-              Account Allocation Status ({controller.limitInfo.remainingSlots} slots remaining):
-            </Text>
-            <Progress
-              percent={percentUsed}
-              status={controller.limitInfo.limitReached ? 'exception' : 'active'}
-              strokeColor={token.colorPrimary}
-            />
-          </Col>
-          <Col span={6} style={{ textAlign: 'right' }}>
-            <Tag
-              color={controller.limitInfo.limitReached ? 'red' : 'green'}
-              style={{ fontSize: 13, padding: '4px 12px' }}
-            >
-              {controller.limitInfo.limitReached ? 'LIMIT REACHED' : 'SLOTS AVAILABLE'}
-            </Tag>
-          </Col>
-        </Row>
+            <div className="usc-form-section">
+              <Title level={5} className="usc-form-section__title">
+                Profile
+              </Title>
+              <Row gutter={[16, 16]}>
+                <Col {...RESPONSIVE_COL.formHalf}>
+                  <FormInput
+                    control={createForm.control}
+                    name="firstName"
+                    label={reqLabel("First Name")}
+                    size="large"
+                    placeholder="John"
+                  />
+                </Col>
+                <Col {...RESPONSIVE_COL.formHalf}>
+                  <FormInput
+                    control={createForm.control}
+                    name="lastName"
+                    label={reqLabel("Last Name")}
+                    size="large"
+                    placeholder="Doe"
+                  />
+                </Col>
+                <Col {...RESPONSIVE_COL.formHalf}>
+                  <FormInput
+                    control={createForm.control}
+                    name="email"
+                    type="email"
+                    label={reqLabel("Email Address")}
+                    size="large"
+                    prefix={<AppIcon icon={Icons.mail} size={16} />}
+                    placeholder="john.doe@company.com"
+                  />
+                </Col>
+                <Col {...RESPONSIVE_COL.formHalf}>
+                  <FormInput
+                    control={createForm.control}
+                    name="custPhoneNo"
+                    label={reqLabel("Contact Phone")}
+                    size="large"
+                    prefix={<AppIcon icon={Icons.phone} size={16} />}
+                    placeholder="+1 212 555-0199"
+                  />
+                </Col>
+                <Col {...RESPONSIVE_COL.full}>
+                  <FormInput
+                    control={createForm.control}
+                    name="companyName"
+                    label={
+                      <span className="form-field-label">Company Profile</span>
+                    }
+                    size="large"
+                  />
+                </Col>
+              </Row>
+            </div>
+
+            <div className="usc-form-section">
+              <Title level={5} className="usc-form-section__title">
+                Module Access Entitlements
+              </Title>
+              <div className="usc-modules-group">
+                <Controller
+                  control={createForm.control}
+                  name="allowedModules"
+                  render={({ field }) => (
+                    <Checkbox.Group
+                      options={MODULE_OPTIONS}
+                      value={field.value}
+                      onChange={(vals) => field.onChange(vals as string[])}
+                    />
+                  )}
+                />
+              </div>
+            </div>
+          </div>
+        </AppDrawer>
       </Card>
-
-      {controller.limitInfo.limitReached && (
-        <Alert
-          message="Creation Limit Exceeded"
-          description="Creation of user profile limit has been reached. Please contact system admin to expand your allowed user quota."
-          type="warning"
-          showIcon
-          style={{ marginBottom: 20, borderRadius: 8 }}
-        />
-      )}
-
-      {/* Filter Input */}
-      <div style={{ marginBottom: 16 }}>
-        <Input
-          size="large"
-          prefix={<SolutionOutlined style={{ color: token.colorTextQuaternary }} />}
-          placeholder="Search sub-users by login name, name, or email..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          style={{ width: 360 }}
-        />
-      </div>
-
-      {/* AG Grid DataView Surface */}
-      <DataView
-        style={{ height: 480 }}
-        columnDefs={columnDefs}
-        rowData={filteredUsers}
-        loading={controller.isLoadingUsers}
-        allowedViewModes={['list']}
-        listOptions={{
-          gridOptions: {
-            domLayout: 'autoHeight',
-          },
-        }}
-      />
-
-      {/* Create Sub-User Modal */}
-      <AppModal
-        open={isModalOpen}
-        title="Create Sub-User Account Credentials"
-        onCancel={() => setIsModalOpen(false)}
-        onOk={handleCreate}
-        confirmLoading={controller.isCreating}
-      >
-        <Space direction="vertical" style={{ width: '100%', marginTop: 16 }} size="middle">
-          <Row gutter={16}>
-            <Col span={12}>
-              <Text style={{ fontWeight: 600, display: 'block', marginBottom: 6 }}>Login Username *</Text>
-              <Input
-                size="large"
-                prefix={<UserOutlined />}
-                placeholder="e.g. SUB_EMP_01"
-                value={loginName}
-                onChange={(e) => setLoginName(e.target.value)}
-              />
-            </Col>
-            <Col span={12}>
-              <Text style={{ fontWeight: 600, display: 'block', marginBottom: 6 }}>Initial Password *</Text>
-              <Input.Password
-                size="large"
-                prefix={<KeyOutlined />}
-                placeholder="Enter password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </Col>
-          </Row>
-
-          <Row gutter={16}>
-            <Col span={12}>
-              <Text style={{ fontWeight: 600, display: 'block', marginBottom: 6 }}>First Name *</Text>
-              <Input size="large" value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="John" />
-            </Col>
-            <Col span={12}>
-              <Text style={{ fontWeight: 600, display: 'block', marginBottom: 6 }}>Last Name *</Text>
-              <Input size="large" value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Doe" />
-            </Col>
-          </Row>
-
-          <Row gutter={16}>
-            <Col span={12}>
-              <Text style={{ fontWeight: 600, display: 'block', marginBottom: 6 }}>Email Address *</Text>
-              <Input
-                size="large"
-                prefix={<MailOutlined />}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="john.doe@company.com"
-              />
-            </Col>
-            <Col span={12}>
-              <Text style={{ fontWeight: 600, display: 'block', marginBottom: 6 }}>Contact Phone *</Text>
-              <Input
-                size="large"
-                prefix={<PhoneOutlined />}
-                value={custPhoneNo}
-                onChange={(e) => setCustPhoneNo(e.target.value)}
-                placeholder="+1 212 555-0199"
-              />
-            </Col>
-          </Row>
-
-          <div>
-            <Text style={{ fontWeight: 600, display: 'block', marginBottom: 6 }}>Company Profile</Text>
-            <Input size="large" value={companyName} onChange={(e) => setCompanyName(e.target.value)} />
-          </div>
-
-          <div>
-            <Text style={{ fontWeight: 600, display: 'block', marginBottom: 8 }}>Module Access Entitlements</Text>
-            <Checkbox.Group
-              options={[
-                { label: 'Schedules (SCH)', value: 'SCH' },
-                { label: 'Tracking (TRK)', value: 'TRK' },
-                { label: 'e-Booking (BKG)', value: 'BKG' },
-                { label: 'Shipping Instruction (SI)', value: 'SI' },
-                { label: 'VGM Filing', value: 'VGM' },
-                { label: 'Bill of Lading (BL)', value: 'BL' },
-              ]}
-              value={selectedModules}
-              onChange={(vals) => setSelectedModules(vals as string[])}
-            />
-          </div>
-        </Space>
-      </AppModal>
-    </Card>
+    </FeaturePageShell>
   );
 }

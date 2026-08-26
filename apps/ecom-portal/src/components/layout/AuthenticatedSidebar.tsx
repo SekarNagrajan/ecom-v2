@@ -1,166 +1,295 @@
-// Modified by sekar nagarajan (2026-08-21)
+// Modified by Sekar Nagarajan (2026-08-25 19:10)
+import { useAuthStore, usePermission, useTenantStore } from "@solverminds/auth";
+import { useLocation, useNavigate } from "@tanstack/react-router";
+import type { MenuProps } from "antd";
+import { Drawer, Layout, Menu, Tooltip } from "antd";
+import type { LucideIcon } from "lucide-react";
+import { useState } from "react";
+
 import {
-  AuditOutlined,
-  BankOutlined,
-  BarcodeOutlined,
-  BookOutlined,
-  CalendarOutlined,
-  CheckSquareOutlined,
-  CloudOutlined,
-  CompassOutlined,
-  CustomerServiceOutlined,
-  DashboardOutlined,
-  DeliveredProcedureOutlined,
-  DollarOutlined,
-  EllipsisOutlined,
-  FileProtectOutlined,
-  NotificationOutlined,
-  SafetyCertificateOutlined,
-  SettingOutlined,
-  SolutionOutlined,
-  TagOutlined,
-  UserAddOutlined,
-} from '@ant-design/icons';
-import { useAuthStore, usePermission, useTenantStore } from '@solverminds/auth';
-import { useLocation, useNavigate } from '@tanstack/react-router';
-import type { MenuProps } from 'antd';
-import { Layout, Menu, theme } from 'antd';
+  appPathnameToMenuKey,
+  isPublicMenuKey,
+  menuKeyToAppPath,
+  menuKeyToOpenGroupKeys,
+} from "../../features/auth/utils/public-menu-access";
+import { AppIcon, NavIcons } from "../icons";
 
 const { Sider } = Layout;
+
+function navIcon(Icon: LucideIcon, size = 18, locked = false) {
+  return (
+    <AppIcon
+      icon={Icon}
+      size={size}
+      variant={locked ? "navLocked" : "nav"}
+      className="app-icon"
+    />
+  );
+}
+
+function menuLabel(text: string, locked: boolean) {
+  if (!locked) return text;
+  return <Tooltip title="Sign In Required">{text}</Tooltip>;
+}
 
 interface AuthenticatedSidebarProps {
   collapsed: boolean;
   onCollapse: (collapsed: boolean) => void;
+  isMobile?: boolean;
+  mobileOpen?: boolean;
+  onMobileClose?: () => void;
+  /** Guest browsing public search modules — lock privileged items. */
+  isGuest?: boolean;
+  onLoginRequired?: (intendedPath?: string | null) => void;
 }
 
-export function AuthenticatedSidebar({ collapsed, onCollapse }: AuthenticatedSidebarProps) {
-  const { token } = theme.useToken();
+export function AuthenticatedSidebar({
+  collapsed,
+  onCollapse,
+  isMobile = false,
+  mobileOpen = false,
+  onMobileClose,
+  isGuest = false,
+  onLoginRequired,
+}: AuthenticatedSidebarProps) {
   const { can } = usePermission();
   const user = useAuthStore((state) => state.user);
   const activeTenant = useTenantStore((state) => state.activeTenant);
   const navigate = useNavigate();
   const location = useLocation();
-  let currentRoute = location.pathname.split('/')[2] || 'dashboard';
-  if (currentRoute === 'Dashboard ') {
-    currentRoute = 'dashboard';
-  }
+  const selectedKey = appPathnameToMenuKey(location.pathname);
+  const requiredOpenKeys = menuKeyToOpenGroupKeys(selectedKey);
+  const [userOpenKeys, setUserOpenKeys] = useState<string[]>([]);
+  const openKeys = Array.from(new Set([...requiredOpenKeys, ...userOpenKeys]));
 
-  const isSuperUser = Boolean(user?.isSessionAdmin || user?.role === 'ADMIN');
-  const tenantModules = [...(activeTenant.features.allowedModules || []), 'admin', 'user-creation', 'vendor-approvals', 'tracking'];
+  const isSuperUser = Boolean(user?.isSessionAdmin || user?.role === "ADMIN");
+  const tenantModules = [
+    ...(activeTenant.features.allowedModules || []),
+    "admin",
+    "user-creation",
+    "vendor-approvals",
+    "tracking",
+  ];
 
-  const rawMenuItems: MenuProps['items'] = [
+  const lock = (key: string) => isGuest && !isPublicMenuKey(key);
+
+  const rawMenuItems: MenuProps["items"] = [
     {
-      key: 'dashboard',
-      icon: <DashboardOutlined style={{ fontSize: 18 }} />,
-      label: 'Dashboard',
+      key: "dashboard",
+      icon: navIcon(NavIcons.dashboard, 18, lock("dashboard")),
+      label: menuLabel("Dashboard", lock("dashboard")),
+      className: lock("dashboard") ? "ant-menu-item-locked" : undefined,
     },
     {
-      key: 'schedules-group',
-      icon: <CalendarOutlined style={{ fontSize: 18 }} />,
-      label: 'Schedules',
+      key: "schedules-group",
+      icon: navIcon(NavIcons.schedules),
+      label: "Schedules",
       children: [
-        { key: 'schedules', icon: <CalendarOutlined />, label: 'Schedules', disabled: !can('SCH') },
-        { key: 'tracking', icon: <CompassOutlined />, label: 'Tracking', disabled: !can('TRK') },
-      ].filter((child) => isSuperUser || tenantModules.includes(child.key)),
+        {
+          key: "schedules",
+          icon: navIcon(NavIcons.schedules, 16),
+          label: menuLabel("Schedules", false),
+          disabled: !isGuest && !can("SCH"),
+        },
+        {
+          key: "tracking",
+          icon: navIcon(NavIcons.tracking, 16),
+          label: menuLabel("Tracking", false),
+          disabled: !isGuest && !can("TRK"),
+        },
+      ].filter((child) => isGuest || isSuperUser || tenantModules.includes(child.key)),
     },
     {
-      key: 'rates-group',
-      icon: <DollarOutlined style={{ fontSize: 18 }} />,
-      label: 'Rates',
+      key: "rates-group",
+      icon: navIcon(NavIcons.rates),
+      label: "Rates",
       children: [
-        { key: 'rates', icon: <DollarOutlined />, label: 'Rates', disabled: !can('SCH') },
-        { key: 'tariff', icon: <TagOutlined />, label: 'Tariff', disabled: !can('SCH') },
-      ].filter((child) => isSuperUser || tenantModules.includes(child.key)),
+        {
+          key: "rates",
+          icon: navIcon(NavIcons.rates, 16),
+          label: menuLabel("Rates", false),
+          disabled: !isGuest && !can("SCH"),
+        },
+        {
+          key: "tariff",
+          icon: navIcon(NavIcons.tariff, 16),
+          label: menuLabel("Tariff", false),
+          disabled: !isGuest && !can("SCH"),
+        },
+      ].filter((child) => isGuest || isSuperUser || tenantModules.includes(child.key)),
     },
     {
-      key: 'booking',
-      icon: <BookOutlined style={{ fontSize: 18 }} />,
-      label: 'Booking',
-      disabled: !can('BKG'),
+      key: "booking",
+      icon: navIcon(NavIcons.booking, 18, lock("booking")),
+      label: menuLabel("Booking", lock("booking")),
+      disabled: !isGuest && !can("BKG"),
+      className: lock("booking") ? "ant-menu-item-locked" : undefined,
     },
     {
-      key: 'si',
-      icon: <AuditOutlined style={{ fontSize: 18 }} />,
-      label: 'Shipping Instruction',
-      disabled: !can('SI'),
+      key: "si",
+      icon: navIcon(NavIcons.shippingInstruction, 18, lock("si")),
+      label: menuLabel("Shipping Instruction", lock("si")),
+      disabled: !isGuest && !can("SI"),
+      className: lock("si") ? "ant-menu-item-locked" : undefined,
     },
     {
-      key: 'vgm',
-      icon: <SafetyCertificateOutlined style={{ fontSize: 18 }} />,
-      label: 'VGM',
-      disabled: !can('BL'),
+      key: "vgm",
+      icon: navIcon(NavIcons.vgm, 18, lock("vgm")),
+      label: menuLabel("VGM", lock("vgm")),
+      disabled: !isGuest && !can("BL"),
+      className: lock("vgm") ? "ant-menu-item-locked" : undefined,
     },
     {
-      key: 'bl',
-      icon: <FileProtectOutlined style={{ fontSize: 18 }} />,
-      label: 'Bill of Lading',
-      disabled: !can('BL'),
+      key: "bl",
+      icon: navIcon(NavIcons.billOfLading, 18, lock("bl")),
+      label: menuLabel("Bill of Lading", lock("bl")),
+      disabled: !isGuest && !can("BL"),
+      className: lock("bl") ? "ant-menu-item-locked" : undefined,
     },
     {
-      key: 'do',
-      icon: <DeliveredProcedureOutlined style={{ fontSize: 18 }} />,
-      label: 'Delivery Order',
+      key: "do",
+      icon: navIcon(NavIcons.deliveryOrder, 18, lock("do")),
+      label: menuLabel("Delivery Order", lock("do")),
+      className: lock("do") ? "ant-menu-item-locked" : undefined,
     },
     {
-      key: 'arrival-notice',
-      icon: <NotificationOutlined style={{ fontSize: 18 }} />,
-      label: 'Arrival Notice',
+      key: "arrival-notice",
+      icon: navIcon(NavIcons.arrivalNotice, 18, lock("arrival-notice")),
+      label: menuLabel("Arrival Notice", lock("arrival-notice")),
+      className: lock("arrival-notice") ? "ant-menu-item-locked" : undefined,
     },
     {
-      key: 'cro',
-      icon: <BarcodeOutlined style={{ fontSize: 18 }} />,
-      label: 'Container Release Order',
+      key: "cro",
+      icon: navIcon(NavIcons.containerRelease, 18, lock("cro")),
+      label: menuLabel("Container Release Order", lock("cro")),
+      disabled: !isGuest && !can("CRO"),
+      className: lock("cro") ? "ant-menu-item-locked" : undefined,
     },
     {
-      key: 'user-creation',
-      icon: <UserAddOutlined style={{ fontSize: 18 }} />,
-      label: 'User Creation (USC)',
+      key: "user-creation",
+      icon: navIcon(NavIcons.userCreation, 18, lock("user-creation")),
+      label: menuLabel("User Creation (USC)", lock("user-creation")),
+      className: lock("user-creation") ? "ant-menu-item-locked" : undefined,
     },
     {
-      key: 'vendor-approvals',
-      icon: <CheckSquareOutlined style={{ fontSize: 18 }} />,
-      label: 'Agency Approvals',
+      key: "vendor-approvals",
+      icon: navIcon(NavIcons.vendorApprovals, 18, lock("vendor-approvals")),
+      label: menuLabel("Agency Approvals", lock("vendor-approvals")),
+      className: lock("vendor-approvals") ? "ant-menu-item-locked" : undefined,
     },
     {
-      key: 'more-group',
-      icon: <EllipsisOutlined style={{ fontSize: 20 }} />,
-      label: 'More',
+      key: "more-group",
+      icon: navIcon(NavIcons.more, 20),
+      label: "More",
       children: [
-        { key: 'admin', icon: <SettingOutlined />, label: 'Control Panel Admin' },
-        { key: 'payments', icon: <BankOutlined />, label: 'Payment History', disabled: !can('PAY') },
-        { key: 'customer-stmt', icon: <SolutionOutlined />, label: 'Customer Statement' },
-        { key: 'carbon', icon: <CloudOutlined />, label: 'Carbon Calculator' },
-        { key: 'contact-us', icon: <CustomerServiceOutlined />, label: 'Contact Us' },
-      ].filter((child) => isSuperUser || tenantModules.includes(child.key)),
+        {
+          key: "admin",
+          icon: navIcon(NavIcons.admin, 16, lock("admin")),
+          label: menuLabel("Control Panel Admin", lock("admin")),
+          className: lock("admin") ? "ant-menu-item-locked" : undefined,
+        },
+        {
+          key: "payments",
+          icon: navIcon(NavIcons.payments, 16, lock("payments")),
+          label: menuLabel("Payment History", lock("payments")),
+          disabled: !isGuest && !can("PAY"),
+          className: lock("payments") ? "ant-menu-item-locked" : undefined,
+        },
+        {
+          key: "customer-stmt",
+          icon: navIcon(NavIcons.customerStatement, 16, lock("customer-stmt")),
+          label: menuLabel("Customer Statement", lock("customer-stmt")),
+          disabled: !isGuest && !can("STMT"),
+          className: lock("customer-stmt") ? "ant-menu-item-locked" : undefined,
+        },
+        {
+          key: "carbon",
+          icon: navIcon(NavIcons.carbon, 16, lock("carbon")),
+          label: menuLabel("Carbon Calculator", lock("carbon")),
+          disabled: !isGuest && !can("CO2"),
+          className: lock("carbon") ? "ant-menu-item-locked" : undefined,
+        },
+      ].filter((child) => isGuest || isSuperUser || tenantModules.includes(child.key)),
     },
   ];
 
-  // Filter items: Superusers see all modules bypassing RegMenus restriction
   const menuItems = rawMenuItems.filter((item) => {
     if (!item) return false;
-    if (isSuperUser) return true; // Superuser sees all menus!
+    if (isGuest || isSuperUser) return true;
     const key = item.key as string;
-    if (key.endsWith('-group')) {
+    if (key.endsWith("-group")) {
       const groupItem = item as { children?: unknown[] };
       return Array.isArray(groupItem.children) && groupItem.children.length > 0;
     }
     return tenantModules.includes(key);
   });
 
-  const onMenuSelect: MenuProps['onSelect'] = ({ key }) => {
-    if (key === 'contact-us') {
-      navigate({ to: '/contact-us' });
-    } else if (key === 'rates' || key === 'tariff') {
-      navigate({ to: '/app/rates' });
-    } else if (key === 'si') {
-      navigate({ to: '/app/shipping-instruction' });
-    } else if (key === 'do') {
-      navigate({ to: '/app/delivery-order' });
+  const onMenuSelect: MenuProps["onSelect"] = ({ key }) => {
+    onMobileClose?.();
+
+    if (isGuest && !isPublicMenuKey(key)) {
+      onLoginRequired?.(menuKeyToAppPath(key));
+      return;
+    }
+
+    if (key === "rates" || key === "tariff") {
+      navigate({ to: "/app/rates" });
+    } else if (key === "si") {
+      navigate({ to: "/app/shipping-instruction" });
+    } else if (key === "do") {
+      navigate({ to: "/app/delivery-order" });
     } else {
       navigate({ to: `/app/${key}` });
     }
   };
 
+  const brandBlock = (
+    <div className="app-sidebar-brand">
+      <img
+        src={activeTenant.logoUrl || "/logo.png"}
+        alt={activeTenant.name}
+        className="app-sidebar-brand__logo"
+      />
+    </div>
+  );
+
+  /** Icon-rail (collapsed): leave openKeys uncontrolled so AntD popup submenus work.
+   *  Expanded: keep parent groups open for the active module. */
+  const isIconRail = collapsed && !isMobile;
+  const menuBlock = (
+    <Menu
+      theme="light"
+      mode="inline"
+      selectedKeys={[selectedKey]}
+      {...(isIconRail
+        ? {}
+        : {
+            openKeys,
+            onOpenChange: (keys: string[]) => {
+              setUserOpenKeys(keys);
+            },
+          })}
+      items={menuItems}
+      onSelect={onMenuSelect}
+      className="app-sidebar-menu"
+    />
+  );
+
+  if (isMobile) {
+    return (
+      <Drawer
+        title={activeTenant.name}
+        placement="left"
+        open={mobileOpen}
+        onClose={onMobileClose}
+        size={280}
+        classNames={{ body: "app-sidebar-drawer-body custom-scroll" }}
+      >
+        {brandBlock}
+        {menuBlock}
+      </Drawer>
+    );
+  }
 
   return (
     <Sider
@@ -171,63 +300,10 @@ export function AuthenticatedSidebar({ collapsed, onCollapse }: AuthenticatedSid
       width={250}
       collapsedWidth={80}
       theme="light"
-      className="custom-scroll"
-      style={{
-        position: 'absolute',
-        left: 0,
-        top: 0,
-        bottom: 0,
-        background: token.colorBgContainer,
-        borderRight: `1px solid ${token.colorBorderSecondary}`,
-        zIndex: 100,
-        overflowY: 'auto',
-        overflowX: 'hidden',
-        boxShadow: collapsed
-          ? '2px 0 8px 0 rgba(29,35,41,.05)'
-          : '8px 0 28px 0 rgba(0,0,0,.15)',
-        transition: 'all 0.25s cubic-bezier(0.2, 0, 0, 1)',
-      }}
+      className="custom-scroll app-sidebar-sider"
     >
-      <style>{`
-        .custom-scroll::-webkit-scrollbar {
-          width: 6px;
-          height: 6px;
-        }
-        .custom-scroll::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        .custom-scroll::-webkit-scrollbar-thumb {
-          background: ${token.colorBorder};
-          border-radius: 3px;
-        }
-        .custom-scroll::-webkit-scrollbar-thumb:hover {
-          background: ${token.colorTextQuaternary};
-        }
-      `}</style>
-      <div
-        style={{
-          height: 64,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          borderBottom: `1px solid ${token.colorBorderSecondary}`,
-          borderTop: `3px solid ${token.colorPrimary}`,
-          overflow: 'hidden',
-          padding: '12px 16px',
-          background: token.colorBgContainer,
-          gap: 10,
-        }}
-      >
-        <img src={activeTenant.logoUrl || '/logo.png'} alt={activeTenant.name} style={{ height: 38, maxWidth: '100%', objectFit: 'contain' }} />
-      </div>
-      <Menu
-        theme="light"
-        mode="inline"
-        selectedKeys={[currentRoute]}
-        items={menuItems}
-        onSelect={onMenuSelect}
-        style={{ borderRight: 0, paddingTop: 8 }}
-      />
+      {brandBlock}
+      {menuBlock}
     </Sider>
   );
 }

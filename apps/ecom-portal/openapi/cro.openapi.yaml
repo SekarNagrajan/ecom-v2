@@ -1,0 +1,193 @@
+openapi: 3.0.3
+info:
+  title: E-Com Portal Container Release Order API
+  version: 1.0.0
+paths:
+  /api/ecom/imp/container-release-orders:
+    get:
+      summary: CRO list by date range
+      parameters:
+        - name: fromDate
+          in: query
+          schema: { type: string, format: date }
+        - name: toDate
+          in: query
+          schema: { type: string, format: date }
+      responses:
+        '200':
+          description: CRO list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CROListResponse'
+    post:
+      summary: Generate CRO (P2)
+      responses:
+        '501':
+          description: Not implemented in P1
+  /api/ecom/imp/container-release-orders/eligibility:
+    get:
+      summary: Eligibility for booking-linked empty release
+      parameters:
+        - name: bookingNo
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Eligibility result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CROEligibilityResponse'
+  /api/ecom/imp/container-release-orders/{croNo}:
+    get:
+      summary: CRO detail
+      parameters:
+        - name: croNo
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: CRO detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CRODetailResponse'
+  /api/ecom/imp/container-release-orders/{croNo}/document:
+    get:
+      summary: Print CRO PDF
+      parameters:
+        - name: croNo
+          in: path
+          required: true
+          schema: { type: string }
+        - name: format
+          in: query
+          schema: { type: string, enum: [pdf] }
+      responses:
+        '200':
+          description: PDF blob
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+  /api/ecom/imp/container-release-orders/{croNo}/haulier:
+    post:
+      summary: Assign haulier (P2)
+      parameters:
+        - name: croNo
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '501':
+          description: Not implemented in P1
+  /api/ecom/imp/container-release-orders/{croNo}/cancel:
+    post:
+      summary: Cancel CRO (P2)
+      parameters:
+        - name: croNo
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '501':
+          description: Not implemented in P1
+components:
+  schemas:
+    CROEligibility:
+      type: object
+      required: [eligible, reasons]
+      properties:
+        eligible: { type: boolean }
+        reasons:
+          type: array
+          items: { type: string }
+    CROListDTO:
+      type: object
+      required:
+        - croNo
+        - bookingNo
+        - vessel
+        - voyage
+        - loadPort
+        - dischargePort
+        - eqpType
+        - qtyBooked
+        - qtyReleased
+        - emptyReleaseDepot
+        - croDate
+        - validTo
+        - printStatus
+        - releaseStatus
+      properties:
+        croNo: { type: string }
+        bookingNo: { type: string }
+        vessel: { type: string }
+        voyage: { type: string }
+        loadPort: { type: string }
+        dischargePort: { type: string }
+        eqpType: { type: string }
+        qtyBooked: { type: integer }
+        qtyReleased: { type: integer }
+        emptyReleaseDepot: { type: string }
+        croDate: { type: string }
+        validTo: { type: string }
+        printStatus: { type: string, enum: [Y, N] }
+        releaseStatus:
+          type: string
+          enum: [Eligible, Blocked, Released, Cancelled]
+    CRODTO:
+      allOf:
+        - $ref: '#/components/schemas/CROListDTO'
+        - type: object
+          required: [containers, eligibility, printCount]
+          properties:
+            containers:
+              type: array
+              items:
+                type: object
+                properties:
+                  containerNo: { type: string }
+                  eqpSize: { type: string }
+                  sealNo: { type: string }
+            eligibility:
+              $ref: '#/components/schemas/CROEligibility'
+            polArrival: { type: string }
+            polDeparture: { type: string }
+            printCount: { type: integer }
+    CROListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CROListDTO'
+        error:
+          type: object
+          properties:
+            code: { type: string }
+            message: { type: string }
+    CRODetailResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CRODTO'
+        error:
+          type: object
+          properties:
+            code: { type: string }
+            message: { type: string }
+    CROEligibilityResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CROEligibility'
+        error:
+          type: object
+          properties:
+            code: { type: string }
+            message: { type: string }

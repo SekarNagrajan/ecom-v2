@@ -1,13 +1,10 @@
-import {
-  BellOutlined,
-  FullscreenExitOutlined,
-  FullscreenOutlined,
-} from '@ant-design/icons';
+// Modified by Sekar Nagarajan (2026-08-24 16:05)
 import { AppButton } from '@solverminds/shared-ui';
 import { useAntdBreakpoint } from '@solverminds/shared-ui/hooks';
 import { Flex, Layout, Typography, theme } from 'antd';
 import React, { useState } from 'react';
 
+import { AppIcon, Icons } from '../icons';
 import { HeaderThemeToggle } from './header-theme-toggle';
 import { UserMenu } from './user-menu';
 
@@ -88,17 +85,15 @@ export const LayoutHeader: React.FC = () => {
           justifyContent: 'flex-end',
         }}
       >
-        {/* Notifications - Commented out per user request */}
-        {/* <AppButton
-          aria-label="Notifications"
-          icon={<BellOutlined />}
-          size="small"
-          type="text"
-        /> */}
         <HeaderThemeToggle />
         <AppButton
           aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
-          icon={isFullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
+          icon={
+            <AppIcon
+              icon={isFullscreen ? Icons.minimize : Icons.expand}
+              size={16}
+            />
+          }
           onClick={toggleFullscreen}
           size="small"
           type="text"

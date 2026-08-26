@@ -1,11 +1,11 @@
-// Modified by Sekar Nagarajan (2026-08-21 14:55)
-import React from 'react';
-import { Table, Checkbox, Tag, Typography, Card, Space } from 'antd';
-import { KeyOutlined, SaveOutlined } from '@ant-design/icons';
+// Modified by Sekar Nagarajan (2026-08-24 19:14)
 import { AppButton } from '@solverminds/shared-ui';
-import type { SpecialPrivilege } from '../types/admin.types';
+import { Checkbox, Table, Tag } from 'antd';
+import React from 'react';
 
-const { Text, Title } = Typography;
+import { AppIcon, Icons } from '../../../components/icons';
+import type { SpecialPrivilege } from '../types/admin.types';
+import { AdminPanelShell } from './AdminPanelShell';
 
 interface SpecialPrivilegesViewProps {
   privileges: SpecialPrivilege[];
@@ -26,8 +26,26 @@ export function SpecialPrivilegesView({ privileges, onSave }: SpecialPrivilegesV
   };
 
   const columns = [
-    { title: 'Role Name', dataIndex: 'roleName', key: 'roleName', render: (val: string) => <Tag color="purple">{val}</Tag> },
-    { title: 'Module Code', dataIndex: 'moduleCode', key: 'moduleCode', render: (val: string) => <Tag color="blue">{val}</Tag> },
+    {
+      title: 'Role Name',
+      dataIndex: 'roleName',
+      key: 'roleName',
+      render: (val: string) => (
+        <Tag className="admin-code-tag" color="purple">
+          {val}
+        </Tag>
+      ),
+    },
+    {
+      title: 'Module Code',
+      dataIndex: 'moduleCode',
+      key: 'moduleCode',
+      render: (val: string) => (
+        <Tag className="admin-code-tag" color="blue">
+          {val}
+        </Tag>
+      ),
+    },
     {
       title: 'Can View',
       dataIndex: 'canView',
@@ -71,28 +89,30 @@ export function SpecialPrivilegesView({ privileges, onSave }: SpecialPrivilegesV
   ];
 
   return (
-    <Card style={{ borderRadius: 16, boxShadow: '0 8px 24px rgba(0,0,0,0.05)', border: 'none' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-        <div>
-          <Space align="center">
-            <KeyOutlined style={{ fontSize: 20, color: '#722ed1' }} />
-            <Title level={4} style={{ margin: 0 }}>Special Privileges Matrix</Title>
-          </Space>
-          <Text type="secondary" style={{ display: 'block', marginTop: 4 }}>
-            Assign granular action permissions for internal agency and vendor roles
-          </Text>
-        </div>
-        <AppButton type="primary" size="large" icon={<SaveOutlined />} onClick={() => onSave(data)}>
+    <AdminPanelShell
+      icon={Icons.key}
+      title="Special Privileges Matrix"
+      subtitle="Assign granular action permissions for internal agency and vendor roles."
+      extra={
+        <AppButton
+          type="primary"
+          size="large"
+          icon={<AppIcon icon={Icons.save} size={16} />}
+          onClick={() => onSave(data)}
+        >
           Save Privileges Matrix
         </AppButton>
+      }
+    >
+      <div className="responsive-table-wrap">
+        <Table
+          dataSource={data}
+          columns={columns}
+          rowKey={(r: SpecialPrivilege) => `${r.roleId}_${r.moduleCode}`}
+          pagination={false}
+          scroll={{ x: true }}
+        />
       </div>
-
-      <Table
-        dataSource={data}
-        columns={columns}
-        rowKey={(r: SpecialPrivilege) => `${r.roleId}_${r.moduleCode}`}
-        pagination={false}
-      />
-    </Card>
+    </AdminPanelShell>
   );
 }

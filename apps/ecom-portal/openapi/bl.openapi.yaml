@@ -1,0 +1,335 @@
+openapi: 3.0.3
+info:
+  title: E-Com Portal Bill of Lading API
+  version: 1.0.0
+paths:
+  /api/bl/list:
+    get:
+      summary: SSRM B/L list
+      parameters:
+        - name: startRow
+          in: query
+          schema: { type: integer }
+        - name: endRow
+          in: query
+          schema: { type: integer }
+      responses:
+        '200':
+          description: B/L list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BLListResponse'
+  /api/bl/{blNo}:
+    get:
+      summary: B/L detail
+      parameters:
+        - name: blNo
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BLDetailResponse'
+    put:
+      summary: Save B/L draft
+      parameters:
+        - name: blNo
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BLDTO'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BLDetailResponse'
+  /api/bl/from-si/{siNo}:
+    get:
+      summary: Build draft B/L from SI
+      parameters:
+        - name: siNo
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BLDetailResponse'
+  /api/bl/{blNo}/draft:
+    post:
+      summary: Auto-save wizard step
+      parameters:
+        - name: blNo
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BLDetailResponse'
+  /api/bl/{blNo}/verify:
+    post:
+      summary: Accept / verify B/L (acceptbl)
+      parameters:
+        - name: blNo
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BLDetailResponse'
+  /api/bl/{blNo}/cancel:
+    post:
+      summary: Cancel submitted B/L
+      parameters:
+        - name: blNo
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BLDetailResponse'
+  /api/bl/{blNo}/submit:
+    post:
+      summary: Submit B/L
+      parameters:
+        - name: blNo
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BLDetailResponse'
+  /api/bl/{blNo}/issue:
+    post:
+      summary: Issue B/L (carrier)
+      parameters:
+        - name: blNo
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BLDetailResponse'
+  /api/bl/{blNo}/print:
+    get:
+      summary: Print B/L PDF
+      parameters:
+        - name: blNo
+          in: path
+          required: true
+          schema: { type: string }
+        - name: type
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [draft, original, nn]
+        - name: appVersion
+          in: query
+          schema: { type: string, enum: ['1', '2'] }
+      responses:
+        '200':
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+  /api/bl/print/batch:
+    post:
+      summary: Batch original print
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                blNos:
+                  type: array
+                  items: { type: string }
+      responses:
+        '200':
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+  /api/bl/{blNo}/charges:
+    get:
+      summary: B/L charge summary
+      parameters:
+        - name: blNo
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BLChargesResponse'
+  /api/bl/guards/voyage-closed:
+    get:
+      summary: Voyage closed guard
+      parameters:
+        - name: blNo
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  closed: { type: boolean }
+  /api/mcn/list:
+    get:
+      summary: Manifest list (P3)
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MCNListResponse'
+  /api/mcn/{mcnId}:
+    get:
+      summary: Manifest detail
+      parameters:
+        - name: mcnId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MCNDetailResponse'
+  /api/mcn/{mcnId}/print:
+    get:
+      summary: Print manifest PDF
+      parameters:
+        - name: mcnId
+          in: path
+          required: true
+          schema: { type: string }
+        - name: manifestType
+          in: query
+          schema: { type: string }
+      responses:
+        '200':
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+components:
+  schemas:
+    ApiError:
+      type: object
+      properties:
+        code: { type: string }
+        message: { type: string }
+    BLListDTO:
+      type: object
+      required: [blNo, bookingNo, status, statusLabel]
+      properties:
+        blNo: { type: string }
+        mcnNo: { type: string, nullable: true }
+        bookingNo: { type: string }
+        siNo: { type: string, nullable: true }
+        status: { type: string, enum: [D, S, C, I] }
+        statusLabel: { type: string }
+        agencyRefNo: { type: string, nullable: true }
+        origin: { type: string }
+        loadPort: { type: string }
+        dischargePort: { type: string }
+        delivery: { type: string }
+        confirmedDate: { type: string, nullable: true }
+        createdDate: { type: string, nullable: true }
+        printStatus: { type: string, enum: [Y, N] }
+        appVersion: { type: string, enum: ['1', '2'] }
+        isLocked: { type: boolean }
+        paymentEligible: { type: boolean }
+        paymentCompleted: { type: boolean }
+        payAmountUsd: { type: number }
+        fcnNo: { type: string }
+        hasInsurance: { type: boolean }
+        policyNo: { type: string, nullable: true }
+    BLDTO:
+      type: object
+    BLChargesDTO:
+      type: object
+    BLListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/BLListDTO'
+        meta:
+          type: object
+          properties:
+            totalCount: { type: integer }
+        error:
+          $ref: '#/components/schemas/ApiError'
+    BLDetailResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/BLDTO'
+        error:
+          $ref: '#/components/schemas/ApiError'
+    BLChargesResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/BLChargesDTO'
+        error:
+          $ref: '#/components/schemas/ApiError'
+    MCNListDTO:
+      type: object
+      properties:
+        mcnId: { type: string }
+        blNo: { type: string }
+        status: { type: string }
+        bookingNo: { type: string }
+    MCNListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/MCNListDTO'
+    MCNDetailResponse:
+      type: object
+      properties:
+        data:
+          type: object

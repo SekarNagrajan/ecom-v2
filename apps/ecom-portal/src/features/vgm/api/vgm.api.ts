@@ -1,63 +1,43 @@
-// Created by Antigravity (2026-08-24 12:00)
-import type { ApiResponse } from '../../../types/api.types';
-import type { VgmDeclarationDTO, VgmSubmitPayload } from '../types/vgm.types';
+// Modified by Sekar Nagarajan (2026-08-26 12:48)
+import type { ApiResponse } from "../../../types/api.types";
+import { MOCK_VGM_DATA } from "../mocks/vgm.mock";
+import type { VgmDeclarationDTO, VgmSubmitPayload } from "../types/vgm.types";
 
-// MOCK DATA
-const MOCK_VGM_DATA: Record<string, VgmDeclarationDTO> = {
-  'BKG-123456': {
-    referenceDetails: {
-      referenceNo: 'BKG-123456',
-      type: 'bookno',
-      shipperName: 'GLOBAL EXPORTS LTD',
-      apName: 'GLOBAL EXPORTS LTD',
-      origin: 'USNYC - NEW YORK',
-      delivery: 'GBFEL - FELIXSTOWE',
-      pol: 'USNYC - NEW YORK',
-      pod: 'GBFEL - FELIXSTOWE',
-    },
-    containers: [
-      { containerNo: 'MSKU1234567', eqpType: '40HC', tareWeight: 3850, vgmWeight: null, vgmUnit: 'K', method: 'SM1', date: null },
-      { containerNo: 'MSKU7654321', eqpType: '40HC', tareWeight: 3850, vgmWeight: null, vgmUnit: 'K', method: 'SM1', date: null },
-    ],
-    companyName: 'GLOBAL EXPORTS LTD',
-    obtainMethod: 'SM1'
+const delay = (ms: number) =>
+  new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+
+/** VGM API — mock-backed until REST/OpenAPI is wired (agenct parity). */
+export const vgmApi = {
+  async searchReference(
+    type: "bookno" | "blno",
+    referenceNo: string,
+  ): Promise<ApiResponse<VgmDeclarationDTO>> {
+    await delay(800); // simulated latency
+    const data = MOCK_VGM_DATA[referenceNo];
+    if (data && data.referenceDetails.type === type) {
+      return { data };
+    }
+    throw {
+      error: { code: "NOT_FOUND", message: "Invalid Booking or BL Number." },
+    };
   },
-  'BL-987654': {
-    referenceDetails: {
-      referenceNo: 'BL-987654',
-      type: 'blno',
-      shipperName: 'PACIFIC IMPORTS LLC',
-      apName: 'PACIFIC IMPORTS LLC',
-      origin: 'CNSHA - SHANGHAI',
-      delivery: 'USLAX - LOS ANGELES',
-      pol: 'CNSHA - SHANGHAI',
-      pod: 'USLAX - LOS ANGELES',
-    },
-    containers: [
-      { containerNo: 'CMAU9876543', eqpType: '20ST', tareWeight: 2200, vgmWeight: null, vgmUnit: 'K', method: 'SM1', date: null },
-    ],
-    companyName: 'PACIFIC IMPORTS LLC',
-    obtainMethod: 'SM1'
-  }
+
+  async submit(
+    payload: VgmSubmitPayload,
+  ): Promise<ApiResponse<{ message: string }>> {
+    await delay(1000); // simulated submit
+    void payload;
+    return { data: { message: "VGM successfully submitted and email sent." } };
+  },
 };
 
-export const searchVgmReference = async (type: 'bookno' | 'blno', referenceNo: string): Promise<ApiResponse<VgmDeclarationDTO>> => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      const data = MOCK_VGM_DATA[referenceNo];
-      if (data && data.referenceDetails.type === type) {
-        resolve({ data });
-      } else {
-        reject({ error: { code: 'NOT_FOUND', message: 'Invalid Booking or BL Number.' } });
-      }
-    }, 800);
-  });
-};
+/** @deprecated Prefer vgmApi */
+export const searchVgmReference = (
+  type: "bookno" | "blno",
+  referenceNo: string,
+) => vgmApi.searchReference(type, referenceNo);
 
-export const submitVgm = async (payload: VgmSubmitPayload): Promise<ApiResponse<{ message: string }>> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({ data: { message: 'VGM successfully submitted and email sent.' } });
-    }, 1000);
-  });
-};
+/** @deprecated Prefer vgmApi */
+export const submitVgm = (payload: VgmSubmitPayload) => vgmApi.submit(payload);

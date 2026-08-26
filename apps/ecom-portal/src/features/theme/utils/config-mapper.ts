@@ -1,3 +1,13 @@
+// Modified by Sekar Nagarajan (2026-08-25 17:25)
+
+/**
+ * BE ↔ UI theme config mapper.
+ *
+ * Phase 5 (CRM parity — deferred): wire GET/PUT `/api-theme-config` with
+ * optimistic Zustand updates + debounced save via React Query. Until the
+ * backend endpoint exists, ecom persists themeMode in localStorage only
+ * (`ecom-user-theme-config`). This mapper is ready for that future path.
+ */
 import { type AppCustomConfig } from '@solverminds/shared-ui/providers';
 
 import {
@@ -36,6 +46,7 @@ export const BE_DENSITY_MAP = {
 
 export const BE_COLOR_MAP = {
   BLUE: '#1677ff',
+  MARITIME: '#1B6DAB',
   GOLD: '#faad14',
   GREEN: '#52c41a',
   RED: '#f5222d',
@@ -69,8 +80,8 @@ export const mapBeToUiConfig = (
       beConfig.densityLevel && beConfig.densityLevel in BE_DENSITY_MAP
         ? BE_DENSITY_MAP[beConfig.densityLevel as keyof typeof BE_DENSITY_MAP]
         : 'normal',
-    fontFamily: 'Inter, sans-serif',
-    primaryColor: beConfig.primaryColor || '#1677ff',
+    fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    primaryColor: beConfig.primaryColor || '#1B6DAB',
     secondaryColor: '#595959',
     successColor: '#52c41a',
     warningColor: '#faad14',

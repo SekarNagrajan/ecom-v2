@@ -1,5 +1,5 @@
-// Modified by sekar nagarajan (2026-08-21)
-import { CheckCircleOutlined, CreditCardOutlined, DollarOutlined, DownloadOutlined } from '@ant-design/icons';
+// Modified by Sekar Nagarajan (2026-08-24 16:05)
+import { AppIcon, Icons } from '../../../components/icons';
 import { AppButton } from '@solverminds/shared-ui';
 import { DataView, DataViewColumn } from '@solverminds/shared-ui/data-view';
 import { useToast } from '@solverminds/shared-ui/hooks';
@@ -36,7 +36,7 @@ export function PaymentHistoryView() {
       sortable: true,
       cellRenderer: (params: { value?: string }) => (
         <Space>
-          <CreditCardOutlined style={{ color: token.colorPrimary }} />
+          <AppIcon icon={Icons.creditCard} size={16} />
           <strong>{params.value}</strong>
         </Space>
       ),
@@ -98,7 +98,7 @@ export function PaymentHistoryView() {
           <AppButton
             type="primary"
             size="small"
-            icon={<DownloadOutlined />}
+            icon={<AppIcon icon={Icons.download} size={16} tone="download" />}
             onClick={() => handleDownloadReceipt(rec)}
           >
             PDF Receipt
@@ -121,7 +121,7 @@ export function PaymentHistoryView() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
         <div>
           <Space align="center">
-            <CreditCardOutlined style={{ fontSize: 24, color: token.colorPrimary }} />
+            <AppIcon icon={Icons.creditCard} size={24} />
             <Title level={4} style={{ margin: 0, fontWeight: 700 }}>
               Payment Transaction History & Invoice Receipts
             </Title>
@@ -141,7 +141,7 @@ export function PaymentHistoryView() {
               title="Total Settled Payments"
               value={totalPaidUSD}
               precision={2}
-              prefix={<DollarOutlined />}
+              prefix={<AppIcon icon={Icons.dollarSign} size={16} />}
               valueStyle={{ color: token.colorSuccess }}
             />
           </Card>
@@ -151,7 +151,7 @@ export function PaymentHistoryView() {
             <Statistic
               title="Successful Transactions"
               value={successfulCount}
-              prefix={<CheckCircleOutlined />}
+              prefix={<AppIcon icon={Icons.checkCircle} size={16} />}
               valueStyle={{ color: token.colorPrimary }}
             />
           </Card>

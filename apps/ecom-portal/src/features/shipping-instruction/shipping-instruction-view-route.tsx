@@ -1,124 +1,110 @@
-// Created by Antigravity (2026-08-24 11:35)
-import { Card, Typography, Space, theme, Row, Col, Table } from 'antd';
-import { FileTextOutlined } from '@ant-design/icons';
-import { AppButton } from '@solverminds/shared-ui';
-import { useNavigate, useParams } from '@tanstack/react-router';
-import { useQuery } from '@tanstack/react-query';
-import { fetchSIDetails } from './api/si.api';
+// Modified by Sekar Nagarajan (2026-08-26 12:38)
+import { AppButton } from "@solverminds/shared-ui";
+import { useQuery } from "@tanstack/react-query";
+import { useNavigate, useParams } from "@tanstack/react-router";
+import { Card, Result, Space } from "antd";
 
-const { Title, Text } = Typography;
+import { AppIcon, Icons } from "../../components/icons";
+import { FeaturePageShell } from "../../components/shared/feature-page-shell";
+import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
+import {
+  MODULE_TITLES,
+  formatModuleScreenTitle,
+} from "../../constants/module-titles";
+import { siListQueryOptions } from "./api/si.queries";
+import { SiLoadingCenter } from "./components/si-loading-center";
+import { SiModuleStyles } from "./components/si-module-styles";
+import { SiDetailsViewer } from "./components/view/SiDetailsViewer";
 
 export function ShippingInstructionViewRoute() {
-  const { token } = theme.useToken();
   const navigate = useNavigate();
-  
   const { siId } = useParams({ strict: false });
+  const id = siId as string;
 
-  const { data: siDetails, isLoading } = useQuery({
-    queryKey: ['siDetails', siId],
-    queryFn: async () => {
-      const res = await fetchSIDetails(siId as string);
-      return res.data;
-    }
-  });
+  const { data: list = [], isLoading } = useQuery(siListQueryOptions());
+  const listRow = list.find((row) => row.id === id);
 
-  const cardStyle = { border: `1px solid ${token.colorBorderSecondary}`, borderRadius: 8, marginBottom: 24 };
-  const labelStyle: React.CSSProperties = { fontWeight: 600, fontSize: 13, color: token.colorTextSecondary, display: 'block', marginBottom: 4 };
+  const goDashboard = () => {
+    navigate({ to: "/app/shipping-instruction" });
+  };
 
-  if (isLoading) return <div style={{ padding: 24 }}>Loading SI details...</div>;
-  if (!siDetails) return <div style={{ padding: 24 }}>SI not found.</div>;
+  if (isLoading) {
+    return (
+      <FeaturePageShell>
+        <SiModuleStyles />
+        <SiLoadingCenter fill />
+      </FeaturePageShell>
+    );
+  }
+
+  if (!id) {
+    return (
+      <FeaturePageShell>
+        <SiModuleStyles />
+        <Result
+          status="404"
+          title="Shipping Instruction not found"
+          extra={
+            <AppButton type="primary" onClick={goDashboard}>
+              Back to Dashboard
+            </AppButton>
+          }
+        />
+      </FeaturePageShell>
+    );
+  }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      <Card style={{ borderRadius: 16, boxShadow: '0 8px 24px rgba(0,0,0,0.05)', border: 'none' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Space align="center" size={10}>
-            <FileTextOutlined style={{ fontSize: 24, color: token.colorPrimary }} />
-            <Title level={4} style={{ margin: 0, fontWeight: 700 }}>
-              VIEW SHIPPING INSTRUCTION: {siDetails.siNo || siId}
-            </Title>
-          </Space>
-          <AppButton onClick={() => navigate({ to: '/app/shipping-instruction' })}>Back to Dashboard</AppButton>
-        </div>
-      </Card>
-
-      <div style={{ padding: '0 2px' }}>
-        {/* Master Details */}
-        <Card style={cardStyle} title={<Title level={5} style={{ margin: 0 }}>MASTER DETAILS</Title>} size="small">
-          <Row gutter={[24, 24]}>
-            <Col span={8}>
-              <Text style={labelStyle}>Booking Number</Text>
-              <div style={{ fontSize: 15, fontWeight: 500 }}>{siDetails.bookingNo}</div>
-            </Col>
-            <Col span={8}>
-              <Text style={labelStyle}>B/L Type</Text>
-              <div style={{ fontSize: 15, fontWeight: 500 }}>{siDetails.blType}</div>
-            </Col>
-            <Col span={8}>
-              <Text style={labelStyle}>Freight Option</Text>
-              <div style={{ fontSize: 15, fontWeight: 500 }}>{siDetails.freightOption}</div>
-            </Col>
-          </Row>
+    <FeaturePageShell>
+      <SiModuleStyles />
+      <Space direction="vertical" size="large" className="feature-page-stack">
+        <Card className="feature-page-card" bordered={false}>
+          <ModuleScreenHeader
+            icon={Icons.clipboardList}
+            title={formatModuleScreenTitle(
+              MODULE_TITLES.shippingInstruction,
+              listRow?.siNo || id,
+            )}
+            marginBottom={0}
+            extra={
+              <AppButton onClick={goDashboard}>Back to Dashboard</AppButton>
+            }
+          />
         </Card>
 
-        {/* Parties */}
-        <Card style={cardStyle} title={<Title level={5} style={{ margin: 0 }}>PARTIES</Title>} size="small">
-          <Row gutter={[24, 24]}>
-            <Col xs={24} md={8}>
-              <div style={{ padding: 12, backgroundColor: token.colorFillAlter, borderRadius: 6, height: '100%' }}>
-                <Text style={labelStyle}>SHIPPER</Text>
-                <div style={{ marginTop: 8 }}><Text strong>{siDetails.parties.shipper.name}</Text></div>
-                <div><Text>{siDetails.parties.shipper.address}</Text></div>
-                <div><Text>{siDetails.parties.shipper.city}, {siDetails.parties.shipper.country}</Text></div>
+        {listRow ? (
+          <div className="si-route-strip">
+            <div className="si-route-port si-route-port--origin">
+              <div className="si-route-port__label">
+                <AppIcon icon={Icons.mapPin} size={14} />
+                Origin
               </div>
-            </Col>
-            <Col xs={24} md={8}>
-              <div style={{ padding: 12, backgroundColor: token.colorFillAlter, borderRadius: 6, height: '100%' }}>
-                <Text style={labelStyle}>CONSIGNEE {siDetails.parties.consignee.toOrder && <Text type="warning">(TO ORDER)</Text>}</Text>
-                <div style={{ marginTop: 8 }}><Text strong>{siDetails.parties.consignee.name}</Text></div>
-                <div><Text>{siDetails.parties.consignee.address}</Text></div>
-                <div><Text>{siDetails.parties.consignee.city}, {siDetails.parties.consignee.country}</Text></div>
+              <div className="si-route-port__code form-step-readonly-value">
+                {listRow.origin}
               </div>
-            </Col>
-            <Col xs={24} md={8}>
-              <div style={{ padding: 12, backgroundColor: token.colorFillAlter, borderRadius: 6, height: '100%' }}>
-                <Text style={labelStyle}>NOTIFY PARTY</Text>
-                <div style={{ marginTop: 8 }}><Text strong>{siDetails.parties.notify.name}</Text></div>
-                <div><Text>{siDetails.parties.notify.address}</Text></div>
-                <div><Text>{siDetails.parties.notify.city}, {siDetails.parties.notify.country}</Text></div>
-              </div>
-            </Col>
-          </Row>
-        </Card>
-
-        {/* Cargo & Containers */}
-        <Card style={cardStyle} title={<Title level={5} style={{ margin: 0 }}>CARGO & CONTAINERS</Title>} size="small">
-          {siDetails.containers.map((c, i) => (
-            <div key={c.id} style={{ marginBottom: i < siDetails.containers.length - 1 ? 24 : 0 }}>
-              <div style={{ marginBottom: 12, display: 'flex', justifyContent: 'space-between' }}>
-                <Text strong style={{ fontSize: 15 }}>Container {i + 1}: {c.containerNo} ({c.eqpSize})</Text>
-                <div>
-                  <Text type="secondary" style={{ marginRight: 16 }}>Carrier Seal: <Text strong>{c.carrierSeal || 'N/A'}</Text></Text>
-                  <Text type="secondary">Shipper Seal: <Text strong>{c.shipperSeal || 'N/A'}</Text></Text>
-                </div>
-              </div>
-              <Table
-                size="small"
-                dataSource={c.cargoLines}
-                rowKey="id"
-                pagination={false}
-                bordered
-                columns={[
-                  { title: 'Marks & Numbers', dataIndex: 'marksAndNumbers', key: 'marksAndNumbers' },
-                  { title: 'Description', dataIndex: 'description', key: 'description' },
-                  { title: 'Packages', key: 'packages', render: (_, record) => `${record.packageCount} ${record.packageType}` },
-                  { title: 'Gross Wt (KG)', dataIndex: 'grossWeight', key: 'grossWeight' },
-                ]}
-              />
             </div>
-          ))}
-        </Card>
-      </div>
-    </div>
+            <div className="si-route-connector">
+              <span className="si-route-connector__label">Port to Port</span>
+              <div className="si-route-connector__line">
+                <span className="si-route-connector__track" />
+                <AppIcon icon={Icons.arrowRight} size={14} />
+                <span className="si-route-connector__track" />
+              </div>
+            </div>
+            <div className="si-route-port si-route-port--delivery">
+              <div className="si-route-port__label">
+                <AppIcon icon={Icons.mapPin} size={14} />
+                Delivery
+              </div>
+              <div className="si-route-port__code form-step-readonly-value">
+                {listRow.delivery}
+              </div>
+            </div>
+          </div>
+        ) : null}
+
+        <SiDetailsViewer siId={id} />
+      </Space>
+    </FeaturePageShell>
   );
 }

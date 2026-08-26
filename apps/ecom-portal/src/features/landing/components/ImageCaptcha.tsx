@@ -1,8 +1,9 @@
-import { ReloadOutlined } from '@ant-design/icons';
-import { Button, Flex, Image, Input, Skeleton, theme } from 'antd';
-import { useEffect, useState } from 'react';
-import type { Control } from 'react-hook-form';
-import { Controller } from 'react-hook-form';
+// Modified by Sekar Nagarajan (2026-08-24 16:05)
+import { Button, Flex, Image, Input, Skeleton, theme } from "antd";
+import { useEffect, useState } from "react";
+import type { Control } from "react-hook-form";
+import { Controller } from "react-hook-form";
+import { AppIcon, Icons } from "../../../components/icons";
 
 interface ImageCaptchaProps {
   /** RHF control for the captcha field */
@@ -25,7 +26,7 @@ interface ImageCaptchaProps {
 export function ImageCaptcha({
   control,
   name,
-  captchaType = '',
+  captchaType = "",
   errorMessage,
 }: ImageCaptchaProps) {
   const { token } = theme.useToken();
@@ -33,7 +34,7 @@ export function ImageCaptcha({
   const [loaded, setLoaded] = useState(false);
 
   const params = new URLSearchParams({ v: String(version) });
-  if (captchaType) params.set('type', captchaType);
+  if (captchaType) params.set("type", captchaType);
   const src = `/api/captcha/image?${params.toString()}`;
 
   useEffect(() => {
@@ -52,17 +53,14 @@ export function ImageCaptcha({
             width: 140,
             height: 48,
             borderRadius: token.borderRadius,
-            overflow: 'hidden',
+            overflow: "hidden",
             border: `1px solid ${token.colorBorderSecondary}`,
             background: token.colorBgContainerDisabled,
             flexShrink: 0,
           }}
         >
           {!loaded && (
-            <Skeleton.Image
-              active
-              style={{ width: 140, height: 48 }}
-            />
+            <Skeleton.Image active style={{ width: 140, height: 48 }} />
           )}
           <Image
             src={src}
@@ -70,16 +68,16 @@ export function ImageCaptcha({
             preview={false}
             onLoad={() => setLoaded(true)}
             style={{
-              display: loaded ? 'block' : 'none',
+              display: loaded ? "block" : "none",
               width: 140,
               height: 48,
-              objectFit: 'contain',
+              objectFit: "contain",
             }}
           />
         </div>
         <Button
           aria-label="Reload captcha"
-          icon={<ReloadOutlined />}
+          icon={<AppIcon icon={Icons.refreshCw} size={16} />}
           onClick={refresh}
           size="middle"
           type="default"
@@ -96,8 +94,12 @@ export function ImageCaptcha({
                 aria-label="Enter captcha code"
                 autoComplete="off"
                 placeholder="Enter code"
-                status={errorMessage ? 'error' : undefined}
-                style={{ height: 48, borderRadius: 24, fontSize: 15 }}
+                status={errorMessage ? "error" : undefined}
+                style={{
+                  height: 48,
+                  borderRadius: token.borderRadius,
+                  fontSize: 15,
+                }}
               />
             )}
           />

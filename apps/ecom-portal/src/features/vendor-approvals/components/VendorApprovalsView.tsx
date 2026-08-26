@@ -1,5 +1,5 @@
-// Modified by sekar nagarajan (2026-08-21)
-import { CheckCircleOutlined, CheckSquareOutlined, CloseCircleOutlined } from '@ant-design/icons';
+// Modified by Sekar Nagarajan (2026-08-24 16:05)
+import { AppIcon, Icons } from '../../../components/icons';
 import { AppButton } from '@solverminds/shared-ui';
 import { DataView, DataViewColumn } from '@solverminds/shared-ui/data-view';
 import { useToast } from '@solverminds/shared-ui/hooks';
@@ -53,7 +53,7 @@ export function VendorApprovalsView() {
               <AppButton
                 type="text"
                 size="small"
-                icon={<CheckCircleOutlined style={{ color: token.colorSuccess, fontSize: 16 }} />}
+                icon={<AppIcon icon={Icons.checkCircle} size={16} gridAction tone="approve" />}
                 onClick={() => handleAction(record.id, 'APPROVED')}
               />
             </Tooltip>
@@ -61,7 +61,7 @@ export function VendorApprovalsView() {
               <AppButton
                 type="text"
                 size="small"
-                icon={<CloseCircleOutlined style={{ color: token.colorError, fontSize: 16 }} />}
+                icon={<AppIcon icon={Icons.circleX} size={16} gridAction tone="reject" />}
                 onClick={() => handleAction(record.id, 'REJECTED')}
               />
             </Tooltip>
@@ -124,7 +124,7 @@ export function VendorApprovalsView() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
         <div>
           <Space align="center">
-            <CheckSquareOutlined style={{ fontSize: 22, color: token.colorPrimary }} />
+            <AppIcon icon={Icons.checkSquare} size={22} />
             <Title level={4} style={{ margin: 0, fontWeight: 700 }}>
               Agency & Vendor Superuser Approvals
             </Title>
@@ -143,7 +143,7 @@ export function VendorApprovalsView() {
         </Col>
         <Col span={8}>
           <Card type="inner" style={{ borderRadius: 12, background: token.colorFillAlter }}>
-            <Statistic title="Approved Today" value={approvedCount} valueStyle={{ color: token.colorSuccess }} prefix={<CheckCircleOutlined />} />
+            <Statistic title="Approved Today" value={approvedCount} valueStyle={{ color: token.colorSuccess }} prefix={<AppIcon icon={Icons.checkCircle} size={16} />} />
           </Card>
         </Col>
         <Col span={8}>

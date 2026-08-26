@@ -1,18 +1,22 @@
-// Container & Cargo Tracking Search Filter Component
-// Parity with Tracking.jsp search form layout
-// Mandatory field red asterisk (*) displayed AFTER the label text per agenct.md
-// Modified by sekar nagarajan (2026-08-21 18:40)
-
+// Modified by Sekar Nagarajan (2026-08-25 19:15)
+import { AppButton } from "@solverminds/shared-ui";
 import {
-  BarcodeOutlined,
-  FileTextOutlined,
-  ReloadOutlined,
-  SearchOutlined,
-  TagOutlined,
-} from '@ant-design/icons';
-import { AppButton } from '@solverminds/shared-ui';
-import { Card, Col, Form, Input, Row, Segmented, Space, Tag, theme, Typography } from 'antd';
-import type { TrackingSearchParams, TrackingSearchType } from '../types/tracking.types';
+  Card,
+  Col,
+  Form,
+  Input,
+  Row,
+  Segmented,
+  Space,
+  Tag,
+  Typography,
+} from "antd";
+
+import { AppIcon, Icons } from "../../../components/icons";
+import type {
+  TrackingSearchParams,
+  TrackingSearchType,
+} from "../types/tracking.types";
 
 const { Text } = Typography;
 
@@ -22,13 +26,23 @@ interface TrackingSearchFilterProps {
   initialValue?: string;
 }
 
-export function TrackingSearchFilter({ onSearch, isLoading, initialValue = 'SMLU8829102' }: TrackingSearchFilterProps) {
-  const { token } = theme.useToken();
+function SearchActionsLabel() {
+  return <span className="tracking-search-actions-label">&nbsp;</span>;
+}
+
+export function TrackingSearchFilter({
+  onSearch,
+  isLoading,
+  initialValue = "SMLU8829102",
+}: TrackingSearchFilterProps) {
   const [form] = Form.useForm();
 
-  const handleFinish = (values: { searchType: TrackingSearchType; searchValue: string }) => {
+  const handleFinish = (values: {
+    searchType: TrackingSearchType;
+    searchValue: string;
+  }) => {
     onSearch({
-      searchType: values.searchType || 'CONTAINER',
+      searchType: values.searchType || "CONTAINER",
       searchValue: values.searchValue,
     });
   };
@@ -43,96 +57,110 @@ export function TrackingSearchFilter({ onSearch, isLoading, initialValue = 'SMLU
   };
 
   return (
-    <Card
-      type="inner"
-      style={{
-        borderRadius: 12,
-        background: token.colorFillAlter,
-        border: `1px solid ${token.colorBorderSecondary}`,
-        marginBottom: 20,
-      }}
-      styles={{ body: { padding: '20px 24px' } }}
-    >
+    <Card type="inner" className="tracking-search-panel">
       <Form
         form={form}
         layout="vertical"
         requiredMark={false}
         initialValues={{
-          searchType: 'CONTAINER',
+          searchType: "CONTAINER",
           searchValue: initialValue,
         }}
         onFinish={handleFinish}
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 12 }}>
-          <Form.Item name="searchType" style={{ margin: 0 }}>
+        <div className="tracking-search-toolbar">
+          <Form.Item name="searchType" className="tracking-search-type">
             <Segmented
               options={[
-                { label: 'Container No', value: 'CONTAINER', icon: <BarcodeOutlined /> },
-                { label: 'Booking No', value: 'BOOKING', icon: <TagOutlined /> },
-                { label: 'Bill of Lading (BL)', value: 'BL', icon: <FileTextOutlined /> },
+                {
+                  label: "Container No",
+                  value: "CONTAINER",
+                  icon: <AppIcon icon={Icons.container} size={16} />,
+                },
+                {
+                  label: "Booking No",
+                  value: "BOOKING",
+                  icon: <AppIcon icon={Icons.tag} size={16} />,
+                },
+                {
+                  label: "Bill of Lading (BL)",
+                  value: "BL",
+                  icon: <AppIcon icon={Icons.fileText} size={16} />,
+                },
               ]}
             />
           </Form.Item>
 
-          <Space size={8} align="center">
-            <Text type="secondary" style={{ fontSize: 12 }}>
+          <Space size={8} align="center" className="tracking-search-samples">
+            <Text type="secondary" className="tracking-search-samples__label">
               Quick Samples:
             </Text>
             <Tag
               color="blue"
-              style={{ cursor: 'pointer', borderRadius: 10 }}
-              onClick={() => handleQuickSelect('SMLU8829102')}
+              className="tracking-search-sample"
+              onClick={() => handleQuickSelect("SMLU8829102")}
             >
               SMLU8829102
             </Tag>
             <Tag
               color="cyan"
-              style={{ cursor: 'pointer', borderRadius: 10 }}
-              onClick={() => handleQuickSelect('BKG-2026-9901')}
+              className="tracking-search-sample"
+              onClick={() => handleQuickSelect("BKG-2026-9901")}
             >
               BKG-2026-9901
             </Tag>
           </Space>
         </div>
 
-        <Row gutter={[16, 16]} align="bottom">
+        <Row gutter={[16, 16]} align="top">
           <Col xs={24} md={18} lg={19}>
             <Form.Item
               name="searchValue"
+              className="tracking-search-field"
               label={
-                <span style={{ fontWeight: 600, fontSize: 13, color: token.colorTextSecondary }}>
-                  Enter Container, Booking or BL Reference Numbers <Text type="danger">*</Text>
+                <span className="form-field-label">
+                  Enter Container, Booking or BL Reference Numbers{" "}
+                  <Text type="danger">*</Text>
                 </span>
               }
-              rules={[{ required: true, message: 'Please enter reference number(s)' }]}
-              style={{ margin: 0 }}
+              rules={[
+                { required: true, message: "Please enter reference number(s)" },
+              ]}
             >
-              <Input.TextArea
-                rows={1}
+              <Input
+                size="large"
+                allowClear
                 placeholder="e.g. SMLU8829102, MSKU9012845, BKG-2026-9901"
-                style={{ borderRadius: 8, fontSize: 14 }}
               />
             </Form.Item>
           </Col>
 
-          <Col xs={24} md={6} lg={5} style={{ textAlign: 'right' }}>
-            <Space style={{ width: '100%' }}>
-              <AppButton
-                type="primary"
-                htmlType="submit"
-                loading={isLoading}
-                icon={<SearchOutlined />}
-                style={{ flex: 1, height: 38 }}
-              >
-                Track Cargo
-              </AppButton>
-              <AppButton
-                icon={<ReloadOutlined />}
-                onClick={handleReset}
-                title="Reset search fields"
-                style={{ height: 38 }}
-              />
-            </Space>
+          <Col xs={24} md={6} lg={5}>
+            <Form.Item
+              label={<SearchActionsLabel />}
+              className="tracking-search-actions-field"
+            >
+              <div className="tracking-search-actions">
+                <AppButton
+                  type="primary"
+                  size="large"
+                  htmlType="submit"
+                  loading={isLoading}
+                  icon={<AppIcon icon={Icons.search} size={16} />}
+                >
+                  Track Cargo
+                </AppButton>
+                <AppButton
+                  size="large"
+                  icon={
+                    <AppIcon icon={Icons.refreshCw} size={16} tone="primary" />
+                  }
+                  onClick={handleReset}
+                >
+                  Reset
+                </AppButton>
+              </div>
+            </Form.Item>
           </Col>
         </Row>
       </Form>

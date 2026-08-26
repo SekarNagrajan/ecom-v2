@@ -1,11 +1,13 @@
-// Modified by Sekar Nagarajan (2026-08-21 14:55)
-import React from 'react';
-import { Table, Switch, Tag, Typography, Card, Space } from 'antd';
-import { StopOutlined, SaveOutlined } from '@ant-design/icons';
+// Modified by Sekar Nagarajan (2026-08-24 19:14)
 import { AppButton } from '@solverminds/shared-ui';
-import type { ServiceRestriction } from '../types/admin.types';
+import { Card, Switch, Tag, Typography } from 'antd';
+import React from 'react';
 
-const { Text, Title } = Typography;
+import { AppIcon, Icons } from '../../../components/icons';
+import type { ServiceRestriction } from '../types/admin.types';
+import { AdminPanelShell } from './AdminPanelShell';
+
+const { Title } = Typography;
 
 interface ServiceRestrictionsViewProps {
   restrictions: ServiceRestriction[];
@@ -20,47 +22,103 @@ export function ServiceRestrictionsView({ restrictions, onSave }: ServiceRestric
   }, [restrictions]);
 
   const handleToggle = (id: string, checked: boolean) => {
-    const updated = data.map((item) => (item.id === id ? { ...item, isRestricted: checked } : item));
-    setData(updated);
+    setData(data.map((item) => (item.id === id ? { ...item, isRestricted: checked } : item)));
   };
 
-  const columns = [
-    { title: 'POL Code', dataIndex: 'polCode', key: 'polCode', render: (val: string) => <Tag color="geekblue">{val}</Tag> },
-    { title: 'POD Code', dataIndex: 'podCode', key: 'podCode', render: (val: string) => <Tag color="volcano">{val}</Tag> },
-    { title: 'Service Loop', dataIndex: 'serviceLoop', key: 'serviceLoop' },
-    { title: 'Tenant Code', dataIndex: 'tenantId', key: 'tenantId', render: (val: string) => <Tag color="gold">{val}</Tag> },
-    {
-      title: 'Restriction Status',
-      dataIndex: 'isRestricted',
-      key: 'isRestricted',
-      render: (restricted: boolean, record: ServiceRestriction) => (
-        <Space>
-          <Switch checked={restricted} onChange={(checked) => handleToggle(record.id, checked)} />
-          <Tag color={restricted ? 'red' : 'green'}>{restricted ? 'RESTRICTED' : 'ACTIVE'}</Tag>
-        </Space>
-      ),
-    },
-    { title: 'Restriction Reason', dataIndex: 'reason', key: 'reason', render: (val?: string) => val || 'N/A' },
-  ];
-
   return (
-    <Card style={{ borderRadius: 16, boxShadow: '0 8px 24px rgba(0,0,0,0.05)', border: 'none' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-        <div>
-          <Space align="center">
-            <StopOutlined style={{ fontSize: 20, color: '#ff4d4f' }} />
-            <Title level={4} style={{ margin: 0 }}>Service & Route Restrictions</Title>
-          </Space>
-          <Text type="secondary" style={{ display: 'block', marginTop: 4 }}>
-            Enable or restrict specific origin/destination port pairs and maritime service loops
-          </Text>
-        </div>
-        <AppButton type="primary" size="large" icon={<SaveOutlined />} onClick={() => onSave(data)}>
+    <AdminPanelShell
+      icon={Icons.stopCircle}
+      title="Service & Route Restrictions"
+      subtitle="Enable or restrict specific origin/destination port pairs and maritime service loops."
+      extra={
+        <AppButton
+          type="primary"
+          size="large"
+          icon={<AppIcon icon={Icons.save} size={16} />}
+          onClick={() => onSave(data)}
+        >
           Save Route Rules
         </AppButton>
-      </div>
+      }
+    >
+      <div className="admin-route-list">
+        {data.map((item) => (
+          <Card key={item.id} className="admin-route-card" bordered={false}>
+            <div className="admin-route-strip">
+              <div className="admin-route-port admin-route-port--origin">
+                <div className="admin-route-port__label">
+                  <AppIcon icon={Icons.mapPin} size={14} tone="track" />
+                  Origin
+                </div>
+                <Title level={4} className="admin-route-port__code admin-route-port__code--origin">
+                  {item.polCode}
+                </Title>
+              </div>
 
-      <Table dataSource={data} columns={columns} rowKey="id" pagination={false} />
-    </Card>
+              <div className="admin-route-connector">
+                <span className="admin-route-connector__label">Port to Port</span>
+                <div className="admin-route-connector__line">
+                  <span className="admin-route-connector__dot admin-route-connector__dot--origin" />
+                  <span className="admin-route-connector__track" />
+                  <AppIcon icon={Icons.arrowRight} size={14} tone="navigate" />
+                  <span className="admin-route-connector__track" />
+                  <span className="admin-route-connector__dot admin-route-connector__dot--delivery" />
+                </div>
+                <AppIcon icon={Icons.truck} size={16} />
+              </div>
+
+              <div className="admin-route-port admin-route-port--delivery">
+                <div className="admin-route-port__label">
+                  <AppIcon icon={Icons.mapPin} size={14} tone="track" />
+                  Delivery
+                </div>
+                <Title
+                  level={4}
+                  className="admin-route-port__code admin-route-port__code--delivery"
+                >
+                  {item.podCode}
+                </Title>
+              </div>
+            </div>
+
+            <div className="admin-route-meta">
+              <div>
+                <span className="admin-route-meta__label">Service Loop</span>
+                <span className="admin-route-meta__value">{item.serviceLoop}</span>
+              </div>
+              <div>
+                <span className="admin-route-meta__label">Tenant Code</span>
+                <span className="admin-route-meta__value">
+                  <Tag className="admin-code-tag" color="gold">
+                    {item.tenantId}
+                  </Tag>
+                </span>
+              </div>
+              <div>
+                <span className="admin-route-meta__label">Restriction Reason</span>
+                <span className="admin-route-meta__value">{item.reason || 'N/A'}</span>
+              </div>
+              <div>
+                <span className="admin-route-meta__label">Status</span>
+                <span className="admin-route-meta__value">
+                  <span className="admin-toggle-row">
+                    <Switch
+                      checked={item.isRestricted}
+                      onChange={(checked) => handleToggle(item.id, checked)}
+                    />
+                    <Tag
+                      className="admin-status-tag"
+                      color={item.isRestricted ? 'error' : 'success'}
+                    >
+                      {item.isRestricted ? 'Restricted' : 'Active'}
+                    </Tag>
+                  </span>
+                </span>
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
+    </AdminPanelShell>
   );
 }

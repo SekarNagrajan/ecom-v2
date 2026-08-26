@@ -1,0 +1,185 @@
+openapi: 3.0.3
+info:
+  title: E-Com Portal Customer Statement API
+  version: 1.0.0
+paths:
+  /api/ecom/fin/statement/accounts:
+    get:
+      summary: Statement account options for the authenticated customer
+      responses:
+        '200':
+          description: Account list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountListResponse'
+  /api/ecom/fin/statement:
+    get:
+      summary: Customer statement for criteria
+      parameters:
+        - name: accountId
+          in: query
+          required: true
+          schema: { type: string }
+        - name: currency
+          in: query
+          required: true
+          schema: { type: string }
+        - name: fromDate
+          in: query
+          required: true
+          schema: { type: string, format: date }
+        - name: toDate
+          in: query
+          required: true
+          schema: { type: string, format: date }
+      responses:
+        '200':
+          description: Statement DTO
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatementResponse'
+  /api/ecom/fin/statement/document:
+    get:
+      summary: Export statement PDF
+      parameters:
+        - name: format
+          in: query
+          schema: { type: string, enum: [pdf] }
+        - name: accountId
+          in: query
+          required: true
+          schema: { type: string }
+        - name: currency
+          in: query
+          required: true
+          schema: { type: string }
+        - name: fromDate
+          in: query
+          required: true
+          schema: { type: string, format: date }
+        - name: toDate
+          in: query
+          required: true
+          schema: { type: string, format: date }
+      responses:
+        '200':
+          description: PDF blob
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+  /api/ecom/fin/statement/export:
+    get:
+      summary: Export statement Excel
+      parameters:
+        - name: format
+          in: query
+          schema: { type: string, enum: [xlsx] }
+        - name: accountId
+          in: query
+          required: true
+          schema: { type: string }
+        - name: currency
+          in: query
+          required: true
+          schema: { type: string }
+        - name: fromDate
+          in: query
+          required: true
+          schema: { type: string, format: date }
+        - name: toDate
+          in: query
+          required: true
+          schema: { type: string, format: date }
+      responses:
+        '200':
+          description: XLSX blob
+          content:
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+              schema:
+                type: string
+                format: binary
+components:
+  schemas:
+    AccountOption:
+      type: object
+      required: [accountId, name, currency]
+      properties:
+        accountId: { type: string }
+        name: { type: string }
+        currency: { type: string }
+    StatementLine:
+      type: object
+      required: [date, docType, docNo, debit, credit, runningBalance, currency]
+      properties:
+        date: { type: string }
+        docType:
+          type: string
+          enum: [Invoice, CreditNote, DebitNote, Receipt, Adjustment]
+        docNo: { type: string }
+        reference: { type: string }
+        debit: { type: string }
+        credit: { type: string }
+        runningBalance: { type: string }
+        currency: { type: string }
+    StatementTotals:
+      type: object
+      required: [totalDebit, totalCredit, net]
+      properties:
+        totalDebit: { type: string }
+        totalCredit: { type: string }
+        net: { type: string }
+    StatementDTO:
+      type: object
+      required:
+        - accountId
+        - accountName
+        - currency
+        - period
+        - openingBalance
+        - lines
+        - closingBalance
+        - totals
+      properties:
+        accountId: { type: string }
+        accountName: { type: string }
+        currency: { type: string }
+        period:
+          type: object
+          required: [from, to]
+          properties:
+            from: { type: string }
+            to: { type: string }
+        openingBalance: { type: string }
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/StatementLine'
+        closingBalance: { type: string }
+        totals:
+          $ref: '#/components/schemas/StatementTotals'
+    AccountListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountOption'
+        error:
+          type: object
+          properties:
+            code: { type: string }
+            message: { type: string }
+    StatementResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/StatementDTO'
+        error:
+          type: object
+          properties:
+            code: { type: string }
+            message: { type: string }

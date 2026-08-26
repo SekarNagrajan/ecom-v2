@@ -1,11 +1,11 @@
-// Modified by Sekar Nagarajan (2026-08-21 14:55)
-import React from 'react';
-import { Table, Switch, Tag, Typography, Card, Space } from 'antd';
-import { FormOutlined, SaveOutlined } from '@ant-design/icons';
+// Modified by Sekar Nagarajan (2026-08-24 19:14)
 import { AppButton } from '@solverminds/shared-ui';
-import type { FieldConfig } from '../types/admin.types';
+import { Switch, Table, Tag } from 'antd';
+import React from 'react';
 
-const { Text, Title } = Typography;
+import { AppIcon, Icons } from '../../../components/icons';
+import type { FieldConfig } from '../types/admin.types';
+import { AdminPanelShell } from './AdminPanelShell';
 
 interface FieldConfigViewProps {
   fields: FieldConfig[];
@@ -20,50 +20,101 @@ export function FieldConfigView({ fields, onSave }: FieldConfigViewProps) {
   }, [fields]);
 
   const handleToggle = (id: string, prop: 'isVisible' | 'isRequired', checked: boolean) => {
-    const updated = data.map((item) => (item.id === id ? { ...item, [prop]: checked } : item));
-    setData(updated);
+    setData(data.map((item) => (item.id === id ? { ...item, [prop]: checked } : item)));
   };
 
   const columns = [
-    { title: 'Form Module', dataIndex: 'formName', key: 'formName', render: (val: string) => <Tag color="blue">{val}</Tag> },
-    { title: 'Field Identifier', dataIndex: 'fieldId', key: 'fieldId', render: (val: string) => <code>{val}</code> },
-    { title: 'Field Display Label', dataIndex: 'fieldLabel', key: 'fieldLabel' },
     {
-      title: 'Is Visible',
-      dataIndex: 'isVisible',
-      key: 'isVisible',
-      render: (val: boolean, record: FieldConfig) => (
-        <Switch checked={val} onChange={(checked) => handleToggle(record.id, 'isVisible', checked)} />
+      title: 'Actions',
+      key: 'actions',
+      width: 160,
+      fixed: 'left' as const,
+      render: (_: unknown, record: FieldConfig) => (
+        <SpaceActions
+          visible={record.isVisible}
+          required={record.isRequired}
+          onVisible={(checked) => handleToggle(record.id, 'isVisible', checked)}
+          onRequired={(checked) => handleToggle(record.id, 'isRequired', checked)}
+        />
       ),
     },
     {
-      title: 'Is Mandatory',
+      title: 'Form Module',
+      dataIndex: 'formName',
+      key: 'formName',
+      render: (val: string) => (
+        <Tag className="admin-code-tag" color="blue">
+          {val}
+        </Tag>
+      ),
+    },
+    {
+      title: 'Field Identifier',
+      dataIndex: 'fieldId',
+      key: 'fieldId',
+      render: (val: string) => <code>{val}</code>,
+    },
+    { title: 'Field Display Label', dataIndex: 'fieldLabel', key: 'fieldLabel' },
+    {
+      title: 'Visible',
+      dataIndex: 'isVisible',
+      key: 'isVisible',
+      render: (val: boolean) => (
+        <Tag className="admin-status-tag" color={val ? 'success' : 'default'}>
+          {val ? 'Visible' : 'Hidden'}
+        </Tag>
+      ),
+    },
+    {
+      title: 'Mandatory',
       dataIndex: 'isRequired',
       key: 'isRequired',
-      render: (val: boolean, record: FieldConfig) => (
-        <Switch checked={val} onChange={(checked) => handleToggle(record.id, 'isRequired', checked)} />
+      render: (val: boolean) => (
+        <Tag className="admin-status-tag" color={val ? 'warning' : 'default'}>
+          {val ? 'Required' : 'Optional'}
+        </Tag>
       ),
     },
   ];
 
   return (
-    <Card style={{ borderRadius: 16, boxShadow: '0 8px 24px rgba(0,0,0,0.05)', border: 'none' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-        <div>
-          <Space align="center">
-            <FormOutlined style={{ fontSize: 20, color: '#fa8c16' }} />
-            <Title level={4} style={{ margin: 0 }}>Form Field Configuration</Title>
-          </Space>
-          <Text type="secondary" style={{ display: 'block', marginTop: 4 }}>
-            Dynamically manage form field visibility and mandatory rules across all forms
-          </Text>
-        </div>
-        <AppButton type="primary" size="large" icon={<SaveOutlined />} onClick={() => onSave(data)}>
+    <AdminPanelShell
+      icon={Icons.formInput}
+      title="Form Field Configuration"
+      subtitle="Dynamically manage form field visibility and mandatory rules across all forms."
+      extra={
+        <AppButton
+          type="primary"
+          size="large"
+          icon={<AppIcon icon={Icons.save} size={16} />}
+          onClick={() => onSave(data)}
+        >
           Save Field Configs
         </AppButton>
+      }
+    >
+      <div className="responsive-table-wrap">
+        <Table dataSource={data} columns={columns} rowKey="id" pagination={false} scroll={{ x: true }} />
       </div>
+    </AdminPanelShell>
+  );
+}
 
-      <Table dataSource={data} columns={columns} rowKey="id" pagination={false} />
-    </Card>
+function SpaceActions({
+  visible,
+  required,
+  onVisible,
+  onRequired,
+}: {
+  visible: boolean;
+  required: boolean;
+  onVisible: (checked: boolean) => void;
+  onRequired: (checked: boolean) => void;
+}) {
+  return (
+    <span className="admin-field-actions">
+      <Switch size="small" checked={visible} onChange={onVisible} title="Visible" />
+      <Switch size="small" checked={required} onChange={onRequired} title="Required" />
+    </span>
   );
 }

@@ -1,17 +1,53 @@
-import {
-  GlobalOutlined,
-  LoginOutlined,
-  MailOutlined,
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  UserAddOutlined,
-} from '@ant-design/icons';
-import type { MenuProps } from 'antd';
-import { Button, Dropdown, Flex, Layout, Space, Typography, theme } from 'antd';
+// Modified by Sekar Nagarajan (2026-08-25 17:25)
+import { AppButton } from '@solverminds/shared-ui';
 import { Link } from '@tanstack/react-router';
+import type { MenuProps } from 'antd';
+import { Dropdown, Layout } from 'antd';
+import { useState } from 'react';
+
+import { AppIcon, Icons } from '../icons';
+import { HeaderThemeToggle } from './header-theme-toggle';
 
 const { Header } = Layout;
-const { Text } = Typography;
+
+export type PublicLanguageCode = 'en' | 'zh' | 'ma' | 'es';
+
+const PUBLIC_LANGUAGES: Array<{
+  key: PublicLanguageCode;
+  label: string;
+  nativeName: string;
+  detail: string;
+  shortCode: string;
+}> = [
+  {
+    key: 'en',
+    label: 'English',
+    nativeName: 'English',
+    detail: 'Default portal language',
+    shortCode: 'EN',
+  },
+  {
+    key: 'zh',
+    label: 'Chinese',
+    nativeName: '中文',
+    detail: 'Simplified Chinese (中文)',
+    shortCode: 'ZH',
+  },
+  {
+    key: 'ma',
+    label: 'Malay',
+    nativeName: 'Bahasa Melayu',
+    detail: 'Bahasa Melayu',
+    shortCode: 'MS',
+  },
+  {
+    key: 'es',
+    label: 'Spanish',
+    nativeName: 'Español',
+    detail: 'Español (Spanish)',
+    shortCode: 'ES',
+  },
+];
 
 interface PublicLayoutHeaderProps {
   /** Company logo URL — loaded from config / static asset */
@@ -27,7 +63,7 @@ interface PublicLayoutHeaderProps {
  * PublicLayoutHeader — unauthenticated app header.
  *
  * Parity: JSP `MainLoginLayout.jsp` navbar when `isViaLogin !== 'Yes'`.
- * Shows: Hamburger menu · Logo · Portal name | Contact Us · Register · Login
+ * Shows: Hamburger · Logo · Portal name | Contact Us · Register · Login · Language
  */
 export function PublicLayoutHeader({
   logoUrl,
@@ -36,125 +72,124 @@ export function PublicLayoutHeader({
   collapsed,
   onToggleCollapse,
 }: PublicLayoutHeaderProps) {
-  const { token } = theme.useToken();
+  const [language, setLanguage] = useState<PublicLanguageCode>('en');
+  const selectedLanguage =
+    PUBLIC_LANGUAGES.find((item) => item.key === language) ?? PUBLIC_LANGUAGES[0];
 
-  const languageItems: MenuProps['items'] = [
-    { key: 'en', label: 'English' },
-    { key: 'zh', label: 'Chinese' },
-    { key: 'ma', label: 'Malay' },
-    { key: 'es', label: 'Spanish' },
-  ];
+  const languageItems: MenuProps['items'] = PUBLIC_LANGUAGES.map((item) => ({
+    key: item.key,
+    label: (
+      <div className="pub-header-lang-item">
+        <span className="pub-header-lang-item__name">
+          {item.nativeName}
+          {item.nativeName !== item.label ? ` · ${item.label}` : ''}
+        </span>
+        <span className="pub-header-lang-item__detail">{item.detail}</span>
+      </div>
+    ),
+  }));
+
+  const onLanguageClick: MenuProps['onClick'] = ({ key }) => {
+    setLanguage(key as PublicLanguageCode);
+  };
 
   return (
-    <Header
-      style={{
-        position: 'sticky',
-        top: 0,
-        zIndex: token.zIndexBase + 20,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingInline: token.paddingLG,
-        height: 48,
-        background: token.colorBgContainer,
-        borderBottom: `1px solid ${token.colorBorderSecondary}`,
-        boxShadow: token.boxShadow,
-      }}
-    >
-      {/* Left: Hamburger + Logo + portal name */}
-      <Flex align="center" gap={token.marginSM}>
+    <Header className="pub-layout-header">
+      <div className="pub-layout-header__left">
         {onToggleCollapse ? (
-          <Button
+          <AppButton
             type="text"
-            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+            aria-label={collapsed ? 'Expand menu' : 'Collapse menu'}
+            icon={<AppIcon icon={Icons.menu} size={18} />}
             onClick={onToggleCollapse}
-            style={{ fontSize: 18, padding: '0 8px' }}
           />
         ) : null}
-        <Link to="/" style={{ textDecoration: 'none' }}>
-        <Flex align="center" gap={token.marginSM}>
+        <Link to="/" className="pub-layout-header__brand-link">
           {logoUrl ? (
             <img
               src={logoUrl}
               alt="Logo"
-              style={{ maxHeight: 40, objectFit: 'contain' }}
+              className="pub-layout-header__logo"
             />
           ) : (
-            <Flex align="center" gap={token.marginXS}>
-              <GlobalOutlined
-                style={{
-                  fontSize: token.fontSizeXL + 4,
-                  color: token.colorPrimary,
-                }}
-              />
-              <Flex vertical style={{ lineHeight: 1.2 }}>
-                <Text
-                  strong
-                  style={{
-                    fontSize: token.fontSizeLG,
-                    color: token.colorText,
-                    lineHeight: 1.2,
-                  }}
-                >
-                  SOLVERMINDS
-                </Text>
-                <Text
-                  style={{
-                    fontSize: token.fontSizeSM,
-                    color: token.colorPrimary,
-                    lineHeight: 1.2,
-                    letterSpacing: '0.5px',
-                  }}
-                >
-                  {portalName}
-                </Text>
-              </Flex>
-            </Flex>
+            <div className="pub-layout-header__brand">
+              <AppIcon icon={Icons.globe} size={18} />
+              <div className="pub-layout-header__brand-text">
+                <span className="pub-layout-header__brand-name">SOLVERMINDS</span>
+                <span className="pub-layout-header__brand-portal">{portalName}</span>
+              </div>
+            </div>
           )}
-        </Flex>
-      </Link>
-      </Flex>
+        </Link>
+      </div>
 
-      {/* Right: Contact Us · Register · Login */}
-      <Space size={token.marginSM}>
+      <div className="pub-header-actions">
         <Link to="/contact-us">
-          <Button
-            icon={<MailOutlined />}
-            size="middle"
+          <AppButton
             type="text"
+            className="pub-header-action"
             id="nav-contact-us"
-            style={{ color: token.colorText }}
+            icon={<AppIcon icon={Icons.headphones} size={16} />}
+            aria-label="Contact Us"
           >
-            Contact Us
-          </Button>
+            <span className="pub-header-action__label">Contact Us</span>
+          </AppButton>
         </Link>
+
         <Link to="/register">
-          <Button
-            icon={<UserAddOutlined />}
-            size="middle"
+          <AppButton
             type="text"
+            className="pub-header-action"
             id="nav-register"
-            style={{ color: token.colorText }}
+            icon={<AppIcon icon={Icons.userPlus} size={16} />}
+            aria-label="Register"
           >
-            Register
-          </Button>
+            <span className="pub-header-action__label">Register</span>
+          </AppButton>
         </Link>
-        <Button
-          icon={<LoginOutlined />}
-          id="nav-login-btn"
-          onClick={onLoginClick}
-          size="middle"
+
+        <AppButton
           type="primary"
+          className="pub-header-action pub-header-action--primary"
+          id="nav-login-btn"
+          icon={<AppIcon icon={Icons.logIn} size={16} />}
+          onClick={onLoginClick}
+          aria-label="Login"
         >
-          Login
-        </Button>
-        <Dropdown menu={{ items: languageItems }} placement="bottomRight">
-          <Button type="text" style={{ color: token.colorPrimary, display: 'flex', alignItems: 'center', gap: 6, fontWeight: 500 }}>
-            <GlobalOutlined style={{ fontSize: 16 }} />
-            Language
-          </Button>
+          <span className="pub-header-action__label">Login</span>
+        </AppButton>
+
+        <HeaderThemeToggle />
+
+        <Dropdown
+          trigger={['click']}
+          placement="bottomRight"
+          menu={{
+            items: languageItems,
+            selectable: true,
+            selectedKeys: [language],
+            onClick: onLanguageClick,
+          }}
+        >
+          <AppButton
+            type="text"
+            className="pub-header-action"
+            aria-label={`Language: ${selectedLanguage.label}`}
+            aria-haspopup="menu"
+          >
+            <span className="pub-header-lang-trigger">
+              <AppIcon icon={Icons.globe} size={16} />
+              <span className="pub-header-lang-trigger__code">
+                {selectedLanguage.shortCode}
+              </span>
+              <span className="pub-header-action__label">
+                {selectedLanguage.label}
+              </span>
+              <AppIcon icon={Icons.chevronDown} size={14} />
+            </span>
+          </AppButton>
         </Dropdown>
-      </Space>
+      </div>
     </Header>
   );
 }

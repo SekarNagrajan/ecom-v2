@@ -1,85 +1,130 @@
-import { delay, http, HttpResponse } from 'msw';
+import { delay, http, HttpResponse } from "msw";
 
 const mockBookings = [
   {
-    id: 'bkg-1',
-    bookingNo: 'AE01444000',
-    onlineRefNo: 'BKON7045',
-    agencyRefNo: '',
-    status: 'Confirmed',
-    origin: 'AEJEA-JEBEL ALI, UAE',
-    delivery: 'SGSIN-SINGAPORE',
-    createdDate: '10-Aug-2026 08:32',
-    confirmedDate: '11-Aug-2026 00:26',
-    dgStatus: 'N',
+    id: "bkg-1",
+    bookingNo: "AE01444000",
+    onlineRefNo: "BKON7045",
+    agencyRefNo: "",
+    status: "Confirmed",
+    origin: "AEJEA-JEBEL ALI, UAE",
+    delivery: "SGSIN-SINGAPORE",
+    createdDate: "10-Aug-2026 08:32",
+    confirmedDate: "11-Aug-2026 00:26",
+    dgStatus: "N",
     teusCount: 5.0,
-    submittedDate: '10-Aug-2026 08:32'
+    submittedDate: "10-Aug-2026 08:32",
   },
   {
-    id: 'bkg-2',
-    bookingNo: 'AE01443500',
-    onlineRefNo: 'BKON7041',
-    agencyRefNo: '',
-    status: 'Confirmed',
-    origin: 'AEJEA-JEBEL ALI, UAE',
-    delivery: 'SGSIN-SINGAPORE',
-    createdDate: '10-Aug-2026 05:33',
-    confirmedDate: '10-Aug-2026 07:05',
-    dgStatus: 'N',
+    id: "bkg-2",
+    bookingNo: "AE01443500",
+    onlineRefNo: "BKON7041",
+    agencyRefNo: "",
+    status: "Confirmed",
+    origin: "AEJEA-JEBEL ALI, UAE",
+    delivery: "SGSIN-SINGAPORE",
+    createdDate: "10-Aug-2026 05:33",
+    confirmedDate: "10-Aug-2026 07:05",
+    dgStatus: "N",
     teusCount: 5.0,
-    submittedDate: '10-Aug-2026 05:33'
+    submittedDate: "10-Aug-2026 05:33",
   },
   {
-    id: 'bkg-3',
-    bookingNo: 'IN01443000',
-    onlineRefNo: 'BKON7038',
-    agencyRefNo: '',
-    status: 'Awaiting Acceptance',
-    origin: 'INNSA-NHAVA SHEVA...',
-    delivery: 'AEJEA-JEBEL ALI, UAE',
-    createdDate: '10-Aug-2026 04:33',
-    confirmedDate: '',
-    dgStatus: 'N',
+    id: "bkg-3",
+    bookingNo: "IN01443000",
+    onlineRefNo: "BKON7038",
+    agencyRefNo: "",
+    status: "Awaiting Acceptance",
+    origin: "INNSA-NHAVA SHEVA...",
+    delivery: "AEJEA-JEBEL ALI, UAE",
+    createdDate: "10-Aug-2026 04:33",
+    confirmedDate: "",
+    dgStatus: "N",
     teusCount: 1.0,
-    submittedDate: '10-Aug-2026 04:33'
-  }
+    submittedDate: "10-Aug-2026 04:33",
+  },
 ];
 
 let mockTemplates = [
   {
-    id: 'tmpl-1',
-    templateName: 'Standard Electronics Export',
-    origin: 'AEJEA-JEBEL ALI, UAE',
-    delivery: 'SGSIN-SINGAPORE',
+    id: "tmpl-1",
+    templateName: "Standard Electronics Export",
+    origin: "AEJEA-JEBEL ALI, UAE",
+    delivery: "SGSIN-SINGAPORE",
     payload: {
-      masterDetails: { origin: 'AEJEA-JEBEL ALI, UAE', delivery: 'SGSIN-SINGAPORE', cargoReadyDate: '2026-09-01', haulageOriginType: 'Merchant', haulageDestinationType: 'Merchant' },
-      parties: { shipperName: 'Electronics Trading LLC', consigneeName: 'Tech Hub Pte Ltd', siSubmittingParty: 'Logistics Partner', agreementParty: 'Logistics Partner' },
-      cargo: { commodity: 'GEN-CGO', containerType: "20' Standard Dry", containerCount: 1, totalWeightKg: 5000, isLcl: false, isDangerousGoods: false, isReefer: false, isOog: false },
+      masterDetails: {
+        origin: "AEJEA-JEBEL ALI, UAE",
+        delivery: "SGSIN-SINGAPORE",
+        cargoReadyDate: "2026-09-01",
+        haulageOriginType: "Merchant",
+        haulageDestinationType: "Merchant",
+      },
+      parties: {
+        shipperName: "Electronics Trading LLC",
+        consigneeName: "Tech Hub Pte Ltd",
+        siSubmittingParty: "Logistics Partner",
+        agreementParty: "Logistics Partner",
+      },
+      cargo: {
+        commodity: "GEN-CGO",
+        containerType: "20' Standard Dry",
+        containerCount: 1,
+        totalWeightKg: 5000,
+        isLcl: false,
+        isDangerousGoods: false,
+        isReefer: false,
+        isOog: false,
+      },
       ens: null,
       insurance: null,
-    }
+    },
   },
   {
-    id: 'tmpl-2',
-    templateName: 'Auto Parts to Europe',
-    origin: 'AEJEA-JEBEL ALI, UAE',
-    delivery: 'NLRTM-ROTTERDAM',
+    id: "tmpl-2",
+    templateName: "Auto Parts to Europe",
+    origin: "AEJEA-JEBEL ALI, UAE",
+    delivery: "NLRTM-ROTTERDAM",
     payload: {
-      masterDetails: { origin: 'AEJEA-JEBEL ALI, UAE', delivery: 'NLRTM-ROTTERDAM', cargoReadyDate: '2026-09-15', haulageOriginType: 'Carrier', haulageDestinationType: 'Carrier' },
-      parties: { shipperName: 'Auto Parts FZE', consigneeName: 'Euro Spares B.V.', siSubmittingParty: 'Auto Parts FZE', agreementParty: 'Auto Parts FZE' },
-      cargo: { commodity: 'AUTO-PARTS', containerType: "40' High Cube Dry", containerCount: 2, totalWeightKg: 12000, isLcl: false, isDangerousGoods: false, isReefer: false, isOog: false },
-      ens: { euCustomsZone: true, blType: 'Straight BL', ensFilingType: 'Single Filing', paymentMethod: 'Wire Transfer' },
+      masterDetails: {
+        origin: "AEJEA-JEBEL ALI, UAE",
+        delivery: "NLRTM-ROTTERDAM",
+        cargoReadyDate: "2026-09-15",
+        haulageOriginType: "Carrier",
+        haulageDestinationType: "Carrier",
+      },
+      parties: {
+        shipperName: "Auto Parts FZE",
+        consigneeName: "Euro Spares B.V.",
+        siSubmittingParty: "Auto Parts FZE",
+        agreementParty: "Auto Parts FZE",
+      },
+      cargo: {
+        commodity: "AUTO-PARTS",
+        containerType: "40' High Cube Dry",
+        containerCount: 2,
+        totalWeightKg: 12000,
+        isLcl: false,
+        isDangerousGoods: false,
+        isReefer: false,
+        isOog: false,
+      },
+      ens: {
+        euCustomsZone: true,
+        blType: "Straight BL",
+        ensFilingType: "Single Filing",
+        paymentMethod: "Wire Transfer",
+      },
       insurance: null,
-    }
-  }
+    },
+  },
 ];
 
 export const bookingHandlers = [
-  http.get('/api/booking/list', async () => {
+  http.get("/api/booking/list", async () => {
     await delay(500);
     return HttpResponse.json({ data: mockBookings });
   }),
-  http.post('/api/booking/submit', async ({ request }) => {
+  http.post("/api/booking/submit", async ({ request }) => {
     await delay(1500); // Simulate network latency
 
     const payload = await request.json();
@@ -87,13 +132,15 @@ export const bookingHandlers = [
     // Mock response for a successful booking
     return HttpResponse.json({
       data: {
-        bookingReference: `BKG-${new Date().getFullYear()}-${Math.floor(10000 + Math.random() * 90000)}`,
-        status: 'CONFIRMED',
+        bookingReference: `BKG-${new Date().getFullYear()}-${Math.floor(
+          10000 + Math.random() * 90000,
+        )}`,
+        status: "CONFIRMED",
         submittedAt: new Date().toISOString(),
       },
     });
   }),
-  http.put('/api/booking/amend', async ({ request }) => {
+  http.put("/api/booking/amend", async ({ request }) => {
     await delay(1500); // Simulate network latency
 
     const payload = await request.json();
@@ -101,20 +148,22 @@ export const bookingHandlers = [
     // Mock response for a successful amendment
     return HttpResponse.json({
       data: {
-        bookingReference: `BKG-AMD-${new Date().getFullYear()}-${Math.floor(10000 + Math.random() * 90000)}`,
-        status: 'CONFIRMED',
+        bookingReference: `BKG-AMD-${new Date().getFullYear()}-${Math.floor(
+          10000 + Math.random() * 90000,
+        )}`,
+        status: "CONFIRMED",
         submittedAt: new Date().toISOString(),
       },
     });
   }),
-  http.get('/api/booking/templates', async () => {
+  http.get("/api/booking/templates", async () => {
     await delay(300);
     return HttpResponse.json({ data: mockTemplates });
   }),
-  http.delete('/api/booking/templates/:id', async ({ params }) => {
+  http.delete("/api/booking/templates/:id", async ({ params }) => {
     await delay(300);
     const { id } = params;
-    mockTemplates = mockTemplates.filter(t => t.id !== id);
+    mockTemplates = mockTemplates.filter((t) => t.id !== id);
     return new HttpResponse(null, { status: 200 });
   }),
 ];

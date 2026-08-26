@@ -1,7 +1,8 @@
-// Modified by Sekar Nagarajan (2026-08-22 00:06)
-import { SearchOutlined } from '@ant-design/icons';
-import { Button, Input, theme } from 'antd';
+// Modified by Sekar Nagarajan (2026-08-25 15:45)
+import { AppButton } from '@solverminds/shared-ui';
+import { Flex, Input, theme } from 'antd';
 import { Controller, type UseFormReturn } from 'react-hook-form';
+import { AppIcon, Icons } from '../../../components/icons';
 
 import type { TrackingSearchForm } from '../types/landing.types';
 import { ImageCaptcha } from './ImageCaptcha';
@@ -18,7 +19,11 @@ export function TrackingSearchTab({
   showImageCaptcha = true,
 }: TrackingSearchTabProps) {
   const { token } = theme.useToken();
-  const { control, formState: { errors } } = form;
+  const { control, reset, formState: { errors } } = form;
+
+  const handleReset = () => {
+    reset();
+  };
 
   const inputStyle = {
     height: 44,
@@ -50,7 +55,7 @@ export function TrackingSearchTab({
                 allowClear
                 style={inputStyle}
                 status={errors.trackingNumber ? 'error' : undefined}
-                prefix={<SearchOutlined style={{ color: '#888', marginRight: 8, fontSize: 16 }} />}
+                prefix={<AppIcon icon={Icons.search} size={16} style={{ marginRight: 8, fontSize: 16 }} />}
                 onChange={(e) => {
                   form.setValue('trackingNumber', e.target.value.toUpperCase());
                 }}
@@ -78,24 +83,27 @@ export function TrackingSearchTab({
         </div>
       )}
 
-      <Button
-        htmlType="submit"
-        onClick={(e) => onSubmit(e as any)}
-        id="tracking-search-btn"
-        type="primary"
-        icon={<SearchOutlined />}
-        style={{
-          width: '100%',
-          height: 44,
-          borderRadius: token.borderRadius,
-          fontWeight: 600,
-          fontSize: 16,
-          background: token.colorPrimary,
-          boxShadow: `0 4px 12px ${token.colorPrimary}40`
-        }}
-      >
-        Track shipment
-      </Button>
+      <Flex gap={12} wrap="wrap" className="landing-search-actions">
+        <AppButton
+          type="primary"
+          size="large"
+          htmlType="submit"
+          id="tracking-search-btn"
+          onClick={(e) => onSubmit(e as unknown as React.FormEvent<HTMLFormElement>)}
+          icon={<AppIcon icon={Icons.search} size={16} />}
+        >
+          Track shipment
+        </AppButton>
+        <AppButton
+          size="large"
+          htmlType="button"
+          icon={<AppIcon icon={Icons.refreshCw} size={16} />}
+          onClick={handleReset}
+          aria-label="Reset tracking search"
+        >
+          Reset
+        </AppButton>
+      </Flex>
     </form>
   );
 }

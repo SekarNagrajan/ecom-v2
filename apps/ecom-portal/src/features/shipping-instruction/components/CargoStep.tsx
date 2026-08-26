@@ -1,79 +1,122 @@
-// Created by Antigravity (2026-08-24 11:30)
-import { AppButton } from '@solverminds/shared-ui';
-import { Card, Col, Row, Typography, theme, Table, Tag } from 'antd';
-import type { SIDTO } from '../types/si.types';
+// Modified by Sekar Nagarajan (2026-08-26 12:19)
+import { AppButton } from "@solverminds/shared-ui";
+import { Card, Col, Row, Table, Tag, Typography } from "antd";
 
-const { Text, Title } = Typography;
+import type { SIDTO } from "../types/si.types";
 
-export function CargoStep({ 
-  data, 
-  onNext, 
-  onPrevious, 
-  isSubmitting 
-}: { 
+const { Text } = Typography;
+
+interface StepProps {
   data: SIDTO;
   onNext: () => void;
   onPrevious: () => void;
   onSubmit: () => void;
+  onCancel: () => void;
   isFirstStep: boolean;
   isLastStep: boolean;
   isSubmitting: boolean;
-}) {
-  const { token } = theme.useToken();
+}
 
-  const handleNext = () => {
-    onNext();
-  };
-
+export function CargoStep({
+  data,
+  onNext,
+  onPrevious,
+  onCancel,
+  isSubmitting,
+}: StepProps) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-      <div className="custom-scroll" style={{ flex: 1, overflowY: 'auto', padding: '24px' }}>
+    <div className="form-step-layout">
+      <div className="custom-scroll form-step-scroll">
         {data.containers.map((container, index) => (
-          <Card 
+          <Card
             key={container.id}
-            style={{ border: `1px solid ${token.colorBorderSecondary}`, borderRadius: 8, marginBottom: 24 }}
-            styles={{ header: { backgroundColor: token.colorFillAlter, borderBottom: `1px solid ${token.colorBorderSecondary}` } }}
+            className="form-step-card form-step-section si-cargo-card"
             title={
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: 16 }}>Container {index + 1}: <Text strong>{container.containerNo}</Text></span>
-                <Tag color="blue">{container.eqpSize}</Tag>
+              <div className="si-cargo-card-toolbar">
+                <span>
+                  Container {index + 1}:{" "}
+                  <Text strong>{container.containerNo}</Text>
+                </span>
+                <Tag color="processing">{container.eqpSize}</Tag>
               </div>
             }
           >
-            <Row gutter={[24, 24]} style={{ marginBottom: 24 }}>
-              <Col span={12}>
-                <Text type="secondary" style={{ display: 'block', marginBottom: 4 }}>Carrier Seal</Text>
-                <div style={{ fontSize: 15, fontWeight: 500 }}>{container.carrierSeal || 'N/A'}</div>
+            <Row gutter={[24, 24]} className="form-step-section">
+              <Col xs={24} md={12}>
+                <div className="form-field-cell">
+                  <span className="form-field-label">Carrier Seal</span>
+                  <div className="form-step-readonly-value">
+                    {container.carrierSeal || "N/A"}
+                  </div>
+                </div>
               </Col>
-              <Col span={12}>
-                <Text type="secondary" style={{ display: 'block', marginBottom: 4 }}>Shipper Seal</Text>
-                <div style={{ fontSize: 15, fontWeight: 500 }}>{container.shipperSeal || 'N/A'}</div>
+              <Col xs={24} md={12}>
+                <div className="form-field-cell">
+                  <span className="form-field-label">Shipper Seal</span>
+                  <div className="form-step-readonly-value">
+                    {container.shipperSeal || "N/A"}
+                  </div>
+                </div>
               </Col>
             </Row>
 
-            <Table
-              dataSource={container.cargoLines}
-              rowKey="id"
-              pagination={false}
-              size="small"
-              bordered
-              columns={[
-                { title: 'Marks & Numbers', dataIndex: 'marksAndNumbers', key: 'marksAndNumbers' },
-                { title: 'Description', dataIndex: 'description', key: 'description' },
-                { title: 'Commodity', dataIndex: 'commodityCode', key: 'commodityCode' },
-                { title: 'HS Code', dataIndex: 'hsCode', key: 'hsCode' },
-                { title: 'Packages', key: 'packages', render: (_, record) => `${record.packageCount} ${record.packageType}` },
-                { title: 'Gross Wt (KG)', dataIndex: 'grossWeight', key: 'grossWeight' },
-                { title: 'Volume (CBM)', dataIndex: 'volume', key: 'volume' },
-              ]}
-            />
+            <div className="responsive-table-wrap custom-scroll">
+              <Table
+                dataSource={container.cargoLines}
+                rowKey="id"
+                pagination={false}
+                size="small"
+                bordered
+                scroll={{ x: 720 }}
+                columns={[
+                  {
+                    title: "Marks & Numbers",
+                    dataIndex: "marksAndNumbers",
+                    key: "marksAndNumbers",
+                  },
+                  {
+                    title: "Description",
+                    dataIndex: "description",
+                    key: "description",
+                  },
+                  {
+                    title: "Commodity",
+                    dataIndex: "commodityCode",
+                    key: "commodityCode",
+                  },
+                  { title: "HS Code", dataIndex: "hsCode", key: "hsCode" },
+                  {
+                    title: "Packages",
+                    key: "packages",
+                    render: (_, record) =>
+                      `${record.packageCount} ${record.packageType}`,
+                  },
+                  {
+                    title: "Gross Wt (KG)",
+                    dataIndex: "grossWeight",
+                    key: "grossWeight",
+                  },
+                  {
+                    title: "Volume (CBM)",
+                    dataIndex: "volume",
+                    key: "volume",
+                  },
+                ]}
+              />
+            </div>
           </Card>
         ))}
       </div>
 
-      <div style={{ flexShrink: 0, padding: '16px 24px', borderTop: `1px solid ${token.colorBorderSecondary}`, display: 'flex', justifyContent: 'space-between', backgroundColor: token.colorBgContainer }}>
-        <AppButton onClick={onPrevious} disabled={isSubmitting}>Previous</AppButton>
-        <AppButton type="primary" onClick={handleNext} disabled={isSubmitting}>Next</AppButton>
+      <div className="form-step-footer form-step-footer--split">
+        <div className="form-step-footer__start custom-scroll">
+          <AppButton onClick={onPrevious} disabled={isSubmitting}>
+            Previous
+          </AppButton>
+        </div>
+        <AppButton type="primary" onClick={onNext} disabled={isSubmitting}>
+          Next
+        </AppButton>
       </div>
     </div>
   );

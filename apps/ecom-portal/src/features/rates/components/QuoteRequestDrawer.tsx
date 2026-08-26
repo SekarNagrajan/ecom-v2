@@ -1,32 +1,25 @@
-// Modified by Antigravity (2026-08-21 23:59)
-// QuoteRequestDrawer component aligned with ApplicationResource_en.properties keys:
-// ecom.rr.reqforrate=Request for Quote
-// ecom.rr.pol=POL
-// ecom.rr.pod=POD
-// ecom.rr.eqptype=Cargo Type
-// ecom.rr.cargoqty=Cargo Quantity
-// ecom.rr.cargowt=Cargo Weight
-// ecom.rr.commodity=Commodity
-// ecom.rr.comments=Comments
+// Modified by Sekar Nagarajan (2026-08-25 19:25)
+// QuoteRequestDrawer — ApplicationResource_en.properties Request for Quote fields
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { AppButton, AppDrawer } from '@solverminds/shared-ui';
-import { useToast } from '@solverminds/shared-ui/hooks';
-import { Form, Input, InputNumber, Select, Space, Typography } from 'antd';
-import { Controller, useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { useCreateQuoteMutation } from '../api/rates.queries';
-import { CreateQuoteInput } from '../types/rates.types';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AppButton, AppDrawer } from "@solverminds/shared-ui";
+import { useToast } from "@solverminds/shared-ui/hooks";
+import { Form, Input, InputNumber, Select, Space, Typography } from "antd";
+import { Controller, useForm } from "react-hook-form";
+import { z } from "zod";
+
+import { useCreateQuoteMutation } from "../api/rates.queries";
+import type { CreateQuoteInput } from "../types/rates.types";
 
 const { Text } = Typography;
 
 const quoteSchema = z.object({
-  originPort: z.string().min(1, 'Port of Load is required'),
-  deliveryPort: z.string().min(1, 'Port of Discharge is required'),
-  eqpType: z.string().min(1, 'Cargo Type is required'),
-  eqpQuantity: z.number().min(1, 'Cargo Quantity must be at least 1'),
-  commodity: z.string().min(1, 'Commodity is required'),
-  cargoWeightKg: z.number().min(100, 'Cargo Weight is required'),
+  originPort: z.string().min(1, "Port of Load is required"),
+  deliveryPort: z.string().min(1, "Port of Discharge is required"),
+  eqpType: z.string().min(1, "Cargo Type is required"),
+  eqpQuantity: z.number().min(1, "Cargo Quantity must be at least 1"),
+  commodity: z.string().min(1, "Commodity is required"),
+  cargoWeightKg: z.number().min(100, "Cargo Weight is required"),
   expectedAmountUsd: z.number().optional(),
   comments: z.string().optional(),
 });
@@ -48,11 +41,11 @@ export function QuoteRequestDrawer({ open, onClose }: QuoteRequestDrawerProps) {
   } = useForm<CreateQuoteInput>({
     resolver: zodResolver(quoteSchema),
     defaultValues: {
-      originPort: 'USNYC',
-      deliveryPort: 'SGSIN',
+      originPort: "USNYC",
+      deliveryPort: "SGSIN",
       eqpType: "40' High Cube Dry",
       eqpQuantity: 1,
-      commodity: 'General Merchandise',
+      commodity: "General Merchandise",
       cargoWeightKg: 15000,
     },
   });
@@ -60,12 +53,14 @@ export function QuoteRequestDrawer({ open, onClose }: QuoteRequestDrawerProps) {
   const onSubmit = (data: CreateQuoteInput) => {
     createMutation.mutate(data, {
       onSuccess: (newQuote) => {
-        toast.success(`Request for Quote ${newQuote.quoteNo} submitted successfully!`);
+        toast.success(
+          `Request for Quote ${newQuote.quoteNo} submitted successfully!`,
+        );
         reset();
         onClose();
       },
       onError: () => {
-        toast.error('Failed to submit Request for Quote. Please try again.');
+        toast.error("Failed to submit Request for Quote. Please try again.");
       },
     });
   };
@@ -76,25 +71,35 @@ export function QuoteRequestDrawer({ open, onClose }: QuoteRequestDrawerProps) {
       open={open}
       onClose={onClose}
       width={520}
+      classNames={{ body: "rates-drawer-body custom-scroll" }}
       extra={
         <Space size={8}>
           <AppButton onClick={onClose}>Cancel</AppButton>
-          <AppButton type="primary" loading={createMutation.isPending} onClick={handleSubmit(onSubmit)}>
+          <AppButton
+            type="primary"
+            loading={createMutation.isPending}
+            onClick={handleSubmit(onSubmit)}
+          >
             Submit Request for Quote
           </AppButton>
         </Space>
       }
     >
       <Form layout="vertical" requiredMark={false}>
-        {/* Port of Load (POL) */}
         <Form.Item
           label={
-            <span>
+            <span className="form-field-label">
               Port of Load (POL) <Text type="danger">*</Text>
             </span>
           }
-          validateStatus={errors.originPort ? 'error' : ''}
-          help={errors.originPort?.message}
+          validateStatus={errors.originPort ? "error" : ""}
+          help={
+            errors.originPort ? (
+              <Text type="danger" className="form-field-error">
+                {errors.originPort.message}
+              </Text>
+            ) : undefined
+          }
         >
           <Controller
             name="originPort"
@@ -102,26 +107,32 @@ export function QuoteRequestDrawer({ open, onClose }: QuoteRequestDrawerProps) {
             render={({ field }) => (
               <Select
                 {...field}
+                size="large"
                 showSearch
                 options={[
-                  { value: 'USNYC', label: 'USNYC - New York, USA' },
-                  { value: 'DEHAM', label: 'DEHAM - Hamburg, Germany' },
-                  { value: 'INNSA', label: 'INNSA - Nhava Sheva, India' },
+                  { value: "USNYC", label: "USNYC - New York, USA" },
+                  { value: "DEHAM", label: "DEHAM - Hamburg, Germany" },
+                  { value: "INNSA", label: "INNSA - Nhava Sheva, India" },
                 ]}
               />
             )}
           />
         </Form.Item>
 
-        {/* Port of Discharge (POD) */}
         <Form.Item
           label={
-            <span>
+            <span className="form-field-label">
               Port of Discharge (POD) <Text type="danger">*</Text>
             </span>
           }
-          validateStatus={errors.deliveryPort ? 'error' : ''}
-          help={errors.deliveryPort?.message}
+          validateStatus={errors.deliveryPort ? "error" : ""}
+          help={
+            errors.deliveryPort ? (
+              <Text type="danger" className="form-field-error">
+                {errors.deliveryPort.message}
+              </Text>
+            ) : undefined
+          }
         >
           <Controller
             name="deliveryPort"
@@ -129,26 +140,32 @@ export function QuoteRequestDrawer({ open, onClose }: QuoteRequestDrawerProps) {
             render={({ field }) => (
               <Select
                 {...field}
+                size="large"
                 showSearch
                 options={[
-                  { value: 'SGSIN', label: 'SGSIN - Singapore, Singapore' },
-                  { value: 'CNSHA', label: 'CNSHA - Shanghai, China' },
-                  { value: 'AEDXB', label: 'AEDXB - Jebel Ali, UAE' },
+                  { value: "SGSIN", label: "SGSIN - Singapore, Singapore" },
+                  { value: "CNSHA", label: "CNSHA - Shanghai, China" },
+                  { value: "AEDXB", label: "AEDXB - Jebel Ali, UAE" },
                 ]}
               />
             )}
           />
         </Form.Item>
 
-        {/* Cargo Type (Eqp Type) */}
         <Form.Item
           label={
-            <span>
+            <span className="form-field-label">
               Cargo Type <Text type="danger">*</Text>
             </span>
           }
-          validateStatus={errors.eqpType ? 'error' : ''}
-          help={errors.eqpType?.message}
+          validateStatus={errors.eqpType ? "error" : ""}
+          help={
+            errors.eqpType ? (
+              <Text type="danger" className="form-field-error">
+                {errors.eqpType.message}
+              </Text>
+            ) : undefined
+          }
         >
           <Controller
             name="eqpType"
@@ -156,83 +173,139 @@ export function QuoteRequestDrawer({ open, onClose }: QuoteRequestDrawerProps) {
             render={({ field }) => (
               <Select
                 {...field}
+                size="large"
                 options={[
-                  { value: "20' Standard Dry", label: "20' Standard Dry (20DV)" },
-                  { value: "40' High Cube Dry", label: "40' High Cube Dry (40HC)" },
-                  { value: "40' Reefer Container", label: "40' Reefer Container (40RF)" },
+                  {
+                    value: "20' Standard Dry",
+                    label: "20' Standard Dry (20DV)",
+                  },
+                  {
+                    value: "40' High Cube Dry",
+                    label: "40' High Cube Dry (40HC)",
+                  },
+                  {
+                    value: "40' Reefer Container",
+                    label: "40' Reefer Container (40RF)",
+                  },
                 ]}
               />
             )}
           />
         </Form.Item>
 
-        {/* Cargo Quantity */}
         <Form.Item
           label={
-            <span>
+            <span className="form-field-label">
               Cargo Quantity <Text type="danger">*</Text>
             </span>
           }
-          validateStatus={errors.eqpQuantity ? 'error' : ''}
-          help={errors.eqpQuantity?.message}
+          validateStatus={errors.eqpQuantity ? "error" : ""}
+          help={
+            errors.eqpQuantity ? (
+              <Text type="danger" className="form-field-error">
+                {errors.eqpQuantity.message}
+              </Text>
+            ) : undefined
+          }
         >
           <Controller
             name="eqpQuantity"
             control={control}
-            render={({ field }) => <InputNumber {...field} min={1} style={{ width: '100%' }} />}
+            render={({ field }) => (
+              <InputNumber {...field} min={1} size="large" className="rates-input-full" />
+            )}
           />
         </Form.Item>
 
-        {/* Commodity */}
         <Form.Item
           label={
-            <span>
+            <span className="form-field-label">
               Commodity <Text type="danger">*</Text>
             </span>
           }
-          validateStatus={errors.commodity ? 'error' : ''}
-          help={errors.commodity?.message}
+          validateStatus={errors.commodity ? "error" : ""}
+          help={
+            errors.commodity ? (
+              <Text type="danger" className="form-field-error">
+                {errors.commodity.message}
+              </Text>
+            ) : undefined
+          }
         >
           <Controller
             name="commodity"
             control={control}
-            render={({ field }) => <Input {...field} placeholder="e.g. General Cargo / Machinery" />}
+            render={({ field }) => (
+              <Input
+                {...field}
+                size="large"
+                placeholder="e.g. General Cargo / Machinery"
+              />
+            )}
           />
         </Form.Item>
 
-        {/* Cargo Weight */}
         <Form.Item
           label={
-            <span>
+            <span className="form-field-label">
               Cargo Weight (kg) <Text type="danger">*</Text>
             </span>
           }
-          validateStatus={errors.cargoWeightKg ? 'error' : ''}
-          help={errors.cargoWeightKg?.message}
+          validateStatus={errors.cargoWeightKg ? "error" : ""}
+          help={
+            errors.cargoWeightKg ? (
+              <Text type="danger" className="form-field-error">
+                {errors.cargoWeightKg.message}
+              </Text>
+            ) : undefined
+          }
         >
           <Controller
             name="cargoWeightKg"
             control={control}
-            render={({ field }) => <InputNumber {...field} min={100} style={{ width: '100%' }} addonAfter="kg" />}
+            render={({ field }) => (
+              <InputNumber
+                {...field}
+                min={100}
+                size="large"
+                className="rates-input-full"
+                addonAfter="kg"
+              />
+            )}
           />
         </Form.Item>
 
-        {/* Expected Target Amount */}
-        <Form.Item label="Expected Target Rate (USD)">
+        <Form.Item
+          label={
+            <span className="form-field-label">Expected Target Rate (USD)</span>
+          }
+        >
           <Controller
             name="expectedAmountUsd"
             control={control}
-            render={({ field }) => <InputNumber {...field} min={0} style={{ width: '100%' }} prefix="$" addonAfter="USD" />}
+            render={({ field }) => (
+              <InputNumber
+                {...field}
+                min={0}
+                size="large"
+                className="rates-input-full"
+                prefix="$"
+                addonAfter="USD"
+              />
+            )}
           />
         </Form.Item>
 
-        {/* Comments */}
-        <Form.Item label="Comments">
+        <Form.Item label={<span className="form-field-label">Comments</span>}>
           <Controller
             name="comments"
             control={control}
             render={({ field }) => (
-              <Input.TextArea {...field} rows={3} placeholder="Special stowage or temperature requirements..." />
+              <Input.TextArea
+                {...field}
+                rows={3}
+                placeholder="Special stowage or temperature requirements..."
+              />
             )}
           />
         </Form.Item>

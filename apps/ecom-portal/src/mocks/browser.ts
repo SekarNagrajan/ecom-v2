@@ -1,3 +1,4 @@
+// Modified by Sekar Nagarajan (2026-08-25 13:00)
 import { setupWorker } from 'msw/browser';
 import { landingHandlers } from './landing.handlers';
 import { registrationHandlers } from './registration.handlers';
@@ -9,13 +10,18 @@ import { userModulesHandlers } from './user-modules.handlers';
 import { ratesHandlers } from './rates.handlers';
 import { bookingHandlers } from './booking.handlers';
 import { deliveryOrderHandlers } from './delivery-order.handlers';
+import { blHandlers } from './bl.handlers';
+import { croHandlers } from './cro.handlers';
+import { arrivalNoticeHandlers } from './arrival-notice.handlers';
+import { customerStatementHandlers } from './customer-statement.handlers';
+import { carbonHandlers } from './carbon.handlers';
 
 /**
  * MSW browser service worker — active in development only.
  * Import and start this in main.tsx before ReactDOM.createRoot.
  */
 export const worker = setupWorker(
-  ...landingHandlers, 
+  ...landingHandlers,
   ...registrationHandlers,
   ...authHandlers,
   ...contactUsHandlers,
@@ -24,6 +30,11 @@ export const worker = setupWorker(
   ...userModulesHandlers,
   ...ratesHandlers,
   ...bookingHandlers,
-  ...deliveryOrderHandlers
+  ...deliveryOrderHandlers,
+  ...blHandlers,
+  ...croHandlers,
+  ...arrivalNoticeHandlers,
+  ...customerStatementHandlers,
+  ...carbonHandlers
 );
 

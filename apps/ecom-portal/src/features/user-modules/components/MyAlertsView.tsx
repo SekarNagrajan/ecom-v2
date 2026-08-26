@@ -1,5 +1,5 @@
-// Modified by sekar nagarajan (2026-08-21)
-import { BellOutlined, DesktopOutlined, MailOutlined, MobileOutlined, SaveOutlined } from '@ant-design/icons';
+// Modified by Sekar Nagarajan (2026-08-24 16:05)
+import { AppIcon, Icons } from '../../../components/icons';
 import { AppButton, AppDrawer } from '@solverminds/shared-ui';
 import { useToast } from '@solverminds/shared-ui/hooks';
 import { Badge, Card, Col, Divider, List, Row, Space, Spin, Switch, Tag, theme, Typography } from 'antd';
@@ -67,7 +67,7 @@ export function MyAlertsView({ open = true, onClose }: MyAlertsViewProps) {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
         <div>
           <Space align="center">
-            <BellOutlined style={{ fontSize: 24, color: token.colorPrimary }} />
+            <AppIcon icon={Icons.bell} size={24} />
             <Title level={4} style={{ margin: 0, fontWeight: 700 }}>
               My Alert Preferences & Notifications
             </Title>
@@ -78,7 +78,7 @@ export function MyAlertsView({ open = true, onClose }: MyAlertsViewProps) {
         </div>
 
         {!onClose && (
-          <AppButton type="primary" size="large" icon={<SaveOutlined />} loading={saving} onClick={handleSave}>
+          <AppButton type="primary" size="large" icon={<AppIcon icon={Icons.save} size={16} />} loading={saving} onClick={handleSave}>
             Save Preferences
           </AppButton>
         )}
@@ -170,7 +170,7 @@ export function MyAlertsView({ open = true, onClose }: MyAlertsViewProps) {
               <Space direction="vertical" style={{ width: '100%' }} size="middle">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <Space align="center">
-                    <MailOutlined style={{ fontSize: 18, color: token.colorPrimary }} />
+                    <AppIcon icon={Icons.mail} size={18} />
                     <div>
                       <Text strong>Email Notifications</Text>
                       <Text type="secondary" style={{ display: 'block', fontSize: 12 }}>
@@ -188,7 +188,7 @@ export function MyAlertsView({ open = true, onClose }: MyAlertsViewProps) {
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <Space align="center">
-                    <MobileOutlined style={{ fontSize: 18, color: token.colorPrimary }} />
+                    <AppIcon icon={Icons.smartphone} size={18} />
                     <div>
                       <Text strong>SMS Mobile Alerts</Text>
                       <Text type="secondary" style={{ display: 'block', fontSize: 12 }}>
@@ -206,7 +206,7 @@ export function MyAlertsView({ open = true, onClose }: MyAlertsViewProps) {
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <Space align="center">
-                    <DesktopOutlined style={{ fontSize: 18, color: token.colorPrimary }} />
+                    <AppIcon icon={Icons.monitor} size={18} />
                     <div>
                       <Text strong>Portal Badge Notifications</Text>
                       <Text type="secondary" style={{ display: 'block', fontSize: 12 }}>
@@ -279,7 +279,7 @@ export function MyAlertsView({ open = true, onClose }: MyAlertsViewProps) {
         footer={
           <Space style={{ width: '100%', justifyContent: 'flex-end' }} size={8}>
             <AppButton danger onClick={onClose}>Close</AppButton>
-            <AppButton type="primary" icon={<SaveOutlined />} loading={saving} onClick={handleSave}>
+            <AppButton type="primary" icon={<AppIcon icon={Icons.save} size={16} />} loading={saving} onClick={handleSave}>
               Save Preferences
             </AppButton>
           </Space>

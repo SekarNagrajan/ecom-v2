@@ -1,8 +1,9 @@
-import React from 'react';
-import { Card, Space } from 'antd';
-import { UseFormReturn } from 'react-hook-form';
-import { SearchOutlined, ReloadOutlined } from '@ant-design/icons';
-import { AppButton, FormInput } from '@solverminds/shared-ui';
+// Modified by Sekar Nagarajan (2026-08-25 18:40)
+import { AppButton, FormInput } from "@solverminds/shared-ui";
+import { Card, Space } from "antd";
+import type { UseFormReturn } from "react-hook-form";
+
+import { AppIcon, Icons } from "../../../components/icons";
 
 interface ScheduleFilterProps {
   form: UseFormReturn<{ originPort?: string; destinationPort?: string }>;
@@ -11,13 +12,18 @@ interface ScheduleFilterProps {
   isLoading: boolean;
 }
 
-export const ScheduleFilter: React.FC<ScheduleFilterProps> = ({ form, onSearch, onReset, isLoading }) => {
+export function ScheduleFilter({
+  form,
+  onSearch,
+  onReset,
+  isLoading,
+}: ScheduleFilterProps) {
   return (
-    <Card style={{ marginBottom: 16, borderRadius: 8 }}>
+    <Card className="schedule-filter-card">
       <form onSubmit={form.handleSubmit(onSearch)}>
-        <Space size="middle" wrap style={{ width: '100%', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+        <Space size="middle" wrap className="schedule-filter-toolbar">
           <Space size="middle" wrap>
-            <div style={{ width: 240 }}>
+            <div className="schedule-filter-field">
               <FormInput
                 control={form.control}
                 name="originPort"
@@ -25,7 +31,7 @@ export const ScheduleFilter: React.FC<ScheduleFilterProps> = ({ form, onSearch, 
                 placeholder="e.g. USNYC or New York"
               />
             </div>
-            <div style={{ width: 240 }}>
+            <div className="schedule-filter-field">
               <FormInput
                 control={form.control}
                 name="destinationPort"
@@ -34,11 +40,19 @@ export const ScheduleFilter: React.FC<ScheduleFilterProps> = ({ form, onSearch, 
               />
             </div>
           </Space>
-          <Space style={{ marginBottom: 16 }}>
-            <AppButton type="primary" htmlType="submit" icon={<SearchOutlined />} loading={isLoading}>
+          <Space className="schedule-filter-actions">
+            <AppButton
+              type="primary"
+              htmlType="submit"
+              icon={<AppIcon icon={Icons.search} size={16} />}
+              loading={isLoading}
+            >
               Search Vessel Schedules
             </AppButton>
-            <AppButton onClick={onReset} icon={<ReloadOutlined />}>
+            <AppButton
+              onClick={onReset}
+              icon={<AppIcon icon={Icons.refreshCw} size={16} tone="edit" />}
+            >
               Reset
             </AppButton>
           </Space>
@@ -46,4 +60,4 @@ export const ScheduleFilter: React.FC<ScheduleFilterProps> = ({ form, onSearch, 
       </form>
     </Card>
   );
-};
+}

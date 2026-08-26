@@ -1,115 +1,196 @@
-// Created by Antigravity (2026-08-24 11:30)
-import { AppButton } from '@solverminds/shared-ui';
-import { Card, Col, Row, Typography, theme, Divider, Table } from 'antd';
-import type { SIDTO } from '../types/si.types';
+// Modified by Sekar Nagarajan (2026-08-26 12:19)
+import { AppButton } from "@solverminds/shared-ui";
+import { Card, Col, Row, Table, Typography } from "antd";
+
+import {
+  MODULE_TITLES,
+  WIZARD_STEP_TITLES,
+} from "../../../constants/module-titles";
+import type { SIDTO } from "../types/si.types";
 
 const { Title, Text } = Typography;
 
-export function PreviewStep({ 
-  data, 
-  onNext, 
-  onPrevious,
-  onSubmit,
-  isSubmitting 
-}: { 
+interface StepProps {
   data: SIDTO;
   onNext: () => void;
   onPrevious: () => void;
   onSubmit: () => void;
+  onCancel: () => void;
   isFirstStep: boolean;
   isLastStep: boolean;
   isSubmitting: boolean;
-}) {
-  const { token } = theme.useToken();
-  const cardStyle = { border: `1px solid ${token.colorBorderSecondary}`, borderRadius: 8, marginBottom: 24 };
-  const labelStyle: React.CSSProperties = { fontWeight: 600, fontSize: 13, color: token.colorTextSecondary, display: 'block', marginBottom: 4 };
+}
 
+export function PreviewStep({
+  data,
+  onPrevious,
+  onSubmit,
+  onCancel,
+  isSubmitting,
+}: StepProps) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-      <div className="custom-scroll" style={{ flex: 1, overflowY: 'auto', padding: '24px' }}>
-        
-        <Title level={4} style={{ textAlign: 'center', marginBottom: 32, color: token.colorPrimary }}>SHIPPING INSTRUCTION SUMMARY</Title>
+    <div className="form-step-layout">
+      <div className="custom-scroll form-step-scroll">
+        <Title level={4} className="form-step-card-title si-preview-title">
+          {MODULE_TITLES.shippingInstructionSummary}
+        </Title>
 
-        {/* Master Details */}
-        <Card style={cardStyle} title={<Title level={5} style={{ margin: 0 }}>MASTER DETAILS</Title>} size="small">
-          <Row gutter={[24, 24]}>
-            <Col span={8}>
-              <Text style={labelStyle}>Booking Number</Text>
-              <div style={{ fontSize: 15, fontWeight: 500 }}>{data.bookingNo}</div>
-            </Col>
-            <Col span={8}>
-              <Text style={labelStyle}>B/L Type</Text>
-              <div style={{ fontSize: 15, fontWeight: 500 }}>{data.blType}</div>
-            </Col>
-            <Col span={8}>
-              <Text style={labelStyle}>Freight Option</Text>
-              <div style={{ fontSize: 15, fontWeight: 500 }}>{data.freightOption}</div>
-            </Col>
-          </Row>
-        </Card>
-
-        {/* Parties */}
-        <Card style={cardStyle} title={<Title level={5} style={{ margin: 0 }}>PARTIES</Title>} size="small">
+        <Card
+          className="form-step-card form-step-section"
+          size="small"
+          title={
+            <Title level={5} className="si-section-title">
+              {WIZARD_STEP_TITLES.masterDetails}
+            </Title>
+          }
+        >
           <Row gutter={[24, 24]}>
             <Col xs={24} md={8}>
-              <div style={{ padding: 12, backgroundColor: token.colorFillAlter, borderRadius: 6, height: '100%' }}>
-                <Text style={labelStyle}>SHIPPER</Text>
-                <div style={{ marginTop: 8 }}><Text strong>{data.parties.shipper.name}</Text></div>
-                <div><Text>{data.parties.shipper.address}</Text></div>
-                <div><Text>{data.parties.shipper.city}, {data.parties.shipper.country}</Text></div>
+              <div className="form-field-cell">
+                <span className="form-field-label">Booking Number</span>
+                <div className="form-step-readonly-value">{data.bookingNo}</div>
               </div>
             </Col>
             <Col xs={24} md={8}>
-              <div style={{ padding: 12, backgroundColor: token.colorFillAlter, borderRadius: 6, height: '100%' }}>
-                <Text style={labelStyle}>CONSIGNEE {data.parties.consignee.toOrder && <Text type="warning">(TO ORDER)</Text>}</Text>
-                <div style={{ marginTop: 8 }}><Text strong>{data.parties.consignee.name}</Text></div>
-                <div><Text>{data.parties.consignee.address}</Text></div>
-                <div><Text>{data.parties.consignee.city}, {data.parties.consignee.country}</Text></div>
+              <div className="form-field-cell">
+                <span className="form-field-label">B/L Type</span>
+                <div className="form-step-readonly-value">{data.blType}</div>
               </div>
             </Col>
             <Col xs={24} md={8}>
-              <div style={{ padding: 12, backgroundColor: token.colorFillAlter, borderRadius: 6, height: '100%' }}>
-                <Text style={labelStyle}>NOTIFY PARTY</Text>
-                <div style={{ marginTop: 8 }}><Text strong>{data.parties.notify.name}</Text></div>
-                <div><Text>{data.parties.notify.address}</Text></div>
-                <div><Text>{data.parties.notify.city}, {data.parties.notify.country}</Text></div>
-              </div>
-            </Col>
-          </Row>
-        </Card>
-
-        {/* Cargo & Containers */}
-        <Card style={cardStyle} title={<Title level={5} style={{ margin: 0 }}>CARGO & CONTAINERS</Title>} size="small">
-          {data.containers.map((c, i) => (
-            <div key={c.id} style={{ marginBottom: i < data.containers.length - 1 ? 24 : 0 }}>
-              <div style={{ marginBottom: 12, display: 'flex', justifyContent: 'space-between' }}>
-                <Text strong style={{ fontSize: 15 }}>Container {i + 1}: {c.containerNo} ({c.eqpSize})</Text>
-                <div>
-                  <Text type="secondary" style={{ marginRight: 16 }}>Carrier Seal: <Text strong>{c.carrierSeal || 'N/A'}</Text></Text>
-                  <Text type="secondary">Shipper Seal: <Text strong>{c.shipperSeal || 'N/A'}</Text></Text>
+              <div className="form-field-cell">
+                <span className="form-field-label">Freight Option</span>
+                <div className="form-step-readonly-value">
+                  {data.freightOption}
                 </div>
               </div>
-              <Table
-                size="small"
-                dataSource={c.cargoLines}
-                rowKey="id"
-                pagination={false}
-                bordered
-                columns={[
-                  { title: 'Marks & Numbers', dataIndex: 'marksAndNumbers', key: 'marksAndNumbers' },
-                  { title: 'Description', dataIndex: 'description', key: 'description' },
-                  { title: 'Packages', key: 'packages', render: (_, record) => `${record.packageCount} ${record.packageType}` },
-                  { title: 'Gross Wt (KG)', dataIndex: 'grossWeight', key: 'grossWeight' },
-                ]}
-              />
+            </Col>
+          </Row>
+        </Card>
+
+        <Card
+          className="form-step-card form-step-section"
+          size="small"
+          title={
+            <Title level={5} className="si-section-title">
+              Parties
+            </Title>
+          }
+        >
+          <Row gutter={[24, 24]}>
+            <Col xs={24} md={8}>
+              <div className="si-party-block">
+                <span className="form-field-label">Shipper</span>
+                <Text strong>{data.parties.shipper.name}</Text>
+                <Text>{data.parties.shipper.address}</Text>
+                <Text>
+                  {data.parties.shipper.city}, {data.parties.shipper.country}
+                </Text>
+              </div>
+            </Col>
+            <Col xs={24} md={8}>
+              <div className="si-party-block">
+                <span className="form-field-label">
+                  Consignee{" "}
+                  {data.parties.consignee.toOrder ? (
+                    <Text type="warning">(To Order)</Text>
+                  ) : null}
+                </span>
+                <Text strong>{data.parties.consignee.name}</Text>
+                <Text>{data.parties.consignee.address}</Text>
+                <Text>
+                  {data.parties.consignee.city},{" "}
+                  {data.parties.consignee.country}
+                </Text>
+              </div>
+            </Col>
+            <Col xs={24} md={8}>
+              <div className="si-party-block">
+                <span className="form-field-label">Notify Party</span>
+                <Text strong>{data.parties.notify.name}</Text>
+                <Text>{data.parties.notify.address}</Text>
+                <Text>
+                  {data.parties.notify.city}, {data.parties.notify.country}
+                </Text>
+              </div>
+            </Col>
+          </Row>
+        </Card>
+
+        <Card
+          className="form-step-card form-step-section"
+          size="small"
+          title={
+            <Title level={5} className="si-section-title">
+              Cargo & Containers
+            </Title>
+          }
+        >
+          {data.containers.map((container, index) => (
+            <div key={container.id} className="si-container-block">
+              <div className="si-container-block__header">
+                <Text strong>
+                  Container {index + 1}: {container.containerNo} (
+                  {container.eqpSize})
+                </Text>
+                <div>
+                  <Text type="secondary">
+                    Carrier Seal:{" "}
+                    <Text strong>{container.carrierSeal || "N/A"}</Text>
+                  </Text>
+                  {" · "}
+                  <Text type="secondary">
+                    Shipper Seal:{" "}
+                    <Text strong>{container.shipperSeal || "N/A"}</Text>
+                  </Text>
+                </div>
+              </div>
+              <div className="responsive-table-wrap custom-scroll">
+                <Table
+                  size="small"
+                  dataSource={container.cargoLines}
+                  rowKey="id"
+                  pagination={false}
+                  bordered
+                  columns={[
+                    {
+                      title: "Marks & Numbers",
+                      dataIndex: "marksAndNumbers",
+                      key: "marksAndNumbers",
+                    },
+                    {
+                      title: "Description",
+                      dataIndex: "description",
+                      key: "description",
+                    },
+                    {
+                      title: "Packages",
+                      key: "packages",
+                      render: (_, record) =>
+                        `${record.packageCount} ${record.packageType}`,
+                    },
+                    {
+                      title: "Gross Wt (KG)",
+                      dataIndex: "grossWeight",
+                      key: "grossWeight",
+                    },
+                  ]}
+                />
+              </div>
             </div>
           ))}
         </Card>
       </div>
 
-      <div style={{ flexShrink: 0, padding: '16px 24px', borderTop: `1px solid ${token.colorBorderSecondary}`, display: 'flex', justifyContent: 'space-between', backgroundColor: token.colorBgContainer }}>
-        <AppButton onClick={onPrevious} disabled={isSubmitting}>Previous</AppButton>
-        <AppButton type="primary" onClick={onSubmit} loading={isSubmitting}>Submit to ESL</AppButton>
+      <div className="form-step-footer form-step-footer--split">
+        <div className="form-step-footer__start custom-scroll">
+          <AppButton onClick={onPrevious} disabled={isSubmitting}>
+            Previous
+          </AppButton>
+        </div>
+        <AppButton type="primary" onClick={onSubmit} loading={isSubmitting}>
+          Submit to ESL
+        </AppButton>
       </div>
     </div>
   );

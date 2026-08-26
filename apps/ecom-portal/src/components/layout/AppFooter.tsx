@@ -1,30 +1,19 @@
-// Modified by sekar nagarajan (2026-08-21)
-import { Flex, Layout, Typography, theme } from 'antd';
+// Modified by Sekar Nagarajan (2026-08-25 15:00)
+import { Layout, Typography } from 'antd';
 
 const { Footer } = Layout;
 const { Text } = Typography;
 
 export function AppFooter() {
-  const { token } = theme.useToken();
-
   return (
-    <Footer
-      style={{
-        textAlign: 'center',
-        background: token.colorBgContainer,
-        borderTop: `1px solid ${token.colorBorderSecondary}`,
-        padding: `${token.paddingXS}px ${token.paddingLG}px`,
-        zIndex: 2,
-      }}
-    >
-      <Flex justify="space-between" align="center">
-        <Text type="secondary" style={{ fontSize: 12 }}>
-          Version 1.0.0
+    <Footer className="app-footer">
+      <div className="app-footer__inner">
+        <Text className="app-footer__text">Version 1.0.0</Text>
+        <Text className="app-footer__text">
+          Copyright &copy; {new Date().getFullYear()} All rights reserved. Solverminds
+          Solutions &amp; Technologies Pvt.Ltd
         </Text>
-        <Text type="secondary" style={{ fontSize: 12 }}>
-          Copyright &copy; {new Date().getFullYear()} All rights reserved. Solverminds Solutions &amp; Technologies Pvt.Ltd
-        </Text>
-      </Flex>
+      </div>
     </Footer>
   );
 }

@@ -1,26 +1,21 @@
-// Tracking Feature Main Route View Component
-// Parity with UserCreationView layout standard (<Card style={{ borderRadius: 16, boxShadow: '0 8px 24px rgba(0,0,0,0.05)', border: 'none' }}>)
-// Parity with Tracking.jsp, TrackingDetails.jsp, and TrackingAllMovement.jsp
-// Modified by sekar nagarajan (2026-08-21)
+// Modified by Sekar Nagarajan (2026-08-25 19:15)
+import { AppButton } from "@solverminds/shared-ui";
+import { useToast } from "@solverminds/shared-ui/hooks";
+import { Card, Space } from "antd";
 
-import {
-  DownloadOutlined,
-  EnvironmentOutlined,
-  MailOutlined
-} from '@ant-design/icons';
-import { AppButton } from '@solverminds/shared-ui';
-import { Card, message, Space, theme, Typography } from 'antd';
-import React from 'react';
-import { TrackingContainersTable } from './components/TrackingContainersTable';
-import { TrackingMovementDrawer } from './components/TrackingMovementDrawer';
-import { TrackingOverview } from './components/TrackingOverview';
-import { TrackingSearchFilter } from './components/TrackingSearchFilter';
-import { useTrackingController } from './hooks/useTrackingController';
+import { AppIcon, Icons } from "../../components/icons";
+import { FeaturePageShell } from "../../components/shared/feature-page-shell";
+import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
+import { MODULE_TITLES } from "../../constants/module-titles";
+import { TrackingModuleStyles } from "./components/tracking-module-styles";
+import { TrackingContainersTable } from "./components/TrackingContainersTable";
+import { TrackingMovementDrawer } from "./components/TrackingMovementDrawer";
+import { TrackingOverview } from "./components/TrackingOverview";
+import { TrackingSearchFilter } from "./components/TrackingSearchFilter";
+import { useTrackingController } from "./hooks/useTrackingController";
 
-const { Title, Text } = Typography;
-
-export const TrackingRoute: React.FC = () => {
-  const { token } = theme.useToken();
+export function TrackingRoute() {
+  const toast = useToast();
   const {
     isLoading,
     trackingResult,
@@ -31,60 +26,64 @@ export const TrackingRoute: React.FC = () => {
     handleCloseMovements,
   } = useTrackingController();
 
-  const handleExportExcel = () => {
-    message.success('Exporting container tracking trace history to Excel...');
-  };
-
-  const handleSendEmail = () => {
-    message.info('Opening tracking status email share dialog...');
-  };
-
   return (
-    <Card style={{ borderRadius: 16, boxShadow: '0 8px 24px rgba(0,0,0,0.05)', border: 'none' }}>
-      {/* 1. Feature Page Header (Matching UserCreationView standard) */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
-        <div>
-          <Space align="center" size={10}>
-            <EnvironmentOutlined style={{ fontSize: 24, color: token.colorPrimary }} />
-            <Title level={4} style={{ margin: 0, fontWeight: 700 }}>
-              Cargo Tracking & Container Traceability
-            </Title>
+    <FeaturePageShell>
+      <TrackingModuleStyles />
+      <Card className="feature-page-card" bordered={false}>
+        <ModuleScreenHeader
+          icon={Icons.mapPin}
+          title={MODULE_TITLES.tracking}
+          subtitle="Track real-time container movements, vessel voyage milestones, port cut-offs, and transport event logs."
+          extra={
+            <Space align="center" size={12} wrap>
+              <AppButton
+                icon={
+                  <AppIcon icon={Icons.download} size={16} tone="download" />
+                }
+                onClick={() =>
+                  toast.success(
+                    "Exporting container tracking trace history to Excel…",
+                  )
+                }
+              >
+                Export Excel
+              </AppButton>
+              <AppButton
+                icon={<AppIcon icon={Icons.mail} size={16} tone="navigate" />}
+                onClick={() =>
+                  toast.info("Opening tracking status email share dialog…")
+                }
+              >
+                Share via Mail
+              </AppButton>
+            </Space>
+          }
+        />
+
+        <TrackingSearchFilter onSearch={executeSearch} isLoading={isLoading} />
+
+        {trackingResult ? (
+          <Space
+            direction="vertical"
+            size="large"
+            className="feature-page-stack"
+          >
+            <TrackingOverview data={trackingResult} />
+            <div className="responsive-table-wrap custom-scroll">
+              <TrackingContainersTable
+                containers={trackingResult.containers}
+                onViewMovements={handleOpenMovements}
+              />
+            </div>
           </Space>
-          <Text type="secondary" style={{ display: 'block', marginTop: 4, fontSize: 13 }}>
-            Track real-time container movements, vessel voyage milestones, port cut-offs, and transport event logs.
-          </Text>
-        </div>
+        ) : null}
 
-        <Space align="center" size={12}>
-          <AppButton icon={<DownloadOutlined />} onClick={handleExportExcel}>
-            Export Excel
-          </AppButton>
-          <AppButton icon={<MailOutlined />} onClick={handleSendEmail}>
-            Share via Mail
-          </AppButton>
-        </Space>
-      </div>
-
-      {/* 2. Search Filter Section */}
-      <TrackingSearchFilter onSearch={executeSearch} isLoading={isLoading} />
-
-      {/* 3. Results Section */}
-      {trackingResult && (
-        <>
-          <TrackingOverview data={trackingResult} />
-          <TrackingContainersTable
-            containers={trackingResult.containers}
-            onViewMovements={handleOpenMovements}
-          />
-        </>
-      )}
-
-      {/* 4. Drawers */}
-      <TrackingMovementDrawer
-        container={selectedContainer}
-        open={isMovementDrawerOpen}
-        onClose={handleCloseMovements}
-      />
-    </Card>
+        <TrackingMovementDrawer
+          container={selectedContainer}
+          open={isMovementDrawerOpen}
+          onClose={handleCloseMovements}
+        />
+      </Card>
+    </FeaturePageShell>
   );
-};
+}

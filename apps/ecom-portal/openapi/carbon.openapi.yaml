@@ -1,0 +1,229 @@
+openapi: 3.0.3
+info:
+  title: E-Com Portal Carbon Calculator API
+  version: 1.0.0
+paths:
+  /api/ecom/co2/lookups:
+    get:
+      summary: Port, mode, equipment, and fuel options for the calculator
+      responses:
+        '200':
+          description: Lookup options
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LookupsResponse'
+  /api/ecom/co2/compute:
+    post:
+      summary: Compute CO2e footprint for shipment inputs (idempotent)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarbonInput'
+      responses:
+        '200':
+          description: Carbon result DTO
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComputeResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+  /api/ecom/co2/document:
+    post:
+      summary: Export carbon estimate PDF for the given inputs
+      parameters:
+        - name: format
+          in: query
+          schema:
+            type: string
+            enum: [pdf]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarbonInput'
+      responses:
+        '200':
+          description: PDF blob
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+components:
+  schemas:
+    TransportMode:
+      type: string
+      enum: [SEA, ROAD, RAIL, AIR, INLAND_WATER]
+    DisplayUnit:
+      type: string
+      enum: [kg, t]
+    CarbonLegInput:
+      type: object
+      required: [mode, from, to]
+      properties:
+        mode:
+          $ref: '#/components/schemas/TransportMode'
+        from:
+          type: string
+          minLength: 5
+          maxLength: 5
+        to:
+          type: string
+          minLength: 5
+          maxLength: 5
+        distanceKm:
+          type: number
+          exclusiveMinimum: 0
+    CarbonInput:
+      type: object
+      required: [origin, destination, cargoWeightKg, equipment, containerCount, unit]
+      properties:
+        origin:
+          type: string
+          minLength: 5
+          maxLength: 5
+          description: UN/LOCODE
+        destination:
+          type: string
+          minLength: 5
+          maxLength: 5
+        legs:
+          type: array
+          items:
+            $ref: '#/components/schemas/CarbonLegInput'
+        cargoWeightKg:
+          type: number
+          exclusiveMinimum: 0
+        equipment:
+          type: string
+          minLength: 1
+        containerCount:
+          type: integer
+          minimum: 1
+        fuelType:
+          type: string
+        unit:
+          $ref: '#/components/schemas/DisplayUnit'
+    CarbonLegResult:
+      type: object
+      required: [mode, from, to, distanceKm, co2eKg, co2eTonnes]
+      properties:
+        mode:
+          $ref: '#/components/schemas/TransportMode'
+        from: { type: string }
+        to: { type: string }
+        distanceKm: { type: number }
+        co2eKg: { type: number }
+        co2eTonnes: { type: number }
+    CarbonIntensity:
+      type: object
+      properties:
+        perTeu: { type: number }
+        perTonneKm: { type: number }
+    CarbonMethodology:
+      type: object
+      required: [standard, version]
+      properties:
+        standard: { type: string }
+        version: { type: string }
+    CarbonResultDTO:
+      type: object
+      required:
+        - totalCo2eKg
+        - totalCo2eTonnes
+        - ttwCo2eKg
+        - ttwCo2eTonnes
+        - wttCo2eKg
+        - wttCo2eTonnes
+        - legs
+        - intensity
+        - methodology
+        - computedAt
+        - unit
+      properties:
+        totalCo2eKg: { type: number }
+        totalCo2eTonnes: { type: number }
+        ttwCo2eKg: { type: number }
+        ttwCo2eTonnes: { type: number }
+        wttCo2eKg: { type: number }
+        wttCo2eTonnes: { type: number }
+        legs:
+          type: array
+          items:
+            $ref: '#/components/schemas/CarbonLegResult'
+        intensity:
+          $ref: '#/components/schemas/CarbonIntensity'
+        methodology:
+          $ref: '#/components/schemas/CarbonMethodology'
+        computedAt: { type: string, format: date-time }
+        unit:
+          $ref: '#/components/schemas/DisplayUnit'
+    LookupOption:
+      type: object
+      required: [value, label]
+      properties:
+        value: { type: string }
+        label: { type: string }
+    CarbonLookupsDTO:
+      type: object
+      required: [ports, modes, equipment, fuelTypes]
+      properties:
+        ports:
+          type: array
+          items:
+            $ref: '#/components/schemas/LookupOption'
+        modes:
+          type: array
+          items:
+            $ref: '#/components/schemas/LookupOption'
+        equipment:
+          type: array
+          items:
+            $ref: '#/components/schemas/LookupOption'
+        fuelTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/LookupOption'
+    LookupsResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CarbonLookupsDTO'
+        error:
+          type: object
+          properties:
+            code: { type: string }
+            message: { type: string }
+    ComputeResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CarbonResultDTO'
+        error:
+          type: object
+          properties:
+            code: { type: string }
+            message: { type: string }
+    ErrorEnvelope:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code: { type: string }
+            message: { type: string }

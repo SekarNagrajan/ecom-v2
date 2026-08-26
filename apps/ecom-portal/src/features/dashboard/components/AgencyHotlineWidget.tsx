@@ -1,6 +1,8 @@
-import { PhoneOutlined, UserOutlined, MailOutlined } from '@ant-design/icons';
+// Modified by Sekar Nagarajan (2026-08-25 15:05)
 import { FloatButton, Drawer, Collapse, Typography, Space } from 'antd';
 import { useState } from 'react';
+
+import { AppIcon, Icons } from '../../../components/icons';
 
 const { Panel } = Collapse;
 const { Text, Link } = Typography;
@@ -11,7 +13,6 @@ export function AgencyHotlineWidget() {
   const showDrawer = () => setOpen(true);
   const onClose = () => setOpen(false);
 
-  // Mock data representing the hotline contacts per region
   const mockContacts = [
     {
       region: 'Asia Pacific',
@@ -31,7 +32,7 @@ export function AgencyHotlineWidget() {
   return (
     <>
       <FloatButton
-        icon={<PhoneOutlined />}
+        icon={<AppIcon icon={Icons.phone} size={18} />}
         type="primary"
         style={{ right: 24, bottom: 24 }}
         onClick={showDrawer}
@@ -43,7 +44,7 @@ export function AgencyHotlineWidget() {
         placement="right"
         onClose={onClose}
         open={open}
-        width={350}
+        size={350}
       >
         <Collapse defaultActiveKey={['0']} ghost>
           {mockContacts.map((region, index) => (
@@ -52,9 +53,9 @@ export function AgencyHotlineWidget() {
                 {region.ports.map((port, pIndex) => (
                   <Panel header={<Text style={{ color: '#1677ff' }}>{port.name}</Text>} key={`${index}-${pIndex}`}>
                     <Space direction="vertical" size={2}>
-                      <Text type="secondary"><UserOutlined style={{ marginRight: 8 }} />{port.contact}</Text>
-                      <Text type="secondary"><PhoneOutlined style={{ marginRight: 8 }} />{port.phone}</Text>
-                      <Link href={`mailto:${port.email}`}><MailOutlined style={{ marginRight: 8 }} />{port.email}</Link>
+                      <Text type="secondary"><AppIcon icon={Icons.user} size={14} style={{ marginRight: 8 }} />{port.contact}</Text>
+                      <Text type="secondary"><AppIcon icon={Icons.phone} size={14} style={{ marginRight: 8 }} />{port.phone}</Text>
+                      <Link href={`mailto:${port.email}`}><AppIcon icon={Icons.mail} size={14} style={{ marginRight: 8 }} />{port.email}</Link>
                     </Space>
                   </Panel>
                 ))}

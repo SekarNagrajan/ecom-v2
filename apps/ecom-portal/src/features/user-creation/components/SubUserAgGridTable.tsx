@@ -1,5 +1,5 @@
-// Modified by sekar nagarajan (2026-08-21)
-import { UserOutlined } from '@ant-design/icons';
+// Modified by Sekar Nagarajan (2026-08-24 16:05)
+import { AppIcon, Icons } from '../../../components/icons';
 import {
   ClientSideRowModelModule,
   ColDef,
@@ -48,7 +48,7 @@ export function SubUserAgGridTable({
         flex: 1.2,
         cellRenderer: (params: { value: string }) => (
           <Space>
-            <UserOutlined style={{ color: token.colorPrimary }} />
+            <AppIcon icon={Icons.user} size={16} />
             <strong style={{ color: token.colorText }}>{params.value}</strong>
           </Space>
         ),

@@ -1,5 +1,5 @@
-// Modified by sekar nagarajan (2026-08-21)
-import { ArrowRightOutlined, EditOutlined, EyeOutlined, FileTextOutlined, PlusOutlined, SendOutlined } from '@ant-design/icons';
+// Modified by Sekar Nagarajan (2026-08-24 16:05)
+import { AppIcon, Icons } from '../../../components/icons';
 import { AppButton, AppDrawer } from '@solverminds/shared-ui';
 import { DataView, DataViewColumn } from '@solverminds/shared-ui/data-view';
 import { useToast } from '@solverminds/shared-ui/hooks';
@@ -67,7 +67,7 @@ export function QuotesView() {
             <AppButton
               type="primary"
               size="small"
-              icon={<ArrowRightOutlined style={{ fontSize: 14 }} />}
+              icon={<AppIcon icon={Icons.arrowRight} size={14} gridAction tone="navigate" />}
               onClick={() => {
                 toast.info(`Converting Quote ${rec.quoteNo} into e-Booking...`);
                 navigate({ to: '/schedules' });
@@ -81,7 +81,7 @@ export function QuotesView() {
             <AppButton
               type="text"
               size="small"
-              icon={<EyeOutlined style={{ color: token.colorPrimary, fontSize: 16 }} />}
+              icon={<AppIcon icon={Icons.eye} size={16} gridAction tone="view" />}
               onClick={() => toast.info(`Quote Reference: ${rec.quoteNo}`)}
             />
           </Tooltip>
@@ -94,7 +94,7 @@ export function QuotesView() {
       sortable: true,
       cellRenderer: (params: { value?: string }) => (
         <Space>
-          <FileTextOutlined style={{ color: token.colorPrimary }} />
+          <AppIcon icon={Icons.fileText} size={16} tone="view" />
           <strong>{params.value}</strong>
         </Space>
       ),
@@ -155,7 +155,7 @@ export function QuotesView() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
         <div>
           <Space align="center">
-            <EditOutlined style={{ fontSize: 24, color: token.colorPrimary }} />
+            <AppIcon icon={Icons.edit} size={24} tone="edit" />
             <Title level={4} style={{ margin: 0, fontWeight: 700 }}>
               Rate Request & Quotation Management (Quote)
             </Title>
@@ -168,7 +168,7 @@ export function QuotesView() {
         <AppButton
           type="primary"
           size="large"
-          icon={<PlusOutlined />}
+          icon={<AppIcon icon={Icons.plus} size={16} tone="create" />}
           onClick={() => setIsDrawerOpen(true)}
         >
           Request New Rate Quote
@@ -221,7 +221,7 @@ export function QuotesView() {
         footer={
           <Space style={{ width: '100%', justifyContent: 'flex-end' }} size={8}>
             <AppButton danger onClick={() => setIsDrawerOpen(false)}>Cancel</AppButton>
-            <AppButton type="primary" icon={<SendOutlined />} loading={submitting} onClick={handleCreateQuote}>
+            <AppButton type="primary" icon={<AppIcon icon={Icons.send} size={16} />} loading={submitting} onClick={handleCreateQuote}>
               Submit Quote Request
             </AppButton>
           </Space>

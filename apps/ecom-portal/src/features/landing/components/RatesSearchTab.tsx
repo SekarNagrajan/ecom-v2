@@ -1,9 +1,10 @@
-// Modified by Sekar Nagarajan (2026-08-22 00:06)
-import { CalendarOutlined, EnvironmentOutlined, SearchOutlined, SwapOutlined } from '@ant-design/icons';
-import { AutoComplete, Button, DatePicker, Input, Select, Skeleton, theme, Flex } from 'antd';
+// Modified by Sekar Nagarajan (2026-08-25 15:45)
+import { AppButton } from '@solverminds/shared-ui';
+import { AutoComplete, Button, DatePicker, Flex, Input, Select, Skeleton, theme } from 'antd';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 import { Controller, type UseFormReturn } from 'react-hook-form';
+import { AppIcon, Icons } from '../../../components/icons';
 
 import { useEquipmentTypes, usePortSearch } from '../api/landing.queries';
 import type { RatesSearchForm } from '../types/landing.types';
@@ -32,7 +33,7 @@ function usePortAutocomplete(initialQuery = '') {
 
 export function RatesSearchTab({ form, onSubmit }: RatesSearchTabProps) {
   const { token } = theme.useToken();
-  const { control, setValue, getValues, formState: { errors } } = form;
+  const { control, setValue, getValues, reset, formState: { errors } } = form;
 
   const polAC = usePortAutocomplete();
   const podAC = usePortAutocomplete();
@@ -47,6 +48,12 @@ export function RatesSearchTab({ form, onSubmit }: RatesSearchTabProps) {
     setValue('pod', pol, { shouldValidate: true });
     polAC.setQuery(pod);
     podAC.setQuery(pol);
+  };
+
+  const handleReset = () => {
+    reset();
+    polAC.setQuery('');
+    podAC.setQuery('');
   };
 
   const inputStyle = {
@@ -81,7 +88,7 @@ export function RatesSearchTab({ form, onSubmit }: RatesSearchTabProps) {
                 <Input
                   placeholder="Singapore"
                   style={inputStyle}
-                  prefix={<EnvironmentOutlined style={{ color: '#888', marginRight: 8, fontSize: 16 }} />}
+                  prefix={<AppIcon icon={Icons.mapPin} size={16} style={{ marginRight: 8, fontSize: 16 }} />}
                 />
               </AutoComplete>
             )}
@@ -95,7 +102,7 @@ export function RatesSearchTab({ form, onSubmit }: RatesSearchTabProps) {
 
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>
           <Button
-            icon={<SwapOutlined style={{ color: token.colorPrimary, fontSize: 16 }} />}
+            icon={<AppIcon icon={Icons.arrowLeftRight} size={16} />}
             onClick={handleSwap}
             shape="circle"
             style={{ width: 36, height: 36, borderColor: token.colorPrimaryBgHover, boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}
@@ -118,7 +125,7 @@ export function RatesSearchTab({ form, onSubmit }: RatesSearchTabProps) {
                 <Input
                   placeholder="Rotterdam"
                   style={inputStyle}
-                  prefix={<EnvironmentOutlined style={{ color: '#888', marginRight: 8, fontSize: 16 }} />}
+                  prefix={<AppIcon icon={Icons.mapPin} size={16} style={{ marginRight: 8, fontSize: 16 }} />}
                 />
               </AutoComplete>
             )}
@@ -170,7 +177,7 @@ export function RatesSearchTab({ form, onSubmit }: RatesSearchTabProps) {
                 style={{ width: '100%', ...inputStyle }}
                 value={field.value ? dayjs(field.value) : null}
                 onChange={(date) => field.onChange(date ? date.format('YYYY-MM-DD') : '')}
-                suffixIcon={<CalendarOutlined style={{ color: '#555', fontSize: 16 }} />}
+                suffixIcon={<AppIcon icon={Icons.calendar} size={16} />}
               />
             )}
           />
@@ -194,23 +201,26 @@ export function RatesSearchTab({ form, onSubmit }: RatesSearchTabProps) {
         </div>
       </div>
 
-      <Button
-        htmlType="submit"
-        onClick={(e) => onSubmit(e as any)}
-        type="primary"
-        icon={<SearchOutlined />}
-        style={{
-          width: '100%',
-          height: 44,
-          borderRadius: token.borderRadius,
-          fontWeight: 600,
-          fontSize: 16,
-          background: token.colorPrimary,
-          boxShadow: `0 4px 12px ${token.colorPrimary}40`
-        }}
-      >
-        Get Rates
-      </Button>
+      <Flex gap={12} wrap="wrap" className="landing-search-actions">
+        <AppButton
+          type="primary"
+          size="large"
+          htmlType="submit"
+          onClick={(e) => onSubmit(e as unknown as React.FormEvent<HTMLFormElement>)}
+          icon={<AppIcon icon={Icons.search} size={16} />}
+        >
+          Get Rates
+        </AppButton>
+        <AppButton
+          size="large"
+          htmlType="button"
+          icon={<AppIcon icon={Icons.refreshCw} size={16} />}
+          onClick={handleReset}
+          aria-label="Reset rates search"
+        >
+          Reset
+        </AppButton>
+      </Flex>
     </form>
   );
 }

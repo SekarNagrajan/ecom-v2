@@ -1,6 +1,19 @@
-import { AppButton } from '@solverminds/shared-ui';
-import { Flex, Tooltip, theme } from 'antd';
-import type { CSSProperties, MouseEvent, ReactNode } from 'react';
+// Modified by Sekar Nagarajan (2026-08-25 18:30)
+import { AppButton } from "@solverminds/shared-ui";
+import { Tooltip } from "antd";
+import {
+  cloneElement,
+  isValidElement,
+  type MouseEvent,
+  type ReactElement,
+  type ReactNode,
+} from "react";
+
+import {
+  AppIcon,
+  type AppIconActionTone,
+  type AppIconProps,
+} from "../icons/app-icon";
 
 const ACTION_TOOLTIP_DELAY = 0.5; // 500ms
 
@@ -11,7 +24,21 @@ export interface ListActionButtonProps {
   danger?: boolean;
   disabled?: boolean;
   ariaLabel?: string;
-  color?: string;
+  /** Semantic Lucide tone; `danger` forces `reject` */
+  tone?: AppIconActionTone;
+}
+
+function withGridActionIcon(
+  icon: ReactNode,
+  tone?: AppIconActionTone,
+): ReactNode {
+  if (isValidElement<AppIconProps>(icon) && icon.type === AppIcon) {
+    return cloneElement(icon as ReactElement<AppIconProps>, {
+      gridAction: true,
+      tone: tone ?? icon.props.tone,
+    });
+  }
+  return icon;
 }
 
 export function ListActionButton({
@@ -21,27 +48,23 @@ export function ListActionButton({
   danger,
   disabled,
   ariaLabel,
-  color,
+  tone,
 }: ListActionButtonProps) {
-  const { token } = theme.useToken();
-  const style: CSSProperties = {
-    padding: 0,
-    height: 'auto',
-    fontSize: token.fontSizeLG,
-    ...(color && !disabled ? { color } : {}),
-  };
+  const resolvedTone: AppIconActionTone | undefined = danger
+    ? "reject"
+    : tone;
 
   return (
     <Tooltip title={title} mouseEnterDelay={ACTION_TOOLTIP_DELAY}>
       <AppButton
         type="link"
         size="small"
-        icon={icon}
+        icon={withGridActionIcon(icon, resolvedTone)}
         aria-label={ariaLabel ?? title}
         danger={danger}
         disabled={disabled}
         onClick={onClick}
-        style={style}
+        className="list-action-button"
       />
     </Tooltip>
   );
@@ -52,14 +75,5 @@ interface ListActionsRowProps {
 }
 
 export function ListActionsRow({ children }: ListActionsRowProps) {
-  const { token } = theme.useToken();
-  return (
-    <Flex
-      align="center"
-      gap={token.marginSM}
-      style={{ height: '100%', lineHeight: 1 }}
-    >
-      {children}
-    </Flex>
-  );
+  return <div className="list-actions-row">{children}</div>;
 }

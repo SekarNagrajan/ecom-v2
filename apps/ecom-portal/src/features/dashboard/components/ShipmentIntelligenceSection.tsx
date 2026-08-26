@@ -1,17 +1,33 @@
-// Section 5: Interactive Shipment Intelligence & Top Consignees
-// Modified by sekar nagarajan (2026-08-21)
+// Modified by Sekar Nagarajan (2026-08-25 18:20)
+import { AppButton } from "@solverminds/shared-ui";
+import {
+  Card,
+  Col,
+  Progress,
+  Row,
+  Tabs,
+  theme,
+  Tooltip,
+  Typography,
+} from "antd";
+import * as echarts from "echarts";
+import { useLayoutEffect, useRef, useState } from "react";
 
-import { EyeOutlined } from '@ant-design/icons';
-import { AppButton } from '@solverminds/shared-ui';
-import { Card, Col, Progress, Row, Tabs, theme, Typography } from 'antd';
-import * as echarts from 'echarts';
-import { useEffect, useRef, useState } from 'react';
-import type { IntelligenceBreakdown, TopConsignee } from '../mocks/dashboard.mock';
+import { AppIcon, Icons } from "../../../components/icons";
+import { useChartTokens } from "../../theme/utils/use-portal-chart-tokens";
+import type {
+  IntelligenceBreakdown,
+  TopConsignee,
+} from "../mocks/dashboard.mock";
 import {
   MOCK_INTELLIGENCE_BY_ORIGIN,
   MOCK_INTELLIGENCE_BY_POD,
   MOCK_INTELLIGENCE_BY_POL,
-} from '../mocks/dashboard.mock';
+} from "../mocks/dashboard.mock";
+import {
+  resolveDashboardTone,
+  type DashboardTone,
+} from "../utils/dashboard-tone";
 
 const { Text } = Typography;
 
@@ -21,51 +37,74 @@ interface DonutChartProps {
 }
 
 function DonutChart({ data, totalFeus }: DonutChartProps) {
+  const chartTokens = useChartTokens();
   const { token } = theme.useToken();
   const ref = useRef<HTMLDivElement>(null);
-  const chartRef = useRef<echarts.ECharts | null>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!ref.current) return;
-    chartRef.current = echarts.init(ref.current, undefined, { renderer: 'svg' });
-    const handleResize = () => chartRef.current?.resize();
-    window.addEventListener('resize', handleResize);
-    return () => { chartRef.current?.dispose(); window.removeEventListener('resize', handleResize); };
-  }, []);
-
-  useEffect(() => {
-    if (!chartRef.current) return;
-    chartRef.current.setOption({
-      tooltip: { trigger: 'item', formatter: '{b}: {c} FEUs ({d}%)' },
+    const chart = echarts.init(ref.current, undefined, { renderer: "svg" });
+    chart.setOption({
+      backgroundColor: "transparent",
+      tooltip: {
+        trigger: "item",
+        formatter: "{b}: {c} FEUs ({d}%)",
+        backgroundColor: chartTokens.colorBgElevated,
+        borderColor: chartTokens.colorBorderSecondary,
+        textStyle: { color: chartTokens.colorText },
+      },
       graphic: [
         {
-          type: 'text',
-          left: 'center',
-          top: '38%',
-          style: { text: totalFeus.toLocaleString(), textAlign: 'center', fill: token.colorText, fontSize: 20, fontWeight: 'bold' },
+          type: "text",
+          left: "center",
+          top: "38%",
+          style: {
+            text: totalFeus.toLocaleString(),
+            textAlign: "center",
+            fill: chartTokens.colorText,
+            fontSize: 20,
+            fontWeight: "bold",
+          },
         },
         {
-          type: 'text',
-          left: 'center',
-          top: '52%',
-          style: { text: 'FEUs', textAlign: 'center', fill: token.colorTextSecondary, fontSize: 11 },
+          type: "text",
+          left: "center",
+          top: "52%",
+          style: {
+            text: "FEUs",
+            textAlign: "center",
+            fill: chartTokens.colorTextSecondary,
+            fontSize: 11,
+          },
         },
       ],
       series: [
         {
-          type: 'pie',
-          radius: ['50%', '76%'],
-          center: ['50%', '47%'],
+          type: "pie",
+          radius: ["50%", "76%"],
+          center: ["50%", "47%"],
           avoidLabelOverlap: false,
           label: { show: false },
           emphasis: { scale: true, scaleSize: 4 },
-          data: data.map((d) => ({ value: d.feus, name: d.name, itemStyle: { color: d.color } })),
+          data: data.map((d) => ({
+            value: d.feus,
+            name: d.name,
+            itemStyle: {
+              color: resolveDashboardTone(token, d.tone as DashboardTone),
+            },
+          })),
         },
       ],
     });
-  }, [data, totalFeus, token]);
+    const observer = new ResizeObserver(() => chart.resize());
+    observer.observe(ref.current);
+    return () => {
+      observer.disconnect();
+      chart.dispose();
+    };
+  }, [data, totalFeus, chartTokens, token]);
 
-  return <div ref={ref} style={{ width: '100%', height: 180 }} />;
+  return <div ref={ref} className="dashboard-donut" />;
 }
 
 interface BreakdownTableProps {
@@ -75,32 +114,51 @@ interface BreakdownTableProps {
 function BreakdownTable({ data }: BreakdownTableProps) {
   const { token } = theme.useToken();
   const max = data[0]?.feus ?? 1;
+
   return (
-    <div style={{ overflowX: 'auto' }}>
-      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11 }}>
+    <div className="dashboard-table-wrap custom-scroll">
+      <table className="dashboard-table">
         <thead>
           <tr>
-            {['Origin', 'FEUs', '% Total', ''].map((h) => (
-              <th key={h} style={{ padding: '4px 6px', color: token.colorTextSecondary, textAlign: h === 'FEUs' || h === '% Total' ? 'right' : 'left', fontWeight: 600, fontSize: 10, borderBottom: `1px solid ${token.colorBorderSecondary}` }}>
-                {h}
-              </th>
-            ))}
+            <th>Origin</th>
+            <th className="is-right">FEUs</th>
+            <th className="is-right">% Total</th>
+            <th />
           </tr>
         </thead>
         <tbody>
-          {data.map((row, idx) => (
-            <tr key={idx} style={{ background: idx % 2 === 0 ? 'transparent' : token.colorFillAlter }}>
-              <td style={{ padding: '5px 6px', display: 'flex', alignItems: 'center', gap: 4 }}>
-                <div style={{ width: 6, height: 6, borderRadius: '50%', background: row.color, flexShrink: 0 }} />
-                <Text style={{ fontSize: 11 }} ellipsis>{row.name}</Text>
-              </td>
-              <td style={{ padding: '5px 6px', textAlign: 'right', fontWeight: 700 }}>{row.feus.toLocaleString()}</td>
-              <td style={{ padding: '5px 6px', textAlign: 'right', color: token.colorTextSecondary }}>{row.pctOfTotal}%</td>
-              <td style={{ padding: '5px 6px', minWidth: 60 }}>
-                <Progress percent={Math.round((row.feus / max) * 100)} showInfo={false} size="small" strokeColor={row.color} />
-              </td>
-            </tr>
-          ))}
+          {data.map((row, idx) => {
+            const stroke = resolveDashboardTone(
+              token,
+              row.tone as DashboardTone,
+            );
+            return (
+              <tr key={idx} className={idx % 2 === 1 ? "is-alt" : undefined}>
+                <td>
+                  <span className="dashboard-name-cell">
+                    <span
+                      className={`dashboard-dot dashboard-dot--${row.tone}`}
+                    />
+                    <Text ellipsis>{row.name}</Text>
+                  </span>
+                </td>
+                <td className="is-right">
+                  <Text strong>{row.feus.toLocaleString()}</Text>
+                </td>
+                <td className="is-right">
+                  <Text type="secondary">{row.pctOfTotal}%</Text>
+                </td>
+                <td>
+                  <Progress
+                    percent={Math.round((row.feus / max) * 100)}
+                    showInfo={false}
+                    size="small"
+                    strokeColor={stroke}
+                  />
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
@@ -108,36 +166,41 @@ function BreakdownTable({ data }: BreakdownTableProps) {
 }
 
 const INTELLIGENCE_TABS = [
-  { key: 'origin', label: 'By Origin', data: MOCK_INTELLIGENCE_BY_ORIGIN },
-  { key: 'pol', label: 'By POL', data: MOCK_INTELLIGENCE_BY_POL },
-  { key: 'pod', label: 'By POD', data: MOCK_INTELLIGENCE_BY_POD },
-  { key: 'pickup', label: 'By Pickup', data: MOCK_INTELLIGENCE_BY_ORIGIN },
-  { key: 'consignee', label: 'By Consignee', data: MOCK_INTELLIGENCE_BY_POL },
-  { key: 'destination', label: 'By Destination', data: MOCK_INTELLIGENCE_BY_POD },
+  { key: "origin", label: "By Origin", data: MOCK_INTELLIGENCE_BY_ORIGIN },
+  { key: "pol", label: "By POL", data: MOCK_INTELLIGENCE_BY_POL },
+  { key: "pod", label: "By POD", data: MOCK_INTELLIGENCE_BY_POD },
+  { key: "pickup", label: "By Pickup", data: MOCK_INTELLIGENCE_BY_ORIGIN },
+  { key: "consignee", label: "By Consignee", data: MOCK_INTELLIGENCE_BY_POL },
+  {
+    key: "destination",
+    label: "By Destination",
+    data: MOCK_INTELLIGENCE_BY_POD,
+  },
 ];
 
 export function InteractiveShipmentIntelligenceCard() {
-  const { token } = theme.useToken();
-  const [activeTab, setActiveTab] = useState('origin');
+  const [activeTab, setActiveTab] = useState("origin");
   const currentTab = INTELLIGENCE_TABS.find((t) => t.key === activeTab)!;
   const totalFeus = currentTab.data.reduce((s, d) => s + d.feus, 0);
 
-  const cardStyle = {
-    borderRadius: 16,
-    border: `1px solid ${token.colorBorderSecondary}`,
-    boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-    height: '100%',
-  };
-
   return (
     <Card
-      style={cardStyle}
-      styles={{ body: { padding: '16px 20px' } }}
-      title={<Text strong style={{ fontSize: 14 }}>5. Interactive Shipment Intelligence</Text>}
+      className="dashboard-panel"
+      title={
+        <Text strong className="dashboard-panel__title">
+          5. Interactive Shipment Intelligence
+        </Text>
+      }
       extra={
-        <AppButton type="link" size="small" icon={<EyeOutlined />}>
-          Report →
-        </AppButton>
+        <Tooltip title="Open Intelligence Report">
+          <AppButton
+            type="link"
+            size="small"
+            icon={<AppIcon icon={Icons.eye} size={16} />}
+          >
+            Report →
+          </AppButton>
+        </Tooltip>
       }
     >
       <Tabs
@@ -145,9 +208,8 @@ export function InteractiveShipmentIntelligenceCard() {
         activeKey={activeTab}
         onChange={setActiveTab}
         items={INTELLIGENCE_TABS.map((t) => ({ key: t.key, label: t.label }))}
-        style={{ marginBottom: 0 }}
       />
-      <Row gutter={12} style={{ marginTop: 8 }}>
+      <Row gutter={[12, 12]}>
         <Col xs={24} sm={9}>
           <DonutChart data={currentTab.data} totalFeus={totalFeus} />
         </Col>
@@ -167,43 +229,63 @@ export function TopConsigneesCard({ consignees }: TopConsigneesProps) {
   const { token } = theme.useToken();
   const max = consignees[0]?.feus ?? 1;
 
-  const cardStyle = {
-    borderRadius: 16,
-    border: `1px solid ${token.colorBorderSecondary}`,
-    boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-    height: '100%',
-  };
-
   return (
     <Card
-      style={cardStyle}
-      styles={{ body: { padding: '16px 20px' } }}
-      title={<Text strong style={{ fontSize: 14 }}>Top Consignees (By FEUs)</Text>}
-      extra={<AppButton type="link" size="small">View All</AppButton>}
+      className="dashboard-panel"
+      title={
+        <Text strong className="dashboard-panel__title">
+          Top Consignees (By FEUs)
+        </Text>
+      }
+      extra={
+        <Tooltip title="View All Consignees">
+          <AppButton type="link" size="small">
+            View All
+          </AppButton>
+        </Tooltip>
+      }
     >
-      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
-        <thead>
-          <tr>
-            {['Company Name', 'FEUs', '% Total', 'Volume Share'].map((h) => (
-              <th key={h} style={{ padding: '4px 6px', color: token.colorTextSecondary, textAlign: h === 'FEUs' || h === '% Total' ? 'right' : 'left', fontWeight: 600, fontSize: 11, borderBottom: `1px solid ${token.colorBorderSecondary}` }}>
-                {h}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {consignees.map((c, idx) => (
-            <tr key={idx} style={{ background: idx % 2 === 0 ? 'transparent' : token.colorFillAlter }}>
-              <td style={{ padding: '7px 6px', fontWeight: 500 }}>{c.name}</td>
-              <td style={{ padding: '7px 6px', textAlign: 'right', fontWeight: 700 }}>{c.feus.toLocaleString()}</td>
-              <td style={{ padding: '7px 6px', textAlign: 'right', color: token.colorTextSecondary }}>{c.pctOfTotal}%</td>
-              <td style={{ padding: '7px 6px', minWidth: 90 }}>
-                <Progress percent={Math.round((c.feus / max) * 100)} showInfo={false} size="small" strokeColor={c.color} />
-              </td>
+      <div className="dashboard-table-wrap custom-scroll">
+        <table className="dashboard-table">
+          <thead>
+            <tr>
+              <th>Company Name</th>
+              <th className="is-right">FEUs</th>
+              <th className="is-right">% Total</th>
+              <th>Volume Share</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {consignees.map((c, idx) => {
+              const stroke = resolveDashboardTone(
+                token,
+                c.tone as DashboardTone,
+              );
+              return (
+                <tr key={idx} className={idx % 2 === 1 ? "is-alt" : undefined}>
+                  <td>
+                    <Text>{c.name}</Text>
+                  </td>
+                  <td className="is-right">
+                    <Text strong>{c.feus.toLocaleString()}</Text>
+                  </td>
+                  <td className="is-right">
+                    <Text type="secondary">{c.pctOfTotal}%</Text>
+                  </td>
+                  <td>
+                    <Progress
+                      percent={Math.round((c.feus / max) * 100)}
+                      showInfo={false}
+                      size="small"
+                      strokeColor={stroke}
+                    />
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </Card>
   );
 }
@@ -212,7 +294,9 @@ interface ShipmentIntelligenceProps {
   consignees: TopConsignee[];
 }
 
-export function ShipmentIntelligenceSection({ consignees }: ShipmentIntelligenceProps) {
+export function ShipmentIntelligenceSection({
+  consignees,
+}: ShipmentIntelligenceProps) {
   return (
     <Row gutter={[16, 16]}>
       <Col xs={24} lg={14}>

@@ -1,11 +1,14 @@
-// Modified by Sekar Nagarajan (2026-08-21 14:55)
-import React from 'react';
-import { Card, Input, Tag, Typography, Space, Row, Col, Select } from 'antd';
-import { MailOutlined, SaveOutlined } from '@ant-design/icons';
+// Modified by Sekar Nagarajan (2026-08-24 19:14)
 import { AppButton } from '@solverminds/shared-ui';
-import type { EmailTemplate } from '../types/admin.types';
+import { Col, Input, Row, Select, Space, Tag, Typography } from 'antd';
+import React from 'react';
 
-const { Text, Title } = Typography;
+import { AppIcon, Icons } from '../../../components/icons';
+import { RESPONSIVE_COL } from '../../../constants/responsive-grid';
+import type { EmailTemplate } from '../types/admin.types';
+import { AdminPanelShell } from './AdminPanelShell';
+
+const { Text } = Typography;
 const { TextArea } = Input;
 
 interface EmailTemplateEditorViewProps {
@@ -30,38 +33,43 @@ export function EmailTemplateEditorView({ templates, onSave }: EmailTemplateEdit
   if (!activeTemplate) return null;
 
   return (
-    <Card style={{ borderRadius: 16, boxShadow: '0 8px 24px rgba(0,0,0,0.05)', border: 'none' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-        <div>
-          <Space align="center">
-            <MailOutlined style={{ fontSize: 20, color: '#13c2c2' }} />
-            <Title level={4} style={{ margin: 0 }}>Email Template Editor</Title>
-          </Space>
-          <Text type="secondary" style={{ display: 'block', marginTop: 4 }}>
-            Create and customize transactional notification templates with dynamic variables
-          </Text>
-        </div>
-        <AppButton type="primary" size="large" icon={<SaveOutlined />} onClick={() => onSave(activeTemplate.id, { subject, bodyHtml })}>
+    <AdminPanelShell
+      icon={Icons.mail}
+      title="Email Template Editor"
+      subtitle="Create and customize transactional notification templates with dynamic variables."
+      extra={
+        <AppButton
+          type="primary"
+          size="large"
+          icon={<AppIcon icon={Icons.save} size={16} />}
+          onClick={() => onSave(activeTemplate.id, { subject, bodyHtml })}
+        >
           Save Template
         </AppButton>
-      </div>
-
-      <Row gutter={16}>
-        <Col span={8}>
-          <Text style={{ fontWeight: 600, display: 'block', marginBottom: 8 }}>Select Email Template</Text>
+      }
+    >
+      <Row gutter={[16, 16]}>
+        <Col {...RESPONSIVE_COL.formThird}>
+          <span className="form-field-label">Select Email Template</span>
           <Select
             size="large"
-            style={{ width: '100%' }}
+            className="admin-full-width"
             value={selectedId}
             onChange={(val) => setSelectedId(val)}
             options={templates.map((t) => ({ label: t.templateCode, value: t.id }))}
+            style={{ width: '100%' }}
           />
 
-          <div style={{ marginTop: 24, padding: 16, background: '#f8fafc', borderRadius: 8, border: '1px solid #e2e8f0' }}>
-            <Text style={{ fontWeight: 600, display: 'block', marginBottom: 8 }}>Available Variables</Text>
+          <div className="admin-vars-box">
+            <span className="form-field-label">Available Variables</span>
             <Space wrap size={[4, 8]}>
               {activeTemplate.placeholders.map((ph) => (
-                <Tag color="cyan" key={ph} style={{ cursor: 'pointer' }} onClick={() => setBodyHtml((prev) => prev + ` ${ph} `)}>
+                <Tag
+                  className="admin-code-tag"
+                  color="cyan"
+                  key={ph}
+                  onClick={() => setBodyHtml((prev) => prev + ` ${ph} `)}
+                >
                   {ph}
                 </Tag>
               ))}
@@ -69,33 +77,32 @@ export function EmailTemplateEditorView({ templates, onSave }: EmailTemplateEdit
           </div>
         </Col>
 
-        <Col span={16}>
-          <Space direction="vertical" style={{ width: '100%' }} size="middle">
+        <Col {...RESPONSIVE_COL.twoThirds}>
+          <Space direction="vertical" size="middle" className="admin-stack-full">
             <div>
-              <Text style={{ fontWeight: 600, display: 'block', marginBottom: 6 }}>Email Subject Line</Text>
+              <span className="form-field-label">Email Subject Line</span>
               <Input size="large" value={subject} onChange={(e) => setSubject(e.target.value)} />
             </div>
 
             <div>
-              <Text style={{ fontWeight: 600, display: 'block', marginBottom: 6 }}>HTML Template Body</Text>
+              <span className="form-field-label">HTML Template Body</span>
               <TextArea
                 rows={10}
                 value={bodyHtml}
                 onChange={(e) => setBodyHtml(e.target.value)}
-                className="custom-scroll"
-                style={{ fontFamily: 'monospace' }}
+                className="custom-scroll admin-mono-textarea"
               />
             </div>
 
-            <div style={{ padding: 16, background: '#ffffff', borderRadius: 8, border: '1px dashed #cbd5e1' }}>
-              <Text type="secondary" style={{ fontSize: 12, display: 'block', marginBottom: 4 }}>
-                LIVE PREVIEW:
+            <div className="admin-preview-box">
+              <Text type="secondary" className="admin-preview-box__label">
+                Live Preview
               </Text>
               <div dangerouslySetInnerHTML={{ __html: bodyHtml }} />
             </div>
           </Space>
         </Col>
       </Row>
-    </Card>
+    </AdminPanelShell>
   );
 }

@@ -1,5 +1,5 @@
-// Modified by sekar nagarajan (2026-08-21)
-import { CheckCircleOutlined, CloseCircleOutlined, KeyOutlined, LockOutlined, SaveOutlined } from '@ant-design/icons';
+// Modified by Sekar Nagarajan (2026-08-24 16:05)
+import { AppIcon, Icons } from '../../../components/icons';
 import { AppButton, AppDrawer } from '@solverminds/shared-ui';
 import { useToast } from '@solverminds/shared-ui/hooks';
 import { Form, Input, List, Progress, Space, Typography, theme } from 'antd';
@@ -84,7 +84,7 @@ export function ChangePasswordView({ open = true, onClose }: ChangePasswordViewP
         name="oldPassword"
         rules={[{ required: true, message: 'Please enter your current password' }]}
       >
-        <Input.Password prefix={<LockOutlined style={{ color: token.colorTextQuaternary }} />} placeholder="Enter current password" />
+        <Input.Password prefix={<AppIcon icon={Icons.lock} size={16} />} placeholder="Enter current password" />
       </Form.Item>
 
       <Form.Item
@@ -93,7 +93,7 @@ export function ChangePasswordView({ open = true, onClose }: ChangePasswordViewP
         rules={[{ required: true, message: 'Please enter new password' }]}
       >
         <Input.Password
-          prefix={<LockOutlined style={{ color: token.colorTextQuaternary }} />}
+          prefix={<AppIcon icon={Icons.lock} size={16} />}
           placeholder="Enter new password"
           onChange={(e) => setNewPassword(e.target.value)}
         />
@@ -119,9 +119,9 @@ export function ChangePasswordView({ open = true, onClose }: ChangePasswordViewP
               <List.Item style={{ padding: '4px 0', border: 'none' }}>
                 <Space size={6}>
                   {item.valid ? (
-                    <CheckCircleOutlined style={{ color: token.colorSuccess }} />
+                    <AppIcon icon={Icons.checkCircle} size={16} tone="approve" />
                   ) : (
-                    <CloseCircleOutlined style={{ color: token.colorTextQuaternary }} />
+                    <AppIcon icon={Icons.circleX} size={16} tone="reject" />
                   )}
                   <Text type={item.valid ? 'success' : 'secondary'} style={{ fontSize: 12 }}>
                     {item.label}
@@ -138,12 +138,12 @@ export function ChangePasswordView({ open = true, onClose }: ChangePasswordViewP
         name="confirmPassword"
         rules={[{ required: true, message: 'Please confirm your new password' }]}
       >
-        <Input.Password prefix={<LockOutlined style={{ color: token.colorTextQuaternary }} />} placeholder="Re-enter new password" />
+        <Input.Password prefix={<AppIcon icon={Icons.lock} size={16} />} placeholder="Re-enter new password" />
       </Form.Item>
 
       {!onClose && (
         <Form.Item style={{ marginTop: 24, textAlign: 'right' }}>
-          <AppButton type="primary" size="large" icon={<SaveOutlined />} loading={loading} htmlType="submit">
+          <AppButton type="primary" size="large" icon={<AppIcon icon={Icons.save} size={16} />} loading={loading} htmlType="submit">
             Update Password
           </AppButton>
         </Form.Item>
@@ -155,7 +155,7 @@ export function ChangePasswordView({ open = true, onClose }: ChangePasswordViewP
     <div>
       <div style={{ textAlign: 'center', marginBottom: 24 }}>
         <Space align="center" style={{ justifyContent: 'center' }}>
-          <KeyOutlined style={{ fontSize: 26, color: token.colorPrimary }} />
+          <AppIcon icon={Icons.key} size={26} />
           <Title level={4} style={{ margin: 0, fontWeight: 700 }}>
             Change Account Password
           </Title>
@@ -184,7 +184,7 @@ export function ChangePasswordView({ open = true, onClose }: ChangePasswordViewP
         footer={
           <Space style={{ width: '100%', justifyContent: 'flex-end' }} size={8}>
             <AppButton danger onClick={onClose}>Cancel</AppButton>
-            <AppButton type="primary" icon={<SaveOutlined />} loading={loading} onClick={() => form.submit()}>
+            <AppButton type="primary" icon={<AppIcon icon={Icons.save} size={16} />} loading={loading} onClick={() => form.submit()}>
               Update Password
             </AppButton>
           </Space>

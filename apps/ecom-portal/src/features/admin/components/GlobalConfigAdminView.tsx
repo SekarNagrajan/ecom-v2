@@ -1,11 +1,12 @@
-// Modified by Sekar Nagarajan (2026-08-21 14:55)
-import React from 'react';
-import { Card, Switch, InputNumber, Input, Typography, Space, Row, Col, Divider } from 'antd';
-import { SettingOutlined, SaveOutlined, SafetyCertificateOutlined, AppstoreOutlined } from '@ant-design/icons';
+// Modified by Sekar Nagarajan (2026-08-24 19:14)
 import { AppButton } from '@solverminds/shared-ui';
-import type { GlobalConfig } from '../types/admin.types';
+import { Card, Col, Divider, Input, InputNumber, Row, Space, Switch } from 'antd';
+import React from 'react';
 
-const { Text, Title } = Typography;
+import { AppIcon, Icons } from '../../../components/icons';
+import { RESPONSIVE_COL } from '../../../constants/responsive-grid';
+import type { GlobalConfig } from '../types/admin.types';
+import { AdminPanelShell } from './AdminPanelShell';
 
 interface GlobalConfigAdminViewProps {
   config?: GlobalConfig;
@@ -35,35 +36,35 @@ export function GlobalConfigAdminView({ config, onSave }: GlobalConfigAdminViewP
   };
 
   return (
-    <Card style={{ borderRadius: 16, boxShadow: '0 8px 24px rgba(0,0,0,0.05)', border: 'none' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-        <div>
-          <Space align="center">
-            <SettingOutlined style={{ fontSize: 20, color: '#1677ff' }} />
-            <Title level={4} style={{ margin: 0 }}>Global System Configuration</Title>
-          </Space>
-          <Text type="secondary" style={{ display: 'block', marginTop: 4 }}>
-            Manage core security rules, captcha policies, and feature flags
-          </Text>
-        </div>
-        <AppButton type="primary" size="large" icon={<SaveOutlined />} onClick={() => onSave(formState)}>
+    <AdminPanelShell
+      icon={Icons.settings}
+      title="Global System Configuration"
+      subtitle="Manage core security rules, captcha policies, and feature flags."
+      extra={
+        <AppButton
+          type="primary"
+          size="large"
+          icon={<AppIcon icon={Icons.save} size={16} />}
+          onClick={() => onSave(formState)}
+        >
           Save Global Configs
         </AppButton>
-      </div>
-
+      }
+    >
       <Row gutter={[24, 24]}>
-        <Col span={12}>
+        <Col {...RESPONSIVE_COL.formHalf}>
           <Card
+            className="admin-inner-card"
             type="inner"
             title={
               <Space>
-                <SafetyCertificateOutlined style={{ color: '#1677ff' }} />
+                <AppIcon icon={Icons.shieldCheck} size={16} />
                 <span>Security & Authentication Controls</span>
               </Space>
             }
           >
-            <Space direction="vertical" style={{ width: '100%' }} size="middle">
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Space direction="vertical" size="middle" className="admin-stack-full">
+              <div className="admin-toggle-row">
                 <span>Enable Login reCAPTCHA v2</span>
                 <Switch
                   checked={formState.enableLoginCaptcha}
@@ -72,7 +73,7 @@ export function GlobalConfigAdminView({ config, onSave }: GlobalConfigAdminViewP
               </div>
 
               <div>
-                <Text style={{ fontWeight: 600, display: 'block', marginBottom: 6 }}>Captcha Secret Key</Text>
+                <span className="form-field-label">Captcha Secret Key</span>
                 <Input
                   size="large"
                   value={formState.captchaSecretKey}
@@ -80,9 +81,9 @@ export function GlobalConfigAdminView({ config, onSave }: GlobalConfigAdminViewP
                 />
               </div>
 
-              <Divider style={{ margin: '12px 0' }} />
+              <Divider />
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div className="admin-toggle-row">
                 <span>Max Invalid Password Attempts Limit</span>
                 <InputNumber
                   size="large"
@@ -93,7 +94,7 @@ export function GlobalConfigAdminView({ config, onSave }: GlobalConfigAdminViewP
                 />
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div className="admin-toggle-row">
                 <span>Account Lock Duration (Minutes)</span>
                 <InputNumber
                   size="large"
@@ -104,7 +105,7 @@ export function GlobalConfigAdminView({ config, onSave }: GlobalConfigAdminViewP
                 />
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div className="admin-toggle-row">
                 <span>Enable Password Complexity Rules</span>
                 <Switch
                   checked={formState.enablePasswordValidation}
@@ -115,18 +116,19 @@ export function GlobalConfigAdminView({ config, onSave }: GlobalConfigAdminViewP
           </Card>
         </Col>
 
-        <Col span={12}>
+        <Col {...RESPONSIVE_COL.formHalf}>
           <Card
+            className="admin-inner-card"
             type="inner"
             title={
               <Space>
-                <AppstoreOutlined style={{ color: '#52c41a' }} />
+                <AppIcon icon={Icons.layoutGrid} size={16} />
                 <span>Platform & Tenant Feature Flags</span>
               </Space>
             }
           >
-            <Space direction="vertical" style={{ width: '100%' }} size="middle">
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Space direction="vertical" size="middle" className="admin-stack-full">
+              <div className="admin-toggle-row">
                 <span>Allow Incomplete Registration Login</span>
                 <Switch
                   checked={formState.allowIncompletedRegToLogin}
@@ -134,7 +136,7 @@ export function GlobalConfigAdminView({ config, onSave }: GlobalConfigAdminViewP
                 />
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div className="admin-toggle-row">
                 <span>V1 Data Synchronization Engine</span>
                 <Switch
                   checked={formState.v1DataEnableStatus}
@@ -142,7 +144,7 @@ export function GlobalConfigAdminView({ config, onSave }: GlobalConfigAdminViewP
                 />
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div className="admin-toggle-row">
                 <span>Enable Executive Cargo Dashboard</span>
                 <Switch
                   checked={formState.dashboardDisplay}
@@ -153,6 +155,6 @@ export function GlobalConfigAdminView({ config, onSave }: GlobalConfigAdminViewP
           </Card>
         </Col>
       </Row>
-    </Card>
+    </AdminPanelShell>
   );
 }

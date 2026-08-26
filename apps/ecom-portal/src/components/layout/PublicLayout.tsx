@@ -1,50 +1,64 @@
-// Modified by Sekar Nagarajan (2026-08-22 00:06)
+// Modified by Sekar Nagarajan (2026-08-25 19:00)
 import {
-  AuditOutlined,
-  BankOutlined,
-  BarcodeOutlined,
-  BookOutlined,
-  CalendarOutlined,
-  CloudOutlined,
-  CompassOutlined,
-  CustomerServiceOutlined,
-  DeliveredProcedureOutlined,
-  DollarOutlined,
-  EllipsisOutlined,
-  EnvironmentOutlined,
-  FileProtectOutlined,
-  HomeOutlined,
-  NotificationOutlined,
-  SafetyCertificateOutlined,
-  SolutionOutlined,
-  TagOutlined,
-} from '@ant-design/icons';
-import type { MenuProps } from 'antd';
-import { Card, Flex, Grid, Layout, Menu, Typography, theme } from 'antd';
-import { useEffect, useState } from 'react';
+  Outlet,
+  useLocation,
+  useNavigate,
+  useSearch,
+} from "@tanstack/react-router";
+import type { MenuProps } from "antd";
+import { Card, Drawer, Layout, Menu, Tooltip, Typography } from "antd";
+import type { LucideIcon } from "lucide-react";
+import { useEffect, useState } from "react";
 
-import { useLoginController } from '../../features/auth/hooks/use-login-controller';
-import { HeroSearchPanel } from '../../features/landing/components/HeroSearchPanel';
-import { PublicLoginPanel } from '../../features/landing/components/PublicLoginPanel';
-import { useLandingController } from '../../features/landing/hooks/use-landing-controller';
-import { AppFooter } from './AppFooter';
-import { PublicLayoutHeader } from './PublicLayoutHeader';
-
-import { Outlet, useLocation, useNavigate, useSearch } from '@tanstack/react-router';
+import { useLoginController } from "../../features/auth/hooks/use-login-controller";
+import { usePostLoginRedirectStore } from "../../features/auth/stores/use-post-login-redirect-store";
+import {
+  appPathnameToMenuKey,
+  isPublicMenuKey,
+  menuKeyToAppPath,
+} from "../../features/auth/utils/public-menu-access";
+import { HeroSearchPanel } from "../../features/landing/components/HeroSearchPanel";
+import { PublicLoginPanel } from "../../features/landing/components/PublicLoginPanel";
+import { useLandingController } from "../../features/landing/hooks/use-landing-controller";
+import { useResponsiveLayout } from "../../hooks/use-responsive-layout";
+import { AppIcon, Icons } from "../icons";
+import { AppFooter } from "./AppFooter";
+import { PublicLayoutHeader } from "./PublicLayoutHeader";
 
 const { Sider, Content } = Layout;
 const { Text } = Typography;
 
+function navIcon(Icon: LucideIcon, size = 18, locked = false) {
+  return (
+    <AppIcon
+      icon={Icon}
+      size={size}
+      variant={locked ? "navLocked" : "nav"}
+    />
+  );
+}
+
+function menuLabel(text: string, locked: boolean) {
+  if (!locked) return text;
+  return <Tooltip title="Sign In Required">{text}</Tooltip>;
+}
+
 export function PublicLayout() {
-  const { token } = theme.useToken();
-  const search = useSearch({ strict: false }) as any;
+  const search = useSearch({ strict: false }) as { login?: boolean };
   const navigate = useNavigate();
   const location = useLocation();
-  const [loginPanelOpen, setLoginPanelOpen] = useState(!!search.login);
+  const { useMobileNav, stackHero, tier } = useResponsiveLayout();
+  const setIntendedPath = usePostLoginRedirectStore((s) => s.setIntendedPath);
+  const clearIntendedPath = usePostLoginRedirectStore(
+    (s) => s.clearIntendedPath
+  );
+  const consumeIntendedPath = usePostLoginRedirectStore(
+    (s) => s.consumeIntendedPath
+  );
+
+  const [loginPanelOpen, setLoginPanelOpen] = useState(Boolean(search.login));
   const [collapsed, setCollapsed] = useState(true);
-  const screens = Grid.useBreakpoint();
-  const isMobile = !screens.md; // < 768px
-  const isStacked = !screens.xl; // < 1200px
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   useEffect(() => {
     if (search.login) {
@@ -52,291 +66,350 @@ export function PublicLayout() {
     }
   }, [search.login]);
 
+  const openLoginPanel = (intendedPath?: string | null) => {
+    if (intendedPath) {
+      setIntendedPath(intendedPath);
+    } else {
+      clearIntendedPath();
+    }
+    setLoginPanelOpen(true);
+  };
+
   const loginController = useLoginController({
     onSuccess: () => {
       setLoginPanelOpen(false);
-      navigate({ to: '/app/dashboard' });
+      const path = consumeIntendedPath() ?? "/app/dashboard";
+      navigate({ to: path as never });
     },
   });
 
   const landingController = useLandingController({
-    onLoginRequired: () => setLoginPanelOpen(true),
+    onLoginRequired: (intendedPath?: string) => {
+      openLoginPanel(intendedPath ?? null);
+    },
   });
 
-  const activeRouteKey =
-    location.pathname === '/' ? 'home' :
-      location.pathname.startsWith('/schedules') ? 'schedules' :
-        location.pathname.startsWith('/tracking') ? 'tracking' :
-          location.pathname.startsWith('/contact-us') ? 'contact-us' : 'home';
+  const activeRouteKey = appPathnameToMenuKey(location.pathname);
 
-  const menuItems: MenuProps['items'] = [
+  const menuItems: MenuProps["items"] = [
     {
-      key: 'home',
-      icon: <HomeOutlined style={{ fontSize: 18 }} />,
-      label: 'Home',
+      key: "home",
+      icon: navIcon(Icons.home),
+      label: menuLabel("Home", false),
     },
     {
-      key: 'schedules-group',
-      icon: <CalendarOutlined style={{ fontSize: 18 }} />,
-      label: 'Schedules',
+      key: "schedules-group",
+      icon: navIcon(Icons.calendar),
+      label: "Schedules",
       children: [
-        { key: 'schedules', icon: <CalendarOutlined />, label: 'Schedules' },
-        { key: 'tracking', icon: <CompassOutlined />, label: 'Tracking' },
+        {
+          key: "schedules",
+          icon: navIcon(Icons.calendar, 16),
+          label: menuLabel("Schedules", false),
+        },
+        {
+          key: "tracking",
+          icon: navIcon(Icons.mapPin, 16),
+          label: menuLabel("Tracking", false),
+        },
       ],
     },
     {
-      key: 'rates-group',
-      icon: <DollarOutlined style={{ fontSize: 18 }} />,
-      label: 'Rates',
+      key: "rates-group",
+      icon: navIcon(Icons.dollarSign),
+      label: "Rates",
       children: [
-        { key: 'rates', icon: <DollarOutlined />, label: 'Rates' },
-        { key: 'tariff', icon: <TagOutlined />, label: 'Tariff' },
+        {
+          key: "rates",
+          icon: navIcon(Icons.dollarSign, 16),
+          label: menuLabel("Rates", false),
+        },
+        {
+          key: "tariff",
+          icon: navIcon(Icons.tag, 16),
+          label: menuLabel("Tariff", false),
+        },
       ],
     },
     {
-      key: 'booking',
-      icon: <BookOutlined style={{ fontSize: 18 }} />,
-      label: 'Booking',
+      key: "booking",
+      icon: navIcon(Icons.bookOpen, 18, true),
+      label: menuLabel("Booking", true),
+      className: "ant-menu-item-locked",
     },
     {
-      key: 'si',
-      icon: <AuditOutlined style={{ fontSize: 18 }} />,
-      label: 'Shipping Instruction',
+      key: "si",
+      icon: navIcon(Icons.clipboardList, 18, true),
+      label: menuLabel("Shipping Instruction", true),
+      className: "ant-menu-item-locked",
     },
     {
-      key: 'vgm',
-      icon: <SafetyCertificateOutlined style={{ fontSize: 18 }} />,
-      label: 'VGM',
+      key: "vgm",
+      icon: navIcon(Icons.shieldCheck, 18, true),
+      label: menuLabel("VGM", true),
+      className: "ant-menu-item-locked",
     },
     {
-      key: 'bl',
-      icon: <FileProtectOutlined style={{ fontSize: 18 }} />,
-      label: 'Bill of Lading',
+      key: "bl",
+      icon: navIcon(Icons.shieldCheck, 18, true),
+      label: menuLabel("Bill of Lading", true),
+      className: "ant-menu-item-locked",
     },
     {
-      key: 'do',
-      icon: <DeliveredProcedureOutlined style={{ fontSize: 18 }} />,
-      label: 'Delivery Order',
+      key: "do",
+      icon: navIcon(Icons.truck, 18, true),
+      label: menuLabel("Delivery Order", true),
+      className: "ant-menu-item-locked",
     },
     {
-      key: 'arrival-notice',
-      icon: <NotificationOutlined style={{ fontSize: 18 }} />,
-      label: 'Arrival Notice',
+      key: "arrival-notice",
+      icon: navIcon(Icons.bell, 18, true),
+      label: menuLabel("Arrival Notice", true),
+      className: "ant-menu-item-locked",
     },
     {
-      key: 'cro',
-      icon: <BarcodeOutlined style={{ fontSize: 18 }} />,
-      label: 'Container Release Order',
+      key: "cro",
+      icon: navIcon(Icons.barcode, 18, true),
+      label: menuLabel("Container Release Order", true),
+      className: "ant-menu-item-locked",
     },
     {
-      key: 'more-group',
-      icon: <EllipsisOutlined style={{ fontSize: 20 }} />,
-      label: 'More',
+      key: "more-group",
+      icon: navIcon(Icons.ellipsis, 20),
+      label: "More",
       children: [
-        { key: 'payments', icon: <BankOutlined />, label: 'Payment History' },
-        { key: 'customer-stmt', icon: <SolutionOutlined />, label: 'Customer Statement' },
-        { key: 'carbon', icon: <CloudOutlined />, label: 'Carbon Calculator' },
-        { key: 'contact-us', icon: <CustomerServiceOutlined />, label: 'Contact Us' },
+        {
+          key: "payments",
+          icon: navIcon(Icons.landmark, 16, true),
+          label: menuLabel("Payment History", true),
+          className: "ant-menu-item-locked",
+        },
+        {
+          key: "customer-stmt",
+          icon: navIcon(Icons.contact, 16, true),
+          label: menuLabel("Customer Statement", true),
+          className: "ant-menu-item-locked",
+        },
+        {
+          key: "carbon",
+          icon: navIcon(Icons.cloud, 16, true),
+          label: menuLabel("Carbon Calculator", true),
+          className: "ant-menu-item-locked",
+        },
+        {
+          key: "contact-us",
+          icon: navIcon(Icons.headphones, 16),
+          label: menuLabel("Contact Us", false),
+        },
       ],
     },
   ];
 
-  const onMenuSelect: MenuProps['onSelect'] = ({ key }) => {
-    if (key === 'home') {
-      navigate({ to: '/' });
-    } else if (key === 'schedules') {
-      navigate({ to: '/app/schedules' as any });
-    } else if (key === 'tracking') {
-      navigate({ to: '/app/tracking' as any });
-    } else if (key === 'rates') {
-      navigate({ to: '/app/rates' as any });
-    } else if (key === 'contact-us') {
-      navigate({ to: '/contact-us' });
+  const onMenuSelect: MenuProps["onSelect"] = ({ key }) => {
+    setMobileNavOpen(false);
+    if (isPublicMenuKey(key)) {
+      clearIntendedPath();
+      if (key === "home") {
+        navigate({ to: "/" });
+      } else if (key === "schedules") {
+        navigate({ to: "/app/schedules" as never });
+      } else if (key === "tracking") {
+        navigate({ to: "/app/tracking" as never });
+      } else if (key === "rates" || key === "tariff") {
+        navigate({ to: "/app/rates" as never });
+      } else if (key === "contact-us") {
+        navigate({ to: "/contact-us" });
+      }
+      return;
+    }
+
+    openLoginPanel(menuKeyToAppPath(key));
+  };
+
+  const menuBlock = (
+    <Menu
+      theme="light"
+      mode="inline"
+      selectedKeys={[activeRouteKey]}
+      items={menuItems}
+      onSelect={onMenuSelect}
+      className="pub-layout-sider__menu"
+    />
+  );
+
+  const handleMenuToggle = () => {
+    if (useMobileNav) {
+      setMobileNavOpen(true);
     } else {
-      // Protected features prompt guest users to login
-      setLoginPanelOpen(true);
+      setCollapsed((prev) => !prev);
     }
   };
 
+  const mainClassName = useMobileNav
+    ? "pub-layout-main"
+    : "pub-layout-main pub-layout-main--with-rail";
+
   return (
-    <Layout style={{ height: '100vh', overflow: 'hidden' }}>
-      <style>{`
-        .custom-scroll::-webkit-scrollbar {
-          width: 6px;
-          height: 6px;
-        }
-        .custom-scroll::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        .custom-scroll::-webkit-scrollbar-thumb {
-          background: #d9d9d9;
-          border-radius: 3px;
-        }
-        .custom-scroll::-webkit-scrollbar-thumb:hover {
-          background: #bfbfbf;
-        }
-      `}</style>
+    <Layout className="pub-layout-root" data-viewport-tier={tier}>
       <PublicLayoutHeader
         logoUrl="/logo.png"
         portalName="E-Com Portal"
-        onLoginClick={() => setLoginPanelOpen(true)}
+        onLoginClick={() => openLoginPanel(null)}
         collapsed={collapsed}
-        onToggleCollapse={() => setCollapsed(!collapsed)}
+        onToggleCollapse={handleMenuToggle}
       />
-      <Layout style={{ position: 'relative', flex: 1, overflow: 'hidden' }}>
-        {/* Floating Overlay Sidebar */}
-        <Sider
-          collapsible
-          collapsed={collapsed}
-          onCollapse={setCollapsed}
-          trigger={null}
-          width={240}
-          collapsedWidth={80}
-          theme="light"
-          className="custom-scroll"
-          style={{
-            position: 'absolute',
-            left: 0,
-            top: 0,
-            bottom: 0,
-            background: '#fff',
-            borderRight: `1px solid ${token.colorBorderSecondary}`,
-            zIndex: 100,
-            overflowY: 'auto',
-            overflowX: 'hidden',
-            boxShadow: collapsed
-              ? '2px 0 8px 0 rgba(29,35,41,.05)'
-              : '8px 0 28px 0 rgba(0,0,0,.15)',
-            transition: 'all 0.25s cubic-bezier(0.2, 0, 0, 1)',
-          }}
-        >
-          <Menu
+
+      <div className="pub-layout-shell">
+        {useMobileNav ? (
+          <Drawer
+            title="E-Com Portal"
+            placement="left"
+            open={mobileNavOpen}
+            onClose={() => setMobileNavOpen(false)}
+            size={280}
+            classNames={{ body: "app-sidebar-drawer-body custom-scroll" }}
+          >
+            {menuBlock}
+          </Drawer>
+        ) : (
+          <Sider
+            collapsible
+            collapsed={collapsed}
+            onCollapse={setCollapsed}
+            trigger={null}
+            width={240}
+            collapsedWidth={80}
             theme="light"
-            mode="inline"
-            selectedKeys={[activeRouteKey]}
-            items={menuItems}
-            onSelect={onMenuSelect}
-            style={{ borderRight: 0, paddingTop: 16 }}
-          />
-        </Sider>
+            className="custom-scroll pub-layout-sider"
+          >
+            {menuBlock}
+          </Sider>
+        )}
 
-        <Content style={{ position: 'relative', display: 'flex', flexDirection: 'column', marginLeft: 80, height: '100%' }}>
-          {/* Background Image Layer */}
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              backgroundImage: 'url(/hero-bg.png)',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              opacity: 0.8,
-              zIndex: 0,
-            }}
-          />
-          {/* Subtle overlay */}
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'linear-gradient(to right, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%)',
-              zIndex: 1,
-            }}
-          />
+        <Layout className={mainClassName}>
+          <Content className="pub-layout-content">
+            <div className="pub-layout-bg" aria-hidden />
+            <div className="pub-layout-bg-overlay" aria-hidden />
 
-          {location.pathname !== '/' ? (
-            <div style={{ flex: 1, zIndex: 2, padding: '24px 40px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-              <Outlet />
-            </div>
-          ) : (
-            <div
-              style={{
-                flex: 1,
-                display: 'flex',
-                flexDirection: isStacked ? 'column' : 'row',
-                zIndex: 2,
-                padding: isMobile ? '24px 16px' : isStacked ? '32px 32px' : '40px 60px',
-                gap: 40,
-                overflowY: 'auto'
-              }}
-            >
-              <Outlet />
-              {/* Left side text and cards (Landing page content) */}
-              <Flex vertical justify="center" style={{ flex: 1, paddingRight: isStacked ? 0 : 40, maxWidth: isStacked ? '100%' : 650 }}>
+            {location.pathname !== "/" ? (
+              <div
+                className={
+                  location.pathname === "/register" ||
+                  location.pathname === "/contact-us"
+                    ? "pub-layout-page pub-layout-page--outlet pub-layout-page--outlet-locked"
+                    : "pub-layout-page pub-layout-page--outlet custom-scroll"
+                }
+              >
+                <Outlet />
+              </div>
+            ) : (
+              <div
+                className={
+                  stackHero
+                    ? "pub-landing custom-scroll"
+                    : "pub-landing pub-landing--row custom-scroll"
+                }
+              >
                 <div
-                  style={{
-                    display: 'inline-block',
-                    padding: '6px 20px',
-                    borderRadius: 24,
-                    border: `1px solid ${token.colorPrimary}`,
-                    color: token.colorPrimary,
-                    fontWeight: 600,
-                    fontSize: 12,
-                    letterSpacing: 1,
-                    marginBottom: 24,
-                    alignSelf: 'flex-start',
-                    background: '#fff'
-                  }}
+                  className={
+                    stackHero
+                      ? "pub-landing__copy"
+                      : "pub-landing__copy pub-landing__copy--narrow"
+                  }
                 >
-                  E-COMMERCE ONLINE PORTAL
+                  <span className="pub-landing__eyebrow">
+                    E-COMMERCE ONLINE PORTAL
+                  </span>
+                  <h1 className="pub-landing__title">
+                    SCHEDULES, TRACKING &amp; RATES
+                  </h1>
+                  <Text className="pub-landing__subtitle">
+                    Search sailings, track shipments, and request rates in
+                    seconds — all from one quick-action workspace in the Carrier
+                    Portal.
+                  </Text>
+                  <div className="pub-landing__cards">
+                    <Card
+                      size="small"
+                      className={
+                        landingController.activeTab === "schedules"
+                          ? "pub-landing__card pub-landing__card--active"
+                          : "pub-landing__card"
+                      }
+                      onClick={() =>
+                        landingController.handleTabChange("schedules")
+                      }
+                    >
+                      <span className="pub-landing__card-icon">
+                        <AppIcon icon={Icons.calendar} size={20} />
+                      </span>
+                      <Text strong className="pub-landing__card-label">
+                        Live sailing
+                      </Text>
+                    </Card>
+                    <Card
+                      size="small"
+                      className={
+                        landingController.activeTab === "tracking"
+                          ? "pub-landing__card pub-landing__card--active"
+                          : "pub-landing__card"
+                      }
+                      onClick={() =>
+                        landingController.handleTabChange("tracking")
+                      }
+                    >
+                      <span className="pub-landing__card-icon">
+                        <AppIcon icon={Icons.mapPin} size={20} />
+                      </span>
+                      <Text strong className="pub-landing__card-label">
+                        Real-time
+                        <br />
+                        tracking
+                      </Text>
+                    </Card>
+                    <Card
+                      size="small"
+                      className={
+                        landingController.activeTab === "rates"
+                          ? "pub-landing__card pub-landing__card--active"
+                          : "pub-landing__card"
+                      }
+                      onClick={() => landingController.handleTabChange("rates")}
+                    >
+                      <span className="pub-landing__card-icon">
+                        <AppIcon icon={Icons.dollarSign} size={20} />
+                      </span>
+                      <Text strong className="pub-landing__card-label">
+                        Instant spot-
+                        <br />
+                        rate quotes
+                      </Text>
+                    </Card>
+                  </div>
                 </div>
-                <h1 style={{ fontSize: isMobile ? '2.5rem' : '3.5rem', fontWeight: 800, margin: '0 0 16px 0', lineHeight: 1.1, color: '#1a1a1a' }}>
-                  SCHEDULES, TRACKING & RATES
-                </h1>
-                <Text style={{ fontSize: '1.25rem', color: '#444', marginBottom: 40, lineHeight: 1.6, maxWidth: 550 }}>
-                  Search sailings, track shipments, and request rates in seconds — all from one quick-action workspace in the Carrier Portal.
-                </Text>
-                <Flex gap={16} wrap="wrap">
-                  <Card
-                    size="small"
-                    style={{ borderRadius: 16, flex: '1 1 140px', minWidth: 140, boxShadow: '0 4px 12px rgba(0,0,0,0.05)', border: `1px solid ${token.colorPrimary}`, cursor: 'pointer' }}
-                    styles={{ body: { padding: '16px', display: 'flex', alignItems: 'center', gap: 12 } }}
-                    onClick={() => landingController.handleTabChange('schedules')}
-                  >
-                    <div style={{ background: token.colorPrimaryBg, padding: 8, borderRadius: 8, color: token.colorPrimary }}>
-                      <CalendarOutlined style={{ fontSize: 20 }} />
-                    </div>
-                    <Text strong style={{ fontSize: 13, lineHeight: 1.2 }}>Live sailing<br />schedules</Text>
-                  </Card>
-                  <Card
-                    size="small"
-                    style={{ borderRadius: 16, flex: '1 1 140px', minWidth: 140, boxShadow: '0 4px 12px rgba(0,0,0,0.05)', cursor: 'pointer' }}
-                    styles={{ body: { padding: '16px', display: 'flex', alignItems: 'center', gap: 12 } }}
-                    onClick={() => landingController.handleTabChange('tracking')}
-                  >
-                    <div style={{ background: token.colorPrimaryBg, padding: 8, borderRadius: 8, color: token.colorPrimary }}>
-                      <EnvironmentOutlined style={{ fontSize: 20 }} />
-                    </div>
-                    <Text strong style={{ fontSize: 13, lineHeight: 1.2 }}>Real-time<br />tracking</Text>
-                  </Card>
-                  <Card
-                    size="small"
-                    style={{ borderRadius: 16, flex: '1 1 140px', minWidth: 140, boxShadow: '0 4px 12px rgba(0,0,0,0.05)', cursor: 'pointer' }}
-                    styles={{ body: { padding: '16px', display: 'flex', alignItems: 'center', gap: 12 } }}
-                    onClick={() => landingController.handleTabChange('rates')}
-                  >
-                    <div style={{ background: token.colorPrimaryBg, padding: 8, borderRadius: 8, color: token.colorPrimary }}>
-                      <DollarOutlined style={{ fontSize: 20 }} />
-                    </div>
-                    <Text strong style={{ fontSize: 13, lineHeight: 1.2 }}>Instant spot-<br />rate quotes</Text>
-                  </Card>
-                </Flex>
-              </Flex>
 
-              {/* Right side search panel */}
-              <Flex align={isStacked ? "stretch" : "center"} justify={isStacked ? "center" : "flex-end"} style={{ width: isStacked ? '100%' : 600, minWidth: isStacked ? 0 : 550 }}>
-                <HeroSearchPanel controller={landingController} />
-              </Flex>
-            </div>
-          )}
-
+                <div
+                  className={
+                    stackHero
+                      ? "pub-landing__panel"
+                      : "pub-landing__panel pub-landing__panel--side"
+                  }
+                >
+                  <HeroSearchPanel controller={landingController} />
+                </div>
+              </div>
+            )}
+          </Content>
           <AppFooter />
-        </Content>
-      </Layout>
+        </Layout>
+      </div>
 
       <PublicLoginPanel
         open={loginPanelOpen}
-        onClose={() => setLoginPanelOpen(false)}
+        onClose={() => {
+          setLoginPanelOpen(false);
+          clearIntendedPath();
+        }}
         controller={loginController}
       />
     </Layout>

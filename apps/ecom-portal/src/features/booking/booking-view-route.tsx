@@ -1,43 +1,57 @@
-// Created by Antigravity (2026-08-22 10:25)
-import { Card, Typography, Space, theme } from 'antd';
-import { BookOutlined } from '@ant-design/icons';
-import { AppButton } from '@solverminds/shared-ui';
-import { useNavigate, useParams } from '@tanstack/react-router';
-import { BookingDetailsViewer } from './components/view/BookingDetailsViewer';
-import { HaulageTrackingGrid } from './components/view/HaulageTrackingGrid';
+// Modified by Sekar Nagarajan (2026-08-26 11:20)
+import { AppButton } from "@solverminds/shared-ui";
+import { useNavigate, useParams } from "@tanstack/react-router";
+import { Card, Space } from "antd";
 
-const { Title } = Typography;
+import { AppIcon, Icons } from "../../components/icons";
+import { FeaturePageShell } from "../../components/shared/feature-page-shell";
+import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
+import {
+  MODULE_TITLES,
+  formatModuleScreenTitle,
+} from "../../constants/module-titles";
+import { BookingModuleStyles } from "./components/booking-module-styles";
+import { BookingDetailsViewer } from "./components/view/BookingDetailsViewer";
+import { HaulageTrackingGrid } from "./components/view/HaulageTrackingGrid";
 
 export function BookingViewRoute() {
-  const { token } = theme.useToken();
   const navigate = useNavigate();
-  
-  // Note: useParams requires generic typed route matching in TanStack, 
-  // but for this manual setup we use strict false or extract from props if provided.
-  // We'll use a mocked hook or useParams with strict false.
   const { bookingId } = useParams({ strict: false });
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      <Card style={{ borderRadius: 16, boxShadow: '0 8px 24px rgba(0,0,0,0.05)', border: 'none' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Space align="center" size={10}>
-            <BookOutlined style={{ fontSize: 24, color: token.colorPrimary }} />
-            <Title level={4} style={{ margin: 0, fontWeight: 700 }}>
-              VIEW BOOKING: {bookingId}
-            </Title>
-          </Space>
-          <Space>
-            <AppButton onClick={() => navigate({ to: '/app/booking' })}>Back to Dashboard</AppButton>
-            <AppButton type="primary" onClick={() => navigate({ to: `/app/booking/${bookingId}/amend` })}>
-              Amend Booking
-            </AppButton>
-          </Space>
-        </div>
-      </Card>
+    <FeaturePageShell>
+      <BookingModuleStyles />
+      <Space direction="vertical" size="large" className="feature-page-stack">
+        <Card className="feature-page-card" bordered={false}>
+          <ModuleScreenHeader
+            icon={Icons.bookOpen}
+            title={formatModuleScreenTitle(
+              MODULE_TITLES.viewBooking,
+              bookingId,
+            )}
+            marginBottom={0}
+            extra={
+              <Space wrap className="custom-scroll">
+                <AppButton onClick={() => navigate({ to: "/app/booking" })}>
+                  Back to Dashboard
+                </AppButton>
+                <AppButton
+                  type="primary"
+                  icon={<AppIcon icon={Icons.edit} size={16} tone="edit" />}
+                  onClick={() =>
+                    navigate({ to: `/app/booking/${bookingId}/amend` })
+                  }
+                >
+                  Amend Booking
+                </AppButton>
+              </Space>
+            }
+          />
+        </Card>
 
-      <BookingDetailsViewer bookingId={bookingId} />
-      <HaulageTrackingGrid bookingId={bookingId} />
-    </div>
+        <BookingDetailsViewer bookingId={bookingId} />
+        <HaulageTrackingGrid bookingId={bookingId} />
+      </Space>
+    </FeaturePageShell>
   );
 }

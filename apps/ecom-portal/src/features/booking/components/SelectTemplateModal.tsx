@@ -1,9 +1,21 @@
-import { AppModal } from '@solverminds/shared-ui';
-import { Button, Space, Table, Input, Select, message } from 'antd';
+// Modified by Sekar Nagarajan (2026-08-24 17:10)
+import { AppButton } from '@solverminds/shared-ui';
 import { useQuery } from '@tanstack/react-query';
+import { Flex, Table, Typography } from 'antd';
+import type { ColumnsType } from 'antd/es/table';
+
+import { useToast } from '@solverminds/shared-ui/hooks';
+import {
+  BookingTemplateModalShell,
+  TemplateNameCell,
+  TemplateRouteCell,
+} from '../../../components/shared/booking-template-modal-shell';
+import { AppIcon, Icons } from '../../../components/icons';
 import { bookingApi } from '../api/booking.api';
-import type { BookingTemplate } from '../types/booking.types';
 import { useBookingStore } from '../stores/booking.store';
+import type { BookingTemplate } from '../types/booking.types';
+
+const { Text } = Typography;
 
 interface SelectTemplateModalProps {
   open: boolean;
@@ -11,6 +23,7 @@ interface SelectTemplateModalProps {
 }
 
 export function SelectTemplateModal({ open, onCancel }: SelectTemplateModalProps) {
+  const toast = useToast();
   const { initializeFromBooking } = useBookingStore();
 
   const { data: templates = [], isLoading } = useQuery({
@@ -21,63 +34,86 @@ export function SelectTemplateModal({ open, onCancel }: SelectTemplateModalProps
 
   const handleSelect = (template: BookingTemplate) => {
     initializeFromBooking(template.payload);
-    message.success(`Applied template: ${template.templateName}`);
+    toast.success(`Applied template: ${template.templateName}`);
     onCancel();
   };
 
-  const columns = [
-    { title: 'S.No', key: 'sno', width: 80, render: (_: any, __: any, index: number) => index + 1 },
-    { title: 'Template Name', dataIndex: 'templateName' },
-    { title: 'Origin', dataIndex: 'origin' },
-    { title: 'Delivery', dataIndex: 'delivery' },
-    { 
-      title: 'Action', 
+  const columns: ColumnsType<BookingTemplate> = [
+    {
+      title: 'Action',
       key: 'action',
-      render: (_: any, record: BookingTemplate) => (
-        <Button type="primary" size="small" onClick={() => handleSelect(record)}>
+      width: 70,
+      fixed: 'left',
+      render: (_: unknown, record) => (
+        <AppButton
+          type="primary"
+          size="small"
+          icon={<AppIcon icon={Icons.check} size={14} />}
+          onClick={() => handleSelect(record)}
+        >
           Select
-        </Button>
-      )
+        </AppButton>
+      ),
+    },
+    {
+      title: 'S.No',
+      key: 'sno',
+      width: 72,
+      align: 'center',
+      render: (_: unknown, __: BookingTemplate, index: number) => index + 1,
+    },
+    {
+      title: 'Template Name',
+      dataIndex: 'templateName',
+      width: 160,
+      render: (value: string) => <TemplateNameCell name={value} />,
+    },
+    {
+      title: 'Origin',
+      dataIndex: 'origin',
+      width: 120,
+      render: (value: string) => <TemplateRouteCell value={value} />,
+    },
+    {
+      title: 'Delivery',
+      dataIndex: 'delivery',
+      width: 120,
+      render: (value: string) => <TemplateRouteCell value={value} />,
     },
   ];
 
   return (
-    <AppModal
-      title={<div style={{ color: '#fff' }}>Select Template</div>}
+    <BookingTemplateModalShell
       open={open}
-      onCancel={onCancel}
-      dialogSize="lg"
-      footer={null}
-      styles={{
-        header: { backgroundColor: '#1677ff', margin: '-20px -24px 20px -24px', padding: '16px 24px' },
-        mask: { backdropFilter: 'blur(4px)' }
-      }}
-      closeIcon={<span style={{ color: '#fff' }}>×</span>}
+      onClose={onCancel}
+      icon={Icons.clipboardList}
+      title="Select Booking Template"
+      subtitle="Choose a saved template to pre-fill your booking form"
     >
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 16 }}>
-        <Space>
-          Show 
-          <Select defaultValue="10" options={[{ value: '10', label: '10' }]} style={{ width: 70 }} /> 
-          entries
-        </Space>
-        <Space>
-          Search: <Input style={{ width: 200 }} />
-        </Space>
-      </div>
-
-      <Table 
-        columns={columns} 
+      <Table
+        className="booking-template-modal__table"
+        columns={columns}
         dataSource={templates}
         rowKey="id"
         loading={isLoading}
         pagination={{
+          pageSize: 10,
           showSizeChanger: false,
-          showTotal: (total, range) => `Showing ${range[0]} to ${range[1]} of ${total} entries`,
+          showTotal: (total, range) =>
+            `Showing ${range[0]} to ${range[1]} of ${total} entries`,
         }}
-        bordered
-        size="small"
-        locale={{ emptyText: 'No templates available' }}
+        bordered={false}
+        size="middle"
+        scroll={{ x: 640 }}
+        locale={{
+          emptyText: (
+            <Flex vertical align="center" gap={8} className="booking-template-modal__empty">
+              <AppIcon icon={Icons.inbox} size={28} />
+              <Text type="secondary">No templates available</Text>
+            </Flex>
+          ),
+        }}
       />
-    </AppModal>
+    </BookingTemplateModalShell>
   );
 }

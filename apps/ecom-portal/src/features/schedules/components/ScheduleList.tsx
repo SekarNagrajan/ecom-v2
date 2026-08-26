@@ -1,11 +1,12 @@
-import React from 'react';
-import { Tag, Space, Tooltip } from 'antd';
-import { EyeOutlined } from '@ant-design/icons';
-import { AppButton } from '@solverminds/shared-ui';
+// Modified by Sekar Nagarajan (2026-08-25 18:40)
+import { AppButton } from "@solverminds/shared-ui";
+import { Space, Tag, Tooltip } from "antd";
 // @ts-ignore
-import { DataView } from '@solverminds/shared-ui/data-view';
-import type { ColDef } from 'ag-grid-community';
-import type { ScheduleItem } from '../types/schedules.types';
+import { DataView } from "@solverminds/shared-ui/data-view";
+import type { ColDef } from "ag-grid-community";
+
+import { AppIcon, Icons } from "../../../components/icons";
+import type { ScheduleItem } from "../types/schedules.types";
 
 interface ScheduleListProps {
   schedules: ScheduleItem[];
@@ -13,14 +14,18 @@ interface ScheduleListProps {
   onViewDetails: (schedule: ScheduleItem) => void;
 }
 
-export const ScheduleList: React.FC<ScheduleListProps> = ({ schedules, isLoading, onViewDetails }) => {
+export function ScheduleList({
+  schedules,
+  isLoading,
+  onViewDetails,
+}: ScheduleListProps) {
   const columnDefs: ColDef<ScheduleItem>[] = [
     {
-      headerName: 'Actions',
-      field: 'id',
+      headerName: "Actions",
+      field: "id",
       sortable: false,
       width: 100,
-      pinned: 'left',
+      pinned: "left",
       cellRenderer: (params: { data?: ScheduleItem }) => {
         const record = params.data;
         if (!record) return null;
@@ -29,7 +34,9 @@ export const ScheduleList: React.FC<ScheduleListProps> = ({ schedules, isLoading
             <AppButton
               type="text"
               size="small"
-              icon={<EyeOutlined style={{ color: '#1677ff', fontSize: 16 }} />}
+              icon={
+                <AppIcon icon={Icons.eye} size={16} gridAction tone="view" />
+              }
               onClick={() => onViewDetails(record)}
             />
           </Tooltip>
@@ -37,51 +44,55 @@ export const ScheduleList: React.FC<ScheduleListProps> = ({ schedules, isLoading
       },
     },
     {
-      headerName: 'Vessel / Voyage',
-      field: 'vesselName',
+      headerName: "Vessel / Voyage",
+      field: "vesselName",
       cellRenderer: (params: { data?: ScheduleItem }) => {
         const record = params.data;
         if (!record) return null;
         return (
           <div>
-            <div style={{ fontWeight: 600, color: '#002B49' }}>{record.vesselName}</div>
-            <div style={{ fontSize: 12, color: '#64748B' }}>
-              Voyage: {record.voyage} · Service: <Tag color="blue">{record.serviceCode}</Tag>
+            <div className="schedule-list-cell__title">{record.vesselName}</div>
+            <div className="schedule-list-cell__sub">
+              Voyage: {record.voyage} · Service:{" "}
+              <Tag color="blue">{record.serviceCode}</Tag>
             </div>
           </div>
         );
       },
     },
     {
-      headerName: 'Route',
-      field: 'polPortId',
+      headerName: "Route",
+      field: "polPortId",
       cellRenderer: (params: { data?: ScheduleItem }) => {
         const record = params.data;
         if (!record) return null;
         return (
           <div>
-            <div>
-              <strong>{record.polPortId}</strong> ➔ <strong>{record.podPortId}</strong>
+            <div className="schedule-list-cell__title">
+              {record.polPortId} → {record.podPortId}
             </div>
-            <div style={{ fontSize: 12, color: '#64748B' }}>Terminal: {record.polTerminal}</div>
+            <div className="schedule-list-cell__sub">
+              Terminal: {record.polTerminal}
+            </div>
           </div>
         );
       },
     },
+    { headerName: "ETD", field: "etd" },
+    { headerName: "ETA", field: "eta" },
     {
-      headerName: 'ETD',
-      field: 'etd',
-    },
-    {
-      headerName: 'ETA',
-      field: 'eta',
-    },
-    {
-      headerName: 'Transit',
-      field: 'transitTimeDays',
-      valueFormatter: (params: { value?: number }) => (params.value ? `${params.value} days` : ''),
+      headerName: "Transit",
+      field: "transitTimeDays",
+      valueFormatter: (params: { value?: number }) =>
+        params.value ? `${params.value} days` : "",
     },
   ];
 
-  return <DataView columnDefs={columnDefs} rowData={schedules || []} loading={isLoading} />;
-};
+  return (
+    <DataView
+      columnDefs={columnDefs}
+      rowData={schedules || []}
+      loading={isLoading}
+    />
+  );
+}

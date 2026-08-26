@@ -1,17 +1,29 @@
-// Created by Antigravity (2026-08-22 09:55)
-import { zodResolver } from '@hookform/resolvers/zod';
-import { AppButton } from '@solverminds/shared-ui';
-import { Card, Checkbox, Col, Input, InputNumber, Row, Select, Typography, theme } from 'antd';
-import { useEffect } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { useBookingStore } from '../stores/booking.store';
-import { cargoSchema, type CargoData } from '../types/booking.types';
+// Modified by Sekar Nagarajan (2026-08-26 11:10)
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AppButton } from "@solverminds/shared-ui";
+import {
+    Card,
+    Checkbox,
+    Col,
+    Input,
+    InputNumber,
+    Row,
+    Select,
+    Typography,
+} from "antd";
+import { useEffect } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { useBookingStore } from "../stores/booking.store";
+import { cargoSchema, type CargoData } from "../types/booking.types";
 
-const { Text, Title } = Typography;
+const { Text } = Typography;
 
 const COMMODITIES = [
-  { value: 'GEN-CGO', label: 'GEN-CGO - General Freight / Merchandise' },
-  { value: 'AUTO-PARTS', label: 'AUTO-PARTS - Automotive Spare Parts & Machinery' },
+  { value: "GEN-CGO", label: "GEN-CGO - General Freight / Merchandise" },
+  {
+    value: "AUTO-PARTS",
+    label: "AUTO-PARTS - Automotive Spare Parts & Machinery",
+  },
 ];
 
 const EQUIPMENT_TYPES = [
@@ -20,29 +32,34 @@ const EQUIPMENT_TYPES = [
 ];
 
 export function CargoStep() {
-  const { token } = theme.useToken();
   const { payload, updateCargo, nextStep, prevStep } = useBookingStore();
 
-  const { control, handleSubmit, watch, formState: { errors }, reset } = useForm<any>({
+  const {
+    control,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    reset,
+  } = useForm<any>({
     resolver: zodResolver(cargoSchema),
     defaultValues: payload.cargo || {
-      commodity: '',
-      containerType: '',
+      commodity: "",
+      containerType: "",
       containerCount: 1,
       totalWeightKg: 1000,
       isLcl: false,
-      packageType: '',
+      packageType: "",
       isDangerousGoods: false,
-      unNumber: '',
-      dgClass: '',
-      flashPoint: '',
+      unNumber: "",
+      dgClass: "",
+      flashPoint: "",
       marinePollutant: false,
-      shippingName: '',
+      shippingName: "",
       isReefer: false,
       setTemp: undefined,
       minTemp: undefined,
       maxTemp: undefined,
-      tempUnit: 'Celsius',
+      tempUnit: "Celsius",
       volume: undefined,
       isOog: false,
       olForward: undefined,
@@ -50,14 +67,14 @@ export function CargoStep() {
       oh: undefined,
       olAft: undefined,
       owRight: undefined,
-      dimensionUnit: 'CM',
+      dimensionUnit: "CM",
     },
   });
 
-  const isLcl = watch('isLcl');
-  const isDg = watch('isDangerousGoods');
-  const isReefer = watch('isReefer');
-  const isOog = watch('isOog');
+  const isLcl = watch("isLcl");
+  const isDg = watch("isDangerousGoods");
+  const isReefer = watch("isReefer");
+  const isOog = watch("isOog");
 
   useEffect(() => {
     if (payload.cargo) reset(payload.cargo);
@@ -68,207 +85,487 @@ export function CargoStep() {
     nextStep();
   };
 
-  const labelStyle: React.CSSProperties = { fontWeight: 600, fontSize: 13, color: token.colorTextSecondary, marginBottom: 6, display: 'block' };
-
   return (
-    <form onSubmit={handleSubmit(onSubmit)} autoComplete="off" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-      <div className="custom-scroll" style={{ flex: 1, overflowY: 'auto', padding: '0 24px' }}>
-        <Row gutter={[24, 24]}>
-          <Col xs={24} md={12}>
-            <label style={labelStyle}>Commodity <Text type="danger">*</Text></label>
-            <Controller control={control} name="commodity" render={({ field }) => (
-              <Select {...field} options={COMMODITIES} placeholder="Select Commodity" style={{ width: '100%', height: 40 }} />
-            )} />
-            {errors.commodity && <Text type="danger" style={{ fontSize: 12, marginTop: 4 }}>{errors.commodity.message as string}</Text>}
-          </Col>
-
-          <Col xs={24} md={12}>
-            <label style={labelStyle}>Equipment Description <Text type="danger">*</Text></label>
-            <Controller control={control} name="containerType" render={({ field }) => (
-              <Select {...field} options={EQUIPMENT_TYPES} placeholder="Select Equipment" style={{ width: '100%', height: 40 }} />
-            )} />
-            {errors.containerType && <Text type="danger" style={{ fontSize: 12, marginTop: 4 }}>{errors.containerType.message as string}</Text>}
-          </Col>
-
-          <Col xs={24} md={12}>
-            <label style={labelStyle}>Container Count <Text type="danger">*</Text></label>
-            <Controller control={control} name="containerCount" render={({ field }) => (
-              <InputNumber {...field} min={1} max={100} style={{ width: '100%', height: 40 }} size="large" />
-            )} />
-            {errors.containerCount && <Text type="danger" style={{ fontSize: 12, marginTop: 4 }}>{errors.containerCount.message as string}</Text>}
-          </Col>
-
-          <Col xs={24} md={12}>
-            <label style={labelStyle}>Total Weight (kg) <Text type="danger">*</Text></label>
-            <Controller control={control} name="totalWeightKg" render={({ field }) => (
-              <InputNumber {...field} min={100} style={{ width: '100%', height: 40 }} size="large" />
-            )} />
-            {errors.totalWeightKg && <Text type="danger" style={{ fontSize: 12, marginTop: 4 }}>{errors.totalWeightKg.message as string}</Text>}
-          </Col>
-        </Row>
-
-        {/* Cargo Requirements Checkboxes */}
-        <Card size="small" style={{ marginTop: 24, background: token.colorFillAlter, border: `1px solid ${token.colorBorderSecondary}` }}>
-          <Row gutter={[16, 16]}>
-            <Col span={6}>
-              <Controller control={control} name="isLcl" render={({ field: { value, onChange, ...field } }) => (
-                <Checkbox {...field} checked={value} onChange={e => onChange(e.target.checked)}><b>LCL</b></Checkbox>
-              )} />
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      autoComplete="off"
+      className="form-step-layout"
+    >
+      <div className="custom-scroll form-step-scroll">
+        <Card className="form-step-card form-step-section">
+          <Row gutter={[24, 24]}>
+            <Col xs={24} md={12}>
+              <label className="form-field-label">
+                Commodity <Text type="danger">*</Text>
+              </label>
+              <Controller
+                control={control}
+                name="commodity"
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    size="large"
+                    options={COMMODITIES}
+                    placeholder="Select Commodity"
+                    className="form-field-full-width"
+                  />
+                )}
+              />
+              {errors.commodity && (
+                <Text type="danger" className="form-field-error">
+                  {errors.commodity.message as string}
+                </Text>
+              )}
             </Col>
-            <Col span={6}>
-              <Controller control={control} name="isDangerousGoods" render={({ field: { value, onChange, ...field } }) => (
-                <Checkbox {...field} checked={value} onChange={e => onChange(e.target.checked)}><b>Hazardous</b></Checkbox>
-              )} />
+
+            <Col xs={24} md={12}>
+              <label className="form-field-label">
+                Equipment Description <Text type="danger">*</Text>
+              </label>
+              <Controller
+                control={control}
+                name="containerType"
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    size="large"
+                    options={EQUIPMENT_TYPES}
+                    placeholder="Select Equipment"
+                    className="form-field-full-width"
+                  />
+                )}
+              />
+              {errors.containerType && (
+                <Text type="danger" className="form-field-error">
+                  {errors.containerType.message as string}
+                </Text>
+              )}
             </Col>
-            <Col span={6}>
-              <Controller control={control} name="isReefer" render={({ field: { value, onChange, ...field } }) => (
-                <Checkbox {...field} checked={value} onChange={e => onChange(e.target.checked)}><b>Reefer</b></Checkbox>
-              )} />
+
+            <Col xs={24} md={12}>
+              <label className="form-field-label">
+                Container Count <Text type="danger">*</Text>
+              </label>
+              <Controller
+                control={control}
+                name="containerCount"
+                render={({ field }) => (
+                  <InputNumber
+                    {...field}
+                    min={1}
+                    max={100}
+                    size="large"
+                    className="form-field-full-width"
+                  />
+                )}
+              />
+              {errors.containerCount && (
+                <Text type="danger" className="form-field-error">
+                  {errors.containerCount.message as string}
+                </Text>
+              )}
             </Col>
-            <Col span={6}>
-              <Controller control={control} name="isOog" render={({ field: { value, onChange, ...field } }) => (
-                <Checkbox {...field} checked={value} onChange={e => onChange(e.target.checked)}><b>OOG</b></Checkbox>
-              )} />
+
+            <Col xs={24} md={12}>
+              <label className="form-field-label">
+                Total Weight (kg) <Text type="danger">*</Text>
+              </label>
+              <Controller
+                control={control}
+                name="totalWeightKg"
+                render={({ field }) => (
+                  <InputNumber
+                    {...field}
+                    min={100}
+                    size="large"
+                    className="form-field-full-width"
+                  />
+                )}
+              />
+              {errors.totalWeightKg && (
+                <Text type="danger" className="form-field-error">
+                  {errors.totalWeightKg.message as string}
+                </Text>
+              )}
             </Col>
           </Row>
+
+          <div className="form-step-card form-step-section">
+            <Card size="small" className="form-step-card">
+              <Row gutter={[24, 24]}>
+                <Col xs={12} md={6}>
+                  <Controller
+                    control={control}
+                    name="isLcl"
+                    render={({ field: { value, onChange, ...field } }) => (
+                      <Checkbox
+                        {...field}
+                        checked={value}
+                        onChange={(e) => onChange(e.target.checked)}
+                      >
+                        <b>LCL</b>
+                      </Checkbox>
+                    )}
+                  />
+                </Col>
+                <Col xs={12} md={6}>
+                  <Controller
+                    control={control}
+                    name="isDangerousGoods"
+                    render={({ field: { value, onChange, ...field } }) => (
+                      <Checkbox
+                        {...field}
+                        checked={value}
+                        onChange={(e) => onChange(e.target.checked)}
+                      >
+                        <b>Hazardous</b>
+                      </Checkbox>
+                    )}
+                  />
+                </Col>
+                <Col xs={12} md={6}>
+                  <Controller
+                    control={control}
+                    name="isReefer"
+                    render={({ field: { value, onChange, ...field } }) => (
+                      <Checkbox
+                        {...field}
+                        checked={value}
+                        onChange={(e) => onChange(e.target.checked)}
+                      >
+                        <b>Reefer</b>
+                      </Checkbox>
+                    )}
+                  />
+                </Col>
+                <Col xs={12} md={6}>
+                  <Controller
+                    control={control}
+                    name="isOog"
+                    render={({ field: { value, onChange, ...field } }) => (
+                      <Checkbox
+                        {...field}
+                        checked={value}
+                        onChange={(e) => onChange(e.target.checked)}
+                      >
+                        <b>OOG</b>
+                      </Checkbox>
+                    )}
+                  />
+                </Col>
+              </Row>
+            </Card>
+          </div>
+
+          {isLcl && (
+            <Card
+              size="small"
+              title="LCL Details"
+              className="form-step-card form-step-section"
+            >
+              <Row gutter={[24, 24]}>
+                <Col xs={24} md={8}>
+                  <label className="form-field-label">
+                    Package Type <Text type="danger">*</Text>
+                  </label>
+                  <Controller
+                    control={control}
+                    name="packageType"
+                    render={({ field }) => (
+                      <Input
+                        {...field}
+                        placeholder="e.g. Pallets"
+                        size="large"
+                      />
+                    )}
+                  />
+                  {errors.packageType && (
+                    <Text type="danger" className="form-field-error">
+                      {errors.packageType.message as string}
+                    </Text>
+                  )}
+                </Col>
+              </Row>
+            </Card>
+          )}
+
+          {isDg && (
+            <Card
+              size="small"
+              title="DG Details"
+              className="form-step-card form-step-section"
+            >
+              <Row gutter={[24, 24]}>
+                <Col xs={24} md={8}>
+                  <label className="form-field-label">
+                    UN No <Text type="danger">*</Text>
+                  </label>
+                  <Controller
+                    control={control}
+                    name="unNumber"
+                    render={({ field }) => (
+                      <Input {...field} placeholder="e.g. 1993" size="large" />
+                    )}
+                  />
+                  {errors.unNumber && (
+                    <Text type="danger" className="form-field-error">
+                      {errors.unNumber.message as string}
+                    </Text>
+                  )}
+                </Col>
+                <Col xs={24} md={8}>
+                  <label className="form-field-label">
+                    DG Class <Text type="danger">*</Text>
+                  </label>
+                  <Controller
+                    control={control}
+                    name="dgClass"
+                    render={({ field }) => (
+                      <Input {...field} placeholder="e.g. 3" size="large" />
+                    )}
+                  />
+                  {errors.dgClass && (
+                    <Text type="danger" className="form-field-error">
+                      {errors.dgClass.message as string}
+                    </Text>
+                  )}
+                </Col>
+                <Col xs={24} md={8}>
+                  <label className="form-field-label">Flash Point</label>
+                  <Controller
+                    control={control}
+                    name="flashPoint"
+                    render={({ field }) => (
+                      <Input {...field} placeholder="e.g. 23 C" size="large" />
+                    )}
+                  />
+                </Col>
+                <Col xs={24} md={16}>
+                  <label className="form-field-label">Shipping Name</label>
+                  <Controller
+                    control={control}
+                    name="shippingName"
+                    render={({ field }) => (
+                      <Input
+                        {...field}
+                        placeholder="Proper shipping name"
+                        size="large"
+                      />
+                    )}
+                  />
+                </Col>
+                <Col xs={24} md={8}>
+                  <Controller
+                    control={control}
+                    name="marinePollutant"
+                    render={({ field: { value, onChange, ...field } }) => (
+                      <Checkbox
+                        {...field}
+                        checked={value}
+                        onChange={(e) => onChange(e.target.checked)}
+                      >
+                        Marine Pollutant
+                      </Checkbox>
+                    )}
+                  />
+                </Col>
+              </Row>
+            </Card>
+          )}
+
+          {isReefer && (
+            <Card
+              size="small"
+              title="Reefer Details"
+              className="form-step-card form-step-section"
+            >
+              <Row gutter={[24, 24]}>
+                <Col xs={24} md={6}>
+                  <label className="form-field-label">
+                    Set Temp <Text type="danger">*</Text>
+                  </label>
+                  <Controller
+                    control={control}
+                    name="setTemp"
+                    render={({ field }) => (
+                      <InputNumber
+                        {...field}
+                        size="large"
+                        className="form-field-full-width"
+                      />
+                    )}
+                  />
+                  {errors.setTemp && (
+                    <Text type="danger" className="form-field-error">
+                      {errors.setTemp.message as string}
+                    </Text>
+                  )}
+                </Col>
+                <Col xs={24} md={6}>
+                  <label className="form-field-label">Min Temp</label>
+                  <Controller
+                    control={control}
+                    name="minTemp"
+                    render={({ field }) => (
+                      <InputNumber
+                        {...field}
+                        size="large"
+                        className="form-field-full-width"
+                      />
+                    )}
+                  />
+                </Col>
+                <Col xs={24} md={6}>
+                  <label className="form-field-label">Max Temp</label>
+                  <Controller
+                    control={control}
+                    name="maxTemp"
+                    render={({ field }) => (
+                      <InputNumber
+                        {...field}
+                        size="large"
+                        className="form-field-full-width"
+                      />
+                    )}
+                  />
+                </Col>
+                <Col xs={24} md={6}>
+                  <label className="form-field-label">
+                    Temp Unit <Text type="danger">*</Text>
+                  </label>
+                  <Controller
+                    control={control}
+                    name="tempUnit"
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        size="large"
+                        options={[
+                          { value: "Celsius", label: "Celsius" },
+                          { value: "Fahrenheit", label: "Fahrenheit" },
+                        ]}
+                        className="form-field-full-width"
+                      />
+                    )}
+                  />
+                </Col>
+              </Row>
+            </Card>
+          )}
+
+          {isOog && (
+            <Card
+              size="small"
+              title="OOG Details"
+              className="form-step-card form-step-section"
+            >
+              <Row gutter={[24, 24]}>
+                <Col xs={24} md={6}>
+                  <label className="form-field-label">
+                    Dimension Unit <Text type="danger">*</Text>
+                  </label>
+                  <Controller
+                    control={control}
+                    name="dimensionUnit"
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        size="large"
+                        options={[
+                          { value: "CM", label: "CM" },
+                          { value: "IN", label: "IN" },
+                        ]}
+                        className="form-field-full-width"
+                      />
+                    )}
+                  />
+                  {errors.dimensionUnit && (
+                    <Text type="danger" className="form-field-error">
+                      {errors.dimensionUnit.message as string}
+                    </Text>
+                  )}
+                </Col>
+                <Col xs={24} md={6}>
+                  <label className="form-field-label">OL Forward</label>
+                  <Controller
+                    control={control}
+                    name="olForward"
+                    render={({ field }) => (
+                      <InputNumber
+                        {...field}
+                        size="large"
+                        className="form-field-full-width"
+                      />
+                    )}
+                  />
+                </Col>
+                <Col xs={24} md={6}>
+                  <label className="form-field-label">OL Aft</label>
+                  <Controller
+                    control={control}
+                    name="olAft"
+                    render={({ field }) => (
+                      <InputNumber
+                        {...field}
+                        size="large"
+                        className="form-field-full-width"
+                      />
+                    )}
+                  />
+                </Col>
+                <Col xs={24} md={6}>
+                  <label className="form-field-label">OW Left</label>
+                  <Controller
+                    control={control}
+                    name="owLeft"
+                    render={({ field }) => (
+                      <InputNumber
+                        {...field}
+                        size="large"
+                        className="form-field-full-width"
+                      />
+                    )}
+                  />
+                </Col>
+                <Col xs={24} md={6}>
+                  <label className="form-field-label">OW Right</label>
+                  <Controller
+                    control={control}
+                    name="owRight"
+                    render={({ field }) => (
+                      <InputNumber
+                        {...field}
+                        size="large"
+                        className="form-field-full-width"
+                      />
+                    )}
+                  />
+                </Col>
+                <Col xs={24} md={6}>
+                  <label className="form-field-label">OH</label>
+                  <Controller
+                    control={control}
+                    name="oh"
+                    render={({ field }) => (
+                      <InputNumber
+                        {...field}
+                        size="large"
+                        className="form-field-full-width"
+                      />
+                    )}
+                  />
+                </Col>
+              </Row>
+            </Card>
+          )}
         </Card>
-
-        {/* LCL Fields */}
-        {isLcl && (
-          <Card size="small" title="LCL Details" style={{ marginTop: 16 }}>
-            <Row gutter={[16, 16]}>
-              <Col xs={24} md={8}>
-                <label style={labelStyle}>Package Type <Text type="danger">*</Text></label>
-                <Controller control={control} name="packageType" render={({ field }) => (
-                  <Input {...field} placeholder="e.g. Pallets" size="large" />
-                )} />
-                {errors.packageType && <Text type="danger" style={{ fontSize: 12, marginTop: 4 }}>{errors.packageType.message as string}</Text>}
-              </Col>
-            </Row>
-          </Card>
-        )}
-
-        {/* Hazardous Fields */}
-        {isDg && (
-          <Card size="small" title="DG Details" style={{ marginTop: 16 }}>
-            <Row gutter={[16, 16]}>
-              <Col xs={24} md={8}>
-                <label style={labelStyle}>UN No <Text type="danger">*</Text></label>
-                <Controller control={control} name="unNumber" render={({ field }) => (
-                  <Input {...field} placeholder="e.g. 1993" size="large" />
-                )} />
-                {errors.unNumber && <Text type="danger" style={{ fontSize: 12, marginTop: 4 }}>{errors.unNumber.message as string}</Text>}
-              </Col>
-              <Col xs={24} md={8}>
-                <label style={labelStyle}>DG Class <Text type="danger">*</Text></label>
-                <Controller control={control} name="dgClass" render={({ field }) => (
-                  <Input {...field} placeholder="e.g. 3" size="large" />
-                )} />
-                {errors.dgClass && <Text type="danger" style={{ fontSize: 12, marginTop: 4 }}>{errors.dgClass.message as string}</Text>}
-              </Col>
-              <Col xs={24} md={8}>
-                <label style={labelStyle}>Flash Point</label>
-                <Controller control={control} name="flashPoint" render={({ field }) => (
-                  <Input {...field} placeholder="e.g. 23 C" size="large" />
-                )} />
-              </Col>
-              <Col xs={24} md={16}>
-                <label style={labelStyle}>Shipping Name</label>
-                <Controller control={control} name="shippingName" render={({ field }) => (
-                  <Input {...field} placeholder="Proper shipping name" size="large" />
-                )} />
-              </Col>
-              <Col xs={24} md={8} style={{ display: 'flex', alignItems: 'center', paddingTop: 24 }}>
-                <Controller control={control} name="marinePollutant" render={({ field: { value, onChange, ...field } }) => (
-                  <Checkbox {...field} checked={value} onChange={e => onChange(e.target.checked)}>Marine Pollutant</Checkbox>
-                )} />
-              </Col>
-            </Row>
-          </Card>
-        )}
-
-        {/* Reefer Fields */}
-        {isReefer && (
-          <Card size="small" title="Reefer Details" style={{ marginTop: 16 }}>
-            <Row gutter={[16, 16]}>
-              <Col xs={24} md={6}>
-                <label style={labelStyle}>Set Temp <Text type="danger">*</Text></label>
-                <Controller control={control} name="setTemp" render={({ field }) => (
-                  <InputNumber {...field} style={{ width: '100%' }} size="large" />
-                )} />
-                {errors.setTemp && <Text type="danger" style={{ fontSize: 12, marginTop: 4 }}>{errors.setTemp.message as string}</Text>}
-              </Col>
-              <Col xs={24} md={6}>
-                <label style={labelStyle}>Min Temp</label>
-                <Controller control={control} name="minTemp" render={({ field }) => (
-                  <InputNumber {...field} style={{ width: '100%' }} size="large" />
-                )} />
-              </Col>
-              <Col xs={24} md={6}>
-                <label style={labelStyle}>Max Temp</label>
-                <Controller control={control} name="maxTemp" render={({ field }) => (
-                  <InputNumber {...field} style={{ width: '100%' }} size="large" />
-                )} />
-              </Col>
-              <Col xs={24} md={6}>
-                <label style={labelStyle}>Temp Unit <Text type="danger">*</Text></label>
-                <Controller control={control} name="tempUnit" render={({ field }) => (
-                  <Select {...field} options={[{ value: 'Celsius', label: 'Celsius' }, { value: 'Fahrenheit', label: 'Fahrenheit' }]} style={{ width: '100%', height: 40 }} />
-                )} />
-              </Col>
-            </Row>
-          </Card>
-        )}
-
-        {/* OOG Fields */}
-        {isOog && (
-          <Card size="small" title="OOG Details" style={{ marginTop: 16, marginBottom: 24 }}>
-            <Row gutter={[16, 16]}>
-              <Col xs={24} md={6}>
-                <label style={labelStyle}>Dimension Unit <Text type="danger">*</Text></label>
-                <Controller control={control} name="dimensionUnit" render={({ field }) => (
-                  <Select {...field} options={[{ value: 'CM', label: 'CM' }, { value: 'IN', label: 'IN' }]} style={{ width: '100%', height: 40 }} />
-                )} />
-                {errors.dimensionUnit && <Text type="danger" style={{ fontSize: 12, marginTop: 4 }}>{errors.dimensionUnit.message as string}</Text>}
-              </Col>
-              <Col xs={24} md={6}>
-                <label style={labelStyle}>OL Forward</label>
-                <Controller control={control} name="olForward" render={({ field }) => (
-                  <InputNumber {...field} style={{ width: '100%' }} size="large" />
-                )} />
-              </Col>
-              <Col xs={24} md={6}>
-                <label style={labelStyle}>OL Aft</label>
-                <Controller control={control} name="olAft" render={({ field }) => (
-                  <InputNumber {...field} style={{ width: '100%' }} size="large" />
-                )} />
-              </Col>
-              <Col xs={24} md={6}>
-                <label style={labelStyle}>OW Left</label>
-                <Controller control={control} name="owLeft" render={({ field }) => (
-                  <InputNumber {...field} style={{ width: '100%' }} size="large" />
-                )} />
-              </Col>
-              <Col xs={24} md={6}>
-                <label style={labelStyle}>OW Right</label>
-                <Controller control={control} name="owRight" render={({ field }) => (
-                  <InputNumber {...field} style={{ width: '100%' }} size="large" />
-                )} />
-              </Col>
-              <Col xs={24} md={6}>
-                <label style={labelStyle}>OH</label>
-                <Controller control={control} name="oh" render={({ field }) => (
-                  <InputNumber {...field} style={{ width: '100%' }} size="large" />
-                )} />
-              </Col>
-            </Row>
-          </Card>
-        )}
       </div>
 
-      <div style={{ flexShrink: 0, padding: '16px 24px', borderTop: `1px solid ${token.colorBorderSecondary}`, display: 'flex', justifyContent: 'flex-end', backgroundColor: token.colorBgContainer }}>
+      <div className="form-step-footer">
         <AppButton onClick={prevStep}>Previous</AppButton>
-        <AppButton type="primary" htmlType="submit" style={{ marginLeft: 8 }}>Next</AppButton>
+        <AppButton type="primary" htmlType="submit">
+          Next
+        </AppButton>
       </div>
     </form>
   );

@@ -1,30 +1,26 @@
-// Schedules Feature Main Route View Component
-// Parity with UserCreationView main layout standard (<Card style={{ borderRadius: 16, boxShadow: '0 8px 24px rgba(0,0,0,0.05)', border: 'none' }}>)
-// Parity with eCommSchedules.jsp, SchedulebetweenlocationView.jsp & VesselDetails.jsp
-// Modified by sekar nagarajan (2026-08-21)
+// Modified by Sekar Nagarajan (2026-08-25 18:40)
+import { AppButton } from "@solverminds/shared-ui";
+import { useToast } from "@solverminds/shared-ui/hooks";
+import { Card, Segmented, Space, Spin, Typography } from "antd";
+import React from "react";
+import { AppIcon, Icons } from "../../components/icons";
 
-import {
-  CalendarOutlined,
-  CompassOutlined,
-  DownloadOutlined,
-  MailOutlined,
-  UnorderedListOutlined,
-} from '@ant-design/icons';
-import { AppButton } from '@solverminds/shared-ui';
-import { Badge, Card, message, Segmented, Space, theme, Typography } from 'antd';
-import React from 'react';
-import { ScheduleCalendarView } from './components/ScheduleCalendarView';
-import { ScheduleCarbonModal } from './components/ScheduleCarbonModal';
-import { ScheduleCardList } from './components/ScheduleCardList';
-import { ScheduleRatesModal } from './components/ScheduleRatesModal';
-import { ScheduleSearchFilter } from './components/ScheduleSearchFilter';
-import { VesselDetailsModal } from './components/VesselDetailsModal';
-import { useSchedulesController } from './hooks/useSchedulesController';
+import { FeaturePageShell } from "../../components/shared/feature-page-shell";
+import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
+import { MODULE_TITLES } from "../../constants/module-titles";
+import { ScheduleModuleStyles } from "./components/schedule-module-styles";
+import { ScheduleCalendarView } from "./components/ScheduleCalendarView";
+import { ScheduleCarbonModal } from "./components/ScheduleCarbonModal";
+import { ScheduleCardList } from "./components/ScheduleCardList";
+import { ScheduleRatesModal } from "./components/ScheduleRatesModal";
+import { ScheduleSearchFilter } from "./components/ScheduleSearchFilter";
+import { VesselDetailsModal } from "./components/VesselDetailsModal";
+import { useSchedulesController } from "./hooks/useSchedulesController";
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 export const SchedulesRoute: React.FC = () => {
-  const { token } = theme.useToken();
+  const toast = useToast();
   const {
     viewMode,
     setViewMode,
@@ -46,112 +42,102 @@ export const SchedulesRoute: React.FC = () => {
     handleBookNow,
   } = useSchedulesController();
 
-  const handleExportExcel = () => {
-    message.success('Exporting schedule search results to Excel...');
-  };
-
-  const handleSendEmail = () => {
-    message.info('Opening schedule email share dialog...');
-  };
-
   return (
-    <Card style={{ borderRadius: 16, boxShadow: '0 8px 24px rgba(0,0,0,0.05)', border: 'none' }}>
-      {/* 1. Feature Page Header (Matching UserCreationView) */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
-        <div>
-          <Space align="center" size={10}>
-            <CompassOutlined style={{ fontSize: 24, color: token.colorPrimary }} />
-            <Title level={4} style={{ margin: 0, fontWeight: 700 }}>
-              Vessel Schedules & Global Routes
-            </Title>
+    <FeaturePageShell>
+      <ScheduleModuleStyles />
+
+      <Card className="feature-page-card" bordered={false}>
+        <ModuleScreenHeader
+          icon={Icons.calendar}
+          title={MODULE_TITLES.schedules}
+          subtitle="Search sailings by route, vessel, or port — compare transit times, cut-offs, and book directly."
+          extra={
+            <Space align="center" size={12} wrap>
+              <AppButton
+                icon={
+                  <AppIcon icon={Icons.download} size={16} tone="download" />
+                }
+                onClick={() => toast.success("Exporting schedule results…")}
+              >
+                Export
+              </AppButton>
+              <AppButton
+                icon={<AppIcon icon={Icons.mail} size={16} tone="navigate" />}
+                onClick={() => toast.info("Opening share dialog…")}
+              >
+                Share
+              </AppButton>
+            </Space>
+          }
+        />
+
+        <ScheduleSearchFilter onSearch={handleSearch} isLoading={isLoading} />
+
+        <div className="schedule-results-bar">
+          <Space align="center" size={10} wrap>
+            <AppIcon icon={Icons.calendar} size={18} />
+            <Text className="schedule-results-bar__title">
+              Available Sailings
+            </Text>
+            <span className="schedule-results-bar__count">
+              {schedules.length}
+            </span>
+            {isLoading ? <Spin size="small" /> : null}
           </Space>
-          <Text type="secondary" style={{ display: 'block', marginTop: 4, fontSize: 13 }}>
-            Search real-time vessel schedules, port cut-offs, transit times, and eco-emissions across global liner trade lanes.
-          </Text>
+
+          <Segmented
+            value={viewMode}
+            onChange={(val) => setViewMode(val as "LIST" | "CALENDAR")}
+            options={[
+              {
+                label: "List",
+                value: "LIST",
+                icon: <AppIcon icon={Icons.list} size={14} />,
+              },
+              {
+                label: "Calendar",
+                value: "CALENDAR",
+                icon: <AppIcon icon={Icons.calendar} size={14} />,
+              },
+            ]}
+          />
         </div>
 
-        <Space align="center" size={12}>
-          <AppButton icon={<DownloadOutlined />} onClick={handleExportExcel}>
-            Export Excel
-          </AppButton>
-          <AppButton icon={<MailOutlined />} onClick={handleSendEmail}>
-            Share via Mail
-          </AppButton>
-        </Space>
-      </div>
+        {viewMode === "LIST" ? (
+          <ScheduleCardList
+            schedules={schedules}
+            isLoading={isLoading}
+            onBookNow={handleBookNow}
+            onViewVessel={handleViewVessel}
+            onViewRates={handleOpenRates}
+            onOpenCarbonModal={handleOpenCarbon}
+          />
+        ) : (
+          <ScheduleCalendarView
+            schedules={schedules}
+            onSelectSchedule={handleBookNow}
+          />
+        )}
 
-      {/* 2. Search Filter Section */}
-      <ScheduleSearchFilter onSearch={handleSearch} isLoading={isLoading} />
-
-      {/* 3. Available Sailing Options Header Bar */}
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginTop: 20,
-          marginBottom: 16,
-          padding: '10px 16px',
-          borderRadius: 12,
-          background: token.colorFillAlter,
-          border: `1px solid ${token.colorBorderSecondary}`,
-        }}
-      >
-        <Space align="center" size={10}>
-          <CompassOutlined style={{ fontSize: 18, color: token.colorPrimary }} />
-          <Text strong style={{ fontSize: 15 }}>
-            Available Sailing Options
-          </Text>
-          <Badge count={schedules.length} style={{ backgroundColor: token.colorError }} />
-
-        </Space>
-
-        <Segmented
-          value={viewMode}
-          onChange={(val) => setViewMode(val as 'LIST' | 'CALENDAR')}
-          options={[
-            { label: 'List View', value: 'LIST', icon: <UnorderedListOutlined /> },
-            { label: 'Calendar View', value: 'CALENDAR', icon: <CalendarOutlined /> },
-          ]}
+        <VesselDetailsModal
+          vessel={selectedVessel}
+          open={isVesselModalOpen}
+          onClose={handleCloseVesselModal}
         />
-      </div>
 
-      {/* 4. Results List / Calendar View */}
-      {viewMode === 'LIST' ? (
-        <ScheduleCardList
-          schedules={schedules}
-          isLoading={isLoading}
-          onBookNow={handleBookNow}
-          onViewVessel={handleViewVessel}
-          onViewRates={handleOpenRates}
-          onOpenCarbonModal={handleOpenCarbon}
+        <ScheduleRatesModal
+          schedule={ratesSchedule}
+          open={isRatesModalOpen}
+          onClose={handleCloseRates}
+          onProceedBooking={handleBookNow}
         />
-      ) : (
-        <ScheduleCalendarView
-          schedules={schedules}
-          onSelectSchedule={(sch) => handleBookNow(sch)}
+
+        <ScheduleCarbonModal
+          schedule={carbonSchedule}
+          open={isCarbonModalOpen}
+          onClose={handleCloseCarbon}
         />
-      )}
-
-      {/* 5. Drawers */}
-      <VesselDetailsModal
-        vessel={selectedVessel}
-        open={isVesselModalOpen}
-        onClose={handleCloseVesselModal}
-      />
-
-      <ScheduleRatesModal
-        schedule={ratesSchedule}
-        open={isRatesModalOpen}
-        onClose={handleCloseRates}
-        onProceedBooking={handleBookNow}
-      />
-
-      <ScheduleCarbonModal
-        schedule={carbonSchedule}
-        open={isCarbonModalOpen}
-        onClose={handleCloseCarbon}
-      />
-    </Card>
+      </Card>
+    </FeaturePageShell>
   );
 };

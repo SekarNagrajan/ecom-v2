@@ -1,56 +1,81 @@
-import { RegistrationFormData } from '../types/registration.schema';
+// Modified by Sekar Nagarajan (2026-08-25 16:15)
+import type {
+  AddressLookupResult,
+  CustomerCodeCheckResult,
+  EmailCheckResult,
+  RegistrationFormData,
+  RegistrationSubmitResult,
+} from "../types/registration.schema";
 
-export async function submitRegistration(data: RegistrationFormData): Promise<{ success: boolean; message: string }> {
+function isUploadFileLike(
+  value: unknown
+): value is { originFileObj?: File } {
+  return typeof value === "object" && value !== null;
+}
+
+export async function submitRegistration(
+  data: RegistrationFormData
+): Promise<RegistrationSubmitResult> {
   const formData = new FormData();
-  
-  // Append all top level string/boolean fields
+
   Object.entries(data).forEach(([key, value]) => {
-    if (value !== undefined && key !== 'kycFile') {
-      formData.append(key, value.toString());
+    if (value !== undefined && key !== "kycFile") {
+      formData.append(key, String(value));
     }
   });
 
-  // Append file if it exists
-  if (data.kycFile && data.kycFile.originFileObj) {
-    formData.append('kycFile', data.kycFile.originFileObj);
-  } else if (data.kycFile instanceof File) {
-    formData.append('kycFile', data.kycFile);
+  const kyc = data.kycFile;
+  if (kyc instanceof File) {
+    formData.append("kycFile", kyc);
+  } else if (isUploadFileLike(kyc) && kyc.originFileObj instanceof File) {
+    formData.append("kycFile", kyc.originFileObj);
   }
 
-  const res = await fetch('/api/registration', {
-    method: 'POST',
+  const res = await fetch("/api/registration", {
+    method: "POST",
     body: formData,
   });
 
   if (!res.ok) {
-    const errorData = await res.json().catch(() => ({}));
-    throw new Error(errorData.message || 'Registration submission failed');
+    const errorData = (await res.json().catch(() => ({}))) as {
+      message?: string;
+    };
+    throw new Error(errorData.message || "Registration submission failed");
   }
 
-  const json = await res.json();
-  return json;
+  return (await res.json()) as RegistrationSubmitResult;
 }
 
-export async function searchAddress(query: string): Promise<any[]> {
+export async function searchAddress(
+  query: string
+): Promise<AddressLookupResult[]> {
   if (!query) return [];
-  const res = await fetch(`/api/address-lookup?q=${encodeURIComponent(query)}`);
+  const res = await fetch(
+    `/api/address-lookup?q=${encodeURIComponent(query)}`
+  );
   if (!res.ok) return [];
-  const data = await res.json();
-  return data.results || [];
+  const data = (await res.json()) as { results?: AddressLookupResult[] };
+  return data.results ?? [];
 }
 
-export async function checkCustomerCode(code: string): Promise<any> {
-  const res = await fetch(`/api/check-company?code=${encodeURIComponent(code)}`);
+export async function checkCustomerCode(
+  code: string
+): Promise<CustomerCodeCheckResult> {
+  const res = await fetch(
+    `/api/check-company?code=${encodeURIComponent(code)}`
+  );
   if (!res.ok) {
-    throw new Error('Customer code check failed');
+    throw new Error("Customer code check failed");
   }
-  return res.json();
+  return (await res.json()) as CustomerCodeCheckResult;
 }
 
-export async function checkEmail(email: string): Promise<{ available: boolean }> {
-  const res = await fetch(`/api/check-email?email=${encodeURIComponent(email)}`);
+export async function checkEmail(email: string): Promise<EmailCheckResult> {
+  const res = await fetch(
+    `/api/check-email?email=${encodeURIComponent(email)}`
+  );
   if (!res.ok) {
-    throw new Error('Email check failed');
+    throw new Error("Email check failed");
   }
-  return res.json();
+  return (await res.json()) as EmailCheckResult;
 }

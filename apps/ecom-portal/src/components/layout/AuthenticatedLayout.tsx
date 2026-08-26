@@ -1,87 +1,99 @@
-// Modified by Sekar Nagarajan (2026-08-21 14:58)
-import { Layout, theme } from 'antd';
-import { useState } from 'react';
-import { AuthenticatedSidebar } from './AuthenticatedSidebar';
-import { AuthenticatedLayoutHeader } from './AuthenticatedLayoutHeader';
-import { AppFooter } from './AppFooter';
+// Modified by Sekar Nagarajan (2026-08-25 17:02)
+import { useAuthStore } from "@solverminds/auth";
+import { Layout } from "antd";
+import { useState } from "react";
+import { Outlet, useNavigate } from "@tanstack/react-router";
 
-import { Outlet, useNavigate } from '@tanstack/react-router';
-import { useAuthStore } from '@solverminds/auth';
+import { useLoginController } from "../../features/auth/hooks/use-login-controller";
+import { usePostLoginRedirectStore } from "../../features/auth/stores/use-post-login-redirect-store";
+import { PublicLoginPanel } from "../../features/landing/components/PublicLoginPanel";
+import { useResponsiveLayout } from "../../hooks/use-responsive-layout";
+import { AppFooter } from "./AppFooter";
+import { AuthenticatedLayoutHeader } from "./AuthenticatedLayoutHeader";
+import { AuthenticatedSidebar } from "./AuthenticatedSidebar";
 
 const { Content } = Layout;
 
 export function AuthenticatedLayout() {
   const [collapsed, setCollapsed] = useState(true);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [loginPanelOpen, setLoginPanelOpen] = useState(false);
   const navigate = useNavigate();
-  const { token } = theme.useToken();
+  const { useMobileNav, compactHeader, tier } = useResponsiveLayout();
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const setIntendedPath = usePostLoginRedirectStore((s) => s.setIntendedPath);
+  const clearIntendedPath = usePostLoginRedirectStore(
+    (s) => s.clearIntendedPath
+  );
+  const consumeIntendedPath = usePostLoginRedirectStore(
+    (s) => s.consumeIntendedPath
+  );
+
+  const openLoginPanel = (intendedPath?: string | null) => {
+    if (intendedPath) {
+      setIntendedPath(intendedPath);
+    } else {
+      clearIntendedPath();
+    }
+    setLoginPanelOpen(true);
+  };
+
+  const loginController = useLoginController({
+    onSuccess: () => {
+      setLoginPanelOpen(false);
+      const path = consumeIntendedPath();
+      if (path) {
+        navigate({ to: path as never });
+      }
+      // If already on a public /app module with no intent, stay put after login.
+    },
+  });
 
   const onLogout = () => {
     useAuthStore.getState().logout();
-    navigate({ to: '/' });
+    navigate({ to: "/" });
   };
 
   return (
-    <Layout style={{ height: '100vh', overflow: 'hidden', position: 'relative' }}>
-      <style>{`
-        .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #d9d9d9; border-radius: 3px; }
-        .custom-scroll::-webkit-scrollbar-thumb:hover { background: #bfbfbf; }
-        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
-      `}</style>
-      <AuthenticatedSidebar 
-        collapsed={collapsed} 
-        onCollapse={setCollapsed} 
+    <Layout className="app-layout-root" data-viewport-tier={tier}>
+      <AuthenticatedSidebar
+        collapsed={collapsed}
+        onCollapse={setCollapsed}
+        isMobile={useMobileNav}
+        mobileOpen={mobileNavOpen}
+        onMobileClose={() => setMobileNavOpen(false)}
+        isGuest={!isAuthenticated}
+        onLoginRequired={openLoginPanel}
       />
-      <Layout style={{ marginLeft: 80, transition: 'all 0.25s cubic-bezier(0.2, 0, 0, 1)', display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
-        <AuthenticatedLayoutHeader 
-          collapsed={collapsed} 
-          setCollapsed={setCollapsed} 
-          onLogout={onLogout} 
+      <Layout className="app-layout-main">
+        <AuthenticatedLayoutHeader
+          onLogout={onLogout}
+          compactHeader={compactHeader}
+          onMobileMenuOpen={() => setMobileNavOpen(true)}
+          showMobileMenu={useMobileNav}
+          isGuest={!isAuthenticated}
+          onLoginClick={() => openLoginPanel(null)}
         />
-        <Content 
-          style={{ 
-            flex: 1, 
-            minHeight: 0,
-            overflow: 'hidden',
-            background: token.colorBgLayout, 
-            display: 'flex',
-            flexDirection: 'column'
-          }}
-        >
-          <div
-            style={{
-              flex: 1,
-              display: 'flex',
-              flexDirection: 'column',
-              minHeight: 0,
-            }}
-          >
-            <main
-              className="custom-scroll"
-              style={{
-                flex: 1,
-                display: 'flex',
-                flexDirection: 'column',
-                overflow: 'auto',
-                minHeight: 0,
-                padding: token.paddingMD,
-              }}
-            >
-              <div
-                style={{
-                  minHeight: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                }}
-              >
-                <Outlet />
-              </div>
+        <Content className="app-layout-content">
+          <div className="app-content-inner">
+            <main className="app-content-main custom-scroll">
+              <Outlet />
             </main>
           </div>
         </Content>
         <AppFooter />
       </Layout>
+
+      {!isAuthenticated ? (
+        <PublicLoginPanel
+          open={loginPanelOpen}
+          onClose={() => {
+            setLoginPanelOpen(false);
+            clearIntendedPath();
+          }}
+          controller={loginController}
+        />
+      ) : null}
     </Layout>
   );
 }
-

@@ -1,8 +1,8 @@
-// Modified by sekar nagarajan (2026-08-21 23:37)
+// Modified by Sekar Nagarajan (2026-08-25 19:25)
+import { AppDrawer } from "@solverminds/shared-ui";
+import { Table, Tag, Typography } from "antd";
 
-import { AppDrawer } from '@solverminds/shared-ui';
-import { Space, Table, Tag, Typography } from 'antd';
-import { ContractDTO, SurchargeDTO } from '../types/rates.types';
+import type { ContractDTO, SurchargeDTO } from "../types/rates.types";
 
 const { Text } = Typography;
 
@@ -12,32 +12,36 @@ interface ContractSurchargeModalProps {
   onClose: () => void;
 }
 
-export function ContractSurchargeModal({ contract, open, onClose }: ContractSurchargeModalProps) {
+export function ContractSurchargeModal({
+  contract,
+  open,
+  onClose,
+}: ContractSurchargeModalProps) {
   if (!contract) return null;
 
   const columns = [
     {
-      title: 'Charge Code',
-      dataIndex: 'chargeCode',
-      key: 'chargeCode',
+      title: "Charge Code",
+      dataIndex: "chargeCode",
+      key: "chargeCode",
       render: (code: string) => <Tag color="purple">{code}</Tag>,
     },
     {
-      title: 'Charge Name',
-      dataIndex: 'chargeName',
-      key: 'chargeName',
+      title: "Charge Name",
+      dataIndex: "chargeName",
+      key: "chargeName",
     },
     {
-      title: 'Currency',
-      dataIndex: 'currency',
-      key: 'currency',
+      title: "Currency",
+      dataIndex: "currency",
+      key: "currency",
     },
     {
-      title: 'Amount',
-      dataIndex: 'amount',
-      key: 'amount',
+      title: "Amount",
+      dataIndex: "amount",
+      key: "amount",
       render: (val: number, record: SurchargeDTO) => (
-        <Text strong style={{ color: '#cf1322' }}>
+        <Text strong className="text-amount-error rates-amount">
           {record.currency} ${val.toFixed(2)}
         </Text>
       ),
@@ -50,23 +54,33 @@ export function ContractSurchargeModal({ contract, open, onClose }: ContractSurc
       open={open}
       onClose={onClose}
       width={600}
+      classNames={{ body: "rates-drawer-body custom-scroll" }}
     >
-      <Space direction="vertical" size="medium" style={{ width: '100%' }}>
-        <Text type="secondary">
-          Customer: <Text strong>{contract.customerName}</Text> ({contract.customerCode})
-        </Text>
-        <Text type="secondary">
-          Route: <Text strong>{contract.originPortName} ({contract.originPort}) → {contract.deliveryPortName} ({contract.deliveryPort})</Text>
-        </Text>
+      <div className="rates-stack">
+        <div className="rates-drawer-meta">
+          <Text type="secondary">
+            Customer: <Text strong>{contract.customerName}</Text> (
+            {contract.customerCode})
+          </Text>
+          <Text type="secondary">
+            Route:{" "}
+            <Text strong>
+              {contract.originPortName} ({contract.originPort}) →{" "}
+              {contract.deliveryPortName} ({contract.deliveryPort})
+            </Text>
+          </Text>
+        </div>
 
-        <Table
-          dataSource={contract.surcharges}
-          columns={columns}
-          rowKey="id"
-          pagination={false}
-          size="small"
-        />
-      </Space>
+        <div className="responsive-table-wrap custom-scroll">
+          <Table
+            dataSource={contract.surcharges}
+            columns={columns}
+            rowKey="id"
+            pagination={false}
+            size="small"
+          />
+        </div>
+      </div>
     </AppDrawer>
   );
 }

@@ -1,4 +1,4 @@
-// Created by Sekar Nagarajan (2026-08-26 14:26)
+// Modified by Sekar Nagarajan (2026-08-26 14:34)
 import { AppButton, AppDrawer, FormattedDate } from "@solverminds/shared-ui";
 import { Tag, Tooltip, Typography } from "antd";
 
@@ -120,11 +120,11 @@ export function DoViewDrawer({ record, onClose }: DoViewDrawerProps) {
 
       <div className="do-meta-grid">
         <div className="do-meta-item">
-          <span className="do-meta-item__label">DO No</span>
+          <span className="form-field-label">DO No</span>
           <span className="do-meta-item__value">{record.delordno}</span>
         </div>
         <div className="do-meta-item">
-          <span className="do-meta-item__label">DO Date</span>
+          <span className="form-field-label">DO Date</span>
           <span className="do-meta-item__value">
             {record.delorddate ? (
               <FormattedDate value={record.delorddate} />
@@ -134,37 +134,33 @@ export function DoViewDrawer({ record, onClose }: DoViewDrawerProps) {
           </span>
         </div>
         <div className="do-meta-item">
-          <span className="do-meta-item__label">B/L Number</span>
-          <span className="do-meta-item__value">
-            {record.blnumber || "—"}
-          </span>
+          <span className="form-field-label">B/L Number</span>
+          <span className="do-meta-item__value">{record.blnumber || "—"}</span>
         </div>
         <div className="do-meta-item">
-          <span className="do-meta-item__label">Terminal</span>
-          <span className="do-meta-item__value">
-            {record.terminal || "—"}
-          </span>
+          <span className="form-field-label">Terminal</span>
+          <span className="do-meta-item__value">{record.terminal || "—"}</span>
         </div>
         <div className="do-meta-item">
-          <span className="do-meta-item__label">Vessel</span>
+          <span className="form-field-label">Vessel</span>
           <span className="do-meta-item__value">{record.vessel || "—"}</span>
         </div>
         <div className="do-meta-item">
-          <span className="do-meta-item__label">Voyage</span>
+          <span className="form-field-label">Voyage</span>
           <span className="do-meta-item__value">{record.voyage || "—"}</span>
         </div>
         <div className="do-meta-item">
-          <span className="do-meta-item__label">Bound</span>
+          <span className="form-field-label">Bound</span>
           <span className="do-meta-item__value">{record.bound || "—"}</span>
         </div>
         <div className="do-meta-item">
-          <span className="do-meta-item__label">Arrival Date</span>
+          <span className="form-field-label">Arrival Date</span>
           <span className="do-meta-item__value">
             {record.arrdate ? <FormattedDate value={record.arrdate} /> : "—"}
           </span>
         </div>
         <div className="do-meta-item">
-          <span className="do-meta-item__label">Valid Till</span>
+          <span className="form-field-label">Valid Till</span>
           <span className="do-meta-item__value">
             {record.dovaliditydate ? (
               <FormattedDate value={record.dovaliditydate} />
@@ -174,7 +170,7 @@ export function DoViewDrawer({ record, onClose }: DoViewDrawerProps) {
           </span>
         </div>
         <div className="do-meta-item">
-          <span className="do-meta-item__label">Print Status</span>
+          <span className="form-field-label">Print Status</span>
           <span className="do-meta-item__value">
             <Tag
               className="do-status-tag"

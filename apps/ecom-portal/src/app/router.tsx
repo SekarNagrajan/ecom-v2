@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-25 13:00)
+// Modified by Sekar Nagarajan (2026-08-26 16:00)
 import { useAuthStore } from "@solverminds/auth";
 import {
   createRootRoute,
@@ -22,11 +22,7 @@ import { DeliveryOrderRoute } from "../features/delivery-order/delivery-order-ro
 import { RegistrationRoute } from "../features/registration/registration-route";
 import { SchedulesRoute } from "../features/schedules/schedules-route";
 import { userCreationRoute } from "../features/user-creation/user-creation-route";
-import { ChangePasswordView } from "../features/user-modules/components/ChangePasswordView";
-import { MyAlertsView } from "../features/user-modules/components/MyAlertsView";
-import { PaymentHistoryView } from "../features/user-modules/components/PaymentHistoryView";
-import { ProfileView } from "../features/user-modules/components/ProfileView";
-import { QuotesView } from "../features/user-modules/components/QuotesView";
+import { ChangePasswordRoute, MyAlertsRoute, PaymentHistoryRoute, ProfileRoute, QuotesRoute } from "../features/user-modules/user-modules-routes";
 import { vendorApprovalsRoute } from "../features/vendor-approvals/vendor-approvals-route";
 
 // 1. Root Route
@@ -126,35 +122,35 @@ const adminRoute = createRoute({
 const profileRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/profile",
-  component: () => <ProfileView />,
+  component: () => <ProfileRoute />,
 });
 
 // 3.5 Change Password
 const changePasswordRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/change-password",
-  component: () => <ChangePasswordView />,
+  component: () => <ChangePasswordRoute />,
 });
 
 // 3.6 Quote / Rate Requests
 const quotesRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/quotes",
-  component: () => <QuotesView />,
+  component: () => <QuotesRoute />,
 });
 
 // 3.7 My Alert Preferences
 const myAlertsRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/my-alerts",
-  component: () => <MyAlertsView />,
+  component: () => <MyAlertsRoute />,
 });
 
 // 3.8 Payment History
 const paymentsRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/payments",
-  component: () => <PaymentHistoryView />,
+  component: () => <PaymentHistoryRoute />,
 });
 
 // 3.8 Delivery Order

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 14:26)
+// Modified by Sekar Nagarajan (2026-08-26 14:42)
 import { z } from "zod";
 
 export type DOPrintStatus = "Y" | "N";
@@ -24,17 +24,35 @@ export interface DOListFilters {
   toDate?: string;
 }
 
+/** DatePicker clears to null — normalize before string checks. */
+function requiredCalendarDate(label: string) {
+  return z.preprocess(
+    (value) => {
+      if (value == null) return "";
+      if (typeof value === "string") return value.trim();
+      return "";
+    },
+    z.string().min(1, `${label} is required`),
+  );
+}
+
 export const doSearchSchema = z
   .object({
-    fromDate: z.string().min(1, "From date is required"),
-    toDate: z.string().min(1, "To date is required"),
+    fromDate: requiredCalendarDate("From date"),
+    toDate: requiredCalendarDate("To date"),
   })
-  .refine(
-    (values) => values.fromDate <= values.toDate,
-    {
-      message: "From date must be on or before To date",
-      path: ["toDate"],
-    },
-  );
+  .superRefine((values, ctx) => {
+    if (!values.fromDate || !values.toDate) return;
+    if (values.fromDate > values.toDate) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "From date must be on or before To date",
+        path: ["toDate"],
+      });
+    }
+  });
 
-export type DOSearchValues = z.infer<typeof doSearchSchema>;
+export type DOSearchValues = {
+  fromDate: string;
+  toDate: string;
+};

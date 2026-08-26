@@ -1,109 +1,60 @@
-// Modified by sekar nagarajan (2026-08-21)
-import { http, HttpResponse } from 'msw';
-import type { SubUser } from '../features/user-creation/types/user-creation.types';
+// Modified by Sekar Nagarajan (2026-08-26 15:06)
+import { http, HttpResponse } from "msw";
 
-let subUsersStore: SubUser[] = [
-  {
-    id: 'sub-1',
-    loginName: 'APEX_LOGISTICS_OP1',
-    firstName: 'Sarah',
-    lastName: 'Conner',
-    email: 'sarah.c@apexlogistics.com',
-    companyName: 'Apex Logistics Global',
-    custCountryCode: '+1',
-    custPhoneCode: '212',
-    custPhoneNo: '555-0199',
-    mobileCode: '+1',
-    mobileNo: '555-0122',
-    defLanguage: 'en',
-    prefLanguage: 'en',
-    isActive: true,
-    createdDate: '2026-08-15',
-    allowedModules: ['SCH', 'TRK', 'BKG', 'SI'],
-  },
-  {
-    id: 'sub-2',
-    loginName: 'APEX_LOGISTICS_OP2',
-    firstName: 'Michael',
-    lastName: 'Vance',
-    email: 'm.vance@apexlogistics.com',
-    companyName: 'Apex Logistics Global',
-    custCountryCode: '+1',
-    custPhoneCode: '212',
-    custPhoneNo: '555-0198',
-    mobileCode: '+1',
-    mobileNo: '555-0123',
-    defLanguage: 'en',
-    prefLanguage: 'en',
-    isActive: true,
-    createdDate: '2026-08-18',
-    allowedModules: ['SCH', 'TRK', 'BL'],
-  },
-];
-
-const ALLOWED_USER_LIMIT = 5;
+import type { CreateSubUserPayload } from "../features/user-creation/types/user-creation.types";
+import {
+  createMockSubUser,
+  getMockUserLimit,
+  mockSubUsers,
+  toggleMockSubUserStatus,
+} from "../features/user-creation/mocks/usc.mock";
 
 export const userCreationHandlers = [
-  http.get('/api/v1/user-creation/sub-users', () => {
-    return HttpResponse.json(subUsersStore);
-  }),
-
-  http.get('/api/v1/user-creation/limit', () => {
-    const currentlyAllocated = subUsersStore.length;
-    const remainingSlots = Math.max(0, ALLOWED_USER_LIMIT - currentlyAllocated);
+  http.get("/api/v1/user-creation/sub-users", () => {
     return HttpResponse.json({
-      allowedUserLimit: ALLOWED_USER_LIMIT,
-      currentlyAllocated,
-      remainingSlots,
-      limitReached: currentlyAllocated >= ALLOWED_USER_LIMIT,
+      data: mockSubUsers.map((row) => ({
+        ...row,
+        allowedModules: [...row.allowedModules],
+      })),
     });
   }),
 
-  http.post('/api/v1/user-creation/sub-users', async ({ request }) => {
-    const body = (await request.json()) as Partial<SubUser> & { password?: string };
+  http.get("/api/v1/user-creation/limit", () => {
+    return HttpResponse.json({ data: getMockUserLimit() });
+  }),
 
-    if (subUsersStore.length >= ALLOWED_USER_LIMIT) {
+  http.post("/api/v1/user-creation/sub-users", async ({ request }) => {
+    const body = (await request.json()) as CreateSubUserPayload;
+    const result = createMockSubUser(body);
+    if (!result.ok) {
       return HttpResponse.json(
-        { success: false, message: 'Creation of user profile limit has been reached' },
-        { status: 400 }
+        {
+          error: {
+            code: "LIMIT_REACHED",
+            message: result.message,
+          },
+        },
+        { status: 400 },
       );
     }
-
-    const newSubUser: SubUser = {
-      id: `sub-${Date.now()}`,
-      loginName: body.loginName || 'SUB_USER',
-      firstName: body.firstName || 'First',
-      lastName: body.lastName || 'Last',
-      email: body.email || 'user@company.com',
-      companyName: body.companyName || 'Apex Logistics Global',
-      custCountryCode: body.custCountryCode || '+1',
-      custPhoneCode: body.custPhoneCode || '212',
-      custPhoneNo: body.custPhoneNo || '555-0000',
-      mobileCode: body.mobileCode || '+1',
-      mobileNo: body.mobileNo || '',
-      defLanguage: body.defLanguage || 'en',
-      prefLanguage: body.prefLanguage || 'en',
-      isActive: true,
-      createdDate: new Date().toISOString().split('T')[0],
-      allowedModules: body.allowedModules || ['SCH', 'TRK'],
-    };
-
-    subUsersStore.push(newSubUser);
-
-    return HttpResponse.json({
-      success: true,
-      message: 'User profile has been created successfully',
-      subUser: newSubUser,
-    });
+    return HttpResponse.json({ data: result.subUser });
   }),
 
-  http.patch('/api/v1/user-creation/sub-users/:id/status', async ({ params, request }) => {
-    const { id } = params;
-    const body = (await request.json()) as { active: boolean };
-
-    subUsersStore = subUsersStore.map((u) => (u.id === id ? { ...u, isActive: body.active } : u));
-    const updated = subUsersStore.find((u) => u.id === id);
-
-    return HttpResponse.json(updated);
-  }),
+  http.patch(
+    "/api/v1/user-creation/sub-users/:id/status",
+    async ({ params, request }) => {
+      const id = String(params.id);
+      const body = (await request.json()) as { active: boolean };
+      const updated = toggleMockSubUserStatus(id, body.active);
+      if (!updated) {
+        return HttpResponse.json(
+          {
+            error: { code: "NOT_FOUND", message: "Sub-user not found" },
+          },
+          { status: 404 },
+        );
+      }
+      return HttpResponse.json({ data: updated });
+    },
+  ),
 ];

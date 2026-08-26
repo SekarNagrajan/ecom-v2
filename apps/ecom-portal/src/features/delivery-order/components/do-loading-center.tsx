@@ -19,7 +19,7 @@ export function DoLoadingCenter({ fill = false }: DoLoadingCenterProps) {
       role="status"
       aria-label="Loading"
     >
-      <Spin size="large" />
+      <Spin size="medium" />
     </div>
   );
 }

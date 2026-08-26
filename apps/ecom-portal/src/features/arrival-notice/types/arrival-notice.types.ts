@@ -1,5 +1,7 @@
-// Modified by Sekar Nagarajan (2026-08-25 12:20)
-export type ArrivalNoticePrintStatus = 'Y' | 'N';
+// Modified by Sekar Nagarajan (2026-08-26 14:50)
+import { z } from "zod";
+
+export type ArrivalNoticePrintStatus = "Y" | "N";
 
 export interface ArrivalNoticeContainerRow {
   containerNo: string;
@@ -45,30 +47,40 @@ export interface ArrivalNoticeDTO extends ArrivalNoticeListDTO {
   demurrageFrom?: string;
 }
 
-export interface ApiResponse<T = unknown> {
-  data?: T;
-  error?: {
-    code: string;
-    message: string;
-    details?: string;
-  };
+export interface ArrivalNoticeListFilters {
+  fromDate?: string;
+  toDate?: string;
 }
 
-export const ARN_PRINT_STATUS_LABELS: Record<ArrivalNoticePrintStatus, string> = {
-  Y: 'Printed',
-  N: 'Not Printed',
-};
-
-export function getArrivalNoticePrintStatusColor(
-  status: ArrivalNoticePrintStatus
-): string {
-  return status === 'Y' ? 'success' : 'default';
+/** DatePicker clears to null — normalize before string checks. */
+function requiredCalendarDate(label: string) {
+  return z.preprocess(
+    (value) => {
+      if (value == null) return "";
+      if (typeof value === "string") return value.trim();
+      return "";
+    },
+    z.string().min(1, `${label} is required`),
+  );
 }
 
-export function formatArrivalNoticeAmount(amount: number, currency: string): string {
-  const formatted = amount.toLocaleString('en-US', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+export const arnSearchSchema = z
+  .object({
+    fromDate: requiredCalendarDate("From date"),
+    toDate: requiredCalendarDate("To date"),
+  })
+  .superRefine((values, ctx) => {
+    if (!values.fromDate || !values.toDate) return;
+    if (values.fromDate > values.toDate) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "From date must be on or before To date",
+        path: ["toDate"],
+      });
+    }
   });
-  return `${formatted} ${currency}`;
-}
+
+export type ArnSearchValues = {
+  fromDate: string;
+  toDate: string;
+};

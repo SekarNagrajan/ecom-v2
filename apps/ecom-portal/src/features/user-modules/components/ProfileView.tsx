@@ -1,215 +1,293 @@
-// Modified by Sekar Nagarajan (2026-08-24 16:05)
-import { AppIcon, Icons } from '../../../components/icons';
-import { AppButton, AppDrawer } from '@solverminds/shared-ui';
-import { useToast } from '@solverminds/shared-ui/hooks';
-import { Col, Form, Input, Row, Select, Space, Spin, Tag, theme, Typography } from 'antd';
-import { useEffect, useState } from 'react';
-import { userModulesApi } from '../api/user-modules.api';
-import type { CustomerProfile } from '../types/user-modules.types';
+// Modified by Sekar Nagarajan (2026-08-26 16:00)
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  AppButton,
+  AppDrawer,
+  FormInput,
+  FormSelect,
+} from "@solverminds/shared-ui";
+import { Col, Row, Tag, Typography } from "antd";
+import { useEffect } from "react";
+import { useForm, type Resolver } from "react-hook-form";
 
-const { Title, Text } = Typography;
+import { AppIcon, Icons } from "../../../components/icons";
+import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
+import { MODULE_TITLES } from "../../../constants/module-titles";
+import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
+import {
+  useProfileQuery,
+  useUpdateProfileMutation,
+} from "../api/user-modules.queries";
+import type { CustomerProfile } from "../types/user-modules.types";
+import { customerProfileSchema } from "../types/user-modules.types";
+import { UmLoadingCenter } from "./um-loading-center";
+import { UserModulesModuleStyles } from "./user-modules-module-styles";
+
+const { Text } = Typography;
+
+const FIELD_ITEM_PROPS = {
+  layout: "vertical" as const,
+  colon: false,
+};
+
+const LANGUAGE_OPTIONS = [
+  { value: "en", label: "English (United States)" },
+  { value: "es", label: "Spanish (Español)" },
+  { value: "zh", label: "Mandarin Chinese (中文)" },
+  { value: "de", label: "German (Deutsch)" },
+];
+
+const TIMEZONE_OPTIONS = [
+  { value: "UTC-5 (EST)", label: "Eastern Standard Time (EST / UTC-5)" },
+  { value: "UTC+0 (GMT)", label: "Greenwich Mean Time (GMT / UTC+0)" },
+  { value: "UTC+8 (SGT)", label: "Singapore Time (SGT / UTC+8)" },
+  { value: "UTC+1 (CET)", label: "Central European Time (CET / UTC+1)" },
+];
 
 export interface ProfileViewProps {
   open?: boolean;
   onClose?: () => void;
 }
 
+function reqLabel(label: string) {
+  return (
+    <span className="form-field-label">
+      {label} <Text type="danger">*</Text>
+    </span>
+  );
+}
+
+function optLabel(label: string) {
+  return <span className="form-field-label">{label}</span>;
+}
+
 export function ProfileView({ open = true, onClose }: ProfileViewProps) {
-  const { token } = theme.useToken();
-  const toast = useToast();
-  const [form] = Form.useForm();
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [profile, setProfile] = useState<CustomerProfile | null>(null);
+  const isDrawer = Boolean(onClose);
+  const { data: profile, isLoading } = useProfileQuery(open);
+  const { mutateAsync: updateProfile, isPending: isSaving } =
+    useUpdateProfileMutation();
+
+  const form = useForm<CustomerProfile>({
+    resolver: zodResolver(customerProfileSchema) as Resolver<CustomerProfile>,
+    defaultValues: {
+      loginName: "",
+      customerCode: "",
+      companyName: "",
+      firstName: "",
+      lastName: "",
+      email: "",
+      phoneCode: "+1",
+      phoneNo: "",
+      mobileCode: "+1",
+      mobileNo: "",
+      taxId: "",
+      country: "",
+      city: "",
+      address: "",
+      defLanguage: "en",
+      prefTimeZone: "UTC-5 (EST)",
+    },
+  });
 
   useEffect(() => {
-    if (open) {
-      setLoading(true);
-      userModulesApi
-        .getProfile()
-        .then((data) => {
-          setProfile(data);
-          form.setFieldsValue(data);
-        })
-        .catch(() => toast.error('Failed to load profile details'))
-        .finally(() => setLoading(false));
+    if (profile) {
+      form.reset(profile);
     }
-  }, [open, form, toast]);
+  }, [profile, form]);
 
-  const handleSave = async (values: CustomerProfile) => {
-    setSaving(true);
-    try {
-      const updated = await userModulesApi.updateProfile(values);
-      setProfile(updated);
-      toast.success('Customer Profile details updated successfully');
-      if (onClose) onClose();
-    } catch {
-      toast.error('Failed to save profile changes');
-    } finally {
-      setSaving(false);
-    }
+  const handleClose = () => {
+    onClose?.();
   };
 
+  const handleSave = form.handleSubmit(async (values) => {
+    await updateProfile(values);
+    handleClose();
+  });
+
   const formFields = (
-    <Form
-      form={form}
-      layout="vertical"
-      onFinish={handleSave}
-      size="large"
-      requiredMark={(label, { required }) => (
-        <span>
-          {label}
-          {required && <span style={{ color: token.colorError, marginLeft: 4 }}>*</span>}
-        </span>
-      )}
+    <div className="um-form-section">
+      <Row gutter={[16, 16]}>
+        <Col {...RESPONSIVE_COL.formHalf}>
+          <FormInput
+            control={form.control}
+            name="loginName"
+            label={optLabel("Login Account ID")}
+            size="large"
+            prefix={<AppIcon icon={Icons.user} size={16} />}
+            disabled
+            formItemProps={FIELD_ITEM_PROPS}
+          />
+        </Col>
+        <Col {...RESPONSIVE_COL.formHalf}>
+          <FormInput
+            control={form.control}
+            name="companyName"
+            label={optLabel("Company Name")}
+            size="large"
+            disabled
+            formItemProps={FIELD_ITEM_PROPS}
+          />
+        </Col>
+        <Col {...RESPONSIVE_COL.formHalf}>
+          <FormInput
+            control={form.control}
+            name="firstName"
+            label={reqLabel("First Name")}
+            size="large"
+            placeholder="Enter first name"
+            formItemProps={FIELD_ITEM_PROPS}
+          />
+        </Col>
+        <Col {...RESPONSIVE_COL.formHalf}>
+          <FormInput
+            control={form.control}
+            name="lastName"
+            label={reqLabel("Last Name")}
+            size="large"
+            placeholder="Enter last name"
+            formItemProps={FIELD_ITEM_PROPS}
+          />
+        </Col>
+        <Col {...RESPONSIVE_COL.formHalf}>
+          <FormInput
+            control={form.control}
+            name="email"
+            type="email"
+            label={reqLabel("Primary Email Address")}
+            size="large"
+            prefix={<AppIcon icon={Icons.mail} size={16} />}
+            placeholder="Enter email address"
+            formItemProps={FIELD_ITEM_PROPS}
+          />
+        </Col>
+        <Col {...RESPONSIVE_COL.formHalf}>
+          <FormInput
+            control={form.control}
+            name="phoneNo"
+            label={reqLabel("Telephone Number")}
+            size="large"
+            prefix={<AppIcon icon={Icons.phone} size={16} />}
+            placeholder="Enter contact phone"
+            formItemProps={FIELD_ITEM_PROPS}
+          />
+        </Col>
+        <Col {...RESPONSIVE_COL.formHalf}>
+          <FormInput
+            control={form.control}
+            name="country"
+            label={optLabel("Country")}
+            size="large"
+            prefix={<AppIcon icon={Icons.mapPin} size={16} />}
+            formItemProps={FIELD_ITEM_PROPS}
+          />
+        </Col>
+        <Col {...RESPONSIVE_COL.formHalf}>
+          <FormInput
+            control={form.control}
+            name="taxId"
+            label={optLabel("Tax ID / Registration Number")}
+            size="large"
+            placeholder="Enter Tax ID"
+            formItemProps={FIELD_ITEM_PROPS}
+          />
+        </Col>
+        <Col {...RESPONSIVE_COL.formHalf}>
+          <FormSelect
+            control={form.control}
+            name="defLanguage"
+            label={optLabel("Preferred Portal Language")}
+            size="large"
+            options={LANGUAGE_OPTIONS}
+            formItemProps={FIELD_ITEM_PROPS}
+          />
+        </Col>
+        <Col {...RESPONSIVE_COL.formHalf}>
+          <FormSelect
+            control={form.control}
+            name="prefTimeZone"
+            label={optLabel("Preferred Timezone")}
+            size="large"
+            options={TIMEZONE_OPTIONS}
+            formItemProps={FIELD_ITEM_PROPS}
+          />
+        </Col>
+      </Row>
+    </div>
+  );
+
+  const verifiedTag = (
+    <Tag
+      className="um-verified-tag"
+      icon={<AppIcon icon={Icons.shieldCheck} size={14} />}
+      color="green"
     >
-      <Row gutter={24}>
-        <Col span={12}>
-          <Form.Item label="Login Account ID" name="loginName">
-            <Input prefix={<AppIcon icon={Icons.user} size={16} />} disabled />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item label="Company Name" name="companyName">
-            <Input disabled />
-          </Form.Item>
-        </Col>
-      </Row>
+      Verified Customer ({profile?.customerCode || "CUST-001"})
+    </Tag>
+  );
 
-      <Row gutter={24}>
-        <Col span={12}>
-          <Form.Item label="First Name" name="firstName" rules={[{ required: true, message: 'First name is required' }]}>
-            <Input placeholder="Enter first name" />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item label="Last Name" name="lastName" rules={[{ required: true, message: 'Last name is required' }]}>
-            <Input placeholder="Enter last name" />
-          </Form.Item>
-        </Col>
-      </Row>
-
-      <Row gutter={24}>
-        <Col span={12}>
-          <Form.Item label="Primary Email Address" name="email" rules={[{ required: true, type: 'email', message: 'Valid email is required' }]}>
-            <Input prefix={<AppIcon icon={Icons.mail} size={16} />} placeholder="Enter email address" />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item label="Telephone Number" name="phoneNo" rules={[{ required: true, message: 'Phone number is required' }]}>
-            <Input prefix={<AppIcon icon={Icons.phone} size={16} />} placeholder="Enter contact phone" />
-          </Form.Item>
-        </Col>
-      </Row>
-
-      <Row gutter={24}>
-        <Col span={12}>
-          <Form.Item label="Country" name="country">
-            <Input prefix={<AppIcon icon={Icons.mapPin} size={16} />} />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item label="Tax ID / Registration Number" name="taxId">
-            <Input placeholder="Enter Tax ID" />
-          </Form.Item>
-        </Col>
-      </Row>
-
-      <Row gutter={24}>
-        <Col span={12}>
-          <Form.Item label="Preferred Portal Language" name="defLanguage">
-            <Select
-              options={[
-                { value: 'en', label: 'English (United States)' },
-                { value: 'es', label: 'Spanish (Español)' },
-                { value: 'zh', label: 'Mandarin Chinese (中文)' },
-                { value: 'de', label: 'German (Deutsch)' },
-              ]}
-            />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item label="Preferred Timezone" name="prefTimeZone">
-            <Select
-              options={[
-                { value: 'UTC-5 (EST)', label: 'Eastern Standard Time (EST / UTC-5)' },
-                { value: 'UTC+0 (GMT)', label: 'Greenwich Mean Time (GMT / UTC+0)' },
-                { value: 'UTC+8 (SGT)', label: 'Singapore Time (SGT / UTC+8)' },
-                { value: 'UTC+1 (CET)', label: 'Central European Time (CET / UTC+1)' },
-              ]}
-            />
-          </Form.Item>
-        </Col>
-      </Row>
-
-      {!onClose && (
-        <Form.Item style={{ marginTop: 12, textAlign: 'right' }}>
-          <AppButton type="primary" size="large" icon={<AppIcon icon={Icons.save} size={16} />} loading={saving} htmlType="submit">
+  const pageBody = (
+    <div className="um-page-layout">
+      <ModuleScreenHeader
+        icon={Icons.user}
+        title={MODULE_TITLES.profile}
+        subtitle="Manage primary contact information, company details, timezone, and communication preferences"
+        extra={verifiedTag}
+      />
+      {isLoading ? <UmLoadingCenter fill={!isDrawer} /> : formFields}
+      {!isDrawer && !isLoading ? (
+        <div className="um-page-actions">
+          <AppButton
+            type="primary"
+            icon={<AppIcon icon={Icons.save} size={16} />}
+            loading={isSaving}
+            onClick={handleSave}
+          >
             Save Profile Updates
           </AppButton>
-        </Form.Item>
-      )}
-    </Form>
-  );
-
-  const headerContent = (
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-      <div>
-        <Space align="center">
-          <AppIcon icon={Icons.user} size={24} />
-          <Title level={4} style={{ margin: 0, fontWeight: 700 }}>
-            Customer Profile Details
-          </Title>
-        </Space>
-        <Text type="secondary" style={{ display: 'block', marginTop: 4 }}>
-          Manage primary contact information, company details, timezone, and communication preferences
-        </Text>
-      </div>
-
-      <Tag icon={<AppIcon icon={Icons.shieldCheck} size={16} />} color="green" style={{ fontSize: 13, padding: '4px 12px' }}>
-        VERIFIED CUSTOMER ({profile?.customerCode || 'CUST-001'})
-      </Tag>
-    </div>
-  );
-
-  const bodyContent = (
-    <div>
-      {headerContent}
-      {loading ? (
-        <div style={{ textAlign: 'center', padding: 60 }}>
-          <Spin size="large" tip="Loading customer profile..." />
         </div>
-      ) : (
-        formFields
-      )}
+      ) : null}
     </div>
   );
 
-  if (onClose) {
+  if (isDrawer) {
     return (
-      <AppDrawer
-        open={open}
-        onClose={onClose}
-        width="50%"
-        styles={{
-          body: { overflowY: 'auto', maxHeight: 'calc(100vh - 105px)', padding: '20px 24px' },
-          footer: { display: 'flex', justifyContent: 'flex-end', borderTop: `1px solid ${token.colorBorderSecondary}`, padding: '8px 20px', background: token.colorBgContainer },
-        }}
-        title="Customer Account Profile"
-        mask={{ blur: false }}
-        footer={
-          <Space style={{ width: '100%', justifyContent: 'flex-end' }} size={8}>
-            <AppButton danger onClick={onClose}>Cancel</AppButton>
-            <AppButton type="primary" icon={<AppIcon icon={Icons.save} size={16} />} loading={saving} onClick={() => form.submit()}>
-              Save Profile Updates
-            </AppButton>
-          </Space>
-        }
-      >
-        {bodyContent}
-      </AppDrawer>
+      <>
+        <UserModulesModuleStyles />
+        <AppDrawer
+          open={open}
+          onClose={handleClose}
+          placement="right"
+          dialogSize="md"
+          destroyOnClose
+          maskClosable={!isSaving}
+          keyboard={!isSaving}
+          classNames={{
+            body: "um-drawer-body custom-scroll",
+            footer: "um-drawer-footer-bar",
+          }}
+          styles={{ body: { padding: 0 } }}
+          title={MODULE_TITLES.profile}
+          footer={
+            <div className="um-drawer-footer form-step-footer">
+              <AppButton onClick={handleClose} disabled={isSaving}>
+                Cancel
+              </AppButton>
+              <AppButton
+                type="primary"
+                icon={<AppIcon icon={Icons.save} size={16} />}
+                loading={isSaving}
+                onClick={handleSave}
+              >
+                Save
+              </AppButton>
+            </div>
+          }
+        >
+          {isLoading ? <UmLoadingCenter /> : formFields}
+        </AppDrawer>
+      </>
     );
   }
 
-  return bodyContent;
+  return pageBody;
 }

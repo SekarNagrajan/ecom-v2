@@ -1,77 +1,99 @@
-// Modified by Sekar Nagarajan (2026-08-25 12:19)
-import { AppButton, FormattedDate } from "@solverminds/shared-ui";
-import {
-  DataView,
-  type DataViewColumn,
-} from "@solverminds/shared-ui/data-view";
+// Modified by Sekar Nagarajan (2026-08-26 14:57)
+import { FormattedDate } from "@solverminds/shared-ui";
+import { DataView, type DataViewColumn } from "@solverminds/shared-ui/data-view";
 import type { RowDoubleClickedEvent } from "ag-grid-community";
-import { Col, DatePicker, Row, Space, Tag, Tooltip } from "antd";
-import dayjs from "dayjs";
+import { Tag } from "antd";
+import { DateTime } from "luxon";
+import { useState } from "react";
 
 import { AppIcon, Icons, NavIcons } from "../../../components/icons";
+import { buildActionsColumn } from "../../../components/shared/build-actions-column";
+import {
+  ListActionButton,
+  ListActionsRow,
+} from "../../../components/shared/list-action-button";
 import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
 import { MODULE_TITLES } from "../../../constants/module-titles";
-import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
-import { useCRODownloadMutation, useCROSummaryQuery } from "../api/cro.queries";
-import type { CROListDTO } from "../types/cro.types";
-import { getCROReleaseStatusColor } from "../types/cro.types";
+import {
+  useCRODownloadMutation,
+  useCROSummaryQuery,
+} from "../api/cro.queries";
+import type {
+  CROListDTO,
+  CROListFilters,
+  CroSearchValues,
+} from "../types/cro.types";
+import {
+  getCroPrintStatusColor,
+  getCroPrintStatusLabel,
+  getCroReleaseStatusColor,
+} from "../utils/cro-status";
+import { CroLoadingCenter } from "./cro-loading-center";
+import { CroSearchPanel } from "./cro-search-panel";
+import { CroViewDrawer } from "./view/CroViewDrawer";
 
-interface CROListingProps {
-  fromDate: string | undefined;
-  toDate: string | undefined;
-  activeFromDate: string | undefined;
-  activeToDate: string | undefined;
-  onFromDateChange: (value: string | undefined) => void;
-  onToDateChange: (value: string | undefined) => void;
-  onSearch: () => void;
-  onView: (croNo: string) => void;
-}
+const initialFilters: CROListFilters = {
+  fromDate: DateTime.now().minus({ days: 60 }).toISODate() ?? undefined,
+  toDate: DateTime.now().toISODate() ?? undefined,
+};
 
-export function CROListing({
-  fromDate,
-  toDate,
-  activeFromDate,
-  activeToDate,
-  onFromDateChange,
-  onToDateChange,
-  onSearch,
-  onView,
-}: CROListingProps) {
-  const { data: rows = [], isLoading } = useCROSummaryQuery(
-    activeFromDate,
-    activeToDate,
-  );
+export function CROListing() {
+  const [filters, setFilters] = useState<CROListFilters>(initialFilters);
+  const [selectedCroNo, setSelectedCroNo] = useState<string | null>(null);
+
+  const {
+    data: rows = [],
+    isLoading,
+    isFetching,
+  } = useCROSummaryQuery(filters.fromDate, filters.toDate);
   const { mutate: downloadDoc } = useCRODownloadMutation();
+
+  const handleSearch = (values: CroSearchValues) => {
+    setFilters({ fromDate: values.fromDate, toDate: values.toDate });
+  };
+
+  const handleView = (croNo: string) => {
+    setSelectedCroNo(croNo);
+  };
+
+  const handleRowDoubleClick = (
+    event: RowDoubleClickedEvent<CROListDTO>,
+  ) => {
+    const croNo = event.data?.croNo;
+    if (croNo) handleView(croNo);
+  };
 
   const columns: DataViewColumn<CROListDTO>[] = [
     {
-      headerName: "Actions",
-      field: "croNo",
-      width: 100,
-      pinned: "left",
-      cellRenderer: (params: { data?: CROListDTO }) => {
-        if (!params.data) return null;
-        return (
-          <Space size={6}>
-            <Tooltip title="View Details">
-              <AppButton
-                type="text"
-                size="small"
-                icon={<AppIcon icon={Icons.eye} size={16} gridAction tone="view" />}
-                onClick={() => onView(params.data!.croNo)}
+      ...buildActionsColumn<CROListDTO>({
+        field: "croNo",
+        width: 110,
+        cellRenderer: (params) => {
+          if (!params.data) return null;
+          const row = params.data;
+          return (
+            <ListActionsRow>
+              <ListActionButton
+                title="View Details"
+                icon={<AppIcon icon={Icons.eye} size={16} tone="view" />}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleView(row.croNo);
+                }}
               />
-            </Tooltip>
-            <Tooltip title="Print Container Release Order">
-              <AppButton
-                type="text"
-                size="small"
-                icon={<AppIcon icon={Icons.printer} size={16} gridAction tone="print" />}
-                onClick={() => downloadDoc(params.data!.croNo)}
+              <ListActionButton
+                title="Print Container Release Order"
+                icon={<AppIcon icon={Icons.printer} size={16} tone="print" />}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  downloadDoc(row.croNo);
+                }}
               />
-            </Tooltip>
-          </Space>
-        );
-      },
+            </ListActionsRow>
+          );
+        },
+      }),
+      colId: "actions",
     },
     { field: "croNo", headerName: "Release No", width: 130, pinned: "left" },
     { field: "bookingNo", headerName: "Booking No", width: 130 },
@@ -110,7 +132,7 @@ export function CROListing({
         return (
           <Tag
             className="cro-status-tag"
-            color={getCROReleaseStatusColor(params.data.releaseStatus)}
+            color={getCroReleaseStatusColor(params.data.releaseStatus)}
           >
             {params.data.releaseStatus}
           </Tag>
@@ -123,18 +145,19 @@ export function CROListing({
       width: 110,
       cellRenderer: (params: { data?: CROListDTO }) => {
         if (!params.data) return null;
-        const isPrinted = params.data.printStatus === "Y";
         return (
           <Tag
             className="cro-status-tag"
-            color={isPrinted ? "success" : "default"}
+            color={getCroPrintStatusColor(params.data.printStatus)}
           >
-            {isPrinted ? "Printed" : "Not Printed"}
+            {getCroPrintStatusLabel(params.data.printStatus)}
           </Tag>
         );
       },
     },
   ];
+
+  const showLoading = isLoading && rows.length === 0;
 
   return (
     <div className="cro-page-layout">
@@ -142,83 +165,43 @@ export function CROListing({
         <ModuleScreenHeader
           icon={NavIcons.containerRelease}
           title={MODULE_TITLES.containerReleaseOrder}
+          subtitle="Filter by date range, review load-to-discharge routing, and print container release orders."
           marginBottom={0}
         />
       </div>
 
-      <div className="cro-search-panel">
-        <div className="cro-search-panel__body">
-          <Row gutter={[16, 16]} align="bottom">
-            <Col {...RESPONSIVE_COL.formThird}>
-              <div className="cro-search-field">
-                <span className="form-field-label">From Date</span>
-                <DatePicker
-                  size="large"
-                  value={fromDate ? dayjs(fromDate) : null}
-                  onChange={(d) =>
-                    onFromDateChange(d ? d.format("YYYY-MM-DD") : undefined)
-                  }
-                  allowClear={false}
-                />
-              </div>
-            </Col>
-            <Col {...RESPONSIVE_COL.formThird}>
-              <div className="cro-search-field">
-                <span className="form-field-label">To Date</span>
-                <DatePicker
-                  size="large"
-                  value={toDate ? dayjs(toDate) : null}
-                  onChange={(d) =>
-                    onToDateChange(d ? d.format("YYYY-MM-DD") : undefined)
-                  }
-                  allowClear={false}
-                />
-              </div>
-            </Col>
-            <Col {...RESPONSIVE_COL.formThird}>
-              <div className="cro-search-actions-field">
-                <span className="cro-search-actions-field__spacer form-field-label">
-                  Show
-                </span>
-                <div className="cro-search-actions">
-                  <AppButton
-                    type="primary"
-                    size="large"
-                    icon={<AppIcon icon={Icons.search} size={16} />}
-                    onClick={onSearch}
-                  >
-                    Show
-                  </AppButton>
-                </div>
-              </div>
-            </Col>
-          </Row>
-        </div>
-      </div>
+      <CroSearchPanel isSearching={isFetching} onSearch={handleSearch} />
 
-      <div className="cro-grid-wrap responsive-table-wrap">
-        <DataView
-          rowData={rows}
-          columnDefs={columns}
-          loading={isLoading}
-          allowedViewModes={["list"]}
-          defaultViewMode="list"
-          renderToolbar={() => null}
-          className="cro-data-view"
-          listOptions={{
-            showToolbar: true,
-            gridOptions: {
-              getRowId: (params: { data: CROListDTO }) => params.data.croNo,
-              onRowDoubleClicked: (
-                event: RowDoubleClickedEvent<CROListDTO>,
-              ) => {
-                const croNo = event.data?.croNo;
-                if (croNo) onView(croNo);
+      {showLoading ? (
+        <CroLoadingCenter fill />
+      ) : (
+        <div className="cro-grid-wrap responsive-table-wrap custom-scroll">
+          <DataView
+            rowData={rows}
+            columnDefs={columns}
+            loading={isFetching}
+            allowedViewModes={["list"]}
+            defaultViewMode="list"
+            renderToolbar={() => null}
+            className="cro-data-view"
+            listOptions={{
+              showToolbar: false,
+              gridOptions: {
+                getRowId: (params: { data: CROListDTO }) => params.data.croNo,
+                onRowDoubleClicked: handleRowDoubleClick,
+                overlayNoRowsTemplate: "No container release orders found.",
               },
-            },
-          }}
+            }}
+          />
+        </div>
+      )}
+
+      {selectedCroNo ? (
+        <CroViewDrawer
+          croNo={selectedCroNo}
+          onClose={() => setSelectedCroNo(null)}
         />
-      </div>
+      ) : null}
     </div>
   );
 }

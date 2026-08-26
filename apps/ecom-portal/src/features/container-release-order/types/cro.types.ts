@@ -1,7 +1,13 @@
-// Modified by Sekar Nagarajan (2026-08-25 12:10)
-export type CROPrintStatus = 'Y' | 'N';
+// Modified by Sekar Nagarajan (2026-08-26 14:57)
+import { z } from "zod";
 
-export type CROReleaseStatus = 'Eligible' | 'Blocked' | 'Released' | 'Cancelled';
+export type CROPrintStatus = "Y" | "N";
+
+export type CROReleaseStatus =
+  | "Eligible"
+  | "Blocked"
+  | "Released"
+  | "Cancelled";
 
 export interface CROEligibility {
   eligible: boolean;
@@ -39,26 +45,40 @@ export interface CRODTO extends CROListDTO {
   printCount: number;
 }
 
-export interface ApiResponse<T = unknown> {
-  data?: T;
-  error?: {
-    code: string;
-    message: string;
-    details?: string;
-  };
+export interface CROListFilters {
+  fromDate?: string;
+  toDate?: string;
 }
 
-export function getCROReleaseStatusColor(status: CROReleaseStatus): string {
-  switch (status) {
-    case 'Eligible':
-      return 'processing';
-    case 'Released':
-      return 'success';
-    case 'Blocked':
-      return 'error';
-    case 'Cancelled':
-      return 'default';
-    default:
-      return 'default';
-  }
+/** DatePicker clears to null — normalize before string checks. */
+function requiredCalendarDate(label: string) {
+  return z.preprocess(
+    (value) => {
+      if (value == null) return "";
+      if (typeof value === "string") return value.trim();
+      return "";
+    },
+    z.string().min(1, `${label} is required`),
+  );
 }
+
+export const croSearchSchema = z
+  .object({
+    fromDate: requiredCalendarDate("From date"),
+    toDate: requiredCalendarDate("To date"),
+  })
+  .superRefine((values, ctx) => {
+    if (!values.fromDate || !values.toDate) return;
+    if (values.fromDate > values.toDate) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "From date must be on or before To date",
+        path: ["toDate"],
+      });
+    }
+  });
+
+export type CroSearchValues = {
+  fromDate: string;
+  toDate: string;
+};

@@ -1,21 +1,18 @@
-// Modified by Sekar Nagarajan (2026-08-25 12:10)
-import { useToast } from '@solverminds/shared-ui/hooks';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+// Modified by Sekar Nagarajan (2026-08-26 14:57)
+import { useToast } from "@solverminds/shared-ui/hooks";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import {
-  downloadCRODocument,
-  getCRODetail,
-  getCROEligibility,
-  getCROSummary,
-} from './cro.api';
-import { croKeys } from './cro.keys';
+import { croApi } from "./cro.api";
+import { croKeys } from "./cro.keys";
 
 export function useCROSummaryQuery(fromDate?: string, toDate?: string) {
   return useQuery({
     queryKey: croKeys.list(fromDate, toDate),
     queryFn: async () => {
-      const res = await getCROSummary(fromDate, toDate);
-      if (res.error) throw new Error(res.error.message || 'Failed to fetch CRO summary');
+      const res = await croApi.fetchList({ fromDate, toDate });
+      if (res.error) {
+        throw new Error(res.error.message || "Failed to fetch CRO summary");
+      }
       return res.data ?? [];
     },
   });
@@ -23,12 +20,14 @@ export function useCROSummaryQuery(fromDate?: string, toDate?: string) {
 
 export function useCRODetailQuery(croNo: string | null) {
   return useQuery({
-    queryKey: croKeys.detail(croNo ?? ''),
+    queryKey: croKeys.detail(croNo ?? ""),
     enabled: Boolean(croNo),
     queryFn: async () => {
       if (!croNo) return null;
-      const res = await getCRODetail(croNo);
-      if (res.error) throw new Error(res.error.message || 'Failed to fetch CRO detail');
+      const res = await croApi.fetchDetail(croNo);
+      if (res.error) {
+        throw new Error(res.error.message || "Failed to fetch CRO detail");
+      }
       return res.data ?? null;
     },
   });
@@ -36,12 +35,14 @@ export function useCRODetailQuery(croNo: string | null) {
 
 export function useCROEligibilityQuery(bookingNo: string | null) {
   return useQuery({
-    queryKey: croKeys.eligibility(bookingNo ?? ''),
+    queryKey: croKeys.eligibility(bookingNo ?? ""),
     enabled: Boolean(bookingNo),
     queryFn: async () => {
       if (!bookingNo) return null;
-      const res = await getCROEligibility(bookingNo);
-      if (res.error) throw new Error(res.error.message || 'Failed to fetch eligibility');
+      const res = await croApi.fetchEligibility(bookingNo);
+      if (res.error) {
+        throw new Error(res.error.message || "Failed to fetch eligibility");
+      }
       return res.data ?? null;
     },
   });
@@ -53,14 +54,16 @@ export function useCRODownloadMutation() {
 
   return useMutation({
     mutationFn: async (croNo: string) => {
-      const res = await downloadCRODocument(croNo);
-      if (res.error) throw new Error(res.error.message || 'Failed to download CRO document');
+      const res = await croApi.downloadDocument(croNo);
+      if (res.error) {
+        throw new Error(res.error.message || "Failed to download CRO document");
+      }
       return { blob: res.data, croNo };
     },
     onSuccess: ({ blob, croNo }) => {
       if (!blob) return;
       const url = URL.createObjectURL(blob);
-      const a = Object.assign(document.createElement('a'), {
+      const a = Object.assign(document.createElement("a"), {
         href: url,
         download: `${croNo}.pdf`,
       });

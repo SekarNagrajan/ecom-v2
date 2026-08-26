@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-24 16:35)
+// Modified by Sekar Nagarajan (2026-08-26 16:00)
 /** Title Case module screen names — aligned with sidebar nomenclature (ApplicationResource_en.properties). */
 export const MODULE_TITLES = {
   dashboard: 'Dashboard',
@@ -26,7 +26,7 @@ export const MODULE_TITLES = {
   carbonCalculator: 'Carbon Calculator',
   contactUs: 'Contact Us',
   quotes: 'Quote (Rate Request)',
-  myAlerts: 'My Alert',
+  myAlerts: 'My Alerts',
   profile: 'Profile',
   changePassword: 'Change Password',
   admin: 'Control Panel Admin',

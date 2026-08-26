@@ -1,7 +1,7 @@
-// Modified by Sekar Nagarajan (2026-08-24 19:14)
-import { theme } from 'antd';
+// Modified by Sekar Nagarajan (2026-08-26 16:30)
+import { theme } from "antd";
 
-import { tokenMix } from '../../theme/utils/token-mix';
+import { tokenMix } from "../../theme/utils/token-mix";
 
 export function AdminModuleStyles() {
   const { token } = theme.useToken();
@@ -10,6 +10,104 @@ export function AdminModuleStyles() {
 
   return (
     <style>{`
+      .admin-layout {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginLG}px;
+        width: 100%;
+        min-width: 0;
+        min-height: calc(100vh - 160px);
+      }
+
+      /* Compact left rail; right module fills remaining width */
+      .admin-workspace {
+        display: grid;
+        grid-template-columns: clamp(200px, 20%, 240px) minmax(0, 1fr);
+        gap: ${token.marginMD}px;
+        width: 100%;
+        min-width: 0;
+        flex: 1;
+        min-height: 0;
+        align-items: stretch;
+      }
+
+      .admin-workspace__nav {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginSM}px;
+        width: 100%;
+        min-width: 0;
+        min-height: 0;
+        max-height: calc(100vh - 220px);
+        overflow-y: auto;
+        padding: ${token.paddingSM}px;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorBgContainer};
+      }
+      .admin-workspace__nav-title {
+        margin: 0;
+        padding: 0 ${token.paddingXXS}px;
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorTextSecondary};
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+      .admin-workspace__nav-list {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+        width: 100%;
+      }
+      .admin-workspace__nav-item {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginSM}px;
+        width: 100%;
+        margin: 0;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        border: 1px solid transparent;
+        border-radius: ${token.borderRadius}px;
+        background: transparent;
+        color: ${token.colorText};
+        font-size: ${token.fontSize}px;
+        line-height: ${token.lineHeight};
+        text-align: left;
+        cursor: pointer;
+        transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+      }
+      .admin-workspace__nav-item:hover {
+        background: ${token.colorFillTertiary};
+        color: ${token.colorPrimary};
+      }
+      .admin-workspace__nav-item--active {
+        background: ${primaryTint8};
+        border-color: ${token.colorPrimaryBorder};
+        color: ${token.colorPrimary};
+        font-weight: ${token.fontWeightStrong};
+      }
+
+      .admin-workspace__content {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        min-height: 0;
+        max-height: calc(100vh - 220px);
+        overflow-y: auto;
+        padding: ${token.paddingMD}px;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorBgContainer};
+      }
+      .admin-workspace__content > .admin-panel.ant-card {
+        border: none;
+        background: transparent;
+      }
+      .admin-workspace__content > .admin-panel > .ant-card-body {
+        padding: 0 !important;
+      }
+
       .admin-panel.ant-card {
         border: none;
         border-radius: ${token.borderRadiusLG}px;
@@ -54,6 +152,91 @@ export function AdminModuleStyles() {
         display: flex;
         flex-direction: column;
         gap: ${token.marginMD}px;
+      }
+      .admin-loading-center {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        min-height: ${token.controlHeightLG * 4}px;
+      }
+      .admin-loading-center--fill {
+        min-height: calc(100vh - 320px);
+      }
+      .admin-config-form {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginLG}px;
+        width: 100%;
+        min-width: 0;
+      }
+      .admin-config-form input:-webkit-autofill,
+      .admin-config-form input:-webkit-autofill:hover,
+      .admin-config-form input:-webkit-autofill:focus {
+        -webkit-box-shadow: 0 0 0 1000px ${token.colorBgContainer} inset !important;
+        transition: background-color 50000s ease-in-out 0s !important;
+      }
+      .admin-config-section__title {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXS}px;
+        font-weight: ${token.fontWeightStrong};
+      }
+      .admin-config-section__body {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginSM}px;
+        width: 100%;
+        min-width: 0;
+      }
+      .admin-config-section__body .ant-form-item {
+        margin-bottom: 0;
+      }
+      .admin-config-toggle.ant-form-item {
+        width: 100%;
+        margin-bottom: 0;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        border-radius: ${token.borderRadius}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorFillAlter};
+      }
+      .admin-config-toggle .ant-form-item-row {
+        flex-direction: row !important;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: ${token.marginSM}px;
+        width: 100%;
+      }
+      .admin-config-toggle .ant-form-item-label {
+        padding: 0 !important;
+        flex: 1 1 auto;
+        min-width: 0;
+      }
+      .admin-config-toggle .ant-form-item-label > label {
+        height: auto !important;
+        white-space: normal;
+      }
+      .admin-config-toggle .ant-form-item-control {
+        flex: 0 0 auto;
+        width: auto !important;
+        max-width: none;
+      }
+      .admin-config-toggle .ant-form-item-control-input,
+      .admin-config-toggle .ant-form-item-control-input-content {
+        min-height: 0;
+        display: flex;
+        justify-content: flex-end;
+      }
+      .admin-form-footer.form-step-footer {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: ${token.marginSM}px;
+        flex-wrap: wrap;
+        width: 100%;
+        padding-top: ${token.paddingMD}px;
+        border-top: 1px solid ${token.colorBorderSecondary};
       }
       .admin-toggle-row {
         display: flex;
@@ -230,7 +413,26 @@ export function AdminModuleStyles() {
         font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       }
 
+      @media (max-width: 991px) {
+        .admin-workspace {
+          grid-template-columns: 1fr;
+        }
+        .admin-workspace__nav,
+        .admin-workspace__content {
+          max-height: none;
+        }
+        .admin-workspace__nav-list {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: ${token.marginXXS}px;
+        }
+      }
+
       @media (max-width: 767px) {
+        .admin-layout {
+          gap: ${token.marginMD}px;
+          min-height: 0;
+        }
         .admin-panel > .ant-card-body {
           padding: ${token.paddingMD}px !important;
         }
@@ -240,6 +442,19 @@ export function AdminModuleStyles() {
         .admin-panel-actions .sm-app-button,
         .admin-panel-actions .ant-btn {
           width: 100%;
+        }
+        .admin-form-footer.form-step-footer {
+          flex-direction: column-reverse;
+        }
+        .admin-form-footer.form-step-footer .sm-app-button,
+        .admin-form-footer.form-step-footer .ant-btn {
+          width: 100%;
+        }
+        .admin-config-toggle .ant-form-item-row {
+          flex-wrap: wrap;
+        }
+        .admin-workspace__nav-list {
+          grid-template-columns: 1fr;
         }
         .admin-route-strip {
           flex-direction: column;

@@ -1,15 +1,15 @@
-// Modified by Sekar Nagarajan (2026-08-25 16:25)
+// Modified by Sekar Nagarajan (2026-08-26 16:30)
 import { AppButton } from "@solverminds/shared-ui";
 import { useNavigate, useSearch } from "@tanstack/react-router";
-import { Card, Flex, Result, Typography } from "antd";
+import { Card, Result } from "antd";
 
 import { AppIcon, Icons } from "../../components/icons";
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
+import { MODULE_TITLES } from "../../constants/module-titles";
+import { ContactPanelHeader } from "./components/contact-panel-header";
 import { ContactUsForm } from "./components/ContactUsForm";
 import { ContactUsModuleStyles } from "./components/contact-us-module-styles";
 import { useContactUsController } from "./hooks/use-contact-us-controller";
-
-const { Title, Text } = Typography;
 
 /**
  * ContactUsRoute — thin route wrapper for the Contact Us page.
@@ -33,14 +33,14 @@ export function ContactUsRoute() {
     <FeaturePageShell>
       <ContactUsModuleStyles />
       <div className="contact-page">
-        <Flex justify="flex-end" className="contact-page__toolbar">
+        <div className="contact-page__toolbar">
           <AppButton
             icon={<AppIcon icon={Icons.arrowLeft} size={16} />}
             onClick={() => navigate({ to: "/" })}
           >
             Back to Home
           </AppButton>
-        </Flex>
+        </div>
 
         <Card className="contact-page-card">
           {controller.isSuccess ? (
@@ -62,23 +62,12 @@ export function ContactUsRoute() {
               />
             </div>
           ) : (
-            <Flex vertical gap={24} className="contact-page__body">
-              <div className="contact-page__header">
-                <Flex align="center" gap={12}>
-                  <div className="contact-page__icon app-icon-inherit primary-surface">
-                    <AppIcon icon={Icons.mail} size={16} />
-                  </div>
-                  <div>
-                    <Title level={3} className="contact-page__title">
-                      Contact Us
-                    </Title>
-                    <Text type="secondary" className="contact-page__subtitle">
-                      Have a question or need help? Send us a message and we
-                      will get back to you promptly.
-                    </Text>
-                  </div>
-                </Flex>
-              </div>
+            <div className="contact-page__body">
+              <ContactPanelHeader
+                icon={Icons.mail}
+                title={MODULE_TITLES.contactUs}
+                description="Have a question or need help? Send us a message and we will get back to you promptly."
+              />
 
               <form
                 onSubmit={controller.handleSubmit}
@@ -88,7 +77,7 @@ export function ContactUsRoute() {
                   <ContactUsForm controller={controller} />
                 </div>
 
-                <Flex className="form-step-footer" justify="flex-end" gap={12}>
+                <div className="form-step-footer">
                   <AppButton
                     size="large"
                     icon={<AppIcon icon={Icons.refreshCw} size={16} />}
@@ -106,9 +95,9 @@ export function ContactUsRoute() {
                   >
                     Send Message
                   </AppButton>
-                </Flex>
+                </div>
               </form>
-            </Flex>
+            </div>
           )}
         </Card>
       </div>

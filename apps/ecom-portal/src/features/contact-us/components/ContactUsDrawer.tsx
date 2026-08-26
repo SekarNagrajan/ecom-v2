@@ -1,11 +1,13 @@
-// Modified by Sekar Nagarajan (2026-08-24 16:05)
+// Modified by Sekar Nagarajan (2026-08-26 16:30)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
-import { Result, Space, Typography, theme } from "antd";
-import { AppIcon, Icons } from "../../../components/icons";
-import { useContactUsController } from "../hooks/use-contact-us-controller";
-import { ContactUsForm } from "./ContactUsForm";
+import { Result } from "antd";
 
-const { Title, Text } = Typography;
+import { AppIcon, Icons } from "../../../components/icons";
+import { MODULE_TITLES } from "../../../constants/module-titles";
+import { useContactUsController } from "../hooks/use-contact-us-controller";
+import { ContactPanelHeader } from "./contact-panel-header";
+import { ContactUsForm } from "./ContactUsForm";
+import { ContactUsModuleStyles } from "./contact-us-module-styles";
 
 export interface ContactUsDrawerProps {
   open: boolean;
@@ -18,107 +20,79 @@ export function ContactUsDrawer({
   onClose,
   defaultSubject = "",
 }: ContactUsDrawerProps) {
-  const { token } = theme.useToken();
   const controller = useContactUsController({ defaultSubject });
 
-  return (
-    <AppDrawer
-      open={open}
-      onClose={onClose}
-      width="50%"
-      mask={{ blur: false }}
-      title="Contact Us & Support Inquiry"
-      styles={{
-        body: {
-          overflowY: "auto",
-          maxHeight: "calc(100vh - 105px)",
-          padding: "20px 24px",
-        },
-        footer: {
-          display: "flex",
-          justify: "flex-end",
-          borderTop: `1px solid ${token.colorBorderSecondary}`,
-          padding: "8px 20px",
-          background: token.colorBgContainer,
-        },
-      }}
-      footer={
-        !controller.isSuccess ? (
-          <Space style={{ width: "100%", justifyContent: "flex-end" }} size={8}>
-            <AppButton
-              danger
-              onClick={controller.handleReset}
-              disabled={controller.isSubmitting}
-            >
-              Reset Form
-            </AppButton>
-            <AppButton
-              type="primary"
-              icon={<AppIcon icon={Icons.send} size={16} />}
-              loading={controller.isSubmitting}
-              onClick={controller.handleSubmit}
-            >
-              Send Message
-            </AppButton>
-          </Space>
-        ) : null
-      }
-    >
-      {controller.isSuccess ? (
-        <div style={{ padding: "40px 20px", textAlign: "center" }}>
-          <Result
-            status="success"
-            title="Message Sent Successfully!"
-            subTitle="Thank you for contacting us. We have received your request and will process it with the concerned department immediately. You will be contacted shortly."
-            extra={[
-              <AppButton type="primary" key="close" onClick={onClose}>
-                Close
-              </AppButton>,
-            ]}
-          />
-        </div>
-      ) : (
-        <div>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 12,
-              marginBottom: 20,
-            }}
-          >
-            <div
-              className="app-icon-inherit primary-surface"
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: "50%",
-                background: token.colorPrimary,
-                color: token.colorTextLightSolid,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: 18,
-              }}
-            >
-              <AppIcon icon={Icons.mail} size={16} />
-            </div>
-            <div>
-              <Title level={4} style={{ margin: 0, fontWeight: 700 }}>
-                Send Us a Message
-              </Title>
-              <Text type="secondary" style={{ fontSize: 13 }}>
-                Have a question or need operational assistance? Submit your
-                inquiry below
-              </Text>
-            </div>
-          </div>
+  const handleClose = () => {
+    controller.handleDismiss();
+    onClose();
+  };
 
+  return (
+    <>
+      <ContactUsModuleStyles />
+      <AppDrawer
+        open={open}
+        onClose={handleClose}
+        placement="right"
+        dialogSize="md"
+        destroyOnClose
+        maskClosable={!controller.isSubmitting}
+        keyboard={!controller.isSubmitting}
+        mask={{ blur: false }}
+        classNames={{
+          header: "contact-drawer-header-bar",
+          body: "contact-drawer-body custom-scroll",
+          footer: "contact-drawer-footer-bar",
+        }}
+        styles={{ body: { padding: 0 } }}
+        title={
+          <ContactPanelHeader
+            icon={Icons.mail}
+            title={MODULE_TITLES.contactUs}
+            description="Have a question or need operational assistance? Submit your inquiry below."
+            compact
+          />
+        }
+        footer={
+          controller.isSuccess ? null : (
+            <div className="contact-drawer-footer form-step-footer">
+              <AppButton
+                onClick={handleClose}
+                disabled={controller.isSubmitting}
+              >
+                Cancel
+              </AppButton>
+              <AppButton
+                type="primary"
+                icon={<AppIcon icon={Icons.send} size={16} />}
+                loading={controller.isSubmitting}
+                onClick={controller.handleSubmit}
+              >
+                Send Message
+              </AppButton>
+            </div>
+          )
+        }
+      >
+        {controller.isSuccess ? (
+          <div className="contact-success custom-scroll">
+            <Result
+              status="success"
+              title="Message Sent Successfully!"
+              subTitle="Thank you for contacting us. We have received your request and will process it with the concerned department immediately. You will be contacted shortly."
+              extra={[
+                <AppButton type="primary" key="close" onClick={handleClose}>
+                  Close
+                </AppButton>,
+              ]}
+            />
+          </div>
+        ) : (
           <form onSubmit={controller.handleSubmit}>
             <ContactUsForm controller={controller} />
           </form>
-        </div>
-      )}
-    </AppDrawer>
+        )}
+      </AppDrawer>
+    </>
   );
 }

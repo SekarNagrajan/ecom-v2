@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 16:00)
+// Modified by Sekar Nagarajan (2026-08-26 16:25)
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AppButton,
@@ -11,7 +11,6 @@ import { useEffect } from "react";
 import { useForm, type Resolver } from "react-hook-form";
 
 import { AppIcon, Icons } from "../../../components/icons";
-import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
 import { MODULE_TITLES } from "../../../constants/module-titles";
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import {
@@ -21,6 +20,7 @@ import {
 import type { CustomerProfile } from "../types/user-modules.types";
 import { customerProfileSchema } from "../types/user-modules.types";
 import { UmLoadingCenter } from "./um-loading-center";
+import { UmPanelHeader } from "./um-panel-header";
 import { UserModulesModuleStyles } from "./user-modules-module-styles";
 
 const { Text } = Typography;
@@ -29,6 +29,9 @@ const FIELD_ITEM_PROPS = {
   layout: "vertical" as const,
   colon: false,
 };
+
+const PROFILE_DESCRIPTION =
+  "Manage primary contact information, company details, timezone, and communication preferences.";
 
 const LANGUAGE_OPTIONS = [
   { value: "en", label: "English (United States)" },
@@ -106,7 +109,7 @@ export function ProfileView({ open = true, onClose }: ProfileViewProps) {
 
   const formFields = (
     <div className="um-form-section">
-      <Row gutter={[16, 16]}>
+      <Row gutter={[16, 16]} align="top">
         <Col {...RESPONSIVE_COL.formHalf}>
           <FormInput
             control={form.control}
@@ -225,28 +228,14 @@ export function ProfileView({ open = true, onClose }: ProfileViewProps) {
     </Tag>
   );
 
-  const pageBody = (
-    <div className="um-page-layout">
-      <ModuleScreenHeader
-        icon={Icons.user}
-        title={MODULE_TITLES.profile}
-        subtitle="Manage primary contact information, company details, timezone, and communication preferences"
-        extra={verifiedTag}
-      />
-      {isLoading ? <UmLoadingCenter fill={!isDrawer} /> : formFields}
-      {!isDrawer && !isLoading ? (
-        <div className="um-page-actions">
-          <AppButton
-            type="primary"
-            icon={<AppIcon icon={Icons.save} size={16} />}
-            loading={isSaving}
-            onClick={handleSave}
-          >
-            Save Profile Updates
-          </AppButton>
-        </div>
-      ) : null}
-    </div>
+  const panelHeader = (
+    <UmPanelHeader
+      icon={Icons.user}
+      title={MODULE_TITLES.profile}
+      description={PROFILE_DESCRIPTION}
+      extra={!isDrawer ? verifiedTag : undefined}
+      compact={isDrawer}
+    />
   );
 
   if (isDrawer) {
@@ -262,11 +251,12 @@ export function ProfileView({ open = true, onClose }: ProfileViewProps) {
           maskClosable={!isSaving}
           keyboard={!isSaving}
           classNames={{
+            header: "um-drawer-header-bar",
             body: "um-drawer-body custom-scroll",
             footer: "um-drawer-footer-bar",
           }}
           styles={{ body: { padding: 0 } }}
-          title={MODULE_TITLES.profile}
+          title={panelHeader}
           footer={
             <div className="um-drawer-footer form-step-footer">
               <AppButton onClick={handleClose} disabled={isSaving}>
@@ -283,11 +273,35 @@ export function ProfileView({ open = true, onClose }: ProfileViewProps) {
             </div>
           }
         >
-          {isLoading ? <UmLoadingCenter /> : formFields}
+          {isLoading ? (
+            <UmLoadingCenter />
+          ) : (
+            <>
+              {verifiedTag}
+              {formFields}
+            </>
+          )}
         </AppDrawer>
       </>
     );
   }
 
-  return pageBody;
+  return (
+    <div className="um-page-layout">
+      {panelHeader}
+      {isLoading ? <UmLoadingCenter fill /> : formFields}
+      {!isLoading ? (
+        <div className="um-page-actions">
+          <AppButton
+            type="primary"
+            icon={<AppIcon icon={Icons.save} size={16} />}
+            loading={isSaving}
+            onClick={handleSave}
+          >
+            Save Profile Updates
+          </AppButton>
+        </div>
+      ) : null}
+    </div>
+  );
 }

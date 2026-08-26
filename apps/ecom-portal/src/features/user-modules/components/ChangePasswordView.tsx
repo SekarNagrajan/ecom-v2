@@ -1,15 +1,15 @@
-// Modified by Sekar Nagarajan (2026-08-26 16:00)
+// Modified by Sekar Nagarajan (2026-08-26 16:25)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton, AppDrawer, FormInput } from "@solverminds/shared-ui";
 import { List, Progress, Space, Typography, theme } from "antd";
-import { useWatch, useForm, type Resolver } from "react-hook-form";
+import { useForm, useWatch, type Resolver } from "react-hook-form";
 
 import { AppIcon, Icons } from "../../../components/icons";
-import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
 import { MODULE_TITLES } from "../../../constants/module-titles";
 import { useChangePasswordMutation } from "../api/user-modules.queries";
 import type { ChangePasswordPayload } from "../types/user-modules.types";
 import { changePasswordSchema } from "../types/user-modules.types";
+import { UmPanelHeader } from "./um-panel-header";
 import { UserModulesModuleStyles } from "./user-modules-module-styles";
 
 const { Text } = Typography;
@@ -18,6 +18,9 @@ const FIELD_ITEM_PROPS = {
   layout: "vertical" as const,
   colon: false,
 };
+
+const PASSWORD_DESCRIPTION =
+  "Update your portal authentication credentials to maintain account security.";
 
 const DEFAULTS: ChangePasswordPayload = {
   oldPassword: "",
@@ -55,7 +58,8 @@ export function ChangePasswordView({
     mode: "onChange",
   });
 
-  const newPassword = useWatch({ control: form.control, name: "newPassword" }) ?? "";
+  const newPassword =
+    useWatch({ control: form.control, name: "newPassword" }) ?? "";
 
   const checks = [
     { label: "At least 8 characters long", valid: newPassword.length >= 8 },
@@ -77,7 +81,11 @@ export function ChangePasswordView({
   const passedCount = checks.filter((c) => c.valid).length;
   const strengthPercent = Math.round((passedCount / checks.length) * 100);
   const strengthLevel =
-    strengthPercent <= 40 ? "weak" : strengthPercent <= 80 ? "medium" : "strong";
+    strengthPercent <= 40
+      ? "weak"
+      : strengthPercent <= 80
+        ? "medium"
+        : "strong";
   const strengthLabel =
     strengthLevel === "weak"
       ? "WEAK"
@@ -148,7 +156,7 @@ export function ChangePasswordView({
             dataSource={checks}
             renderItem={(item) => (
               <List.Item>
-                <Space size={6}>
+                <Space size={6} align="start">
                   {item.valid ? (
                     <AppIcon icon={Icons.checkCircle} size={16} tone="approve" />
                   ) : (
@@ -180,6 +188,15 @@ export function ChangePasswordView({
     </div>
   );
 
+  const panelHeader = (
+    <UmPanelHeader
+      icon={Icons.key}
+      title={MODULE_TITLES.changePassword}
+      description={PASSWORD_DESCRIPTION}
+      compact={isDrawer}
+    />
+  );
+
   if (isDrawer) {
     return (
       <>
@@ -193,11 +210,12 @@ export function ChangePasswordView({
           maskClosable={!isPending}
           keyboard={!isPending}
           classNames={{
+            header: "um-drawer-header-bar",
             body: "um-drawer-body custom-scroll",
             footer: "um-drawer-footer-bar",
           }}
           styles={{ body: { padding: 0 } }}
-          title={MODULE_TITLES.changePassword}
+          title={panelHeader}
           footer={
             <div className="um-drawer-footer form-step-footer">
               <AppButton onClick={handleClose} disabled={isPending}>
@@ -222,11 +240,7 @@ export function ChangePasswordView({
 
   return (
     <div className="um-page-layout">
-      <ModuleScreenHeader
-        icon={Icons.key}
-        title={MODULE_TITLES.changePassword}
-        subtitle="Update your portal authentication credentials to maintain account security"
-      />
+      {panelHeader}
       {formFields}
       <div className="um-page-actions">
         <AppButton

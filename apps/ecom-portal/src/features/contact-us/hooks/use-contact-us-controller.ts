@@ -1,9 +1,9 @@
-// Modified by Sekar Nagarajan (2026-08-25 16:25)
+// Modified by Sekar Nagarajan (2026-08-26 16:30)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuthStore } from "@solverminds/auth";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { useMutation } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 
 import { submitContactUs } from "../api/contact-us.api";
 import {
@@ -45,9 +45,9 @@ export function useContactUsController(
     },
   });
 
-  const watchedCountry = form.watch("country");
+  const watchedCountry = useWatch({ control: form.control, name: "country" });
   const countriesQuery = useContactUsCountries();
-  const statesQuery = useContactUsStates(watchedCountry);
+  const statesQuery = useContactUsStates(watchedCountry ?? "");
 
   const mutation = useMutation({
     mutationFn: submitContactUs,
@@ -78,10 +78,16 @@ export function useContactUsController(
     }
   };
 
+  const handleDismiss = () => {
+    mutation.reset();
+    handleReset();
+  };
+
   return {
     form,
     handleSubmit,
     handleReset,
+    handleDismiss,
     isAuthenticated,
     user,
     isSubmitting: mutation.isPending,

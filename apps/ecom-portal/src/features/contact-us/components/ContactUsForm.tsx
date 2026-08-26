@@ -1,38 +1,43 @@
-// Modified by Sekar Nagarajan (2026-08-25 16:25)
-import { Col, Descriptions, Flex, Input, Row, Select, Typography } from "antd";
-import { Controller } from "react-hook-form";
+// Modified by Sekar Nagarajan (2026-08-26 16:30)
+import {
+  FormInput,
+  FormSelect,
+  FormTextarea,
+} from "@solverminds/shared-ui";
+import { Col, Descriptions, Row, Typography } from "antd";
+import { useEffect, useRef } from "react";
+import { useWatch } from "react-hook-form";
 
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import type { useContactUsController } from "../hooks/use-contact-us-controller";
 
 const { Text } = Typography;
-const { TextArea } = Input;
+
+const FIELD_ITEM_PROPS = {
+  layout: "vertical" as const,
+  colon: false,
+};
 
 interface ContactUsFormProps {
   controller: ReturnType<typeof useContactUsController>;
 }
 
-function FieldLabel({
-  children,
-  required,
-}: {
-  children: React.ReactNode;
-  required?: boolean;
-}) {
+function reqLabel(label: string) {
   return (
     <span className="form-field-label">
-      {children}
-      {required ? <Text type="danger"> *</Text> : null}
+      {label} <Text type="danger">*</Text>
     </span>
   );
 }
 
+function optLabel(label: string) {
+  return <span className="form-field-label">{label}</span>;
+}
+
 /**
- * ContactUsForm — renders the form body.
- *
- * Two modes (parity with legacy ContactUs.jsp):
- * 1. **Authenticated**: Profile fields shown as read-only labels, only Subject + Message editable.
- * 2. **Guest**: All fields editable with full validation.
+ * ContactUsForm — form body.
+ * Authenticated: profile read-only + Subject/Message.
+ * Guest: full editable fields (legacy ContactUs.jsp parity).
  */
 export function ContactUsForm({ controller }: ContactUsFormProps) {
   const {
@@ -44,13 +49,21 @@ export function ContactUsForm({ controller }: ContactUsFormProps) {
     states,
     statesLoading,
   } = controller;
-  const {
-    control,
-    formState: { errors },
-  } = form;
+
+  const selectedCountry =
+    useWatch({ control: form.control, name: "country" }) ?? "";
+  const skipCountryClear = useRef(true);
+
+  useEffect(() => {
+    if (skipCountryClear.current) {
+      skipCountryClear.current = false;
+      return;
+    }
+    form.setValue("state", "");
+  }, [selectedCountry, form]);
 
   return (
-    <Flex vertical gap={20} className="contact-form-body">
+    <div className="contact-form-body">
       {isAuthenticated && user ? (
         <Descriptions
           bordered
@@ -72,271 +85,135 @@ export function ContactUsForm({ controller }: ContactUsFormProps) {
           </Descriptions.Item>
         </Descriptions>
       ) : (
-        <Row gutter={[16, 20]}>
+        <Row gutter={[16, 16]} align="top">
           <Col {...RESPONSIVE_COL.formHalf}>
-            <Flex vertical gap={8}>
-              <FieldLabel required>Name</FieldLabel>
-              <Controller
-                control={control}
-                name="name"
-                render={({ field }) => (
-                  <Input
-                    {...field}
-                    id="contact-name"
-                    size="large"
-                    placeholder="Enter your name"
-                    maxLength={100}
-                    status={errors.name ? "error" : undefined}
-                  />
-                )}
-              />
-              {errors.name && (
-                <Text type="danger" className="form-field-error">
-                  {errors.name.message}
-                </Text>
-              )}
-            </Flex>
+            <FormInput
+              control={form.control}
+              name="name"
+              label={reqLabel("Name")}
+              size="large"
+              placeholder="Enter your name"
+              maxLength={100}
+              formItemProps={FIELD_ITEM_PROPS}
+            />
           </Col>
-
           <Col {...RESPONSIVE_COL.formHalf}>
-            <Flex vertical gap={8}>
-              <FieldLabel required>Company Name</FieldLabel>
-              <Controller
-                control={control}
-                name="companyName"
-                render={({ field }) => (
-                  <Input
-                    {...field}
-                    id="contact-company"
-                    size="large"
-                    placeholder="Enter company name"
-                    maxLength={50}
-                    status={errors.companyName ? "error" : undefined}
-                  />
-                )}
-              />
-              {errors.companyName && (
-                <Text type="danger" className="form-field-error">
-                  {errors.companyName.message}
-                </Text>
-              )}
-            </Flex>
+            <FormInput
+              control={form.control}
+              name="companyName"
+              label={reqLabel("Company Name")}
+              size="large"
+              placeholder="Enter company name"
+              maxLength={50}
+              formItemProps={FIELD_ITEM_PROPS}
+            />
           </Col>
-
           <Col {...RESPONSIVE_COL.formHalf}>
-            <Flex vertical gap={8}>
-              <FieldLabel required>Country</FieldLabel>
-              <Controller
-                control={control}
-                name="country"
-                render={({ field }) => (
-                  <Select
-                    {...field}
-                    value={field.value || undefined}
-                    id="contact-country"
-                    placeholder="Select Country"
-                    loading={countriesLoading}
-                    showSearch
-                    size="large"
-                    optionFilterProp="label"
-                    options={countries.map((c) => ({
-                      value: c.code,
-                      label: c.name,
-                    }))}
-                    className="contact-field-full"
-                    status={errors.country ? "error" : undefined}
-                    onChange={(val) => {
-                      field.onChange(val);
-                      form.setValue("state", "");
-                    }}
-                  />
-                )}
-              />
-              {errors.country && (
-                <Text type="danger" className="form-field-error">
-                  {errors.country.message}
-                </Text>
-              )}
-            </Flex>
+            <FormSelect
+              control={form.control}
+              name="country"
+              label={reqLabel("Country")}
+              size="large"
+              placeholder="Select Country"
+              loading={countriesLoading}
+              showSearch
+              optionFilterProp="label"
+              options={countries.map((c) => ({
+                value: c.code,
+                label: c.name,
+              }))}
+              className="contact-field-full"
+              formItemProps={FIELD_ITEM_PROPS}
+            />
           </Col>
-
           <Col {...RESPONSIVE_COL.formHalf}>
-            <Flex vertical gap={8}>
-              <FieldLabel>State</FieldLabel>
-              <Controller
-                control={control}
-                name="state"
-                render={({ field }) => (
-                  <Select
-                    {...field}
-                    value={field.value || undefined}
-                    id="contact-state"
-                    placeholder="Select State"
-                    loading={statesLoading}
-                    showSearch
-                    size="large"
-                    optionFilterProp="label"
-                    options={states.map((s) => ({
-                      value: s.code,
-                      label: s.name,
-                    }))}
-                    className="contact-field-full"
-                    allowClear
-                    disabled={!form.watch("country")}
-                  />
-                )}
-              />
-            </Flex>
+            <FormSelect
+              control={form.control}
+              name="state"
+              label={optLabel("State")}
+              size="large"
+              placeholder="Select State"
+              loading={statesLoading}
+              showSearch
+              optionFilterProp="label"
+              options={states.map((s) => ({
+                value: s.code,
+                label: s.name,
+              }))}
+              className="contact-field-full"
+              allowClear
+              disabled={!selectedCountry}
+              formItemProps={FIELD_ITEM_PROPS}
+            />
           </Col>
-
           <Col {...RESPONSIVE_COL.full}>
-            <Flex vertical gap={8}>
-              <FieldLabel required>City</FieldLabel>
-              <Controller
-                control={control}
-                name="city"
-                render={({ field }) => (
-                  <Input
-                    {...field}
-                    id="contact-city"
-                    size="large"
-                    placeholder="Enter city"
-                    maxLength={150}
-                    status={errors.city ? "error" : undefined}
-                  />
-                )}
-              />
-              {errors.city && (
-                <Text type="danger" className="form-field-error">
-                  {errors.city.message}
-                </Text>
-              )}
-            </Flex>
+            <FormInput
+              control={form.control}
+              name="city"
+              label={reqLabel("City")}
+              size="large"
+              placeholder="Enter city"
+              maxLength={150}
+              formItemProps={FIELD_ITEM_PROPS}
+            />
           </Col>
-
           <Col {...RESPONSIVE_COL.formHalf}>
-            <Flex vertical gap={8}>
-              <FieldLabel>Phone</FieldLabel>
-              <Controller
-                control={control}
-                name="phone"
-                render={({ field }) => (
-                  <Input
-                    {...field}
-                    id="contact-phone"
-                    size="large"
-                    placeholder="Enter phone number"
-                    maxLength={15}
-                    status={errors.phone ? "error" : undefined}
-                  />
-                )}
-              />
-              {errors.phone && (
-                <Text type="danger" className="form-field-error">
-                  {errors.phone.message}
-                </Text>
-              )}
-            </Flex>
+            <FormInput
+              control={form.control}
+              name="phone"
+              label={optLabel("Phone")}
+              size="large"
+              placeholder="Enter phone number"
+              maxLength={15}
+              formItemProps={FIELD_ITEM_PROPS}
+            />
           </Col>
-
           <Col {...RESPONSIVE_COL.formHalf}>
-            <Flex vertical gap={8}>
-              <FieldLabel>Mobile</FieldLabel>
-              <Controller
-                control={control}
-                name="mobile"
-                render={({ field }) => (
-                  <Input
-                    {...field}
-                    id="contact-mobile"
-                    size="large"
-                    placeholder="Enter mobile number"
-                    maxLength={11}
-                    status={errors.mobile ? "error" : undefined}
-                  />
-                )}
-              />
-              {errors.mobile && (
-                <Text type="danger" className="form-field-error">
-                  {errors.mobile.message}
-                </Text>
-              )}
-            </Flex>
+            <FormInput
+              control={form.control}
+              name="mobile"
+              label={optLabel("Mobile")}
+              size="large"
+              placeholder="Enter mobile number"
+              maxLength={11}
+              formItemProps={FIELD_ITEM_PROPS}
+            />
           </Col>
-
           <Col {...RESPONSIVE_COL.full}>
-            <Flex vertical gap={8}>
-              <FieldLabel required>Email</FieldLabel>
-              <Controller
-                control={control}
-                name="email"
-                render={({ field }) => (
-                  <Input
-                    {...field}
-                    id="contact-email"
-                    size="large"
-                    placeholder="Enter email address"
-                    maxLength={300}
-                    status={errors.email ? "error" : undefined}
-                  />
-                )}
-              />
-              {errors.email && (
-                <Text type="danger" className="form-field-error">
-                  {errors.email.message}
-                </Text>
-              )}
-            </Flex>
+            <FormInput
+              control={form.control}
+              name="email"
+              type="email"
+              label={reqLabel("Email")}
+              size="large"
+              placeholder="Enter email address"
+              maxLength={300}
+              formItemProps={FIELD_ITEM_PROPS}
+            />
           </Col>
         </Row>
       )}
 
-      <Flex vertical gap={8}>
-        <FieldLabel required>Subject</FieldLabel>
-        <Controller
-          control={control}
-          name="subject"
-          render={({ field }) => (
-            <Input
-              {...field}
-              id="contact-subject"
-              size="large"
-              placeholder="Enter subject"
-              maxLength={100}
-              status={errors.subject ? "error" : undefined}
-            />
-          )}
-        />
-        {errors.subject && (
-          <Text type="danger" className="form-field-error">
-            {errors.subject.message}
-          </Text>
-        )}
-      </Flex>
+      <FormInput
+        control={form.control}
+        name="subject"
+        label={reqLabel("Subject")}
+        size="large"
+        placeholder="Enter subject"
+        maxLength={100}
+        formItemProps={FIELD_ITEM_PROPS}
+      />
 
-      <Flex vertical gap={8}>
-        <FieldLabel required>Message</FieldLabel>
-        <Controller
-          control={control}
-          name="message"
-          render={({ field }) => (
-            <TextArea
-              {...field}
-              id="contact-message"
-              placeholder="Type your message here..."
-              maxLength={5000}
-              rows={5}
-              showCount
-              status={errors.message ? "error" : undefined}
-            />
-          )}
-        />
-        {errors.message && (
-          <Text type="danger" className="form-field-error">
-            {errors.message.message}
-          </Text>
-        )}
-      </Flex>
-    </Flex>
+      <FormTextarea
+        control={form.control}
+        name="message"
+        label={reqLabel("Message")}
+        placeholder="Type your message here..."
+        maxLength={5000}
+        rows={5}
+        showCount
+        formItemProps={FIELD_ITEM_PROPS}
+      />
+    </div>
   );
 }

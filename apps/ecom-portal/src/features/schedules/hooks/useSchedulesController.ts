@@ -1,14 +1,15 @@
-// Modified by Antigravity (2026-08-22 00:06)
+// Modified by Sekar Nagarajan (2026-08-26 16:10)
 // Schedule Feature Controller Hook with URL query param auto-fetch on mount
 
+import { useToast } from '@solverminds/shared-ui/hooks';
 import { useNavigate } from '@tanstack/react-router';
-import { message } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import { schedulesApi } from '../api/schedules.api';
 import type { ScheduleItem, ScheduleSearchParams, VesselParticulars } from '../types/schedules.types';
 
 export function useSchedulesController() {
   const navigate = useNavigate();
+  const toast = useToast();
 
   const [viewMode, setViewMode] = useState<'LIST' | 'CALENDAR'>('LIST');
   const [schedules, setSchedules] = useState<ScheduleItem[]>([]);
@@ -29,11 +30,11 @@ export function useSchedulesController() {
       const data = await schedulesApi.searchSchedules(params);
       setSchedules(data);
     } catch {
-      message.error('Failed to load vessel schedules');
+      toast.error('Failed to load vessel schedules');
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [toast]);
 
   useEffect(() => {
     // Parse URL query params passed from Landing page
@@ -87,9 +88,8 @@ export function useSchedulesController() {
     setCarbonSchedule(null);
   };
 
-  const handleBookNow = (schedule: ScheduleItem) => {
-    message.success(`Proceeding to Booking for vessel ${schedule.vesselName} (${schedule.voyage})`);
-    navigate({ to: '/booking' as any });
+  const handleBookNow = (_schedule: ScheduleItem) => {
+    navigate({ to: '/app/booking/new' });
   };
 
   return {

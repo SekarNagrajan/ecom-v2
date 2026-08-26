@@ -1,160 +1,226 @@
-// Modified by Sekar Nagarajan (2026-08-24 19:14)
-import { AppButton } from '@solverminds/shared-ui';
-import { Card, Col, Divider, Input, InputNumber, Row, Space, Switch } from 'antd';
-import React from 'react';
+// Modified by Sekar Nagarajan (2026-08-26 16:35)
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  AppButton,
+  FormInput,
+  FormInputNumber,
+  FormSwitch,
+} from "@solverminds/shared-ui";
+import { Card, Col, Row, Typography } from "antd";
+import { useState } from "react";
+import { useForm, type Resolver } from "react-hook-form";
 
-import { AppIcon, Icons } from '../../../components/icons';
-import { RESPONSIVE_COL } from '../../../constants/responsive-grid';
-import type { GlobalConfig } from '../types/admin.types';
-import { AdminPanelShell } from './AdminPanelShell';
+import { AppIcon, Icons } from "../../../components/icons";
+import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
+import {
+  GlobalConfigSchema,
+  type GlobalConfig,
+} from "../types/admin.types";
+import { AdminLoadingCenter } from "./admin-loading-center";
+import { AdminPanelShell } from "./AdminPanelShell";
+
+const { Text } = Typography;
+
+const FIELD_ITEM_PROPS = {
+  layout: "vertical" as const,
+  colon: false,
+};
+
+const TOGGLE_ITEM_PROPS = {
+  layout: "horizontal" as const,
+  colon: false,
+  className: "admin-config-toggle",
+};
+
+const DEFAULT_GLOBAL_CONFIG: GlobalConfig = {
+  enableLoginCaptcha: true,
+  captchaSecretKey: "",
+  attemptLimit: 3,
+  accountLockDurationMinutes: 30,
+  enablePasswordValidation: true,
+  allowIncompletedRegToLogin: true,
+  v1DataEnableStatus: true,
+  dashboardDisplay: true,
+};
 
 interface GlobalConfigAdminViewProps {
   config?: GlobalConfig;
-  onSave: (config: GlobalConfig) => void;
+  onSave: (config: GlobalConfig) => void | Promise<void>;
 }
 
-export function GlobalConfigAdminView({ config, onSave }: GlobalConfigAdminViewProps) {
-  const [formState, setFormState] = React.useState<GlobalConfig>(
-    config || {
-      enableLoginCaptcha: true,
-      captchaSecretKey: '',
-      attemptLimit: 3,
-      accountLockDurationMinutes: 30,
-      enablePasswordValidation: true,
-      allowIncompletedRegToLogin: true,
-      v1DataEnableStatus: true,
-      dashboardDisplay: true,
-    }
+function optLabel(label: string) {
+  return <span className="form-field-label">{label}</span>;
+}
+
+function reqLabel(label: string) {
+  return (
+    <span className="form-field-label">
+      {label} <Text type="danger">*</Text>
+    </span>
   );
+}
 
-  React.useEffect(() => {
-    if (config) setFormState(config);
-  }, [config]);
+export function GlobalConfigAdminView({
+  config,
+  onSave,
+}: GlobalConfigAdminViewProps) {
+  const [isSaving, setIsSaving] = useState(false);
 
-  const handleChange = <K extends keyof GlobalConfig>(key: K, value: GlobalConfig[K]) => {
-    setFormState((prev) => ({ ...prev, [key]: value }));
+  const form = useForm<GlobalConfig>({
+    resolver: zodResolver(GlobalConfigSchema) as Resolver<GlobalConfig>,
+    defaultValues: DEFAULT_GLOBAL_CONFIG,
+    values: config,
+    mode: "onChange",
+  });
+
+  const handleCancel = () => {
+    form.reset(config ?? DEFAULT_GLOBAL_CONFIG);
   };
+
+  const handleUpdate = form.handleSubmit(async (values) => {
+    setIsSaving(true);
+    try {
+      await onSave(values);
+    } finally {
+      setIsSaving(false);
+    }
+  });
+
+  if (!config) {
+    return (
+      <AdminPanelShell
+        icon={Icons.settings}
+        title="Global System Configuration"
+        subtitle="Manage core security rules, captcha policies, and feature flags."
+      >
+        <AdminLoadingCenter />
+      </AdminPanelShell>
+    );
+  }
 
   return (
     <AdminPanelShell
       icon={Icons.settings}
       title="Global System Configuration"
       subtitle="Manage core security rules, captcha policies, and feature flags."
-      extra={
-        <AppButton
-          type="primary"
-          size="large"
-          icon={<AppIcon icon={Icons.save} size={16} />}
-          onClick={() => onSave(formState)}
-        >
-          Save Global Configs
-        </AppButton>
-      }
     >
-      <Row gutter={[24, 24]}>
-        <Col {...RESPONSIVE_COL.formHalf}>
-          <Card
-            className="admin-inner-card"
-            type="inner"
-            title={
-              <Space>
-                <AppIcon icon={Icons.shieldCheck} size={16} />
-                <span>Security & Authentication Controls</span>
-              </Space>
-            }
-          >
-            <Space direction="vertical" size="middle" className="admin-stack-full">
-              <div className="admin-toggle-row">
-                <span>Enable Login reCAPTCHA v2</span>
-                <Switch
-                  checked={formState.enableLoginCaptcha}
-                  onChange={(val) => handleChange('enableLoginCaptcha', val)}
+      <div className="admin-config-form">
+        <Row gutter={[16, 16]} align="top">
+          <Col {...RESPONSIVE_COL.formHalf}>
+            <Card
+              className="admin-inner-card"
+              type="inner"
+              title={
+                <span className="admin-config-section__title">
+                  <AppIcon icon={Icons.shieldCheck} size={16} />
+                  <span>Security & Authentication Controls</span>
+                </span>
+              }
+            >
+              <div className="admin-config-section__body">
+                <FormSwitch
+                  control={form.control}
+                  name="enableLoginCaptcha"
+                  label={optLabel("Enable Login reCAPTCHA v2")}
+                  formItemProps={TOGGLE_ITEM_PROPS}
                 />
-              </div>
 
-              <div>
-                <span className="form-field-label">Captcha Secret Key</span>
-                <Input
+                <FormInput
+                  control={form.control}
+                  name="captchaSecretKey"
+                  label={optLabel("Captcha Secret Key")}
                   size="large"
-                  value={formState.captchaSecretKey}
-                  onChange={(e) => handleChange('captchaSecretKey', e.target.value)}
+                  type="password"
+                  autoComplete="off"
+                  prefix={<AppIcon icon={Icons.lock} size={16} />}
+                  formItemProps={FIELD_ITEM_PROPS}
                 />
-              </div>
 
-              <Divider />
-
-              <div className="admin-toggle-row">
-                <span>Max Invalid Password Attempts Limit</span>
-                <InputNumber
+                <FormInputNumber
+                  control={form.control}
+                  name="attemptLimit"
+                  label={reqLabel("Max Invalid Password Attempts")}
                   size="large"
                   min={1}
                   max={10}
-                  value={formState.attemptLimit}
-                  onChange={(val) => handleChange('attemptLimit', val || 3)}
+                  numericMode="positive-integer"
+                  className="admin-stack-full"
+                  formItemProps={FIELD_ITEM_PROPS}
                 />
-              </div>
 
-              <div className="admin-toggle-row">
-                <span>Account Lock Duration (Minutes)</span>
-                <InputNumber
+                <FormInputNumber
+                  control={form.control}
+                  name="accountLockDurationMinutes"
+                  label={reqLabel("Account Lock Duration (Minutes)")}
                   size="large"
                   min={5}
                   max={1440}
-                  value={formState.accountLockDurationMinutes}
-                  onChange={(val) => handleChange('accountLockDurationMinutes', val || 30)}
+                  numericMode="positive-integer"
+                  className="admin-stack-full"
+                  formItemProps={FIELD_ITEM_PROPS}
+                />
+
+                <FormSwitch
+                  control={form.control}
+                  name="enablePasswordValidation"
+                  label={optLabel("Enable Password Complexity Rules")}
+                  formItemProps={TOGGLE_ITEM_PROPS}
                 />
               </div>
+            </Card>
+          </Col>
 
-              <div className="admin-toggle-row">
-                <span>Enable Password Complexity Rules</span>
-                <Switch
-                  checked={formState.enablePasswordValidation}
-                  onChange={(val) => handleChange('enablePasswordValidation', val)}
+          <Col {...RESPONSIVE_COL.formHalf}>
+            <Card
+              className="admin-inner-card"
+              type="inner"
+              title={
+                <span className="admin-config-section__title">
+                  <AppIcon icon={Icons.layoutGrid} size={16} />
+                  <span>Platform & Tenant Feature Flags</span>
+                </span>
+              }
+            >
+              <div className="admin-config-section__body">
+                <FormSwitch
+                  control={form.control}
+                  name="allowIncompletedRegToLogin"
+                  label={optLabel("Allow Incomplete Registration Login")}
+                  formItemProps={TOGGLE_ITEM_PROPS}
+                />
+
+                <FormSwitch
+                  control={form.control}
+                  name="v1DataEnableStatus"
+                  label={optLabel("V1 Data Synchronization Engine")}
+                  formItemProps={TOGGLE_ITEM_PROPS}
+                />
+
+                <FormSwitch
+                  control={form.control}
+                  name="dashboardDisplay"
+                  label={optLabel("Enable Executive Cargo Dashboard")}
+                  formItemProps={TOGGLE_ITEM_PROPS}
                 />
               </div>
-            </Space>
-          </Card>
-        </Col>
+            </Card>
+          </Col>
+        </Row>
 
-        <Col {...RESPONSIVE_COL.formHalf}>
-          <Card
-            className="admin-inner-card"
-            type="inner"
-            title={
-              <Space>
-                <AppIcon icon={Icons.layoutGrid} size={16} />
-                <span>Platform & Tenant Feature Flags</span>
-              </Space>
-            }
+        <div className="admin-form-footer form-step-footer">
+          <AppButton onClick={handleCancel} disabled={isSaving}>
+            Cancel
+          </AppButton>
+          <AppButton
+            type="primary"
+            icon={<AppIcon icon={Icons.save} size={16} />}
+            loading={isSaving}
+            onClick={handleUpdate}
           >
-            <Space direction="vertical" size="middle" className="admin-stack-full">
-              <div className="admin-toggle-row">
-                <span>Allow Incomplete Registration Login</span>
-                <Switch
-                  checked={formState.allowIncompletedRegToLogin}
-                  onChange={(val) => handleChange('allowIncompletedRegToLogin', val)}
-                />
-              </div>
-
-              <div className="admin-toggle-row">
-                <span>V1 Data Synchronization Engine</span>
-                <Switch
-                  checked={formState.v1DataEnableStatus}
-                  onChange={(val) => handleChange('v1DataEnableStatus', val)}
-                />
-              </div>
-
-              <div className="admin-toggle-row">
-                <span>Enable Executive Cargo Dashboard</span>
-                <Switch
-                  checked={formState.dashboardDisplay}
-                  onChange={(val) => handleChange('dashboardDisplay', val)}
-                />
-              </div>
-            </Space>
-          </Card>
-        </Col>
-      </Row>
+            Update
+          </AppButton>
+        </div>
+      </div>
     </AdminPanelShell>
   );
 }

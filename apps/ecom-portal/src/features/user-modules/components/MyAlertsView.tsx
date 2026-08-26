@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 16:00)
+// Modified by Sekar Nagarajan (2026-08-26 16:25)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import {
   Badge,
@@ -15,7 +15,6 @@ import {
 import { useEffect, useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
-import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
 import { MODULE_TITLES } from "../../../constants/module-titles";
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import {
@@ -25,9 +24,13 @@ import {
 } from "../api/user-modules.queries";
 import type { AlertPreference } from "../types/user-modules.types";
 import { UmLoadingCenter } from "./um-loading-center";
+import { UmPanelHeader } from "./um-panel-header";
 import { UserModulesModuleStyles } from "./user-modules-module-styles";
 
 const { Text } = Typography;
+
+const ALERTS_DESCRIPTION =
+  "Configure transactional email/SMS subscription alerts for e-Bookings, SI, BL, and vessel delays.";
 
 const EMPTY_PREFS: AlertPreference = {
   bookingUpdates: true,
@@ -76,10 +79,31 @@ export function MyAlertsView({ open = true, onClose }: MyAlertsViewProps) {
     handleClose();
   };
 
+  const saveButton = (
+    <AppButton
+      type="primary"
+      icon={<AppIcon icon={Icons.save} size={16} />}
+      loading={isSaving}
+      onClick={handleSave}
+    >
+      Save Preferences
+    </AppButton>
+  );
+
+  const panelHeader = (
+    <UmPanelHeader
+      icon={Icons.bell}
+      title={MODULE_TITLES.myAlerts}
+      description={ALERTS_DESCRIPTION}
+      extra={!isDrawer && !isLoading ? saveButton : undefined}
+      compact={isDrawer}
+    />
+  );
+
   const bodyContent = isLoading ? (
     <UmLoadingCenter fill={!isDrawer} />
   ) : (
-    <Row className="um-alerts-layout" gutter={[16, 16]}>
+    <Row className="um-alerts-layout" gutter={[16, 16]} align="top">
       <Col {...RESPONSIVE_COL.twoThirds}>
         <Card
           className="um-alerts-card"
@@ -162,7 +186,7 @@ export function MyAlertsView({ open = true, onClose }: MyAlertsViewProps) {
         >
           <Space direction="vertical" size="middle" className="um-channel-list">
             <div className="um-channel-row">
-              <Space align="center">
+              <Space align="start">
                 <AppIcon icon={Icons.mail} size={18} />
                 <div className="um-channel-row__meta">
                   <Text strong>Email Notifications</Text>
@@ -178,7 +202,7 @@ export function MyAlertsView({ open = true, onClose }: MyAlertsViewProps) {
             </div>
             <Divider className="um-channel-divider" />
             <div className="um-channel-row">
-              <Space align="center">
+              <Space align="start">
                 <AppIcon icon={Icons.smartphone} size={18} />
                 <div className="um-channel-row__meta">
                   <Text strong>SMS Mobile Alerts</Text>
@@ -194,7 +218,7 @@ export function MyAlertsView({ open = true, onClose }: MyAlertsViewProps) {
             </div>
             <Divider className="um-channel-divider" />
             <div className="um-channel-row">
-              <Space align="center">
+              <Space align="start">
                 <AppIcon icon={Icons.monitor} size={18} />
                 <div className="um-channel-row__meta">
                   <Text strong>Portal Badge Notifications</Text>
@@ -266,11 +290,12 @@ export function MyAlertsView({ open = true, onClose }: MyAlertsViewProps) {
           maskClosable={!isSaving}
           keyboard={!isSaving}
           classNames={{
+            header: "um-drawer-header-bar",
             body: "um-drawer-body custom-scroll",
             footer: "um-drawer-footer-bar",
           }}
           styles={{ body: { padding: 0 } }}
-          title={MODULE_TITLES.myAlerts}
+          title={panelHeader}
           footer={
             <div className="um-drawer-footer form-step-footer">
               <AppButton onClick={handleClose} disabled={isSaving}>
@@ -295,23 +320,7 @@ export function MyAlertsView({ open = true, onClose }: MyAlertsViewProps) {
 
   return (
     <div className="um-page-layout">
-      <ModuleScreenHeader
-        icon={Icons.bell}
-        title={MODULE_TITLES.myAlerts}
-        subtitle="Configure transactional email/SMS subscription alerts for e-Bookings, SI, BL, and vessel delays"
-        extra={
-          !isLoading ? (
-            <AppButton
-              type="primary"
-              icon={<AppIcon icon={Icons.save} size={16} />}
-              loading={isSaving}
-              onClick={handleSave}
-            >
-              Save Preferences
-            </AppButton>
-          ) : null
-        }
-      />
+      {panelHeader}
       {bodyContent}
     </div>
   );

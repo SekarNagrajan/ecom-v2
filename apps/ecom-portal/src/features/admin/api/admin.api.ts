@@ -1,8 +1,11 @@
-// Modified by Sekar Nagarajan (2026-08-27 12:42)
+// Modified by Sekar Nagarajan (2026-08-27 14:30)
 import type {
   BannerConfig,
   CustomerAdvisory,
   CutoffConfig,
+  CutoffConfigFormValues,
+  CutoffPortOption,
+  CutoffTerminalOption,
   EmailTemplate,
   FieldConfig,
   GlobalConfig,
@@ -210,18 +213,79 @@ export const adminApi = {
     return json.data;
   },
 
-  // 10. Cutoff Configuration
+  // 10. Cutoff Configuration (CutoffConfiguration.jsp parity)
   getCutoffConfigs: async (): Promise<CutoffConfig[]> => {
     const res = await fetch('/api/v1/admin/cutoff-configs');
-    return res.json();
+    if (!res.ok) throw new Error('Failed to load cutoff configs');
+    const json = (await res.json()) as { data?: CutoffConfig[] } | CutoffConfig[];
+    return Array.isArray(json) ? json : (json.data ?? []);
   },
-  updateCutoffConfigs: async (data: CutoffConfig[]): Promise<CutoffConfig[]> => {
+  createCutoffConfig: async (
+    data: CutoffConfigFormValues & {
+      portName: string;
+      terminalName: string;
+    },
+  ): Promise<CutoffConfig> => {
     const res = await fetch('/api/v1/admin/cutoff-configs', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    const json = (await res.json()) as {
+      data?: CutoffConfig;
+      error?: { message?: string };
+    };
+    if (!res.ok) {
+      throw new Error(json.error?.message ?? 'Failed to create cutoff config');
+    }
+    return json.data as CutoffConfig;
+  },
+  updateCutoffConfig: async (
+    id: string,
+    data: Omit<
+      CutoffConfigFormValues,
+      'portCode' | 'terminalCode'
+    > & {
+      portName?: string;
+      terminalName?: string;
+    },
+  ): Promise<CutoffConfig> => {
+    const res = await fetch(`/api/v1/admin/cutoff-configs/${encodeURIComponent(id)}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
-    const json = await res.json();
+    const json = (await res.json()) as {
+      data?: CutoffConfig;
+      error?: { message?: string };
+    };
+    if (!res.ok) {
+      throw new Error(json.error?.message ?? 'Failed to update cutoff config');
+    }
+    return json.data as CutoffConfig;
+  },
+  deleteCutoffConfig: async (id: string): Promise<void> => {
+    const res = await fetch(`/api/v1/admin/cutoff-configs/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+    });
+    if (!res.ok) {
+      const json = (await res.json()) as { error?: { message?: string } };
+      throw new Error(json.error?.message ?? 'Failed to delete cutoff config');
+    }
+  },
+  getCutoffPorts: async (): Promise<CutoffPortOption[]> => {
+    const res = await fetch('/api/v1/admin/cutoff-ports');
+    if (!res.ok) throw new Error('Failed to load ports');
+    const json = (await res.json()) as { data: CutoffPortOption[] };
+    return json.data;
+  },
+  getCutoffTerminals: async (
+    portCode: string,
+  ): Promise<CutoffTerminalOption[]> => {
+    const params = new URLSearchParams({ portCode });
+    const res = await fetch(`/api/v1/admin/cutoff-terminals?${params}`);
+    if (!res.ok) throw new Error('Failed to load terminals');
+    const json = (await res.json()) as { data: CutoffTerminalOption[] };
     return json.data;
   },
 };

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-27 12:42)
+// Modified by Sekar Nagarajan (2026-08-27 14:30)
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { adminApi } from '../api/admin.api';
@@ -6,6 +6,7 @@ import type {
   BannerConfig,
   CustomerAdvisory,
   CutoffConfig,
+  CutoffConfigFormValues,
   EmailTemplate,
   FieldConfig,
   GlobalConfig,
@@ -27,6 +28,9 @@ export const ADMIN_KEYS = {
   banners: ['admin', 'banners'] as const,
   customerAdvisories: ['admin', 'customerAdvisories'] as const,
   cutoffConfigs: ['admin', 'cutoffConfigs'] as const,
+  cutoffPorts: ['admin', 'cutoffPorts'] as const,
+  cutoffTerminals: (portCode: string) =>
+    ['admin', 'cutoffTerminals', portCode] as const,
 };
 
 export function useAdminController() {
@@ -125,8 +129,31 @@ export function useAdminController() {
       }),
   });
 
-  const updateCutoffConfigsMutation = useMutation({
-    mutationFn: (data: CutoffConfig[]) => adminApi.updateCutoffConfigs(data),
+  const createCutoffMutation = useMutation({
+    mutationFn: (
+      data: CutoffConfigFormValues & {
+        portName: string;
+        terminalName: string;
+      },
+    ) => adminApi.createCutoffConfig(data),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ADMIN_KEYS.cutoffConfigs }),
+  });
+
+  const updateCutoffMutation = useMutation({
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: Omit<CutoffConfigFormValues, 'portCode' | 'terminalCode'>;
+    }) => adminApi.updateCutoffConfig(id, data),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ADMIN_KEYS.cutoffConfigs }),
+  });
+
+  const deleteCutoffMutation = useMutation({
+    mutationFn: (id: string) => adminApi.deleteCutoffConfig(id),
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: ADMIN_KEYS.cutoffConfigs }),
   });
@@ -141,6 +168,7 @@ export function useAdminController() {
     banners: bannersQuery.data ?? [],
     customerAdvisories: customerAdvisoriesQuery.data ?? [],
     cutoffConfigs: cutoffConfigsQuery.data ?? [],
+    isLoadingCutoffConfigs: cutoffConfigsQuery.isLoading,
 
     updateMenuConfigs: updateMenuMutation.mutateAsync,
     createMenuConfig: createMenuMutation.mutateAsync,
@@ -151,7 +179,9 @@ export function useAdminController() {
     updateServiceRestrictions: updateServiceRestrictionsMutation.mutateAsync,
     createBanner: createBannerMutation.mutateAsync,
     createAdvisory: createAdvisoryMutation.mutateAsync,
-    updateCutoffConfigs: updateCutoffConfigsMutation.mutateAsync,
+    createCutoffConfig: createCutoffMutation.mutateAsync,
+    updateCutoffConfig: updateCutoffMutation.mutateAsync,
+    deleteCutoffConfig: deleteCutoffMutation.mutateAsync,
   };
 }
 

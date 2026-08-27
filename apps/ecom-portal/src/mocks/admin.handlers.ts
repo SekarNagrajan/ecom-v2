@@ -1,9 +1,11 @@
-// Modified by Sekar Nagarajan (2026-08-27 12:45)
+// Modified by Sekar Nagarajan (2026-08-27 14:30)
 import { http, HttpResponse } from 'msw';
 import type {
   BannerConfig,
   CustomerAdvisory,
   CutoffConfig,
+  CutoffPortOption,
+  CutoffTerminalOption,
   EmailTemplate,
   FieldConfig,
   GlobalConfig,
@@ -131,9 +133,58 @@ let MOCK_CUSTOMER_ADVISORIES: CustomerAdvisory[] = [
 ];
 
 let MOCK_CUTOFF_CONFIGS: CutoffConfig[] = [
-  { id: 'CO_01', portCode: 'SGSIN', vesselName: 'APEX EXPRESS', voyageNo: 'V.2026E', vgmCutoffHours: 12, siCutoffHours: 24, bookingCutoffHours: 48 },
-  { id: 'CO_02', portCode: 'CNSHA', vesselName: 'ATLANTIC STAR', voyageNo: 'V.108W', vgmCutoffHours: 18, siCutoffHours: 36, bookingCutoffHours: 72 },
+  {
+    id: 'SGSIN|PSA',
+    portCode: 'SGSIN',
+    portName: 'Singapore',
+    terminalCode: 'PSA',
+    terminalName: 'PSA Terminal',
+    cfsClosing: 48,
+    vgmClosing: 24,
+    documentClosing: 36,
+    ediDecClosing: 30,
+    fullCntrGateClosing: 24,
+    excludeWeekends: true,
+  },
+  {
+    id: 'CNSHA|All',
+    portCode: 'CNSHA',
+    portName: 'Shanghai',
+    terminalCode: 'All',
+    terminalName: 'All Terminal',
+    cfsClosing: 72,
+    vgmClosing: 36,
+    documentClosing: 48,
+    ediDecClosing: 42,
+    fullCntrGateClosing: 36,
+    excludeWeekends: false,
+  },
 ];
+
+const MOCK_CUTOFF_PORTS: CutoffPortOption[] = [
+  { portCode: 'All', portName: 'All Port', label: 'All - All Port' },
+  { portCode: 'SGSIN', portName: 'Singapore', label: 'SGSIN - Singapore' },
+  { portCode: 'CNSHA', portName: 'Shanghai', label: 'CNSHA - Shanghai' },
+  { portCode: 'USNYC', portName: 'New York', label: 'USNYC - New York' },
+  { portCode: 'DEHAM', portName: 'Hamburg', label: 'DEHAM - Hamburg' },
+  { portCode: 'NLRTM', portName: 'Rotterdam', label: 'NLRTM - Rotterdam' },
+  { portCode: 'INMAA', portName: 'Chennai', label: 'INMAA - Chennai' },
+];
+
+const MOCK_CUTOFF_TERMINALS: CutoffTerminalOption[] = [
+  { portCode: 'SGSIN', terminalCode: 'PSA', terminalName: 'PSA Terminal' },
+  { portCode: 'SGSIN', terminalCode: 'JUR', terminalName: 'Jurong Terminal' },
+  { portCode: 'CNSHA', terminalCode: 'YANG', terminalName: 'Yangshan' },
+  { portCode: 'CNSHA', terminalCode: 'WGQ', terminalName: 'Waigaoqiao' },
+  { portCode: 'USNYC', terminalCode: 'APM', terminalName: 'APM Elizabeth' },
+  { portCode: 'DEHAM', terminalCode: 'CTA', terminalName: 'CTA Hamburg' },
+  { portCode: 'NLRTM', terminalCode: 'ECT', terminalName: 'ECT Delta' },
+  { portCode: 'INMAA', terminalCode: 'CIT', terminalName: 'Chennai CIT' },
+];
+
+function cutoffId(portCode: string, terminalCode: string) {
+  return `${portCode}|${terminalCode}`;
+}
 
 export const adminHandlers = [
   // 1. Menu Management / Module Creation
@@ -292,13 +343,94 @@ export const adminHandlers = [
     return HttpResponse.json({ success: true, data: newAdv });
   }),
 
-  // 10. Cutoff Configuration
+  // 10. Cutoff Configuration (CutoffConfiguration.jsp parity)
   http.get('/api/v1/admin/cutoff-configs', () => {
-    return HttpResponse.json(MOCK_CUTOFF_CONFIGS);
+    return HttpResponse.json({ data: MOCK_CUTOFF_CONFIGS });
   }),
-  http.put('/api/v1/admin/cutoff-configs', async ({ request }) => {
-    const updated = (await request.json()) as CutoffConfig[];
-    MOCK_CUTOFF_CONFIGS = updated;
-    return HttpResponse.json({ success: true, data: MOCK_CUTOFF_CONFIGS });
+  http.post('/api/v1/admin/cutoff-configs', async ({ request }) => {
+    const body = (await request.json()) as Omit<CutoffConfig, 'id'> & {
+      id?: string;
+    };
+    const id = cutoffId(body.portCode, body.terminalCode);
+    if (MOCK_CUTOFF_CONFIGS.some((row) => row.id === id)) {
+      return HttpResponse.json(
+        {
+          error: {
+            code: 'DUPLICATE',
+            message: 'Duplicate port and terminal',
+          },
+        },
+        { status: 409 },
+      );
+    }
+    const created: CutoffConfig = {
+      id,
+      portCode: body.portCode,
+      portName: body.portName,
+      terminalCode: body.terminalCode,
+      terminalName: body.terminalName,
+      cfsClosing: body.cfsClosing,
+      vgmClosing: body.vgmClosing,
+      documentClosing: body.documentClosing,
+      ediDecClosing: body.ediDecClosing,
+      fullCntrGateClosing: body.fullCntrGateClosing,
+      excludeWeekends: body.excludeWeekends,
+    };
+    MOCK_CUTOFF_CONFIGS = [...MOCK_CUTOFF_CONFIGS, created];
+    return HttpResponse.json({ success: true, data: created });
+  }),
+  http.put('/api/v1/admin/cutoff-configs/:id', async ({ params, request }) => {
+    const id = decodeURIComponent(String(params.id));
+    const body = (await request.json()) as Partial<CutoffConfig>;
+    const index = MOCK_CUTOFF_CONFIGS.findIndex((row) => row.id === id);
+    if (index < 0) {
+      return HttpResponse.json(
+        { error: { code: 'NOT_FOUND', message: 'Cutoff config not found' } },
+        { status: 404 },
+      );
+    }
+    const current = MOCK_CUTOFF_CONFIGS[index];
+    const updated: CutoffConfig = {
+      ...current,
+      cfsClosing: body.cfsClosing ?? current.cfsClosing,
+      vgmClosing: body.vgmClosing ?? current.vgmClosing,
+      documentClosing: body.documentClosing ?? current.documentClosing,
+      ediDecClosing: body.ediDecClosing ?? current.ediDecClosing,
+      fullCntrGateClosing:
+        body.fullCntrGateClosing ?? current.fullCntrGateClosing,
+      excludeWeekends: body.excludeWeekends ?? current.excludeWeekends,
+    };
+    MOCK_CUTOFF_CONFIGS = MOCK_CUTOFF_CONFIGS.map((row, i) =>
+      i === index ? updated : row,
+    );
+    return HttpResponse.json({ success: true, data: updated });
+  }),
+  http.delete('/api/v1/admin/cutoff-configs/:id', ({ params }) => {
+    const id = decodeURIComponent(String(params.id));
+    const before = MOCK_CUTOFF_CONFIGS.length;
+    MOCK_CUTOFF_CONFIGS = MOCK_CUTOFF_CONFIGS.filter((row) => row.id !== id);
+    if (MOCK_CUTOFF_CONFIGS.length === before) {
+      return HttpResponse.json(
+        { error: { code: 'NOT_FOUND', message: 'Cutoff config not found' } },
+        { status: 404 },
+      );
+    }
+    return HttpResponse.json({ success: true });
+  }),
+  http.get('/api/v1/admin/cutoff-ports', () => {
+    return HttpResponse.json({ data: MOCK_CUTOFF_PORTS });
+  }),
+  http.get('/api/v1/admin/cutoff-terminals', ({ request }) => {
+    const url = new URL(request.url);
+    const portCode = url.searchParams.get('portCode') ?? '';
+    const terminals: CutoffTerminalOption[] = [
+      {
+        portCode,
+        terminalCode: 'All',
+        terminalName: 'All Terminal',
+      },
+      ...MOCK_CUTOFF_TERMINALS.filter((t) => t.portCode === portCode),
+    ];
+    return HttpResponse.json({ data: terminals });
   }),
 ];

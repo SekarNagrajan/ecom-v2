@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-27 12:42)
+// Modified by Sekar Nagarajan (2026-08-27 14:30)
 import { z } from 'zod';
 
 // 1. Menu Management / Module Creation Types (RegisterMenu.jsp parity)
@@ -148,14 +148,56 @@ export const CustomerAdvisorySchema = z.object({
 });
 export type CustomerAdvisory = z.infer<typeof CustomerAdvisorySchema>;
 
-// 10. Cut-off Time Config Types
+// 10. Cut-off Configuration Types (CutoffConfiguration.jsp parity)
 export const CutoffConfigSchema = z.object({
   id: z.string(),
-  portCode: z.string(),
-  vesselName: z.string(),
-  voyageNo: z.string(),
-  vgmCutoffHours: z.number(),
-  siCutoffHours: z.number(),
-  bookingCutoffHours: z.number(),
+  portCode: z.string().min(1),
+  portName: z.string(),
+  terminalCode: z.string().min(1),
+  terminalName: z.string(),
+  cfsClosing: z.number().int().min(1).max(999),
+  vgmClosing: z.number().int().min(1).max(999),
+  documentClosing: z.number().int().min(1).max(999),
+  ediDecClosing: z.number().int().min(1).max(999),
+  fullCntrGateClosing: z.number().int().min(1).max(999),
+  excludeWeekends: z.boolean(),
 });
 export type CutoffConfig = z.infer<typeof CutoffConfigSchema>;
+
+export const CutoffConfigFormSchema = z.object({
+  portCode: z.string().min(1, 'Port is required'),
+  terminalCode: z.string().min(1, 'Terminal is required'),
+  cfsClosing: z.number({ error: 'CFS closing is required' }).int().min(1).max(999),
+  vgmClosing: z.number({ error: 'VGM closing is required' }).int().min(1).max(999),
+  documentClosing: z
+    .number({ error: 'Document closing is required' })
+    .int()
+    .min(1)
+    .max(999),
+  ediDecClosing: z
+    .number({ error: 'EDI declaration closing is required' })
+    .int()
+    .min(1)
+    .max(999),
+  fullCntrGateClosing: z
+    .number({ error: 'Full container gate-in closing is required' })
+    .int()
+    .min(1)
+    .max(999),
+  excludeWeekends: z.boolean(),
+});
+export type CutoffConfigFormValues = z.infer<typeof CutoffConfigFormSchema>;
+
+export const CutoffPortOptionSchema = z.object({
+  portCode: z.string(),
+  portName: z.string(),
+  label: z.string(),
+});
+export type CutoffPortOption = z.infer<typeof CutoffPortOptionSchema>;
+
+export const CutoffTerminalOptionSchema = z.object({
+  terminalCode: z.string(),
+  terminalName: z.string(),
+  portCode: z.string(),
+});
+export type CutoffTerminalOption = z.infer<typeof CutoffTerminalOptionSchema>;

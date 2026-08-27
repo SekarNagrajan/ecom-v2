@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-27 13:05)
+// Modified by Sekar Nagarajan (2026-08-27 14:30)
 import { useTenantStore } from "@solverminds/auth";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { useSearch } from "@tanstack/react-router";
@@ -7,7 +7,6 @@ import type { ReactNode } from "react";
 import { FeaturePageShell } from "../../../components/shared/feature-page-shell";
 import { useAdminController } from "../hooks/use-admin-controller";
 import type {
-  CutoffConfig,
   EmailTemplate,
   FieldConfig,
   GlobalConfig,
@@ -75,11 +74,6 @@ export function AdminLayout() {
     toast.success("Service Restrictions Updated");
   };
 
-  const handleSaveCutoffConfig = async (items: CutoffConfig[]) => {
-    await controller.updateCutoffConfigs(items);
-    toast.success("Cut-off Threshold Matrix Saved");
-  };
-
   const sectionContent: Record<AdminSectionKey, ReactNode> = {
     "global-config": (
       <GlobalConfigAdminView
@@ -131,7 +125,10 @@ export function AdminLayout() {
     "cutoff-config": (
       <CutoffConfigView
         cutoffConfigs={controller.cutoffConfigs}
-        onSave={handleSaveCutoffConfig}
+        isLoading={controller.isLoadingCutoffConfigs}
+        onCreate={controller.createCutoffConfig}
+        onUpdate={controller.updateCutoffConfig}
+        onDelete={controller.deleteCutoffConfig}
       />
     ),
   };

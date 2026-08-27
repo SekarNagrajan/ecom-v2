@@ -13,21 +13,21 @@ import {
   useSensors,
   type DragEndEvent,
   type DragStartEvent,
-} from '@dnd-kit/core';
-import { CSS } from '@dnd-kit/utilities';
-import { AppButton, AppCheckbox } from '@solverminds/shared-ui';
-import { Empty, Input, Tag, Tooltip, Typography } from 'antd';
-import { useState, type ReactNode } from 'react';
+} from "@dnd-kit/core";
+import { CSS } from "@dnd-kit/utilities";
+import { AppButton, AppCheckbox } from "@solverminds/shared-ui";
+import { Empty, Input, Tag, Tooltip, Typography } from "antd";
+import { useState, type ReactNode } from "react";
 
-import { AppIcon, Icons } from '../../../components/icons';
-import type { ModuleMappingMenu } from '../types/admin.types';
+import { AppIcon, Icons } from "../../../components/icons";
+import type { ModuleMappingMenu } from "../types/admin.types";
 
 const { Text } = Typography;
 
-export type MappingColumnId = 'available' | 'assigned';
+export type MappingColumnId = "available" | "assigned";
 
 export function displayMenuName(name: string) {
-  return name === 'OBLPrint' ? 'Bill of Lading' : name;
+  return name === "OBLPrint" ? "Bill of Lading" : name;
 }
 
 interface ModuleMappingBoardProps {
@@ -55,7 +55,7 @@ function filterMenus(menus: ModuleMappingMenu[], term: string) {
   return menus.filter(
     (m) =>
       displayMenuName(m.menuName).toLowerCase().includes(q) ||
-      (m.refNo ?? '').toLowerCase().includes(q),
+      (m.refNo ?? "").toLowerCase().includes(q),
   );
 }
 
@@ -77,12 +77,17 @@ function MappingMenuCard({
   disabled?: boolean;
 }) {
   const dragId = `${column}:${menu.menuId}`;
-  const { attributes, listeners, setNodeRef: setDragRef, transform, isDragging } =
-    useDraggable({
-      id: dragId,
-      data: { menuId: menu.menuId, column, menu },
-      disabled: locked || disabled,
-    });
+  const {
+    attributes,
+    listeners,
+    setNodeRef: setDragRef,
+    transform,
+    isDragging,
+  } = useDraggable({
+    id: dragId,
+    data: { menuId: menu.menuId, column, menu },
+    disabled: locked || disabled,
+  });
   const { setNodeRef: setDropRef, isOver } = useDroppable({
     id: `drop:${dragId}`,
     data: { column },
@@ -103,14 +108,14 @@ function MappingMenuCard({
       ref={setNodeRef}
       style={style}
       className={[
-        'admin-mapping-card',
-        locked ? 'admin-mapping-card--locked' : '',
-        selected ? 'admin-mapping-card--selected' : '',
-        isDragging ? 'admin-mapping-card--dragging' : '',
-        isOver ? 'admin-mapping-card--drop-target' : '',
+        "admin-mapping-card",
+        locked ? "admin-mapping-card--locked" : "",
+        selected ? "admin-mapping-card--selected" : "",
+        isDragging ? "admin-mapping-card--dragging" : "",
+        isOver ? "admin-mapping-card--drop-target" : "",
       ]
         .filter(Boolean)
-        .join(' ')}
+        .join(" ")}
     >
       {locked ? (
         <span className="admin-mapping-card__handle admin-mapping-card__handle--locked">
@@ -147,7 +152,7 @@ function MappingMenuCard({
           </AppCheckbox>
         )}
         {menu.refNo ? (
-          <Tag className="admin-code-tag" color={locked ? 'default' : 'blue'}>
+          <Tag className="admin-code-tag" color={locked ? "default" : "blue"}>
             {menu.refNo}
           </Tag>
         ) : null}
@@ -161,7 +166,7 @@ function MappingMenuCard({
       {!locked && onQuickMove ? (
         <Tooltip
           title={
-            column === 'available' ? 'Add to customer' : 'Remove from customer'
+            column === "available" ? "Add to customer" : "Remove from customer"
           }
         >
           <span>
@@ -170,14 +175,14 @@ function MappingMenuCard({
               size="small"
               disabled={disabled}
               aria-label={
-                column === 'available'
+                column === "available"
                   ? `Add ${displayMenuName(menu.menuName)}`
                   : `Remove ${displayMenuName(menu.menuName)}`
               }
               icon={
                 <AppIcon
                   icon={
-                    column === 'available' ? Icons.arrowRight : Icons.arrowLeft
+                    column === "available" ? Icons.arrowRight : Icons.arrowLeft
                   }
                   size={14}
                 />
@@ -221,11 +226,11 @@ function MappingDropColumn({
     <div
       ref={setNodeRef}
       className={[
-        'admin-mapping-column',
-        isOver ? 'admin-mapping-column--over' : '',
+        "admin-mapping-column",
+        isOver ? "admin-mapping-column--over" : "",
       ]
         .filter(Boolean)
-        .join(' ')}
+        .join(" ")}
     >
       <div className="admin-mapping-column__head">
         <div className="admin-mapping-column__title-row">
@@ -289,8 +294,8 @@ export function ModuleMappingBoard({
   isRemoving,
   disabled = false,
 }: ModuleMappingBoardProps) {
-  const [availableSearch, setAvailableSearch] = useState('');
-  const [assignedSearch, setAssignedSearch] = useState('');
+  const [availableSearch, setAvailableSearch] = useState("");
+  const [assignedSearch, setAssignedSearch] = useState("");
   const [activeMenu, setActiveMenu] = useState<ModuleMappingMenu | null>(null);
 
   const sensors = useSensors(
@@ -307,7 +312,9 @@ export function ModuleMappingBoard({
     filteredDefault.length === 0 && filteredAssigned.length === 0;
 
   const handleDragStart = (event: DragStartEvent) => {
-    const menu = event.active.data.current?.menu as ModuleMappingMenu | undefined;
+    const menu = event.active.data.current?.menu as
+      | ModuleMappingMenu
+      | undefined;
     setActiveMenu(menu ?? null);
   };
 
@@ -326,17 +333,17 @@ export function ModuleMappingBoard({
     const overColumn = over.data.current?.column as MappingColumnId | undefined;
     const target: MappingColumnId | null =
       overColumn ??
-      (overId === 'available' || overId === 'assigned'
+      (overId === "available" || overId === "assigned"
         ? overId
-        : overId.includes('available')
-          ? 'available'
-          : overId.includes('assigned')
-            ? 'assigned'
-            : null);
+        : overId.includes("available")
+        ? "available"
+        : overId.includes("assigned")
+        ? "assigned"
+        : null);
 
     if (!target || target === source) return;
 
-    if (source === 'available' && target === 'assigned') {
+    if (source === "available" && target === "assigned") {
       const ids =
         selectedAvailableIds.includes(menuId) && selectedAvailableIds.length > 1
           ? selectedAvailableIds
@@ -345,7 +352,7 @@ export function ModuleMappingBoard({
       return;
     }
 
-    if (source === 'assigned' && target === 'available') {
+    if (source === "assigned" && target === "available") {
       const ids =
         selectedAssignedIds.includes(menuId) && selectedAssignedIds.length > 1
           ? selectedAssignedIds
@@ -367,11 +374,11 @@ export function ModuleMappingBoard({
     >
       <div
         className={[
-          'admin-mapping-board',
-          busy ? 'admin-mapping-board--busy' : '',
+          "admin-mapping-board",
+          busy ? "admin-mapping-board--busy" : "",
         ]
           .filter(Boolean)
-          .join(' ')}
+          .join(" ")}
       >
         <MappingDropColumn
           id="available"
@@ -402,7 +409,9 @@ export function ModuleMappingBoard({
               type="primary"
               loading={isAdding}
               disabled={busy || selectedAvailableIds.length === 0}
-              icon={<AppIcon icon={Icons.arrowRight} size={16} />}
+              icon={
+                <AppIcon icon={Icons.arrowRight} size={16} tone="approve" />
+              }
               onClick={onAddSelected}
               aria-label="Add selected privileges"
             />
@@ -412,7 +421,7 @@ export function ModuleMappingBoard({
               danger
               loading={isRemoving}
               disabled={busy || selectedAssignedIds.length === 0}
-              icon={<AppIcon icon={Icons.arrowLeft} size={16} />}
+              icon={<AppIcon icon={Icons.arrowLeft} size={16} tone="delete" />}
               onClick={onRemoveSelected}
               aria-label="Remove selected privileges"
             />

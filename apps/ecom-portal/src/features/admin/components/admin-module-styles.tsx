@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-27 13:05)
+// Modified by Sekar Nagarajan (2026-08-27 15:00)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -33,9 +33,22 @@ export function AdminModuleStyles() {
       .admin-workspace.admin-workspace--content-only {
         display: block;
         grid-template-columns: none;
+        width: 100%;
+        margin: 0;
+        padding: 0;
       }
       .admin-workspace.admin-workspace--content-only .admin-workspace__content {
         width: 100%;
+        margin: ${token.marginXXS}px ${token.marginXXS}px ${
+      token.marginXXS
+    }px ${token.marginXXS}px ${token.marginXXS}px;
+    }px ${token.marginXXS}px;
+        padding: ${token.paddingLG}px ${token.paddingXL}px ${token.paddingXL}px;
+        border: none;
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorBgContainer};
+        box-sizing: border-box;
+        max-width: calc(100% - ${token.marginLG * 2}px);
       }
 
       .admin-workspace__nav {
@@ -99,14 +112,15 @@ export function AdminModuleStyles() {
         display: flex;
         flex-direction: column;
         min-width: 0;
-        padding: ${token.paddingLG}px;
+        padding: ${token.paddingLG}px ${token.paddingXL}px;
         border-radius: ${token.borderRadiusLG}px;
-        border: 1px solid ${token.colorBorderSecondary};
+        border: none;
         background: ${token.colorBgContainer};
       }
       .admin-workspace__content > .admin-panel.ant-card {
         border: none;
         background: transparent;
+        box-shadow: none;
       }
       .admin-workspace__content > .admin-panel > .ant-card-body {
         padding: 0 !important;
@@ -116,17 +130,17 @@ export function AdminModuleStyles() {
         border: none;
         border-radius: ${token.borderRadiusLG}px;
         background: ${token.colorBgContainer};
-        border: 1px solid ${token.colorBorderSecondary};
+        box-shadow: none;
       }
       .admin-panel > .ant-card-body {
-        padding: ${token.paddingMD}px !important;
+        padding: ${token.paddingMD}px 0 !important;
       }
       .admin-panel__header {
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
         gap: ${token.marginMD}px;
-        margin-bottom: ${token.marginMD}px;
+        margin-bottom: ${token.marginLG}px;
         flex-wrap: wrap;
       }
       .admin-panel__header-main {
@@ -198,7 +212,9 @@ export function AdminModuleStyles() {
       .admin-config-form input:-webkit-autofill,
       .admin-config-form input:-webkit-autofill:hover,
       .admin-config-form input:-webkit-autofill:focus {
-        -webkit-box-shadow: 0 0 0 1000px ${token.colorBgContainer} inset !important;
+        -webkit-box-shadow: 0 0 0 1000px ${
+          token.colorBgContainer
+        } inset !important;
         transition: background-color 50000s ease-in-out 0s !important;
       }
       .admin-config-section__title {
@@ -610,7 +626,9 @@ export function AdminModuleStyles() {
         flex-wrap: nowrap;
         max-width: 100%;
         overflow-x: auto;
-        padding: ${token.paddingXS}px ${token.paddingXXS}px ${token.paddingSM}px 0;
+        padding: ${token.paddingXS}px ${token.paddingXXS}px ${
+      token.paddingSM
+    }px 0;
       }
       .admin-priv-actions__item {
         display: inline-flex;
@@ -642,6 +660,105 @@ export function AdminModuleStyles() {
       }
       .admin-cutoff-input.ant-input-number {
         width: 100%;
+      }
+      .admin-cutoff-create {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginMD}px;
+        width: 100%;
+      }
+      .admin-cutoff-create__row {
+        display: grid;
+        gap: ${token.marginMD}px;
+        width: 100%;
+        /* Align controls to one baseline when labels wrap to 2 lines */
+        align-items: end;
+      }
+      .admin-cutoff-create__row--5 {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+      }
+      .admin-cutoff-create__row--2 {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+      }
+      .admin-cutoff-create__row .ant-form-item {
+        margin-bottom: 0;
+        min-width: 0;
+        position: relative;
+      }
+      .admin-cutoff-create__row .ant-form-item-label {
+        padding: 0 0 ${token.paddingXXS}px !important;
+      }
+      /*
+       * Validation text must not grow the Form.Item height — otherwise
+       * align-items:end pushes sibling inputs (e.g. Port) downward.
+       */
+      .admin-cutoff-create__row .ant-form-item-explain,
+      .admin-cutoff-create__row .ant-form-item-additional {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        z-index: 1;
+      }
+      .admin-cutoff-weekend {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginSM}px;
+        justify-content: flex-end;
+        min-width: 0;
+        padding: ${token.paddingSM}px 0;
+      }
+      .admin-cutoff-create__actions {
+        display: inline-flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: ${token.marginSM}px;
+        flex-wrap: wrap;
+        min-width: 0;
+        padding: ${token.paddingSM}px 0;
+      }
+      .admin-cutoff-create__actions.form-step-footer {
+        margin: 0;
+        padding: ${token.paddingSM}px 0;
+        border: none;
+        width: auto;
+      }
+      .admin-cutoff-grid-wrap {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        min-width: 0;
+        /* Fill remaining viewport under the create/edit form */
+        height: calc(100vh - 420px);
+        min-height: ${token.controlHeightLG * 5}px;
+        max-height: calc(100vh - 300px);
+      }
+      /* Hide empty DataView search / view-mode / Filters toolbar card */
+      .admin-cutoff-grid-wrap > .ant-flex > .ant-card:first-child {
+        display: none !important;
+      }
+      .admin-cutoff-grid-wrap > .ant-flex {
+        flex: 1;
+        min-height: 0;
+        height: 100%;
+      }
+      .admin-cutoff-grid-wrap > * {
+        flex: 1;
+        min-height: 0;
+        height: 100%;
+      }
+      .admin-cutoff-grid-wrap .admin-cutoff-data-view {
+        height: 100%;
+        min-height: 0;
+      }
+      .admin-cutoff-grid-wrap .ag-theme-alpine,
+      .admin-cutoff-grid-wrap .ag-root-wrapper {
+        height: 100% !important;
+        min-height: 0 !important;
+      }
+      .admin-cutoff-data-view .sm-data-view-toolbar,
+      .admin-cutoff-data-view .data-view-toolbar {
+        display: none !important;
       }
 
       .responsive-table-wrap {
@@ -803,11 +920,15 @@ export function AdminModuleStyles() {
       }
       .admin-route-port--origin {
         border-left: 4px solid ${token.colorPrimary};
-        background: linear-gradient(180deg, ${primaryTint8} 0%, ${token.colorFillAlter} 100%);
+        background: linear-gradient(180deg, ${primaryTint8} 0%, ${
+      token.colorFillAlter
+    } 100%);
       }
       .admin-route-port--delivery {
         border-left: 4px solid ${token.colorSuccess};
-        background: linear-gradient(180deg, ${successTint8} 0%, ${token.colorFillAlter} 100%);
+        background: linear-gradient(180deg, ${successTint8} 0%, ${
+      token.colorFillAlter
+    } 100%);
       }
       .admin-route-port__label {
         display: flex;
@@ -873,7 +994,9 @@ export function AdminModuleStyles() {
         flex: 1;
         height: 2px;
         margin: 0 ${token.marginXXS}px;
-        background: linear-gradient(90deg, ${token.colorPrimary} 0%, ${token.colorSuccess} 100%);
+        background: linear-gradient(90deg, ${token.colorPrimary} 0%, ${
+      token.colorSuccess
+    } 100%);
       }
       .admin-route-meta {
         display: grid;
@@ -923,6 +1046,14 @@ export function AdminModuleStyles() {
         .admin-workspace__content {
           padding: ${token.paddingLG}px;
         }
+        .admin-workspace.admin-workspace--content-only .admin-workspace__content {
+          margin: ${token.marginSM}px ${token.marginMD}px ${token.marginMD}px;
+          padding: ${token.paddingLG}px ${token.paddingLG}px ${
+      token.paddingXL
+    }px;
+          max-width: calc(100% - ${token.marginMD * 2}px);
+          border: none;
+        }
         .admin-workspace__nav-list {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -939,6 +1070,14 @@ export function AdminModuleStyles() {
           flex-direction: row;
           justify-content: center;
         }
+        .admin-cutoff-create__row--5,
+        .admin-cutoff-create__row--2 {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .admin-cutoff-create__actions {
+          grid-column: 1 / -1;
+          justify-content: flex-end;
+        }
       }
 
       @media (max-width: 767px) {
@@ -950,8 +1089,16 @@ export function AdminModuleStyles() {
         .admin-workspace__content {
           padding: ${token.paddingMD}px;
         }
+        .admin-workspace.admin-workspace--content-only .admin-workspace__content {
+          margin: ${token.marginXS}px ${token.marginSM}px ${token.marginMD}px;
+          padding: ${token.paddingMD}px ${token.paddingMD}px ${
+      token.paddingLG
+    }px;
+          max-width: calc(100% - ${token.marginSM * 2}px);
+          border: none;
+        }
         .admin-panel > .ant-card-body {
-          padding: ${token.paddingMD}px !important;
+          padding: 0 !important;
         }
         .admin-panel__header {
           margin-bottom: ${token.marginMD}px;
@@ -991,6 +1138,19 @@ export function AdminModuleStyles() {
         .admin-cutoff-actions,
         .admin-priv-actions {
           gap: ${token.marginSM}px;
+        }
+        .admin-cutoff-create__row--5,
+        .admin-cutoff-create__row--2 {
+          grid-template-columns: 1fr;
+        }
+        .admin-cutoff-create__actions {
+          grid-column: auto;
+          width: 100%;
+          justify-content: stretch;
+        }
+        .admin-cutoff-create__actions .sm-app-button,
+        .admin-cutoff-create__actions .ant-btn {
+          flex: 1 1 auto;
         }
         .admin-route-card > .ant-card-body {
           padding: ${token.paddingMD}px !important;

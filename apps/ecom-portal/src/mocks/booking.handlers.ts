@@ -1,5 +1,7 @@
 import { delay, http, HttpResponse } from "msw";
 
+import { buildMockBookingRoutes } from "../features/booking/mocks/booking-routing.mock";
+
 const mockBookings = [
   {
     id: "bkg-1",
@@ -120,6 +122,15 @@ let mockTemplates = [
 ];
 
 export const bookingHandlers = [
+  http.get("/api/booking/routing", async ({ request }) => {
+    await delay(600); // simulate schedule lookup
+    const url = new URL(request.url);
+    const origin = url.searchParams.get("origin") || "";
+    const delivery = url.searchParams.get("delivery") || "";
+    const cargoReadyDate = url.searchParams.get("cargoReadyDate") || "";
+    const data = buildMockBookingRoutes({ origin, delivery, cargoReadyDate });
+    return HttpResponse.json({ data });
+  }),
   http.get("/api/booking/list", async () => {
     await delay(500);
     return HttpResponse.json({ data: mockBookings });

@@ -1,8 +1,9 @@
-// Modified by Sekar Nagarajan (2026-08-25 17:25)
+// Modified by Sekar Nagarajan (2026-08-27 12:34)
 
 import {
   PRECONFIGURED_TENANTS,
   useAuthStore,
+  usePermission,
   useTenantStore,
 } from "@solverminds/auth";
 import { AppButton } from "@solverminds/shared-ui";
@@ -12,15 +13,19 @@ import type { MenuProps } from "antd";
 import {
   Avatar,
   Dropdown,
+  Flex,
   Layout,
   Select,
   Space,
   Tag,
   Tooltip,
   Typography,
+  theme,
 } from "antd";
 import { useState } from "react";
 import { ContactUsDrawer } from "../../features/contact-us/components/ContactUsDrawer";
+import { CustomerPickerModal } from "../../features/auth/components/customer-picker-modal";
+import { useImpersonationController } from "../../features/auth/hooks/use-impersonation-controller";
 import { useThemePreferences } from "../../features/theme/providers/theme-preferences-provider";
 import { ChangePasswordView } from "../../features/user-modules/components/ChangePasswordView";
 import { MyAlertsView } from "../../features/user-modules/components/MyAlertsView";
@@ -50,15 +55,19 @@ export function AuthenticatedLayoutHeader({
   isGuest = false,
   onLoginClick,
 }: AuthenticatedLayoutHeaderProps) {
+  const { token: themeToken } = theme.useToken();
   const navigate = useNavigate();
   const toast = useToast();
   const confirm = useConfirm();
   const user = useAuthStore((state) => state.user);
+  const { isImpersonating: isImpersonatingFn } = usePermission();
   const setActiveSubCustomer = useAuthStore(
     (state) => state.setActiveSubCustomer,
   );
 
   const { activeTenant, setTenant } = useTenantStore();
+
+  const impersonation = useImpersonationController();
 
   const [profileDrawerOpen, setProfileDrawerOpen] = useState(false);
   const [changePasswordDrawerOpen, setChangePasswordDrawerOpen] =
@@ -86,7 +95,7 @@ export function AuthenticatedLayoutHeader({
   const handleLogoutConfirm = () => {
     confirm.danger({
       title: "Confirm Portal Logout",
-      icon: <AppIcon icon={Icons.logOut} size={16} />,
+
       content:
         "Are you sure you want to terminate your current portal session and log out?",
       okText: "Confirm Logout",
@@ -99,6 +108,10 @@ export function AuthenticatedLayoutHeader({
 
   const [preferencesOpen, setPreferencesOpen] = useState(false);
   const preferencesController = useThemePreferences();
+
+  // Cpanel system admin — customer-scope only (not dual tenant + customer pickers)
+  const isCpanelAdmin =
+    user?.adminUserType === "A" && user?.loginType === "V";
 
   // Guest on public search modules: Login/Register chrome — not a fake logged-in user bar
   if (isGuest || !user) {
@@ -215,20 +228,21 @@ export function AuthenticatedLayoutHeader({
       case "user-creation":
         navigate({ to: "/app/sub-users" as any });
         break;
-      case "logout":
-        handleLogoutConfirm();
-        break;
       default:
         break;
     }
   };
 
   const userNameDisplay = user?.name || user?.email || "";
-  const userRoleDisplay = user?.isSessionAdmin
-    ? "Superuser (Customer Admin)"
-    : user?.role === "ADMIN"
-    ? "System Administrator"
-    : "Customer Account";
+  const userRoleDisplay = user?.isImpersonating
+    ? "Admin Impersonation"
+    : user?.role === "ADMIN" && user?.adminUserType === "A"
+      ? "System Administrator"
+      : user?.role === "VENDOR"
+        ? "Agency Administrator"
+        : user?.isSessionAdmin
+          ? "Superuser (Customer Admin)"
+          : "Customer Account";
   const initials = userNameDisplay
     ? userNameDisplay
         .split(" ")
@@ -289,56 +303,106 @@ export function AuthenticatedLayoutHeader({
           },
         ]
       : []),
-    { type: "divider" },
-    {
-      key: "logout",
-      label: "Log-Out",
-      icon: <AppIcon icon={Icons.logOut} size={16} />,
-      danger: true,
-    },
   ];
 
   return (
-    <Header className="app-layout-header">
-      <div className="app-layout-header__left">
-        {showMobileMenu ? (
-          <Tooltip title="Open Navigation Menu">
-            <AppButton
-              type="text"
-              icon={<AppIcon icon={Icons.menu} size={18} />}
-              onClick={onMobileMenuOpen}
-              aria-label="Open navigation menu"
+    <>
+      {isImpersonatingFn() && user?.impersonatedCustomer ? (
+        <Flex
+          align="center"
+          justify="space-between"
+          style={{
+            background: themeToken.colorWarningBg,
+            borderBottom: `1px solid ${themeToken.colorWarningBorder}`,
+            padding: `${themeToken.paddingXS}px ${themeToken.paddingLG}px`,
+          }}
+        >
+          <Space size="small">
+            <AppIcon
+              icon={Icons.userCog}
+              size={16}
+              style={{ color: themeToken.colorWarning }}
             />
-          </Tooltip>
-        ) : null}
-        <div className="app-header-brand-detail">
-          <div className="app-layout-header__brand-row">
-            <Text strong className="app-layout-header__tenant-name">
-              {activeTenant.name}
+            <Text strong>
+              Acting as: {user.impersonatedCustomer.compName} (
+              {user.impersonatedCustomer.custCode})
             </Text>
-            <Tag color="blue" className="app-header-tag">
-              {activeTenant.customerCode}
-            </Tag>
-            {user?.isSessionAdmin ? (
-              <Tag
-                icon={<AppIcon icon={Icons.crown} size={16} />}
-                color="gold"
-                className="app-header-tag"
-              >
-                SUPERUSER ACTIVE
+          </Space>
+          <Space size="small">
+            <AppButton
+              size="small"
+              onClick={() => impersonation.setShowPicker(true)}
+              icon={<AppIcon icon={Icons.users} size={14} />}
+            >
+              Switch Customer
+            </AppButton>
+            <AppButton
+              size="small"
+              danger
+              loading={impersonation.isExiting}
+              onClick={impersonation.handleExitImpersonation}
+              icon={<AppIcon icon={Icons.logOut} size={14} />}
+            >
+              Exit Impersonation
+            </AppButton>
+          </Space>
+        </Flex>
+      ) : null}
+
+      <Header className="app-layout-header">
+        <div className="app-layout-header__left">
+          {showMobileMenu ? (
+            <Tooltip title="Open Navigation Menu">
+              <AppButton
+                type="text"
+                icon={<AppIcon icon={Icons.menu} size={18} />}
+                onClick={onMobileMenuOpen}
+                aria-label="Open navigation menu"
+              />
+            </Tooltip>
+          ) : null}
+          <div className="app-header-brand-detail">
+            <div className="app-layout-header__brand-row">
+              <Text strong className="app-layout-header__tenant-name">
+                {activeTenant.name}
+              </Text>
+              <Tag color="blue" className="app-header-tag">
+                {activeTenant.customerCode}
               </Tag>
-            ) : null}
+              {user?.isSessionAdmin && !user?.isImpersonating ? (
+                <Tag
+                  icon={<AppIcon icon={Icons.crown} size={16} />}
+                  color="gold"
+                  className="app-header-tag"
+                >
+                  SUPERUSER ACTIVE
+                </Tag>
+              ) : null}
+              {user?.isImpersonating ? (
+                <Tag
+                  icon={<AppIcon icon={Icons.userCog} size={16} />}
+                  color="orange"
+                  className="app-header-tag"
+                >
+                  IMPERSONATING
+                </Tag>
+              ) : null}
+            </div>
+            <Text type="secondary" className="app-layout-header__welcome">
+              Welcome to E-COM PORTAL ({activeTenant.id})
+            </Text>
           </div>
-          <Text type="secondary" className="app-layout-header__welcome">
-            Welcome to E-COM PORTAL ({activeTenant.id})
-          </Text>
         </div>
-      </div>
 
       <div className="app-header-actions">
+        {/* Customer scope: superuser / cpanel default-customer list / sub-accounts */}
         {(user?.isSessionAdmin ||
-          (user?.subCustomerAccounts && user.subCustomerAccounts.length > 0)) &&
-        !compactHeader ? (
+          isCpanelAdmin ||
+          (user?.subCustomerAccounts &&
+            user.subCustomerAccounts.length > 0 &&
+            !isCpanelAdmin)) &&
+        !compactHeader &&
+        (user?.subCustomerAccounts?.length ?? 0) > 0 ? (
           <Space size={4} align="center">
             <AppIcon icon={Icons.users} size={16} />
             <Select
@@ -363,7 +427,8 @@ export function AuthenticatedLayoutHeader({
           </Space>
         ) : null}
 
-        {user?.role === "ADMIN" && !compactHeader ? (
+        {/* Tenant switcher: ADMIN only — hidden for cpanel (uses customer selector above) */}
+        {user?.role === "ADMIN" && !isCpanelAdmin && !compactHeader ? (
           <Space size={4} align="center">
             <AppIcon icon={Icons.layoutGrid} size={16} />
             <Select
@@ -385,9 +450,7 @@ export function AuthenticatedLayoutHeader({
 
         <HeaderThemeToggle />
 
-        <Tooltip
-          title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
-        >
+        <Tooltip title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}>
           <AppButton
             type="text"
             shape="circle"
@@ -403,25 +466,42 @@ export function AuthenticatedLayoutHeader({
           />
         </Tooltip>
 
-        <Dropdown
-          trigger={["click"]}
-          menu={{ items: profileMenuItems, onClick: handleMenuClick }}
-          placement="bottomRight"
-        >
-          <div className="app-header-user-trigger">
-            <Avatar className="app-header-avatar" size="default">
-              {initials}
-            </Avatar>
-            <div className="app-header-user-meta">
-              <Text strong className="app-header-user-name">
-                {userNameDisplay}
-              </Text>
-              <Text type="secondary" className="app-header-user-role">
-                {userRoleDisplay}
-              </Text>
-            </div>
-          </div>
-        </Dropdown>
+        <div className="app-header-user-cluster">
+          <Dropdown
+            trigger={["click"]}
+            menu={{ items: profileMenuItems, onClick: handleMenuClick }}
+            placement="bottomRight"
+          >
+            <button
+              type="button"
+              className="app-header-user-trigger"
+              aria-label="Open account menu"
+            >
+              <Avatar className="app-header-avatar" size="default">
+                {initials}
+              </Avatar>
+              <div className="app-header-user-meta">
+                <Text strong className="app-header-user-name">
+                  {userNameDisplay}
+                </Text>
+                <Text type="secondary" className="app-header-user-role">
+                  {userRoleDisplay}
+                </Text>
+              </div>
+            </button>
+          </Dropdown>
+
+          <Tooltip title="Log Out">
+            <AppButton
+              type="text"
+              shape="circle"
+              className="app-header-logout"
+              icon={<AppIcon icon={Icons.logOut} size={16} tone="reject" />}
+              onClick={handleLogoutConfirm}
+              aria-label="Log out"
+            />
+          </Tooltip>
+        </div>
       </div>
 
       {/* Account Profile Drawer */}
@@ -455,5 +535,14 @@ export function AuthenticatedLayoutHeader({
         preferencesController={preferencesController}
       />
     </Header>
+
+      {/* Customer Picker Modal for impersonation switching */}
+      <CustomerPickerModal
+        open={impersonation.showPicker}
+        customerList={impersonation.customerList}
+        onSelect={impersonation.handleSelectCustomer}
+        onCancel={() => impersonation.setShowPicker(false)}
+      />
+    </>
   );
 }

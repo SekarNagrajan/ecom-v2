@@ -1,4 +1,4 @@
-// Modified by sekar nagarajan (2026-08-21)
+// Modified by Sekar Nagarajan (2026-08-27 12:42)
 import type {
   BannerConfig,
   CustomerAdvisory,
@@ -7,6 +7,8 @@ import type {
   FieldConfig,
   GlobalConfig,
   MenuConfig,
+  ModuleMappingCustomer,
+  ModuleMappingMenu,
   ServiceRestriction,
   SpecialPrivilege,
 } from '../types/admin.types';
@@ -27,18 +29,84 @@ export const adminApi = {
     return json.data;
   },
 
-  // 2. Special Privileges
+  // 2. Module Mapping (SpecialPrivilege.jsp parity)
+  getModuleMapping: async (
+    custCode: string,
+    webId: string,
+  ): Promise<ModuleMappingMenu[]> => {
+    const params = new URLSearchParams({ custCode, webId });
+    const res = await fetch(`/api/v1/admin/module-mapping?${params}`);
+    if (!res.ok) throw new Error('Failed to load module mapping');
+    const json = (await res.json()) as { data: ModuleMappingMenu[] };
+    return json.data;
+  },
+  addModulePrivileges: async (payload: {
+    custCode: string;
+    webId: string;
+    menuIds: string[];
+  }): Promise<ModuleMappingMenu[]> => {
+    const res = await fetch('/api/v1/admin/module-mapping/add', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) throw new Error('Failed to add privileges');
+    const json = (await res.json()) as { data: ModuleMappingMenu[] };
+    return json.data;
+  },
+  removeModulePrivileges: async (payload: {
+    custCode: string;
+    webId: string;
+    menuIds: string[];
+  }): Promise<ModuleMappingMenu[]> => {
+    const res = await fetch('/api/v1/admin/module-mapping/remove', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) throw new Error('Failed to remove privileges');
+    const json = (await res.json()) as { data: ModuleMappingMenu[] };
+    return json.data;
+  },
+  searchModuleMappingCustomers: async (
+    query = '',
+  ): Promise<ModuleMappingCustomer[]> => {
+    const params = new URLSearchParams({ q: query });
+    const res = await fetch(
+      `/api/v1/admin/module-mapping/customers?${params}`,
+    );
+    if (!res.ok) throw new Error('Failed to search customers');
+    const json = (await res.json()) as { data: ModuleMappingCustomer[] };
+    return json.data;
+  },
+
+  // Legacy matrix endpoints (unused by Module Mapping UI)
   getSpecialPrivileges: async (): Promise<SpecialPrivilege[]> => {
     const res = await fetch('/api/v1/admin/special-privileges');
     return res.json();
   },
-  updateSpecialPrivileges: async (data: SpecialPrivilege[]): Promise<SpecialPrivilege[]> => {
+  updateSpecialPrivileges: async (
+    data: SpecialPrivilege[],
+  ): Promise<SpecialPrivilege[]> => {
     const res = await fetch('/api/v1/admin/special-privileges', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
     const json = await res.json();
+    return json.data;
+  },
+
+  createMenuConfig: async (
+    data: Omit<MenuConfig, 'isEnabled'> & { isEnabled?: boolean },
+  ): Promise<MenuConfig[]> => {
+    const res = await fetch('/api/v1/admin/menu-config', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error('Failed to create menu');
+    const json = (await res.json()) as { data: MenuConfig[] };
     return json.data;
   },
 

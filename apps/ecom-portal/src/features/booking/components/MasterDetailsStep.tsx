@@ -1,6 +1,7 @@
-// Modified by Sekar Nagarajan (2026-08-26 11:51)
+// Modified by Sekar Nagarajan (2026-08-26 18:41)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
+import { useToast } from "@solverminds/shared-ui/hooks";
 import {
   AutoComplete,
   Card,
@@ -19,12 +20,15 @@ import { Controller, useForm } from "react-hook-form";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { usePortSearch } from "../../landing/api/landing.queries";
+import { extractPortCode } from "../mocks/booking-routing.mock";
 import { useBookingStore } from "../stores/booking.store";
 import {
   masterDetailsSchema,
   type MasterDetailsData,
+  type SelectedRoute,
 } from "../types/booking.types";
 import { BookingModuleStyles } from "./booking-module-styles";
+import { RoutingSelectModal } from "./RoutingSelectModal";
 import { SelectTemplateModal } from "./SelectTemplateModal";
 
 const { Text } = Typography;
@@ -39,6 +43,18 @@ const POPULAR_PORTS = [
   { value: "AEDXB", label: "AEDXB - Jebel Ali, UAE" },
   { value: "GBFEL", label: "GBFEL - Felixstowe, UK" },
 ];
+
+function routeMatchesPorts(
+  route: SelectedRoute | null | undefined,
+  origin: string,
+  delivery: string,
+) {
+  if (!route) return false;
+  return (
+    extractPortCode(route.polPortId) === extractPortCode(origin) &&
+    extractPortCode(route.podPortId) === extractPortCode(delivery)
+  );
+}
 
 function usePortAutocomplete(initialQuery = "") {
   const [query, setQuery] = useState(initialQuery);
@@ -61,9 +77,11 @@ function usePortAutocomplete(initialQuery = "") {
 }
 
 export function MasterDetailsStep() {
+  const toast = useToast();
   const { payload, updateMasterDetails, nextStep } = useBookingStore();
   const [showAdditional, setShowAdditional] = useState(false);
   const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
+  const [isRoutingModalOpen, setIsRoutingModalOpen] = useState(false);
 
   const originAC = usePortAutocomplete(payload.masterDetails?.origin || "");
   const deliveryAC = usePortAutocomplete(payload.masterDetails?.delivery || "");
@@ -73,9 +91,10 @@ export function MasterDetailsStep() {
     handleSubmit,
     getValues,
     setValue,
+    watch,
     formState: { errors },
     reset,
-  } = useForm<any>({
+  } = useForm<MasterDetailsData>({
     resolver: zodResolver(masterDetailsSchema),
     defaultValues: payload.masterDetails || {
       origin: "",
@@ -88,8 +107,14 @@ export function MasterDetailsStep() {
       agreementParty: "",
       preferredAgency: "",
       additionalInformation: "",
+      selectedRoute: null,
     },
   });
+
+  const selectedRoute = watch("selectedRoute");
+  const originValue = watch("origin");
+  const deliveryValue = watch("delivery");
+  const cargoReadyDate = watch("cargoReadyDate");
 
   useEffect(() => {
     if (payload.masterDetails) {
@@ -100,6 +125,10 @@ export function MasterDetailsStep() {
     // eslint-disable-next-line react-hooks/exhaustive-deps -- sync from store only
   }, [payload.masterDetails, reset]);
 
+  const clearSelectedRoute = () => {
+    setValue("selectedRoute", null, { shouldDirty: true });
+  };
+
   const handleSwapPorts = () => {
     const origin = getValues("origin");
     const delivery = getValues("delivery");
@@ -107,12 +136,38 @@ export function MasterDetailsStep() {
     setValue("delivery", origin, { shouldValidate: true, shouldDirty: true });
     originAC.setQuery(delivery || "");
     deliveryAC.setQuery(origin || "");
+    clearSelectedRoute();
   };
 
   const onSubmit = (data: MasterDetailsData) => {
+    // JSP parity: block Next until a vessel/route is chosen for this POL/POD
+    if (!routeMatchesPorts(data.selectedRoute, data.origin, data.delivery)) {
+      updateMasterDetails({ ...data, selectedRoute: null });
+      setIsRoutingModalOpen(true);
+      return;
+    }
     updateMasterDetails(data);
     nextStep();
   };
+
+  const handleRouteSelect = (route: SelectedRoute) => {
+    const draft = getValues();
+    const nextData: MasterDetailsData = { ...draft, selectedRoute: route };
+    setValue("selectedRoute", route, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+    updateMasterDetails(nextData);
+    setIsRoutingModalOpen(false);
+    toast.success(`Route selected: ${route.serviceName} · ${route.vesselName}`);
+    nextStep();
+  };
+
+  const hasValidRoute = routeMatchesPorts(
+    selectedRoute,
+    originValue,
+    deliveryValue,
+  );
 
   return (
     <form
@@ -151,10 +206,12 @@ export function MasterDetailsStep() {
                     onSelect={(val) => {
                       field.onChange(val);
                       originAC.setQuery(String(val));
+                      clearSelectedRoute();
                     }}
                     onChange={(val) => {
                       field.onChange(val);
                       originAC.setQuery(String(val ?? ""));
+                      clearSelectedRoute();
                     }}
                     size="large"
                   >
@@ -175,9 +232,7 @@ export function MasterDetailsStep() {
               >
                 {errors.origin.message as string}
               </Text>
-            ) : (
-              <span className="booking-port-row__origin-error" aria-hidden />
-            )}
+            ) : null}
 
             <div className="booking-port-row__swap">
               <Tooltip title="Swap Origin and Delivery">
@@ -208,10 +263,12 @@ export function MasterDetailsStep() {
                     onSelect={(val) => {
                       field.onChange(val);
                       deliveryAC.setQuery(String(val));
+                      clearSelectedRoute();
                     }}
                     onChange={(val) => {
                       field.onChange(val);
                       deliveryAC.setQuery(String(val ?? ""));
+                      clearSelectedRoute();
                     }}
                     size="large"
                   >
@@ -232,9 +289,7 @@ export function MasterDetailsStep() {
               >
                 {errors.delivery.message as string}
               </Text>
-            ) : (
-              <span className="booking-port-row__delivery-error" aria-hidden />
-            )}
+            ) : null}
 
             <label className="form-field-label booking-port-row__date-label">
               Cargo Ready Date <Text type="danger">*</Text>
@@ -249,9 +304,10 @@ export function MasterDetailsStep() {
                     size="large"
                     format="DD-MMM-YYYY"
                     value={value ? dayjs(value) : null}
-                    onChange={(date) =>
-                      onChange(date ? date.format("YYYY-MM-DD") : "")
-                    }
+                    onChange={(date) => {
+                      onChange(date ? date.format("YYYY-MM-DD") : "");
+                      clearSelectedRoute();
+                    }}
                   />
                 )}
               />
@@ -263,10 +319,31 @@ export function MasterDetailsStep() {
               >
                 {errors.cargoReadyDate.message as string}
               </Text>
-            ) : (
-              <span className="booking-port-row__date-error" aria-hidden />
-            )}
+            ) : null}
           </div>
+
+          {hasValidRoute && selectedRoute ? (
+            <div className="booking-selected-route">
+              <div>
+                <Text strong className="booking-selected-route__title">
+                  Selected route: {selectedRoute.serviceName} (
+                  {selectedRoute.serviceCode})
+                </Text>
+                <Text type="secondary" className="booking-selected-route__meta">
+                  {selectedRoute.vesselName} · Voy {selectedRoute.voyage}
+                  {selectedRoute.bound ? `/${selectedRoute.bound}` : ""} · ETD{" "}
+                  {selectedRoute.etd} · ETA {selectedRoute.eta} ·{" "}
+                  {selectedRoute.transitTimeDays} days
+                </Text>
+              </div>
+              <AppButton
+                icon={<AppIcon icon={Icons.refreshCw} size={14} />}
+                onClick={() => setIsRoutingModalOpen(true)}
+              >
+                Change Route
+              </AppButton>
+            </div>
+          ) : null}
 
           <Row gutter={[24, 24]}>
             <Col xs={24} md={8}>
@@ -372,7 +449,7 @@ export function MasterDetailsStep() {
               Additional Information
             </div>
 
-            {showAdditional && (
+            {showAdditional ? (
               <div className="form-step-section">
                 <Row gutter={[24, 24]}>
                   <Col xs={24} md={6}>
@@ -706,7 +783,7 @@ export function MasterDetailsStep() {
                   </Col>
                 </Row>
               </div>
-            )}
+            ) : null}
           </div>
         </Card>
       </div>
@@ -714,13 +791,22 @@ export function MasterDetailsStep() {
       <div className="form-step-footer">
         <AppButton>Previous</AppButton>
         <AppButton type="primary" htmlType="submit">
-          Next
+          {hasValidRoute ? "Next" : "Select Vessel / Route"}
         </AppButton>
       </div>
 
       <SelectTemplateModal
         open={isTemplateModalOpen}
         onCancel={() => setIsTemplateModalOpen(false)}
+      />
+
+      <RoutingSelectModal
+        open={isRoutingModalOpen}
+        origin={originValue || ""}
+        delivery={deliveryValue || ""}
+        cargoReadyDate={cargoReadyDate || ""}
+        onCancel={() => setIsRoutingModalOpen(false)}
+        onSelect={handleRouteSelect}
       />
     </form>
   );

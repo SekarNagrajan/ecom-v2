@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-25 18:50)
+// Modified by Sekar Nagarajan (2026-08-27 12:56)
 // Lucide icon registry — central map for ecom-portal navigation and actions
 import {
   AlertCircle,
@@ -15,6 +15,7 @@ import {
   Bell,
   BookOpen,
   Boxes,
+  Building2,
   Calculator,
   Calendar,
   Check,
@@ -46,6 +47,7 @@ import {
   Filter,
   Flag,
   FormInput,
+  GripVertical,
   Headphones,
   History,
   Home,
@@ -100,11 +102,14 @@ import {
   Type,
   Upload,
   User,
+  UserCog,
   UserPlus,
   Users,
   X,
   Zap,
 } from "lucide-react";
+
+import { ShieldUser } from "./shield-user-icon";
 
 export const NavIcons = {
   dashboard: LayoutDashboard,
@@ -179,6 +184,7 @@ export const Icons = {
   flag: Flag,
   formInput: FormInput,
   globe: Languages,
+  gripVertical: GripVertical,
   headphones: Headphones,
   history: History,
   home: Home,
@@ -219,6 +225,7 @@ export const Icons = {
   settings: Settings,
   shield: Shield,
   shieldCheck: ShieldCheck,
+  shieldUser: ShieldUser,
   ship: Ship,
   shoppingCart: ShoppingCart,
   smartphone: Smartphone,
@@ -232,7 +239,9 @@ export const Icons = {
   type: Type,
   upload: Upload,
   user: User,
+  userCog: UserCog,
   userPlus: UserPlus,
   users: Users,
+  building: Building2,
   zap: Zap,
 } as const;

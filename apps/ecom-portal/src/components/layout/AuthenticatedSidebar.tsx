@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 17:15)
+// Modified by Sekar Nagarajan (2026-08-27 13:05)
 import { useAuthStore, usePermission, useTenantStore } from "@solverminds/auth";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import type { MenuProps } from "antd";
@@ -6,6 +6,15 @@ import { Drawer, Layout, Menu, Tooltip } from "antd";
 import type { LucideIcon } from "lucide-react";
 import { useState } from "react";
 
+import {
+  adminSectionToMenuKey,
+  isAdminSectionKey,
+  menuKeyToAdminSection,
+  resolveAllowedAdminSections,
+  resolveDefaultAdminSection,
+} from "../../features/admin/utils/admin-menu-access";
+import { buildAdminSectionNavItems } from "../../features/admin/utils/admin-section-nav";
+import { useMenuCategories } from "../../features/auth/api/menu-access.queries";
 import {
   appPathnameToMenuKey,
   isPublicMenuKey,
@@ -18,11 +27,7 @@ const { Sider } = Layout;
 
 function navIcon(Icon: LucideIcon, size = 18, locked = false) {
   return (
-    <AppIcon
-      icon={Icon}
-      size={size}
-      variant={locked ? "navLocked" : "nav"}
-    />
+    <AppIcon icon={Icon} size={size} variant={locked ? "navLocked" : "nav"} />
   );
 }
 
@@ -51,9 +56,10 @@ export function AuthenticatedSidebar({
   isGuest = false,
   onLoginRequired,
 }: AuthenticatedSidebarProps) {
-  const { can } = usePermission();
+  const { can, isAdmin, isVendor, isSuperuser } = usePermission();
   const user = useAuthStore((state) => state.user);
   const activeTenant = useTenantStore((state) => state.activeTenant);
+  const { data: menuCategories } = useMenuCategories();
   const navigate = useNavigate();
   const location = useLocation();
   const selectedKey = appPathnameToMenuKey(location.pathname);
@@ -61,7 +67,13 @@ export function AuthenticatedSidebar({
   const [userOpenKeys, setUserOpenKeys] = useState<string[]>([]);
   const openKeys = Array.from(new Set([...requiredOpenKeys, ...userOpenKeys]));
 
-  const isSuperUser = Boolean(user?.isSessionAdmin || user?.role === "ADMIN");
+  const isSuperUser = isSuperuser();
+  const isAdminUser = isAdmin();
+  const isVendorUser = isVendor();
+  // Cpanel system admin (legacy SESSION_LOGIN_TYPE=V + usertype A) —
+  // modules listed in vendorMenuList as the primary sidebar.
+  const isCpanelAdmin =
+    user?.adminUserType === "A" && user?.loginType === "V";
   const tenantModules = [
     ...(activeTenant.features.allowedModules || []),
     "admin",
@@ -70,12 +82,105 @@ export function AuthenticatedSidebar({
     "tracking",
   ];
 
-  const lock = (key: string) => isGuest && !isPublicMenuKey(key);
+  const lock = (key: string) =>
+    isGuest && !isPublicMenuKey(key, menuCategories);
+
+  // Cpanel: Module Mapping / Email Config / Cutoff as sidebar modules
+  if (isCpanelAdmin && !isGuest) {
+    const allowedSections = resolveAllowedAdminSections(user?.vendorMenuList);
+    const sectionNavItems = buildAdminSectionNavItems(allowedSections);
+    const searchSection = (location.search as { section?: string } | undefined)
+      ?.section;
+    const activeSection = isAdminSectionKey(searchSection)
+      ? searchSection
+      : resolveDefaultAdminSection(allowedSections);
+    const selectedAdminKey = adminSectionToMenuKey(activeSection);
+
+    const cpanelMenuItems: MenuProps["items"] = sectionNavItems.map((item) => ({
+      key: adminSectionToMenuKey(item.key),
+      icon: navIcon(item.icon, 20),
+      label: item.label,
+    }));
+
+    const onCpanelMenuSelect: MenuProps["onSelect"] = ({ key }) => {
+      onMobileClose?.();
+      const section = menuKeyToAdminSection(key);
+      if (section) {
+        navigate({
+          to: "/app/admin",
+          search: { section },
+        } as never);
+      }
+    };
+
+    const brandBlock = (
+      <div className="app-sidebar-brand">
+        <img
+          src={activeTenant.logoUrl || "/logo.png"}
+          alt={activeTenant.name}
+          className="app-sidebar-brand__logo"
+        />
+      </div>
+    );
+
+    const isIconRail = collapsed && !isMobile;
+    const menuBlock = (
+      <Menu
+        theme="light"
+        mode="inline"
+        selectedKeys={[selectedAdminKey]}
+        {...(isIconRail
+          ? {}
+          : {
+              openKeys,
+              onOpenChange: (keys: string[]) => {
+                setUserOpenKeys(keys);
+              },
+            })}
+        items={cpanelMenuItems}
+        onSelect={onCpanelMenuSelect}
+        className="app-sidebar-menu"
+        classNames={{ popup: { root: "app-sidebar-menu-popup" } }}
+      />
+    );
+
+    if (isMobile) {
+      return (
+        <Drawer
+          title={activeTenant.name}
+          placement="left"
+          open={mobileOpen}
+          onClose={onMobileClose}
+          size={280}
+          classNames={{ body: "app-sidebar-drawer-body custom-scroll" }}
+        >
+          {brandBlock}
+          {menuBlock}
+        </Drawer>
+      );
+    }
+
+    return (
+      <Sider
+        collapsible
+        collapsed={collapsed}
+        onCollapse={onCollapse}
+        trigger={null}
+        width={250}
+        collapsedWidth={80}
+        theme="light"
+        className="custom-scroll app-sidebar-sider"
+      >
+        {brandBlock}
+        {menuBlock}
+      </Sider>
+    );
+  }
 
   const rawMenuItems: MenuProps["items"] = [
     {
       key: "dashboard",
-      icon: navIcon(NavIcons.dashboard, 18, lock("dashboard")),
+      icon: navIcon(NavIcons.dashboard, 20, lock("dashboard")),
       label: menuLabel("Dashboard", lock("dashboard")),
       className: lock("dashboard") ? "ant-menu-item-locked" : undefined,
     },
@@ -86,17 +191,19 @@ export function AuthenticatedSidebar({
       children: [
         {
           key: "schedules",
-          icon: navIcon(NavIcons.schedules, 16),
+          icon: navIcon(NavIcons.schedules, 20),
           label: menuLabel("Schedules", false),
           disabled: !isGuest && !can("SCH"),
         },
         {
           key: "tracking",
-          icon: navIcon(NavIcons.tracking, 16),
+          icon: navIcon(NavIcons.tracking, 20),
           label: menuLabel("Tracking", false),
           disabled: !isGuest && !can("TRK"),
         },
-      ].filter((child) => isGuest || isSuperUser || tenantModules.includes(child.key)),
+      ].filter(
+        (child) => isGuest || isSuperUser || tenantModules.includes(child.key),
+      ),
     },
     {
       key: "rates-group",
@@ -105,110 +212,150 @@ export function AuthenticatedSidebar({
       children: [
         {
           key: "rates",
-          icon: navIcon(NavIcons.rates, 16),
+          icon: navIcon(NavIcons.rates, 20),
           label: menuLabel("Rates", false),
           disabled: !isGuest && !can("SCH"),
         },
         {
           key: "tariff",
-          icon: navIcon(NavIcons.tariff, 16),
+          icon: navIcon(NavIcons.tariff, 20),
           label: menuLabel("Tariff", false),
           disabled: !isGuest && !can("SCH"),
         },
-      ].filter((child) => isGuest || isSuperUser || tenantModules.includes(child.key)),
+      ].filter(
+        (child) => isGuest || isSuperUser || tenantModules.includes(child.key),
+      ),
     },
     {
       key: "booking",
-      icon: navIcon(NavIcons.booking, 18, lock("booking")),
+      icon: navIcon(NavIcons.booking, 20, lock("booking")),
       label: menuLabel("Booking", lock("booking")),
       disabled: !isGuest && !can("BKG"),
       className: lock("booking") ? "ant-menu-item-locked" : undefined,
     },
     {
       key: "si",
-      icon: navIcon(NavIcons.shippingInstruction, 18, lock("si")),
+      icon: navIcon(NavIcons.shippingInstruction, 20, lock("si")),
       label: menuLabel("Shipping Instruction", lock("si")),
       disabled: !isGuest && !can("SI"),
       className: lock("si") ? "ant-menu-item-locked" : undefined,
     },
     {
       key: "vgm",
-      icon: navIcon(NavIcons.vgm, 18, lock("vgm")),
+      icon: navIcon(NavIcons.vgm, 20, lock("vgm")),
       label: menuLabel("VGM", lock("vgm")),
-      disabled: !isGuest && !can("BL"),
+      disabled: !isGuest && !can("VGM"),
       className: lock("vgm") ? "ant-menu-item-locked" : undefined,
     },
     {
       key: "bl",
-      icon: navIcon(NavIcons.billOfLading, 18, lock("bl")),
+      icon: navIcon(NavIcons.billOfLading, 20, lock("bl")),
       label: menuLabel("Bill of Lading", lock("bl")),
       disabled: !isGuest && !can("BL"),
       className: lock("bl") ? "ant-menu-item-locked" : undefined,
     },
     {
       key: "do",
-      icon: navIcon(NavIcons.deliveryOrder, 18, lock("do")),
+      icon: navIcon(NavIcons.deliveryOrder, 20, lock("do")),
       label: menuLabel("Delivery Order", lock("do")),
       className: lock("do") ? "ant-menu-item-locked" : undefined,
     },
     {
       key: "arrival-notice",
-      icon: navIcon(NavIcons.arrivalNotice, 18, lock("arrival-notice")),
+      icon: navIcon(NavIcons.arrivalNotice, 20, lock("arrival-notice")),
       label: menuLabel("Arrival Notice", lock("arrival-notice")),
       className: lock("arrival-notice") ? "ant-menu-item-locked" : undefined,
     },
     {
       key: "cro",
-      icon: navIcon(NavIcons.containerRelease, 18, lock("cro")),
+      icon: navIcon(NavIcons.containerRelease, 20, lock("cro")),
       label: menuLabel("Container Release Order", lock("cro")),
       disabled: !isGuest && !can("CRO"),
       className: lock("cro") ? "ant-menu-item-locked" : undefined,
     },
     {
-      key: "user-creation",
-      icon: navIcon(NavIcons.userCreation, 18, lock("user-creation")),
-      label: menuLabel("User Creation (USC)", lock("user-creation")),
-      className: lock("user-creation") ? "ant-menu-item-locked" : undefined,
+      key: "customer-stmt",
+      icon: navIcon(NavIcons.customerStatement, 20, lock("customer-stmt")),
+      label: menuLabel("Customer Statement", lock("customer-stmt")),
+      disabled: !isGuest && !can("STMT"),
+      className: lock("customer-stmt") ? "ant-menu-item-locked" : undefined,
     },
-    {
-      key: "vendor-approvals",
-      icon: navIcon(NavIcons.vendorApprovals, 18, lock("vendor-approvals")),
-      label: menuLabel("Agency Approvals", lock("vendor-approvals")),
-      className: lock("vendor-approvals") ? "ant-menu-item-locked" : undefined,
-    },
+
     {
       key: "more-group",
       icon: navIcon(NavIcons.more, 20),
       label: "More",
       children: [
-        {
-          key: "admin",
-          icon: navIcon(NavIcons.admin, 16, lock("admin")),
-          label: menuLabel("Control Panel Admin", lock("admin")),
-          className: lock("admin") ? "ant-menu-item-locked" : undefined,
-        },
+        isAdminUser
+          ? {
+              key: "admin-group",
+              icon: navIcon(NavIcons.admin, 20, lock("admin")),
+              label: menuLabel("Control Panel Admin", lock("admin")),
+              className: lock("admin") ? "ant-menu-item-locked" : undefined,
+              children: buildAdminSectionNavItems(
+                resolveAllowedAdminSections(user?.vendorMenuList),
+              ).map((item) => ({
+                key: adminSectionToMenuKey(item.key),
+                icon: navIcon(item.icon, 18, lock("admin")),
+                label: menuLabel(item.label, lock("admin")),
+                className: lock("admin") ? "ant-menu-item-locked" : undefined,
+              })),
+            }
+          : null,
         {
           key: "payments",
-          icon: navIcon(NavIcons.payments, 16, lock("payments")),
+          icon: navIcon(NavIcons.payments, 20, lock("payments")),
           label: menuLabel("Payment History", lock("payments")),
           disabled: !isGuest && !can("PAY"),
           className: lock("payments") ? "ant-menu-item-locked" : undefined,
         },
         {
-          key: "customer-stmt",
-          icon: navIcon(NavIcons.customerStatement, 16, lock("customer-stmt")),
-          label: menuLabel("Customer Statement", lock("customer-stmt")),
-          disabled: !isGuest && !can("STMT"),
-          className: lock("customer-stmt") ? "ant-menu-item-locked" : undefined,
-        },
-        {
           key: "carbon",
-          icon: navIcon(NavIcons.carbon, 16, lock("carbon")),
+          icon: navIcon(NavIcons.carbon, 20, lock("carbon")),
           label: menuLabel("Carbon Calculator", lock("carbon")),
           disabled: !isGuest && !can("CO2"),
           className: lock("carbon") ? "ant-menu-item-locked" : undefined,
         },
-      ].filter((child) => isGuest || isSuperUser || tenantModules.includes(child.key)),
+        isSuperUser
+          ? {
+              key: "user-creation",
+              icon: navIcon(
+                NavIcons.userCreation,
+                20,
+                lock("user-creation"),
+              ),
+              label: menuLabel(
+                "User Creation (USC)",
+                lock("user-creation"),
+              ),
+              className: lock("user-creation")
+                ? "ant-menu-item-locked"
+                : undefined,
+            }
+          : null,
+        isVendorUser
+          ? {
+              key: "vendor-approvals",
+              icon: navIcon(
+                NavIcons.vendorApprovals,
+                20,
+                lock("vendor-approvals"),
+              ),
+              label: menuLabel(
+                "Agency Approvals",
+                lock("vendor-approvals"),
+              ),
+              className: lock("vendor-approvals")
+                ? "ant-menu-item-locked"
+                : undefined,
+            }
+          : null,
+      ]
+        .filter(Boolean)
+        .filter(
+          (child) =>
+            isGuest || isSuperUser || tenantModules.includes(child!.key),
+        ) as NonNullable<MenuProps["items"]>,
     },
   ];
 
@@ -223,10 +370,24 @@ export function AuthenticatedSidebar({
     return tenantModules.includes(key);
   });
 
+  // Highlight active admin section under More when on /app/admin
+  const searchSection = (location.search as { section?: string } | undefined)
+    ?.section;
+  const adminSelectedKey =
+    selectedKey === "admin" && isAdminSectionKey(searchSection)
+      ? adminSectionToMenuKey(searchSection)
+      : selectedKey === "admin"
+        ? adminSectionToMenuKey(
+            resolveDefaultAdminSection(
+              resolveAllowedAdminSections(user?.vendorMenuList),
+            ),
+          )
+        : selectedKey;
+
   const onMenuSelect: MenuProps["onSelect"] = ({ key }) => {
     onMobileClose?.();
 
-    if (isGuest && !isPublicMenuKey(key)) {
+    if (isGuest && !isPublicMenuKey(key, menuCategories)) {
       onLoginRequired?.(menuKeyToAppPath(key));
       return;
     }
@@ -238,6 +399,25 @@ export function AuthenticatedSidebar({
     } else if (key === "do") {
       navigate({ to: "/app/delivery-order" });
     } else {
+      const adminSection = menuKeyToAdminSection(key);
+      if (adminSection) {
+        navigate({
+          to: "/app/admin",
+          search: { section: adminSection },
+        } as never);
+        return;
+      }
+      if (key === "admin") {
+        navigate({
+          to: "/app/admin",
+          search: {
+            section: resolveDefaultAdminSection(
+              resolveAllowedAdminSections(user?.vendorMenuList),
+            ),
+          },
+        } as never);
+        return;
+      }
       navigate({ to: `/app/${key}` });
     }
   };
@@ -259,7 +439,7 @@ export function AuthenticatedSidebar({
     <Menu
       theme="light"
       mode="inline"
-      selectedKeys={[selectedKey]}
+      selectedKeys={[adminSelectedKey]}
       {...(isIconRail
         ? {}
         : {

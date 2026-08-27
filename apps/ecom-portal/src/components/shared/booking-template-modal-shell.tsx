@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-24 17:10)
+// Modified by Sekar Nagarajan (2026-08-26 18:52)
 import { AppModal } from "@solverminds/shared-ui";
 import { Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
@@ -15,6 +15,8 @@ export interface BookingTemplateModalShellProps {
   open: boolean;
   subtitle: string;
   title: string;
+  /** Defaults to lg (1000). Routing pipeline uses xl. */
+  dialogSize?: "sm" | "md" | "lg" | "xl" | number;
 }
 
 export function BookingTemplateModalShell({
@@ -24,6 +26,7 @@ export function BookingTemplateModalShell({
   open,
   subtitle,
   title,
+  dialogSize = "lg",
 }: BookingTemplateModalShellProps) {
   return (
     <AppModal
@@ -31,7 +34,7 @@ export function BookingTemplateModalShell({
       open={open}
       onCancel={onClose}
       closable={false}
-      dialogSize="lg"
+      dialogSize={dialogSize}
       footer={null}
       destroyOnClose
       classNames={{ body: "booking-template-modal__modal-body" }}

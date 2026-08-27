@@ -1,19 +1,62 @@
-// Modified by sekar nagarajan (2026-08-21)
+// Modified by Sekar Nagarajan (2026-08-27 12:42)
 import { z } from 'zod';
 
-// 1. Menu Management Types
+// 1. Menu Management / Module Creation Types (RegisterMenu.jsp parity)
 export const MenuConfigSchema = z.object({
-  refNo: z.string(),
-  labelValue: z.string(),
-  category: z.enum(['D', 'P']), // D = Default, P = Permission Restricted
+  refNo: z.string().min(1, 'Ref No is required'),
+  labelValue: z.string().min(1, 'Label is required'),
+  menuName: z.string().optional(),
+  category: z.enum(['D', 'P']),
   classValue: z.string(),
   attrValue: z.string(),
   orderNo: z.number(),
   isEnabled: z.boolean(),
+  userType: z.enum(['U', 'V']).optional(),
+  menuType: z.string().optional(),
+  parentMenu: z.string().optional(),
+  developedBy: z.string().optional(),
+  createdBy: z.string().optional(),
 });
 export type MenuConfig = z.infer<typeof MenuConfigSchema>;
 
-// 2. Special Privileges Types
+export const MenuCreateSchema = z.object({
+  menuName: z.string().min(1, 'Menu name is required'),
+  menuOrder: z.number({ error: 'Menu order is required' }).min(1, 'Menu order is required'),
+  userType: z.enum(['U', 'V'], { message: 'User type is required' }),
+  developedBy: z.string().optional(),
+  refNo: z.string().min(1, 'Ref No is required').max(100),
+  status: z.enum(['A', 'I']),
+  category: z.enum(['D', 'P']),
+  createdBy: z.string().optional(),
+  classValue: z.string().optional(),
+  attrValue: z.string().min(1, 'Route / attr value is required'),
+  labelValue: z.string().min(1, 'Label value is required'),
+  menuType: z.string().optional(),
+  parentMenu: z.string().optional(),
+});
+export type MenuCreateForm = z.infer<typeof MenuCreateSchema>;
+
+// 2. Module Mapping Types (SpecialPrivilege.jsp parity)
+/** P = available privileged, D = default (locked), NP = assigned to customer */
+export const ModuleMappingCategorySchema = z.enum(['P', 'D', 'NP']);
+export type ModuleMappingCategory = z.infer<typeof ModuleMappingCategorySchema>;
+
+export const ModuleMappingMenuSchema = z.object({
+  menuId: z.string(),
+  menuName: z.string(),
+  refNo: z.string().optional(),
+  category: ModuleMappingCategorySchema,
+});
+export type ModuleMappingMenu = z.infer<typeof ModuleMappingMenuSchema>;
+
+export const ModuleMappingCustomerSchema = z.object({
+  custCode: z.string(),
+  webId: z.string(),
+  compName: z.string(),
+});
+export type ModuleMappingCustomer = z.infer<typeof ModuleMappingCustomerSchema>;
+
+/** @deprecated Prefer Module Mapping APIs */
 export const SpecialPrivilegeSchema = z.object({
   roleId: z.string(),
   roleName: z.string(),

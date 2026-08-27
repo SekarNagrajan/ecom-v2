@@ -1,10 +1,10 @@
-// Modified by Sekar Nagarajan (2026-08-25 19:00)
+// Modified by Sekar Nagarajan (2026-08-27 12:00)
 /**
  * Public-menu access helpers — parity with JSP menu Category D (public) vs P (privileged).
- * Hard-coded until full `/api/config/menu-access` Category map is available.
+ * Falls back to hard-coded keys when the backend menu-access API hasn't loaded yet.
  */
 
-/** Menu keys reachable without login (Category D / JSP whitelist). */
+/** Fallback menu keys reachable without login (Category D / JSP whitelist). */
 export const PUBLIC_MENU_KEYS = new Set([
   "home",
   "schedules",
@@ -14,7 +14,41 @@ export const PUBLIC_MENU_KEYS = new Set([
   "contact-us",
 ]);
 
-export function isPublicMenuKey(key: string): boolean {
+/** Capability code -> sidebar menu key mapping */
+const CAPABILITY_TO_MENU_KEY: Record<string, string> = {
+  SCH: "schedules",
+  TRK: "tracking",
+  BKG: "booking",
+  SI: "si",
+  BL: "bl",
+  VGM: "vgm",
+  DO: "do",
+  CRO: "cro",
+  ARN: "arrival-notice",
+  STMT: "customer-stmt",
+  CO2: "carbon",
+  PAY: "payments",
+};
+
+export function capabilityToMenuKey(capCode: string): string | undefined {
+  return CAPABILITY_TO_MENU_KEY[capCode];
+}
+
+export function menuKeyToCapability(menuKey: string): string | undefined {
+  return Object.entries(CAPABILITY_TO_MENU_KEY).find(
+    ([, v]) => v === menuKey,
+  )?.[0];
+}
+
+export function isPublicMenuKey(
+  key: string,
+  menuCategories?: Record<string, "D" | "P"> | null,
+): boolean {
+  if (menuCategories) {
+    const capCode = menuKeyToCapability(key);
+    if (capCode && menuCategories[capCode] === "D") return true;
+    if (capCode && menuCategories[capCode] === "P") return false;
+  }
   return PUBLIC_MENU_KEYS.has(key);
 }
 

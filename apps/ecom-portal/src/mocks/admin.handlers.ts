@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-25 12:45)
+// Modified by Sekar Nagarajan (2026-08-27 12:45)
 import { http, HttpResponse } from 'msw';
 import type {
   BannerConfig,
@@ -8,6 +8,8 @@ import type {
   FieldConfig,
   GlobalConfig,
   MenuConfig,
+  ModuleMappingCustomer,
+  ModuleMappingMenu,
   ServiceRestriction,
   SpecialPrivilege,
 } from '../features/admin/types/admin.types';
@@ -34,6 +36,39 @@ let MOCK_SPECIAL_PRIVILEGES: SpecialPrivilege[] = [
   { roleId: 'ROLE_AGENCY_USER', roleName: 'Agency Desk Officer', moduleCode: 'BKG', canView: true, canCreate: true, canEdit: true, canDelete: false, canApprove: false },
   { roleId: 'ROLE_VENDOR_DOCS', roleName: 'Documentation Partner', moduleCode: 'BOL', canView: true, canCreate: false, canEdit: true, canDelete: false, canApprove: true },
 ];
+
+/** Per-customer assigned privileged menus (NP). Key = `${custCode}|${webId}` */
+const MOCK_CUSTOMER_ASSIGNED: Record<string, string[]> = {
+  'CUST-001|APEXWEB': ['4', '5'],
+};
+
+const MOCK_MAPPING_CUSTOMERS: ModuleMappingCustomer[] = [
+  { custCode: 'CUST-001', webId: 'APEXWEB', compName: 'Apex Logistics Global' },
+  { custCode: 'CUST-002', webId: 'OCEANWEB', compName: 'Ocean Freight Partners' },
+  { custCode: 'CUST-003', webId: 'PACIFIC01', compName: 'Pacific Container Lines' },
+];
+
+function buildModuleMapping(
+  custCode: string,
+  webId: string,
+): ModuleMappingMenu[] {
+  const key = `${custCode}|${webId}`;
+  const assigned = new Set(MOCK_CUSTOMER_ASSIGNED[key] ?? []);
+
+  return MOCK_MENU_CONFIGS.filter((m) => m.isEnabled).map((menu, index) => {
+    const menuId = String(index + 1);
+    let category: ModuleMappingMenu['category'] = menu.category;
+    if (menu.category === 'P' && assigned.has(menuId)) {
+      category = 'NP';
+    }
+    return {
+      menuId,
+      menuName: menu.menuName || menu.labelValue.replace(/^ecom\./, ''),
+      refNo: menu.refNo,
+      category,
+    };
+  });
+}
 
 let MOCK_EMAIL_TEMPLATES: EmailTemplate[] = [
   {
@@ -101,7 +136,7 @@ let MOCK_CUTOFF_CONFIGS: CutoffConfig[] = [
 ];
 
 export const adminHandlers = [
-  // 1. Menu Management
+  // 1. Menu Management / Module Creation
   http.get('/api/v1/admin/menu-config', () => {
     return HttpResponse.json(MOCK_MENU_CONFIGS);
   }),
@@ -110,8 +145,72 @@ export const adminHandlers = [
     MOCK_MENU_CONFIGS = updated;
     return HttpResponse.json({ success: true, data: MOCK_MENU_CONFIGS });
   }),
+  http.post('/api/v1/admin/menu-config', async ({ request }) => {
+    const body = (await request.json()) as Omit<MenuConfig, 'isEnabled'> & {
+      isEnabled?: boolean;
+    };
+    const created: MenuConfig = {
+      ...body,
+      isEnabled: body.isEnabled ?? true,
+      classValue: body.classValue || '',
+      menuName: body.menuName || body.labelValue,
+    };
+    MOCK_MENU_CONFIGS = [...MOCK_MENU_CONFIGS, created];
+    return HttpResponse.json({ success: true, data: MOCK_MENU_CONFIGS });
+  }),
 
-  // 2. Special Privileges
+  // 2. Module Mapping (SpecialPrivilege.jsp parity)
+  http.get('/api/v1/admin/module-mapping/customers', ({ request }) => {
+    const url = new URL(request.url);
+    const q = (url.searchParams.get('q') ?? '').toLowerCase();
+    const data = MOCK_MAPPING_CUSTOMERS.filter(
+      (c) =>
+        !q ||
+        c.custCode.toLowerCase().includes(q) ||
+        c.compName.toLowerCase().includes(q) ||
+        c.webId.toLowerCase().includes(q),
+    );
+    return HttpResponse.json({ data });
+  }),
+  http.get('/api/v1/admin/module-mapping', ({ request }) => {
+    const url = new URL(request.url);
+    const custCode = url.searchParams.get('custCode') ?? '';
+    const webId = url.searchParams.get('webId') ?? '';
+    return HttpResponse.json({
+      data: buildModuleMapping(custCode, webId),
+    });
+  }),
+  http.post('/api/v1/admin/module-mapping/add', async ({ request }) => {
+    const body = (await request.json()) as {
+      custCode: string;
+      webId: string;
+      menuIds: string[];
+    };
+    const key = `${body.custCode}|${body.webId}`;
+    const current = new Set(MOCK_CUSTOMER_ASSIGNED[key] ?? []);
+    for (const id of body.menuIds) current.add(id);
+    MOCK_CUSTOMER_ASSIGNED[key] = [...current];
+    return HttpResponse.json({
+      data: buildModuleMapping(body.custCode, body.webId),
+    });
+  }),
+  http.post('/api/v1/admin/module-mapping/remove', async ({ request }) => {
+    const body = (await request.json()) as {
+      custCode: string;
+      webId: string;
+      menuIds: string[];
+    };
+    const key = `${body.custCode}|${body.webId}`;
+    const removeSet = new Set(body.menuIds);
+    MOCK_CUSTOMER_ASSIGNED[key] = (MOCK_CUSTOMER_ASSIGNED[key] ?? []).filter(
+      (id) => !removeSet.has(id),
+    );
+    return HttpResponse.json({
+      data: buildModuleMapping(body.custCode, body.webId),
+    });
+  }),
+
+  // Legacy special-privileges matrix (kept for compatibility)
   http.get('/api/v1/admin/special-privileges', () => {
     return HttpResponse.json(MOCK_SPECIAL_PRIVILEGES);
   }),

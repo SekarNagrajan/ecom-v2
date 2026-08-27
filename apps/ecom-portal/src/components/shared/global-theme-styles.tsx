@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 17:15)
+// Modified by Sekar Nagarajan (2026-08-27 10:54)
 import { theme } from "antd";
 
 import { tokenMix } from "../../features/theme/utils/token-mix";
@@ -931,12 +931,31 @@ export function GlobalThemeStyles() {
         font-size: ${token.fontSizeSM}px;
         margin: 0;
       }
+      .app-header-user-cluster {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        min-width: 0;
+      }
       .app-header-user-trigger {
         display: flex;
         align-items: center;
         gap: ${token.marginXS}px;
-        cursor: pointer;
+        margin: 0;
         padding: 0 ${token.paddingXS}px;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        color: inherit;
+        min-width: 0;
+      }
+      .app-header-logout.ant-btn,
+      .app-header-logout.sm-app-button {
+        color: ${token.colorTextSecondary};
+      }
+      .app-header-logout.ant-btn:hover,
+      .app-header-logout.sm-app-button:hover {
+        color: ${token.colorError} !important;
       }
       .app-header-avatar {
         background-color: ${token.colorPrimary};
@@ -1166,17 +1185,18 @@ export function GlobalThemeStyles() {
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
-        opacity: 0.8;
+        opacity: 0.95;
         z-index: 0;
       }
+      /* Modified by Sekar Nagarajan (2026-08-27 10:54) — lighter white wash so hero image reads through */
       .pub-layout-bg-overlay {
         position: absolute;
         inset: 0;
         background: linear-gradient(
           to right,
-          ${tokenMix(token.colorBgContainer, 95)} 0%,
-          ${tokenMix(token.colorBgContainer, 60)} 50%,
-          transparent 100%
+          ${tokenMix(token.colorBgContainer, 72)} 0%,
+          ${tokenMix(token.colorBgContainer, 38)} 45%,
+          transparent 85%
         );
         z-index: 1;
       }
@@ -1358,7 +1378,9 @@ export function GlobalThemeStyles() {
       input:-webkit-autofill,
       input:-webkit-autofill:hover,
       input:-webkit-autofill:focus {
-        -webkit-box-shadow: 0 0 0 1000px ${token.colorBgContainer} inset !important;
+        -webkit-box-shadow: 0 0 0 1000px ${
+          token.colorBgContainer
+        } inset !important;
         -webkit-text-fill-color: ${token.colorText} !important;
         transition: background-color 50000s ease-in-out 0s !important;
       }

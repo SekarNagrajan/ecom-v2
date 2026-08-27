@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 17:10)
+// Modified by Sekar Nagarajan (2026-08-27 13:05)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -27,6 +27,15 @@ export function AdminModuleStyles() {
         width: 100%;
         min-width: 0;
         align-items: start;
+      }
+
+      /* Content-only — modules live in the app sidebar */
+      .admin-workspace.admin-workspace--content-only {
+        display: block;
+        grid-template-columns: none;
+      }
+      .admin-workspace.admin-workspace--content-only .admin-workspace__content {
+        width: 100%;
       }
 
       .admin-workspace__nav {
@@ -170,6 +179,7 @@ export function AdminModuleStyles() {
       /* Shared module body stacks */
       .admin-config-form,
       .admin-menu-form,
+      .admin-mapping-form,
       .admin-priv-form,
       .admin-password-form,
       .admin-field-form,
@@ -304,6 +314,262 @@ export function AdminModuleStyles() {
         border-color: ${token.colorWarningBorder};
         background: ${warningTint8};
         color: ${token.colorWarning};
+      }
+
+      /* Module Creation — RegisterMenu form */
+      .admin-menu-create.ant-collapse {
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorFillAlter};
+      }
+      .admin-menu-create .ant-collapse-header {
+        align-items: center !important;
+        font-weight: ${token.fontWeightStrong};
+      }
+      .admin-menu-create__form {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginMD}px;
+        width: 100%;
+      }
+      .admin-menu-create__grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: ${token.marginMD}px;
+        width: 100%;
+      }
+      .admin-menu-create__grid .admin-login-page__field {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+        min-width: 0;
+      }
+      .admin-menu-create .admin-form-footer.form-step-footer {
+        margin-top: ${token.marginSM}px;
+      }
+
+      /* Module Mapping — dual-list board + drag-drop */
+      .admin-mapping-alert,
+      .admin-mapping-hint {
+        margin: 0;
+      }
+      .admin-mapping-customer {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXS}px;
+        width: 100%;
+      }
+      .admin-mapping-customer__row {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginSM}px;
+        width: 100%;
+        flex-wrap: wrap;
+      }
+      .admin-mapping-customer__row .ant-input-affix-wrapper,
+      .admin-mapping-customer__row > .ant-input {
+        flex: 1 1 240px;
+        min-width: 0;
+      }
+      .admin-mapping-customer__meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: ${token.marginSM}px;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorFillAlter};
+      }
+      .admin-mapping-summary {
+        display: inline-flex;
+        flex-wrap: wrap;
+        gap: ${token.marginXXS}px;
+        margin-inline-start: auto;
+      }
+      .admin-mapping-empty {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: ${token.controlHeightLG * 6}px;
+        padding: ${token.paddingLG}px;
+      }
+
+      .admin-mapping-board {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        gap: ${token.marginMD}px;
+        align-items: stretch;
+        width: 100%;
+        min-width: 0;
+      }
+      .admin-mapping-board--busy {
+        opacity: 0.72;
+        pointer-events: none;
+      }
+
+      .admin-mapping-column {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginSM}px;
+        min-width: 0;
+        min-height: 420px;
+        padding: ${token.paddingMD}px;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorBgContainer};
+        transition: border-color 0.2s ease, box-shadow 0.2s ease,
+          background-color 0.2s ease;
+      }
+      .admin-mapping-column--over {
+        border-color: ${token.colorPrimary};
+        background: ${primaryTint8};
+        box-shadow: 0 0 0 1px ${token.colorPrimaryBorder};
+      }
+      .admin-mapping-column__head {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXS}px;
+      }
+      .admin-mapping-column__title-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: ${token.marginSM}px;
+      }
+      .admin-mapping-column__title {
+        margin: 0;
+      }
+      .admin-mapping-column__hint {
+        display: block;
+        font-size: ${token.fontSizeSM}px;
+        margin: 0;
+      }
+      .admin-mapping-column__list {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginSM}px;
+        flex: 1;
+        min-height: 280px;
+        max-height: 480px;
+        overflow-y: auto;
+        padding: ${token.paddingXXS}px;
+      }
+
+      .admin-mapping-transfer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: ${token.marginSM}px;
+        padding: ${token.paddingSM}px 0;
+      }
+      .admin-mapping-transfer__hint {
+        font-size: ${token.fontSizeSM}px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+
+      .admin-mapping-card {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginSM}px;
+        width: 100%;
+        margin: 0;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorBgContainer};
+        transition: border-color 0.2s ease, background-color 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+      .admin-mapping-card:hover {
+        border-color: ${token.colorPrimaryBorder};
+      }
+      .admin-mapping-card--selected {
+        border-color: ${token.colorPrimary};
+        background: ${primaryTint8};
+      }
+      .admin-mapping-card--locked {
+        background: ${token.colorFillAlter};
+      }
+      .admin-mapping-card--dragging {
+        opacity: 0.35;
+      }
+      .admin-mapping-card--drop-target {
+        border-color: ${token.colorPrimary};
+        background: ${primaryTint8};
+      }
+      .admin-mapping-card--overlay {
+        box-shadow: ${token.boxShadowSecondary};
+        border-color: ${token.colorPrimary};
+        background: ${token.colorBgElevated};
+        cursor: grabbing;
+      }
+      .admin-mapping-card__handle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin: 0;
+        padding: ${token.paddingXXS}px;
+        border: none;
+        border-radius: ${token.borderRadiusSM}px;
+        background: transparent;
+        color: ${token.colorTextSecondary};
+        cursor: grab;
+      }
+      .admin-mapping-card__handle:hover {
+        background: ${token.colorFillSecondary};
+        color: ${token.colorPrimary};
+      }
+      .admin-mapping-card__handle--locked {
+        cursor: default;
+        color: ${token.colorTextQuaternary};
+      }
+      .admin-mapping-card__body {
+        display: flex;
+        flex: 1;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: ${token.marginXS}px;
+        min-width: 0;
+      }
+      .admin-mapping-card__name {
+        margin: 0;
+        font-weight: ${token.fontWeightStrong};
+      }
+
+      .admin-mapping-search-input {
+        margin-bottom: ${token.marginMD}px;
+      }
+      .admin-mapping-search-list {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXS}px;
+        max-height: 360px;
+        overflow-y: auto;
+      }
+      .admin-mapping-search-item {
+        display: flex;
+        align-items: flex-start;
+        gap: ${token.marginMD}px;
+        width: 100%;
+        margin: 0;
+        padding: ${token.paddingMD}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorBgContainer};
+        text-align: left;
+        cursor: pointer;
+        transition: border-color 0.2s ease, background-color 0.2s ease;
+      }
+      .admin-mapping-search-item:hover {
+        border-color: ${token.colorPrimaryBorder};
+        background: ${primaryTint8};
+      }
+      .admin-mapping-search-item__title {
+        margin: 0 0 ${token.marginXXS}px !important;
       }
 
       /* Table / row action cells */
@@ -662,6 +928,17 @@ export function AdminModuleStyles() {
           grid-template-columns: repeat(2, minmax(0, 1fr));
           gap: ${token.marginXS}px;
         }
+        .admin-mapping-panels,
+        .admin-menu-create__grid {
+          grid-template-columns: 1fr;
+        }
+        .admin-mapping-board {
+          grid-template-columns: 1fr;
+        }
+        .admin-mapping-transfer {
+          flex-direction: row;
+          justify-content: center;
+        }
       }
 
       @media (max-width: 767px) {
@@ -741,6 +1018,14 @@ export function AdminModuleStyles() {
         .admin-route-meta {
           grid-template-columns: 1fr;
           gap: ${token.marginSM}px;
+        }
+        .admin-mapping-customer__row {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .admin-mapping-customer__row .sm-app-button,
+        .admin-mapping-customer__row .ant-btn {
+          width: 100%;
         }
       }
     `}</style>

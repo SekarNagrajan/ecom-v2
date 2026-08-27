@@ -28,13 +28,9 @@ import { PublicLayoutHeader } from "./PublicLayoutHeader";
 const { Sider, Content } = Layout;
 const { Text } = Typography;
 
-function navIcon(Icon: LucideIcon, size = 18, locked = false) {
+function navIcon(Icon: LucideIcon, size = 20, locked = false) {
   return (
-    <AppIcon
-      icon={Icon}
-      size={size}
-      variant={locked ? "navLocked" : "nav"}
-    />
+    <AppIcon icon={Icon} size={size} variant={locked ? "navLocked" : "nav"} />
   );
 }
 
@@ -50,10 +46,10 @@ export function PublicLayout() {
   const { useMobileNav, stackHero, tier } = useResponsiveLayout();
   const setIntendedPath = usePostLoginRedirectStore((s) => s.setIntendedPath);
   const clearIntendedPath = usePostLoginRedirectStore(
-    (s) => s.clearIntendedPath
+    (s) => s.clearIntendedPath,
   );
   const consumeIntendedPath = usePostLoginRedirectStore(
-    (s) => s.consumeIntendedPath
+    (s) => s.consumeIntendedPath,
   );
 
   const [loginPanelOpen, setLoginPanelOpen] = useState(Boolean(search.login));
@@ -104,12 +100,12 @@ export function PublicLayout() {
       children: [
         {
           key: "schedules",
-          icon: navIcon(Icons.calendar, 16),
+          icon: navIcon(Icons.calendar, 20),
           label: menuLabel("Schedules", false),
         },
         {
           key: "tracking",
-          icon: navIcon(Icons.mapPin, 16),
+          icon: navIcon(Icons.mapPin, 20),
           label: menuLabel("Tracking", false),
         },
       ],
@@ -121,55 +117,55 @@ export function PublicLayout() {
       children: [
         {
           key: "rates",
-          icon: navIcon(Icons.dollarSign, 16),
+          icon: navIcon(Icons.dollarSign, 20),
           label: menuLabel("Rates", false),
         },
         {
           key: "tariff",
-          icon: navIcon(Icons.tag, 16),
+          icon: navIcon(Icons.tag, 20),
           label: menuLabel("Tariff", false),
         },
       ],
     },
     {
       key: "booking",
-      icon: navIcon(Icons.bookOpen, 18, true),
+      icon: navIcon(Icons.bookOpen, 20, true),
       label: menuLabel("Booking", true),
       className: "ant-menu-item-locked",
     },
     {
       key: "si",
-      icon: navIcon(Icons.clipboardList, 18, true),
+      icon: navIcon(Icons.clipboardList, 20, true),
       label: menuLabel("Shipping Instruction", true),
       className: "ant-menu-item-locked",
     },
     {
       key: "vgm",
-      icon: navIcon(Icons.shieldCheck, 18, true),
+      icon: navIcon(Icons.shieldCheck, 20, true),
       label: menuLabel("VGM", true),
       className: "ant-menu-item-locked",
     },
     {
       key: "bl",
-      icon: navIcon(Icons.shieldCheck, 18, true),
+      icon: navIcon(Icons.shieldCheck, 20, true),
       label: menuLabel("Bill of Lading", true),
       className: "ant-menu-item-locked",
     },
     {
       key: "do",
-      icon: navIcon(Icons.truck, 18, true),
+      icon: navIcon(Icons.truck, 20, true),
       label: menuLabel("Delivery Order", true),
       className: "ant-menu-item-locked",
     },
     {
       key: "arrival-notice",
-      icon: navIcon(Icons.bell, 18, true),
+      icon: navIcon(Icons.bell, 20, true),
       label: menuLabel("Arrival Notice", true),
       className: "ant-menu-item-locked",
     },
     {
       key: "cro",
-      icon: navIcon(Icons.barcode, 18, true),
+      icon: navIcon(Icons.barcode, 20, true),
       label: menuLabel("Container Release Order", true),
       className: "ant-menu-item-locked",
     },
@@ -180,25 +176,25 @@ export function PublicLayout() {
       children: [
         {
           key: "payments",
-          icon: navIcon(Icons.landmark, 16, true),
+          icon: navIcon(Icons.landmark, 20, true),
           label: menuLabel("Payment History", true),
           className: "ant-menu-item-locked",
         },
         {
           key: "customer-stmt",
-          icon: navIcon(Icons.contact, 16, true),
+          icon: navIcon(Icons.contact, 20, true),
           label: menuLabel("Customer Statement", true),
           className: "ant-menu-item-locked",
         },
         {
           key: "carbon",
-          icon: navIcon(Icons.cloud, 16, true),
+          icon: navIcon(Icons.cloud, 20, true),
           label: menuLabel("Carbon Calculator", true),
           className: "ant-menu-item-locked",
         },
         {
           key: "contact-us",
-          icon: navIcon(Icons.headphones, 16),
+          icon: navIcon(Icons.headphones, 20),
           label: menuLabel("Contact Us", false),
         },
       ],

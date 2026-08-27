@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-24 15:42)
+// Modified by Sekar Nagarajan (2026-08-26 17:40)
 import { type AppCustomConfig } from '@solverminds/shared-ui/providers';
 import { type ColorPickerProps } from 'antd';
 
@@ -69,6 +69,7 @@ export const CURRENCY_FORMAT_OPTIONS = [
 
 export const COLOR_OPTIONS = [
   { label: 'Maritime Blue', value: BE_COLOR_MAP.MARITIME },
+  { label: 'Harbor Blue', value: BE_COLOR_MAP.HARBOR },
   { label: 'Ocean Blue', value: BE_COLOR_MAP.BLUE },
   { label: 'Sunlit Gold', value: BE_COLOR_MAP.GOLD },
   { label: 'Forest Green', value: BE_COLOR_MAP.GREEN },

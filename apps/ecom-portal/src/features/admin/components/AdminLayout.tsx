@@ -1,13 +1,10 @@
-// Modified by Sekar Nagarajan (2026-08-26 17:01)
+// Modified by Sekar Nagarajan (2026-08-27 13:05)
 import { useTenantStore } from "@solverminds/auth";
 import { useToast } from "@solverminds/shared-ui/hooks";
-import type { LucideIcon } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { useSearch } from "@tanstack/react-router";
+import type { ReactNode } from "react";
 
-import { AppIcon, Icons } from "../../../components/icons";
 import { FeaturePageShell } from "../../../components/shared/feature-page-shell";
-import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
-import { MODULE_TITLES } from "../../../constants/module-titles";
 import { useAdminController } from "../hooks/use-admin-controller";
 import type {
   CutoffConfig,
@@ -16,8 +13,12 @@ import type {
   GlobalConfig,
   MenuConfig,
   ServiceRestriction,
-  SpecialPrivilege,
 } from "../types/admin.types";
+import {
+  ADMIN_SECTION_LABELS,
+  DEFAULT_ADMIN_SECTION,
+  type AdminSectionKey,
+} from "../utils/admin-menu-access";
 import { AdminModuleStyles } from "./admin-module-styles";
 import { AdminPasswordResetView } from "./AdminPasswordResetView";
 import { BannerManagerView } from "./BannerManagerView";
@@ -30,56 +31,25 @@ import { MenuManagementView } from "./MenuManagementView";
 import { ServiceRestrictionsView } from "./ServiceRestrictionsView";
 import { SpecialPrivilegesView } from "./SpecialPrivilegesView";
 
-type AdminSectionKey =
-  | "global-config"
-  | "menu-management"
-  | "special-privileges"
-  | "email-templates"
-  | "password-reset"
-  | "field-config"
-  | "service-restrictions"
-  | "banner-manager"
-  | "customer-advisories"
-  | "cutoff-config";
-
-interface AdminNavItem {
-  key: AdminSectionKey;
-  label: string;
-  icon: LucideIcon;
-}
-
-const ADMIN_NAV_ITEMS: AdminNavItem[] = [
-  { key: "global-config", label: "Global Config", icon: Icons.settings },
-  { key: "menu-management", label: "Menu Management", icon: Icons.list },
-  { key: "special-privileges", label: "Special Privileges", icon: Icons.key },
-  { key: "email-templates", label: "Email Templates", icon: Icons.mail },
-  { key: "password-reset", label: "Password Reset", icon: Icons.lock },
-  { key: "field-config", label: "Field Config", icon: Icons.formInput },
-  {
-    key: "service-restrictions",
-    label: "Route Restrictions",
-    icon: Icons.stopCircle,
-  },
-  { key: "banner-manager", label: "Banners & Assets", icon: Icons.image },
-  { key: "customer-advisories", label: "Advisories", icon: Icons.bell },
-  { key: "cutoff-config", label: "Cut-off Thresholds", icon: Icons.clock },
-];
-
 export function AdminLayout() {
+  const search = useSearch({ strict: false }) as {
+    section?: AdminSectionKey;
+  };
+  const effectiveSection = search.section ?? DEFAULT_ADMIN_SECTION;
   const activeTenant = useTenantStore((state) => state.activeTenant);
   const toast = useToast();
   const controller = useAdminController();
-  const [activeSection, setActiveSection] =
-    useState<AdminSectionKey>("global-config");
 
   const handleSaveMenu = async (menus: MenuConfig[]) => {
     await controller.updateMenuConfigs(menus);
     toast.success("Global Menu Configuration Updated Successfully");
   };
 
-  const handleSavePrivileges = async (privs: SpecialPrivilege[]) => {
-    await controller.updateSpecialPrivileges(privs);
-    toast.success("Special Privileges Matrix Saved");
+  const handleCreateMenu = async (
+    data: Parameters<typeof controller.createMenuConfig>[0],
+  ) => {
+    await controller.createMenuConfig(data);
+    toast.success("Menu created successfully");
   };
 
   const handleSaveEmailTemplate = async (
@@ -121,14 +91,10 @@ export function AdminLayout() {
       <MenuManagementView
         menus={controller.menuConfigs}
         onSave={handleSaveMenu}
+        onCreate={handleCreateMenu}
       />
     ),
-    "special-privileges": (
-      <SpecialPrivilegesView
-        privileges={controller.specialPrivileges}
-        onSave={handleSavePrivileges}
-      />
-    ),
+    "special-privileges": <SpecialPrivilegesView />,
     "email-templates": (
       <EmailTemplateEditorView
         templates={controller.emailTemplates}
@@ -170,56 +136,26 @@ export function AdminLayout() {
     ),
   };
 
-  const activeNav =
-    ADMIN_NAV_ITEMS.find((item) => item.key === activeSection) ??
-    ADMIN_NAV_ITEMS[0];
+  const sectionTitle = ADMIN_SECTION_LABELS[effectiveSection];
 
   return (
     <FeaturePageShell>
       <AdminModuleStyles />
       <div className="admin-layout">
-        <ModuleScreenHeader
+        {/* <ModuleScreenHeader
           icon={Icons.shieldCheck}
-          title={MODULE_TITLES.admin}
+          title={sectionTitle}
           subtitle={`Tenant Scope: ${activeTenant.name} (${activeTenant.customerCode})`}
-        />
+        /> */}
 
-        <div className="admin-workspace">
-          <aside className="admin-workspace__nav" aria-label="Admin sections">
-            <p className="admin-workspace__nav-title">Admin Sections</p>
-            <nav className="admin-workspace__nav-list">
-              {ADMIN_NAV_ITEMS.map((item) => {
-                const isActive = item.key === activeSection;
-                return (
-                  <button
-                    key={item.key}
-                    type="button"
-                    className={[
-                      "admin-workspace__nav-item",
-                      isActive
-                        ? "admin-workspace__nav-item--active"
-                        : undefined,
-                    ]
-                      .filter(Boolean)
-                      .join(" ")}
-                    aria-current={isActive ? "page" : undefined}
-                    onClick={() => setActiveSection(item.key)}
-                  >
-                    <AppIcon icon={item.icon} size={16} />
-                    <span>{item.label}</span>
-                  </button>
-                );
-              })}
-            </nav>
-          </aside>
-
-          <section
-            className="admin-workspace__content"
-            aria-label={activeNav.label}
-          >
-            {sectionContent[activeSection]}
-          </section>
-        </div>
+        <section
+          className="admin-workspace admin-workspace--content-only"
+          aria-label={sectionTitle}
+        >
+          <div className="admin-workspace__content">
+            {sectionContent[effectiveSection]}
+          </div>
+        </section>
       </div>
     </FeaturePageShell>
   );

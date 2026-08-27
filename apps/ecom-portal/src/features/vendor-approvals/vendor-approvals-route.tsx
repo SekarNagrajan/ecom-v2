@@ -1,5 +1,6 @@
-// Modified by Sekar Nagarajan (2026-08-26 16:25)
-import { createRoute } from "@tanstack/react-router";
+// Modified by Sekar Nagarajan (2026-08-27 11:50)
+import { useAuthStore } from "@solverminds/auth";
+import { createRoute, redirect } from "@tanstack/react-router";
 import { Card } from "antd";
 
 import { appRoute } from "../../app/router";
@@ -21,5 +22,14 @@ function VendorApprovalsPage() {
 export const vendorApprovalsRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "vendor-approvals",
+  beforeLoad: () => {
+    const user = useAuthStore.getState().user;
+    if (!user) {
+      throw redirect({ to: "/", search: { login: true } as never });
+    }
+    if (user.role !== "VENDOR" && user.role !== "ADMIN") {
+      throw redirect({ to: "/app/dashboard" });
+    }
+  },
   component: VendorApprovalsPage,
 });

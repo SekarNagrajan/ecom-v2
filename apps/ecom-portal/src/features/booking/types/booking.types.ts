@@ -1,6 +1,60 @@
-// Created by Antigravity (2026-08-22 09:45)
+// Modified by Sekar Nagarajan (2026-08-26 18:43)
 import { z } from 'zod';
 import type { ApiResponse } from '../../../types/api.types';
+
+/** One sail/move leg — JSP Route row inside a routing option (module details). */
+export const bookingRouteLegSchema = z.object({
+  id: z.string().min(1),
+  legType: z.enum(['Mainline', 'Feeder', 'Inland', 'Vessel']),
+  vesselName: z.string().min(1),
+  vesselCode: z.string().optional(),
+  voyage: z.string().optional(),
+  bound: z.string().optional(),
+  serviceName: z.string().optional(),
+  serviceCode: z.string().optional(),
+  polPortId: z.string().min(1),
+  polPortName: z.string().min(1),
+  podPortId: z.string().min(1),
+  podPortName: z.string().min(1),
+  etd: z.string().min(1),
+  eta: z.string().min(1),
+  terminal: z.string().optional(),
+});
+
+export type BookingRouteLeg = z.infer<typeof bookingRouteLegSchema>;
+
+/** Selected vessel/route from ebookRoutingDetails-style popup (JSP parity). */
+export const selectedRouteSchema = z.object({
+  routeId: z.string().min(1),
+  serviceCode: z.string().min(1),
+  serviceName: z.string().min(1),
+  vesselCode: z.string().min(1),
+  vesselName: z.string().min(1),
+  voyage: z.string().min(1),
+  bound: z.string().min(1),
+  polPortId: z.string().min(1),
+  polPortName: z.string().min(1),
+  podPortId: z.string().min(1),
+  podPortName: z.string().min(1),
+  polTerminal: z.string().optional(),
+  podTerminal: z.string().optional(),
+  etd: z.string().min(1),
+  eta: z.string().min(1),
+  transitTimeDays: z.number(),
+  isDirect: z.boolean(),
+  isDefaultRoute: z.boolean().optional(),
+  transshipmentCount: z.number().optional(),
+  shipmentKind: z
+    .enum(['Direct', 'Transshipment', 'Multimodal'])
+    .optional(),
+  gateInCutoff: z.string().optional(),
+  siDocCutoff: z.string().optional(),
+  vgmCutoff: z.string().optional(),
+  /** Module / leg timeline for Transshipment & Multimodal (eBookingRouteDetails parity). */
+  legs: z.array(bookingRouteLegSchema).optional(),
+});
+
+export type SelectedRoute = z.infer<typeof selectedRouteSchema>;
 
 // Step 1: Master Details (formerly Routing & Schedule)
 export const masterDetailsSchema = z.object({
@@ -35,6 +89,9 @@ export const masterDetailsSchema = z.object({
   acid: z.string().optional(),
   dpwShipperType: z.string().optional(),
   dpwShipperCode: z.string().optional(),
+
+  /** Vessel/route chosen via Select Vessel/Route popup (required to leave step 0 in UI). */
+  selectedRoute: selectedRouteSchema.nullable().optional(),
 });
 
 // Step 2: Parties

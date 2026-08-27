@@ -1,11 +1,21 @@
-// Modified by Sekar Nagarajan (2026-08-26 16:39)
+// Modified by Sekar Nagarajan (2026-08-27 12:42)
+/**
+ * Module Creation — parity with RegisterMenu.jsp:
+ * create form + list with enable/disable (Global Menu Management).
+ */
+import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton, AppSwitch } from "@solverminds/shared-ui";
-import { Table, Tag, Tooltip, Typography } from "antd";
+import { Collapse, Input, Select, Table, Tag, Tooltip, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { useState } from "react";
+import { Controller, useForm, type Resolver } from "react-hook-form";
 
 import { AppIcon, Icons } from "../../../components/icons";
-import type { MenuConfig } from "../types/admin.types";
+import {
+  MenuCreateSchema,
+  type MenuConfig,
+  type MenuCreateForm,
+} from "../types/admin.types";
 import { AdminPanelShell } from "./AdminPanelShell";
 
 const { Text } = Typography;
@@ -13,6 +23,9 @@ const { Text } = Typography;
 interface MenuManagementViewProps {
   menus: MenuConfig[];
   onSave: (menus: MenuConfig[]) => void | Promise<void>;
+  onCreate: (
+    menu: Omit<MenuConfig, "isEnabled"> & { isEnabled?: boolean },
+  ) => void | Promise<void>;
 }
 
 function menusSignature(items: MenuConfig[]) {
@@ -27,12 +40,33 @@ function menusSignature(items: MenuConfig[]) {
 export function MenuManagementView({
   menus,
   onSave,
+  onCreate,
 }: MenuManagementViewProps) {
   const [draft, setDraft] = useState<MenuConfig[]>(menus);
   const [appliedSignature, setAppliedSignature] = useState(() =>
     menusSignature(menus),
   );
   const [isSaving, setIsSaving] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
+
+  const createForm = useForm<MenuCreateForm>({
+    resolver: zodResolver(MenuCreateSchema) as Resolver<MenuCreateForm>,
+    defaultValues: {
+      menuName: "",
+      menuOrder: menus.length + 1,
+      userType: undefined,
+      developedBy: "",
+      refNo: "",
+      status: "A",
+      category: "P",
+      createdBy: "",
+      classValue: "",
+      attrValue: "",
+      labelValue: "",
+      menuType: "",
+      parentMenu: "",
+    },
+  });
 
   const nextSignature = menusSignature(menus);
   if (nextSignature !== appliedSignature) {
@@ -64,6 +98,49 @@ export function MenuManagementView({
       setIsSaving(false);
     }
   };
+
+  const handleCreateSubmit = createForm.handleSubmit(async (values) => {
+    setIsCreating(true);
+    try {
+      await onCreate({
+        refNo: values.refNo,
+        labelValue: values.labelValue,
+        menuName: values.menuName,
+        category: values.category,
+        classValue: values.classValue || "",
+        attrValue: values.attrValue,
+        orderNo: values.menuOrder,
+        isEnabled: values.status === "A",
+        userType: values.userType,
+        menuType: values.menuType,
+        parentMenu: values.parentMenu,
+        developedBy: values.developedBy,
+        createdBy: values.createdBy,
+      });
+      createForm.reset({
+        menuName: "",
+        menuOrder: menus.length + 2,
+        userType: undefined,
+        developedBy: "",
+        refNo: "",
+        status: "A",
+        category: "P",
+        createdBy: "",
+        classValue: "",
+        attrValue: "",
+        labelValue: "",
+        menuType: "",
+        parentMenu: "",
+      });
+    } finally {
+      setIsCreating(false);
+    }
+  });
+
+  const {
+    control,
+    formState: { errors },
+  } = createForm;
 
   const columns: ColumnsType<MenuConfig> = [
     {
@@ -101,6 +178,14 @@ export function MenuManagementView({
         <Tag className="admin-code-tag" color="blue">
           {val}
         </Tag>
+      ),
+    },
+    {
+      title: "Menu Name",
+      dataIndex: "menuName",
+      key: "menuName",
+      render: (val: string | undefined, record) => (
+        <Text>{val || record.labelValue}</Text>
       ),
     },
     {
@@ -152,10 +237,279 @@ export function MenuManagementView({
   return (
     <AdminPanelShell
       icon={Icons.list}
-      title="Global Menu Management"
-      subtitle="Configure menu hierarchy, visibility, and category entitlement rules."
+      title="Module Creation"
+      subtitle="Register new menus and configure visibility / category entitlement rules."
     >
       <div className="admin-menu-form">
+        <Collapse
+          className="admin-menu-create"
+          defaultActiveKey={["create"]}
+          items={[
+            {
+              key: "create",
+              label: "Create Menu (Register)",
+              children: (
+                <form
+                  onSubmit={handleCreateSubmit}
+                  className="admin-menu-create__form"
+                  autoComplete="off"
+                >
+                  <div className="admin-menu-create__grid">
+                    <div className="admin-login-page__field">
+                      <label className="form-field-label">
+                        Menu Name <Text type="danger">*</Text>
+                      </label>
+                      <Controller
+                        control={control}
+                        name="menuName"
+                        render={({ field }) => (
+                          <Input
+                            {...field}
+                            size="large"
+                            status={errors.menuName ? "error" : undefined}
+                          />
+                        )}
+                      />
+                      {errors.menuName ? (
+                        <Text type="danger" className="form-field-error">
+                          {errors.menuName.message}
+                        </Text>
+                      ) : null}
+                    </div>
+                    <div className="admin-login-page__field">
+                      <label className="form-field-label">
+                        Menu Order <Text type="danger">*</Text>
+                      </label>
+                      <Controller
+                        control={control}
+                        name="menuOrder"
+                        render={({ field }) => (
+                          <Input
+                            size="large"
+                            type="number"
+                            value={field.value}
+                            status={errors.menuOrder ? "error" : undefined}
+                            onChange={(e) => {
+                              const next = Number(e.target.value);
+                              field.onChange(
+                                Number.isFinite(next) ? next : field.value,
+                              );
+                            }}
+                            onBlur={field.onBlur}
+                            name={field.name}
+                            ref={field.ref}
+                          />
+                        )}
+                      />
+                      {errors.menuOrder ? (
+                        <Text type="danger" className="form-field-error">
+                          {errors.menuOrder.message}
+                        </Text>
+                      ) : null}
+                    </div>
+                    <div className="admin-login-page__field">
+                      <label className="form-field-label">
+                        User Type <Text type="danger">*</Text>
+                      </label>
+                      <Controller
+                        control={control}
+                        name="userType"
+                        render={({ field }) => (
+                          <Select
+                            {...field}
+                            size="large"
+                            placeholder="Select"
+                            options={[
+                              { value: "U", label: "User" },
+                              { value: "V", label: "Vendor" },
+                            ]}
+                            status={errors.userType ? "error" : undefined}
+                          />
+                        )}
+                      />
+                      {errors.userType ? (
+                        <Text type="danger" className="form-field-error">
+                          {errors.userType.message}
+                        </Text>
+                      ) : null}
+                    </div>
+                    <div className="admin-login-page__field">
+                      <label className="form-field-label">
+                        Ref No <Text type="danger">*</Text>
+                      </label>
+                      <Controller
+                        control={control}
+                        name="refNo"
+                        render={({ field }) => (
+                          <Input
+                            {...field}
+                            size="large"
+                            status={errors.refNo ? "error" : undefined}
+                          />
+                        )}
+                      />
+                      {errors.refNo ? (
+                        <Text type="danger" className="form-field-error">
+                          {errors.refNo.message}
+                        </Text>
+                      ) : null}
+                    </div>
+                    <div className="admin-login-page__field">
+                      <label className="form-field-label">
+                        Status <Text type="danger">*</Text>
+                      </label>
+                      <Controller
+                        control={control}
+                        name="status"
+                        render={({ field }) => (
+                          <Select
+                            {...field}
+                            size="large"
+                            options={[
+                              { value: "A", label: "ACTIVE" },
+                              { value: "I", label: "INACTIVE" },
+                            ]}
+                          />
+                        )}
+                      />
+                    </div>
+                    <div className="admin-login-page__field">
+                      <label className="form-field-label">
+                        Category <Text type="danger">*</Text>
+                      </label>
+                      <Controller
+                        control={control}
+                        name="category"
+                        render={({ field }) => (
+                          <Select
+                            {...field}
+                            size="large"
+                            options={[
+                              { value: "D", label: "Default" },
+                              { value: "P", label: "Privileged" },
+                            ]}
+                          />
+                        )}
+                      />
+                    </div>
+                    <div className="admin-login-page__field">
+                      <label className="form-field-label">
+                        Label Value <Text type="danger">*</Text>
+                      </label>
+                      <Controller
+                        control={control}
+                        name="labelValue"
+                        render={({ field }) => (
+                          <Input
+                            {...field}
+                            size="large"
+                            placeholder="e.g. ecom.booking"
+                            status={errors.labelValue ? "error" : undefined}
+                          />
+                        )}
+                      />
+                      {errors.labelValue ? (
+                        <Text type="danger" className="form-field-error">
+                          {errors.labelValue.message}
+                        </Text>
+                      ) : null}
+                    </div>
+                    <div className="admin-login-page__field">
+                      <label className="form-field-label">
+                        Attr / Route <Text type="danger">*</Text>
+                      </label>
+                      <Controller
+                        control={control}
+                        name="attrValue"
+                        render={({ field }) => (
+                          <Input
+                            {...field}
+                            size="large"
+                            placeholder="e.g. /app/booking"
+                            status={errors.attrValue ? "error" : undefined}
+                          />
+                        )}
+                      />
+                      {errors.attrValue ? (
+                        <Text type="danger" className="form-field-error">
+                          {errors.attrValue.message}
+                        </Text>
+                      ) : null}
+                    </div>
+                    <div className="admin-login-page__field">
+                      <label className="form-field-label">Class Value</label>
+                      <Controller
+                        control={control}
+                        name="classValue"
+                        render={({ field }) => (
+                          <Input {...field} size="large" />
+                        )}
+                      />
+                    </div>
+                    <div className="admin-login-page__field">
+                      <label className="form-field-label">Developed By</label>
+                      <Controller
+                        control={control}
+                        name="developedBy"
+                        render={({ field }) => (
+                          <Input {...field} size="large" />
+                        )}
+                      />
+                    </div>
+                    <div className="admin-login-page__field">
+                      <label className="form-field-label">Created By</label>
+                      <Controller
+                        control={control}
+                        name="createdBy"
+                        render={({ field }) => (
+                          <Input {...field} size="large" />
+                        )}
+                      />
+                    </div>
+                    <div className="admin-login-page__field">
+                      <label className="form-field-label">Menu Type</label>
+                      <Controller
+                        control={control}
+                        name="menuType"
+                        render={({ field }) => (
+                          <Input {...field} size="large" />
+                        )}
+                      />
+                    </div>
+                    <div className="admin-login-page__field">
+                      <label className="form-field-label">Parent Menu</label>
+                      <Controller
+                        control={control}
+                        name="parentMenu"
+                        render={({ field }) => (
+                          <Input {...field} size="large" />
+                        )}
+                      />
+                    </div>
+                  </div>
+                  <div className="admin-form-footer form-step-footer">
+                    <AppButton
+                      htmlType="button"
+                      onClick={() => createForm.reset()}
+                      disabled={isCreating}
+                    >
+                      Reset
+                    </AppButton>
+                    <AppButton
+                      type="primary"
+                      htmlType="submit"
+                      loading={isCreating}
+                      icon={<AppIcon icon={Icons.plus} size={16} />}
+                    >
+                      Submit
+                    </AppButton>
+                  </div>
+                </form>
+              ),
+            },
+          ]}
+        />
+
         <div className="admin-menu-summary" aria-label="Menu summary">
           <span className="admin-menu-summary__chip">
             <AppIcon icon={Icons.list} size={14} />

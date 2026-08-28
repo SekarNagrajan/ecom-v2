@@ -1,6 +1,5 @@
-// Modified by Sekar Nagarajan (2026-08-28 12:09)
+// Modified by Sekar Nagarajan (2026-08-28 15:19)
 import {
-  Card,
   Checkbox,
   Col,
   Input,
@@ -66,11 +65,9 @@ export function CargoCommodityCard({
   const path = (field: string) => `containers.${ci}.commodities.${mi}.${field}`;
 
   return (
-    <Card
-      size="small"
-      className="form-step-card form-step-section booking-cargo-commodity-card"
-      title={`Commodity ${mi + 1}`}
-      extra={
+    <section className="booking-cargo-commodity-card">
+      <div className="booking-cargo-commodity-card__header">
+        <Text strong>Commodity {mi + 1}</Text>
         <ListActionsRow>
           <ListActionButton
             title="Copy Commodity"
@@ -89,10 +86,9 @@ export function CargoCommodityCard({
             onClick={onRemove}
           />
         </ListActionsRow>
-      }
-    >
+      </div>
+
       <Row gutter={[24, 24]}>
-        {/* Modified by Sekar Nagarajan (2026-08-28 12:09) — single Commodity (code + name) field */}
         <Col {...RESPONSIVE_COL.formSixth}>
           <div className="form-field-cell">
             <label className="form-field-label">
@@ -375,6 +371,6 @@ export function CargoCommodityCard({
           </Col>
         </Row>
       ) : null}
-    </Card>
+    </section>
   );
 }

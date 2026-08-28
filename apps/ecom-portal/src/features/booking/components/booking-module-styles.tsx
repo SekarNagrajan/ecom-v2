@@ -856,20 +856,184 @@ export function BookingModuleStyles() {
         }
       }
 
+      /* Modified by Sekar Nagarajan (2026-08-28 15:19) — master/detail cargo layout */
+      .booking-cargo-split {
+        display: grid;
+        grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+        gap: ${token.marginMD}px;
+        align-items: stretch;
+        min-height: 420px;
+      }
+      .booking-cargo-split__list {
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorBgContainer};
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        max-height: min(70vh, 720px);
+        overflow: hidden;
+      }
+      .booking-cargo-split__list-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: ${token.marginSM}px;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        border-bottom: 1px solid ${token.colorBorderSecondary};
+        flex-shrink: 0;
+      }
+      .booking-cargo-split__list-items {
+        list-style: none;
+        margin: 0;
+        padding: ${token.paddingXS}px;
+        overflow-y: auto;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+      }
+      .booking-cargo-split__item {
+        width: 100%;
+        text-align: left;
+        border: 1px solid transparent;
+        border-radius: ${token.borderRadius}px;
+        background: transparent;
+        padding: ${token.paddingSM}px;
+        cursor: pointer;
+        transition: border-color 0.15s ease, background 0.15s ease;
+      }
+      .booking-cargo-split__item:hover {
+        background: ${token.colorFillAlter};
+      }
+      .booking-cargo-split__item--active {
+        border-color: ${token.colorPrimary};
+        background: ${token.colorPrimaryBg};
+      }
+      .booking-cargo-split__item--error {
+        border-color: ${token.colorError};
+      }
+      .booking-cargo-split__item-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: ${token.marginXS}px;
+      }
+      .booking-cargo-split__item-title {
+        margin: 0 !important;
+      }
+      .booking-cargo-split__item-qty {
+        font-size: ${token.fontSizeSM}px;
+        white-space: nowrap;
+      }
+      .booking-cargo-split__item-type {
+        display: block;
+        margin-top: ${token.marginXXS}px;
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+        line-height: 1.3;
+      }
+      .booking-cargo-split__item-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        margin-top: ${token.marginXS}px;
+      }
+      .booking-cargo-split__detail {
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorBgContainer};
+        padding: ${token.paddingMD}px ${token.paddingLG}px;
+        min-width: 0;
+        max-height: min(70vh, 720px);
+        overflow-y: auto;
+      }
+      /* Modified by Sekar Nagarajan (2026-08-28 15:23) — padding/margin for cargo field layers */
+      .booking-cargo-detail__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: ${token.marginSM}px;
+        margin-bottom: ${token.marginLG}px;
+        flex-wrap: wrap;
+      }
+      .booking-cargo-detail__title {
+        margin: 0 !important;
+      }
+      .booking-cargo-detail__section {
+        margin-top: ${token.marginLG}px;
+        margin-bottom: ${token.marginSM}px;
+        padding: ${token.paddingMD}px ${token.paddingLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorFillAlter};
+      }
+      .booking-cargo-detail__section-title {
+        display: block;
+        margin-bottom: ${token.marginMD}px;
+      }
       .booking-cargo-toolbar {
         margin-bottom: ${token.marginMD}px;
       }
       .booking-cargo-container-card {
         margin-bottom: ${token.marginLG}px;
+        border: 1px solid ${token.colorBorderSecondary} !important;
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorFillAlter};
+      }
+      .booking-cargo-container-card.ant-card {
+        box-shadow: none !important;
+      }
+      .booking-cargo-container-card > .ant-card-body {
+        padding: ${token.paddingMD}px ${token.paddingLG}px !important;
       }
       .booking-cargo-container-card__title {
         margin: 0 !important;
       }
       .booking-cargo-commodity-toolbar {
-        margin: ${token.marginMD}px 0 ${token.marginSM}px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: ${token.marginSM}px;
+        margin: ${token.marginLG}px 0 ${token.marginMD}px;
+        flex-wrap: wrap;
       }
       .booking-cargo-commodity-card {
         margin-bottom: ${token.marginMD}px;
+        padding: ${token.paddingMD}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorFillAlter};
+      }
+      .booking-cargo-commodity-card__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: ${token.marginSM}px;
+        margin-bottom: ${token.marginMD}px;
+        flex-wrap: wrap;
+      }
+      @media (max-width: 991px) {
+        .booking-cargo-split {
+          grid-template-columns: 1fr;
+          min-height: 0;
+        }
+        .booking-cargo-split__list {
+          max-height: none;
+        }
+        .booking-cargo-split__list-items {
+          flex-direction: row;
+          overflow-x: auto;
+          overflow-y: hidden;
+          padding-bottom: ${token.paddingXS}px;
+        }
+        .booking-cargo-split__list-items > li {
+          flex: 0 0 min(240px, 80vw);
+        }
+        .booking-cargo-split__detail {
+          max-height: none;
+        }
       }
       .form-field-full-width.ant-input-number,
       .form-field-full-width.ant-input-number-group-wrapper {
@@ -911,7 +1075,8 @@ export function BookingModuleStyles() {
         border-right-width: 0;
       }
       .booking-cargo-container-card .list-actions-row,
-      .booking-cargo-commodity-card .list-actions-row {
+      .booking-cargo-commodity-card .list-actions-row,
+      .booking-cargo-detail__header .list-actions-row {
         display: inline-flex;
         align-items: center;
         gap: ${token.marginXXS}px;
@@ -1195,6 +1360,7 @@ export function BookingModuleStyles() {
         width: 100%;
         grid-template-columns: repeat(6, minmax(0, 1fr));
         gap: ${token.marginMD}px ${token.marginLG}px;
+        padding-top: ${token.paddingXXS}px;
       }
       @media (max-width: 1199px) {
         .booking-oog-form-grid {

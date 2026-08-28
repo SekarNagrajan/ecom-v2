@@ -1,14 +1,14 @@
 // Created by Sekar Nagarajan (2026-08-27 19:12)
-import type { PartiesData } from '../types/booking.types';
+import type { PartiesData } from "../types/booking.types";
 
 export type PartyRoleKey =
-  | 'shipper'
-  | 'consignee'
-  | 'notifyParty'
-  | 'notifyParty2'
-  | 'forwarder'
-  | 'agreementParty'
-  | 'siSubmittingParty';
+  | "shipper"
+  | "consignee"
+  | "notifyParty"
+  | "notifyParty2"
+  | "forwarder"
+  | "agreementParty"
+  | "siSubmittingParty";
 
 export interface PartyCardData {
   company: string;
@@ -21,34 +21,34 @@ export interface PartyCardData {
 }
 
 export const PARTY_ROLE_OPTIONS: { key: PartyRoleKey; label: string }[] = [
-  { key: 'shipper', label: 'Shipper' },
-  { key: 'consignee', label: 'Consignee' },
-  { key: 'notifyParty', label: 'Notify Party' },
-  { key: 'notifyParty2', label: 'Notify Party 2' },
-  { key: 'forwarder', label: 'Forwarder' },
-  { key: 'agreementParty', label: 'Agreement Party' },
-  { key: 'siSubmittingParty', label: 'SI Submitting Party' },
+  { key: "shipper", label: "Shipper" },
+  { key: "consignee", label: "Consignee" },
+  { key: "notifyParty", label: "Notify Party" },
+  { key: "notifyParty2", label: "Notify Party 2" },
+  { key: "forwarder", label: "Forwarder" },
+  { key: "agreementParty", label: "Agreement Party" },
+  { key: "siSubmittingParty", label: "SI Submitting Party" },
 ];
 
 export const PARTY_ROLE_LABEL: Record<PartyRoleKey, string> = {
-  shipper: 'Shipper',
-  consignee: 'Consignee',
-  notifyParty: 'Notify Party',
-  notifyParty2: 'Notify Party 2',
-  forwarder: 'Forwarder',
-  agreementParty: 'Agreement Party',
-  siSubmittingParty: 'SI Submitting Party',
+  shipper: "Shipper",
+  consignee: "Consignee",
+  notifyParty: "Notify Party",
+  notifyParty2: "Notify Party 2",
+  forwarder: "Forwarder",
+  agreementParty: "Agreement Party",
+  siSubmittingParty: "SI Submitting Party",
 };
 
 export function emptyPartyCard(): PartyCardData {
   return {
-    company: '',
-    contact: '',
-    address: '',
-    city: '',
-    country: '',
-    email: '',
-    phone: '',
+    company: "",
+    contact: "",
+    address: "",
+    city: "",
+    country: "",
+    email: "",
+    phone: "",
   };
 }
 
@@ -60,78 +60,78 @@ export function partiesToCards(
   if (parties.shipperName) {
     cards.shipper = {
       company: parties.shipperName,
-      contact: parties.shipperContact || parties.shipperReference || '',
-      address: parties.shipperAddress || '',
-      city: parties.shipperCity || '',
-      country: parties.shipperCountry || '',
-      email: parties.shipperEmail || '',
-      phone: parties.shipperPhone || '',
+      contact: parties.shipperContact || parties.shipperReference || "",
+      address: parties.shipperAddress || "",
+      city: parties.shipperCity || "",
+      country: parties.shipperCountry || "",
+      email: parties.shipperEmail || "",
+      phone: parties.shipperPhone || "",
     };
   }
   if (parties.consigneeName) {
     cards.consignee = {
       company: parties.consigneeName,
-      contact: parties.consigneeContact || '',
-      address: parties.consigneeAddress || '',
-      city: parties.consigneeCity || '',
-      country: parties.consigneeCountry || '',
-      email: parties.consigneeEmail || '',
-      phone: parties.consigneePhone || '',
+      contact: parties.consigneeContact || "",
+      address: parties.consigneeAddress || "",
+      city: parties.consigneeCity || "",
+      country: parties.consigneeCountry || "",
+      email: parties.consigneeEmail || "",
+      phone: parties.consigneePhone || "",
     };
   }
   if (parties.notifyPartyName) {
     cards.notifyParty = {
       company: parties.notifyPartyName,
-      contact: parties.notifyPartyContact || '',
-      address: parties.notifyPartyAddress || '',
-      city: parties.notifyPartyCity || '',
-      country: parties.notifyPartyCountry || '',
-      email: parties.notifyPartyEmail || '',
-      phone: parties.notifyPartyPhone || '',
+      contact: parties.notifyPartyContact || "",
+      address: parties.notifyPartyAddress || "",
+      city: parties.notifyPartyCity || "",
+      country: parties.notifyPartyCountry || "",
+      email: parties.notifyPartyEmail || "",
+      phone: parties.notifyPartyPhone || "",
     };
   }
   if (parties.notifyParty2Name) {
     cards.notifyParty2 = {
       company: parties.notifyParty2Name,
-      contact: parties.notifyParty2Contact || '',
-      address: '',
-      city: '',
-      country: '',
-      email: '',
-      phone: '',
+      contact: parties.notifyParty2Contact || "",
+      address: "",
+      city: "",
+      country: "",
+      email: "",
+      phone: "",
     };
   }
   if (parties.freightForwarder) {
     cards.forwarder = {
       company: parties.freightForwarder,
-      contact: parties.freightForwarderContact || '',
-      address: '',
-      city: '',
-      country: '',
-      email: '',
-      phone: '',
+      contact: parties.freightForwarderContact || "",
+      address: "",
+      city: "",
+      country: "",
+      email: "",
+      phone: "",
     };
   }
   if (parties.agreementParty) {
     cards.agreementParty = {
       company: parties.agreementParty,
-      contact: parties.agreementPartyContact || '',
-      address: '',
-      city: '',
-      country: '',
-      email: '',
-      phone: '',
+      contact: parties.agreementPartyContact || "",
+      address: "",
+      city: "",
+      country: "",
+      email: "",
+      phone: "",
     };
   }
   if (parties.siSubmittingParty) {
     cards.siSubmittingParty = {
       company: parties.siSubmittingParty,
-      contact: parties.siSubmittingPartyContact || '',
-      address: '',
-      city: '',
-      country: '',
-      email: '',
-      phone: '',
+      contact: parties.siSubmittingPartyContact || "",
+      address: "",
+      city: "",
+      country: "",
+      email: "",
+      phone: "",
     };
   }
   return cards;
@@ -149,35 +149,35 @@ export function cardsToParties(
   const si = cards.siSubmittingParty;
 
   return {
-    shipperName: shipper?.company || '',
-    shipperReference: '',
-    shipperContact: shipper?.contact || '',
-    shipperAddress: shipper?.address || '',
-    shipperCity: shipper?.city || '',
-    shipperCountry: shipper?.country || '',
-    shipperEmail: shipper?.email || '',
-    shipperPhone: shipper?.phone || '',
-    consigneeName: consignee?.company || '',
-    consigneeContact: consignee?.contact || '',
-    consigneeAddress: consignee?.address || '',
-    consigneeCity: consignee?.city || '',
-    consigneeCountry: consignee?.country || '',
-    consigneeEmail: consignee?.email || '',
-    consigneePhone: consignee?.phone || '',
-    notifyPartyName: notify?.company || '',
-    notifyPartyContact: notify?.contact || '',
-    notifyPartyAddress: notify?.address || '',
-    notifyPartyCity: notify?.city || '',
-    notifyPartyCountry: notify?.country || '',
-    notifyPartyEmail: notify?.email || '',
-    notifyPartyPhone: notify?.phone || '',
-    notifyParty2Name: notify2?.company || '',
-    notifyParty2Contact: notify2?.contact || '',
-    freightForwarder: forwarder?.company || '',
-    freightForwarderContact: forwarder?.contact || '',
-    agreementParty: agreement?.company || '',
-    agreementPartyContact: agreement?.contact || '',
-    siSubmittingParty: si?.company || '',
-    siSubmittingPartyContact: si?.contact || '',
+    shipperName: shipper?.company || "",
+    shipperReference: "",
+    shipperContact: shipper?.contact || "",
+    shipperAddress: shipper?.address || "",
+    shipperCity: shipper?.city || "",
+    shipperCountry: shipper?.country || "",
+    shipperEmail: shipper?.email || "",
+    shipperPhone: shipper?.phone || "",
+    consigneeName: consignee?.company || "",
+    consigneeContact: consignee?.contact || "",
+    consigneeAddress: consignee?.address || "",
+    consigneeCity: consignee?.city || "",
+    consigneeCountry: consignee?.country || "",
+    consigneeEmail: consignee?.email || "",
+    consigneePhone: consignee?.phone || "",
+    notifyPartyName: notify?.company || "",
+    notifyPartyContact: notify?.contact || "",
+    notifyPartyAddress: notify?.address || "",
+    notifyPartyCity: notify?.city || "",
+    notifyPartyCountry: notify?.country || "",
+    notifyPartyEmail: notify?.email || "",
+    notifyPartyPhone: notify?.phone || "",
+    notifyParty2Name: notify2?.company || "",
+    notifyParty2Contact: notify2?.contact || "",
+    freightForwarder: forwarder?.company || "",
+    freightForwarderContact: forwarder?.contact || "",
+    agreementParty: agreement?.company || "",
+    agreementPartyContact: agreement?.contact || "",
+    siSubmittingParty: si?.company || "",
+    siSubmittingPartyContact: si?.contact || "",
   };
 }

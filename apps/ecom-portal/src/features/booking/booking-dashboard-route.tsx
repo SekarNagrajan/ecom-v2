@@ -31,8 +31,9 @@ export function BookingDashboardRoute() {
   const toast = useToast();
   const queryClient = useQueryClient();
   const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
-  const [selectedBooking, setSelectedBooking] =
-    useState<BookingListDTO | null>(null);
+  const [selectedBooking, setSelectedBooking] = useState<BookingListDTO | null>(
+    null,
+  );
 
   const { data: bookings = [], isLoading } = useQuery({
     queryKey: bookingKeys.list(),
@@ -160,7 +161,11 @@ export function BookingDashboardRoute() {
                         <ListActionButton
                           title="Duplicate Booking"
                           icon={
-                            <AppIcon icon={Icons.copy} size={16} tone="create" />
+                            <AppIcon
+                              icon={Icons.copy}
+                              size={16}
+                              tone="create"
+                            />
                           }
                           tone="create"
                           onClick={(e) => {
@@ -223,10 +228,10 @@ export function BookingDashboardRoute() {
                       val === "Confirmed"
                         ? "success"
                         : val === "Awaiting Acceptance"
-                          ? "processing"
-                          : val === "Cancelled"
-                            ? "default"
-                            : "error";
+                        ? "processing"
+                        : val === "Cancelled"
+                        ? "default"
+                        : "error";
                     return <Tag color={color}>{val}</Tag>;
                   },
                 },

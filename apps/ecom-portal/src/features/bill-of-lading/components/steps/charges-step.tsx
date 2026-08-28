@@ -3,22 +3,22 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
 import { Card, Input, InputNumber, Select, Typography } from "antd";
 import {
-  Controller,
-  useFieldArray,
-  useForm,
-  type Control,
-  type FieldErrors,
+    Controller,
+    useFieldArray,
+    useForm,
+    type Control,
+    type FieldErrors,
 } from "react-hook-form";
 
 import { AppIcon, Icons } from "../../../../components/icons";
 import {
-  ListActionButton,
-  ListActionsRow,
+    ListActionButton,
+    ListActionsRow,
 } from "../../../../components/shared/list-action-button";
 import {
-  blChargesStepSchema,
-  type BLChargesStepValues,
-  type BLPrepaidCollect,
+    blChargesStepSchema,
+    type BLChargesStepValues,
+    type BLPrepaidCollect,
 } from "../../types/bl.types";
 import type { BLWizardStepProps } from "./MasterDetailsStep";
 
@@ -184,8 +184,7 @@ export function ChargesStep({
   } = useForm<BLChargesStepValues>({
     resolver: zodResolver(blChargesStepSchema),
     defaultValues: {
-      charges:
-        data.charges.length > 0 ? data.charges : [createEmptyCharge()],
+      charges: data.charges.length > 0 ? data.charges : [createEmptyCharge()],
     },
   });
 
@@ -220,7 +219,10 @@ export function ChargesStep({
           }
         >
           {typeof errors.charges?.message === "string" ? (
-            <Text type="danger" className="form-field-error bl-charges-form-error">
+            <Text
+              type="danger"
+              className="form-field-error bl-charges-form-error"
+            >
               {errors.charges.message}
             </Text>
           ) : null}

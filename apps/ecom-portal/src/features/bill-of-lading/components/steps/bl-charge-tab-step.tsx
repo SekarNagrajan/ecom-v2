@@ -40,7 +40,13 @@ function ReadonlyField({
   );
 }
 
-function ChargeSummaryLine({ line, index }: { line: BLChargeLine; index: number }) {
+function ChargeSummaryLine({
+  line,
+  index,
+}: {
+  line: BLChargeLine;
+  index: number;
+}) {
   return (
     <Card
       size="small"

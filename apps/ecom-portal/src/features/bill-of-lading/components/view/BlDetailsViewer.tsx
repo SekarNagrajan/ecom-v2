@@ -1,8 +1,8 @@
 // Modified by Sekar Nagarajan (2026-08-28 11:15)
 import { Card, Col, Row, Table, Typography } from "antd";
 
-import { RESPONSIVE_COL } from "../../../../constants/responsive-grid";
 import { WIZARD_STEP_TITLES } from "../../../../constants/module-titles";
+import { RESPONSIVE_COL } from "../../../../constants/responsive-grid";
 import { SI_CARGO_LINE_COLUMNS } from "../../../shipping-instruction/utils/si-cargo-line-columns";
 import { useBLDetailQuery } from "../../api/bl.queries";
 import { BlLoadingCenter } from "../bl-loading-center";
@@ -88,11 +88,15 @@ export function BlDetailsViewer({ blNo }: BlDetailsViewerProps) {
           <Row gutter={[24, 24]}>
             <Col {...RESPONSIVE_COL.formQuarter}>
               <Text className="form-field-label">Origin (Print)</Text>
-              <div className="form-step-readonly-value">{data.routing.originPrint}</div>
+              <div className="form-step-readonly-value">
+                {data.routing.originPrint}
+              </div>
             </Col>
             <Col {...RESPONSIVE_COL.formQuarter}>
               <Text className="form-field-label">POL (Print)</Text>
-              <div className="form-step-readonly-value">{data.routing.polPrint}</div>
+              <div className="form-step-readonly-value">
+                {data.routing.polPrint}
+              </div>
             </Col>
           </Row>
         </Card>
@@ -138,7 +142,11 @@ export function BlDetailsViewer({ blNo }: BlDetailsViewerProps) {
       </Card>
 
       {data.charges && data.charges.length > 0 ? (
-        <Card className="bl-panel feature-page-card" size="small" title={<Title level={5}>Charges</Title>}>
+        <Card
+          className="bl-panel feature-page-card"
+          size="small"
+          title={<Title level={5}>Charges</Title>}
+        >
           <Table
             size="small"
             pagination={false}

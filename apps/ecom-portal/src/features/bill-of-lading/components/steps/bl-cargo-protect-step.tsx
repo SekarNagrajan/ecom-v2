@@ -125,7 +125,8 @@ export function BlCargoProtectStep({
         >
           {lines.length === 0 ? (
             <Text type="secondary" className="bl-cargo-protect-empty">
-              No cargo protect lines. Click Add Row to include coverage products.
+              No cargo protect lines. Click Add Row to include coverage
+              products.
             </Text>
           ) : (
             <div className="bl-cargo-protect-lines">

@@ -101,7 +101,7 @@ export function PublicLayoutHeader({
           <AppButton
             type="text"
             aria-label={collapsed ? "Expand menu" : "Collapse menu"}
-            icon={<AppIcon icon={Icons.menu} size={20} />}
+            icon={<AppIcon icon={Icons.menu} size={25} />}
             onClick={onToggleCollapse}
           />
         ) : null}

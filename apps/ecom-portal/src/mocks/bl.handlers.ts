@@ -6,7 +6,9 @@ import { BL_STATUS_LABELS } from '../features/bill-of-lading/types/bl.types';
 import {
   getMockBLDetail,
   mockBLChargesSeed,
+  mockBLConfig,
   mockBLDetailsSeed,
+  mockBLInsuranceSeed,
   mockBLListSeed,
   mockMCNDetailsSeed,
   mockMCNListSeed,
@@ -54,6 +56,11 @@ function mockPdf(blNo: string, type: BLPrintType) {
  * are never swallowed by the parametric detail route.
  */
 export const blHandlers = [
+  http.get('*/api/bl/config', async () => {
+    await delay(100);
+    return HttpResponse.json({ data: mockBLConfig });
+  }),
+
   http.get('*/api/bl/list', async ({ request }) => {
     await delay(300);
     const url = new URL(request.url);
@@ -137,6 +144,80 @@ export const blHandlers = [
     return HttpResponse.json({ data: charges });
   }),
 
+  http.get('*/api/bl/:blNo/insurance', async ({ params }) => {
+    await delay(150);
+    const blNo = params.blNo as string;
+    const insurance = mockBLInsuranceSeed[blNo];
+    if (!insurance) {
+      return HttpResponse.json(
+        { error: { code: 'NOT_FOUND', message: 'No insurance policy' } },
+        { status: 404 },
+      );
+    }
+    return HttpResponse.json({ data: insurance });
+  }),
+
+  http.post('*/api/bl/payment/intent', async ({ request }) => {
+    await delay(300);
+    const body = (await request.json()) as { blNos?: string[]; amountUsd?: number };
+    const blNos = body.blNos ?? [];
+    const amountUsd = body.amountUsd ?? 0;
+    return HttpResponse.json({
+      data: {
+        clientSecret: `mock_secret_${blNos.join('_')}`,
+        amountUsd,
+        blNos,
+      },
+    });
+  }),
+
+  http.post('*/api/bl/:blNo/cargo/import', async ({ params, request }) => {
+    await delay(400);
+    const blNo = params.blNo as string;
+    const detail = mockBLDetails[blNo] ?? getMockBLDetail(blNo);
+    if (!detail) {
+      return HttpResponse.json(
+        { error: { code: 'NOT_FOUND', message: 'B/L not found' } },
+        { status: 404 },
+      );
+    }
+    const formData = await request.formData();
+    const file = formData.get('file');
+    if (!(file instanceof File)) {
+      return HttpResponse.json(
+        { error: { code: 'INVALID_FILE', message: 'No file uploaded' } },
+        { status: 400 },
+      );
+    }
+    if (!/\.xls(x)?$/i.test(file.name)) {
+      return HttpResponse.json(
+        { error: { code: 'INVALID_FILE', message: 'Only .xls/.xlsx files are supported' } },
+        { status: 400 },
+      );
+    }
+    return HttpResponse.json({ data: { containers: detail.containers } });
+  }),
+
+  http.get('*/api/bl/:blNo/cargo/export', async ({ params, request }) => {
+    await delay(200);
+    const blNo = params.blNo as string;
+    const url = new URL(request.url);
+    const template = url.searchParams.get('template') ?? 'standard';
+    const content = `Mock Excel cargo template (${template}) for ${blNo}`;
+    return new HttpResponse(new Blob([content], { type: 'application/vnd.ms-excel' }), {
+      headers: {
+        'Content-Type': 'application/vnd.ms-excel',
+        'Content-Disposition': `attachment; filename="${blNo}-cargo-${template}.xls"`,
+      },
+    });
+  }),
+
+  http.post('*/api/bl/:blNo/amendment-mail', async ({ params }) => {
+    await delay(250);
+    const blNo = params.blNo as string;
+    return HttpResponse.json({ data: { sent: true, blNo } });
+  }),
+
   http.post('*/api/bl/:blNo/draft', async ({ params, request }) => {
     await delay(150);
     const blNo = params.blNo as string;
@@ -189,6 +270,14 @@ export const blHandlers = [
       return HttpResponse.json({ error: { code: 'NOT_FOUND', message: 'Not found' } }, { status: 404 });
     }
     detail.status = 'S';
+    detail.submitResult = {
+      success: true,
+      messages: ['B/L submitted successfully.'],
+      insuranceMessage: detail.insurance?.isInsuranceRequired
+        ? 'Insurance policy will be issued within 24 hours.'
+        : undefined,
+      fileRestrictionMessage: undefined,
+    };
     syncDetailToList(blNo, detail);
     return HttpResponse.json({ data: detail });
   }),
@@ -264,6 +353,29 @@ export const blHandlers = [
       return HttpResponse.json({ error: { code: 'NOT_FOUND', message: 'MCN not found' } }, { status: 404 });
     }
     return HttpResponse.json({ data: detail });
+  }),
+
+  http.put('*/api/mcn/:mcnId', async ({ params, request }) => {
+    await delay(250);
+    const mcnId = params.mcnId as string;
+    const body = (await request.json()) as Partial<typeof mockMCNDetailsSeed[string]>;
+    const existing = mockMCNDetailsSeed[mcnId];
+    if (!existing) {
+      return HttpResponse.json({ error: { code: 'NOT_FOUND', message: 'MCN not found' } }, { status: 404 });
+    }
+    mockMCNDetailsSeed[mcnId] = { ...existing, ...body, mcnId };
+    return HttpResponse.json({ data: mockMCNDetailsSeed[mcnId] });
+  }),
+
+  http.post('*/api/mcn/:mcnId/submit', async ({ params }) => {
+    await delay(300);
+    const mcnId = params.mcnId as string;
+    const existing = mockMCNDetailsSeed[mcnId];
+    if (!existing) {
+      return HttpResponse.json({ error: { code: 'NOT_FOUND', message: 'MCN not found' } }, { status: 404 });
+    }
+    mockMCNDetailsSeed[mcnId] = { ...existing, status: 'Submitted' };
+    return HttpResponse.json({ data: mockMCNDetailsSeed[mcnId] });
   }),
 ];
 

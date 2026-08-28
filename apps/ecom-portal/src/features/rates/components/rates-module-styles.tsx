@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 10:55)
+// Modified by Sekar Nagarajan (2026-08-28 15:09)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -37,12 +37,25 @@ export function RatesModuleStyles() {
         align-items: center;
         gap: ${token.marginXXS}px;
       }
-      /* Align swap control with Select height (not label row) */
+      .rates-port-option {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXS}px;
+      }
+      .rates-port-option__code {
+        display: inline-flex;
+        align-items: center;
+        font-weight: ${token.fontWeightStrong};
+        font-size: ${token.fontSizeSM}px;
+        padding: 2px ${token.paddingXS}px;
+        border-radius: ${token.borderRadiusSM}px;
+        background: ${token.colorFillSecondary};
+        color: ${token.colorText};
+      }
       .rates-port-swap-col {
         display: flex;
         align-items: flex-end;
         justify-content: center;
-        /* Match sibling Form.Item margin-bottom so button sits with the input */
         padding-bottom: ${token.marginSM}px;
       }
       .rates-port-swap {
@@ -94,15 +107,32 @@ export function RatesModuleStyles() {
         margin-bottom: 0;
       }
 
-      .rates-results-toolbar {
+      .rates-results-bar {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: ${token.marginMD}px;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorBgContainer};
+        border: 1px solid ${token.colorBorderSecondary};
         gap: ${token.marginSM}px;
         flex-wrap: wrap;
       }
-      .rates-results-toolbar__title {
+      .rates-results-bar__count {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: ${token.controlHeightSM}px;
+        height: ${token.controlHeightSM}px;
+        padding: 0 ${token.paddingXS}px;
+        border-radius: ${token.borderRadius}px;
+        background: ${token.colorError};
+        color: ${token.colorTextLightSolid};
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+      }
+      .rates-results-bar__title {
         font-size: ${token.fontSizeLG}px;
         font-weight: ${token.fontWeightStrong};
       }
@@ -129,16 +159,18 @@ export function RatesModuleStyles() {
         border-color: ${tokenMix(token.colorWarning, 40)};
         box-shadow: none !important;
       }
-      .rates-card__body {
-        padding: ${token.paddingMD}px ${token.paddingLG}px;
+      .rates-card__main {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: ${token.marginMD}px;
+        padding: ${token.paddingLG}px;
+        align-items: start;
       }
-      .rates-card__header {
+      .rates-card__content {
+        min-width: 0;
         display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        gap: ${token.marginSM}px;
-        margin-bottom: ${token.marginMD}px;
-        flex-wrap: wrap;
+        flex-direction: column;
+        gap: ${token.marginMD}px;
       }
       .rates-card__meta {
         display: flex;
@@ -150,156 +182,95 @@ export function RatesModuleStyles() {
         font-size: ${token.fontSizeSM}px;
         color: ${token.colorTextSecondary};
         white-space: nowrap;
+        margin-left: auto;
       }
 
-      /* Voyage: origin port —— pricing lane —— delivery port */
-      .rates-card__voyage {
+      .rates-card__route {
         display: grid;
         grid-template-columns: 1fr;
         gap: ${token.marginMD}px;
-        align-items: stretch;
+        align-items: start;
+        width: 100%;
       }
-      .rates-card__port {
+      .rates-card__endpoint {
+        min-width: 0;
         display: flex;
-        gap: ${token.marginSM}px;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+      }
+      .rates-card__endpoint--dest {
+        text-align: left;
         align-items: flex-start;
-        padding: ${token.paddingMD}px;
-        border-radius: ${token.borderRadiusLG}px;
-        background: ${token.colorFillAlter};
-        border: 1px solid ${token.colorBorderSecondary};
-        min-width: 0;
       }
-      .rates-card__port--origin {
-        border-color: ${tokenMix(token.colorPrimary, 35)};
-      }
-      .rates-card__port--delivery {
-        border-color: ${tokenMix(token.colorSuccess, 35)};
-      }
-      .rates-card__port-badge {
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-      }
-      .rates-card__port-badge--origin {
-        background: ${token.colorPrimaryBg};
-        color: ${token.colorPrimary};
-      }
-      .rates-card__port-badge--delivery {
-        background: ${token.colorSuccessBg};
-        color: ${token.colorSuccess};
-        transform: scaleX(-1);
-      }
-      .rates-card__port-body {
-        flex: 1;
-        min-width: 0;
-      }
-      .rates-card__port-label {
-        font-size: ${token.fontSizeSM}px;
-        font-weight: ${token.fontWeightStrong};
+      .rates-card__place {
+        display: block;
+        font-size: ${token.fontSizeLG}px;
         color: ${token.colorTextSecondary};
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-        margin-bottom: ${token.marginXXS}px;
+        line-height: 1.35;
       }
       .rates-card__port-code {
-        margin: 0 !important;
-        font-size: ${token.fontSizeHeading4}px !important;
-        line-height: 1.1 !important;
-      }
-      .rates-card__port-code--origin {
-        color: ${token.colorPrimary} !important;
-      }
-      .rates-card__port-code--delivery {
-        color: ${token.colorSuccess} !important;
-      }
-      .rates-card__port-name {
-        font-size: ${token.fontSizeSM}px;
         font-weight: ${token.fontWeightStrong};
-        display: block;
-        margin-top: ${token.marginXXS}px;
+        color: ${token.colorText};
       }
-      .rates-card__port-tags {
-        margin-top: ${token.marginXS}px;
+      .rates-card__etime {
+        margin-top: ${token.marginXXS}px;
         display: flex;
         flex-wrap: wrap;
         gap: ${token.marginXXS}px;
       }
-      .rates-card__port-detail {
+      .rates-card__terminal {
+        display: block;
         font-size: ${token.fontSizeSM}px;
         color: ${token.colorTextSecondary};
-        display: block;
-        margin-top: ${token.marginXXS}px;
+        line-height: 1.35;
       }
-
-      .rates-card__pricing-lane {
+      .rates-card__connector {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         gap: ${token.marginXXS}px;
-        padding: ${token.paddingSM}px ${token.paddingXS}px;
         min-width: 0;
+        padding: ${token.paddingXS}px 0;
       }
-      .rates-card__pricing-lane-label {
-        font-size: ${token.fontSizeSM}px;
-        font-weight: ${token.fontWeightStrong};
-        color: ${token.colorTextSecondary};
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-        text-align: center;
-      }
-      .rates-card__pricing-lane-total {
-        font-weight: ${token.fontWeightStrong};
-        color: ${token.colorSuccess};
-        font-size: ${token.fontSizeLG}px;
-        text-align: center;
-        line-height: 1.2;
-      }
-      .rates-card__pricing-lane-track {
+      .rates-card__connector-line {
         display: flex;
         align-items: center;
         width: 100%;
-        max-width: 200px;
-        margin: ${token.marginXXS}px 0;
+        max-width: 280px;
       }
-      .rates-card__pricing-lane-dot {
+      .rates-card__connector-dot {
         width: 8px;
         height: 8px;
         border-radius: 50%;
+        background: ${token.colorPrimary};
         flex-shrink: 0;
       }
-      .rates-card__pricing-lane-dot--origin {
-        background: ${token.colorPrimary};
-      }
-      .rates-card__pricing-lane-dot--delivery {
-        background: ${token.colorSuccess};
-      }
-      .rates-card__pricing-lane-line {
+      .rates-card__connector-rail {
         flex: 1;
         height: 2px;
-        background: ${token.colorPrimary};
+        background: ${token.colorBorder};
       }
-      .rates-card__pricing-lane-line--delivery {
-        background: ${token.colorSuccess};
-      }
-      .rates-card__pricing-lane-mid {
-        width: 28px;
-        height: 28px;
-        border-radius: 50%;
-        background: ${token.colorWarningBg};
-        border: 1px solid ${token.colorWarningBorder};
+      .rates-card__connector-pill {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        color: ${token.colorWarning};
-        flex-shrink: 0;
+        padding: ${token.paddingXXS}px ${token.paddingSM}px;
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorSuccessBg};
+        border: 1px solid ${token.colorSuccessBorder};
+        color: ${token.colorSuccess};
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        white-space: nowrap;
         margin: 0 ${token.marginXXS}px;
       }
-      .rates-card__pricing-lane-hint {
+      .rates-card__connector-type {
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+        text-align: center;
+      }
+      .rates-card__connector-hint {
         font-size: ${token.fontSizeSM}px;
         color: ${token.colorTextSecondary};
         text-align: center;
@@ -312,8 +283,11 @@ export function RatesModuleStyles() {
       }
       .rates-card__actions-secondary {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr;
         gap: ${token.marginXS}px;
+      }
+      .rates-card__actions .sm-app-button {
+        width: 100%;
       }
       .rates-card__footer {
         padding: ${token.paddingSM}px ${token.paddingLG}px;
@@ -378,7 +352,7 @@ export function RatesModuleStyles() {
         line-height: 1.2;
       }
       .rates-card__surcharges {
-        margin-top: ${token.marginMD}px;
+        margin: 0 ${token.paddingLG}px ${token.paddingMD}px;
         padding: ${token.paddingMD}px;
         background: ${token.colorFillAlter};
         border-radius: ${token.borderRadiusLG}px;
@@ -490,40 +464,24 @@ export function RatesModuleStyles() {
       }
 
       @media (min-width: 768px) {
-        .rates-card__voyage {
+        .rates-card__route {
           grid-template-columns: 1fr auto 1fr;
           align-items: center;
         }
-        .rates-card__actions {
-          grid-column: 1 / -1;
-          flex-direction: row;
-          flex-wrap: wrap;
-        }
-        .rates-card__actions .sm-app-button:first-child {
-          flex: 1;
-          min-width: 160px;
+        .rates-card__endpoint--dest {
+          text-align: right;
+          align-items: flex-end;
         }
         .rates-card__surcharge-row {
           grid-template-columns: 1fr auto;
           align-items: center;
         }
-        .rates-card__pricing-lane {
-          min-width: 140px;
-        }
       }
 
       @media (min-width: 992px) {
-        .rates-card__voyage {
-          grid-template-columns: 1.15fr 0.85fr 1.15fr 1fr;
-          align-items: center;
-        }
-        .rates-card__actions {
-          grid-column: auto;
-          flex-direction: column;
-        }
-        .rates-card__actions .sm-app-button:first-child {
-          flex: unset;
-          width: 100%;
+        .rates-card__main {
+          grid-template-columns: minmax(0, 1fr) 200px;
+          align-items: start;
         }
       }
 
@@ -543,15 +501,19 @@ export function RatesModuleStyles() {
         .rates-search-actions .ant-btn {
           width: 100%;
         }
-        .rates-results-toolbar .ant-segmented {
+        .rates-results-bar .ant-segmented {
           width: 100%;
         }
-        .rates-card__body {
+        .rates-card__main {
           padding: ${token.paddingMD}px;
         }
         .rates-card__footer {
           flex-direction: column;
           align-items: flex-start;
+        }
+        .rates-card__surcharges {
+          margin-left: ${token.paddingMD}px;
+          margin-right: ${token.paddingMD}px;
         }
         .rates-filter-select.ant-select {
           width: 100%;

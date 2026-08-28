@@ -13,7 +13,6 @@ import {
 import * as echarts from "echarts";
 import { useLayoutEffect, useRef, useState } from "react";
 
-import { AppIcon, Icons } from "../../../components/icons";
 import { useChartTokens } from "../../theme/utils/use-portal-chart-tokens";
 import type {
   IntelligenceBreakdown,
@@ -188,17 +187,13 @@ export function InteractiveShipmentIntelligenceCard() {
       className="dashboard-panel"
       title={
         <Text strong className="dashboard-panel__title">
-          5. Interactive Shipment Intelligence
+          Interactive Shipment Intelligence
         </Text>
       }
       extra={
         <Tooltip title="Open Intelligence Report">
-          <AppButton
-            type="link"
-            size="small"
-            icon={<AppIcon icon={Icons.eye} size={16} />}
-          >
-            Report →
+          <AppButton type="link" size="small">
+            View Report
           </AppButton>
         </Tooltip>
       }

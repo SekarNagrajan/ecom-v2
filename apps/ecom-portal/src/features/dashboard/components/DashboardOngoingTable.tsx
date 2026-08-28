@@ -296,7 +296,6 @@ export function DashboardOngoingTable({
             className="dashboard-ongoing-toolbar"
           >
             <Space align="center">
-              <AppIcon icon={Icons.arrowRight} size={16} tone="navigate" />
               <Text strong>
                 Ongoing Transactions
                 {filterLabel !== "Total Shipments" ? ` — ${filterLabel}` : ""}

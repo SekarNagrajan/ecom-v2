@@ -20,6 +20,7 @@ export function ContactUsModuleStyles() {
         height: 100%;
         min-height: 0;
         overflow: hidden;
+        
       }
       .contact-page__toolbar {
         flex-shrink: 0;
@@ -30,7 +31,7 @@ export function ContactUsModuleStyles() {
       .contact-page-card.ant-card {
         border-radius: ${token.borderRadiusLG}px;
         box-shadow: ${token.boxShadowTertiary};
-        border: none;
+        border: 1px solid ${token.colorPrimary};
         display: flex;
         flex-direction: column;
         flex: 1;

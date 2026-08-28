@@ -188,7 +188,7 @@ export function ScheduleSearchTab({ form, onSubmit }: ScheduleSearchTabProps) {
                   style={inputStyle}
                   prefix={
                     <AppIcon
-                      icon={Icons.truck}
+                      icon={Icons.mapPin}
                       size={16}
                       style={{ marginRight: 8, fontSize: 16 }}
                     />

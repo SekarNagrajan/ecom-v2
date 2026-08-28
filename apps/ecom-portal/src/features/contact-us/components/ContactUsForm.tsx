@@ -1,9 +1,5 @@
 // Modified by Sekar Nagarajan (2026-08-26 16:30)
-import {
-  FormInput,
-  FormSelect,
-  FormTextarea,
-} from "@solverminds/shared-ui";
+import { FormInput, FormSelect, FormTextarea } from "@solverminds/shared-ui";
 import { Col, Descriptions, Row, Typography } from "antd";
 import { useEffect, useRef } from "react";
 import { useWatch } from "react-hook-form";
@@ -71,18 +67,14 @@ export function ContactUsForm({ controller }: ContactUsFormProps) {
           column={{ xs: 1, sm: 2 }}
           className="contact-profile-desc"
         >
-          <Descriptions.Item label="Name">
-            {user.name || "-"}
-          </Descriptions.Item>
+          <Descriptions.Item label="Name">{user.name || "-"}</Descriptions.Item>
           <Descriptions.Item label="Company">
             {user.company || "-"}
           </Descriptions.Item>
           <Descriptions.Item label="Email">
             {user.email || "-"}
           </Descriptions.Item>
-          <Descriptions.Item label="Role">
-            {user.role || "-"}
-          </Descriptions.Item>
+          <Descriptions.Item label="Role">{user.role || "-"}</Descriptions.Item>
         </Descriptions>
       ) : (
         <Row gutter={[16, 16]} align="top">

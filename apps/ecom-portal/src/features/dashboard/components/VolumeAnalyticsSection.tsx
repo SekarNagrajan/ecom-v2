@@ -193,10 +193,7 @@ export function VolumeAnalyticsSection({
       className="dashboard-panel"
       title={
         <Text strong className="dashboard-panel__title">
-          1. Shipment Volume Analytics (FEUs){" "}
-          <Tooltip title="Freight Equivalent Units — Standard Container Measurement">
-            <AppIcon icon={Icons.info} size={12} />
-          </Tooltip>
+          Shipment Volume Analytics (FEUs){" "}
         </Text>
       }
     >

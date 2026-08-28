@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-24 17:15)
+// Modified by Sekar Nagarajan (2026-08-28 10:42)
 
 /** Standard Ant Design Col spans — use across all feature modules for consistent responsive grids. */
 export const RESPONSIVE_COL = {
@@ -16,4 +16,8 @@ export const RESPONSIVE_COL = {
   /** Form field pairs */
   formHalf: { xs: 24, md: 12 },
   formThird: { xs: 24, md: 8 },
+  /** Four commodity fields on one row from lg */
+  formQuarter: { xs: 24, md: 12, lg: 6 },
+  /** Six equal fields on one row from lg (commodity scalar row) */
+  formSixth: { xs: 24, md: 12, lg: 4 },
 } as const;

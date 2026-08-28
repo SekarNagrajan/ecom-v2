@@ -1,8 +1,8 @@
-// Modified by Sekar Nagarajan (2026-08-26 13:04)
+// Modified by Sekar Nagarajan (2026-08-28 11:55)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { useNavigate } from "@tanstack/react-router";
-import type { RowDoubleClickedEvent } from "ag-grid-community";
-import { Space } from "antd";
+import type { RowDoubleClickedEvent, SelectionChangedEvent } from "ag-grid-community";
+import { Space, Typography } from "antd";
 import { useState } from "react";
 
 import { AppIcon, Icons, NavIcons } from "../../../components/icons";
@@ -16,20 +16,26 @@ import {
   useBLPrintMutation,
   useBLVerifyMutation,
 } from "../api/bl.queries";
+import { useBLWizardConfig } from "../hooks/use-bl-wizard-config";
 import type { BLListDTO, BLPrintType } from "../types/bl.types";
 import { canOpenBlWizard } from "../utils/bl-status";
 import { BatchPrintDialog } from "./BatchPrintDialog";
 import { BillOfLadingCharges } from "./BillOfLadingCharges";
 import { BillOfLadingListGrid } from "./BillOfLadingListGrid";
+import { BlPaymentBar } from "./bl-payment-bar";
 import { ManifestDrawer } from "./ManifestDrawer";
 import { BlViewDrawer } from "./view/BlViewDrawer";
+
+const { Text } = Typography;
 
 export function BillOfLadingListing() {
   const navigate = useNavigate();
   const { data, isLoading } = useBLListQuery({});
+  const { data: config } = useBLWizardConfig();
   const rows = data?.rows ?? [];
 
   const [selectedRecord, setSelectedRecord] = useState<BLListDTO | null>(null);
+  const [selectedBlNos, setSelectedBlNos] = useState<string[]>([]);
   const [chargesBlNo, setChargesBlNo] = useState<string | null>(null);
   const [batchOpen, setBatchOpen] = useState(false);
   const [manifestMcnId, setManifestMcnId] = useState<string | null>(null);
@@ -77,6 +83,11 @@ export function BillOfLadingListing() {
     setSelectedRecord(record);
   };
 
+  const handleSelectionChanged = (event: SelectionChangedEvent<BLListDTO>) => {
+    const selected = event.api.getSelectedRows().map((r) => r.blNo);
+    setSelectedBlNos(selected);
+  };
+
   return (
     <div className="bl-page-layout">
       <div className="bl-page-header">
@@ -101,9 +112,23 @@ export function BillOfLadingListing() {
         </div>
       </div>
 
+      <BlPaymentBar
+        rows={rows}
+        selectedBlNos={selectedBlNos}
+        onSelectionChange={setSelectedBlNos}
+        enabled={config?.enableStripePayment}
+      />
+
       <BillOfLadingListGrid
         rows={rows}
         loading={isLoading}
+        hideAgencyRefColumn={config?.hideAgencyRefColumn}
+        showChargeSummary={config?.showChargeSummary}
+        showNnPrint={config?.showNnPrint}
+        showReadyToConfirm={config?.showReadyToConfirm}
+        enableTermsOnConfirmedEdit={config?.enableTermsOnConfirmedEdit}
+        rowSelection={config?.enableStripePayment ? "multiple" : undefined}
+        onSelectionChanged={handleSelectionChanged}
         onView={handleView}
         onEdit={(blNo) => navigate({ to: `/app/bl/${blNo}/edit` })}
         onPrint={handlePrint}
@@ -113,6 +138,12 @@ export function BillOfLadingListing() {
         onManifest={openManifest}
         onRowDoubleClicked={handleRowDoubleClick}
       />
+
+      {config?.showNonRatedBlMsg ? (
+        <Text type="secondary" className="bl-list-footnote">
+          * Non-rated B/L charges may differ from final invoice.
+        </Text>
+      ) : null}
 
       {selectedRecord ? (
         <BlViewDrawer

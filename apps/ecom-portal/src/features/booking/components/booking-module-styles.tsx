@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 18:52)
+// Modified by Sekar Nagarajan (2026-08-28 14:20)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -69,11 +69,15 @@ export function BookingModuleStyles() {
       }
       .booking-route-port--origin {
         border-left: 4px solid ${token.colorPrimary};
-        background: linear-gradient(180deg, ${primaryTint8} 0%, ${token.colorFillAlter} 100%);
+        background: linear-gradient(180deg, ${primaryTint8} 0%, ${
+      token.colorFillAlter
+    } 100%);
       }
       .booking-route-port--delivery {
         border-left: 4px solid ${token.colorSuccess};
-        background: linear-gradient(180deg, ${successTint8} 0%, ${token.colorFillAlter} 100%);
+        background: linear-gradient(180deg, ${successTint8} 0%, ${
+      token.colorFillAlter
+    } 100%);
       }
       .booking-route-port__label {
         display: flex;
@@ -139,7 +143,9 @@ export function BookingModuleStyles() {
         flex: 1;
         height: 2px;
         margin: 0 ${token.marginXXS}px;
-        background: linear-gradient(90deg, ${token.colorPrimary} 0%, ${token.colorSuccess} 100%);
+        background: linear-gradient(90deg, ${token.colorPrimary} 0%, ${
+      token.colorSuccess
+    } 100%);
       }
 
       .booking-summary-chips {
@@ -266,7 +272,9 @@ export function BookingModuleStyles() {
       /* Modified by Sekar Nagarajan (2026-08-26 18:41) — collapse empty error row so Master Details has no dead gap */
       .booking-port-row {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) ${token.controlHeightLG}px minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-columns: minmax(0, 1fr) ${
+          token.controlHeightLG
+        }px minmax(0, 1fr) minmax(0, 1fr);
         grid-template-areas:
           "origin-label . delivery-label date-label"
           "origin-field swap delivery-field date-field"
@@ -276,15 +284,27 @@ export function BookingModuleStyles() {
         align-items: end;
         margin-bottom: ${token.marginMD}px;
       }
-      .booking-port-row__origin-label { grid-area: origin-label; align-self: start; margin-bottom: ${token.marginSM}px; }
+      .booking-port-row__origin-label { grid-area: origin-label; align-self: start; margin-bottom: ${
+        token.marginSM
+      }px; }
       .booking-port-row__origin-field { grid-area: origin-field; }
-      .booking-port-row__origin-error { grid-area: origin-error; margin-top: ${token.marginXXS}px; }
-      .booking-port-row__delivery-label { grid-area: delivery-label; align-self: start; margin-bottom: ${token.marginSM}px; }
+      .booking-port-row__origin-error { grid-area: origin-error; margin-top: ${
+        token.marginXXS
+      }px; }
+      .booking-port-row__delivery-label { grid-area: delivery-label; align-self: start; margin-bottom: ${
+        token.marginSM
+      }px; }
       .booking-port-row__delivery-field { grid-area: delivery-field; }
-      .booking-port-row__delivery-error { grid-area: delivery-error; margin-top: ${token.marginXXS}px; }
-      .booking-port-row__date-label { grid-area: date-label; align-self: start; margin-bottom: ${token.marginSM}px; }
+      .booking-port-row__delivery-error { grid-area: delivery-error; margin-top: ${
+        token.marginXXS
+      }px; }
+      .booking-port-row__date-label { grid-area: date-label; align-self: start; margin-bottom: ${
+        token.marginSM
+      }px; }
       .booking-port-row__date-field { grid-area: date-field; }
-      .booking-port-row__date-error { grid-area: date-error; margin-top: ${token.marginXXS}px; }
+      .booking-port-row__date-error { grid-area: date-error; margin-top: ${
+        token.marginXXS
+      }px; }
       .booking-port-row__swap {
         grid-area: swap;
         display: flex;
@@ -307,12 +327,12 @@ export function BookingModuleStyles() {
         opacity: 0.9;
       }
 
-      /* Select Vessel/Route popup (ebookRoutingDetails parity) */
+      /* Modified by Sekar Nagarajan (2026-08-27 23:34) — fix card overlap */
       .booking-routing-modal {
         display: flex;
         flex-direction: column;
-        gap: ${token.marginMD}px;
-        max-height: min(70vh, 640px);
+        gap: ${token.marginLG}px;
+        max-height: min(70vh, 720px);
         overflow-y: auto;
         padding-right: ${token.paddingXXS}px;
       }
@@ -326,275 +346,438 @@ export function BookingModuleStyles() {
       .booking-routing-card {
         display: flex;
         flex-direction: column;
-        gap: ${token.marginSM}px;
-        padding: ${token.paddingMD}px;
+        flex-shrink: 0;
         border-radius: ${token.borderRadiusLG}px;
         border: 1px solid ${token.colorBorderSecondary};
         background: ${token.colorBgContainer};
+        overflow: visible;
       }
       .booking-routing-card--default {
-        border-color: ${token.colorPrimaryBorder};
-        background: ${primaryTint8};
+        border-color: ${tokenMix(token.colorWarning, 40)};
       }
-      .booking-routing-card__service {
-        font-size: ${token.fontSizeLG}px;
+      .booking-routing-card__main {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginMD}px;
+        padding: ${token.paddingLG}px;
+        padding-bottom: ${token.paddingMD}px;
+        align-items: stretch;
       }
-      .booking-routing-card__vessel {
-        display: block;
-        margin-top: ${token.marginXXS}px;
+      .booking-routing-card__content {
+        min-width: 0;
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginMD}px;
       }
       .booking-routing-card__meta {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-        gap: ${token.marginMD}px;
-        align-items: start;
-      }
-      .booking-routing-card__meta-item {
-        display: flex;
-        flex-direction: column;
-        gap: ${token.marginXXS}px;
-        min-width: 0;
-      }
-      .booking-routing-card__meta-item--center {
-        align-items: center;
-        text-align: center;
-        padding-top: ${token.paddingXS}px;
-      }
-      .booking-routing-card__meta-label {
-        font-size: ${token.fontSizeSM}px;
-        text-transform: uppercase;
-        letter-spacing: 0.03em;
-      }
-      .booking-routing-card__cutoffs {
         display: flex;
         flex-wrap: wrap;
-        gap: ${token.marginSM}px ${token.marginMD}px;
+        gap: ${token.marginXS}px;
+        align-items: center;
+      }
+      .booking-routing-card__route {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: ${token.marginMD}px;
+        align-items: start;
+        width: 100%;
+      }
+      .booking-routing-card__endpoint {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+      }
+      .booking-routing-card__endpoint--dest {
+        text-align: left;
+        align-items: flex-start;
+      }
+      .booking-routing-card__date {
+        font-size: ${token.fontSizeHeading3}px;
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+        line-height: 1.2;
+        letter-spacing: -0.02em;
+      }
+      .booking-routing-card__place {
+        display: block;
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+        line-height: 1.4;
+        word-break: break-word;
+      }
+      .booking-routing-card__port-code {
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+      }
+      .booking-routing-card__etime {
+        margin-top: ${token.marginXXS}px;
+      }
+      .booking-routing-card__terminal {
+        display: block;
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+        line-height: 1.4;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+      }
+      .booking-routing-card__connector {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: ${token.marginXXS}px;
+        min-width: 0;
+        align-self: center;
+        width: 100%;
+      }
+      .booking-routing-card__connector-line {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        gap: ${token.marginXXS}px;
+      }
+      .booking-routing-card__connector-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: ${token.colorPrimary};
+        flex-shrink: 0;
+      }
+      .booking-routing-card__connector-rail {
+        flex: 1 1 0;
+        min-width: ${token.marginSM}px;
+        height: 0;
+        border-top: 2px dashed ${tokenMix(token.colorPrimary, 55)};
+      }
+      .booking-routing-card__connector-pill {
+        flex-shrink: 0;
+        padding: ${token.paddingXXS}px ${token.paddingMD}px;
+        border-radius: ${token.borderRadiusLG * 2}px;
+        border: 1px solid ${tokenMix(token.colorPrimary, 35)};
+        background: ${token.colorPrimaryBg};
+        color: ${token.colorPrimary};
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        white-space: nowrap;
+      }
+      .booking-routing-card__connector-type {
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+      .booking-routing-card__transport-wrap {
+        padding: 0 ${token.paddingLG}px ${token.paddingMD}px;
+        min-width: 0;
+      }
+      .booking-routing-card__transport {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginXS}px;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        width: 100%;
+        min-height: ${token.controlHeightSM}px;
+        padding-bottom: ${token.paddingXXS}px;
+      }
+      .booking-routing-card__transport-rail {
+        flex: 0 0 auto;
+        width: ${token.controlHeightSM}px;
+        min-width: ${token.marginLG}px;
+        height: 0;
+        border-top: 2px dashed ${token.colorBorder};
+      }
+      .booking-routing-card__transport-mode,
+      .booking-routing-card__transport-vessel {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        flex-shrink: 0;
+        color: ${token.colorTextSecondary};
+        font-size: ${token.fontSizeSM}px;
+        white-space: nowrap;
+      }
+      .booking-routing-card__transport-vessel {
+        color: ${token.colorText};
+        font-weight: ${token.fontWeightStrong};
+      }
+      .booking-routing-card__transport-hub {
+        flex-shrink: 0;
+        padding: ${token.paddingXXS}px ${token.paddingSM}px;
+        border-radius: ${token.borderRadiusLG * 2}px;
+        background: ${token.colorWarning};
+        color: ${token.colorText};
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        line-height: 1.2;
+        white-space: nowrap;
+      }
+      .booking-routing-card__actions {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXS}px;
+        flex-shrink: 0;
+        min-width: 0;
+        width: 100%;
         padding-top: ${token.paddingSM}px;
         border-top: 1px solid ${token.colorBorderSecondary};
-        font-size: ${token.fontSizeSM}px;
       }
-      /* Modified by Sekar Nagarajan (2026-08-26 18:48) — pipeline module details */
-      .booking-routing-card__shipment {
-        display: flex;
-        justify-content: flex-end;
+      .booking-routing-card__actions .sm-app-button {
+        width: 100%;
       }
-      .booking-routing-card__shipment-toggle {
-        display: inline-flex;
-        align-items: center;
-        gap: ${token.marginXS}px;
-        margin: 0;
-        padding: 0;
-        border: none;
-        background: transparent;
-        color: ${token.colorPrimary};
-        font-weight: ${token.fontWeightStrong};
-        font-size: ${token.fontSize}px;
-        cursor: pointer;
-      }
-      .booking-routing-card__shipment-toggle:hover {
-        opacity: 0.85;
-      }
-      .booking-routing-card__shipment-static {
-        display: inline-flex;
-        align-items: center;
-        gap: ${token.marginXS}px;
-        font-weight: ${token.fontWeightStrong};
-      }
-      .booking-routing-card__shipment-icon {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
+      .booking-routing-card__footer {
+        padding: ${token.paddingSM}px ${token.paddingLG}px;
+        border-top: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorFillAlter};
         flex-shrink: 0;
       }
-      /* Modified by Sekar Nagarajan (2026-08-26 18:52) — wider pipeline strip, no connector overlap */
-      .booking-routing-pipeline {
+      .booking-routing-card__deadlines {
         display: flex;
-        align-items: stretch;
+        flex-wrap: wrap;
         gap: ${token.marginSM}px;
-        width: 100%;
-        overflow-x: auto;
-        padding: ${token.paddingMD}px;
-        border-radius: ${token.borderRadiusLG}px;
-        border: 1px solid ${token.colorBorderSecondary};
-        background: ${token.colorFillAlter};
       }
-      .booking-routing-pipeline__segment {
-        display: flex;
-        align-items: stretch;
-        flex: 0 0 auto;
-        min-width: max-content;
-      }
-      .booking-routing-pipeline__port {
-        flex: 0 0 auto;
-        width: 132px;
-        display: flex;
-        flex-direction: column;
-        gap: ${token.marginXXS}px;
-        padding: ${token.paddingSM}px ${token.paddingMD}px;
-        border-radius: ${token.borderRadiusLG}px;
+      .booking-routing-card__deadline {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXS}px;
+        padding: ${token.paddingXXS}px ${token.paddingSM}px;
+        border-radius: ${token.borderRadius}px;
         border: 1px solid ${token.colorBorderSecondary};
         background: ${token.colorBgContainer};
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorText};
       }
-      .booking-routing-pipeline__port--origin {
-        border-color: ${token.colorPrimaryBorder};
-        box-shadow: inset 3px 0 0 ${token.colorPrimary};
-      }
-      .booking-routing-pipeline__port--hub {
-        border-color: ${token.colorWarningBorder};
-        box-shadow: inset 3px 0 0 ${token.colorWarning};
-      }
-      .booking-routing-pipeline__port--delivery {
-        border-color: ${token.colorSuccessBorder};
-        box-shadow: inset 3px 0 0 ${token.colorSuccess};
-      }
-      .booking-routing-pipeline__port-icon {
+      .booking-routing-card__deadline-icon {
+        width: 28px;
+        height: 28px;
+        border-radius: ${token.borderRadiusSM}px;
         display: inline-flex;
-        color: ${token.colorPrimary};
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
       }
-      .booking-routing-pipeline__port--hub .booking-routing-pipeline__port-icon {
+      .booking-routing-card__deadline-icon--gate {
+        background: ${token.colorInfoBg};
+        color: ${token.colorInfo};
+      }
+      .booking-routing-card__deadline-icon--si {
+        background: ${token.colorWarningBg};
         color: ${token.colorWarning};
       }
-      .booking-routing-pipeline__port--delivery .booking-routing-pipeline__port-icon {
+      .booking-routing-card__deadline-icon--vgm {
+        background: ${token.colorSuccessBg};
         color: ${token.colorSuccess};
       }
-      .booking-routing-pipeline__port-code {
-        font-size: ${token.fontSizeLG}px;
+      .booking-routing-card__deadline-label {
+        display: block;
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
         line-height: 1.2;
       }
-      .booking-routing-pipeline__port-name {
+      .booking-routing-card__deadline-value {
         display: block;
-        font-size: ${token.fontSizeSM}px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        font-weight: ${token.fontWeightStrong};
+        line-height: 1.2;
       }
-      .booking-routing-pipeline__port-time {
-        display: block;
-        font-size: ${token.fontSizeSM}px;
-        line-height: 1.3;
+
+      .booking-route-details {
+        margin: 0 ${token.marginLG}px ${token.marginMD}px;
+        padding: ${token.paddingMD}px ${token.paddingLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorBgContainer};
       }
-      .booking-routing-pipeline__move {
-        flex: 0 0 auto;
-        width: 148px;
+      .booking-route-details__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: ${token.marginSM}px;
+        margin-bottom: ${token.marginMD}px;
+        flex-wrap: wrap;
+      }
+      .booking-route-details__title {
+        margin: 0 !important;
+        color: ${token.colorPrimary} !important;
+        font-weight: ${token.fontWeightStrong} !important;
+      }
+      .booking-route-timeline {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .booking-route-stop {
+        display: grid;
+        grid-template-columns: 32px minmax(0, 1fr);
+        gap: ${token.marginSM}px;
+        align-items: stretch;
+      }
+      .booking-route-stop__rail {
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
-        gap: ${token.marginXXS}px;
-        padding: ${token.paddingXS}px ${token.paddingSM}px;
-        text-align: center;
       }
-      .booking-routing-pipeline__rail {
-        display: flex;
-        align-items: center;
-        width: 100%;
-      }
-      .booking-routing-pipeline__dot {
-        width: 8px;
-        height: 8px;
+      .booking-route-stop__node {
+        width: 28px;
+        height: 28px;
         border-radius: 50%;
-        flex-shrink: 0;
         background: ${token.colorPrimary};
-      }
-      .booking-routing-pipeline__dot--end {
-        background: ${token.colorSuccess};
-      }
-      .booking-routing-pipeline__track {
-        flex: 1;
-        height: 2px;
-        margin: 0 ${token.marginXXS}px;
-        background: linear-gradient(
-          90deg,
-          ${token.colorPrimary} 0%,
-          ${token.colorSuccess} 100%
-        );
-      }
-      .booking-routing-pipeline__move--inland .booking-routing-pipeline__track {
-        background: linear-gradient(
-          90deg,
-          ${token.colorWarning} 0%,
-          ${token.colorPrimary} 100%
-        );
-      }
-      .booking-routing-pipeline__move--inland .booking-routing-pipeline__dot {
-        background: ${token.colorWarning};
-      }
-      .booking-routing-pipeline__move-icon {
+        color: ${token.colorTextLightSolid};
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: ${token.controlHeightSM}px;
-        height: ${token.controlHeightSM}px;
-        border-radius: 50%;
         flex-shrink: 0;
-        background: ${token.colorInfoBg};
-        color: ${token.colorInfo};
-        border: 1px solid ${token.colorInfoBorder};
+        z-index: 1;
       }
-      .booking-routing-pipeline__move--inland .booking-routing-pipeline__move-icon {
-        background: ${token.colorWarningBg};
-        color: ${token.colorWarning};
-        border-color: ${token.colorWarningBorder};
+      .booking-route-stop__line {
+        flex: 1;
+        width: 0;
+        min-height: ${token.controlHeightLG}px;
+        margin: ${token.marginXXS}px 0;
+        border-left: 2px dashed ${tokenMix(token.colorPrimary, 45)};
       }
-      .booking-routing-pipeline__move-tag {
-        margin-inline-end: 0 !important;
+      .booking-route-stop__body {
+        min-width: 0;
+        padding-bottom: ${token.paddingLG}px;
       }
-      .booking-routing-pipeline__move-vessel {
+      .booking-route-stop:last-child .booking-route-stop__body {
+        padding-bottom: 0;
+      }
+      .booking-route-stop__main {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXS}px;
+        align-items: stretch;
+      }
+      .booking-route-stop__location {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+      }
+      .booking-route-stop__place {
+        display: block;
+        font-size: ${token.fontSize}px;
+        color: ${token.colorText};
+        line-height: 1.35;
+      }
+      .booking-route-stop__code {
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+      }
+      .booking-route-stop__terminal {
         display: block;
         font-size: ${token.fontSizeSM}px;
-        max-width: 140px;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        color: ${token.colorTextSecondary};
+        line-height: 1.35;
+      }
+      .booking-route-stop__badges {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: ${token.marginXS}px;
+        margin-top: ${token.marginXXS}px;
+      }
+      .booking-route-stop__badge {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        padding: ${token.paddingXXS}px ${token.paddingSM}px;
+        border-radius: ${token.borderRadiusLG * 2}px;
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        line-height: 1.2;
         white-space: nowrap;
       }
-      .booking-routing-pipeline__move-meta {
+      .booking-route-stop__badge--road {
+        border: 1px solid ${token.colorBorder};
+        background: ${token.colorBgContainer};
+        color: ${token.colorTextSecondary};
+      }
+      .booking-route-stop__badge--hub {
+        border: none;
+        background: ${token.colorWarning};
+        color: ${token.colorText};
+      }
+      .booking-route-stop__badge--vessel {
+        border: 1px solid ${token.colorBorder};
+        background: ${token.colorBgContainer};
+        color: ${token.colorText};
+      }
+      .booking-route-stop__times {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+        align-items: flex-start;
+      }
+      .booking-route-stop__time {
         display: block;
         font-size: ${token.fontSizeSM}px;
-        max-width: 140px;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        color: ${token.colorTextSecondary};
+        line-height: 1.35;
         white-space: nowrap;
       }
+      .booking-route-stop__time-date {
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+      }
+
+      @media (min-width: 768px) {
+        .booking-routing-card__route {
+          grid-template-columns: minmax(0, 1fr) minmax(160px, 1.15fr) minmax(0, 1fr);
+          gap: ${token.marginMD}px;
+          align-items: start;
+        }
+        .booking-routing-card__endpoint--dest {
+          text-align: right;
+          align-items: flex-end;
+        }
+        .booking-routing-card__connector {
+          align-self: center;
+          padding-top: ${token.paddingLG}px;
+        }
+        .booking-route-stop__main {
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: flex-start;
+          gap: ${token.marginLG}px;
+        }
+        .booking-route-stop__times {
+          align-items: flex-end;
+          text-align: right;
+          flex-shrink: 0;
+        }
+      }
+
+      @media (min-width: 992px) {
+        .booking-routing-card__main {
+          flex-direction: row;
+          align-items: flex-start;
+          gap: ${token.marginLG}px;
+        }
+        .booking-routing-card__actions {
+          width: 160px;
+          border-top: none;
+          border-left: 1px solid ${token.colorBorderSecondary};
+          padding-top: 0;
+          padding-left: ${token.paddingMD}px;
+          justify-content: flex-start;
+        }
+      }
+
       @media (max-width: 767px) {
-        .booking-routing-pipeline {
-          flex-direction: column;
-          overflow-x: visible;
-          gap: ${token.marginXS}px;
+        .booking-routing-card__main {
+          padding: ${token.paddingMD}px;
         }
-        .booking-routing-pipeline__segment {
-          flex-direction: column;
-          width: 100%;
-          min-width: 0;
+        .booking-routing-card__date {
+          font-size: ${token.fontSizeHeading4}px;
         }
-        .booking-routing-pipeline__port {
-          width: 100%;
-        }
-        .booking-routing-pipeline__move {
-          width: 100%;
-          padding: ${token.paddingSM}px 0;
-        }
-        .booking-routing-pipeline__rail {
-          flex-direction: column;
-          height: ${token.controlHeightLG * 2}px;
-          width: auto;
-        }
-        .booking-routing-pipeline__track {
-          width: 2px;
-          height: auto;
-          flex: 1;
-          margin: ${token.marginXXS}px 0;
-          background: linear-gradient(
-            180deg,
-            ${token.colorPrimary} 0%,
-            ${token.colorSuccess} 100%
-          );
-        }
-        .booking-routing-pipeline__move--inland .booking-routing-pipeline__track {
-          background: linear-gradient(
-            180deg,
-            ${token.colorWarning} 0%,
-            ${token.colorPrimary} 100%
-          );
+        .booking-route-details {
+          margin-left: ${token.marginMD}px;
+          margin-right: ${token.marginMD}px;
         }
       }
       .booking-selected-route {
@@ -671,12 +854,361 @@ export function BookingModuleStyles() {
         .booking-port-row__swap {
           margin: ${token.marginXS}px 0;
         }
-        .booking-routing-card__meta {
-          grid-template-columns: 1fr;
+      }
+
+      .booking-cargo-toolbar {
+        margin-bottom: ${token.marginMD}px;
+      }
+      .booking-cargo-container-card {
+        margin-bottom: ${token.marginLG}px;
+      }
+      .booking-cargo-container-card__title {
+        margin: 0 !important;
+      }
+      .booking-cargo-commodity-toolbar {
+        margin: ${token.marginMD}px 0 ${token.marginSM}px;
+      }
+      .booking-cargo-commodity-card {
+        margin-bottom: ${token.marginMD}px;
+      }
+      .form-field-full-width.ant-input-number,
+      .form-field-full-width.ant-input-number-group-wrapper {
+        width: 100%;
+      }
+      /* Modified by Sekar Nagarajan (2026-08-28 12:09) */
+      .booking-qty-stepper {
+        width: 100%;
+      }
+      .booking-qty-stepper .booking-qty-stepper__input {
+        flex: 1 1 auto;
+        min-width: 0;
+        width: 100%;
+      }
+      .booking-qty-stepper .booking-qty-stepper__input.ant-input-number {
+        width: 100%;
+        border-radius: 0;
+      }
+      .booking-qty-stepper .ant-input-number-input {
+        text-align: center;
+      }
+      .booking-qty-stepper .booking-qty-stepper__btn-wrap {
+        display: inline-flex;
+        flex: 0 0 auto;
+      }
+      .booking-qty-stepper .booking-qty-stepper__btn-wrap .ant-btn {
+        height: 100%;
+      }
+      .booking-qty-stepper .booking-qty-stepper__btn--minus {
+        border-top-right-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+      }
+      .booking-qty-stepper .booking-qty-stepper__btn--plus {
+        border-top-left-radius: 0 !important;
+        border-bottom-left-radius: 0 !important;
+      }
+      .booking-qty-stepper .booking-qty-stepper__input.ant-input-number {
+        border-left-width: 0;
+        border-right-width: 0;
+      }
+      .booking-cargo-container-card .list-actions-row,
+      .booking-cargo-commodity-card .list-actions-row {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+      }
+      .booking-cargo-commodity-card__checkbox-col {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+      }
+      .booking-cargo-commodity-card__checkbox-col .ant-checkbox-wrapper,
+      .booking-cargo-commodity-card__hazardous-check {
+        min-height: ${token.controlHeightLG}px;
+        display: inline-flex;
+        align-items: center;
+      }
+      .booking-upload-type {
+        margin-bottom: ${token.marginMD}px;
+        max-width: 320px;
+      }
+      .booking-upload-list {
+        margin: ${token.marginMD}px 0 0;
+        padding-inline-start: ${token.paddingLG}px;
+      }
+      .booking-preview-card__title {
+        margin: 0 !important;
+      }
+      .booking-preview-container {
+        margin-bottom: ${token.marginMD}px;
+      }
+
+      .booking-rates-table {
+        width: 100%;
+        overflow-x: auto;
+      }
+
+      .booking-party-search-input {
+        flex: 1;
+        min-width: 220px;
+        width: 100%;
+      }
+      .booking-party-search-hint {
+        display: block;
+        margin-top: ${token.marginSM}px;
+      }
+      .booking-party-suggest-option {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+        padding-block: ${token.paddingXXS}px;
+      }
+      .booking-party-suggest-option__meta {
+        font-size: ${token.fontSizeSM}px;
+      }
+      .booking-party-selected-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: ${token.marginSM}px;
+        margin-top: ${token.marginMD}px;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorFillAlter};
+      }
+      .booking-party-selected-row__info {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+        min-width: 0;
+      }
+      .booking-party-section > .ant-card-head .ant-card-head-title {
+        width: 100%;
+      }
+      .booking-party-section__title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: ${token.marginSM}px;
+        width: 100%;
+      }
+      .booking-party-section__count {
+        flex-shrink: 0;
+        font-weight: ${token.fontWeightStrong};
+      }
+      .booking-party-grid {
+        margin: 0 !important;
+      }
+      .booking-party-grid__col {
+        display: flex;
+      }
+      .booking-party-card.ant-card {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+        border-radius: ${token.borderRadiusLG}px;
+      }
+      .booking-party-card > .ant-card-head {
+        min-height: ${token.controlHeightLG}px;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        border-bottom: 1px solid ${token.colorBorderSecondary};
+      }
+      .booking-party-card > .ant-card-head .ant-card-head-wrapper {
+        align-items: center;
+        gap: ${token.marginSM}px;
+      }
+      .booking-party-card > .ant-card-head .ant-card-head-title {
+        padding: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .booking-party-card > .ant-card-head .ant-card-extra {
+        margin-inline-start: 0;
+        padding: 0;
+        flex-shrink: 0;
+      }
+      .booking-party-card > .ant-card-body {
+        flex: 1;
+        padding: ${token.paddingMD}px !important;
+      }
+      .booking-party-card__title {
+        margin: 0 !important;
+        font-size: ${token.fontSizeLG}px !important;
+        line-height: ${token.lineHeight} !important;
+      }
+      .booking-party-card__body {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+        min-width: 0;
+      }
+      .booking-party-card__company {
+        display: block;
+        line-height: ${token.lineHeight};
+        word-break: break-word;
+      }
+      .booking-party-card__meta {
+        display: block;
+        font-size: ${token.fontSizeSM}px;
+        line-height: ${token.lineHeight};
+        word-break: break-word;
+      }
+      /* Inline Assign Roles panel (no popup) */
+      .booking-party-role-panel {
+        margin-top: ${token.marginMD}px;
+        padding: ${token.paddingMD}px;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorFillAlter};
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginSM}px;
+      }
+      .booking-party-role-panel__header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: ${token.marginSM}px;
+      }
+      .booking-party-role-panel__customer {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginSM}px;
+        min-width: 0;
+      }
+      .booking-party-role-panel__customer-icon {
+        width: ${token.controlHeight}px;
+        height: ${token.controlHeight}px;
+        border-radius: ${token.borderRadiusLG}px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        background: ${token.colorPrimaryBg};
+        color: ${token.colorPrimary};
+      }
+      .booking-party-role-panel__customer-info {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+      }
+      .booking-party-role-panel__meta {
+        display: block;
+        font-size: ${token.fontSizeSM}px;
+      }
+      .booking-party-role-panel__hint {
+        display: block;
+        font-size: ${token.fontSizeSM}px;
+      }
+      .booking-party-role-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: ${token.marginSM}px;
+      }
+      .booking-party-role-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXS}px;
+        min-height: ${token.controlHeight}px;
+        padding: ${token.paddingXXS}px ${token.paddingMD}px;
+        border-radius: ${token.borderRadiusLG * 2}px;
+        border: 1px solid ${token.colorBorder};
+        background: ${token.colorBgContainer};
+        color: ${token.colorText};
+        font-size: ${token.fontSize}px;
+        cursor: pointer;
+        transition:
+          border-color 0.2s ease,
+          background-color 0.2s ease,
+          color 0.2s ease;
+      }
+      .booking-party-role-chip:hover:not(:disabled) {
+        border-color: ${tokenMix(token.colorPrimary, 45)};
+        color: ${token.colorPrimary};
+      }
+      .booking-party-role-chip--selected {
+        border-color: ${token.colorPrimary};
+        background: ${token.colorPrimaryBg};
+        color: ${token.colorPrimary};
+        font-weight: ${token.fontWeightStrong};
+      }
+      .booking-party-role-chip--assigned {
+        opacity: 0.65;
+        cursor: default;
+      }
+      .booking-party-role-chip__tag {
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+      }
+      .booking-party-role-actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: ${token.marginSM}px;
+        padding-top: ${token.paddingXS}px;
+      }
+      .booking-party-drawer-footer {
+        display: flex;
+        flex-wrap: wrap;
+        gap: ${token.marginSM}px;
+        justify-content: flex-end;
+      }
+      .booking-party-drawer-search {
+        margin-bottom: ${token.marginMD}px;
+      }
+
+      .booking-activity-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        max-height: 320px;
+        overflow-y: auto;
+      }
+      .booking-activity-list__item {
+        padding: ${token.paddingSM}px 0;
+        border-bottom: 1px solid ${token.colorBorderSecondary};
+      }
+      .booking-activity-list__item:last-child {
+        border-bottom: none;
+      }
+      .booking-activity-list__action {
+        display: block;
+      }
+      .booking-activity-list__meta {
+        display: block;
+        font-size: ${token.fontSizeSM}px;
+      }
+      .booking-activity-list__note {
+        display: block;
+        margin-top: ${token.marginXXS}px;
+        color: ${token.colorTextSecondary};
+      }
+
+      /* Modified by Sekar Nagarajan (2026-08-28 14:20) — OOG Details single row */
+      .booking-oog-form-grid {
+        display: grid;
+        width: 100%;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: ${token.marginMD}px ${token.marginLG}px;
+      }
+      @media (max-width: 1199px) {
+        .booking-oog-form-grid {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
         }
-        .booking-routing-card__meta-item--center {
-          align-items: flex-start;
-          text-align: left;
+      }
+      @media (max-width: 991px) {
+        .booking-oog-form-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+      @media (max-width: 767px) {
+        .booking-oog-form-grid {
+          grid-template-columns: minmax(0, 1fr);
         }
       }
     `}</style>

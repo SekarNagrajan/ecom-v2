@@ -1,25 +1,31 @@
-// Modified by Sekar Nagarajan (2026-08-26 18:41)
+// Modified by Sekar Nagarajan (2026-08-27 19:12)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
+import { useQuery } from "@tanstack/react-query";
 import {
   AutoComplete,
   Card,
   Col,
   DatePicker,
+  Flex,
   Input,
   Row,
   Segmented,
   Select,
+  Table,
   Tooltip,
   Typography,
 } from "antd";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, type Resolver } from "react-hook-form";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { usePortSearch } from "../../landing/api/landing.queries";
+import { bookingApi, type BookingRateOption } from "../api/booking.api";
+import { bookingKeys } from "../api/booking.keys";
+import { useBookingLookups } from "../api/booking.queries";
 import { extractPortCode } from "../mocks/booking-routing.mock";
 import { useBookingStore } from "../stores/booking.store";
 import {
@@ -78,10 +84,21 @@ function usePortAutocomplete(initialQuery = "") {
 
 export function MasterDetailsStep() {
   const toast = useToast();
-  const { payload, updateMasterDetails, nextStep } = useBookingStore();
+  const { payload, updateMasterDetails, nextStep, prevStep } =
+    useBookingStore();
   const [showAdditional, setShowAdditional] = useState(false);
   const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
   const [isRoutingModalOpen, setIsRoutingModalOpen] = useState(false);
+  const [isValidatingContract, setIsValidatingContract] = useState(false);
+
+  const { data: carriageContracts = [] } =
+    useBookingLookups("carriageContracts");
+  const { data: agencies = [] } = useBookingLookups("agencies");
+  const { data: placesOfReceipt = [] } = useBookingLookups("placesOfReceipt");
+  const { data: emptyPickupFacilities = [] } = useBookingLookups(
+    "emptyPickupFacilities",
+  );
+  const { data: dpwShipperTypes = [] } = useBookingLookups("dpwShipperTypes");
 
   const originAC = usePortAutocomplete(payload.masterDetails?.origin || "");
   const deliveryAC = usePortAutocomplete(payload.masterDetails?.delivery || "");
@@ -95,7 +112,8 @@ export function MasterDetailsStep() {
     formState: { errors },
     reset,
   } = useForm<MasterDetailsData>({
-    resolver: zodResolver(masterDetailsSchema),
+    // Modified by Sekar Nagarajan (2026-08-27 18:41)
+    resolver: zodResolver(masterDetailsSchema) as Resolver<MasterDetailsData>,
     defaultValues: payload.masterDetails || {
       origin: "",
       delivery: "",
@@ -108,13 +126,31 @@ export function MasterDetailsStep() {
       preferredAgency: "",
       additionalInformation: "",
       selectedRoute: null,
+      selectedRate: null,
     },
   });
 
   const selectedRoute = watch("selectedRoute");
+  const selectedRate = watch("selectedRate");
   const originValue = watch("origin");
   const deliveryValue = watch("delivery");
   const cargoReadyDate = watch("cargoReadyDate");
+
+  const canSearchRates =
+    Boolean(originValue?.trim()) && Boolean(deliveryValue?.trim());
+
+  const { data: availableRates = [], isFetching: ratesLoading } = useQuery({
+    queryKey: bookingKeys.rates(
+      originValue?.trim() || "",
+      deliveryValue?.trim() || "",
+    ),
+    queryFn: () =>
+      bookingApi.searchRates({
+        origin: originValue.trim(),
+        delivery: deliveryValue.trim(),
+      }),
+    enabled: canSearchRates && !selectedRate,
+  });
 
   useEffect(() => {
     if (payload.masterDetails) {
@@ -129,6 +165,16 @@ export function MasterDetailsStep() {
     setValue("selectedRoute", null, { shouldDirty: true });
   };
 
+  const clearSelectedRate = () => {
+    setValue("selectedRate", null, { shouldDirty: true });
+  };
+
+  const handleSelectRate = (rate: BookingRateOption) => {
+    setValue("selectedRate", rate, { shouldDirty: true });
+    setValue("rateReference", rate.rateNo, { shouldDirty: true });
+    toast.success(`Rate selected: ${rate.rateNo}`);
+  };
+
   const handleSwapPorts = () => {
     const origin = getValues("origin");
     const delivery = getValues("delivery");
@@ -137,6 +183,7 @@ export function MasterDetailsStep() {
     originAC.setQuery(delivery || "");
     deliveryAC.setQuery(origin || "");
     clearSelectedRoute();
+    clearSelectedRate();
   };
 
   const onSubmit = (data: MasterDetailsData) => {
@@ -207,11 +254,13 @@ export function MasterDetailsStep() {
                       field.onChange(val);
                       originAC.setQuery(String(val));
                       clearSelectedRoute();
+                      clearSelectedRate();
                     }}
                     onChange={(val) => {
                       field.onChange(val);
                       originAC.setQuery(String(val ?? ""));
                       clearSelectedRoute();
+                      clearSelectedRate();
                     }}
                     size="large"
                   >
@@ -264,18 +313,20 @@ export function MasterDetailsStep() {
                       field.onChange(val);
                       deliveryAC.setQuery(String(val));
                       clearSelectedRoute();
+                      clearSelectedRate();
                     }}
                     onChange={(val) => {
                       field.onChange(val);
                       deliveryAC.setQuery(String(val ?? ""));
                       clearSelectedRoute();
+                      clearSelectedRate();
                     }}
                     size="large"
                   >
                     <Input
                       size="large"
                       placeholder="Search delivery port (e.g. GBFEL)"
-                      prefix={<AppIcon icon={Icons.truck} size={16} />}
+                      prefix={<AppIcon icon={Icons.mapPin} size={16} />}
                       allowClear
                     />
                   </AutoComplete>
@@ -345,6 +396,82 @@ export function MasterDetailsStep() {
             </div>
           ) : null}
 
+          {canSearchRates ? (
+            selectedRate ? (
+              <div className="booking-selected-route">
+                <div>
+                  <Text strong className="booking-selected-route__title">
+                    Selected rate: {selectedRate.rateNo} · Item{" "}
+                    {selectedRate.itemNo}
+                  </Text>
+                  <Text
+                    type="secondary"
+                    className="booking-selected-route__meta"
+                  >
+                    {selectedRate.rateType} · {selectedRate.eqpType} ·{" "}
+                    {selectedRate.amount} {selectedRate.currency} ·{" "}
+                    {selectedRate.customer}
+                  </Text>
+                </div>
+                <AppButton
+                  icon={<AppIcon icon={Icons.refreshCw} size={14} />}
+                  onClick={clearSelectedRate}
+                >
+                  Change
+                </AppButton>
+              </div>
+            ) : (
+              <Card
+                size="small"
+                title="Available Rates"
+                className="form-step-card form-step-section"
+              >
+                <div className="booking-rates-table custom-scroll">
+                  <Table
+                    size="small"
+                    rowKey={(r) => `${r.rateNo}-${r.itemNo}-${r.amdNo}`}
+                    loading={ratesLoading}
+                    pagination={false}
+                    dataSource={availableRates}
+                    columns={[
+                      { title: "Rate No", dataIndex: "rateNo" },
+                      { title: "Item", dataIndex: "itemNo", width: 70 },
+                      { title: "Amd", dataIndex: "amdNo", width: 70 },
+                      { title: "Type", dataIndex: "rateType", width: 80 },
+                      { title: "Eqp", dataIndex: "eqpType", width: 80 },
+                      {
+                        title: "Amount",
+                        key: "amount",
+                        render: (_: unknown, row: BookingRateOption) =>
+                          `${row.amount} ${row.currency}`,
+                      },
+                      {
+                        title: "Customer",
+                        dataIndex: "customer",
+                        ellipsis: true,
+                      },
+                      {
+                        title: "",
+                        key: "select",
+                        width: 100,
+                        render: (_: unknown, row: BookingRateOption) => (
+                          <AppButton
+                            type="primary"
+                            size="small"
+                            onClick={() => handleSelectRate(row)}
+                          >
+                            Select
+                          </AppButton>
+                        ),
+                      },
+                    ]}
+                    locale={{ emptyText: "No rates for this lane" }}
+                  />
+                </div>
+              </Card>
+            )
+          ) : null}
+
           <Row gutter={[24, 24]}>
             <Col xs={24} md={8}>
               <label className="form-field-label">Haulage Origin</label>
@@ -386,9 +513,13 @@ export function MasterDetailsStep() {
                 render={({ field }) => (
                   <Select
                     {...field}
+                    size="large"
                     placeholder="Select Carriage Contract"
-                    options={[]}
+                    options={carriageContracts}
                     className="form-field-full-width"
+                    allowClear
+                    showSearch
+                    optionFilterProp="label"
                   />
                 )}
               />
@@ -428,8 +559,13 @@ export function MasterDetailsStep() {
                 render={({ field }) => (
                   <Select
                     {...field}
-                    options={[]}
+                    size="large"
+                    options={agencies}
                     className="form-field-full-width"
+                    allowClear
+                    showSearch
+                    optionFilterProp="label"
+                    placeholder="Select Agency"
                   />
                 )}
               />
@@ -454,17 +590,53 @@ export function MasterDetailsStep() {
                 <Row gutter={[24, 24]}>
                   <Col xs={24} md={6}>
                     <label className="form-field-label">Rate Reference</label>
-                    <Controller
-                      control={control}
-                      name="rateReference"
-                      render={({ field }) => (
-                        <Input
-                          {...field}
-                          placeholder="Rate Reference"
-                          size="large"
-                        />
-                      )}
-                    />
+                    <Flex gap="small" align="flex-start">
+                      <Controller
+                        control={control}
+                        name="rateReference"
+                        render={({ field }) => (
+                          <Input
+                            {...field}
+                            placeholder="Rate Reference"
+                            size="large"
+                            className="form-field-full-width"
+                          />
+                        )}
+                      />
+                      <AppButton
+                        loading={isValidatingContract}
+                        onClick={async () => {
+                          const ref = getValues("rateReference")?.trim();
+                          if (!ref) {
+                            toast.error(
+                              "Enter a rate / contract reference first",
+                            );
+                            return;
+                          }
+                          setIsValidatingContract(true);
+                          try {
+                            const result = await bookingApi.validateContract(
+                              ref,
+                            );
+                            if (result.valid) {
+                              toast.success(
+                                result.contractName
+                                  ? `Valid: ${result.contractName}`
+                                  : "Contract reference is valid",
+                              );
+                            } else {
+                              toast.error("Contract reference is invalid");
+                            }
+                          } catch {
+                            toast.error("Failed to validate contract");
+                          } finally {
+                            setIsValidatingContract(false);
+                          }
+                        }}
+                      >
+                        Validate
+                      </AppButton>
+                    </Flex>
                   </Col>
 
                   <Col xs={24} md={6}>
@@ -511,9 +683,13 @@ export function MasterDetailsStep() {
                       render={({ field }) => (
                         <Select
                           {...field}
+                          size="large"
                           placeholder="Select Place"
-                          options={[]}
+                          options={placesOfReceipt}
                           className="form-field-full-width"
+                          allowClear
+                          showSearch
+                          optionFilterProp="label"
                         />
                       )}
                     />
@@ -680,9 +856,13 @@ export function MasterDetailsStep() {
                       render={({ field }) => (
                         <Select
                           {...field}
+                          size="large"
                           placeholder="Select Pick Up"
-                          options={[]}
+                          options={emptyPickupFacilities}
                           className="form-field-full-width"
+                          allowClear
+                          showSearch
+                          optionFilterProp="label"
                         />
                       )}
                     />
@@ -743,9 +923,13 @@ export function MasterDetailsStep() {
                       render={({ field }) => (
                         <Select
                           {...field}
+                          size="large"
                           placeholder="Select Shipper Type"
-                          options={[]}
+                          options={dpwShipperTypes}
                           className="form-field-full-width"
+                          allowClear
+                          showSearch
+                          optionFilterProp="label"
                         />
                       )}
                     />
@@ -789,7 +973,7 @@ export function MasterDetailsStep() {
       </div>
 
       <div className="form-step-footer">
-        <AppButton>Previous</AppButton>
+        <AppButton onClick={prevStep}>Previous</AppButton>
         <AppButton type="primary" htmlType="submit">
           {hasValidRoute ? "Next" : "Select Vessel / Route"}
         </AppButton>

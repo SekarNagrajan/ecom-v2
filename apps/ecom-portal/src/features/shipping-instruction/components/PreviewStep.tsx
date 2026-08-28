@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 12:19)
+// Modified by Sekar Nagarajan (2026-08-28 11:15)
 import { AppButton } from "@solverminds/shared-ui";
 import { Card, Col, Row, Table, Typography } from "antd";
 
@@ -7,6 +7,7 @@ import {
   WIZARD_STEP_TITLES,
 } from "../../../constants/module-titles";
 import type { SIDTO } from "../types/si.types";
+import { SI_CARGO_LINE_COLUMNS } from "../utils/si-cargo-line-columns";
 
 const { Title, Text } = Typography;
 
@@ -152,29 +153,7 @@ export function PreviewStep({
                   rowKey="id"
                   pagination={false}
                   bordered
-                  columns={[
-                    {
-                      title: "Marks & Numbers",
-                      dataIndex: "marksAndNumbers",
-                      key: "marksAndNumbers",
-                    },
-                    {
-                      title: "Description",
-                      dataIndex: "description",
-                      key: "description",
-                    },
-                    {
-                      title: "Packages",
-                      key: "packages",
-                      render: (_, record) =>
-                        `${record.packageCount} ${record.packageType}`,
-                    },
-                    {
-                      title: "Gross Wt (KG)",
-                      dataIndex: "grossWeight",
-                      key: "grossWeight",
-                    },
-                  ]}
+                  columns={SI_CARGO_LINE_COLUMNS}
                 />
               </div>
             </div>
@@ -182,14 +161,13 @@ export function PreviewStep({
         </Card>
       </div>
 
-      <div className="form-step-footer form-step-footer--split">
-        <div className="form-step-footer__start custom-scroll">
-          <AppButton onClick={onPrevious} disabled={isSubmitting}>
-            Previous
-          </AppButton>
-        </div>
+      {/* Modified by Sekar Nagarajan (2026-08-28 12:40) */}
+      <div className="form-step-footer">
+        <AppButton onClick={onPrevious} disabled={isSubmitting}>
+          Previous
+        </AppButton>
         <AppButton type="primary" onClick={onSubmit} loading={isSubmitting}>
-          Submit to ESL
+          Submit
         </AppButton>
       </div>
     </div>

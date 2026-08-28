@@ -6,8 +6,8 @@ import { AppIcon, Icons } from "../../../components/icons";
 import { MODULE_TITLES } from "../../../constants/module-titles";
 import { useContactUsController } from "../hooks/use-contact-us-controller";
 import { ContactPanelHeader } from "./contact-panel-header";
-import { ContactUsForm } from "./ContactUsForm";
 import { ContactUsModuleStyles } from "./contact-us-module-styles";
+import { ContactUsForm } from "./ContactUsForm";
 
 export interface ContactUsDrawerProps {
   open: boolean;
@@ -59,6 +59,7 @@ export function ContactUsDrawer({
               <AppButton
                 onClick={handleClose}
                 disabled={controller.isSubmitting}
+                danger
               >
                 Cancel
               </AppButton>

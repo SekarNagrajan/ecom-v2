@@ -5,4 +5,5 @@ export const siKeys = {
   list: () => [...siKeys.lists()] as const,
   details: () => [...siKeys.all, "detail"] as const,
   detail: (id: string) => [...siKeys.details(), id] as const,
+  config: () => [...siKeys.all, "config"] as const,
 };

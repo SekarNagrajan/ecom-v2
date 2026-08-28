@@ -1,9 +1,12 @@
-// Modified by Sekar Nagarajan (2026-08-26 11:45)
+// Modified by Sekar Nagarajan (2026-08-28 11:15)
 import { useQuery } from "@tanstack/react-query";
 import { Card, Result, Skeleton, Typography } from "antd";
 import type { ReactNode } from "react";
 
 import { AppIcon, Icons } from "../../../../components/icons";
+import { bookingApi } from "../../api/booking.api";
+import { bookingKeys } from "../../api/booking.keys";
+import { migrateLegacyCargo } from "../../types/booking.types";
 
 const { Title, Text } = Typography;
 
@@ -43,50 +46,20 @@ export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["booking", bookingId],
+    queryKey: bookingKeys.detail(String(bookingId ?? "")),
     queryFn: async () => {
+      const data = await bookingApi.getBookingById(String(bookingId));
       return {
-        masterDetails: {
-          origin: "USNYC",
-          delivery: "GBFEL",
-          cargoReadyDate: "2026-09-01",
-          haulageOriginType: "Merchant",
-          haulageDestinationType: "Carrier",
-          carriageContract: "C-12345",
-          onlineBookingNo: bookingId,
-        },
-        parties: {
-          shipperName: "Global Exports LLC",
-          consigneeName: "UK Imports Ltd",
-          agreementParty: "Global Exports LLC",
-          siSubmittingParty: "Global Exports LLC",
-        },
-        cargo: {
-          commodity: "GEN-CGO - General Freight / Merchandise",
-          containerType: "40' High Cube Dry",
-          containerCount: 2,
-          totalWeightKg: 45000,
-          isLcl: false,
-          isDangerousGoods: false,
-          isReefer: false,
-          isOog: false,
-        },
-        ens: {
-          euCustomsZone: true,
-          blType: "Straight BL",
-          ensFilingType: "Single Filing",
-          paymentMethod: "Wire Transfer",
-          declarantName: "Declarant Co",
-          declarantCountry: "GB",
-        },
-        insurance: {
-          isInsuranceRequired: true,
-          currency: "USD",
-          cargoValue: 100000,
-          termsAccepted: true,
-        },
+        ...data,
+        cargo: data.cargo ? migrateLegacyCargo(data.cargo) : null,
       };
     },
+    enabled: !!bookingId,
+  });
+
+  const { data: activity = [], isLoading: activityLoading } = useQuery({
+    queryKey: bookingKeys.activity(String(bookingId ?? "")),
+    queryFn: () => bookingApi.getBookingActivity(String(bookingId)),
     enabled: !!bookingId,
   });
 
@@ -98,9 +71,11 @@ export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
     );
   }
 
-  if (error || !booking) {
+  if (error || !booking || !booking.masterDetails || !booking.parties) {
     return <Result status="error" title="Failed to load booking details" />;
   }
+
+  const cargo = booking.cargo;
 
   return (
     <div className="booking-stack">
@@ -146,6 +121,10 @@ export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
           <MetaItem label="Shipper" value={booking.parties.shipperName} />
           <MetaItem label="Consignee" value={booking.parties.consigneeName} />
           <MetaItem
+            label="Notify 2"
+            value={booking.parties.notifyParty2Name || "N/A"}
+          />
+          <MetaItem
             label="Agreement Party"
             value={booking.parties.agreementParty}
           />
@@ -165,29 +144,36 @@ export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
         }
       >
         <div className="booking-meta-grid booking-meta-grid--3">
-          <MetaItem label="Commodity" value={booking.cargo.commodity} />
-          <MetaItem
-            label="Equipment"
-            value={`${booking.cargo.containerCount}x ${booking.cargo.containerType}`}
-          />
-          <MetaItem
-            label="Total Weight"
-            value={`${booking.cargo.totalWeightKg} kg`}
-          />
+          {(cargo?.containers ?? []).map((c, i) => (
+            <MetaItem
+              key={c.id}
+              label={`Container ${i + 1}`}
+              value={`${c.quantity}x ${c.containerType} · ${c.commodities
+                .map((m) =>
+                  [
+                    m.hsCode,
+                    m.commodity || m.description,
+                    `${m.packageQuantity} ${m.packageType}`,
+                    `${m.weight} kg`,
+                    `${m.volume} m³`,
+                    m.marksAndNumbers ? `Marks: ${m.marksAndNumbers}` : "",
+                  ]
+                    .filter(Boolean)
+                    .join(" · "),
+                )
+                .join("; ")}`}
+            />
+          ))}
           <MetaItem
             label="Hazardous"
             value={
-              booking.cargo.isDangerousGoods ? (
+              (cargo?.containers ?? []).some((c) =>
+                c.commodities.some((m) => m.isDangerousGoods),
+              ) ? (
                 <Text type="danger">Yes</Text>
               ) : (
                 "No"
               )
-            }
-          />
-          <MetaItem
-            label="Reefer"
-            value={
-              booking.cargo.isReefer ? <Text type="success">Yes</Text> : "No"
             }
           />
         </div>
@@ -209,10 +195,6 @@ export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
               label="Declarant Name"
               value={booking.ens.declarantName}
             />
-            <MetaItem
-              label="Declarant Country"
-              value={booking.ens.declarantCountry}
-            />
           </div>
         </Card>
       ) : null}
@@ -221,9 +203,7 @@ export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
         <Card
           className="booking-panel"
           title={
-            <SectionTitle
-              icon={<AppIcon icon={Icons.shieldCheck} size={16} />}
-            >
+            <SectionTitle icon={<AppIcon icon={Icons.shieldCheck} size={16} />}>
               Insurance Details
             </SectionTitle>
           }
@@ -240,6 +220,56 @@ export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
           </div>
         </Card>
       ) : null}
+
+      {(booking.documents?.length ?? 0) > 0 ? (
+        <Card
+          className="booking-panel"
+          title={
+            <SectionTitle icon={<AppIcon icon={Icons.inbox} size={16} />}>
+              Documents
+            </SectionTitle>
+          }
+        >
+          <div className="booking-meta-grid">
+            {booking.documents!.map((d) => (
+              <MetaItem key={d.id} label={d.type} value={d.fileName} />
+            ))}
+          </div>
+        </Card>
+      ) : null}
+
+      <Card
+        className="booking-panel"
+        title={
+          <SectionTitle icon={<AppIcon icon={Icons.history} size={16} />}>
+            Activity
+          </SectionTitle>
+        }
+      >
+        {activityLoading ? (
+          <Skeleton active paragraph={{ rows: 3 }} />
+        ) : activity.length === 0 ? (
+          <Text type="secondary">No activity recorded.</Text>
+        ) : (
+          <ul className="booking-activity-list custom-scroll">
+            {activity.map((event) => (
+              <li key={event.id} className="booking-activity-list__item">
+                <Text strong className="booking-activity-list__action">
+                  {event.action}
+                </Text>
+                <Text type="secondary" className="booking-activity-list__meta">
+                  {event.by} · {event.at}
+                </Text>
+                {event.note ? (
+                  <Text className="booking-activity-list__note">
+                    {event.note}
+                  </Text>
+                ) : null}
+              </li>
+            ))}
+          </ul>
+        )}
+      </Card>
     </div>
   );
 }

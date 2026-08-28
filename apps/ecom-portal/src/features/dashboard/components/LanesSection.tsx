@@ -25,16 +25,12 @@ export function TopActiveLanesSection({ lanes, lastUsed }: TopLanesProps) {
       className="dashboard-panel"
       title={
         <Text strong className="dashboard-panel__title">
-          2. Top Active Lanes (by FEUs)
+          Top Active Lanes (by FEUs)
         </Text>
       }
       extra={
         <Tooltip title="View All Lanes">
-          <AppButton
-            type="link"
-            size="small"
-            icon={<AppIcon icon={Icons.eye} size={16} tone="view" />}
-          >
+          <AppButton type="link" size="small">
             View All
           </AppButton>
         </Tooltip>
@@ -126,7 +122,7 @@ export function LaneOpportunitySection({
       className="dashboard-panel"
       title={
         <Text strong className="dashboard-panel__title">
-          3. Lane Opportunity Visibility
+          Lane Opportunity Visibility
         </Text>
       }
       extra={

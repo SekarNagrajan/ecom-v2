@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-25 16:20)
+// Modified by Sekar Nagarajan (2026-08-27 22:15)
 import { AppButton } from "@solverminds/shared-ui";
 import { useAntdBreakpoint } from "@solverminds/shared-ui/hooks";
 import { Card, Flex, Result, Steps, Typography } from "antd";
@@ -6,8 +6,8 @@ import type { LucideIcon } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { FormProvider } from "react-hook-form";
 
-import { FeaturePageShell } from "../../components/shared/feature-page-shell";
 import { AppIcon, Icons } from "../../components/icons";
+import { FeaturePageShell } from "../../components/shared/feature-page-shell";
 import { CompanyInfoStep } from "./components/CompanyInfoStep";
 import { FileUploadStep } from "./components/FileUploadStep";
 import { RegistrationModuleStyles } from "./components/registration-module-styles";
@@ -21,11 +21,11 @@ interface RegistrationRouteProps {
   onCancel: () => void;
 }
 
-const PIPELINE_STEPS: { title: string; icon: LucideIcon }[] = [
-  { title: "Company Info", icon: Icons.fileText },
-  { title: "User Info", icon: Icons.user },
-  { title: "KYC Upload", icon: Icons.upload },
-  { title: "Terms & Conditions", icon: Icons.shieldCheck },
+const PIPELINE_STEPS: { title: string; icon: LucideIcon; size: number }[] = [
+  { title: "Company Info", icon: Icons.fileText, size: 20 },
+  { title: "User Info", icon: Icons.user, size: 20 },
+  { title: "KYC Upload", icon: Icons.upload, size: 20 },
+  { title: "Terms & Conditions", icon: Icons.shieldCheck, size: 20 },
 ];
 
 function pipelineIconClass(stepIndex: number, currentStep: number): string {
@@ -101,10 +101,10 @@ export function RegistrationRoute({ onCancel }: RegistrationRouteProps) {
                       <div
                         className={pipelineIconClass(
                           index,
-                          controller.currentStep
+                          controller.currentStep,
                         )}
                       >
-                        <AppIcon icon={step.icon} size={16} />
+                        <AppIcon icon={step.icon} size={step.size} />
                       </div>
                     ),
                   }))}
@@ -140,7 +140,7 @@ export function RegistrationRoute({ onCancel }: RegistrationRouteProps) {
                           size="large"
                           onClick={controller.nextStep}
                         >
-                          Next Step
+                          Next
                         </AppButton>
                       ) : (
                         <AppButton

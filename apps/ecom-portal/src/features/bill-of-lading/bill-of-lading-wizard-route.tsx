@@ -1,16 +1,15 @@
-// Modified by Sekar Nagarajan (2026-08-26 13:04)
+// Modified by Sekar Nagarajan (2026-08-28 11:50)
 import { AppButton, AppModal } from "@solverminds/shared-ui";
-import { useConfirm } from "@solverminds/shared-ui/hooks";
+import { useConfirm, useToast } from "@solverminds/shared-ui/hooks";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { Card, Result, Space, Steps, theme } from "antd";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { AppIcon, Icons } from "../../components/icons";
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import {
   MODULE_TITLES,
-  WIZARD_STEP_TITLES,
   formatModuleScreenTitle,
 } from "../../constants/module-titles";
 import { checkVoyageClosed } from "./api/bl.api";
@@ -21,27 +20,36 @@ import {
 } from "./api/bl.queries";
 import { BlLoadingCenter } from "./components/bl-loading-center";
 import { BlModuleStyles } from "./components/bl-module-styles";
-import { ChargesStep } from "./components/steps/ChargesStep";
-import { ContainersCargoStep } from "./components/steps/ContainersCargoStep";
-import { MasterDetailsStep } from "./components/steps/MasterDetailsStep";
-import { PartiesStep } from "./components/steps/PartiesStep";
-import { PreviewStep } from "./components/steps/PreviewStep";
+import {
+  buildBlWizardSteps,
+  getStepIcon,
+  renderBlWizardStep,
+} from "./config/bl-wizard-steps";
+import { DEFAULT_BL_WIZARD_CONFIG } from "./config/bl-wizard-config";
 import { useBLWizard } from "./hooks/use-bl-wizard";
+import { useBLWizardConfig } from "./hooks/use-bl-wizard-config";
 import type { BLDTO } from "./types/bl.types";
 
 const BL_TERMS_HTML =
   "By proceeding with B/L correction you agree to the carrier terms and conditions for document amendments.";
 
-const PIPELINE_ICON_SIZE = 25;
-
 export function BillOfLadingWizardRoute() {
   const { token } = theme.useToken();
   const navigate = useNavigate();
   const confirm = useConfirm();
+  const toast = useToast();
   const { blNo } = useParams({ strict: false }) as { blNo: string };
 
   const { data: detail, isLoading, isError, error, refetch } =
     useBLDetailQuery(blNo);
+  const { data: wizardConfig = DEFAULT_BL_WIZARD_CONFIG } =
+    useBLWizardConfig();
+
+  const wizardSteps = useMemo(
+    () => buildBlWizardSteps(wizardConfig),
+    [wizardConfig],
+  );
+
   const {
     currentStep,
     setCurrentStep,
@@ -49,7 +57,10 @@ export function BillOfLadingWizardRoute() {
     goPrevious,
     draft,
     updateDraft,
-  } = useBLWizard(detail);
+    isFirstStep,
+    isLastStep,
+  } = useBLWizard(detail, wizardSteps.length);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [termsOpen, setTermsOpen] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
@@ -61,74 +72,11 @@ export function BillOfLadingWizardRoute() {
     navigate({ to: "/app/bl" });
   };
 
-  const stepsConfig = [
-    {
-      title: WIZARD_STEP_TITLES.masterDetails,
-      icon: <AppIcon icon={Icons.rocket} size={PIPELINE_ICON_SIZE} />,
-    },
-    {
-      title: WIZARD_STEP_TITLES.parties,
-      icon: <AppIcon icon={Icons.contact} size={PIPELINE_ICON_SIZE} />,
-    },
-    {
-      title: WIZARD_STEP_TITLES.cargoDetails,
-      icon: <AppIcon icon={Icons.bookOpen} size={PIPELINE_ICON_SIZE} />,
-    },
-    {
-      title: WIZARD_STEP_TITLES.charges,
-      icon: <AppIcon icon={Icons.dollarSign} size={PIPELINE_ICON_SIZE} />,
-    },
-    {
-      title: WIZARD_STEP_TITLES.preview,
-      icon: <AppIcon icon={Icons.fileCheck} size={PIPELINE_ICON_SIZE} />,
-    },
-  ];
+  const activeStep = wizardSteps[currentStep];
 
-  const getStepIcon = (
-    icon: React.ReactNode,
-    index: number,
-    current: number,
-  ) => {
-    const isCompleted = index < current;
-    const isActive = index === current;
-
-    let background = token.colorBgContainer;
-    let borderColor = token.colorBorder;
-    let color = token.colorTextQuaternary;
-
-    if (isCompleted) {
-      background = token.colorSuccess;
-      borderColor = token.colorSuccess;
-      color = token.colorWhite;
-    } else if (isActive) {
-      background = token.colorPrimary;
-      borderColor = token.colorPrimary;
-      color = token.colorWhite;
-    }
-
-    return (
-      <span
-        className={[
-          "wizard-step-icon",
-          isActive ? "pipeline-stage-current-badge" : undefined,
-          "app-icon-inherit",
-        ]
-          .filter(Boolean)
-          .join(" ")}
-        style={{
-          background,
-          border: `2px solid ${borderColor}`,
-          color,
-        }}
-      >
-        {icon}
-      </span>
-    );
-  };
-
-  const steps = stepsConfig.map((step, index) => ({
+  const steps = wizardSteps.map((step, index) => ({
     title: step.title,
-    icon: getStepIcon(step.icon, index, currentStep),
+    icon: getStepIcon(step.icon, index, currentStep, token),
   }));
 
   const ensureEditAllowed = async () => {
@@ -142,7 +90,11 @@ export function BillOfLadingWizardRoute() {
       goDashboard();
       return false;
     }
-    if (draft.status === "C" && !termsAccepted) {
+    if (
+      draft.status === "C" &&
+      wizardConfig.enableTermsOnConfirmedEdit &&
+      !termsAccepted
+    ) {
       setTermsOpen(true);
       return false;
     }
@@ -158,8 +110,11 @@ export function BillOfLadingWizardRoute() {
       const updateRes = await updateBl({ blNo, payload: draft });
       if (updateRes.error) return;
       const submitRes = await submitBl(blNo);
-      if (!submitRes.error) {
-        navigate({ to: `/app/bl/${blNo}` });
+      if (!submitRes.error && submitRes.data) {
+        navigate({
+          to: `/app/bl/${blNo}/submit-result`,
+          state: { submitResult: submitRes.data.submitResult } as never,
+        });
       }
     } finally {
       setIsSubmitting(false);
@@ -173,34 +128,20 @@ export function BillOfLadingWizardRoute() {
     onSubmit: handleSubmit,
     onUpdate: updateDraft,
     onCancel: goDashboard,
-    isFirstStep: currentStep === 0,
-    isLastStep: currentStep === stepsConfig.length - 1,
+    isFirstStep,
+    isLastStep,
     isSubmitting,
   };
 
   const renderStepContent = () => {
-    if (isLoading || !draft) {
+    if (isLoading || !draft || !activeStep) {
       return (
         <div className="custom-scroll form-step-scroll">
           <BlLoadingCenter />
         </div>
       );
     }
-
-    switch (currentStep) {
-      case 0:
-        return <MasterDetailsStep {...stepProps} />;
-      case 1:
-        return <PartiesStep {...stepProps} />;
-      case 2:
-        return <ContainersCargoStep {...stepProps} />;
-      case 3:
-        return <ChargesStep {...stepProps} />;
-      case 4:
-        return <PreviewStep {...stepProps} />;
-      default:
-        return null;
-    }
+    return renderBlWizardStep(activeStep, stepProps);
   };
 
   if (isError) {
@@ -312,6 +253,7 @@ export function BillOfLadingWizardRoute() {
               onClick={() => {
                 setTermsAccepted(true);
                 setTermsOpen(false);
+                toast.success("Terms accepted — you may continue editing.");
               }}
             >
               I Agree

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-24 17:10)
+// Modified by Sekar Nagarajan (2026-08-28 00:35)
 import { useConfirm, useToast } from "@solverminds/shared-ui/hooks";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
@@ -36,11 +36,12 @@ export function ManageTemplateModal({
   const queryClient = useQueryClient();
   const { initializeFromBooking } = useBookingStore();
 
-  const { data: templates = [], isLoading } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["booking-templates"],
     queryFn: bookingApi.getTemplates,
     enabled: open,
   });
+  const templates = Array.isArray(data) ? data : [];
 
   const deleteMutation = useMutation({
     mutationFn: bookingApi.deleteTemplate,

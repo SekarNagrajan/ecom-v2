@@ -1,9 +1,10 @@
-// Modified by Sekar Nagarajan (2026-08-26 12:38)
+// Modified by Sekar Nagarajan (2026-08-28 11:15)
 import { Card, Col, Row, Table, Typography } from "antd";
 
 import { RESPONSIVE_COL } from "../../../../constants/responsive-grid";
 import { WIZARD_STEP_TITLES } from "../../../../constants/module-titles";
 import { useSiDetailQuery } from "../../api/si.queries";
+import { SI_CARGO_LINE_COLUMNS } from "../../utils/si-cargo-line-columns";
 import { SiLoadingCenter } from "../si-loading-center";
 
 const { Title, Text } = Typography;
@@ -153,29 +154,7 @@ export function SiDetailsViewer({ siId }: SiDetailsViewerProps) {
                 pagination={false}
                 bordered
                 scroll={{ x: 640 }}
-                columns={[
-                  {
-                    title: "Marks & Numbers",
-                    dataIndex: "marksAndNumbers",
-                    key: "marksAndNumbers",
-                  },
-                  {
-                    title: "Description",
-                    dataIndex: "description",
-                    key: "description",
-                  },
-                  {
-                    title: "Packages",
-                    key: "packages",
-                    render: (_, record) =>
-                      `${record.packageCount} ${record.packageType}`,
-                  },
-                  {
-                    title: "Gross Wt (KG)",
-                    dataIndex: "grossWeight",
-                    key: "grossWeight",
-                  },
-                ]}
+                columns={SI_CARGO_LINE_COLUMNS}
               />
             </div>
           </div>

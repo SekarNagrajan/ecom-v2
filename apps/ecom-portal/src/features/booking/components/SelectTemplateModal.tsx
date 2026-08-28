@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-24 17:10)
+// Modified by Sekar Nagarajan (2026-08-28 00:35)
 import { AppButton } from '@solverminds/shared-ui';
 import { useQuery } from '@tanstack/react-query';
 import { Flex, Table, Typography } from 'antd';
@@ -26,11 +26,12 @@ export function SelectTemplateModal({ open, onCancel }: SelectTemplateModalProps
   const toast = useToast();
   const { initializeFromBooking } = useBookingStore();
 
-  const { data: templates = [], isLoading } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['booking-templates'],
     queryFn: bookingApi.getTemplates,
     enabled: open,
   });
+  const templates = Array.isArray(data) ? data : [];
 
   const handleSelect = (template: BookingTemplate) => {
     initializeFromBooking(template.payload);

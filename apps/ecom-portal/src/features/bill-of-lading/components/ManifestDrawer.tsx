@@ -1,7 +1,8 @@
 // Modified by Sekar Nagarajan (2026-08-26 13:04)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
-import { Empty, Tag, Typography } from "antd";
+import { Empty, Radio, Tag, Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
+import { useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { formatModuleScreenTitle } from "../../../constants/module-titles";
@@ -67,6 +68,7 @@ export function ManifestDrawer({
   blNo,
   onClose,
 }: ManifestDrawerProps) {
+  const [manifestType, setManifestType] = useState<"cargo" | "freight">("cargo");
   const { data: detail, isLoading } = useMCNDetailQuery(
     mcnId ?? "",
     Boolean(open && mcnId),
@@ -97,7 +99,12 @@ export function ManifestDrawer({
               type="primary"
               icon={<AppIcon icon={Icons.printer} size={16} tone="print" />}
               loading={isPending}
-              onClick={() => printMcn({ mcnId: detail.mcnId })}
+              onClick={() =>
+                printMcn({
+                  mcnId: detail.mcnId,
+                  manifestType: manifestType === "cargo" ? "C" : "F",
+                })
+              }
             >
               Print Manifest
             </AppButton>
@@ -181,6 +188,19 @@ export function ManifestDrawer({
             <AppIcon icon={status.icon} size={16} />
             <Text strong>Status</Text>
             <Tag color={status.color}>{detail.status}</Tag>
+          </div>
+
+          <div className="bl-manifest-type form-step-section">
+            <Text strong className="form-field-label">
+              Manifest Type
+            </Text>
+            <Radio.Group
+              value={manifestType}
+              onChange={(e) => setManifestType(e.target.value)}
+            >
+              <Radio value="cargo">Cargo Manifest</Radio>
+              <Radio value="freight">Freight Manifest</Radio>
+            </Radio.Group>
           </div>
 
           <div className="bl-manifest-meta">

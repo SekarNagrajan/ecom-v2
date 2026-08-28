@@ -3,11 +3,13 @@ import type { BLListFilters } from '../types/bl.types';
 
 export const blKeys = {
   all: ['bill-of-lading'] as const,
+  config: () => [...blKeys.all, 'config'] as const,
   lists: () => [...blKeys.all, 'list'] as const,
   list: (filters: BLListFilters) => [...blKeys.lists(), filters] as const,
   details: () => [...blKeys.all, 'detail'] as const,
   detail: (blNo: string) => [...blKeys.details(), blNo] as const,
   charges: (blNo: string) => [...blKeys.all, 'charges', blNo] as const,
+  insurance: (blNo: string) => [...blKeys.all, 'insurance', blNo] as const,
   mcn: {
     all: ['mcn'] as const,
     lists: () => [...blKeys.mcn.all, 'list'] as const,

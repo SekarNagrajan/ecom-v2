@@ -1,4 +1,4 @@
-// Modified by sekar nagarajan (2026-08-21 23:30)
+// Modified by Sekar Nagarajan (2026-08-28 15:07)
 
 export interface TariffDTO {
   id: string;
@@ -14,6 +14,10 @@ export interface TariffDTO {
   localAmount: number;
   effectiveFrom: string;
   effectiveTo: string;
+  /** JSP RatesViewNew parity */
+  soc?: string;
+  nor?: boolean;
+  transService?: string;
 }
 
 export interface SurchargeDTO {
@@ -53,6 +57,9 @@ export interface ContractDTO {
   effectiveFrom: string;
   effectiveTo: string;
   surcharges: SurchargeDTO[];
+  /** JSP RatesContractView parity */
+  transService?: string;
+  nor?: boolean;
 }
 
 export interface QuoteDTO {
@@ -68,7 +75,7 @@ export interface QuoteDTO {
   commodity: string;
   cargoWeightKg: number;
   quotedAmountUsd: number;
-  status: 'DRAFT' | 'PENDING_REVIEW' | 'QUOTED' | 'ACCEPTED' | 'EXPIRED';
+  status: "DRAFT" | "PENDING_REVIEW" | "QUOTED" | "ACCEPTED" | "EXPIRED";
   validFrom: string;
   validTo: string;
   createdAt: string;

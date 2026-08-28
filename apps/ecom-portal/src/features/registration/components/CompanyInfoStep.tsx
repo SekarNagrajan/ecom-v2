@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-25 16:15)
+// Modified by Sekar Nagarajan (2026-08-27 22:15)
 import { useToast } from "@solverminds/shared-ui/hooks";
 import {
   AutoComplete,
@@ -118,7 +118,7 @@ export function CompanyInfoStep() {
   };
 
   return (
-    <Flex vertical gap={24} className="reg-step-body">
+    <Flex vertical gap={16} className="reg-step-body">
       <Controller
         name="customerType"
         control={control}
@@ -130,9 +130,9 @@ export function CompanyInfoStep() {
         )}
       />
 
-      {customerType === "EXISTING" && (
-        <Row gutter={[24, 24]}>
-          <Col {...RESPONSIVE_COL.formHalf}>
+      {customerType === "EXISTING" ? (
+        <Row gutter={[16, 16]}>
+          <Col {...RESPONSIVE_COL.formThird}>
             <Flex vertical gap={8}>
               <FieldLabel required>Customer Code</FieldLabel>
               <Controller
@@ -151,21 +151,21 @@ export function CompanyInfoStep() {
                       }}
                       disabled={isCheckingCode}
                     />
-                    {errors.customerCode && (
+                    {errors.customerCode ? (
                       <Text type="danger" className="form-field-error">
                         {errors.customerCode.message}
                       </Text>
-                    )}
+                    ) : null}
                   </div>
                 )}
               />
             </Flex>
           </Col>
         </Row>
-      )}
+      ) : null}
 
-      <Row gutter={[24, 24]}>
-        <Col {...RESPONSIVE_COL.formHalf}>
+      <Row gutter={[16, 16]}>
+        <Col {...RESPONSIVE_COL.formThird}>
           <Flex vertical gap={8}>
             <FieldLabel required>Company Name</FieldLabel>
             <Controller
@@ -188,18 +188,18 @@ export function CompanyInfoStep() {
                       status={errors.companyName ? "error" : undefined}
                     />
                   </AutoComplete>
-                  {errors.companyName && (
+                  {errors.companyName ? (
                     <Text type="danger" className="form-field-error">
                       {errors.companyName.message}
                     </Text>
-                  )}
+                  ) : null}
                 </div>
               )}
             />
           </Flex>
         </Col>
 
-        <Col {...RESPONSIVE_COL.formHalf}>
+        <Col {...RESPONSIVE_COL.formThird}>
           <Flex vertical gap={8}>
             <FieldLabel required>Country</FieldLabel>
             <Controller
@@ -223,18 +223,18 @@ export function CompanyInfoStep() {
                       { value: "SG", label: "Singapore" },
                     ]}
                   />
-                  {errors.country && (
+                  {errors.country ? (
                     <Text type="danger" className="form-field-error">
                       {errors.country.message}
                     </Text>
-                  )}
+                  ) : null}
                 </div>
               )}
             />
           </Flex>
         </Col>
 
-        <Col {...RESPONSIVE_COL.formHalf}>
+        <Col {...RESPONSIVE_COL.formThird}>
           <Flex vertical gap={8}>
             <FieldLabel required>Controlling Agency</FieldLabel>
             <Controller
@@ -255,18 +255,18 @@ export function CompanyInfoStep() {
                       { value: "AGENCY_SG", label: "Singapore Agency" },
                     ]}
                   />
-                  {errors.location && (
+                  {errors.location ? (
                     <Text type="danger" className="form-field-error">
                       {errors.location.message}
                     </Text>
-                  )}
+                  ) : null}
                 </div>
               )}
             />
           </Flex>
         </Col>
 
-        <Col {...RESPONSIVE_COL.formHalf}>
+        <Col {...RESPONSIVE_COL.formThird}>
           <Flex vertical gap={8}>
             <FieldLabel required>City</FieldLabel>
             <Controller
@@ -280,18 +280,44 @@ export function CompanyInfoStep() {
                     placeholder="City"
                     status={errors.city ? "error" : undefined}
                   />
-                  {errors.city && (
+                  {errors.city ? (
                     <Text type="danger" className="form-field-error">
                       {errors.city.message}
                     </Text>
-                  )}
+                  ) : null}
                 </div>
               )}
             />
           </Flex>
         </Col>
 
-        <Col {...RESPONSIVE_COL.full}>
+        <Col {...RESPONSIVE_COL.formThird}>
+          <Flex vertical gap={8}>
+            <FieldLabel>Postal Code</FieldLabel>
+            <Controller
+              name="postalCode"
+              control={control}
+              render={({ field }) => (
+                <Input {...field} size="large" placeholder="Postal Code" />
+              )}
+            />
+          </Flex>
+        </Col>
+
+        <Col {...RESPONSIVE_COL.formThird}>
+          <Flex vertical gap={8}>
+            <FieldLabel>Tax ID</FieldLabel>
+            <Controller
+              name="taxId"
+              control={control}
+              render={({ field }) => (
+                <Input {...field} size="large" placeholder="Tax ID" />
+              )}
+            />
+          </Flex>
+        </Col>
+
+        <Col {...RESPONSIVE_COL.formThird}>
           <Flex vertical gap={8}>
             <FieldLabel required>Address 1</FieldLabel>
             <Controller
@@ -305,18 +331,18 @@ export function CompanyInfoStep() {
                     placeholder="Address 1"
                     status={errors.address1 ? "error" : undefined}
                   />
-                  {errors.address1 && (
+                  {errors.address1 ? (
                     <Text type="danger" className="form-field-error">
                       {errors.address1.message}
                     </Text>
-                  )}
+                  ) : null}
                 </div>
               )}
             />
           </Flex>
         </Col>
 
-        <Col {...RESPONSIVE_COL.full}>
+        <Col {...RESPONSIVE_COL.formThird}>
           <Flex vertical gap={8}>
             <FieldLabel>Address 2</FieldLabel>
             <Controller
@@ -329,33 +355,7 @@ export function CompanyInfoStep() {
           </Flex>
         </Col>
 
-        <Col {...RESPONSIVE_COL.formHalf}>
-          <Flex vertical gap={8}>
-            <FieldLabel>Postal Code</FieldLabel>
-            <Controller
-              name="postalCode"
-              control={control}
-              render={({ field }) => (
-                <Input {...field} size="large" placeholder="Postal Code" />
-              )}
-            />
-          </Flex>
-        </Col>
-
-        <Col {...RESPONSIVE_COL.formHalf}>
-          <Flex vertical gap={8}>
-            <FieldLabel>Tax ID</FieldLabel>
-            <Controller
-              name="taxId"
-              control={control}
-              render={({ field }) => (
-                <Input {...field} size="large" placeholder="Tax ID" />
-              )}
-            />
-          </Flex>
-        </Col>
-
-        <Col {...RESPONSIVE_COL.formHalf}>
+        <Col {...RESPONSIVE_COL.formThird}>
           <Flex vertical gap={8}>
             <FieldLabel>Website</FieldLabel>
             <Controller
@@ -368,7 +368,7 @@ export function CompanyInfoStep() {
           </Flex>
         </Col>
 
-        <Col {...RESPONSIVE_COL.formHalf}>
+        <Col {...RESPONSIVE_COL.formThird}>
           <Flex vertical gap={8}>
             <FieldLabel>Recent BL/Booking number</FieldLabel>
             <Controller
@@ -385,7 +385,7 @@ export function CompanyInfoStep() {
           </Flex>
         </Col>
 
-        <Col {...RESPONSIVE_COL.formHalf}>
+        <Col {...RESPONSIVE_COL.formThird}>
           <Flex vertical gap={8}>
             <FieldLabel required>Company Phone</FieldLabel>
             <Flex gap={8}>
@@ -416,11 +416,11 @@ export function CompanyInfoStep() {
                 )}
               />
             </Flex>
-            {errors.companyPhoneNo && (
+            {errors.companyPhoneNo ? (
               <Text type="danger" className="form-field-error">
                 {errors.companyPhoneNo.message}
               </Text>
-            )}
+            ) : null}
           </Flex>
         </Col>
       </Row>

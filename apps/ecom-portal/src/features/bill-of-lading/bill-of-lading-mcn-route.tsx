@@ -33,6 +33,14 @@ export function BillOfLadingMcnListRoute() {
             <AppButton
               type="text"
               size="small"
+              icon={<AppIcon icon={Icons.edit} size={16} gridAction tone="edit" />}
+              onClick={() =>
+                navigate({ to: `/app/bl/mcn/${params.data!.mcnId}/edit` })
+              }
+            />
+            <AppButton
+              type="text"
+              size="small"
               icon={<AppIcon icon={Icons.eye} size={16} gridAction tone="view" />}
               onClick={() => setManifestMcnId(params.data!.mcnId)}
             />

@@ -44,7 +44,7 @@ export function HeroSearchPanel({ controller }: HeroSearchPanelProps) {
       key: "tracking" as LandingTab,
       label: (
         <Flex align="center" gap={8} style={tabLabelStyle}>
-          <AppIcon icon={Icons.boxes} size={18} />
+          <AppIcon icon={Icons.mapPin} size={18} />
           <span>Tracking</span>
         </Flex>
       ),

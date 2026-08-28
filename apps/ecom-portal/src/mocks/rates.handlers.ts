@@ -1,4 +1,4 @@
-// Modified by sekar nagarajan (2026-08-21 23:31)
+// Modified by Sekar Nagarajan (2026-08-28 15:09)
 import { http, HttpResponse } from 'msw';
 import { ContractDTO, CreateQuoteInput, QuoteDTO, SurchargeDTO, TariffDTO } from '../features/rates/types/rates.types';
 
@@ -17,6 +17,9 @@ export const mockTariffs: TariffDTO[] = [
     localAmount: 1450.0,
     effectiveFrom: '2026-01-01',
     effectiveTo: '2026-12-31',
+    soc: 'No',
+    nor: false,
+    transService: 'FE1',
   },
   {
     id: 'trf-102',
@@ -32,6 +35,9 @@ export const mockTariffs: TariffDTO[] = [
     localAmount: 1199.0,
     effectiveFrom: '2026-03-01',
     effectiveTo: '2026-12-31',
+    soc: 'Yes',
+    nor: true,
+    transService: 'TA2',
   },
   {
     id: 'trf-103',
@@ -47,6 +53,9 @@ export const mockTariffs: TariffDTO[] = [
     localAmount: 2850.0,
     effectiveFrom: '2026-02-15',
     effectiveTo: '2026-11-30',
+    soc: 'No',
+    nor: false,
+    transService: 'AE3',
   },
   {
     id: 'trf-104',
@@ -62,6 +71,9 @@ export const mockTariffs: TariffDTO[] = [
     localAmount: 650.0,
     effectiveFrom: '2026-01-01',
     effectiveTo: '2026-12-31',
+    soc: 'No',
+    nor: false,
+    transService: 'ME1',
   },
 ];
 
@@ -150,6 +162,8 @@ export const mockContracts: ContractDTO[] = [
     effectiveFrom: '2026-01-01',
     effectiveTo: '2026-12-31',
     surcharges: mockSurcharges,
+    transService: 'FE1',
+    nor: false,
   },
   {
     id: 'ctr-302',
@@ -167,11 +181,13 @@ export const mockContracts: ContractDTO[] = [
     oceanFreight: 980.0,
     currency: 'USD',
     subjectToChargesAmount: 410.0,
-    soc: 'No',
+    soc: 'Yes',
     carrTerms: 'Door / CY',
     effectiveFrom: '2026-02-01',
     effectiveTo: '2026-11-30',
     surcharges: mockSurcharges.slice(0, 2),
+    transService: 'TA2',
+    nor: true,
   },
 ];
 

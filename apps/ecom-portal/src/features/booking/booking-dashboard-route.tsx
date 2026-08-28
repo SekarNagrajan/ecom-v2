@@ -1,8 +1,8 @@
-// Modified by Sekar Nagarajan (2026-08-26 11:25)
+// Modified by Sekar Nagarajan (2026-08-27 19:12)
 import { AppButton } from "@solverminds/shared-ui";
 import { ListView } from "@solverminds/shared-ui/data-view/list-view";
 import { useConfirm, useToast } from "@solverminds/shared-ui/hooks";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import type { RowDoubleClickedEvent } from "ag-grid-community";
 import { Card, Space, Tag } from "antd";
@@ -17,21 +17,25 @@ import {
 } from "../../components/shared/list-action-button";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import { MODULE_TITLES } from "../../constants/module-titles";
+import { bookingApi } from "./api/booking.api";
+import { bookingKeys } from "./api/booking.keys";
 import { BookingModuleStyles } from "./components/booking-module-styles";
 import { ManageTemplateModal } from "./components/ManageTemplateModal";
 import { BookingViewDrawer } from "./components/view/BookingViewDrawer";
+import { useBookingStore } from "./stores/booking.store";
 import type { BookingListDTO } from "./types/booking-list.types";
 
 export function BookingDashboardRoute() {
   const navigate = useNavigate();
   const confirm = useConfirm();
   const toast = useToast();
+  const queryClient = useQueryClient();
   const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
   const [selectedBooking, setSelectedBooking] =
     useState<BookingListDTO | null>(null);
 
   const { data: bookings = [], isLoading } = useQuery({
-    queryKey: ["bookings"],
+    queryKey: bookingKeys.list(),
     queryFn: async () => {
       const res = await fetch("/api/booking/list");
       const json = await res.json();
@@ -47,14 +51,47 @@ export function BookingDashboardRoute() {
     navigate({ to: `/app/booking/${booking.id}/amend` });
   };
 
+  const handleDuplicate = async (booking: BookingListDTO) => {
+    try {
+      const payload = await bookingApi.getBookingById(booking.id);
+      useBookingStore.getState().initializeFromBooking(payload);
+      toast.success(`Duplicated booking ${booking.bookingNo}`);
+      navigate({ to: "/app/booking/new" });
+    } catch {
+      toast.error(`Failed to duplicate booking ${booking.bookingNo}`);
+    }
+  };
+
+  const handleDownloadPdf = async (booking: BookingListDTO) => {
+    try {
+      const blob = await bookingApi.downloadBookingPdf(booking.id);
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = `booking-${booking.id}.pdf`;
+      anchor.click();
+      URL.revokeObjectURL(url);
+      toast.success(`Downloaded PDF for ${booking.bookingNo}`);
+    } catch {
+      toast.error(`Failed to download PDF for ${booking.bookingNo}`);
+    }
+  };
+
   const handleCancel = (booking: BookingListDTO) => {
     confirm.danger({
       title: "Cancel Booking",
       content: "Are you sure you want to cancel this booking?",
       okText: "Yes",
       cancelText: "No",
-      onOk: () => {
-        toast.success(`Booking ${booking.bookingNo} cancelled.`);
+      onOk: async () => {
+        try {
+          await bookingApi.cancelBooking(booking.id);
+          await queryClient.invalidateQueries({ queryKey: ["bookings"] });
+          await queryClient.invalidateQueries({ queryKey: bookingKeys.list() });
+          toast.success(`Booking ${booking.bookingNo} cancelled.`);
+        } catch {
+          toast.error(`Failed to cancel booking ${booking.bookingNo}.`);
+        }
       },
     });
   };
@@ -94,7 +131,7 @@ export function BookingDashboardRoute() {
               columnDefs={[
                 buildActionsColumn<BookingListDTO>({
                   field: "id",
-                  width: 150,
+                  width: 210,
                   cellRenderer: (params: { data?: BookingListDTO }) => {
                     const record = params.data;
                     if (!record) return null;
@@ -118,6 +155,32 @@ export function BookingDashboardRoute() {
                           onClick={(e) => {
                             e.stopPropagation();
                             handleAmend(record);
+                          }}
+                        />
+                        <ListActionButton
+                          title="Duplicate Booking"
+                          icon={
+                            <AppIcon icon={Icons.copy} size={16} tone="create" />
+                          }
+                          tone="create"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            void handleDuplicate(record);
+                          }}
+                        />
+                        <ListActionButton
+                          title="Download PDF"
+                          icon={
+                            <AppIcon
+                              icon={Icons.download}
+                              size={16}
+                              tone="download"
+                            />
+                          }
+                          tone="download"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            void handleDownloadPdf(record);
                           }}
                         />
                         <ListActionButton
@@ -161,7 +224,9 @@ export function BookingDashboardRoute() {
                         ? "success"
                         : val === "Awaiting Acceptance"
                           ? "processing"
-                          : "error";
+                          : val === "Cancelled"
+                            ? "default"
+                            : "error";
                     return <Tag color={color}>{val}</Tag>;
                   },
                 },

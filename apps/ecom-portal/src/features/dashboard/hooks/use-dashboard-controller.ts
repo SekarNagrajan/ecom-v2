@@ -3,13 +3,13 @@
  * Dashboard controller — enhancedDashboard.jsp parity.
  * Loads summary via dashboardApi (mock until REST facade exists).
  */
+import { useToast } from "@solverminds/shared-ui/hooks";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { useToast } from "@solverminds/shared-ui/hooks";
 
 import {
-  dashboardApi,
-  type DashboardSummaryResponse,
+    dashboardApi,
+    type DashboardSummaryResponse,
 } from "../api/dashboard.api";
 import { getDashboardFilterLabel } from "../utils/filter-dashboard-shipments";
 

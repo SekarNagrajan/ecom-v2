@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-25 16:15)
+// Modified by Sekar Nagarajan (2026-08-27 22:15)
 import { Col, Flex, Input, Row, Select, Typography } from "antd";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
@@ -57,59 +57,9 @@ export function UserInfoStep() {
   };
 
   return (
-    <Flex vertical gap={24} className="reg-step-body">
-      <Row gutter={[24, 24]}>
-        <Col {...RESPONSIVE_COL.formHalf}>
-          <Flex vertical gap={8}>
-            <FieldLabel required>First Name</FieldLabel>
-            <Controller
-              name="firstName"
-              control={control}
-              render={({ field }) => (
-                <div>
-                  <Input
-                    {...field}
-                    size="large"
-                    placeholder="First Name"
-                    status={errors.firstName ? "error" : undefined}
-                  />
-                  {errors.firstName && (
-                    <Text type="danger" className="form-field-error">
-                      {errors.firstName.message}
-                    </Text>
-                  )}
-                </div>
-              )}
-            />
-          </Flex>
-        </Col>
-
-        <Col {...RESPONSIVE_COL.formHalf}>
-          <Flex vertical gap={8}>
-            <FieldLabel required>Last Name</FieldLabel>
-            <Controller
-              name="lastName"
-              control={control}
-              render={({ field }) => (
-                <div>
-                  <Input
-                    {...field}
-                    size="large"
-                    placeholder="Last Name"
-                    status={errors.lastName ? "error" : undefined}
-                  />
-                  {errors.lastName && (
-                    <Text type="danger" className="form-field-error">
-                      {errors.lastName.message}
-                    </Text>
-                  )}
-                </div>
-              )}
-            />
-          </Flex>
-        </Col>
-
-        <Col {...RESPONSIVE_COL.formHalf}>
+    <Flex vertical gap={16} className="reg-step-body">
+      <Row gutter={[16, 16]}>
+        <Col {...RESPONSIVE_COL.formThird}>
           <Flex vertical gap={8}>
             <FieldLabel required>Title</FieldLabel>
             <Controller
@@ -131,18 +81,68 @@ export function UserInfoStep() {
                       { value: "Dr.", label: "Dr." },
                     ]}
                   />
-                  {errors.title && (
+                  {errors.title ? (
                     <Text type="danger" className="form-field-error">
                       {errors.title.message}
                     </Text>
-                  )}
+                  ) : null}
                 </div>
               )}
             />
           </Flex>
         </Col>
 
-        <Col {...RESPONSIVE_COL.full}>
+        <Col {...RESPONSIVE_COL.formThird}>
+          <Flex vertical gap={8}>
+            <FieldLabel required>First Name</FieldLabel>
+            <Controller
+              name="firstName"
+              control={control}
+              render={({ field }) => (
+                <div>
+                  <Input
+                    {...field}
+                    size="large"
+                    placeholder="First Name"
+                    status={errors.firstName ? "error" : undefined}
+                  />
+                  {errors.firstName ? (
+                    <Text type="danger" className="form-field-error">
+                      {errors.firstName.message}
+                    </Text>
+                  ) : null}
+                </div>
+              )}
+            />
+          </Flex>
+        </Col>
+
+        <Col {...RESPONSIVE_COL.formThird}>
+          <Flex vertical gap={8}>
+            <FieldLabel required>Last Name</FieldLabel>
+            <Controller
+              name="lastName"
+              control={control}
+              render={({ field }) => (
+                <div>
+                  <Input
+                    {...field}
+                    size="large"
+                    placeholder="Last Name"
+                    status={errors.lastName ? "error" : undefined}
+                  />
+                  {errors.lastName ? (
+                    <Text type="danger" className="form-field-error">
+                      {errors.lastName.message}
+                    </Text>
+                  ) : null}
+                </div>
+              )}
+            />
+          </Flex>
+        </Col>
+
+        <Col {...RESPONSIVE_COL.formThird}>
           <Flex vertical gap={8}>
             <FieldLabel required>Email Id</FieldLabel>
             <Controller
@@ -162,18 +162,18 @@ export function UserInfoStep() {
                     }}
                     disabled={isCheckingEmail}
                   />
-                  {errors.email && (
+                  {errors.email ? (
                     <Text type="danger" className="form-field-error">
                       {errors.email.message}
                     </Text>
-                  )}
+                  ) : null}
                 </div>
               )}
             />
           </Flex>
         </Col>
 
-        <Col {...RESPONSIVE_COL.formHalf}>
+        <Col {...RESPONSIVE_COL.formThird}>
           <Flex vertical gap={8}>
             <FieldLabel required>Password</FieldLabel>
             <Controller
@@ -187,18 +187,18 @@ export function UserInfoStep() {
                     placeholder="Password"
                     status={errors.password ? "error" : undefined}
                   />
-                  {errors.password && (
+                  {errors.password ? (
                     <Text type="danger" className="form-field-error">
                       {errors.password.message}
                     </Text>
-                  )}
+                  ) : null}
                 </div>
               )}
             />
           </Flex>
         </Col>
 
-        <Col {...RESPONSIVE_COL.formHalf}>
+        <Col {...RESPONSIVE_COL.formThird}>
           <Flex vertical gap={8}>
             <FieldLabel required>Confirm Password</FieldLabel>
             <Controller
@@ -212,18 +212,18 @@ export function UserInfoStep() {
                     placeholder="Confirm Password"
                     status={errors.confirmPassword ? "error" : undefined}
                   />
-                  {errors.confirmPassword && (
+                  {errors.confirmPassword ? (
                     <Text type="danger" className="form-field-error">
                       {errors.confirmPassword.message}
                     </Text>
-                  )}
+                  ) : null}
                 </div>
               )}
             />
           </Flex>
         </Col>
 
-        <Col {...RESPONSIVE_COL.full}>
+        <Col {...RESPONSIVE_COL.formThird}>
           <Flex vertical gap={8}>
             <FieldLabel required>Timezone</FieldLabel>
             <Controller
@@ -249,18 +249,18 @@ export function UserInfoStep() {
                       { value: "IST", label: "IST - Indian Standard Time" },
                     ]}
                   />
-                  {errors.timezone && (
+                  {errors.timezone ? (
                     <Text type="danger" className="form-field-error">
                       {errors.timezone.message}
                     </Text>
-                  )}
+                  ) : null}
                 </div>
               )}
             />
           </Flex>
         </Col>
 
-        <Col {...RESPONSIVE_COL.formHalf}>
+        <Col {...RESPONSIVE_COL.formThird}>
           <Flex vertical gap={8}>
             <FieldLabel>Default View</FieldLabel>
             <Controller
@@ -284,7 +284,7 @@ export function UserInfoStep() {
           </Flex>
         </Col>
 
-        <Col {...RESPONSIVE_COL.formHalf}>
+        <Col {...RESPONSIVE_COL.formThird}>
           <Flex vertical gap={8}>
             <FieldLabel>Preferred View</FieldLabel>
             <Controller

@@ -1,11 +1,16 @@
 // Modified by Sekar Nagarajan (2026-08-26 13:04)
+import type { BLWizardConfig } from '../config/bl-wizard-config';
+import { DEFAULT_BL_WIZARD_CONFIG } from '../config/bl-wizard-config';
 import type {
   ApiResponse,
   BLChargesDTO,
   BLDTO,
+  BLInsuranceDTO,
   BLListDTO,
   BLListFilters,
+  BLPaymentIntentDTO,
   BLPrintType,
+  BLSubmitResult,
   MCNDTO,
   MCNListDTO,
 } from '../types/bl.types';
@@ -58,6 +63,19 @@ async function mockDetailFallback(blNo: string): Promise<ApiResponse<BLDTO> | nu
     return detail ? { data: detail } : null;
   } catch {
     return null;
+  }
+}
+
+export async function fetchBLConfig(): Promise<ApiResponse<BLWizardConfig>> {
+  try {
+    const res = await fetch('/api/bl/config');
+    return readApiJson<BLWizardConfig>(res, 'Failed to fetch B/L config');
+  } catch (error: unknown) {
+    if (import.meta.env.DEV) {
+      return { data: DEFAULT_BL_WIZARD_CONFIG };
+    }
+    const message = error instanceof Error ? error.message : 'Network error';
+    return { error: { code: 'NETWORK_ERROR', message } };
   }
 }
 
@@ -117,6 +135,35 @@ export async function saveBLDraft(blNo: string, payload: Partial<BLDTO>): Promis
   }
 }
 
+export async function updateMCN(
+  mcnId: string,
+  payload: Partial<MCNDTO>,
+): Promise<ApiResponse<MCNDTO>> {
+  try {
+    const res = await fetch(`/api/mcn/${encodeURIComponent(mcnId)}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    return readApiJson<MCNDTO>(res, 'Failed to update MCN');
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Network error';
+    return { error: { code: 'NETWORK_ERROR', message } };
+  }
+}
+
+export async function submitMCN(mcnId: string): Promise<ApiResponse<MCNDTO>> {
+  try {
+    const res = await fetch(`/api/mcn/${encodeURIComponent(mcnId)}/submit`, {
+      method: 'POST',
+    });
+    return readApiJson<MCNDTO>(res, 'Failed to submit MCN');
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Network error';
+    return { error: { code: 'NETWORK_ERROR', message } };
+  }
+}
+
 export async function updateBL(blNo: string, payload: Partial<BLDTO>): Promise<ApiResponse<BLDTO>> {
   try {
     const res = await fetch(`/api/bl/${encodeURIComponent(blNo)}`, {
@@ -145,6 +192,90 @@ export async function cancelBL(blNo: string): Promise<ApiResponse<BLDTO>> {
   try {
     const res = await fetch(`/api/bl/${encodeURIComponent(blNo)}/cancel`, { method: 'POST' });
     return readApiJson<BLDTO>(res, 'Failed to cancel B/L');
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Network error';
+    return { error: { code: 'NETWORK_ERROR', message } };
+  }
+}
+
+export async function fetchBLInsurance(
+  blNo: string,
+): Promise<ApiResponse<BLInsuranceDTO>> {
+  try {
+    const res = await fetch(`/api/bl/${encodeURIComponent(blNo)}/insurance`);
+    return readApiJson<BLInsuranceDTO>(res, 'Failed to fetch insurance');
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Network error';
+    return { error: { code: 'NETWORK_ERROR', message } };
+  }
+}
+
+export async function createBLPaymentIntent(
+  blNos: string[],
+  amountUsd: number,
+): Promise<ApiResponse<BLPaymentIntentDTO>> {
+  try {
+    const res = await fetch('/api/bl/payment/intent', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ blNos, amountUsd }),
+    });
+    return readApiJson<BLPaymentIntentDTO>(res, 'Failed to create payment intent');
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Network error';
+    return { error: { code: 'NETWORK_ERROR', message } };
+  }
+}
+
+export async function importBLCargo(
+  blNo: string,
+  file: File,
+): Promise<ApiResponse<{ containers: BLDTO['containers'] }>> {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    const res = await fetch(`/api/bl/${encodeURIComponent(blNo)}/cargo/import`, {
+      method: 'POST',
+      body: formData,
+    });
+    return readApiJson<{ containers: BLDTO['containers'] }>(
+      res,
+      'Failed to import cargo',
+    );
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Network error';
+    return { error: { code: 'NETWORK_ERROR', message } };
+  }
+}
+
+export async function exportBLCargoTemplate(
+  blNo: string,
+  template: 'standard' | 'customize' = 'standard',
+): Promise<{ data?: Blob; error?: { message: string } }> {
+  try {
+    const params = new URLSearchParams({ template });
+    const res = await fetch(
+      `/api/bl/${encodeURIComponent(blNo)}/cargo/export?${params.toString()}`,
+    );
+    if (!res.ok) {
+      const parsed = await readApiJson<unknown>(res, 'Export failed');
+      return { error: parsed.error ?? { message: 'Export failed' } };
+    }
+    return { data: await res.blob() };
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Network error';
+    return { error: { message } };
+  }
+}
+
+export async function sendBLAmendmentMail(
+  blNo: string,
+): Promise<ApiResponse<{ sent: boolean }>> {
+  try {
+    const res = await fetch(`/api/bl/${encodeURIComponent(blNo)}/amendment-mail`, {
+      method: 'POST',
+    });
+    return readApiJson<{ sent: boolean }>(res, 'Failed to send amendment mail');
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Network error';
     return { error: { code: 'NETWORK_ERROR', message } };
@@ -262,6 +393,54 @@ export async function fetchMCNDetail(mcnId: string): Promise<ApiResponse<MCNDTO>
     }
     return parsed;
   } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Network error';
+    return { error: { code: 'NETWORK_ERROR', message } };
+  }
+}
+
+export async function fetchBLExcelTemplate(
+  blNo: string
+): Promise<{ data?: Blob; error?: { message: string; code?: string } }> {
+  try {
+    const res = await fetch(
+      `/api/bl/${encodeURIComponent(blNo)}/excel/template`
+    );
+    if (!res.ok) {
+      const parsed = await readApiJson<unknown>(res, 'Failed to download Excel template');
+      return {
+        error: parsed.error ?? { code: 'ERROR', message: 'Failed to download Excel template' },
+      };
+    }
+    return { data: await res.blob() };
+  } catch (error: unknown) {
+    if (import.meta.env.DEV) {
+      return {
+        data: new Blob(['BL Excel template stub'], {
+          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        }),
+      };
+    }
+    const message = error instanceof Error ? error.message : 'Network error';
+    return { error: { message } };
+  }
+}
+
+export async function importBLExcel(
+  blNo: string,
+  file: File
+): Promise<ApiResponse<{ importedRows: number }>> {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    const res = await fetch(`/api/bl/${encodeURIComponent(blNo)}/excel/import`, {
+      method: 'POST',
+      body: formData,
+    });
+    return readApiJson<{ importedRows: number }>(res, 'Failed to import Excel');
+  } catch (error: unknown) {
+    if (import.meta.env.DEV) {
+      return { data: { importedRows: 1 } };
+    }
     const message = error instanceof Error ? error.message : 'Network error';
     return { error: { code: 'NETWORK_ERROR', message } };
   }

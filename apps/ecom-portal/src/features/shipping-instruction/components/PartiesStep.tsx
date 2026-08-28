@@ -1,253 +1,339 @@
-// Modified by Sekar Nagarajan (2026-08-26 12:19)
-import { zodResolver } from "@hookform/resolvers/zod";
+// Modified by Sekar Nagarajan (2026-08-28 00:45)
 import { AppButton } from "@solverminds/shared-ui";
-import { Card, Col, Input, Row, Switch, Typography } from "antd";
-import { Controller, useForm } from "react-hook-form";
+import { useToast } from "@solverminds/shared-ui/hooks";
+import { Card, Col, Row, Switch, Typography } from "antd";
+import { useState } from "react";
 
-import type { SIDTO, SiPartiesForm } from "../types/si.types";
-import { siPartiesSchema } from "../types/si.types";
+import { AppIcon, Icons } from "../../../components/icons";
+import {
+  ListActionButton,
+  ListActionsRow,
+} from "../../../components/shared/list-action-button";
+import { CustomerSearchAutoComplete } from "../../booking/components/party-edit-drawer";
+import {
+  SiPartyEditDrawer,
+  SiRoleAssignPanel,
+} from "./si-party-edit-drawer";
+import type { BookingCustomerOption } from "../../booking/api/booking.api";
+import { siPartiesSchema, type SIWizardStepProps } from "../types/si.types";
+import {
+  cardsToSiPartiesForm,
+  emptySiPartyCard,
+  SI_PARTY_ROLE_LABEL,
+  siPartiesToCards,
+  type SiPartyCardData,
+  type SiPartyRoleKey,
+} from "../utils/si-party.utils";
 
 const { Text, Title } = Typography;
-const { TextArea } = Input;
-
-interface StepProps {
-  data: SIDTO;
-  onNext: () => void;
-  onPrevious: () => void;
-  onSubmit: () => void;
-  onCancel: () => void;
-  isFirstStep: boolean;
-  isLastStep: boolean;
-  isSubmitting: boolean;
-}
 
 export function PartiesStep({
   data,
   onNext,
   onPrevious,
-  onCancel,
+  onUpdate,
   isSubmitting,
-}: StepProps) {
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<SiPartiesForm>({
-    resolver: zodResolver(siPartiesSchema),
-    defaultValues: {
-      shipperName: data.parties.shipper.name,
-      shipperAddress: data.parties.shipper.address,
-      shipperPrint: data.parties.shipper.printOnBl ?? false,
-      consigneeName: data.parties.consignee.name,
-      consigneeAddress: data.parties.consignee.address,
-      consigneePrint: data.parties.consignee.printOnBl ?? false,
-      consigneeToOrder: data.parties.consignee.toOrder,
-      notifyName: data.parties.notify.name,
-      notifyAddress: data.parties.notify.address,
-      notifyPrint: data.parties.notify.printOnBl ?? false,
-    },
-  });
+}: SIWizardStepProps) {
+  const toast = useToast();
+  const [cards, setCards] = useState<
+    Partial<Record<SiPartyRoleKey, SiPartyCardData>>
+  >(() => siPartiesToCards(data.parties));
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCustomer, setSelectedCustomer] =
+    useState<BookingCustomerOption | null>(null);
+  const [editRole, setEditRole] = useState<SiPartyRoleKey | null>(null);
+  const [editValue, setEditValue] = useState<SiPartyCardData>(emptySiPartyCard());
 
-  const onValid = (_formData: SiPartiesForm) => {
+  const assignedRoles = Object.keys(cards) as SiPartyRoleKey[];
+  const cardEntries = Object.entries(cards) as [
+    SiPartyRoleKey,
+    SiPartyCardData,
+  ][];
+
+  const handleSelectCustomer = (customer: BookingCustomerOption) => {
+    setSelectedCustomer(customer);
+    setSearchQuery(customer.customerName);
+  };
+
+  const clearSelectedCustomer = () => {
+    setSelectedCustomer(null);
+    setSearchQuery("");
+  };
+
+  const handleAssignRoles = (roles: SiPartyRoleKey[]) => {
+    if (!selectedCustomer || roles.length === 0) {
+      toast.error("Select at least one role");
+      return;
+    }
+    const card: SiPartyCardData = {
+      company: selectedCustomer.customerName,
+      contact: selectedCustomer.customerCode,
+      address: `${selectedCustomer.city}, ${selectedCustomer.country}`,
+      city: selectedCustomer.city,
+      country: selectedCustomer.country,
+      email: selectedCustomer.email || "",
+      phone: selectedCustomer.phone || "",
+      printOnBl: true,
+    };
+    setCards((prev) => {
+      const next = { ...prev };
+      roles.forEach((role) => {
+        next[role] = {
+          ...card,
+          toOrder: role === "consignee" ? false : undefined,
+        };
+      });
+      return next;
+    });
+    clearSelectedCustomer();
+    toast.success("Party roles assigned");
+  };
+
+  const handleDeleteCard = (role: SiPartyRoleKey) => {
+    setCards((prev) => {
+      const next = { ...prev };
+      delete next[role];
+      return next;
+    });
+  };
+
+  const openEdit = (role: SiPartyRoleKey) => {
+    setEditRole(role);
+    setEditValue(cards[role] ? { ...cards[role]! } : emptySiPartyCard());
+  };
+
+  const saveEdit = () => {
+    if (!editRole || !editValue.company.trim()) {
+      toast.error("Company is required");
+      return;
+    }
+    setCards((prev) => ({ ...prev, [editRole]: { ...editValue } }));
+    setEditRole(null);
+    setEditValue(emptySiPartyCard());
+  };
+
+  const updateCardFlag = (
+    role: SiPartyRoleKey,
+    patch: Partial<Pick<SiPartyCardData, "printOnBl" | "toOrder">>,
+  ) => {
+    setCards((prev) => {
+      const current = prev[role];
+      if (!current) return prev;
+      return { ...prev, [role]: { ...current, ...patch } };
+    });
+  };
+
+  const handleNext = () => {
+    const parsed = siPartiesSchema.safeParse(cardsToSiPartiesForm(cards));
+    if (!parsed.success) {
+      const first = parsed.error.issues[0];
+      toast.error(first?.message || "Please complete required parties");
+      return;
+    }
+
+    const toParty = (card: SiPartyCardData | undefined) =>
+      card
+        ? {
+            name: card.company,
+            address: card.address,
+            city: card.city,
+            country: card.country,
+            email: card.email,
+            phone: card.phone,
+            printOnBl: card.printOnBl,
+          }
+        : undefined;
+
+    onUpdate({
+      parties: {
+        shipper: toParty(cards.shipper) ?? data.parties.shipper,
+        consignee: {
+          ...(toParty(cards.consignee) ?? data.parties.consignee),
+          toOrder: cards.consignee?.toOrder ?? false,
+        },
+        notify: toParty(cards.notify) ?? data.parties.notify,
+        notify2: toParty(cards.notify2),
+        notify3: toParty(cards.notify3),
+        forwarder: toParty(cards.forwarder) ?? data.parties.forwarder,
+        warehouse: toParty(cards.warehouse) ?? data.parties.warehouse,
+        agreementParty:
+          toParty(cards.agreementParty) ?? data.parties.agreementParty,
+      },
+    });
     onNext();
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(onValid)}
-      autoComplete="off"
-      className="form-step-layout"
-    >
+    <div className="form-step-layout">
       <div className="custom-scroll form-step-scroll">
-        <Card className="form-step-card form-step-section">
-          <div className="form-step-card-toolbar">
-            <Title level={5} className="form-step-card-title">
-              Shipper
-            </Title>
-            <div className="form-step-card-toolbar__actions">
-              <Text>Print on B/L</Text>
-              <Controller
-                control={control}
-                name="shipperPrint"
-                render={({ field: { value, onChange } }) => (
-                  <Switch checked={value} onChange={onChange} />
-                )}
-              />
-            </div>
-          </div>
-          <Row gutter={[24, 24]}>
-            <Col xs={24} md={12}>
-              <div className="form-field-cell">
-                <label className="form-field-label">
-                  Shipper Name <Text type="danger">*</Text>
-                </label>
-                <Controller
-                  control={control}
-                  name="shipperName"
-                  render={({ field }) => <Input {...field} size="large" />}
-                />
-                {errors.shipperName ? (
-                  <Text type="danger" className="form-field-error">
-                    {errors.shipperName.message}
-                  </Text>
-                ) : null}
-              </div>
-            </Col>
-            <Col xs={24} md={12}>
-              <div className="form-field-cell">
-                <label className="form-field-label">
-                  Address <Text type="danger">*</Text>
-                </label>
-                <Controller
-                  control={control}
-                  name="shipperAddress"
-                  render={({ field }) => (
-                    <TextArea {...field} rows={3} size="large" />
-                  )}
-                />
-                {errors.shipperAddress ? (
-                  <Text type="danger" className="form-field-error">
-                    {errors.shipperAddress.message}
-                  </Text>
-                ) : null}
-              </div>
-            </Col>
-          </Row>
+        <Card className="form-step-card form-step-section" title="Customer Search">
+          <label className="form-field-label">Search Customer</label>
+          <CustomerSearchAutoComplete
+            value={searchQuery}
+            onChange={(val) => {
+              setSearchQuery(val);
+              if (!val.trim()) {
+                setSelectedCustomer(null);
+              }
+            }}
+            onSelectCustomer={handleSelectCustomer}
+          />
+
+          {selectedCustomer ? (
+            <SiRoleAssignPanel
+              customer={selectedCustomer}
+              assignedRoles={assignedRoles}
+              onAssign={handleAssignRoles}
+              onClear={clearSelectedCustomer}
+            />
+          ) : (
+            <Text type="secondary" className="booking-party-search-hint">
+              Search and select a customer, then choose roles inline below.
+            </Text>
+          )}
         </Card>
 
-        <Card className="form-step-card form-step-section">
-          <div className="form-step-card-toolbar">
-            <div className="form-step-card-toolbar__actions">
-              <Title level={5} className="form-step-card-title">
-                Consignee
-              </Title>
-              <Text>To Order</Text>
-              <Controller
-                control={control}
-                name="consigneeToOrder"
-                render={({ field: { value, onChange } }) => (
-                  <Switch checked={value} onChange={onChange} />
-                )}
-              />
+        <Card
+          className="form-step-card form-step-section booking-party-section"
+          title={
+            <div className="booking-party-section__title">
+              <span>Assigned Parties</span>
+              <Text type="secondary" className="booking-party-section__count">
+                {cardEntries.length} assigned
+              </Text>
             </div>
-            <div className="form-step-card-toolbar__actions">
-              <Text>Print on B/L</Text>
-              <Controller
-                control={control}
-                name="consigneePrint"
-                render={({ field: { value, onChange } }) => (
-                  <Switch checked={value} onChange={onChange} />
-                )}
-              />
-            </div>
-          </div>
-          <Row gutter={[24, 24]}>
-            <Col xs={24} md={12}>
-              <div className="form-field-cell">
-                <label className="form-field-label">
-                  Consignee Name <Text type="danger">*</Text>
-                </label>
-                <Controller
-                  control={control}
-                  name="consigneeName"
-                  render={({ field }) => <Input {...field} size="large" />}
-                />
-                {errors.consigneeName ? (
-                  <Text type="danger" className="form-field-error">
-                    {errors.consigneeName.message}
-                  </Text>
-                ) : null}
-              </div>
-            </Col>
-            <Col xs={24} md={12}>
-              <div className="form-field-cell">
-                <label className="form-field-label">
-                  Address <Text type="danger">*</Text>
-                </label>
-                <Controller
-                  control={control}
-                  name="consigneeAddress"
-                  render={({ field }) => (
-                    <TextArea {...field} rows={3} size="large" />
-                  )}
-                />
-                {errors.consigneeAddress ? (
-                  <Text type="danger" className="form-field-error">
-                    {errors.consigneeAddress.message}
-                  </Text>
-                ) : null}
-              </div>
-            </Col>
-          </Row>
-        </Card>
-
-        <Card className="form-step-card form-step-section">
-          <div className="form-step-card-toolbar">
-            <Title level={5} className="form-step-card-title">
-              Notify Party
-            </Title>
-            <div className="form-step-card-toolbar__actions">
-              <Text>Print on B/L</Text>
-              <Controller
-                control={control}
-                name="notifyPrint"
-                render={({ field: { value, onChange } }) => (
-                  <Switch checked={value} onChange={onChange} />
-                )}
-              />
-            </div>
-          </div>
-          <Row gutter={[24, 24]}>
-            <Col xs={24} md={12}>
-              <div className="form-field-cell">
-                <label className="form-field-label">
-                  Notify Party Name <Text type="danger">*</Text>
-                </label>
-                <Controller
-                  control={control}
-                  name="notifyName"
-                  render={({ field }) => <Input {...field} size="large" />}
-                />
-                {errors.notifyName ? (
-                  <Text type="danger" className="form-field-error">
-                    {errors.notifyName.message}
-                  </Text>
-                ) : null}
-              </div>
-            </Col>
-            <Col xs={24} md={12}>
-              <div className="form-field-cell">
-                <label className="form-field-label">
-                  Address <Text type="danger">*</Text>
-                </label>
-                <Controller
-                  control={control}
-                  name="notifyAddress"
-                  render={({ field }) => (
-                    <TextArea {...field} rows={3} size="large" />
-                  )}
-                />
-                {errors.notifyAddress ? (
-                  <Text type="danger" className="form-field-error">
-                    {errors.notifyAddress.message}
-                  </Text>
-                ) : null}
-              </div>
-            </Col>
-          </Row>
+          }
+        >
+          {cardEntries.length === 0 ? (
+            <Text type="secondary">
+              Search and assign customers to Shipper, Consignee, and Notify
+              Party.
+            </Text>
+          ) : (
+            <Row gutter={[24, 24]} className="booking-party-grid">
+              {cardEntries.map(([role, card]) => (
+                <Col
+                  xs={24}
+                  md={12}
+                  key={role}
+                  className="booking-party-grid__col"
+                >
+                  <Card
+                    size="small"
+                    className="booking-party-card"
+                    title={
+                      <Title level={5} className="booking-party-card__title">
+                        {SI_PARTY_ROLE_LABEL[role]}
+                      </Title>
+                    }
+                    extra={
+                      <ListActionsRow>
+                        <ListActionButton
+                          title="Edit Party"
+                          icon={
+                            <AppIcon icon={Icons.edit} size={16} tone="edit" />
+                          }
+                          onClick={() => openEdit(role)}
+                        />
+                        <ListActionButton
+                          title="Delete Party"
+                          icon={
+                            <AppIcon
+                              icon={Icons.trash}
+                              size={16}
+                              tone="delete"
+                            />
+                          }
+                          tone="delete"
+                          onClick={() => handleDeleteCard(role)}
+                        />
+                      </ListActionsRow>
+                    }
+                  >
+                    <div className="booking-party-card__body">
+                      <Text strong className="booking-party-card__company">
+                        {card.company}
+                      </Text>
+                      {card.contact ? (
+                        <Text
+                          type="secondary"
+                          className="booking-party-card__meta"
+                        >
+                          {card.contact}
+                        </Text>
+                      ) : null}
+                      {card.address || card.city ? (
+                        <Text
+                          type="secondary"
+                          className="booking-party-card__meta"
+                        >
+                          {[card.address, card.city, card.country]
+                            .filter(Boolean)
+                            .join(", ")}
+                        </Text>
+                      ) : null}
+                      {card.email || card.phone ? (
+                        <Text
+                          type="secondary"
+                          className="booking-party-card__meta"
+                        >
+                          {[card.email, card.phone].filter(Boolean).join(" · ")}
+                        </Text>
+                      ) : null}
+                      <div className="si-party-card__flags">
+                        <label className="si-party-card__flag">
+                          <Text>Print on B/L</Text>
+                          <Switch
+                            size="small"
+                            checked={card.printOnBl}
+                            onChange={(checked) =>
+                              updateCardFlag(role, { printOnBl: checked })
+                            }
+                          />
+                        </label>
+                        {role === "consignee" ? (
+                          <label className="si-party-card__flag">
+                            <Text>To Order</Text>
+                            <Switch
+                              size="small"
+                              checked={!!card.toOrder}
+                              onChange={(checked) =>
+                                updateCardFlag(role, { toOrder: checked })
+                              }
+                            />
+                          </label>
+                        ) : null}
+                      </div>
+                    </div>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+          )}
         </Card>
       </div>
 
-      <div className="form-step-footer form-step-footer--split">
-        <div className="form-step-footer__start custom-scroll">
-          <AppButton onClick={onPrevious} disabled={isSubmitting}>
-            Previous
-          </AppButton>
-        </div>
-        <AppButton type="primary" htmlType="submit" disabled={isSubmitting}>
+      {/* Modified by Sekar Nagarajan (2026-08-28 12:40) */}
+      <div className="form-step-footer">
+        <AppButton onClick={onPrevious} disabled={isSubmitting}>
+          Previous
+        </AppButton>
+        <AppButton type="primary" onClick={handleNext} disabled={isSubmitting}>
           Next
         </AppButton>
       </div>
-    </form>
+
+      <SiPartyEditDrawer
+        open={!!editRole}
+        roleKey={editRole}
+        value={editValue}
+        onChange={setEditValue}
+        onSave={saveEdit}
+        onClose={() => {
+          setEditRole(null);
+          setEditValue(emptySiPartyCard());
+        }}
+      />
+    </div>
   );
 }

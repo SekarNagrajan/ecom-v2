@@ -21,7 +21,7 @@ export const MOCK_SCHEDULES: ScheduleItem[] = [
     transitTimeDays: 22,
     isDirect: true,
     transshipmentCount: 0,
-    isMultimodal: false,
+    isMultimodal: true,
     vesselName: 'ANTIGRAVITY EXPRESS',
     vesselCode: 'AGEX',
     voyage: '024',

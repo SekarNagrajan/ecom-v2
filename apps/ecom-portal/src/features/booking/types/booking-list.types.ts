@@ -5,7 +5,7 @@ export interface BookingListDTO {
   bookingNo: string;
   onlineRefNo: string;
   agencyRefNo: string;
-  status: "Confirmed" | "Awaiting Acceptance" | "Rejected";
+  status: "Confirmed" | "Awaiting Acceptance" | "Rejected" | "Cancelled";
   origin: string;
   delivery: string;
   createdDate: string;

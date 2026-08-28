@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-25 16:20)
+// Modified by Sekar Nagarajan (2026-08-27 22:15)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -10,7 +10,7 @@ export function RegistrationModuleStyles() {
   return (
     <style>{`
       .reg-page {
-        max-width: 1000px;
+        max-width: 1100px;
         margin: 0 auto;
         flex: 1;
         display: flex;
@@ -24,10 +24,11 @@ export function RegistrationModuleStyles() {
         flex-shrink: 0;
         margin-bottom: ${token.marginMD}px;
       }
+      /* Border on the card itself (same radius) — body border + smaller radius clipped the corners */
       .reg-page-card.ant-card {
-        border-radius: ${token.borderRadiusLG * 2}px;
+        border-radius: ${token.borderRadiusLG * 1}px;
         box-shadow: ${token.boxShadowTertiary};
-        border: none;
+        border: 1px solid ${token.colorPrimary};
         display: flex;
         flex-direction: column;
         flex: 1;
@@ -40,11 +41,14 @@ export function RegistrationModuleStyles() {
         flex: 1;
         min-height: 0;
         overflow: hidden;
-        padding: ${token.paddingLG}px ${token.paddingXL + 8}px;
+        border: none;
+        border-radius: 0;
+        padding: ${token.paddingLG}px ${token.paddingXL}px;
       }
       .reg-page__title {
         margin: 0;
         font-weight: ${token.fontWeightStrong};
+        font-size: ${token.fontSizeHeading4}px;
       }
       .reg-page__body {
         flex: 1;
@@ -57,7 +61,7 @@ export function RegistrationModuleStyles() {
         flex-shrink: 0;
       }
       .reg-page__subtitle {
-        font-size: ${token.fontSizeLG}px;
+        font-size: ${token.fontSizeSM}px;
       }
       .reg-page .pipeline-steps {
         flex-shrink: 0;
@@ -82,7 +86,10 @@ export function RegistrationModuleStyles() {
         flex-shrink: 0;
       }
       .reg-step-body {
-        padding: ${token.paddingLG}px 0;
+        padding: ${token.paddingMD}px 0;
+      }
+      .reg-step-body .ant-row {
+        width: 100%;
       }
       .reg-field-full,
       .reg-field-full.ant-select,
@@ -110,7 +117,7 @@ export function RegistrationModuleStyles() {
         padding: ${token.paddingLG}px;
         border-radius: ${token.borderRadiusLG}px;
         border: 1px solid ${token.colorBorderSecondary};
-        max-height: 300px;
+        max-height: 280px;
         overflow-y: auto;
       }
       .reg-terms-box__para {
@@ -161,7 +168,7 @@ export function RegistrationModuleStyles() {
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-        border: 2px solid ${token.colorBorderSecondary};
+        border: 20px solid ${token.colorBorderSecondary};
         margin: 0 auto;
         transition: all 0.3s ease-in-out;
         cursor: pointer;
@@ -236,9 +243,17 @@ export function RegistrationModuleStyles() {
       .reg-page input:-webkit-autofill:hover,
       .reg-page input:-webkit-autofill:focus,
       .reg-page input:-webkit-autofill:active {
-        -webkit-box-shadow: 0 0 0 1000px ${token.colorBgContainer} inset !important;
+        -webkit-box-shadow: 0 0 0 1000px ${
+          token.colorBgContainer
+        } inset !important;
         transition: background-color 50000s ease-in-out 0s !important;
         -webkit-text-fill-color: ${token.colorText} !important;
+      }
+
+      @media (max-width: 991px) {
+        .reg-page {
+          max-width: 100%;
+        }
       }
 
       @media (max-width: 767px) {

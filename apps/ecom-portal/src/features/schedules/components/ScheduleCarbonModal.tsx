@@ -1,6 +1,15 @@
 // Modified by Sekar Nagarajan (2026-08-25 18:40)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
-import { Card, Col, Form, InputNumber, Row, Space, Tag, Typography } from "antd";
+import {
+  Card,
+  Col,
+  Form,
+  InputNumber,
+  Row,
+  Space,
+  Tag,
+  Typography,
+} from "antd";
 import { useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
@@ -50,19 +59,19 @@ export function ScheduleCarbonModal({
       classNames={{ body: "schedule-drawer-body custom-scroll" }}
       title={
         <Space align="center" size={8} className="schedule-drawer-title">
-          <AppIcon icon={Icons.globe} size={20} />
+          <AppIcon icon={Icons.calculator} size={20} />
           <Title level={4} className="schedule-drawer-title__text">
             Cargo Carbon Footprint Calculator
           </Title>
         </Space>
       }
-      footer={
-        <div className="schedule-drawer-footer">
-          <AppButton danger onClick={onClose}>
-            Cancel
-          </AppButton>
-        </div>
-      }
+      // footer={
+      //   <div className="schedule-drawer-footer">
+      //     <AppButton danger onClick={onClose}>
+      //       Cancel
+      //     </AppButton>
+      //   </div>
+      // }
     >
       <div className="schedule-route-banner">
         <Space align="center" size={6}>
@@ -195,7 +204,7 @@ export function ScheduleCarbonModal({
       <Card size="small" className="schedule-co2-note">
         <Space align="start">
           <AppIcon icon={Icons.info} size={16} />
-          <Paragraph type="secondary" className="schedule-co2-note__text">
+          <Paragraph type="primary" className="schedule-co2-note__text">
             <b>Methodology Notice:</b> Calculations follow standard GLEC (Global
             Logistics Emissions Council) & IMO guidelines applying 8.5g
             CO₂/ton-km for ocean container vessels. Actual emissions may vary

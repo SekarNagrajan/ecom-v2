@@ -1,12 +1,16 @@
-// Modified by Sekar Nagarajan (2026-08-26 13:04)
-import { AppButton } from '@solverminds/shared-ui';
+// Modified by Sekar Nagarajan (2026-08-28 11:55)
+import { AppButton, AppModal } from '@solverminds/shared-ui';
 import { useConfirm } from '@solverminds/shared-ui/hooks';
 import { Space, Tooltip } from 'antd';
+import { useState } from 'react';
 
 import { AppIcon, Icons } from '../../../components/icons';
 import { ListActionButton, ListActionsRow } from '../../../components/shared/list-action-button';
 import { checkVoyageClosed } from '../api/bl.api';
 import type { BLListDTO, BLPrintType } from '../types/bl.types';
+
+const BL_EDIT_TERMS =
+  'By editing a confirmed B/L you agree to carrier amendment terms and conditions.';
 
 export interface BillOfLadingRowActionsProps {
   row: BLListDTO;
@@ -20,6 +24,7 @@ export interface BillOfLadingRowActionsProps {
   showChargeSummary?: boolean;
   showNnPrint?: boolean;
   showReadyToConfirm?: boolean;
+  enableTermsOnConfirmedEdit?: boolean;
 }
 
 export function BillOfLadingRowActions({
@@ -34,8 +39,11 @@ export function BillOfLadingRowActions({
   showChargeSummary = true,
   showNnPrint = true,
   showReadyToConfirm = false,
+  enableTermsOnConfirmedEdit = true,
 }: BillOfLadingRowActionsProps) {
   const confirm = useConfirm();
+  const [termsOpen, setTermsOpen] = useState(false);
+  const [pendingEditBlNo, setPendingEditBlNo] = useState<string | null>(null);
 
   if (row.isLocked) {
     return (
@@ -67,6 +75,16 @@ export function BillOfLadingRowActions({
     onEdit(row.blNo);
   };
 
+  const requestEdit = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (row.status === 'C' && enableTermsOnConfirmedEdit) {
+      setPendingEditBlNo(row.blNo);
+      setTermsOpen(true);
+      return;
+    }
+    void handleEdit(e);
+  };
+
   const handleOriginalPrint = (e: React.MouseEvent) => {
     e.stopPropagation();
     confirm.info({
@@ -96,7 +114,7 @@ export function BillOfLadingRowActions({
         key="edit"
         title="Edit"
         icon={<AppIcon icon={Icons.edit} size={16} tone="edit" />}
-        onClick={handleEdit}
+        onClick={requestEdit}
       />
     );
     actions.push(
@@ -129,7 +147,7 @@ export function BillOfLadingRowActions({
         key="amend"
         title="Amendment"
         icon={<AppIcon icon={Icons.edit} size={16} tone="edit" />}
-        onClick={handleEdit}
+        onClick={requestEdit}
       />
     );
     actions.push(
@@ -168,7 +186,7 @@ export function BillOfLadingRowActions({
         key="edit"
         title="Edit"
         icon={<AppIcon icon={Icons.edit} size={16} tone="edit" />}
-        onClick={handleEdit}
+        onClick={requestEdit}
       />
     );
     if (showNnPrint) {
@@ -263,8 +281,55 @@ export function BillOfLadingRowActions({
   }
 
   return (
-    <Space size={4} wrap>
-      {actions}
-    </Space>
+    <>
+      <Space size={4} wrap>
+        {actions}
+      </Space>
+      <AppModal
+        title="Confirmed B/L Edit — Terms"
+        open={termsOpen}
+        onCancel={() => {
+          setTermsOpen(false);
+          setPendingEditBlNo(null);
+        }}
+        footer={
+          <>
+            <AppButton
+              onClick={() => {
+                setTermsOpen(false);
+                setPendingEditBlNo(null);
+              }}
+            >
+              Decline
+            </AppButton>
+            <AppButton
+              type="primary"
+              onClick={async () => {
+                if (!pendingEditBlNo) return;
+                try {
+                  const { closed } = await checkVoyageClosed(pendingEditBlNo);
+                  if (closed) {
+                    confirm.warning({
+                      title: 'Voyage Closed',
+                      content: 'This voyage is closed. B/L edit is not permitted.',
+                    });
+                    return;
+                  }
+                } catch {
+                  // best-effort
+                }
+                onEdit(pendingEditBlNo);
+                setTermsOpen(false);
+                setPendingEditBlNo(null);
+              }}
+            >
+              I Agree
+            </AppButton>
+          </>
+        }
+      >
+        <p>{BL_EDIT_TERMS}</p>
+      </AppModal>
+    </>
   );
 }

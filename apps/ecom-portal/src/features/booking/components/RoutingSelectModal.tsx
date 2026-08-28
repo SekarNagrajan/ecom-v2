@@ -1,20 +1,17 @@
-// Modified by Sekar Nagarajan (2026-08-26 18:52)
-/**
- * Select Vessel/Route popup — JSP ebookRoutingDetails / eBookingRouteDetails parity
- * (Direct / Transshipment / Multimodal + expandable module details).
- */
+// Modified by Sekar Nagarajan (2026-08-27 23:34)
 import { AppButton } from "@solverminds/shared-ui";
 import { useQuery } from "@tanstack/react-query";
-import { Empty, Flex, Spin, Tag, Typography } from "antd";
-import { useState } from "react";
+import { Empty, Spin, Tag, Typography } from "antd";
+import type { LucideIcon } from "lucide-react";
+import { Fragment, useState } from "react";
 
-import { BookingTemplateModalShell } from "../../../components/shared/booking-template-modal-shell";
 import { AppIcon, Icons } from "../../../components/icons";
+import { BookingTemplateModalShell } from "../../../components/shared/booking-template-modal-shell";
 import { bookingApi } from "../api/booking.api";
 import { bookingKeys } from "../api/booking.keys";
 import type { BookingRouteLeg, SelectedRoute } from "../types/booking.types";
 
-const { Text } = Typography;
+const { Text, Title } = Typography;
 
 interface RoutingSelectModalProps {
   open: boolean;
@@ -25,198 +22,605 @@ interface RoutingSelectModalProps {
   onSelect: (route: SelectedRoute) => void;
 }
 
-/** JSP show_details label: Direct / Transshipment (N) / Multimodal Shipment (N). */
-function shipmentDetailsLabel(route: SelectedRoute): string {
-  const legs = route.legs ?? [];
-  const isMultimodal =
-    route.shipmentKind === "Multimodal" ||
-    legs.some((leg) => leg.legType === "Inland");
-  const moduleCount = Math.max(legs.length - 1, route.transshipmentCount ?? 0);
+type TransportNode =
+  | { kind: "mode"; mode: "road"; label: string; icon: LucideIcon }
+  | { kind: "hub"; label: string }
+  | { kind: "vessel"; label: string; vesselCode: string };
 
-  if (isMultimodal) {
-    return moduleCount > 0
-      ? `Multimodal Shipment (${moduleCount})`
-      : "Multimodal Shipment";
-  }
-  if (!route.isDirect && moduleCount > 0) {
-    return `Transshipment (${moduleCount})`;
-  }
-  return "Direct Shipment";
+type RouteStopBadge =
+  | { kind: "road" }
+  | { kind: "hub"; label: string }
+  | { kind: "vessel"; label: string; vesselCode: string };
+
+interface RouteStop {
+  id: string;
+  index: number;
+  portCode: string;
+  portName: string;
+  terminal?: string;
+  eta?: string;
+  etd?: string;
+  badges: RouteStopBadge[];
 }
 
-function shipmentKindIcon(route: SelectedRoute) {
+function isMultimodalRoute(route: SelectedRoute): boolean {
   const legs = route.legs ?? [];
-  const isMultimodal =
-    route.shipmentKind === "Multimodal" ||
-    legs.some((leg) => leg.legType === "Inland");
-  if (isMultimodal) return Icons.truck;
-  if (!route.isDirect) return Icons.ship;
-  return Icons.anchor;
-}
-
-function canExpandModules(route: SelectedRoute): boolean {
-  const legs = route.legs ?? [];
-  if (legs.length > 1) return true;
   return (
     route.shipmentKind === "Multimodal" ||
     legs.some((leg) => leg.legType === "Inland")
   );
 }
 
-function displayLegType(leg: BookingRouteLeg): string {
-  if (leg.legType === "Mainline" || leg.legType === "Feeder") return "Vessel";
-  if (leg.legType === "Vessel") return "Vessel";
-  return leg.legType;
+function routingLabel(route: SelectedRoute): string {
+  if (isMultimodalRoute(route)) {
+    const moduleCount = Math.max(
+      (route.legs?.length ?? 1) - 1,
+      route.transshipmentCount ?? 0,
+    );
+    return moduleCount > 0 ? `Multimodal (${moduleCount})` : "Multimodal";
+  }
+  if (!route.isDirect) {
+    const stops =
+      route.transshipmentCount ?? Math.max((route.legs?.length ?? 1) - 1, 0);
+    return stops > 0
+      ? `${stops} ${stops === 1 ? "Stop" : "Stops"}`
+      : "Transshipment";
+  }
+  return "Direct";
 }
 
-function legTypeIcon(leg: BookingRouteLeg) {
-  const label = displayLegType(leg);
-  if (label === "Inland") return Icons.truck;
-  if (label === "Vessel") return Icons.ship;
-  return Icons.truck;
+function canExpandModules(route: SelectedRoute): boolean {
+  const legs = route.legs ?? [];
+  if (legs.length > 0) return true;
+  return isMultimodalRoute(route) || !route.isDirect;
 }
 
-interface PipelinePortNode {
-  key: string;
-  code: string;
-  name: string;
-  etd?: string;
-  eta?: string;
-  role: "origin" | "hub" | "delivery";
+function formatCardDate(value: string): string {
+  const parsed = new Date(value.replace(" ", "T"));
+  if (Number.isNaN(parsed.getTime())) return value;
+  const mm = String(parsed.getMonth() + 1).padStart(2, "0");
+  const dd = String(parsed.getDate()).padStart(2, "0");
+  const yy = String(parsed.getFullYear()).slice(-2);
+  return `${mm}/${dd}/${yy}`;
 }
 
-/** Flatten legs into port nodes + move connectors for a pipeline strip. */
-function buildPipeline(legs: BookingRouteLeg[]) {
-  if (legs.length === 0) {
-    return { ports: [] as PipelinePortNode[], moves: [] as BookingRouteLeg[] };
+function formatDetailDateTime(value: string): { date: string; time: string } {
+  const parsed = new Date(value.replace(" ", "T"));
+  if (Number.isNaN(parsed.getTime())) {
+    return { date: value, time: "" };
+  }
+  const mm = String(parsed.getMonth() + 1).padStart(2, "0");
+  const dd = String(parsed.getDate()).padStart(2, "0");
+  const yyyy = String(parsed.getFullYear());
+  const hh = String(parsed.getHours()).padStart(2, "0");
+  const min = String(parsed.getMinutes()).padStart(2, "0");
+  return { date: `${mm}/${dd}/${yyyy}`, time: `${hh}:${min} LT` };
+}
+
+function portCity(name: string): string {
+  return name.replace(/\s*\([^)]*\)\s*/g, "").trim();
+}
+
+function vesselLabel(
+  leg: Pick<BookingRouteLeg | SelectedRoute, "vesselName" | "voyage" | "bound">,
+): string {
+  const voyage = leg.voyage ?? "";
+  const bound = leg.bound ?? "";
+  const suffix = `${voyage}${bound}`;
+  return suffix ? `${leg.vesselName} (${suffix})` : leg.vesselName;
+}
+
+function isInlandLeg(leg: BookingRouteLeg): boolean {
+  return leg.legType === "Inland";
+}
+
+function buildTransportNodes(route: SelectedRoute): TransportNode[] {
+  const legs = route.legs ?? [];
+  const multimodal = isMultimodalRoute(route);
+  const nodes: TransportNode[] = [];
+
+  if (multimodal) {
+    nodes.push({
+      kind: "mode",
+      mode: "road",
+      label: "Road",
+      icon: Icons.truck,
+    });
+    nodes.push({ kind: "hub", label: route.serviceCode });
   }
 
-  const ports: PipelinePortNode[] = [];
-  const first = legs[0]!;
-  ports.push({
-    key: `port-${first.polPortId}-0`,
-    code: first.polPortId,
-    name: first.polPortName || first.polPortId,
-    etd: first.etd,
-    role: "origin",
-  });
+  const oceanLegs = legs.filter((leg) => !isInlandLeg(leg));
+  const sourceLegs = oceanLegs.length > 0 ? oceanLegs : legs;
 
-  legs.forEach((leg, index) => {
-    const isLast = index === legs.length - 1;
-    ports.push({
-      key: `port-${leg.podPortId}-${index + 1}`,
-      code: leg.podPortId,
-      name: leg.podPortName || leg.podPortId,
-      eta: leg.eta,
-      etd: isLast ? undefined : legs[index + 1]?.etd,
-      role: isLast ? "delivery" : "hub",
+  sourceLegs.forEach((leg, index) => {
+    if (index > 0) {
+      nodes.push({ kind: "hub", label: sourceLegs[index - 1]!.podPortId });
+    }
+    if (isInlandLeg(leg)) {
+      nodes.push({
+        kind: "mode",
+        mode: "road",
+        label: "Road",
+        icon: Icons.truck,
+      });
+      return;
+    }
+    nodes.push({
+      kind: "vessel",
+      label: vesselLabel(leg),
+      vesselCode: leg.vesselCode || leg.vesselName,
     });
   });
 
-  return { ports, moves: legs };
+  if (multimodal) {
+    nodes.push({
+      kind: "mode",
+      mode: "road",
+      label: "Road",
+      icon: Icons.truck,
+    });
+  }
+
+  if (!multimodal && sourceLegs.length <= 1) {
+    return [
+      { kind: "hub", label: route.serviceCode },
+      {
+        kind: "vessel",
+        label: vesselLabel(route),
+        vesselCode: route.vesselCode,
+      },
+    ];
+  }
+
+  if (nodes.length === 0) {
+    return [
+      { kind: "hub", label: route.serviceCode },
+      {
+        kind: "vessel",
+        label: vesselLabel(route),
+        vesselCode: route.vesselCode,
+      },
+    ];
+  }
+
+  return nodes;
 }
 
-function RouteModulePipeline({ legs }: { legs: BookingRouteLeg[] }) {
-  const { ports, moves } = buildPipeline(legs);
-  if (ports.length === 0) return null;
+function legOutboundBadges(
+  leg: BookingRouteLeg,
+  options?: { includeRoad?: boolean },
+): RouteStopBadge[] {
+  const badges: RouteStopBadge[] = [];
+  if (options?.includeRoad || isInlandLeg(leg)) {
+    badges.push({ kind: "road" });
+  }
+  if (!isInlandLeg(leg)) {
+    if (leg.serviceCode) {
+      badges.push({ kind: "hub", label: leg.serviceCode });
+    }
+    badges.push({
+      kind: "vessel",
+      label: vesselLabel(leg),
+      vesselCode: leg.vesselCode || leg.vesselName,
+    });
+  }
+  return badges;
+}
+
+function buildRouteStops(route: SelectedRoute): RouteStop[] {
+  const legs = route.legs ?? [];
+  const multimodal = isMultimodalRoute(route);
+
+  if (legs.length === 0) {
+    return [
+      {
+        id: `stop-${route.polPortId}`,
+        index: 1,
+        portCode: route.polPortId,
+        portName: route.polPortName,
+        terminal: route.polTerminal,
+        etd: route.etd,
+        badges: multimodal
+          ? [{ kind: "road" }]
+          : [
+              { kind: "hub", label: route.serviceCode },
+              {
+                kind: "vessel",
+                label: vesselLabel(route),
+                vesselCode: route.vesselCode,
+              },
+            ],
+      },
+      {
+        id: `stop-${route.podPortId}`,
+        index: 2,
+        portCode: route.podPortId,
+        portName: route.podPortName,
+        terminal: route.podTerminal,
+        eta: route.eta,
+        badges: multimodal ? [{ kind: "road" }] : [],
+      },
+    ];
+  }
+
+  const stops: Omit<RouteStop, "index">[] = [];
+
+  legs.forEach((leg, i) => {
+    if (i === 0) {
+      stops.push({
+        id: `stop-${leg.polPortId}-origin`,
+        portCode: leg.polPortId,
+        portName: leg.polPortName,
+        terminal: route.polTerminal || leg.terminal,
+        etd: leg.etd,
+        badges: legOutboundBadges(leg, {
+          includeRoad: multimodal && !isInlandLeg(leg),
+        }),
+      });
+      return;
+    }
+
+    const prev = legs[i - 1]!;
+    stops.push({
+      id: `stop-${leg.polPortId}-hub-${i}`,
+      portCode: leg.polPortId,
+      portName: leg.polPortName,
+      terminal: leg.terminal,
+      eta: prev.eta,
+      etd: leg.etd,
+      badges: legOutboundBadges(leg),
+    });
+  });
+
+  const last = legs[legs.length - 1]!;
+  stops.push({
+    id: `stop-${last.podPortId}-dest`,
+    portCode: last.podPortId,
+    portName: last.podPortName,
+    terminal: route.podTerminal || last.terminal,
+    eta: last.eta,
+    badges: multimodal || isInlandLeg(last) ? [{ kind: "road" }] : [],
+  });
+
+  return stops.map((stop, index) => ({ ...stop, index: index + 1 }));
+}
+
+function TransportTranscript({ route }: { route: SelectedRoute }) {
+  const nodes = buildTransportNodes(route);
 
   return (
-    <div
-      className="booking-routing-pipeline custom-scroll"
-      aria-label="Module pipeline"
-    >
-      {ports.map((port, index) => {
-        const move = moves[index];
-        const isVessel = move ? displayLegType(move) === "Vessel" : false;
-        return (
-          <div key={port.key} className="booking-routing-pipeline__segment">
-            <div
-              className={
-                port.role === "origin"
-                  ? "booking-routing-pipeline__port booking-routing-pipeline__port--origin"
-                  : port.role === "delivery"
-                    ? "booking-routing-pipeline__port booking-routing-pipeline__port--delivery"
-                    : "booking-routing-pipeline__port booking-routing-pipeline__port--hub"
-              }
+    <div className="booking-routing-card__transport custom-scroll">
+      {nodes.map((node, index) => (
+        <Fragment key={`${node.kind}-${index}-${node.label}`}>
+          {index > 0 ? (
+            <span
+              className="booking-routing-card__transport-rail"
+              aria-hidden
+            />
+          ) : null}
+          {node.kind === "hub" ? (
+            <span className="booking-routing-card__transport-hub">
+              {node.label}
+            </span>
+          ) : null}
+          {node.kind === "mode" ? (
+            <span className="booking-routing-card__transport-mode">
+              <AppIcon icon={node.icon} size={14} />
+              <span>{node.label}</span>
+            </span>
+          ) : null}
+          {node.kind === "vessel" ? (
+            <span className="booking-routing-card__transport-vessel">
+              <AppIcon icon={Icons.ship} size={14} />
+              <span>{node.label}</span>
+            </span>
+          ) : null}
+        </Fragment>
+      ))}
+    </div>
+  );
+}
+
+function RouteStopBadges({ badges }: { badges: RouteStopBadge[] }) {
+  if (badges.length === 0) return null;
+
+  return (
+    <div className="booking-route-stop__badges">
+      {badges.map((badge, index) => {
+        if (badge.kind === "road") {
+          return (
+            <span
+              key={`road-${index}`}
+              className="booking-route-stop__badge booking-route-stop__badge--road"
             >
-              <span
-                className="booking-routing-pipeline__port-icon app-icon-inherit"
-                aria-hidden
-              >
-                <AppIcon icon={Icons.mapPin} size={16} />
-              </span>
-              <Text
-                strong
-                className="booking-routing-pipeline__port-code"
-              >
-                {port.code}
+              <AppIcon icon={Icons.truck} size={12} />
+              Road
+            </span>
+          );
+        }
+        if (badge.kind === "hub") {
+          return (
+            <span
+              key={`hub-${badge.label}-${index}`}
+              className="booking-route-stop__badge booking-route-stop__badge--hub"
+            >
+              {badge.label}
+            </span>
+          );
+        }
+        return (
+          <span
+            key={`vessel-${badge.vesselCode}-${index}`}
+            className="booking-route-stop__badge booking-route-stop__badge--vessel"
+          >
+            <AppIcon icon={Icons.ship} size={12} />
+            {badge.label}
+          </span>
+        );
+      })}
+    </div>
+  );
+}
+
+function RouteStopTimes({ eta, etd }: { eta?: string; etd?: string }) {
+  const etaParts = eta ? formatDetailDateTime(eta) : null;
+  const etdParts = etd ? formatDetailDateTime(etd) : null;
+
+  return (
+    <div className="booking-route-stop__times">
+      {etaParts ? (
+        <Text className="booking-route-stop__time">
+          ETA:{" "}
+          <span className="booking-route-stop__time-date">{etaParts.date}</span>
+          {etaParts.time ? ` | ${etaParts.time}` : null}
+        </Text>
+      ) : null}
+      {etdParts ? (
+        <Text className="booking-route-stop__time">
+          ETD:{" "}
+          <span className="booking-route-stop__time-date">{etdParts.date}</span>
+          {etdParts.time ? ` | ${etdParts.time}` : null}
+        </Text>
+      ) : null}
+    </div>
+  );
+}
+
+function BookingRouteDetails({
+  route,
+  onClose,
+}: {
+  route: SelectedRoute;
+  onClose: () => void;
+}) {
+  const stops = buildRouteStops(route);
+
+  return (
+    <div className="booking-route-details">
+      <div className="booking-route-details__header">
+        <Title level={5} className="booking-route-details__title">
+          Route
+        </Title>
+      </div>
+
+      <ol className="booking-route-timeline">
+        {stops.map((stop, index) => {
+          const isLast = index === stops.length - 1;
+          return (
+            <li key={stop.id} className="booking-route-stop">
+              <div className="booking-route-stop__rail">
+                <span className="booking-route-stop__node">{stop.index}</span>
+                {isLast ? null : (
+                  <span className="booking-route-stop__line" aria-hidden />
+                )}
+              </div>
+              <div className="booking-route-stop__body">
+                <div className="booking-route-stop__main">
+                  <div className="booking-route-stop__location">
+                    <Text className="booking-route-stop__place">
+                      {portCity(stop.portName).toUpperCase()},{" "}
+                      <span className="booking-route-stop__code">
+                        {stop.portCode}
+                      </span>
+                    </Text>
+                    {stop.terminal ? (
+                      <Text className="booking-route-stop__terminal">
+                        {stop.terminal}
+                      </Text>
+                    ) : null}
+                    <RouteStopBadges badges={stop.badges} />
+                  </div>
+                  <RouteStopTimes eta={stop.eta} etd={stop.etd} />
+                </div>
+              </div>
+            </li>
+          );
+        })}
+      </ol>
+    </div>
+  );
+}
+
+function RoutingRouteCard({
+  route,
+  expanded,
+  onToggle,
+  onSelect,
+}: {
+  route: SelectedRoute;
+  expanded: boolean;
+  onToggle: () => void;
+  onSelect: (route: SelectedRoute) => void;
+}) {
+  const expandable = canExpandModules(route);
+  const multimodal = isMultimodalRoute(route);
+  const label = routingLabel(route);
+
+  return (
+    <article
+      className={[
+        "booking-routing-card",
+        route.isDefaultRoute ? "booking-routing-card--default" : undefined,
+      ]
+        .filter(Boolean)
+        .join(" ")}
+    >
+      <div className="booking-routing-card__main">
+        <div className="booking-routing-card__content">
+          <div className="booking-routing-card__meta">
+            {route.isDefaultRoute ? (
+              <Tag color="gold">Default route</Tag>
+            ) : null}
+            <Tag color="blue">
+              {route.serviceCode} — {route.serviceName}
+            </Tag>
+
+            <Tag>
+              {route.vesselName} ({route.voyage}
+              {route.bound})
+            </Tag>
+          </div>
+
+          <div className="booking-routing-card__route">
+            <div className="booking-routing-card__endpoint booking-routing-card__endpoint--origin">
+              <div className="booking-routing-card__date">
+                {formatCardDate(route.etd)}
+              </div>
+              <Text className="booking-routing-card__place">
+                {portCity(route.polPortName).toUpperCase()},{" "}
+                <span className="booking-routing-card__port-code">
+                  {route.polPortId}
+                </span>
               </Text>
-              <Text
-                type="secondary"
-                className="booking-routing-pipeline__port-name"
-              >
-                {port.name}
-              </Text>
-              {port.etd ? (
-                <Text className="booking-routing-pipeline__port-time">
-                  <Text type="secondary">ETD </Text>
-                  {port.etd}
-                </Text>
-              ) : null}
-              {port.eta ? (
-                <Text className="booking-routing-pipeline__port-time">
-                  <Text type="secondary">ETA </Text>
-                  {port.eta}
+              <div className="booking-routing-card__etime">
+                <Tag color="blue">ETD {route.etd}</Tag>
+              </div>
+              {route.polTerminal ? (
+                <Text className="booking-routing-card__terminal">
+                  Terminal: {route.polTerminal}
                 </Text>
               ) : null}
             </div>
 
-            {move ? (
-              <div
-                className={
-                  isVessel
-                    ? "booking-routing-pipeline__move booking-routing-pipeline__move--vessel"
-                    : "booking-routing-pipeline__move booking-routing-pipeline__move--inland"
-                }
-              >
-                <div className="booking-routing-pipeline__rail">
-                  <span className="booking-routing-pipeline__dot" />
-                  <span className="booking-routing-pipeline__track" />
-                  <span
-                    className="booking-routing-pipeline__move-icon app-icon-inherit"
-                    aria-hidden
-                  >
-                    <AppIcon icon={legTypeIcon(move)} size={16} />
-                  </span>
-                  <span className="booking-routing-pipeline__track" />
-                  <span className="booking-routing-pipeline__dot booking-routing-pipeline__dot--end" />
-                </div>
-                <Tag className="booking-routing-pipeline__move-tag">
-                  {displayLegType(move)}
-                </Tag>
-                <Text
-                  strong
-                  className="booking-routing-pipeline__move-vessel"
-                >
-                  {move.vesselName}
+            <div className="booking-routing-card__connector">
+              <div className="booking-routing-card__connector-line">
+                <span className="booking-routing-card__connector-dot" />
+                <span className="booking-routing-card__connector-rail" />
+                <span className="booking-routing-card__connector-pill">
+                  {route.transitTimeDays} Days
+                </span>
+                <span className="booking-routing-card__connector-rail" />
+                <span className="booking-routing-card__connector-dot" />
+              </div>
+              <Text className="booking-routing-card__connector-type">
+                {label}
+              </Text>
+            </div>
+
+            <div className="booking-routing-card__endpoint booking-routing-card__endpoint--dest">
+              <div className="booking-routing-card__date">
+                {formatCardDate(route.eta)}
+              </div>
+              <Text className="booking-routing-card__place">
+                {portCity(route.podPortName).toUpperCase()},{" "}
+                <span className="booking-routing-card__port-code">
+                  {route.podPortId}
+                </span>
+              </Text>
+              <div className="booking-routing-card__etime">
+                <Tag color="green">ETA {route.eta}</Tag>
+              </div>
+              {route.podTerminal ? (
+                <Text className="booking-routing-card__terminal">
+                  Terminal: {route.podTerminal}
                 </Text>
-                {isVessel && move.serviceName ? (
-                  <Text
-                    type="secondary"
-                    className="booking-routing-pipeline__move-meta"
-                  >
-                    {move.serviceName}
-                    {move.voyage
-                      ? ` · ${move.voyage}${move.bound ? `/${move.bound}` : ""}`
-                      : ""}
-                  </Text>
-                ) : null}
+              ) : null}
+            </div>
+          </div>
+        </div>
+
+        <div className="booking-routing-card__actions">
+          <AppButton
+            type="primary"
+            icon={<AppIcon icon={Icons.check} size={14} />}
+            onClick={() => onSelect(route)}
+            block
+          >
+            Select
+          </AppButton>
+          {expandable ? (
+            <AppButton
+              type="link"
+              icon={<AppIcon icon={Icons.route} size={14} />}
+              onClick={onToggle}
+              block
+            >
+              {expanded ? "Close Details" : "Show Details"}
+            </AppButton>
+          ) : null}
+        </div>
+      </div>
+
+      <div className="booking-routing-card__transport-wrap">
+        <TransportTranscript route={route} />
+      </div>
+
+      {expanded ? (
+        <BookingRouteDetails route={route} onClose={onToggle} />
+      ) : null}
+
+      {(route.gateInCutoff || route.siDocCutoff || route.vgmCutoff) && (
+        <div className="booking-routing-card__footer">
+          <div className="booking-routing-card__deadlines">
+            {route.gateInCutoff ? (
+              <div className="booking-routing-card__deadline">
+                <span className="booking-routing-card__deadline-icon booking-routing-card__deadline-icon--gate app-icon-inherit">
+                  <AppIcon icon={Icons.container} size={14} />
+                </span>
+                <span>
+                  <span className="booking-routing-card__deadline-label">
+                    Gate-In
+                  </span>
+                  <span className="booking-routing-card__deadline-value">
+                    {route.gateInCutoff}
+                  </span>
+                </span>
+              </div>
+            ) : null}
+            {route.siDocCutoff ? (
+              <div className="booking-routing-card__deadline">
+                <span className="booking-routing-card__deadline-icon booking-routing-card__deadline-icon--si app-icon-inherit">
+                  <AppIcon icon={Icons.clipboardList} size={14} />
+                </span>
+                <span>
+                  <span className="booking-routing-card__deadline-label">
+                    SI Cut-Off
+                  </span>
+                  <span className="booking-routing-card__deadline-value">
+                    {route.siDocCutoff}
+                  </span>
+                </span>
+              </div>
+            ) : null}
+            {route.vgmCutoff ? (
+              <div className="booking-routing-card__deadline">
+                <span className="booking-routing-card__deadline-icon booking-routing-card__deadline-icon--vgm app-icon-inherit">
+                  <AppIcon icon={Icons.shieldCheck} size={14} />
+                </span>
+                <span>
+                  <span className="booking-routing-card__deadline-label">
+                    VGM Cut-Off
+                  </span>
+                  <span className="booking-routing-card__deadline-value">
+                    {route.vgmCutoff}
+                  </span>
+                </span>
               </div>
             ) : null}
           </div>
-        );
-      })}
-    </div>
+        </div>
+      )}
+    </article>
   );
 }
 
@@ -243,21 +647,20 @@ export function RoutingSelectModal({
     staleTime: 30_000,
   });
 
-  if (!open && expandedRouteId !== null) {
+  const handleClose = () => {
     setExpandedRouteId(null);
-  }
-
-  const toggleModules = (routeId: string) => {
-    setExpandedRouteId((prev) => (prev === routeId ? null : routeId));
+    onCancel();
   };
 
   return (
     <BookingTemplateModalShell
       open={open}
-      onClose={onCancel}
+      onClose={handleClose}
       icon={Icons.ship}
       title="Select Vessel / Route"
-      subtitle={`${origin || "—"} → ${delivery || "—"} · Cargo ready ${cargoReadyDate || "—"}`}
+      subtitle={`${origin || "—"} → ${delivery || "—"} · Cargo ready ${
+        cargoReadyDate || "—"
+      }`}
       dialogSize="xl"
     >
       <div className="booking-routing-modal custom-scroll">
@@ -280,155 +683,19 @@ export function RoutingSelectModal({
         ) : null}
 
         {!isFetching && !isError
-          ? routes.map((route) => {
-              const detailsLabel = shipmentDetailsLabel(route);
-              const expandable = canExpandModules(route);
-              const expanded = expandedRouteId === route.routeId;
-              const legs = route.legs ?? [];
-
-              return (
-                <div
-                  key={route.routeId}
-                  className={
-                    route.isDefaultRoute
-                      ? "booking-routing-card booking-routing-card--default"
-                      : "booking-routing-card"
-                  }
-                >
-                  <Flex
-                    align="flex-start"
-                    justify="space-between"
-                    gap={12}
-                    wrap="wrap"
-                    className="booking-routing-card__top"
-                  >
-                    <div className="booking-routing-card__title-block">
-                      <Flex align="center" gap={8} wrap="wrap">
-                        <Text strong className="booking-routing-card__service">
-                          {route.serviceName}
-                        </Text>
-                        <Tag>{route.serviceCode}</Tag>
-                        {route.isDefaultRoute ? (
-                          <Tag color="gold">Default route</Tag>
-                        ) : null}
-                      </Flex>
-                      <Text
-                        type="secondary"
-                        className="booking-routing-card__vessel"
-                      >
-                        {route.vesselName} · Voy {route.voyage}
-                        {route.bound ? `/${route.bound}` : ""}
-                      </Text>
-                    </div>
-                    <AppButton
-                      type="primary"
-                      icon={<AppIcon icon={Icons.check} size={14} />}
-                      onClick={() => onSelect(route)}
-                    >
-                      Select
-                    </AppButton>
-                  </Flex>
-
-                  <div className="booking-routing-card__meta">
-                    <div className="booking-routing-card__meta-item">
-                      <Text
-                        type="secondary"
-                        className="booking-routing-card__meta-label"
-                      >
-                        Departure (ETD)
-                      </Text>
-                      <Text strong>{route.etd}</Text>
-                      <Text type="secondary">
-                        {route.polTerminal || route.polPortId}
-                      </Text>
-                    </div>
-                    <div className="booking-routing-card__meta-item booking-routing-card__meta-item--center">
-                      <Text
-                        type="secondary"
-                        className="booking-routing-card__meta-label"
-                      >
-                        Transit
-                      </Text>
-                      <Text strong>{route.transitTimeDays} days</Text>
-                    </div>
-                    <div className="booking-routing-card__meta-item">
-                      <Text
-                        type="secondary"
-                        className="booking-routing-card__meta-label"
-                      >
-                        Arrival (ETA)
-                      </Text>
-                      <Text strong>{route.eta}</Text>
-                      <Text type="secondary">
-                        {route.podTerminal || route.podPortId}
-                      </Text>
-                    </div>
-                  </div>
-
-                  <div className="booking-routing-card__shipment">
-                    {expandable ? (
-                      <button
-                        type="button"
-                        className="booking-routing-card__shipment-toggle"
-                        aria-expanded={expanded}
-                        onClick={() => toggleModules(route.routeId)}
-                      >
-                        <span
-                          className="booking-routing-card__shipment-icon app-icon-inherit"
-                          aria-hidden
-                        >
-                          <AppIcon icon={shipmentKindIcon(route)} size={14} />
-                        </span>
-                        <span>{detailsLabel}</span>
-                        <AppIcon
-                          icon={expanded ? Icons.chevronUp : Icons.chevronDown}
-                          size={14}
-                        />
-                      </button>
-                    ) : (
-                      <Text
-                        type="secondary"
-                        className="booking-routing-card__shipment-static"
-                      >
-                        <span
-                          className="booking-routing-card__shipment-icon app-icon-inherit"
-                          aria-hidden
-                        >
-                          <AppIcon icon={shipmentKindIcon(route)} size={14} />
-                        </span>
-                        {detailsLabel}
-                      </Text>
-                    )}
-                  </div>
-
-                  {expanded && legs.length > 0 ? (
-                    <RouteModulePipeline legs={legs} />
-                  ) : null}
-
-                  {(route.gateInCutoff ||
-                    route.siDocCutoff ||
-                    route.vgmCutoff) && (
-                    <div className="booking-routing-card__cutoffs">
-                      {route.gateInCutoff ? (
-                        <Text type="secondary">
-                          Gate-in: <Text>{route.gateInCutoff}</Text>
-                        </Text>
-                      ) : null}
-                      {route.siDocCutoff ? (
-                        <Text type="secondary">
-                          SI/Doc: <Text>{route.siDocCutoff}</Text>
-                        </Text>
-                      ) : null}
-                      {route.vgmCutoff ? (
-                        <Text type="secondary">
-                          VGM: <Text>{route.vgmCutoff}</Text>
-                        </Text>
-                      ) : null}
-                    </div>
-                  )}
-                </div>
-              );
-            })
+          ? routes.map((route) => (
+              <RoutingRouteCard
+                key={route.routeId}
+                route={route}
+                expanded={expandedRouteId === route.routeId}
+                onToggle={() =>
+                  setExpandedRouteId((prev) =>
+                    prev === route.routeId ? null : route.routeId,
+                  )
+                }
+                onSelect={onSelect}
+              />
+            ))
           : null}
       </div>
     </BookingTemplateModalShell>

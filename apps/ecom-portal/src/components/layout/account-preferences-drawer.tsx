@@ -1,8 +1,8 @@
-import { AppDrawer } from '@solverminds/shared-ui';
-import { Flex, Typography, theme } from 'antd';
+import { AppDrawer } from "@solverminds/shared-ui";
+import { Flex, Typography, theme } from "antd";
 
-import { ThemePreferencesPanel } from '../../features/theme/components/theme-preferences-panel';
-import { type useThemePreferencesController } from '../../features/theme/hooks/use-theme-preferences-controller';
+import { ThemePreferencesPanel } from "../../features/theme/components/theme-preferences-panel";
+import { type useThemePreferencesController } from "../../features/theme/hooks/use-theme-preferences-controller";
 
 const { Text } = Typography;
 
@@ -25,20 +25,20 @@ export function AccountPreferencesDrawer({
   const { token } = theme.useToken();
 
   const statusLabel =
-    preferencesController.saveStatus === 'saving'
-      ? 'Saving...'
-      : preferencesController.saveStatus === 'dirty'
-        ? 'Not saved'
-        : preferencesController.saveStatus === 'error'
-          ? 'Save failed'
-          : null;
+    preferencesController.saveStatus === "saving"
+      ? "Saving..."
+      : preferencesController.saveStatus === "dirty"
+      ? "Not saved"
+      : preferencesController.saveStatus === "error"
+      ? "Save failed"
+      : null;
 
   const statusColor =
-    preferencesController.saveStatus === 'error'
+    preferencesController.saveStatus === "error"
       ? token.colorError
-      : preferencesController.saveStatus === 'dirty'
-        ? token.colorWarning
-        : token.colorTextSecondary;
+      : preferencesController.saveStatus === "dirty"
+      ? token.colorWarning
+      : token.colorTextSecondary;
 
   return (
     <AppDrawer
@@ -56,9 +56,7 @@ export function AccountPreferencesDrawer({
                 fontSize: token.fontSizeSM,
                 fontWeight: token.fontWeightStrong,
               }}
-            >
-              {statusLabel}
-            </Text>
+            ></Text>
           ) : null}
         </Flex>
       }
@@ -66,11 +64,11 @@ export function AccountPreferencesDrawer({
         body: {
           paddingTop: token.paddingMD,
           paddingBottom: token.paddingMD,
-          overflowY: 'auto',
-          maxHeight: 'calc(100vh - 105px)',
+          overflowY: "auto",
+          maxHeight: "calc(100vh - 105px)",
         },
         footer: {
-          borderTop: 'none',
+          borderTop: "none",
         },
       }}
     >

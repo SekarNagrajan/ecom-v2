@@ -1,4 +1,4 @@
-// Created by Sekar Nagarajan (2026-08-26 12:19)
+// Modified by Sekar Nagarajan (2026-08-28 11:15)
 import type { SIDTO, SIListDTO } from "../types/si.types";
 
 export const MOCK_SI_LIST: SIListDTO[] = [
@@ -89,6 +89,14 @@ export const MOCK_SI_DETAIL: SIDTO = {
   blType: "Original",
   releaseType: "O",
   freightOption: "PREPAID",
+  nvocc: false,
+  t2lFiling: false,
+  ensFilingHint: "N",
+  agencyRefNo: "AGY-4457",
+  origin: "SGSIN - SINGAPORE",
+  loadPort: "SGSIN - SINGAPORE",
+  dischargePort: "JPTYO - TOKYO",
+  delivery: "JPTYO - TOKYO",
   parties: {
     shipper: {
       name: "Global Logistics Corp",
@@ -113,26 +121,63 @@ export const MOCK_SI_DETAIL: SIDTO = {
       printOnBl: false,
     },
   },
+  routing: {
+    originPrint: "SINGAPORE",
+    polPrint: "SINGAPORE",
+    podPrint: "TOKYO",
+    deliveryPrint: "TOKYO",
+    vesselVoyage: "EVER GIVEN / 0123E",
+    scheduleLegs: [],
+  },
   containers: [
     {
       id: "CONT-1",
       containerNo: "MSKU1234567",
-      eqpSize: "40HC",
+      eqpSize: "20DC",
       carrierSeal: "SEAL9988",
       shipperSeal: "SHP1122",
+      // Modified by Sekar Nagarajan (2026-08-28 12:56)
+      isSoc: false,
+      isOog: false,
+      reeferMode: "none",
       cargoLines: [
         {
           id: "CARGO-1",
           marksAndNumbers: "N/M",
           description: "ELECTRONICS AND SPARE PARTS",
           commodityCode: "ELEC",
-          hsCode: "8517.12.00",
+          hsCode: "85171200",
           packageCount: 120,
-          packageType: "Cartons",
+          packageType: "CTN",
           grossWeight: 4500,
           volume: 24.5,
         },
       ],
     },
   ],
+  charges: [
+    {
+      id: "CHG-1",
+      chargeCode: "OFR",
+      description: "Ocean Freight",
+      amount: 1850,
+      currency: "USD",
+      prepaidCollect: "PREPAID",
+      payByCustType: "Shipper",
+    },
+    {
+      id: "CHG-2",
+      chargeCode: "THC",
+      description: "Terminal Handling",
+      amount: 220,
+      currency: "USD",
+      prepaidCollect: "PREPAID",
+      payByCustType: "Shipper",
+    },
+  ],
+  insurance: null,
+  cargoProtect: [],
+  ens: null,
+  files: [],
+  preview: {},
 };

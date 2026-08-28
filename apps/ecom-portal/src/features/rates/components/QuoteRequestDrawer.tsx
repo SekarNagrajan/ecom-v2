@@ -1,10 +1,11 @@
-// Modified by Sekar Nagarajan (2026-08-25 19:25)
+// Modified by Sekar Nagarajan (2026-08-28 15:09)
 // QuoteRequestDrawer — ApplicationResource_en.properties Request for Quote fields
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { Form, Input, InputNumber, Select, Space, Typography } from "antd";
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -24,12 +25,26 @@ const quoteSchema = z.object({
   comments: z.string().optional(),
 });
 
+const DEFAULT_QUOTE_VALUES: CreateQuoteInput = {
+  originPort: "USNYC",
+  deliveryPort: "SGSIN",
+  eqpType: "40' High Cube Dry",
+  eqpQuantity: 1,
+  commodity: "General Merchandise",
+  cargoWeightKg: 15000,
+};
+
 interface QuoteRequestDrawerProps {
   open: boolean;
   onClose: () => void;
+  initialValues?: Partial<CreateQuoteInput>;
 }
 
-export function QuoteRequestDrawer({ open, onClose }: QuoteRequestDrawerProps) {
+export function QuoteRequestDrawer({
+  open,
+  onClose,
+  initialValues,
+}: QuoteRequestDrawerProps) {
   const toast = useToast();
   const createMutation = useCreateQuoteMutation();
 
@@ -40,15 +55,28 @@ export function QuoteRequestDrawer({ open, onClose }: QuoteRequestDrawerProps) {
     formState: { errors },
   } = useForm<CreateQuoteInput>({
     resolver: zodResolver(quoteSchema),
-    defaultValues: {
-      originPort: "USNYC",
-      deliveryPort: "SGSIN",
-      eqpType: "40' High Cube Dry",
-      eqpQuantity: 1,
-      commodity: "General Merchandise",
-      cargoWeightKg: 15000,
-    },
+    defaultValues: DEFAULT_QUOTE_VALUES,
   });
+
+  // Prefill from rates search when drawer opens (external sync)
+  useEffect(() => {
+    if (!open) return;
+    reset({
+      ...DEFAULT_QUOTE_VALUES,
+      ...initialValues,
+      eqpQuantity: initialValues?.eqpQuantity ?? DEFAULT_QUOTE_VALUES.eqpQuantity,
+      cargoWeightKg:
+        initialValues?.cargoWeightKg ?? DEFAULT_QUOTE_VALUES.cargoWeightKg,
+      commodity:
+        initialValues?.commodity && initialValues.commodity !== "ALL"
+          ? initialValues.commodity
+          : DEFAULT_QUOTE_VALUES.commodity,
+      eqpType:
+        initialValues?.eqpType && initialValues.eqpType !== "ALL"
+          ? initialValues.eqpType
+          : DEFAULT_QUOTE_VALUES.eqpType,
+    });
+  }, [open, initialValues, reset]);
 
   const onSubmit = (data: CreateQuoteInput) => {
     createMutation.mutate(data, {

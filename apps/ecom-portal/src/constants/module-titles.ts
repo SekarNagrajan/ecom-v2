@@ -42,6 +42,9 @@ export const WIZARD_STEP_TITLES = {
   preview: 'Preview',
   parties: 'Parties',
   charges: 'Charges',
+  routing: 'Routing',
+  cargoProtect: 'Cargo Protect',
+  chargeSummary: 'Charge Summary',
 } as const;
 
 export function formatModuleScreenTitle(base: string, detail?: string | null): string {

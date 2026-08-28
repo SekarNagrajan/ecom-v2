@@ -1,26 +1,35 @@
-// Modified by Sekar Nagarajan (2026-08-26 11:10)
+// Modified by Sekar Nagarajan (2026-08-27 18:21)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
 import {
-    Alert,
-    Card,
-    Checkbox,
-    Col,
-    InputNumber,
-    Radio,
-    Row,
-    Select,
-    Typography,
+  Alert,
+  Card,
+  Checkbox,
+  Col,
+  InputNumber,
+  Radio,
+  Row,
+  Select,
+  Typography,
 } from "antd";
 import { useEffect } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, type Resolver } from "react-hook-form";
+
 import { useBookingStore } from "../stores/booking.store";
-import { insuranceSchema } from "../types/booking.types";
+import { insuranceSchema, type InsuranceData } from "../types/booking.types";
 
 const { Text } = Typography;
 
+const defaults: InsuranceData = {
+  isInsuranceRequired: false,
+  currency: "USD",
+  cargoValue: undefined,
+  termsAccepted: false,
+};
+
 export function InsuranceStep() {
-  const { payload, updateInsurance, nextStep, prevStep } = useBookingStore();
+  const { payload, updateInsurance, clearInsurance, nextStep, prevStep } =
+    useBookingStore();
 
   const {
     control,
@@ -28,24 +37,25 @@ export function InsuranceStep() {
     watch,
     formState: { errors },
     reset,
-  } = useForm<any>({
-    resolver: zodResolver(insuranceSchema),
-    defaultValues: payload.insurance || {
-      isInsuranceRequired: false,
-      currency: "USD",
-      cargoValue: undefined,
-      termsAccepted: false,
-    },
+  } = useForm<InsuranceData>({
+    // Modified by Sekar Nagarajan (2026-08-27 18:41)
+    resolver: zodResolver(insuranceSchema) as Resolver<InsuranceData>,
+    defaultValues: payload.insurance || defaults,
   });
 
   const isInsuranceRequired = watch("isInsuranceRequired");
 
   useEffect(() => {
-    if (payload.insurance) reset(payload.insurance);
+    if (payload.insurance) reset({ ...defaults, ...payload.insurance });
   }, [payload.insurance, reset]);
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: InsuranceData) => {
     updateInsurance(data);
+    nextStep();
+  };
+
+  const handleSkip = () => {
+    clearInsurance();
     nextStep();
   };
 
@@ -57,30 +67,24 @@ export function InsuranceStep() {
     >
       <div className="custom-scroll form-step-scroll">
         <Card size="small" className="form-step-card form-step-section">
-          <Row gutter={[24, 24]}>
-            <Col span={24}>
-              <label className="form-field-label">
-                Do you require Cargo Insurance?
-              </label>
-              <Controller
-                control={control}
-                name="isInsuranceRequired"
-                render={({ field: { value, onChange, ...field } }) => (
-                  <Radio.Group
-                    {...field}
-                    value={value}
-                    onChange={(e) => onChange(e.target.value)}
-                  >
-                    <Radio value={true}>Yes</Radio>
-                    <Radio value={false}>No</Radio>
-                  </Radio.Group>
-                )}
-              />
-            </Col>
-          </Row>
+          <label className="form-field-label">Do you require Cargo Insurance?</label>
+          <Controller
+            control={control}
+            name="isInsuranceRequired"
+            render={({ field: { value, onChange, ...field } }) => (
+              <Radio.Group
+                {...field}
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
+              >
+                <Radio value={true}>Yes</Radio>
+                <Radio value={false}>No</Radio>
+              </Radio.Group>
+            )}
+          />
         </Card>
 
-        {isInsuranceRequired && (
+        {isInsuranceRequired ? (
           <Card
             size="small"
             title="Insurance Details"
@@ -98,21 +102,21 @@ export function InsuranceStep() {
                     <Select
                       {...field}
                       size="large"
+                      className="form-field-full-width"
                       options={[
                         { value: "USD", label: "USD" },
                         { value: "EUR", label: "EUR" },
+                        { value: "AED", label: "AED" },
                       ]}
-                      className="form-field-full-width"
                     />
                   )}
                 />
-                {errors.currency && (
+                {errors.currency ? (
                   <Text type="danger" className="form-field-error">
-                    {errors.currency.message as string}
+                    {errors.currency.message}
                   </Text>
-                )}
+                ) : null}
               </Col>
-
               <Col xs={24} md={12}>
                 <label className="form-field-label">
                   Cargo Value <Text type="danger">*</Text>
@@ -129,20 +133,19 @@ export function InsuranceStep() {
                     />
                   )}
                 />
-                {errors.cargoValue && (
+                {errors.cargoValue ? (
                   <Text type="danger" className="form-field-error">
-                    {errors.cargoValue.message as string}
+                    {errors.cargoValue.message}
                   </Text>
-                )}
+                ) : null}
               </Col>
-
               <Col span={24}>
                 <Alert
-                  message="Insurance Terms & Conditions"
-                  description="By requesting cargo insurance, you agree to the carrier's standard terms and conditions of insurance which will be applied to your final booking confirmation. The premium will be added to your freight invoice."
+                  className="form-step-section"
                   type="info"
                   showIcon
-                  className="form-step-section"
+                  message="Insurance Terms & Conditions"
+                  description="By requesting cargo insurance, you agree to the carrier's standard insurance terms. Premium will be added to the freight invoice."
                 />
                 <Controller
                   control={control}
@@ -158,15 +161,15 @@ export function InsuranceStep() {
                     </Checkbox>
                   )}
                 />
-                {errors.termsAccepted && (
+                {errors.termsAccepted ? (
                   <Text type="danger" className="form-field-error">
-                    {errors.termsAccepted.message as string}
+                    {errors.termsAccepted.message}
                   </Text>
-                )}
+                ) : null}
               </Col>
             </Row>
           </Card>
-        )}
+        ) : null}
       </div>
 
       <div className="form-step-footer">
@@ -174,7 +177,7 @@ export function InsuranceStep() {
         <AppButton type="primary" htmlType="submit">
           Next
         </AppButton>
-        <AppButton type="link" onClick={() => nextStep()}>
+        <AppButton type="link" onClick={handleSkip}>
           Skip
         </AppButton>
       </div>

@@ -298,7 +298,7 @@ export function MyAlertsView({ open = true, onClose }: MyAlertsViewProps) {
           title={panelHeader}
           footer={
             <div className="um-drawer-footer form-step-footer">
-              <AppButton onClick={handleClose} disabled={isSaving}>
+              <AppButton onClick={handleClose} disabled={isSaving} danger>
                 Cancel
               </AppButton>
               <AppButton

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 12:38)
+// Modified by Sekar Nagarajan (2026-08-28 12:40)
 import { AppButton } from "@solverminds/shared-ui";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { Card, Result, Steps, Typography, theme } from "antd";
@@ -8,28 +8,27 @@ import { FeaturePageShell } from "../../components/shared/feature-page-shell";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import {
   MODULE_TITLES,
-  WIZARD_STEP_TITLES,
   formatModuleScreenTitle,
 } from "../../constants/module-titles";
 import { useSiDetailQuery } from "./api/si.queries";
-import { CargoStep } from "./components/CargoStep";
-import { ChargesStep } from "./components/ChargesStep";
-import { MasterDetailsStep } from "./components/MasterDetailsStep";
-import { PartiesStep } from "./components/PartiesStep";
-import { PreviewStep } from "./components/PreviewStep";
 import { SiLoadingCenter } from "./components/si-loading-center";
 import { SiModuleStyles } from "./components/si-module-styles";
+import { buildSiWizardSteps } from "./config/si-wizard-steps";
+import { DEFAULT_SI_WIZARD_CONFIG } from "./config/si-wizard-config";
+import { useSiWizardConfigQuery } from "./hooks/use-si-wizard-config";
 import { useSiWizard } from "./hooks/use-si-wizard";
 
 const { Text } = Typography;
-
-const PIPELINE_ICON_SIZE = 25;
 
 export function ShippingInstructionWizardRoute() {
   const { token } = theme.useToken();
   const navigate = useNavigate();
   const params = useParams({ from: "/app/shipping-instruction/wizard/$id" });
   const { data: siDetails, isLoading, isError } = useSiDetailQuery(params.id);
+  const { data: wizardConfig = DEFAULT_SI_WIZARD_CONFIG } =
+    useSiWizardConfigQuery();
+
+  const wizardSteps = buildSiWizardSteps(wizardConfig);
 
   const {
     currentStep,
@@ -39,30 +38,9 @@ export function ShippingInstructionWizardRoute() {
     handleNext,
     handlePrevious,
     handleSubmit,
-  } = useSiWizard(params.id);
-
-  const stepsConfig = [
-    {
-      title: WIZARD_STEP_TITLES.masterDetails,
-      icon: <AppIcon icon={Icons.rocket} size={PIPELINE_ICON_SIZE} />,
-    },
-    {
-      title: WIZARD_STEP_TITLES.parties,
-      icon: <AppIcon icon={Icons.contact} size={PIPELINE_ICON_SIZE} />,
-    },
-    {
-      title: WIZARD_STEP_TITLES.cargoDetails,
-      icon: <AppIcon icon={Icons.fileText} size={PIPELINE_ICON_SIZE} />,
-    },
-    {
-      title: WIZARD_STEP_TITLES.charges,
-      icon: <AppIcon icon={Icons.dollarSign} size={PIPELINE_ICON_SIZE} />,
-    },
-    {
-      title: WIZARD_STEP_TITLES.preview,
-      icon: <AppIcon icon={Icons.fileCheck} size={PIPELINE_ICON_SIZE} />,
-    },
-  ];
+    draft,
+    updateDraft,
+  } = useSiWizard(params.id, siDetails);
 
   const getStepIcon = (
     icon: React.ReactNode,
@@ -106,7 +84,7 @@ export function ShippingInstructionWizardRoute() {
     );
   };
 
-  const steps = stepsConfig.map((step, index) => ({
+  const steps = wizardSteps.map((step, index) => ({
     title: step.title,
     icon: getStepIcon(step.icon, index, currentStep),
   }));
@@ -116,54 +94,51 @@ export function ShippingInstructionWizardRoute() {
   };
 
   const renderStepContent = () => {
+    // Modified by Sekar Nagarajan (2026-08-28 12:40)
+    // Match Booking form-step-layout so loading/error fill the wizard body.
     if (isLoading) {
       return (
-        <div className="custom-scroll form-step-scroll">
-          <SiLoadingCenter />
+        <div className="form-step-layout">
+          <div className="custom-scroll form-step-scroll">
+            <SiLoadingCenter />
+          </div>
         </div>
       );
     }
     if (isError || !siDetails) {
       return (
-        <div className="custom-scroll form-step-scroll">
-          <Result
-            status="error"
-            title="Unable to load Shipping Instruction"
-            extra={
-              <AppButton type="primary" onClick={goDashboard}>
-                Back to Dashboard
-              </AppButton>
-            }
-          />
+        <div className="form-step-layout">
+          <div className="custom-scroll form-step-scroll">
+            <Result
+              status="error"
+              title="Unable to load Shipping Instruction"
+              extra={
+                <AppButton type="primary" onClick={goDashboard}>
+                  Back to Dashboard
+                </AppButton>
+              }
+            />
+          </div>
         </div>
       );
     }
 
-    const commonProps = {
-      data: siDetails,
-      onNext: () => handleNext(stepsConfig.length),
-      onPrevious: handlePrevious,
-      onSubmit: handleSubmit,
-      onCancel: goDashboard,
-      isFirstStep: currentStep === 0,
-      isLastStep: currentStep === stepsConfig.length - 1,
-      isSubmitting,
-    };
+    const StepComponent = wizardSteps[currentStep]?.Component;
+    if (!StepComponent) return null;
 
-    switch (currentStep) {
-      case 0:
-        return <MasterDetailsStep {...commonProps} />;
-      case 1:
-        return <PartiesStep {...commonProps} />;
-      case 2:
-        return <CargoStep {...commonProps} />;
-      case 3:
-        return <ChargesStep {...commonProps} />;
-      case 4:
-        return <PreviewStep {...commonProps} />;
-      default:
-        return null;
-    }
+    return (
+      <StepComponent
+        data={draft ?? siDetails}
+        onNext={() => handleNext(wizardSteps.length)}
+        onPrevious={handlePrevious}
+        onSubmit={handleSubmit}
+        onUpdate={updateDraft}
+        onCancel={goDashboard}
+        isFirstStep={currentStep === 0}
+        isLastStep={currentStep === wizardSteps.length - 1}
+        isSubmitting={isSubmitting}
+      />
+    );
   };
 
   return (
@@ -198,7 +173,11 @@ export function ShippingInstructionWizardRoute() {
                   via EDI.
                   <div className="si-confirmation__ref">
                     SI Reference:{" "}
-                    <Text copyable strong className="si-confirmation__ref-value">
+                    <Text
+                      copyable
+                      strong
+                      className="si-confirmation__ref-value"
+                    >
                       {confirmationSiNo}
                     </Text>
                   </div>

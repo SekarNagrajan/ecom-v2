@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 12:15)
+// Modified by Sekar Nagarajan (2026-08-28 00:38)
 import { AppButton } from "@solverminds/shared-ui";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "@tanstack/react-router";
@@ -11,6 +11,9 @@ import {
     WIZARD_STEP_TITLES,
     formatModuleScreenTitle,
 } from "../../constants/module-titles";
+import { bookingApi } from "./api/booking.api";
+import { bookingKeys } from "./api/booking.keys";
+import { BookingModuleStyles } from "./components/booking-module-styles";
 import { CargoStep } from "./components/CargoStep";
 import { CustomerDetailsStep } from "./components/CustomerDetailsStep";
 import { ENSStep } from "./components/ENSStep";
@@ -20,6 +23,10 @@ import { MasterDetailsStep } from "./components/MasterDetailsStep";
 import { PreviewStep } from "./components/PreviewStep";
 import { useBookingWizard } from "./hooks/use-booking-wizard";
 import { useBookingStore } from "./stores/booking.store";
+import {
+  defaultCargoData,
+  migrateLegacyCargo,
+} from "./types/booking.types";
 
 const { Text } = Typography;
 
@@ -40,80 +47,41 @@ export function BookingAmendRoute() {
   const { initializeFromBooking } = useBookingStore();
   const [isInitialized, setIsInitialized] = useState(false);
 
-  // Mock fetching booking to amend
   const {
     data: booking,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["booking-amend", bookingId],
-    queryFn: async () => {
-      // Mock data representing existing booking
-      return {
-        masterDetails: {
-          origin: "USNYC",
-          delivery: "GBFEL",
-          cargoReadyDate: "2026-09-01",
-          haulageOriginType: "Merchant",
-          haulageDestinationType: "Carrier",
-          carriageContract: "C-12345",
-          onlineBookingNo: bookingId,
-        },
-        parties: {
-          shipperName: "Global Exports LLC",
-          consigneeName: "UK Imports Ltd",
-          agreementParty: "Global Exports LLC",
-          siSubmittingParty: "Global Exports LLC",
-        },
-        cargo: {
-          commodity: "GEN-CGO - General Freight / Merchandise",
-          containerType: "40' High Cube Dry",
-          containerCount: 2,
-          totalWeightKg: 45000,
-          isLcl: false,
-          isDangerousGoods: false,
-          isReefer: false,
-          isOog: false,
-        },
-        ens: {
-          euCustomsZone: true,
-          blType: "Straight BL",
-          ensFilingType: "Single Filing",
-          paymentMethod: "Wire Transfer",
-          declarantName: "Declarant Co",
-          declarantCountry: "GB",
-        },
-        insurance: {
-          isInsuranceRequired: true,
-          currency: "USD",
-          cargoValue: 100000,
-          termsAccepted: true,
-        },
-      };
-    },
+    queryKey: bookingKeys.detail(bookingId ?? ""),
+    queryFn: () => bookingApi.getBookingById(bookingId as string),
     enabled: !!bookingId,
   });
 
   useEffect(() => {
     if (booking && !isInitialized) {
-      // Need to safely cast because types might not perfectly match between strict schemas and mock
-      initializeFromBooking(booking as any);
+      initializeFromBooking({
+        ...booking,
+        cargo: booking.cargo
+          ? migrateLegacyCargo(booking.cargo)
+          : defaultCargoData(),
+        documents: booking.documents ?? [],
+      });
       setIsInitialized(true);
     }
-  }, [booking, isInitialized, initializeFromBooking]);
+  }, [booking, initializeFromBooking, isInitialized]);
 
   const stepsConfig = [
     {
       title: WIZARD_STEP_TITLES.masterDetails,
-      icon: <AppIcon icon={Icons.rocket} size={PIPELINE_ICON_SIZE} />,
+      icon: <AppIcon icon={Icons.settings} size={PIPELINE_ICON_SIZE} />,
     },
     {
       title: WIZARD_STEP_TITLES.customerDetails,
-      icon: <AppIcon icon={Icons.contact} size={PIPELINE_ICON_SIZE} />,
+      icon: <AppIcon icon={Icons.user} size={PIPELINE_ICON_SIZE} />,
     },
     {
       title: WIZARD_STEP_TITLES.cargoDetails,
-      icon: <AppIcon icon={Icons.bookOpen} size={PIPELINE_ICON_SIZE} />,
+      icon: <AppIcon icon={Icons.container} size={PIPELINE_ICON_SIZE} />,
     },
     {
       title: WIZARD_STEP_TITLES.ensDetails,
@@ -125,11 +93,11 @@ export function BookingAmendRoute() {
     },
     {
       title: WIZARD_STEP_TITLES.fileUpload,
-      icon: <AppIcon icon={Icons.inbox} size={PIPELINE_ICON_SIZE} />,
+      icon: <AppIcon icon={Icons.upload} size={PIPELINE_ICON_SIZE} />,
     },
     {
       title: WIZARD_STEP_TITLES.preview,
-      icon: <AppIcon icon={Icons.fileCheck} size={PIPELINE_ICON_SIZE} />,
+      icon: <AppIcon icon={Icons.eye} size={PIPELINE_ICON_SIZE} />,
     },
   ];
 
@@ -198,6 +166,7 @@ export function BookingAmendRoute() {
 
   return (
     <Card className="wizard-page-card">
+      <BookingModuleStyles />
       <div className="wizard-page-header">
         <ModuleScreenHeader
           icon={Icons.bookOpen}

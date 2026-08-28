@@ -1,13 +1,17 @@
-// Modified by Sekar Nagarajan (2026-08-26 11:54)
+// Modified by Sekar Nagarajan (2026-08-27 19:12)
 import { AppButton } from "@solverminds/shared-ui";
+import { useToast } from "@solverminds/shared-ui/hooks";
 import { useNavigate } from "@tanstack/react-router";
-import { Card, Result, Steps, Typography, theme } from "antd";
+import { Card, Result, Space, Steps, Typography, theme } from "antd";
+import { useState } from "react";
 import { AppIcon, Icons } from "../../components/icons";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import {
   MODULE_TITLES,
   WIZARD_STEP_TITLES,
 } from "../../constants/module-titles";
+import { bookingApi } from "./api/booking.api";
+import { BookingModuleStyles } from "./components/booking-module-styles";
 import { CargoStep } from "./components/CargoStep";
 import { CustomerDetailsStep } from "./components/CustomerDetailsStep";
 import { ENSStep } from "./components/ENSStep";
@@ -16,6 +20,7 @@ import { InsuranceStep } from "./components/InsuranceStep";
 import { MasterDetailsStep } from "./components/MasterDetailsStep";
 import { PreviewStep } from "./components/PreviewStep";
 import { useBookingWizard } from "./hooks/use-booking-wizard";
+import { useBookingStore } from "./stores/booking.store";
 
 const { Text } = Typography;
 
@@ -23,7 +28,10 @@ const PIPELINE_ICON_SIZE = 25;
 
 export function BookingWizardRoute() {
   const { token } = theme.useToken();
+  const toast = useToast();
   const navigate = useNavigate();
+  const payload = useBookingStore((s) => s.payload);
+  const [savingDraft, setSavingDraft] = useState(false);
   const {
     currentStep,
     setCurrentStep,
@@ -33,18 +41,30 @@ export function BookingWizardRoute() {
     handleStartOver,
   } = useBookingWizard();
 
+  const handleSaveDraft = async () => {
+    setSavingDraft(true);
+    try {
+      const { draftId } = await bookingApi.saveDraft(payload);
+      toast.success(`Draft saved (${draftId})`);
+    } catch {
+      toast.error("Failed to save draft");
+    } finally {
+      setSavingDraft(false);
+    }
+  };
+
   const stepsConfig = [
     {
       title: WIZARD_STEP_TITLES.masterDetails,
-      icon: <AppIcon icon={Icons.rocket} size={PIPELINE_ICON_SIZE} />,
+      icon: <AppIcon icon={Icons.settings} size={PIPELINE_ICON_SIZE} />,
     },
     {
       title: WIZARD_STEP_TITLES.customerDetails,
-      icon: <AppIcon icon={Icons.contact} size={PIPELINE_ICON_SIZE} />,
+      icon: <AppIcon icon={Icons.user} size={PIPELINE_ICON_SIZE} />,
     },
     {
       title: WIZARD_STEP_TITLES.cargoDetails,
-      icon: <AppIcon icon={Icons.bookOpen} size={PIPELINE_ICON_SIZE} />,
+      icon: <AppIcon icon={Icons.container} size={PIPELINE_ICON_SIZE} />,
     },
     {
       title: WIZARD_STEP_TITLES.ensDetails,
@@ -56,11 +76,11 @@ export function BookingWizardRoute() {
     },
     {
       title: WIZARD_STEP_TITLES.fileUpload,
-      icon: <AppIcon icon={Icons.inbox} size={PIPELINE_ICON_SIZE} />,
+      icon: <AppIcon icon={Icons.upload} size={PIPELINE_ICON_SIZE} />,
     },
     {
       title: WIZARD_STEP_TITLES.preview,
-      icon: <AppIcon icon={Icons.fileCheck} size={PIPELINE_ICON_SIZE} />,
+      icon: <AppIcon icon={Icons.eye} size={PIPELINE_ICON_SIZE} />,
     },
   ];
 
@@ -113,15 +133,28 @@ export function BookingWizardRoute() {
 
   return (
     <Card className="wizard-page-card">
+      <BookingModuleStyles />
       <div className="wizard-page-header">
         <ModuleScreenHeader
           icon={Icons.bookOpen}
           title={MODULE_TITLES.newBooking}
           marginBottom={0}
           extra={
-            <AppButton onClick={() => navigate({ to: "/app/booking" })}>
-              Back to Dashboard
-            </AppButton>
+            <Space wrap className="custom-scroll">
+              {!confirmation ? (
+                <AppButton
+                  icon={<AppIcon icon={Icons.save} size={16} />}
+                  loading={savingDraft}
+                  disabled={isSubmitting}
+                  onClick={() => void handleSaveDraft()}
+                >
+                  Save Draft
+                </AppButton>
+              ) : null}
+              <AppButton onClick={() => navigate({ to: "/app/booking" })}>
+                Back to Dashboard
+              </AppButton>
+            </Space>
           }
         />
       </div>

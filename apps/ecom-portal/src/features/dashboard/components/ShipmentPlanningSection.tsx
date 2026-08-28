@@ -2,7 +2,6 @@
 import { AppButton } from "@solverminds/shared-ui";
 import { Card, Tooltip, Typography } from "antd";
 
-import { AppIcon, Icons } from "../../../components/icons";
 import type { CalendarWeek, PlanningKpi } from "../mocks/dashboard.mock";
 
 const { Text, Title } = Typography;
@@ -55,16 +54,12 @@ export function ShipmentPlanningSection({
       className="dashboard-panel"
       title={
         <Text strong className="dashboard-panel__title">
-          4. Upcoming Shipment Planning
+          Upcoming Shipment Planning
         </Text>
       }
       extra={
         <Tooltip title="View All Upcoming Bookings">
-          <AppButton
-            type="link"
-            size="small"
-            icon={<AppIcon icon={Icons.eye} size={16} tone="view" />}
-          >
+          <AppButton type="link" size="small">
             View All
           </AppButton>
         </Tooltip>
@@ -78,12 +73,12 @@ export function ShipmentPlanningSection({
         <PlanningKpiTile
           label="FEUs"
           value={kpis.feusNext7Days}
-         tone="primary"
+          tone="primary"
         />
         <PlanningKpiTile
           label="Missing SI"
           value={kpis.missingSI}
-         tone="error"
+          tone="error"
         />
         <PlanningKpiTile label="At Risk" value={kpis.atRisk} tone="warning" />
       </div>
@@ -107,10 +102,16 @@ export function ShipmentPlanningSection({
           </thead>
           <tbody>
             {calendar.map((week, idx) => (
-              <tr key={week.week} className={idx % 2 === 1 ? "is-alt" : undefined}>
+              <tr
+                key={week.week}
+                className={idx % 2 === 1 ? "is-alt" : undefined}
+              >
                 <td>
                   <Text strong>{week.week}</Text>
-                  <Text type="secondary" className="dashboard-metric-tile__period">
+                  <Text
+                    type="secondary"
+                    className="dashboard-metric-tile__period"
+                  >
                     {week.dateRange}
                   </Text>
                 </td>
@@ -119,9 +120,7 @@ export function ShipmentPlanningSection({
                   .map(([day, count]) => (
                     <td key={day} className="is-center">
                       <Tooltip title={`${count} booking(s)`}>
-                        <div className={calCellClass(count)}>
-                          {count || ""}
-                        </div>
+                        <div className={calCellClass(count)}>{count || ""}</div>
                       </Tooltip>
                     </td>
                   ))}

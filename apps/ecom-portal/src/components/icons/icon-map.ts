@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-27 12:56)
+// Modified by Sekar Nagarajan (2026-08-27 18:30)
 // Lucide icon registry — central map for ecom-portal navigation and actions
 import {
   AlertCircle,
@@ -32,6 +32,7 @@ import {
   Compass,
   Contact,
   Container,
+  Copy,
   CreditCard,
   Crown,
   DollarSign,
@@ -83,6 +84,7 @@ import {
   Printer,
   RefreshCw,
   Rocket,
+  Route,
   Rows,
   Save,
   Search,
@@ -132,9 +134,11 @@ export const NavIcons = {
   customerStatement: Contact,
   carbon: Cloud,
   contactUs: Headphones,
+  route: Route,
 } as const;
 
 export const Icons = {
+  route: Route,
   notebook: Notebook,
   anchor: Anchor,
   x: X,
@@ -235,6 +239,7 @@ export const Icons = {
   tag: Tag,
   team: Users,
   trash: Trash2,
+  copy: Copy,
   truck: Truck,
   type: Type,
   upload: Upload,

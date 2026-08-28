@@ -84,20 +84,20 @@ export function ChangePasswordView({
     strengthPercent <= 40
       ? "weak"
       : strengthPercent <= 80
-        ? "medium"
-        : "strong";
+      ? "medium"
+      : "strong";
   const strengthLabel =
     strengthLevel === "weak"
       ? "WEAK"
       : strengthLevel === "medium"
-        ? "MEDIUM"
-        : "STRONG";
+      ? "MEDIUM"
+      : "STRONG";
   const strokeColor =
     strengthLevel === "weak"
       ? token.colorError
       : strengthLevel === "medium"
-        ? token.colorWarning
-        : token.colorSuccess;
+      ? token.colorWarning
+      : token.colorSuccess;
 
   const handleClose = () => {
     form.reset(DEFAULTS);
@@ -158,7 +158,11 @@ export function ChangePasswordView({
               <List.Item>
                 <Space size={6} align="start">
                   {item.valid ? (
-                    <AppIcon icon={Icons.checkCircle} size={16} tone="approve" />
+                    <AppIcon
+                      icon={Icons.checkCircle}
+                      size={16}
+                      tone="approve"
+                    />
                   ) : (
                     <AppIcon icon={Icons.circleX} size={16} tone="reject" />
                   )}
@@ -218,7 +222,7 @@ export function ChangePasswordView({
           title={panelHeader}
           footer={
             <div className="um-drawer-footer form-step-footer">
-              <AppButton onClick={handleClose} disabled={isPending}>
+              <AppButton onClick={handleClose} disabled={isPending} danger>
                 Cancel
               </AppButton>
               <AppButton

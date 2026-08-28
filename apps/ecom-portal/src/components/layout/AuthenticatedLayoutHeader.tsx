@@ -23,9 +23,9 @@ import {
   theme,
 } from "antd";
 import { useState } from "react";
-import { ContactUsDrawer } from "../../features/contact-us/components/ContactUsDrawer";
 import { CustomerPickerModal } from "../../features/auth/components/customer-picker-modal";
 import { useImpersonationController } from "../../features/auth/hooks/use-impersonation-controller";
+import { ContactUsDrawer } from "../../features/contact-us/components/ContactUsDrawer";
 import { useThemePreferences } from "../../features/theme/providers/theme-preferences-provider";
 import { ChangePasswordView } from "../../features/user-modules/components/ChangePasswordView";
 import { MyAlertsView } from "../../features/user-modules/components/MyAlertsView";
@@ -110,8 +110,7 @@ export function AuthenticatedLayoutHeader({
   const preferencesController = useThemePreferences();
 
   // Cpanel system admin — customer-scope only (not dual tenant + customer pickers)
-  const isCpanelAdmin =
-    user?.adminUserType === "A" && user?.loginType === "V";
+  const isCpanelAdmin = user?.adminUserType === "A" && user?.loginType === "V";
 
   // Guest on public search modules: Login/Register chrome — not a fake logged-in user bar
   if (isGuest || !user) {
@@ -237,12 +236,12 @@ export function AuthenticatedLayoutHeader({
   const userRoleDisplay = user?.isImpersonating
     ? "Admin Impersonation"
     : user?.role === "ADMIN" && user?.adminUserType === "A"
-      ? "System Administrator"
-      : user?.role === "VENDOR"
-        ? "Agency Administrator"
-        : user?.isSessionAdmin
-          ? "Superuser (Customer Admin)"
-          : "Customer Account";
+    ? "System Administrator"
+    : user?.role === "VENDOR"
+    ? "Agency Administrator"
+    : user?.isSessionAdmin
+    ? "Superuser (Customer Admin)"
+    : "Customer Account";
   const initials = userNameDisplay
     ? userNameDisplay
         .split(" ")
@@ -394,147 +393,151 @@ export function AuthenticatedLayoutHeader({
           </div>
         </div>
 
-      <div className="app-header-actions">
-        {/* Customer scope: superuser / cpanel default-customer list / sub-accounts */}
-        {(user?.isSessionAdmin ||
-          isCpanelAdmin ||
-          (user?.subCustomerAccounts &&
-            user.subCustomerAccounts.length > 0 &&
-            !isCpanelAdmin)) &&
-        !compactHeader &&
-        (user?.subCustomerAccounts?.length ?? 0) > 0 ? (
-          <Space size={4} align="center">
-            <AppIcon icon={Icons.users} size={16} />
-            <Select
-              value={
-                user?.activeSubCustomer || subCustomerAccounts[0]?.custCode
-              }
-              onChange={(val) => {
-                setActiveSubCustomer(val);
-                const match = subCustomerAccounts.find(
-                  (a) => a.custCode === val,
-                );
-                toast.success(
-                  `Switched Customer Scope to ${match ? match.compName : val}`,
-                );
-              }}
-              className="app-header-select"
-              options={subCustomerAccounts.map((a) => ({
-                value: a.custCode,
-                label: `${a.custCode} - ${a.compName}`,
-              }))}
-            />
-          </Space>
-        ) : null}
+        <div className="app-header-actions">
+          {/* Customer scope: superuser / cpanel default-customer list / sub-accounts */}
+          {(user?.isSessionAdmin ||
+            isCpanelAdmin ||
+            (user?.subCustomerAccounts &&
+              user.subCustomerAccounts.length > 0 &&
+              !isCpanelAdmin)) &&
+          !compactHeader &&
+          (user?.subCustomerAccounts?.length ?? 0) > 0 ? (
+            <Space size={4} align="center">
+              <AppIcon icon={Icons.users} size={16} />
+              <Select
+                value={
+                  user?.activeSubCustomer || subCustomerAccounts[0]?.custCode
+                }
+                onChange={(val) => {
+                  setActiveSubCustomer(val);
+                  const match = subCustomerAccounts.find(
+                    (a) => a.custCode === val,
+                  );
+                  toast.success(
+                    `Switched Customer Scope to ${
+                      match ? match.compName : val
+                    }`,
+                  );
+                }}
+                className="app-header-select"
+                options={subCustomerAccounts.map((a) => ({
+                  value: a.custCode,
+                  label: `${a.custCode} - ${a.compName}`,
+                }))}
+              />
+            </Space>
+          ) : null}
 
-        {/* Tenant switcher: ADMIN only — hidden for cpanel (uses customer selector above) */}
-        {user?.role === "ADMIN" && !isCpanelAdmin && !compactHeader ? (
-          <Space size={4} align="center">
-            <AppIcon icon={Icons.layoutGrid} size={16} />
-            <Select
-              value={activeTenant.id}
-              onChange={(val) => {
-                setTenant(val);
-                toast.info(
-                  `Switched active tenant to ${PRECONFIGURED_TENANTS[val]?.name}`,
-                );
-              }}
-              className="app-header-select"
-              options={Object.values(PRECONFIGURED_TENANTS).map((t) => ({
-                value: t.id,
-                label: `${t.customerCode} - ${t.name}`,
-              }))}
-            />
-          </Space>
-        ) : null}
+          {/* Tenant switcher: ADMIN only — hidden for cpanel (uses customer selector above) */}
+          {user?.role === "ADMIN" && !isCpanelAdmin && !compactHeader ? (
+            <Space size={4} align="center">
+              <AppIcon icon={Icons.layoutGrid} size={16} />
+              <Select
+                value={activeTenant.id}
+                onChange={(val) => {
+                  setTenant(val);
+                  toast.info(
+                    `Switched active tenant to ${PRECONFIGURED_TENANTS[val]?.name}`,
+                  );
+                }}
+                className="app-header-select"
+                options={Object.values(PRECONFIGURED_TENANTS).map((t) => ({
+                  value: t.id,
+                  label: `${t.customerCode} - ${t.name}`,
+                }))}
+              />
+            </Space>
+          ) : null}
 
-        <HeaderThemeToggle />
+          <HeaderThemeToggle />
 
-        <Tooltip title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}>
-          <AppButton
-            type="text"
-            shape="circle"
-            icon={
-              isFullscreen ? (
-                <AppIcon icon={Icons.minimize} size={16} />
-              ) : (
-                <AppIcon icon={Icons.expand} size={16} />
-              )
-            }
-            onClick={toggleFullscreen}
-            aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
-          />
-        </Tooltip>
-
-        <div className="app-header-user-cluster">
-          <Dropdown
-            trigger={["click"]}
-            menu={{ items: profileMenuItems, onClick: handleMenuClick }}
-            placement="bottomRight"
+          <Tooltip
+            title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
           >
-            <button
-              type="button"
-              className="app-header-user-trigger"
-              aria-label="Open account menu"
-            >
-              <Avatar className="app-header-avatar" size="default">
-                {initials}
-              </Avatar>
-              <div className="app-header-user-meta">
-                <Text strong className="app-header-user-name">
-                  {userNameDisplay}
-                </Text>
-                <Text type="secondary" className="app-header-user-role">
-                  {userRoleDisplay}
-                </Text>
-              </div>
-            </button>
-          </Dropdown>
-
-          <Tooltip title="Log Out">
             <AppButton
               type="text"
               shape="circle"
-              className="app-header-logout"
-              icon={<AppIcon icon={Icons.logOut} size={16} tone="reject" />}
-              onClick={handleLogoutConfirm}
-              aria-label="Log out"
+              icon={
+                isFullscreen ? (
+                  <AppIcon icon={Icons.minimize} size={16} />
+                ) : (
+                  <AppIcon icon={Icons.expand} size={16} />
+                )
+              }
+              onClick={toggleFullscreen}
+              aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
             />
           </Tooltip>
+
+          <div className="app-header-user-cluster">
+            <Dropdown
+              trigger={["click"]}
+              menu={{ items: profileMenuItems, onClick: handleMenuClick }}
+              placement="bottomRight"
+            >
+              <button
+                type="button"
+                className="app-header-user-trigger"
+                aria-label="Open account menu"
+              >
+                <Avatar className="app-header-avatar" size="default">
+                  {initials}
+                </Avatar>
+                <div className="app-header-user-meta">
+                  <Text strong className="app-header-user-name">
+                    {userNameDisplay}
+                  </Text>
+                  <Text type="secondary" className="app-header-user-role">
+                    {userRoleDisplay}
+                  </Text>
+                </div>
+              </button>
+            </Dropdown>
+
+            <Tooltip title="Log Out">
+              <AppButton
+                type="text"
+                shape="circle"
+                className="app-header-logout"
+                icon={<AppIcon icon={Icons.logOut} size={20} tone="reject" />}
+                onClick={handleLogoutConfirm}
+                aria-label="Log out"
+              />
+            </Tooltip>
+          </div>
         </div>
-      </div>
 
-      {/* Account Profile Drawer */}
-      <ProfileView
-        open={profileDrawerOpen}
-        onClose={() => setProfileDrawerOpen(false)}
-      />
+        {/* Account Profile Drawer */}
+        <ProfileView
+          open={profileDrawerOpen}
+          onClose={() => setProfileDrawerOpen(false)}
+        />
 
-      {/* Change Password Drawer */}
-      <ChangePasswordView
-        open={changePasswordDrawerOpen}
-        onClose={() => setChangePasswordDrawerOpen(false)}
-      />
+        {/* Change Password Drawer */}
+        <ChangePasswordView
+          open={changePasswordDrawerOpen}
+          onClose={() => setChangePasswordDrawerOpen(false)}
+        />
 
-      {/* My Alert Preferences Drawer */}
-      <MyAlertsView
-        open={myAlertDrawerOpen}
-        onClose={() => setMyAlertDrawerOpen(false)}
-      />
+        {/* My Alert Preferences Drawer */}
+        <MyAlertsView
+          open={myAlertDrawerOpen}
+          onClose={() => setMyAlertDrawerOpen(false)}
+        />
 
-      {/* Global Contact Us Drawer */}
-      <ContactUsDrawer
-        open={contactUsDrawerOpen}
-        onClose={() => setContactUsDrawerOpen(false)}
-      />
+        {/* Global Contact Us Drawer */}
+        <ContactUsDrawer
+          open={contactUsDrawerOpen}
+          onClose={() => setContactUsDrawerOpen(false)}
+        />
 
-      {/* Theme & Appearance Customization Panel */}
-      <AccountPreferencesDrawer
-        open={preferencesOpen}
-        onClose={() => setPreferencesOpen(false)}
-        preferencesController={preferencesController}
-      />
-    </Header>
+        {/* Theme & Appearance Customization Panel */}
+        <AccountPreferencesDrawer
+          open={preferencesOpen}
+          onClose={() => setPreferencesOpen(false)}
+          preferencesController={preferencesController}
+        />
+      </Header>
 
       {/* Customer Picker Modal for impersonation switching */}
       <CustomerPickerModal

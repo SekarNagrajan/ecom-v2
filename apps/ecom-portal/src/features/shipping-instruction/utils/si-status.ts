@@ -8,11 +8,14 @@ export function getSiStatusTagColor(status: SIStatus | string): string {
     case "Draft":
       return "processing";
     case "Create SI":
+    case "Create Multiple SI":
       return "cyan";
     case "Accepted":
       return "green";
     case "Declined":
       return "error";
+    case "Locked":
+      return "default";
     default:
       return "default";
   }
@@ -21,6 +24,7 @@ export function getSiStatusTagColor(status: SIStatus | string): string {
 export function canOpenSiWizard(status: SIStatus): boolean {
   return (
     status === "Create SI" ||
+    status === "Create Multiple SI" ||
     status === "Draft" ||
     status === "Submitted" ||
     status === "Declined"

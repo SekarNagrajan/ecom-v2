@@ -125,7 +125,7 @@ export function QuotesCreateDrawer({ open, onClose }: QuotesCreateDrawerProps) {
       }
       footer={
         <div className="um-drawer-footer form-step-footer">
-          <AppButton onClick={handleClose} disabled={isSubmitting}>
+          <AppButton onClick={handleClose} disabled={isSubmitting} danger>
             Cancel
           </AppButton>
           <AppButton

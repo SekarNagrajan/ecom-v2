@@ -29,8 +29,10 @@ import {
   BillOfLadingMcnListRoute,
   BillOfLadingMcnViewRoute,
 } from "../features/bill-of-lading/bill-of-lading-mcn-route";
+import { BillOfLadingMcnEditRoute } from "../features/bill-of-lading/bill-of-lading-mcn-edit-route";
 import { BillOfLadingViewRoute } from "../features/bill-of-lading/bill-of-lading-view-route";
 import { BillOfLadingWizardRoute } from "../features/bill-of-lading/bill-of-lading-wizard-route";
+import { BillOfLadingSubmitResultRoute } from "../features/bill-of-lading/bill-of-lading-submit-result-route";
 import { BookingAmendRoute } from "../features/booking/booking-amend-route";
 import { BookingDashboardRoute } from "../features/booking/booking-dashboard-route";
 import { BookingViewRoute } from "../features/booking/booking-view-route";
@@ -368,6 +370,20 @@ const blWizardRoute = createRoute({
   component: () => <BillOfLadingWizardRoute />,
 });
 
+const blSubmitResultRoute = createRoute({
+  getParentRoute: () => appRoute,
+  path: "/bl/$blNo/submit-result",
+  beforeLoad: assertCapability("BL"),
+  component: () => <BillOfLadingSubmitResultRoute />,
+});
+
+const blMcnEditRoute = createRoute({
+  getParentRoute: () => appRoute,
+  path: "/bl/mcn/$mcnId/edit",
+  beforeLoad: assertCapability("BL"),
+  component: () => <BillOfLadingMcnEditRoute />,
+});
+
 const blBatchPrintRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/bl/batch-print",
@@ -524,7 +540,9 @@ const routeTree = rootRoute.addChildren([
     blBatchPrintRoute,
     blMcnListRoute,
     blMcnViewRoute,
+    blMcnEditRoute,
     blWizardRoute,
+    blSubmitResultRoute,
     blViewRoute,
     deliveryOrderRoute,
     containerReleaseOrderRoute,

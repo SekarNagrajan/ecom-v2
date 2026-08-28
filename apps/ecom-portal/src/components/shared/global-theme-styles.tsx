@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-27 10:54)
+// Modified by Sekar Nagarajan (2026-08-28 14:18)
 import { theme } from "antd";
 
 import { tokenMix } from "../../features/theme/utils/token-mix";
@@ -19,6 +19,8 @@ export function GlobalThemeStyles() {
       .custom-scroll {
         scrollbar-width: thin;
         scrollbar-color: ${token.colorTextQuaternary} transparent;
+ 
+       
       }
       .custom-scroll::-webkit-scrollbar {
         width: 6px;
@@ -182,6 +184,10 @@ export function GlobalThemeStyles() {
         margin-bottom: 0;
       }
       .form-field-full-width {
+        width: 100%;
+      }
+      .form-field-full-width.ant-input-number,
+      .form-field-full-width.ant-input-number-group-wrapper {
         width: 100%;
       }
       .wizard-step-content > .ant-spin-nested-loading,
@@ -521,11 +527,13 @@ export function GlobalThemeStyles() {
       /*
        * Connector rail: Ant Design 6 uses item-rail (not legacy item-tail).
        * Center the horizontal line through the middle of the sizeXXL circle.
+       * Modified by Sekar Nagarajan (2026-08-28 14:18) — raise rail opacity;
+       * finish used colorBorderSecondary and vanished on white backgrounds.
        */
       .custom-booking-steps .ant-steps-item-rail,
       .custom-booking-steps .ant-steps-item-tail {
         position: absolute !important;
-        top: calc(${token.sizeXXL / 2}px - ${token.lineWidth / 2}px) !important;
+        top: calc(${token.sizeXXL / 2}px - 1px) !important;
         margin-top: 0 !important;
         inset-inline-start: calc(
           50% + ${token.sizeXXL / 2}px + ${token.marginXXS}px
@@ -534,17 +542,31 @@ export function GlobalThemeStyles() {
           100% - ${token.sizeXXL}px - ${token.marginXXS * 2}px
         ) !important;
         height: 0 !important;
-        border-block-start-width: ${token.lineWidth}px !important;
+        border-block-start-width: 2px !important;
         border-block-start-style: solid !important;
+        border-block-start-color: ${token.colorBorder} !important;
         background: transparent !important;
         padding: 0 !important;
+        opacity: 1 !important;
       }
       .custom-booking-steps .ant-steps-item-tail::after {
         display: none !important;
       }
       .custom-booking-steps .ant-steps-item-finish > .ant-steps-item-container > .ant-steps-item-tail::after,
+      .custom-booking-steps .ant-steps-item-finish .ant-steps-item-rail,
       .custom-booking-steps .ant-steps-item-rail-finish {
-        border-block-start-color: ${token.colorBorderSecondary} !important;
+        border-block-start-color: ${token.colorSuccess} !important;
+        opacity: 1 !important;
+      }
+      .custom-booking-steps .ant-steps-item-process .ant-steps-item-rail,
+      .custom-booking-steps .ant-steps-item-rail-process {
+        border-block-start-color: ${token.colorPrimary} !important;
+        opacity: 1 !important;
+      }
+      .custom-booking-steps .ant-steps-item-wait .ant-steps-item-rail,
+      .custom-booking-steps .ant-steps-item-rail-wait {
+        border-block-start-color: ${token.colorBorder} !important;
+        opacity: 1 !important;
       }
       .pipeline-stage-current-badge {
         animation: pipeline-stage-current-pulse 1.5s ease-in-out infinite;
@@ -1181,24 +1203,37 @@ export function GlobalThemeStyles() {
       .pub-layout-bg {
         position: absolute;
         inset: 0;
-        background-image: url(/hero-bg.png);
+        /* Light mode (default) */
+        background-image: url(/landing-bg-light.png);
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
-        opacity: 0.95;
+        opacity: 1;
         z-index: 0;
       }
-      /* Modified by Sekar Nagarajan (2026-08-27 10:54) — lighter white wash so hero image reads through */
+      /* Dark mode — navy logistics hero */
+      html.dark .pub-layout-bg {
+        background-image: url(/hero-bg.png);
+      }
+      /* Modified by Sekar Nagarajan (2026-08-27 15:47) — theme-aware wash for readable hero copy */
       .pub-layout-bg-overlay {
         position: absolute;
         inset: 0;
         background: linear-gradient(
           to right,
-          ${tokenMix(token.colorBgContainer, 72)} 0%,
-          ${tokenMix(token.colorBgContainer, 38)} 45%,
-          transparent 85%
+          ${tokenMix(token.colorBgContainer, 62)} 0%,
+          ${tokenMix(token.colorBgContainer, 32)} 45%,
+          transparent 82%
         );
         z-index: 1;
+      }
+      html.dark .pub-layout-bg-overlay {
+        background: linear-gradient(
+          to right,
+          ${tokenMix(token.colorBgContainer, 70)} 0%,
+          ${tokenMix(token.colorBgContainer, 38)} 48%,
+          transparent 85%
+        );
       }
       .pub-layout-page {
         flex: 1;

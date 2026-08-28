@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 13:04)
+// Modified by Sekar Nagarajan (2026-08-28 11:15)
 import { AppButton } from '@solverminds/shared-ui';
 import { Card, Col, Row, Space, Table, Tag, Typography } from 'antd';
 
@@ -6,6 +6,7 @@ import { Icons } from '../../../components/icons';
 import { ModuleScreenHeader } from '../../../components/shared/module-screen-header';
 import { RESPONSIVE_COL } from '../../../constants/responsive-grid';
 import { MODULE_TITLES, WIZARD_STEP_TITLES, formatModuleScreenTitle } from '../../../constants/module-titles';
+import { SI_CARGO_LINE_COLUMNS } from '../../shipping-instruction/utils/si-cargo-line-columns';
 import type { BLDTO } from '../types/bl.types';
 import { BL_STATUS_LABELS } from '../types/bl.types';
 import { getBLStatusColor } from '../utils/bl-status';
@@ -141,6 +142,35 @@ export function BillOfLadingView({
         </Row>
       </Card>
 
+      {detail.routing ? (
+        <Card className="feature-page-card" title={<Title level={5}>{WIZARD_STEP_TITLES.routing}</Title>} size="small">
+          <Row gutter={[24, 24]}>
+            <Col {...RESPONSIVE_COL.formQuarter}>
+              <Text className="form-field-label">Origin (Print)</Text>
+              <Text strong>{detail.routing.originPrint}</Text>
+            </Col>
+            <Col {...RESPONSIVE_COL.formQuarter}>
+              <Text className="form-field-label">POL (Print)</Text>
+              <Text strong>{detail.routing.polPrint}</Text>
+            </Col>
+            <Col {...RESPONSIVE_COL.formQuarter}>
+              <Text className="form-field-label">POD (Print)</Text>
+              <Text strong>{detail.routing.podPrint}</Text>
+            </Col>
+            <Col {...RESPONSIVE_COL.formQuarter}>
+              <Text className="form-field-label">Delivery (Print)</Text>
+              <Text strong>{detail.routing.deliveryPrint}</Text>
+            </Col>
+            {detail.routing.vesselVoyage ? (
+              <Col {...RESPONSIVE_COL.formHalf}>
+                <Text className="form-field-label">Vessel / Voyage</Text>
+                <Text strong>{detail.routing.vesselVoyage}</Text>
+              </Col>
+            ) : null}
+          </Row>
+        </Card>
+      ) : null}
+
       <Card className="feature-page-card" title={<Title level={5}>Parties</Title>} size="small">
         <Row gutter={[24, 24]}>
           <Col {...RESPONSIVE_COL.third}>
@@ -167,8 +197,69 @@ export function BillOfLadingView({
               <Text>{detail.parties.notify.address}</Text>
             </div>
           </Col>
+          {detail.parties.notify2 ? (
+            <Col {...RESPONSIVE_COL.third}>
+              <div className="bl-party-block">
+                <Text className="form-field-label">NOTIFY 2</Text>
+                <Text strong>{detail.parties.notify2.name}</Text>
+              </div>
+            </Col>
+          ) : null}
+          {detail.parties.forwarder ? (
+            <Col {...RESPONSIVE_COL.third}>
+              <div className="bl-party-block">
+                <Text className="form-field-label">FORWARDER</Text>
+                <Text strong>{detail.parties.forwarder.name}</Text>
+              </div>
+            </Col>
+          ) : null}
         </Row>
       </Card>
+
+      {detail.charges && detail.charges.length > 0 ? (
+        <Card className="feature-page-card" title={<Title level={5}>Charges</Title>} size="small">
+          <Table
+            size="small"
+            pagination={false}
+            rowKey="id"
+            dataSource={detail.charges}
+            columns={[
+              { title: 'Code', dataIndex: 'chargeCode' },
+              { title: 'Description', dataIndex: 'description' },
+              { title: 'P/C/E', dataIndex: 'prepaidCollect', width: 90 },
+              { title: 'Payor', dataIndex: 'payByCustType' },
+            ]}
+          />
+        </Card>
+      ) : null}
+
+      {detail.insurance?.isInsuranceRequired ? (
+        <Card className="feature-page-card" title={<Title level={5}>Insurance</Title>} size="small">
+          <Text>
+            Coverage: {detail.insurance.currency} {detail.insurance.cargoValue}
+            {detail.insurance.policyNo ? ` · Policy ${detail.insurance.policyNo}` : ''}
+          </Text>
+        </Card>
+      ) : null}
+
+      {detail.preview && Object.keys(detail.preview).length > 0 ? (
+        <Card className="feature-page-card" title={<Title level={5}>Preview Fields</Title>} size="small">
+          <Row gutter={[24, 24]}>
+            {detail.preview.declaredValue ? (
+              <Col {...RESPONSIVE_COL.formThird}>
+                <Text className="form-field-label">Declared Value</Text>
+                <Text strong>{detail.preview.declaredValue}</Text>
+              </Col>
+            ) : null}
+            {detail.preview.siCustRemarks ? (
+              <Col {...RESPONSIVE_COL.formHalf}>
+                <Text className="form-field-label">Remarks</Text>
+                <Text>{detail.preview.siCustRemarks}</Text>
+              </Col>
+            ) : null}
+          </Row>
+        </Card>
+      ) : null}
 
       <Card className="feature-page-card" title={<Title level={5}>Cargo & Containers</Title>} size="small">
         {detail.containers.map((c, i) => (
@@ -186,16 +277,7 @@ export function BillOfLadingView({
                 pagination={false}
                 bordered
                 scroll={{ x: 640 }}
-                columns={[
-                  { title: 'Marks & Numbers', dataIndex: 'marksAndNumbers', key: 'marksAndNumbers' },
-                  { title: 'Description', dataIndex: 'description', key: 'description' },
-                  {
-                    title: 'Packages',
-                    key: 'packages',
-                    render: (_, record) => `${record.packageCount} ${record.packageType}`,
-                  },
-                  { title: 'Gross Wt (KG)', dataIndex: 'grossWeight', key: 'grossWeight' },
-                ]}
+                columns={SI_CARGO_LINE_COLUMNS}
               />
             </div>
           </div>

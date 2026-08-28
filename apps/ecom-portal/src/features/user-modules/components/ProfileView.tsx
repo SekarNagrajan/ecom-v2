@@ -127,6 +127,7 @@ export function ProfileView({ open = true, onClose }: ProfileViewProps) {
             name="companyName"
             label={optLabel("Company Name")}
             size="large"
+            prefix={<AppIcon icon={Icons.building} size={16} />}
             disabled
             formItemProps={FIELD_ITEM_PROPS}
           />
@@ -233,7 +234,7 @@ export function ProfileView({ open = true, onClose }: ProfileViewProps) {
       icon={Icons.user}
       title={MODULE_TITLES.profile}
       description={PROFILE_DESCRIPTION}
-      extra={!isDrawer ? verifiedTag : undefined}
+      // extra={!isDrawer ? verifiedTag : undefined}
       compact={isDrawer}
     />
   );
@@ -259,7 +260,7 @@ export function ProfileView({ open = true, onClose }: ProfileViewProps) {
           title={panelHeader}
           footer={
             <div className="um-drawer-footer form-step-footer">
-              <AppButton onClick={handleClose} disabled={isSaving}>
+              <AppButton onClick={handleClose} disabled={isSaving} danger>
                 Cancel
               </AppButton>
               <AppButton
@@ -277,7 +278,7 @@ export function ProfileView({ open = true, onClose }: ProfileViewProps) {
             <UmLoadingCenter />
           ) : (
             <>
-              {verifiedTag}
+              {/* {verifiedTag} */}
               {formFields}
             </>
           )}

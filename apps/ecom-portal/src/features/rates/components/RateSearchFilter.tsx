@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 10:55)
+// Modified by Sekar Nagarajan (2026-08-28 15:09)
 import { AppButton } from "@solverminds/shared-ui";
 import {
   Col,
@@ -11,9 +11,11 @@ import {
   Typography,
 } from "antd";
 import dayjs from "dayjs";
-import { AppIcon, Icons } from "../../../components/icons";
+import { useMemo, useState } from "react";
 
-const { RangePicker } = DatePicker;
+import { AppIcon, Icons } from "../../../components/icons";
+import { usePortSearch } from "../../landing/api/landing.queries";
+
 const { Text } = Typography;
 
 export type RateSearchMode =
@@ -22,7 +24,7 @@ export type RateSearchMode =
   | "SERVICE_CONTRACTS"
   | "SPOT_QUOTES";
 
-const POPULAR_PORTS = [
+const FALLBACK_PORTS = [
   { value: "USNYC", label: "USNYC - New York, USA" },
   { value: "SGSIN", label: "SGSIN - Singapore, Singapore" },
   { value: "NLRTM", label: "NLRTM - Rotterdam, Netherlands" },
@@ -63,17 +65,47 @@ export interface RateSearchParams {
 interface RateSearchFilterProps {
   onSearch: (params: RateSearchParams) => void;
   isLoading?: boolean;
+  onRequestQuote?: () => void;
 }
 
 function SearchActionsLabel() {
   return <span className="rates-search-actions-label">&nbsp;</span>;
 }
 
+function usePortSelectOptions(initialQuery = "") {
+  const [query, setQuery] = useState(initialQuery);
+  const { data: ports = [], isFetching } = usePortSearch(query);
+
+  const options = useMemo(() => {
+    if (ports.length === 0) return FALLBACK_PORTS;
+    return ports.map((p) => ({
+      value: p.portCode,
+      label: `${p.portCode} - ${p.portName}`,
+    }));
+  }, [ports]);
+
+  return { query, setQuery, options, isFetching };
+}
+
 export function RateSearchFilter({
   onSearch,
   isLoading,
+  onRequestQuote,
 }: RateSearchFilterProps) {
   const [form] = Form.useForm();
+  const searchMode: RateSearchMode =
+    Form.useWatch("searchMode", form) || "PUBLISHED_TARIFF";
+
+  const polAC = usePortSelectOptions("USNYC");
+  const podAC = usePortSelectOptions("SGSIN");
+
+  const showCommodity =
+    searchMode === "PUBLISHED_TARIFF" ||
+    searchMode === "SERVICE_CONTRACTS" ||
+    searchMode === "SPOT_QUOTES";
+  const showEquipment = searchMode !== "SERVICE_CONTRACTS";
+  const showShipmentDate = searchMode !== "SPOT_QUOTES";
+  const isRfqMode = searchMode === "SPOT_QUOTES";
 
   const handleSwapPorts = () => {
     const pol = form.getFieldValue("polCode");
@@ -82,24 +114,47 @@ export function RateSearchFilter({
       polCode: pod,
       podCode: pol,
     });
+    polAC.setQuery(typeof pod === "string" ? pod : "");
+    podAC.setQuery(typeof pol === "string" ? pol : "");
   };
 
   const handleReset = () => {
     form.resetFields();
+    polAC.setQuery("USNYC");
+    podAC.setQuery("SGSIN");
   };
 
   const handleFinish = (values: Record<string, unknown>) => {
-    const dateRange = values.dateRange as
-      | [dayjs.Dayjs, dayjs.Dayjs]
-      | undefined;
+    const mode = values.searchMode as RateSearchMode;
+    if (mode === "SPOT_QUOTES" && onRequestQuote) {
+      onSearch({
+        searchMode: mode,
+        polCode: values.polCode as string,
+        podCode: values.podCode as string,
+        eqpType: values.eqpType as string,
+        commodity: values.commodity as string,
+        fromDate: values.shipmentDate
+          ? (values.shipmentDate as dayjs.Dayjs).format("YYYY-MM-DD")
+          : undefined,
+        toDate: values.toDate
+          ? (values.toDate as dayjs.Dayjs).format("YYYY-MM-DD")
+          : undefined,
+      });
+      return;
+    }
+
     onSearch({
-      searchMode: values.searchMode as RateSearchMode,
+      searchMode: mode,
       polCode: values.polCode as string,
       podCode: values.podCode as string,
       eqpType: values.eqpType as string,
       commodity: values.commodity as string,
-      fromDate: dateRange ? dateRange[0].format("YYYY-MM-DD") : undefined,
-      toDate: dateRange ? dateRange[1].format("YYYY-MM-DD") : undefined,
+      fromDate: values.shipmentDate
+        ? (values.shipmentDate as dayjs.Dayjs).format("YYYY-MM-DD")
+        : undefined,
+      toDate: values.toDate
+        ? (values.toDate as dayjs.Dayjs).format("YYYY-MM-DD")
+        : undefined,
     });
   };
 
@@ -116,7 +171,8 @@ export function RateSearchFilter({
             podCode: "SGSIN",
             eqpType: "40' High Cube Dry",
             commodity: "GEN-CGO",
-            dateRange: [dayjs(), dayjs().add(90, "day")],
+            shipmentDate: dayjs(),
+            toDate: dayjs().add(90, "day"),
           }}
           onFinish={handleFinish}
         >
@@ -125,7 +181,7 @@ export function RateSearchFilter({
               <Segmented
                 options={[
                   {
-                    label: "Published Tariff",
+                    label: "Tariff",
                     value: "PUBLISHED_TARIFF",
                     icon: <AppIcon icon={Icons.dollarSign} size={16} />,
                   },
@@ -150,7 +206,7 @@ export function RateSearchFilter({
           </div>
 
           <Row gutter={[16, 8]} align="bottom">
-            <Col xs={24} md={11} lg={8}>
+            <Col xs={24} md={11} lg={showEquipment ? 7 : 8}>
               <Form.Item
                 name="polCode"
                 label={
@@ -164,11 +220,12 @@ export function RateSearchFilter({
                   size="large"
                   showSearch
                   placeholder="Where are you shipping from?"
-                  options={POPULAR_PORTS}
-                  filterOption={(input, option) =>
-                    (option?.label ?? "")
-                      .toLowerCase()
-                      .includes(input.toLowerCase())
+                  filterOption={false}
+                  onSearch={polAC.setQuery}
+                  options={polAC.options}
+                  loading={polAC.isFetching}
+                  notFoundContent={
+                    polAC.isFetching ? "Searching ports…" : "No ports found"
                   }
                 />
               </Form.Item>
@@ -189,7 +246,7 @@ export function RateSearchFilter({
               </div>
             </Col>
 
-            <Col xs={24} md={11} lg={8}>
+            <Col xs={24} md={11} lg={showEquipment ? 7 : 8}>
               <Form.Item
                 name="podCode"
                 label={
@@ -203,79 +260,152 @@ export function RateSearchFilter({
                   size="large"
                   showSearch
                   placeholder="Where is cargo going?"
-                  options={POPULAR_PORTS}
-                  filterOption={(input, option) =>
-                    (option?.label ?? "")
-                      .toLowerCase()
-                      .includes(input.toLowerCase())
+                  filterOption={false}
+                  onSearch={podAC.setQuery}
+                  options={podAC.options}
+                  loading={podAC.isFetching}
+                  notFoundContent={
+                    podAC.isFetching ? "Searching ports…" : "No ports found"
                   }
                 />
               </Form.Item>
             </Col>
 
-            <Col xs={24} md={24} lg={7}>
-              <Form.Item
-                name="eqpType"
-                label={
-                  <span className="form-field-label rates-port-label">
-                    Equipment Type
-                  </span>
-                }
-              >
-                <Select size="large" options={EQUIPMENT_TYPES} />
-              </Form.Item>
-            </Col>
+            {showEquipment ? (
+              <Col xs={24} md={12} lg={9}>
+                <Form.Item
+                  name="eqpType"
+                  label={
+                    <span className="form-field-label rates-port-label">
+                      Equipment Type
+                    </span>
+                  }
+                >
+                  <Select size="large" options={EQUIPMENT_TYPES} />
+                </Form.Item>
+              </Col>
+            ) : null}
           </Row>
 
           <Row gutter={[16, 8]} align="bottom">
-            <Col xs={24} md={8} lg={7}>
-              <Form.Item
-                name="commodity"
-                label={<span className="form-field-label">Commodity</span>}
-              >
-                <Select size="large" options={COMMODITIES} />
-              </Form.Item>
-            </Col>
+            {showCommodity ? (
+              <Col xs={24} md={8} lg={isRfqMode ? 8 : 6}>
+                <Form.Item
+                  name="commodity"
+                  label={<span className="form-field-label">Commodity</span>}
+                >
+                  <Select size="large" options={COMMODITIES} />
+                </Form.Item>
+              </Col>
+            ) : null}
 
-            <Col xs={24} md={10} lg={9}>
-              <Form.Item
-                name="dateRange"
-                label={
-                  <span className="form-field-label rates-port-label">
-                    From Date / To Date
-                  </span>
-                }
-              >
-                <RangePicker
-                  size="large"
-                  className="rates-date-range"
-                  format="YYYY-MM-DD"
-                />
-              </Form.Item>
-            </Col>
+            {showShipmentDate ? (
+              <>
+                <Col xs={24} md={8} lg={showCommodity ? 5 : 7}>
+                  <Form.Item
+                    name="shipmentDate"
+                    label={
+                      <span className="form-field-label rates-port-label">
+                        Shipment Date
+                      </span>
+                    }
+                  >
+                    <DatePicker
+                      size="large"
+                      className="rates-date-range"
+                      format="YYYY-MM-DD"
+                    />
+                  </Form.Item>
+                </Col>
+                <Col xs={24} md={8} lg={showCommodity ? 5 : 7}>
+                  <Form.Item
+                    name="toDate"
+                    label={
+                      <span className="form-field-label rates-port-label">
+                        Valid Through
+                      </span>
+                    }
+                  >
+                    <DatePicker
+                      size="large"
+                      className="rates-date-range"
+                      format="YYYY-MM-DD"
+                    />
+                  </Form.Item>
+                </Col>
+              </>
+            ) : null}
 
-            <Col xs={24} md={6} lg={8}>
+            <Col
+              xs={24}
+              md={showShipmentDate ? 24 : 16}
+              lg={isRfqMode ? 16 : showCommodity ? 8 : 10}
+            >
               <Form.Item
                 label={<SearchActionsLabel />}
                 className="rates-search-actions-field"
               >
                 <div className="rates-search-actions">
-                  <AppButton
-                    type="primary"
-                    size="large"
-                    icon={<AppIcon icon={Icons.search} size={16} />}
-                    loading={isLoading}
-                    htmlType="submit"
-                  >
-                    Search Rates
-                  </AppButton>
-                  <AppButton
-                    size="large"
-                    icon={<AppIcon icon={Icons.refreshCw} size={16} />}
-                    onClick={handleReset}
-                  >
-                    Reset
-                  </AppButton>
+                  {isRfqMode && onRequestQuote ? (
+                    <AppButton
+                      type="primary"
+                      size="large"
+                      icon={<AppIcon icon={Icons.zap} size={16} />}
+                      onClick={() => {
+                        void form.validateFields(["polCode", "podCode"]).then(
+                          () => {
+                            onSearch({
+                              searchMode: "SPOT_QUOTES",
+                              polCode: form.getFieldValue("polCode"),
+                              podCode: form.getFieldValue("podCode"),
+                              eqpType: form.getFieldValue("eqpType"),
+                              commodity: form.getFieldValue("commodity"),
+                            });
+                            onRequestQuote();
+                          },
+                        );
+                      }}
+                    >
+                      Request for Quote
+                    </AppButton>
+                  ) : (
+                    <AppButton
+                      type="primary"
+                      size="large"
+                      icon={<AppIcon icon={Icons.search} size={16} />}
+                      loading={isLoading}
+                      htmlType="submit"
+                    >
+                      Search Rates
+                    </AppButton>
+                  )}
+                  {!isRfqMode ? (
+                    <AppButton
+                      size="large"
+                      icon={<AppIcon icon={Icons.refreshCw} size={16} />}
+                      onClick={handleReset}
+                    >
+                      Reset
+                    </AppButton>
+                  ) : (
+                    <>
+                      <AppButton
+                        size="large"
+                        icon={<AppIcon icon={Icons.search} size={16} />}
+                        loading={isLoading}
+                        htmlType="submit"
+                      >
+                        View Quotes
+                      </AppButton>
+                      <AppButton
+                        size="large"
+                        icon={<AppIcon icon={Icons.refreshCw} size={16} />}
+                        onClick={handleReset}
+                      >
+                        Reset
+                      </AppButton>
+                    </>
+                  )}
                 </div>
               </Form.Item>
             </Col>

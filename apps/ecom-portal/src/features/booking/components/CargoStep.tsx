@@ -378,8 +378,11 @@ function ContainerDetailPanel({
                   optionFilterProp="label"
                   onChange={(value: string) => {
                     field.onChange(value);
+                    // Modified by Sekar Nagarajan (2026-09-01 00:08) — reefer defaults to operating (NOR = No)
                     if (!isReeferContainerType(value)) {
                       setValue(`containers.${ci}.reeferMode`, "none");
+                    } else if (reeferMode === "none") {
+                      setValue(`containers.${ci}.reeferMode`, "operating");
                     }
                   }}
                 />
@@ -481,9 +484,9 @@ function ContainerDetailPanel({
                 name={`containers.${ci}.reeferMode`}
                 render={({ field }) => (
                   <Switch
-                    checked={field.value === "operating"}
+                    checked={field.value === "nor"}
                     onChange={(checked) =>
-                      field.onChange(checked ? "operating" : "none")
+                      field.onChange(checked ? "nor" : "operating")
                     }
                     checkedChildren="Yes"
                     unCheckedChildren="No"
@@ -494,7 +497,7 @@ function ContainerDetailPanel({
           ) : null}
         </Row>
 
-        {showReeferMode && reeferMode === "operating" ? (
+        {showReeferMode && reeferMode !== "nor" ? (
           <div className="booking-cargo-detail__section">
             <Text strong className="booking-cargo-detail__section-title">
               Reefer Details

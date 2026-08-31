@@ -97,7 +97,7 @@ export const MOCK_SI_DETAIL: SIDTO = {
   loadPort: "SGSIN - SINGAPORE",
   dischargePort: "JPTYO - TOKYO",
   delivery: "JPTYO - TOKYO",
-  // Modified by Sekar Nagarajan (2026-08-31 23:08) — agreement party mirrors shipper; consignee removed from defaults
+  // Modified by Sekar Nagarajan (2026-08-31 23:52) — default sections: shipper, consignee, notify
   parties: {
     shipper: {
       name: "Global Logistics Corp",
@@ -106,12 +106,13 @@ export const MOCK_SI_DETAIL: SIDTO = {
       country: "SG",
       printOnBl: true,
     },
-    agreementParty: {
-      name: "Global Logistics Corp",
-      address: "123 Export Ave, Suite 400",
-      city: "Singapore",
-      country: "SG",
+    consignee: {
+      name: "Pacific Imports Co.",
+      address: "456 Dockside Avenue, Chiyoda",
+      city: "Tokyo",
+      country: "JP",
       printOnBl: true,
+      toOrder: false,
     },
     notify: {
       name: "Customs Brokers Inc",

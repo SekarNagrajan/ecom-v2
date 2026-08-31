@@ -1,9 +1,10 @@
 // Created by Sekar Nagarajan (2026-08-28 11:15)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
-import { Card, Col, Input, Radio, Row, Select, Space, Typography } from "antd";
+import { Card, Col, Input, Row, Select, Space, Switch, Typography } from "antd";
 import { Controller, useForm, type Resolver } from "react-hook-form";
 
+import { AppIcon, Icons } from "../../../../components/icons";
 import { RESPONSIVE_COL } from "../../../../constants/responsive-grid";
 import { ensSchema, type EnsData } from "../../../booking/types/booking.types";
 import type { BLWizardStepProps } from "./MasterDetailsStep";
@@ -72,18 +73,21 @@ export function BlEnsStep({
           <Row gutter={[24, 24]}>
             <Col {...RESPONSIVE_COL.formQuarter}>
               <label className="form-field-label">EU Customs Zone</label>
+              {/* Modified by Sekar Nagarajan (2026-09-01 00:28) — switch toggle */}
               <Controller
                 control={control}
                 name="euCustomsZone"
-                render={({ field: { value, onChange, ...field } }) => (
-                  <Radio.Group
-                    {...field}
-                    value={value}
-                    onChange={(e) => onChange(e.target.value)}
-                  >
-                    <Radio value={true}>Yes</Radio>
-                    <Radio value={false}>No</Radio>
-                  </Radio.Group>
+                render={({ field: { value, onChange } }) => (
+                  <div className="bl-ens-switch-control">
+                    <Switch
+                      size="medium"
+                      className="bl-ens-switch"
+                      checked={value}
+                      onChange={onChange}
+                      checkedChildren={<AppIcon icon={Icons.check} size={12} />}
+                      unCheckedChildren={<AppIcon icon={Icons.x} size={12} />}
+                    />
+                  </div>
                 )}
               />
             </Col>
@@ -210,14 +214,20 @@ export function BlEnsStep({
 
             <Row gutter={[24, 24]} className="form-step-section">
               <Col {...RESPONSIVE_COL.half}>
-                <Card size="small" title="Buyer Details" className="form-step-card">
+                <Card
+                  size="small"
+                  title="Buyer Details"
+                  className="form-step-card"
+                >
                   <Row gutter={[16, 16]}>
                     <Col span={24}>
                       <label className="form-field-label">Name</label>
                       <Controller
                         control={control}
                         name="buyerName"
-                        render={({ field }) => <Input {...field} size="large" />}
+                        render={({ field }) => (
+                          <Input {...field} size="large" />
+                        )}
                       />
                     </Col>
                     <Col span={24}>
@@ -225,7 +235,9 @@ export function BlEnsStep({
                       <Controller
                         control={control}
                         name="buyerAddress"
-                        render={({ field }) => <Input {...field} size="large" />}
+                        render={({ field }) => (
+                          <Input {...field} size="large" />
+                        )}
                       />
                     </Col>
                     <Col span={12}>
@@ -233,7 +245,9 @@ export function BlEnsStep({
                       <Controller
                         control={control}
                         name="buyerCity"
-                        render={({ field }) => <Input {...field} size="large" />}
+                        render={({ field }) => (
+                          <Input {...field} size="large" />
+                        )}
                       />
                     </Col>
                     <Col span={12}>
@@ -241,21 +255,29 @@ export function BlEnsStep({
                       <Controller
                         control={control}
                         name="buyerCountry"
-                        render={({ field }) => <Input {...field} size="large" />}
+                        render={({ field }) => (
+                          <Input {...field} size="large" />
+                        )}
                       />
                     </Col>
                   </Row>
                 </Card>
               </Col>
               <Col {...RESPONSIVE_COL.half}>
-                <Card size="small" title="Seller Details" className="form-step-card">
+                <Card
+                  size="small"
+                  title="Seller Details"
+                  className="form-step-card"
+                >
                   <Row gutter={[16, 16]}>
                     <Col span={24}>
                       <label className="form-field-label">Name</label>
                       <Controller
                         control={control}
                         name="sellerName"
-                        render={({ field }) => <Input {...field} size="large" />}
+                        render={({ field }) => (
+                          <Input {...field} size="large" />
+                        )}
                       />
                     </Col>
                     <Col span={24}>
@@ -263,7 +285,9 @@ export function BlEnsStep({
                       <Controller
                         control={control}
                         name="sellerAddress"
-                        render={({ field }) => <Input {...field} size="large" />}
+                        render={({ field }) => (
+                          <Input {...field} size="large" />
+                        )}
                       />
                     </Col>
                     <Col span={12}>
@@ -271,7 +295,9 @@ export function BlEnsStep({
                       <Controller
                         control={control}
                         name="sellerCity"
-                        render={({ field }) => <Input {...field} size="large" />}
+                        render={({ field }) => (
+                          <Input {...field} size="large" />
+                        )}
                       />
                     </Col>
                     <Col span={12}>
@@ -279,7 +305,9 @@ export function BlEnsStep({
                       <Controller
                         control={control}
                         name="sellerCountry"
-                        render={({ field }) => <Input {...field} size="large" />}
+                        render={({ field }) => (
+                          <Input {...field} size="large" />
+                        )}
                       />
                     </Col>
                   </Row>

@@ -781,9 +781,36 @@ export function BlModuleStyles() {
       .bl-master-detail-grid--4 {
         grid-template-columns: repeat(4, minmax(0, 1fr));
       }
-      .bl-master-detail-grid--5,
+      /* Modified by Sekar Nagarajan (2026-09-01 00:06) — single-row Vessels grid */
+      .bl-master-detail-grid--5 {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+      }
       .bl-master-detail-grid--refs {
         grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .bl-container-block__title.ant-typography {
+        display: inline-flex;
+        align-items: center;
+        padding: ${token.paddingXXS}px ${token.paddingSM}px;
+        border-radius: ${token.borderRadius}px;
+        background: ${token.colorWarningBg};
+        border: 1px solid ${token.colorWarning};
+        color: ${token.colorText};
+      }
+
+      /* Modified by Sekar Nagarajan (2026-09-01 00:28) — ENS switch (icon colors + alignment) */
+      .bl-ens-switch-control {
+        display: flex;
+        align-items: center;
+        min-height: ${token.controlHeight}px;
+      }
+      .bl-ens-switch .app-icon {
+        color: ${token.colorPrimary};
+        display: inline-flex;
+      }
+      .bl-ens-switch.ant-switch-checked .app-icon {
+        color: ${token.colorTextLightSolid};
       }
       .bl-master-readonly-field {
         min-width: 0;

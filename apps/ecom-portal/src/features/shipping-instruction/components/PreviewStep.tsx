@@ -6,9 +6,7 @@ import { AppButton } from "@solverminds/shared-ui";
 import { Col, Descriptions, Row, Table, Tag, Typography } from "antd";
 
 import { AppIcon, Icons } from "../../../components/icons";
-import {
-  WIZARD_STEP_TITLES
-} from "../../../constants/module-titles";
+import { WIZARD_STEP_TITLES } from "../../../constants/module-titles";
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import type { SIWizardStepId } from "../config/si-wizard-config";
 import { DEFAULT_SI_WIZARD_CONFIG } from "../config/si-wizard-config";
@@ -240,17 +238,17 @@ export function PreviewStep({
             data.containers.map((container, index) => (
               <div key={container.id} className="si-container-block">
                 <div className="si-container-block__header">
-                  <Text strong>
+                  <Text strong className="si-container-block__title">
                     Container {index + 1}: {container.containerNo || "—"} (
                     {container.eqpSize || "—"})
                   </Text>
                   <div>
-                    <Text type="secondary">
+                    <Text type="success">
                       Carrier Seal:{" "}
                       <Text strong>{container.carrierSeal || "N/A"}</Text>
                     </Text>
-                    {" · "}
-                    <Text type="secondary">
+                    {" | "}
+                    <Text type="danger">
                       Shipper Seal:{" "}
                       <Text strong>{container.shipperSeal || "N/A"}</Text>
                     </Text>

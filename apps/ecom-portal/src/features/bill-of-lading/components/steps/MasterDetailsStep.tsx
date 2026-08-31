@@ -10,7 +10,6 @@ import type { ReactNode } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 import { RESPONSIVE_COL } from "../../../../constants/responsive-grid";
-import { SiVesselScheduleCard } from "../../../shipping-instruction/components/si-vessel-schedule-card";
 import type { BLWizardStepId } from "../../config/bl-wizard-config";
 import { useBLWizardConfig } from "../../hooks/use-bl-wizard-config";
 import type { BLDTO, BLMasterStepValues } from "../../types/bl.types";
@@ -93,6 +92,7 @@ export function MasterDetailsStep({
 
   const routing = data.routing;
   const primaryLeg = routing?.scheduleLegs?.[0];
+  const vesselVoyage = routing?.vesselVoyage || "—";
   const origin =
     data.origin || routing?.originPrint || primaryLeg?.polPortName || "—";
   const loadPort = data.loadPort || routing?.polPrint || "—";
@@ -249,26 +249,33 @@ export function MasterDetailsStep({
           </Col>
         </Row>
 
+        {/* Modified by Sekar Nagarajan (2026-09-01 00:06) — read-only Vessels fields (replaces schedule card) */}
         <Row gutter={[24, 24]} className="bl-master-step-row">
           <Col {...RESPONSIVE_COL.full}>
             <Card
-              className="form-step-card form-step-section bl-master-step-card bl-master-step-card--route"
+              className="form-step-card form-step-section bl-master-step-card"
               title={
                 <div className="bl-master-card-title-row">
                   <Title level={5} className="form-step-card-title">
-                    Vessel Details
+                    Vessels
                   </Title>
-                  <Tag color="processing">Read only</Tag>
                 </div>
               }
             >
-              <SiVesselScheduleCard
-                routing={routing}
-                origin={origin}
-                loadPort={loadPort}
-                dischargePort={dischargePort}
-                delivery={delivery}
-              />
+              <div className="bl-master-detail-grid bl-master-detail-grid--5">
+                <ReadonlyField
+                  label="Vessel / Voyage Number"
+                  value={vesselVoyage}
+                  emphasis
+                />
+                <ReadonlyField label="Place of Receipt" value={origin} />
+                <ReadonlyField label="Port of Loading" value={loadPort} />
+                <ReadonlyField
+                  label="Port of Discharge"
+                  value={dischargePort}
+                />
+                <ReadonlyField label="Place of Delivery" value={delivery} />
+              </div>
             </Card>
           </Col>
         </Row>

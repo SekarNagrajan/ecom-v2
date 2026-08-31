@@ -1,14 +1,13 @@
 // Modified by Sekar Nagarajan (2026-08-31 16:03)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
-import { Card, Col, Input, Row, Segmented, Tag, Typography } from "antd";
+import { Card, Col, Input, Row, Segmented, Typography } from "antd";
 import type { ReactNode } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import type { SiMasterDetailsForm, SIWizardStepProps } from "../types/si.types";
 import { siMasterDetailsSchema } from "../types/si.types";
-import { SiVesselScheduleCard } from "./si-vessel-schedule-card";
 
 const { Text, Title } = Typography;
 
@@ -71,6 +70,7 @@ export function MasterDetailsStep({
 
   const routing = data.routing;
   const primaryLeg = routing?.scheduleLegs?.[0];
+  const vesselVoyage = routing?.vesselVoyage || "—";
   const origin =
     data.origin || routing?.originPrint || primaryLeg?.polPortName || "—";
   const loadPort = data.loadPort || routing?.polPrint || "—";
@@ -229,27 +229,32 @@ export function MasterDetailsStep({
           </Col>
         </Row>
 
-        {/* Modified by Sekar Nagarajan (2026-08-31 16:03) — exact Schedules ScheduleCard */}
+        {/* Modified by Sekar Nagarajan (2026-09-01 00:00) — read-only Vessels fields (replaces schedule card) */}
         <Row gutter={[24, 24]} className="si-master-step-row">
           <Col {...RESPONSIVE_COL.full}>
             <Card
-              className="form-step-card form-step-section si-master-step-card si-master-step-card--route"
+              className="form-step-card form-step-section si-master-step-card"
               title={
                 <div className="si-master-card-title-row">
                   <Title level={5} className="form-step-card-title">
                     Vessel Details
                   </Title>
-                  <Tag color="processing">Read only</Tag>
                 </div>
               }
             >
-              <SiVesselScheduleCard
-                routing={routing}
-                origin={origin}
-                loadPort={loadPort}
-                dischargePort={dischargePort}
-                delivery={delivery}
-              />
+              <div className="si-master-detail-grid si-master-detail-grid--5">
+                <ReadonlyField
+                  label="Vessel / Voyage Number"
+                  value={vesselVoyage}
+                />
+                <ReadonlyField label="Place of Receipt" value={origin} />
+                <ReadonlyField label="Port of Loading" value={loadPort} />
+                <ReadonlyField
+                  label="Port of Discharge"
+                  value={dischargePort}
+                />
+                <ReadonlyField label="Place of Delivery" value={delivery} />
+              </div>
             </Card>
           </Col>
         </Row>

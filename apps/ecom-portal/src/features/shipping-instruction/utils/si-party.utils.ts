@@ -20,13 +20,15 @@ export interface SiPartyCardData extends PartyCardData {
   toOrder?: boolean;
 }
 
+// Modified by Sekar Nagarajan (2026-08-31 23:52)
 /**
- * Primary parties always shown on the top row.
- * Booking Party (shipper) is view-only; Agreement Party is editable but not deletable.
+ * Primary parties always shown as default sections.
+ * Booking Party (shipper) is view-only; Consignee & Notify are editable but not deletable.
  */
 export const DEFAULT_SI_PARTY_ROLES: readonly SiPartyRoleKey[] = [
   "shipper",
-  "agreementParty",
+  "consignee",
+  "notify",
 ] as const;
 
 export const SI_PARTY_ROLE_OPTIONS: { key: SiPartyRoleKey; label: string }[] = [
@@ -58,12 +60,33 @@ function toSiCard(card: PartyCardData): SiPartyCardData {
   };
 }
 
-/** ecom-app mock seed for SI/BL when parties are empty. */
+// Modified by Sekar Nagarajan (2026-08-31 23:52)
+/** ecom-app mock seed for SI when parties are empty — shipper, consignee, notify. */
 export const MOCK_DEFAULT_SI_PARTY_CARDS: Partial<
   Record<SiPartyRoleKey, SiPartyCardData>
 > = {
   shipper: toSiCard(MOCK_DEFAULT_PARTY_CARDS.shipper!),
-  agreementParty: toSiCard(MOCK_DEFAULT_PARTY_CARDS.agreementParty!),
+  consignee: {
+    company: "Pacific Imports Co.",
+    contact: "Mary Chen",
+    address: "456 Dockside Avenue, Tokyo 100-0001",
+    city: "Tokyo",
+    country: "JP",
+    email: "mary.chen@pacificimports.com",
+    phone: "+81 3 1234 5678",
+    printOnBl: true,
+    toOrder: false,
+  },
+  notify: {
+    company: "Eastbound Logistics Inc.",
+    contact: "David Park",
+    address: "789 Terminal Road, Busan 48058",
+    city: "Busan",
+    country: "KR",
+    email: "david.park@eastbound.com",
+    phone: "+82 51 234 5678",
+    printOnBl: true,
+  },
 };
 
 /** CSS modifier for mild per-role card background. */
@@ -148,17 +171,14 @@ export function siPartiesToCards(
   return cards;
 }
 
-// Modified by Sekar Nagarajan (2026-08-31 23:08)
-/** Use saved parties when present; otherwise seed ecom-app mock defaults.
- *  Auto-populates agreementParty from shipper when missing. */
+// Modified by Sekar Nagarajan (2026-08-31 23:52)
+/** Use saved parties when present; otherwise seed ecom-app mock defaults
+ *  (shipper, consignee, notify). */
 export function initialSiPartyCards(
   parties: PartyDirectory | SIDTO["parties"] | null | undefined,
 ): Partial<Record<SiPartyRoleKey, SiPartyCardData>> {
   const fromPayload = siPartiesToCards(parties);
   if (Object.keys(fromPayload).length > 0) {
-    if (!fromPayload.agreementParty && fromPayload.shipper) {
-      fromPayload.agreementParty = { ...fromPayload.shipper };
-    }
     return fromPayload;
   }
   return structuredClone(MOCK_DEFAULT_SI_PARTY_CARDS);

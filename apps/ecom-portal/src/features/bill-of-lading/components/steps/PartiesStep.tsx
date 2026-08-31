@@ -322,12 +322,11 @@ export function PartiesStep({
             </div>
           }
         >
-          {/* Modified by Sekar Nagarajan (2026-08-31 22:59) — role-based action rules + unified 3-col grid */}
+          {/* Modified by Sekar Nagarajan (2026-08-31 23:55) — default sections: shipper, consignee, notify */}
           <Row gutter={[24, 24]} className="booking-party-grid">
             {DEFAULT_SI_PARTY_ROLES.map((role) => {
               const card = cards[role];
               const isBookingParty = role === "shipper";
-              const isAgreementParty = role === "agreementParty";
               return (
                 <Col
                   key={role}
@@ -340,7 +339,7 @@ export function PartiesStep({
                       card={card}
                       readOnly={isBookingParty}
                       canEdit={!isBookingParty}
-                      canDelete={!isBookingParty && !isAgreementParty}
+                      canDelete={false}
                       onEdit={() => openEdit(role)}
                       onDelete={() => handleDeleteCard(role)}
                       onUpdateFlag={(patch) => updateCardFlag(role, patch)}

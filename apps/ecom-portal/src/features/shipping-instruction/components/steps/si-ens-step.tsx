@@ -4,9 +4,10 @@
  */
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
-import { Alert, Card, Segmented, Typography } from "antd";
+import { Alert, Card, Segmented, Switch, Typography } from "antd";
 import { Controller, useForm } from "react-hook-form";
 
+import { AppIcon, Icons } from "../../../../components/icons";
 import {
   emptySiEnsDeclarant,
   emptySiEnsParty,
@@ -119,51 +120,52 @@ export function SiEnsStep({
             </Title>
           }
         >
-          <div className="si-ens-required-row">
+          {/* Modified by Sekar Nagarajan (2026-09-01 00:21) — ENS toggle + options in one row */}
+          <div className="si-ens-required-row si-ens-top-row">
             <div className="form-field-cell">
-              <label className="form-field-label">ENS Required?</label>
+              <label className="form-field-label">ENS</label>
               <Controller
                 control={control}
                 name="ensRequired"
                 render={({ field: { value, onChange } }) => (
-                  <Segmented
-                    block
-                    className="form-field-full-width si-master-segmented"
-                    value={value ? "yes" : "no"}
-                    onChange={(next) => onChange(next === "yes")}
-                    options={[
-                      { label: "No", value: "no" },
-                      { label: "Yes", value: "yes" },
-                    ]}
-                  />
+                  <div className="si-ens-switch-control">
+                    <Switch
+                      size="medium"
+                      className="si-ens-switch"
+                      checked={value}
+                      onChange={onChange}
+                      checkedChildren={<AppIcon icon={Icons.check} size={12} />}
+                      unCheckedChildren={<AppIcon icon={Icons.x} size={12} />}
+                    />
+                  </div>
                 )}
               />
             </div>
-          </div>
 
-          {!ensRequired ? (
-            <Text type="secondary">
-              ENS filing is not required. Continue to the next step.
-            </Text>
-          ) : (
-            <div className="si-ens-sections">
-              <div className="si-ens-options-grid">
+            {ensRequired ? (
+              <>
                 <div className="form-field-cell">
                   <label className="form-field-label">EU Customs Zone</label>
                   <Controller
                     control={control}
                     name="euCustZone"
                     render={({ field: { value, onChange } }) => (
-                      <Segmented
-                        block
-                        className="form-field-full-width si-master-segmented"
-                        value={value}
-                        onChange={onChange}
-                        options={[
-                          { label: "Yes", value: "Y" },
-                          { label: "No", value: "N" },
-                        ]}
-                      />
+                      <div className="si-ens-switch-control">
+                        <Switch
+                          size="medium"
+                          className="si-ens-switch"
+                          checked={value === "Y"}
+                          onChange={(checked: boolean) =>
+                            onChange(checked ? "Y" : "N")
+                          }
+                          checkedChildren={
+                            <AppIcon icon={Icons.check} size={12} />
+                          }
+                          unCheckedChildren={
+                            <AppIcon icon={Icons.x} size={12} />
+                          }
+                        />
+                      </div>
                     )}
                   />
                 </div>
@@ -197,9 +199,7 @@ export function SiEnsStep({
                 </div>
 
                 <div className="form-field-cell">
-                  <label className="form-field-label">
-                    Type of ENS Filing
-                  </label>
+                  <label className="form-field-label">Type of ENS Filing</label>
                   <Controller
                     control={control}
                     name="ensFillingType"
@@ -249,8 +249,16 @@ export function SiEnsStep({
                     )}
                   />
                 </div>
-              </div>
+              </>
+            ) : null}
+          </div>
 
+          {!ensRequired ? (
+            <Text type="secondary">
+              ENS filing is not required. Continue to the next step.
+            </Text>
+          ) : (
+            <div className="si-ens-sections">
               {isMultipleFiling ? (
                 <Card
                   size="small"

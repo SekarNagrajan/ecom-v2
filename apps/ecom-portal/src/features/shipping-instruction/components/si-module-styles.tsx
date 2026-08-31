@@ -153,6 +153,16 @@ export function SiModuleStyles() {
         gap: ${token.marginSM}px;
         flex-wrap: wrap;
       }
+      /* Modified by Sekar Nagarajan (2026-09-01 00:32) — highlight container no + size */
+      .si-container-block__title.ant-typography {
+        display: inline-flex;
+        align-items: center;
+        padding: ${token.paddingXXS}px ${token.paddingSM}px;
+        border-radius: ${token.borderRadius}px;
+        background: ${token.colorWarningBg};
+        border: 1px solid ${token.colorWarning};
+        color: ${token.colorText};
+      }
 
       .si-cargo-card-toolbar {
         margin-bottom: 0;
@@ -904,6 +914,10 @@ export function SiModuleStyles() {
       .si-master-detail-grid--4 {
         grid-template-columns: repeat(4, minmax(0, 1fr));
       }
+      /* Modified by Sekar Nagarajan (2026-09-01 00:02) — single-row Vessels grid */
+      .si-master-detail-grid--5 {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+      }
       .si-master-readonly-field {
         min-width: 0;
       }
@@ -1223,6 +1237,33 @@ export function SiModuleStyles() {
         margin-bottom: ${token.marginLG}px;
         gap: ${token.marginSM}px;
       }
+      /* Modified by Sekar Nagarajan (2026-09-01 00:21) — ENS toggle + options single row */
+      .si-ens-top-row {
+        max-width: 100%;
+        grid-template-columns: minmax(0, 0.5fr) repeat(4, minmax(0, 1fr));
+        align-items: start;
+        column-gap: ${token.marginLG}px;
+        row-gap: ${token.marginMD}px;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-01 00:17) — ENS switch icon colors (off = blue, on = white) */
+      .si-ens-switch-control {
+        display: flex;
+        align-items: center;
+        min-height: ${token.controlHeight}px;
+      }
+      .si-ens-switch.ant-switch {
+        width: auto;
+        min-width: ${token.controlHeightLG * 1}px;
+        align-self: flex-start;
+        justify-self: start;
+      }
+      .si-ens-switch .app-icon {
+        color: ${token.colorPrimary};
+        display: inline-flex;
+      }
+      .si-ens-switch.ant-switch-checked .app-icon {
+        color: ${token.colorTextLightSolid};
+      }
       /* Modified by Sekar Nagarajan (2026-08-31 16:19) — ENS field padding/margin (token-only) */
       .si-ens-sections {
         display: flex;
@@ -1309,7 +1350,8 @@ export function SiModuleStyles() {
       }
 
       @media (max-width: 1199px) {
-        .si-master-detail-grid--4 {
+        .si-master-detail-grid--4,
+        .si-master-detail-grid--5 {
           grid-template-columns: repeat(2, minmax(0, 1fr));
         }
         .si-master-sections-row .si-master-detail-grid--3,
@@ -1321,6 +1363,7 @@ export function SiModuleStyles() {
         .si-routing-form-grid,
         .si-ens-form-grid,
         .si-ens-options-grid,
+        .si-ens-top-row,
         .si-ens-party-grid {
           grid-template-columns: repeat(2, minmax(0, 1fr));
         }
@@ -1336,6 +1379,7 @@ export function SiModuleStyles() {
         }
         .si-master-detail-grid--3,
         .si-master-detail-grid--4,
+        .si-master-detail-grid--5,
         .si-master-options-grid,
         .si-master-compliance-grid,
         .si-routing-form-grid,
@@ -1344,6 +1388,7 @@ export function SiModuleStyles() {
         .si-charge-tab-form-grid,
         .si-ens-form-grid,
         .si-ens-options-grid,
+        .si-ens-top-row,
         .si-ens-party-grid {
           grid-template-columns: minmax(0, 1fr);
         }

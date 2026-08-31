@@ -56,8 +56,10 @@ export function BlPreviewEmpty({ label }: { label?: string }) {
   );
 }
 
+// Modified by Sekar Nagarajan (2026-08-31 23:43)
 export function BlPreviewPartyBlock({
   role,
+  roleKey,
   name,
   address,
   city,
@@ -65,15 +67,20 @@ export function BlPreviewPartyBlock({
   extra,
 }: {
   role: string;
+  roleKey?: string;
   name?: string;
   address?: string;
   city?: string;
   country?: string;
   extra?: ReactNode;
 }) {
+  const blockClass = roleKey
+    ? `bl-party-block booking-party-card booking-party-card--${roleKey}`
+    : "bl-party-block";
+
   if (!name) {
     return (
-      <div className="bl-party-block">
+      <div className={blockClass}>
         <span className="form-field-label">{role}</span>
         <BlPreviewEmpty />
       </div>
@@ -81,7 +88,7 @@ export function BlPreviewPartyBlock({
   }
 
   return (
-    <div className="bl-party-block">
+    <div className={blockClass}>
       <span className="form-field-label">
         {role}
         {extra}

@@ -1086,6 +1086,13 @@ export function BookingModuleStyles() {
         border-radius: ${token.borderRadiusLG}px;
         background: ${token.colorFillAlter};
       }
+      /* Modified by Sekar Nagarajan (2026-08-31 23:31) — gap between commodity rows and DG section */
+      .booking-cargo-commodity-card > .ant-row + .ant-row,
+      .booking-cargo-commodity-card > .form-step-section {
+        margin-top: ${token.marginLG}px;
+        padding-top: ${token.paddingMD}px;
+        border-top: 1px dashed ${token.colorBorderSecondary};
+      }
       .booking-cargo-commodity-card__header {
         display: flex;
         align-items: center;
@@ -1240,6 +1247,41 @@ export function BookingModuleStyles() {
         display: flex;
         flex-direction: column;
         gap: ${token.marginXXS}px;
+      }
+      /* Modified by Sekar Nagarajan (2026-08-31 23:42) — preview party blocks with role tints */
+      .booking-party-block.booking-party-card {
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        height: 100%;
+      }
+      .booking-party-block.booking-party-card--shipper {
+        background: ${primaryTint8};
+        border-color: ${primaryTint14};
+      }
+      .booking-party-block.booking-party-card--agreementParty {
+        background: ${geekblueTint8};
+        border-color: ${geekblueTint14};
+      }
+      .booking-party-block.booking-party-card--consignee {
+        background: ${successTint8};
+        border-color: ${successTint14};
+      }
+      .booking-party-block.booking-party-card--notifyParty {
+        background: ${cyanTint8};
+        border-color: ${cyanTint14};
+      }
+      .booking-party-block.booking-party-card--notifyParty2 {
+        background: ${infoTint8};
+        border-color: ${infoTint14};
+      }
+      .booking-party-block.booking-party-card--forwarder {
+        background: ${warningTint8};
+        border-color: ${warningTint14};
+      }
+      .booking-party-block.booking-party-card--siSubmittingParty {
+        background: ${orangeTint8};
+        border-color: ${orangeTint14};
       }
 
       .booking-rates-table {

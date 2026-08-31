@@ -6,8 +6,23 @@ import { tokenMix } from "../../theme/utils/token-mix";
 export function BlModuleStyles() {
   const { token } = theme.useToken();
   const primaryTint8 = tokenMix(token.colorPrimary, 8);
+  const primaryTint14 = tokenMix(token.colorPrimary, 14);
   const successTint8 = tokenMix(token.colorSuccess, 8);
+  const successTint14 = tokenMix(token.colorSuccess, 14);
   const successTint28 = tokenMix(token.colorSuccess, 28);
+  // Modified by Sekar Nagarajan (2026-08-31 23:43) — role-tinted preview party blocks
+  const geekblueTint8 = tokenMix(token.geekblue, 8);
+  const geekblueTint14 = tokenMix(token.geekblue, 14);
+  const cyanTint8 = tokenMix(token.cyan, 8);
+  const cyanTint14 = tokenMix(token.cyan, 14);
+  const warningTint8 = tokenMix(token.colorWarning, 8);
+  const warningTint14 = tokenMix(token.colorWarning, 14);
+  const infoTint8 = tokenMix(token.colorInfo, 8);
+  const infoTint14 = tokenMix(token.colorInfo, 14);
+  const orangeTint8 = tokenMix(token.orange, 8);
+  const orangeTint14 = tokenMix(token.orange, 14);
+  const purpleTint8 = tokenMix(token.purple, 8);
+  const purpleTint14 = tokenMix(token.purple, 14);
 
   return (
     <style>{`
@@ -478,6 +493,44 @@ export function BlModuleStyles() {
         display: flex;
         flex-direction: column;
         gap: ${token.marginXXS}px;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        border-radius: ${token.borderRadiusLG}px;
+        height: 100%;
+        border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorBgContainer};
+      }
+      /* Modified by Sekar Nagarajan (2026-08-31 23:43) — role-tinted preview party blocks */
+      .bl-party-block.booking-party-card--shipper {
+        background: ${primaryTint8};
+        border-color: ${primaryTint14};
+      }
+      .bl-party-block.booking-party-card--agreementParty {
+        background: ${geekblueTint8};
+        border-color: ${geekblueTint14};
+      }
+      .bl-party-block.booking-party-card--consignee {
+        background: ${successTint8};
+        border-color: ${successTint14};
+      }
+      .bl-party-block.booking-party-card--notify {
+        background: ${cyanTint8};
+        border-color: ${cyanTint14};
+      }
+      .bl-party-block.booking-party-card--notify2 {
+        background: ${infoTint8};
+        border-color: ${infoTint14};
+      }
+      .bl-party-block.booking-party-card--notify3 {
+        background: ${orangeTint8};
+        border-color: ${orangeTint14};
+      }
+      .bl-party-block.booking-party-card--forwarder {
+        background: ${warningTint8};
+        border-color: ${warningTint14};
+      }
+      .bl-party-block.booking-party-card--warehouse {
+        background: ${purpleTint8};
+        border-color: ${purpleTint14};
       }
       .bl-container-block {
         margin-bottom: ${token.marginMD}px;

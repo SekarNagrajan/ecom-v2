@@ -151,7 +151,8 @@ export interface BLDTO {
   preview: BLPreviewFields;
   parties: {
     shipper: BLParty;
-    consignee: BLConsigneeParty;
+    // Modified by Sekar Nagarajan (2026-08-31 23:08) — consignee optional (assigned via parties step, not default)
+    consignee?: BLConsigneeParty;
     notify: BLParty;
     notify2?: BLParty;
     notify3?: BLParty;

@@ -21,8 +21,7 @@ import { Controller, useForm } from "react-hook-form";
 
 import { AppIcon, Icons } from "../../../../components/icons";
 import {
-  MODULE_TITLES,
-  WIZARD_STEP_TITLES,
+  WIZARD_STEP_TITLES
 } from "../../../../constants/module-titles";
 import { RESPONSIVE_COL } from "../../../../constants/responsive-grid";
 import { SI_CARGO_LINE_COLUMNS } from "../../../shipping-instruction/utils/si-cargo-line-columns";
@@ -77,8 +76,8 @@ export function PreviewStep({
     data.releaseType === "O"
       ? "Original"
       : data.releaseType === "T"
-        ? "Telex Release"
-        : dash(data.releaseType);
+      ? "Telex Release"
+      : dash(data.releaseType);
 
   const {
     control,
@@ -121,15 +120,6 @@ export function PreviewStep({
   return (
     <div className="form-step-layout">
       <div className="custom-scroll form-step-scroll bl-preview-scroll">
-        <div className="bl-preview-header">
-          <Title level={4} className="form-step-card-title bl-preview-title">
-            {MODULE_TITLES.billOfLadingSummary}
-          </Title>
-          <Text type="secondary" className="bl-preview-subtitle">
-            Review each section. Use Edit to jump back and update that step.
-          </Text>
-        </div>
-
         <BlPreviewSection
           title={WIZARD_STEP_TITLES.masterDetails}
           onEdit={() => go("master")}
@@ -170,7 +160,10 @@ export function PreviewStep({
                 {data.t2lFiling ? "Yes" : "No"}
               </Descriptions.Item>
             ) : null}
-            {data.origin || data.loadPort || data.dischargePort || data.delivery ? (
+            {data.origin ||
+            data.loadPort ||
+            data.dischargePort ||
+            data.delivery ? (
               <>
                 <Descriptions.Item label="Origin">
                   {dash(data.origin)}
@@ -193,43 +186,64 @@ export function PreviewStep({
           title={WIZARD_STEP_TITLES.parties}
           onEdit={() => go("parties")}
         >
+          {/* Modified by Sekar Nagarajan (2026-08-31 23:43) — role-tinted preview party blocks */}
           <Row gutter={[24, 24]}>
             <Col {...RESPONSIVE_COL.third}>
               <BlPreviewPartyBlock
-                role="Shipper"
+                role="Booking Party"
+                roleKey="shipper"
                 name={data.parties.shipper.name}
                 address={data.parties.shipper.address}
                 city={data.parties.shipper.city}
                 country={data.parties.shipper.country}
               />
             </Col>
-            <Col {...RESPONSIVE_COL.third}>
-              <BlPreviewPartyBlock
-                role="Consignee"
-                name={data.parties.consignee.name}
-                address={data.parties.consignee.address}
-                city={data.parties.consignee.city}
-                country={data.parties.consignee.country}
-                extra={
-                  data.parties.consignee.toOrder ? (
-                    <Text type="warning"> (To Order)</Text>
-                  ) : null
-                }
-              />
-            </Col>
-            <Col {...RESPONSIVE_COL.third}>
-              <BlPreviewPartyBlock
-                role="Notify Party"
-                name={data.parties.notify.name}
-                address={data.parties.notify.address}
-                city={data.parties.notify.city}
-                country={data.parties.notify.country}
-              />
-            </Col>
-            {data.parties.forwarder ? (
+            {data.parties.agreementParty?.name ? (
+              <Col {...RESPONSIVE_COL.third}>
+                <BlPreviewPartyBlock
+                  role="Agreement Party"
+                  roleKey="agreementParty"
+                  name={data.parties.agreementParty.name}
+                  address={data.parties.agreementParty.address}
+                  city={data.parties.agreementParty.city}
+                  country={data.parties.agreementParty.country}
+                />
+              </Col>
+            ) : null}
+            {data.parties.consignee?.name ? (
+              <Col {...RESPONSIVE_COL.third}>
+                <BlPreviewPartyBlock
+                  role="Consignee"
+                  roleKey="consignee"
+                  name={data.parties.consignee.name}
+                  address={data.parties.consignee.address}
+                  city={data.parties.consignee.city}
+                  country={data.parties.consignee.country}
+                  extra={
+                    data.parties.consignee?.toOrder ? (
+                      <Text type="warning"> (To Order)</Text>
+                    ) : null
+                  }
+                />
+              </Col>
+            ) : null}
+            {data.parties.notify?.name ? (
+              <Col {...RESPONSIVE_COL.third}>
+                <BlPreviewPartyBlock
+                  role="Notify Party"
+                  roleKey="notify"
+                  name={data.parties.notify.name}
+                  address={data.parties.notify.address}
+                  city={data.parties.notify.city}
+                  country={data.parties.notify.country}
+                />
+              </Col>
+            ) : null}
+            {data.parties.forwarder?.name ? (
               <Col {...RESPONSIVE_COL.third}>
                 <BlPreviewPartyBlock
                   role="Forwarder"
+                  roleKey="forwarder"
                   name={data.parties.forwarder.name}
                   address={data.parties.forwarder.address}
                   city={data.parties.forwarder.city}
@@ -237,10 +251,11 @@ export function PreviewStep({
                 />
               </Col>
             ) : null}
-            {data.parties.warehouse ? (
+            {data.parties.warehouse?.name ? (
               <Col {...RESPONSIVE_COL.third}>
                 <BlPreviewPartyBlock
                   role="Warehouse"
+                  roleKey="warehouse"
                   name={data.parties.warehouse.name}
                   address={data.parties.warehouse.address}
                   city={data.parties.warehouse.city}
@@ -538,7 +553,10 @@ export function PreviewStep({
                     control={control}
                     name="aesDisclaimer"
                     render={({ field }) => (
-                      <Radio.Group {...field} className="bl-preview-radio-group">
+                      <Radio.Group
+                        {...field}
+                        className="bl-preview-radio-group"
+                      >
                         <Radio value="provided">Provided</Radio>
                         <Radio value="not_applicable">Not Applicable</Radio>
                       </Radio.Group>

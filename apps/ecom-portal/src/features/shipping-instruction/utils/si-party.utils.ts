@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-31 14:36)
+// Modified by Sekar Nagarajan (2026-08-31 22:59)
 import {
   MOCK_DEFAULT_PARTY_CARDS,
   type PartyCardData,
@@ -21,13 +21,12 @@ export interface SiPartyCardData extends PartyCardData {
 }
 
 /**
- * Primary parties always shown on one 3-column row (ecom-app CustomerDetails parity:
- * Booking Party · Agreement Party · Consignee).
+ * Primary parties always shown on the top row.
+ * Booking Party (shipper) is view-only; Agreement Party is editable but not deletable.
  */
 export const DEFAULT_SI_PARTY_ROLES: readonly SiPartyRoleKey[] = [
   "shipper",
   "agreementParty",
-  "consignee",
 ] as const;
 
 export const SI_PARTY_ROLE_OPTIONS: { key: SiPartyRoleKey; label: string }[] = [
@@ -65,10 +64,6 @@ export const MOCK_DEFAULT_SI_PARTY_CARDS: Partial<
 > = {
   shipper: toSiCard(MOCK_DEFAULT_PARTY_CARDS.shipper!),
   agreementParty: toSiCard(MOCK_DEFAULT_PARTY_CARDS.agreementParty!),
-  consignee: {
-    ...toSiCard(MOCK_DEFAULT_PARTY_CARDS.consignee!),
-    toOrder: false,
-  },
 };
 
 /** CSS modifier for mild per-role card background. */
@@ -153,12 +148,17 @@ export function siPartiesToCards(
   return cards;
 }
 
-/** Use saved parties when present; otherwise seed ecom-app mock defaults. */
+// Modified by Sekar Nagarajan (2026-08-31 23:08)
+/** Use saved parties when present; otherwise seed ecom-app mock defaults.
+ *  Auto-populates agreementParty from shipper when missing. */
 export function initialSiPartyCards(
   parties: PartyDirectory | SIDTO["parties"] | null | undefined,
 ): Partial<Record<SiPartyRoleKey, SiPartyCardData>> {
   const fromPayload = siPartiesToCards(parties);
   if (Object.keys(fromPayload).length > 0) {
+    if (!fromPayload.agreementParty && fromPayload.shipper) {
+      fromPayload.agreementParty = { ...fromPayload.shipper };
+    }
     return fromPayload;
   }
   return structuredClone(MOCK_DEFAULT_SI_PARTY_CARDS);

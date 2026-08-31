@@ -5,21 +5,12 @@
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { useNavigate } from "@tanstack/react-router";
-import {
-  Col,
-  Descriptions,
-  Flex,
-  Result,
-  Row,
-  Tag,
-  Typography,
-} from "antd";
+import { Col, Descriptions, Flex, Result, Row, Tag, Typography } from "antd";
 import { useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import {
-  MODULE_TITLES,
-  WIZARD_STEP_TITLES,
+  WIZARD_STEP_TITLES
 } from "../../../constants/module-titles";
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import { bookingApi } from "../api/booking.api";
@@ -102,18 +93,6 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
     <div className="form-step-layout">
       <BookingModuleStyles />
       <div className="custom-scroll form-step-scroll booking-preview-scroll">
-        <div className="booking-preview-header">
-          <Title
-            level={4}
-            className="form-step-card-title booking-preview-title"
-          >
-            {MODULE_TITLES.bookingSummary}
-          </Title>
-          <Text type="secondary" className="booking-preview-subtitle">
-            Review each section. Use Edit to jump back and update that step.
-          </Text>
-        </div>
-
         <BookingPreviewSection
           title={WIZARD_STEP_TITLES.masterDetails}
           onEdit={() => go(BOOKING_STEP.master)}
@@ -175,6 +154,7 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
             <Col {...RESPONSIVE_COL.third}>
               <BookingPreviewPartyBlock
                 role="Booking Party"
+                roleKey="shipper"
                 name={parties.shipperName}
                 address={parties.shipperAddress}
                 city={parties.shipperCity}
@@ -183,42 +163,62 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
             </Col>
             <Col {...RESPONSIVE_COL.third}>
               <BookingPreviewPartyBlock
-                role="Consignee"
-                name={parties.consigneeName}
-                address={parties.consigneeAddress}
-                city={parties.consigneeCity}
-                country={parties.consigneeCountry}
+                role="Agreement Party"
+                roleKey="agreementParty"
+                name={parties.agreementParty}
               />
             </Col>
-            <Col {...RESPONSIVE_COL.third}>
-              <BookingPreviewPartyBlock
-                role="Notify Party"
-                name={parties.notifyPartyName}
-                address={parties.notifyPartyAddress}
-                city={parties.notifyPartyCity}
-                country={parties.notifyPartyCountry}
-              />
-            </Col>
+            {parties.consigneeName ? (
+              <Col {...RESPONSIVE_COL.third}>
+                <BookingPreviewPartyBlock
+                  role="Consignee"
+                  roleKey="consignee"
+                  name={parties.consigneeName}
+                  address={parties.consigneeAddress}
+                  city={parties.consigneeCity}
+                  country={parties.consigneeCountry}
+                />
+              </Col>
+            ) : null}
+            {parties.notifyPartyName ? (
+              <Col {...RESPONSIVE_COL.third}>
+                <BookingPreviewPartyBlock
+                  role="Notify Party"
+                  roleKey="notifyParty"
+                  name={parties.notifyPartyName}
+                  address={parties.notifyPartyAddress}
+                  city={parties.notifyPartyCity}
+                  country={parties.notifyPartyCountry}
+                />
+              </Col>
+            ) : null}
             {parties.notifyParty2Name ? (
               <Col {...RESPONSIVE_COL.third}>
                 <BookingPreviewPartyBlock
                   role="Notify Party 2"
+                  roleKey="notifyParty2"
                   name={parties.notifyParty2Name}
                 />
               </Col>
             ) : null}
-            <Col {...RESPONSIVE_COL.third}>
-              <div className="booking-party-block">
-                <span className="form-field-label">Agreement Party</span>
-                <Text strong>{dash(parties.agreementParty)}</Text>
-              </div>
-            </Col>
-            <Col {...RESPONSIVE_COL.third}>
-              <div className="booking-party-block">
-                <span className="form-field-label">SI Submitting Party</span>
-                <Text strong>{dash(parties.siSubmittingParty)}</Text>
-              </div>
-            </Col>
+            {parties.freightForwarder ? (
+              <Col {...RESPONSIVE_COL.third}>
+                <BookingPreviewPartyBlock
+                  role="Forwarder"
+                  roleKey="forwarder"
+                  name={parties.freightForwarder}
+                />
+              </Col>
+            ) : null}
+            {parties.siSubmittingParty ? (
+              <Col {...RESPONSIVE_COL.third}>
+                <BookingPreviewPartyBlock
+                  role="SI Submitting Party"
+                  roleKey="siSubmittingParty"
+                  name={parties.siSubmittingParty}
+                />
+              </Col>
+            ) : null}
           </Row>
         </BookingPreviewSection>
 
@@ -297,9 +297,7 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
                 <Descriptions.Item label="Declarant">
                   {ens.declarantName
                     ? `${ens.declarantName}${
-                        ens.declarantCountry
-                          ? ` (${ens.declarantCountry})`
-                          : ""
+                        ens.declarantCountry ? ` (${ens.declarantCountry})` : ""
                       }`
                     : "—"}
                 </Descriptions.Item>

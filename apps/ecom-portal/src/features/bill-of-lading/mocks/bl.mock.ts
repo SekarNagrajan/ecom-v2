@@ -324,6 +324,7 @@ const sharedContainers = [
   },
 ];
 
+// Modified by Sekar Nagarajan (2026-08-31 23:08) — agreement party mirrors shipper; consignee removed from defaults
 const sharedParties = {
   shipper: {
     name: "Global Logistics Corp",
@@ -332,13 +333,12 @@ const sharedParties = {
     country: "SG",
     printOnBl: true,
   },
-  consignee: {
-    name: "Tokyo Imports Ltd",
-    address: "456 Import St, Chiyoda",
-    city: "Tokyo",
-    country: "JP",
+  agreementParty: {
+    name: "Global Logistics Corp",
+    address: "123 Export Ave, Suite 400",
+    city: "Singapore",
+    country: "SG",
     printOnBl: true,
-    toOrder: false,
   },
   notify: {
     name: "Customs Brokers Inc",
@@ -661,7 +661,14 @@ export const mockBLDetailsSeed: Record<string, BLDTO> = {
     issuedAt: "2026-08-19T12:00:00Z",
     parties: {
       ...sharedParties,
-      consignee: { ...sharedParties.consignee, toOrder: true },
+      consignee: {
+        name: "Tokyo Imports Ltd",
+        address: "456 Import St, Chiyoda",
+        city: "Tokyo",
+        country: "JP",
+        printOnBl: true,
+        toOrder: true,
+      },
     },
   }),
 };

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-31 14:36)
+// Modified by Sekar Nagarajan (2026-08-31 22:44)
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { Card, Col, Row, Typography } from "antd";
@@ -34,14 +34,22 @@ const { Text, Title } = Typography;
 function PartyRoleCard({
   role,
   card,
+  readOnly = false,
+  canEdit = true,
+  canDelete = true,
   onEdit,
   onDelete,
 }: {
   role: PartyRoleKey;
   card: PartyCardData;
+  readOnly?: boolean;
+  canEdit?: boolean;
+  canDelete?: boolean;
   onEdit: () => void;
   onDelete: () => void;
 }) {
+  const showActions = !readOnly && (canEdit || canDelete);
+
   return (
     <Card
       size="small"
@@ -52,19 +60,25 @@ function PartyRoleCard({
         </Title>
       }
       extra={
-        <ListActionsRow>
-          <ListActionButton
-            title="Edit Party"
-            icon={<AppIcon icon={Icons.edit} size={16} tone="edit" />}
-            onClick={onEdit}
-          />
-          <ListActionButton
-            title="Delete Party"
-            icon={<AppIcon icon={Icons.trash} size={16} tone="delete" />}
-            tone="delete"
-            onClick={onDelete}
-          />
-        </ListActionsRow>
+        showActions ? (
+          <ListActionsRow>
+            {canEdit ? (
+              <ListActionButton
+                title="Edit Party"
+                icon={<AppIcon icon={Icons.edit} size={16} tone="edit" />}
+                onClick={onEdit}
+              />
+            ) : null}
+            {canDelete ? (
+              <ListActionButton
+                title="Delete Party"
+                icon={<AppIcon icon={Icons.trash} size={16} tone="delete" />}
+                tone="delete"
+                onClick={onDelete}
+              />
+            ) : null}
+          </ListActionsRow>
+        ) : null
       }
     >
       <div className="booking-party-card__body">
@@ -251,10 +265,12 @@ export function CustomerDetailsStep() {
             </div>
           }
         >
-          {/* Modified by Sekar Nagarajan (2026-08-31 14:36) — Booking / Agreement / Consignee + mock seed */}
+          {/* Modified by Sekar Nagarajan (2026-08-31 22:50) — unified 3-column grid */}
           <Row gutter={[24, 24]} className="booking-party-grid">
             {DEFAULT_PARTY_ROLES.map((role) => {
               const card = cards[role];
+              const isBookingParty = role === "shipper";
+              const isAgreementParty = role === "agreementParty";
               return (
                 <Col
                   key={role}
@@ -265,6 +281,9 @@ export function CustomerDetailsStep() {
                     <PartyRoleCard
                       role={role}
                       card={card}
+                      readOnly={isBookingParty}
+                      canEdit={!isBookingParty}
+                      canDelete={!isBookingParty && !isAgreementParty}
                       onEdit={() => openEdit(role)}
                       onDelete={() => handleDeleteCard(role)}
                     />
@@ -277,29 +296,21 @@ export function CustomerDetailsStep() {
                 </Col>
               );
             })}
+            {otherEntries.map(([role, card]) => (
+              <Col
+                key={role}
+                {...RESPONSIVE_COL.formThird}
+                className="booking-party-grid__col"
+              >
+                <PartyRoleCard
+                  role={role}
+                  card={card}
+                  onEdit={() => openEdit(role)}
+                  onDelete={() => handleDeleteCard(role)}
+                />
+              </Col>
+            ))}
           </Row>
-
-          {otherEntries.length > 0 ? (
-            <Row
-              gutter={[24, 24]}
-              className="booking-party-grid booking-party-grid--other"
-            >
-              {otherEntries.map(([role, card]) => (
-                <Col
-                  key={role}
-                  {...RESPONSIVE_COL.formThird}
-                  className="booking-party-grid__col"
-                >
-                  <PartyRoleCard
-                    role={role}
-                    card={card}
-                    onEdit={() => openEdit(role)}
-                    onDelete={() => handleDeleteCard(role)}
-                  />
-                </Col>
-              ))}
-            </Row>
-          ) : null}
         </Card>
       </div>
 

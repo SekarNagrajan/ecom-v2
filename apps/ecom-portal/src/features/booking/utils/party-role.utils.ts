@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-31 14:36)
+// Modified by Sekar Nagarajan (2026-08-31 22:44)
 import type { PartiesData } from "../types/booking.types";
 
 export type PartyRoleKey =
@@ -21,14 +21,12 @@ export interface PartyCardData {
 }
 
 /**
- * Primary parties always shown on one 3-column row (ecom-app CustomerDetails parity:
- * Booking Party · Agreement Party · Consignee).
- * Data key `shipper` maps to Booking Party (legacy shipperName field).
+ * Primary parties always shown on the top row.
+ * Booking Party (shipper) is view-only; Agreement Party is editable but not deletable.
  */
 export const DEFAULT_PARTY_ROLES: readonly PartyRoleKey[] = [
   "shipper",
   "agreementParty",
-  "consignee",
 ] as const;
 
 export const PARTY_ROLE_OPTIONS: { key: PartyRoleKey; label: string }[] = [
@@ -52,36 +50,22 @@ export const PARTY_ROLE_LABEL: Record<PartyRoleKey, string> = {
 };
 
 /** ecom-app CustomerDetailsStep demo seed — used when parties are empty. */
+const BOOKING_PARTY_SEED: PartyCardData = {
+  company: "Global Shipping Solutions Ltd.",
+  contact: "John Smith",
+  address: "123 Harbor Street, Singapore 048582",
+  city: "Singapore",
+  country: "SG",
+  email: "john.smith@globalshipping.com",
+  phone: "+65 6123 4567",
+};
+
+// Modified by Sekar Nagarajan (2026-08-31 22:47)
 export const MOCK_DEFAULT_PARTY_CARDS: Partial<
   Record<PartyRoleKey, PartyCardData>
 > = {
-  shipper: {
-    company: "Global Shipping Solutions Ltd.",
-    contact: "John Smith",
-    address: "123 Harbor Street, Singapore 048582",
-    city: "Singapore",
-    country: "SG",
-    email: "john.smith@globalshipping.com",
-    phone: "+65 6123 4567",
-  },
-  agreementParty: {
-    company: "Maritime Freight Forwarders LLC",
-    contact: "Sarah Johnson",
-    address: "456 Trade Center, Dubai 12345",
-    city: "Dubai",
-    country: "AE",
-    email: "sarah@maritimefreight.ae",
-    phone: "+971 4 987 6543",
-  },
-  consignee: {
-    company: "SA GLOBAL BUSINESS LTD.",
-    contact: "AEJEA20170000532",
-    address: "Ajman, AE",
-    city: "Ajman",
-    country: "AE",
-    email: "",
-    phone: "",
-  },
+  shipper: { ...BOOKING_PARTY_SEED },
+  agreementParty: { ...BOOKING_PARTY_SEED },
 };
 
 /** CSS modifier for mild per-role card background (see booking-module-styles). */
@@ -195,12 +179,17 @@ export function partiesToCards(
   return cards;
 }
 
-/** Use saved parties when present; otherwise seed ecom-app mock defaults. */
+// Modified by Sekar Nagarajan (2026-08-31 23:08)
+/** Use saved parties when present; otherwise seed ecom-app mock defaults.
+ *  Auto-populates agreementParty from shipper when missing. */
 export function initialPartyCards(
   parties: PartiesData | null | undefined,
 ): Partial<Record<PartyRoleKey, PartyCardData>> {
   const fromPayload = partiesToCards(parties);
   if (Object.keys(fromPayload).length > 0) {
+    if (!fromPayload.agreementParty && fromPayload.shipper) {
+      fromPayload.agreementParty = { ...fromPayload.shipper };
+    }
     return fromPayload;
   }
   return structuredClone(MOCK_DEFAULT_PARTY_CARDS);

@@ -56,8 +56,10 @@ export function SiPreviewEmpty({ label }: { label?: string }) {
   );
 }
 
+// Modified by Sekar Nagarajan (2026-08-31 23:43)
 export function SiPreviewPartyBlock({
   role,
+  roleKey,
   name,
   address,
   city,
@@ -65,15 +67,20 @@ export function SiPreviewPartyBlock({
   extra,
 }: {
   role: string;
+  roleKey?: string;
   name?: string;
   address?: string;
   city?: string;
   country?: string;
   extra?: ReactNode;
 }) {
+  const blockClass = roleKey
+    ? `si-party-block booking-party-card booking-party-card--${roleKey}`
+    : "si-party-block";
+
   if (!name) {
     return (
-      <div className="si-party-block">
+      <div className={blockClass}>
         <span className="form-field-label">{role}</span>
         <SiPreviewEmpty />
       </div>
@@ -81,7 +88,7 @@ export function SiPreviewPartyBlock({
   }
 
   return (
-    <div className="si-party-block">
+    <div className={blockClass}>
       <span className="form-field-label">
         {role}
         {extra}

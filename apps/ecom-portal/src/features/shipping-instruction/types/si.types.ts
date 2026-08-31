@@ -375,9 +375,10 @@ export interface SIDTO {
   loadPort?: string;
   dischargePort?: string;
   delivery?: string;
+  // Modified by Sekar Nagarajan (2026-08-31 23:08) — consignee optional (assigned via parties step, not default)
   parties: {
     shipper: SIParty;
-    consignee: SIParty & { toOrder: boolean };
+    consignee?: SIParty & { toOrder: boolean };
     notify: SIParty;
     notify2?: SIParty;
     notify3?: SIParty;

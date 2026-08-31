@@ -56,8 +56,10 @@ export function BookingPreviewEmpty({ label }: { label?: string }) {
   );
 }
 
+// Modified by Sekar Nagarajan (2026-08-31 23:39)
 export function BookingPreviewPartyBlock({
   role,
+  roleKey,
   name,
   address,
   city,
@@ -65,15 +67,20 @@ export function BookingPreviewPartyBlock({
   extra,
 }: {
   role: string;
+  roleKey?: string;
   name?: string;
   address?: string;
   city?: string;
   country?: string;
   extra?: ReactNode;
 }) {
+  const cardClass = roleKey
+    ? `booking-party-block booking-party-card booking-party-card--${roleKey}`
+    : "booking-party-block";
+
   if (!name) {
     return (
-      <div className="booking-party-block">
+      <div className={cardClass}>
         <span className="form-field-label">{role}</span>
         <BookingPreviewEmpty />
       </div>
@@ -81,7 +88,7 @@ export function BookingPreviewPartyBlock({
   }
 
   return (
-    <div className="booking-party-block">
+    <div className={cardClass}>
       <span className="form-field-label">
         {role}
         {extra}

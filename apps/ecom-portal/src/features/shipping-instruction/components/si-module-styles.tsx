@@ -97,13 +97,47 @@ export function SiModuleStyles() {
       }
 
       .si-party-block {
-        padding: ${token.paddingSM}px;
-        background: ${token.colorFillAlter};
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
         border-radius: ${token.borderRadiusLG}px;
         height: 100%;
         display: flex;
         flex-direction: column;
         gap: ${token.marginXXS}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorBgContainer};
+      }
+      /* Modified by Sekar Nagarajan (2026-08-31 23:43) — role-tinted preview party blocks */
+      .si-party-block.booking-party-card--shipper {
+        background: ${primaryTint8};
+        border-color: ${primaryTint14};
+      }
+      .si-party-block.booking-party-card--agreementParty {
+        background: ${geekblueTint8};
+        border-color: ${geekblueTint14};
+      }
+      .si-party-block.booking-party-card--consignee {
+        background: ${successTint8};
+        border-color: ${successTint14};
+      }
+      .si-party-block.booking-party-card--notify {
+        background: ${cyanTint8};
+        border-color: ${cyanTint14};
+      }
+      .si-party-block.booking-party-card--notify2 {
+        background: ${infoTint8};
+        border-color: ${infoTint14};
+      }
+      .si-party-block.booking-party-card--notify3 {
+        background: ${orangeTint8};
+        border-color: ${orangeTint14};
+      }
+      .si-party-block.booking-party-card--forwarder {
+        background: ${warningTint8};
+        border-color: ${warningTint14};
+      }
+      .si-party-block.booking-party-card--warehouse {
+        background: ${purpleTint8};
+        border-color: ${purpleTint14};
       }
       .si-container-block {
         margin-bottom: ${token.marginLG}px;

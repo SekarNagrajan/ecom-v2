@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-31 14:17)
+// Modified by Sekar Nagarajan (2026-08-31 22:59)
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { Card, Col, Row, Switch, Typography } from "antd";
@@ -38,18 +38,26 @@ const { Text, Title } = Typography;
 function BlPartyRoleCard({
   role,
   card,
+  readOnly = false,
+  canEdit = true,
+  canDelete = true,
   onEdit,
   onDelete,
   onUpdateFlag,
 }: {
   role: SiPartyRoleKey;
   card: SiPartyCardData;
+  readOnly?: boolean;
+  canEdit?: boolean;
+  canDelete?: boolean;
   onEdit: () => void;
   onDelete: () => void;
   onUpdateFlag: (
     patch: Partial<Pick<SiPartyCardData, "printOnBl" | "toOrder">>,
   ) => void;
 }) {
+  const showActions = !readOnly && (canEdit || canDelete);
+
   return (
     <Card
       size="small"
@@ -60,19 +68,25 @@ function BlPartyRoleCard({
         </Title>
       }
       extra={
-        <ListActionsRow>
-          <ListActionButton
-            title="Edit Party"
-            icon={<AppIcon icon={Icons.edit} size={16} tone="edit" />}
-            onClick={onEdit}
-          />
-          <ListActionButton
-            title="Delete Party"
-            icon={<AppIcon icon={Icons.trash} size={16} tone="delete" />}
-            tone="delete"
-            onClick={onDelete}
-          />
-        </ListActionsRow>
+        showActions ? (
+          <ListActionsRow>
+            {canEdit ? (
+              <ListActionButton
+                title="Edit Party"
+                icon={<AppIcon icon={Icons.edit} size={16} tone="edit" />}
+                onClick={onEdit}
+              />
+            ) : null}
+            {canDelete ? (
+              <ListActionButton
+                title="Delete Party"
+                icon={<AppIcon icon={Icons.trash} size={16} tone="delete" />}
+                tone="delete"
+                onClick={onDelete}
+              />
+            ) : null}
+          </ListActionsRow>
+        ) : null
       }
     >
       <div className="booking-party-card__body">
@@ -308,10 +322,12 @@ export function PartiesStep({
             </div>
           }
         >
-          {/* Modified by Sekar Nagarajan (2026-08-31 14:36) — Booking / Agreement / Consignee + mock seed */}
+          {/* Modified by Sekar Nagarajan (2026-08-31 22:59) — role-based action rules + unified 3-col grid */}
           <Row gutter={[24, 24]} className="booking-party-grid">
             {DEFAULT_SI_PARTY_ROLES.map((role) => {
               const card = cards[role];
+              const isBookingParty = role === "shipper";
+              const isAgreementParty = role === "agreementParty";
               return (
                 <Col
                   key={role}
@@ -322,6 +338,9 @@ export function PartiesStep({
                     <BlPartyRoleCard
                       role={role}
                       card={card}
+                      readOnly={isBookingParty}
+                      canEdit={!isBookingParty}
+                      canDelete={!isBookingParty && !isAgreementParty}
                       onEdit={() => openEdit(role)}
                       onDelete={() => handleDeleteCard(role)}
                       onUpdateFlag={(patch) => updateCardFlag(role, patch)}
@@ -335,30 +354,22 @@ export function PartiesStep({
                 </Col>
               );
             })}
+            {otherEntries.map(([role, card]) => (
+              <Col
+                key={role}
+                {...RESPONSIVE_COL.formThird}
+                className="booking-party-grid__col"
+              >
+                <BlPartyRoleCard
+                  role={role}
+                  card={card}
+                  onEdit={() => openEdit(role)}
+                  onDelete={() => handleDeleteCard(role)}
+                  onUpdateFlag={(patch) => updateCardFlag(role, patch)}
+                />
+              </Col>
+            ))}
           </Row>
-
-          {otherEntries.length > 0 ? (
-            <Row
-              gutter={[24, 24]}
-              className="booking-party-grid booking-party-grid--other"
-            >
-              {otherEntries.map(([role, card]) => (
-                <Col
-                  key={role}
-                  {...RESPONSIVE_COL.formThird}
-                  className="booking-party-grid__col"
-                >
-                  <BlPartyRoleCard
-                    role={role}
-                    card={card}
-                    onEdit={() => openEdit(role)}
-                    onDelete={() => handleDeleteCard(role)}
-                    onUpdateFlag={(patch) => updateCardFlag(role, patch)}
-                  />
-                </Col>
-              ))}
-            </Row>
-          ) : null}
         </Card>
       </div>
 

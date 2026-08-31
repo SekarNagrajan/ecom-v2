@@ -1,11 +1,12 @@
-// Modified by Sekar Nagarajan (2026-08-28 15:19)
+// Modified by Sekar Nagarajan (2026-08-31 23:14)
 import {
-  Checkbox,
   Col,
+  Flex,
   Input,
   InputNumber,
   Row,
   Select,
+  Switch,
   Typography,
 } from "antd";
 import {
@@ -244,15 +245,20 @@ export function CargoCommodityCard({
             <Controller
               control={control}
               name={`containers.${ci}.commodities.${mi}.isDangerousGoods`}
-              render={({ field: { value, onChange, ...field } }) => (
-                <Checkbox
-                  {...field}
-                  checked={value}
-                  onChange={(e) => onChange(e.target.checked)}
+              render={({ field: { value, onChange } }) => (
+                <Flex
+                  align="center"
+                  gap={6}
                   className="booking-cargo-commodity-card__hazardous-check"
                 >
-                  Yes
-                </Checkbox>
+                  <Switch
+                    size="medium"
+                    checked={value}
+                    onChange={onChange}
+                    checkedChildren="Yes"
+                    unCheckedChildren="No"
+                  />
+                </Flex>
               )}
             />
           </div>
@@ -357,14 +363,17 @@ export function CargoCommodityCard({
               <Controller
                 control={control}
                 name={`containers.${ci}.commodities.${mi}.marinePollutant`}
-                render={({ field: { value, onChange, ...field } }) => (
-                  <Checkbox
-                    {...field}
-                    checked={value}
-                    onChange={(e) => onChange(e.target.checked)}
-                  >
-                    Marine Pollutant
-                  </Checkbox>
+                render={({ field: { value, onChange } }) => (
+                  <Flex align="center" gap={6}>
+                    <Switch
+                      size="medium"
+                      checked={value}
+                      onChange={onChange}
+                      checkedChildren="Yes"
+                      unCheckedChildren="No"
+                    />
+                    <Text>Marine Pollutant</Text>
+                  </Flex>
                 )}
               />
             </div>

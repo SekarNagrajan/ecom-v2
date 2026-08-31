@@ -1,17 +1,15 @@
-// Modified by Sekar Nagarajan (2026-08-31 14:26)
+// Modified by Sekar Nagarajan (2026-08-31 23:14)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import {
   Card,
-  Checkbox,
   Col,
   Empty,
-  Flex,
   InputNumber,
   Row,
-  Segmented,
   Select,
+  Switch,
   Tag,
   Typography,
 } from "antd";
@@ -362,7 +360,7 @@ function ContainerDetailPanel({
         bordered={false}
       >
         <Row gutter={[24, 24]}>
-          <Col xs={24} md={showReeferMode ? 5 : 8}>
+          <Col xs={24} md={showReeferMode ? 5 : 6}>
             <label className="form-field-label">
               Container Type <Text type="danger">*</Text>
             </label>
@@ -393,7 +391,7 @@ function ContainerDetailPanel({
               </Text>
             ) : null}
           </Col>
-          <Col xs={24} md={showReeferMode ? 3 : 4}>
+          <Col xs={12} md={showReeferMode ? 3 : 4}>
             <label className="form-field-label">
               Quantity <Text type="danger">*</Text>
             </label>
@@ -410,7 +408,7 @@ function ContainerDetailPanel({
               )}
             />
           </Col>
-          <Col xs={24} md={showReeferMode ? 3 : 4}>
+          <Col xs={12} md={showReeferMode ? 3 : 4}>
             <label className="form-field-label">Eqp. Status</label>
             <Controller
               control={control}
@@ -428,7 +426,7 @@ function ContainerDetailPanel({
               )}
             />
           </Col>
-          <Col xs={24} md={showReeferMode ? 3 : 4}>
+          <Col xs={12} md={showReeferMode ? 3 : 4}>
             <label className="form-field-label">Tare Weight</label>
             <Controller
               control={control}
@@ -444,53 +442,51 @@ function ContainerDetailPanel({
               )}
             />
           </Col>
-          <Col xs={24} md={4}>
-            <label className="form-field-label">SOC / OOG</label>
-            <Flex align="center" gap="middle" wrap="wrap">
-              <Controller
-                control={control}
-                name={`containers.${ci}.isSoc`}
-                render={({ field: { value, onChange, ...field } }) => (
-                  <Checkbox
-                    {...field}
-                    checked={value}
-                    onChange={(e) => onChange(e.target.checked)}
-                  >
-                    <b>SOC</b>
-                  </Checkbox>
-                )}
-              />
-              <Controller
-                control={control}
-                name={`containers.${ci}.isOog`}
-                render={({ field: { value, onChange, ...field } }) => (
-                  <Checkbox
-                    {...field}
-                    checked={value}
-                    onChange={(e) => onChange(e.target.checked)}
-                  >
-                    <b>OOG</b>
-                  </Checkbox>
-                )}
-              />
-            </Flex>
+          {/* Modified by Sekar Nagarajan (2026-08-31 23:23) — switch with check/close icons */}
+          <Col xs={6} md={showReeferMode ? 2 : 3}>
+            <label className="form-field-label">SOC</label>
+            <Controller
+              control={control}
+              name={`containers.${ci}.isSoc`}
+              render={({ field: { value, onChange } }) => (
+                <Switch
+                  checked={value}
+                  onChange={onChange}
+                  checkedChildren="Yes"
+                  unCheckedChildren="No"
+                />
+              )}
+            />
+          </Col>
+          <Col xs={6} md={showReeferMode ? 2 : 3}>
+            <label className="form-field-label">OOG</label>
+            <Controller
+              control={control}
+              name={`containers.${ci}.isOog`}
+              render={({ field: { value, onChange } }) => (
+                <Switch
+                  checked={value}
+                  onChange={onChange}
+                  checkedChildren="Yes"
+                  unCheckedChildren="No"
+                />
+              )}
+            />
           </Col>
           {showReeferMode ? (
-            <Col xs={24} md={6}>
-              {/* Modified by Sekar Nagarajan (2026-08-31 14:26) — Yes shows reefer details */}
+            <Col xs={12} md={6}>
               <label className="form-field-label">NOR</label>
               <Controller
                 control={control}
                 name={`containers.${ci}.reeferMode`}
                 render={({ field }) => (
-                  <Segmented
-                    block
-                    options={[
-                      { label: "Yes", value: "operating" },
-                      { label: "No", value: "none" },
-                    ]}
-                    value={field.value === "operating" ? "operating" : "none"}
-                    onChange={(value) => field.onChange(value)}
+                  <Switch
+                    checked={field.value === "operating"}
+                    onChange={(checked) =>
+                      field.onChange(checked ? "operating" : "none")
+                    }
+                    checkedChildren="Yes"
+                    unCheckedChildren="No"
                   />
                 )}
               />

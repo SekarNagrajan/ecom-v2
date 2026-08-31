@@ -7,12 +7,11 @@ import { Col, Descriptions, Row, Table, Tag, Typography } from "antd";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import {
-  MODULE_TITLES,
-  WIZARD_STEP_TITLES,
+  WIZARD_STEP_TITLES
 } from "../../../constants/module-titles";
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
-import { DEFAULT_SI_WIZARD_CONFIG } from "../config/si-wizard-config";
 import type { SIWizardStepId } from "../config/si-wizard-config";
+import { DEFAULT_SI_WIZARD_CONFIG } from "../config/si-wizard-config";
 import { useSiWizardConfigQuery } from "../hooks/use-si-wizard-config";
 import type { SIWizardStepProps } from "../types/si.types";
 import { SI_CARGO_LINE_COLUMNS } from "../utils/si-cargo-line-columns";
@@ -46,21 +45,12 @@ export function PreviewStep({
     data.releaseType === "O"
       ? "Original"
       : data.releaseType === "T"
-        ? "Telex Release"
-        : dash(data.releaseType);
+      ? "Telex Release"
+      : dash(data.releaseType);
 
   return (
     <div className="form-step-layout">
       <div className="custom-scroll form-step-scroll si-preview-scroll">
-        <div className="si-preview-header">
-          <Title level={4} className="form-step-card-title si-preview-title">
-            {MODULE_TITLES.shippingInstructionSummary}
-          </Title>
-          <Text type="secondary" className="si-preview-subtitle">
-            Review each section. Use Edit to jump back and update that step.
-          </Text>
-        </div>
-
         <SiPreviewSection
           title={WIZARD_STEP_TITLES.masterDetails}
           onEdit={() => go("master")}
@@ -98,7 +88,10 @@ export function PreviewStep({
                 {data.t2lFiling ? "Yes" : "No"}
               </Descriptions.Item>
             ) : null}
-            {data.origin || data.loadPort || data.dischargePort || data.delivery ? (
+            {data.origin ||
+            data.loadPort ||
+            data.dischargePort ||
+            data.delivery ? (
               <>
                 <Descriptions.Item label="Origin">
                   {dash(data.origin)}
@@ -121,39 +114,83 @@ export function PreviewStep({
           title={WIZARD_STEP_TITLES.parties}
           onEdit={() => go("parties")}
         >
+          {/* Modified by Sekar Nagarajan (2026-08-31 23:43) — role-tinted preview party blocks */}
           <Row gutter={[24, 24]}>
             <Col {...RESPONSIVE_COL.third}>
               <SiPreviewPartyBlock
-                role="Shipper"
+                role="Booking Party"
+                roleKey="shipper"
                 name={data.parties.shipper.name}
                 address={data.parties.shipper.address}
                 city={data.parties.shipper.city}
                 country={data.parties.shipper.country}
               />
             </Col>
-            <Col {...RESPONSIVE_COL.third}>
-              <SiPreviewPartyBlock
-                role="Consignee"
-                name={data.parties.consignee.name}
-                address={data.parties.consignee.address}
-                city={data.parties.consignee.city}
-                country={data.parties.consignee.country}
-                extra={
-                  data.parties.consignee.toOrder ? (
-                    <Text type="warning"> (To Order)</Text>
-                  ) : null
-                }
-              />
-            </Col>
-            <Col {...RESPONSIVE_COL.third}>
-              <SiPreviewPartyBlock
-                role="Notify Party"
-                name={data.parties.notify.name}
-                address={data.parties.notify.address}
-                city={data.parties.notify.city}
-                country={data.parties.notify.country}
-              />
-            </Col>
+            {data.parties.agreementParty?.name ? (
+              <Col {...RESPONSIVE_COL.third}>
+                <SiPreviewPartyBlock
+                  role="Agreement Party"
+                  roleKey="agreementParty"
+                  name={data.parties.agreementParty.name}
+                  address={data.parties.agreementParty.address}
+                  city={data.parties.agreementParty.city}
+                  country={data.parties.agreementParty.country}
+                />
+              </Col>
+            ) : null}
+            {data.parties.consignee?.name ? (
+              <Col {...RESPONSIVE_COL.third}>
+                <SiPreviewPartyBlock
+                  role="Consignee"
+                  roleKey="consignee"
+                  name={data.parties.consignee.name}
+                  address={data.parties.consignee.address}
+                  city={data.parties.consignee.city}
+                  country={data.parties.consignee.country}
+                  extra={
+                    data.parties.consignee.toOrder ? (
+                      <Text type="warning"> (To Order)</Text>
+                    ) : null
+                  }
+                />
+              </Col>
+            ) : null}
+            {data.parties.notify?.name ? (
+              <Col {...RESPONSIVE_COL.third}>
+                <SiPreviewPartyBlock
+                  role="Notify Party"
+                  roleKey="notify"
+                  name={data.parties.notify.name}
+                  address={data.parties.notify.address}
+                  city={data.parties.notify.city}
+                  country={data.parties.notify.country}
+                />
+              </Col>
+            ) : null}
+            {data.parties.forwarder?.name ? (
+              <Col {...RESPONSIVE_COL.third}>
+                <SiPreviewPartyBlock
+                  role="Forwarder"
+                  roleKey="forwarder"
+                  name={data.parties.forwarder.name}
+                  address={data.parties.forwarder.address}
+                  city={data.parties.forwarder.city}
+                  country={data.parties.forwarder.country}
+                />
+              </Col>
+            ) : null}
+            {data.parties.warehouse?.name ? (
+              <Col {...RESPONSIVE_COL.third}>
+                <SiPreviewPartyBlock
+                  role="Warehouse"
+                  roleKey="warehouse"
+                  name={data.parties.warehouse.name}
+                  address={data.parties.warehouse.address}
+                  city={data.parties.warehouse.city}
+                  country={data.parties.warehouse.country}
+                />
+              </Col>
+            ) : null}
           </Row>
         </SiPreviewSection>
 

@@ -16,6 +16,7 @@ import type { BLWizardStepProps } from "../components/steps/MasterDetailsStep";
 import { MasterDetailsStep } from "../components/steps/MasterDetailsStep";
 import { PartiesStep } from "../components/steps/PartiesStep";
 import { PreviewStep } from "../components/steps/PreviewStep";
+import { ReferenceStep } from "../components/steps/ReferenceStep";
 import { RoutingStep } from "../components/steps/routing-step";
 import {
   buildBlWizardStepIds,
@@ -46,6 +47,7 @@ const STEP_COMPONENTS: Record<
   ens: BlEnsStep,
   chargeTab: BlChargeTabStep,
   files: BlFileUploadStep,
+  references: ReferenceStep,
   preview: PreviewStep,
 };
 
@@ -60,6 +62,7 @@ const STEP_ICONS: Record<BLWizardStepId, ReactNode> = {
   ens: <AppIcon icon={Icons.filePlus} size={PIPELINE_ICON_SIZE} />,
   chargeTab: <AppIcon icon={Icons.fileCheck} size={PIPELINE_ICON_SIZE} />,
   files: <AppIcon icon={Icons.inbox} size={PIPELINE_ICON_SIZE} />,
+  references: <AppIcon icon={Icons.fileText} size={PIPELINE_ICON_SIZE} />,
   preview: <AppIcon icon={Icons.eye} size={PIPELINE_ICON_SIZE} />,
 };
 
@@ -74,6 +77,7 @@ const STEP_TITLES: Record<BLWizardStepId, string> = {
   ens: WIZARD_STEP_TITLES.ensDetails,
   chargeTab: "Charge Summary",
   files: WIZARD_STEP_TITLES.fileUpload,
+  references: WIZARD_STEP_TITLES.references,
   preview: WIZARD_STEP_TITLES.preview,
 };
 

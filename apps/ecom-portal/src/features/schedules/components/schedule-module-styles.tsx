@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-27 23:09)
+// Modified by Sekar Nagarajan (2026-08-31 11:25)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -50,13 +50,40 @@ export function ScheduleModuleStyles() {
         padding: ${token.paddingLG}px;
         background: ${token.colorFillAlter};
       }
+      /* Modified by Sekar Nagarajan (2026-08-31 11:25) — Tabs as view/search-type switcher */
       .schedule-search-type-wrap {
         margin-bottom: ${token.marginMD}px;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
       }
-      .schedule-search-type-wrap .ant-segmented {
-        min-width: max-content;
+      .schedule-search-tabs.ant-tabs {
+        margin-bottom: 0;
+      }
+      .schedule-search-tabs .ant-tabs-nav {
+        margin-bottom: 0;
+      }
+      .schedule-search-tabs .ant-tabs-content-holder {
+        display: none;
+      }
+      .schedule-tab-label {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        line-height: 1;
+      }
+      .schedule-tab-label .app-icon {
+        display: block;
+        flex: none;
+      }
+      .schedule-results-tabs.ant-tabs {
+        margin-bottom: 0;
+        flex-shrink: 0;
+      }
+      .schedule-results-tabs .ant-tabs-nav {
+        margin-bottom: 0;
+      }
+      .schedule-results-tabs .ant-tabs-content-holder {
+        display: none;
       }
       .schedule-port-swap-field .ant-form-item-control-input-content {
         display: flex;
@@ -371,7 +398,7 @@ export function ScheduleModuleStyles() {
         color: ${token.colorWarning};
       }
       .schedule-card__deadline-icon--vgm {
-        background: ${token.colorSuccessBg};
+        background: ${tokenMix(token.colorSuccess, 10)};
         color: ${token.colorSuccess};
       }
       .schedule-card__deadline-label {
@@ -911,7 +938,7 @@ export function ScheduleModuleStyles() {
         .schedule-search-actions .sm-app-button {
           width: 100%;
         }
-        .schedule-results-bar .ant-segmented {
+        .schedule-results-bar .schedule-results-tabs {
           width: 100%;
         }
         .schedule-card__main {

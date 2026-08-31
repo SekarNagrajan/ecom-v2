@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-27 23:52)
+// Modified by Sekar Nagarajan (2026-08-31 14:36)
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { Card, Col, Row, Typography } from "antd";
@@ -9,14 +9,17 @@ import {
   ListActionButton,
   ListActionsRow,
 } from "../../../components/shared/list-action-button";
+import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import type { BookingCustomerOption } from "../api/booking.api";
 import { useBookingStore } from "../stores/booking.store";
 import { partiesSchema, type PartiesData } from "../types/booking.types";
 import {
   cardsToParties,
+  DEFAULT_PARTY_ROLES,
   emptyPartyCard,
+  initialPartyCards,
   PARTY_ROLE_LABEL,
-  partiesToCards,
+  partyRoleCardClassName,
   type PartyCardData,
   type PartyRoleKey,
 } from "../utils/party-role.utils";
@@ -28,12 +31,103 @@ import {
 
 const { Text, Title } = Typography;
 
+function PartyRoleCard({
+  role,
+  card,
+  onEdit,
+  onDelete,
+}: {
+  role: PartyRoleKey;
+  card: PartyCardData;
+  onEdit: () => void;
+  onDelete: () => void;
+}) {
+  return (
+    <Card
+      size="small"
+      className={partyRoleCardClassName(role)}
+      title={
+        <Title level={5} className="booking-party-card__title">
+          {PARTY_ROLE_LABEL[role]}
+        </Title>
+      }
+      extra={
+        <ListActionsRow>
+          <ListActionButton
+            title="Edit Party"
+            icon={<AppIcon icon={Icons.edit} size={16} tone="edit" />}
+            onClick={onEdit}
+          />
+          <ListActionButton
+            title="Delete Party"
+            icon={<AppIcon icon={Icons.trash} size={16} tone="delete" />}
+            tone="delete"
+            onClick={onDelete}
+          />
+        </ListActionsRow>
+      }
+    >
+      <div className="booking-party-card__body">
+        <Text strong className="booking-party-card__company">
+          {card.company}
+        </Text>
+        {card.contact ? (
+          <Text type="secondary" className="booking-party-card__meta">
+            {card.contact}
+          </Text>
+        ) : null}
+        {card.address || card.city ? (
+          <Text type="secondary" className="booking-party-card__meta">
+            {[card.address, card.city, card.country].filter(Boolean).join(", ")}
+          </Text>
+        ) : null}
+        {card.email || card.phone ? (
+          <Text type="secondary" className="booking-party-card__meta">
+            {[card.email, card.phone].filter(Boolean).join(" · ")}
+          </Text>
+        ) : null}
+      </div>
+    </Card>
+  );
+}
+
+function EmptyPartySlot({
+  role,
+  onAssign,
+}: {
+  role: PartyRoleKey;
+  onAssign: () => void;
+}) {
+  return (
+    <Card
+      size="small"
+      className={partyRoleCardClassName(role, true)}
+      title={
+        <Title level={5} className="booking-party-card__title">
+          {PARTY_ROLE_LABEL[role]}
+        </Title>
+      }
+    >
+      <div className="booking-party-card__empty-body">
+        <Text type="secondary">Not assigned yet</Text>
+        <AppButton
+          size="small"
+          icon={<AppIcon icon={Icons.plus} size={14} tone="create" />}
+          onClick={onAssign}
+        >
+          Assign
+        </AppButton>
+      </div>
+    </Card>
+  );
+}
+
 export function CustomerDetailsStep() {
   const toast = useToast();
   const { payload, updateParties, nextStep, prevStep } = useBookingStore();
   const [cards, setCards] = useState<
     Partial<Record<PartyRoleKey, PartyCardData>>
-  >(() => partiesToCards(payload.parties));
+  >(() => initialPartyCards(payload.parties));
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCustomer, setSelectedCustomer] =
     useState<BookingCustomerOption | null>(null);
@@ -41,7 +135,10 @@ export function CustomerDetailsStep() {
   const [editValue, setEditValue] = useState<PartyCardData>(emptyPartyCard());
 
   const assignedRoles = Object.keys(cards) as PartyRoleKey[];
-  const cardEntries = Object.entries(cards) as [PartyRoleKey, PartyCardData][];
+  const otherEntries = (
+    Object.entries(cards) as [PartyRoleKey, PartyCardData][]
+  ).filter(([role]) => !DEFAULT_PARTY_ROLES.includes(role));
+  const assignedCount = assignedRoles.length;
 
   const handleSelectCustomer = (customer: BookingCustomerOption) => {
     setSelectedCustomer(customer);
@@ -149,78 +246,60 @@ export function CustomerDetailsStep() {
             <div className="booking-party-section__title">
               <span>Assigned Parties</span>
               <Text type="secondary" className="booking-party-section__count">
-                {cardEntries.length} assigned
+                {assignedCount} assigned
               </Text>
             </div>
           }
         >
-          {cardEntries.length === 0 ? (
-            <Text type="secondary">
-              Search and assign customers to Shipper, Consignee, and other roles.
-            </Text>
-          ) : (
-            <Row gutter={[24, 24]} className="booking-party-grid">
-              {cardEntries.map(([role, card]) => (
-                <Col xs={24} md={12} key={role} className="booking-party-grid__col">
-                  <Card
-                    size="small"
-                    className="booking-party-card"
-                    title={
-                      <Title level={5} className="booking-party-card__title">
-                        {PARTY_ROLE_LABEL[role]}
-                      </Title>
-                    }
-                    extra={
-                      <ListActionsRow>
-                        <ListActionButton
-                          title="Edit Party"
-                          icon={
-                            <AppIcon icon={Icons.edit} size={16} tone="edit" />
-                          }
-                          onClick={() => openEdit(role)}
-                        />
-                        <ListActionButton
-                          title="Delete Party"
-                          icon={
-                            <AppIcon
-                              icon={Icons.trash}
-                              size={16}
-                              tone="delete"
-                            />
-                          }
-                          tone="delete"
-                          onClick={() => handleDeleteCard(role)}
-                        />
-                      </ListActionsRow>
-                    }
-                  >
-                    <div className="booking-party-card__body">
-                      <Text strong className="booking-party-card__company">
-                        {card.company}
-                      </Text>
-                      {card.contact ? (
-                        <Text type="secondary" className="booking-party-card__meta">
-                          {card.contact}
-                        </Text>
-                      ) : null}
-                      {card.address || card.city ? (
-                        <Text type="secondary" className="booking-party-card__meta">
-                          {[card.address, card.city, card.country]
-                            .filter(Boolean)
-                            .join(", ")}
-                        </Text>
-                      ) : null}
-                      {card.email || card.phone ? (
-                        <Text type="secondary" className="booking-party-card__meta">
-                          {[card.email, card.phone].filter(Boolean).join(" · ")}
-                        </Text>
-                      ) : null}
-                    </div>
-                  </Card>
+          {/* Modified by Sekar Nagarajan (2026-08-31 14:36) — Booking / Agreement / Consignee + mock seed */}
+          <Row gutter={[24, 24]} className="booking-party-grid">
+            {DEFAULT_PARTY_ROLES.map((role) => {
+              const card = cards[role];
+              return (
+                <Col
+                  key={role}
+                  {...RESPONSIVE_COL.formThird}
+                  className="booking-party-grid__col"
+                >
+                  {card ? (
+                    <PartyRoleCard
+                      role={role}
+                      card={card}
+                      onEdit={() => openEdit(role)}
+                      onDelete={() => handleDeleteCard(role)}
+                    />
+                  ) : (
+                    <EmptyPartySlot
+                      role={role}
+                      onAssign={() => openEdit(role)}
+                    />
+                  )}
+                </Col>
+              );
+            })}
+          </Row>
+
+          {otherEntries.length > 0 ? (
+            <Row
+              gutter={[24, 24]}
+              className="booking-party-grid booking-party-grid--other"
+            >
+              {otherEntries.map(([role, card]) => (
+                <Col
+                  key={role}
+                  {...RESPONSIVE_COL.formThird}
+                  className="booking-party-grid__col"
+                >
+                  <PartyRoleCard
+                    role={role}
+                    card={card}
+                    onEdit={() => openEdit(role)}
+                    onDelete={() => handleDeleteCard(role)}
+                  />
                 </Col>
               ))}
             </Row>
-          )}
+          ) : null}
         </Card>
       </div>
 

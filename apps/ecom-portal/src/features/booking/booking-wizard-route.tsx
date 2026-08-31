@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-27 19:12)
+// Modified by Sekar Nagarajan (2026-08-31 14:46)
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { useNavigate } from "@tanstack/react-router";
@@ -19,6 +19,7 @@ import { FileUploadStep } from "./components/FileUploadStep";
 import { InsuranceStep } from "./components/InsuranceStep";
 import { MasterDetailsStep } from "./components/MasterDetailsStep";
 import { PreviewStep } from "./components/PreviewStep";
+import { ReferenceInformationStep } from "./components/ReferenceInformationStep";
 import { useBookingWizard } from "./hooks/use-booking-wizard";
 import { useBookingStore } from "./stores/booking.store";
 
@@ -77,6 +78,10 @@ export function BookingWizardRoute() {
     {
       title: WIZARD_STEP_TITLES.fileUpload,
       icon: <AppIcon icon={Icons.upload} size={PIPELINE_ICON_SIZE} />,
+    },
+    {
+      title: WIZARD_STEP_TITLES.references,
+      icon: <AppIcon icon={Icons.fileText} size={PIPELINE_ICON_SIZE} />,
     },
     {
       title: WIZARD_STEP_TITLES.preview,
@@ -163,7 +168,7 @@ export function BookingWizardRoute() {
         <div className="wizard-confirmation">
           <Result
             status="success"
-            icon={<AppIcon icon={Icons.checkCircle} size={16} tone="approve" />}
+            icon={<AppIcon icon={Icons.checkCircle} size={60} tone="approve" />}
             title="Booking Submitted Successfully"
             subTitle={
               <div>
@@ -223,7 +228,8 @@ export function BookingWizardRoute() {
             {currentStep === 3 && <ENSStep />}
             {currentStep === 4 && <InsuranceStep />}
             {currentStep === 5 && <FileUploadStep />}
-            {currentStep === 6 && (
+            {currentStep === 6 && <ReferenceInformationStep />}
+            {currentStep === 7 && (
               <PreviewStep
                 onSubmit={handleSubmit}
                 isSubmitting={isSubmitting}

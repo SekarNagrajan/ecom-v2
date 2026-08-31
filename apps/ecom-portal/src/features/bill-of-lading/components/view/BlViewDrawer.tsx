@@ -1,4 +1,4 @@
-// Created by Sekar Nagarajan (2026-08-26 13:04)
+// Modified by Sekar Nagarajan (2026-08-31 17:25)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { useNavigate } from "@tanstack/react-router";
 import { Tag, Tooltip, Typography } from "antd";
@@ -8,7 +8,7 @@ import { formatModuleScreenTitle } from "../../../../constants/module-titles";
 import type { BLListDTO } from "../../types/bl.types";
 import {
   canOpenBlWizard,
-  getBLStatusColor,
+  getBLListStatusColor,
   getBLStatusLabel,
 } from "../../utils/bl-status";
 import { BlDetailsViewer } from "./BlDetailsViewer";
@@ -57,7 +57,7 @@ export function BlViewDrawer({ record, onClose }: BlViewDrawerProps) {
               ) : null}
             </Text>
             <div className="bl-drawer-title__tags">
-              <Tag color={getBLStatusColor(record.status)}>
+              <Tag className="bl-status-tag" color={getBLListStatusColor(record)}>
                 {record.isLocked ? "Locked" : getBLStatusLabel(record.status)}
               </Tag>
               {record.mcnNo ? (

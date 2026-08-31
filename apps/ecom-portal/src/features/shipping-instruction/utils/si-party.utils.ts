@@ -1,5 +1,8 @@
-// Modified by Sekar Nagarajan (2026-08-28 00:55)
-import type { PartyCardData } from "../../booking/utils/party-role.utils";
+// Modified by Sekar Nagarajan (2026-08-31 14:36)
+import {
+  MOCK_DEFAULT_PARTY_CARDS,
+  type PartyCardData,
+} from "../../booking/utils/party-role.utils";
 import type { SIDTO, SIParty, SiPartiesForm } from "../types/si.types";
 
 export type SiPartyRoleKey =
@@ -17,8 +20,18 @@ export interface SiPartyCardData extends PartyCardData {
   toOrder?: boolean;
 }
 
+/**
+ * Primary parties always shown on one 3-column row (ecom-app CustomerDetails parity:
+ * Booking Party · Agreement Party · Consignee).
+ */
+export const DEFAULT_SI_PARTY_ROLES: readonly SiPartyRoleKey[] = [
+  "shipper",
+  "agreementParty",
+  "consignee",
+] as const;
+
 export const SI_PARTY_ROLE_OPTIONS: { key: SiPartyRoleKey; label: string }[] = [
-  { key: "shipper", label: "Shipper" },
+  { key: "shipper", label: "Booking Party" },
   { key: "consignee", label: "Consignee" },
   { key: "notify", label: "Notify Party" },
   { key: "notify2", label: "Notify Party 2" },
@@ -29,7 +42,7 @@ export const SI_PARTY_ROLE_OPTIONS: { key: SiPartyRoleKey; label: string }[] = [
 ];
 
 export const SI_PARTY_ROLE_LABEL: Record<SiPartyRoleKey, string> = {
-  shipper: "Shipper",
+  shipper: "Booking Party",
   consignee: "Consignee",
   notify: "Notify Party",
   notify2: "Notify Party 2",
@@ -38,6 +51,39 @@ export const SI_PARTY_ROLE_LABEL: Record<SiPartyRoleKey, string> = {
   warehouse: "Warehouse",
   agreementParty: "Agreement Party",
 };
+
+function toSiCard(card: PartyCardData): SiPartyCardData {
+  return {
+    ...card,
+    printOnBl: true,
+  };
+}
+
+/** ecom-app mock seed for SI/BL when parties are empty. */
+export const MOCK_DEFAULT_SI_PARTY_CARDS: Partial<
+  Record<SiPartyRoleKey, SiPartyCardData>
+> = {
+  shipper: toSiCard(MOCK_DEFAULT_PARTY_CARDS.shipper!),
+  agreementParty: toSiCard(MOCK_DEFAULT_PARTY_CARDS.agreementParty!),
+  consignee: {
+    ...toSiCard(MOCK_DEFAULT_PARTY_CARDS.consignee!),
+    toOrder: false,
+  },
+};
+
+/** CSS modifier for mild per-role card background. */
+export function siPartyRoleCardClassName(
+  role: SiPartyRoleKey,
+  empty = false,
+): string {
+  return [
+    "booking-party-card",
+    `booking-party-card--${role}`,
+    empty ? "booking-party-card--empty" : undefined,
+  ]
+    .filter(Boolean)
+    .join(" ");
+}
 
 export function emptySiPartyCard(): SiPartyCardData {
   return {
@@ -76,6 +122,9 @@ type PartyDirectory = {
   notify?: SIParty;
   notify2?: SIParty;
   notify3?: SIParty;
+  forwarder?: SIParty;
+  warehouse?: SIParty;
+  agreementParty?: SIParty;
 };
 
 export function siPartiesToCards(
@@ -104,6 +153,17 @@ export function siPartiesToCards(
   return cards;
 }
 
+/** Use saved parties when present; otherwise seed ecom-app mock defaults. */
+export function initialSiPartyCards(
+  parties: PartyDirectory | SIDTO["parties"] | null | undefined,
+): Partial<Record<SiPartyRoleKey, SiPartyCardData>> {
+  const fromPayload = siPartiesToCards(parties);
+  if (Object.keys(fromPayload).length > 0) {
+    return fromPayload;
+  }
+  return structuredClone(MOCK_DEFAULT_SI_PARTY_CARDS);
+}
+
 function cardAddress(card: SiPartyCardData): string {
   return [card.address, card.city, card.country].filter(Boolean).join(", ");
 }
@@ -113,7 +173,7 @@ export function cardsToSiPartiesForm(
 ): SiPartiesForm {
   const shipper = cards.shipper;
   const consignee = cards.consignee;
-  const notify = cards.notify;
+  const notify = cards.notify ?? cards.consignee;
   return {
     shipperName: shipper?.company ?? "",
     shipperAddress: shipper ? cardAddress(shipper) : "",

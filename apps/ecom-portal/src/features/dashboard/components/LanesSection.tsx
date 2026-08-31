@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-25 18:20)
+// Modified by Sekar Nagarajan (2026-08-31 15:05)
 import { AppButton } from "@solverminds/shared-ui";
 import { Card, Progress, Tag, Tooltip, Typography } from "antd";
 
@@ -133,43 +133,46 @@ export function LaneOpportunitySection({
         </Tooltip>
       }
     >
-      <div>
-        <Text className="dashboard-subsection-label">
-          Contracted Lanes with Limited / No Activity (Last 90 Days)
-        </Text>
-        {contracted.map((lane, idx) => (
-          <div key={idx} className="dashboard-list-row">
-            <span className="dashboard-lane-chip-row">
-              <Tag>{lane.pol}</Tag>
-              <AppIcon icon={Icons.arrowRight} size={9} />
-              <Tag>{lane.pod}</Tag>
-            </span>
-            <Tag color="error">No Activity</Tag>
-          </div>
-        ))}
-      </div>
+      <div className="dashboard-split-stack">
+        <div className="dashboard-split-stack__block">
+          <Text className="dashboard-subsection-label">
+            Contracted Lanes with Limited / No Activity (Last 90 Days)
+          </Text>
+          {contracted.map((lane, idx) => (
+            <div key={idx} className="dashboard-list-row">
+              <span className="dashboard-lane-chip-row">
+                <Tag>{lane.pol}</Tag>
+                <AppIcon icon={Icons.arrowRight} size={9} />
+                <Tag>{lane.pod}</Tag>
+              </span>
+              <Tag color="error">No Activity</Tag>
+            </div>
+          ))}
+        </div>
 
-      <div>
-        <Text className="dashboard-subsection-label">
-          Potential New Opportunities (Based on History)
-        </Text>
-        {opportunities.map((lane, idx) => (
-          <div key={idx} className="dashboard-list-row">
-            <span className="dashboard-lane-chip-row">
-              <AppIcon icon={Icons.zap} size={11} />
-              <Tag color="blue">{lane.pol}</Tag>
-              <AppIcon icon={Icons.arrowRight} size={9} />
-              <Tag color="blue">{lane.pod}</Tag>
-            </span>
-            <Tag
-              color={
-                lane.suggestion === "High Potential" ? "warning" : "processing"
-              }
-            >
-              {lane.suggestion}
-            </Tag>
-          </div>
-        ))}
+        <div className="dashboard-split-stack__block">
+          <Text className="dashboard-subsection-label">
+            Potential New Opportunities (Based on History)
+          </Text>
+          {opportunities.map((lane, idx) => (
+            <div key={idx} className="dashboard-list-row">
+              <span className="dashboard-lane-chip-row">
+                <Tag color="blue">{lane.pol}</Tag>
+                <AppIcon icon={Icons.arrowRight} size={9} />
+                <Tag color="blue">{lane.pod}</Tag>
+              </span>
+              <Tag
+                color={
+                  lane.suggestion === "High Potential"
+                    ? "warning"
+                    : "processing"
+                }
+              >
+                {lane.suggestion}
+              </Tag>
+            </div>
+          ))}
+        </div>
       </div>
     </Card>
   );

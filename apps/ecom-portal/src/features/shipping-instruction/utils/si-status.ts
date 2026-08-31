@@ -1,17 +1,17 @@
-// Created by Sekar Nagarajan (2026-08-26 12:19)
+// Modified by Sekar Nagarajan (2026-08-31 15:17)
 import type { SIStatus } from "../types/si.types";
 
 export function getSiStatusTagColor(status: SIStatus | string): string {
   switch (status) {
-    case "Submitted":
-      return "success";
-    case "Draft":
-      return "processing";
     case "Create SI":
     case "Create Multiple SI":
-      return "cyan";
+      return "blue";
+    case "Draft":
+      return "default";
+    case "Submitted":
+      return "warning";
     case "Accepted":
-      return "green";
+      return "success";
     case "Declined":
       return "error";
     case "Locked":

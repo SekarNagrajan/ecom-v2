@@ -1,16 +1,13 @@
-// Modified by Sekar Nagarajan (2026-08-28 11:55)
+// Modified by Sekar Nagarajan (2026-08-31 17:21)
 import { FormattedDate } from "@solverminds/shared-ui";
 import { DataView, DataViewColumn } from "@solverminds/shared-ui/data-view";
-import type {
-  RowDoubleClickedEvent,
-  SelectionChangedEvent,
-} from "ag-grid-community";
+import type { RowDoubleClickedEvent } from "ag-grid-community";
 import { Tag } from "antd";
 import { useMemo } from "react";
 
 import { buildActionsColumn } from "../../../components/shared/build-actions-column";
 import type { BLListDTO, BLPrintType } from "../types/bl.types";
-import { getBLStatusColor } from "../utils/bl-status";
+import { getBLListStatusColor } from "../utils/bl-status";
 import { BillOfLadingRowActions } from "./BillOfLadingRowActions";
 
 export interface BillOfLadingListGridProps {
@@ -29,8 +26,6 @@ export interface BillOfLadingListGridProps {
   showNnPrint?: boolean;
   showReadyToConfirm?: boolean;
   enableTermsOnConfirmedEdit?: boolean;
-  rowSelection?: "multiple" | "single";
-  onSelectionChanged?: (event: SelectionChangedEvent<BLListDTO>) => void;
 }
 
 export function BillOfLadingListGrid({
@@ -49,8 +44,6 @@ export function BillOfLadingListGrid({
   showNnPrint = true,
   showReadyToConfirm = false,
   enableTermsOnConfirmedEdit = true,
-  rowSelection,
-  onSelectionChanged,
 }: BillOfLadingListGridProps) {
   const columns: DataViewColumn<BLListDTO>[] = useMemo(() => {
     const cols: DataViewColumn<BLListDTO>[] = [
@@ -83,13 +76,13 @@ export function BillOfLadingListGrid({
       {
         field: "statusLabel",
         headerName: "Status",
-        width: 150,
+        width: 160,
         cellRenderer: (params: { data?: BLListDTO }) => {
           if (!params.data) return null;
           return (
             <Tag
               className="bl-status-tag"
-              color={getBLStatusColor(params.data.status)}
+              color={getBLListStatusColor(params.data)}
             >
               {params.data.isLocked ? "Locked" : params.data.statusLabel}
             </Tag>
@@ -102,10 +95,8 @@ export function BillOfLadingListGrid({
         width: 150,
         pinned: "left",
         colId: "blNo",
-        checkboxSelection: rowSelection === "multiple",
-        headerCheckboxSelection: rowSelection === "multiple",
       },
-      { field: "mcnNo", headerName: "MCN No", width: 130 },
+      { field: "mcnNo", headerName: "MCN No", width: 170 },
       { field: "bookingNo", headerName: "Booking No", width: 140 },
     ];
 
@@ -149,7 +140,6 @@ export function BillOfLadingListGrid({
     onPrint,
     onVerify,
     onView,
-    rowSelection,
     showChargeSummary,
     showNnPrint,
     showReadyToConfirm,
@@ -170,10 +160,6 @@ export function BillOfLadingListGrid({
           gridOptions: {
             getRowId: (params) => params.data.blNo,
             onRowDoubleClicked: onRowDoubleClicked,
-            rowSelection: rowSelection
-              ? { mode: rowSelection === "multiple" ? "multiRow" : "singleRow" }
-              : undefined,
-            onSelectionChanged,
           },
         }}
       />

@@ -1,15 +1,53 @@
-// Modified by Sekar Nagarajan (2026-08-28 10:32)
+// Modified by Sekar Nagarajan (2026-08-31 16:41)
+/**
+ * Preview — summary of all wizard step inputs with Edit → jump to step.
+ */
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
-import { Card, Descriptions, Flex, Result, Typography } from "antd";
+import { useNavigate } from "@tanstack/react-router";
+import {
+  Col,
+  Descriptions,
+  Flex,
+  Result,
+  Row,
+  Tag,
+  Typography,
+} from "antd";
 import { useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import {
+  MODULE_TITLES,
+  WIZARD_STEP_TITLES,
+} from "../../../constants/module-titles";
+import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import { bookingApi } from "../api/booking.api";
 import { useBookingStore } from "../stores/booking.store";
 import { BookingModuleStyles } from "./booking-module-styles";
+import {
+  BookingPreviewEmpty,
+  BookingPreviewPartyBlock,
+  BookingPreviewSection,
+} from "./preview/booking-preview-section";
 
 const { Title, Text } = Typography;
+
+/** Wizard step indices — mirrors booking-wizard-route Steps order. */
+const BOOKING_STEP = {
+  master: 0,
+  parties: 1,
+  cargo: 2,
+  ens: 3,
+  insurance: 4,
+  files: 5,
+  references: 6,
+} as const;
+
+function dash(value?: string | number | null): string {
+  if (value === undefined || value === null || value === "") return "—";
+  return String(value);
+}
 
 interface PreviewStepProps {
   onSubmit: () => void;
@@ -18,8 +56,13 @@ interface PreviewStepProps {
 
 export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
   const toast = useToast();
-  const { payload, prevStep } = useBookingStore();
+  const navigate = useNavigate();
+  const { payload, prevStep, setCurrentStep } = useBookingStore();
   const [savingDraft, setSavingDraft] = useState(false);
+
+  const go = (step: (typeof BOOKING_STEP)[keyof typeof BOOKING_STEP]) => {
+    setCurrentStep(step);
+  };
 
   const handleSaveDraft = async () => {
     setSavingDraft(true);
@@ -43,46 +86,66 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
     );
   }
 
-  const { masterDetails, parties, cargo, ens, insurance, documents = [] } =
-    payload;
+  const {
+    masterDetails,
+    parties,
+    cargo,
+    ens,
+    insurance,
+    documents = [],
+    referenceFields = [],
+  } = payload;
   const route = masterDetails.selectedRoute;
+  const busy = isSubmitting || savingDraft;
 
   return (
     <div className="form-step-layout">
       <BookingModuleStyles />
-      <div className="custom-scroll form-step-scroll">
-        <Card
-          title={
-            <Title level={5} className="booking-preview-card-title">
-              Master Details
-            </Title>
-          }
-          className="form-step-card form-step-section"
+      <div className="custom-scroll form-step-scroll booking-preview-scroll">
+        <div className="booking-preview-header">
+          <Title
+            level={4}
+            className="form-step-card-title booking-preview-title"
+          >
+            {MODULE_TITLES.bookingSummary}
+          </Title>
+          <Text type="secondary" className="booking-preview-subtitle">
+            Review each section. Use Edit to jump back and update that step.
+          </Text>
+        </div>
+
+        <BookingPreviewSection
+          title={WIZARD_STEP_TITLES.masterDetails}
+          onEdit={() => go(BOOKING_STEP.master)}
         >
-          <Descriptions column={{ xs: 1, sm: 2, md: 3 }}>
+          <Descriptions
+            size="small"
+            column={{ xs: 1, sm: 2, md: 3 }}
+            className="booking-preview-descriptions"
+          >
             <Descriptions.Item label="Origin">
-              {masterDetails.origin}
+              {dash(masterDetails.origin)}
             </Descriptions.Item>
             <Descriptions.Item label="Delivery">
-              {masterDetails.delivery}
+              {dash(masterDetails.delivery)}
             </Descriptions.Item>
             <Descriptions.Item label="Cargo Ready Date">
-              {masterDetails.cargoReadyDate}
+              {dash(masterDetails.cargoReadyDate)}
             </Descriptions.Item>
             <Descriptions.Item label="Haulage Origin">
-              {masterDetails.haulageOriginType}
+              {dash(masterDetails.haulageOriginType)}
             </Descriptions.Item>
             <Descriptions.Item label="Haulage Destination">
-              {masterDetails.haulageDestinationType}
+              {dash(masterDetails.haulageDestinationType)}
             </Descriptions.Item>
             <Descriptions.Item label="Carriage Contract">
-              {masterDetails.carriageContract || "N/A"}
+              {dash(masterDetails.carriageContract)}
             </Descriptions.Item>
             <Descriptions.Item label="Agreement Party">
-              {masterDetails.agreementParty || "N/A"}
+              {dash(masterDetails.agreementParty)}
             </Descriptions.Item>
             <Descriptions.Item label="Preferred Agency">
-              {masterDetails.preferredAgency || "N/A"}
+              {dash(masterDetails.preferredAgency)}
             </Descriptions.Item>
           </Descriptions>
 
@@ -99,167 +162,228 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
                 </Text>
               </div>
             </div>
-          ) : null}
-        </Card>
+          ) : (
+            <BookingPreviewEmpty label="No route selected" />
+          )}
+        </BookingPreviewSection>
 
-        <Card
-          title={
-            <Title level={5} className="booking-preview-card-title">
-              Parties
-            </Title>
-          }
-          className="form-step-card form-step-section"
+        <BookingPreviewSection
+          title={WIZARD_STEP_TITLES.customerDetails}
+          onEdit={() => go(BOOKING_STEP.parties)}
         >
-          <Descriptions column={{ xs: 1, sm: 2 }}>
-            <Descriptions.Item label="Shipper">
-              {parties.shipperName}
-            </Descriptions.Item>
-            <Descriptions.Item label="Shipper Address">
-              {[
-                parties.shipperAddress,
-                parties.shipperCity,
-                parties.shipperCountry,
-              ]
-                .filter(Boolean)
-                .join(", ") || "N/A"}
-            </Descriptions.Item>
-            <Descriptions.Item label="Consignee">
-              {parties.consigneeName}
-            </Descriptions.Item>
-            <Descriptions.Item label="Consignee Address">
-              {[
-                parties.consigneeAddress,
-                parties.consigneeCity,
-                parties.consigneeCountry,
-              ]
-                .filter(Boolean)
-                .join(", ") || "N/A"}
-            </Descriptions.Item>
-            <Descriptions.Item label="Notify Party">
-              {parties.notifyPartyName || "N/A"}
-            </Descriptions.Item>
-            <Descriptions.Item label="Notify Party 2">
-              {parties.notifyParty2Name || "N/A"}
-            </Descriptions.Item>
-            <Descriptions.Item label="Agreement Party">
-              {parties.agreementParty}
-            </Descriptions.Item>
-            <Descriptions.Item label="SI Submitting Party">
-              {parties.siSubmittingParty}
-            </Descriptions.Item>
-          </Descriptions>
-        </Card>
+          <Row gutter={[24, 24]}>
+            <Col {...RESPONSIVE_COL.third}>
+              <BookingPreviewPartyBlock
+                role="Booking Party"
+                name={parties.shipperName}
+                address={parties.shipperAddress}
+                city={parties.shipperCity}
+                country={parties.shipperCountry}
+              />
+            </Col>
+            <Col {...RESPONSIVE_COL.third}>
+              <BookingPreviewPartyBlock
+                role="Consignee"
+                name={parties.consigneeName}
+                address={parties.consigneeAddress}
+                city={parties.consigneeCity}
+                country={parties.consigneeCountry}
+              />
+            </Col>
+            <Col {...RESPONSIVE_COL.third}>
+              <BookingPreviewPartyBlock
+                role="Notify Party"
+                name={parties.notifyPartyName}
+                address={parties.notifyPartyAddress}
+                city={parties.notifyPartyCity}
+                country={parties.notifyPartyCountry}
+              />
+            </Col>
+            {parties.notifyParty2Name ? (
+              <Col {...RESPONSIVE_COL.third}>
+                <BookingPreviewPartyBlock
+                  role="Notify Party 2"
+                  name={parties.notifyParty2Name}
+                />
+              </Col>
+            ) : null}
+            <Col {...RESPONSIVE_COL.third}>
+              <div className="booking-party-block">
+                <span className="form-field-label">Agreement Party</span>
+                <Text strong>{dash(parties.agreementParty)}</Text>
+              </div>
+            </Col>
+            <Col {...RESPONSIVE_COL.third}>
+              <div className="booking-party-block">
+                <span className="form-field-label">SI Submitting Party</span>
+                <Text strong>{dash(parties.siSubmittingParty)}</Text>
+              </div>
+            </Col>
+          </Row>
+        </BookingPreviewSection>
 
-        <Card
-          title={
-            <Title level={5} className="booking-preview-card-title">
-              Cargo & Equipment
-            </Title>
-          }
-          className="form-step-card form-step-section"
+        <BookingPreviewSection
+          title={WIZARD_STEP_TITLES.cargoDetails}
+          onEdit={() => go(BOOKING_STEP.cargo)}
         >
-          {cargo.containers.map((container, idx) => (
-            <div key={container.id} className="booking-cargo-container-card">
-              <Text strong>
-                Container {idx + 1}: {container.quantity}x{" "}
-                {container.containerType}
-                {container.isSoc ? " · SOC" : ""}
-                {container.reeferMode !== "none"
-                  ? ` · Reefer ${container.reeferMode}`
-                  : ""}
-                {container.isLcl ? " · LCL" : ""}
-                {container.isOog ? " · OOG" : ""}
-              </Text>
-              <ul className="booking-cargo-commodity-list">
-                {container.commodities.map((c) => (
-                  <li key={c.id}>
-                    {c.hsCode ? `${c.hsCode} · ` : ""}
-                    {c.commodity || c.description} · {c.packageQuantity}{" "}
-                    {c.packageType} · {c.weight} kg · {c.volume} m³
-                    {c.marksAndNumbers ? ` · Marks: ${c.marksAndNumbers}` : ""}
-                    {c.isDangerousGoods ? (
-                      <Text type="danger">
-                        {" "}
-                        · DG UN {c.unNumber} / Class {c.dgClass}
-                      </Text>
-                    ) : null}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </Card>
+          {cargo.containers.length === 0 ? (
+            <BookingPreviewEmpty label="No containers" />
+          ) : (
+            cargo.containers.map((container, idx) => (
+              <div key={container.id} className="booking-cargo-container-card">
+                <Text strong>
+                  Container {idx + 1}: {container.quantity}x{" "}
+                  {container.containerType}
+                  {container.isSoc ? " · SOC" : ""}
+                  {container.reeferMode !== "none"
+                    ? ` · Reefer ${container.reeferMode}`
+                    : ""}
+                  {container.isLcl ? " · LCL" : ""}
+                  {container.isOog ? " · OOG" : ""}
+                </Text>
+                <ul className="booking-preview-list">
+                  {container.commodities.map((c) => (
+                    <li key={c.id}>
+                      {c.hsCode ? `${c.hsCode} · ` : ""}
+                      {c.commodity || c.description} · {c.packageQuantity}{" "}
+                      {c.packageType} · {c.weight} kg · {c.volume} m³
+                      {c.marksAndNumbers
+                        ? ` · Marks: ${c.marksAndNumbers}`
+                        : ""}
+                      {c.isDangerousGoods ? (
+                        <Text type="danger">
+                          {" "}
+                          · DG UN {c.unNumber} / Class {c.dgClass}
+                        </Text>
+                      ) : null}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          )}
+        </BookingPreviewSection>
 
-        {ens?.euCustomsZone ? (
-          <Card
-            title={
-              <Title level={5} className="booking-preview-card-title">
-                ENS Details
-              </Title>
-            }
-            className="form-step-card form-step-section"
-          >
-            <Descriptions column={{ xs: 1, sm: 2, md: 3 }}>
-              <Descriptions.Item label="BL Type">{ens.blType}</Descriptions.Item>
+        <BookingPreviewSection
+          title={WIZARD_STEP_TITLES.ensDetails}
+          onEdit={() => go(BOOKING_STEP.ens)}
+        >
+          {ens?.euCustomsZone ? (
+            <Descriptions
+              size="small"
+              column={{ xs: 1, sm: 2, md: 3 }}
+              className="booking-preview-descriptions"
+            >
+              <Descriptions.Item label="EU Customs Zone">Yes</Descriptions.Item>
+              <Descriptions.Item label="BL Type">
+                {dash(ens.blType)}
+              </Descriptions.Item>
               <Descriptions.Item label="Filing Type">
-                {ens.ensFilingType}
+                {dash(ens.ensFilingType)}
               </Descriptions.Item>
               <Descriptions.Item label="Payment Method">
-                {ens.paymentMethod}
+                {dash(ens.paymentMethod)}
               </Descriptions.Item>
-              {ens.declarantName ? (
+              {ens.ensFilingType === "Single Filing" ? (
+                <>
+                  <Descriptions.Item label="Buyer">
+                    {dash(ens.buyerName)}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Seller">
+                    {dash(ens.sellerName)}
+                  </Descriptions.Item>
+                </>
+              ) : (
                 <Descriptions.Item label="Declarant">
-                  {ens.declarantName} ({ens.declarantCountry})
+                  {ens.declarantName
+                    ? `${ens.declarantName}${
+                        ens.declarantCountry
+                          ? ` (${ens.declarantCountry})`
+                          : ""
+                      }`
+                    : "—"}
                 </Descriptions.Item>
-              ) : null}
+              )}
             </Descriptions>
-          </Card>
-        ) : null}
+          ) : (
+            <Tag>ENS not required</Tag>
+          )}
+        </BookingPreviewSection>
 
-        {insurance?.isInsuranceRequired ? (
-          <Card
-            title={
-              <Title level={5} className="booking-preview-card-title">
-                Insurance
-              </Title>
-            }
-            className="form-step-card form-step-section"
-          >
-            <Descriptions column={{ xs: 1, sm: 2 }}>
+        <BookingPreviewSection
+          title={WIZARD_STEP_TITLES.insurance}
+          onEdit={() => go(BOOKING_STEP.insurance)}
+        >
+          {insurance?.isInsuranceRequired ? (
+            <Descriptions
+              size="small"
+              column={{ xs: 1, sm: 2, md: 3 }}
+              className="booking-preview-descriptions"
+            >
+              <Descriptions.Item label="Required">Yes</Descriptions.Item>
               <Descriptions.Item label="Cargo Value">
-                {insurance.cargoValue} {insurance.currency}
+                {dash(insurance.cargoValue)} {dash(insurance.currency)}
               </Descriptions.Item>
               <Descriptions.Item label="Terms Accepted">
                 {insurance.termsAccepted ? "Yes" : "No"}
               </Descriptions.Item>
             </Descriptions>
-          </Card>
-        ) : null}
+          ) : (
+            <Tag>Insurance not required</Tag>
+          )}
+        </BookingPreviewSection>
 
-        {documents.length > 0 ? (
-          <Card
-            title={
-              <Title level={5} className="booking-preview-card-title">
-                Documents
-              </Title>
-            }
-            className="form-step-card form-step-section"
-          >
-            <ul className="booking-preview-doc-list">
+        <BookingPreviewSection
+          title={WIZARD_STEP_TITLES.fileUpload}
+          onEdit={() => go(BOOKING_STEP.files)}
+        >
+          {documents.length > 0 ? (
+            <ul className="booking-preview-list">
               {documents.map((d) => (
                 <li key={d.id}>
                   {d.fileName} ({d.type})
                 </li>
               ))}
             </ul>
-          </Card>
-        ) : null}
+          ) : (
+            <BookingPreviewEmpty label="No files uploaded" />
+          )}
+        </BookingPreviewSection>
+
+        <BookingPreviewSection
+          title={WIZARD_STEP_TITLES.references}
+          onEdit={() => go(BOOKING_STEP.references)}
+        >
+          {referenceFields.length > 0 ? (
+            <Descriptions
+              size="small"
+              column={{ xs: 1, sm: 2, md: 3 }}
+              className="booking-preview-descriptions"
+            >
+              {referenceFields.map((field) => (
+                <Descriptions.Item key={field.id} label={field.name}>
+                  {dash(field.value)}
+                </Descriptions.Item>
+              ))}
+            </Descriptions>
+          ) : (
+            <BookingPreviewEmpty label="No reference fields" />
+          )}
+        </BookingPreviewSection>
       </div>
 
-      <div className="form-step-footer">
-        <AppButton onClick={prevStep} disabled={isSubmitting || savingDraft}>
-          Previous
-        </AppButton>
+      <div className="form-step-footer form-step-footer--split">
+        <div className="form-step-footer__start custom-scroll">
+          <AppButton onClick={prevStep} disabled={busy}>
+            Previous
+          </AppButton>
+          <AppButton
+            onClick={() => navigate({ to: "/app/booking" })}
+            disabled={busy}
+          >
+            Cancel
+          </AppButton>
+        </div>
         <Flex gap="small" wrap="wrap">
           <AppButton
             icon={<AppIcon icon={Icons.save} size={16} />}
@@ -269,7 +393,13 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
           >
             Save Draft
           </AppButton>
-          <AppButton type="primary" onClick={onSubmit} loading={isSubmitting}>
+          <AppButton
+            type="primary"
+            icon={<AppIcon icon={Icons.check} size={16} />}
+            onClick={onSubmit}
+            loading={isSubmitting}
+            disabled={savingDraft}
+          >
             Submit Booking
           </AppButton>
         </Flex>

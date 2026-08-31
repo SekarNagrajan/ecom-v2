@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 11:45)
+// Modified by Sekar Nagarajan (2026-08-31 18:52)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { useNavigate } from "@tanstack/react-router";
 import { Tag, Tooltip, Typography } from "antd";
@@ -6,6 +6,7 @@ import { Tag, Tooltip, Typography } from "antd";
 import { AppIcon, Icons } from "../../../../components/icons";
 import { formatModuleScreenTitle } from "../../../../constants/module-titles";
 import type { BookingListDTO } from "../../types/booking-list.types";
+import { getBookingListStatusColor } from "../../types/booking-list.types";
 import { BookingDetailsViewer } from "./BookingDetailsViewer";
 import { HaulageTrackingGrid } from "./HaulageTrackingGrid";
 
@@ -14,12 +15,6 @@ const { Title, Text } = Typography;
 interface BookingViewDrawerProps {
   booking: BookingListDTO;
   onClose: () => void;
-}
-
-function statusColor(status: BookingListDTO["status"]) {
-  if (status === "Confirmed") return "success";
-  if (status === "Awaiting Acceptance") return "processing";
-  return "error";
 }
 
 export function BookingViewDrawer({
@@ -56,7 +51,9 @@ export function BookingViewDrawer({
               ) : null}
             </Text>
             <div className="booking-drawer-title__tags">
-              <Tag color={statusColor(booking.status)}>{booking.status}</Tag>
+              <Tag color={getBookingListStatusColor(booking.status)}>
+                {booking.status}
+              </Tag>
               {booking.dgStatus === "Y" ? (
                 <Tag color="error">Dangerous Goods</Tag>
               ) : (

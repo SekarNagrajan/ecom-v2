@@ -1,4 +1,4 @@
-// Created by Sekar Nagarajan (2026-08-28 00:55)
+// Modified by Sekar Nagarajan (2026-08-31 14:17)
 import type { BLParty, BLDTO } from "../types/bl.types";
 import {
   cardsToSiPartiesForm,
@@ -41,15 +41,25 @@ export function cardsToBlParties(
       ...cardToParty(cards.consignee, existing.consignee),
       toOrder: cards.consignee?.toOrder ?? false,
     },
-    notify: cardToParty(cards.notify, existing.notify),
+    notify: cardToParty(
+      cards.notify ?? cards.consignee,
+      existing.notify,
+    ),
     notify2: cards.notify2
       ? cardToParty(cards.notify2, existing.notify2)
       : undefined,
     notify3: cards.notify3
       ? cardToParty(cards.notify3, existing.notify3)
       : undefined,
-    forwarder: existing.forwarder,
-    warehouse: existing.warehouse,
+    forwarder: cards.forwarder
+      ? cardToParty(cards.forwarder, existing.forwarder)
+      : existing.forwarder,
+    warehouse: cards.warehouse
+      ? cardToParty(cards.warehouse, existing.warehouse)
+      : existing.warehouse,
+    agreementParty: cards.agreementParty
+      ? cardToParty(cards.agreementParty, existing.agreementParty)
+      : existing.agreementParty,
     notifySameAsConsignee: existing.notifySameAsConsignee,
   };
 }

@@ -1,10 +1,26 @@
-// Created by Sekar Nagarajan (2026-08-28 00:55)
+// Modified by Sekar Nagarajan (2026-08-31 14:17)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
 
 export function BlPartyStyles() {
   const { token } = theme.useToken();
+  const primaryTint8 = tokenMix(token.colorPrimary, 8);
+  const successTint8 = tokenMix(token.colorSuccess, 8);
+  const warningTint8 = tokenMix(token.colorWarning, 8);
+  const infoTint8 = tokenMix(token.colorInfo, 8);
+  const geekblueTint8 = tokenMix(token.geekblue, 8);
+  const cyanTint8 = tokenMix(token.cyan, 8);
+  const orangeTint8 = tokenMix(token.orange, 8);
+  const purpleTint8 = tokenMix(token.purple, 8);
+  const primaryTint14 = tokenMix(token.colorPrimary, 14);
+  const successTint14 = tokenMix(token.colorSuccess, 14);
+  const warningTint14 = tokenMix(token.colorWarning, 14);
+  const infoTint14 = tokenMix(token.colorInfo, 14);
+  const geekblueTint14 = tokenMix(token.geekblue, 14);
+  const cyanTint14 = tokenMix(token.cyan, 14);
+  const orangeTint14 = tokenMix(token.orange, 14);
+  const purpleTint14 = tokenMix(token.purple, 14);
 
   return (
     <style>{`
@@ -58,6 +74,9 @@ export function BlPartyStyles() {
       .booking-party-grid {
         margin: 0 !important;
       }
+      .booking-party-grid--other {
+        margin-top: ${token.marginLG}px !important;
+      }
       .booking-party-grid__col {
         display: flex;
       }
@@ -67,6 +86,60 @@ export function BlPartyStyles() {
         width: 100%;
         height: 100%;
         border-radius: ${token.borderRadiusLG}px;
+      }
+      /* Modified by Sekar Nagarajan (2026-08-31 14:17) — mild per-role card tints */
+      .booking-party-card--shipper.ant-card {
+        background: ${primaryTint8};
+        border-color: ${primaryTint14};
+      }
+      .booking-party-card--agreementParty.ant-card {
+        background: ${geekblueTint8};
+        border-color: ${geekblueTint14};
+      }
+      .booking-party-card--notify.ant-card {
+        background: ${cyanTint8};
+        border-color: ${cyanTint14};
+      }
+      .booking-party-card--consignee.ant-card {
+        background: ${successTint8};
+        border-color: ${successTint14};
+      }
+      .booking-party-card--notify2.ant-card {
+        background: ${infoTint8};
+        border-color: ${infoTint14};
+      }
+      .booking-party-card--notify3.ant-card {
+        background: ${orangeTint8};
+        border-color: ${orangeTint14};
+      }
+      .booking-party-card--forwarder.ant-card {
+        background: ${warningTint8};
+        border-color: ${warningTint14};
+      }
+      .booking-party-card--warehouse.ant-card {
+        background: ${purpleTint8};
+        border-color: ${purpleTint14};
+      }
+      .booking-party-card--shipper > .ant-card-head,
+      .booking-party-card--agreementParty > .ant-card-head,
+      .booking-party-card--notify > .ant-card-head,
+      .booking-party-card--consignee > .ant-card-head,
+      .booking-party-card--notify2 > .ant-card-head,
+      .booking-party-card--notify3 > .ant-card-head,
+      .booking-party-card--forwarder > .ant-card-head,
+      .booking-party-card--warehouse > .ant-card-head {
+        background: transparent;
+      }
+      .booking-party-card--empty.ant-card {
+        border-style: dashed;
+      }
+      .booking-party-card__empty-body {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        gap: ${token.marginSM}px;
+        min-height: ${token.controlHeightLG * 2}px;
       }
       .booking-party-card > .ant-card-head {
         min-height: ${token.controlHeightLG}px;

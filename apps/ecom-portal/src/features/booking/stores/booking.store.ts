@@ -1,5 +1,5 @@
-// Modified by Sekar Nagarajan (2026-08-27 18:30)
-import { create } from 'zustand';
+// Modified by Sekar Nagarajan (2026-08-31 14:46)
+import { create } from "zustand";
 import type {
   BookingDocument,
   BookingPayload,
@@ -8,8 +8,9 @@ import type {
   InsuranceData,
   MasterDetailsData,
   PartiesData,
-} from '../types/booking.types';
-import { defaultCargoData, migrateLegacyCargo } from '../types/booking.types';
+} from "../types/booking.types";
+import { defaultCargoData, migrateLegacyCargo } from "../types/booking.types";
+import type { ReferenceField } from "../utils/reference-field.utils";
 
 interface BookingState {
   currentStep: number;
@@ -26,10 +27,13 @@ interface BookingState {
   updateEns: (data: EnsData) => void;
   updateInsurance: (data: InsuranceData) => void;
   updateDocuments: (documents: BookingDocument[]) => void;
+  updateReferenceFields: (fields: ReferenceField[]) => void;
   clearEns: () => void;
   clearInsurance: () => void;
   initializeFromBooking: (payload: BookingPayload) => void;
 }
+
+const BOOKING_WIZARD_LAST_STEP = 7; // Preview (References is step 6)
 
 const initialPayload: BookingPayload = {
   masterDetails: null,
@@ -38,13 +42,16 @@ const initialPayload: BookingPayload = {
   ens: null,
   insurance: null,
   documents: [],
+  referenceFields: [],
 };
 
 export const useBookingStore = create<BookingState>((set) => ({
   currentStep: 0,
   setCurrentStep: (step) => set({ currentStep: step }),
   nextStep: () =>
-    set((state) => ({ currentStep: Math.min(state.currentStep + 1, 6) })),
+    set((state) => ({
+      currentStep: Math.min(state.currentStep + 1, BOOKING_WIZARD_LAST_STEP),
+    })),
   prevStep: () =>
     set((state) => ({ currentStep: Math.max(state.currentStep - 1, 0) })),
   resetWizard: () => set({ currentStep: 0, payload: initialPayload }),
@@ -63,6 +70,8 @@ export const useBookingStore = create<BookingState>((set) => ({
     set((state) => ({ payload: { ...state.payload, insurance: data } })),
   updateDocuments: (documents) =>
     set((state) => ({ payload: { ...state.payload, documents } })),
+  updateReferenceFields: (referenceFields) =>
+    set((state) => ({ payload: { ...state.payload, referenceFields } })),
   clearEns: () =>
     set((state) => ({ payload: { ...state.payload, ens: null } })),
   clearInsurance: () =>
@@ -76,6 +85,7 @@ export const useBookingStore = create<BookingState>((set) => ({
           ? migrateLegacyCargo(payload.cargo)
           : defaultCargoData(),
         documents: payload.documents ?? [],
+        referenceFields: payload.referenceFields ?? [],
       },
     }),
 }));

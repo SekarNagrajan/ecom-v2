@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-27 19:12)
+// Modified by Sekar Nagarajan (2026-08-31 18:52)
 import { AppButton } from "@solverminds/shared-ui";
 import { ListView } from "@solverminds/shared-ui/data-view/list-view";
 import { useConfirm, useToast } from "@solverminds/shared-ui/hooks";
@@ -24,6 +24,7 @@ import { ManageTemplateModal } from "./components/ManageTemplateModal";
 import { BookingViewDrawer } from "./components/view/BookingViewDrawer";
 import { useBookingStore } from "./stores/booking.store";
 import type { BookingListDTO } from "./types/booking-list.types";
+import { getBookingListStatusColor } from "./types/booking-list.types";
 
 export function BookingDashboardRoute() {
   const navigate = useNavigate();
@@ -100,180 +101,192 @@ export function BookingDashboardRoute() {
   return (
     <FeaturePageShell>
       <BookingModuleStyles />
-      <Space direction="vertical" size="large" className="feature-page-stack">
-        <ModuleScreenHeader
-          icon={Icons.bookOpen}
-          title={MODULE_TITLES.booking}
-          extra={
-            <Space wrap className="custom-scroll">
-              <AppButton
-                icon={<AppIcon icon={Icons.settings} size={16} />}
-                onClick={() => setIsTemplateModalOpen(true)}
-              >
-                Manage Template
-              </AppButton>
-              <AppButton
-                type="primary"
-                icon={<AppIcon icon={Icons.plus} size={16} />}
-                onClick={() => navigate({ to: "/app/booking/new" })}
-              >
-                New Booking
-              </AppButton>
-            </Space>
-          }
-        />
-
-        <Card className="booking-list-card" bordered={false}>
-          <div className="booking-list-grid responsive-table-wrap custom-scroll ag-theme-alpine">
-            <ListView
-              rowData={bookings}
-              loading={isLoading}
-              defaultColDef={{ filter: true }}
-              columnDefs={[
-                buildActionsColumn<BookingListDTO>({
-                  field: "id",
-                  width: 210,
-                  cellRenderer: (params: { data?: BookingListDTO }) => {
-                    const record = params.data;
-                    if (!record) return null;
-                    return (
-                      <ListActionsRow>
-                        <ListActionButton
-                          title="View Booking"
-                          icon={
-                            <AppIcon icon={Icons.eye} size={16} tone="view" />
-                          }
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleView(record);
-                          }}
-                        />
-                        <ListActionButton
-                          title="Amendment (Edit)"
-                          icon={
-                            <AppIcon icon={Icons.edit} size={16} tone="edit" />
-                          }
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleAmend(record);
-                          }}
-                        />
-                        <ListActionButton
-                          title="Duplicate Booking"
-                          icon={
-                            <AppIcon
-                              icon={Icons.copy}
-                              size={16}
-                              tone="create"
-                            />
-                          }
-                          tone="create"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            void handleDuplicate(record);
-                          }}
-                        />
-                        <ListActionButton
-                          title="Download PDF"
-                          icon={
-                            <AppIcon
-                              icon={Icons.download}
-                              size={16}
-                              tone="download"
-                            />
-                          }
-                          tone="download"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            void handleDownloadPdf(record);
-                          }}
-                        />
-                        <ListActionButton
-                          title="Cancel Booking"
-                          icon={
-                            <AppIcon
-                              icon={Icons.circleX}
-                              size={16}
-                              tone="reject"
-                            />
-                          }
-                          danger
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleCancel(record);
-                          }}
-                        />
-                      </ListActionsRow>
-                    );
-                  },
-                }),
-                { field: "bookingNo", headerName: "Booking No", flex: 1 },
-                {
-                  field: "onlineRefNo",
-                  headerName: "Online Reference Number",
-                  flex: 1,
-                },
-                {
-                  field: "agencyRefNo",
-                  headerName: "Agency Ref No.",
-                  flex: 1,
-                },
-                {
-                  field: "status",
-                  headerName: "Status",
-                  flex: 1,
-                  cellRenderer: (params: { value?: string }) => {
-                    const val = params.value;
-                    const color =
-                      val === "Confirmed"
-                        ? "success"
-                        : val === "Awaiting Acceptance"
-                        ? "processing"
-                        : val === "Cancelled"
-                        ? "default"
-                        : "error";
-                    return <Tag color={color}>{val}</Tag>;
-                  },
-                },
-                { field: "origin", headerName: "Origin", flex: 1 },
-                { field: "delivery", headerName: "Delivery", flex: 1 },
-                { field: "createdDate", headerName: "Created Date", flex: 1 },
-                {
-                  field: "confirmedDate",
-                  headerName: "Confirmed Date",
-                  flex: 1,
-                },
-                { field: "dgStatus", headerName: "DG Status", width: 100 },
-                { field: "teusCount", headerName: "TEUs count", width: 120 },
-                {
-                  field: "submittedDate",
-                  headerName: "Submitted Date",
-                  flex: 1,
-                },
-              ]}
-              gridOptions={{
-                onRowDoubleClicked: (
-                  event: RowDoubleClickedEvent<BookingListDTO>,
-                ) => {
-                  if (event.data) handleView(event.data);
-                },
-              }}
+      <Card className="feature-page-card booking-page-card" bordered={false}>
+        <div className="booking-page-layout">
+          <div className="booking-page-header">
+            <ModuleScreenHeader
+              icon={Icons.bookOpen}
+              title={MODULE_TITLES.booking}
+              subtitle="Create and manage bookings, amend drafts, and track confirmation status."
+              marginBottom={0}
+              extra={
+                <Space wrap className="custom-scroll">
+                  <AppButton
+                    icon={<AppIcon icon={Icons.settings} size={16} />}
+                    onClick={() => setIsTemplateModalOpen(true)}
+                  >
+                    Manage Template
+                  </AppButton>
+                  <AppButton
+                    type="primary"
+                    icon={<AppIcon icon={Icons.plus} size={16} />}
+                    onClick={() => navigate({ to: "/app/booking/new" })}
+                  >
+                    New Booking
+                  </AppButton>
+                </Space>
+              }
             />
           </div>
-        </Card>
 
-        <ManageTemplateModal
-          open={isTemplateModalOpen}
-          onCancel={() => setIsTemplateModalOpen(false)}
+          <div className="booking-grid-wrap">
+            <div className="booking-list-grid responsive-table-wrap custom-scroll ag-theme-alpine">
+              <ListView
+                rowData={bookings}
+                loading={isLoading}
+                defaultColDef={{ filter: true }}
+                columnDefs={[
+                  buildActionsColumn<BookingListDTO>({
+                    field: "id",
+                    width: 210,
+                    cellRenderer: (params: { data?: BookingListDTO }) => {
+                      const record = params.data;
+                      if (!record) return null;
+                      return (
+                        <ListActionsRow>
+                          <ListActionButton
+                            title="View Booking"
+                            icon={
+                              <AppIcon icon={Icons.eye} size={16} tone="view" />
+                            }
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleView(record);
+                            }}
+                          />
+                          <ListActionButton
+                            title="Amendment (Edit)"
+                            icon={
+                              <AppIcon
+                                icon={Icons.edit}
+                                size={16}
+                                tone="edit"
+                              />
+                            }
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleAmend(record);
+                            }}
+                          />
+                          <ListActionButton
+                            title="Duplicate Booking"
+                            icon={
+                              <AppIcon
+                                icon={Icons.copy}
+                                size={16}
+                                tone="create"
+                              />
+                            }
+                            tone="create"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              void handleDuplicate(record);
+                            }}
+                          />
+                          <ListActionButton
+                            title="Download PDF"
+                            icon={
+                              <AppIcon
+                                icon={Icons.download}
+                                size={16}
+                                tone="download"
+                              />
+                            }
+                            tone="download"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              void handleDownloadPdf(record);
+                            }}
+                          />
+                          <ListActionButton
+                            title="Cancel Booking"
+                            icon={
+                              <AppIcon
+                                icon={Icons.circleX}
+                                size={16}
+                                tone="reject"
+                              />
+                            }
+                            danger
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleCancel(record);
+                            }}
+                          />
+                        </ListActionsRow>
+                      );
+                    },
+                  }),
+                  { field: "bookingNo", headerName: "Booking No", flex: 1 },
+                  {
+                    field: "onlineRefNo",
+                    headerName: "Online Reference Number",
+                    flex: 1,
+                  },
+                  {
+                    field: "agencyRefNo",
+                    headerName: "Agency Ref No.",
+                    flex: 1,
+                  },
+                  {
+                    field: "status",
+                    headerName: "Status",
+                    flex: 1,
+                    cellRenderer: (params: { value?: string }) => {
+                      const val = params.value as
+                        | BookingListDTO["status"]
+                        | undefined;
+                      return (
+                        <Tag
+                          color={
+                            val ? getBookingListStatusColor(val) : "default"
+                          }
+                        >
+                          {val}
+                        </Tag>
+                      );
+                    },
+                  },
+                  { field: "origin", headerName: "Origin", flex: 1 },
+                  { field: "delivery", headerName: "Delivery", flex: 1 },
+                  { field: "createdDate", headerName: "Created Date", flex: 1 },
+                  {
+                    field: "confirmedDate",
+                    headerName: "Confirmed Date",
+                    flex: 1,
+                  },
+                  { field: "dgStatus", headerName: "DG Status", width: 100 },
+                  { field: "teusCount", headerName: "TEUs count", width: 120 },
+                  {
+                    field: "submittedDate",
+                    headerName: "Submitted Date",
+                    flex: 1,
+                  },
+                ]}
+                gridOptions={{
+                  onRowDoubleClicked: (
+                    event: RowDoubleClickedEvent<BookingListDTO>,
+                  ) => {
+                    if (event.data) handleView(event.data);
+                  },
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      </Card>
+
+      <ManageTemplateModal
+        open={isTemplateModalOpen}
+        onCancel={() => setIsTemplateModalOpen(false)}
+      />
+
+      {selectedBooking ? (
+        <BookingViewDrawer
+          booking={selectedBooking}
+          onClose={() => setSelectedBooking(null)}
         />
-
-        {selectedBooking ? (
-          <BookingViewDrawer
-            booking={selectedBooking}
-            onClose={() => setSelectedBooking(null)}
-          />
-        ) : null}
-      </Space>
+      ) : null}
     </FeaturePageShell>
   );
 }

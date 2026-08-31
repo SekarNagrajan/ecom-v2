@@ -1,5 +1,6 @@
-// Modified by Sekar Nagarajan (2026-08-25 19:20)
+// Modified by Sekar Nagarajan (2026-08-31 11:25)
 import { theme } from "antd";
+import { tokenMix } from "../../theme/utils/token-mix";
 
 /** Token-backed Tracking module layout classes (agenct.md). */
 export function TrackingModuleStyles() {
@@ -29,8 +30,28 @@ export function TrackingModuleStyles() {
         flex-wrap: wrap;
         gap: ${token.marginSM}px;
       }
+      /* Modified by Sekar Nagarajan (2026-08-31 11:25) — Tabs as search-type switcher */
       .tracking-search-type {
         margin: 0 !important;
+      }
+      .tracking-search-tabs.ant-tabs {
+        margin-bottom: 0;
+      }
+      .tracking-search-tabs .ant-tabs-nav {
+        margin-bottom: 0;
+      }
+      .tracking-search-tabs .ant-tabs-content-holder {
+        display: none;
+      }
+      .tracking-tab-label {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        line-height: 1;
+      }
+      .tracking-tab-label .app-icon {
+        display: block;
+        flex: none;
       }
       .tracking-search-samples {
         display: inline-flex;
@@ -251,7 +272,7 @@ export function TrackingModuleStyles() {
         color: ${token.colorWarning};
       }
       .tracking-deadline__icon--vgm {
-        background: ${token.colorSuccessBg};
+        background: ${tokenMix(token.colorSuccess, 10)};
         color: ${token.colorSuccess};
       }
       .tracking-deadline__label {

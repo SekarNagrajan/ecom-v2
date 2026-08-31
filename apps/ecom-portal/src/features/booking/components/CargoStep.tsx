@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-28 15:19)
+// Modified by Sekar Nagarajan (2026-08-31 14:26)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
@@ -192,7 +192,10 @@ export function CargoStep() {
                       onClick={() => setSelectedIndex(ci)}
                     >
                       <div className="booking-cargo-split__item-top">
-                        <Text strong className="booking-cargo-split__item-title">
+                        <Text
+                          strong
+                          className="booking-cargo-split__item-title"
+                        >
                           Container {ci + 1}
                         </Text>
                         <Text
@@ -237,9 +240,7 @@ export function CargoStep() {
                 dgClasses={dgClasses}
                 watch={watch}
                 setValue={setValue}
-                onDuplicate={() =>
-                  handleDuplicateContainer(safeSelectedIndex)
-                }
+                onDuplicate={() => handleDuplicateContainer(safeSelectedIndex)}
                 onRemove={() => handleRemoveContainer(safeSelectedIndex)}
                 canRemove={containerFields.length > 1}
               />
@@ -476,19 +477,20 @@ function ContainerDetailPanel({
           </Col>
           {showReeferMode ? (
             <Col xs={24} md={6}>
-              <label className="form-field-label">Reefer Mode</label>
+              {/* Modified by Sekar Nagarajan (2026-08-31 14:26) — Yes shows reefer details */}
+              <label className="form-field-label">NOR</label>
               <Controller
                 control={control}
                 name={`containers.${ci}.reeferMode`}
                 render={({ field }) => (
                   <Segmented
-                    {...field}
                     block
                     options={[
-                      { label: "None", value: "none" },
-                      { label: "Operating", value: "operating" },
-                      { label: "NOR", value: "nor" },
+                      { label: "Yes", value: "operating" },
+                      { label: "No", value: "none" },
                     ]}
+                    value={field.value === "operating" ? "operating" : "none"}
+                    onChange={(value) => field.onChange(value)}
                   />
                 )}
               />

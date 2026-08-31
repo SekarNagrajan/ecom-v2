@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-28 12:58)
+// Modified by Sekar Nagarajan (2026-08-31 17:13)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -8,6 +8,20 @@ export function SiModuleStyles() {
   const { token } = theme.useToken();
   const primaryTint8 = tokenMix(token.colorPrimary, 8);
   const successTint8 = tokenMix(token.colorSuccess, 8);
+  const warningTint8 = tokenMix(token.colorWarning, 8);
+  const infoTint8 = tokenMix(token.colorInfo, 8);
+  const geekblueTint8 = tokenMix(token.geekblue, 8);
+  const cyanTint8 = tokenMix(token.cyan, 8);
+  const orangeTint8 = tokenMix(token.orange, 8);
+  const purpleTint8 = tokenMix(token.purple, 8);
+  const primaryTint14 = tokenMix(token.colorPrimary, 14);
+  const successTint14 = tokenMix(token.colorSuccess, 14);
+  const warningTint14 = tokenMix(token.colorWarning, 14);
+  const infoTint14 = tokenMix(token.colorInfo, 14);
+  const geekblueTint14 = tokenMix(token.geekblue, 14);
+  const cyanTint14 = tokenMix(token.cyan, 14);
+  const orangeTint14 = tokenMix(token.orange, 14);
+  const purpleTint14 = tokenMix(token.purple, 14);
 
   return (
     <style>{`
@@ -23,16 +37,59 @@ export function SiModuleStyles() {
         min-height: calc(100vh - 220px);
       }
 
-      .si-list-card {
+      /* Modified by Sekar Nagarajan (2026-08-31 17:13) — VGM/BL page-card + explicit AG Grid height */
+      .feature-page-card.si-page-card.ant-card {
         border: none;
+        border-radius: ${token.borderRadiusLG}px;
       }
-      .si-list-card > .ant-card-body {
+      .feature-page-card.si-page-card > .ant-card-body {
+        display: flex;
+        flex-direction: column;
         padding: 0 !important;
+        min-height: calc(100vh - 160px);
+        overflow: hidden;
+      }
+      .si-page-layout {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
+      }
+      .si-page-header {
+        flex-shrink: 0;
+        padding: ${token.paddingMD}px ${token.paddingLG}px 0;
+      }
+      .si-grid-wrap {
+        flex: 1;
+        min-height: calc(100vh - 280px);
+        width: 100%;
+        padding: ${token.paddingMD}px ${token.paddingLG}px ${token.paddingLG}px;
+        display: flex;
+        flex-direction: column;
+      }
+      .si-grid-wrap > * {
+        flex: 1;
+        min-height: 0;
+        height: 100%;
       }
       .si-list-grid {
         width: 100%;
-        height: 500px;
-        min-height: 320px;
+        flex: 1;
+        min-height: calc(100vh - 280px);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+      .si-list-grid > * {
+        flex: 1;
+        min-height: 0;
+        height: 100%;
+      }
+      .si-list-grid .ag-theme-alpine,
+      .si-list-grid .ag-root-wrapper {
+        height: 100% !important;
+        min-height: calc(100vh - 280px);
       }
 
       .si-field-full {
@@ -177,6 +234,9 @@ export function SiModuleStyles() {
       .booking-party-grid {
         margin: 0 !important;
       }
+      .booking-party-grid--other {
+        margin-top: ${token.marginLG}px !important;
+      }
       .booking-party-grid__col {
         display: flex;
       }
@@ -186,6 +246,60 @@ export function SiModuleStyles() {
         width: 100%;
         height: 100%;
         border-radius: ${token.borderRadiusLG}px;
+      }
+      /* Modified by Sekar Nagarajan (2026-08-31 14:17) — mild per-role card tints */
+      .booking-party-card--shipper.ant-card {
+        background: ${primaryTint8};
+        border-color: ${primaryTint14};
+      }
+      .booking-party-card--agreementParty.ant-card {
+        background: ${geekblueTint8};
+        border-color: ${geekblueTint14};
+      }
+      .booking-party-card--notify.ant-card {
+        background: ${cyanTint8};
+        border-color: ${cyanTint14};
+      }
+      .booking-party-card--consignee.ant-card {
+        background: ${successTint8};
+        border-color: ${successTint14};
+      }
+      .booking-party-card--notify2.ant-card {
+        background: ${infoTint8};
+        border-color: ${infoTint14};
+      }
+      .booking-party-card--notify3.ant-card {
+        background: ${orangeTint8};
+        border-color: ${orangeTint14};
+      }
+      .booking-party-card--forwarder.ant-card {
+        background: ${warningTint8};
+        border-color: ${warningTint14};
+      }
+      .booking-party-card--warehouse.ant-card {
+        background: ${purpleTint8};
+        border-color: ${purpleTint14};
+      }
+      .booking-party-card--shipper > .ant-card-head,
+      .booking-party-card--agreementParty > .ant-card-head,
+      .booking-party-card--notify > .ant-card-head,
+      .booking-party-card--consignee > .ant-card-head,
+      .booking-party-card--notify2 > .ant-card-head,
+      .booking-party-card--notify3 > .ant-card-head,
+      .booking-party-card--forwarder > .ant-card-head,
+      .booking-party-card--warehouse > .ant-card-head {
+        background: transparent;
+      }
+      .booking-party-card--empty.ant-card {
+        border-style: dashed;
+      }
+      .booking-party-card__empty-body {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        gap: ${token.marginSM}px;
+        min-height: ${token.controlHeightLG * 2}px;
       }
       .booking-party-card > .ant-card-head {
         min-height: ${token.controlHeightLG}px;
@@ -346,7 +460,53 @@ export function SiModuleStyles() {
 
       .si-preview-title {
         text-align: center;
-        margin-bottom: ${token.marginLG}px !important;
+        margin-bottom: ${token.marginXXS}px !important;
+      }
+      /* Modified by Sekar Nagarajan (2026-08-31 16:27) — Preview summary + section Edit */
+      .si-preview-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        margin-bottom: ${token.marginLG}px;
+        text-align: center;
+      }
+      .si-preview-subtitle {
+        font-size: ${token.fontSizeSM}px;
+        max-width: ${token.controlHeightLG * 18}px;
+      }
+      .si-preview-scroll {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+      .si-preview-section.ant-card {
+        margin-bottom: ${token.marginMD}px;
+      }
+      .si-preview-section > .ant-card-head {
+        min-height: auto;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+      }
+      .si-preview-section > .ant-card-body {
+        padding: ${token.paddingMD}px ${token.paddingLG}px !important;
+      }
+      .si-preview-descriptions {
+        width: 100%;
+      }
+      .si-preview-descriptions .ant-descriptions-item-label {
+        color: ${token.colorTextSecondary};
+        font-weight: ${token.fontWeightStrong};
+      }
+      .si-preview-list {
+        margin: 0;
+        padding-left: ${token.paddingLG}px;
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+      }
+      .si-preview-empty {
+        display: block;
+        padding: ${token.paddingXXS}px 0;
       }
       .si-section-title {
         margin: 0 !important;
@@ -403,11 +563,15 @@ export function SiModuleStyles() {
       }
       .si-route-port--origin {
         border-left: 4px solid ${token.colorPrimary};
-        background: linear-gradient(180deg, ${primaryTint8} 0%, ${token.colorFillAlter} 100%);
+        background: linear-gradient(180deg, ${primaryTint8} 0%, ${
+      token.colorFillAlter
+    } 100%);
       }
       .si-route-port--delivery {
         border-left: 4px solid ${token.colorSuccess};
-        background: linear-gradient(180deg, ${successTint8} 0%, ${token.colorFillAlter} 100%);
+        background: linear-gradient(180deg, ${successTint8} 0%, ${
+      token.colorFillAlter
+    } 100%);
       }
       .si-route-port__label {
         display: flex;
@@ -484,7 +648,154 @@ export function SiModuleStyles() {
         color: ${token.colorPrimary};
       }
 
-      /* Modified by Sekar Nagarajan (2026-08-28 12:48) — Master Details 1+2 column layout */
+      /* Modified by Sekar Nagarajan (2026-08-31 16:08) — full-width vessel schedule showcase */
+      .si-master-step-card--route > .ant-card-body {
+        padding: ${token.paddingMD}px !important;
+        background: linear-gradient(
+          180deg,
+          ${tokenMix(token.colorPrimary, 4)} 0%,
+          ${token.colorBgContainer} 48%
+        );
+      }
+      .si-vessel-schedule-card.schedule-card {
+        width: 100%;
+      }
+      .si-vessel-schedule-card .schedule-card__main {
+        grid-template-columns: minmax(0, 1fr) !important;
+        width: 100%;
+        padding: ${token.paddingLG}px ${token.paddingXL}px;
+      }
+      .si-vessel-schedule-card .schedule-card__content {
+        width: 100%;
+      }
+      .si-vessel-schedule-card .schedule-card__meta {
+        width: 100%;
+      }
+      .si-vessel-schedule-card .schedule-card__distance {
+        margin-left: auto;
+      }
+      .si-vessel-schedule-card .schedule-card__route {
+        width: 100%;
+        gap: ${token.marginLG}px;
+      }
+      .si-vessel-schedule-card .schedule-card__endpoint {
+        padding: ${token.paddingMD}px ${token.paddingLG}px;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorFillAlter};
+        min-height: ${token.controlHeightLG * 3}px;
+        justify-content: center;
+      }
+      .si-vessel-schedule-card .schedule-card__endpoint--origin {
+        border-left: 4px solid ${token.colorPrimary};
+        background: linear-gradient(
+          180deg,
+          ${primaryTint8} 0%,
+          ${token.colorFillAlter} 100%
+        );
+      }
+      .si-vessel-schedule-card .schedule-card__endpoint--dest {
+        border-left: 4px solid ${token.colorSuccess};
+        background: linear-gradient(
+          180deg,
+          ${successTint8} 0%,
+          ${token.colorFillAlter} 100%
+        );
+      }
+      .si-vessel-schedule-card .schedule-card__place {
+        font-size: ${token.fontSizeHeading5}px;
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+        line-height: 1.3;
+      }
+      .si-vessel-schedule-card .schedule-card__connector {
+        min-width: 0;
+        width: 100%;
+        padding-top: ${token.paddingMD}px;
+      }
+      .si-vessel-schedule-card .schedule-card__connector-pill {
+        padding: ${token.paddingXXS}px ${token.paddingMD}px;
+        font-size: ${token.fontSize}px;
+      }
+      .si-vessel-schedule-card .schedule-card__transport {
+        width: 100%;
+      }
+      .si-vessel-schedule-card .schedule-card__footer {
+        width: 100%;
+      }
+      @media (min-width: 768px) {
+        .si-vessel-schedule-card .schedule-card__route {
+          grid-template-columns: minmax(0, 1.2fr) minmax(180px, 1fr) minmax(0, 1.2fr);
+          align-items: stretch;
+        }
+        .si-vessel-schedule-card .schedule-card__endpoint--dest {
+          text-align: right;
+          align-items: flex-end;
+          border-left: 1px solid ${token.colorBorderSecondary};
+          border-right: 4px solid ${token.colorSuccess};
+        }
+        .si-vessel-schedule-card .schedule-card__connector {
+          align-self: center;
+        }
+      }
+      .si-radio-card-group {
+        display: flex;
+        gap: ${token.marginXS}px;
+        width: 100%;
+      }
+      .si-radio-card {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        padding: ${token.paddingSM}px ${token.paddingXS}px;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1.5px solid ${token.colorBorderSecondary};
+        background: ${token.colorBgContainer};
+        cursor: pointer;
+        transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+        min-width: 0;
+      }
+      .si-radio-card:hover {
+        border-color: ${tokenMix(token.colorPrimary, 45)};
+        background: ${tokenMix(token.colorPrimary, 4)};
+      }
+      .si-radio-card--active {
+        border-color: ${token.colorPrimary};
+        background: ${tokenMix(token.colorPrimary, 8)};
+        box-shadow: 0 0 0 2px ${tokenMix(token.colorPrimary, 15)};
+      }
+      .si-radio-card--active:hover {
+        border-color: ${token.colorPrimary};
+        background: ${tokenMix(token.colorPrimary, 12)};
+      }
+      .si-radio-card__icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: ${token.controlHeight}px;
+        height: ${token.controlHeight}px;
+        border-radius: ${token.borderRadius}px;
+        background: ${token.colorFillAlter};
+        color: ${token.colorTextSecondary};
+        transition: background 0.2s, color 0.2s;
+      }
+      .si-radio-card--active .si-radio-card__icon {
+        background: ${tokenMix(token.colorPrimary, 15)};
+        color: ${token.colorPrimary};
+      }
+      .si-radio-card__label {
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorTextSecondary};
+        text-align: center;
+        line-height: 1.25;
+        transition: color 0.2s;
+      }
+      .si-radio-card--active .si-radio-card__label {
+        color: ${token.colorPrimary};
+      }
       .si-master-step-stack {
         display: flex;
         flex-direction: column;
@@ -492,6 +803,36 @@ export function SiModuleStyles() {
       }
       .si-master-step-row {
         width: 100%;
+      }
+      .si-master-sections-row > .ant-col {
+        display: flex;
+      }
+      .si-master-sections-row .si-master-step-card.ant-card {
+        height: 100%;
+      }
+      .si-master-sections-row .si-master-vessel-row {
+        grid-template-columns: minmax(220px, 0.9fr) minmax(0, 1.3fr);
+      }
+      .si-master-combined-panel {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginLG}px;
+      }
+      .si-master-subsection-label {
+        display: block;
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorTextSecondary};
+        margin-bottom: ${token.marginSM}px;
+      }
+      .si-master-sections-row .si-master-detail-grid--3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+      .si-master-sections-row .si-master-options-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+      .si-master-options-grid--stack {
+        grid-template-columns: minmax(0, 1fr);
       }
       .si-master-step-row > .ant-col {
         display: flex;
@@ -507,32 +848,276 @@ export function SiModuleStyles() {
       .si-master-step-card > .ant-card-head {
         padding: ${token.paddingMD}px ${token.paddingLG}px !important;
       }
-      .si-master-segmented.ant-segmented {
+      .si-master-card-title-row {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: ${token.marginSM}px;
         width: 100%;
+        flex-wrap: wrap;
       }
-      .si-master-refs-grid {
+      .si-master-card-title-hint {
+        font-size: ${token.fontSizeSM}px;
+      }
+      .si-master-detail-grid {
         display: grid;
         width: 100%;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: ${token.marginMD}px ${token.marginLG}px;
+      }
+      .si-master-detail-grid--3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+      .si-master-detail-grid--4 {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+      .si-master-readonly-field {
+        min-width: 0;
+      }
+      .si-master-readonly-value.ant-typography,
+      .si-master-readonly-value {
+        display: block;
+        width: 100%;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin-top: ${token.marginXXS}px;
+      }
+      .si-master-detail-grid .form-step-readonly-value--emphasis {
+        font-size: ${token.fontSizeLG}px;
+        line-height: ${token.lineHeight};
+        margin-top: ${token.marginXXS}px;
+      }
+      .si-master-step-card .form-field-cell {
+        padding: ${token.paddingXS}px 0;
       }
       .si-master-options-grid {
-        display: grid;
-        width: 100%;
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: ${token.marginMD}px ${token.marginLG}px;
+      }
+      .si-master-segmented.ant-segmented {
+        width: 100%;
       }
       .si-master-compliance-grid {
         display: grid;
         width: 100%;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: ${token.marginMD}px ${token.marginLG}px;
-        align-items: end;
+        align-items: start;
       }
-      .si-master-compliance-check {
-        min-height: ${token.controlHeightLG}px;
+      .si-master-vessel-panel {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginMD}px;
+        padding: ${token.paddingMD}px;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px solid ${tokenMix(token.colorInfo, 22)};
+        background: linear-gradient(
+          135deg,
+          ${tokenMix(token.colorInfo, 6)} 0%,
+          ${token.colorBgContainer} 48%,
+          ${tokenMix(token.colorPrimary, 5)} 100%
+        );
+      }
+      .si-master-vessel-panel__head {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginSM}px;
+        flex-wrap: wrap;
+      }
+      .si-master-vessel-panel__badge {
         display: inline-flex;
         align-items: center;
+        justify-content: center;
+        width: ${token.controlHeightSM}px;
+        height: ${token.controlHeightSM}px;
+        border-radius: ${token.borderRadius}px;
+        background: ${tokenMix(token.colorInfo, 14)};
+        color: ${token.colorInfo};
+        flex-shrink: 0;
+      }
+      .si-master-vessel-panel__title {
+        margin-bottom: 0;
+        color: ${token.colorText};
+      }
+      .si-master-vessel-panel__tag {
+        margin-inline-end: 0;
+        margin-left: auto;
+      }
+      .si-master-vessel-row {
+        display: grid;
+        grid-template-columns: minmax(200px, 0.85fr) minmax(0, 1.4fr);
+        gap: ${token.marginMD}px;
+        align-items: stretch;
+      }
+      .si-master-vessel-hero {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginMD}px;
+        padding: ${token.paddingMD}px;
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${tokenMix(token.colorPrimary, 10)};
+        border: 1px solid ${tokenMix(token.colorPrimary, 28)};
+        box-shadow: inset 3px 0 0 ${token.colorPrimary};
+        margin-bottom: 0;
+      }
+      .si-master-vessel-hero__icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: ${token.controlHeightLG}px;
+        height: ${token.controlHeightLG}px;
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorPrimary};
+        color: ${token.colorTextLightSolid};
+        flex-shrink: 0;
+      }
+      .si-master-vessel-hero__body {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+      }
+      .si-master-vessel-hero__label {
+        font-size: ${token.fontSizeSM}px;
+        line-height: ${token.lineHeightSM};
+        color: ${token.colorPrimary};
+        font-weight: ${token.fontWeightStrong};
+      }
+      .si-master-vessel-hero__value {
+        font-size: ${token.fontSizeLG}px;
+        line-height: ${token.lineHeight};
+        color: ${token.colorText};
+      }
+      .si-master-vessel-hero__hint {
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+      }
+      .si-master-vessel-legs {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: ${token.marginSM}px;
+        min-width: 0;
+        max-height: none;
+        overflow-y: visible;
+      }
+      .si-master-vessel-leg {
+        flex: 1 1 280px;
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginSM}px;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorBgContainer};
+        box-shadow: inset 0 0 0 1px ${tokenMix(token.colorSuccess, 6)};
+      }
+      .si-master-vessel-leg__top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: ${token.marginSM}px;
+        flex-wrap: wrap;
+      }
+      .si-master-vessel-leg__index {
+        margin-inline-end: 0;
+      }
+      .si-master-vessel-leg__vessel {
+        font-size: ${token.fontSizeSM}px;
+      }
+      .si-master-vessel-leg__route {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        align-items: center;
+        gap: ${token.marginSM}px;
+        min-width: 0;
+      }
+      .si-master-vessel-leg__port {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+        min-width: 0;
+      }
+      .si-master-vessel-leg__port--pod {
+        text-align: right;
+        align-items: flex-end;
+      }
+      .si-master-vessel-leg__port-label {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorTextSecondary};
+      }
+      .si-master-vessel-leg__port--pol .si-master-vessel-leg__port-label {
+        color: ${token.colorPrimary};
+      }
+      .si-master-vessel-leg__port--pod .si-master-vessel-leg__port-label {
+        color: ${token.colorSuccess};
+        flex-direction: row-reverse;
+      }
+      .si-master-vessel-leg__port-name {
+        font-size: ${token.fontSize}px;
+        line-height: ${token.lineHeight};
+      }
+      .si-master-vessel-leg__connector {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        min-width: 72px;
+      }
+      .si-master-vessel-leg__dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .si-master-vessel-leg__dot--pol {
+        background: ${token.colorPrimary};
+      }
+      .si-master-vessel-leg__dot--pod {
+        background: ${token.colorSuccess};
+      }
+      .si-master-vessel-leg__rail {
+        flex: 1;
+        height: 2px;
+        background: linear-gradient(
+          90deg,
+          ${token.colorPrimary} 0%,
+          ${token.colorSuccess} 100%
+        );
+      }
+      .si-master-vessel-leg__ship {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: ${token.controlHeightSM}px;
+        height: ${token.controlHeightSM}px;
+        border-radius: 50%;
+        background: ${tokenMix(token.colorInfo, 12)};
+        color: ${token.colorInfo};
+        flex-shrink: 0;
+      }
+      .si-master-vessel-leg__meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: ${token.marginXS}px;
+      }
+      .si-master-vessel-leg__etime {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+      }
+      .si-master-vessel-empty {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginSM}px;
+        padding: ${token.paddingMD}px;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px dashed ${token.colorBorder};
+        background: ${token.colorFillAlter};
+        font-size: ${token.fontSizeSM}px;
       }
 
       /* Modified by Sekar Nagarajan (2026-08-28 12:50) — Routing print fields single row */
@@ -600,24 +1185,110 @@ export function SiModuleStyles() {
       .si-ens-required-row {
         display: grid;
         width: 100%;
-        max-width: 280px;
+        max-width: ${token.controlHeightLG * 7}px;
         margin-bottom: ${token.marginLG}px;
+        gap: ${token.marginSM}px;
       }
+      /* Modified by Sekar Nagarajan (2026-08-31 16:19) — ENS field padding/margin (token-only) */
+      .si-ens-sections {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginLG}px;
+        width: 100%;
+        margin-top: ${token.marginXS}px;
+      }
+      .si-ens-options-grid,
+      .si-ens-party-grid,
       .si-ens-form-grid {
         display: grid;
         width: 100%;
+        align-items: start;
+        column-gap: ${token.marginLG}px;
+        row-gap: ${token.marginMD}px;
+      }
+      .si-ens-options-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        padding-bottom: ${token.paddingXS}px;
+      }
+      .si-ens-party-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+      .si-ens-form-grid {
         grid-template-columns: repeat(5, minmax(0, 1fr));
-        gap: ${token.marginMD}px ${token.marginLG}px;
+      }
+      .si-ens-options-grid .form-field-cell,
+      .si-ens-party-grid .form-field-cell,
+      .si-ens-form-grid .form-field-cell,
+      .si-ens-required-row .form-field-cell {
+        min-width: 0;
+        padding: ${token.paddingXS}px 0;
+        gap: ${token.marginXS}px;
+      }
+      .si-ens-options-grid .form-field-label,
+      .si-ens-party-grid .form-field-label,
+      .si-ens-form-grid .form-field-label,
+      .si-ens-required-row .form-field-label {
+        margin-bottom: 0;
+      }
+      .si-ens-options-grid .form-field-error,
+      .si-ens-party-grid .form-field-error,
+      .si-ens-form-grid .form-field-error {
+        margin-top: 0;
+      }
+      .si-ens-options-grid .ant-input,
+      .si-ens-options-grid .ant-select,
+      .si-ens-party-grid .ant-input,
+      .si-ens-party-grid .ant-select,
+      .si-ens-form-grid .ant-input,
+      .si-ens-form-grid .ant-select,
+      .si-ens-required-row .ant-segmented {
+        width: 100%;
+      }
+      .si-ens-subcard.ant-card {
+        width: 100%;
+        margin: 0;
+        border: 1px solid ${token.colorBorderSecondary};
+      }
+      .si-ens-subcard > .ant-card-head {
+        min-height: auto;
+        padding: ${token.paddingSM}px ${token.paddingMD}px !important;
+        border-bottom: 1px solid ${token.colorBorderSecondary};
+      }
+      .si-ens-subcard > .ant-card-body {
+        padding: ${token.paddingMD}px ${token.paddingLG}px !important;
+      }
+      .si-ens-subcard .form-step-card-title {
+        margin: 0 !important;
+      }
+      .si-ens-notes.ant-alert {
+        width: 100%;
+        margin: 0;
+        padding: ${token.paddingMD}px ${token.paddingLG}px;
+      }
+      .si-ens-notes .ant-alert-message {
+        margin-bottom: ${token.marginXS}px;
+      }
+      .si-ens-notes .ant-alert-description {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
       }
 
       @media (max-width: 1199px) {
-        .si-master-options-grid,
-        .si-master-compliance-grid {
+        .si-master-detail-grid--4 {
           grid-template-columns: repeat(2, minmax(0, 1fr));
         }
+        .si-master-sections-row .si-master-detail-grid--3,
+        .si-master-sections-row .si-master-vessel-row,
+        .si-master-options-grid:not(.si-master-options-grid--stack),
+        .si-master-compliance-grid {
+          grid-template-columns: minmax(0, 1fr);
+        }
         .si-routing-form-grid,
-        .si-ens-form-grid {
-          grid-template-columns: repeat(3, minmax(0, 1fr));
+        .si-ens-form-grid,
+        .si-ens-options-grid,
+        .si-ens-party-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
         }
         .si-cargo-protect-form-grid,
         .si-charges-form-grid,
@@ -626,19 +1297,42 @@ export function SiModuleStyles() {
         }
       }
       @media (max-width: 991px) {
-        .si-master-refs-grid,
+        .si-master-vessel-row {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .si-master-detail-grid--3,
+        .si-master-detail-grid--4,
         .si-master-options-grid,
         .si-master-compliance-grid,
         .si-routing-form-grid,
         .si-cargo-protect-form-grid,
         .si-charges-form-grid,
         .si-charge-tab-form-grid,
-        .si-ens-form-grid {
+        .si-ens-form-grid,
+        .si-ens-options-grid,
+        .si-ens-party-grid {
           grid-template-columns: minmax(0, 1fr);
         }
       }
 
       @media (max-width: 767px) {
+        .si-master-vessel-leg__route {
+          grid-template-columns: minmax(0, 1fr);
+          gap: ${token.marginXS}px;
+        }
+        .si-master-vessel-leg__port--pod {
+          text-align: left;
+          align-items: flex-start;
+        }
+        .si-master-vessel-leg__port--pod .si-master-vessel-leg__port-label {
+          flex-direction: row;
+        }
+        .si-master-vessel-leg__connector {
+          min-width: 0;
+          width: 100%;
+          justify-content: center;
+          padding: ${token.paddingXXS}px 0;
+        }
         .si-list-grid {
           height: 420px;
         }

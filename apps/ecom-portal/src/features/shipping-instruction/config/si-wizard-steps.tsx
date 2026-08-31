@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-28 11:53)
+// Modified by Sekar Nagarajan (2026-08-31 15:42)
 import type { ReactNode } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
@@ -8,6 +8,7 @@ import { ChargesStep } from "../components/ChargesStep";
 import { MasterDetailsStep } from "../components/MasterDetailsStep";
 import { PartiesStep } from "../components/PartiesStep";
 import { PreviewStep } from "../components/PreviewStep";
+import { ReferenceStep } from "../components/ReferenceStep";
 import { SiCargoProtectStep } from "../components/steps/si-cargo-protect-step";
 import { SiChargeTabStep } from "../components/steps/si-charge-tab-step";
 import { SiEnsStep } from "../components/steps/si-ens-step";
@@ -44,6 +45,7 @@ const STEP_COMPONENTS: Record<
   ens: SiEnsStep,
   chargeTab: SiChargeTabStep,
   files: SiFileUploadStep,
+  references: ReferenceStep as React.ComponentType<SIWizardStepProps>,
   preview: PreviewStep as React.ComponentType<SIWizardStepProps>,
 };
 
@@ -58,6 +60,7 @@ const STEP_ICONS: Record<SIWizardStepId, ReactNode> = {
   ens: <AppIcon icon={Icons.fileCheck} size={PIPELINE_ICON_SIZE} />,
   chargeTab: <AppIcon icon={Icons.fileCheck} size={PIPELINE_ICON_SIZE} />,
   files: <AppIcon icon={Icons.inbox} size={PIPELINE_ICON_SIZE} />,
+  references: <AppIcon icon={Icons.fileText} size={PIPELINE_ICON_SIZE} />,
   preview: <AppIcon icon={Icons.eye} size={PIPELINE_ICON_SIZE} />,
 };
 
@@ -72,6 +75,7 @@ const STEP_TITLES: Record<SIWizardStepId, string> = {
   ens: WIZARD_STEP_TITLES.ensDetails,
   chargeTab: WIZARD_STEP_TITLES.chargeSummary,
   files: WIZARD_STEP_TITLES.fileUpload,
+  references: WIZARD_STEP_TITLES.references,
   preview: WIZARD_STEP_TITLES.preview,
 };
 

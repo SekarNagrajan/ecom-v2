@@ -257,7 +257,7 @@ export function RatesModuleStyles() {
         justify-content: center;
         padding: ${token.paddingXXS}px ${token.paddingSM}px;
         border-radius: ${token.borderRadiusLG}px;
-        background: ${token.colorSuccessBg};
+        background: ${tokenMix(token.colorSuccess, 10)};
         border: 1px solid ${token.colorSuccessBorder};
         color: ${token.colorSuccess};
         font-size: ${token.fontSizeSM}px;
@@ -337,7 +337,7 @@ export function RatesModuleStyles() {
         color: ${token.colorPrimary};
       }
       .rates-card__validity-icon--tariff {
-        background: ${token.colorSuccessBg};
+        background: ${tokenMix(token.colorSuccess, 10)};
         color: ${token.colorSuccess};
       }
       .rates-card__validity-label {

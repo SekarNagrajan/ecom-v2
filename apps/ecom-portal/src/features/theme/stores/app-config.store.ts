@@ -1,3 +1,4 @@
+// Modified by Sekar Nagarajan (2026-08-31 12:55)
 import { persist } from 'zustand/middleware';
 import type {
   AppCustomConfig,
@@ -12,6 +13,9 @@ export interface AppConfigState {
   setThemeMode: (themeMode: ThemeMode) => void;
   toggleThemeMode: () => void;
 }
+
+/** Legacy Ant Design / interim success greens — migrate persisted configs to current default. */
+const LEGACY_SUCCESS_COLORS = new Set(['#52c41a', '#0f766e', '#52C41A', '#0F766E']);
 
 export const useAppConfigStore = create<AppConfigState>()(
   persist(
@@ -47,6 +51,27 @@ export const useAppConfigStore = create<AppConfigState>()(
     }),
     {
       name: 'ecom-user-theme-config',
+      // Bump when semantic brand colors change so localStorage picks up new defaults
+      version: 1,
+      migrate: (persistedState) => {
+        const state = persistedState as AppConfigState | undefined;
+        if (!state?.config) {
+          return { config: DEFAULT_APP_CONFIG } as AppConfigState;
+        }
+
+        const nextSuccess = LEGACY_SUCCESS_COLORS.has(state.config.successColor)
+          ? DEFAULT_APP_CONFIG.successColor
+          : state.config.successColor;
+
+        return {
+          ...state,
+          config: {
+            ...DEFAULT_APP_CONFIG,
+            ...state.config,
+            successColor: nextSuccess,
+          },
+        };
+      },
     }
   )
 );

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-25 18:20)
+// Modified by Sekar Nagarajan (2026-08-31 15:05)
 import { AppButton } from "@solverminds/shared-ui";
 import {
   Card,
@@ -199,12 +199,13 @@ export function InteractiveShipmentIntelligenceCard() {
       }
     >
       <Tabs
+        className="dashboard-intelligence-tabs"
         size="small"
         activeKey={activeTab}
         onChange={setActiveTab}
         items={INTELLIGENCE_TABS.map((t) => ({ key: t.key, label: t.label }))}
       />
-      <Row gutter={[12, 12]}>
+      <Row gutter={[12, 12]} className="dashboard-intelligence-body">
         <Col xs={24} sm={9}>
           <DonutChart data={currentTab.data} totalFeus={totalFeus} />
         </Col>
@@ -293,7 +294,7 @@ export function ShipmentIntelligenceSection({
   consignees,
 }: ShipmentIntelligenceProps) {
   return (
-    <Row gutter={[16, 16]}>
+    <Row gutter={[16, 16]} className="dashboard-equal-row">
       <Col xs={24} lg={14}>
         <InteractiveShipmentIntelligenceCard />
       </Col>

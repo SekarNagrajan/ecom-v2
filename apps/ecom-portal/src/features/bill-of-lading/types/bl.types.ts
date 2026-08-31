@@ -1,7 +1,8 @@
-// Modified by Sekar Nagarajan (2026-08-28 12:22)
+// Modified by Sekar Nagarajan (2026-08-31 14:46)
 import { z } from "zod";
 
 import type { EnsData, InsuranceData } from "../../booking/types/booking.types";
+import type { ReferenceField } from "../../booking/utils/reference-field.utils";
 import type { SIContainer } from "../../shipping-instruction/types/si.types";
 
 export type BLRowStatus = "D" | "S" | "C" | "I";
@@ -156,6 +157,8 @@ export interface BLDTO {
     notify3?: BLParty;
     forwarder?: BLParty;
     warehouse?: BLParty;
+    // Modified by Sekar Nagarajan (2026-08-31 14:17) — AG Party (SI/booking parity)
+    agreementParty?: BLParty;
     notifySameAsConsignee?: boolean;
   };
   containers: SIContainer[];
@@ -164,6 +167,8 @@ export interface BLDTO {
   insurance?: BLInsuranceInfo | null;
   cargoProtect?: BLCargoProtectLine[];
   files?: BLFileUploadItem[];
+  /** Dynamic reference fields (ecom-app Reference Information step). */
+  referenceFields?: ReferenceField[];
   submitResult?: BLSubmitResult;
 }
 
@@ -319,15 +324,15 @@ export const blRoutingStepSchema = z.object({
 });
 
 export const blPartiesStepSchema = z.object({
-  shipperName: z.string().min(1, "Shipper name is required"),
-  shipperAddress: z.string().min(1, "Shipper address is required"),
+  shipperName: z.string().min(1, "Booking Party is required"),
+  shipperAddress: z.string().min(1, "Booking Party address is required"),
   shipperPrint: z.boolean(),
   consigneeName: z.string().min(1, "Consignee name is required"),
   consigneeAddress: z.string().min(1, "Consignee address is required"),
   consigneePrint: z.boolean(),
   consigneeToOrder: z.boolean(),
-  notifyName: z.string().min(1, "Notify party name is required"),
-  notifyAddress: z.string().min(1, "Notify party address is required"),
+  notifyName: z.string().min(1, "Notify Party is required"),
+  notifyAddress: z.string().min(1, "Notify Party address is required"),
   notifyPrint: z.boolean(),
 });
 

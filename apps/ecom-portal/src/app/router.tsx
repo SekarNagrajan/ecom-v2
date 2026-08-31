@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-27 13:05)
+// Modified by Sekar Nagarajan (2026-08-31 17:03)
 import { useAuthStore } from "@solverminds/auth";
 import {
   createRootRoute,
@@ -78,7 +78,13 @@ function assertCapability(code: string) {
     if (!user) {
       throw redirect({ to: "/", search: { login: true } as never });
     }
-    if (user.role === "ADMIN" || user.isSessionAdmin || user.isImpersonating) {
+    // Modified by Sekar Nagarajan (2026-08-31 17:03) — tenant admin bypass (STMT/CO2 parity)
+    if (
+      user.role === "ADMIN" ||
+      user.isTenantAdmin ||
+      user.isSessionAdmin ||
+      user.isImpersonating
+    ) {
       return;
     }
     if (!user.capabilities.includes(code)) {

@@ -1,19 +1,28 @@
-// Created by Sekar Nagarajan (2026-08-26 13:04)
+// Modified by Sekar Nagarajan (2026-08-31 16:45)
 import type { BLListDTO, BLRowStatus } from "../types/bl.types";
 import { BL_STATUS_LABELS } from "../types/bl.types";
 
 export function getBLStatusColor(status: BLRowStatus): string {
   switch (status) {
+    case "I":
+      return "blue";
+    case "D":
+      return "default";
+    case "S":
+      return "warning";
     case "C":
       return "success";
-    case "S":
-      return "processing";
-    case "I":
-      return "default";
-    case "D":
     default:
-      return "warning";
+      return "default";
   }
+}
+
+/** List/drawer status tag color — Locked rows use error (red). */
+export function getBLListStatusColor(
+  row: Pick<BLListDTO, "status" | "isLocked">,
+): string {
+  if (row.isLocked) return "error";
+  return getBLStatusColor(row.status);
 }
 
 export function getBLStatusLabel(status: BLRowStatus): string {

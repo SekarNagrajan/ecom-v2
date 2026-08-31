@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { Meta, StoryObj } from '@storybook/react';
-import { useState, useCallback } from 'react';
+import type { Meta, StoryObj } from "@storybook/react";
+import { useCallback, useState } from "react";
 
-import { useToast } from '../../hooks';
-import { CardView } from './card-view/card-view';
-import { DataView } from './data-view';
-import { KanbanView } from './kanban-view/kanban-view';
-import type { KanbanUpdateParams } from './kanban-view/types';
-import { ListView } from './list-view/list-view';
-import type { DataViewColumn } from './types';
+import { useToast } from "../../hooks";
+import { CardView } from "./card-view/card-view";
+import { DataView } from "./data-view";
+import { KanbanView } from "./kanban-view/kanban-view";
+import type { KanbanUpdateParams } from "./kanban-view/types";
+import { ListView } from "./list-view/list-view";
+import type { DataViewColumn } from "./types";
 
 // =============================================================================
 // MOCK DATA & TYPES
@@ -18,26 +18,26 @@ interface User {
   id: string;
   name: string;
   email: string;
-  status: 'Active' | 'Pending' | 'Inactive';
+  status: "Active" | "Pending" | "Inactive";
   role: string;
 }
 
-const STATUS_OPTIONS = ['Active', 'Pending', 'Inactive'] as const;
-const ROLE_OPTIONS = ['Admin', 'User', 'Manager'] as const;
+const STATUS_OPTIONS = ["Active", "Pending", "Inactive"] as const;
+const ROLE_OPTIONS = ["Admin", "User", "Manager"] as const;
 
 const MOCK_USERS: User[] = Array.from({ length: 50 }, (_, i) => ({
   id: String(i + 1),
   name: `User ${i + 1}`,
   email: `user${i + 1}@example.com`,
-  status: STATUS_OPTIONS[i % STATUS_OPTIONS.length] as User['status'],
-  role: ROLE_OPTIONS[i % ROLE_OPTIONS.length] as User['role'],
+  status: STATUS_OPTIONS[i % STATUS_OPTIONS.length] as User["status"],
+  role: ROLE_OPTIONS[i % ROLE_OPTIONS.length] as User["role"],
 }));
 
 const COLUMNS: DataViewColumn<User>[] = [
-  { field: 'name', headerName: 'Name', isPrimary: true },
-  { field: 'email', headerName: 'Email', isSecondary: true },
-  { field: 'status', headerName: 'Status' },
-  { field: 'role', headerName: 'Role' },
+  { field: "name", headerName: "Name", isPrimary: true },
+  { field: "email", headerName: "Email", isSecondary: true },
+  { field: "status", headerName: "Status" },
+  { field: "role", headerName: "Role" },
 ];
 
 // =============================================================================
@@ -45,15 +45,15 @@ const COLUMNS: DataViewColumn<User>[] = [
 // =============================================================================
 
 const meta: Meta = {
-  title: 'Components/DataView/Unified',
+  title: "Components/DataView/Unified",
   decorators: [
     (Story) => (
       <div
         style={{
-          height: '600px',
-          padding: '20px',
-          display: 'flex',
-          flexDirection: 'column',
+          height: "600px",
+          padding: "20px",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
         <Story />
@@ -69,7 +69,7 @@ export default meta;
 // =============================================================================
 
 export const ListViewClient: StoryObj<typeof ListView> = {
-  name: 'ListView / Client Mode',
+  name: "ListView / Client Mode",
   render: () => (
     <ListView
       dataMode="client"
@@ -102,7 +102,7 @@ function StatefulCardView() {
 }
 
 export const CardViewStory: StoryObj<typeof CardView> = {
-  name: 'CardView / Client Mode',
+  name: "CardView / Client Mode",
   render: () => <StatefulCardView />,
 };
 
@@ -126,8 +126,8 @@ const KanbanDemo = ({
         id: String(i + 1),
         name: `User ${i + 1}`,
         email: `user${i + 1}@example.com`,
-        status: STATUS_OPTIONS[i % STATUS_OPTIONS.length] as User['status'],
-        role: ROLE_OPTIONS[i % ROLE_OPTIONS.length] as User['role'],
+        status: STATUS_OPTIONS[i % STATUS_OPTIONS.length] as User["status"],
+        role: ROLE_OPTIONS[i % ROLE_OPTIONS.length] as User["role"],
       }))
     : MOCK_USERS;
 
@@ -149,7 +149,7 @@ const KanbanDemo = ({
 
       if (shouldFail) {
         toast.error(`Failed to move ${item.name} to ${newValue}`);
-        throw new Error('API Error');
+        throw new Error("API Error");
       }
 
       setData((prev) => {
@@ -170,11 +170,11 @@ const KanbanDemo = ({
 
       toast.success(
         `${item.name} moved to ${newValue} (Pos: ${
-          beforeId ? 'after ' + beforeId : afterId ? 'before ' + afterId : 'end'
-        })`
+          beforeId ? "after " + beforeId : afterId ? "before " + afterId : "end"
+        })`,
       );
     },
-    [shouldFail, toast]
+    [shouldFail, toast],
   );
 
   return (
@@ -184,9 +184,9 @@ const KanbanDemo = ({
       groupByField="status"
       idField="id"
       lanes={[
-        { id: 'Active', title: 'Active', color: '#52c41a' },
-        { id: 'Pending', title: 'Pending', color: '#faad14' },
-        { id: 'Inactive', title: 'Inactive', color: '#ff4d4f' },
+        { id: "Active", title: "Active", color: "#047857" },
+        { id: "Pending", title: "Pending", color: "#faad14" },
+        { id: "Inactive", title: "Inactive", color: "#ff4d4f" },
       ]}
       onItemUpdate={handleUpdate}
       collapsible={collapsible}
@@ -196,28 +196,28 @@ const KanbanDemo = ({
               <div
                 {...dragHandleProps}
                 style={{
-                  padding: '12px',
-                  background: '#fff',
-                  border: '1px solid #d9d9d9',
-                  borderRadius: '8px',
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
-                  cursor: 'grab',
+                  padding: "12px",
+                  background: "#fff",
+                  border: "1px solid #d9d9d9",
+                  borderRadius: "8px",
+                  boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+                  cursor: "grab",
                 }}
               >
-                <div style={{ fontWeight: 'bold', color: '#1890ff' }}>
+                <div style={{ fontWeight: "bold", color: "#1890ff" }}>
                   {item.name}
                 </div>
-                <div style={{ fontSize: '12px', color: '#8c8c8c' }}>
+                <div style={{ fontSize: "12px", color: "#8c8c8c" }}>
                   {item.email}
                 </div>
                 <div
                   style={{
-                    marginTop: '8px',
-                    display: 'inline-block',
-                    padding: '2px 8px',
-                    background: '#f5f5f5',
-                    borderRadius: '4px',
-                    fontSize: '11px',
+                    marginTop: "8px",
+                    display: "inline-block",
+                    padding: "2px 8px",
+                    background: "#f5f5f5",
+                    borderRadius: "4px",
+                    fontSize: "11px",
                   }}
                 >
                   {item.role}
@@ -231,27 +231,27 @@ const KanbanDemo = ({
 };
 
 export const KanbanViewSuccess: StoryObj<typeof KanbanView> = {
-  name: 'KanbanView / Success Flow',
+  name: "KanbanView / Success Flow",
   render: () => <KanbanDemo />,
 };
 
 export const KanbanViewFailure: StoryObj<typeof KanbanView> = {
-  name: 'KanbanView / Error Handling (Rollback)',
+  name: "KanbanView / Error Handling (Rollback)",
   render: () => <KanbanDemo shouldFail />,
 };
 
 export const KanbanViewCustomCard: StoryObj<typeof KanbanView> = {
-  name: 'KanbanView / Custom Card Rendering',
+  name: "KanbanView / Custom Card Rendering",
   render: () => <KanbanDemo customCard />,
 };
 
 export const KanbanViewLargeDataset: StoryObj<typeof KanbanView> = {
-  name: 'KanbanView / Large Dataset (1000 items)',
+  name: "KanbanView / Large Dataset (1000 items)",
   render: () => <KanbanDemo isLargeDataset />,
 };
 
 export const KanbanViewCollapsible: StoryObj<typeof KanbanView> = {
-  name: 'KanbanView / Collapsible Lanes',
+  name: "KanbanView / Collapsible Lanes",
   render: () => <KanbanDemo collapsible />,
 };
 
@@ -269,12 +269,12 @@ const DataViewDemo = ({ shouldFail = false }: { shouldFail?: boolean }) => {
       rowData={data}
       columnDefs={COLUMNS as any}
       kanbanOptions={{
-        groupByField: 'status',
-        idField: 'id',
+        groupByField: "status",
+        idField: "id",
         lanes: [
-          { id: 'Active', title: 'Active' },
-          { id: 'Pending', title: 'Pending' },
-          { id: 'Inactive', title: 'Inactive' },
+          { id: "Active", title: "Active" },
+          { id: "Pending", title: "Pending" },
+          { id: "Inactive", title: "Inactive" },
         ],
         onItemUpdate: async ({
           item,
@@ -285,14 +285,14 @@ const DataViewDemo = ({ shouldFail = false }: { shouldFail?: boolean }) => {
           await new Promise((r) => setTimeout(r, 1000));
 
           if (shouldFail) {
-            toast.error('Server rejected the update');
-            throw new Error('Failure');
+            toast.error("Server rejected the update");
+            throw new Error("Failure");
           }
 
           setData((prev) =>
             prev.map((i) =>
-              i.id === item.id ? { ...i, [field]: newValue } : i
-            )
+              i.id === item.id ? { ...i, [field]: newValue } : i,
+            ),
           );
 
           toast.success(`Successfully moved ${item.name}`);
@@ -303,24 +303,24 @@ const DataViewDemo = ({ shouldFail = false }: { shouldFail?: boolean }) => {
 };
 
 export const DataViewWithCustomKanban: StoryObj<typeof DataView> = {
-  name: 'DataView / Orchestrator with Kanban',
+  name: "DataView / Orchestrator with Kanban",
   render: () => <DataViewDemo />,
 };
 
 export const DataViewOrchestrator: StoryObj<typeof DataView> = {
-  name: 'DataView / Orchestrator (List + Card + Kanban)',
+  name: "DataView / Orchestrator (List + Card + Kanban)",
   render: () => (
     <DataView
       dataMode="client"
       rowData={MOCK_USERS}
       columnDefs={COLUMNS as any}
       kanbanOptions={{
-        groupByField: 'status',
-        idField: 'id',
+        groupByField: "status",
+        idField: "id",
         lanes: [
-          { id: 'Active', title: 'Active', color: '#52c41a' },
-          { id: 'Pending', title: 'Pending', color: '#faad14' },
-          { id: 'Inactive', title: 'Inactive', color: '#ff4d4f' },
+          { id: "Active", title: "Active", color: "#047857" },
+          { id: "Pending", title: "Pending", color: "#faad14" },
+          { id: "Inactive", title: "Inactive", color: "#ff4d4f" },
         ],
       }}
     />

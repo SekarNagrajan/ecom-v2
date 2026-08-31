@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-27 19:12)
+// Modified by Sekar Nagarajan (2026-08-31 13:09)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
@@ -8,14 +8,13 @@ import {
   Card,
   Col,
   DatePicker,
-  Flex,
   Input,
   Row,
   Segmented,
   Select,
   Table,
   Tooltip,
-  Typography,
+  Typography
 } from "antd";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
@@ -33,6 +32,7 @@ import {
   type MasterDetailsData,
   type SelectedRoute,
 } from "../types/booking.types";
+import { pickDefaultBookingRoute } from "../utils/pick-default-booking-route";
 import { BookingModuleStyles } from "./booking-module-styles";
 import { RoutingSelectModal } from "./RoutingSelectModal";
 import { SelectTemplateModal } from "./SelectTemplateModal";
@@ -90,6 +90,7 @@ export function MasterDetailsStep() {
   const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
   const [isRoutingModalOpen, setIsRoutingModalOpen] = useState(false);
   const [isValidatingContract, setIsValidatingContract] = useState(false);
+  const [isApplyingDefaultRoute, setIsApplyingDefaultRoute] = useState(false);
 
   const { data: carriageContracts = [] } =
     useBookingLookups("carriageContracts");
@@ -167,12 +168,89 @@ export function MasterDetailsStep() {
 
   const clearSelectedRate = () => {
     setValue("selectedRate", null, { shouldDirty: true });
+    setValue("rateReference", "", { shouldDirty: true });
   };
 
-  const handleSelectRate = (rate: BookingRateOption) => {
+  /** Fetch sailings for the lane and apply the carrier default route when present. */
+  const applyDefaultRouteForLane = async (
+    origin: string,
+    delivery: string,
+    readyDate: string,
+  ): Promise<SelectedRoute | null> => {
+    if (!origin.trim() || !delivery.trim() || !readyDate.trim()) {
+      return null;
+    }
+
+    setIsApplyingDefaultRoute(true);
+    try {
+      const routes = await bookingApi.searchRouting({
+        origin: origin.trim(),
+        delivery: delivery.trim(),
+        cargoReadyDate: readyDate.trim(),
+      });
+      const defaultRoute = pickDefaultBookingRoute(routes);
+      if (
+        defaultRoute &&
+        routeMatchesPorts(defaultRoute, origin, delivery)
+      ) {
+        setValue("selectedRoute", defaultRoute, {
+          shouldDirty: true,
+          shouldValidate: true,
+        });
+        return defaultRoute;
+      }
+      setValue("selectedRoute", null, { shouldDirty: true });
+      return null;
+    } catch {
+      setValue("selectedRoute", null, { shouldDirty: true });
+      return null;
+    } finally {
+      setIsApplyingDefaultRoute(false);
+    }
+  };
+
+  // Modified by Sekar Nagarajan (2026-08-31 13:09)
+  const handleSelectRate = async (rate: BookingRateOption) => {
     setValue("selectedRate", rate, { shouldDirty: true });
     setValue("rateReference", rate.rateNo, { shouldDirty: true });
+
+    const origin = getValues("origin");
+    const delivery = getValues("delivery");
+    const readyDate = getValues("cargoReadyDate");
+
+    if (!readyDate?.trim()) {
+      clearSelectedRoute();
+      toast.success(`Rate selected: ${rate.rateNo}`);
+      toast.info(
+        "Set Cargo Ready Date to auto-apply the default route, or select a vessel/route manually.",
+      );
+      return;
+    }
+
+    const route = await applyDefaultRouteForLane(origin, delivery, readyDate);
+    if (route) {
+      updateMasterDetails({
+        ...getValues(),
+        selectedRate: rate,
+        rateReference: rate.rateNo,
+        selectedRoute: route,
+      });
+      toast.success(
+        `Rate ${rate.rateNo} selected · default route applied (${route.serviceName})`,
+      );
+      return;
+    }
+
+    updateMasterDetails({
+      ...getValues(),
+      selectedRate: rate,
+      rateReference: rate.rateNo,
+      selectedRoute: null,
+    });
     toast.success(`Rate selected: ${rate.rateNo}`);
+    toast.info(
+      "No default route for this lane. Please select a vessel/route manually.",
+    );
   };
 
   const handleSwapPorts = () => {
@@ -356,8 +434,23 @@ export function MasterDetailsStep() {
                     format="DD-MMM-YYYY"
                     value={value ? dayjs(value) : null}
                     onChange={(date) => {
-                      onChange(date ? date.format("YYYY-MM-DD") : "");
+                      const nextDate = date ? date.format("YYYY-MM-DD") : "";
+                      onChange(nextDate);
                       clearSelectedRoute();
+                      const rate = getValues("selectedRate");
+                      if (rate && nextDate) {
+                        void applyDefaultRouteForLane(
+                          getValues("origin"),
+                          getValues("delivery"),
+                          nextDate,
+                        ).then((route) => {
+                          if (route) {
+                            toast.success(
+                              `Default route applied: ${route.serviceName}`,
+                            );
+                          }
+                        });
+                      }
                     }}
                   />
                 )}
@@ -458,7 +551,9 @@ export function MasterDetailsStep() {
                           <AppButton
                             type="primary"
                             size="small"
-                            onClick={() => handleSelectRate(row)}
+                            loading={isApplyingDefaultRoute}
+                            disabled={isApplyingDefaultRoute}
+                            onClick={() => void handleSelectRate(row)}
                           >
                             Select
                           </AppButton>
@@ -472,8 +567,9 @@ export function MasterDetailsStep() {
             )
           ) : null}
 
-          <Row gutter={[24, 24]}>
-            <Col xs={24} md={8}>
+          {/* Modified by Sekar Nagarajan (2026-08-31 16:58) — gap from port row + five fields on one row from lg+ */}
+          <Row gutter={[24, 24]} className="booking-master-options-row">
+            <Col xs={24} md={12} lg={{ flex: "1 1 0%" }}>
               <label className="form-field-label">Haulage Origin</label>
               <Controller
                 control={control}
@@ -489,7 +585,7 @@ export function MasterDetailsStep() {
               />
             </Col>
 
-            <Col xs={24} md={8}>
+            <Col xs={24} md={12} lg={{ flex: "1 1 0%" }}>
               <label className="form-field-label">Haulage Destination</label>
               <Controller
                 control={control}
@@ -505,7 +601,7 @@ export function MasterDetailsStep() {
               />
             </Col>
 
-            <Col xs={24} md={8}>
+            <Col xs={24} md={12} lg={{ flex: "1 1 0%" }}>
               <label className="form-field-label">Carriage Contract</label>
               <Controller
                 control={control}
@@ -525,7 +621,7 @@ export function MasterDetailsStep() {
               />
             </Col>
 
-            <Col xs={24} md={8}>
+            <Col xs={24} md={12} lg={{ flex: "1 1 0%" }}>
               <label className="form-field-label">Online Booking No</label>
               <Controller
                 control={control}
@@ -536,7 +632,7 @@ export function MasterDetailsStep() {
               />
             </Col>
 
-            <Col xs={24} md={8}>
+            {/* <Col xs={24} md={8}>
               <label className="form-field-label">Agreement Party</label>
               <Controller
                 control={control}
@@ -549,9 +645,9 @@ export function MasterDetailsStep() {
                   />
                 )}
               />
-            </Col>
+            </Col> */}
 
-            <Col xs={24} md={8}>
+            <Col xs={24} md={12} lg={{ flex: "1 1 0%" }}>
               <label className="form-field-label">Preferred Agency</label>
               <Controller
                 control={control}
@@ -572,7 +668,7 @@ export function MasterDetailsStep() {
             </Col>
           </Row>
 
-          <div className="form-step-section">
+          {/* <div className="form-step-section">
             <div
               className="form-section-toggle"
               onClick={() => setShowAdditional(!showAdditional)}
@@ -968,13 +1064,18 @@ export function MasterDetailsStep() {
                 </Row>
               </div>
             ) : null}
-          </div>
+          </div> */}
         </Card>
       </div>
 
       <div className="form-step-footer">
         <AppButton onClick={prevStep}>Previous</AppButton>
-        <AppButton type="primary" htmlType="submit">
+        <AppButton
+          type="primary"
+          htmlType="submit"
+          loading={isApplyingDefaultRoute}
+          disabled={isApplyingDefaultRoute}
+        >
           {hasValidRoute ? "Next" : "Select Vessel / Route"}
         </AppButton>
       </div>

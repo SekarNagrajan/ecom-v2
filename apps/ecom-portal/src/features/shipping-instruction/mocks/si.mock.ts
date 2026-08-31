@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-28 11:15)
+// Modified by Sekar Nagarajan (2026-08-31 15:01)
 import type { SIDTO, SIListDTO } from "../types/si.types";
 
 export const MOCK_SI_LIST: SIListDTO[] = [
@@ -121,14 +121,35 @@ export const MOCK_SI_DETAIL: SIDTO = {
       printOnBl: false,
     },
   },
+  // Modified by Sekar Nagarajan (2026-08-31 15:27) — sample schedule legs for Master Details vessel card
   routing: {
     originPrint: "SINGAPORE",
     polPrint: "SINGAPORE",
     podPrint: "TOKYO",
     deliveryPrint: "TOKYO",
     vesselVoyage: "EVER GIVEN / 0123E",
-    scheduleLegs: [],
+    scheduleLegs: [
+      {
+        id: "LEG-1",
+        vesselName: "EVER GIVEN",
+        voyage: "0123E",
+        polPortName: "Singapore",
+        podPortName: "Colombo",
+        etd: "2026-09-05",
+        eta: "2026-09-09",
+      },
+      {
+        id: "LEG-2",
+        vesselName: "EVER GIVEN",
+        voyage: "0123E",
+        polPortName: "Colombo",
+        podPortName: "Tokyo",
+        etd: "2026-09-10",
+        eta: "2026-09-18",
+      },
+    ],
   },
+  // Modified by Sekar Nagarajan (2026-08-28 16:43) — multi-container cargo for list/grid UI
   containers: [
     {
       id: "CONT-1",
@@ -136,7 +157,6 @@ export const MOCK_SI_DETAIL: SIDTO = {
       eqpSize: "20DC",
       carrierSeal: "SEAL9988",
       shipperSeal: "SHP1122",
-      // Modified by Sekar Nagarajan (2026-08-28 12:56)
       isSoc: false,
       isOog: false,
       reeferMode: "none",
@@ -151,6 +171,63 @@ export const MOCK_SI_DETAIL: SIDTO = {
           packageType: "CTN",
           grossWeight: 4500,
           volume: 24.5,
+        },
+      ],
+    },
+    {
+      id: "CONT-2",
+      containerNo: "TEMU7654321",
+      eqpSize: "40HC",
+      carrierSeal: "SEAL4455",
+      shipperSeal: "SHP7788",
+      isSoc: false,
+      isOog: false,
+      reeferMode: "none",
+      cargoLines: [
+        {
+          id: "CARGO-2A",
+          marksAndNumbers: "TOKYO\nLOT-A\n1-80",
+          description: "AUTO PARTS — BRAKE ASSEMBLIES",
+          commodityCode: "AUTO-PARTS",
+          hsCode: "870830",
+          packageCount: 80,
+          packageType: "PLT",
+          grossWeight: 9200,
+          volume: 38.2,
+        },
+        {
+          id: "CARGO-2B",
+          marksAndNumbers: "TOKYO\nLOT-B\n81-140",
+          description: "AUTO PARTS — FILTERS & GASKETS",
+          commodityCode: "AUTO-PARTS",
+          hsCode: "842123",
+          packageCount: 60,
+          packageType: "CTN",
+          grossWeight: 3100,
+          volume: 16.4,
+        },
+      ],
+    },
+    {
+      id: "CONT-3",
+      containerNo: "HLXU9988776",
+      eqpSize: "40HC",
+      carrierSeal: "",
+      shipperSeal: "",
+      isSoc: false,
+      isOog: false,
+      reeferMode: "none",
+      cargoLines: [
+        {
+          id: "CARGO-3",
+          marksAndNumbers: "",
+          description: "",
+          commodityCode: "",
+          hsCode: "",
+          packageCount: 1,
+          packageType: "",
+          grossWeight: 1,
+          volume: 0,
         },
       ],
     },
@@ -179,5 +256,6 @@ export const MOCK_SI_DETAIL: SIDTO = {
   cargoProtect: [],
   ens: null,
   files: [],
+  referenceFields: [],
   preview: {},
 };

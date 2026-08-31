@@ -1,16 +1,6 @@
-// Modified by Sekar Nagarajan (2026-08-25 19:15)
+// Modified by Sekar Nagarajan (2026-08-31 11:25)
 import { AppButton } from "@solverminds/shared-ui";
-import {
-  Card,
-  Col,
-  Form,
-  Input,
-  Row,
-  Segmented,
-  Space,
-  Tag,
-  Typography,
-} from "antd";
+import { Card, Col, Form, Input, Row, Tabs, Typography } from "antd";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import type {
@@ -36,6 +26,8 @@ export function TrackingSearchFilter({
   initialValue = "SMLU8829102",
 }: TrackingSearchFilterProps) {
   const [form] = Form.useForm();
+  const searchType: TrackingSearchType =
+    Form.useWatch("searchType", form) || "CONTAINER";
 
   const handleFinish = (values: {
     searchType: TrackingSearchType;
@@ -69,29 +61,36 @@ export function TrackingSearchFilter({
         onFinish={handleFinish}
       >
         <div className="tracking-search-toolbar">
-          <Form.Item name="searchType" className="tracking-search-type">
-            <Segmented
-              options={[
-                {
-                  label: "Container No",
-                  value: "CONTAINER",
-                  icon: <AppIcon icon={Icons.container} size={16} />,
-                },
-                {
-                  label: "Booking No",
-                  value: "BOOKING",
-                  icon: <AppIcon icon={Icons.tag} size={16} />,
-                },
-                {
-                  label: "Bill of Lading (BL)",
-                  value: "BL",
-                  icon: <AppIcon icon={Icons.fileText} size={16} />,
-                },
-              ]}
-            />
+          <Form.Item name="searchType" className="tracking-search-type" hidden>
+            <input type="hidden" />
           </Form.Item>
+          <Tabs
+            activeKey={searchType}
+            onChange={(key) =>
+              form.setFieldValue("searchType", key as TrackingSearchType)
+            }
+            className="tracking-search-tabs"
+            items={[
+              {
+                key: "CONTAINER",
+                label: <span className="tracking-tab-label">Container No</span>,
+              },
+              {
+                key: "BOOKING",
+                label: <span className="tracking-tab-label">Booking No</span>,
+              },
+              {
+                key: "BL",
+                label: (
+                  <span className="tracking-tab-label">
+                    Bill of Lading (BL)
+                  </span>
+                ),
+              },
+            ]}
+          />
 
-          <Space size={8} align="center" className="tracking-search-samples">
+          {/* <Space size={8} align="center" className="tracking-search-samples">
             <Text type="secondary" className="tracking-search-samples__label">
               Quick Samples:
             </Text>
@@ -109,7 +108,7 @@ export function TrackingSearchFilter({
             >
               BKG-2026-9901
             </Tag>
-          </Space>
+          </Space> */}
         </div>
 
         <Row gutter={[16, 16]} align="top">
@@ -135,7 +134,7 @@ export function TrackingSearchFilter({
             </Form.Item>
           </Col>
 
-          <Col xs={24} md={6} lg={5}>
+          <Col xs={24} md={6} lg={4}>
             <Form.Item
               label={<SearchActionsLabel />}
               className="tracking-search-actions-field"
@@ -146,14 +145,15 @@ export function TrackingSearchFilter({
                   size="large"
                   htmlType="submit"
                   loading={isLoading}
-                  icon={<AppIcon icon={Icons.search} size={16} />}
+                  icon={<AppIcon icon={Icons.ship} size={16} />}
                 >
-                  Track Cargo
+                  Search
                 </AppButton>
                 <AppButton
+                  danger
                   size="large"
                   icon={
-                    <AppIcon icon={Icons.refreshCw} size={16} tone="primary" />
+                    <AppIcon icon={Icons.refreshCw} size={16} tone="reject" />
                   }
                   onClick={handleReset}
                 >

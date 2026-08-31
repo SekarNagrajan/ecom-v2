@@ -1,24 +1,48 @@
-// Modified by Sekar Nagarajan (2026-08-28 12:48)
+// Modified by Sekar Nagarajan (2026-08-31 16:03)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
-import {
-  Card,
-  Checkbox,
-  Col,
-  Input,
-  Row,
-  Segmented,
-  Select,
-  Typography,
-} from "antd";
+import { Card, Col, Input, Row, Segmented, Tag, Typography } from "antd";
+import type { ReactNode } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
-import { useSiWizardConfigQuery } from "../hooks/use-si-wizard-config";
 import type { SiMasterDetailsForm, SIWizardStepProps } from "../types/si.types";
 import { siMasterDetailsSchema } from "../types/si.types";
+import { SiVesselScheduleCard } from "./si-vessel-schedule-card";
 
 const { Text, Title } = Typography;
+
+function ReadonlyField({
+  label,
+  value,
+  emphasis = false,
+}: {
+  label: string;
+  value: ReactNode;
+  emphasis?: boolean;
+}) {
+  return (
+    <div className="form-field-cell si-master-readonly-field">
+      <label className="form-field-label">{label}</label>
+      {typeof value === "string" ? (
+        <Text
+          ellipsis={{ tooltip: value }}
+          className={
+            emphasis
+              ? "form-step-readonly-value form-step-readonly-value--emphasis si-master-readonly-value"
+              : "form-step-readonly-value si-master-readonly-value"
+          }
+        >
+          {value || "—"}
+        </Text>
+      ) : (
+        <div className="form-step-readonly-value si-master-readonly-value">
+          {value}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export function MasterDetailsStep({
   data,
@@ -28,7 +52,6 @@ export function MasterDetailsStep({
   isFirstStep,
   isSubmitting,
 }: SIWizardStepProps) {
-  const { data: config } = useSiWizardConfigQuery();
   const {
     control,
     handleSubmit,
@@ -46,10 +69,14 @@ export function MasterDetailsStep({
     },
   });
 
-  const showCompliance =
-    !!config?.enableNvocc ||
-    !!config?.enableT2LFiling ||
-    !!config?.enableTensDocumentation;
+  const routing = data.routing;
+  const primaryLeg = routing?.scheduleLegs?.[0];
+  const origin =
+    data.origin || routing?.originPrint || primaryLeg?.polPortName || "—";
+  const loadPort = data.loadPort || routing?.polPrint || "—";
+  const dischargePort = data.dischargePort || routing?.podPrint || "—";
+  const delivery =
+    data.delivery || routing?.deliveryPrint || primaryLeg?.podPortName || "—";
 
   const onValid = (values: SiMasterDetailsForm) => {
     onUpdate(values);
@@ -63,9 +90,12 @@ export function MasterDetailsStep({
       className="form-step-layout"
     >
       <div className="custom-scroll form-step-scroll si-master-step-stack">
-        {/* Row 1 — Document References (full width, fields in one row) */}
-        <Row gutter={[24, 24]} className="si-master-step-row">
-          <Col {...RESPONSIVE_COL.full}>
+        {/* Modified by Sekar Nagarajan (2026-08-31 15:55) — refs + BL options, then full vessel */}
+        <Row
+          gutter={[24, 24]}
+          className="si-master-step-row si-master-sections-row"
+        >
+          <Col {...RESPONSIVE_COL.formHalf}>
             <Card
               className="form-step-card form-step-section si-master-step-card"
               title={
@@ -74,35 +104,34 @@ export function MasterDetailsStep({
                 </Title>
               }
             >
-              <div className="si-master-refs-grid">
-                <div className="form-field-cell">
-                  <label className="form-field-label">Booking Number</label>
-                  <div className="form-step-readonly-value">{data.bookingNo}</div>
-                </div>
-                <div className="form-field-cell">
-                  <label className="form-field-label">SI Number</label>
-                  <div className="form-step-readonly-value">
-                    {data.siNo || "Draft"}
-                  </div>
-                </div>
-                <div className="form-field-cell">
+              <div className="si-master-detail-grid si-master-detail-grid--3">
+                <ReadonlyField
+                  label="Booking Number"
+                  value={data.bookingNo}
+                  emphasis
+                />
+                <ReadonlyField label="SI Number" value={data.siNo || "Draft"} />
+                <div className="form-field-cell si-master-readonly-field">
                   <label className="form-field-label">Agency Ref</label>
                   <Controller
                     control={control}
                     name="agencyRefNo"
                     render={({ field }) => (
-                      <Input {...field} size="large" maxLength={35} />
+                      <Input
+                        {...field}
+                        size="large"
+                        maxLength={35}
+                        placeholder="Enter agency reference"
+                        className="form-field-full-width"
+                      />
                     )}
                   />
                 </div>
               </div>
             </Card>
           </Col>
-        </Row>
 
-        {/* Row 2 — Options + Compliance side by side */}
-        <Row gutter={[24, 24]} className="si-master-step-row">
-          <Col {...(showCompliance ? RESPONSIVE_COL.formHalf : RESPONSIVE_COL.full)}>
+          <Col {...RESPONSIVE_COL.formHalf}>
             <Card
               className="form-step-card form-step-section si-master-step-card"
               title={
@@ -111,10 +140,10 @@ export function MasterDetailsStep({
                 </Title>
               }
             >
-              <div className="si-master-options-grid">
-                <div className="form-field-cell">
+              <div className="si-master-detail-grid si-master-options-grid">
+                <div className="form-field-cell si-master-readonly-field">
                   <label className="form-field-label">
-                    B/L Type <Text type="danger">*</Text>
+                    B/L Type <Text type="danger"> *</Text>
                   </label>
                   <Controller
                     control={control}
@@ -122,12 +151,13 @@ export function MasterDetailsStep({
                     render={({ field: { value, onChange } }) => (
                       <Segmented
                         block
+                        size="small"
                         className="form-field-full-width si-master-segmented"
                         value={value}
                         onChange={onChange}
                         options={[
-                          { label: "Original", value: "Original" },
-                          { label: "Seaway", value: "Seaway" },
+                          { label: "Original B/L", value: "Original" },
+                          { label: "Sea Waybill", value: "Seaway" },
                         ]}
                       />
                     )}
@@ -139,9 +169,9 @@ export function MasterDetailsStep({
                   ) : null}
                 </div>
 
-                <div className="form-field-cell">
+                <div className="form-field-cell si-master-readonly-field">
                   <label className="form-field-label">
-                    Release Type <Text type="danger">*</Text>
+                    Release Type <Text type="danger"> *</Text>
                   </label>
                   <Controller
                     control={control}
@@ -149,12 +179,13 @@ export function MasterDetailsStep({
                     render={({ field: { value, onChange } }) => (
                       <Segmented
                         block
+                        size="small"
                         className="form-field-full-width si-master-segmented"
                         value={value}
                         onChange={onChange}
                         options={[
                           { label: "Original", value: "O" },
-                          { label: "Telex", value: "T" },
+                          { label: "Telex Release", value: "T" },
                         ]}
                       />
                     )}
@@ -166,9 +197,9 @@ export function MasterDetailsStep({
                   ) : null}
                 </div>
 
-                <div className="form-field-cell">
+                <div className="form-field-cell si-master-readonly-field">
                   <label className="form-field-label">
-                    Freight Option <Text type="danger">*</Text>
+                    Freight Terms <Text type="danger"> *</Text>
                   </label>
                   <Controller
                     control={control}
@@ -176,12 +207,13 @@ export function MasterDetailsStep({
                     render={({ field: { value, onChange } }) => (
                       <Segmented
                         block
+                        size="small"
                         className="form-field-full-width si-master-segmented"
                         value={value}
                         onChange={onChange}
                         options={[
-                          { label: "PREPAID", value: "PREPAID" },
-                          { label: "COLLECT", value: "COLLECT" },
+                          { label: "Prepaid", value: "PREPAID" },
+                          { label: "Collect", value: "COLLECT" },
                         ]}
                       />
                     )}
@@ -195,85 +227,36 @@ export function MasterDetailsStep({
               </div>
             </Card>
           </Col>
+        </Row>
 
-          {showCompliance ? (
-            <Col {...RESPONSIVE_COL.formHalf}>
-              <Card
-                className="form-step-card form-step-section si-master-step-card"
-                title={
+        {/* Modified by Sekar Nagarajan (2026-08-31 16:03) — exact Schedules ScheduleCard */}
+        <Row gutter={[24, 24]} className="si-master-step-row">
+          <Col {...RESPONSIVE_COL.full}>
+            <Card
+              className="form-step-card form-step-section si-master-step-card si-master-step-card--route"
+              title={
+                <div className="si-master-card-title-row">
                   <Title level={5} className="form-step-card-title">
-                    Compliance Flags
+                    Vessel Details
                   </Title>
-                }
-              >
-                <div className="si-master-compliance-grid">
-                  {config?.enableNvocc ? (
-                    <div className="form-field-cell si-master-compliance-check">
-                      <Controller
-                        control={control}
-                        name="nvocc"
-                        render={({ field: { value, onChange, ...field } }) => (
-                          <Checkbox
-                            {...field}
-                            checked={!!value}
-                            onChange={(e) => onChange(e.target.checked)}
-                          >
-                            NVOCC House B/L
-                          </Checkbox>
-                        )}
-                      />
-                    </div>
-                  ) : null}
-                  {config?.enableT2LFiling ? (
-                    <div className="form-field-cell si-master-compliance-check">
-                      <Controller
-                        control={control}
-                        name="t2lFiling"
-                        render={({ field: { value, onChange, ...field } }) => (
-                          <Checkbox
-                            {...field}
-                            checked={!!value}
-                            onChange={(e) => onChange(e.target.checked)}
-                          >
-                            T2L Filing
-                          </Checkbox>
-                        )}
-                      />
-                    </div>
-                  ) : null}
-                  {config?.enableTensDocumentation ? (
-                    <div className="form-field-cell">
-                      <label className="form-field-label">ENS Filing Hint</label>
-                      <Controller
-                        control={control}
-                        name="ensFilingHint"
-                        render={({ field }) => (
-                          <Select
-                            {...field}
-                            size="large"
-                            className="form-field-full-width"
-                            options={[
-                              { label: "Not required", value: "N" },
-                              { label: "Shipper", value: "S" },
-                              { label: "Carrier", value: "P" },
-                            ]}
-                          />
-                        )}
-                      />
-                    </div>
-                  ) : null}
+                  <Tag color="processing">Read only</Tag>
                 </div>
-              </Card>
-            </Col>
-          ) : null}
+              }
+            >
+              <SiVesselScheduleCard
+                routing={routing}
+                origin={origin}
+                loadPort={loadPort}
+                dischargePort={dischargePort}
+                delivery={delivery}
+              />
+            </Card>
+          </Col>
         </Row>
       </div>
 
       <div className="form-step-footer">
-        <AppButton
-          onClick={onPrevious}
-          disabled={isFirstStep || isSubmitting}
-        >
+        <AppButton onClick={onPrevious} disabled={isFirstStep || isSubmitting}>
           Previous
         </AppButton>
         <AppButton type="primary" htmlType="submit" disabled={isSubmitting}>

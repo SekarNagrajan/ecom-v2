@@ -8,8 +8,8 @@ import { AppIcon, Icons } from "../../components/icons";
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import {
-  MODULE_TITLES,
-  formatModuleScreenTitle,
+    MODULE_TITLES,
+    formatModuleScreenTitle,
 } from "../../constants/module-titles";
 import { siListQueryOptions } from "./api/si.queries";
 import { SiLoadingCenter } from "./components/si-loading-center";

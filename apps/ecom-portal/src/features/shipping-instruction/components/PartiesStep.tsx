@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-28 00:45)
+// Modified by Sekar Nagarajan (2026-08-31 14:17)
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { Card, Col, Row, Switch, Typography } from "antd";
@@ -9,23 +9,138 @@ import {
   ListActionButton,
   ListActionsRow,
 } from "../../../components/shared/list-action-button";
-import { CustomerSearchAutoComplete } from "../../booking/components/party-edit-drawer";
-import {
-  SiPartyEditDrawer,
-  SiRoleAssignPanel,
-} from "./si-party-edit-drawer";
+import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import type { BookingCustomerOption } from "../../booking/api/booking.api";
+import { CustomerSearchAutoComplete } from "../../booking/components/party-edit-drawer";
 import { siPartiesSchema, type SIWizardStepProps } from "../types/si.types";
 import {
   cardsToSiPartiesForm,
+  DEFAULT_SI_PARTY_ROLES,
   emptySiPartyCard,
+  initialSiPartyCards,
   SI_PARTY_ROLE_LABEL,
-  siPartiesToCards,
+  siPartyRoleCardClassName,
   type SiPartyCardData,
   type SiPartyRoleKey,
 } from "../utils/si-party.utils";
+import { SiPartyEditDrawer, SiRoleAssignPanel } from "./si-party-edit-drawer";
 
 const { Text, Title } = Typography;
+
+function SiPartyRoleCard({
+  role,
+  card,
+  onEdit,
+  onDelete,
+  onUpdateFlag,
+}: {
+  role: SiPartyRoleKey;
+  card: SiPartyCardData;
+  onEdit: () => void;
+  onDelete: () => void;
+  onUpdateFlag: (
+    patch: Partial<Pick<SiPartyCardData, "printOnBl" | "toOrder">>,
+  ) => void;
+}) {
+  return (
+    <Card
+      size="small"
+      className={siPartyRoleCardClassName(role)}
+      title={
+        <Title level={5} className="booking-party-card__title">
+          {SI_PARTY_ROLE_LABEL[role]}
+        </Title>
+      }
+      extra={
+        <ListActionsRow>
+          <ListActionButton
+            title="Edit Party"
+            icon={<AppIcon icon={Icons.edit} size={16} tone="edit" />}
+            onClick={onEdit}
+          />
+          <ListActionButton
+            title="Delete Party"
+            icon={<AppIcon icon={Icons.trash} size={16} tone="delete" />}
+            tone="delete"
+            onClick={onDelete}
+          />
+        </ListActionsRow>
+      }
+    >
+      <div className="booking-party-card__body">
+        <Text strong className="booking-party-card__company">
+          {card.company}
+        </Text>
+        {card.contact ? (
+          <Text type="secondary" className="booking-party-card__meta">
+            {card.contact}
+          </Text>
+        ) : null}
+        {card.address || card.city ? (
+          <Text type="secondary" className="booking-party-card__meta">
+            {[card.address, card.city, card.country].filter(Boolean).join(", ")}
+          </Text>
+        ) : null}
+        {card.email || card.phone ? (
+          <Text type="secondary" className="booking-party-card__meta">
+            {[card.email, card.phone].filter(Boolean).join(" · ")}
+          </Text>
+        ) : null}
+        <div className="si-party-card__flags">
+          <label className="si-party-card__flag">
+            <Text>Print on B/L</Text>
+            <Switch
+              size="small"
+              checked={card.printOnBl}
+              onChange={(checked) => onUpdateFlag({ printOnBl: checked })}
+            />
+          </label>
+          {role === "consignee" ? (
+            <label className="si-party-card__flag">
+              <Text>To Order</Text>
+              <Switch
+                size="small"
+                checked={!!card.toOrder}
+                onChange={(checked) => onUpdateFlag({ toOrder: checked })}
+              />
+            </label>
+          ) : null}
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function EmptySiPartySlot({
+  role,
+  onAssign,
+}: {
+  role: SiPartyRoleKey;
+  onAssign: () => void;
+}) {
+  return (
+    <Card
+      size="small"
+      className={siPartyRoleCardClassName(role, true)}
+      title={
+        <Title level={5} className="booking-party-card__title">
+          {SI_PARTY_ROLE_LABEL[role]}
+        </Title>
+      }
+    >
+      <div className="booking-party-card__empty-body">
+        <Text type="secondary">Not assigned yet</Text>
+        <AppButton
+          size="small"
+          icon={<AppIcon icon={Icons.plus} size={14} tone="create" />}
+          onClick={onAssign}
+        >
+          Assign
+        </AppButton>
+      </div>
+    </Card>
+  );
+}
 
 export function PartiesStep({
   data,
@@ -37,7 +152,7 @@ export function PartiesStep({
   const toast = useToast();
   const [cards, setCards] = useState<
     Partial<Record<SiPartyRoleKey, SiPartyCardData>>
-  >(() => siPartiesToCards(data.parties));
+  >(() => initialSiPartyCards(data.parties));
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCustomer, setSelectedCustomer] =
     useState<BookingCustomerOption | null>(null);
@@ -45,10 +160,10 @@ export function PartiesStep({
   const [editValue, setEditValue] = useState<SiPartyCardData>(emptySiPartyCard());
 
   const assignedRoles = Object.keys(cards) as SiPartyRoleKey[];
-  const cardEntries = Object.entries(cards) as [
-    SiPartyRoleKey,
-    SiPartyCardData,
-  ][];
+  const otherEntries = (
+    Object.entries(cards) as [SiPartyRoleKey, SiPartyCardData][]
+  ).filter(([role]) => !DEFAULT_SI_PARTY_ROLES.includes(role));
+  const assignedCount = assignedRoles.length;
 
   const handleSelectCustomer = (customer: BookingCustomerOption) => {
     setSelectedCustomer(customer);
@@ -151,7 +266,7 @@ export function PartiesStep({
           ...(toParty(cards.consignee) ?? data.parties.consignee),
           toOrder: cards.consignee?.toOrder ?? false,
         },
-        notify: toParty(cards.notify) ?? data.parties.notify,
+        notify: toParty(cards.notify ?? cards.consignee) ?? data.parties.notify,
         notify2: toParty(cards.notify2),
         notify3: toParty(cards.notify3),
         forwarder: toParty(cards.forwarder) ?? data.parties.forwarder,
@@ -199,121 +314,65 @@ export function PartiesStep({
             <div className="booking-party-section__title">
               <span>Assigned Parties</span>
               <Text type="secondary" className="booking-party-section__count">
-                {cardEntries.length} assigned
+                {assignedCount} assigned
               </Text>
             </div>
           }
         >
-          {cardEntries.length === 0 ? (
-            <Text type="secondary">
-              Search and assign customers to Shipper, Consignee, and Notify
-              Party.
-            </Text>
-          ) : (
-            <Row gutter={[24, 24]} className="booking-party-grid">
-              {cardEntries.map(([role, card]) => (
+          {/* Modified by Sekar Nagarajan (2026-08-31 14:36) — Booking / Agreement / Consignee + mock seed */}
+          <Row gutter={[24, 24]} className="booking-party-grid">
+            {DEFAULT_SI_PARTY_ROLES.map((role) => {
+              const card = cards[role];
+              return (
                 <Col
-                  xs={24}
-                  md={12}
                   key={role}
+                  {...RESPONSIVE_COL.formThird}
                   className="booking-party-grid__col"
                 >
-                  <Card
-                    size="small"
-                    className="booking-party-card"
-                    title={
-                      <Title level={5} className="booking-party-card__title">
-                        {SI_PARTY_ROLE_LABEL[role]}
-                      </Title>
-                    }
-                    extra={
-                      <ListActionsRow>
-                        <ListActionButton
-                          title="Edit Party"
-                          icon={
-                            <AppIcon icon={Icons.edit} size={16} tone="edit" />
-                          }
-                          onClick={() => openEdit(role)}
-                        />
-                        <ListActionButton
-                          title="Delete Party"
-                          icon={
-                            <AppIcon
-                              icon={Icons.trash}
-                              size={16}
-                              tone="delete"
-                            />
-                          }
-                          tone="delete"
-                          onClick={() => handleDeleteCard(role)}
-                        />
-                      </ListActionsRow>
-                    }
-                  >
-                    <div className="booking-party-card__body">
-                      <Text strong className="booking-party-card__company">
-                        {card.company}
-                      </Text>
-                      {card.contact ? (
-                        <Text
-                          type="secondary"
-                          className="booking-party-card__meta"
-                        >
-                          {card.contact}
-                        </Text>
-                      ) : null}
-                      {card.address || card.city ? (
-                        <Text
-                          type="secondary"
-                          className="booking-party-card__meta"
-                        >
-                          {[card.address, card.city, card.country]
-                            .filter(Boolean)
-                            .join(", ")}
-                        </Text>
-                      ) : null}
-                      {card.email || card.phone ? (
-                        <Text
-                          type="secondary"
-                          className="booking-party-card__meta"
-                        >
-                          {[card.email, card.phone].filter(Boolean).join(" · ")}
-                        </Text>
-                      ) : null}
-                      <div className="si-party-card__flags">
-                        <label className="si-party-card__flag">
-                          <Text>Print on B/L</Text>
-                          <Switch
-                            size="small"
-                            checked={card.printOnBl}
-                            onChange={(checked) =>
-                              updateCardFlag(role, { printOnBl: checked })
-                            }
-                          />
-                        </label>
-                        {role === "consignee" ? (
-                          <label className="si-party-card__flag">
-                            <Text>To Order</Text>
-                            <Switch
-                              size="small"
-                              checked={!!card.toOrder}
-                              onChange={(checked) =>
-                                updateCardFlag(role, { toOrder: checked })
-                              }
-                            />
-                          </label>
-                        ) : null}
-                      </div>
-                    </div>
-                  </Card>
+                  {card ? (
+                    <SiPartyRoleCard
+                      role={role}
+                      card={card}
+                      onEdit={() => openEdit(role)}
+                      onDelete={() => handleDeleteCard(role)}
+                      onUpdateFlag={(patch) => updateCardFlag(role, patch)}
+                    />
+                  ) : (
+                    <EmptySiPartySlot
+                      role={role}
+                      onAssign={() => openEdit(role)}
+                    />
+                  )}
+                </Col>
+              );
+            })}
+          </Row>
+
+          {otherEntries.length > 0 ? (
+            <Row
+              gutter={[24, 24]}
+              className="booking-party-grid booking-party-grid--other"
+            >
+              {otherEntries.map(([role, card]) => (
+                <Col
+                  key={role}
+                  {...RESPONSIVE_COL.formThird}
+                  className="booking-party-grid__col"
+                >
+                  <SiPartyRoleCard
+                    role={role}
+                    card={card}
+                    onEdit={() => openEdit(role)}
+                    onDelete={() => handleDeleteCard(role)}
+                    onUpdateFlag={(patch) => updateCardFlag(role, patch)}
+                  />
                 </Col>
               ))}
             </Row>
-          )}
+          ) : null}
         </Card>
       </div>
 
-      {/* Modified by Sekar Nagarajan (2026-08-28 12:40) */}
       <div className="form-step-footer">
         <AppButton onClick={onPrevious} disabled={isSubmitting}>
           Previous

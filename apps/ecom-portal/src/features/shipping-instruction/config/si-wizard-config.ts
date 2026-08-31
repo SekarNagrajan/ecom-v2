@@ -12,6 +12,7 @@ export type SIWizardStepId =
   | "ens"
   | "chargeTab"
   | "files"
+  | "references"
   | "preview";
 
 export interface SIWizardConfig {
@@ -38,7 +39,7 @@ export interface SIWizardConfig {
 export const DEFAULT_SI_WIZARD_CONFIG: SIWizardConfig = {
   showRouting: false,
   showInsurance: false,
-  showCargoProtect: true,
+  showCargoProtect: false,
   showChargesInWizard: false,
   showChargeTab: false,
   showEns: true,
@@ -65,6 +66,7 @@ export function buildSiWizardStepIds(config: SIWizardConfig): SIWizardStepId[] {
   if (config.showEns) steps.push("ens");
   if (config.showChargeTab) steps.push("chargeTab");
   if (config.showFileUpload) steps.push("files");
-  steps.push("preview");
+  // Modified by Sekar Nagarajan (2026-08-31 15:42) — References before Preview (booking/BL parity)
+  steps.push("references", "preview");
   return steps;
 }

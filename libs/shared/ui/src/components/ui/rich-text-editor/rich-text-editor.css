@@ -159,19 +159,19 @@
     border-radius: var(--rte-border-radius-sm, 8px);
   }
 
-  .ProseMirror [style*='text-align: left'] {
+  .ProseMirror [style*="text-align: left"] {
     text-align: left;
   }
 
-  .ProseMirror [style*='text-align: center'] {
+  .ProseMirror [style*="text-align: center"] {
     text-align: center;
   }
 
-  .ProseMirror [style*='text-align: right'] {
+  .ProseMirror [style*="text-align: right"] {
     text-align: right;
   }
 
-  .ProseMirror [style*='text-align: justify'] {
+  .ProseMirror [style*="text-align: justify"] {
     text-align: justify;
   }
 
@@ -191,7 +191,7 @@
     background: var(--rte-color-fill-quaternary, rgba(148, 163, 184, 0.12));
     border-radius: var(--rte-border-radius-sm, 8px);
     color: var(--rte-color-text, inherit);
-    font-family: 'JetBrainsMono', 'Courier New', Courier, monospace;
+    font-family: "JetBrainsMono", "Courier New", Courier, monospace;
     padding: 0.75rem 1rem;
     margin: 1rem 0;
   }
@@ -331,7 +331,7 @@
   }
 
   .rte-content-drop-active::after {
-    content: 'Drop to insert inline';
+    content: "Drop to insert inline";
     position: absolute;
     top: 8px;
     left: 50%;
@@ -371,7 +371,7 @@
   .rte-drop-overlay--attachment {
     background: color-mix(
       in srgb,
-      var(--rte-color-success, #52c41a) 6%,
+      var(--rte-color-success, #047857) 6%,
       transparent
     );
     border: 2px dashed var(--rte-color-success-border, #95de64);
@@ -380,10 +380,10 @@
   .rte-drop-overlay--attachment.rte-drop-overlay--active {
     background: color-mix(
       in srgb,
-      var(--rte-color-success, #52c41a) 12%,
+      var(--rte-color-success, #047857) 12%,
       transparent
     );
-    border-color: var(--rte-color-success, #52c41a);
+    border-color: var(--rte-color-success, #047857);
   }
 
   .rte-drop-overlay-label {
@@ -505,7 +505,7 @@
   .rich-text-content pre {
     background: var(--ant-color-fill-quaternary);
     border-radius: var(--ant-border-radius);
-    font-family: 'JetBrainsMono', 'Courier New', Courier, monospace;
+    font-family: "JetBrainsMono", "Courier New", Courier, monospace;
     padding: 0.75rem 1rem;
     margin: 0.75rem 0;
   }

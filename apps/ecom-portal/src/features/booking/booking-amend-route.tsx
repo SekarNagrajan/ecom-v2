@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-28 00:38)
+// Modified by Sekar Nagarajan (2026-08-31 15:01)
 import { AppButton } from "@solverminds/shared-ui";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "@tanstack/react-router";
@@ -21,6 +21,7 @@ import { FileUploadStep } from "./components/FileUploadStep";
 import { InsuranceStep } from "./components/InsuranceStep";
 import { MasterDetailsStep } from "./components/MasterDetailsStep";
 import { PreviewStep } from "./components/PreviewStep";
+import { ReferenceInformationStep } from "./components/ReferenceInformationStep";
 import { useBookingWizard } from "./hooks/use-booking-wizard";
 import { useBookingStore } from "./stores/booking.store";
 import {
@@ -65,6 +66,7 @@ export function BookingAmendRoute() {
           ? migrateLegacyCargo(booking.cargo)
           : defaultCargoData(),
         documents: booking.documents ?? [],
+        referenceFields: booking.referenceFields ?? [],
       });
       setIsInitialized(true);
     }
@@ -94,6 +96,10 @@ export function BookingAmendRoute() {
     {
       title: WIZARD_STEP_TITLES.fileUpload,
       icon: <AppIcon icon={Icons.upload} size={PIPELINE_ICON_SIZE} />,
+    },
+    {
+      title: WIZARD_STEP_TITLES.references,
+      icon: <AppIcon icon={Icons.fileText} size={PIPELINE_ICON_SIZE} />,
     },
     {
       title: WIZARD_STEP_TITLES.preview,
@@ -241,7 +247,8 @@ export function BookingAmendRoute() {
             {currentStep === 3 && <ENSStep />}
             {currentStep === 4 && <InsuranceStep />}
             {currentStep === 5 && <FileUploadStep />}
-            {currentStep === 6 && (
+            {currentStep === 6 && <ReferenceInformationStep />}
+            {currentStep === 7 && (
               <PreviewStep
                 onSubmit={handleSubmit}
                 isSubmitting={isSubmitting}

@@ -12,6 +12,7 @@ export type BLWizardStepId =
   | "ens"
   | "chargeTab"
   | "files"
+  | "references"
   | "preview";
 
 export interface BLWizardConfig {
@@ -49,7 +50,7 @@ export interface BLWizardConfig {
 export const DEFAULT_BL_WIZARD_CONFIG: BLWizardConfig = {
   showRouting: false,
   showInsurance: false,
-  showCargoProtect: true,
+  showCargoProtect: false,
   showChargesInWizard: false,
   showChargeTab: false,
   showEns: true,
@@ -86,6 +87,6 @@ export function buildBlWizardStepIds(config: BLWizardConfig): BLWizardStepId[] {
   if (config.showChargesInWizard) steps.push("charges");
   if (config.showEns) steps.push("ens");
   if (config.showChargeTab) steps.push("chargeTab");
-  steps.push("files", "preview");
+  steps.push("files", "references", "preview");
   return steps;
 }

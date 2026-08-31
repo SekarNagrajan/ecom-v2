@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-25 11:50)
+// Modified by Sekar Nagarajan (2026-08-31 15:25)
 import { AppButton } from '@solverminds/shared-ui';
 import { Card, Empty, Space, Table, Tag, Typography } from 'antd';
 import { useNavigate } from '@tanstack/react-router';
@@ -11,6 +11,7 @@ import { useBLBatchPrintMutation, useBLListQuery } from './api/bl.queries';
 import { BlModuleStyles } from './components/bl-module-styles';
 import type { BLListDTO } from './types/bl.types';
 import { BL_STATUS_LABELS } from './types/bl.types';
+import { getBLStatusColor } from './utils/bl-status';
 
 const { Text } = Typography;
 
@@ -100,7 +101,12 @@ export function BillOfLadingBatchPrintRoute() {
                     key: 'status',
                     width: 120,
                     render: (status: BLListDTO['status']) => (
-                      <Tag>{BL_STATUS_LABELS[status]}</Tag>
+                      <Tag
+                        className="bl-status-tag"
+                        color={getBLStatusColor(status)}
+                      >
+                        {BL_STATUS_LABELS[status]}
+                      </Tag>
                     ),
                   },
                   {

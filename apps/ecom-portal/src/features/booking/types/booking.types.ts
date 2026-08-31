@@ -1,7 +1,8 @@
-// Modified by Sekar Nagarajan (2026-08-28 11:15)
+// Modified by Sekar Nagarajan (2026-08-31 14:46)
 import { z } from "zod";
 import type { ApiResponse } from "../../../types/api.types";
 import type { BookingRateOption } from "../mocks/booking-rates.mock";
+import type { ReferenceField } from "../utils/reference-field.utils";
 
 /** One sail/move leg — JSP Route row inside a routing option (module details). */
 export const bookingRouteLegSchema = z.object({
@@ -112,7 +113,7 @@ export const masterDetailsSchema = z.object({
 
 // Step 2: Parties
 export const partiesSchema = z.object({
-  shipperName: z.string().min(3, "Shipper Name is required"),
+  shipperName: z.string().min(3, "Booking Party is required"),
   shipperReference: z.string().optional(),
   shipperContact: z.string().optional(),
   shipperAddress: z.string().optional(),
@@ -480,6 +481,8 @@ export interface BookingPayload {
   ens: EnsData | null;
   insurance: InsuranceData | null;
   documents?: BookingDocument[];
+  /** Dynamic reference fields (ecom-app Reference Information step). */
+  referenceFields?: ReferenceField[];
   /** Soft draft id when saved via Save Draft. */
   draftId?: string;
 }

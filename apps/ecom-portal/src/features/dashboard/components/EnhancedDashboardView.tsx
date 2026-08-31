@@ -1,7 +1,7 @@
-// Modified by Sekar Nagarajan (2026-08-25 17:35)
+// Modified by Sekar Nagarajan (2026-08-31 15:05)
 /**
  * Enhanced Dashboard — JSP parity with enhancedDashboard.jsp:
- * KPI filter cards → Ongoing Transactions table, plus analytics sections.
+ * KPI filter cards → Upcoming Shipment Planning → Ongoing Transactions, plus analytics sections.
  */
 import { AppButton } from "@solverminds/shared-ui";
 import { Col, Empty, Row, Space, Spin } from "antd";
@@ -79,6 +79,13 @@ export function EnhancedDashboardView() {
         </Spin>
 
         <Spin spinning={controller.isLoading}>
+          <ShipmentPlanningSection
+            kpis={MOCK_PLANNING_KPIS}
+            calendar={MOCK_CALENDAR_WEEKS}
+          />
+        </Spin>
+
+        <Spin spinning={controller.isLoading}>
           <DashboardOngoingTable
             shipments={shipments}
             activeFilter={controller.activeFilter}
@@ -98,35 +105,28 @@ export function EnhancedDashboardView() {
           />
         </Spin>
 
-        <Row gutter={[16, 16]}>
-          <Col xs={24} lg={12}>
-            <Spin spinning={controller.isLoading}>
-              <TopActiveLanesSection
-                lanes={MOCK_TOP_LANES}
-                lastUsed={MOCK_LAST_USED_LANES}
-              />
-            </Spin>
-          </Col>
-          <Col xs={24} lg={12}>
-            <Spin spinning={controller.isLoading}>
-              <LaneOpportunitySection
-                contracted={MOCK_CONTRACTED_LANES}
-                opportunities={MOCK_OPPORTUNITY_LANES}
-              />
-            </Spin>
-          </Col>
-        </Row>
+        <div className="dashboard-twin-sections">
+          <Spin spinning={controller.isLoading}>
+            <Row gutter={[16, 16]} className="dashboard-equal-row">
+              <Col xs={24} lg={12}>
+                <TopActiveLanesSection
+                  lanes={MOCK_TOP_LANES}
+                  lastUsed={MOCK_LAST_USED_LANES}
+                />
+              </Col>
+              <Col xs={24} lg={12}>
+                <LaneOpportunitySection
+                  contracted={MOCK_CONTRACTED_LANES}
+                  opportunities={MOCK_OPPORTUNITY_LANES}
+                />
+              </Col>
+            </Row>
+          </Spin>
 
-        <Spin spinning={controller.isLoading}>
-          <ShipmentPlanningSection
-            kpis={MOCK_PLANNING_KPIS}
-            calendar={MOCK_CALENDAR_WEEKS}
-          />
-        </Spin>
-
-        <Spin spinning={controller.isLoading}>
-          <ShipmentIntelligenceSection consignees={MOCK_TOP_CONSIGNEES} />
-        </Spin>
+          <Spin spinning={controller.isLoading}>
+            <ShipmentIntelligenceSection consignees={MOCK_TOP_CONSIGNEES} />
+          </Spin>
+        </div>
       </Space>
     </FeaturePageShell>
   );

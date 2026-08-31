@@ -22,5 +22,4 @@ export const SI_CARGO_LINE_COLUMNS: TableColumnsType<SICargoLine> = [
     render: (_, record) => `${record.packageCount} ${record.packageType}`,
   },
   { title: "Weight (kg)", dataIndex: "grossWeight", key: "grossWeight" },
-  { title: "Volume (m³)", dataIndex: "volume", key: "volume" },
 ];

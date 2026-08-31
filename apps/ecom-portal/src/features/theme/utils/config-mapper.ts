@@ -48,7 +48,8 @@ export const BE_COLOR_MAP = {
   /** Brighter maritime variant — Appearance / header primary swatches only */
   HARBOR: "#3B7DDD",
   GOLD: "#faad14",
-  GREEN: "#52c41a",
+  // Modified by Sekar Nagarajan (2026-08-31 12:52) — success emerald #047857
+  GREEN: "#047857",
   RED: "#f5222d",
   PURPLE: "#722ed1",
   CYAN: "#13c2c2",
@@ -84,7 +85,8 @@ export const mapBeToUiConfig = (
       "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
     primaryColor: beConfig.primaryColor || "#1B6DAB",
     secondaryColor: "#595959",
-    successColor: "#52c41a",
+    // Modified by Sekar Nagarajan (2026-08-31 12:52) — success emerald #047857
+    successColor: "#047857",
     warningColor: "#faad14",
     errorColor: "#ff4d4f",
     infoColor: "#1677ff",

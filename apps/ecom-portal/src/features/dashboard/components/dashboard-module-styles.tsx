@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-25 18:15)
+// Modified by Sekar Nagarajan (2026-08-31 15:11)
 import { theme } from "antd";
 import { tokenMix } from "../../theme/utils/token-mix";
 
@@ -32,6 +32,24 @@ export function DashboardModuleStyles() {
         background: ${token.colorBgContainer};
         box-shadow: none !important;
       }
+      .dashboard-panel.ant-card {
+        display: flex;
+        flex-direction: column;
+      }
+      .dashboard-panel .ant-card-head {
+        flex-shrink: 0;
+      }
+      .dashboard-equal-row.ant-row {
+        align-items: stretch;
+      }
+      .dashboard-equal-row > .ant-col {
+        display: flex;
+        flex-direction: column;
+      }
+      .dashboard-equal-row .dashboard-panel.ant-card {
+        flex: 1;
+        height: 100%;
+      }
       .dashboard-kpi-card.ant-card {
         height: 100%;
         cursor: pointer;
@@ -58,7 +76,7 @@ export function DashboardModuleStyles() {
       }
       .dashboard-kpi-card--tone-success.dashboard-kpi-card--active {
         border-color: ${token.colorSuccess};
-        background: ${token.colorSuccessBg};
+        background: ${tokenMix(token.colorSuccess, 12)};
       }
       .dashboard-kpi-card--tone-warning.dashboard-kpi-card--active {
         border-color: ${token.colorWarning};
@@ -81,7 +99,7 @@ export function DashboardModuleStyles() {
         color: ${token.colorPrimary};
       }
       .dashboard-kpi-card__icon--success {
-        background: ${token.colorSuccessBg};
+        background: ${tokenMix(token.colorSuccess, 12)};
         color: ${token.colorSuccess};
       }
       .dashboard-kpi-card__icon--warning {
@@ -125,6 +143,36 @@ export function DashboardModuleStyles() {
       }
       .dashboard-panel .ant-card-body {
         padding: ${token.paddingMD}px ${token.paddingLG}px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+      }
+      .dashboard-split-stack {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginMD}px;
+        min-height: 0;
+      }
+      .dashboard-split-stack__block {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+      }
+      .dashboard-intelligence-tabs.ant-tabs {
+        flex-shrink: 0;
+      }
+      .dashboard-intelligence-body.ant-row {
+        flex: 1;
+        min-height: 0;
+        align-items: stretch;
+      }
+      .dashboard-intelligence-body > .ant-col {
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
       }
       .dashboard-panel__title {
         font-size: ${token.fontSize}px;
@@ -315,7 +363,7 @@ export function DashboardModuleStyles() {
       }
       .dashboard-delta-badge--up {
         color: ${token.colorSuccess};
-        background: ${token.colorSuccessBg};
+        background: ${tokenMix(token.colorSuccess, 12)};
       }
       .dashboard-delta-badge--down {
         color: ${token.colorError};
@@ -511,7 +559,7 @@ export function DashboardModuleStyles() {
       .dashboard-dot--neutral { background: ${token.colorTextQuaternary}; }
       .dashboard-donut {
         width: 100%;
-        height: 180px;
+        height: ${token.controlHeightLG * 5}px;
       }
       .dashboard-name-cell {
         display: flex;
@@ -520,6 +568,11 @@ export function DashboardModuleStyles() {
         min-width: 0;
       }
 
+      .dashboard-twin-sections {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginLG}px;
+      }
       @media (max-width: 1199px) {
         .dashboard-kpi-col {
           flex: 1 1 calc((100% - ${token.marginMD * 3}px) / 4);

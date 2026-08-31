@@ -1,7 +1,7 @@
-// Modified by Sekar Nagarajan (2026-08-28 11:55)
+// Modified by Sekar Nagarajan (2026-08-31 17:21)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { useNavigate } from "@tanstack/react-router";
-import type { RowDoubleClickedEvent, SelectionChangedEvent } from "ag-grid-community";
+import type { RowDoubleClickedEvent } from "ag-grid-community";
 import { Space, Typography } from "antd";
 import { useState } from "react";
 
@@ -83,11 +83,6 @@ export function BillOfLadingListing() {
     setSelectedRecord(record);
   };
 
-  const handleSelectionChanged = (event: SelectionChangedEvent<BLListDTO>) => {
-    const selected = event.api.getSelectedRows().map((r) => r.blNo);
-    setSelectedBlNos(selected);
-  };
-
   return (
     <div className="bl-page-layout">
       <div className="bl-page-header">
@@ -105,9 +100,9 @@ export function BillOfLadingListing() {
             >
               Batch Original Print
             </AppButton>
-            <AppButton onClick={() => navigate({ to: "/app/bl/batch-print" })}>
+            {/* <AppButton onClick={() => navigate({ to: "/app/bl/batch-print" })}>
               Batch Print Page
-            </AppButton>
+            </AppButton> */}
           </Space>
         </div>
       </div>
@@ -127,8 +122,6 @@ export function BillOfLadingListing() {
         showNnPrint={config?.showNnPrint}
         showReadyToConfirm={config?.showReadyToConfirm}
         enableTermsOnConfirmedEdit={config?.enableTermsOnConfirmedEdit}
-        rowSelection={config?.enableStripePayment ? "multiple" : undefined}
-        onSelectionChanged={handleSelectionChanged}
         onView={handleView}
         onEdit={(blNo) => navigate({ to: `/app/bl/${blNo}/edit` })}
         onPrint={handlePrint}
@@ -138,12 +131,6 @@ export function BillOfLadingListing() {
         onManifest={openManifest}
         onRowDoubleClicked={handleRowDoubleClick}
       />
-
-      {config?.showNonRatedBlMsg ? (
-        <Text type="secondary" className="bl-list-footnote">
-          * Non-rated B/L charges may differ from final invoice.
-        </Text>
-      ) : null}
 
       {selectedRecord ? (
         <BlViewDrawer

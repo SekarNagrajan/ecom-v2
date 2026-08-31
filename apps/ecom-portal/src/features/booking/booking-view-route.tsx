@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 11:20)
+// Modified by Sekar Nagarajan (2026-08-31 17:05)
 import { AppButton } from "@solverminds/shared-ui";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { Card, Space } from "antd";
@@ -21,7 +21,7 @@ export function BookingViewRoute() {
   return (
     <FeaturePageShell>
       <BookingModuleStyles />
-      <Space direction="vertical" size="large" className="feature-page-stack">
+      <Space direction="vertical" size="large" className="feature-page-stack booking-page-stack">
         <Card className="feature-page-card" bordered={false}>
           <ModuleScreenHeader
             icon={Icons.bookOpen}

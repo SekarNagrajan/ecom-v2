@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 13:04)
+// Modified by Sekar Nagarajan (2026-08-31 15:20)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { Empty, Radio, Tag, Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
@@ -36,7 +36,7 @@ function statusTone(status: MCNDTO["status"]): {
 } {
   if (status === "Confirmed")
     return { color: "success", icon: Icons.badgeCheck };
-  if (status === "Submitted") return { color: "processing", icon: Icons.send };
+  if (status === "Submitted") return { color: "warning", icon: Icons.send };
   return { color: "default", icon: Icons.clock };
 }
 
@@ -68,7 +68,9 @@ export function ManifestDrawer({
   blNo,
   onClose,
 }: ManifestDrawerProps) {
-  const [manifestType, setManifestType] = useState<"cargo" | "freight">("cargo");
+  const [manifestType, setManifestType] = useState<"cargo" | "freight">(
+    "cargo",
+  );
   const { data: detail, isLoading } = useMCNDetailQuery(
     mcnId ?? "",
     Boolean(open && mcnId),
@@ -139,7 +141,7 @@ export function ManifestDrawer({
           <div className="bl-manifest-route">
             <div className="bl-manifest-route__port bl-manifest-route__port--load">
               <div className="bl-manifest-route__label">
-                <AppIcon icon={Icons.mapPin} size={14} tone="track" />
+                <AppIcon icon={Icons.mapPin} size={14} tone="view" />
                 Load Port
               </div>
               <Title
@@ -167,7 +169,7 @@ export function ManifestDrawer({
 
             <div className="bl-manifest-route__port bl-manifest-route__port--discharge">
               <div className="bl-manifest-route__label">
-                <AppIcon icon={Icons.mapPin} size={14} tone="track" />
+                <AppIcon icon={Icons.mapPin} size={14} tone="view" />
                 Discharge Port
               </div>
               <Title

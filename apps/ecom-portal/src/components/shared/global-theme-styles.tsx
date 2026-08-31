@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-28 14:18)
+// Modified by Sekar Nagarajan (2026-08-31 13:00)
 import { theme } from "antd";
 
 import { tokenMix } from "../../features/theme/utils/token-mix";
@@ -12,6 +12,16 @@ export function GlobalThemeStyles() {
   const lightSolid18 = tokenMix(token.colorTextLightSolid, 18);
   const lightSolid15 = tokenMix(token.colorTextLightSolid, 15);
   const lightSolid85 = tokenMix(token.colorTextLightSolid, 85);
+  // Mild status-tag surfaces derived from semantic text colors (not mid-tone *Bg)
+  const successTint8 = tokenMix(token.colorSuccess, 8);
+  const successTint28 = tokenMix(token.colorSuccess, 28);
+  const primaryTint28 = tokenMix(token.colorPrimary, 28);
+  const errorTint8 = tokenMix(token.colorError, 8);
+  const errorTint28 = tokenMix(token.colorError, 28);
+  const warningTint8 = tokenMix(token.colorWarning, 8);
+  const warningTint28 = tokenMix(token.colorWarning, 28);
+  const infoTint8 = tokenMix(token.colorInfo, 8);
+  const infoTint28 = tokenMix(token.colorInfo, 28);
 
   return (
     <style>{`
@@ -190,6 +200,17 @@ export function GlobalThemeStyles() {
       .form-field-full-width.ant-input-number-group-wrapper {
         width: 100%;
       }
+      /* Modified by Sekar Nagarajan (2026-08-31 22:35) — primary bg + white text for active segment */
+      .ant-segmented .ant-segmented-item-selected {
+        background: ${token.colorPrimary} !important;
+        color: ${token.colorTextLightSolid} !important;
+      }
+      .ant-segmented .ant-segmented-item-selected .ant-segmented-item-label {
+        color: ${token.colorTextLightSolid} !important;
+      }
+      .ant-segmented .ant-segmented-thumb {
+        background: ${token.colorPrimary} !important;
+      }
       .wizard-step-content > .ant-spin-nested-loading,
       .wizard-step-content > .ant-spin-nested-loading > .ant-spin-container {
         height: 100%;
@@ -228,6 +249,53 @@ export function GlobalThemeStyles() {
       .ag-cell .ant-btn:has(.app-icon-grid-action)::after,
       .ag-cell .list-action-button.ant-btn::after {
         display: none !important;
+      }
+
+      /* Modified by Sekar Nagarajan (2026-08-31 13:00) — mild tint bg from text color (colorSuccessText / seed) */
+      .ag-cell .ant-tag {
+        font-weight: ${token.fontWeightStrong};
+        border-width: 1px;
+        border-style: solid;
+      }
+      .ag-cell .ant-tag-success,
+      .ag-cell .ant-tag-filled.ant-tag-success,
+      .ag-cell .ant-tag-green,
+      .ag-cell .ant-tag-filled.ant-tag-green {
+        color: ${token.colorSuccessText};
+        background: ${successTint8};
+        border-color: ${successTint28};
+      }
+      .ag-cell .ant-tag-processing,
+      .ag-cell .ant-tag-filled.ant-tag-processing,
+      .ag-cell .ant-tag-blue,
+      .ag-cell .ant-tag-filled.ant-tag-blue {
+        color: ${token.colorPrimary};
+        background: ${primaryTint8};
+        border-color: ${primaryTint28};
+      }
+      .ag-cell .ant-tag-error,
+      .ag-cell .ant-tag-filled.ant-tag-error {
+        color: ${token.colorErrorText};
+        background: ${errorTint8};
+        border-color: ${errorTint28};
+      }
+      .ag-cell .ant-tag-warning,
+      .ag-cell .ant-tag-filled.ant-tag-warning {
+        color: ${token.colorWarningText};
+        background: ${warningTint8};
+        border-color: ${warningTint28};
+      }
+      .ag-cell .ant-tag-default,
+      .ag-cell .ant-tag-filled.ant-tag-default {
+        color: ${token.colorTextSecondary};
+        background: ${token.colorFillAlter};
+        border-color: ${token.colorBorderSecondary};
+      }
+      .ag-cell .ant-tag-cyan,
+      .ag-cell .ant-tag-filled.ant-tag-cyan {
+        color: ${token.colorInfoText};
+        background: ${infoTint8};
+        border-color: ${infoTint28};
       }
 
       .booking-template-modal__modal-body {

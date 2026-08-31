@@ -19,7 +19,8 @@ export const authHandlers = [
           email: 'test@example.com',
           company: 'Test Company',
           role: 'CUSTOMER',
-          capabilities: ['VIEW_DASHBOARD', 'CREATE_BOOKING', 'BL', 'SI', 'BKG', 'CRO', 'ARN', 'STMT', 'CO2'],
+          // Modified by Sekar Nagarajan (2026-08-31 17:03) — include DO so Delivery Order route is reachable
+          capabilities: ['VIEW_DASHBOARD', 'CREATE_BOOKING', 'BL', 'SI', 'BKG', 'DO', 'CRO', 'ARN', 'STMT', 'CO2', 'VGM'],
         },
       };
 

@@ -1,9 +1,9 @@
-// Modified by Sekar Nagarajan (2026-08-26 13:04)
+// Modified by Sekar Nagarajan (2026-08-31 16:45)
 import { describe, expect, it } from 'vitest';
 
 import { mockBLListSeed } from './mocks/bl.mock';
 import { BL_STATUS_LABELS } from './types/bl.types';
-import { getBLStatusColor } from './utils/bl-status';
+import { getBLListStatusColor, getBLStatusColor } from './utils/bl-status';
 
 describe('bill-of-lading mock data', () => {
   it('covers all primary BL row statuses', () => {
@@ -34,7 +34,14 @@ describe('BL status helpers', () => {
   });
 
   it('maps status codes to tag colors', () => {
+    expect(getBLStatusColor('I')).toBe('blue');
+    expect(getBLStatusColor('D')).toBe('default');
+    expect(getBLStatusColor('S')).toBe('warning');
     expect(getBLStatusColor('C')).toBe('success');
-    expect(getBLStatusColor('D')).toBe('warning');
+  });
+
+  it('uses error color for locked list rows', () => {
+    expect(getBLListStatusColor({ status: 'D', isLocked: true })).toBe('error');
+    expect(getBLListStatusColor({ status: 'D', isLocked: false })).toBe('default');
   });
 });

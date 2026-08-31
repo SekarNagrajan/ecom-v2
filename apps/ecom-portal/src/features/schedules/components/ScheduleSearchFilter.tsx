@@ -1,14 +1,6 @@
-// Modified by Sekar Nagarajan (2026-08-25 18:40)
+// Modified by Sekar Nagarajan (2026-08-31 11:25)
 import { AppButton } from "@solverminds/shared-ui";
-import {
-  Col,
-  DatePicker,
-  Form,
-  Row,
-  Segmented,
-  Select,
-  Typography,
-} from "antd";
+import { Col, DatePicker, Form, Row, Select, Tabs, Typography } from "antd";
 import dayjs from "dayjs";
 import { AppIcon, Icons } from "../../../components/icons";
 
@@ -145,27 +137,36 @@ export function ScheduleSearchFilter({
           onFinish={handleFinish}
         >
           <div className="schedule-search-type-wrap">
-            <Form.Item name="searchType" className="schedule-search-type">
-              <Segmented
-                options={[
-                  {
-                    label: "Point to Point",
-                    value: "POINT_TO_POINT",
-                    icon: <AppIcon icon={Icons.compass} size={14} />,
-                  },
-                  {
-                    label: "By Vessel",
-                    value: "VESSEL_SCHEDULE",
-                    icon: <AppIcon icon={Icons.compass} size={14} />,
-                  },
-                  {
-                    label: "By Port",
-                    value: "PORT_SCHEDULE",
-                    icon: <AppIcon icon={Icons.mapPin} size={14} />,
-                  },
-                ]}
-              />
+            <Form.Item
+              name="searchType"
+              className="schedule-search-type"
+              hidden
+            >
+              <input type="hidden" />
             </Form.Item>
+            <Tabs
+              activeKey={searchType}
+              onChange={(key) =>
+                form.setFieldValue("searchType", key as ScheduleSearchType)
+              }
+              className="schedule-search-tabs"
+              items={[
+                {
+                  key: "POINT_TO_POINT",
+                  label: (
+                    <span className="schedule-tab-label">Point to Point</span>
+                  ),
+                },
+                {
+                  key: "VESSEL_SCHEDULE",
+                  label: <span className="schedule-tab-label">By Vessel</span>,
+                },
+                {
+                  key: "PORT_SCHEDULE",
+                  label: <span className="schedule-tab-label">By Port</span>,
+                },
+              ]}
+            />
           </div>
 
           {searchType === "POINT_TO_POINT" && (

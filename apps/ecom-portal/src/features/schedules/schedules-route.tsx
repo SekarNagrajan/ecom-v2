@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-25 18:40)
+// Modified by Sekar Nagarajan (2026-08-31 11:25)
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { Card, Segmented, Space, Spin, Typography } from "antd";
@@ -87,17 +87,26 @@ export const SchedulesRoute: React.FC = () => {
 
           <Segmented
             value={viewMode}
-            onChange={(val) => setViewMode(val as "LIST" | "CALENDAR")}
+            onChange={(value) => setViewMode(value as "LIST" | "CALENDAR")}
+            className="schedule-results-tabs"
             options={[
               {
-                label: "List",
                 value: "LIST",
-                icon: <AppIcon icon={Icons.list} size={14} />,
+                label: (
+                  <span className="schedule-tab-label">
+                    <AppIcon icon={Icons.list} size={14} />
+                    List
+                  </span>
+                ),
               },
               {
-                label: "Calendar",
                 value: "CALENDAR",
-                icon: <AppIcon icon={Icons.calendar} size={14} />,
+                label: (
+                  <span className="schedule-tab-label">
+                    <AppIcon icon={Icons.calendar} size={14} />
+                    Calendar
+                  </span>
+                ),
               },
             ]}
           />

@@ -1,27 +1,27 @@
 import {
-  themeQuartz,
   colorSchemeDark,
-  type Theme,
-  type ThemeDefaultParams,
   colorSchemeLight,
   iconSetQuartz,
-} from 'ag-grid-community';
-import { theme as antdTheme } from 'antd';
-import { useMemo } from 'react';
+  themeQuartz,
+  type Theme,
+  type ThemeDefaultParams,
+} from "ag-grid-community";
+import { theme as antdTheme } from "antd";
+import { useMemo } from "react";
 
-import { useAppConfig } from '../../hooks';
-import type { DensityLevel } from '../../providers/types';
+import { useAppConfig } from "../../hooks";
+import type { DensityLevel } from "../../providers/types";
 
 type AgGridDensityThemeParams = Required<
   Pick<
     ThemeDefaultParams,
-    | 'spacing'
-    | 'cellHorizontalPadding'
-    | 'inputHeight'
-    | 'listItemHeight'
-    | 'inputBorderRadius'
-    | 'rowHeight'
-    | 'headerHeight'
+    | "spacing"
+    | "cellHorizontalPadding"
+    | "inputHeight"
+    | "listItemHeight"
+    | "inputBorderRadius"
+    | "rowHeight"
+    | "headerHeight"
   >
 >;
 
@@ -36,12 +36,12 @@ type AgGridDensityConfig = {
   runtimeSizing: AgGridRuntimeSizing;
 };
 
-type AntdToken = ReturnType<typeof antdTheme.useToken>['token'];
+type AntdToken = ReturnType<typeof antdTheme.useToken>["token"];
 const BASE_AG_GRID_THEME = themeQuartz.withPart(iconSetQuartz);
 
 function getAgGridDensityConfig(
   token: AntdToken,
-  density: DensityLevel
+  density: DensityLevel,
 ): AgGridDensityConfig {
   const densityParamsMap: Record<DensityLevel, AgGridDensityConfig> = {
     compact: {
@@ -104,7 +104,7 @@ function getAgGridDensityConfig(
 // systems. See `DARK_NEUTRAL` in `providers/theme-builder.ts` for the
 // full ramp this color belongs to.
 function getAgGridRowHoverColor(isDark: boolean): string {
-  return isDark ? '#1F1F1F' : '#e4e8ee';
+  return isDark ? "#1F1F1F" : "#e4e8ee";
 }
 
 function buildAgGridThemeParams({
@@ -112,7 +112,7 @@ function buildAgGridThemeParams({
   isDark,
   densityParams,
 }: {
-  token: ReturnType<typeof antdTheme.useToken>['token'];
+  token: ReturnType<typeof antdTheme.useToken>["token"];
   isDark: boolean;
   densityParams: AgGridDensityThemeParams;
 }): Partial<ThemeDefaultParams> {
@@ -120,7 +120,7 @@ function buildAgGridThemeParams({
     // 1. COLORS
     accentColor: token.colorPrimary,
     invalidColor: token.colorError,
-    browserColorScheme: isDark ? 'dark' : 'light',
+    browserColorScheme: isDark ? "dark" : "light",
 
     // Backgrounds & Text
     backgroundColor: token.colorBgContainer,
@@ -131,12 +131,10 @@ function buildAgGridThemeParams({
     // Light theme uses the Figma redesign's slate header color so column
     // labels read as deliberate UI affordances rather than secondary text.
     // Dark theme keeps the AntD secondary token for proper contrast.
-    headerTextColor: isDark ? token.colorTextSecondary : '#2D3E50',
-    // Zebra striping — every odd row gets a soft tint (Figma redesign).
-    // Dark uses the `layout` step (#171717) so odd rows lift one tier
-    // above the `surface` card the grid sits on, matching how the AntD
-    // Table header sits one tier above its card.
-    oddRowBackgroundColor: isDark ? '#171717' : '#F6F8FF',
+    headerTextColor: isDark ? token.colorTextSecondary : "#2D3E50",
+    // Modified by Sekar Nagarajan (2026-08-31 16:49) — no zebra striping; rows separated by rowBorder only
+    //oddRowBackgroundColor: isDark ? '#171717' : '#F6F8FF',
+    oddRowBackgroundColor: token.colorBgContainer,
     rowHoverColor: getAgGridRowHoverColor(isDark),
     selectedRowBackgroundColor: token.controlItemBgActive,
     rangeSelectionBackgroundColor: token.controlItemBgHover,
@@ -151,7 +149,7 @@ function buildAgGridThemeParams({
     // when its host container provides no border of its own.
     wrapperBorder: {
       color: token.colorBorder,
-      style: 'solid',
+      style: "solid",
       width: 1,
     },
     rowBorder: true,
@@ -164,7 +162,7 @@ function buildAgGridThemeParams({
     // user scrolls horizontally.
     pinnedColumnBorder: {
       color: token.colorBorder,
-      style: 'solid',
+      style: "solid",
       width: 1,
     },
     // Stronger horizontal divider between header / floating-filter / data rows
@@ -172,7 +170,7 @@ function buildAgGridThemeParams({
     // background matches the header.
     headerRowBorder: {
       color: token.colorBorder,
-      style: 'solid',
+      style: "solid",
       width: 1,
     },
 
@@ -201,19 +199,19 @@ function buildAgGridThemeParams({
 export function useAgGridTheme(): Theme {
   const { token } = antdTheme.useToken();
   const { effectiveThemeMode, density } = useAppConfig();
-  const isDark = effectiveThemeMode === 'dark';
+  const isDark = effectiveThemeMode === "dark";
 
   return useMemo(() => {
     const densityConfig = getAgGridDensityConfig(token, density);
 
     return BASE_AG_GRID_THEME.withPart(
-      isDark ? colorSchemeDark : colorSchemeLight
+      isDark ? colorSchemeDark : colorSchemeLight,
     ).withParams(
       buildAgGridThemeParams({
         token,
         isDark,
         densityParams: densityConfig.themeParams,
-      })
+      }),
     );
   }, [density, isDark, token]);
 }
@@ -224,6 +222,6 @@ export function useAgGridRuntimeSizing(): AgGridRuntimeSizing {
 
   return useMemo(
     () => getAgGridDensityConfig(token, density).runtimeSizing,
-    [density, token]
+    [density, token],
   );
 }

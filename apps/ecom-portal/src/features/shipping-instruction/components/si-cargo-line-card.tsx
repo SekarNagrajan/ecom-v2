@@ -1,5 +1,5 @@
-// Modified by Sekar Nagarajan (2026-08-28 12:35)
-import { Card, Col, Input, InputNumber, Row, Select, Typography } from "antd";
+// Modified by Sekar Nagarajan (2026-08-28 17:54)
+import { Input, InputNumber, Select, Typography } from "antd";
 import {
   Controller,
   type Control,
@@ -11,7 +11,6 @@ import {
   ListActionButton,
   ListActionsRow,
 } from "../../../components/shared/list-action-button";
-import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import { HsCodeAutoComplete } from "../../booking/components/cargo-code-lookups";
 import { QuantityStepper } from "../../booking/components/quantity-stepper";
 import { cargoFieldError } from "../../booking/utils/cargo-field-error";
@@ -38,6 +37,7 @@ interface SiCargoLineCardProps {
   canRemove: boolean;
 }
 
+/** Commodity card — wider HS code; Quantity + Weight grouped tightly. */
 export function SiCargoLineCard({
   control,
   containerIndex: ci,
@@ -53,11 +53,11 @@ export function SiCargoLineCard({
   const path = (field: string) => `containers.${ci}.cargoLines.${mi}.${field}`;
 
   return (
-    <Card
-      size="small"
-      className="form-step-card form-step-section booking-cargo-commodity-card"
-      title={`Commodity ${mi + 1}`}
-      extra={
+    <div className="si-cargo-sitem">
+      <div className="si-cargo-sitem__head">
+        <Text type="secondary" className="form-field-label">
+          Commodity {mi + 1}
+        </Text>
         <ListActionsRow>
           <ListActionButton
             title="Copy Commodity"
@@ -76,86 +76,90 @@ export function SiCargoLineCard({
             onClick={onRemove}
           />
         </ListActionsRow>
-      }
-    >
-      <Row gutter={[24, 24]}>
-        <Col {...RESPONSIVE_COL.formQuarter}>
-          <div className="form-field-cell">
-            <label className="form-field-label">
-              Commodity <Text type="danger">*</Text>
-            </label>
-            <Controller
-              control={control}
-              name={`containers.${ci}.cargoLines.${mi}.hsCode`}
-              render={({ field }) => (
-                <HsCodeAutoComplete
-                  value={field.value}
-                  commodityName={commodityName}
-                  onChange={field.onChange}
-                  onClearName={() => {
-                    setValue(
-                      `containers.${ci}.cargoLines.${mi}.commodityCode`,
-                      "",
-                      { shouldDirty: true },
-                    );
-                    setValue(
-                      `containers.${ci}.cargoLines.${mi}.description`,
-                      "",
-                      { shouldDirty: true },
-                    );
-                  }}
-                  onSelectOption={(opt) => {
-                    field.onChange(opt.code);
-                    setValue(
-                      `containers.${ci}.cargoLines.${mi}.commodityCode`,
-                      opt.desc,
-                      { shouldDirty: true },
-                    );
-                    setValue(
-                      `containers.${ci}.cargoLines.${mi}.description`,
-                      opt.desc,
-                      { shouldDirty: true, shouldValidate: true },
-                    );
-                  }}
-                />
-              )}
-            />
-            {cargoFieldError(errors, path("hsCode")) ? (
-              <Text type="danger" className="form-field-error">
-                {cargoFieldError(errors, path("hsCode"))}
-              </Text>
-            ) : null}
-          </div>
-        </Col>
-        <Col {...RESPONSIVE_COL.formSixth}>
-          <div className="form-field-cell">
-            <label className="form-field-label">
-              Package Type <Text type="danger">*</Text>
-            </label>
-            <Controller
-              control={control}
-              name={`containers.${ci}.cargoLines.${mi}.packageType`}
-              render={({ field }) => (
-                <Select
-                  {...field}
-                  size="large"
-                  options={packageTypes}
-                  placeholder="Select Package Type"
-                  className="form-field-full-width"
-                  showSearch
-                  optionFilterProp="label"
-                />
-              )}
-            />
-            {cargoFieldError(errors, path("packageType")) ? (
-              <Text type="danger" className="form-field-error">
-                {cargoFieldError(errors, path("packageType"))}
-              </Text>
-            ) : null}
-          </div>
-        </Col>
-        <Col {...RESPONSIVE_COL.formSixth}>
-          <div className="form-field-cell">
+      </div>
+
+      <div className="si-cargo-sitem__grid">
+        {/* Row 1 — HS spans 2; Package; Quantity+Weight cluster */}
+        <div className="form-field-cell si-cargo-sitem__hs">
+          <label className="form-field-label">
+            HS code <Text type="danger">*</Text>
+          </label>
+          <Controller
+            control={control}
+            name={`containers.${ci}.cargoLines.${mi}.hsCode`}
+            render={({ field }) => (
+              <HsCodeAutoComplete
+                value={field.value}
+                commodityName={commodityName}
+                onChange={field.onChange}
+                onClearName={() => {
+                  setValue(
+                    `containers.${ci}.cargoLines.${mi}.commodityCode`,
+                    "",
+                    { shouldDirty: true },
+                  );
+                  setValue(
+                    `containers.${ci}.cargoLines.${mi}.description`,
+                    "",
+                    { shouldDirty: true },
+                  );
+                }}
+                onSelectOption={(opt) => {
+                  field.onChange(opt.code);
+                  setValue(
+                    `containers.${ci}.cargoLines.${mi}.commodityCode`,
+                    opt.desc,
+                    { shouldDirty: true },
+                  );
+                  setValue(
+                    `containers.${ci}.cargoLines.${mi}.description`,
+                    opt.desc,
+                    { shouldDirty: true, shouldValidate: true },
+                  );
+                }}
+              />
+            )}
+          />
+          {cargoFieldError(errors, path("hsCode")) ? (
+            <Text type="danger" className="form-field-error">
+              {cargoFieldError(errors, path("hsCode"))}
+            </Text>
+          ) : null}
+        </div>
+
+        <div className="form-field-cell">
+          <label className="form-field-label">
+            Package Type <Text type="danger">*</Text>
+          </label>
+          <Controller
+            control={control}
+            name={`containers.${ci}.cargoLines.${mi}.packageType`}
+            render={({ field }) => (
+              <Select
+                {...field}
+                size="large"
+                options={packageTypes}
+                placeholder="Package Type"
+                className="form-field-full-width"
+                showSearch
+                optionFilterProp="label"
+                status={
+                  cargoFieldError(errors, path("packageType"))
+                    ? "error"
+                    : undefined
+                }
+              />
+            )}
+          />
+          {cargoFieldError(errors, path("packageType")) ? (
+            <Text type="danger" className="form-field-error">
+              {cargoFieldError(errors, path("packageType"))}
+            </Text>
+          ) : null}
+        </div>
+
+        <div className="si-cargo-sitem__measures">
+          <div className="form-field-cell si-cargo-sitem__narrow">
             <label className="form-field-label">
               Quantity <Text type="danger">*</Text>
             </label>
@@ -165,7 +169,7 @@ export function SiCargoLineCard({
               render={({ field }) => (
                 <QuantityStepper
                   value={field.value}
-                  onChange={field.onChange}
+                  onChange={(next) => field.onChange(next ?? 1)}
                   min={1}
                 />
               )}
@@ -176,11 +180,10 @@ export function SiCargoLineCard({
               </Text>
             ) : null}
           </div>
-        </Col>
-        <Col {...RESPONSIVE_COL.formSixth}>
-          <div className="form-field-cell">
+
+          <div className="form-field-cell si-cargo-sitem__narrow">
             <label className="form-field-label">
-              Weight <Text type="danger">*</Text>
+              Weight (kg) <Text type="danger">*</Text>
             </label>
             <Controller
               control={control}
@@ -192,6 +195,11 @@ export function SiCargoLineCard({
                   size="large"
                   className="form-field-full-width"
                   addonAfter="kg"
+                  status={
+                    cargoFieldError(errors, path("grossWeight"))
+                      ? "error"
+                      : undefined
+                  }
                 />
               )}
             />
@@ -201,77 +209,57 @@ export function SiCargoLineCard({
               </Text>
             ) : null}
           </div>
-        </Col>
-        <Col {...RESPONSIVE_COL.formSixth}>
-          <div className="form-field-cell">
-            <label className="form-field-label">
-              Volume <Text type="danger">*</Text>
-            </label>
-            <Controller
-              control={control}
-              name={`containers.${ci}.cargoLines.${mi}.volume`}
-              render={({ field }) => (
-                <InputNumber
-                  {...field}
-                  min={0}
-                  size="large"
-                  className="form-field-full-width"
-                  addonAfter="m³"
-                />
-              )}
-            />
-            {cargoFieldError(errors, path("volume")) ? (
-              <Text type="danger" className="form-field-error">
-                {cargoFieldError(errors, path("volume"))}
-              </Text>
-            ) : null}
-          </div>
-        </Col>
-      </Row>
+        </div>
 
-      <Row gutter={[24, 24]} className="form-step-section">
-        <Col {...RESPONSIVE_COL.formHalf}>
-          <div className="form-field-cell">
-            <label className="form-field-label">
-              Commodity Description <Text type="danger">*</Text>
-            </label>
-            <Controller
-              control={control}
-              name={`containers.${ci}.cargoLines.${mi}.description`}
-              render={({ field }) => (
-                <TextArea
-                  {...field}
-                  size="large"
-                  rows={4}
-                  placeholder="Commodity Description"
-                />
-              )}
-            />
-            {cargoFieldError(errors, path("description")) ? (
-              <Text type="danger" className="form-field-error">
-                {cargoFieldError(errors, path("description"))}
-              </Text>
-            ) : null}
-          </div>
-        </Col>
-        <Col {...RESPONSIVE_COL.formHalf}>
-          <div className="form-field-cell">
-            <label className="form-field-label">Marks & No.</label>
-            <Controller
-              control={control}
-              name={`containers.${ci}.cargoLines.${mi}.marksAndNumbers`}
-              render={({ field }) => (
-                <TextArea
-                  {...field}
-                  size="large"
-                  rows={4}
-                  placeholder="Marks & No."
-                />
-              )}
-            />
-          </div>
-        </Col>
-      </Row>
-    </Card>
+        {/* Row 2 — description | marks */}
+        <div className="form-field-cell si-cargo-sitem__half">
+          <label className="form-field-label">
+            Commodity Description <Text type="danger">*</Text>
+          </label>
+          <Controller
+            control={control}
+            name={`containers.${ci}.cargoLines.${mi}.description`}
+            render={({ field }) => (
+              <TextArea
+                {...field}
+                value={field.value ?? ""}
+                size="large"
+                rows={3}
+                placeholder="Commodity Description"
+                className="form-field-full-width"
+                status={
+                  cargoFieldError(errors, path("description"))
+                    ? "error"
+                    : undefined
+                }
+              />
+            )}
+          />
+          {cargoFieldError(errors, path("description")) ? (
+            <Text type="danger" className="form-field-error">
+              {cargoFieldError(errors, path("description"))}
+            </Text>
+          ) : null}
+        </div>
+
+        <div className="form-field-cell si-cargo-sitem__half">
+          <label className="form-field-label">Marks & numbers</label>
+          <Controller
+            control={control}
+            name={`containers.${ci}.cargoLines.${mi}.marksAndNumbers`}
+            render={({ field }) => (
+              <TextArea
+                {...field}
+                value={field.value ?? ""}
+                size="large"
+                rows={3}
+                placeholder="Marks & numbers"
+                className="form-field-full-width"
+              />
+            )}
+          />
+        </div>
+      </div>
+    </div>
   );
 }

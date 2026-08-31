@@ -127,9 +127,7 @@ function RateCard({
             ) : null}
             {item.carrTerms ? <Tag>{item.carrTerms}</Tag> : null}
             {item.quoteStatus ? (
-              <Tag color="blue">
-                {item.quoteStatus.replace(/_/g, " ")}
-              </Tag>
+              <Tag color="blue">{item.quoteStatus.replace(/_/g, " ")}</Tag>
             ) : null}
             <Text type="secondary" className="rates-card__ref">
               Ref: {item.id}
@@ -164,8 +162,8 @@ function RateCard({
                 {item.type === "SURCHARGE"
                   ? "Accessorial"
                   : item.type === "QUOTE"
-                    ? "Quoted amount"
-                    : "All-in estimate"}
+                  ? "Quoted amount"
+                  : "All-in estimate"}
               </Text>
               {item.type !== "SURCHARGE" && item.type !== "QUOTE" ? (
                 <Text className="rates-card__connector-hint">
@@ -219,7 +217,7 @@ function RateCard({
               View Surcharges
             </AppButton>
           ) : null}
-          <AppButton
+          {/* <AppButton
             type="link"
             icon={
               expanded ? (
@@ -233,7 +231,7 @@ function RateCard({
             disabled={!hasSurcharges && item.type !== "QUOTE"}
           >
             {expanded ? "Close Details" : "Show Details"}
-          </AppButton>
+          </AppButton> */}
           <div className="rates-card__actions-secondary">
             <Tooltip title="Share Rate Quote">
               <AppButton
@@ -310,8 +308,8 @@ function RateCard({
                     item.type === "CONTRACT"
                       ? Icons.shieldCheck
                       : item.type === "QUOTE"
-                        ? Icons.zap
-                        : Icons.tag
+                      ? Icons.zap
+                      : Icons.tag
                   }
                   size={14}
                 />

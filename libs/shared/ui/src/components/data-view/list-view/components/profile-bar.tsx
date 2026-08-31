@@ -7,7 +7,7 @@ import {
   PlusOutlined,
   StarFilled,
   StarOutlined,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 import {
   Button,
   Divider,
@@ -17,12 +17,12 @@ import {
   Typography,
   theme,
   type MenuProps,
-} from 'antd';
-import { cloneElement, useState, type ReactElement } from 'react';
+} from "antd";
+import { cloneElement, useState, type ReactElement } from "react";
 
-import { useConfirm } from '../../../../hooks';
-import type { GridProfile } from '../types';
-import type { ProfileBarProps } from './types';
+import { useConfirm } from "../../../../hooks";
+import type { GridProfile } from "../types";
+import type { ProfileBarProps } from "./types";
 
 const { Text } = Typography;
 
@@ -32,7 +32,7 @@ const CHIP_NAME_MAX_WIDTH = 150;
  * Static — independent of theme tokens — so it's safe to hoist out of the
  * component body and reuse across renders / chips.
  */
-const MENU_STYLE: React.CSSProperties = { boxShadow: 'none' };
+const MENU_STYLE: React.CSSProperties = { boxShadow: "none" };
 
 interface ChipMenuTriggerProps {
   profile: GridProfile;
@@ -57,7 +57,7 @@ function ChipMenuTrigger({
   const confirm = useConfirm();
   const [open, setOpen] = useState(false);
 
-  const items: MenuProps['items'] = [];
+  const items: MenuProps["items"] = [];
 
   /**
    * Per-view editing actions (save current grid state, discard back to
@@ -66,9 +66,9 @@ function ChipMenuTrigger({
    */
   if (isActive && onSave) {
     items.push({
-      key: 'save',
+      key: "save",
       icon: <CloudUploadOutlined />,
-      label: 'Save changes',
+      label: "Save changes",
       onClick: ({ domEvent }) => {
         domEvent.stopPropagation();
         setOpen(false);
@@ -78,9 +78,9 @@ function ChipMenuTrigger({
   }
   if (isActive && onReset) {
     items.push({
-      key: 'reset',
+      key: "reset",
       icon: <HistoryOutlined />,
-      label: 'Reset to default',
+      label: "Reset to default",
       onClick: ({ domEvent }) => {
         domEvent.stopPropagation();
         setOpen(false);
@@ -93,9 +93,9 @@ function ChipMenuTrigger({
   const metadataItemsStart = items.length;
   if (onRename) {
     items.push({
-      key: 'rename',
+      key: "rename",
       icon: <EditOutlined />,
-      label: 'Rename',
+      label: "Rename",
       onClick: ({ domEvent }) => {
         domEvent.stopPropagation();
         setOpen(false);
@@ -105,9 +105,9 @@ function ChipMenuTrigger({
   }
   if (onSetDefault && !profile.isDefault) {
     items.push({
-      key: 'setDefault',
+      key: "setDefault",
       icon: <StarOutlined />,
-      label: 'Set as default',
+      label: "Set as default",
       onClick: ({ domEvent }) => {
         domEvent.stopPropagation();
         setOpen(false);
@@ -116,29 +116,29 @@ function ChipMenuTrigger({
     });
   }
   if (metadataItemsStart > 0 && items.length > metadataItemsStart) {
-    items.splice(metadataItemsStart, 0, { type: 'divider' });
+    items.splice(metadataItemsStart, 0, { type: "divider" });
   }
 
   if (onDelete) {
     if (items.length > 0) {
-      items.push({ type: 'divider' });
+      items.push({ type: "divider" });
     }
     items.push({
-      key: 'delete',
+      key: "delete",
       icon: <DeleteOutlined />,
-      label: 'Delete',
+      label: "Delete",
       danger: true,
       onClick: ({ domEvent }) => {
         domEvent.stopPropagation();
         setOpen(false);
         confirm.danger({
-          title: 'Delete saved view?',
+          title: "Delete saved view?",
           content: (
             <span>
               <b>{profile.name}</b> will be permanently removed.
             </span>
           ),
-          okText: 'Delete',
+          okText: "Delete",
           onOk: () => onDelete(profile.id),
         });
       },
@@ -175,7 +175,7 @@ function ChipMenuTrigger({
               fontSize: token.fontSizeSM,
               color: token.colorTextSecondary,
               lineHeight: token.lineHeightSM,
-              wordBreak: 'break-word',
+              wordBreak: "break-word",
             }}
           >
             {profile.description}
@@ -192,7 +192,7 @@ function ChipMenuTrigger({
   return (
     <Dropdown
       menu={{ items }}
-      trigger={['click']}
+      trigger={["click"]}
       open={open}
       onOpenChange={setOpen}
       placement="bottomRight"
@@ -203,14 +203,14 @@ function ChipMenuTrigger({
         aria-label={`More options for ${profile.name}`}
         onClick={(e) => e.stopPropagation()}
         style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
           marginLeft: token.marginXXS,
           marginRight: -token.marginXXS,
           borderRadius: token.borderRadiusSM,
-          cursor: 'pointer',
-          color: isActive ? 'inherit' : token.colorTextTertiary,
+          cursor: "pointer",
+          color: isActive ? "inherit" : token.colorTextTertiary,
           fontSize: token.fontSizeSM,
           lineHeight: 1,
         }}
@@ -254,17 +254,17 @@ function ProfileChip({
   const showActions =
     !profile.isSystem &&
     Boolean(
-      onRename || onSetDefault || onDelete || (isActive && (onSave || onReset))
+      onRename || onSetDefault || onDelete || (isActive && (onSave || onReset)),
     );
 
   return (
     <Button
-      type={isActive ? 'primary' : 'default'}
+      type={isActive ? "primary" : "default"}
       size="small"
       onClick={() => onSelect(profile.id)}
       style={{
-        display: 'inline-flex',
-        alignItems: 'center',
+        display: "inline-flex",
+        alignItems: "center",
         gap: token.marginXXS,
         flexShrink: 0,
         fontSize: token.fontSizeSM,
@@ -284,9 +284,9 @@ function ProfileChip({
         ellipsis
         style={{
           maxWidth: CHIP_NAME_MAX_WIDTH,
-          color: 'inherit',
-          fontSize: 'inherit',
-          lineHeight: 'inherit',
+          color: "inherit",
+          fontSize: "inherit",
+          lineHeight: "inherit",
         }}
       >
         {profile.name}
@@ -326,16 +326,16 @@ export function ProfileBar({
   };
 
   const scrollContainerStyle: React.CSSProperties = {
-    display: 'flex',
-    flexWrap: 'nowrap',
-    alignItems: 'center',
+    display: "flex",
+    flexWrap: "nowrap",
+    alignItems: "center",
     gap: token.marginXXS,
-    overflowX: 'auto',
-    overflowY: 'hidden',
-    flex: '1 1 auto',
+    overflowX: "auto",
+    overflowY: "hidden",
+    flex: "1 1 auto",
     minWidth: 0,
     // Thin scrollbar so the chip row stays compact across browsers.
-    scrollbarWidth: 'thin',
+    scrollbarWidth: "thin",
   };
 
   /**
@@ -367,7 +367,7 @@ export function ProfileBar({
       <Flex
         gap={token.marginXXS}
         align="center"
-        style={{ minWidth: 0, flex: '1 1 auto' }}
+        style={{ minWidth: 0, flex: "1 1 auto" }}
       >
         <Text type="secondary" style={labelStyle}>
           Views:
@@ -385,7 +385,7 @@ export function ProfileBar({
     <Flex
       gap={token.marginXXS}
       align="center"
-      style={{ minWidth: 0, flex: '1 1 auto' }}
+      style={{ minWidth: 0, flex: "1 1 auto" }}
     >
       <Text type="secondary" style={labelStyle}>
         Views:

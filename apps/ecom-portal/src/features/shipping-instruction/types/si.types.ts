@@ -1,5 +1,8 @@
-// Modified by Sekar Nagarajan (2026-08-28 11:47)
+// Modified by Sekar Nagarajan (2026-08-31 16:27)
 import { z } from "zod";
+
+import type { ReferenceField } from "../../booking/utils/reference-field.utils";
+import type { SIWizardStepId } from "../config/si-wizard-config";
 
 /** List / lifecycle — mirrors SISummary.jsp statuses (+ Locked / Create Multiple SI). */
 export type SIStatus =
@@ -142,14 +145,201 @@ export interface SICargoProtectLine {
   currency: string;
 }
 
+export interface SIEnsParty {
+  customerCode?: string;
+  name: string;
+  address: string;
+  address2?: string;
+  city: string;
+  country: string;
+  state?: string;
+  zip?: string;
+  phone?: string;
+  fax?: string;
+  email?: string;
+  eori?: string;
+  personType?: "" | "Legal" | "Natural" | "Association of persons";
+}
+
+export interface SIEnsDeclarant {
+  name: string;
+  address: string;
+  address2: string;
+  city: string;
+  zip?: string;
+  country: string;
+  state: string;
+  telephone: string;
+  eori: string;
+  email: string;
+  fillingType: "House BL" | "Sub-House BL";
+}
+
+/** ENS tab — parity with SIBLCommonENS.jsp */
 export interface SIEnsInfo {
   ensRequired: boolean;
-  filingType: "N" | "S" | "P";
-  declarantName?: string;
-  buyerName?: string;
-  sellerName?: string;
-  euZone?: string;
+  euCustZone: "Y" | "N";
+  blTypeEns: "Straight BL" | "Master BL";
+  ensFillingType: "Single Filing" | "Multiple Filing";
+  paymentMethod: "Wire Transfer" | "Not Prepaid";
+  declarant?: SIEnsDeclarant;
+  buyer: SIEnsParty;
+  seller: SIEnsParty;
 }
+
+export const SI_ENS_PERSON_TYPE_OPTIONS = [
+  { value: "", label: "Type of Person" },
+  { value: "Legal", label: "Legal" },
+  { value: "Natural", label: "Natural" },
+  {
+    value: "Association of persons",
+    label: "Association of persons",
+  },
+] as const;
+
+export const emptySiEnsParty = (): SIEnsParty => ({
+  customerCode: "",
+  name: "",
+  address: "",
+  address2: "",
+  city: "",
+  country: "",
+  state: "",
+  zip: "",
+  phone: "",
+  fax: "",
+  email: "",
+  eori: "",
+  personType: "",
+});
+
+export const emptySiEnsDeclarant = (): SIEnsDeclarant => ({
+  name: "",
+  address: "",
+  address2: "",
+  city: "",
+  zip: "",
+  country: "",
+  state: "",
+  telephone: "",
+  eori: "",
+  email: "",
+  fillingType: "House BL",
+});
+
+const siEnsPartySchema = z.object({
+  customerCode: z.string().optional(),
+  name: z.string().max(150),
+  address: z.string().max(150),
+  address2: z.string().max(150).optional(),
+  city: z.string().max(150),
+  country: z.string().max(50),
+  state: z.string().max(50).optional(),
+  zip: z.string().max(15).optional(),
+  phone: z.string().max(20).optional(),
+  fax: z.string().max(20).optional(),
+  email: z.string().max(75).optional(),
+  eori: z.string().max(17).optional(),
+  personType: z
+    .enum(["", "Legal", "Natural", "Association of persons"])
+    .optional(),
+});
+
+const siEnsDeclarantSchema = z.object({
+  name: z.string().max(150),
+  address: z.string().max(150),
+  address2: z.string().max(150),
+  city: z.string().max(150),
+  zip: z.string().max(15).optional(),
+  country: z.string().max(50),
+  state: z.string().max(50),
+  telephone: z.string().max(25),
+  eori: z.string().max(20),
+  email: z.string().max(100),
+  fillingType: z.enum(["House BL", "Sub-House BL"]),
+});
+
+export const siEnsStepSchema = z
+  .object({
+    ensRequired: z.boolean(),
+    euCustZone: z.enum(["Y", "N"]),
+    blTypeEns: z.enum(["Straight BL", "Master BL"]),
+    ensFillingType: z.enum(["Single Filing", "Multiple Filing"]),
+    paymentMethod: z.enum(["Wire Transfer", "Not Prepaid"]),
+    declarant: siEnsDeclarantSchema.optional(),
+    buyer: siEnsPartySchema,
+    seller: siEnsPartySchema,
+  })
+  .superRefine((values, ctx) => {
+    if (!values.ensRequired) return;
+
+    if (values.ensFillingType === "Multiple Filing") {
+      const d = values.declarant;
+      const requiredDeclarant: Array<keyof SIEnsDeclarant> = [
+        "name",
+        "address",
+        "address2",
+        "city",
+        "country",
+        "state",
+        "telephone",
+        "eori",
+        "email",
+        "fillingType",
+      ];
+      for (const key of requiredDeclarant) {
+        const value = d?.[key];
+        if (!value || !String(value).trim()) {
+          ctx.addIssue({
+            code: "custom",
+            path: ["declarant", key],
+            message: "Required for Multiple Filing",
+          });
+        }
+      }
+      return;
+    }
+
+    const requireParty = (
+      party: z.infer<typeof siEnsPartySchema>,
+      path: "buyer" | "seller",
+      label: string,
+    ) => {
+      if (!party.name.trim()) {
+        ctx.addIssue({
+          code: "custom",
+          path: [path, "name"],
+          message: `${label} name is required`,
+        });
+      }
+      if (!party.address.trim()) {
+        ctx.addIssue({
+          code: "custom",
+          path: [path, "address"],
+          message: `${label} address is required`,
+        });
+      }
+      if (!party.city.trim()) {
+        ctx.addIssue({
+          code: "custom",
+          path: [path, "city"],
+          message: `${label} city is required`,
+        });
+      }
+      if (!party.country.trim()) {
+        ctx.addIssue({
+          code: "custom",
+          path: [path, "country"],
+          message: `${label} country is required`,
+        });
+      }
+    };
+
+    requireParty(values.buyer, "buyer", "Buyer");
+    requireParty(values.seller, "seller", "Seller");
+  });
+
+export type SiEnsStepForm = z.infer<typeof siEnsStepSchema>;
 
 export interface SIFileItem {
   id: string;
@@ -202,6 +392,8 @@ export interface SIDTO {
   cargoProtect?: SICargoProtectLine[];
   ens?: SIEnsInfo | null;
   files?: SIFileItem[];
+  /** Dynamic reference fields (ecom-app Reference Information step). */
+  referenceFields?: ReferenceField[];
   preview?: SIPreviewFields;
 }
 
@@ -225,15 +417,15 @@ export type SiMasterDetailsForm = z.infer<typeof siMasterDetailsSchema>;
 
 /** Step 2 — Parties */
 export const siPartiesSchema = z.object({
-  shipperName: z.string().min(1, "Shipper name is required"),
-  shipperAddress: z.string().min(1, "Shipper address is required"),
+  shipperName: z.string().min(1, "Booking Party is required"),
+  shipperAddress: z.string().min(1, "Booking Party address is required"),
   shipperPrint: z.boolean(),
   consigneeName: z.string().min(1, "Consignee name is required"),
   consigneeAddress: z.string().min(1, "Consignee address is required"),
   consigneePrint: z.boolean(),
   consigneeToOrder: z.boolean(),
-  notifyName: z.string().min(1, "Notify party name is required"),
-  notifyAddress: z.string().min(1, "Notify party address is required"),
+  notifyName: z.string().min(1, "Notify Party is required"),
+  notifyAddress: z.string().min(1, "Notify Party address is required"),
   notifyPrint: z.boolean(),
 });
 export type SiPartiesForm = z.infer<typeof siPartiesSchema>;
@@ -288,6 +480,8 @@ export const siCargoLineSchema = z.object({
   packageType: z.string().min(1, "Package Type is required"),
   packageCount: z.number().min(1, "Quantity is required"),
   grossWeight: z.number().min(1, "Weight is required"),
+  // Modified by Sekar Nagarajan (2026-08-28 17:03)
+  netWeight: z.number().min(0).optional(),
   volume: z.number().min(0, "Volume is required"),
   description: z.string().min(1, "Commodity Description is required"),
   marksAndNumbers: z.string().optional(),
@@ -358,6 +552,21 @@ export function createEmptyCargoLine(): SICargoLine {
   };
 }
 
+// Modified by Sekar Nagarajan (2026-08-28 16:43)
+export function createEmptyContainer(eqpSize = "40HC"): SIContainer {
+  return {
+    id: newCargoLineId(),
+    containerNo: "",
+    eqpSize,
+    carrierSeal: "",
+    shipperSeal: "",
+    cargoLines: [createEmptyCargoLine()],
+    isSoc: false,
+    isOog: false,
+    reeferMode: "none",
+  };
+}
+
 /** Shared wizard step contract — all SI steps. */
 export interface SIWizardStepProps {
   data: SIDTO;
@@ -366,6 +575,8 @@ export interface SIWizardStepProps {
   onSubmit: () => void;
   onUpdate: (partial: Partial<SIDTO>) => void;
   onCancel: () => void;
+  /** Jump to a wizard step by id (Preview section Edit). */
+  onGoToStep?: (stepId: SIWizardStepId) => void;
   isFirstStep: boolean;
   isLastStep: boolean;
   isSubmitting: boolean;

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-28 11:50)
+// Modified by Sekar Nagarajan (2026-08-31 16:36)
 import { AppButton, AppModal } from "@solverminds/shared-ui";
 import { useConfirm, useToast } from "@solverminds/shared-ui/hooks";
 import { useNavigate, useParams } from "@tanstack/react-router";
@@ -25,7 +25,10 @@ import {
   getStepIcon,
   renderBlWizardStep,
 } from "./config/bl-wizard-steps";
-import { DEFAULT_BL_WIZARD_CONFIG } from "./config/bl-wizard-config";
+import {
+  DEFAULT_BL_WIZARD_CONFIG,
+  type BLWizardStepId,
+} from "./config/bl-wizard-config";
 import { useBLWizard } from "./hooks/use-bl-wizard";
 import { useBLWizardConfig } from "./hooks/use-bl-wizard-config";
 import type { BLDTO } from "./types/bl.types";
@@ -128,6 +131,10 @@ export function BillOfLadingWizardRoute() {
     onSubmit: handleSubmit,
     onUpdate: updateDraft,
     onCancel: goDashboard,
+    onGoToStep: (stepId: BLWizardStepId) => {
+      const index = wizardSteps.findIndex((step) => step.id === stepId);
+      if (index >= 0) setCurrentStep(index);
+    },
     isFirstStep,
     isLastStep,
     isSubmitting,

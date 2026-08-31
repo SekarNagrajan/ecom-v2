@@ -242,7 +242,6 @@ export function DashboardOngoingTable({
         if (rec.siNo) {
           return (
             <Space size={4}>
-              <AppIcon icon={Icons.fileText} size={16} tone="view" />
               <Text type="secondary">{rec.siNo}</Text>
             </Space>
           );

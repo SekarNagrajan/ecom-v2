@@ -1,4 +1,4 @@
-// Created by Sekar Nagarajan (2026-08-27 19:12)
+// Modified by Sekar Nagarajan (2026-08-31 14:36)
 import type { PartiesData } from "../types/booking.types";
 
 export type PartyRoleKey =
@@ -20,8 +20,19 @@ export interface PartyCardData {
   phone: string;
 }
 
+/**
+ * Primary parties always shown on one 3-column row (ecom-app CustomerDetails parity:
+ * Booking Party · Agreement Party · Consignee).
+ * Data key `shipper` maps to Booking Party (legacy shipperName field).
+ */
+export const DEFAULT_PARTY_ROLES: readonly PartyRoleKey[] = [
+  "shipper",
+  "agreementParty",
+  "consignee",
+] as const;
+
 export const PARTY_ROLE_OPTIONS: { key: PartyRoleKey; label: string }[] = [
-  { key: "shipper", label: "Shipper" },
+  { key: "shipper", label: "Booking Party" },
   { key: "consignee", label: "Consignee" },
   { key: "notifyParty", label: "Notify Party" },
   { key: "notifyParty2", label: "Notify Party 2" },
@@ -31,7 +42,7 @@ export const PARTY_ROLE_OPTIONS: { key: PartyRoleKey; label: string }[] = [
 ];
 
 export const PARTY_ROLE_LABEL: Record<PartyRoleKey, string> = {
-  shipper: "Shipper",
+  shipper: "Booking Party",
   consignee: "Consignee",
   notifyParty: "Notify Party",
   notifyParty2: "Notify Party 2",
@@ -39,6 +50,53 @@ export const PARTY_ROLE_LABEL: Record<PartyRoleKey, string> = {
   agreementParty: "Agreement Party",
   siSubmittingParty: "SI Submitting Party",
 };
+
+/** ecom-app CustomerDetailsStep demo seed — used when parties are empty. */
+export const MOCK_DEFAULT_PARTY_CARDS: Partial<
+  Record<PartyRoleKey, PartyCardData>
+> = {
+  shipper: {
+    company: "Global Shipping Solutions Ltd.",
+    contact: "John Smith",
+    address: "123 Harbor Street, Singapore 048582",
+    city: "Singapore",
+    country: "SG",
+    email: "john.smith@globalshipping.com",
+    phone: "+65 6123 4567",
+  },
+  agreementParty: {
+    company: "Maritime Freight Forwarders LLC",
+    contact: "Sarah Johnson",
+    address: "456 Trade Center, Dubai 12345",
+    city: "Dubai",
+    country: "AE",
+    email: "sarah@maritimefreight.ae",
+    phone: "+971 4 987 6543",
+  },
+  consignee: {
+    company: "SA GLOBAL BUSINESS LTD.",
+    contact: "AEJEA20170000532",
+    address: "Ajman, AE",
+    city: "Ajman",
+    country: "AE",
+    email: "",
+    phone: "",
+  },
+};
+
+/** CSS modifier for mild per-role card background (see booking-module-styles). */
+export function partyRoleCardClassName(
+  role: PartyRoleKey,
+  empty = false,
+): string {
+  return [
+    "booking-party-card",
+    `booking-party-card--${role}`,
+    empty ? "booking-party-card--empty" : undefined,
+  ]
+    .filter(Boolean)
+    .join(" ");
+}
 
 export function emptyPartyCard(): PartyCardData {
   return {
@@ -137,6 +195,17 @@ export function partiesToCards(
   return cards;
 }
 
+/** Use saved parties when present; otherwise seed ecom-app mock defaults. */
+export function initialPartyCards(
+  parties: PartiesData | null | undefined,
+): Partial<Record<PartyRoleKey, PartyCardData>> {
+  const fromPayload = partiesToCards(parties);
+  if (Object.keys(fromPayload).length > 0) {
+    return fromPayload;
+  }
+  return structuredClone(MOCK_DEFAULT_PARTY_CARDS);
+}
+
 export function cardsToParties(
   cards: Partial<Record<PartyRoleKey, PartyCardData>>,
 ): PartiesData {
@@ -177,7 +246,8 @@ export function cardsToParties(
     freightForwarderContact: forwarder?.contact || "",
     agreementParty: agreement?.company || "",
     agreementPartyContact: agreement?.contact || "",
-    siSubmittingParty: si?.company || "",
-    siSubmittingPartyContact: si?.contact || "",
+    // Mock / empty flow: SI Submitting defaults to Booking Party when unset
+    siSubmittingParty: si?.company || shipper?.company || "",
+    siSubmittingPartyContact: si?.contact || shipper?.contact || "",
   };
 }

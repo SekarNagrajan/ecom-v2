@@ -1,5 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 16:00)
-/** Title Case module screen names — aligned with sidebar nomenclature (ApplicationResource_en.properties). */
+// Modified by Sekar Nagarajan (2026-08-31 16:41)
 export const MODULE_TITLES = {
   dashboard: 'Dashboard',
   schedules: 'Schedules',
@@ -16,6 +15,7 @@ export const MODULE_TITLES = {
   vgm: 'VGM Declaration',
   billOfLading: 'Bill of Lading',
   billOfLadingSummary: 'Bill of Lading Summary',
+  bookingSummary: 'Booking Summary',
   deliveryOrder: 'Delivery Order',
   arrivalNotice: 'Arrival Notice',
   containerReleaseOrder: 'Container Release Order',
@@ -39,6 +39,7 @@ export const WIZARD_STEP_TITLES = {
   ensDetails: 'ENS Details',
   insurance: 'Insurance',
   fileUpload: 'File Upload',
+  references: 'References',
   preview: 'Preview',
   parties: 'Parties',
   charges: 'Charges',

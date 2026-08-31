@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-28 12:40)
+// Modified by Sekar Nagarajan (2026-08-31 16:27)
 import { AppButton } from "@solverminds/shared-ui";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { Card, Result, Steps, Typography, theme } from "antd";
@@ -134,6 +134,10 @@ export function ShippingInstructionWizardRoute() {
         onSubmit={handleSubmit}
         onUpdate={updateDraft}
         onCancel={goDashboard}
+        onGoToStep={(stepId) => {
+          const index = wizardSteps.findIndex((step) => step.id === stepId);
+          if (index >= 0) setCurrentStep(index);
+        }}
         isFirstStep={currentStep === 0}
         isLastStep={currentStep === wizardSteps.length - 1}
         isSubmitting={isSubmitting}

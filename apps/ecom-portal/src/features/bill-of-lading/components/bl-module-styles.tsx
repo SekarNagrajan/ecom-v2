@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-28 12:22)
+// Modified by Sekar Nagarajan (2026-08-31 17:25)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -7,6 +7,7 @@ export function BlModuleStyles() {
   const { token } = theme.useToken();
   const primaryTint8 = tokenMix(token.colorPrimary, 8);
   const successTint8 = tokenMix(token.colorSuccess, 8);
+  const successTint28 = tokenMix(token.colorSuccess, 28);
 
   return (
     <style>{`
@@ -149,6 +150,15 @@ export function BlModuleStyles() {
         gap: ${token.marginXXS}px;
         margin-top: ${token.marginXXS}px;
       }
+      /* Modified by Sekar Nagarajan (2026-08-31 17:25) — light Confirmed / success badge */
+      .bl-drawer-title__tags .ant-tag-success,
+      .bl-drawer-title__tags .ant-tag-filled.ant-tag-success,
+      .bl-status-tag.ant-tag-success,
+      .bl-status-tag.ant-tag-filled.ant-tag-success {
+        color: ${token.colorSuccessText || token.colorSuccess};
+        background: ${successTint8};
+        border-color: ${successTint28};
+      }
       .bl-drawer-actions {
         display: flex;
         flex-wrap: wrap;
@@ -171,11 +181,15 @@ export function BlModuleStyles() {
       }
       .bl-view-route-port--origin {
         border-left: 4px solid ${token.colorPrimary};
-        background: linear-gradient(180deg, ${primaryTint8} 0%, ${token.colorFillAlter} 100%);
+        background: linear-gradient(180deg, ${primaryTint8} 0%, ${
+      token.colorFillAlter
+    } 100%);
       }
       .bl-view-route-port--delivery {
         border-left: 4px solid ${token.colorSuccess};
-        background: linear-gradient(180deg, ${successTint8} 0%, ${token.colorFillAlter} 100%);
+        background: linear-gradient(180deg, ${successTint8} 0%, ${
+      token.colorFillAlter
+    } 100%);
       }
       .bl-view-route-port__label {
         display: flex;
@@ -287,11 +301,15 @@ export function BlModuleStyles() {
       }
       .bl-manifest-route__port--load {
         border-left: 4px solid ${token.colorPrimary};
-        background: linear-gradient(180deg, ${primaryTint8} 0%, ${token.colorFillAlter} 100%);
+        background: linear-gradient(180deg, ${primaryTint8} 0%, ${
+      token.colorFillAlter
+    } 100%);
       }
       .bl-manifest-route__port--discharge {
         border-left: 4px solid ${token.colorSuccess};
-        background: linear-gradient(180deg, ${successTint8} 0%, ${token.colorFillAlter} 100%);
+        background: linear-gradient(180deg, ${successTint8} 0%, ${
+      token.colorFillAlter
+    } 100%);
       }
       .bl-manifest-route__label {
         display: flex;
@@ -357,13 +375,15 @@ export function BlModuleStyles() {
         background: ${token.colorPrimary};
       }
       .bl-manifest-route__dot--discharge {
-        background: ${token.colorSuccess};
+        background: ${tokenMix(token.colorSuccess, 10)};
       }
       .bl-manifest-route__track {
         flex: 1;
         height: 2px;
         margin: 0 ${token.marginXXS}px;
-        background: linear-gradient(90deg, ${token.colorPrimary} 0%, ${token.colorSuccess} 100%);
+        background: linear-gradient(90deg, ${token.colorPrimary} 0%, ${
+      token.colorSuccess
+    } 100%);
       }
       .bl-manifest-status {
         display: flex;
@@ -596,6 +616,66 @@ export function BlModuleStyles() {
       .bl-master-segmented.ant-segmented {
         width: 100%;
       }
+
+      /* Modified by Sekar Nagarajan (2026-08-31 12:32) — Radio card tiles */
+      .bl-radio-card-group {
+        display: flex;
+        gap: ${token.marginXS}px;
+        width: 100%;
+      }
+      .bl-radio-card {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        padding: ${token.paddingSM}px ${token.paddingXS}px;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1.5px solid ${token.colorBorderSecondary};
+        background: ${token.colorBgContainer};
+        cursor: pointer;
+        transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+        min-width: 0;
+      }
+      .bl-radio-card:hover {
+        border-color: ${tokenMix(token.colorPrimary, 45)};
+        background: ${tokenMix(token.colorPrimary, 4)};
+      }
+      .bl-radio-card--active {
+        border-color: ${token.colorPrimary};
+        background: ${tokenMix(token.colorPrimary, 8)};
+        box-shadow: 0 0 0 2px ${tokenMix(token.colorPrimary, 15)};
+      }
+      .bl-radio-card--active:hover {
+        border-color: ${token.colorPrimary};
+        background: ${tokenMix(token.colorPrimary, 12)};
+      }
+      .bl-radio-card__icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: ${token.controlHeight}px;
+        height: ${token.controlHeight}px;
+        border-radius: ${token.borderRadius}px;
+        background: ${token.colorFillAlter};
+        color: ${token.colorTextSecondary};
+        transition: background 0.2s, color 0.2s;
+      }
+      .bl-radio-card--active .bl-radio-card__icon {
+        background: ${tokenMix(token.colorPrimary, 15)};
+        color: ${token.colorPrimary};
+      }
+      .bl-radio-card__label {
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorTextSecondary};
+        text-align: center;
+        line-height: 1.25;
+        transition: color 0.2s;
+      }
+      .bl-radio-card--active .bl-radio-card__label {
+        color: ${token.colorPrimary};
+      }
       .bl-master-step-stack {
         display: flex;
         flex-direction: column;
@@ -606,6 +686,12 @@ export function BlModuleStyles() {
       }
       .bl-master-step-row > .ant-col {
         display: flex;
+      }
+      .bl-master-sections-row > .ant-col {
+        display: flex;
+      }
+      .bl-master-sections-row .bl-master-step-card.ant-card {
+        height: 100%;
       }
       .bl-master-step-card.ant-card {
         flex: 1;
@@ -618,6 +704,22 @@ export function BlModuleStyles() {
       .bl-master-step-card > .ant-card-head {
         padding: ${token.paddingMD}px ${token.paddingLG}px !important;
       }
+      .bl-master-card-title-row {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: ${token.marginSM}px;
+        width: 100%;
+      }
+      /* Modified by Sekar Nagarajan (2026-08-31 16:31) — SI-parity vessel route card */
+      .bl-master-step-card--route > .ant-card-body {
+        padding: ${token.paddingMD}px !important;
+        background: linear-gradient(
+          180deg,
+          ${tokenMix(token.colorPrimary, 4)} 0%,
+          ${token.colorBgContainer} 48%
+        );
+      }
       .bl-master-detail-grid {
         display: grid;
         width: 100%;
@@ -626,8 +728,9 @@ export function BlModuleStyles() {
       .bl-master-detail-grid--4 {
         grid-template-columns: repeat(4, minmax(0, 1fr));
       }
-      .bl-master-detail-grid--5 {
-        grid-template-columns: repeat(5, minmax(0, 1fr));
+      .bl-master-detail-grid--5,
+      .bl-master-detail-grid--refs {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
       }
       .bl-master-readonly-field {
         min-width: 0;
@@ -676,8 +779,9 @@ export function BlModuleStyles() {
         line-height: ${token.lineHeightSM};
       }
       @media (max-width: 1199px) {
-        .bl-master-detail-grid--5 {
-          grid-template-columns: repeat(3, minmax(0, 1fr));
+        .bl-master-detail-grid--5,
+        .bl-master-detail-grid--refs {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
         }
         .bl-master-options-grid,
         .bl-master-compliance-grid--3,
@@ -688,6 +792,7 @@ export function BlModuleStyles() {
       @media (max-width: 991px) {
         .bl-master-detail-grid--4,
         .bl-master-detail-grid--5,
+        .bl-master-detail-grid--refs,
         .bl-master-options-grid,
         .bl-master-compliance-grid--2,
         .bl-master-compliance-grid--3,
@@ -698,6 +803,7 @@ export function BlModuleStyles() {
       @media (max-width: 575px) {
         .bl-master-detail-grid--4,
         .bl-master-detail-grid--5,
+        .bl-master-detail-grid--refs,
         .bl-master-options-grid,
         .bl-master-compliance-grid--1,
         .bl-master-compliance-grid--2,
@@ -902,6 +1008,56 @@ export function BlModuleStyles() {
         .bl-charges-form-grid {
           grid-template-columns: minmax(0, 1fr);
         }
+      }
+      /* Modified by Sekar Nagarajan (2026-08-31 16:36) — Preview summary + section Edit */
+      .bl-preview-title {
+        text-align: center;
+        margin-bottom: ${token.marginXXS}px !important;
+      }
+      .bl-preview-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        margin-bottom: ${token.marginLG}px;
+        text-align: center;
+      }
+      .bl-preview-subtitle {
+        font-size: ${token.fontSizeSM}px;
+        max-width: ${token.controlHeightLG * 18}px;
+      }
+      .bl-preview-scroll {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+      .bl-preview-section.ant-card {
+        margin-bottom: ${token.marginMD}px;
+      }
+      .bl-preview-section > .ant-card-head {
+        min-height: auto;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+      }
+      .bl-preview-section > .ant-card-body {
+        padding: ${token.paddingMD}px ${token.paddingLG}px !important;
+      }
+      .bl-preview-descriptions {
+        width: 100%;
+      }
+      .bl-preview-descriptions .ant-descriptions-item-label {
+        color: ${token.colorTextSecondary};
+        font-weight: ${token.fontWeightStrong};
+      }
+      .bl-preview-list {
+        margin: 0;
+        padding-left: ${token.paddingLG}px;
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+      }
+      .bl-preview-empty {
+        display: block;
+        padding: ${token.paddingXXS}px 0;
       }
       .bl-preview-fields-card > .ant-card-head {
         padding: ${token.paddingMD}px ${token.paddingLG}px !important;

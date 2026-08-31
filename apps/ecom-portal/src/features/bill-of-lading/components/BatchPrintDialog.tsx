@@ -1,11 +1,11 @@
-// Modified by Sekar Nagarajan (2026-08-26 14:17)
+// Modified by Sekar Nagarajan (2026-08-31 15:25)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { Empty, Table, Tag, Typography } from "antd";
 import { useState } from "react";
 
 import type { BLListDTO } from "../types/bl.types";
 import { BL_STATUS_LABELS } from "../types/bl.types";
-import { isBatchOriginalPrintEligible } from "../utils/bl-status";
+import { getBLStatusColor, isBatchOriginalPrintEligible } from "../utils/bl-status";
 
 const { Text } = Typography;
 
@@ -95,7 +95,12 @@ export function BatchPrintDialog({
                 key: "status",
                 width: 120,
                 render: (status: BLListDTO["status"]) => (
-                  <Tag>{BL_STATUS_LABELS[status]}</Tag>
+                  <Tag
+                    className="bl-status-tag"
+                    color={getBLStatusColor(status)}
+                  >
+                    {BL_STATUS_LABELS[status]}
+                  </Tag>
                 ),
               },
               {

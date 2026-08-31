@@ -1,5 +1,6 @@
-// Modified by Sekar Nagarajan (2026-08-26 12:19)
+// Modified by Sekar Nagarajan (2026-08-31 15:01)
 import type { ApiResponse } from "../../../types/api.types";
+import { MOCK_DEFAULT_REFERENCE_FIELDS } from "../../booking/utils/reference-field.utils";
 import {
   DEFAULT_SI_WIZARD_CONFIG,
   type SIWizardConfig,
@@ -21,7 +22,12 @@ export const siApi = {
 
   async fetchDetails(id: string): Promise<ApiResponse<SIDTO>> {
     await delay(500); // simulated latency
-    return { data: { ...MOCK_SI_DETAIL, id } };
+    const listRow = MOCK_SI_LIST.find((row) => row.id === id);
+    // Existing SI (has SI no) keeps saved references; create/new starts empty
+    const referenceFields = listRow?.siNo
+      ? structuredClone(MOCK_DEFAULT_REFERENCE_FIELDS)
+      : [];
+    return { data: { ...MOCK_SI_DETAIL, id, referenceFields } };
   },
 
   async fetchWizardConfig(): Promise<ApiResponse<SIWizardConfig>> {

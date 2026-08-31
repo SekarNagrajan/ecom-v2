@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 17:15)
+// Modified by Sekar Nagarajan (2026-08-31 13:01)
 import { theme } from "antd";
 
 import { tokenMix } from "../../features/theme/utils/token-mix";
@@ -10,14 +10,17 @@ import { tokenMix } from "../../features/theme/utils/token-mix";
  */
 export function AppIconStyles() {
   const { token } = theme.useToken();
-  const primaryHoverBg =
-    token.colorPrimaryBg || tokenMix(token.colorPrimary, 12);
+  // Mild tint from seed color — avoid mid-tone *Bg (muddy with dark emerald success)
+  const primaryHoverBg = tokenMix(token.colorPrimary, 12);
+  const successHoverBg = tokenMix(token.colorSuccess, 12);
+  const warningHoverBg = tokenMix(token.colorWarning, 12);
+  const errorHoverBg = tokenMix(token.colorError, 12);
 
   const tones = [
     {
       key: "view",
       color: token.colorPrimary,
-      hoverBg: token.colorPrimaryBg || tokenMix(token.colorPrimary, 12),
+      hoverBg: primaryHoverBg,
     },
     {
       key: "print",
@@ -27,17 +30,17 @@ export function AppIconStyles() {
     {
       key: "edit",
       color: token.colorWarning,
-      hoverBg: token.colorWarningBg || tokenMix(token.colorWarning, 12),
+      hoverBg: warningHoverBg,
     },
     {
       key: "create",
-      color: token.colorSuccess,
-      hoverBg: token.colorSuccessBg || tokenMix(token.colorSuccess, 12),
+      color: token.colorSuccessText || token.colorSuccess,
+      hoverBg: successHoverBg,
     },
     {
       key: "delete",
       color: token.colorError,
-      hoverBg: token.colorErrorBg || tokenMix(token.colorError, 12),
+      hoverBg: errorHoverBg,
     },
     {
       key: "approve",

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-28 14:20)
+// Modified by Sekar Nagarajan (2026-08-31 17:13)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -8,6 +8,22 @@ export function BookingModuleStyles() {
   const { token } = theme.useToken();
   const primaryTint8 = tokenMix(token.colorPrimary, 8);
   const successTint8 = tokenMix(token.colorSuccess, 8);
+  const warningTint8 = tokenMix(token.colorWarning, 8);
+  const infoTint8 = tokenMix(token.colorInfo, 8);
+  const geekblueTint8 = tokenMix(token.geekblue, 8);
+  const cyanTint8 = tokenMix(token.cyan, 8);
+  const orangeTint8 = tokenMix(token.orange, 8);
+  const errorTint8 = tokenMix(token.colorError, 8);
+  const primaryTint14 = tokenMix(token.colorPrimary, 14);
+  const successTint14 = tokenMix(token.colorSuccess, 14);
+  const warningTint14 = tokenMix(token.colorWarning, 14);
+  const infoTint14 = tokenMix(token.colorInfo, 14);
+  const geekblueTint14 = tokenMix(token.geekblue, 14);
+  const cyanTint14 = tokenMix(token.cyan, 14);
+  const orangeTint14 = tokenMix(token.orange, 14);
+  const primaryTint28 = tokenMix(token.colorPrimary, 28);
+  const successTint28 = tokenMix(token.colorSuccess, 28);
+  const errorTint28 = tokenMix(token.colorError, 28);
 
   return (
     <style>{`
@@ -37,6 +53,25 @@ export function BookingModuleStyles() {
         flex-wrap: wrap;
         gap: ${token.marginXXS}px;
         margin-top: ${token.marginXXS}px;
+      }
+      /* Modified by Sekar Nagarajan (2026-08-31 14:57) — light status badge backgrounds */
+      .booking-drawer-title__tags .ant-tag-success,
+      .booking-drawer-title__tags .ant-tag-filled.ant-tag-success {
+        color: ${token.colorSuccessText || token.colorSuccess};
+        background: ${successTint8};
+        border-color: ${successTint28};
+      }
+      .booking-drawer-title__tags .ant-tag-processing,
+      .booking-drawer-title__tags .ant-tag-filled.ant-tag-processing {
+        color: ${token.colorPrimary};
+        background: ${primaryTint8};
+        border-color: ${primaryTint28};
+      }
+      .booking-drawer-title__tags .ant-tag-error,
+      .booking-drawer-title__tags .ant-tag-filled.ant-tag-error {
+        color: ${token.colorErrorText || token.colorError};
+        background: ${errorTint8};
+        border-color: ${errorTint28};
       }
       .booking-drawer-actions {
         display: flex;
@@ -246,18 +281,59 @@ export function BookingModuleStyles() {
         font-size: ${token.fontSizeSM}px;
         color: ${token.colorTextSecondary};
       }
-      .booking-list-grid {
-        height: 500px;
-        min-height: 320px;
-      }
-      .booking-list-card.ant-card {
+      /* Modified by Sekar Nagarajan (2026-08-31 17:13) — VGM/BL page-card + explicit AG Grid height */
+      .feature-page-card.booking-page-card.ant-card {
+        border: none;
         border-radius: ${token.borderRadiusLG}px;
-        border: 1px solid ${token.colorBorderSecondary};
-        background: ${token.colorBgContainer};
-        box-shadow: none !important;
       }
-      .booking-list-card > .ant-card-body {
+      .feature-page-card.booking-page-card > .ant-card-body {
+        display: flex;
+        flex-direction: column;
         padding: 0 !important;
+        min-height: calc(100vh - 160px);
+        overflow: hidden;
+      }
+      .booking-page-layout {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
+      }
+      .booking-page-header {
+        flex-shrink: 0;
+        padding: ${token.paddingMD}px ${token.paddingLG}px 0;
+      }
+      .booking-grid-wrap {
+        flex: 1;
+        min-height: calc(100vh - 280px);
+        width: 100%;
+        padding: ${token.paddingMD}px ${token.paddingLG}px ${token.paddingLG}px;
+        display: flex;
+        flex-direction: column;
+      }
+      .booking-grid-wrap > * {
+        flex: 1;
+        min-height: 0;
+        height: 100%;
+      }
+      .booking-list-grid {
+        width: 100%;
+        flex: 1;
+        min-height: calc(100vh - 280px);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+      .booking-list-grid > * {
+        flex: 1;
+        min-height: 0;
+        height: 100%;
+      }
+      .booking-list-grid .ag-theme-alpine,
+      .booking-list-grid .ag-root-wrapper {
+        height: 100% !important;
+        min-height: calc(100vh - 280px);
       }
 
       /* Origin / Delivery / Date + swap — CSS grid keeps inputs + swap on one row */
@@ -269,7 +345,7 @@ export function BookingModuleStyles() {
       .booking-port-field.ant-picker {
         width: 100%;
       }
-      /* Modified by Sekar Nagarajan (2026-08-26 18:41) — collapse empty error row so Master Details has no dead gap */
+      /* Modified by Sekar Nagarajan (2026-08-31 16:58) — gap below port/date row before haulage options */
       .booking-port-row {
         display: grid;
         grid-template-columns: minmax(0, 1fr) ${
@@ -282,7 +358,10 @@ export function BookingModuleStyles() {
         column-gap: ${token.marginMD}px;
         row-gap: 0;
         align-items: end;
-        margin-bottom: ${token.marginMD}px;
+        margin-bottom: ${token.marginXL}px;
+      }
+      .booking-master-options-row {
+        margin-top: ${token.marginSM}px;
       }
       .booking-port-row__origin-label { grid-area: origin-label; align-self: start; margin-bottom: ${
         token.marginSM
@@ -566,9 +645,10 @@ export function BookingModuleStyles() {
         background: ${token.colorWarningBg};
         color: ${token.colorWarning};
       }
+      /* Modified by Sekar Nagarajan (2026-08-31 13:11) — mild success tint (same as grid status tags) */
       .booking-routing-card__deadline-icon--vgm {
-        background: ${token.colorSuccessBg};
-        color: ${token.colorSuccess};
+        background: ${successTint8};
+        color: ${token.colorSuccessText || token.colorSuccess};
       }
       .booking-routing-card__deadline-label {
         display: block;
@@ -1106,6 +1186,61 @@ export function BookingModuleStyles() {
       .booking-preview-container {
         margin-bottom: ${token.marginMD}px;
       }
+      /* Modified by Sekar Nagarajan (2026-08-31 16:41) — Preview summary + section Edit */
+      .booking-preview-title {
+        text-align: center;
+        margin-bottom: ${token.marginXXS}px !important;
+      }
+      .booking-preview-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        margin-bottom: ${token.marginLG}px;
+        text-align: center;
+      }
+      .booking-preview-subtitle {
+        font-size: ${token.fontSizeSM}px;
+        max-width: ${token.controlHeightLG * 18}px;
+      }
+      .booking-preview-scroll {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+      .booking-preview-section.ant-card {
+        margin-bottom: ${token.marginMD}px;
+      }
+      .booking-preview-section > .ant-card-head {
+        min-height: auto;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+      }
+      .booking-preview-section > .ant-card-body {
+        padding: ${token.paddingMD}px ${token.paddingLG}px !important;
+      }
+      .booking-preview-descriptions {
+        width: 100%;
+      }
+      .booking-preview-descriptions .ant-descriptions-item-label {
+        color: ${token.colorTextSecondary};
+        font-weight: ${token.fontWeightStrong};
+      }
+      .booking-preview-list {
+        margin: ${token.marginXS}px 0 0;
+        padding-left: ${token.paddingLG}px;
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+      }
+      .booking-preview-empty {
+        display: block;
+        padding: ${token.paddingXXS}px 0;
+      }
+      .booking-party-block {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+      }
 
       .booking-rates-table {
         width: 100%;
@@ -1165,6 +1300,9 @@ export function BookingModuleStyles() {
       .booking-party-grid {
         margin: 0 !important;
       }
+      .booking-party-grid--other {
+        margin-top: ${token.marginLG}px !important;
+      }
       .booking-party-grid__col {
         display: flex;
       }
@@ -1174,6 +1312,56 @@ export function BookingModuleStyles() {
         width: 100%;
         height: 100%;
         border-radius: ${token.borderRadiusLG}px;
+      }
+      /* Modified by Sekar Nagarajan (2026-08-31 14:14) — mild per-role card tints */
+      .booking-party-card--shipper.ant-card {
+        background: ${primaryTint8};
+        border-color: ${primaryTint14};
+      }
+      .booking-party-card--agreementParty.ant-card {
+        background: ${geekblueTint8};
+        border-color: ${geekblueTint14};
+      }
+      .booking-party-card--notifyParty.ant-card {
+        background: ${cyanTint8};
+        border-color: ${cyanTint14};
+      }
+      .booking-party-card--consignee.ant-card {
+        background: ${successTint8};
+        border-color: ${successTint14};
+      }
+      .booking-party-card--notifyParty2.ant-card {
+        background: ${infoTint8};
+        border-color: ${infoTint14};
+      }
+      .booking-party-card--forwarder.ant-card {
+        background: ${warningTint8};
+        border-color: ${warningTint14};
+      }
+      .booking-party-card--siSubmittingParty.ant-card {
+        background: ${orangeTint8};
+        border-color: ${orangeTint14};
+      }
+      .booking-party-card--shipper > .ant-card-head,
+      .booking-party-card--agreementParty > .ant-card-head,
+      .booking-party-card--notifyParty > .ant-card-head,
+      .booking-party-card--consignee > .ant-card-head,
+      .booking-party-card--notifyParty2 > .ant-card-head,
+      .booking-party-card--forwarder > .ant-card-head,
+      .booking-party-card--siSubmittingParty > .ant-card-head {
+        background: transparent;
+      }
+      /* Modified by Sekar Nagarajan (2026-08-31 14:10) — empty default party slot */
+      .booking-party-card--empty.ant-card {
+        border-style: dashed;
+      }
+      .booking-party-card__empty-body {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        gap: ${token.marginSM}px;
+        min-height: ${token.controlHeightLG * 2}px;
       }
       .booking-party-card > .ant-card-head {
         min-height: ${token.controlHeightLG}px;

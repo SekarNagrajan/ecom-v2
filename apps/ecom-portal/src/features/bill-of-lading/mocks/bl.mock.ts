@@ -1,4 +1,5 @@
-// Modified by Sekar Nagarajan (2026-08-28 12:22)
+// Modified by Sekar Nagarajan (2026-08-31 16:43)
+import { MOCK_DEFAULT_REFERENCE_FIELDS } from "../../booking/utils/reference-field.utils";
 import {
   DEFAULT_BL_WIZARD_CONFIG,
   type BLWizardConfig,
@@ -7,6 +8,8 @@ import type {
   BLChargesDTO,
   BLDTO,
   BLListDTO,
+  BLRouting,
+  BLRoutingLeg,
   BLRowStatus,
   MCNDTO,
   MCNListDTO,
@@ -16,6 +19,275 @@ import {
   createDefaultBlRouting,
   createEmptyBlPreview,
 } from "../types/bl.types";
+
+/** "SGSIN - SINGAPORE" → "Singapore" for vessel card port labels. */
+function portDisplayName(portLabel: string): string {
+  const parts = portLabel.split(" - ");
+  const name = (parts[1] ?? parts[0] ?? portLabel).trim();
+  if (!name) return "—";
+  return name
+    .toLowerCase()
+    .replace(/\b\w/g, (ch) => ch.toUpperCase());
+}
+
+function oceanLeg(
+  partial: Omit<BLRoutingLeg, "legType"> & { legType?: string },
+): BLRoutingLeg {
+  return { legType: "Ocean", ...partial };
+}
+
+/**
+ * Per–B/L vessel schedule mocks for Master Details.
+ * Keyed by blNo so opening different BLs shows distinct vessel / voyage / legs.
+ */
+const mockBlVesselByBlNo: Record<
+  string,
+  { vesselName: string; voyage: string; legs: BLRoutingLeg[] }
+> = {
+  "BL-998824": {
+    vesselName: "MSC ELARA",
+    voyage: "EL042N",
+    legs: [
+      oceanLeg({
+        id: "LEG-BL-998824-1",
+        vesselName: "MSC ELARA",
+        voyage: "EL042N",
+        polPortName: "Singapore",
+        podPortName: "Colombo",
+        etd: "2026-09-01",
+        eta: "2026-09-05",
+      }),
+      oceanLeg({
+        id: "LEG-BL-998824-2",
+        vesselName: "MSC ELARA",
+        voyage: "EL042N",
+        polPortName: "Colombo",
+        podPortName: "Tokyo",
+        etd: "2026-09-06",
+        eta: "2026-09-12",
+      }),
+    ],
+  },
+  "BL-998825": {
+    vesselName: "MAERSK ESSEX",
+    voyage: "ME118E",
+    legs: [
+      oceanLeg({
+        id: "LEG-BL-998825-1",
+        vesselName: "MAERSK ESSEX",
+        voyage: "ME118E",
+        polPortName: "New York",
+        podPortName: "Halifax",
+        etd: "2026-09-03",
+        eta: "2026-09-06",
+      }),
+      oceanLeg({
+        id: "LEG-BL-998825-2",
+        vesselName: "MAERSK ESSEX",
+        voyage: "ME118E",
+        polPortName: "Halifax",
+        podPortName: "Felixstowe",
+        etd: "2026-09-07",
+        eta: "2026-09-14",
+      }),
+    ],
+  },
+  "BL-998822": {
+    vesselName: "APL SENTOSA",
+    voyage: "AS091W",
+    legs: [
+      oceanLeg({
+        id: "LEG-BL-998822-1",
+        vesselName: "APL SENTOSA",
+        voyage: "AS091W",
+        polPortName: "New York",
+        podPortName: "Felixstowe",
+        etd: "2026-08-28",
+        eta: "2026-09-08",
+      }),
+    ],
+  },
+  "BL-998826": {
+    vesselName: "COSCO SHIPPING UNIVERSE",
+    voyage: "CU055E",
+    legs: [
+      oceanLeg({
+        id: "LEG-BL-998826-1",
+        vesselName: "COSCO SHIPPING UNIVERSE",
+        voyage: "CU055E",
+        polPortName: "Shanghai",
+        podPortName: "Busan",
+        etd: "2026-08-25",
+        eta: "2026-08-28",
+      }),
+      oceanLeg({
+        id: "LEG-BL-998826-2",
+        vesselName: "COSCO SHIPPING UNIVERSE",
+        voyage: "CU055E",
+        polPortName: "Busan",
+        podPortName: "Los Angeles",
+        etd: "2026-08-29",
+        eta: "2026-09-10",
+      }),
+    ],
+  },
+  ESLSIN123456: {
+    vesselName: "EVER GIVEN",
+    voyage: "EG023W",
+    legs: [
+      oceanLeg({
+        id: "LEG-ESLSIN123456-1",
+        vesselName: "EVER GIVEN",
+        voyage: "EG023W",
+        polPortName: "Singapore",
+        podPortName: "Colombo",
+        etd: "2026-09-02",
+        eta: "2026-09-06",
+      }),
+      oceanLeg({
+        id: "LEG-ESLSIN123456-2",
+        vesselName: "EVER GIVEN",
+        voyage: "EG023W",
+        polPortName: "Colombo",
+        podPortName: "Nhava Sheva",
+        etd: "2026-09-07",
+        eta: "2026-09-12",
+      }),
+    ],
+  },
+  "BL-V1-001": {
+    vesselName: "HMM ALGECIRAS",
+    voyage: "HA014E",
+    legs: [
+      oceanLeg({
+        id: "LEG-BL-V1-001-1",
+        vesselName: "HMM ALGECIRAS",
+        voyage: "HA014E",
+        polPortName: "Jebel Ali",
+        podPortName: "Singapore",
+        etd: "2026-09-04",
+        eta: "2026-09-11",
+      }),
+    ],
+  },
+  "BL-LOCKED-01": {
+    vesselName: "OOCL TOKYO",
+    voyage: "OT088N",
+    legs: [
+      oceanLeg({
+        id: "LEG-BL-LOCKED-01-1",
+        vesselName: "OOCL TOKYO",
+        voyage: "OT088N",
+        polPortName: "Singapore",
+        podPortName: "Hong Kong",
+        etd: "2026-09-05",
+        eta: "2026-09-08",
+      }),
+    ],
+  },
+  "BL-VOY-CLOSED": {
+    vesselName: "MSC OSCAR",
+    voyage: "MO201W",
+    legs: [
+      oceanLeg({
+        id: "LEG-BL-VOY-CLOSED-1",
+        vesselName: "MSC OSCAR",
+        voyage: "MO201W",
+        polPortName: "Nhava Sheva",
+        podPortName: "Jeddah",
+        etd: "2026-08-22",
+        eta: "2026-08-27",
+      }),
+      oceanLeg({
+        id: "LEG-BL-VOY-CLOSED-2",
+        vesselName: "MSC OSCAR",
+        voyage: "MO201W",
+        polPortName: "Jeddah",
+        podPortName: "Hamburg",
+        etd: "2026-08-28",
+        eta: "2026-09-09",
+      }),
+    ],
+  },
+  "BL-BATCH-01": {
+    vesselName: "ONE COMPETENCE",
+    voyage: "OC033E",
+    legs: [
+      oceanLeg({
+        id: "LEG-BL-BATCH-01-1",
+        vesselName: "ONE COMPETENCE",
+        voyage: "OC033E",
+        polPortName: "Singapore",
+        podPortName: "Tokyo",
+        etd: "2026-09-01",
+        eta: "2026-09-09",
+      }),
+    ],
+  },
+  "BL-BATCH-02": {
+    vesselName: "CMA CGM MARCO POLO",
+    voyage: "CM077E",
+    legs: [
+      oceanLeg({
+        id: "LEG-BL-BATCH-02-1",
+        vesselName: "CMA CGM MARCO POLO",
+        voyage: "CM077E",
+        polPortName: "Shanghai",
+        podPortName: "Los Angeles",
+        etd: "2026-09-02",
+        eta: "2026-09-16",
+      }),
+    ],
+  },
+  "BL-BATCH-03": {
+    vesselName: "YANG MING WELLNESS",
+    voyage: "YW012S",
+    legs: [
+      oceanLeg({
+        id: "LEG-BL-BATCH-03-1",
+        vesselName: "YANG MING WELLNESS",
+        voyage: "YW012S",
+        polPortName: "Hong Kong",
+        podPortName: "Singapore",
+        etd: "2026-09-03",
+        eta: "2026-09-07",
+      }),
+    ],
+  },
+};
+
+/** Build vessel routing for a list row — explicit seed by blNo, else a direct fallback leg. */
+export function createMockBlRouting(row: BLListDTO): BLRouting {
+  const base = createDefaultBlRouting(row);
+  const seeded = mockBlVesselByBlNo[row.blNo];
+  if (seeded) {
+    return {
+      ...base,
+      vesselVoyage: `${seeded.vesselName} / ${seeded.voyage}`,
+      scheduleLegs: seeded.legs.map((leg) => ({ ...leg })),
+    };
+  }
+
+  const pol = portDisplayName(row.loadPort);
+  const pod = portDisplayName(row.dischargePort);
+  const vesselName = "MOCK VESSEL";
+  const voyage = "MV001E";
+  return {
+    ...base,
+    vesselVoyage: `${vesselName} / ${voyage}`,
+    scheduleLegs: [
+      oceanLeg({
+        id: `LEG-${row.blNo}-1`,
+        vesselName,
+        voyage,
+        polPortName: pol,
+        podPortName: pod,
+        etd: "2026-09-01",
+        eta: "2026-09-10",
+      }),
+    ],
+  };
+}
 
 function listRow(
   partial: Omit<BLListDTO, "statusLabel"> & { status: BLRowStatus },
@@ -299,7 +571,8 @@ function buildDetailFromList(
     t2lFiling: false,
     nvocc: false,
     ensFiling: "N",
-    routing: createDefaultBlRouting(row),
+    // Modified by Sekar Nagarajan (2026-08-31 16:43) — per–BL vessel schedule mock
+    routing: createMockBlRouting(row),
     preview: createEmptyBlPreview(),
     parties: { ...sharedParties },
     containers: sharedContainers.map((c) => ({
@@ -349,30 +622,20 @@ function buildDetailFromList(
       },
     ],
     files: [],
+    // Existing non-draft BLs keep saved references; draft/create starts empty
+    referenceFields:
+      row.status === "D"
+        ? []
+        : structuredClone(MOCK_DEFAULT_REFERENCE_FIELDS),
     ens: null,
   };
   return { ...base, ...overrides };
 }
 
 export const mockBLDetailsSeed: Record<string, BLDTO> = {
+  // Vessel routing comes from createMockBlRouting via buildDetailFromList
   "BL-998824": buildDetailFromList(mockBLListSeed[0], {
     printCount: 0,
-    routing: {
-      ...createDefaultBlRouting(mockBLListSeed[0]),
-      vesselVoyage: "MSC ELARA / EL042N",
-      scheduleLegs: [
-        {
-          id: "LEG-1",
-          legType: "Ocean",
-          vesselName: "MSC ELARA",
-          voyage: "EL042N",
-          polPortName: "SGSIN - SINGAPORE",
-          podPortName: "JPTYO - TOKYO",
-          etd: "2026-09-01",
-          eta: "2026-09-08",
-        },
-      ],
-    },
     parties: {
       ...sharedParties,
       notify2: {

@@ -53,8 +53,8 @@ export function CarbonResultPanel({ input }: CarbonResultPanelProps) {
                 </span>
               </div>
               <AppButton
-                type="primary"
-                size="large"
+                type="default"
+                size="medium"
                 loading={exportMutation.isPending}
                 icon={
                   <AppIcon icon={Icons.download} size={16} tone="download" />

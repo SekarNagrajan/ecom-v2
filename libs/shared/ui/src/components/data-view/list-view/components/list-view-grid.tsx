@@ -46,7 +46,8 @@ export const ListViewGrid = <TData extends DataViewItem>({
     cellSelection = true,
     defaultColDef: userDefaultColDef,
     rowSelection: userRowSelection,
-    autoSizeColumns = false,
+    // Modified by Sekar Nagarajan (2026-09-01 18:25) — default content auto-size all columns
+    autoSizeColumns = true,
     onGridReady,
     onTotalCountChange,
     onSelectionChanged,

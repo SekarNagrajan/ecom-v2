@@ -1,5 +1,8 @@
 // Modified by Sekar Nagarajan (2026-08-26 16:20)
-import { DataView, type DataViewColumn } from "@solverminds/shared-ui/data-view";
+import {
+  DataView,
+  type DataViewColumn,
+} from "@solverminds/shared-ui/data-view";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { DatePicker, Space, Tag, Typography } from "antd";
 
@@ -44,7 +47,11 @@ function formatMoney(amount: number, currency: string) {
 
 export function PaymentHistoryView() {
   const toast = useToast();
-  const { data: payments = [], isLoading, isFetching } = usePaymentHistoryQuery();
+  const {
+    data: payments = [],
+    isLoading,
+    isFetching,
+  } = usePaymentHistoryQuery();
 
   const handleDownloadReceipt = (rec: PaymentHistoryRecord) => {
     toast.info(`Downloading PDF receipt for ${rec.paymentRefNo}...`);
@@ -71,9 +78,7 @@ export function PaymentHistoryView() {
           <ListActionsRow>
             <ListActionButton
               title="Download PDF Receipt"
-              icon={
-                <AppIcon icon={Icons.download} size={16} tone="download" />
-              }
+              icon={<AppIcon icon={Icons.fileText} size={16} tone="download" />}
               onClick={(event) => {
                 event.stopPropagation();
                 handleDownloadReceipt(rec);
@@ -103,9 +108,7 @@ export function PaymentHistoryView() {
       flex: 1,
       minWidth: 150,
       valueGetter: (params: { data?: PaymentHistoryRecord }) =>
-        params.data
-          ? `${params.data.invoiceNo} · ${params.data.blNumber}`
-          : "",
+        params.data ? `${params.data.invoiceNo} · ${params.data.blNumber}` : "",
     },
     {
       headerName: "Gateway",
@@ -195,7 +198,8 @@ export function PaymentHistoryView() {
             showToolbar: false,
             gridOptions: {
               domLayout: "autoHeight",
-              overlayNoRowsTemplate: "No payment records found for this period.",
+              overlayNoRowsTemplate:
+                "No payment records found for this period.",
               suppressCellFocus: true,
             },
           }}

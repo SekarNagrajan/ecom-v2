@@ -7,7 +7,6 @@ import type {
   GetContextMenuItemsParams,
   GridOptions,
   GridReadyEvent,
-  GridSizeChangedEvent,
   GridApi,
   GridState,
   IServerSideDatasource,
@@ -271,13 +270,15 @@ function buildColumnDefs<TData extends DataViewItem>(
 function buildDefaultColDef<TData extends DataViewItem>(
   editable: boolean,
   showAdvancedFilters: boolean,
-  userDefaultColDef: ListViewProps<TData>['defaultColDef']
+  userDefaultColDef: ListViewProps<TData>['defaultColDef'],
+  // Modified by Sekar Nagarajan (2026-09-01 18:25) — skip flex when content auto-sizing
+  autoSizeColumns: boolean
 ) {
   return {
     filter: true,
     sortable: true,
     resizable: true,
-    flex: 1,
+    ...(autoSizeColumns ? {} : { flex: 1 }),
     minWidth: 100,
     editable,
     floatingFilter: showAdvancedFilters,
@@ -415,9 +416,28 @@ export const AgGridHost = <TData extends DataViewItem>({
     [columnDefs, editable]
   );
   const resolvedDefaultColDef = useMemo(
-    () => buildDefaultColDef(editable, showAdvancedFilters, userDefaultColDef),
-    [editable, showAdvancedFilters, userDefaultColDef]
+    () =>
+      buildDefaultColDef(
+        editable,
+        showAdvancedFilters,
+        userDefaultColDef,
+        autoSizeColumns
+      ),
+    [editable, showAdvancedFilters, userDefaultColDef, autoSizeColumns]
   );
+  // Modified by Sekar Nagarajan (2026-09-01 18:25) — AG Grid 35 content auto-size strategy
+  const resolvedAutoSizeStrategy = useMemo(() => {
+    if (gridOptions?.autoSizeStrategy !== undefined) {
+      return gridOptions.autoSizeStrategy;
+    }
+    if (!autoSizeColumns) {
+      return undefined;
+    }
+    return {
+      type: 'fitCellContents' as const,
+      scaleUpToFitGridWidth: true,
+    };
+  }, [autoSizeColumns, gridOptions?.autoSizeStrategy]);
   // Merge our shared "force as text" Excel style with whatever the consumer
   // passed via `gridOptions.excelStyles`. Defaults come first so consumer
   // ids of the same name win on conflict. Memoized to keep AG Grid prop
@@ -433,6 +453,7 @@ export const AgGridHost = <TData extends DataViewItem>({
     return {
       ...gridOptions,
       excelStyles,
+      autoSizeStrategy: resolvedAutoSizeStrategy,
       // Single spinner centered over the whole grid body (AG Grid's default
       // overlay wrapper handles the centering) instead of any per-row /
       // per-column indicator. Driven by the `loading` prop below, which for
@@ -448,7 +469,7 @@ export const AgGridHost = <TData extends DataViewItem>({
       loadingCellRenderer:
         gridOptions?.loadingCellRenderer ?? AgGridNoopLoadingCellRenderer,
     };
-  }, [gridOptions]);
+  }, [gridOptions, resolvedAutoSizeStrategy]);
   /**
    * Normalize `sideBar: true` (AntD-style shorthand) and `sideBar: undefined`
    * (no consumer opinion) to our explicit `DEFAULT_SIDE_BAR` config — keeps
@@ -496,13 +517,16 @@ export const AgGridHost = <TData extends DataViewItem>({
     [activeProfileId, initialStateRef, onGridReady, profiles, setGridApi]
   );
 
+  // Modified by Sekar Nagarajan (2026-09-01 18:25) — content auto-size (not sizeColumnsToFit)
   const handleAutoSizeColumns = useCallback(() => {
     if (!autoSizeColumns) return;
+    // Keep saved profile column widths when a profile is active.
+    if (activeProfileId) return;
     const api = gridRef.current?.api;
     if (api) {
-      api.sizeColumnsToFit();
+      api.autoSizeAllColumns({ scaleUpToFitGridWidth: true });
     }
-  }, [autoSizeColumns, gridRef]);
+  }, [activeProfileId, autoSizeColumns, gridRef]);
 
   const handleToolPanelSizeChanged = useCallback(() => {
     handleAutoSizeColumns();
@@ -518,14 +542,6 @@ export const AgGridHost = <TData extends DataViewItem>({
       onSelectionChanged?.(selectedRows);
     }
   }, [gridRef, onSelectionChanged]);
-
-  const handleGridSizeChanged = useCallback(
-    (params: GridSizeChangedEvent<TData>) => {
-      if (!autoSizeColumns) return;
-      params.api.sizeColumnsToFit();
-    },
-    [autoSizeColumns]
-  );
 
   const memoizedQuickFilterText =
     dataMode === 'client' ? quickFilterText : undefined;
@@ -573,7 +589,6 @@ export const AgGridHost = <TData extends DataViewItem>({
       suppressPaginationPanel={true}
       paginationPageSize={paginationPageSize}
       floatingFiltersHeight={floatingFiltersHeight}
-      onGridSizeChanged={handleGridSizeChanged}
       {...mergedGridOptions}
       // Keep `getContextMenuItems` AFTER the `gridOptions` spread so our
       // hijack always runs. The wrapper delegates to the consumer's

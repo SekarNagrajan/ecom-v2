@@ -169,6 +169,12 @@ export type ListViewOptions<TData extends DataViewItem> = ProfileOptions & {
   rowSelection?: RowSelectionOptions<TData>;
   gridOptions?: GridOptions<TData>;
   showToolbar?: boolean | ToolbarOptions;
+  /**
+   * When true (default), columns auto-size to cell/header content on load
+   * (`autoSizeStrategy: fitCellContents`) and after column visibility changes.
+   * Pass `false` to keep equal flex distribution instead.
+   * Overridden if `gridOptions.autoSizeStrategy` is set explicitly.
+   */
   autoSizeColumns?: boolean;
   defaultShowAdvancedFilters?: boolean;
   /**

@@ -1,5 +1,5 @@
 // Modified by Sekar Nagarajan (2026-08-26 16:15)
-import { AppButton, AppDrawer, FormattedDate } from "@solverminds/shared-ui";
+import { AppDrawer, FormattedDate } from "@solverminds/shared-ui";
 import { Descriptions, Tag } from "antd";
 
 import { Icons } from "../../../components/icons";
@@ -51,11 +51,6 @@ export function QuotesViewDrawer({ quote, onClose }: QuotesViewDrawerProps) {
           description="Quote details for this trade lane, equipment, and validity."
           compact
         />
-      }
-      footer={
-        <div className="um-drawer-footer form-step-footer">
-          <AppButton onClick={onClose}>Cancel</AppButton>
-        </div>
       }
     >
       {quote && statusMeta ? (

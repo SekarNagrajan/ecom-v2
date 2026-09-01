@@ -67,7 +67,7 @@ export function QuotesView() {
               <ListActionButton
                 title="Book This Quote"
                 icon={
-                  <AppIcon icon={Icons.notebook} size={16} tone="navigate" />
+                  <AppIcon icon={Icons.notebook} size={16} tone="download" />
                 }
                 onClick={(event) => {
                   event.stopPropagation();
@@ -87,7 +87,6 @@ export function QuotesView() {
       minWidth: 140,
       cellRenderer: (params: { value?: string }) => (
         <Space size={6}>
-          <AppIcon icon={Icons.fileText} size={16} />
           <strong>{params.value}</strong>
         </Space>
       ),
@@ -106,7 +105,7 @@ export function QuotesView() {
       field: "equipmentType",
       sortable: true,
       flex: 1.2,
-      minWidth: 160,
+      minWidth: 190,
       valueGetter: (params: { data?: QuoteItem }) =>
         params.data
           ? `${params.data.equipmentType} · ${params.data.commodity}`

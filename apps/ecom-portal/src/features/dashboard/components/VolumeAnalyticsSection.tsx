@@ -227,9 +227,13 @@ export function VolumeAnalyticsSection({
                       }
                     >
                       {isPositive ? (
-                        <AppIcon icon={Icons.arrowUp} size={14} />
+                        <AppIcon icon={Icons.arrowUp} size={14} tone="create" />
                       ) : (
-                        <AppIcon icon={Icons.arrowDown} size={14} />
+                        <AppIcon
+                          icon={Icons.arrowDown}
+                          size={14}
+                          tone="delete"
+                        />
                       )}
                       {Math.abs(kpi.change)}%
                     </span>

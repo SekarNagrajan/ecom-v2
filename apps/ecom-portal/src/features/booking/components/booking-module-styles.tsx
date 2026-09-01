@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-31 17:13)
+// Modified by Sekar Nagarajan (2026-09-01 11:54)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -860,24 +860,80 @@ export function BookingModuleStyles() {
           margin-right: ${token.marginMD}px;
         }
       }
+      /* Modified by Sekar Nagarajan (2026-09-01 11:50) — route/rate single-row layout */
+      .booking-selected-summary-row {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: ${token.marginMD}px;
+        margin-top: ${token.marginMD}px;
+        margin-bottom: ${token.marginMD}px;
+        align-items: stretch;
+      }
+      .booking-selected-summary-row--paired {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .booking-selected-summary-row--with-table {
+        grid-template-columns: 1fr;
+      }
+      .booking-selected-summary-row__rates {
+        margin-top: 0;
+      }
       .booking-selected-route {
         display: flex;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         align-items: center;
         justify-content: space-between;
         gap: ${token.marginSM}px;
-        margin-top: ${token.marginMD}px;
-        padding: ${token.paddingMD}px;
+        margin-top: 0;
+        min-width: 0;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
         border-radius: ${token.borderRadiusLG}px;
         border: 1px solid ${token.colorPrimaryBorder};
         background: ${primaryTint8};
       }
+      .booking-selected-route__content {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: baseline;
+        gap: ${token.marginXS}px;
+        min-width: 0;
+        flex: 1;
+        overflow: hidden;
+        cursor: help;
+      }
       .booking-selected-route__title {
-        display: block;
-        margin-bottom: ${token.marginXXS}px;
+        display: inline;
+        margin-bottom: 0;
+        white-space: nowrap;
+        flex-shrink: 0;
       }
       .booking-selected-route__meta {
+        display: inline;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-width: 0;
+      }
+      .booking-selected-route__tooltip {
         display: block;
+        white-space: pre-line;
+      }
+      .booking-selected-route .sm-app-button,
+      .booking-selected-route .ant-btn {
+        flex-shrink: 0;
+      }
+      @media (max-width: 991px) {
+        .booking-selected-summary-row--paired {
+          grid-template-columns: 1fr;
+        }
+        .booking-selected-route__content {
+          flex-wrap: wrap;
+        }
+        .booking-selected-route__meta {
+          white-space: normal;
+          overflow: visible;
+          text-overflow: unset;
+        }
       }
 
       @media (max-width: 991px) {

@@ -21,7 +21,11 @@ export function BookingViewRoute() {
   return (
     <FeaturePageShell>
       <BookingModuleStyles />
-      <Space direction="vertical" size="large" className="feature-page-stack booking-page-stack">
+      <Space
+        direction="vertical"
+        size="large"
+        className="feature-page-stack booking-page-stack"
+      >
         <Card className="feature-page-card" bordered={false}>
           <ModuleScreenHeader
             icon={Icons.bookOpen}
@@ -32,9 +36,18 @@ export function BookingViewRoute() {
             marginBottom={0}
             extra={
               <Space wrap className="custom-scroll">
-                <AppButton onClick={() => navigate({ to: "/app/booking" })}>
-                  Back to Dashboard
-                </AppButton>
+                extra=
+                {
+                  <AppButton
+                    danger
+                    icon={
+                      <AppIcon icon={Icons.arrowLeft} size={16} tone="delete" />
+                    }
+                    onClick={() => navigate({ to: "/app/booking" })}
+                  >
+                    Back to Booking
+                  </AppButton>
+                }
                 <AppButton
                   type="primary"
                   icon={<AppIcon icon={Icons.edit} size={16} tone="edit" />}

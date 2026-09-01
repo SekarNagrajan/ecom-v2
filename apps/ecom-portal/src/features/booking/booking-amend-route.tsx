@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-31 15:01)
+// Modified by Sekar Nagarajan (2026-09-01 12:09)
 import { AppButton } from "@solverminds/shared-ui";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "@tanstack/react-router";
@@ -189,8 +189,12 @@ export function BookingAmendRoute() {
           title={formatModuleScreenTitle(MODULE_TITLES.amendBooking, bookingId)}
           marginBottom={0}
           extra={
-            <AppButton onClick={() => navigate({ to: "/app/booking" })}>
-              Back to Dashboard
+            <AppButton
+              danger
+              icon={<AppIcon icon={Icons.arrowLeft} size={16} tone="delete" />}
+              onClick={() => navigate({ to: "/app/booking" })}
+            >
+              Back to Booking
             </AppButton>
           }
         />

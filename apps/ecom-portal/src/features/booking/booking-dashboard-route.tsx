@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-31 18:52)
+// Modified by Sekar Nagarajan (2026-09-01 12:12)
 import { AppButton } from "@solverminds/shared-ui";
 import { ListView } from "@solverminds/shared-ui/data-view/list-view";
 import { useConfirm, useToast } from "@solverminds/shared-ui/hooks";
@@ -120,7 +120,11 @@ export function BookingDashboardRoute() {
                   <AppButton
                     type="primary"
                     icon={<AppIcon icon={Icons.plus} size={16} />}
-                    onClick={() => navigate({ to: "/app/booking/new" })}
+                    onClick={() => {
+                      // Fresh wizard — clear any in-progress / duplicated draft cache
+                      useBookingStore.getState().resetWizard();
+                      navigate({ to: "/app/booking/new" });
+                    }}
                   >
                     New Booking
                   </AppButton>

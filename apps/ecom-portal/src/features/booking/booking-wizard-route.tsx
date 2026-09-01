@@ -156,9 +156,18 @@ export function BookingWizardRoute() {
                   Save Draft
                 </AppButton>
               ) : null}
-              <AppButton onClick={() => navigate({ to: "/app/booking" })}>
-                Back to Dashboard
-              </AppButton>
+
+              {
+                <AppButton
+                  danger
+                  icon={
+                    <AppIcon icon={Icons.arrowLeft} size={16} tone="delete" />
+                  }
+                  onClick={() => navigate({ to: "/app/booking" })}
+                >
+                  Back to Booking
+                </AppButton>
+              }
             </Space>
           }
         />

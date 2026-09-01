@@ -388,7 +388,7 @@ export function AuthenticatedLayoutHeader({
               ) : null}
             </div>
             <Text type="secondary" className="app-layout-header__welcome">
-              Welcome to E-COM PORTAL ({activeTenant.id})
+              Welcome to E-COM PORTAL
             </Text>
           </div>
         </div>

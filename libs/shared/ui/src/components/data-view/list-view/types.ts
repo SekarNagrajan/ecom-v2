@@ -1,30 +1,30 @@
 import type {
-  ColDef,
-  CsvExportParams,
-  ExcelExportParams,
-  GridOptions,
-  GridReadyEvent,
-  GridState,
-  CellValueChangedEvent,
-  FilterModel,
-  AdvancedFilterModel,
-  SideBarDef,
-  RowSelectionOptions,
-} from 'ag-grid-community';
-import type { CSSProperties } from 'react';
+    AdvancedFilterModel,
+    CellValueChangedEvent,
+    ColDef,
+    CsvExportParams,
+    ExcelExportParams,
+    FilterModel,
+    GridOptions,
+    GridReadyEvent,
+    GridState,
+    RowSelectionOptions,
+    SideBarDef,
+} from "ag-grid-community";
+import type { CSSProperties } from "react";
 
-import type { DataViewColumn } from '../column-types';
-import type { DataViewItem } from '../data-view-item';
-import type { FilterValue, SortConfig } from '../stores/data-view-types';
+import type { DataViewColumn } from "../column-types";
+import type { DataViewItem } from "../data-view-item";
+import type { FilterValue, SortConfig } from "../stores/data-view-types";
 
 export type ColumnFilterType =
-  | 'text'
-  | 'number'
-  | 'boolean'
-  | 'date'
-  | 'select'
-  | 'multiselect'
-  | 'daterange';
+  | "text"
+  | "number"
+  | "boolean"
+  | "date"
+  | "select"
+  | "multiselect"
+  | "daterange";
 
 /** Base column definition for AG Grid usage */
 export interface ListColumn<TData extends DataViewItem> extends ColDef<TData> {
@@ -68,7 +68,7 @@ export interface ProfileRenameInput {
 export interface FetchDataParams {
   startRow?: number;
   endRow?: number;
-  sortModel: { colId: string; sort: 'asc' | 'desc' }[];
+  sortModel: { colId: string; sort: "asc" | "desc" }[];
   filterModel: FilterModel | AdvancedFilterModel | null;
   quickFilterText?: string;
   groupKeys: string[];
@@ -89,9 +89,9 @@ export interface FetchDataResult<TData> {
 
 /** Shared data loading contract for all views */
 export type ListViewDataSourceProps<TData extends DataViewItem> =
-  | { dataMode?: 'client'; rowData: TData[]; onFetchData?: never }
+  | { dataMode?: "client"; rowData: TData[]; onFetchData?: never }
   | {
-      dataMode: 'server';
+      dataMode: "server";
       onFetchData: (params: FetchDataParams) => Promise<FetchDataResult<TData>>;
       rowData?: never;
     };
@@ -150,12 +150,12 @@ export type ProfileOptions =
  */
 export type ExportFileNameResolver =
   | string
-  | ((mode: 'csv' | 'excel') => string);
+  | ((mode: "csv" | "excel") => string);
 
 /** Configuration options specifically for ListView (AG Grid) */
 export type ListViewOptions<TData extends DataViewItem> = ProfileOptions & {
   editable?: boolean;
-  selectionMode?: 'single' | 'multiple' | 'none';
+  selectionMode?: "single" | "multiple" | "none";
   showCheckboxes?: boolean;
   onGridReady?: (params: GridReadyEvent<TData>) => void;
   onSelectionChanged?: (selectedRows: TData[]) => void;

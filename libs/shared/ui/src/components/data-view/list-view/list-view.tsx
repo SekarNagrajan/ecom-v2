@@ -1,56 +1,56 @@
 import {
-  ModuleRegistry,
-  ClientSideRowModelModule,
-  RowSelectionModule,
-  TextFilterModule,
-  NumberFilterModule,
-  DateFilterModule,
-  CsvExportModule,
-  ValidationModule,
-  ColumnAutoSizeModule,
-  TextEditorModule,
-  SelectEditorModule,
-  NumberEditorModule,
-  DateEditorModule,
-  CheckboxEditorModule,
-  QuickFilterModule,
-  ColumnApiModule,
-  RenderApiModule,
-  RowStyleModule,
-} from 'ag-grid-community';
+    CheckboxEditorModule,
+    ClientSideRowModelModule,
+    ColumnApiModule,
+    ColumnAutoSizeModule,
+    CsvExportModule,
+    DateEditorModule,
+    DateFilterModule,
+    ModuleRegistry,
+    NumberEditorModule,
+    NumberFilterModule,
+    QuickFilterModule,
+    RenderApiModule,
+    RowSelectionModule,
+    RowStyleModule,
+    SelectEditorModule,
+    TextEditorModule,
+    TextFilterModule,
+    ValidationModule,
+} from "ag-grid-community";
 import {
-  ServerSideRowModelModule,
-  ServerSideRowModelApiModule,
-  ClipboardModule,
-  RowGroupingModule,
-  MasterDetailModule,
-  RowApiModule,
-  PivotModule,
-  CellSelectionModule,
-  CellStyleModule,
-  CustomEditorModule,
-  GridStateModule,
-  PaginationModule,
-  ScrollApiModule,
-  UndoRedoEditModule,
-  SideBarModule,
-  ColumnsToolPanelModule,
-  FiltersToolPanelModule,
-  SetFilterModule,
-  MenuModule,
-  ExcelExportModule,
-  RichSelectModule,
-} from 'ag-grid-enterprise';
-import { Flex, theme as antdTheme } from 'antd';
+    CellSelectionModule,
+    CellStyleModule,
+    ClipboardModule,
+    ColumnsToolPanelModule,
+    CustomEditorModule,
+    ExcelExportModule,
+    FiltersToolPanelModule,
+    GridStateModule,
+    MasterDetailModule,
+    MenuModule,
+    PaginationModule,
+    PivotModule,
+    RichSelectModule,
+    RowApiModule,
+    RowGroupingModule,
+    ScrollApiModule,
+    ServerSideRowModelApiModule,
+    ServerSideRowModelModule,
+    SetFilterModule,
+    SideBarModule,
+    UndoRedoEditModule,
+} from "ag-grid-enterprise";
+import { Flex, theme as antdTheme } from "antd";
 
-import type { DataViewItem } from '../data-view-item';
-import { ListViewGrid } from './components/list-view-grid';
-import { ListViewPagination } from './components/list-view-pagination';
-import { ListViewToolbar } from './components/list-view-toolbar';
-import { SaveProfileModal } from './components/save-profile-modal';
-import { ListViewContext, type ListViewContextValue } from './context';
-import { useListViewLogic } from './hooks/use-list-view-logic';
-import type { ListViewProps } from './types';
+import type { DataViewItem } from "../data-view-item";
+import { ListViewGrid } from "./components/list-view-grid";
+import { ListViewPagination } from "./components/list-view-pagination";
+import { ListViewToolbar } from "./components/list-view-toolbar";
+import { SaveProfileModal } from "./components/save-profile-modal";
+import { ListViewContext, type ListViewContextValue } from "./context";
+import { useListViewLogic } from "./hooks/use-list-view-logic";
+import type { ListViewProps } from "./types";
 
 ModuleRegistry.registerModules([
   ClientSideRowModelModule,
@@ -94,16 +94,16 @@ ModuleRegistry.registerModules([
 ]);
 
 export const ListView = <TData extends DataViewItem>(
-  props: ListViewProps<TData>
+  props: ListViewProps<TData>,
 ) => {
   const { state, refs, handlers } = useListViewLogic<TData>(props);
   const { token } = antdTheme.useToken();
-  const isAutoHeight = props.gridOptions?.domLayout === 'autoHeight';
+  const isAutoHeight = props.gridOptions?.domLayout === "autoHeight";
 
   const showToolbarProp = props.showToolbar ?? true;
   const showToolbar = showToolbarProp !== false;
   const toolbarOptions =
-    typeof showToolbarProp === 'object' ? showToolbarProp : {};
+    typeof showToolbarProp === "object" ? showToolbarProp : {};
 
   const {
     rowCount,
@@ -168,9 +168,9 @@ export const ListView = <TData extends DataViewItem>(
         vertical
         gap={token.marginXS}
         style={{
-          height: isAutoHeight ? 'auto' : '100%',
-          width: '100%',
-          background: 'inherit',
+          height: isAutoHeight ? "auto" : "100%",
+          width: "100%",
+          background: "inherit",
           ...props.style,
         }}
         className={props.className}

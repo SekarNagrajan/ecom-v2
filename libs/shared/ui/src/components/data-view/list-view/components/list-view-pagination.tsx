@@ -1,8 +1,10 @@
-import type { GridApi } from 'ag-grid-community';
-import { Flex, Pagination, theme } from 'antd';
+// Modified by Sekar Nagarajan (2026-09-01 11:38)
+import type { GridApi } from "ag-grid-community";
+import { Flex, Pagination, theme } from "antd";
+import type { ReactNode } from "react";
 
-import type { DataViewItem } from '../../data-view-item';
-import { useListViewContext } from '../context';
+import type { DataViewItem } from "../../data-view-item";
+import { useListViewContext } from "../context";
 
 type ListViewPaginationProps<TData extends DataViewItem> = {
   gridApi: GridApi<TData> | null;
@@ -11,6 +13,7 @@ type ListViewPaginationProps<TData extends DataViewItem> = {
   setCurrentPage: (page: number) => void;
   setPageSize: (size: number) => void;
   disabled?: boolean;
+  leftContent?: ReactNode;
 };
 
 export const ListViewPagination = <TData extends DataViewItem>({
@@ -31,7 +34,7 @@ export const ListViewPagination = <TData extends DataViewItem>({
       setPageSize(pSize);
       gridApi.paginationGoToPage(page - 1);
       if (pSize !== gridApi.paginationGetPageSize()) {
-        gridApi.setGridOption('paginationPageSize', pSize);
+        gridApi.setGridOption("paginationPageSize", pSize);
       }
     }
   };
@@ -40,13 +43,13 @@ export const ListViewPagination = <TData extends DataViewItem>({
 
   return (
     <Flex
-      justify={isMobile ? 'center' : 'end'}
+      justify={isMobile ? "center" : "end"}
       align="center"
       wrap="wrap"
       gap={token.marginXS}
       style={{
         padding: token.paddingXS,
-        background: 'inherit',
+        background: "inherit",
       }}
     >
       <Pagination

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-31 13:09)
+// Modified by Sekar Nagarajan (2026-09-01 12:02)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
@@ -14,7 +14,7 @@ import {
   Select,
   Table,
   Tooltip,
-  Typography
+  Typography,
 } from "antd";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
@@ -40,15 +40,30 @@ import { SelectTemplateModal } from "./SelectTemplateModal";
 const { Text } = Typography;
 
 const POPULAR_PORTS = [
-  { value: "USNYC", label: "USNYC - New York, USA" },
-  { value: "SGSIN", label: "SGSIN - Singapore, Singapore" },
-  { value: "NLRTM", label: "NLRTM - Rotterdam, Netherlands" },
-  { value: "CNSHA", label: "CNSHA - Shanghai, China" },
-  { value: "DEHAM", label: "DEHAM - Hamburg, Germany" },
-  { value: "INNSA", label: "INNSA - Nhava Sheva, India" },
-  { value: "AEDXB", label: "AEDXB - Jebel Ali, UAE" },
-  { value: "GBFEL", label: "GBFEL - Felixstowe, UK" },
+  { value: "USNYC - New York, USA", label: "USNYC - New York, USA" },
+  { value: "SGSIN - Singapore, Singapore", label: "SGSIN - Singapore, Singapore" },
+  {
+    value: "NLRTM - Rotterdam, Netherlands",
+    label: "NLRTM - Rotterdam, Netherlands",
+  },
+  { value: "CNSHA - Shanghai, China", label: "CNSHA - Shanghai, China" },
+  { value: "DEHAM - Hamburg, Germany", label: "DEHAM - Hamburg, Germany" },
+  { value: "INNSA - Nhava Sheva, India", label: "INNSA - Nhava Sheva, India" },
+  { value: "AEDXB - Jebel Ali, UAE", label: "AEDXB - Jebel Ali, UAE" },
+  { value: "GBFEL - Felixstowe, UK", label: "GBFEL - Felixstowe, UK" },
 ];
+
+/** Prefer "CODE - Name" display; expand bare codes via popular ports when possible. */
+function resolvePortDisplay(value: string): string {
+  const trimmed = value.trim();
+  if (!trimmed) return "";
+  if (trimmed.includes(" - ")) return trimmed;
+  const code = extractPortCode(trimmed);
+  const popular = POPULAR_PORTS.find(
+    (p) => extractPortCode(p.value) === code,
+  );
+  return popular?.label ?? trimmed;
+}
 
 function routeMatchesPorts(
   route: SelectedRoute | null | undefined,
@@ -62,21 +77,64 @@ function routeMatchesPorts(
   );
 }
 
+// Modified by Sekar Nagarajan (2026-09-01 11:54) — full detail tooltips for truncated route/rate cards
+function formatSelectedRouteTooltip(route: SelectedRoute): string {
+  const lines = [
+    `Service: ${route.serviceName} (${route.serviceCode})`,
+    `Vessel: ${route.vesselName} (${route.vesselCode})`,
+    `Voyage: ${route.voyage}${route.bound ? `/${route.bound}` : ""}`,
+    `POL: ${route.polPortId} - ${route.polPortName}${
+      route.polTerminal ? ` · ${route.polTerminal}` : ""
+    }`,
+    `POD: ${route.podPortId} - ${route.podPortName}${
+      route.podTerminal ? ` · ${route.podTerminal}` : ""
+    }`,
+    `ETD: ${route.etd}`,
+    `ETA: ${route.eta}`,
+    `Transit: ${route.transitTimeDays} days`,
+    `Routing: ${route.isDirect ? "Direct" : route.shipmentKind || "Transshipment"}`,
+  ];
+  if (route.gateInCutoff) lines.push(`Gate-in cutoff: ${route.gateInCutoff}`);
+  if (route.siDocCutoff) lines.push(`SI cutoff: ${route.siDocCutoff}`);
+  if (route.vgmCutoff) lines.push(`VGM cutoff: ${route.vgmCutoff}`);
+  return lines.join("\n");
+}
+
+function formatSelectedRateTooltip(rate: BookingRateOption): string {
+  return [
+    `Rate No: ${rate.rateNo}`,
+    `Item: ${rate.itemNo}`,
+    `Amendment: ${rate.amdNo}`,
+    `Type: ${rate.rateType}`,
+    `Equipment: ${rate.eqpType}`,
+    `Amount: ${rate.amount} ${rate.currency}`,
+    `Customer: ${rate.customer}${
+      rate.customerCode ? ` (${rate.customerCode})` : ""
+    }`,
+  ].join("\n");
+}
+
+// Modified by Sekar Nagarajan (2026-09-01 12:02) — port fields show CODE - Name like dropdown
 function usePortAutocomplete(initialQuery = "") {
   const [query, setQuery] = useState(initialQuery);
   const { data: ports = [], isFetching } = usePortSearch(query);
 
   const options =
     query.trim().length >= 2
-      ? ports.map((p) => ({
-          value: p.portCode,
-          label: `${p.portCode} - ${p.portName}`,
-        }))
+      ? ports.map((p) => {
+          const display = `${p.portCode} - ${p.portName}`;
+          return {
+            value: display,
+            label: display,
+          };
+        })
       : POPULAR_PORTS.filter(
           (p) =>
             !query ||
             p.label.toLowerCase().includes(query.toLowerCase()) ||
-            p.value.toLowerCase().includes(query.toLowerCase()),
+            extractPortCode(p.value)
+              .toLowerCase()
+              .includes(query.toLowerCase()),
         );
 
   return { query, setQuery, options, isFetching };
@@ -101,8 +159,12 @@ export function MasterDetailsStep() {
   );
   const { data: dpwShipperTypes = [] } = useBookingLookups("dpwShipperTypes");
 
-  const originAC = usePortAutocomplete(payload.masterDetails?.origin || "");
-  const deliveryAC = usePortAutocomplete(payload.masterDetails?.delivery || "");
+  const originAC = usePortAutocomplete(
+    resolvePortDisplay(payload.masterDetails?.origin || ""),
+  );
+  const deliveryAC = usePortAutocomplete(
+    resolvePortDisplay(payload.masterDetails?.delivery || ""),
+  );
 
   const {
     control,
@@ -115,20 +177,26 @@ export function MasterDetailsStep() {
   } = useForm<MasterDetailsData>({
     // Modified by Sekar Nagarajan (2026-08-27 18:41)
     resolver: zodResolver(masterDetailsSchema) as Resolver<MasterDetailsData>,
-    defaultValues: payload.masterDetails || {
-      origin: "",
-      delivery: "",
-      cargoReadyDate: "",
-      haulageOriginType: "Merchant",
-      haulageDestinationType: "Merchant",
-      carriageContract: "",
-      onlineBookingNo: "",
-      agreementParty: "",
-      preferredAgency: "",
-      additionalInformation: "",
-      selectedRoute: null,
-      selectedRate: null,
-    },
+    defaultValues: payload.masterDetails
+      ? {
+          ...payload.masterDetails,
+          origin: resolvePortDisplay(payload.masterDetails.origin || ""),
+          delivery: resolvePortDisplay(payload.masterDetails.delivery || ""),
+        }
+      : {
+          origin: "",
+          delivery: "",
+          cargoReadyDate: "",
+          haulageOriginType: "Merchant",
+          haulageDestinationType: "Merchant",
+          carriageContract: "",
+          onlineBookingNo: "",
+          agreementParty: "",
+          preferredAgency: "",
+          additionalInformation: "",
+          selectedRoute: null,
+          selectedRate: null,
+        },
   });
 
   const selectedRoute = watch("selectedRoute");
@@ -155,9 +223,17 @@ export function MasterDetailsStep() {
 
   useEffect(() => {
     if (payload.masterDetails) {
-      reset(payload.masterDetails);
-      originAC.setQuery(payload.masterDetails.origin || "");
-      deliveryAC.setQuery(payload.masterDetails.delivery || "");
+      const nextOrigin = resolvePortDisplay(payload.masterDetails.origin || "");
+      const nextDelivery = resolvePortDisplay(
+        payload.masterDetails.delivery || "",
+      );
+      reset({
+        ...payload.masterDetails,
+        origin: nextOrigin,
+        delivery: nextDelivery,
+      });
+      originAC.setQuery(nextOrigin);
+      deliveryAC.setQuery(nextDelivery);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- sync from store only
   }, [payload.masterDetails, reset]);
@@ -189,10 +265,7 @@ export function MasterDetailsStep() {
         cargoReadyDate: readyDate.trim(),
       });
       const defaultRoute = pickDefaultBookingRoute(routes);
-      if (
-        defaultRoute &&
-        routeMatchesPorts(defaultRoute, origin, delivery)
-      ) {
+      if (defaultRoute && routeMatchesPorts(defaultRoute, origin, delivery)) {
         setValue("selectedRoute", defaultRoute, {
           shouldDirty: true,
           shouldValidate: true,
@@ -254,8 +327,8 @@ export function MasterDetailsStep() {
   };
 
   const handleSwapPorts = () => {
-    const origin = getValues("origin");
-    const delivery = getValues("delivery");
+    const origin = resolvePortDisplay(getValues("origin"));
+    const delivery = resolvePortDisplay(getValues("delivery"));
     setValue("origin", delivery, { shouldValidate: true, shouldDirty: true });
     setValue("delivery", origin, { shouldValidate: true, shouldDirty: true });
     originAC.setQuery(delivery || "");
@@ -329,8 +402,9 @@ export function MasterDetailsStep() {
                     options={originAC.options}
                     onSearch={originAC.setQuery}
                     onSelect={(val) => {
-                      field.onChange(val);
-                      originAC.setQuery(String(val));
+                      const display = resolvePortDisplay(String(val));
+                      field.onChange(display);
+                      originAC.setQuery(display);
                       clearSelectedRoute();
                       clearSelectedRate();
                     }}
@@ -388,8 +462,9 @@ export function MasterDetailsStep() {
                     options={deliveryAC.options}
                     onSearch={deliveryAC.setQuery}
                     onSelect={(val) => {
-                      field.onChange(val);
-                      deliveryAC.setQuery(String(val));
+                      const display = resolvePortDisplay(String(val));
+                      field.onChange(display);
+                      deliveryAC.setQuery(display);
                       clearSelectedRoute();
                       clearSelectedRate();
                     }}
@@ -466,105 +541,141 @@ export function MasterDetailsStep() {
             ) : null}
           </div>
 
-          {hasValidRoute && selectedRoute ? (
-            <div className="booking-selected-route">
-              <div>
-                <Text strong className="booking-selected-route__title">
-                  Selected route: {selectedRoute.serviceName} (
-                  {selectedRoute.serviceCode})
-                </Text>
-                <Text type="secondary" className="booking-selected-route__meta">
-                  {selectedRoute.vesselName} · Voy {selectedRoute.voyage}
-                  {selectedRoute.bound ? `/${selectedRoute.bound}` : ""} · ETD{" "}
-                  {selectedRoute.etd} · ETA {selectedRoute.eta} ·{" "}
-                  {selectedRoute.transitTimeDays} days
-                </Text>
-              </div>
-              <AppButton
-                icon={<AppIcon icon={Icons.refreshCw} size={14} />}
-                onClick={() => setIsRoutingModalOpen(true)}
-              >
-                Change Route
-              </AppButton>
-            </div>
-          ) : null}
-
-          {canSearchRates ? (
-            selectedRate ? (
-              <div className="booking-selected-route">
-                <div>
-                  <Text strong className="booking-selected-route__title">
-                    Selected rate: {selectedRate.rateNo} · Item{" "}
-                    {selectedRate.itemNo}
-                  </Text>
-                  <Text
-                    type="secondary"
-                    className="booking-selected-route__meta"
+          {/* Modified by Sekar Nagarajan (2026-09-01 11:50) — route + rate side-by-side single row */}
+          {(hasValidRoute && selectedRoute) || canSearchRates ? (
+            <div
+              className={[
+                "booking-selected-summary-row",
+                hasValidRoute && selectedRoute && selectedRate
+                  ? "booking-selected-summary-row--paired"
+                  : "",
+                canSearchRates && !selectedRate
+                  ? "booking-selected-summary-row--with-table"
+                  : "",
+              ]
+                .filter(Boolean)
+                .join(" ")}
+            >
+              {hasValidRoute && selectedRoute ? (
+                <div className="booking-selected-route">
+                  <Tooltip
+                    title={
+                      <span className="booking-selected-route__tooltip">
+                        {formatSelectedRouteTooltip(selectedRoute)}
+                      </span>
+                    }
                   >
-                    {selectedRate.rateType} · {selectedRate.eqpType} ·{" "}
-                    {selectedRate.amount} {selectedRate.currency} ·{" "}
-                    {selectedRate.customer}
-                  </Text>
+                    <div className="booking-selected-route__content">
+                      <Text strong className="booking-selected-route__title">
+                        Route: {selectedRoute.serviceName} (
+                        {selectedRoute.serviceCode})
+                      </Text>
+                      <Text
+                        type="secondary"
+                        className="booking-selected-route__meta"
+                      >
+                        {selectedRoute.vesselName} · Voy {selectedRoute.voyage}
+                        {selectedRoute.bound ? `/${selectedRoute.bound}` : ""} ·
+                        ETD {selectedRoute.etd} · ETA {selectedRoute.eta} ·{" "}
+                        {selectedRoute.transitTimeDays} days
+                      </Text>
+                    </div>
+                  </Tooltip>
+                  <AppButton
+                    icon={<AppIcon icon={Icons.refreshCw} size={14} />}
+                    onClick={() => setIsRoutingModalOpen(true)}
+                  >
+                    Change Route
+                  </AppButton>
                 </div>
-                <AppButton
-                  icon={<AppIcon icon={Icons.refreshCw} size={14} />}
-                  onClick={clearSelectedRate}
-                >
-                  Change
-                </AppButton>
-              </div>
-            ) : (
-              <Card
-                size="small"
-                title="Available Rates"
-                className="form-step-card form-step-section"
-              >
-                <div className="booking-rates-table custom-scroll">
-                  <Table
+              ) : null}
+
+              {canSearchRates ? (
+                selectedRate ? (
+                  <div className="booking-selected-route">
+                    <Tooltip
+                      title={
+                        <span className="booking-selected-route__tooltip">
+                          {formatSelectedRateTooltip(selectedRate)}
+                        </span>
+                      }
+                    >
+                      <div className="booking-selected-route__content">
+                        <Text strong className="booking-selected-route__title">
+                          Rate: {selectedRate.rateNo} · Item{" "}
+                          {selectedRate.itemNo}
+                        </Text>
+                        <Text
+                          type="secondary"
+                          className="booking-selected-route__meta"
+                        >
+                          {selectedRate.rateType} · {selectedRate.eqpType} ·{" "}
+                          {selectedRate.amount} {selectedRate.currency} ·{" "}
+                          {selectedRate.customer}
+                        </Text>
+                      </div>
+                    </Tooltip>
+                    <AppButton
+                      icon={<AppIcon icon={Icons.refreshCw} size={14} />}
+                      onClick={clearSelectedRate}
+                    >
+                      Change
+                    </AppButton>
+                  </div>
+                ) : (
+                  <Card
                     size="small"
-                    rowKey={(r) => `${r.rateNo}-${r.itemNo}-${r.amdNo}`}
-                    loading={ratesLoading}
-                    pagination={false}
-                    dataSource={availableRates}
-                    columns={[
-                      { title: "Rate No", dataIndex: "rateNo" },
-                      { title: "Item", dataIndex: "itemNo", width: 70 },
-                      { title: "Amd", dataIndex: "amdNo", width: 70 },
-                      { title: "Type", dataIndex: "rateType", width: 80 },
-                      { title: "Eqp", dataIndex: "eqpType", width: 80 },
-                      {
-                        title: "Amount",
-                        key: "amount",
-                        render: (_: unknown, row: BookingRateOption) =>
-                          `${row.amount} ${row.currency}`,
-                      },
-                      {
-                        title: "Customer",
-                        dataIndex: "customer",
-                        ellipsis: true,
-                      },
-                      {
-                        title: "",
-                        key: "select",
-                        width: 100,
-                        render: (_: unknown, row: BookingRateOption) => (
-                          <AppButton
-                            type="primary"
-                            size="small"
-                            loading={isApplyingDefaultRoute}
-                            disabled={isApplyingDefaultRoute}
-                            onClick={() => void handleSelectRate(row)}
-                          >
-                            Select
-                          </AppButton>
-                        ),
-                      },
-                    ]}
-                    locale={{ emptyText: "No rates for this lane" }}
-                  />
-                </div>
-              </Card>
-            )
+                    title="Available Rates"
+                    className="form-step-card form-step-section booking-selected-summary-row__rates"
+                  >
+                    <div className="booking-rates-table custom-scroll">
+                      <Table
+                        size="small"
+                        rowKey={(r) => `${r.rateNo}-${r.itemNo}-${r.amdNo}`}
+                        loading={ratesLoading}
+                        pagination={false}
+                        dataSource={availableRates}
+                        columns={[
+                          { title: "Rate No", dataIndex: "rateNo" },
+                          { title: "Item", dataIndex: "itemNo", width: 70 },
+                          { title: "Amd", dataIndex: "amdNo", width: 70 },
+                          { title: "Type", dataIndex: "rateType", width: 80 },
+                          { title: "Eqp", dataIndex: "eqpType", width: 80 },
+                          {
+                            title: "Amount",
+                            key: "amount",
+                            render: (_: unknown, row: BookingRateOption) =>
+                              `${row.amount} ${row.currency}`,
+                          },
+                          {
+                            title: "Customer",
+                            dataIndex: "customer",
+                            ellipsis: true,
+                          },
+                          {
+                            title: "",
+                            key: "select",
+                            width: 100,
+                            render: (_: unknown, row: BookingRateOption) => (
+                              <AppButton
+                                type="primary"
+                                size="small"
+                                loading={isApplyingDefaultRoute}
+                                disabled={isApplyingDefaultRoute}
+                                onClick={() => void handleSelectRate(row)}
+                              >
+                                Select
+                              </AppButton>
+                            ),
+                          },
+                        ]}
+                        locale={{ emptyText: "No rates for this lane" }}
+                      />
+                    </div>
+                  </Card>
+                )
+              ) : null}
+            </div>
           ) : null}
 
           {/* Modified by Sekar Nagarajan (2026-08-31 16:58) — gap from port row + five fields on one row from lg+ */}

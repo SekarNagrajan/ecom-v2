@@ -22,13 +22,10 @@ import {
   MOCK_VOLUME_KPIS,
   MOCK_VOLUME_TREND,
 } from "../mocks/dashboard.mock";
+import { DashboardModuleStyles } from "./dashboard-module-styles";
 import { DashboardKpiCards } from "./DashboardKpiCards";
 import { DashboardOngoingTable } from "./DashboardOngoingTable";
-import { DashboardModuleStyles } from "./dashboard-module-styles";
-import {
-  LaneOpportunitySection,
-  TopActiveLanesSection,
-} from "./LanesSection";
+import { LaneOpportunitySection, TopActiveLanesSection } from "./LanesSection";
 import { ShipmentIntelligenceSection } from "./ShipmentIntelligenceSection";
 import { ShipmentPlanningSection } from "./ShipmentPlanningSection";
 import { VolumeAnalyticsSection } from "./VolumeAnalyticsSection";
@@ -55,7 +52,8 @@ export function EnhancedDashboardView() {
               Create Booking
             </AppButton>
             <AppButton
-              icon={<AppIcon icon={Icons.refreshCw} size={16} />}
+              danger
+              icon={<AppIcon icon={Icons.refreshCw} size={16} tone="delete" />}
               onClick={() => void controller.loadSummary()}
               loading={controller.isLoading}
             >

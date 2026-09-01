@@ -1,4 +1,4 @@
-// Created by Sekar Nagarajan (2026-08-31 14:46)
+// Modified by Sekar Nagarajan (2026-09-01 12:04)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -77,30 +77,41 @@ export function ReferenceFieldsStyles() {
         color: ${token.colorTextSecondary};
         text-align: center;
       }
+      /* Modified by Sekar Nagarajan (2026-09-01 12:04) — 3-column field grid */
       .ref-fields-list {
-        display: flex;
-        flex-direction: column;
-        gap: ${token.marginSM}px;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: ${token.marginMD}px;
+        align-items: stretch;
       }
       .ref-fields-row {
         display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: ${token.marginMD}px;
+        flex-direction: column;
+        gap: ${token.marginXS}px;
+        min-width: 0;
         padding: ${token.paddingMD}px;
         border-radius: ${token.borderRadiusLG}px;
         border: 1px solid ${token.colorBorderSecondary};
         background: ${token.colorFillAlter};
       }
+      .ref-fields-row__top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: ${token.marginXS}px;
+        min-height: ${token.controlHeightSM}px;
+      }
       .ref-fields-row__label {
-        width: 180px;
-        flex-shrink: 0;
-        font-weight: ${token.fontWeightStrong};
-        color: ${token.colorText};
+        margin-bottom: 0;
+        min-width: 0;
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
       .ref-fields-row__value {
-        flex: 1;
-        min-width: 200px;
+        min-width: 0;
+        width: 100%;
       }
       .ref-fields-row__actions {
         flex-shrink: 0;
@@ -109,6 +120,14 @@ export function ReferenceFieldsStyles() {
         display: flex;
         flex-wrap: wrap;
         gap: ${token.marginSM}px;
+        width: 100%;
+      }
+      .ref-fields-radio.ant-radio-group {
+        width: 100%;
+      }
+      .ref-fields-radio .ant-radio-button-wrapper {
+        flex: 1;
+        text-align: center;
       }
       .ref-fields-radio__option {
         display: inline-flex;
@@ -132,6 +151,16 @@ export function ReferenceFieldsStyles() {
         border-color: ${token.colorPrimary};
         background: ${primaryTint8};
         color: ${token.colorPrimary};
+      }
+      @media (max-width: 991px) {
+        .ref-fields-list {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+      @media (max-width: 575px) {
+        .ref-fields-list {
+          grid-template-columns: 1fr;
+        }
       }
     `}</style>
   );

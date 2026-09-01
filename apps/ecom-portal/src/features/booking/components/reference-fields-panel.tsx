@@ -1,4 +1,4 @@
-// Created by Sekar Nagarajan (2026-08-31 14:46)
+// Modified by Sekar Nagarajan (2026-09-01 12:04)
 import { AppButton } from "@solverminds/shared-ui";
 import { Dropdown, Input, Radio, Typography } from "antd";
 import { useState } from "react";
@@ -125,7 +125,23 @@ export function ReferenceFieldsPanel({
         <div className="ref-fields-list">
           {fields.map((field) => (
             <div key={field.id} className="ref-fields-row">
-              <div className="ref-fields-row__label">{field.name}</div>
+              <div className="ref-fields-row__top">
+                <label className="form-field-label ref-fields-row__label">
+                  {field.name}
+                </label>
+                <div className="ref-fields-row__actions">
+                  <ListActionsRow>
+                    <ListActionButton
+                      title="Remove Field"
+                      icon={
+                        <AppIcon icon={Icons.trash} size={16} tone="delete" />
+                      }
+                      tone="delete"
+                      onClick={() => deleteField(field.id)}
+                    />
+                  </ListActionsRow>
+                </div>
+              </div>
               <div className="ref-fields-row__value">
                 {field.type === "radio" ? (
                   <Radio.Group
@@ -148,18 +164,6 @@ export function ReferenceFieldsPanel({
                     className="form-field-full-width"
                   />
                 )}
-              </div>
-              <div className="ref-fields-row__actions">
-                <ListActionsRow>
-                  <ListActionButton
-                    title="Remove Field"
-                    icon={
-                      <AppIcon icon={Icons.trash} size={16} tone="delete" />
-                    }
-                    tone="delete"
-                    onClick={() => deleteField(field.id)}
-                  />
-                </ListActionsRow>
               </div>
             </div>
           ))}

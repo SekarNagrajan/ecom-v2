@@ -1,15 +1,15 @@
-// Modified by Sekar Nagarajan (2026-08-28 00:35)
+// Modified by Sekar Nagarajan (2026-09-01 20:14)
 import { AppButton } from "@solverminds/shared-ui";
+import { useToast } from "@solverminds/shared-ui/hooks";
 import { useQuery } from "@tanstack/react-query";
 import { Flex, Table, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
 
-import { useToast } from "@solverminds/shared-ui/hooks";
 import { AppIcon, Icons } from "../../../components/icons";
 import {
-    BookingTemplateModalShell,
-    TemplateNameCell,
-    TemplateRouteCell,
+  BookingTemplateModalShell,
+  TemplateNameCell,
+  TemplateRouteCell,
 } from "../../../components/shared/booking-template-modal-shell";
 import { bookingApi } from "../api/booking.api";
 import { useBookingStore } from "../stores/booking.store";
@@ -46,8 +46,8 @@ export function SelectTemplateModal({
     {
       title: "Action",
       key: "action",
-      width: 70,
-      fixed: "left",
+      width: 100,
+      align: "center",
       render: (_: unknown, record) => (
         <AppButton
           type="primary"
@@ -69,19 +69,21 @@ export function SelectTemplateModal({
     {
       title: "Template Name",
       dataIndex: "templateName",
-      width: 160,
+      ellipsis: true,
       render: (value: string) => <TemplateNameCell name={value} />,
     },
     {
       title: "Origin",
       dataIndex: "origin",
-      width: 120,
+      width: 180,
+      ellipsis: true,
       render: (value: string) => <TemplateRouteCell value={value} />,
     },
     {
       title: "Delivery",
       dataIndex: "delivery",
-      width: 120,
+      width: 180,
+      ellipsis: true,
       render: (value: string) => <TemplateRouteCell value={value} />,
     },
   ];
@@ -93,6 +95,7 @@ export function SelectTemplateModal({
       icon={Icons.clipboardList}
       title="Select Booking Template"
       subtitle="Choose a saved template to pre-fill your booking form"
+      dialogSize="lg"
     >
       <Table
         className="booking-template-modal__table"
@@ -108,7 +111,7 @@ export function SelectTemplateModal({
         }}
         bordered={false}
         size="middle"
-        scroll={{ x: 640 }}
+        tableLayout="fixed"
         locale={{
           emptyText: (
             <Flex

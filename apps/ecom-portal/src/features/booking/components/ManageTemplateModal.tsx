@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-28 00:35)
+// Modified by Sekar Nagarajan (2026-09-01 20:14)
 import { useConfirm, useToast } from "@solverminds/shared-ui/hooks";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
@@ -7,13 +7,13 @@ import type { ColumnsType } from "antd/es/table";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import {
-    BookingTemplateModalShell,
-    TemplateNameCell,
-    TemplateRouteCell,
+  BookingTemplateModalShell,
+  TemplateNameCell,
+  TemplateRouteCell,
 } from "../../../components/shared/booking-template-modal-shell";
 import {
-    ListActionButton,
-    ListActionsRow,
+  ListActionButton,
+  ListActionsRow,
 } from "../../../components/shared/list-action-button";
 import { bookingApi } from "../api/booking.api";
 import { useBookingStore } from "../stores/booking.store";
@@ -99,33 +99,30 @@ export function ManageTemplateModal({
     {
       title: "Template Name",
       dataIndex: "templateName",
-      width: 200,
+      ellipsis: true,
       render: (value: string) => <TemplateNameCell name={value} />,
     },
     {
       title: "Origin",
       dataIndex: "origin",
-      width: 140,
+      width: 180,
+      ellipsis: true,
       render: (value: string) => <TemplateRouteCell value={value} />,
     },
     {
       title: "Delivery",
       dataIndex: "delivery",
-      width: 140,
+      width: 180,
+      ellipsis: true,
       render: (value: string) => <TemplateRouteCell value={value} />,
     },
     {
       title: "Action",
       key: "action",
-      width: 120,
-      fixed: "right",
+      width: 132,
+      align: "center",
       render: (_: unknown, record: BookingTemplate) => (
         <ListActionsRow>
-          <ListActionButton
-            title="View"
-            icon={<AppIcon icon={Icons.eye} size={16} tone="view" />}
-            onClick={() => handleView(record)}
-          />
           <ListActionButton
             title="Edit"
             icon={<AppIcon icon={Icons.edit} size={16} tone="edit" />}
@@ -150,6 +147,7 @@ export function ManageTemplateModal({
       icon={Icons.settings}
       title="Manage Booking Templates"
       subtitle="View, edit, or remove your saved booking templates"
+      dialogSize="lg"
     >
       <Table
         className="booking-template-modal__table"
@@ -165,7 +163,7 @@ export function ManageTemplateModal({
         }}
         bordered={false}
         size="middle"
-        scroll={{ x: 720 }}
+        tableLayout="fixed"
         locale={{
           emptyText: (
             <Flex

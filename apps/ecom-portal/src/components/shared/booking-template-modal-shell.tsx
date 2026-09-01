@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 18:52)
+// Modified by Sekar Nagarajan (2026-09-01 20:14)
 import { AppModal } from "@solverminds/shared-ui";
 import { Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
@@ -26,7 +26,7 @@ export function BookingTemplateModalShell({
   open,
   subtitle,
   title,
-  dialogSize = "md",
+  dialogSize = "lg",
 }: BookingTemplateModalShellProps) {
   return (
     <AppModal

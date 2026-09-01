@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-01 14:38)
+// Modified by Sekar Nagarajan (2026-09-01 18:40)
 // Container & Cargo Tracking Domain Types
 // Parity with Struts TrackingVo, MovementDetailsVo, and TrackingActvityResult
 
@@ -71,6 +71,46 @@ export interface TrackingLiveAisPosition {
   lastUpdate: string;
   locationLabel: string;
   source: string;
+}
+
+export type TrackingAisStatus =
+  | "underway"
+  | "moored"
+  | "anchored"
+  | "restricted"
+  | "arrived";
+
+/** Shared mock + live AIS vessel payload for Leaflet map. */
+export interface TrackingAisVessel {
+  mmsi: string;
+  name: string;
+  lat: number;
+  lon: number;
+  sog: number;
+  cog: number;
+  status: TrackingAisStatus;
+  dest: string;
+  eta: string;
+  type: string;
+  trail?: [number, number][];
+  /** True for the tracked shipment vessel (always kept from mock seed). */
+  isPrimary?: boolean;
+  from?: string;
+  to?: string;
+  /** Waypoints for great-circle densified path animation. */
+  waypoints?: [number, number][];
+  /** 0..1 progress along path at seed time. */
+  progress?: number;
+  /** Float index along densified path. */
+  idx?: number;
+  /** Fixed position for stationary vessels. */
+  pos?: [number, number];
+}
+
+export interface TrackingAisPort {
+  code: string;
+  name: string;
+  pos: [number, number];
 }
 
 export interface TrackingSearchResult {

@@ -535,10 +535,20 @@ export function GlobalThemeStyles() {
         justify-content: center;
         flex-shrink: 0;
       }
+      /* Modified by Sekar Nagarajan (2026-09-01 20:14) */
       .booking-template-modal__route-cell {
-        display: flex;
-        align-items: center;
-        gap: ${token.marginXXS + 2}px;
+        display: block;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        padding-inline-end: ${token.paddingXS}px;
+      }
+      .booking-template-modal__route-cell .ant-typography {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
       .booking-template-modal__confirm-content {
         margin-top: ${token.marginXS}px;
@@ -552,6 +562,12 @@ export function GlobalThemeStyles() {
         color: ${token.colorPrimary} !important;
         font-weight: ${token.fontWeightStrong};
         font-size: ${token.fontSizeSM}px;
+      }
+      .booking-template-modal .ant-table-tbody > tr > td {
+        vertical-align: middle;
+      }
+      .booking-template-modal .ant-table-cell-fix {
+        overflow: hidden;
       }
       .booking-template-modal .ant-table-tbody > tr:hover > td {
         background: ${primaryTint8} !important;

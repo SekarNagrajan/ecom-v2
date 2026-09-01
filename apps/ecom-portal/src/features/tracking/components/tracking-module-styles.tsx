@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-01 14:38)
+// Modified by Sekar Nagarajan (2026-09-01 18:40)
 import { theme } from "antd";
 import { tokenMix } from "../../theme/utils/token-mix";
 
@@ -597,6 +597,187 @@ export function TrackingModuleStyles() {
       }
       .tracking-live-map__empty {
         padding: ${token.paddingXL}px ${token.paddingLG}px;
+      }
+
+      /* Leaflet AIS Live Map */
+      .tracking-ais-map {
+        position: relative;
+        width: 100%;
+        height: min(70vh, 560px);
+        min-height: 360px;
+        border-radius: ${token.borderRadiusLG}px;
+        overflow: hidden;
+        border: 1px solid ${token.colorBorderSecondary};
+      }
+      .tracking-ais-map__leaflet {
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+      }
+      .tracking-ais-map__leaflet--ocean.leaflet-container,
+      .tracking-ais-map .leaflet-container {
+        font-family: inherit;
+        background: ${token.colorInfoBg};
+      }
+      .tracking-ais-port-icon {
+        background: transparent !important;
+        border: none !important;
+      }
+      .tracking-ais-port-icon__dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: ${token.colorText};
+        border: 2px solid ${token.colorBgContainer};
+        box-shadow: ${token.boxShadowSecondary};
+      }
+      .tracking-ais-route {
+        stroke: ${token.colorPrimary} !important;
+        stroke-width: 3;
+        stroke-opacity: 0.75;
+        fill: none !important;
+      }
+      .tracking-ais-trail {
+        fill: none !important;
+      }
+      .tracking-ais-trail--sailed {
+        stroke-width: 3;
+        stroke-opacity: 0.95;
+      }
+      .tracking-ais-trail--remaining {
+        stroke-width: 2;
+        stroke-opacity: 0.55;
+        stroke-dasharray: 4 8;
+      }
+      .tracking-ais-trail.is-selected.tracking-ais-trail--sailed {
+        stroke-width: 4;
+      }
+      .tracking-ais-trail--underway {
+        stroke: ${token.colorPrimary} !important;
+      }
+      .tracking-ais-trail--anchored {
+        stroke: ${token.colorWarning} !important;
+      }
+      .tracking-ais-trail--moored {
+        stroke: ${token.colorTextSecondary} !important;
+      }
+      .tracking-ais-trail--restricted,
+      .tracking-ais-trail--arrived {
+        stroke: ${token.colorSuccess} !important;
+      }
+      .tracking-ais-vessel-icon {
+        background: transparent !important;
+        border: none !important;
+      }
+      .tracking-ais-vessel-icon__rotator {
+        width: var(--tracking-ais-size, 24px);
+        height: var(--tracking-ais-size, 24px);
+        transform: rotate(var(--tracking-ais-cog, 0deg));
+        transition: transform 0.3s ease-in-out;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .tracking-ais-vessel-icon__svg {
+        width: 100%;
+        height: 100%;
+        filter: drop-shadow(0 1px 2px ${tokenMix(token.colorText, 35)});
+      }
+      .tracking-ais-vessel-icon__outline {
+        stroke: ${token.colorBgContainer};
+      }
+      .tracking-ais-status--underway {
+        color: ${token.colorPrimary};
+      }
+      .tracking-ais-status--anchored {
+        color: ${token.colorWarning};
+      }
+      .tracking-ais-status--moored {
+        color: ${token.colorTextSecondary};
+      }
+      .tracking-ais-status--restricted {
+        color: ${token.colorError};
+      }
+      .tracking-ais-status--arrived {
+        color: ${token.colorSuccess};
+      }
+      .tracking-ais-vessel-icon__rotator.is-selected .tracking-ais-vessel-icon__outline {
+        stroke: ${token.colorSuccess};
+        stroke-width: 2;
+      }
+      .tracking-ais-legend {
+        position: absolute;
+        bottom: ${token.marginMD}px;
+        left: ${token.marginMD}px;
+        z-index: 1000;
+        background: ${token.colorBgContainer};
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadius}px;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorText};
+        box-shadow: ${token.boxShadowSecondary};
+      }
+      .tracking-ais-legend__title {
+        font-weight: ${token.fontWeightStrong};
+        margin-bottom: ${token.marginXXS}px;
+      }
+      .tracking-ais-legend__row {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginXS}px;
+        margin-top: ${token.marginXXS}px;
+      }
+      .tracking-ais-legend__row--line {
+        margin-top: ${token.marginSM}px;
+        color: ${token.colorTextSecondary};
+      }
+      .tracking-ais-legend__swatch {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        display: inline-block;
+        background: currentColor;
+      }
+      .tracking-ais-legend__line {
+        width: 18px;
+        display: inline-block;
+        border-top: 2px solid ${token.colorPrimary};
+      }
+      .tracking-ais-legend__line--remaining {
+        border-top-style: dashed;
+      }
+      .tracking-ais-popup {
+        min-width: 200px;
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorText};
+      }
+      .tracking-ais-popup__title {
+        font-size: ${token.fontSize}px;
+        font-weight: ${token.fontWeightStrong};
+        margin-bottom: ${token.marginXXS}px;
+        color: ${token.colorText};
+      }
+      .tracking-ais-popup__badge {
+        display: inline-block;
+        margin-bottom: ${token.marginXS}px;
+        padding: 0 ${token.paddingXS}px;
+        border-radius: ${token.borderRadiusSM}px;
+        background: ${token.colorPrimaryBg};
+        color: ${token.colorPrimary};
+        font-size: ${token.fontSizeSM}px;
+      }
+      .tracking-ais-popup__row {
+        display: flex;
+        justify-content: space-between;
+        gap: ${token.marginSM}px;
+        line-height: 1.7;
+      }
+      .tracking-ais-popup__key {
+        color: ${token.colorTextSecondary};
+      }
+      .tracking-ais-popup__val {
+        font-weight: ${token.fontWeightStrong};
       }
 
       @media (max-width: 767px) {

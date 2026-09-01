@@ -89,7 +89,9 @@ export function ENSStep() {
   };
 
   const onSubmit = (data: EnsData) => {
-    updateEns(data.euCustomsZone ? data : { ...defaults, euCustomsZone: false });
+    updateEns(
+      data.euCustomsZone ? data : { ...defaults, euCustomsZone: false },
+    );
     nextStep();
   };
 

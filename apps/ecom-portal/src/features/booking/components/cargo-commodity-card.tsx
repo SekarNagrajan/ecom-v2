@@ -1,28 +1,28 @@
 // Modified by Sekar Nagarajan (2026-09-01 16:00)
 import {
-  Col,
-  Flex,
-  Input,
-  InputNumber,
-  Row,
-  Select,
-  Switch,
-  Typography,
+    Col,
+    Flex,
+    Input,
+    InputNumber,
+    Row,
+    Select,
+    Switch,
+    Typography,
 } from "antd";
 import {
-  Controller,
-  type Control,
-  type UseFormSetValue,
+    Controller,
+    type Control,
+    type UseFormSetValue,
 } from "react-hook-form";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import {
-  ListActionButton,
-  ListActionsRow,
+    ListActionButton,
+    ListActionsRow,
 } from "../../../components/shared/list-action-button";
 import {
-  FORM_YES_NO_SWITCH_CLASS,
-  yesNoSwitchInner,
+    FORM_YES_NO_SWITCH_CLASS,
+    yesNoSwitchInner,
 } from "../../../components/shared/yes-no-switch";
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import type { CargoData } from "../types/booking.types";

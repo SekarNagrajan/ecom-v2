@@ -2,22 +2,22 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
 import {
-  Alert,
-  Card,
-  Checkbox,
-  Col,
-  InputNumber,
-  Row,
-  Select,
-  Switch,
-  Typography,
+    Alert,
+    Card,
+    Checkbox,
+    Col,
+    InputNumber,
+    Row,
+    Select,
+    Switch,
+    Typography,
 } from "antd";
 import { Controller, useForm, type Resolver } from "react-hook-form";
 import { z } from "zod";
 
 import {
-  FORM_YES_NO_SWITCH_CLASS,
-  yesNoSwitchInner,
+    FORM_YES_NO_SWITCH_CLASS,
+    yesNoSwitchInner,
 } from "../../../../components/shared/yes-no-switch";
 import { RESPONSIVE_COL } from "../../../../constants/responsive-grid";
 import { insuranceSchema } from "../../../booking/types/booking.types";
@@ -121,14 +121,14 @@ export function BlInsuranceStep({
                   control={control}
                   name="isInsuranceRequired"
                   render={({ field: { value, onChange } }) => (
-                <div className="form-yes-no-switch-wrap">
-                  <Switch
-                    className={FORM_YES_NO_SWITCH_CLASS}
-                    checked={Boolean(value)}
-                    onChange={onChange}
-                    {...yesNoSwitchInner}
-                  />
-                </div>
+                    <div className="form-yes-no-switch-wrap">
+                      <Switch
+                        className={FORM_YES_NO_SWITCH_CLASS}
+                        checked={Boolean(value)}
+                        onChange={onChange}
+                        {...yesNoSwitchInner}
+                      />
+                    </div>
                   )}
                 />
               </div>

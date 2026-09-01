@@ -13,10 +13,10 @@ import {
 import { useSiDetailQuery } from "./api/si.queries";
 import { SiLoadingCenter } from "./components/si-loading-center";
 import { SiModuleStyles } from "./components/si-module-styles";
-import { buildSiWizardSteps } from "./config/si-wizard-steps";
 import { DEFAULT_SI_WIZARD_CONFIG } from "./config/si-wizard-config";
-import { useSiWizardConfigQuery } from "./hooks/use-si-wizard-config";
+import { buildSiWizardSteps } from "./config/si-wizard-steps";
 import { useSiWizard } from "./hooks/use-si-wizard";
+import { useSiWizardConfigQuery } from "./hooks/use-si-wizard-config";
 
 const { Text } = Typography;
 
@@ -113,8 +113,14 @@ export function ShippingInstructionWizardRoute() {
               status="error"
               title="Unable to load Shipping Instruction"
               extra={
-                <AppButton type="primary" onClick={goDashboard}>
-                  Back to Dashboard
+                <AppButton
+                  danger
+                  icon={
+                    <AppIcon icon={Icons.arrowLeft} size={16} tone="delete" />
+                  }
+                  onClick={goDashboard}
+                >
+                  Back to SI
                 </AppButton>
               }
             />
@@ -158,7 +164,15 @@ export function ShippingInstructionWizardRoute() {
             )}
             marginBottom={0}
             extra={
-              <AppButton onClick={goDashboard}>Back to Dashboard</AppButton>
+              <AppButton
+                danger
+                icon={
+                  <AppIcon icon={Icons.arrowLeft} size={16} tone="delete" />
+                }
+                onClick={goDashboard}
+              >
+                Back to SI
+              </AppButton>
             }
           />
         </div>

@@ -8,8 +8,8 @@ import { AppIcon, Icons } from "../../components/icons";
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import {
-    MODULE_TITLES,
-    formatModuleScreenTitle,
+  MODULE_TITLES,
+  formatModuleScreenTitle,
 } from "../../constants/module-titles";
 import { siListQueryOptions } from "./api/si.queries";
 import { SiLoadingCenter } from "./components/si-loading-center";
@@ -45,8 +45,12 @@ export function ShippingInstructionViewRoute() {
           status="404"
           title="Shipping Instruction not found"
           extra={
-            <AppButton type="primary" onClick={goDashboard}>
-              Back to Dashboard
+            <AppButton
+              danger
+              icon={<AppIcon icon={Icons.arrowLeft} size={16} tone="delete" />}
+              onClick={goDashboard}
+            >
+              Back to SI
             </AppButton>
           }
         />
@@ -67,7 +71,15 @@ export function ShippingInstructionViewRoute() {
             )}
             marginBottom={0}
             extra={
-              <AppButton onClick={goDashboard}>Back to Dashboard</AppButton>
+              <AppButton
+                danger
+                icon={
+                  <AppIcon icon={Icons.arrowLeft} size={16} tone="delete" />
+                }
+                onClick={goDashboard}
+              >
+                Back to SI
+              </AppButton>
             }
           />
         </Card>

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-01 11:54)
+// Modified by Sekar Nagarajan (2026-09-01 12:22)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -32,6 +32,26 @@ export function BookingModuleStyles() {
         flex-direction: column;
         gap: ${token.marginLG}px;
         width: 100%;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-01 12:22) — view drawer section rows */
+      .booking-view-sections {
+        width: 100%;
+      }
+      .booking-view-row {
+        display: grid;
+        gap: ${token.marginMD}px;
+        width: 100%;
+        align-items: stretch;
+      }
+      .booking-view-row--2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .booking-view-row--1 {
+        grid-template-columns: 1fr;
+      }
+      .booking-view-row .booking-panel.ant-card {
+        height: 100%;
+        margin: 0;
       }
 
       .booking-drawer-title {
@@ -275,6 +295,19 @@ export function BookingModuleStyles() {
       .booking-grid-wrap {
         height: 280px;
         min-height: 220px;
+      }
+      .booking-haulage-grid {
+        height: 320px;
+        min-height: 240px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+      .booking-haulage-grid .ag-theme-alpine,
+      .booking-haulage-grid > div {
+        flex: 1;
+        min-height: 0;
+        height: 100%;
       }
       .booking-disclaimer {
         margin-top: ${token.marginSM}px;
@@ -923,6 +956,9 @@ export function BookingModuleStyles() {
         flex-shrink: 0;
       }
       @media (max-width: 991px) {
+        .booking-view-row--2 {
+          grid-template-columns: 1fr;
+        }
         .booking-selected-summary-row--paired {
           grid-template-columns: 1fr;
         }
@@ -1613,28 +1649,85 @@ export function BookingModuleStyles() {
         margin-bottom: ${token.marginMD}px;
       }
 
-      .booking-activity-list {
+      .booking-activity-steps {
         list-style: none;
         margin: 0;
         padding: 0;
-        max-height: 320px;
+        max-height: 360px;
         overflow-y: auto;
       }
-      .booking-activity-list__item {
-        padding: ${token.paddingSM}px 0;
-        border-bottom: 1px solid ${token.colorBorderSecondary};
+      .booking-activity-steps__item {
+        display: flex;
+        align-items: stretch;
+        gap: ${token.marginSM}px;
+        min-width: 0;
       }
-      .booking-activity-list__item:last-child {
-        border-bottom: none;
+      .booking-activity-steps__rail {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex-shrink: 0;
+        width: 28px;
       }
-      .booking-activity-list__action {
+      .booking-activity-steps__icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .booking-activity-steps__icon--primary {
+        background: ${primaryTint8};
+        color: ${token.colorPrimary};
+      }
+      .booking-activity-steps__icon--success {
+        background: ${successTint8};
+        color: ${token.colorSuccess};
+      }
+      .booking-activity-steps__icon--warning {
+        background: ${warningTint8};
+        color: ${token.colorWarning};
+      }
+      .booking-activity-steps__icon--error {
+        background: ${errorTint8};
+        color: ${token.colorError};
+      }
+      .booking-activity-steps__icon--info {
+        background: ${infoTint8};
+        color: ${token.colorInfo};
+      }
+      .booking-activity-steps__icon--muted {
+        background: ${token.colorFillSecondary};
+        color: ${token.colorTextSecondary};
+      }
+      .booking-activity-steps__connector {
+        flex: 1;
+        width: 2px;
+        min-height: ${token.marginMD}px;
+        margin-top: ${token.marginXXS}px;
+        margin-bottom: ${token.marginXXS}px;
+        background: ${token.colorBorderSecondary};
+      }
+      .booking-activity-steps__body {
+        flex: 1;
+        min-width: 0;
+        padding-bottom: ${token.paddingMD}px;
+      }
+      .booking-activity-steps__item--last .booking-activity-steps__body {
+        padding-bottom: 0;
+      }
+      .booking-activity-steps__action {
         display: block;
+        line-height: 1.3;
       }
-      .booking-activity-list__meta {
+      .booking-activity-steps__meta {
         display: block;
         font-size: ${token.fontSizeSM}px;
+        margin-top: ${token.marginXXS}px;
       }
-      .booking-activity-list__note {
+      .booking-activity-steps__note {
         display: block;
         margin-top: ${token.marginXXS}px;
         color: ${token.colorTextSecondary};

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-31 17:13)
+// Modified by Sekar Nagarajan (2026-09-01 12:29)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -22,6 +22,7 @@ export function SiModuleStyles() {
   const cyanTint14 = tokenMix(token.cyan, 14);
   const orangeTint14 = tokenMix(token.orange, 14);
   const purpleTint14 = tokenMix(token.purple, 14);
+  const errorTint8 = tokenMix(token.colorError, 8);
 
   return (
     <style>{`
@@ -554,6 +555,152 @@ export function SiModuleStyles() {
       }
       .si-section-title {
         margin: 0 !important;
+      }
+      .si-section-title-row {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXS}px;
+      }
+
+      /* Modified by Sekar Nagarajan (2026-09-01 12:29) — SI view drawer section rows */
+      .si-view-sections {
+        width: 100%;
+      }
+      .si-view-row {
+        display: grid;
+        gap: ${token.marginMD}px;
+        width: 100%;
+        align-items: stretch;
+      }
+      .si-view-row--2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .si-view-row--1 {
+        grid-template-columns: 1fr;
+      }
+      .si-view-row .si-panel.ant-card {
+        height: 100%;
+        margin: 0;
+      }
+      .si-meta-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: ${token.marginMD}px ${token.marginLG}px;
+      }
+      .si-meta-item__label {
+        display: block;
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+        margin-bottom: ${token.marginXXS}px;
+      }
+      .si-meta-item__value {
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+        word-break: break-word;
+      }
+      .si-party-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: ${token.marginSM}px;
+      }
+      .si-cargo-grid,
+      .si-charges-grid {
+        height: 280px;
+        min-height: 220px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+      .si-cargo-grid .ag-theme-alpine,
+      .si-cargo-grid > div,
+      .si-charges-grid .ag-theme-alpine,
+      .si-charges-grid > div {
+        flex: 1;
+        min-height: 0;
+        height: 100%;
+      }
+      .si-activity-steps {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        max-height: 360px;
+        overflow-y: auto;
+      }
+      .si-activity-steps__item {
+        display: flex;
+        align-items: stretch;
+        gap: ${token.marginSM}px;
+        min-width: 0;
+      }
+      .si-activity-steps__rail {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex-shrink: 0;
+        width: 28px;
+      }
+      .si-activity-steps__icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .si-activity-steps__icon--primary {
+        background: ${primaryTint8};
+        color: ${token.colorPrimary};
+      }
+      .si-activity-steps__icon--success {
+        background: ${successTint8};
+        color: ${token.colorSuccess};
+      }
+      .si-activity-steps__icon--warning {
+        background: ${warningTint8};
+        color: ${token.colorWarning};
+      }
+      .si-activity-steps__icon--error {
+        background: ${errorTint8};
+        color: ${token.colorError};
+      }
+      .si-activity-steps__icon--info {
+        background: ${infoTint8};
+        color: ${token.colorInfo};
+      }
+      .si-activity-steps__icon--muted {
+        background: ${token.colorFillSecondary};
+        color: ${token.colorTextSecondary};
+      }
+      .si-activity-steps__connector {
+        flex: 1;
+        width: 2px;
+        min-height: ${token.marginMD}px;
+        margin-top: ${token.marginXXS}px;
+        margin-bottom: ${token.marginXXS}px;
+        background: ${token.colorBorderSecondary};
+      }
+      .si-activity-steps__body {
+        flex: 1;
+        min-width: 0;
+        padding-bottom: ${token.paddingMD}px;
+      }
+      .si-activity-steps__item--last .si-activity-steps__body {
+        padding-bottom: 0;
+      }
+      .si-activity-steps__action {
+        display: block;
+        line-height: 1.3;
+      }
+      .si-activity-steps__meta {
+        display: block;
+        font-size: ${token.fontSizeSM}px;
+        margin-top: ${token.marginXXS}px;
+      }
+      .si-activity-steps__note {
+        display: block;
+        margin-top: ${token.marginXXS}px;
+        color: ${token.colorTextSecondary};
       }
 
       .si-drawer-title {
@@ -1427,6 +1574,9 @@ export function SiModuleStyles() {
         }
         .si-drawer-body.custom-scroll {
           padding: ${token.paddingMD}px;
+        }
+        .si-view-row--2 {
+          grid-template-columns: 1fr;
         }
         .si-drawer-actions {
           width: 100%;

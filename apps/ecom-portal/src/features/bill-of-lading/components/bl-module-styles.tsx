@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-31 17:25)
+// Modified by Sekar Nagarajan (2026-09-01 12:29)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -23,6 +23,7 @@ export function BlModuleStyles() {
   const orangeTint14 = tokenMix(token.orange, 14);
   const purpleTint8 = tokenMix(token.purple, 8);
   const purpleTint14 = tokenMix(token.purple, 14);
+  const errorTint8 = tokenMix(token.colorError, 8);
 
   return (
     <style>{`
@@ -268,6 +269,151 @@ export function BlModuleStyles() {
       }
       .bl-section-title {
         margin: 0 !important;
+      }
+      .bl-section-title-row {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXS}px;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-01 12:29) — BL view drawer section rows */
+      .bl-view-sections {
+        width: 100%;
+      }
+      .bl-view-row {
+        display: grid;
+        gap: ${token.marginMD}px;
+        width: 100%;
+        align-items: stretch;
+      }
+      .bl-view-row--2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .bl-view-row--1 {
+        grid-template-columns: 1fr;
+      }
+      .bl-view-row .bl-panel.ant-card {
+        height: 100%;
+        margin: 0;
+      }
+      .bl-meta-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: ${token.marginMD}px ${token.marginLG}px;
+      }
+      .bl-meta-item__label {
+        display: block;
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+        margin-bottom: ${token.marginXXS}px;
+      }
+      .bl-meta-item__value {
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+        word-break: break-word;
+      }
+      .bl-party-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: ${token.marginSM}px;
+      }
+      .bl-cargo-grid,
+      .bl-charges-grid {
+        height: 280px;
+        min-height: 220px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+      .bl-cargo-grid .ag-theme-alpine,
+      .bl-cargo-grid > div,
+      .bl-charges-grid .ag-theme-alpine,
+      .bl-charges-grid > div {
+        flex: 1;
+        min-height: 0;
+        height: 100%;
+      }
+      .bl-activity-steps {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        max-height: 360px;
+        overflow-y: auto;
+      }
+      .bl-activity-steps__item {
+        display: flex;
+        align-items: stretch;
+        gap: ${token.marginSM}px;
+        min-width: 0;
+      }
+      .bl-activity-steps__rail {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex-shrink: 0;
+        width: 28px;
+      }
+      .bl-activity-steps__icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .bl-activity-steps__icon--primary {
+        background: ${primaryTint8};
+        color: ${token.colorPrimary};
+      }
+      .bl-activity-steps__icon--success {
+        background: ${successTint8};
+        color: ${token.colorSuccess};
+      }
+      .bl-activity-steps__icon--warning {
+        background: ${warningTint8};
+        color: ${token.colorWarning};
+      }
+      .bl-activity-steps__icon--error {
+        background: ${errorTint8};
+        color: ${token.colorError};
+      }
+      .bl-activity-steps__icon--info {
+        background: ${infoTint8};
+        color: ${token.colorInfo};
+      }
+      .bl-activity-steps__icon--muted {
+        background: ${token.colorFillSecondary};
+        color: ${token.colorTextSecondary};
+      }
+      .bl-activity-steps__connector {
+        flex: 1;
+        width: 2px;
+        min-height: ${token.marginMD}px;
+        margin-top: ${token.marginXXS}px;
+        margin-bottom: ${token.marginXXS}px;
+        background: ${token.colorBorderSecondary};
+      }
+      .bl-activity-steps__body {
+        flex: 1;
+        min-width: 0;
+        padding-bottom: ${token.paddingMD}px;
+      }
+      .bl-activity-steps__item--last .bl-activity-steps__body {
+        padding-bottom: 0;
+      }
+      .bl-activity-steps__action {
+        display: block;
+        line-height: 1.3;
+      }
+      .bl-activity-steps__meta {
+        display: block;
+        font-size: ${token.fontSizeSM}px;
+        margin-top: ${token.marginXXS}px;
+      }
+      .bl-activity-steps__note {
+        display: block;
+        margin-top: ${token.marginXXS}px;
+        color: ${token.colorTextSecondary};
       }
       .bl-panel > .ant-card-body {
         padding: ${token.paddingMD}px !important;
@@ -584,6 +730,9 @@ export function BlModuleStyles() {
         }
         .bl-drawer-body.custom-scroll {
           padding: ${token.paddingMD}px;
+        }
+        .bl-view-row--2 {
+          grid-template-columns: 1fr;
         }
         .bl-drawer-actions {
           width: 100%;

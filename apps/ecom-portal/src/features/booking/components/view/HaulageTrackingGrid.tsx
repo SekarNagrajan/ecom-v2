@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 11:40)
+// Modified by Sekar Nagarajan (2026-09-01 12:22)
 import { ListView } from "@solverminds/shared-ui/data-view/list-view";
 import type { ColDef } from "ag-grid-community";
 import { Card, Typography } from "antd";
@@ -12,6 +12,7 @@ interface HaulageTrackingGridProps {
 }
 
 interface HaulageDetails {
+  id: string;
   containerNo: string;
   equipmentType: string;
   customerReference: string;
@@ -25,7 +26,7 @@ interface HaulageDetails {
   tmsActualDrop: string;
 }
 
-const columns: ColDef[] = [
+const columns: ColDef<HaulageDetails>[] = [
   { field: "containerNo", headerName: "Container No", minWidth: 150 },
   { field: "equipmentType", headerName: "Equipment Type", minWidth: 150 },
   {
@@ -48,47 +49,73 @@ const columns: ColDef[] = [
 ];
 
 export function HaulageTrackingGrid({ bookingId }: HaulageTrackingGridProps) {
-  const mockData: HaulageDetails[] = [
-    {
-      containerNo: "CMAU1234567",
-      equipmentType: "40HC",
-      customerReference: "REF-001",
-      pickupLocationCode: "USNYC",
-      pickupLocationName: "New York",
-      stopSequence: "1",
-      address: "123 Harbor Way, NY",
-      tmsScheduledPickup: "2026-09-01 10:00",
-      tmsActualPickup: "2026-09-01 10:15",
-      tmsScheduledDrop: "2026-09-01 14:00",
-      tmsActualDrop: "",
-    },
-  ];
+  // Mock until haulage REST exists — keyed by bookingId for stable remounts
+  const mockData: HaulageDetails[] = bookingId
+    ? [
+        {
+          id: `${bookingId}-haul-1`,
+          containerNo: "CMAU1234567",
+          equipmentType: "40HC",
+          customerReference: "REF-001",
+          pickupLocationCode: "USNYC",
+          pickupLocationName: "New York",
+          stopSequence: "1",
+          address: "123 Harbor Way, NY",
+          tmsScheduledPickup: "2026-09-01 10:00",
+          tmsActualPickup: "2026-09-01 10:15",
+          tmsScheduledDrop: "2026-09-01 14:00",
+          tmsActualDrop: "",
+        },
+        {
+          id: `${bookingId}-haul-2`,
+          containerNo: "CMAU7654321",
+          equipmentType: "20DV",
+          customerReference: "REF-002",
+          pickupLocationCode: "USNYC",
+          pickupLocationName: "New York",
+          stopSequence: "2",
+          address: "45 Pier Street, NY",
+          tmsScheduledPickup: "2026-09-01 11:00",
+          tmsActualPickup: "",
+          tmsScheduledDrop: "2026-09-01 16:00",
+          tmsActualDrop: "",
+        },
+      ]
+    : [];
 
   if (!bookingId) return null;
 
   return (
-    <Card
-      className="booking-panel"
-      title={
-        <span className="booking-section-title">
-          <AppIcon icon={Icons.truck} size={16} />
-          <Title level={5} className="booking-panel__title">
-            Haulage Tracking Details
-          </Title>
-        </span>
-      }
-    >
-      <div className="booking-grid-wrap responsive-table-wrap custom-scroll ag-theme-alpine">
-        <ListView
-          rowData={mockData}
-          columnDefs={columns}
-          showToolbar={false}
-        />
-      </div>
-      <div className="booking-disclaimer">
-        * Disclaimer: All haulage times are subject to local traffic and
-        terminal conditions.
-      </div>
-    </Card>
+    <div className="booking-view-row booking-view-row--1">
+      <Card
+        className="booking-panel"
+        title={
+          <span className="booking-section-title">
+            <AppIcon icon={Icons.truck} size={16} />
+            <Title level={5} className="booking-panel__title">
+              Haulage Tracking Details
+            </Title>
+          </span>
+        }
+      >
+        <div className="booking-haulage-grid responsive-table-wrap custom-scroll ag-theme-alpine">
+          <ListView
+            rowData={mockData}
+            columnDefs={columns}
+            showToolbar={false}
+            pagination
+            paginationPageSize={10}
+            gridOptions={{
+              animateRows: true,
+              getRowId: (params) => params.data.id,
+            }}
+          />
+        </div>
+        <div className="booking-disclaimer">
+          * Disclaimer: All haulage times are subject to local traffic and
+          terminal conditions.
+        </div>
+      </Card>
+    </div>
   );
 }

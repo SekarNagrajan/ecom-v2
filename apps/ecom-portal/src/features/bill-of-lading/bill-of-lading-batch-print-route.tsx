@@ -1,22 +1,22 @@
 // Modified by Sekar Nagarajan (2026-08-31 15:25)
-import { AppButton } from '@solverminds/shared-ui';
-import { Card, Empty, Space, Table, Tag, Typography } from 'antd';
-import { useNavigate } from '@tanstack/react-router';
-import { useState } from 'react';
+import { AppButton } from "@solverminds/shared-ui";
+import { useNavigate } from "@tanstack/react-router";
+import { Card, Empty, Space, Table, Tag, Typography } from "antd";
+import { useState } from "react";
 
-import { AppIcon, Icons, NavIcons } from '../../components/icons';
-import { FeaturePageShell } from '../../components/shared/feature-page-shell';
-import { ModuleScreenHeader } from '../../components/shared/module-screen-header';
-import { useBLBatchPrintMutation, useBLListQuery } from './api/bl.queries';
-import { BlModuleStyles } from './components/bl-module-styles';
-import type { BLListDTO } from './types/bl.types';
-import { BL_STATUS_LABELS } from './types/bl.types';
-import { getBLStatusColor } from './utils/bl-status';
+import { AppIcon, Icons, NavIcons } from "../../components/icons";
+import { FeaturePageShell } from "../../components/shared/feature-page-shell";
+import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
+import { useBLBatchPrintMutation, useBLListQuery } from "./api/bl.queries";
+import { BlModuleStyles } from "./components/bl-module-styles";
+import type { BLListDTO } from "./types/bl.types";
+import { BL_STATUS_LABELS } from "./types/bl.types";
+import { getBLStatusColor } from "./utils/bl-status";
 
 const { Text } = Typography;
 
 function isBatchEligible(row: BLListDTO) {
-  return row.status === 'C' && row.printStatus === 'Y' && !row.isLocked;
+  return row.status === "C" && row.printStatus === "Y" && !row.isLocked;
 }
 
 export function BillOfLadingBatchPrintRoute() {
@@ -38,7 +38,15 @@ export function BillOfLadingBatchPrintRoute() {
               subtitle="Select confirmed B/Ls eligible for original print, then print in one batch."
               marginBottom={0}
               extra={
-                <AppButton onClick={() => navigate({ to: '/app/bl' })}>Back to Dashboard</AppButton>
+                <AppButton
+                  danger
+                  icon={
+                    <AppIcon icon={Icons.arrowLeft} size={16} tone="delete" />
+                  }
+                  onClick={() => navigate({ to: "/app/bl" })}
+                >
+                  Back to B/L
+                </AppButton>
               }
             />
           </div>
@@ -55,7 +63,10 @@ export function BillOfLadingBatchPrintRoute() {
               >
                 Select All
               </AppButton>
-              <AppButton onClick={() => setSelected([])} disabled={selected.length === 0}>
+              <AppButton
+                onClick={() => setSelected([])}
+                disabled={selected.length === 0}
+              >
                 Clear
               </AppButton>
               <AppButton
@@ -86,21 +97,36 @@ export function BillOfLadingBatchPrintRoute() {
                 loading={isLoading}
                 pagination={false}
                 dataSource={rows}
-                scroll={{ y: 'calc(100vh - 280px)' }}
+                scroll={{ y: "calc(100vh - 280px)" }}
                 rowSelection={{
                   selectedRowKeys: selected,
                   onChange: (keys) => setSelected(keys as string[]),
                 }}
                 columns={[
-                  { title: 'B/L No', dataIndex: 'blNo', key: 'blNo', width: 140 },
-                  { title: 'Booking No', dataIndex: 'bookingNo', key: 'bookingNo', width: 140 },
-                  { title: 'SI No', dataIndex: 'siNo', key: 'siNo', width: 140 },
                   {
-                    title: 'Status',
-                    dataIndex: 'status',
-                    key: 'status',
+                    title: "B/L No",
+                    dataIndex: "blNo",
+                    key: "blNo",
+                    width: 140,
+                  },
+                  {
+                    title: "Booking No",
+                    dataIndex: "bookingNo",
+                    key: "bookingNo",
+                    width: 140,
+                  },
+                  {
+                    title: "SI No",
+                    dataIndex: "siNo",
+                    key: "siNo",
+                    width: 140,
+                  },
+                  {
+                    title: "Status",
+                    dataIndex: "status",
+                    key: "status",
                     width: 120,
-                    render: (status: BLListDTO['status']) => (
+                    render: (status: BLListDTO["status"]) => (
                       <Tag
                         className="bl-status-tag"
                         color={getBLStatusColor(status)}
@@ -110,8 +136,8 @@ export function BillOfLadingBatchPrintRoute() {
                     ),
                   },
                   {
-                    title: 'Route',
-                    key: 'route',
+                    title: "Route",
+                    key: "route",
                     render: (_, row) => (
                       <Text>
                         {row.origin} → {row.delivery}

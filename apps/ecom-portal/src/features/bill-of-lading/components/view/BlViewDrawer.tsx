@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-31 17:25)
+// Modified by Sekar Nagarajan (2026-09-01 12:29)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { useNavigate } from "@tanstack/react-router";
 import { Tag, Tooltip, Typography } from "antd";
@@ -27,11 +27,6 @@ export function BlViewDrawer({ record, onClose }: BlViewDrawerProps) {
   const handleEdit = () => {
     onClose();
     navigate({ to: `/app/bl/${record.blNo}/edit` });
-  };
-
-  const handleFullPage = () => {
-    onClose();
-    navigate({ to: `/app/bl/${record.blNo}` });
   };
 
   return (
@@ -146,7 +141,15 @@ export function BlViewDrawer({ record, onClose }: BlViewDrawerProps) {
         </div>
       </div>
 
-      <BlDetailsViewer blNo={record.blNo} />
+      <BlDetailsViewer
+        blNo={record.blNo}
+        activityHints={{
+          createdDate: record.createdDate,
+          confirmedDate: record.confirmedDate,
+          status: record.status,
+          isLocked: record.isLocked,
+        }}
+      />
     </AppDrawer>
   );
 }

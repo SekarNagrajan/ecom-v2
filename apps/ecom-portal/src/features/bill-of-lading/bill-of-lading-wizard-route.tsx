@@ -21,14 +21,14 @@ import {
 import { BlLoadingCenter } from "./components/bl-loading-center";
 import { BlModuleStyles } from "./components/bl-module-styles";
 import {
+  DEFAULT_BL_WIZARD_CONFIG,
+  type BLWizardStepId,
+} from "./config/bl-wizard-config";
+import {
   buildBlWizardSteps,
   getStepIcon,
   renderBlWizardStep,
 } from "./config/bl-wizard-steps";
-import {
-  DEFAULT_BL_WIZARD_CONFIG,
-  type BLWizardStepId,
-} from "./config/bl-wizard-config";
 import { useBLWizard } from "./hooks/use-bl-wizard";
 import { useBLWizardConfig } from "./hooks/use-bl-wizard-config";
 import type { BLDTO } from "./types/bl.types";
@@ -43,10 +43,14 @@ export function BillOfLadingWizardRoute() {
   const toast = useToast();
   const { blNo } = useParams({ strict: false }) as { blNo: string };
 
-  const { data: detail, isLoading, isError, error, refetch } =
-    useBLDetailQuery(blNo);
-  const { data: wizardConfig = DEFAULT_BL_WIZARD_CONFIG } =
-    useBLWizardConfig();
+  const {
+    data: detail,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useBLDetailQuery(blNo);
+  const { data: wizardConfig = DEFAULT_BL_WIZARD_CONFIG } = useBLWizardConfig();
 
   const wizardSteps = useMemo(
     () => buildBlWizardSteps(wizardConfig),
@@ -177,7 +181,15 @@ export function BillOfLadingWizardRoute() {
                   <AppButton type="primary" onClick={() => refetch()}>
                     Retry
                   </AppButton>
-                  <AppButton onClick={goDashboard}>Back to Dashboard</AppButton>
+                  <AppButton
+                    danger
+                    icon={
+                      <AppIcon icon={Icons.arrowLeft} size={16} tone="delete" />
+                    }
+                    onClick={goDashboard}
+                  >
+                    Back to B/L
+                  </AppButton>
                 </Space>
               }
             />
@@ -226,7 +238,15 @@ export function BillOfLadingWizardRoute() {
             title={formatModuleScreenTitle(MODULE_TITLES.billOfLading, blNo)}
             marginBottom={0}
             extra={
-              <AppButton onClick={goDashboard}>Back to Dashboard</AppButton>
+              <AppButton
+                danger
+                icon={
+                  <AppIcon icon={Icons.arrowLeft} size={16} tone="delete" />
+                }
+                onClick={goDashboard}
+              >
+                Back to B/L
+              </AppButton>
             }
           />
         </div>

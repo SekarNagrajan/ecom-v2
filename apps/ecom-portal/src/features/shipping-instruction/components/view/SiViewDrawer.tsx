@@ -1,4 +1,4 @@
-// Created by Sekar Nagarajan (2026-08-26 12:19)
+// Modified by Sekar Nagarajan (2026-09-01 12:29)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { useNavigate } from "@tanstack/react-router";
 import { Tag, Tooltip, Typography } from "antd";
@@ -144,7 +144,14 @@ export function SiViewDrawer({ record, onClose }: SiViewDrawerProps) {
         </div>
       </div>
 
-      <SiDetailsViewer siId={record.id} />
+      <SiDetailsViewer
+        siId={record.id}
+        activityHints={{
+          createdDate: record.createdDate,
+          submittedDate: record.submittedDate,
+          status: record.status,
+        }}
+      />
     </AppDrawer>
   );
 }

@@ -255,7 +255,7 @@ export function SiEnsStep({
 
           {!ensRequired ? (
             <Text type="secondary">
-              ENS filing is not required. Continue to the next step.
+              {/* ENS filing is not required. Continue to the next step. */}
             </Text>
           ) : (
             <div className="si-ens-sections">

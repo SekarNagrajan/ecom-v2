@@ -148,6 +148,23 @@ export function VgmModuleStyles() {
         font-weight: ${token.fontWeightStrong};
         color: ${token.colorText};
       }
+      /* Modified by Sekar Nagarajan (2026-09-01 00:47) — meta details in card header (right side) */
+      .vgm-header-extra {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        gap: ${token.marginMD}px ${token.marginLG}px;
+      }
+      .vgm-meta-row--header {
+        margin-bottom: 0;
+        gap: ${token.marginSM}px ${token.marginLG}px;
+       
+      
+      }
+      .vgm-meta-row--header .vgm-meta-item {
+        min-width: auto;
+      }
       .vgm-route-strip {
         display: flex;
         align-items: stretch;
@@ -164,11 +181,15 @@ export function VgmModuleStyles() {
       }
       .vgm-route-port--origin {
         border-left: 4px solid ${token.colorPrimary};
-        background: linear-gradient(180deg, ${primaryTint8} 0%, ${token.colorFillAlter} 100%);
+        background: linear-gradient(180deg, ${primaryTint8} 0%, ${
+      token.colorFillAlter
+    } 100%);
       }
       .vgm-route-port--delivery {
         border-left: 4px solid ${token.colorSuccess};
-        background: linear-gradient(180deg, ${successTint8} 0%, ${token.colorFillAlter} 100%);
+        background: linear-gradient(180deg, ${successTint8} 0%, ${
+      token.colorFillAlter
+    } 100%);
       }
       .vgm-route-port__label {
         display: flex;
@@ -240,7 +261,75 @@ export function VgmModuleStyles() {
         flex: 1;
         height: 2px;
         margin: 0 ${token.marginXXS}px;
-        background: linear-gradient(90deg, ${token.colorPrimary} 0%, ${token.colorSuccess} 100%);
+        background: linear-gradient(90deg, ${token.colorPrimary} 0%, ${
+      token.colorSuccess
+    } 100%);
+      }
+      /* Modified by Sekar Nagarajan (2026-09-01 00:50) — schedule-card style route + more info */
+      .vgm-route-card {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginMD}px;
+        width: 100%;
+      }
+      .vgm-route-card__tags {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: ${token.marginXS}px;
+      }
+      .vgm-route-port__extra {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        margin-top: ${token.marginSM}px;
+        padding-top: ${token.marginXS}px;
+        border-top: 1px dashed ${token.colorBorderSecondary};
+      }
+      .vgm-route-port__extra-label {
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorTextSecondary};
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+      }
+      .vgm-route-port__extra-value {
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorText};
+      }
+      .vgm-route-connector__pill {
+        display: inline-flex;
+        align-items: center;
+        padding: 2px ${token.paddingSM}px;
+        border-radius: ${token.borderRadiusLG}px;
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorPrimary};
+        background: ${primaryTint8};
+        border: 1px solid ${token.colorBorderSecondary};
+      }
+      /* Modified by Sekar Nagarajan (2026-09-01 00:56) — declaration fields 5-column grid */
+      .vgm-declaration-grid {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        column-gap: ${token.marginMD}px;
+        row-gap: ${token.marginXS}px;
+        width: 100%;
+      }
+      @media (max-width: 1199px) {
+        .vgm-declaration-grid {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+      }
+      @media (max-width: 767px) {
+        .vgm-declaration-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+      @media (max-width: 479px) {
+        .vgm-declaration-grid {
+          grid-template-columns: minmax(0, 1fr);
+        }
       }
       .vgm-section-card.ant-card {
         border-radius: ${token.borderRadiusLG}px;
@@ -271,6 +360,17 @@ export function VgmModuleStyles() {
       }
       .vgm-field-cell {
         margin-top: ${token.marginXXS}px;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-01 00:57) — containers table padding + spacing */
+      .vgm-containers-wrap {
+        padding: ${token.paddingMD}px ${token.paddingLG}px ${token.paddingLG}px;
+      }
+      .vgm-containers-wrap .ant-table-thead > tr > th {
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+      }
+      .vgm-containers-wrap .ant-table-tbody > tr > td {
+        padding: ${token.paddingXS}px ${token.paddingMD}px;
+        vertical-align: middle;
       }
 
       @media (max-width: 767px) {

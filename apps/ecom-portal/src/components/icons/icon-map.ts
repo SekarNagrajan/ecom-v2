@@ -39,6 +39,7 @@ import {
   Download,
   Edit,
   Ellipsis,
+  EllipsisVertical,
   Expand,
   Eye,
   EyeOff,
@@ -135,9 +136,11 @@ export const NavIcons = {
   carbon: Cloud,
   contactUs: Headphones,
   route: Route,
+  ellipsisVertical: EllipsisVertical,
 } as const;
 
 export const Icons = {
+  ellipsisVertical: EllipsisVertical,
   route: Route,
   notebook: Notebook,
   anchor: Anchor,

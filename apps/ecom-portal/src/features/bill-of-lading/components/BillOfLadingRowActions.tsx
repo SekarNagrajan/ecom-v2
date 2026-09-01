@@ -1,7 +1,8 @@
-// Modified by Sekar Nagarajan (2026-08-28 11:55)
+// Modified by Sekar Nagarajan (2026-09-01 01:02) — status-driven actions + More overflow menu
 import { AppButton, AppModal } from "@solverminds/shared-ui";
 import { useConfirm } from "@solverminds/shared-ui/hooks";
-import { Space, Tooltip } from "antd";
+import type { MenuProps } from "antd";
+import { Dropdown, Space, Tooltip } from "antd";
 import { useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
@@ -100,31 +101,38 @@ export function BillOfLadingRowActions({
 
   const actions: React.ReactNode[] = [];
 
+  // View — always available
+  actions.push(
+    <ListActionButton
+      key="view"
+      title="View"
+      tone="view"
+      icon={<AppIcon icon={Icons.eye} size={16} tone="view" />}
+      onClick={(e) => {
+        e.stopPropagation();
+        onView(row.blNo);
+      }}
+    />,
+  );
+
+  // Edit / Amendment — confirmed edits route through the terms modal
+  actions.push(
+    <ListActionButton
+      key="edit"
+      title={row.status === "S" ? "Amendment" : "Edit"}
+      tone="edit"
+      icon={<AppIcon icon={Icons.edit} size={16} tone="edit" />}
+      onClick={requestEdit}
+    />,
+  );
+
+  // Ready to Confirm — draft only
   if (row.status === "D") {
     actions.push(
       <ListActionButton
-        tone="print"
-        key="draft-print"
-        title="Draft Print"
-        icon={<AppIcon icon={Icons.fileText} size={16} tone="print" />}
-        onClick={(e) => {
-          e.stopPropagation();
-          onPrint(row.blNo, "draft");
-        }}
-      />,
-    );
-    actions.push(
-      <ListActionButton
-        key="edit"
-        title="Edit"
-        icon={<AppIcon icon={Icons.edit} size={16} tone="edit" />}
-        onClick={requestEdit}
-      />,
-    );
-    actions.push(
-      <ListActionButton
-        key="accept"
+        key="confirm"
         title={showReadyToConfirm ? "Ready to Confirm" : "Accept"}
+        tone="track"
         icon={<AppIcon icon={Icons.checkCircle} size={16} tone="track" />}
         onClick={(e) => {
           e.stopPropagation();
@@ -134,50 +142,23 @@ export function BillOfLadingRowActions({
     );
   }
 
-  if (row.status === "S") {
-    actions.push(
-      <ListActionButton
-        key="view"
-        title="View"
-        icon={<AppIcon icon={Icons.eye} size={16} tone="view" />}
-        onClick={(e) => {
-          e.stopPropagation();
-          onView(row.blNo);
-        }}
-      />,
-    );
-    actions.push(
-      <ListActionButton
-        key="amend"
-        title="Amendment"
-        icon={<AppIcon icon={Icons.edit} size={16} tone="edit" />}
-        onClick={requestEdit}
-      />,
-    );
-    actions.push(
-      <ListActionButton
-        key="cancel"
-        title="Cancel"
-        icon={<AppIcon icon={Icons.circleX} size={16} tone="reject" />}
-        danger
-        onClick={(e) => {
-          e.stopPropagation();
-          confirm.danger({
-            title: "Cancel Submitted B/L",
-            content: "Are you sure you want to cancel this submitted B/L?",
-            onOk: () => onCancel(row.blNo),
-          });
-        }}
-      />,
-    );
-  }
-
+  // Print — status driven: Confirmed prints Original, everything else Draft
   if (row.status === "C") {
     actions.push(
       <ListActionButton
+        key="print"
+        title="Original Print"
         tone="print"
-        key="draft-print"
+        icon={<AppIcon icon={Icons.printer} size={16} tone="print" />}
+        onClick={handleOriginalPrint}
+      />,
+    );
+  } else {
+    actions.push(
+      <ListActionButton
+        key="print"
         title="Draft Print"
+        tone="print"
         icon={<AppIcon icon={Icons.fileText} size={16} tone="print" />}
         onClick={(e) => {
           e.stopPropagation();
@@ -185,111 +166,90 @@ export function BillOfLadingRowActions({
         }}
       />,
     );
-    actions.push(
-      <ListActionButton
-        key="edit"
-        title="Edit"
-        icon={<AppIcon icon={Icons.edit} size={16} tone="edit" />}
-        onClick={requestEdit}
-      />,
-    );
-    if (showNnPrint) {
-      actions.push(
-        <ListActionButton
-          tone="print"
-          key="nn-print"
-          title="Non Negotiable"
-          icon={<AppIcon icon={Icons.fileText} size={16} tone="print" />}
-          onClick={(e) => {
-            e.stopPropagation();
-            onPrint(row.blNo, "nn");
-          }}
-        />,
-      );
-    }
-    if (row.printStatus === "Y") {
-      actions.push(
-        <Tooltip key="original-print" title="Original">
-          <AppButton
-            type="text"
-            size="small"
-            icon={
-              <AppIcon icon={Icons.printer} size={16} gridAction tone="print" />
-            }
-            onClick={handleOriginalPrint}
-          />
-        </Tooltip>,
-      );
-    }
   }
 
-  if (row.status === "I") {
-    actions.push(
-      <ListActionButton
-        tone="print"
-        key="nn-issued"
-        title="Non Negotiable"
-        icon={<AppIcon icon={Icons.fileText} size={16} tone="print" />}
-        onClick={(e) => {
-          e.stopPropagation();
-          onPrint(row.blNo, "nn");
-        }}
-      />,
-    );
-    actions.push(
-      <ListActionButton
-        key="issued-lock"
-        title="Issued"
-        icon={<AppIcon icon={Icons.lock} size={16} tone="muted" />}
-        onClick={(e) => e.stopPropagation()}
-      />,
-    );
-    if (row.hasInsurance && row.policyNo) {
-      actions.push(
-        <ListActionButton
-          key="insurance"
-          title={row.policyNo}
-          icon={<AppIcon icon={Icons.shieldCheck} size={16} tone="view" />}
-          onClick={(e) => e.stopPropagation()}
-        />,
-      );
-    }
-  }
-
-  if (showChargeSummary) {
-    actions.push(
-      <ListActionButton
-        tone="navigate"
-        key="charges"
-        title="Charge Summary"
-        icon={<AppIcon icon={Icons.list} size={16} tone="navigate" />}
-        onClick={(e) => {
-          e.stopPropagation();
-          onCharges(row.blNo);
-        }}
-      />,
-    );
-  }
-
+  // Overflow "More" menu — Manifest, Charge Summary, NN print, Cancel
+  const moreItems: MenuProps["items"] = [];
   if (row.status !== "S") {
-    actions.push(
-      <ListActionButton
-        tone="navigate"
-        key="manifest"
-        title="Manifest"
-        icon={<AppIcon icon={Icons.fileCheck} size={16} tone="navigate" />}
-        onClick={(e) => {
-          e.stopPropagation();
-          onManifest(row.blNo, row.mcnNo);
-        }}
-      />,
-    );
+    moreItems.push({
+      key: "manifest",
+      label: "Manifest",
+      icon: <AppIcon icon={Icons.fileCheck} size={16} tone="navigate" />,
+      onClick: ({ domEvent }) => {
+        domEvent.stopPropagation();
+        onManifest(row.blNo, row.mcnNo);
+      },
+    });
+  }
+  if (showChargeSummary) {
+    moreItems.push({
+      key: "charges",
+      label: "Charge Summary",
+      icon: <AppIcon icon={Icons.list} size={16} tone="navigate" />,
+      onClick: ({ domEvent }) => {
+        domEvent.stopPropagation();
+        onCharges(row.blNo);
+      },
+    });
+  }
+  if (showNnPrint && (row.status === "C" || row.status === "I")) {
+    moreItems.push({
+      key: "nn-print",
+      label: "Non Negotiable",
+      icon: <AppIcon icon={Icons.fileText} size={16} tone="print" />,
+      onClick: ({ domEvent }) => {
+        domEvent.stopPropagation();
+        onPrint(row.blNo, "nn");
+      },
+    });
+  }
+  if (row.status === "S") {
+    moreItems.push({
+      key: "cancel",
+      danger: true,
+      label: "Cancel",
+      icon: <AppIcon icon={Icons.circleX} size={16} tone="reject" />,
+      onClick: ({ domEvent }) => {
+        domEvent.stopPropagation();
+        confirm.danger({
+          title: "Cancel Submitted B/L",
+          content: "Are you sure you want to cancel this submitted B/L?",
+          onOk: () => onCancel(row.blNo),
+        });
+      },
+    });
   }
 
   return (
     <>
       <Space size={4} wrap>
         {actions}
+        {moreItems.length ? (
+          <Dropdown
+            menu={{ items: moreItems }}
+            trigger={["click"]}
+            placement="bottomRight"
+          >
+            <span onClick={(e) => e.stopPropagation()}>
+              <Tooltip title="More" mouseEnterDelay={0.5}>
+                <AppButton
+                  type="link"
+                  size="small"
+                  className="list-action-button"
+                  aria-label="More actions"
+                  icon={
+                    <AppIcon
+                      icon={Icons.ellipsisVertical}
+                      size={16}
+                      gridAction
+                      tone="navigate"
+                    />
+                  }
+                />
+              </Tooltip>
+            </span>
+          </Dropdown>
+        ) : null}
       </Space>
       <AppModal
         title="Confirmed B/L Edit — Terms"

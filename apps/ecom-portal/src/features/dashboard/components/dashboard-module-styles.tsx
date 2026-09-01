@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-31 15:11)
+// Modified by Sekar Nagarajan (2026-09-01 11:25)
 import { theme } from "antd";
 import { tokenMix } from "../../theme/utils/token-mix";
 
@@ -21,7 +21,7 @@ export function DashboardModuleStyles() {
       }
       .dashboard-kpi-col {
         flex: 1 1 calc((100% - ${token.marginMD * 6}px) / 7);
-        min-width: 132px;
+        min-width: 168px;
         display: flex;
       }
       .dashboard-kpi-card.ant-card,
@@ -67,8 +67,8 @@ export function DashboardModuleStyles() {
         flex: 1;
         display: flex;
         flex-direction: column;
-        min-height: 118px;
-        padding: ${token.paddingMD}px ${token.paddingMD + 2}px;
+        min-height: 128px;
+        padding: ${token.paddingMD + 2}px ${token.paddingMD + 4}px;
       }
       .dashboard-kpi-card--tone-primary.dashboard-kpi-card--active {
         border-color: ${token.colorPrimary};
@@ -118,28 +118,84 @@ export function DashboardModuleStyles() {
         background: ${token.colorInfoBg};
         color: ${token.colorInfo};
       }
-      .dashboard-kpi-card__stat--primary .ant-statistic-content {
+      .dashboard-kpi-card__body {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        flex: 1;
+      }
+      .dashboard-kpi-card__head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: ${token.marginXS}px;
+      }
+      .dashboard-kpi-card__main {
+        flex: 1;
+        min-width: 0;
+        padding-right: ${token.paddingXXS}px;
+      }
+      .dashboard-kpi-card__eyebrow {
+        display: block;
+        font-size: ${token.fontSizeSM - 1}px;
+        font-weight: ${token.fontWeightStrong};
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: ${token.colorTextSecondary};
+        line-height: 1.25;
+        margin-bottom: ${token.marginSM}px;
+      }
+      .dashboard-kpi-card__metric {
+        margin: 0 !important;
+        font-weight: 700 !important;
+        line-height: 1.1 !important;
+        font-size: 30px !important;
+      }
+      .dashboard-kpi-card__metric--primary {
         color: ${token.colorPrimary} !important;
       }
-      .dashboard-kpi-card__stat--success .ant-statistic-content {
+      .dashboard-kpi-card__metric--success {
         color: ${token.colorSuccess} !important;
       }
-      .dashboard-kpi-card__stat--warning .ant-statistic-content {
+      .dashboard-kpi-card__metric--warning {
         color: ${token.colorWarning} !important;
       }
-      .dashboard-kpi-card__stat--error .ant-statistic-content {
+      .dashboard-kpi-card__metric--error {
         color: ${token.colorError} !important;
       }
-      .dashboard-kpi-card__stat--purple .ant-statistic-content {
+      .dashboard-kpi-card__metric--purple {
         color: ${token.purple} !important;
       }
-      .dashboard-kpi-card__stat--info .ant-statistic-content {
+      .dashboard-kpi-card__metric--info {
         color: ${token.colorInfo} !important;
       }
-      .dashboard-kpi-card__stat .ant-statistic-content-value {
-        font-size: 26px;
-        font-weight: ${token.fontWeightStrong};
-        line-height: 1;
+      .dashboard-kpi-card__trend {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        margin-top: ${token.marginXS}px;
+        width: 100%;
+      }
+      .dashboard-kpi-card__trend-icon {
+        display: inline-flex;
+        flex-shrink: 0;
+      }
+      .dashboard-kpi-card__trend-text {
+        font-size: ${token.fontSizeSM}px;
+        font-weight: 500;
+        line-height: 1.3;
+        white-space: nowrap;
+      }
+      .dashboard-kpi-card__trend--up .dashboard-kpi-card__trend-icon,
+      .dashboard-kpi-card__trend--up .dashboard-kpi-card__trend-text {
+        color: ${token.colorSuccess};
+      }
+      .dashboard-kpi-card__trend--down .dashboard-kpi-card__trend-icon,
+      .dashboard-kpi-card__trend--down .dashboard-kpi-card__trend-text {
+        color: ${token.colorError};
+      }
+      .dashboard-kpi-card__trend--neutral .dashboard-kpi-card__trend-text {
+        color: ${token.colorTextSecondary};
       }
       .dashboard-panel .ant-card-body {
         padding: ${token.paddingMD}px ${token.paddingLG}px;
@@ -178,45 +234,15 @@ export function DashboardModuleStyles() {
         font-size: ${token.fontSize}px;
         font-weight: ${token.fontWeightStrong};
       }
-      .dashboard-kpi-card__head {
-        display: flex;
-        align-items: center;
-        gap: ${token.marginXS}px;
-        margin-bottom: ${token.marginSM}px;
-        min-height: 36px;
-      }
       .dashboard-kpi-card__icon {
-        width: 36px;
-        height: 36px;
-        border-radius: ${token.borderRadius}px;
+        width: 44px;
+        height: 44px;
+        border-radius: ${token.borderRadiusLG - 2}px;
         display: flex;
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-      }
-      .dashboard-kpi-card__label {
-        font-size: ${token.fontSizeSM}px;
-        font-weight: ${token.fontWeightStrong};
-        line-height: 1.3;
-      }
-      .dashboard-kpi-card__value {
-        flex: 1;
-        display: flex;
-        align-items: flex-end;
-      }
-      .dashboard-kpi-card__sub {
-        font-size: ${token.fontSizeSM}px;
         margin-top: ${token.marginXXS}px;
-        display: block;
-        font-weight: ${token.fontWeightStrong};
-        line-height: 1.3;
-        min-height: 1.3em;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-      .dashboard-kpi-card__sub--empty {
-        visibility: hidden;
       }
 
       /* ── Ongoing panel ── */

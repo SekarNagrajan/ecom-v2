@@ -1,17 +1,18 @@
-// Modified by Sekar Nagarajan (2026-08-25 18:25)
+// Modified by Sekar Nagarajan (2026-09-01 11:25)
 /**
  * KPI cards — enhancedDashboard.jsp parity (Total / Confirmed / SI / Payment / lifecycle).
- * Equal-height cards via reserved sub-line + flex columns. Token classes only (agenct).
+ * Visual layout matches dashboard stat cards: eyebrow label, metric, trend, icon top-right.
  */
-import { Card, Statistic, Typography } from "antd";
+import { Card, Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import type { DashboardCounts } from "../api/dashboard.api";
 
-const { Text } = Typography;
+const { Text, Title } = Typography;
 
 type KpiTone = "primary" | "success" | "warning" | "error" | "purple" | "info";
+type KpiTrendDirection = "up" | "down" | "neutral";
 
 interface DashboardKpiCardsProps {
   counts: DashboardCounts;
@@ -22,8 +23,9 @@ interface DashboardKpiCardsProps {
 interface KpiCard {
   key: string;
   label: string;
-  value: number;
-  subValue?: string;
+  value: string;
+  trend: string;
+  trendDirection: KpiTrendDirection;
   icon: LucideIcon;
   tone: KpiTone;
 }
@@ -37,52 +39,65 @@ export function DashboardKpiCards({
     {
       key: "all",
       label: "Total Shipments",
-      value: counts.totCou,
+      value: String(counts.totCou),
+      trend: "Across all lifecycle stages",
+      trendDirection: "neutral",
       icon: Icons.ship,
       tone: "primary",
     },
     {
       key: "bkConfirmed",
       label: "Booking Confirmed",
-      value: counts.bkConfirmed,
+      value: String(counts.bkConfirmed),
+      trend: "+2 confirmed this week",
+      trendDirection: "up",
       icon: Icons.notebook,
       tone: "success",
     },
     {
       key: "siPending",
       label: "SI Pending",
-      value: counts.siPending,
+      value: String(counts.siPending),
+      trend: "2 overdue cutoff",
+      trendDirection: "down",
       icon: Icons.fileText,
       tone: "warning",
     },
     {
       key: "payPending",
       label: "Payment Pending",
-      value: counts.payPending,
-      subValue: `USD ${counts.pendingAmount.toLocaleString("en-US", {
-        minimumFractionDigits: 2,
-      })}`,
+      value: String(counts.payPending),
+      trend: `USD ${counts.pendingAmount.toLocaleString("en-US", {
+        minimumFractionDigits: 0,
+      })} outstanding`,
+      trendDirection: "down",
       icon: Icons.creditCard,
       tone: "error",
     },
     {
       key: "origin",
       label: "At Origin",
-      value: counts.orgCou,
+      value: String(counts.orgCou),
+      trend: "Awaiting departure",
+      trendDirection: "neutral",
       icon: Icons.mapPin,
       tone: "purple",
     },
     {
       key: "inTransit",
       label: "In Transit",
-      value: counts.inTransitCou,
+      value: String(counts.inTransitCou),
+      trend: "2 arriving this week",
+      trendDirection: "up",
       icon: Icons.anchor,
       tone: "info",
     },
     {
       key: "delivered",
       label: "Delivered",
-      value: counts.delCou,
+      value: String(counts.delCou),
+      trend: "Completed shipments",
+      trendDirection: "up",
       icon: Icons.truck,
       tone: "success",
     },
@@ -92,6 +107,13 @@ export function DashboardKpiCards({
     <div className="dashboard-kpi-row">
       {cards.map((card) => {
         const isActive = activeFilter === card.key;
+        const trendIcon =
+          card.trendDirection === "up"
+            ? Icons.arrowUp
+            : card.trendDirection === "down"
+              ? Icons.arrowDown
+              : null;
+
         return (
           <div key={card.key} className="dashboard-kpi-col">
             <Card
@@ -105,32 +127,38 @@ export function DashboardKpiCards({
                 .join(" ")}
               onClick={() => onFilterChange(card.key, card.label)}
             >
-              <div className="dashboard-kpi-card__head">
-                <div
-                  className={`dashboard-kpi-card__icon dashboard-kpi-card__icon--${card.tone}`}
-                >
-                  <AppIcon icon={card.icon} size={18} />
+              <div className="dashboard-kpi-card__body">
+                <div className="dashboard-kpi-card__head">
+                  <div className="dashboard-kpi-card__main">
+                    <Text className="dashboard-kpi-card__eyebrow">
+                      {card.label}
+                    </Text>
+                    <Title
+                      level={3}
+                      className={`dashboard-kpi-card__metric dashboard-kpi-card__metric--${card.tone}`}
+                    >
+                      {card.value}
+                    </Title>
+                  </div>
+                  <div
+                    className={`dashboard-kpi-card__icon dashboard-kpi-card__icon--${card.tone}`}
+                  >
+                    <AppIcon icon={card.icon} size={20} />
+                  </div>
                 </div>
-                <Text type="secondary" className="dashboard-kpi-card__label">
-                  {card.label}
-                </Text>
+                <div
+                  className={`dashboard-kpi-card__trend dashboard-kpi-card__trend--${card.trendDirection}`}
+                >
+                  {trendIcon ? (
+                    <span className="dashboard-kpi-card__trend-icon app-icon-inherit">
+                      <AppIcon icon={trendIcon} size={11} />
+                    </span>
+                  ) : null}
+                  <Text className="dashboard-kpi-card__trend-text">
+                    {card.trend}
+                  </Text>
+                </div>
               </div>
-              <div className="dashboard-kpi-card__value">
-                <Statistic
-                  value={card.value}
-                  className={`dashboard-kpi-card__stat dashboard-kpi-card__stat--${card.tone}`}
-                />
-              </div>
-              <Text
-                type="secondary"
-                className={
-                  card.subValue
-                    ? "dashboard-kpi-card__sub"
-                    : "dashboard-kpi-card__sub dashboard-kpi-card__sub--empty"
-                }
-              >
-                {card.subValue || "\u00a0"}
-              </Text>
             </Card>
           </div>
         );

@@ -56,6 +56,26 @@ export function CargoLinesEditorStyles() {
         display: block;
         flex: none;
       }
+      /* Modified by Sekar Nagarajan (2026-09-01 11:11) — default segment style (not primary) */
+      .si-cargo-view-segmented.ant-segmented .ant-segmented-item-selected {
+        background: ${token.colorBgElevated} !important;
+        color: ${token.colorText} !important;
+      }
+      .si-cargo-view-segmented.ant-segmented
+        .ant-segmented-item-selected
+        .ant-segmented-item-label {
+        color: ${token.colorText} !important;
+      }
+      .si-cargo-view-segmented.ant-segmented .ant-segmented-thumb {
+        background: ${token.colorBgElevated} !important;
+        box-shadow: ${token.boxShadowSecondary} !important;
+      }
+      .si-cargo-view-segmented.ant-segmented
+        .ant-segmented-item-selected
+        .si-cargo-view-opt
+        .app-icon {
+        color: ${token.colorText};
+      }
       .si-cargo-toolbar__search {
         flex: 1 1 220px;
         min-width: 180px;

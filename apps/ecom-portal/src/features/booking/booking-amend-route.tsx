@@ -7,9 +7,9 @@ import { useEffect, useState } from "react";
 import { AppIcon, Icons } from "../../components/icons";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import {
-    MODULE_TITLES,
-    WIZARD_STEP_TITLES,
-    formatModuleScreenTitle,
+  MODULE_TITLES,
+  WIZARD_STEP_TITLES,
+  formatModuleScreenTitle,
 } from "../../constants/module-titles";
 import { bookingApi } from "./api/booking.api";
 import { bookingKeys } from "./api/booking.keys";
@@ -24,10 +24,7 @@ import { PreviewStep } from "./components/PreviewStep";
 import { ReferenceInformationStep } from "./components/ReferenceInformationStep";
 import { useBookingWizard } from "./hooks/use-booking-wizard";
 import { useBookingStore } from "./stores/booking.store";
-import {
-  defaultCargoData,
-  migrateLegacyCargo,
-} from "./types/booking.types";
+import { defaultCargoData, migrateLegacyCargo } from "./types/booking.types";
 
 const { Text } = Typography;
 
@@ -156,8 +153,21 @@ export function BookingAmendRoute() {
 
   if (isLoading || !isInitialized) {
     return (
-      <Card style={{ textAlign: "center", padding: 60 }}>
-        <Spin size="large" description="Loading Booking Details..." />
+      <Card
+        style={{
+          textAlign: "center",
+          padding: 60,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100%",
+        }}
+      >
+        <Spin
+          size="medium"
+          description="Loading Booking Details..."
+          style={{ justifyContent: "center", alignItems: "center" }}
+        />
       </Card>
     );
   }

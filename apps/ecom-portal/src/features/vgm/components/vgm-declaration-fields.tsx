@@ -1,10 +1,11 @@
-// Modified by Sekar Nagarajan (2026-09-01 00:56) — 5-column grid layout
+// Modified by Sekar Nagarajan (2026-09-01 10:52) — form-field-cell gap (commodity card parity)
 import {
   FormDatePicker,
   FormInput,
   FormSelect,
 } from "@solverminds/shared-ui";
 import { Card } from "antd";
+import type { ReactNode } from "react";
 import type { Control } from "react-hook-form";
 
 import type { VgmFormValues } from "../types/vgm.types";
@@ -18,6 +19,26 @@ interface VgmDeclarationFieldsProps {
   control: Control<VgmFormValues>;
 }
 
+function VgmDeclarationFieldCell({
+  label,
+  children,
+}: {
+  label: ReactNode;
+  children: ReactNode;
+}) {
+  return (
+    <div className="form-field-cell">
+      {label}
+      {children}
+    </div>
+  );
+}
+
+const DECLARATION_FIELD_PROPS = {
+  ...VGM_FIELD_ITEM_PROPS,
+  className: "vgm-declaration-field-item",
+};
+
 export function VgmDeclarationFields({ control }: VgmDeclarationFieldsProps) {
   return (
     <Card
@@ -26,101 +47,116 @@ export function VgmDeclarationFields({ control }: VgmDeclarationFieldsProps) {
       bordered={false}
     >
       <div className="vgm-declaration-grid">
-        <FormInput
-          control={control}
-          name="companyName"
-          label={vgmOptionalLabel("Company Name")}
-          size="large"
-          formItemProps={VGM_FIELD_ITEM_PROPS}
-        />
-        <FormInput
-          control={control}
-          name="orderNo"
+        <VgmDeclarationFieldCell label={vgmOptionalLabel("Company Name")}>
+          <FormInput
+            control={control}
+            name="companyName"
+            size="large"
+            formItemProps={DECLARATION_FIELD_PROPS}
+          />
+        </VgmDeclarationFieldCell>
+        <VgmDeclarationFieldCell
           label={vgmOptionalLabel("Reference / Order No")}
-          size="large"
-          formItemProps={VGM_FIELD_ITEM_PROPS}
-        />
-        <FormInput
-          control={control}
-          name="addr1"
-          label={vgmOptionalLabel("Address 1")}
-          size="large"
-          formItemProps={VGM_FIELD_ITEM_PROPS}
-        />
-        <FormInput
-          control={control}
-          name="addr2"
-          label={vgmOptionalLabel("Address 2")}
-          size="large"
-          formItemProps={VGM_FIELD_ITEM_PROPS}
-        />
-        <FormDatePicker
-          control={control}
-          name="obtainDate"
-          label={vgmReqLabel("Obtained Date")}
-          size="large"
-          formItemProps={VGM_FIELD_ITEM_PROPS}
-        />
-        <FormSelect
-          control={control}
-          name="obtainMethod"
-          label={vgmReqLabel("Obtained Method")}
-          size="large"
-          formItemProps={VGM_FIELD_ITEM_PROPS}
-          options={[
-            { label: "SM1", value: "SM1" },
-            { label: "SM2", value: "SM2" },
-          ]}
-        />
-        <FormInput
-          control={control}
-          name="authPerson"
-          label={vgmReqLabel("Authorized Person")}
-          size="large"
-          formItemProps={VGM_FIELD_ITEM_PROPS}
-        />
-        <FormInput
-          control={control}
-          name="country"
-          label={vgmOptionalLabel("Country")}
-          size="large"
-          formItemProps={VGM_FIELD_ITEM_PROPS}
-        />
-        <FormInput
-          control={control}
-          name="city"
-          label={vgmOptionalLabel("City")}
-          size="large"
-          formItemProps={VGM_FIELD_ITEM_PROPS}
-        />
-        <FormInput
-          control={control}
-          name="zipcode"
-          label={vgmOptionalLabel("Zip Code")}
-          size="large"
-          formItemProps={VGM_FIELD_ITEM_PROPS}
-        />
-        <FormInput
-          control={control}
-          name="phone"
-          label={vgmOptionalLabel("Telephone")}
-          size="large"
-          formItemProps={VGM_FIELD_ITEM_PROPS}
-        />
-        <FormInput
-          control={control}
-          name="fax"
-          label={vgmOptionalLabel("Fax")}
-          size="large"
-          formItemProps={VGM_FIELD_ITEM_PROPS}
-        />
-        <FormInput
-          control={control}
-          name="email"
-          label={vgmOptionalLabel("Email")}
-          size="large"
-          formItemProps={VGM_FIELD_ITEM_PROPS}
-        />
+        >
+          <FormInput
+            control={control}
+            name="orderNo"
+            size="large"
+            formItemProps={DECLARATION_FIELD_PROPS}
+          />
+        </VgmDeclarationFieldCell>
+        <VgmDeclarationFieldCell label={vgmOptionalLabel("Address 1")}>
+          <FormInput
+            control={control}
+            name="addr1"
+            size="large"
+            formItemProps={DECLARATION_FIELD_PROPS}
+          />
+        </VgmDeclarationFieldCell>
+        <VgmDeclarationFieldCell label={vgmOptionalLabel("Address 2")}>
+          <FormInput
+            control={control}
+            name="addr2"
+            size="large"
+            formItemProps={DECLARATION_FIELD_PROPS}
+          />
+        </VgmDeclarationFieldCell>
+        <VgmDeclarationFieldCell label={vgmReqLabel("Obtained Date")}>
+          <FormDatePicker
+            control={control}
+            name="obtainDate"
+            size="large"
+            formItemProps={DECLARATION_FIELD_PROPS}
+          />
+        </VgmDeclarationFieldCell>
+        <VgmDeclarationFieldCell label={vgmReqLabel("Obtained Method")}>
+          <FormSelect
+            control={control}
+            name="obtainMethod"
+            size="large"
+            formItemProps={DECLARATION_FIELD_PROPS}
+            options={[
+              { label: "SM1", value: "SM1" },
+              { label: "SM2", value: "SM2" },
+            ]}
+          />
+        </VgmDeclarationFieldCell>
+        <VgmDeclarationFieldCell label={vgmReqLabel("Authorized Person")}>
+          <FormInput
+            control={control}
+            name="authPerson"
+            size="large"
+            formItemProps={DECLARATION_FIELD_PROPS}
+          />
+        </VgmDeclarationFieldCell>
+        <VgmDeclarationFieldCell label={vgmOptionalLabel("Country")}>
+          <FormInput
+            control={control}
+            name="country"
+            size="large"
+            formItemProps={DECLARATION_FIELD_PROPS}
+          />
+        </VgmDeclarationFieldCell>
+        <VgmDeclarationFieldCell label={vgmOptionalLabel("City")}>
+          <FormInput
+            control={control}
+            name="city"
+            size="large"
+            formItemProps={DECLARATION_FIELD_PROPS}
+          />
+        </VgmDeclarationFieldCell>
+        <VgmDeclarationFieldCell label={vgmOptionalLabel("Zip Code")}>
+          <FormInput
+            control={control}
+            name="zipcode"
+            size="large"
+            formItemProps={DECLARATION_FIELD_PROPS}
+          />
+        </VgmDeclarationFieldCell>
+        <VgmDeclarationFieldCell label={vgmOptionalLabel("Telephone")}>
+          <FormInput
+            control={control}
+            name="phone"
+            size="large"
+            formItemProps={DECLARATION_FIELD_PROPS}
+          />
+        </VgmDeclarationFieldCell>
+        <VgmDeclarationFieldCell label={vgmOptionalLabel("Fax")}>
+          <FormInput
+            control={control}
+            name="fax"
+            size="large"
+            formItemProps={DECLARATION_FIELD_PROPS}
+          />
+        </VgmDeclarationFieldCell>
+        <VgmDeclarationFieldCell label={vgmOptionalLabel("Email")}>
+          <FormInput
+            control={control}
+            name="email"
+            size="large"
+            formItemProps={DECLARATION_FIELD_PROPS}
+          />
+        </VgmDeclarationFieldCell>
       </div>
     </Card>
   );

@@ -191,6 +191,7 @@ export function CargoLinesEditor({
               {/* Modified by Sekar Nagarajan (2026-08-28 18:02) */}
               <div className="si-cargo-toolbar__actions">
                 <Segmented
+                  className="si-cargo-view-segmented"
                   value={viewMode}
                   onChange={(v) => setViewMode(v as CargoViewMode)}
                   options={[

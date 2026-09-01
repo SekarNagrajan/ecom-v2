@@ -6,10 +6,7 @@ import { DateTime } from "luxon";
 import { useFieldArray, useForm, type Resolver } from "react-hook-form";
 
 import { useSubmitVgmMutation } from "../api/vgm.queries";
-import type {
-  VgmDeclarationDTO,
-  VgmFormValues,
-} from "../types/vgm.types";
+import type { VgmDeclarationDTO, VgmFormValues } from "../types/vgm.types";
 import { vgmFormSchema } from "../types/vgm.types";
 import { extractVgmErrorMessage } from "../utils/vgm.utils";
 import { VgmAdditionalInfo } from "./vgm-additional-info";
@@ -127,8 +124,13 @@ export function VgmDeclarationForm({
         <VgmAdditionalInfo control={vgmForm.control} />
       </div>
 
-      <div className="form-step-footer form-step-footer--split">
-        <AppButton onClick={onCancel} disabled={submitMutation.isPending}>
+      {/* Modified by Sekar Nagarajan (2026-09-01 11:06) — Cancel + Save grouped on the right */}
+      <div className="form-step-footer">
+        <AppButton
+          danger
+          onClick={onCancel}
+          disabled={submitMutation.isPending}
+        >
           Cancel
         </AppButton>
         <AppButton

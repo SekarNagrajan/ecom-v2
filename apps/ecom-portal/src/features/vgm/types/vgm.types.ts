@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 12:48)
+// Modified by Sekar Nagarajan (2026-09-01 11:02)
 import { z } from "zod";
 
 export interface VgmContainerDTO {
@@ -20,6 +20,10 @@ export interface VgmReferenceDetailsDTO {
   delivery: string;
   pol: string;
   pod: string;
+  /** Estimated time of departure — schedule-card ETD tag parity */
+  etd?: string;
+  /** Estimated time of arrival — schedule-card ETA tag parity */
+  eta?: string;
 }
 
 export interface VgmDeclarationDTO {

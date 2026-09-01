@@ -1,12 +1,8 @@
 // Modified by Sekar Nagarajan (2026-08-26 17:24)
 import { theme } from "antd";
 
-import { tokenMix } from "../../theme/utils/token-mix";
-
 export function VgmModuleStyles() {
   const { token } = theme.useToken();
-  const primaryTint8 = tokenMix(token.colorPrimary, 8);
-  const successTint8 = tokenMix(token.colorSuccess, 8);
 
   return (
     <style>{`
@@ -159,154 +155,14 @@ export function VgmModuleStyles() {
       .vgm-meta-row--header {
         margin-bottom: 0;
         gap: ${token.marginSM}px ${token.marginLG}px;
-       
-      
       }
       .vgm-meta-row--header .vgm-meta-item {
         min-width: auto;
       }
-      .vgm-route-strip {
-        display: flex;
-        align-items: stretch;
-        gap: ${token.marginMD}px;
-        width: 100%;
-      }
-      .vgm-route-port {
-        flex: 1;
-        min-width: 0;
-        padding: ${token.paddingMD}px;
-        border-radius: ${token.borderRadiusLG}px;
-        background: ${token.colorFillAlter};
-        border: 1px solid ${token.colorBorderSecondary};
-      }
-      .vgm-route-port--origin {
-        border-left: 4px solid ${token.colorPrimary};
-        background: linear-gradient(180deg, ${primaryTint8} 0%, ${
-      token.colorFillAlter
-    } 100%);
-      }
-      .vgm-route-port--delivery {
-        border-left: 4px solid ${token.colorSuccess};
-        background: linear-gradient(180deg, ${successTint8} 0%, ${
-      token.colorFillAlter
-    } 100%);
-      }
-      .vgm-route-port__label {
-        display: flex;
-        align-items: center;
-        gap: ${token.marginXXS}px;
-        font-size: ${token.fontSizeSM}px;
-        font-weight: ${token.fontWeightStrong};
-        color: ${token.colorTextSecondary};
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-        margin-bottom: ${token.marginXXS}px;
-      }
-      .vgm-route-port__code {
-        margin: 0 !important;
-        font-size: ${token.fontSizeHeading4}px !important;
-        line-height: 1.15 !important;
-        font-weight: ${token.fontWeightStrong} !important;
-      }
-      .vgm-route-port__code--origin {
-        color: ${token.colorPrimary} !important;
-      }
-      .vgm-route-port__code--delivery {
-        color: ${token.colorSuccess} !important;
-      }
-      .vgm-route-port__name {
-        display: block;
-        margin-top: ${token.marginXXS}px;
-        font-size: ${token.fontSizeSM}px;
-        color: ${token.colorTextSecondary};
-      }
-      .vgm-route-connector {
-        flex: 0 0 auto;
-        min-width: 96px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: ${token.marginXXS}px;
-        text-align: center;
-        padding: ${token.paddingXS}px 0;
-      }
-      .vgm-route-connector__label {
-        font-size: ${token.fontSizeSM}px;
-        font-weight: ${token.fontWeightStrong};
-        color: ${token.colorTextSecondary};
-        text-transform: uppercase;
-        letter-spacing: 0.03em;
-      }
-      .vgm-route-connector__line {
-        display: flex;
-        align-items: center;
-        width: 100%;
-        max-width: 120px;
-        color: ${token.colorPrimary};
-      }
-      .vgm-route-connector__dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        flex-shrink: 0;
-      }
-      .vgm-route-connector__dot--origin {
-        background: ${token.colorPrimary};
-      }
-      .vgm-route-connector__dot--delivery {
-        background: ${token.colorSuccess};
-      }
-      .vgm-route-connector__track {
-        flex: 1;
-        height: 2px;
-        margin: 0 ${token.marginXXS}px;
-        background: linear-gradient(90deg, ${token.colorPrimary} 0%, ${
-      token.colorSuccess
-    } 100%);
-      }
-      /* Modified by Sekar Nagarajan (2026-09-01 00:50) — schedule-card style route + more info */
-      .vgm-route-card {
-        display: flex;
-        flex-direction: column;
-        gap: ${token.marginMD}px;
-        width: 100%;
-      }
-      .vgm-route-card__tags {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: ${token.marginXS}px;
-      }
-      .vgm-route-port__extra {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-        margin-top: ${token.marginSM}px;
-        padding-top: ${token.marginXS}px;
-        border-top: 1px dashed ${token.colorBorderSecondary};
-      }
-      .vgm-route-port__extra-label {
-        font-size: ${token.fontSizeSM}px;
-        font-weight: ${token.fontWeightStrong};
-        color: ${token.colorTextSecondary};
-        text-transform: uppercase;
-        letter-spacing: 0.03em;
-      }
-      .vgm-route-port__extra-value {
-        font-size: ${token.fontSizeSM}px;
-        color: ${token.colorText};
-      }
-      .vgm-route-connector__pill {
-        display: inline-flex;
-        align-items: center;
-        padding: 2px ${token.paddingSM}px;
-        border-radius: ${token.borderRadiusLG}px;
-        font-size: ${token.fontSizeSM}px;
-        font-weight: ${token.fontWeightStrong};
-        color: ${token.colorPrimary};
-        background: ${primaryTint8};
-        border: 1px solid ${token.colorBorderSecondary};
+      /* Modified by Sekar Nagarajan (2026-09-01 10:58) — schedule-card embed in collapsible card */
+      .vgm-reference-schedule-wrap {
+        margin: calc(-1 * ${token.paddingLG}px);
+        margin-top: 0;
       }
       /* Modified by Sekar Nagarajan (2026-09-01 00:56) — declaration fields 5-column grid */
       .vgm-declaration-grid {
@@ -315,6 +171,19 @@ export function VgmModuleStyles() {
         column-gap: ${token.marginMD}px;
         row-gap: ${token.marginXS}px;
         width: 100%;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-01 10:52) — form-field-cell gap (commodity card parity) */
+      .vgm-declaration-grid .form-field-cell {
+        min-width: 0;
+      }
+      .vgm-declaration-grid .form-field-cell .form-field-label {
+        margin-bottom: 0;
+      }
+      .vgm-declaration-grid .form-field-cell .ant-form-item {
+        margin-bottom: 0;
+      }
+      .vgm-declaration-grid .form-field-cell .ant-form-item-label {
+        display: none;
       }
       @media (max-width: 1199px) {
         .vgm-declaration-grid {

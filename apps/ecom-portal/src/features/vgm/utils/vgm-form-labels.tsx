@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 17:19)
+// Modified by Sekar Nagarajan (2026-09-01 10:52)
 import { Typography } from "antd";
 
 const { Text } = Typography;
@@ -9,15 +9,15 @@ export const VGM_FIELD_ITEM_PROPS = {
   colon: false,
 };
 
-/** Required field label — asterisk after label text (agenct.md). */
+/** Label above input (agenct — field name first, value below). */
 export function vgmReqLabel(label: string) {
   return (
-    <span className="form-field-label">
+    <label className="form-field-label">
       {label} <Text type="danger">*</Text>
-    </span>
+    </label>
   );
 }
 
 export function vgmOptionalLabel(label: string) {
-  return <span className="form-field-label">{label}</span>;
+  return <label className="form-field-label">{label}</label>;
 }

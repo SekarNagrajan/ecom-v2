@@ -1,12 +1,12 @@
 // Modified by Sekar Nagarajan (2026-08-25 13:10)
-import { AppButton } from '@solverminds/shared-ui';
-import { Col, InputNumber, Row, Select, Typography } from 'antd';
-import type { UseFormReturn } from 'react-hook-form';
-import { Controller } from 'react-hook-form';
+import { AppButton } from "@solverminds/shared-ui";
+import { Col, InputNumber, Row, Select, Typography } from "antd";
+import type { UseFormReturn } from "react-hook-form";
+import { Controller } from "react-hook-form";
 
-import { AppIcon, Icons } from '../../../components/icons';
-import { useCarbonLookupsQuery } from '../api/carbon.queries';
-import type { CarbonInputFormValues } from '../types/carbon.types';
+import { AppIcon, Icons } from "../../../components/icons";
+import { useCarbonLookupsQuery } from "../api/carbon.queries";
+import type { CarbonInputFormValues } from "../types/carbon.types";
 
 const { Text } = Typography;
 
@@ -28,7 +28,13 @@ interface CarbonCalculatorFormProps {
   calculating?: boolean;
 }
 
-function FieldLabel({ label, required }: { label: string; required?: boolean }) {
+function FieldLabel({
+  label,
+  required,
+}: {
+  label: string;
+  required?: boolean;
+}) {
   return (
     <span className="form-field-label">
       {label}
@@ -98,7 +104,7 @@ export function CarbonCalculatorForm({
                       value={field.value || undefined}
                       onChange={field.onChange}
                       onBlur={field.onBlur}
-                      status={errors.origin ? 'error' : undefined}
+                      status={errors.origin ? "error" : undefined}
                     />
                   )}
                 />
@@ -122,7 +128,7 @@ export function CarbonCalculatorForm({
                       value={field.value || undefined}
                       onChange={field.onChange}
                       onBlur={field.onBlur}
-                      status={errors.destination ? 'error' : undefined}
+                      status={errors.destination ? "error" : undefined}
                     />
                   )}
                 />
@@ -143,7 +149,7 @@ export function CarbonCalculatorForm({
                       value={field.value}
                       onChange={(v) => field.onChange(v ?? 0)}
                       onBlur={field.onBlur}
-                      status={errors.cargoWeightKg ? 'error' : undefined}
+                      status={errors.cargoWeightKg ? "error" : undefined}
                     />
                   )}
                 />
@@ -165,7 +171,7 @@ export function CarbonCalculatorForm({
                       value={field.value || undefined}
                       onChange={field.onChange}
                       onBlur={field.onBlur}
-                      status={errors.equipment ? 'error' : undefined}
+                      status={errors.equipment ? "error" : undefined}
                     />
                   )}
                 />
@@ -187,7 +193,7 @@ export function CarbonCalculatorForm({
                       value={field.value}
                       onChange={(v) => field.onChange(v ?? 1)}
                       onBlur={field.onBlur}
-                      status={errors.containerCount ? 'error' : undefined}
+                      status={errors.containerCount ? "error" : undefined}
                     />
                   )}
                 />
@@ -226,8 +232,8 @@ export function CarbonCalculatorForm({
                     <Select
                       size="large"
                       options={[
-                        { value: 'kg', label: 'kg CO₂e' },
-                        { value: 't', label: 't CO₂e' },
+                        { value: "kg", label: "kg CO₂e" },
+                        { value: "t", label: "t CO₂e" },
                       ]}
                       value={field.value}
                       onChange={field.onChange}
@@ -254,7 +260,15 @@ export function CarbonCalculatorForm({
                   >
                     Calculate
                   </AppButton>
-                  <AppButton size="large" onClick={onReset} disabled={calculating}>
+                  <AppButton
+                    danger
+                    size="large"
+                    icon={
+                      <AppIcon icon={Icons.refreshCw} size={16} tone="delete" />
+                    }
+                    onClick={onReset}
+                    disabled={calculating}
+                  >
                     Reset
                   </AppButton>
                 </div>

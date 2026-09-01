@@ -41,7 +41,10 @@ const { Text } = Typography;
 
 const POPULAR_PORTS = [
   { value: "USNYC - New York, USA", label: "USNYC - New York, USA" },
-  { value: "SGSIN - Singapore, Singapore", label: "SGSIN - Singapore, Singapore" },
+  {
+    value: "SGSIN - Singapore, Singapore",
+    label: "SGSIN - Singapore, Singapore",
+  },
   {
     value: "NLRTM - Rotterdam, Netherlands",
     label: "NLRTM - Rotterdam, Netherlands",
@@ -59,9 +62,7 @@ function resolvePortDisplay(value: string): string {
   if (!trimmed) return "";
   if (trimmed.includes(" - ")) return trimmed;
   const code = extractPortCode(trimmed);
-  const popular = POPULAR_PORTS.find(
-    (p) => extractPortCode(p.value) === code,
-  );
+  const popular = POPULAR_PORTS.find((p) => extractPortCode(p.value) === code);
   return popular?.label ?? trimmed;
 }
 
@@ -92,7 +93,9 @@ function formatSelectedRouteTooltip(route: SelectedRoute): string {
     `ETD: ${route.etd}`,
     `ETA: ${route.eta}`,
     `Transit: ${route.transitTimeDays} days`,
-    `Routing: ${route.isDirect ? "Direct" : route.shipmentKind || "Transshipment"}`,
+    `Routing: ${
+      route.isDirect ? "Direct" : route.shipmentKind || "Transshipment"
+    }`,
   ];
   if (route.gateInCutoff) lines.push(`Gate-in cutoff: ${route.gateInCutoff}`);
   if (route.siDocCutoff) lines.push(`SI cutoff: ${route.siDocCutoff}`);

@@ -563,7 +563,12 @@ export const bookingHandlers = [
     if (id === "templates" || id === "list") {
       return new HttpResponse(null, { status: 404 });
     }
-    const detail = bookingDetailsById[id] ?? bookingDetailsById["bkg-1"];
+    // Modified by Sekar Nagarajan (2026-09-01 12:45) — resolve by list id or bookingNo
+    const listRow = mockBookings.find(
+      (b) => b.id === id || b.bookingNo === id,
+    );
+    const detailKey = listRow?.id ?? id;
+    const detail = bookingDetailsById[detailKey] ?? bookingDetailsById["bkg-1"];
     return HttpResponse.json({ data: detail });
   }),
 

@@ -140,6 +140,8 @@ export function BlModuleStyles() {
         max-height: calc(100vh - 180px);
         overflow-y: auto;
         padding-right: ${token.paddingXXS}px;
+        container-type: inline-size;
+        container-name: bl-drawer;
       }
       .bl-drawer-body.custom-scroll {
         overflow-y: auto;
@@ -275,9 +277,25 @@ export function BlModuleStyles() {
         align-items: center;
         gap: ${token.marginXS}px;
       }
-      /* Modified by Sekar Nagarajan (2026-09-01 12:29) — BL view drawer section rows */
+      /* Modified by Sekar Nagarajan (2026-09-01 13:06) — section stack + side-by-side lines */
       .bl-view-sections {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginLG}px;
         width: 100%;
+      }
+      .bl-view-row-line {
+        width: 100%;
+        margin-inline: 0 !important;
+      }
+      .bl-view-row-line > .ant-col {
+        display: flex;
+      }
+      .bl-view-section-card.bl-panel.ant-card {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        min-width: 0;
       }
       .bl-view-row {
         display: grid;
@@ -289,11 +307,12 @@ export function BlModuleStyles() {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
       .bl-view-row--1 {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
       }
       .bl-view-row .bl-panel.ant-card {
         height: 100%;
         margin: 0;
+        min-width: 0;
       }
       .bl-meta-grid {
         display: grid;
@@ -311,10 +330,16 @@ export function BlModuleStyles() {
         color: ${token.colorText};
         word-break: break-word;
       }
+      /* Modified by Sekar Nagarajan (2026-09-01 14:07) — parties as 2-column grid */
       .bl-party-grid {
         display: grid;
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: ${token.marginSM}px;
+      }
+      @media (max-width: 767px) {
+        .bl-party-grid {
+          grid-template-columns: minmax(0, 1fr);
+        }
       }
       .bl-cargo-grid,
       .bl-charges-grid {

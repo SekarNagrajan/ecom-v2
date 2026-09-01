@@ -26,7 +26,7 @@ export function BookingTemplateModalShell({
   open,
   subtitle,
   title,
-  dialogSize = "lg",
+  dialogSize = "md",
 }: BookingTemplateModalShellProps) {
   return (
     <AppModal

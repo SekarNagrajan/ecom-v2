@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-31 15:05)
+// Modified by Sekar Nagarajan (2026-09-01 12:52)
 /**
  * Enhanced Dashboard — JSP parity with enhancedDashboard.jsp:
  * KPI filter cards → Upcoming Shipment Planning → Ongoing Transactions, plus analytics sections.
@@ -10,6 +10,10 @@ import { AppIcon, Icons } from "../../../components/icons";
 import { FeaturePageShell } from "../../../components/shared/feature-page-shell";
 import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
 import { MODULE_TITLES } from "../../../constants/module-titles";
+import { BlModuleStyles } from "../../bill-of-lading/components/bl-module-styles";
+import { BlViewDrawer } from "../../bill-of-lading/components/view/BlViewDrawer";
+import { BookingModuleStyles } from "../../booking/components/booking-module-styles";
+import { BookingViewDrawer } from "../../booking/components/view/BookingViewDrawer";
 import { useDashboardController } from "../hooks/use-dashboard-controller";
 import {
   MOCK_CALENDAR_WEEKS,
@@ -38,6 +42,8 @@ export function EnhancedDashboardView() {
   return (
     <FeaturePageShell>
       <DashboardModuleStyles />
+      <BookingModuleStyles />
+      <BlModuleStyles />
       <ModuleScreenHeader
         icon={Icons.layoutDashboard}
         title={MODULE_TITLES.dashboard}
@@ -126,6 +132,20 @@ export function EnhancedDashboardView() {
           </Spin>
         </div>
       </Space>
+
+      {controller.selectedBooking ? (
+        <BookingViewDrawer
+          booking={controller.selectedBooking}
+          onClose={controller.handleCloseBookingDrawer}
+        />
+      ) : null}
+
+      {controller.selectedBl ? (
+        <BlViewDrawer
+          record={controller.selectedBl}
+          onClose={controller.handleCloseBlDrawer}
+        />
+      ) : null}
     </FeaturePageShell>
   );
 }

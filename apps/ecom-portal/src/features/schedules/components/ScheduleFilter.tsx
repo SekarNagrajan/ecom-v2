@@ -50,8 +50,9 @@ export function ScheduleFilter({
               Search Vessel Schedules
             </AppButton>
             <AppButton
+              danger
               onClick={onReset}
-              icon={<AppIcon icon={Icons.refreshCw} size={16} tone="edit" />}
+              icon={<AppIcon icon={Icons.refreshCw} size={16} tone="delete" />}
             >
               Reset
             </AppButton>

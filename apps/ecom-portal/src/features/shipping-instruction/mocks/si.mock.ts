@@ -80,6 +80,33 @@ export const MOCK_SI_LIST: SIListDTO[] = [
     submittedDate: "2026-08-22T08:00:00Z",
     createdDate: "2026-08-21T08:00:00Z",
   },
+  // Modified by Sekar Nagarajan (2026-09-01 12:41) — dashboard SI-pending bookings
+  {
+    id: "SI-DASH-2198",
+    siNo: null,
+    bookingNo: "LNRSG0082198",
+    blNo: null,
+    status: "Create SI",
+    blStatus: null,
+    agencyRefNo: "ORN-2026-002",
+    origin: "MYPKG - Port Klang",
+    delivery: "DEHAM - Hamburg",
+    submittedDate: null,
+    createdDate: "2026-08-27T09:00:00Z",
+  },
+  {
+    id: "SI-DASH-1553",
+    siNo: null,
+    bookingNo: "LNRSG0081553",
+    blNo: null,
+    status: "Create SI",
+    blStatus: null,
+    agencyRefNo: "ORN-2026-006",
+    origin: "KRPUS - Busan",
+    delivery: "USLGB - Long Beach",
+    submittedDate: null,
+    createdDate: "2026-08-30T09:00:00Z",
+  },
 ];
 
 export const MOCK_SI_DETAIL: SIDTO = {

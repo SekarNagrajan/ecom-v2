@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-28 11:15)
+// Modified by Sekar Nagarajan (2026-09-01 12:41)
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { useState } from "react";
 
@@ -10,13 +10,15 @@ export function useSiWizard(siId: string, serverDetail: SIDTO | undefined) {
   const [currentStep, setCurrentStep] = useState(0);
   const [confirmationSiNo, setConfirmationSiNo] = useState<string | null>(null);
   const [draft, setDraft] = useState<SIDTO | undefined>(serverDetail);
-  const [syncedId, setSyncedId] = useState<string | undefined>(
-    serverDetail?.id,
-  );
+  const [syncedKey, setSyncedKey] = useState<string | undefined>(undefined);
   const submitMutation = useSubmitSiMutation();
 
-  if (serverDetail && serverDetail.id !== syncedId) {
-    setSyncedId(serverDetail.id);
+  const detailKey = serverDetail
+    ? `${serverDetail.id}|${serverDetail.bookingNo}|${serverDetail.origin ?? ""}|${serverDetail.delivery ?? ""}|${serverDetail.containers?.[0]?.containerNo ?? ""}`
+    : undefined;
+
+  if (serverDetail && detailKey !== syncedKey) {
+    setSyncedKey(detailKey);
     setDraft(serverDetail);
     setCurrentStep(0);
   }

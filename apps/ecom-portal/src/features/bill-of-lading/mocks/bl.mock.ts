@@ -702,8 +702,29 @@ export function getMockBLDetail(blNo: string): BLDTO | undefined {
     return structuredClone(mockBLDetailsSeed[blNo]);
   }
   const row = mockBLListSeed.find((r) => r.blNo === blNo);
-  if (!row) return undefined;
-  return buildDetailFromList(row);
+  if (row) {
+    return buildDetailFromList(row);
+  }
+  // Modified by Sekar Nagarajan (2026-09-01 12:52) — dashboard / unknown BL nos
+  if (!blNo) return undefined;
+  return buildDetailFromList({
+    blNo,
+    mcnNo: null,
+    bookingNo: "—",
+    siNo: null,
+    status: "C",
+    statusLabel: BL_STATUS_LABELS.C,
+    agencyRefNo: null,
+    origin: "—",
+    loadPort: "—",
+    dischargePort: "—",
+    delivery: "—",
+    confirmedDate: null,
+    createdDate: null,
+    printStatus: "N",
+    appVersion: "2",
+    isLocked: false,
+  });
 }
 
 export const mockBLChargesSeed: Record<string, BLChargesDTO> = {

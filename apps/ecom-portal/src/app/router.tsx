@@ -335,6 +335,21 @@ const shippingInstructionDashboardRoute = createRoute({
 const shippingInstructionWizardRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/shipping-instruction/wizard/$id",
+  // Modified by Sekar Nagarajan (2026-09-01 12:41) — dashboard Create SI search seed
+  validateSearch: (search: Record<string, unknown>) => ({
+    fromDashboard:
+      search.fromDashboard === true || search.fromDashboard === "true"
+        ? true
+        : undefined,
+    onlineRefNo:
+      typeof search.onlineRefNo === "string" ? search.onlineRefNo : undefined,
+    origin: typeof search.origin === "string" ? search.origin : undefined,
+    delivery:
+      typeof search.delivery === "string" ? search.delivery : undefined,
+    containerNo:
+      typeof search.containerNo === "string" ? search.containerNo : undefined,
+    blNo: typeof search.blNo === "string" ? search.blNo : undefined,
+  }),
   beforeLoad: assertCapability("SI"),
   component: () => <ShippingInstructionWizardRoute />,
 });

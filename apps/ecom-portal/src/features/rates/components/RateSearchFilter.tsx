@@ -350,10 +350,11 @@ export function RateSearchFilter({
                     <AppButton
                       type="primary"
                       size="large"
-                      icon={<AppIcon icon={Icons.zap} size={16} />}
+                      icon={<AppIcon icon={Icons.dollarSign} size={16} />}
                       onClick={() => {
-                        void form.validateFields(["polCode", "podCode"]).then(
-                          () => {
+                        void form
+                          .validateFields(["polCode", "podCode"])
+                          .then(() => {
                             onSearch({
                               searchMode: "SPOT_QUOTES",
                               polCode: form.getFieldValue("polCode"),
@@ -362,8 +363,7 @@ export function RateSearchFilter({
                               commodity: form.getFieldValue("commodity"),
                             });
                             onRequestQuote();
-                          },
-                        );
+                          });
                       }}
                     >
                       Request for Quote
@@ -381,8 +381,15 @@ export function RateSearchFilter({
                   )}
                   {!isRfqMode ? (
                     <AppButton
+                      danger
                       size="large"
-                      icon={<AppIcon icon={Icons.refreshCw} size={16} />}
+                      icon={
+                        <AppIcon
+                          icon={Icons.refreshCw}
+                          size={16}
+                          tone="delete"
+                        />
+                      }
                       onClick={handleReset}
                     >
                       Reset
@@ -391,7 +398,7 @@ export function RateSearchFilter({
                     <>
                       <AppButton
                         size="large"
-                        icon={<AppIcon icon={Icons.search} size={16} />}
+                        icon={<AppIcon icon={Icons.eye} size={16} />}
                         loading={isLoading}
                         htmlType="submit"
                       >
@@ -399,7 +406,14 @@ export function RateSearchFilter({
                       </AppButton>
                       <AppButton
                         size="large"
-                        icon={<AppIcon icon={Icons.refreshCw} size={16} />}
+                        danger
+                        icon={
+                          <AppIcon
+                            icon={Icons.refreshCw}
+                            size={16}
+                            tone="delete"
+                          />
+                        }
                         onClick={handleReset}
                       >
                         Reset

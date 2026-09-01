@@ -1,8 +1,8 @@
-// Modified by Sekar Nagarajan (2026-08-27 18:21)
+// Modified by Sekar Nagarajan (2026-09-01 14:12)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
-import { Card, Col, Input, Radio, Row, Select, Space, Typography } from "antd";
+import { Card, Col, Input, Row, Select, Space, Switch, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { Controller, useForm, type Resolver } from "react-hook-form";
 
@@ -96,18 +96,17 @@ export function ENSStep() {
           <Row gutter={[24, 24]}>
             <Col xs={24} md={6}>
               <label className="form-field-label">EU Customs Zone</label>
+              {/* Modified by Sekar Nagarajan (2026-09-01 14:12) — Switch Yes/No */}
               <Controller
                 control={control}
                 name="euCustomsZone"
-                render={({ field: { value, onChange, ...field } }) => (
-                  <Radio.Group
-                    {...field}
-                    value={value}
-                    onChange={(e) => onChange(e.target.value)}
-                  >
-                    <Radio value={true}>Yes</Radio>
-                    <Radio value={false}>No</Radio>
-                  </Radio.Group>
+                render={({ field: { value, onChange } }) => (
+                  <Switch
+                    checked={Boolean(value)}
+                    onChange={onChange}
+                    checkedChildren="Yes"
+                    unCheckedChildren="No"
+                  />
                 )}
               />
             </Col>

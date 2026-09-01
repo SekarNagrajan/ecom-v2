@@ -1,11 +1,12 @@
-// Modified by Sekar Nagarajan (2026-09-01 12:29)
+// Modified by Sekar Nagarajan (2026-09-01 14:04)
 import { ListView } from "@solverminds/shared-ui/data-view/list-view";
 import type { ColDef } from "ag-grid-community";
-import { Card, Typography } from "antd";
+import { Card, Col, Row, Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { AppIcon, Icons } from "../../../../components/icons";
+import { RESPONSIVE_COL } from "../../../../constants/responsive-grid";
 import { WIZARD_STEP_TITLES } from "../../../../constants/module-titles";
 import { SI_CARGO_LINE_COL_DEFS } from "../../../shipping-instruction/utils/si-cargo-line-col-defs";
 import { useBLDetailQuery } from "../../api/bl.queries";
@@ -285,277 +286,301 @@ export function BlDetailsViewer({
   });
 
   return (
-    <div className="booking-stack bl-view-sections">
-      <div className="bl-view-row bl-view-row--2">
-        <Card
-          className="bl-panel feature-page-card"
-          size="small"
-          title={
-            <SectionTitle icon={<AppIcon icon={Icons.ship} size={16} />}>
-              {WIZARD_STEP_TITLES.masterDetails}
-            </SectionTitle>
-          }
-        >
-          <div className="bl-meta-grid">
-            <MetaItem label="Booking Number" value={data.bookingNo} />
-            <MetaItem label="SI Number" value={data.siNo} />
-            <MetaItem label="B/L Type" value={data.blType} />
-            <MetaItem
-              label="Release Type"
-              value={data.releaseType === "O" ? "Original" : "Telex"}
-            />
-            <MetaItem label="Freight Option" value={data.freightOption} />
-            <MetaItem
-              label="Route"
-              value={`${data.origin} → ${data.delivery}`}
-            />
-          </div>
-        </Card>
-
-        <Card
-          className="bl-panel feature-page-card"
-          size="small"
-          title={
-            <SectionTitle icon={<AppIcon icon={Icons.users} size={16} />}>
-              Parties
-            </SectionTitle>
-          }
-        >
-          <div className="bl-party-grid">
-            <PartyBlock
-              label="Shipper"
-              party={data.parties.shipper}
-              roleClass="booking-party-card--shipper"
-            />
-            <PartyBlock
-              label="Consignee"
-              party={data.parties.consignee}
-              roleClass="booking-party-card--consignee"
-              extra={
-                data.parties.consignee?.toOrder ? (
-                  <Text type="warning">(To Order)</Text>
-                ) : null
-              }
-            />
-            <PartyBlock
-              label="Notify Party"
-              party={data.parties.notify}
-              roleClass="booking-party-card--notify"
-            />
-          </div>
-        </Card>
-      </div>
-
-      <div className="bl-view-row bl-view-row--2">
-        <Card
-          className="bl-panel feature-page-card"
-          size="small"
-          title={
-            <SectionTitle icon={<AppIcon icon={Icons.anchor} size={16} />}>
-              {WIZARD_STEP_TITLES.routing}
-            </SectionTitle>
-          }
-        >
-          {data.routing ? (
-            <div className="bl-meta-grid">
-              <MetaItem
-                label="Vessel / Voyage"
-                value={data.routing.vesselVoyage || "N/A"}
-              />
-              <MetaItem
-                label="Origin (Print)"
-                value={data.routing.originPrint}
-              />
-              <MetaItem label="POL (Print)" value={data.routing.polPrint} />
-              <MetaItem label="POD (Print)" value={data.routing.podPrint} />
-              <MetaItem
-                label="Delivery (Print)"
-                value={data.routing.deliveryPrint}
-              />
-              <MetaItem
-                label="Schedule Legs"
-                value={String(data.routing.scheduleLegs?.length ?? 0)}
-              />
-            </div>
-          ) : (
-            <Text type="secondary">No routing details.</Text>
-          )}
-        </Card>
-
-        <Card
-          className="bl-panel feature-page-card"
-          size="small"
-          title={
-            <SectionTitle icon={<AppIcon icon={Icons.shieldCheck} size={16} />}>
-              {WIZARD_STEP_TITLES.insurance}
-            </SectionTitle>
-          }
-        >
-          {insuranceRequired && data.insurance ? (
-            <div className="bl-meta-grid">
-              <MetaItem
-                label="Cargo Value"
-                value={`${data.insurance.cargoValue ?? "—"} ${data.insurance.currency ?? ""}`}
-              />
-              <MetaItem
-                label="Policy No"
-                value={data.insurance.policyNo || "N/A"}
-              />
-              <MetaItem
-                label="Terms Accepted"
-                value={data.insurance.termsAccepted ? "Yes" : "No"}
-              />
-              <MetaItem
-                label="Opt Out"
-                value={data.insurance.optOut ? "Yes" : "No"}
-              />
-            </div>
-          ) : (
-            <Text type="secondary">
-              Insurance not required for this bill of lading.
-            </Text>
-          )}
-        </Card>
-      </div>
-
-      <div className="bl-view-row bl-view-row--1">
-        <Card
-          className="bl-panel feature-page-card"
-          size="small"
-          title={
-            <SectionTitle icon={<AppIcon icon={Icons.boxes} size={16} />}>
-              Cargo & Containers
-            </SectionTitle>
-          }
-        >
-          {data.containers.length === 0 ? (
-            <Text type="secondary">No containers recorded.</Text>
-          ) : (
-            data.containers.map((c, i) => (
-              <div key={c.id} className="bl-container-block">
-                <div className="bl-container-block__header">
-                  <Text strong>
-                    Container {i + 1}: {c.containerNo || "—"} ({c.eqpSize || "—"})
-                  </Text>
-                </div>
-                <div className="bl-cargo-grid responsive-table-wrap custom-scroll ag-theme-alpine">
-                  <ListView
-                    rowData={c.cargoLines}
-                    columnDefs={SI_CARGO_LINE_COL_DEFS}
-                    showToolbar={false}
-                    pagination
-                    paginationPageSize={10}
-                    gridOptions={{ animateRows: true }}
-                  />
-                </div>
-              </div>
-            ))
-          )}
-        </Card>
-      </div>
-
-      {data.ens?.euCustomsZone ? (
-        <div className="bl-view-row bl-view-row--1">
+    <div className="bl-view-sections">
+      {/* Modified by Sekar Nagarajan (2026-09-01 14:04) — Master Details and Parties as separate full-width rows */}
+      <Row gutter={[16, 16]} className="bl-view-row-line">
+        <Col {...RESPONSIVE_COL.full}>
           <Card
-            className="bl-panel feature-page-card"
+            className="bl-panel feature-page-card bl-view-section-card"
             size="small"
             title={
-              <SectionTitle icon={<AppIcon icon={Icons.fileText} size={16} />}>
-                ENS Details
+              <SectionTitle icon={<AppIcon icon={Icons.ship} size={16} />}>
+                {WIZARD_STEP_TITLES.masterDetails}
               </SectionTitle>
             }
           >
             <div className="bl-meta-grid">
-              <MetaItem label="B/L Type" value={data.ens.blType || "N/A"} />
+              <MetaItem label="Booking Number" value={data.bookingNo} />
+              <MetaItem label="SI Number" value={data.siNo} />
+              <MetaItem label="B/L Type" value={data.blType} />
               <MetaItem
-                label="Filing Type"
-                value={data.ens.ensFilingType || "N/A"}
+                label="Release Type"
+                value={data.releaseType === "O" ? "Original" : "Telex"}
               />
+              <MetaItem label="Freight Option" value={data.freightOption} />
               <MetaItem
-                label="Payment Method"
-                value={data.ens.paymentMethod || "N/A"}
+                label="Route"
+                value={`${data.origin} → ${data.delivery}`}
               />
-              <MetaItem
-                label="Declarant"
-                value={data.ens.declarantName || "N/A"}
-              />
-              <MetaItem label="Buyer" value={data.ens.buyerName || "N/A"} />
-              <MetaItem label="Seller" value={data.ens.sellerName || "N/A"} />
             </div>
           </Card>
-        </div>
-      ) : null}
+        </Col>
+      </Row>
 
-      <div className="bl-view-row bl-view-row--1">
-        <Card
-          className="bl-panel feature-page-card"
-          size="small"
-          title={
-            <SectionTitle icon={<AppIcon icon={Icons.inbox} size={16} />}>
-              Documents
-            </SectionTitle>
-          }
-        >
-          {files.length === 0 ? (
-            <Text type="secondary">No documents uploaded.</Text>
-          ) : (
-            <div className="bl-meta-grid">
-              {files.map((f) => (
-                <MetaItem
-                  key={f.id}
-                  label={f.category}
-                  value={`${f.fileName} · ${f.uploadedAt}`}
-                />
-              ))}
-            </div>
-          )}
-        </Card>
-      </div>
-
-      <div className="bl-view-row bl-view-row--1">
-        <Card
-          className="bl-panel feature-page-card"
-          size="small"
-          title={
-            <SectionTitle icon={<AppIcon icon={Icons.history} size={16} />}>
-              Activity
-            </SectionTitle>
-          }
-        >
-          {activity.length === 0 ? (
-            <Text type="secondary">No activity recorded.</Text>
-          ) : (
-            <ActivitySteps events={activity} />
-          )}
-        </Card>
-      </div>
-
-      <div className="bl-view-row bl-view-row--1">
-        <Card
-          className="bl-panel feature-page-card"
-          size="small"
-          title={
-            <SectionTitle icon={<AppIcon icon={Icons.banknote} size={16} />}>
-              Charges
-            </SectionTitle>
-          }
-        >
-          {charges.length === 0 ? (
-            <Text type="secondary">No charges recorded.</Text>
-          ) : (
-            <div className="bl-charges-grid responsive-table-wrap custom-scroll ag-theme-alpine">
-              <ListView
-                rowData={charges}
-                columnDefs={CHARGE_COL_DEFS}
-                showToolbar={false}
-                pagination
-                paginationPageSize={10}
-                gridOptions={{ animateRows: true }}
+      <Row gutter={[16, 16]} className="bl-view-row-line">
+        <Col {...RESPONSIVE_COL.full}>
+          <Card
+            className="bl-panel feature-page-card bl-view-section-card"
+            size="small"
+            title={
+              <SectionTitle icon={<AppIcon icon={Icons.users} size={16} />}>
+                Parties
+              </SectionTitle>
+            }
+          >
+            <div className="bl-party-grid">
+              <PartyBlock
+                label="Shipper"
+                party={data.parties.shipper}
+                roleClass="booking-party-card--shipper"
+              />
+              <PartyBlock
+                label="Consignee"
+                party={data.parties.consignee}
+                roleClass="booking-party-card--consignee"
+                extra={
+                  data.parties.consignee?.toOrder ? (
+                    <Text type="warning">(To Order)</Text>
+                  ) : null
+                }
+              />
+              <PartyBlock
+                label="Notify Party"
+                party={data.parties.notify}
+                roleClass="booking-party-card--notify"
               />
             </div>
-          )}
-        </Card>
-      </div>
+          </Card>
+        </Col>
+      </Row>
+
+      <Row gutter={[16, 16]} className="bl-view-row-line">
+        <Col {...RESPONSIVE_COL.formHalf}>
+          <Card
+            className="bl-panel feature-page-card bl-view-section-card"
+            size="small"
+            title={
+              <SectionTitle icon={<AppIcon icon={Icons.anchor} size={16} />}>
+                {WIZARD_STEP_TITLES.routing}
+              </SectionTitle>
+            }
+          >
+            {data.routing ? (
+              <div className="bl-meta-grid">
+                <MetaItem
+                  label="Vessel / Voyage"
+                  value={data.routing.vesselVoyage || "N/A"}
+                />
+                <MetaItem
+                  label="Origin (Print)"
+                  value={data.routing.originPrint}
+                />
+                <MetaItem label="POL (Print)" value={data.routing.polPrint} />
+                <MetaItem label="POD (Print)" value={data.routing.podPrint} />
+                <MetaItem
+                  label="Delivery (Print)"
+                  value={data.routing.deliveryPrint}
+                />
+                <MetaItem
+                  label="Schedule Legs"
+                  value={String(data.routing.scheduleLegs?.length ?? 0)}
+                />
+              </div>
+            ) : (
+              <Text type="secondary">No routing details.</Text>
+            )}
+          </Card>
+        </Col>
+
+        <Col {...RESPONSIVE_COL.formHalf}>
+          <Card
+            className="bl-panel feature-page-card bl-view-section-card"
+            size="small"
+            title={
+              <SectionTitle
+                icon={<AppIcon icon={Icons.shieldCheck} size={16} />}
+              >
+                {WIZARD_STEP_TITLES.insurance}
+              </SectionTitle>
+            }
+          >
+            {insuranceRequired && data.insurance ? (
+              <div className="bl-meta-grid">
+                <MetaItem
+                  label="Cargo Value"
+                  value={`${data.insurance.cargoValue ?? "—"} ${data.insurance.currency ?? ""}`}
+                />
+                <MetaItem
+                  label="Policy No"
+                  value={data.insurance.policyNo || "N/A"}
+                />
+                <MetaItem
+                  label="Terms Accepted"
+                  value={data.insurance.termsAccepted ? "Yes" : "No"}
+                />
+                <MetaItem
+                  label="Opt Out"
+                  value={data.insurance.optOut ? "Yes" : "No"}
+                />
+              </div>
+            ) : (
+              <Text type="secondary">
+                Insurance not required for this bill of lading.
+              </Text>
+            )}
+          </Card>
+        </Col>
+      </Row>
+
+      <Row gutter={[16, 16]} className="bl-view-row-line">
+        <Col {...RESPONSIVE_COL.full}>
+          <Card
+            className="bl-panel feature-page-card bl-view-section-card"
+            size="small"
+            title={
+              <SectionTitle icon={<AppIcon icon={Icons.boxes} size={16} />}>
+                Cargo & Containers
+              </SectionTitle>
+            }
+          >
+            {data.containers.length === 0 ? (
+              <Text type="secondary">No containers recorded.</Text>
+            ) : (
+              data.containers.map((c, i) => (
+                <div key={c.id} className="bl-container-block">
+                  <div className="bl-container-block__header">
+                    <Text strong>
+                      Container {i + 1}: {c.containerNo || "—"} (
+                      {c.eqpSize || "—"})
+                    </Text>
+                  </div>
+                  <div className="bl-cargo-grid responsive-table-wrap custom-scroll ag-theme-alpine">
+                    <ListView
+                      rowData={c.cargoLines}
+                      columnDefs={SI_CARGO_LINE_COL_DEFS}
+                      showToolbar={false}
+                      pagination
+                      paginationPageSize={10}
+                      gridOptions={{ animateRows: true }}
+                    />
+                  </div>
+                </div>
+              ))
+            )}
+          </Card>
+        </Col>
+      </Row>
+
+      {data.ens?.euCustomsZone ? (
+        <Row gutter={[16, 16]} className="bl-view-row-line">
+          <Col {...RESPONSIVE_COL.full}>
+            <Card
+              className="bl-panel feature-page-card bl-view-section-card"
+              size="small"
+              title={
+                <SectionTitle
+                  icon={<AppIcon icon={Icons.fileText} size={16} />}
+                >
+                  ENS Details
+                </SectionTitle>
+              }
+            >
+              <div className="bl-meta-grid">
+                <MetaItem label="B/L Type" value={data.ens.blType || "N/A"} />
+                <MetaItem
+                  label="Filing Type"
+                  value={data.ens.ensFilingType || "N/A"}
+                />
+                <MetaItem
+                  label="Payment Method"
+                  value={data.ens.paymentMethod || "N/A"}
+                />
+                <MetaItem
+                  label="Declarant"
+                  value={data.ens.declarantName || "N/A"}
+                />
+                <MetaItem label="Buyer" value={data.ens.buyerName || "N/A"} />
+                <MetaItem label="Seller" value={data.ens.sellerName || "N/A"} />
+              </div>
+            </Card>
+          </Col>
+        </Row>
+      ) : null}
+
+      <Row gutter={[16, 16]} className="bl-view-row-line">
+        <Col {...RESPONSIVE_COL.formHalf}>
+          <Card
+            className="bl-panel feature-page-card bl-view-section-card"
+            size="small"
+            title={
+              <SectionTitle icon={<AppIcon icon={Icons.inbox} size={16} />}>
+                Documents
+              </SectionTitle>
+            }
+          >
+            {files.length === 0 ? (
+              <Text type="secondary">No documents uploaded.</Text>
+            ) : (
+              <div className="bl-meta-grid">
+                {files.map((f) => (
+                  <MetaItem
+                    key={f.id}
+                    label={f.category}
+                    value={`${f.fileName} · ${f.uploadedAt}`}
+                  />
+                ))}
+              </div>
+            )}
+          </Card>
+        </Col>
+
+        <Col {...RESPONSIVE_COL.formHalf}>
+          <Card
+            className="bl-panel feature-page-card bl-view-section-card"
+            size="small"
+            title={
+              <SectionTitle icon={<AppIcon icon={Icons.history} size={16} />}>
+                Activity
+              </SectionTitle>
+            }
+          >
+            {activity.length === 0 ? (
+              <Text type="secondary">No activity recorded.</Text>
+            ) : (
+              <ActivitySteps events={activity} />
+            )}
+          </Card>
+        </Col>
+      </Row>
+
+      <Row gutter={[16, 16]} className="bl-view-row-line">
+        <Col {...RESPONSIVE_COL.full}>
+          <Card
+            className="bl-panel feature-page-card bl-view-section-card"
+            size="small"
+            title={
+              <SectionTitle icon={<AppIcon icon={Icons.banknote} size={16} />}>
+                Charges
+              </SectionTitle>
+            }
+          >
+            {charges.length === 0 ? (
+              <Text type="secondary">No charges recorded.</Text>
+            ) : (
+              <div className="bl-charges-grid responsive-table-wrap custom-scroll ag-theme-alpine">
+                <ListView
+                  rowData={charges}
+                  columnDefs={CHARGE_COL_DEFS}
+                  showToolbar={false}
+                  pagination
+                  paginationPageSize={10}
+                  gridOptions={{ animateRows: true }}
+                />
+              </div>
+            )}
+          </Card>
+        </Col>
+      </Row>
     </div>
   );
 }

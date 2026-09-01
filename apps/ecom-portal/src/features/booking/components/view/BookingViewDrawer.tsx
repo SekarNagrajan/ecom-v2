@@ -1,7 +1,7 @@
-// Modified by Sekar Nagarajan (2026-08-31 18:52)
+// Modified by Sekar Nagarajan (2026-09-01 12:45)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { useNavigate } from "@tanstack/react-router";
-import { Tag, Tooltip, Typography } from "antd";
+import { Space, Tag, Tooltip, Typography } from "antd";
 
 import { AppIcon, Icons } from "../../../../components/icons";
 import { formatModuleScreenTitle } from "../../../../constants/module-titles";
@@ -23,7 +23,8 @@ export function BookingViewDrawer({
 }: BookingViewDrawerProps) {
   const navigate = useNavigate();
 
-  const handleAmend = () => {
+  // Modified by Sekar Nagarajan (2026-09-01 12:45) — Edit opens amend; Close next to it
+  const handleEdit = () => {
     onClose();
     navigate({ to: `/app/booking/${booking.id}/amend` });
   };
@@ -32,7 +33,7 @@ export function BookingViewDrawer({
     <AppDrawer
       open
       onClose={onClose}
-      dialogSize="lg"
+      dialogSize="md"
       classNames={{ body: "booking-drawer-body custom-scroll" }}
       title={
         <div className="booking-drawer-title">
@@ -65,15 +66,17 @@ export function BookingViewDrawer({
       }
       extra={
         <div className="booking-drawer-actions custom-scroll">
-          <Tooltip title="Amend This Booking">
-            <AppButton
-              type="primary"
-              icon={<AppIcon icon={Icons.squarePen} size={16} tone="edit" />}
-              onClick={handleAmend}
-            >
-              Amend Booking
-            </AppButton>
-          </Tooltip>
+          <Space size="small" wrap>
+            <Tooltip title="Edit / Amend This Booking">
+              <AppButton
+                type="primary"
+                icon={<AppIcon icon={Icons.squarePen} size={16} tone="edit" />}
+                onClick={handleEdit}
+              >
+                Edit
+              </AppButton>
+            </Tooltip>
+          </Space>
         </div>
       }
     >

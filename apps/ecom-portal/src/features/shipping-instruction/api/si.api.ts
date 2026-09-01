@@ -22,12 +22,31 @@ export const siApi = {
 
   async fetchDetails(id: string): Promise<ApiResponse<SIDTO>> {
     await delay(500); // simulated latency
-    const listRow = MOCK_SI_LIST.find((row) => row.id === id);
+    // Modified by Sekar Nagarajan (2026-09-01 12:41) — resolve by SI id or booking no (dashboard Create SI)
+    const listRow = MOCK_SI_LIST.find(
+      (row) => row.id === id || row.bookingNo === id,
+    );
+    const resolvedId = listRow?.id ?? id;
+    const bookingNo = listRow?.bookingNo ?? id;
     // Existing SI (has SI no) keeps saved references; create/new starts empty
     const referenceFields = listRow?.siNo
       ? structuredClone(MOCK_DEFAULT_REFERENCE_FIELDS)
       : [];
-    return { data: { ...MOCK_SI_DETAIL, id, referenceFields } };
+    return {
+      data: {
+        ...MOCK_SI_DETAIL,
+        id: resolvedId,
+        bookingNo,
+        siNo: listRow?.siNo ?? null,
+        blNo: listRow?.blNo ?? null,
+        agencyRefNo: listRow?.agencyRefNo ?? "",
+        origin: listRow?.origin ?? MOCK_SI_DETAIL.origin,
+        loadPort: listRow?.origin ?? MOCK_SI_DETAIL.loadPort,
+        delivery: listRow?.delivery ?? MOCK_SI_DETAIL.delivery,
+        dischargePort: listRow?.delivery ?? MOCK_SI_DETAIL.dischargePort,
+        referenceFields,
+      },
+    };
   },
 
   async fetchWizardConfig(): Promise<ApiResponse<SIWizardConfig>> {

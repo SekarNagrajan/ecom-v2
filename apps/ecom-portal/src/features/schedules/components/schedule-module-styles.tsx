@@ -85,6 +85,26 @@ export function ScheduleModuleStyles() {
       .schedule-results-tabs .ant-tabs-content-holder {
         display: none;
       }
+      /* Modified by Sekar Nagarajan (2026-09-01 13:00) — default segment style (not primary) */
+      .schedule-results-tabs.ant-segmented .ant-segmented-item-selected {
+        background: ${token.colorBgElevated} !important;
+        color: ${token.colorText} !important;
+      }
+      .schedule-results-tabs.ant-segmented
+        .ant-segmented-item-selected
+        .ant-segmented-item-label {
+        color: ${token.colorText} !important;
+      }
+      .schedule-results-tabs.ant-segmented .ant-segmented-thumb {
+        background: ${token.colorBgElevated} !important;
+        box-shadow: ${token.boxShadowSecondary} !important;
+      }
+      .schedule-results-tabs.ant-segmented
+        .ant-segmented-item-selected
+        .schedule-tab-label
+        .app-icon {
+        color: ${token.colorText};
+      }
       .schedule-port-swap-field .ant-form-item-control-input-content {
         display: flex;
         align-items: center;

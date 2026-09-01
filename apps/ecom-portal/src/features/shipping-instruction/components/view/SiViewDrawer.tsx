@@ -29,7 +29,7 @@ export function SiViewDrawer({ record, onClose }: SiViewDrawerProps) {
     <AppDrawer
       open
       onClose={onClose}
-      dialogSize="lg"
+      dialogSize="md"
       classNames={{ body: "si-drawer-body custom-scroll" }}
       title={
         <div className="si-drawer-title">
@@ -113,17 +113,13 @@ export function SiViewDrawer({ record, onClose }: SiViewDrawerProps) {
         <div className="si-summary-chip">
           <span>
             <span className="si-summary-chip__label">SI No</span>
-            <span className="si-summary-chip__value">
-              {record.siNo || "—"}
-            </span>
+            <span className="si-summary-chip__value">{record.siNo || "—"}</span>
           </span>
         </div>
         <div className="si-summary-chip">
           <span>
             <span className="si-summary-chip__label">B/L No</span>
-            <span className="si-summary-chip__value">
-              {record.blNo || "—"}
-            </span>
+            <span className="si-summary-chip__value">{record.blNo || "—"}</span>
           </span>
         </div>
         <div className="si-summary-chip">

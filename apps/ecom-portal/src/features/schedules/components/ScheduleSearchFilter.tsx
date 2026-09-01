@@ -62,8 +62,9 @@ function SearchActionsField({
           Search Schedules
         </AppButton>
         <AppButton
+          danger
           size="large"
-          icon={<AppIcon icon={Icons.refreshCw} size={16} />}
+          icon={<AppIcon icon={Icons.refreshCw} size={16} tone="delete" />}
           onClick={onReset}
           aria-label="Reset search filters"
         >

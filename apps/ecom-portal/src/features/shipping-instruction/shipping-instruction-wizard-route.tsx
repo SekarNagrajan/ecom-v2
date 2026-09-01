@@ -1,6 +1,6 @@
-// Modified by Sekar Nagarajan (2026-08-31 16:27)
+// Modified by Sekar Nagarajan (2026-09-01 12:41)
 import { AppButton } from "@solverminds/shared-ui";
-import { useNavigate, useParams } from "@tanstack/react-router";
+import { useNavigate, useParams, useSearch } from "@tanstack/react-router";
 import { Card, Result, Steps, Typography, theme } from "antd";
 
 import { AppIcon, Icons } from "../../components/icons";
@@ -17,6 +17,10 @@ import { DEFAULT_SI_WIZARD_CONFIG } from "./config/si-wizard-config";
 import { buildSiWizardSteps } from "./config/si-wizard-steps";
 import { useSiWizard } from "./hooks/use-si-wizard";
 import { useSiWizardConfigQuery } from "./hooks/use-si-wizard-config";
+import {
+  applyDashboardSiSeed,
+  parseSiWizardSearch,
+} from "./utils/si-dashboard-seed";
 
 const { Text } = Typography;
 
@@ -24,7 +28,12 @@ export function ShippingInstructionWizardRoute() {
   const { token } = theme.useToken();
   const navigate = useNavigate();
   const params = useParams({ from: "/app/shipping-instruction/wizard/$id" });
-  const { data: siDetails, isLoading, isError } = useSiDetailQuery(params.id);
+  const rawSearch = useSearch({ strict: false }) as Record<string, unknown>;
+  const createSeed = parseSiWizardSearch(rawSearch);
+  const { data: rawDetails, isLoading, isError } = useSiDetailQuery(params.id);
+  const siDetails = rawDetails
+    ? applyDashboardSiSeed(rawDetails, params.id, createSeed)
+    : undefined;
   const { data: wizardConfig = DEFAULT_SI_WIZARD_CONFIG } =
     useSiWizardConfigQuery();
 

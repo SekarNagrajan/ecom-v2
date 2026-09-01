@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-25 18:25)
+// Modified by Sekar Nagarajan (2026-09-01 12:52)
 import { AppButton } from "@solverminds/shared-ui";
 import { DataView, DataViewColumn } from "@solverminds/shared-ui/data-view";
 import { Flex, Space, Tag, theme, Tooltip, Typography } from "antd";
@@ -20,9 +20,9 @@ interface DashboardOngoingTableProps {
   shipments: DashboardShipment[];
   activeFilter: string;
   filterLabel: string;
-  onViewBooking?: (bookNo: string, refNo: string) => void;
-  onViewBl?: (blNo: string, bookNo: string) => void;
-  onCreateSi?: (bookNo: string) => void;
+  onViewBooking?: (shipment: DashboardShipment) => void;
+  onViewBl?: (shipment: DashboardShipment) => void;
+  onCreateSi?: (shipment: DashboardShipment) => void;
 }
 
 export function DashboardOngoingTable({
@@ -64,7 +64,7 @@ export function DashboardOngoingTable({
                       tone="view"
                     />
                   }
-                  onClick={() => onViewBooking?.(rec.bookNo, rec.onlineRefNo)}
+                  onClick={() => onViewBooking?.(rec)}
                 />
               </Tooltip>
             )}
@@ -81,7 +81,7 @@ export function DashboardOngoingTable({
                       tone="view"
                     />
                   }
-                  onClick={() => onViewBl?.(rec.blNo, rec.bookNo)}
+                  onClick={() => onViewBl?.(rec)}
                 />
               </Tooltip>
             ) : (
@@ -97,7 +97,7 @@ export function DashboardOngoingTable({
                       tone="create"
                     />
                   }
-                  onClick={() => onCreateSi?.(rec.bookNo)}
+                  onClick={() => onCreateSi?.(rec)}
                 />
               </Tooltip>
             )}
@@ -118,7 +118,7 @@ export function DashboardOngoingTable({
             type="text"
             size="small"
             className="dashboard-link-btn"
-            onClick={() => onViewBooking?.(rec.bookNo, rec.onlineRefNo)}
+            onClick={() => onViewBooking?.(rec)}
           >
             {rec.bookNo}
           </AppButton>
@@ -139,7 +139,7 @@ export function DashboardOngoingTable({
             size="small"
             className="dashboard-link-btn"
             style={{ color: theme.useToken().token.colorText }}
-            onClick={() => onViewBl?.(rec.blNo, rec.bookNo)}
+            onClick={() => onViewBl?.(rec)}
           >
             {rec.blNo}
           </AppButton>
@@ -253,7 +253,7 @@ export function DashboardOngoingTable({
                 type="text"
                 size="small"
                 icon={<AppIcon icon={Icons.filePlus} size={16} tone="create" />}
-                onClick={() => onCreateSi?.(rec.bookNo)}
+                onClick={() => onCreateSi?.(rec)}
               />
             </Tooltip>
           );

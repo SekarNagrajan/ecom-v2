@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-31 16:03)
+// Modified by Sekar Nagarajan (2026-09-01 16:40)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
 import { Card, Col, Input, Row, Segmented, Typography } from "antd";
@@ -151,8 +151,7 @@ export function MasterDetailsStep({
                     render={({ field: { value, onChange } }) => (
                       <Segmented
                         block
-                        size="small"
-                        className="form-field-full-width si-master-segmented"
+                        className="form-field-full-width form-segmented"
                         value={value}
                         onChange={onChange}
                         options={[
@@ -179,8 +178,7 @@ export function MasterDetailsStep({
                     render={({ field: { value, onChange } }) => (
                       <Segmented
                         block
-                        size="small"
-                        className="form-field-full-width si-master-segmented"
+                        className="form-field-full-width form-segmented"
                         value={value}
                         onChange={onChange}
                         options={[
@@ -207,8 +205,7 @@ export function MasterDetailsStep({
                     render={({ field: { value, onChange } }) => (
                       <Segmented
                         block
-                        size="small"
-                        className="form-field-full-width si-master-segmented"
+                        className="form-field-full-width form-segmented"
                         value={value}
                         onChange={onChange}
                         options={[

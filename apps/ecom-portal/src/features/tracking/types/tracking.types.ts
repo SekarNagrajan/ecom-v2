@@ -1,8 +1,8 @@
+// Modified by Sekar Nagarajan (2026-09-01 14:38)
 // Container & Cargo Tracking Domain Types
 // Parity with Struts TrackingVo, MovementDetailsVo, and TrackingActvityResult
-// Modified by sekar nagarajan (2026-08-21)
 
-export type TrackingSearchType = 'CONTAINER' | 'BOOKING' | 'BL';
+export type TrackingSearchType = "CONTAINER" | "BOOKING" | "BL";
 
 export interface TrackingSearchParams {
   searchType: TrackingSearchType;
@@ -16,7 +16,7 @@ export interface TrackingMilestone {
   timestamp?: string;
   isCompleted: boolean;
   isCurrent: boolean;
-  transportMode?: 'VESSEL' | 'RAIL' | 'TRUCK' | 'BARGE';
+  transportMode?: "VESSEL" | "RAIL" | "TRUCK" | "BARGE";
 }
 
 export interface ContainerMovementEvent {
@@ -29,8 +29,11 @@ export interface ContainerMovementEvent {
   eventDate: string;
   vesselName?: string;
   voyage?: string;
-  transportMode: 'VESSEL' | 'RAIL' | 'TRUCK' | 'BARGE';
+  transportMode: "VESSEL" | "RAIL" | "TRUCK" | "BARGE";
   isActual: boolean;
+  /** Optional mock coordinates for live-map event trail. */
+  lat?: number;
+  lng?: number;
 }
 
 export interface ContainerEquipment {
@@ -42,8 +45,32 @@ export interface ContainerEquipment {
   latestActivity: string;
   activityLocation: string;
   activityDate: string;
-  status: 'IN_TRANSIT' | 'DELIVERED' | 'GATE_IN' | 'LOADED' | 'DISCHARGED';
+  status: "IN_TRANSIT" | "DELIVERED" | "GATE_IN" | "LOADED" | "DISCHARGED";
   movements: ContainerMovementEvent[];
+}
+
+export interface TrackingRouteMapPoint {
+  lat: number;
+  lng: number;
+  label?: string;
+}
+
+/** Mock-only POL → waypoints → POD geometry for the interactive live map. */
+export interface TrackingRouteMap {
+  pol: TrackingRouteMapPoint;
+  pod: TrackingRouteMapPoint;
+  waypoints?: TrackingRouteMapPoint[];
+}
+
+/** Mock AIS / satellite ping shown in the Live Map drawer. */
+export interface TrackingLiveAisPosition {
+  lat: number;
+  lng: number;
+  speedKn: number;
+  headingDeg: number;
+  lastUpdate: string;
+  locationLabel: string;
+  source: string;
 }
 
 export interface TrackingSearchResult {
@@ -72,4 +99,6 @@ export interface TrackingSearchResult {
   };
   milestones: TrackingMilestone[];
   containers: ContainerEquipment[];
+  routeMap?: TrackingRouteMap;
+  liveAis?: TrackingLiveAisPosition;
 }

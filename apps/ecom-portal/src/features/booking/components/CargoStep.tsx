@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-31 23:14)
+// Modified by Sekar Nagarajan (2026-09-01 16:49)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
@@ -6,6 +6,7 @@ import {
   Card,
   Col,
   Empty,
+  Input,
   InputNumber,
   Row,
   Select,
@@ -28,6 +29,10 @@ import {
   ListActionButton,
   ListActionsRow,
 } from "../../../components/shared/list-action-button";
+import {
+  FORM_YES_NO_SWITCH_CLASS,
+  yesNoSwitchInner,
+} from "../../../components/shared/yes-no-switch";
 import { useBookingLookups } from "../api/booking.queries";
 import { useBookingStore } from "../stores/booking.store";
 import {
@@ -359,8 +364,18 @@ function ContainerDetailPanel({
         className="form-step-card form-step-section booking-cargo-container-card"
         bordered={false}
       >
-        <Row gutter={[24, 24]}>
-          <Col xs={24} md={showReeferMode ? 5 : 6}>
+        {/* Modified by Sekar Nagarajan (2026-09-01 16:49) — single-row container fields */}
+        <div
+          className={[
+            "booking-cargo-container-row",
+            showReeferMode
+              ? "booking-cargo-container-row--with-nor"
+              : undefined,
+          ]
+            .filter(Boolean)
+            .join(" ")}
+        >
+          <div className="form-field-cell">
             <label className="form-field-label">
               Container Type <Text type="danger">*</Text>
             </label>
@@ -393,8 +408,29 @@ function ContainerDetailPanel({
                 {cargoFieldError(errors, `containers.${ci}.containerType`)}
               </Text>
             ) : null}
-          </Col>
-          <Col xs={12} md={showReeferMode ? 3 : 4}>
+          </div>
+
+          <div className="form-field-cell" style={{ marginTop: 2 }}>
+            <label className="form-field-label">Container No</label>
+            <Controller
+              control={control}
+              name={`containers.${ci}.containerNo`}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  value={field.value ?? ""}
+                  size="large"
+                  placeholder="Container No."
+                  className="form-field-full-width"
+                />
+              )}
+            />
+          </div>
+
+          <div
+            className="form-field-cell booking-cargo-container-row__qty"
+            style={{ marginTop: -1 }}
+          >
             <label className="form-field-label">
               Quantity <Text type="danger">*</Text>
             </label>
@@ -410,8 +446,9 @@ function ContainerDetailPanel({
                 />
               )}
             />
-          </Col>
-          <Col xs={12} md={showReeferMode ? 3 : 4}>
+          </div>
+
+          <div className="form-field-cell">
             <label className="form-field-label">Eqp. Status</label>
             <Controller
               control={control}
@@ -428,8 +465,9 @@ function ContainerDetailPanel({
                 />
               )}
             />
-          </Col>
-          <Col xs={12} md={showReeferMode ? 3 : 4}>
+          </div>
+
+          <div className="form-field-cell">
             <label className="form-field-label">Tare Weight</label>
             <Controller
               control={control}
@@ -444,58 +482,66 @@ function ContainerDetailPanel({
                 />
               )}
             />
-          </Col>
-          {/* Modified by Sekar Nagarajan (2026-08-31 23:23) — switch with check/close icons */}
-          <Col xs={6} md={showReeferMode ? 2 : 3}>
+          </div>
+
+          <div className="form-field-cell booking-cargo-container-row__switch">
             <label className="form-field-label">SOC</label>
-            <Controller
-              control={control}
-              name={`containers.${ci}.isSoc`}
-              render={({ field: { value, onChange } }) => (
-                <Switch
-                  checked={value}
-                  onChange={onChange}
-                  checkedChildren="Yes"
-                  unCheckedChildren="No"
-                />
-              )}
-            />
-          </Col>
-          <Col xs={6} md={showReeferMode ? 2 : 3}>
-            <label className="form-field-label">OOG</label>
-            <Controller
-              control={control}
-              name={`containers.${ci}.isOog`}
-              render={({ field: { value, onChange } }) => (
-                <Switch
-                  checked={value}
-                  onChange={onChange}
-                  checkedChildren="Yes"
-                  unCheckedChildren="No"
-                />
-              )}
-            />
-          </Col>
-          {showReeferMode ? (
-            <Col xs={12} md={6}>
-              <label className="form-field-label">NOR</label>
+            <div className="form-yes-no-switch-wrap">
               <Controller
                 control={control}
-                name={`containers.${ci}.reeferMode`}
-                render={({ field }) => (
+                name={`containers.${ci}.isSoc`}
+                render={({ field: { value, onChange } }) => (
                   <Switch
-                    checked={field.value === "nor"}
-                    onChange={(checked) =>
-                      field.onChange(checked ? "nor" : "operating")
-                    }
-                    checkedChildren="Yes"
-                    unCheckedChildren="No"
+                    className={FORM_YES_NO_SWITCH_CLASS}
+                    checked={value}
+                    onChange={onChange}
+                    {...yesNoSwitchInner}
                   />
                 )}
               />
-            </Col>
+            </div>
+          </div>
+
+          <div className="form-field-cell booking-cargo-container-row__switch">
+            <label className="form-field-label">OOG</label>
+            <div className="form-yes-no-switch-wrap">
+              <Controller
+                control={control}
+                name={`containers.${ci}.isOog`}
+                render={({ field: { value, onChange } }) => (
+                  <Switch
+                    className={FORM_YES_NO_SWITCH_CLASS}
+                    checked={value}
+                    onChange={onChange}
+                    {...yesNoSwitchInner}
+                  />
+                )}
+              />
+            </div>
+          </div>
+
+          {showReeferMode ? (
+            <div className="form-field-cell booking-cargo-container-row__switch">
+              <label className="form-field-label">NOR</label>
+              <div className="form-yes-no-switch-wrap">
+                <Controller
+                  control={control}
+                  name={`containers.${ci}.reeferMode`}
+                  render={({ field }) => (
+                    <Switch
+                      className={FORM_YES_NO_SWITCH_CLASS}
+                      checked={field.value === "nor"}
+                      onChange={(checked) =>
+                        field.onChange(checked ? "nor" : "operating")
+                      }
+                      {...yesNoSwitchInner}
+                    />
+                  )}
+                />
+              </div>
+            </div>
           ) : null}
-        </Row>
+        </div>
 
         {showReeferMode && reeferMode !== "nor" ? (
           <div className="booking-cargo-detail__section">
@@ -504,25 +550,27 @@ function ContainerDetailPanel({
             </Text>
             <Row gutter={[24, 24]}>
               <Col xs={24} md={6}>
-                <label className="form-field-label">
-                  Set Temp <Text type="danger">*</Text>
-                </label>
-                <Controller
-                  control={control}
-                  name={`containers.${ci}.setTemp`}
-                  render={({ field }) => (
-                    <InputNumber
-                      {...field}
-                      size="large"
-                      className="form-field-full-width"
-                    />
-                  )}
-                />
-                {cargoFieldError(errors, `containers.${ci}.setTemp`) ? (
-                  <Text type="danger" className="form-field-error">
-                    {cargoFieldError(errors, `containers.${ci}.setTemp`)}
-                  </Text>
-                ) : null}
+                <div className="form-field-cell" style={{ marginTop: -4 }}>
+                  <label className="form-field-label">
+                    Set Temp <Text type="danger">*</Text>
+                  </label>
+                  <Controller
+                    control={control}
+                    name={`containers.${ci}.setTemp`}
+                    render={({ field }) => (
+                      <InputNumber
+                        {...field}
+                        size="large"
+                        className="form-field-full-width"
+                      />
+                    )}
+                  />
+                  {cargoFieldError(errors, `containers.${ci}.setTemp`) ? (
+                    <Text type="danger" className="form-field-error">
+                      {cargoFieldError(errors, `containers.${ci}.setTemp`)}
+                    </Text>
+                  ) : null}
+                </div>
               </Col>
               <Col xs={24} md={6}>
                 <label className="form-field-label">Min Temp</label>
@@ -553,24 +601,26 @@ function ContainerDetailPanel({
                 />
               </Col>
               <Col xs={24} md={6}>
-                <label className="form-field-label">
-                  Temp Unit <Text type="danger">*</Text>
-                </label>
-                <Controller
-                  control={control}
-                  name={`containers.${ci}.tempUnit`}
-                  render={({ field }) => (
-                    <Select
-                      {...field}
-                      size="large"
-                      options={[
-                        { value: "Celsius", label: "Celsius" },
-                        { value: "Fahrenheit", label: "Fahrenheit" },
-                      ]}
-                      className="form-field-full-width"
-                    />
-                  )}
-                />
+                <div className="form-field-cell" style={{ marginTop: -5 }}>
+                  <label className="form-field-label">
+                    Temp Unit <Text type="danger">*</Text>
+                  </label>
+                  <Controller
+                    control={control}
+                    name={`containers.${ci}.tempUnit`}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        size="large"
+                        options={[
+                          { value: "Celsius", label: "Celsius" },
+                          { value: "Fahrenheit", label: "Fahrenheit" },
+                        ]}
+                        className="form-field-full-width"
+                      />
+                    )}
+                  />
+                </div>
               </Col>
             </Row>
           </div>
@@ -582,7 +632,7 @@ function ContainerDetailPanel({
               OOG Details
             </Text>
             <div className="booking-oog-form-grid">
-              <div className="form-field-cell">
+              <div className="form-field-cell" style={{ marginTop: -2 }}>
                 <label className="form-field-label">
                   Dimension Unit <Text type="danger">*</Text>
                 </label>

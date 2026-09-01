@@ -9,6 +9,7 @@ import {
   ListActionsRow,
 } from "../../../../components/shared/list-action-button";
 import type { BLCargoProtectLine } from "../../types/bl.types";
+import { BlWizardFooter } from "../bl-wizard-footer";
 import type { BLWizardStepProps } from "./MasterDetailsStep";
 
 const { Text } = Typography;
@@ -81,6 +82,7 @@ export function BlCargoProtectStep({
   onNext,
   onPrevious,
   onUpdate,
+  onGoToStep,
   isFirstStep,
   isSubmitting,
 }: BLWizardStepProps) {
@@ -160,19 +162,12 @@ export function BlCargoProtectStep({
         </Card>
       </div>
 
-      <div className="form-step-footer form-step-footer--split">
-        <div className="form-step-footer__start custom-scroll">
-          <AppButton
-            onClick={onPrevious}
-            disabled={isFirstStep || isSubmitting}
-          >
-            Previous
-          </AppButton>
-        </div>
-        <AppButton type="primary" onClick={handleNext} disabled={isSubmitting}>
-          Next
-        </AppButton>
-      </div>
+      <BlWizardFooter
+        onPrevious={onPrevious}
+        onNext={handleNext}
+        isFirstStep={isFirstStep}
+        isSubmitting={isSubmitting}
+      />
     </div>
   );
 }

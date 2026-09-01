@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-28 17:47)
+// Modified by Sekar Nagarajan (2026-09-01 16:46)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -195,6 +195,7 @@ export function CargoLinesEditorStyles() {
         background: ${token.colorBgContainer};
         overflow: hidden;
       }
+      /* Modified by Sekar Nagarajan (2026-09-01 16:30) — wider commod/pkgs columns + gap */
       .si-cargo-ct-row-wrap {
         display: grid;
         grid-template-columns:
@@ -202,13 +203,14 @@ export function CargoLinesEditorStyles() {
           minmax(128px, 1.4fr)
           64px
           minmax(96px, 1fr)
-          minmax(108px, 0.9fr)
           96px
-          80px
+          104px
+          88px
+          88px
           104px
           72px;
         align-items: center;
-        column-gap: ${token.marginSM}px;
+        column-gap: ${token.marginMD}px;
         padding: ${token.paddingSM}px ${token.paddingMD}px;
         min-height: ${token.controlHeightLG + token.paddingSM * 2}px;
         cursor: pointer;
@@ -320,10 +322,11 @@ export function CargoLinesEditorStyles() {
         gap: ${token.marginSM}px;
         margin-bottom: ${token.marginSM}px;
       }
-      /* Modified by Sekar Nagarajan (2026-08-28 17:54) */
+      /* Modified by Sekar Nagarajan (2026-09-01 16:46) — row1 HS/pkg/qty/wt; row2 desc/marks */
       .si-cargo-sitem__grid {
         display: grid;
-        grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.4fr) minmax(0, 1.1fr) auto;
+        grid-template-columns:
+          minmax(0, 1.6fr) minmax(0, 1.2fr) auto auto;
         gap: ${token.marginSM}px ${token.marginMD}px;
         align-items: start;
       }
@@ -334,14 +337,7 @@ export function CargoLinesEditorStyles() {
         grid-column: 1 / -1;
       }
       .si-cargo-sitem__hs {
-        grid-column: 1 / 3;
-      }
-      .si-cargo-sitem__measures {
-        display: flex;
-        align-items: flex-start;
-        gap: ${token.marginXS}px;
-        min-width: 0;
-        justify-self: end;
+        grid-column: auto;
       }
       .si-cargo-sitem__half {
         grid-column: span 2;
@@ -500,8 +496,9 @@ export function CargoLinesEditorStyles() {
             minmax(120px, 1.2fr)
             56px
             minmax(80px, 1fr)
-            minmax(90px, 0.8fr)
             88px
+            96px
+            80px
             104px
             64px;
         }
@@ -528,15 +525,12 @@ export function CargoLinesEditorStyles() {
         .si-cargo-sitem__grid {
           grid-template-columns: repeat(2, minmax(0, 1fr));
         }
-        .si-cargo-sitem__hs {
-          grid-column: 1 / -1;
-        }
-        .si-cargo-sitem__measures {
-          grid-column: 1 / -1;
-          flex-wrap: wrap;
-        }
+        .si-cargo-sitem__hs,
         .si-cargo-sitem__half {
           grid-column: span 1;
+        }
+        .si-cargo-sitem__narrow {
+          width: 100%;
         }
         .si-cargo-ct-row-wrap {
           grid-template-columns: 28px minmax(0, 1fr) auto auto;
@@ -548,9 +542,10 @@ export function CargoLinesEditorStyles() {
         .si-cargo-ct-actions { grid-column: 4; grid-row: 1 / span 2; align-self: center; }
         .si-cargo-ct-seal { grid-column: 2; grid-row: 2; }
         .si-cargo-ct-meta--commod { grid-column: 2; grid-row: 3; }
-        .si-cargo-ct-meta--kg { grid-column: 3; grid-row: 3; justify-self: end; }
+        .si-cargo-ct-meta--pkgs { grid-column: 3; grid-row: 3; justify-self: end; }
+        .si-cargo-ct-meta--kg { grid-column: 2; grid-row: 4; }
         .si-cargo-ct-meta--cbm { display: none; }
-        .si-cargo-ct-status { grid-column: 2 / 4; grid-row: 4; justify-self: start; }
+        .si-cargo-ct-status { grid-column: 2 / 4; grid-row: 5; justify-self: start; }
       }
     `}</style>
   );

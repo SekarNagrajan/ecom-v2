@@ -1,12 +1,12 @@
-import { type ThemeConfig, theme as antdTheme } from 'antd';
+import { type ThemeConfig, theme as antdTheme } from "antd";
 
-import { SPACING, BREAKPOINTS } from './constants';
+import { SPACING } from "./constants";
 import type {
-  AppCustomConfig,
-  DensityLevel,
-  LineHeightLevel,
-  ThemeMode,
-} from './types';
+    AppCustomConfig,
+    DensityLevel,
+    LineHeightLevel,
+    ThemeMode,
+} from "./types";
 
 // =============================================================================
 // Density scaling — single multiplier per level.
@@ -21,11 +21,11 @@ const DENSITY_SCALES: Record<DensityLevel, number> = {
 
 const DENSITY_COMPONENT_SIZE: Record<
   DensityLevel,
-  'small' | 'middle' | 'large'
+  "small" | "middle" | "large"
 > = {
-  compact: 'small',
-  normal: 'middle',
-  comfortable: 'large',
+  compact: "small",
+  normal: "middle",
+  comfortable: "large",
 };
 
 const SEGMENTED_TRACK_PADDING: Record<DensityLevel, number> = {
@@ -51,7 +51,7 @@ function roundToEven(value: number): number {
 
 function resolveDensityScale(density: DensityLevel, isMobile: boolean): number {
   const base = DENSITY_SCALES[density];
-  if (isMobile && density !== 'compact') {
+  if (isMobile && density !== "compact") {
     return base * 0.85;
   }
   return base;
@@ -60,7 +60,7 @@ function resolveDensityScale(density: DensityLevel, isMobile: boolean): number {
 function resolveControlPaddingBlock(
   controlHeight: number,
   fontHeight: number,
-  lineWidth = 1
+  lineWidth = 1,
 ): number {
   return Math.max((controlHeight - fontHeight) / 2 - lineWidth, 0);
 }
@@ -73,17 +73,17 @@ function resolveControlPaddingBlock(
 /** Resolve the effective theme mode when 'auto' is used. */
 export function resolveThemeMode(
   themeMode: ThemeMode,
-  systemTheme: 'light' | 'dark'
-): 'light' | 'dark' {
-  return themeMode === 'auto' ? systemTheme : themeMode;
+  systemTheme: "light" | "dark",
+): "light" | "dark" {
+  return themeMode === "auto" ? systemTheme : themeMode;
 }
 
 /** Map the lineHeight level string to a numeric value. */
 export function resolveLineHeight(level: LineHeightLevel): number {
   switch (level) {
-    case 'tight':
+    case "tight":
       return 1.25;
-    case 'relaxed':
+    case "relaxed":
       return 1.75;
     default:
       return 1.5;
@@ -92,8 +92,8 @@ export function resolveLineHeight(level: LineHeightLevel): number {
 
 /** Map density level to AntD componentSize. */
 export function resolveComponentSize(
-  density: DensityLevel
-): 'small' | 'middle' | 'large' {
+  density: DensityLevel,
+): "small" | "middle" | "large" {
   return DENSITY_COMPONENT_SIZE[density];
 }
 
@@ -204,47 +204,47 @@ interface Palette {
  * toolbar, grid, drawers).
  */
 const LIGHT_PALETTE: Palette = {
-  surface: '#FFFFFF',
-  layout: '#F5F5F5',
-  elevated: '#FFFFFF',
-  inputBg: '#FFFFFF',
-  segmentedTrackBg: '#EFF1F4',
-  segmentedSelectedBg: '#FFFFFF',
+  surface: "#FFFFFF",
+  layout: "#F5F5F5",
+  elevated: "#FFFFFF",
+  inputBg: "#FFFFFF",
+  segmentedTrackBg: "#EFF1F4",
+  segmentedSelectedBg: "#FFFFFF",
 
-  border: '#E5E7EB',
-  borderSubtle: '#EFF1F4',
-  fieldBorder: '#D5D9E0',
+  border: "#E5E7EB",
+  borderSubtle: "#EFF1F4",
+  fieldBorder: "#D5D9E0",
 
-  textPrimary: '#1A1A1A',
-  textSecondary: '#5C5F66',
-  textTertiary: '#9CA0A8',
-  textPlaceholder: '#B0B4BC',
-  iconDefault: '#5C5F66',
-  iconHover: '#1A1A1A',
+  textPrimary: "#1A1A1A",
+  textSecondary: "#5C5F66",
+  textTertiary: "#9CA0A8",
+  textPlaceholder: "#B0B4BC",
+  iconDefault: "#5C5F66",
+  iconHover: "#1A1A1A",
 
   // Disabled fill is the `layout` step (#F5F5F5) — one shade darker than
   // the white `inputBg` so disabled controls visibly recess. Disabled
   // text reuses `textTertiary` so we don't introduce a new gray rung
   // (still ~3.5:1 against `disabledBg` — sufficient for inert affordances
   // per WCAG non-text-control guidance).
-  disabledBg: '#F5F5F5',
-  disabledText: '#9CA0A8',
+  disabledBg: "#F5F5F5",
+  disabledText: "#9CA0A8",
 
   // Addon strips and multi-select chips share `layout` — one step darker
   // than the white input/selector body so they read as distinct chrome
   // attached to the field rather than part of the editable surface.
-  inputAddonBg: '#F5F5F5',
+  inputAddonBg: "#F5F5F5",
 
   // Inverted dark tooltip (white text) — same near-black as primary text
   // so the popup pops off every light surface in the app.
-  tooltipBg: '#1A1A1A',
+  tooltipBg: "#1A1A1A",
 
-  menuItemHoverBg: '#F1F2F4',
-  segmentedItemColor: '#475569',
-  segmentedItemSelectedColor: '#0f172a',
-  tableHeaderBg: '#F8F9FB',
-  tableRowHoverBg: '#F5F6F8',
-  onPrimary: '#FFFFFF',
+  menuItemHoverBg: "#F1F2F4",
+  segmentedItemColor: "#475569",
+  segmentedItemSelectedColor: "#0f172a",
+  tableHeaderBg: "#F8F9FB",
+  tableRowHoverBg: "#F5F6F8",
+  onPrimary: "#FFFFFF",
 };
 
 /**
@@ -265,51 +265,51 @@ const LIGHT_PALETTE: Palette = {
  * where input bg matches card bg and only the border distinguishes them.
  */
 const DARK_PALETTE: Palette = {
-  surface: '#0D0D0D',
-  layout: '#171717',
-  elevated: '#1F1F1F',
-  inputBg: '#171717',
-  segmentedTrackBg: '#171717',
-  segmentedSelectedBg: '#262626',
+  surface: "#0D0D0D",
+  layout: "#171717",
+  elevated: "#1F1F1F",
+  inputBg: "#171717",
+  segmentedTrackBg: "#171717",
+  segmentedSelectedBg: "#262626",
 
-  border: '#2E2E2E',
-  borderSubtle: '#1F1F1F',
-  fieldBorder: '#2E2E2E',
+  border: "#2E2E2E",
+  borderSubtle: "#1F1F1F",
+  fieldBorder: "#2E2E2E",
 
-  textPrimary: '#F5F5F5',
-  textSecondary: '#A3A3A3',
-  textTertiary: '#737373',
-  textPlaceholder: '#525252',
-  iconDefault: '#A3A3A3',
-  iconHover: '#F5F5F5',
+  textPrimary: "#F5F5F5",
+  textSecondary: "#A3A3A3",
+  textTertiary: "#737373",
+  textPlaceholder: "#525252",
+  iconDefault: "#A3A3A3",
+  iconHover: "#F5F5F5",
 
   // Disabled fill is the `surface` step (#0D0D0D) — one shade DARKER than
   // the `inputBg` (#171717) so disabled controls visibly recess into the
   // card behind them (mirror of the light-mode pattern where disabled
   // pulls toward `layout`). Disabled text reuses `textTertiary` so we
   // don't introduce a new gray rung.
-  disabledBg: '#0D0D0D',
-  disabledText: '#737373',
+  disabledBg: "#0D0D0D",
+  disabledText: "#737373",
 
   // Addon strips and multi-select chips ride the `elevated` step
   // (#1F1F1F) — one shade *lighter* than the `inputBg` (#171717), the
   // dark-mode mirror of the light pattern. Also stays visibly distinct
   // from `disabledBg` (#0D0D0D), so disabled multi-select tags don't
   // dissolve into the disabled wrapper.
-  inputAddonBg: '#1F1F1F',
+  inputAddonBg: "#1F1F1F",
 
   // Tooltip rides the highest gray rung (#262626) — brighter than every
   // surface in the dark ramp (`surface` / `layout` / `elevated`) so the
   // popup reads as floating above whatever it's anchored to. White text
   // on this gray hits ~13:1 contrast (WCAG AAA).
-  tooltipBg: '#262626',
+  tooltipBg: "#262626",
 
-  menuItemHoverBg: '#1F1F1F',
-  segmentedItemColor: '#A3A3A3',
-  segmentedItemSelectedColor: '#F5F5F5',
-  tableHeaderBg: '#171717',
-  tableRowHoverBg: '#1F1F1F',
-  onPrimary: '#FFFFFF',
+  menuItemHoverBg: "#1F1F1F",
+  segmentedItemColor: "#A3A3A3",
+  segmentedItemSelectedColor: "#F5F5F5",
+  tableHeaderBg: "#171717",
+  tableRowHoverBg: "#1F1F1F",
+  onPrimary: "#FFFFFF",
 };
 
 function getPalette(isDark: boolean): Palette {
@@ -322,7 +322,7 @@ function getPalette(isDark: boolean): Palette {
 
 interface BuildThemeParams {
   config: AppCustomConfig;
-  effectiveThemeMode: 'light' | 'dark';
+  effectiveThemeMode: "light" | "dark";
   isMobile: boolean;
   antdThemeOverrides?: ThemeConfig;
 }
@@ -355,7 +355,7 @@ export function buildAntdTheme({
 
   // Algorithms
   const algorithms = [];
-  if (effectiveThemeMode === 'dark') {
+  if (effectiveThemeMode === "dark") {
     algorithms.push(antdTheme.darkAlgorithm);
   } else {
     algorithms.push(antdTheme.defaultAlgorithm);
@@ -379,7 +379,7 @@ export function buildAntdTheme({
   // Colors — every mode-dependent value is read from `palette`, never an
   // inline `isDark ? ... : ...` ternary. Add new color tokens to the
   // `Palette` interface above so both modes are forced to define them.
-  const isDark = effectiveThemeMode === 'dark';
+  const isDark = effectiveThemeMode === "dark";
   const palette = getPalette(isDark);
   const inputHoverBorderColor = config.primaryColor;
   const inputActiveBorderColor = config.primaryColor;
@@ -390,7 +390,7 @@ export function buildAntdTheme({
   // radius so dense rows of fields don't feel pill-y.
   const inputBorderRadius = Math.max(
     Math.round(effectiveBorderRadius * 0.75),
-    4
+    4,
   );
   // Custom tokens for non-AntD-Input form controls (e.g. AppCombobox's button
   // trigger, rich-text editor wrapper) so they share the same surface
@@ -408,7 +408,7 @@ export function buildAntdTheme({
   const cardPadding = adjust(SPACING.MD);
   const cardPaddingSM = adjust(SPACING.SM);
   const cardHeaderHeight = Math.round(
-    (effectiveFontSize + 2) * lineHeight + adjust(SPACING.MD) * 2
+    (effectiveFontSize + 2) * lineHeight + adjust(SPACING.MD) * 2,
   );
   const formItemMarginBottom = adjust(SPACING.MD);
   const inlineItemMarginBottom = adjust(SPACING.SM);
@@ -416,25 +416,25 @@ export function buildAntdTheme({
   const buttonFontSizeSM = Math.max(effectiveFontSize - 1, 12);
   const buttonFontSize = effectiveFontSize;
   const buttonFontSizeLG =
-    config.density === 'comfortable'
+    config.density === "comfortable"
       ? effectiveFontSize + 2
       : effectiveFontSize + 1;
   const buttonLineHeight = 1.5;
   const buttonPaddingBlockSM = Math.max(
     Math.round((controlHeightSM - buttonFontSizeSM * buttonLineHeight) / 2 - 1),
-    0
+    0,
   );
   const buttonPaddingBlock = Math.max(
     Math.round((controlHeight - buttonFontSize * buttonLineHeight) / 2 - 1),
-    0
+    0,
   );
   const buttonPaddingBlockLG = Math.max(
     Math.round((controlHeightLG - buttonFontSizeLG * buttonLineHeight) / 2 - 1),
-    0
+    0,
   );
   const selectOptionVerticalPadding = Math.max(
     adjust(SPACING.XS),
-    Math.round((controlHeight - effectiveFontSize * lineHeight) / 2)
+    Math.round((controlHeight - effectiveFontSize * lineHeight) / 2),
   );
   const selectTypographyAliasTokens = {
     fontHeight: fieldFontHeight,
@@ -446,7 +446,7 @@ export function buildAntdTheme({
     ...antdThemeOverrides,
     algorithm: algorithms,
     cssVar: {
-      prefix: 'sm',
+      prefix: "sm",
       ...antdThemeOverrides?.cssVar,
     },
     token: {
@@ -508,8 +508,6 @@ export function buildAntdTheme({
       controlHeight,
       controlHeightLG,
 
-
-
       // Control padding
       controlPaddingHorizontal,
       controlPaddingHorizontalSM,
@@ -547,8 +545,8 @@ export function buildAntdTheme({
         // rows, soft hover, and a square primary pill (onPrimary icon on
         // solid primary) for the active route. Geometry is tuned to the
         // 72px sidebar so the pill renders as a ~40x40 square.
-        itemBg: 'transparent',
-        subMenuItemBg: 'transparent',
+        itemBg: "transparent",
+        subMenuItemBg: "transparent",
         itemColor: palette.textSecondary,
         itemHoverBg: palette.menuItemHoverBg,
         itemHoverColor: palette.textPrimary,
@@ -622,15 +620,15 @@ export function buildAntdTheme({
         inputFontSizeLG: fieldFontSizeLG,
         paddingBlock: resolveControlPaddingBlock(
           controlHeight,
-          fieldFontHeight
+          fieldFontHeight,
         ),
         paddingBlockSM: resolveControlPaddingBlock(
           controlHeightSM,
-          fieldFontHeight
+          fieldFontHeight,
         ),
         paddingBlockLG: resolveControlPaddingBlock(
           controlHeightLG,
-          fieldFontHeightLG
+          fieldFontHeightLG,
         ),
         paddingInline: fieldPaddingHorizontal,
         paddingInlineSM: fieldPaddingHorizontalSM,
@@ -655,12 +653,12 @@ export function buildAntdTheme({
         singleItemHeightLG: controlHeightLG,
         multipleItemHeightSM: Math.max(
           controlHeightSM - adjust(SPACING.XXS),
-          16
+          16,
         ),
         multipleItemHeight: Math.max(controlHeight - adjust(SPACING.XXS), 20),
         multipleItemHeightLG: Math.max(
           controlHeightLG - adjust(SPACING.XXS),
-          24
+          24,
         ),
         // Tag chips in multi-mode selectors share the same off-ramp color
         // as Input addons so the two "inline chrome" surfaces stay in sync.

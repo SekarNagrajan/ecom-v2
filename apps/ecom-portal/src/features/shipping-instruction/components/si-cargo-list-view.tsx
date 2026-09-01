@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-28 17:03)
+// Modified by Sekar Nagarajan (2026-09-01 16:25)
 import { Input, Typography } from "antd";
 import type { ReactNode } from "react";
 import {
@@ -145,10 +145,14 @@ export function SiCargoListView({
                 Seal {seal}
               </Text>
               <div className="si-cargo-ct-meta si-cargo-ct-meta--commod">
-                <Text className="si-cargo-ct-meta__value">
-                  {lineCount} · {sums.packages.toLocaleString()} pkgs
-                </Text>
+                <Text className="si-cargo-ct-meta__value">{lineCount}</Text>
                 <span className="si-cargo-ct-meta__label">Commodities</span>
+              </div>
+              <div className="si-cargo-ct-meta si-cargo-ct-meta--pkgs">
+                <Text className="si-cargo-ct-meta__value">
+                  {sums.packages.toLocaleString()}
+                </Text>
+                <span className="si-cargo-ct-meta__label">Packages</span>
               </div>
               <div className="si-cargo-ct-meta si-cargo-ct-meta--end si-cargo-ct-meta--kg">
                 <Text className="si-cargo-ct-meta__value">

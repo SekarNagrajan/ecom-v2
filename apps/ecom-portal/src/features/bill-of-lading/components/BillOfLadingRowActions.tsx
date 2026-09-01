@@ -2,7 +2,7 @@
 import { AppButton, AppModal } from "@solverminds/shared-ui";
 import { useConfirm } from "@solverminds/shared-ui/hooks";
 import type { MenuProps } from "antd";
-import { Dropdown, Space, Tooltip } from "antd";
+import { Dropdown, Space } from "antd";
 import { useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
@@ -230,7 +230,7 @@ export function BillOfLadingRowActions({
             trigger={["click"]}
             placement="bottomRight"
           >
-            <span onClick={(e) => e.stopPropagation()}>
+            {/* <span onClick={(e) => e.stopPropagation()}>
               <Tooltip title="More" mouseEnterDelay={0.5}>
                 <AppButton
                   type="link"
@@ -239,7 +239,7 @@ export function BillOfLadingRowActions({
                   aria-label="More actions"
                   icon={
                     <AppIcon
-                      icon={Icons.ellipsisVertical}
+                      icon={Icons.ellipsis}
                       size={16}
                       gridAction
                       tone="navigate"
@@ -247,7 +247,7 @@ export function BillOfLadingRowActions({
                   }
                 />
               </Tooltip>
-            </span>
+            </span> */}
           </Dropdown>
         ) : null}
       </Space>

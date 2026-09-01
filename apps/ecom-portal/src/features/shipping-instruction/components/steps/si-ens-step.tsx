@@ -1,13 +1,16 @@
-// Created by Sekar Nagarajan (2026-08-31 16:13)
+// Modified by Sekar Nagarajan (2026-09-01 16:36)
 /**
- * ENS Details step — field parity with SIBLCommonENS.jsp
+ * ENS Details step — booking ENS layout parity (field model retained for SI).
  */
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
 import { Alert, Card, Segmented, Switch, Typography } from "antd";
 import { Controller, useForm } from "react-hook-form";
 
-import { AppIcon, Icons } from "../../../../components/icons";
+import {
+  FORM_YES_NO_SWITCH_CLASS,
+  yesNoSwitchInner,
+} from "../../../../components/shared/yes-no-switch";
 import {
   emptySiEnsDeclarant,
   emptySiEnsParty,
@@ -19,7 +22,7 @@ import {
 import { SiEnsDeclarantFields } from "../si-ens-declarant-fields";
 import { SiEnsPartyFields } from "../si-ens-party-fields";
 
-const { Text, Title } = Typography;
+const { Title } = Typography;
 
 const defaults = (data?: SIEnsInfo | null): SiEnsStepForm => ({
   ensRequired: data?.ensRequired ?? false,
@@ -61,7 +64,6 @@ export function SiEnsStep({
   ) => {
     setValue("blTypeEns", nextBl, { shouldValidate: true });
     setValue("ensFillingType", nextFiling, { shouldValidate: true });
-    // Modified by Sekar Nagarajan (2026-08-31 16:16) — legacy Single↔Buyer/Seller, Multiple↔Declarant
     if (nextFiling === "Multiple Filing") {
       setValue("declarant", watch("declarant") ?? emptySiEnsDeclarant());
       setValue("buyer", emptySiEnsParty());
@@ -111,31 +113,29 @@ export function SiEnsStep({
       autoComplete="off"
       className="form-step-layout"
     >
-      <div className="custom-scroll form-step-scroll si-master-step-stack">
+      <div className="custom-scroll form-step-scroll">
         <Card
-          className="form-step-card form-step-section si-master-step-card"
+          className="form-step-card form-step-section"
           title={
             <Title level={5} className="form-step-card-title">
               ENS Details
             </Title>
           }
         >
-          {/* Modified by Sekar Nagarajan (2026-09-01 00:21) — ENS toggle + options in one row */}
-          <div className="si-ens-required-row si-ens-top-row">
+          {/* Modified by Sekar Nagarajan (2026-09-01 16:36) — booking ENS layout parity */}
+          <div className="form-ens-required-row form-ens-top-row">
             <div className="form-field-cell">
               <label className="form-field-label">ENS</label>
               <Controller
                 control={control}
                 name="ensRequired"
                 render={({ field: { value, onChange } }) => (
-                  <div className="si-ens-switch-control">
+                  <div className="form-yes-no-switch-wrap">
                     <Switch
-                      size="medium"
-                      className="si-ens-switch"
+                      className={FORM_YES_NO_SWITCH_CLASS}
                       checked={value}
                       onChange={onChange}
-                      checkedChildren={<AppIcon icon={Icons.check} size={12} />}
-                      unCheckedChildren={<AppIcon icon={Icons.x} size={12} />}
+                      {...yesNoSwitchInner}
                     />
                   </div>
                 )}
@@ -145,32 +145,6 @@ export function SiEnsStep({
             {ensRequired ? (
               <>
                 <div className="form-field-cell">
-                  <label className="form-field-label">EU Customs Zone</label>
-                  <Controller
-                    control={control}
-                    name="euCustZone"
-                    render={({ field: { value, onChange } }) => (
-                      <div className="si-ens-switch-control">
-                        <Switch
-                          size="medium"
-                          className="si-ens-switch"
-                          checked={value === "Y"}
-                          onChange={(checked: boolean) =>
-                            onChange(checked ? "Y" : "N")
-                          }
-                          checkedChildren={
-                            <AppIcon icon={Icons.check} size={12} />
-                          }
-                          unCheckedChildren={
-                            <AppIcon icon={Icons.x} size={12} />
-                          }
-                        />
-                      </div>
-                    )}
-                  />
-                </div>
-
-                <div className="form-field-cell">
                   <label className="form-field-label">Type of B/L</label>
                   <Controller
                     control={control}
@@ -178,7 +152,7 @@ export function SiEnsStep({
                     render={({ field: { value } }) => (
                       <Segmented
                         block
-                        className="form-field-full-width si-master-segmented"
+                        className="form-field-full-width form-segmented"
                         value={value}
                         onChange={(next) => {
                           const bl = next as SiEnsStepForm["blTypeEns"];
@@ -206,7 +180,7 @@ export function SiEnsStep({
                     render={({ field: { value } }) => (
                       <Segmented
                         block
-                        className="form-field-full-width si-master-segmented"
+                        className="form-field-full-width form-segmented"
                         value={value}
                         onChange={(next) => {
                           const filing =
@@ -238,7 +212,7 @@ export function SiEnsStep({
                     render={({ field: { value, onChange } }) => (
                       <Segmented
                         block
-                        className="form-field-full-width si-master-segmented"
+                        className="form-field-full-width form-segmented"
                         value={value}
                         onChange={onChange}
                         options={[
@@ -253,16 +227,12 @@ export function SiEnsStep({
             ) : null}
           </div>
 
-          {!ensRequired ? (
-            <Text type="secondary">
-              {/* ENS filing is not required. Continue to the next step. */}
-            </Text>
-          ) : (
-            <div className="si-ens-sections">
+          {ensRequired ? (
+            <div className="form-ens-sections">
               {isMultipleFiling ? (
                 <Card
                   size="small"
-                  className="si-ens-subcard"
+                  className="form-ens-subcard"
                   title={
                     <Title level={5} className="form-step-card-title">
                       Supplementary Declarant
@@ -275,7 +245,7 @@ export function SiEnsStep({
                 <>
                   <Card
                     size="small"
-                    className="si-ens-subcard"
+                    className="form-ens-subcard"
                     title={
                       <Title level={5} className="form-step-card-title">
                         Buyer
@@ -291,7 +261,7 @@ export function SiEnsStep({
 
                   <Card
                     size="small"
-                    className="si-ens-subcard"
+                    className="form-ens-subcard"
                     title={
                       <Title level={5} className="form-step-card-title">
                         Seller
@@ -310,7 +280,7 @@ export function SiEnsStep({
               <Alert
                 type="info"
                 showIcon
-                className="si-ens-notes"
+                className="form-ens-notes"
                 message="ENS filing notes"
                 description={
                   <>
@@ -330,7 +300,7 @@ export function SiEnsStep({
                 }
               />
             </div>
-          )}
+          ) : null}
         </Card>
       </div>
 

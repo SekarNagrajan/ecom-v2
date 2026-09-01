@@ -1,10 +1,9 @@
-// Modified by Sekar Nagarajan (2026-08-31 16:36)
+// Modified by Sekar Nagarajan (2026-09-01 16:40)
 /**
  * Preview — summary of all wizard step inputs with Edit → jump to step,
  * plus BL-specific editable preview fields (AES / UAE / remarks).
  */
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import {
   Col,
@@ -30,6 +29,7 @@ import {
 import { useBLWizardConfig } from "../../hooks/use-bl-wizard-config";
 import type { BLPreviewStepValues } from "../../types/bl.types";
 import { blPreviewStepSchema } from "../../types/bl.types";
+import { BlWizardFooter } from "../bl-wizard-footer";
 import {
   BlPreviewEmpty,
   BlPreviewPartyBlock,
@@ -605,24 +605,16 @@ export function PreviewStep({
         </BlPreviewSection>
       </div>
 
-      <div className="form-step-footer form-step-footer--split">
-        <div className="form-step-footer__start custom-scroll">
-          <AppButton onClick={onPrevious} disabled={isSubmitting}>
-            Previous
-          </AppButton>
-          <AppButton onClick={onCancel} disabled={isSubmitting}>
-            Cancel
-          </AppButton>
-        </div>
-        <AppButton
-          type="primary"
-          icon={<AppIcon icon={Icons.check} size={16} />}
-          onClick={handleSubmitBl}
-          loading={isSubmitting}
-        >
-          Submit B/L
-        </AppButton>
-      </div>
+      <BlWizardFooter
+        onPrevious={onPrevious}
+        split
+        onCancel={onCancel}
+        onNext={handleSubmitBl}
+        nextLabel="Submit B/L"
+        nextIcon={<AppIcon icon={Icons.check} size={16} />}
+        nextLoading={isSubmitting}
+        isSubmitting={isSubmitting}
+      />
     </div>
   );
 }

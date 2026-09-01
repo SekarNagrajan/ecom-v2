@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-31 11:25)
+// Modified by Sekar Nagarajan (2026-09-01 14:38)
 import { theme } from "antd";
 import { tokenMix } from "../../theme/utils/token-mix";
 
@@ -365,7 +365,244 @@ export function TrackingModuleStyles() {
         font-size: ${token.fontSizeSM}px;
       }
 
+      /* Interactive Container Live Map (mock AIS) */
+      @keyframes tracking-live-pulse {
+        0% { opacity: 0.55; transform: scale(0.85); }
+        70% { opacity: 0; transform: scale(1.45); }
+        100% { opacity: 0; transform: scale(1.45); }
+      }
+      .tracking-live-map {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginMD}px;
+      }
+      .tracking-live-map__toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: ${token.marginSM}px;
+        overflow-x: auto;
+      }
+      .tracking-live-map__actions {
+        flex: none;
+      }
+      .tracking-live-map__viewport {
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorFillAlter};
+        overflow: hidden;
+      }
+      .tracking-live-map__svg {
+        display: block;
+        width: 100%;
+        height: auto;
+        min-height: 320px;
+        max-height: 480px;
+        background: ${token.colorInfoBg};
+      }
+      .tracking-live-map__svg--interactive {
+        cursor: grab;
+        touch-action: none;
+        user-select: none;
+      }
+      .tracking-live-map__svg--interactive:active {
+        cursor: grabbing;
+      }
+      .tracking-live-map__ocean {
+        fill: ${token.colorInfoBg};
+      }
+      .tracking-live-map__ocean-overlay {
+        opacity: 0.35;
+        pointer-events: none;
+      }
+      .tracking-live-map__ocean-hatch {
+        stroke: ${token.colorInfo};
+        stroke-width: 0.6;
+        opacity: 0.18;
+        fill: none;
+      }
+      .tracking-live-map__graticule {
+        fill: none;
+        stroke: ${token.colorBorderSecondary};
+        stroke-width: 0.8;
+        opacity: 0.7;
+      }
+      .tracking-live-map__land {
+        fill: ${token.colorFillSecondary ?? token.colorFillAlter};
+        stroke: ${token.colorBorder};
+        stroke-width: 0.8;
+        opacity: 0.95;
+      }
+      .tracking-live-map__bg {
+        fill: ${token.colorFillAlter};
+      }
+      .tracking-live-map__rail {
+        stroke: ${token.colorBorder};
+        stroke-width: 3.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        opacity: 0.9;
+      }
+      .tracking-live-map__done {
+        stroke: ${token.colorPrimary};
+        stroke-width: 3.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .tracking-live-map__port {
+        fill: ${token.colorPrimary};
+        stroke: ${token.colorBgContainer};
+        stroke-width: 2;
+        cursor: pointer;
+      }
+      .tracking-live-map__waypoint {
+        fill: ${token.colorTextQuaternary};
+        stroke: ${token.colorBgContainer};
+        stroke-width: 1;
+        cursor: pointer;
+      }
+      .tracking-live-map__event {
+        fill: ${token.colorWarning};
+        stroke: ${token.colorBgContainer};
+        stroke-width: 1;
+        cursor: pointer;
+      }
+      .tracking-live-map__node--selected {
+        stroke: ${token.colorSuccess};
+        stroke-width: 3;
+      }
+      .tracking-live-map__label {
+        fill: ${token.colorText};
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        pointer-events: none;
+        paint-order: stroke;
+        stroke: ${token.colorBgContainer};
+        stroke-width: 3px;
+      }
+      .tracking-live-map__vessel-group {
+        cursor: pointer;
+      }
+      .tracking-live-map__pulse {
+        fill: ${token.colorPrimaryBg};
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: tracking-live-pulse 1.8s ease-out infinite;
+      }
+      .tracking-live-map__ship {
+        fill: ${token.colorPrimary};
+        stroke: ${token.colorBgContainer};
+        stroke-width: 1.5;
+      }
+      .tracking-live-map__ship-core {
+        fill: ${token.colorTextLightSolid};
+      }
+      .tracking-live-map__vessel {
+        fill: ${token.colorPrimary};
+        stroke: ${token.colorBgContainer};
+        stroke-width: 2;
+      }
+      .tracking-live-map__vessel-group--selected .tracking-live-map__ship {
+        stroke: ${token.colorSuccess};
+        stroke-width: 2.5;
+      }
+      .tracking-live-map__scale-line {
+        stroke: ${token.colorTextSecondary};
+        stroke-width: 2;
+      }
+      .tracking-live-map__scale-text {
+        fill: ${token.colorTextSecondary};
+        font-size: ${token.fontSizeSM}px;
+      }
+      .tracking-live-map__hint {
+        display: block;
+        padding: ${token.paddingXS}px ${token.paddingSM}px;
+        font-size: ${token.fontSizeSM}px;
+      }
+      .tracking-live-map__legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: ${token.marginMD}px;
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+      }
+      .tracking-live-map__legend span {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+      }
+      .tracking-live-map__swatch {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        display: inline-block;
+      }
+      .tracking-live-map__swatch--land {
+        background: ${token.colorFillSecondary ?? token.colorFillAlter};
+        border: 1px solid ${token.colorBorder};
+        border-radius: 2px;
+      }
+      .tracking-live-map__swatch--done {
+        background: ${token.colorPrimary};
+      }
+      .tracking-live-map__swatch--rail {
+        background: ${token.colorBorder};
+      }
+      .tracking-live-map__swatch--vessel {
+        background: ${token.colorPrimary};
+        box-shadow: 0 0 0 3px ${token.colorPrimaryBg};
+      }
+      .tracking-live-map__swatch--event {
+        background: ${token.colorWarning};
+      }
+      .tracking-live-map__selection {
+        padding: ${token.paddingMD}px;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorBgContainer};
+      }
+      .tracking-live-map__selection-title {
+        margin: 0 0 ${token.marginXXS}px 0 !important;
+      }
+      .tracking-live-map__selection-meta {
+        display: block;
+        margin-top: ${token.marginXXS}px;
+        font-size: ${token.fontSizeSM}px;
+      }
+      .tracking-live-map__ais-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: ${token.marginSM}px;
+        padding: ${token.paddingMD}px;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorFillAlter};
+      }
+      .tracking-live-map__ais-item {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        min-width: 0;
+      }
+      .tracking-live-map__ais-label {
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+      .tracking-live-map__ais-value {
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+      }
+      .tracking-live-map__empty {
+        padding: ${token.paddingXL}px ${token.paddingLG}px;
+      }
+
       @media (max-width: 767px) {
+        .tracking-live-map__ais-grid {
+          grid-template-columns: 1fr 1fr;
+        }
         .tracking-search-actions {
           flex-direction: column;
         }

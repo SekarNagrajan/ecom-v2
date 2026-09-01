@@ -1,20 +1,28 @@
-// Modified by Sekar Nagarajan (2026-08-31 16:41)
+// Modified by Sekar Nagarajan (2026-09-01 16:19)
 /**
  * Preview — summary of all wizard step inputs with Edit → jump to step.
  */
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { useNavigate } from "@tanstack/react-router";
-import { Col, Descriptions, Flex, Result, Row, Tag, Typography } from "antd";
+import {
+  Col,
+  Descriptions,
+  Flex,
+  Result,
+  Row,
+  Table,
+  Tag,
+  Typography,
+} from "antd";
 import { useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
-import {
-  WIZARD_STEP_TITLES
-} from "../../../constants/module-titles";
+import { WIZARD_STEP_TITLES } from "../../../constants/module-titles";
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import { bookingApi } from "../api/booking.api";
 import { useBookingStore } from "../stores/booking.store";
+import { BOOKING_CARGO_LINE_COLUMNS } from "../utils/booking-cargo-line-columns";
 import { BookingModuleStyles } from "./booking-module-styles";
 import {
   BookingPreviewEmpty,
@@ -230,35 +238,33 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
             <BookingPreviewEmpty label="No containers" />
           ) : (
             cargo.containers.map((container, idx) => (
-              <div key={container.id} className="booking-cargo-container-card">
-                <Text strong>
-                  Container {idx + 1}: {container.quantity}x{" "}
-                  {container.containerType}
-                  {container.isSoc ? " · SOC" : ""}
-                  {container.reeferMode !== "none"
-                    ? ` · Reefer ${container.reeferMode}`
-                    : ""}
-                  {container.isLcl ? " · LCL" : ""}
-                  {container.isOog ? " · OOG" : ""}
-                </Text>
-                <ul className="booking-preview-list">
-                  {container.commodities.map((c) => (
-                    <li key={c.id}>
-                      {c.hsCode ? `${c.hsCode} · ` : ""}
-                      {c.commodity || c.description} · {c.packageQuantity}{" "}
-                      {c.packageType} · {c.weight} kg · {c.volume} m³
-                      {c.marksAndNumbers
-                        ? ` · Marks: ${c.marksAndNumbers}`
-                        : ""}
-                      {c.isDangerousGoods ? (
-                        <Text type="danger">
-                          {" "}
-                          · DG UN {c.unNumber} / Class {c.dgClass}
-                        </Text>
-                      ) : null}
-                    </li>
-                  ))}
-                </ul>
+              <div key={container.id} className="booking-container-block">
+                <div className="booking-container-block__header">
+                  <Text strong className="booking-container-block__title">
+                    Container {idx + 1}: {container.containerNo || "—"} (
+                    {container.containerType})
+                  </Text>
+                  <div className="booking-container-block__meta">
+                    <Tag>{container.eqpStatus}</Tag>
+                    {container.isSoc ? <Tag color="blue">SOC</Tag> : null}
+                    {container.reeferMode !== "none" ? (
+                      <Tag color="cyan">Reefer {container.reeferMode}</Tag>
+                    ) : null}
+                    {container.isLcl ? <Tag color="purple">LCL</Tag> : null}
+                    {container.isOog ? <Tag color="orange">OOG</Tag> : null}
+                  </div>
+                </div>
+                <div className="responsive-table-wrap custom-scroll">
+                  <Table
+                    size="small"
+                    dataSource={container.commodities}
+                    rowKey="id"
+                    pagination={false}
+                    bordered
+                    columns={BOOKING_CARGO_LINE_COLUMNS}
+                    locale={{ emptyText: "No commodities" }}
+                  />
+                </div>
               </div>
             ))
           )}

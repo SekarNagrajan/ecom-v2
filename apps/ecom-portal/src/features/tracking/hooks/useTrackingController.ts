@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-25 19:20)
+// Modified by Sekar Nagarajan (2026-09-01 14:38)
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { useEffect, useState } from "react";
 
@@ -23,6 +23,7 @@ export function useTrackingController() {
     useState<ContainerEquipment | null>(null);
   const [isMovementDrawerOpen, setIsMovementDrawerOpen] =
     useState<boolean>(false);
+  const [isLiveMapOpen, setIsLiveMapOpen] = useState(false);
 
   const executeSearch = async (params: TrackingSearchParams) => {
     if (!params.searchValue || params.searchValue.trim().length < 3) {
@@ -37,7 +38,11 @@ export function useTrackingController() {
       const data = await trackingApi.getTrackingDetails(params);
       setTrackingResult(data);
       setSearchParams(params);
+      if (!data) {
+        toast.info("No tracking records found for that reference");
+      }
     } catch {
+      setTrackingResult(null);
       toast.error("Failed to load tracking data for the requested reference");
     } finally {
       setIsLoading(false);
@@ -60,13 +65,23 @@ export function useTrackingController() {
   }, []);
 
   const handleOpenMovements = (container: ContainerEquipment) => {
+    setIsLiveMapOpen(false);
     setSelectedContainer(container);
     setIsMovementDrawerOpen(true);
   };
 
   const handleCloseMovements = () => {
     setIsMovementDrawerOpen(false);
-    setSelectedContainer(null);
+  };
+
+  const handleOpenLiveMap = (container: ContainerEquipment) => {
+    setIsMovementDrawerOpen(false);
+    setSelectedContainer(container);
+    setIsLiveMapOpen(true);
+  };
+
+  const handleCloseLiveMap = () => {
+    setIsLiveMapOpen(false);
   };
 
   return {
@@ -76,7 +91,10 @@ export function useTrackingController() {
     executeSearch,
     selectedContainer,
     isMovementDrawerOpen,
+    isLiveMapOpen,
     handleOpenMovements,
     handleCloseMovements,
+    handleOpenLiveMap,
+    handleCloseLiveMap,
   };
 }

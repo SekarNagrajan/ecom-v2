@@ -1,9 +1,9 @@
 // Modified by Sekar Nagarajan (2026-08-28 11:34)
-import { AppButton } from "@solverminds/shared-ui";
 import { Card, Typography } from "antd";
 import type { ReactNode } from "react";
 
 import type { BLChargeLine } from "../../types/bl.types";
+import { BlWizardFooter } from "../bl-wizard-footer";
 import type { BLWizardStepProps } from "./MasterDetailsStep";
 
 const { Text } = Typography;
@@ -71,6 +71,7 @@ export function BlChargeTabStep({
   data,
   onNext,
   onPrevious,
+  onGoToStep,
   isFirstStep,
   isSubmitting,
 }: BLWizardStepProps) {
@@ -97,19 +98,12 @@ export function BlChargeTabStep({
         </Card>
       </div>
 
-      <div className="form-step-footer form-step-footer--split">
-        <div className="form-step-footer__start custom-scroll">
-          <AppButton
-            onClick={onPrevious}
-            disabled={isFirstStep || isSubmitting}
-          >
-            Previous
-          </AppButton>
-        </div>
-        <AppButton type="primary" onClick={onNext} disabled={isSubmitting}>
-          Next
-        </AppButton>
-      </div>
+      <BlWizardFooter
+        onPrevious={onPrevious}
+        onNext={onNext}
+        isFirstStep={isFirstStep}
+        isSubmitting={isSubmitting}
+      />
     </div>
   );
 }

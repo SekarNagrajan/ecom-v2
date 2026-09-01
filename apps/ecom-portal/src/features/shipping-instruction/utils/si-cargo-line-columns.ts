@@ -1,4 +1,4 @@
-// Created by Sekar Nagarajan (2026-08-28 11:15)
+// Modified by Sekar Nagarajan (2026-09-01 16:25)
 import type { TableColumnsType } from "antd";
 
 import type { SICargoLine } from "../types/si.types";
@@ -17,9 +17,14 @@ export const SI_CARGO_LINE_COLUMNS: TableColumnsType<SICargoLine> = [
     key: "description",
   },
   {
-    title: "Packages",
-    key: "packages",
-    render: (_, record) => `${record.packageCount} ${record.packageType}`,
+    title: "Quantity",
+    dataIndex: "packageCount",
+    key: "packageCount",
+  },
+  {
+    title: "Package Type",
+    dataIndex: "packageType",
+    key: "packageType",
   },
   { title: "Weight (kg)", dataIndex: "grossWeight", key: "grossWeight" },
 ];

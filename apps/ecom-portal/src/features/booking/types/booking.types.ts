@@ -181,6 +181,8 @@ export const commodityItemSchema = z.object({
 export const containerItemSchema = z.object({
   id: z.string().min(1),
   containerType: z.string().min(1, "Container type is required"),
+  // Modified by Sekar Nagarajan (2026-09-01 16:25)
+  containerNo: z.string().optional(),
   quantity: z.number().min(1).max(100),
   eqpStatus: z.enum(["LADEN", "EMPTY"]).default("LADEN"),
   tareWeight: z.number().optional(),
@@ -286,6 +288,7 @@ export function createEmptyContainer(): ContainerItem {
     id: newId(),
     // Modified by Sekar Nagarajan (2026-08-28 12:04)
     containerType: "20DC",
+    containerNo: "",
     quantity: 1,
     eqpStatus: "LADEN",
     tareWeight: undefined,
@@ -327,6 +330,9 @@ export function migrateLegacyCargo(legacy: unknown): CargoData {
             ...base,
             ...containerRaw,
             id: String(containerRaw.id ?? base.id),
+            containerNo: String(
+              containerRaw.containerNo ?? containerRaw.containerNumber ?? "",
+            ),
             commodities:
               commoditiesRaw.length > 0
                 ? commoditiesRaw.map((item) => {

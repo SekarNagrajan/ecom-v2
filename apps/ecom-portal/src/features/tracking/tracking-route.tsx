@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-25 19:15)
+// Modified by Sekar Nagarajan (2026-09-01 14:38)
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { Card, Space } from "antd";
@@ -9,6 +9,7 @@ import { ModuleScreenHeader } from "../../components/shared/module-screen-header
 import { MODULE_TITLES } from "../../constants/module-titles";
 import { TrackingModuleStyles } from "./components/tracking-module-styles";
 import { TrackingContainersTable } from "./components/TrackingContainersTable";
+import { TrackingLiveMapDrawer } from "./components/TrackingLiveMapDrawer";
 import { TrackingMovementDrawer } from "./components/TrackingMovementDrawer";
 import { TrackingOverview } from "./components/TrackingOverview";
 import { TrackingSearchFilter } from "./components/TrackingSearchFilter";
@@ -22,8 +23,11 @@ export function TrackingRoute() {
     executeSearch,
     selectedContainer,
     isMovementDrawerOpen,
+    isLiveMapOpen,
     handleOpenMovements,
     handleCloseMovements,
+    handleOpenLiveMap,
+    handleCloseLiveMap,
   } = useTrackingController();
 
   return (
@@ -73,6 +77,7 @@ export function TrackingRoute() {
               <TrackingContainersTable
                 containers={trackingResult.containers}
                 onViewMovements={handleOpenMovements}
+                onViewLiveMap={handleOpenLiveMap}
               />
             </div>
           </Space>
@@ -82,6 +87,13 @@ export function TrackingRoute() {
           container={selectedContainer}
           open={isMovementDrawerOpen}
           onClose={handleCloseMovements}
+        />
+
+        <TrackingLiveMapDrawer
+          container={selectedContainer}
+          shipment={trackingResult}
+          open={isLiveMapOpen}
+          onClose={handleCloseLiveMap}
         />
       </Card>
     </FeaturePageShell>

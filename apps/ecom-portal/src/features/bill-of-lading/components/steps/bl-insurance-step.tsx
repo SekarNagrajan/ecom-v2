@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-28 11:31)
+// Modified by Sekar Nagarajan (2026-09-01 16:07)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
 import {
@@ -7,17 +7,22 @@ import {
   Checkbox,
   Col,
   InputNumber,
-  Radio,
   Row,
   Select,
+  Switch,
   Typography,
 } from "antd";
 import { Controller, useForm, type Resolver } from "react-hook-form";
 import { z } from "zod";
 
+import {
+  FORM_YES_NO_SWITCH_CLASS,
+  yesNoSwitchInner,
+} from "../../../../components/shared/yes-no-switch";
 import { RESPONSIVE_COL } from "../../../../constants/responsive-grid";
 import { insuranceSchema } from "../../../booking/types/booking.types";
 import type { BLInsuranceInfo } from "../../types/bl.types";
+import { BlWizardFooter } from "../bl-wizard-footer";
 import type { BLWizardStepProps } from "./MasterDetailsStep";
 
 const { Text } = Typography;
@@ -45,6 +50,7 @@ export function BlInsuranceStep({
   onNext,
   onPrevious,
   onUpdate,
+  onGoToStep,
   isFirstStep,
   isSubmitting,
 }: BLWizardStepProps) {
@@ -106,23 +112,26 @@ export function BlInsuranceStep({
         {!optOut ? (
           <>
             <Card size="small" className="form-step-card form-step-section">
-              <label className="form-field-label">
-                Do you require Cargo Insurance?
-              </label>
-              <Controller
-                control={control}
-                name="isInsuranceRequired"
-                render={({ field: { value, onChange, ...field } }) => (
-                  <Radio.Group
-                    {...field}
-                    value={value}
-                    onChange={(e) => onChange(e.target.value)}
-                  >
-                    <Radio value={true}>Yes</Radio>
-                    <Radio value={false}>No</Radio>
-                  </Radio.Group>
-                )}
-              />
+              <div className="form-field-cell">
+                <label className="form-field-label">
+                  Do you require Cargo Insurance?
+                </label>
+                {/* Modified by Sekar Nagarajan (2026-09-01 16:12) — compact yes/no switch */}
+                <Controller
+                  control={control}
+                  name="isInsuranceRequired"
+                  render={({ field: { value, onChange } }) => (
+                <div className="form-yes-no-switch-wrap">
+                  <Switch
+                    className={FORM_YES_NO_SWITCH_CLASS}
+                    checked={Boolean(value)}
+                    onChange={onChange}
+                    {...yesNoSwitchInner}
+                  />
+                </div>
+                  )}
+                />
+              </div>
             </Card>
 
             {isInsuranceRequired ? (
@@ -223,30 +232,24 @@ export function BlInsuranceStep({
         ) : null}
       </div>
 
-      <div className="form-step-footer form-step-footer--split">
-        <div className="form-step-footer__start custom-scroll">
-          <AppButton
-            onClick={onPrevious}
-            disabled={isFirstStep || isSubmitting}
-          >
-            Previous
-          </AppButton>
-        </div>
-        <div className="form-step-footer__start custom-scroll">
-          <AppButton type="primary" htmlType="submit" disabled={isSubmitting}>
-            Next
-          </AppButton>
-          {!optOut ? (
+      <BlWizardFooter
+        onPrevious={onPrevious}
+        nextHtmlType="submit"
+        isFirstStep={isFirstStep}
+        isSubmitting={isSubmitting}
+        extraEnd={
+          !optOut ? (
             <AppButton
               type="link"
+              htmlType="button"
               onClick={handleOptOut}
               disabled={isSubmitting}
             >
               Skip Insurance
             </AppButton>
-          ) : null}
-        </div>
-      </div>
+          ) : null
+        }
+      />
     </form>
   );
 }

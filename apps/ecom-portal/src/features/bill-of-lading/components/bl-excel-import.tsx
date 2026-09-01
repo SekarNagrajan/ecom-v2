@@ -1,7 +1,7 @@
-// Modified by Sekar Nagarajan (2026-08-28 11:15)
+// Modified by Sekar Nagarajan (2026-09-01 17:50)
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
-import { Space, Typography, Upload } from "antd";
+import { Space, Upload } from "antd";
 import { useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
@@ -9,8 +9,6 @@ import type { SIContainer } from "../../shipping-instruction/types/si.types";
 import { fetchBLExcelTemplate, importBLExcel } from "../api/bl.api";
 import { DEFAULT_BL_WIZARD_CONFIG } from "../config/bl-wizard-config";
 import { validateExcelFile } from "../utils/bl-excel-import.utils";
-
-const { Text } = Typography;
 
 interface BlExcelImportProps {
   blNo: string;
@@ -99,7 +97,7 @@ export function BlExcelImport({
         }}
       >
         <AppButton
-          icon={<AppIcon icon={Icons.filePlus} size={14} />}
+          icon={<AppIcon icon={Icons.filePlus} size={14} tone="download" />}
           loading={importing}
         >
           Import Excel

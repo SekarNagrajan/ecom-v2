@@ -1,11 +1,11 @@
 // Modified by Sekar Nagarajan (2026-08-28 11:29)
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AppButton } from "@solverminds/shared-ui";
 import { Card, Input, Typography } from "antd";
 import { Controller, useForm } from "react-hook-form";
 
 import type { BLRoutingStepValues } from "../../types/bl.types";
 import { blRoutingStepSchema } from "../../types/bl.types";
+import { BlWizardFooter } from "../bl-wizard-footer";
 import type { BLWizardStepProps } from "./MasterDetailsStep";
 
 const { Text } = Typography;
@@ -28,6 +28,7 @@ export function RoutingStep({
   onNext,
   onPrevious,
   onUpdate,
+  onGoToStep,
   isSubmitting,
 }: BLWizardStepProps) {
   const routing = data.routing ?? {
@@ -147,16 +148,11 @@ export function RoutingStep({
         ) : null}
       </div>
 
-      <div className="form-step-footer form-step-footer--split">
-        <div className="form-step-footer__start custom-scroll">
-          <AppButton onClick={onPrevious} disabled={isSubmitting}>
-            Previous
-          </AppButton>
-        </div>
-        <AppButton type="primary" htmlType="submit" disabled={isSubmitting}>
-          Next
-        </AppButton>
-      </div>
+      <BlWizardFooter
+        onPrevious={onPrevious}
+        nextHtmlType="submit"
+        isSubmitting={isSubmitting}
+      />
     </form>
   );
 }

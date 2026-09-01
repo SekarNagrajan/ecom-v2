@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-01 12:02)
+// Modified by Sekar Nagarajan (2026-09-01 15:52)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
@@ -12,7 +12,6 @@ import {
   Row,
   Segmented,
   Select,
-  Table,
   Tooltip,
   Typography,
 } from "antd";
@@ -34,6 +33,8 @@ import {
 } from "../types/booking.types";
 import { pickDefaultBookingRoute } from "../utils/pick-default-booking-route";
 import { BookingModuleStyles } from "./booking-module-styles";
+import { BookingRouteCard } from "./booking-route-card";
+import { BookingSelectedRatePanel } from "./booking-selected-rate-panel";
 import { RoutingSelectModal } from "./RoutingSelectModal";
 import { SelectTemplateModal } from "./SelectTemplateModal";
 
@@ -76,45 +77,6 @@ function routeMatchesPorts(
     extractPortCode(route.polPortId) === extractPortCode(origin) &&
     extractPortCode(route.podPortId) === extractPortCode(delivery)
   );
-}
-
-// Modified by Sekar Nagarajan (2026-09-01 11:54) — full detail tooltips for truncated route/rate cards
-function formatSelectedRouteTooltip(route: SelectedRoute): string {
-  const lines = [
-    `Service: ${route.serviceName} (${route.serviceCode})`,
-    `Vessel: ${route.vesselName} (${route.vesselCode})`,
-    `Voyage: ${route.voyage}${route.bound ? `/${route.bound}` : ""}`,
-    `POL: ${route.polPortId} - ${route.polPortName}${
-      route.polTerminal ? ` · ${route.polTerminal}` : ""
-    }`,
-    `POD: ${route.podPortId} - ${route.podPortName}${
-      route.podTerminal ? ` · ${route.podTerminal}` : ""
-    }`,
-    `ETD: ${route.etd}`,
-    `ETA: ${route.eta}`,
-    `Transit: ${route.transitTimeDays} days`,
-    `Routing: ${
-      route.isDirect ? "Direct" : route.shipmentKind || "Transshipment"
-    }`,
-  ];
-  if (route.gateInCutoff) lines.push(`Gate-in cutoff: ${route.gateInCutoff}`);
-  if (route.siDocCutoff) lines.push(`SI cutoff: ${route.siDocCutoff}`);
-  if (route.vgmCutoff) lines.push(`VGM cutoff: ${route.vgmCutoff}`);
-  return lines.join("\n");
-}
-
-function formatSelectedRateTooltip(rate: BookingRateOption): string {
-  return [
-    `Rate No: ${rate.rateNo}`,
-    `Item: ${rate.itemNo}`,
-    `Amendment: ${rate.amdNo}`,
-    `Type: ${rate.rateType}`,
-    `Equipment: ${rate.eqpType}`,
-    `Amount: ${rate.amount} ${rate.currency}`,
-    `Customer: ${rate.customer}${
-      rate.customerCode ? ` (${rate.customerCode})` : ""
-    }`,
-  ].join("\n");
 }
 
 // Modified by Sekar Nagarajan (2026-09-01 12:02) — port fields show CODE - Name like dropdown
@@ -361,13 +323,15 @@ export function MasterDetailsStep() {
     updateMasterDetails(nextData);
     setIsRoutingModalOpen(false);
     toast.success(`Route selected: ${route.serviceName} · ${route.vesselName}`);
-    nextStep();
   };
 
   const hasValidRoute = routeMatchesPorts(
     selectedRoute,
     originValue,
     deliveryValue,
+  );
+  const showPairedRouteRate = Boolean(
+    hasValidRoute && selectedRoute && selectedRate && canSearchRates,
   );
 
   return (
@@ -544,140 +508,50 @@ export function MasterDetailsStep() {
             ) : null}
           </div>
 
-          {/* Modified by Sekar Nagarajan (2026-09-01 11:50) — route + rate side-by-side single row */}
-          {(hasValidRoute && selectedRoute) || canSearchRates ? (
+          {/* Modified by Sekar Nagarajan (2026-09-01 16:05) — selected rate 70/30; Change Rate uses full-width table */}
+          {hasValidRoute && selectedRoute ? (
             <div
               className={[
                 "booking-selected-summary-row",
-                hasValidRoute && selectedRoute && selectedRate
-                  ? "booking-selected-summary-row--paired"
-                  : "",
-                canSearchRates && !selectedRate
-                  ? "booking-selected-summary-row--with-table"
+                showPairedRouteRate
+                  ? "booking-selected-summary-row--route-rates"
                   : "",
               ]
                 .filter(Boolean)
                 .join(" ")}
             >
-              {hasValidRoute && selectedRoute ? (
-                <div className="booking-selected-route">
-                  <Tooltip
-                    title={
-                      <span className="booking-selected-route__tooltip">
-                        {formatSelectedRouteTooltip(selectedRoute)}
-                      </span>
-                    }
-                  >
-                    <div className="booking-selected-route__content">
-                      <Text strong className="booking-selected-route__title">
-                        Route: {selectedRoute.serviceName} (
-                        {selectedRoute.serviceCode})
-                      </Text>
-                      <Text
-                        type="secondary"
-                        className="booking-selected-route__meta"
-                      >
-                        {selectedRoute.vesselName} · Voy {selectedRoute.voyage}
-                        {selectedRoute.bound ? `/${selectedRoute.bound}` : ""} ·
-                        ETD {selectedRoute.etd} · ETA {selectedRoute.eta} ·{" "}
-                        {selectedRoute.transitTimeDays} days
-                      </Text>
-                    </div>
-                  </Tooltip>
-                  <AppButton
-                    icon={<AppIcon icon={Icons.refreshCw} size={14} />}
-                    onClick={() => setIsRoutingModalOpen(true)}
-                  >
-                    Change Route
-                  </AppButton>
-                </div>
-              ) : null}
-
+              <BookingRouteCard
+                key={selectedRoute.routeId}
+                route={selectedRoute}
+                detailsMode="drawer"
+                action={{
+                  label: "Change Route",
+                  icon: Icons.refreshCw,
+                  type: "default",
+                  onClick: () => setIsRoutingModalOpen(true),
+                }}
+              />
               {canSearchRates ? (
-                selectedRate ? (
-                  <div className="booking-selected-route">
-                    <Tooltip
-                      title={
-                        <span className="booking-selected-route__tooltip">
-                          {formatSelectedRateTooltip(selectedRate)}
-                        </span>
-                      }
-                    >
-                      <div className="booking-selected-route__content">
-                        <Text strong className="booking-selected-route__title">
-                          Rate: {selectedRate.rateNo} · Item{" "}
-                          {selectedRate.itemNo}
-                        </Text>
-                        <Text
-                          type="secondary"
-                          className="booking-selected-route__meta"
-                        >
-                          {selectedRate.rateType} · {selectedRate.eqpType} ·{" "}
-                          {selectedRate.amount} {selectedRate.currency} ·{" "}
-                          {selectedRate.customer}
-                        </Text>
-                      </div>
-                    </Tooltip>
-                    <AppButton
-                      icon={<AppIcon icon={Icons.refreshCw} size={14} />}
-                      onClick={clearSelectedRate}
-                    >
-                      Change
-                    </AppButton>
-                  </div>
-                ) : (
-                  <Card
-                    size="small"
-                    title="Available Rates"
-                    className="form-step-card form-step-section booking-selected-summary-row__rates"
-                  >
-                    <div className="booking-rates-table custom-scroll">
-                      <Table
-                        size="small"
-                        rowKey={(r) => `${r.rateNo}-${r.itemNo}-${r.amdNo}`}
-                        loading={ratesLoading}
-                        pagination={false}
-                        dataSource={availableRates}
-                        columns={[
-                          { title: "Rate No", dataIndex: "rateNo" },
-                          { title: "Item", dataIndex: "itemNo", width: 70 },
-                          { title: "Amd", dataIndex: "amdNo", width: 70 },
-                          { title: "Type", dataIndex: "rateType", width: 80 },
-                          { title: "Eqp", dataIndex: "eqpType", width: 80 },
-                          {
-                            title: "Amount",
-                            key: "amount",
-                            render: (_: unknown, row: BookingRateOption) =>
-                              `${row.amount} ${row.currency}`,
-                          },
-                          {
-                            title: "Customer",
-                            dataIndex: "customer",
-                            ellipsis: true,
-                          },
-                          {
-                            title: "",
-                            key: "select",
-                            width: 100,
-                            render: (_: unknown, row: BookingRateOption) => (
-                              <AppButton
-                                type="primary"
-                                size="small"
-                                loading={isApplyingDefaultRoute}
-                                disabled={isApplyingDefaultRoute}
-                                onClick={() => void handleSelectRate(row)}
-                              >
-                                Select
-                              </AppButton>
-                            ),
-                          },
-                        ]}
-                        locale={{ emptyText: "No rates for this lane" }}
-                      />
-                    </div>
-                  </Card>
-                )
+                <BookingSelectedRatePanel
+                  rates={availableRates}
+                  selectedRate={selectedRate ?? null}
+                  loading={ratesLoading}
+                  selecting={isApplyingDefaultRoute}
+                  onSelect={(rate) => void handleSelectRate(rate)}
+                  onChange={clearSelectedRate}
+                />
               ) : null}
+            </div>
+          ) : canSearchRates ? (
+            <div className="booking-selected-summary-row">
+              <BookingSelectedRatePanel
+                rates={availableRates}
+                selectedRate={selectedRate ?? null}
+                loading={ratesLoading}
+                selecting={isApplyingDefaultRoute}
+                onSelect={(rate) => void handleSelectRate(rate)}
+                onChange={clearSelectedRate}
+              />
             </div>
           ) : null}
 
@@ -690,6 +564,7 @@ export function MasterDetailsStep() {
                 name="haulageOriginType"
                 render={({ field: { value, onChange } }) => (
                   <Segmented
+                    className="form-field-full-width form-segmented"
                     options={["Carrier", "Merchant"]}
                     value={value}
                     onChange={onChange}
@@ -706,6 +581,7 @@ export function MasterDetailsStep() {
                 name="haulageDestinationType"
                 render={({ field: { value, onChange } }) => (
                   <Segmented
+                    className="form-field-full-width form-segmented"
                     options={["Carrier", "Merchant"]}
                     value={value}
                     onChange={onChange}

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-01 12:29)
+// Modified by Sekar Nagarajan (2026-09-01 16:32)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -840,9 +840,7 @@ export function BlModuleStyles() {
         align-items: center;
       }
 
-      .bl-master-segmented.ant-segmented {
-        width: 100%;
-      }
+      /* Modified by Sekar Nagarajan (2026-09-01 16:45) — master Segmented uses global .form-segmented */
 
       /* Modified by Sekar Nagarajan (2026-08-31 12:32) — Radio card tiles */
       .bl-radio-card-group {
@@ -978,13 +976,6 @@ export function BlModuleStyles() {
         display: flex;
         align-items: center;
         min-height: ${token.controlHeight}px;
-      }
-      .bl-ens-switch .app-icon {
-        color: ${token.colorPrimary};
-        display: inline-flex;
-      }
-      .bl-ens-switch.ant-switch-checked .app-icon {
-        color: ${token.colorTextLightSolid};
       }
       .bl-master-readonly-field {
         min-width: 0;
@@ -1276,6 +1267,9 @@ export function BlModuleStyles() {
         margin-bottom: ${token.marginLG}px;
         text-align: center;
       }
+
+    }
+    
       .bl-preview-subtitle {
         font-size: ${token.fontSizeSM}px;
         max-width: ${token.controlHeightLG * 18}px;
@@ -1340,6 +1334,25 @@ export function BlModuleStyles() {
         gap: ${token.marginXS}px ${token.marginSM}px;
         min-height: ${token.controlHeightLG}px;
         align-items: center;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-01 16:36) — Preview + Next stay on the right */
+      .form-step-footer__end {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: ${token.marginXS}px;
+        flex-wrap: wrap;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-01 17:50) — excel actions right, no card border */
+      .bl-excel-import-toolbar {
+        border: none;
+        margin-bottom: ${token.marginMD}px;
+        margin-right: ${token.marginXXL}px;
+        margin-top: ${token.marginXL}px;
+      }
+      .bl-excel-import-toolbar .bl-excel-import {
+        display: inline-flex;
+        justify-content: flex-end;
       }
       @media (max-width: 1199px) {
         .bl-preview-fields-grid--4,

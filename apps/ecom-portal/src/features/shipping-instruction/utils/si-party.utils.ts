@@ -43,7 +43,7 @@ export const SI_PARTY_ROLE_OPTIONS: { key: SiPartyRoleKey; label: string }[] = [
 ];
 
 export const SI_PARTY_ROLE_LABEL: Record<SiPartyRoleKey, string> = {
-  shipper: "Booking Party",
+  shipper: "Shipper",
   consignee: "Consignee",
   notify: "Notify Party",
   notify2: "Notify Party 2",

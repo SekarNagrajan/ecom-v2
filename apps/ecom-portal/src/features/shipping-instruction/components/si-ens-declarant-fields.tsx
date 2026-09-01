@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-31 16:19)
+// Modified by Sekar Nagarajan (2026-09-01 16:36)
 import { Input, Segmented, Typography } from "antd";
 import type { Control, FieldErrors } from "react-hook-form";
 import { Controller } from "react-hook-form";
@@ -28,7 +28,7 @@ export function SiEnsDeclarantFields({
   const dErrors = errors.declarant;
 
   return (
-    <div className="si-ens-party-grid">
+    <div className="form-ens-party-grid">
       <div className="form-field-cell">
         <label className="form-field-label">
           Declarant Name <Text type="danger"> *</Text>
@@ -257,7 +257,7 @@ export function SiEnsDeclarantFields({
           render={({ field: { value, onChange } }) => (
             <Segmented
               block
-              className="form-field-full-width si-master-segmented"
+              className="form-field-full-width form-segmented"
               value={value ?? "House BL"}
               onChange={onChange}
               options={[

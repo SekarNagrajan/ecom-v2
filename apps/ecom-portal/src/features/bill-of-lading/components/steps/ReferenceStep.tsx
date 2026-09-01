@@ -1,5 +1,4 @@
 // Created by Sekar Nagarajan (2026-08-31 14:46)
-import { AppButton } from "@solverminds/shared-ui";
 import { Card } from "antd";
 import { useState } from "react";
 
@@ -8,6 +7,7 @@ import {
   initialReferenceFields,
   type ReferenceField,
 } from "../../../booking/utils/reference-field.utils";
+import { BlWizardFooter } from "../bl-wizard-footer";
 import type { BLWizardStepProps } from "./MasterDetailsStep";
 
 export function ReferenceStep({
@@ -15,6 +15,7 @@ export function ReferenceStep({
   onNext,
   onPrevious,
   onUpdate,
+  onGoToStep,
   isSubmitting,
 }: BLWizardStepProps) {
   const [fields, setFields] = useState<ReferenceField[]>(() =>
@@ -37,16 +38,11 @@ export function ReferenceStep({
         </Card>
       </div>
 
-      <div className="form-step-footer form-step-footer--split">
-        <div className="form-step-footer__start custom-scroll">
-          <AppButton onClick={onPrevious} disabled={isSubmitting}>
-            Previous
-          </AppButton>
-        </div>
-        <AppButton type="primary" onClick={handleNext} disabled={isSubmitting}>
-          Next
-        </AppButton>
-      </div>
+      <BlWizardFooter
+        onPrevious={onPrevious}
+        onNext={handleNext}
+        isSubmitting={isSubmitting}
+      />
     </div>
   );
 }

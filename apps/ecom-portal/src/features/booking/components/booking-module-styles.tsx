@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-01 12:22)
+// Modified by Sekar Nagarajan (2026-09-01 16:49)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -514,7 +514,7 @@ export function BookingModuleStyles() {
       }
       .booking-routing-card__place {
         display: block;
-        font-size: ${token.fontSizeSM}px;
+        font-size: ${token.fontSizeXL}px;
         color: ${token.colorTextSecondary};
         line-height: 1.4;
         word-break: break-word;
@@ -701,6 +701,19 @@ export function BookingModuleStyles() {
         border: 1px solid ${token.colorBorderSecondary};
         border-radius: ${token.borderRadiusLG}px;
         background: ${token.colorBgContainer};
+      }
+      .booking-route-details-drawer {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginLG}px;
+      }
+      .booking-route-details-drawer__section {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginSM}px;
+      }
+      .booking-route-details-drawer .booking-route-details {
+        margin: 0;
       }
       .booking-route-details__header {
         display: flex;
@@ -893,7 +906,7 @@ export function BookingModuleStyles() {
           margin-right: ${token.marginMD}px;
         }
       }
-      /* Modified by Sekar Nagarajan (2026-09-01 11:50) — route/rate single-row layout */
+      /* Modified by Sekar Nagarajan (2026-09-01 15:52) — selected route 70% / rate 30% */
       .booking-selected-summary-row {
         display: grid;
         grid-template-columns: 1fr;
@@ -902,14 +915,61 @@ export function BookingModuleStyles() {
         margin-bottom: ${token.marginMD}px;
         align-items: stretch;
       }
-      .booking-selected-summary-row--paired {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-      .booking-selected-summary-row--with-table {
+      .booking-selected-summary-row--route-rates {
         grid-template-columns: 1fr;
       }
-      .booking-selected-summary-row__rates {
+      .booking-selected-summary-row--route-rates .booking-routing-card {
+        height: 100%;
+        overflow: hidden;
+      }
+      .booking-selected-rate-panel {
         margin-top: 0;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+      .booking-selected-rate-panel > .ant-card-body {
+        flex: 1;
+        min-height: 0;
+      }
+      .booking-selected-rate-panel__fields {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginSM}px;
+       
+        margin: 0;
+      }
+      .booking-selected-rate-panel__field {
+        display: grid;
+        grid-template-columns: minmax(${
+          token.controlHeightLG * 2
+        }px, 0.9fr) minmax(0, 1.2fr);
+        align-items: baseline;
+        gap: ${token.marginXS}px;
+        
+        min-width: 0;
+      }
+      .booking-selected-rate-panel__label {
+        display: block;
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        line-height: 1.2;
+      }
+      .booking-selected-rate-panel__value {
+        display: block;
+        word-break: break-word;
+        text-align: right;
+      }
+      .booking-selected-rate-panel--table {
+        height: auto;
+        width: 100%;
+      }
+      .booking-selected-rate-panel--table .booking-rates-table {
+        width: 100%;
+      }
+      .booking-selected-rate-panel--table .ant-table-wrapper,
+      .booking-selected-rate-panel--table .ant-table {
+        width: 100%;
       }
       .booking-selected-route {
         display: flex;
@@ -932,7 +992,6 @@ export function BookingModuleStyles() {
         min-width: 0;
         flex: 1;
         overflow: hidden;
-        cursor: help;
       }
       .booking-selected-route__title {
         display: inline;
@@ -947,19 +1006,17 @@ export function BookingModuleStyles() {
         text-overflow: ellipsis;
         min-width: 0;
       }
-      .booking-selected-route__tooltip {
-        display: block;
-        white-space: pre-line;
-      }
       .booking-selected-route .sm-app-button,
       .booking-selected-route .ant-btn {
         flex-shrink: 0;
       }
+      @media (min-width: 992px) {
+        .booking-selected-summary-row--route-rates {
+          grid-template-columns: minmax(0, 7fr) minmax(240px, 3fr);
+        }
+      }
       @media (max-width: 991px) {
         .booking-view-row--2 {
-          grid-template-columns: 1fr;
-        }
-        .booking-selected-summary-row--paired {
           grid-template-columns: 1fr;
         }
         .booking-selected-route__content {
@@ -1163,6 +1220,84 @@ export function BookingModuleStyles() {
       .booking-cargo-container-card__title {
         margin: 0 !important;
       }
+      /* Modified by Sekar Nagarajan (2026-09-01 16:49) — single-row container fields + equal control height */
+      .booking-cargo-container-row {
+        display: grid;
+        grid-template-columns:
+          minmax(0, 1.5fr)
+          minmax(0, 1.2fr)
+          ${token.controlHeightLG * 4.5}px
+          minmax(0, 1fr)
+          minmax(0, 1fr)
+          auto
+          auto;
+        gap: ${token.marginSM}px ${token.marginMD}px;
+        align-items: start;
+      }
+      .booking-cargo-container-row--with-nor {
+        grid-template-columns:
+          minmax(0, 1.4fr)
+          minmax(0, 1.1fr)
+          ${token.controlHeightLG * 4.5}px
+          minmax(0, 0.95fr)
+          minmax(0, 0.95fr)
+          auto
+          auto
+          auto;
+      }
+      .booking-cargo-container-row .form-field-cell {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+      }
+      .booking-cargo-container-row__qty {
+        width: ${token.controlHeightLG * 4.5}px;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-01 17:30) — match compact form-yes-no-switch width */
+      .booking-cargo-container-row__switch {
+        width: auto;
+        min-width: ${token.controlHeightLG}px;
+      }
+      .booking-cargo-container-row__switch .form-yes-no-switch-wrap {
+        min-height: ${token.controlHeightLG}px;
+      }
+      .booking-cargo-container-row .ant-select-lg,
+      .booking-cargo-container-row .ant-input-lg,
+      .booking-cargo-container-row .ant-input-number-lg,
+      .booking-cargo-container-row .ant-input-number-group-wrapper-lg {
+        width: 100%;
+      }
+      .booking-cargo-container-row .ant-select-selector,
+      .booking-cargo-container-row .ant-input,
+      .booking-cargo-container-row .ant-input-number,
+      .booking-cargo-container-row .booking-qty-stepper,
+      .booking-cargo-container-row .booking-qty-stepper .ant-btn,
+      .booking-cargo-container-row .booking-qty-stepper .ant-input-number {
+        min-height: ${token.controlHeightLG}px;
+        height: ${token.controlHeightLG}px;
+      }
+      .booking-cargo-container-row .ant-select-selection-item,
+      .booking-cargo-container-row .ant-select-selection-placeholder,
+      .booking-cargo-container-row .ant-input,
+      .booking-cargo-container-row .ant-input-number-input {
+        line-height: ${token.controlHeightLG - 2}px;
+      }
+      @media (max-width: 1199px) {
+        .booking-cargo-container-row,
+        .booking-cargo-container-row--with-nor {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+        .booking-cargo-container-row__qty {
+          width: 100%;
+        }
+      }
+      @media (max-width: 767px) {
+        .booking-cargo-container-row,
+        .booking-cargo-container-row--with-nor {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
       .booking-cargo-commodity-toolbar {
         display: flex;
         align-items: center;
@@ -1334,6 +1469,36 @@ export function BookingModuleStyles() {
       .booking-preview-empty {
         display: block;
         padding: ${token.paddingXXS}px 0;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-01 16:19) — SI-style cargo preview grid */
+      .booking-container-block {
+        margin-bottom: ${token.marginLG}px;
+      }
+      .booking-container-block:last-child {
+        margin-bottom: 0;
+      }
+      .booking-container-block__header {
+        margin-bottom: ${token.marginSM}px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: ${token.marginSM}px;
+        flex-wrap: wrap;
+      }
+      .booking-container-block__title.ant-typography {
+        display: inline-flex;
+        align-items: center;
+        padding: ${token.paddingXXS}px ${token.paddingSM}px;
+        border-radius: ${token.borderRadius}px;
+        background: ${token.colorWarningBg};
+        border: 1px solid ${token.colorWarning};
+        color: ${token.colorText};
+      }
+      .booking-container-block__meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: ${token.marginXXS}px;
       }
       .booking-party-block {
         display: flex;

@@ -191,7 +191,7 @@ export function BookingDashboardRoute() {
                             title="Download PDF"
                             icon={
                               <AppIcon
-                                icon={Icons.download}
+                                icon={Icons.fileText}
                                 size={16}
                                 tone="download"
                               />

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-28 11:52)
+// Modified by Sekar Nagarajan (2026-09-01 16:07)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
 import {
@@ -7,14 +7,18 @@ import {
   Checkbox,
   Col,
   InputNumber,
-  Radio,
   Row,
   Select,
+  Switch,
   Typography,
 } from "antd";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
+import {
+  FORM_YES_NO_SWITCH_CLASS,
+  yesNoSwitchInner,
+} from "../../../../components/shared/yes-no-switch";
 import { RESPONSIVE_COL } from "../../../../constants/responsive-grid";
 import type { SIInsuranceInfo, SIWizardStepProps } from "../../types/si.types";
 
@@ -131,23 +135,26 @@ export function SiInsuranceStep({
         {!optOut ? (
           <>
             <Card size="small" className="form-step-card form-step-section">
-              <label className="form-field-label">
-                Do you require Cargo Insurance?
-              </label>
-              <Controller
-                control={control}
-                name="isInsuranceRequired"
-                render={({ field: { value, onChange, ...field } }) => (
-                  <Radio.Group
-                    {...field}
-                    value={value}
-                    onChange={(e) => onChange(e.target.value)}
-                  >
-                    <Radio value={true}>Yes</Radio>
-                    <Radio value={false}>No</Radio>
-                  </Radio.Group>
-                )}
-              />
+              <div className="form-field-cell">
+                <label className="form-field-label">
+                  Do you require Cargo Insurance?
+                </label>
+                {/* Modified by Sekar Nagarajan (2026-09-01 16:12) — compact yes/no switch */}
+                <Controller
+                  control={control}
+                  name="isInsuranceRequired"
+                  render={({ field: { value, onChange } }) => (
+                <div className="form-yes-no-switch-wrap">
+                  <Switch
+                    className={FORM_YES_NO_SWITCH_CLASS}
+                    checked={Boolean(value)}
+                    onChange={onChange}
+                    {...yesNoSwitchInner}
+                  />
+                </div>
+                  )}
+                />
+              </div>
             </Card>
 
             {isInsuranceRequired ? (

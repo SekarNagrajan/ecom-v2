@@ -20,6 +20,7 @@ import {
     type BLChargesStepValues,
     type BLPrepaidCollect,
 } from "../../types/bl.types";
+import { BlWizardFooter } from "../bl-wizard-footer";
 import type { BLWizardStepProps } from "./MasterDetailsStep";
 
 const { Text } = Typography;
@@ -174,6 +175,7 @@ export function ChargesStep({
   onNext,
   onPrevious,
   onUpdate,
+  onGoToStep,
   isFirstStep,
   isSubmitting,
 }: BLWizardStepProps) {
@@ -260,19 +262,12 @@ export function ChargesStep({
         </Card>
       </div>
 
-      <div className="form-step-footer form-step-footer--split">
-        <div className="form-step-footer__start custom-scroll">
-          <AppButton
-            onClick={onPrevious}
-            disabled={isFirstStep || isSubmitting}
-          >
-            Previous
-          </AppButton>
-        </div>
-        <AppButton type="primary" htmlType="submit" disabled={isSubmitting}>
-          Next
-        </AppButton>
-      </div>
+      <BlWizardFooter
+        onPrevious={onPrevious}
+        nextHtmlType="submit"
+        isFirstStep={isFirstStep}
+        isSubmitting={isSubmitting}
+      />
     </form>
   );
 }

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-01 12:29)
+// Modified by Sekar Nagarajan (2026-09-01 16:40)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -1089,9 +1089,7 @@ export function SiModuleStyles() {
       .si-master-options-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
       }
-      .si-master-segmented.ant-segmented {
-        width: 100%;
-      }
+      /* Modified by Sekar Nagarajan (2026-09-01 16:45) — master Segmented uses global .form-segmented */
       .si-master-compliance-grid {
         display: grid;
         width: 100%;
@@ -1403,13 +1401,6 @@ export function SiModuleStyles() {
         min-width: ${token.controlHeightLG * 1}px;
         align-self: flex-start;
         justify-self: start;
-      }
-      .si-ens-switch .app-icon {
-        color: ${token.colorPrimary};
-        display: inline-flex;
-      }
-      .si-ens-switch.ant-switch-checked .app-icon {
-        color: ${token.colorTextLightSolid};
       }
       /* Modified by Sekar Nagarajan (2026-08-31 16:19) — ENS field padding/margin (token-only) */
       .si-ens-sections {

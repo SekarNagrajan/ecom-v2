@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-25 19:15)
+// Modified by Sekar Nagarajan (2026-09-01 14:38)
 import { AppButton } from "@solverminds/shared-ui";
 import { DataView, DataViewColumn } from "@solverminds/shared-ui/data-view";
 import { Badge, Flex, Space, Tag, Tooltip, Typography } from "antd";
@@ -11,11 +11,13 @@ const { Text } = Typography;
 interface TrackingContainersTableProps {
   containers: ContainerEquipment[];
   onViewMovements: (container: ContainerEquipment) => void;
+  onViewLiveMap: (container: ContainerEquipment) => void;
 }
 
 export function TrackingContainersTable({
   containers,
   onViewMovements,
+  onViewLiveMap,
 }: TrackingContainersTableProps) {
   const columnDefs: DataViewColumn<ContainerEquipment>[] = [
     {
@@ -39,7 +41,7 @@ export function TrackingContainersTable({
                 onClick={() => onViewMovements(record)}
               />
             </Tooltip>
-            <Tooltip title="Interactive Container Live Map">
+            <Tooltip title="Container Live Map">
               <AppButton
                 type="text"
                 size="small"
@@ -48,10 +50,10 @@ export function TrackingContainersTable({
                     icon={Icons.mapPin}
                     size={16}
                     gridAction
-                    tone="track"
+                    tone="reject"
                   />
                 }
-                onClick={() => onViewMovements(record)}
+                onClick={() => onViewLiveMap(record)}
               />
             </Tooltip>
           </Space>

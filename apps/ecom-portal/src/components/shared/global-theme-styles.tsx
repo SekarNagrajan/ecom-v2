@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-31 13:00)
+// Modified by Sekar Nagarajan (2026-09-01 16:42)
 import { theme } from "antd";
 
 import { tokenMix } from "../../features/theme/utils/token-mix";
@@ -150,6 +150,15 @@ export function GlobalThemeStyles() {
         gap: ${token.marginXS}px;
         flex-wrap: wrap;
       }
+      /* Modified by Sekar Nagarajan (2026-09-01 16:40) — right-aligned Preview + Next */
+      .form-step-footer__end {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: ${token.marginXS}px;
+        flex-wrap: wrap;
+        margin-left: auto;
+      }
       .form-step-card-toolbar {
         display: flex;
         justify-content: space-between;
@@ -199,6 +208,151 @@ export function GlobalThemeStyles() {
       .form-field-full-width.ant-input-number,
       .form-field-full-width.ant-input-number-group-wrapper {
         width: 100%;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-01 17:30) — compact yes/no switch width (all modules) */
+      .form-yes-no-switch-wrap {
+        display: flex;
+        align-items: center;
+      }
+      .form-yes-no-switch.ant-switch {
+        width: ${token.controlHeightLG}px;
+        min-width: ${token.controlHeightLG}px;
+        max-width: ${token.controlHeightLG}px;
+        flex: none;
+      }
+      .form-yes-no-switch .app-icon {
+        display: inline-flex;
+        line-height: 1;
+      }
+      .form-yes-no-switch .ant-switch-inner-unchecked .app-icon {
+        color: ${token.colorPrimary};
+      }
+      .form-yes-no-switch .ant-switch-inner-checked .app-icon {
+        color: ${token.colorTextLightSolid};
+      }
+      /* Modified by Sekar Nagarajan (2026-09-01 16:42) — shared form Segmented (height + border) */
+      .form-segmented.ant-segmented,
+      .form-ens-segmented.ant-segmented,
+      .bl-master-segmented.ant-segmented,
+      .si-master-segmented.ant-segmented {
+        width: 100%;
+        min-height: ${token.controlHeight}px;
+        padding: ${token.paddingXXS}px;
+        border: 1px solid ${token.colorBorder};
+        border-radius: ${token.borderRadius}px;
+        background: ${token.colorBgContainer};
+      }
+      .form-segmented.ant-segmented .ant-segmented-item,
+      .form-ens-segmented.ant-segmented .ant-segmented-item,
+      .bl-master-segmented.ant-segmented .ant-segmented-item,
+      .si-master-segmented.ant-segmented .ant-segmented-item {
+        min-height: ${token.controlHeight - token.paddingXXS * 2}px;
+        line-height: ${token.controlHeight - token.paddingXXS * 2}px;
+      }
+      .form-segmented.ant-segmented .ant-segmented-item-label,
+      .form-ens-segmented.ant-segmented .ant-segmented-item-label,
+      .bl-master-segmented.ant-segmented .ant-segmented-item-label,
+      .si-master-segmented.ant-segmented .ant-segmented-item-label {
+        min-height: ${token.controlHeight - token.paddingXXS * 2}px;
+        line-height: ${token.controlHeight - token.paddingXXS * 2}px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-01 16:36) — shared ENS details layout (booking/SI/BL) */
+      .form-ens-required-row {
+        display: grid;
+        width: 100%;
+        margin-bottom: ${token.marginLG}px;
+        gap: ${token.marginSM}px;
+      }
+      .form-ens-top-row {
+        max-width: 100%;
+        grid-template-columns: minmax(0, 0.5fr) repeat(3, minmax(0, 1fr));
+        align-items: start;
+        column-gap: ${token.marginLG}px;
+        row-gap: ${token.marginMD}px;
+      }
+      .form-ens-top-row .form-field-cell {
+        min-width: 0;
+        padding: ${token.paddingXS}px 0;
+        gap: ${token.marginXS}px;
+      }
+      .form-ens-top-row .form-field-label {
+        margin-bottom: 0;
+      }
+      .form-ens-top-row .ant-segmented,
+      .form-ens-segmented.ant-segmented {
+        width: 100%;
+      }
+      .form-ens-sections {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginLG}px;
+        width: 100%;
+        margin-top: ${token.marginXS}px;
+      }
+      .form-ens-party-grid {
+        display: grid;
+        width: 100%;
+        align-items: start;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        column-gap: ${token.marginLG}px;
+        row-gap: ${token.marginMD}px;
+      }
+      .form-ens-party-grid .form-field-cell {
+        min-width: 0;
+        padding: ${token.paddingXS}px 0;
+        gap: ${token.marginXS}px;
+      }
+      .form-ens-party-grid .form-field-label {
+        margin-bottom: 0;
+      }
+      .form-ens-party-grid .ant-input,
+      .form-ens-party-grid .ant-select,
+      .form-ens-party-grid .ant-segmented {
+        width: 100%;
+      }
+      .form-ens-subcard.ant-card {
+        width: 100%;
+        margin: 0;
+        border: 1px solid ${token.colorBorderSecondary};
+      }
+      .form-ens-subcard > .ant-card-head {
+        min-height: auto;
+        padding: ${token.paddingSM}px ${token.paddingMD}px !important;
+        border-bottom: 1px solid ${token.colorBorderSecondary};
+      }
+      .form-ens-subcard > .ant-card-body {
+        padding: ${token.paddingMD}px ${token.paddingLG}px !important;
+      }
+      .form-ens-subcard .form-step-card-title {
+        margin: 0 !important;
+      }
+      .form-ens-notes.ant-alert {
+        width: 100%;
+        margin: 0;
+        padding: ${token.paddingMD}px ${token.paddingLG}px;
+      }
+      .form-ens-notes .ant-alert-message {
+        margin-bottom: ${token.marginXS}px;
+      }
+      .form-ens-notes .ant-alert-description {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+      }
+      @media (max-width: 1199px) {
+        .form-ens-top-row,
+        .form-ens-party-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+      @media (max-width: 767px) {
+        .form-ens-top-row,
+        .form-ens-party-grid {
+          grid-template-columns: minmax(0, 1fr);
+        }
       }
       /* Modified by Sekar Nagarajan (2026-08-31 22:35) — primary bg + white text for active segment */
       .ant-segmented .ant-segmented-item-selected {

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-31 23:14)
+// Modified by Sekar Nagarajan (2026-09-01 16:00)
 import {
   Col,
   Flex,
@@ -20,6 +20,10 @@ import {
   ListActionButton,
   ListActionsRow,
 } from "../../../components/shared/list-action-button";
+import {
+  FORM_YES_NO_SWITCH_CLASS,
+  yesNoSwitchInner,
+} from "../../../components/shared/yes-no-switch";
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import type { CargoData } from "../types/booking.types";
 import { cargoFieldError } from "../utils/cargo-field-error";
@@ -251,12 +255,13 @@ export function CargoCommodityCard({
                   gap={6}
                   className="booking-cargo-commodity-card__hazardous-check"
                 >
+                  {/* Modified by Sekar Nagarajan (2026-09-01 16:00) — yes/no switch tick + cancel icons */}
                   <Switch
                     size="medium"
+                    className={FORM_YES_NO_SWITCH_CLASS}
                     checked={value}
                     onChange={onChange}
-                    checkedChildren="Yes"
-                    unCheckedChildren="No"
+                    {...yesNoSwitchInner}
                   />
                 </Flex>
               )}
@@ -367,10 +372,10 @@ export function CargoCommodityCard({
                   <Flex align="center" gap={6}>
                     <Switch
                       size="medium"
+                      className={FORM_YES_NO_SWITCH_CLASS}
                       checked={value}
                       onChange={onChange}
-                      checkedChildren="Yes"
-                      unCheckedChildren="No"
+                      {...yesNoSwitchInner}
                     />
                     <Text>Marine Pollutant</Text>
                   </Flex>

@@ -1,15 +1,17 @@
-// Created by Sekar Nagarajan (2026-08-28 11:15)
+// Modified by Sekar Nagarajan (2026-09-01 16:36)
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AppButton } from "@solverminds/shared-ui";
-import { Card, Col, Input, Row, Select, Space, Switch, Typography } from "antd";
+import { Alert, Card, Input, Segmented, Space, Switch, Typography } from "antd";
 import { Controller, useForm, type Resolver } from "react-hook-form";
 
-import { AppIcon, Icons } from "../../../../components/icons";
-import { RESPONSIVE_COL } from "../../../../constants/responsive-grid";
+import {
+  FORM_YES_NO_SWITCH_CLASS,
+  yesNoSwitchInner,
+} from "../../../../components/shared/yes-no-switch";
 import { ensSchema, type EnsData } from "../../../booking/types/booking.types";
+import { BlWizardFooter } from "../bl-wizard-footer";
 import type { BLWizardStepProps } from "./MasterDetailsStep";
 
-const { Text } = Typography;
+const { Text, Title } = Typography;
 
 const defaults: EnsData = {
   euCustomsZone: false,
@@ -37,6 +39,7 @@ export function BlEnsStep({
   onNext,
   onPrevious,
   onUpdate,
+  onGoToStep,
   isFirstStep,
   isSubmitting,
 }: BLWizardStepProps) {
@@ -44,21 +47,48 @@ export function BlEnsStep({
     control,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
   } = useForm<EnsData>({
     resolver: zodResolver(ensSchema) as Resolver<EnsData>,
     defaultValues: { ...defaults, ...(data.ens ?? {}) },
   });
 
-  const euCustomsZone = watch("euCustomsZone");
+  const ensRequired = watch("euCustomsZone");
+  const ensFilingType = watch("ensFilingType");
+  const isMultipleFiling = ensFilingType === "Multiple Filing";
 
-  const onValid = (values: EnsData) => {
-    onUpdate({ ens: values });
-    onNext();
+  const syncBlAndFiling = (
+    nextBl: EnsData["blType"],
+    nextFiling: EnsData["ensFilingType"],
+  ) => {
+    setValue("blType", nextBl, { shouldValidate: true });
+    setValue("ensFilingType", nextFiling, { shouldValidate: true });
+    if (nextFiling === "Multiple Filing") {
+      setValue("buyerName", "");
+      setValue("buyerAddress", "");
+      setValue("buyerCity", "");
+      setValue("buyerCountry", "");
+      setValue("sellerName", "");
+      setValue("sellerAddress", "");
+      setValue("sellerCity", "");
+      setValue("sellerCountry", "");
+    } else {
+      setValue("declarantName", "");
+      setValue("declarantAddress", "");
+      setValue("declarantCity", "");
+      setValue("declarantCountry", "");
+      setValue("declarantEori", "");
+      setValue("declarantEmail", "");
+    }
   };
 
-  const handleSkip = () => {
-    onUpdate({ ens: null });
+  const onValid = (values: EnsData) => {
+    onUpdate({
+      ens: values.euCustomsZone
+        ? values
+        : { ...defaults, euCustomsZone: false },
+    });
     onNext();
   };
 
@@ -69,273 +99,341 @@ export function BlEnsStep({
       className="form-step-layout"
     >
       <div className="custom-scroll form-step-scroll">
-        <Card size="small" className="form-step-card form-step-section">
-          <Row gutter={[24, 24]}>
-            <Col {...RESPONSIVE_COL.formQuarter}>
-              <label className="form-field-label">EU Customs Zone</label>
-              {/* Modified by Sekar Nagarajan (2026-09-01 00:28) — switch toggle */}
+        <Card
+          className="form-step-card form-step-section"
+          title={
+            <Title level={5} className="form-step-card-title">
+              ENS Details
+            </Title>
+          }
+        >
+          {/* Modified by Sekar Nagarajan (2026-09-01 16:36) — booking ENS layout parity */}
+          <div className="form-ens-required-row form-ens-top-row">
+            <div className="form-field-cell">
+              <label className="form-field-label">ENS</label>
               <Controller
                 control={control}
                 name="euCustomsZone"
                 render={({ field: { value, onChange } }) => (
-                  <div className="bl-ens-switch-control">
+                  <div className="form-yes-no-switch-wrap">
                     <Switch
-                      size="medium"
-                      className="bl-ens-switch"
-                      checked={value}
+                      className={FORM_YES_NO_SWITCH_CLASS}
+                      checked={Boolean(value)}
                       onChange={onChange}
-                      checkedChildren={<AppIcon icon={Icons.check} size={12} />}
-                      unCheckedChildren={<AppIcon icon={Icons.x} size={12} />}
+                      {...yesNoSwitchInner}
                     />
                   </div>
                 )}
               />
-            </Col>
-            <Col {...RESPONSIVE_COL.formQuarter}>
-              <label className="form-field-label">Type of BL</label>
-              <Controller
-                control={control}
-                name="blType"
-                render={({ field }) => (
-                  <Select
-                    {...field}
-                    size="large"
-                    className="form-field-full-width"
-                    options={[
-                      { value: "Straight BL", label: "Straight BL" },
-                      { value: "Master BL", label: "Master BL" },
-                    ]}
+            </div>
+
+            {ensRequired ? (
+              <>
+                <div className="form-field-cell">
+                  <label className="form-field-label">Type of B/L</label>
+                  <Controller
+                    control={control}
+                    name="blType"
+                    render={({ field: { value } }) => (
+                      <Segmented
+                        block
+                        className="form-field-full-width form-segmented"
+                        value={value}
+                        onChange={(next) => {
+                          const bl = next as EnsData["blType"];
+                          syncBlAndFiling(
+                            bl,
+                            bl === "Master BL"
+                              ? "Multiple Filing"
+                              : "Single Filing",
+                          );
+                        }}
+                        options={[
+                          { label: "Straight BL", value: "Straight BL" },
+                          { label: "Master BL", value: "Master BL" },
+                        ]}
+                      />
+                    )}
                   />
-                )}
-              />
-            </Col>
-            <Col {...RESPONSIVE_COL.formQuarter}>
-              <label className="form-field-label">Type of ENS Filing</label>
-              <Controller
-                control={control}
-                name="ensFilingType"
-                render={({ field }) => (
-                  <Select
-                    {...field}
-                    size="large"
-                    className="form-field-full-width"
-                    options={[
-                      { value: "Single Filing", label: "Single Filing" },
-                      { value: "Multiple Filing", label: "Multiple Filing" },
-                    ]}
+                </div>
+
+                <div className="form-field-cell">
+                  <label className="form-field-label">Type of ENS Filing</label>
+                  <Controller
+                    control={control}
+                    name="ensFilingType"
+                    render={({ field: { value } }) => (
+                      <Segmented
+                        block
+                        className="form-field-full-width form-segmented"
+                        value={value}
+                        onChange={(next) => {
+                          const filing = next as EnsData["ensFilingType"];
+                          syncBlAndFiling(
+                            filing === "Multiple Filing"
+                              ? "Master BL"
+                              : "Straight BL",
+                            filing,
+                          );
+                        }}
+                        options={[
+                          { label: "Single Filing", value: "Single Filing" },
+                          {
+                            label: "Multiple Filing",
+                            value: "Multiple Filing",
+                          },
+                        ]}
+                      />
+                    )}
                   />
-                )}
-              />
-            </Col>
-            <Col {...RESPONSIVE_COL.formQuarter}>
-              <label className="form-field-label">Method of Payment</label>
-              <Controller
-                control={control}
-                name="paymentMethod"
-                render={({ field }) => (
-                  <Select
-                    {...field}
-                    size="large"
-                    className="form-field-full-width"
-                    options={[
-                      { value: "Wire Transfer", label: "Wire Transfer" },
-                      { value: "Not Prepaid", label: "Not Prepaid" },
-                    ]}
+                </div>
+
+                <div className="form-field-cell">
+                  <label className="form-field-label">Method of Payment</label>
+                  <Controller
+                    control={control}
+                    name="paymentMethod"
+                    render={({ field: { value, onChange } }) => (
+                      <Segmented
+                        block
+                        className="form-field-full-width form-segmented"
+                        value={value}
+                        onChange={onChange}
+                        options={[
+                          { label: "Wire Transfer", value: "Wire Transfer" },
+                          { label: "Not Prepaid", value: "Not Prepaid" },
+                        ]}
+                      />
+                    )}
                   />
-                )}
+                </div>
+              </>
+            ) : null}
+          </div>
+
+          {ensRequired ? (
+            <div className="form-ens-sections">
+              {isMultipleFiling ? (
+                <Card
+                  size="small"
+                  className="form-ens-subcard"
+                  title={
+                    <Title level={5} className="form-step-card-title">
+                      Supplementary Declarant
+                    </Title>
+                  }
+                >
+                  <div className="form-ens-party-grid">
+                    <div className="form-field-cell">
+                      <label className="form-field-label">Name</label>
+                      <Controller
+                        control={control}
+                        name="declarantName"
+                        render={({ field }) => (
+                          <Input {...field} size="large" />
+                        )}
+                      />
+                    </div>
+                    <div className="form-field-cell">
+                      <label className="form-field-label">Address</label>
+                      <Controller
+                        control={control}
+                        name="declarantAddress"
+                        render={({ field }) => (
+                          <Input {...field} size="large" />
+                        )}
+                      />
+                    </div>
+                    <div className="form-field-cell">
+                      <label className="form-field-label">City</label>
+                      <Controller
+                        control={control}
+                        name="declarantCity"
+                        render={({ field }) => (
+                          <Input {...field} size="large" />
+                        )}
+                      />
+                    </div>
+                    <div className="form-field-cell">
+                      <label className="form-field-label">Country</label>
+                      <Controller
+                        control={control}
+                        name="declarantCountry"
+                        render={({ field }) => (
+                          <Input {...field} size="large" />
+                        )}
+                      />
+                    </div>
+                    <div className="form-field-cell">
+                      <label className="form-field-label">EORI</label>
+                      <Controller
+                        control={control}
+                        name="declarantEori"
+                        render={({ field }) => (
+                          <Input {...field} size="large" />
+                        )}
+                      />
+                    </div>
+                    <div className="form-field-cell">
+                      <label className="form-field-label">Email</label>
+                      <Controller
+                        control={control}
+                        name="declarantEmail"
+                        render={({ field }) => (
+                          <Input {...field} size="large" />
+                        )}
+                      />
+                      {errors.declarantEmail ? (
+                        <Text type="danger" className="form-field-error">
+                          {errors.declarantEmail.message}
+                        </Text>
+                      ) : null}
+                    </div>
+                  </div>
+                </Card>
+              ) : (
+                <>
+                  <Card
+                    size="small"
+                    className="form-ens-subcard"
+                    title={
+                      <Title level={5} className="form-step-card-title">
+                        Buyer
+                      </Title>
+                    }
+                  >
+                    <div className="form-ens-party-grid">
+                      <div className="form-field-cell">
+                        <label className="form-field-label">Name</label>
+                        <Controller
+                          control={control}
+                          name="buyerName"
+                          render={({ field }) => (
+                            <Input {...field} size="large" />
+                          )}
+                        />
+                      </div>
+                      <div className="form-field-cell">
+                        <label className="form-field-label">Address</label>
+                        <Controller
+                          control={control}
+                          name="buyerAddress"
+                          render={({ field }) => (
+                            <Input {...field} size="large" />
+                          )}
+                        />
+                      </div>
+                      <div className="form-field-cell">
+                        <label className="form-field-label">City</label>
+                        <Controller
+                          control={control}
+                          name="buyerCity"
+                          render={({ field }) => (
+                            <Input {...field} size="large" />
+                          )}
+                        />
+                      </div>
+                      <div className="form-field-cell">
+                        <label className="form-field-label">Country</label>
+                        <Controller
+                          control={control}
+                          name="buyerCountry"
+                          render={({ field }) => (
+                            <Input {...field} size="large" />
+                          )}
+                        />
+                      </div>
+                    </div>
+                  </Card>
+
+                  <Card
+                    size="small"
+                    className="form-ens-subcard"
+                    title={
+                      <Title level={5} className="form-step-card-title">
+                        Seller
+                      </Title>
+                    }
+                  >
+                    <div className="form-ens-party-grid">
+                      <div className="form-field-cell">
+                        <label className="form-field-label">Name</label>
+                        <Controller
+                          control={control}
+                          name="sellerName"
+                          render={({ field }) => (
+                            <Input {...field} size="large" />
+                          )}
+                        />
+                      </div>
+                      <div className="form-field-cell">
+                        <label className="form-field-label">Address</label>
+                        <Controller
+                          control={control}
+                          name="sellerAddress"
+                          render={({ field }) => (
+                            <Input {...field} size="large" />
+                          )}
+                        />
+                      </div>
+                      <div className="form-field-cell">
+                        <label className="form-field-label">City</label>
+                        <Controller
+                          control={control}
+                          name="sellerCity"
+                          render={({ field }) => (
+                            <Input {...field} size="large" />
+                          )}
+                        />
+                      </div>
+                      <div className="form-field-cell">
+                        <label className="form-field-label">Country</label>
+                        <Controller
+                          control={control}
+                          name="sellerCountry"
+                          render={({ field }) => (
+                            <Input {...field} size="large" />
+                          )}
+                        />
+                      </div>
+                    </div>
+                  </Card>
+                </>
+              )}
+
+              <Alert
+                type="info"
+                showIcon
+                className="form-ens-notes"
+                message="ENS filing notes"
+                description={
+                  <>
+                    <div>
+                      Single Filing requires Buyer and Seller details. Multiple
+                      Filing requires Supplementary Declarant details.
+                    </div>
+                    <div>
+                      Straight BL uses Single Filing; Master BL uses Multiple
+                      Filing.
+                    </div>
+                    <div>
+                      Provide accurate EORI and person type where applicable for
+                      EU customs processing.
+                    </div>
+                  </>
+                }
               />
-            </Col>
-          </Row>
+            </div>
+          ) : null}
         </Card>
-
-        {euCustomsZone ? (
-          <>
-            <Card
-              size="small"
-              title="Supplementary Declarant"
-              className="form-step-card form-step-section"
-            >
-              <Row gutter={[24, 24]}>
-                <Col {...RESPONSIVE_COL.formThird}>
-                  <label className="form-field-label">Name</label>
-                  <Controller
-                    control={control}
-                    name="declarantName"
-                    render={({ field }) => <Input {...field} size="large" />}
-                  />
-                </Col>
-                <Col {...RESPONSIVE_COL.twoThirds}>
-                  <label className="form-field-label">Address</label>
-                  <Controller
-                    control={control}
-                    name="declarantAddress"
-                    render={({ field }) => <Input {...field} size="large" />}
-                  />
-                </Col>
-                <Col {...RESPONSIVE_COL.formThird}>
-                  <label className="form-field-label">City</label>
-                  <Controller
-                    control={control}
-                    name="declarantCity"
-                    render={({ field }) => <Input {...field} size="large" />}
-                  />
-                </Col>
-                <Col {...RESPONSIVE_COL.formThird}>
-                  <label className="form-field-label">Country</label>
-                  <Controller
-                    control={control}
-                    name="declarantCountry"
-                    render={({ field }) => <Input {...field} size="large" />}
-                  />
-                </Col>
-                <Col {...RESPONSIVE_COL.formThird}>
-                  <label className="form-field-label">EORI</label>
-                  <Controller
-                    control={control}
-                    name="declarantEori"
-                    render={({ field }) => <Input {...field} size="large" />}
-                  />
-                </Col>
-                <Col {...RESPONSIVE_COL.formThird}>
-                  <label className="form-field-label">Email</label>
-                  <Controller
-                    control={control}
-                    name="declarantEmail"
-                    render={({ field }) => <Input {...field} size="large" />}
-                  />
-                  {errors.declarantEmail ? (
-                    <Text type="danger" className="form-field-error">
-                      {errors.declarantEmail.message}
-                    </Text>
-                  ) : null}
-                </Col>
-              </Row>
-            </Card>
-
-            <Row gutter={[24, 24]} className="form-step-section">
-              <Col {...RESPONSIVE_COL.half}>
-                <Card
-                  size="small"
-                  title="Buyer Details"
-                  className="form-step-card"
-                >
-                  <Row gutter={[16, 16]}>
-                    <Col span={24}>
-                      <label className="form-field-label">Name</label>
-                      <Controller
-                        control={control}
-                        name="buyerName"
-                        render={({ field }) => (
-                          <Input {...field} size="large" />
-                        )}
-                      />
-                    </Col>
-                    <Col span={24}>
-                      <label className="form-field-label">Address</label>
-                      <Controller
-                        control={control}
-                        name="buyerAddress"
-                        render={({ field }) => (
-                          <Input {...field} size="large" />
-                        )}
-                      />
-                    </Col>
-                    <Col span={12}>
-                      <label className="form-field-label">City</label>
-                      <Controller
-                        control={control}
-                        name="buyerCity"
-                        render={({ field }) => (
-                          <Input {...field} size="large" />
-                        )}
-                      />
-                    </Col>
-                    <Col span={12}>
-                      <label className="form-field-label">Country</label>
-                      <Controller
-                        control={control}
-                        name="buyerCountry"
-                        render={({ field }) => (
-                          <Input {...field} size="large" />
-                        )}
-                      />
-                    </Col>
-                  </Row>
-                </Card>
-              </Col>
-              <Col {...RESPONSIVE_COL.half}>
-                <Card
-                  size="small"
-                  title="Seller Details"
-                  className="form-step-card"
-                >
-                  <Row gutter={[16, 16]}>
-                    <Col span={24}>
-                      <label className="form-field-label">Name</label>
-                      <Controller
-                        control={control}
-                        name="sellerName"
-                        render={({ field }) => (
-                          <Input {...field} size="large" />
-                        )}
-                      />
-                    </Col>
-                    <Col span={24}>
-                      <label className="form-field-label">Address</label>
-                      <Controller
-                        control={control}
-                        name="sellerAddress"
-                        render={({ field }) => (
-                          <Input {...field} size="large" />
-                        )}
-                      />
-                    </Col>
-                    <Col span={12}>
-                      <label className="form-field-label">City</label>
-                      <Controller
-                        control={control}
-                        name="sellerCity"
-                        render={({ field }) => (
-                          <Input {...field} size="large" />
-                        )}
-                      />
-                    </Col>
-                    <Col span={12}>
-                      <label className="form-field-label">Country</label>
-                      <Controller
-                        control={control}
-                        name="sellerCountry"
-                        render={({ field }) => (
-                          <Input {...field} size="large" />
-                        )}
-                      />
-                    </Col>
-                  </Row>
-                </Card>
-              </Col>
-            </Row>
-          </>
-        ) : null}
       </div>
 
-      <div className="form-step-footer form-step-footer--split">
-        <div className="form-step-footer__start custom-scroll">
-          <Space>
-            <AppButton
-              onClick={onPrevious}
-              disabled={isFirstStep || isSubmitting}
-            >
-              Previous
-            </AppButton>
-            <AppButton type="link" onClick={handleSkip} disabled={isSubmitting}>
-              Skip
-            </AppButton>
-          </Space>
-        </div>
-        <AppButton type="primary" htmlType="submit" disabled={isSubmitting}>
-          Next
-        </AppButton>
-      </div>
+      <BlWizardFooter
+        onPrevious={onPrevious}
+        nextHtmlType="submit"
+        isFirstStep={isFirstStep}
+        isSubmitting={isSubmitting}
+      />
     </form>
   );
 }

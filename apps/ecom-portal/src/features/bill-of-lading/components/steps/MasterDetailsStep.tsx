@@ -1,10 +1,9 @@
-// Modified by Sekar Nagarajan (2026-08-31 16:31)
+// Modified by Sekar Nagarajan (2026-09-01 16:40)
 /**
  * BL Master Details — SI Master Details layout parity
  * (Document References | B/L Options, then Vessel Details schedule card).
  */
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AppButton } from "@solverminds/shared-ui";
 import { Card, Col, Row, Segmented, Tag, Typography } from "antd";
 import type { ReactNode } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -15,6 +14,7 @@ import { useBLWizardConfig } from "../../hooks/use-bl-wizard-config";
 import type { BLDTO, BLMasterStepValues } from "../../types/bl.types";
 import { BL_STATUS_LABELS, blMasterStepSchema } from "../../types/bl.types";
 import { getBLStatusColor } from "../../utils/bl-status";
+import { BlWizardFooter } from "../bl-wizard-footer";
 
 const { Text, Title } = Typography;
 
@@ -69,6 +69,7 @@ export function MasterDetailsStep({
   onNext,
   onPrevious,
   onUpdate,
+  onGoToStep,
   isFirstStep,
   isSubmitting,
 }: BLWizardStepProps) {
@@ -171,8 +172,7 @@ export function MasterDetailsStep({
                     render={({ field: { value, onChange } }) => (
                       <Segmented
                         block
-                        size="small"
-                        className="form-field-full-width bl-master-segmented"
+                        className="form-field-full-width form-segmented"
                         value={value}
                         onChange={onChange}
                         options={[
@@ -199,8 +199,7 @@ export function MasterDetailsStep({
                     render={({ field: { value, onChange } }) => (
                       <Segmented
                         block
-                        size="small"
-                        className="form-field-full-width bl-master-segmented"
+                        className="form-field-full-width form-segmented"
                         value={value}
                         onChange={onChange}
                         options={[
@@ -227,8 +226,7 @@ export function MasterDetailsStep({
                     render={({ field: { value, onChange } }) => (
                       <Segmented
                         block
-                        size="small"
-                        className="form-field-full-width bl-master-segmented"
+                        className="form-field-full-width form-segmented"
                         value={value}
                         onChange={onChange}
                         options={[
@@ -281,14 +279,12 @@ export function MasterDetailsStep({
         </Row>
       </div>
 
-      <div className="form-step-footer">
-        <AppButton onClick={onPrevious} disabled={isFirstStep || isSubmitting}>
-          Previous
-        </AppButton>
-        <AppButton type="primary" htmlType="submit" disabled={isSubmitting}>
-          Next
-        </AppButton>
-      </div>
+      <BlWizardFooter
+        onPrevious={onPrevious}
+        nextHtmlType="submit"
+        isFirstStep={isFirstStep}
+        isSubmitting={isSubmitting}
+      />
     </form>
   );
 }

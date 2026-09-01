@@ -1,7 +1,5 @@
-// Created by Sekar Nagarajan (2026-09-01 12:29)
+// Modified by Sekar Nagarajan (2026-09-01 16:25)
 import type { ColDef } from "ag-grid-community";
-
-import type { SICargoLine } from "../types/si.types";
 
 /** AG Grid column defs for SI/BL cargo lines (ListView / view drawers). */
 export const SI_CARGO_LINE_COL_DEFS: ColDef[] = [
@@ -14,14 +12,7 @@ export const SI_CARGO_LINE_COL_DEFS: ColDef[] = [
     minWidth: 200,
     flex: 1,
   },
-  {
-    headerName: "Packages",
-    minWidth: 120,
-    valueGetter: (params) => {
-      const row = params.data as SICargoLine | undefined;
-      if (!row) return "";
-      return `${row.packageCount} ${row.packageType}`;
-    },
-  },
+  { field: "packageCount", headerName: "Quantity", minWidth: 100 },
+  { field: "packageType", headerName: "Package Type", minWidth: 130 },
   { field: "grossWeight", headerName: "Weight (kg)", minWidth: 110 },
 ];

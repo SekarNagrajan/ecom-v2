@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-28 17:54)
+// Modified by Sekar Nagarajan (2026-09-01 16:46)
 import { Input, InputNumber, Select, Typography } from "antd";
 import {
   Controller,
@@ -37,7 +37,7 @@ interface SiCargoLineCardProps {
   canRemove: boolean;
 }
 
-/** Commodity card — wider HS code; Quantity + Weight grouped tightly. */
+/** Cargo line card — row1: HS/Package/Qty/Weight; row2: Description/Marks. */
 export function SiCargoLineCard({
   control,
   containerIndex: ci,
@@ -56,18 +56,18 @@ export function SiCargoLineCard({
     <div className="si-cargo-sitem">
       <div className="si-cargo-sitem__head">
         <Text type="secondary" className="form-field-label">
-          Commodity {mi + 1}
+          Line {mi + 1}
         </Text>
         <ListActionsRow>
           <ListActionButton
-            title="Copy Commodity"
+            title="Copy Line"
             icon={<AppIcon icon={Icons.copy} size={16} tone="view" />}
             onClick={onCopy}
           />
           <ListActionButton
             title={
               canRemove
-                ? "Delete Commodity"
+                ? "Delete Line"
                 : "At Least One Commodity Is Required"
             }
             icon={<AppIcon icon={Icons.trash} size={16} tone="delete" />}
@@ -79,7 +79,6 @@ export function SiCargoLineCard({
       </div>
 
       <div className="si-cargo-sitem__grid">
-        {/* Row 1 — HS spans 2; Package; Quantity+Weight cluster */}
         <div className="form-field-cell si-cargo-sitem__hs">
           <label className="form-field-label">
             HS code <Text type="danger">*</Text>
@@ -158,60 +157,57 @@ export function SiCargoLineCard({
           ) : null}
         </div>
 
-        <div className="si-cargo-sitem__measures">
-          <div className="form-field-cell si-cargo-sitem__narrow">
-            <label className="form-field-label">
-              Quantity <Text type="danger">*</Text>
-            </label>
-            <Controller
-              control={control}
-              name={`containers.${ci}.cargoLines.${mi}.packageCount`}
-              render={({ field }) => (
-                <QuantityStepper
-                  value={field.value}
-                  onChange={(next) => field.onChange(next ?? 1)}
-                  min={1}
-                />
-              )}
-            />
-            {cargoFieldError(errors, path("packageCount")) ? (
-              <Text type="danger" className="form-field-error">
-                {cargoFieldError(errors, path("packageCount"))}
-              </Text>
-            ) : null}
-          </div>
-
-          <div className="form-field-cell si-cargo-sitem__narrow">
-            <label className="form-field-label">
-              Weight (kg) <Text type="danger">*</Text>
-            </label>
-            <Controller
-              control={control}
-              name={`containers.${ci}.cargoLines.${mi}.grossWeight`}
-              render={({ field }) => (
-                <InputNumber
-                  {...field}
-                  min={1}
-                  size="large"
-                  className="form-field-full-width"
-                  addonAfter="kg"
-                  status={
-                    cargoFieldError(errors, path("grossWeight"))
-                      ? "error"
-                      : undefined
-                  }
-                />
-              )}
-            />
-            {cargoFieldError(errors, path("grossWeight")) ? (
-              <Text type="danger" className="form-field-error">
-                {cargoFieldError(errors, path("grossWeight"))}
-              </Text>
-            ) : null}
-          </div>
+        <div className="form-field-cell si-cargo-sitem__narrow">
+          <label className="form-field-label">
+            Quantity <Text type="danger">*</Text>
+          </label>
+          <Controller
+            control={control}
+            name={`containers.${ci}.cargoLines.${mi}.packageCount`}
+            render={({ field }) => (
+              <QuantityStepper
+                value={field.value}
+                onChange={(next) => field.onChange(next ?? 1)}
+                min={1}
+              />
+            )}
+          />
+          {cargoFieldError(errors, path("packageCount")) ? (
+            <Text type="danger" className="form-field-error">
+              {cargoFieldError(errors, path("packageCount"))}
+            </Text>
+          ) : null}
         </div>
 
-        {/* Row 2 — description | marks */}
+        <div className="form-field-cell si-cargo-sitem__narrow">
+          <label className="form-field-label">
+            Weight (kg) <Text type="danger">*</Text>
+          </label>
+          <Controller
+            control={control}
+            name={`containers.${ci}.cargoLines.${mi}.grossWeight`}
+            render={({ field }) => (
+              <InputNumber
+                {...field}
+                min={1}
+                size="large"
+                className="form-field-full-width"
+                addonAfter="kg"
+                status={
+                  cargoFieldError(errors, path("grossWeight"))
+                    ? "error"
+                    : undefined
+                }
+              />
+            )}
+          />
+          {cargoFieldError(errors, path("grossWeight")) ? (
+            <Text type="danger" className="form-field-error">
+              {cargoFieldError(errors, path("grossWeight"))}
+            </Text>
+          ) : null}
+        </div>
+
         <div className="form-field-cell si-cargo-sitem__half">
           <label className="form-field-label">
             Commodity Description <Text type="danger">*</Text>

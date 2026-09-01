@@ -1,6 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-28 12:22)
-import { Card } from "antd";
-
+// Modified by Sekar Nagarajan (2026-09-01 17:50)
 import { CargoLinesEditor } from "../../../shipping-instruction/components/cargo-lines-editor";
 import { useBLWizardConfig } from "../../hooks/use-bl-wizard-config";
 import { BlCargoExtensions } from "../bl-cargo-extensions";
@@ -12,6 +10,7 @@ export function ContainersCargoStep({
   onNext,
   onPrevious,
   onUpdate,
+  onCancel,
   isSubmitting,
 }: BLWizardStepProps) {
   const { data: config } = useBLWizardConfig();
@@ -19,13 +18,13 @@ export function ContainersCargoStep({
   return (
     <div className="form-step-layout">
       {config?.showExcelImport ? (
-        <Card size="small" className="form-step-card form-step-section">
+        <div className="form-step-toolbar bl-excel-import-toolbar">
           <BlExcelImport
             blNo={data.blNo}
             containerCount={data.containers.length}
             onImported={(containers) => onUpdate({ containers })}
           />
-        </Card>
+        </div>
       ) : null}
 
       <CargoLinesEditor
@@ -47,6 +46,7 @@ export function ContainersCargoStep({
           onNext();
         }}
         onPrevious={onPrevious}
+        onCancel={onCancel}
         isSubmitting={isSubmitting}
         showCancel
       />

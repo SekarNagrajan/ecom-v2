@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-28 18:01)
+// Modified by Sekar Nagarajan (2026-09-01 17:40)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
@@ -38,6 +38,7 @@ interface CargoLinesEditorProps {
   isSubmitting: boolean;
   showCancel?: boolean;
   renderContainerFooter?: (container: SIContainer, index: number) => ReactNode;
+  endActions?: ReactNode;
 }
 
 export function CargoLinesEditor({
@@ -48,6 +49,7 @@ export function CargoLinesEditor({
   isSubmitting,
   showCancel = false,
   renderContainerFooter,
+  endActions,
 }: CargoLinesEditorProps) {
   const toast = useToast();
   const { data: packageTypes = [] } = useBookingLookups("packageTypes");
@@ -91,6 +93,15 @@ export function CargoLinesEditor({
   );
   const lineCount = containersWatch.reduce(
     (n, c) => n + (c.cargoLines?.length ?? 0),
+    0,
+  );
+  const packageCount = containersWatch.reduce(
+    (n, c) =>
+      n +
+      (c.cargoLines ?? []).reduce(
+        (sum, line) => sum + Number(line.packageCount || 0),
+        0,
+      ),
     0,
   );
 
@@ -276,7 +287,13 @@ export function CargoLinesEditor({
                 <Text strong className="si-cargo-summary__metric-value">
                   {lineCount}
                 </Text>
-                <Text type="secondary">commodity lines</Text>
+                <Text type="secondary">commodities</Text>
+              </span>
+              <span className="si-cargo-summary__metric">
+                <Text strong className="si-cargo-summary__metric-value">
+                  {packageCount.toLocaleString()}
+                </Text>
+                <Text type="secondary">packages</Text>
               </span>
               {attentionCount > 0 ? (
                 <span className="si-cargo-vchip si-cargo-vchip--warn">
@@ -390,15 +407,16 @@ export function CargoLinesEditor({
         </div>
       </div>
 
+      {/* Modified by Sekar Nagarajan (2026-09-01 17:40) — booking parity: Previous + Next on the right */}
       <div className="form-step-footer">
-        {showCancel && onCancel ? (
-          <AppButton onClick={onCancel} disabled={isSubmitting}>
-            Cancel
-          </AppButton>
-        ) : null}
-        <AppButton onClick={onPrevious} disabled={isSubmitting}>
+        <AppButton
+          htmlType="button"
+          onClick={onPrevious}
+          disabled={isSubmitting}
+        >
           Previous
         </AppButton>
+
         <AppButton type="primary" htmlType="submit" disabled={isSubmitting}>
           Next
         </AppButton>

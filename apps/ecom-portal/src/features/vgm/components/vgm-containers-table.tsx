@@ -21,9 +21,9 @@ export function VgmContainersTable({
   const columns: ColumnsType<
     FieldArrayWithId<VgmFormValues, "containers", "id">
   > = [
-    { dataIndex: "containerNo", title: "Container No", width: 160 },
-    { dataIndex: "eqpType", title: "Type", width: 100 },
-    { dataIndex: "tareWeight", title: "Tare Wt.", width: 120 },
+    { dataIndex: "containerNo", title: "Container No", width: 250 },
+    { dataIndex: "eqpType", title: "Type", width: 250 },
+    { dataIndex: "tareWeight", title: "Tare Wt.", width: 250 },
     {
       dataIndex: "vgmWeight",
       title: (
@@ -49,7 +49,7 @@ export function VgmContainersTable({
           Unit <Text type="danger">*</Text>
         </>
       ),
-      width: 120,
+      width: 250,
       render: (_value, _record, index) => (
         <div className="vgm-field-cell">
           <FormSelect

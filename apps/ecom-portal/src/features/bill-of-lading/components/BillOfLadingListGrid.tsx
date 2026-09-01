@@ -50,7 +50,7 @@ export function BillOfLadingListGrid({
       {
         ...buildActionsColumn<BLListDTO>({
           field: "blNo",
-          width: 240,
+          width: 160,
           cellRenderer: (params) => {
             if (!params.data) return null;
             return (

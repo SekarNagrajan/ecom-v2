@@ -31,6 +31,7 @@ import {
   cardsToSiPartiesForm,
 } from "../../utils/bl-party.utils";
 import { BlPartyStyles } from "../bl-party-styles";
+import { BlWizardFooter } from "../bl-wizard-footer";
 import type { BLWizardStepProps } from "./MasterDetailsStep";
 
 const { Text, Title } = Typography;
@@ -169,6 +170,7 @@ export function PartiesStep({
   onNext,
   onPrevious,
   onUpdate,
+  onGoToStep,
   isSubmitting,
 }: BLWizardStepProps) {
   const toast = useToast();
@@ -372,16 +374,11 @@ export function PartiesStep({
         </Card>
       </div>
 
-      <div className="form-step-footer form-step-footer--split">
-        <div className="form-step-footer__start custom-scroll">
-          <AppButton onClick={onPrevious} disabled={isSubmitting}>
-            Previous
-          </AppButton>
-        </div>
-        <AppButton type="primary" onClick={handleNext} disabled={isSubmitting}>
-          Next
-        </AppButton>
-      </div>
+      <BlWizardFooter
+        onPrevious={onPrevious}
+        onNext={handleNext}
+        isSubmitting={isSubmitting}
+      />
 
       <SiPartyEditDrawer
         open={!!editRole}

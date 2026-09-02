@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-01 11:25)
+// Modified by Sekar Nagarajan (2026-09-02 12:08)
 import { theme } from "antd";
 import { tokenMix } from "../../theme/utils/token-mix";
 
@@ -279,11 +279,42 @@ export function DashboardModuleStyles() {
         font-weight: ${token.fontWeightStrong};
         font-size: ${token.fontSize}px;
       }
+      .dashboard-volume-panel .ant-card-body {
+        container-type: inline-size;
+        container-name: dashboard-volume;
+        min-width: 0;
+        overflow: hidden;
+      }
+      /* Grid tracks can shrink to 0 so sidebar toggle never lets the
+         Volume Trend canvas spill over the KPI tiles. */
+      .dashboard-volume-analytics-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        align-items: stretch;
+        gap: ${token.marginMD}px;
+        min-width: 0;
+        width: 100%;
+        overflow: hidden;
+      }
+      .dashboard-volume-analytics-grid > .dashboard-volume-kpi-grid,
+      .dashboard-volume-analytics-grid > .dashboard-trend-wrap {
+        min-width: 0;
+        max-width: 100%;
+        overflow: hidden;
+      }
+      @container dashboard-volume (max-width: 900px) {
+        .dashboard-volume-analytics-grid {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
       .dashboard-volume-kpi-grid {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
         gap: ${token.marginSM}px;
         align-items: stretch;
+        min-width: 0;
+        position: relative;
+        z-index: 1;
       }
 
       /* ── Shared metric tiles / tables ── */
@@ -405,7 +436,10 @@ export function DashboardModuleStyles() {
         padding: ${token.paddingSM}px ${token.paddingMD}px;
         border: 1px solid ${token.colorBorderSecondary};
         width: 100%;
-        height: 100%;
+        min-width: 0;
+        max-width: 100%;
+        overflow: hidden;
+        isolation: isolate;
         display: flex;
         flex-direction: column;
         box-shadow: none;
@@ -416,11 +450,17 @@ export function DashboardModuleStyles() {
         align-items: center;
         margin-bottom: ${token.marginSM}px;
         gap: ${token.marginSM}px;
+        flex-shrink: 0;
+        min-width: 0;
       }
       .dashboard-trend-chart {
+        position: relative;
         width: 100%;
-        flex: 1;
+        max-width: 100%;
+        flex: 1 1 auto;
+        min-width: 0;
         min-height: 180px;
+        overflow: hidden;
       }
       .dashboard-select-sm {
         width: 100px;

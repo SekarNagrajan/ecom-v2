@@ -1,8 +1,8 @@
 // Modified by Sekar Nagarajan (2026-09-02 10:38)
 import { useAuthStore } from "@solverminds/auth";
+import { Outlet, useNavigate } from "@tanstack/react-router";
 import { Layout } from "antd";
 import { useState } from "react";
-import { Outlet, useNavigate } from "@tanstack/react-router";
 
 import { useLoginController } from "../../features/auth/hooks/use-login-controller";
 import { usePostLoginRedirectStore } from "../../features/auth/stores/use-post-login-redirect-store";
@@ -23,10 +23,10 @@ export function AuthenticatedLayout() {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const setIntendedPath = usePostLoginRedirectStore((s) => s.setIntendedPath);
   const clearIntendedPath = usePostLoginRedirectStore(
-    (s) => s.clearIntendedPath
+    (s) => s.clearIntendedPath,
   );
   const consumeIntendedPath = usePostLoginRedirectStore(
-    (s) => s.consumeIntendedPath
+    (s) => s.consumeIntendedPath,
   );
 
   const openLoginPanel = (intendedPath?: string | null) => {

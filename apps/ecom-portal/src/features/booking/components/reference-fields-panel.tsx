@@ -203,12 +203,12 @@ export function ReferenceFieldsPanel({
               <Title level={5} className="ref-fields-header__title">
                 References
               </Title>
-              {fields.length > 0 ? (
+              {/* {fields.length > 0 ? (
                 <Text type="secondary" className="ref-fields-header__count">
                   ({fields.length}{" "}
                   {fields.length === 1 ? "field" : "fields"})
                 </Text>
-              ) : null}
+              ) : null} */}
             </div>
             <Text type="secondary" className="ref-fields-header__hint">
               Add reference fields to help identify and track this shipment
@@ -228,7 +228,7 @@ export function ReferenceFieldsPanel({
                   label: (
                     <span className="ref-fields-view-opt">
                       <AppIcon icon={Icons.layoutGrid} size={14} />
-                      Grid
+                      List
                     </span>
                   ),
                 },
@@ -237,7 +237,7 @@ export function ReferenceFieldsPanel({
                   label: (
                     <span className="ref-fields-view-opt">
                       <AppIcon icon={Icons.layoutList} size={14} />
-                      List
+                      Grid
                     </span>
                   ),
                 },

@@ -112,9 +112,7 @@ function SidebarDesktopShell({
                 size={18}
               />
               {!collapsed ? (
-                <span className="app-sidebar-collapse-trigger__label">
-                  Collapse
-                </span>
+                <span className="app-sidebar-collapse-trigger__label"></span>
               ) : null}
             </button>
           </Tooltip>

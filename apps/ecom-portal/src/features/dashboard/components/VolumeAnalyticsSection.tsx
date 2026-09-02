@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-25 18:15)
+// Modified by Sekar Nagarajan (2026-09-02 12:08)
 import { Card, Select, Tooltip, Typography } from "antd";
 import * as echarts from "echarts";
 import { useLayoutEffect, useRef } from "react";
@@ -8,6 +8,9 @@ import { useChartTokens } from "../../theme/utils/use-portal-chart-tokens";
 import type { VolumeKpi, VolumeTrendPoint } from "../mocks/dashboard.mock";
 
 const { Text, Title } = Typography;
+
+/** Sidebar margin transition is 0.25s — remeasure after it settles. */
+const SIDEBAR_LAYOUT_SETTLE_MS = 280;
 
 interface SparklineProps {
   data: number[];
@@ -45,9 +48,19 @@ function Sparkline({ data, color }: SparklineProps) {
         },
       ],
     });
-    const observer = new ResizeObserver(() => chart.resize());
+    let rafId: number | null = null;
+    const observer = new ResizeObserver(() => {
+      if (rafId !== null) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        chart.resize();
+      });
+    });
     observer.observe(ref.current);
     return () => {
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+      }
       observer.disconnect();
       chart.dispose();
     };
@@ -68,87 +81,163 @@ function VolumeTrendChart({
   onPeriodChange,
 }: VolumeTrendChartProps) {
   const chartTokens = useChartTokens();
-  const ref = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const chartRef = useRef<echarts.ECharts | null>(null);
 
+  // Init once; keep instance alive across sidebar toggles / parent re-renders.
   useLayoutEffect(() => {
-    if (!ref.current) return;
-    const chart = echarts.init(ref.current, undefined, { renderer: "canvas" });
-    chart.setOption({
-      backgroundColor: "transparent",
-      tooltip: {
-        trigger: "axis",
-        backgroundColor: chartTokens.colorBgElevated,
-        borderColor: chartTokens.colorBorderSecondary,
-        textStyle: { color: chartTokens.colorText },
-        axisPointer: {
-          type: "line",
-          lineStyle: { color: chartTokens.colorPrimary, type: "dashed" },
-        },
-        formatter: "{b}: <b>{c} FEUs</b>",
-      },
-      grid: { top: 16, right: 10, bottom: 30, left: 40, containLabel: false },
-      xAxis: {
-        type: "category",
-        boundaryGap: false,
-        data: data.map((d) => d.month),
-        axisLine: { lineStyle: { color: chartTokens.colorBorderSecondary } },
-        axisTick: { show: false },
-        axisLabel: {
-          fontSize: 10,
-          color: chartTokens.colorTextSecondary,
-          rotate: 20,
-        },
-      },
-      yAxis: {
-        type: "value",
-        min: "dataMin",
-        axisLabel: {
-          fontSize: 10,
-          color: chartTokens.colorTextSecondary,
-          formatter: (v: number) =>
-            v >= 1000 ? `${(v / 1000).toFixed(1)}K` : String(v),
-        },
-        splitLine: {
-          lineStyle: {
-            color: chartTokens.colorBorderSecondary,
-            type: "dashed",
-          },
-        },
-        axisLine: { show: false },
-        axisTick: { show: false },
-      },
-      series: [
-        {
-          type: "line",
-          data: data.map((d) => d.feus),
-          smooth: true,
-          symbol: "circle",
-          symbolSize: 6,
-          itemStyle: {
-            color: chartTokens.colorPrimary,
-            borderColor: chartTokens.colorBgContainer,
-            borderWidth: 2,
-          },
-          lineStyle: { color: chartTokens.colorPrimary, width: 2.5 },
-          areaStyle: {
-            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-              { offset: 0, color: `${chartTokens.colorPrimary}40` },
-              { offset: 1, color: `${chartTokens.colorPrimary}00` },
-            ]),
-          },
-        },
-      ],
-    });
-    const observer = new ResizeObserver(() => chart.resize());
-    observer.observe(ref.current);
-    return () => {
-      observer.disconnect();
-      chart.dispose();
+    const container = containerRef.current;
+    if (!container) return;
+
+    const chart = echarts.init(container, undefined, { renderer: "canvas" });
+    chartRef.current = chart;
+
+    let rafId: number | null = null;
+    let settleTimer: ReturnType<typeof setTimeout> | null = null;
+
+    const resizeChart = () => {
+      if (!chartRef.current || chartRef.current.isDisposed()) return;
+      chartRef.current.resize();
     };
+
+    const scheduleResize = () => {
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+      }
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        resizeChart();
+        // Sidebar uses a 0.25s margin transition — ResizeObserver can fire
+        // mid-animation with a stale width; remeasure after it settles.
+        if (settleTimer !== null) {
+          clearTimeout(settleTimer);
+        }
+        settleTimer = setTimeout(() => {
+          settleTimer = null;
+          resizeChart();
+        }, SIDEBAR_LAYOUT_SETTLE_MS);
+      });
+    };
+
+    const observer = new ResizeObserver(scheduleResize);
+    observer.observe(container);
+    if (wrapRef.current) {
+      observer.observe(wrapRef.current);
+    }
+
+    const layoutMain = container.closest(".app-layout-main");
+    if (layoutMain) {
+      observer.observe(layoutMain);
+      layoutMain.addEventListener("transitionend", scheduleResize);
+    }
+
+    const layoutRoot = container.closest(".app-layout-root");
+    let mutationObserver: MutationObserver | null = null;
+    if (layoutRoot) {
+      mutationObserver = new MutationObserver(scheduleResize);
+      mutationObserver.observe(layoutRoot, {
+        attributes: true,
+        attributeFilter: ["data-sidebar-collapsed"],
+      });
+    }
+
+    resizeChart();
+
+    return () => {
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+      }
+      if (settleTimer !== null) {
+        clearTimeout(settleTimer);
+      }
+      observer.disconnect();
+      mutationObserver?.disconnect();
+      layoutMain?.removeEventListener("transitionend", scheduleResize);
+      chart.dispose();
+      chartRef.current = null;
+    };
+  }, []);
+
+  // Apply / refresh option without disposing the chart instance.
+  useLayoutEffect(() => {
+    const chart = chartRef.current;
+    if (!chart || chart.isDisposed()) return;
+
+    chart.setOption(
+      {
+        backgroundColor: "transparent",
+        tooltip: {
+          trigger: "axis",
+          backgroundColor: chartTokens.colorBgElevated,
+          borderColor: chartTokens.colorBorderSecondary,
+          textStyle: { color: chartTokens.colorText },
+          axisPointer: {
+            type: "line",
+            lineStyle: { color: chartTokens.colorPrimary, type: "dashed" },
+          },
+          formatter: "{b}: <b>{c} FEUs</b>",
+        },
+        grid: { top: 12, right: 12, bottom: 8, left: 8, containLabel: true },
+        xAxis: {
+          type: "category",
+          boundaryGap: false,
+          data: data.map((d) => d.month),
+          axisLine: { lineStyle: { color: chartTokens.colorBorderSecondary } },
+          axisTick: { show: false },
+          axisLabel: {
+            fontSize: 10,
+            color: chartTokens.colorTextSecondary,
+            hideOverlap: true,
+          },
+        },
+        yAxis: {
+          type: "value",
+          min: "dataMin",
+          axisLabel: {
+            fontSize: 10,
+            color: chartTokens.colorTextSecondary,
+            formatter: (v: number) =>
+              v >= 1000 ? `${(v / 1000).toFixed(1)}K` : String(v),
+          },
+          splitLine: {
+            lineStyle: {
+              color: chartTokens.colorBorderSecondary,
+              type: "dashed",
+            },
+          },
+          axisLine: { show: false },
+          axisTick: { show: false },
+        },
+        series: [
+          {
+            type: "line",
+            data: data.map((d) => d.feus),
+            smooth: true,
+            symbol: "circle",
+            symbolSize: 6,
+            itemStyle: {
+              color: chartTokens.colorPrimary,
+              borderColor: chartTokens.colorBgContainer,
+              borderWidth: 2,
+            },
+            lineStyle: { color: chartTokens.colorPrimary, width: 2.5 },
+            areaStyle: {
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                { offset: 0, color: `${chartTokens.colorPrimary}40` },
+                { offset: 1, color: `${chartTokens.colorPrimary}00` },
+              ]),
+            },
+          },
+        ],
+      },
+      { notMerge: true },
+    );
+    chart.resize();
   }, [data, chartTokens]);
 
   return (
-    <div className="dashboard-trend-wrap">
+    <div ref={wrapRef} className="dashboard-trend-wrap">
       <div className="dashboard-trend-head">
         <Text strong className="dashboard-metric-tile__label">
           Volume Trend (FEUs){" "}
@@ -168,7 +257,7 @@ function VolumeTrendChart({
           ]}
         />
       </div>
-      <div ref={ref} className="dashboard-trend-chart" />
+      <div ref={containerRef} className="dashboard-trend-chart" />
     </div>
   );
 }
@@ -190,14 +279,14 @@ export function VolumeAnalyticsSection({
 
   return (
     <Card
-      className="dashboard-panel"
+      className="dashboard-panel dashboard-volume-panel"
       title={
         <Text strong className="dashboard-panel__title">
           Shipment Volume Analytics (FEUs){" "}
         </Text>
       }
     >
-      <div className="dashboard-metric-grid--2">
+      <div className="dashboard-volume-analytics-grid">
         <div className="dashboard-volume-kpi-grid">
           {kpis.map((kpi) => {
             const isPositive = kpi.change >= 0;

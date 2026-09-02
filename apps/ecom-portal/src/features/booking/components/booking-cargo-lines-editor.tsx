@@ -2,7 +2,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
-import { Input, InputNumber, Segmented, Select, Tooltip, Typography } from "antd";
+import {
+  Input,
+  InputNumber,
+  Segmented,
+  Select,
+  Tooltip,
+  Typography,
+} from "antd";
 import { useState } from "react";
 import { useFieldArray, useForm, type Resolver } from "react-hook-form";
 
@@ -150,7 +157,9 @@ export function BookingCargoLinesEditor({
         if (errorIndex === null) return;
         const container = containersWatch[errorIndex];
         const fieldId =
-          containerFields[errorIndex]?.id ?? container?.id ?? String(errorIndex);
+          containerFields[errorIndex]?.id ??
+          container?.id ??
+          String(errorIndex);
         setExpandedId(container?.id ?? fieldId);
         setViewMode("list");
         setPage(Math.floor(errorIndex / PAGE_SIZE));
@@ -177,23 +186,6 @@ export function BookingCargoLinesEditor({
                     setPage(0);
                   }}
                 />
-                <Tooltip title="Show Containers Missing Required Fields">
-                  <AppButton
-                    className={[
-                      "si-cargo-chip",
-                      incompleteOnly ? "si-cargo-chip--on" : undefined,
-                    ]
-                      .filter(Boolean)
-                      .join(" ")}
-                    icon={<AppIcon icon={Icons.alertTriangle} size={12} />}
-                    onClick={() => {
-                      setIncompleteOnly((v) => !v);
-                      setPage(0);
-                    }}
-                  >
-                    Incomplete only
-                  </AppButton>
-                </Tooltip>
               </div>
 
               <div className="si-cargo-toolbar__actions">

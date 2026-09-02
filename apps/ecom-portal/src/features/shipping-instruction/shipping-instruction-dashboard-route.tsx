@@ -15,15 +15,13 @@ import {
 } from "../../components/shared/list-action-button";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import { MODULE_TITLES } from "../../constants/module-titles";
-import {
-  useCancelSiMutation,
-  useSiListQuery,
-} from "./api/si.queries";
+import { useCancelSiMutation, useSiListQuery } from "./api/si.queries";
 import { SiModuleStyles } from "./components/si-module-styles";
 import { SiViewDrawer } from "./components/view/SiViewDrawer";
 import type { SIListDTO } from "./types/si.types";
 import { getSiStatusTagColor } from "./utils/si-status";
-
+// Modified by Sekar Nagarajan (2026-09-02 14:59)
+import { NavShippingInstructionIcon } from "../../components/icons/nav-svg-icons";
 export function ShippingInstructionDashboardRoute() {
   const navigate = useNavigate();
   const confirm = useConfirm();
@@ -41,9 +39,7 @@ export function ShippingInstructionDashboardRoute() {
     setSelectedRecord(record);
   };
 
-  const handleRowDoubleClick = (
-    event: RowDoubleClickedEvent<SIListDTO>,
-  ) => {
+  const handleRowDoubleClick = (event: RowDoubleClickedEvent<SIListDTO>) => {
     const record = event.data;
     if (!record) return;
     if (record.status === "Create SI" || record.status === "Draft") {
@@ -79,7 +75,7 @@ export function ShippingInstructionDashboardRoute() {
         <div className="si-page-layout">
           <div className="si-page-header">
             <ModuleScreenHeader
-              icon={Icons.clipboardList}
+              icon={NavShippingInstructionIcon}
               title={MODULE_TITLES.shippingInstructions}
               subtitle="Review SI status, open drafts, and submit shipping instructions for confirmed bookings."
               marginBottom={0}

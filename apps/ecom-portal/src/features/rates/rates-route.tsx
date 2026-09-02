@@ -14,6 +14,8 @@ import { RateDataView } from "./components/RateDataView";
 import { RateSearchFilter } from "./components/RateSearchFilter";
 import { RatesModuleStyles } from "./components/rates-module-styles";
 import { useRatesController } from "./hooks/useRatesController";
+// Modified by Sekar Nagarajan (2026-09-02 14:57)
+import { NavRatesIcon } from "../../components/icons/nav-svg-icons";
 
 const { Text } = Typography;
 
@@ -45,7 +47,7 @@ export function RatesRoute() {
       <RatesModuleStyles />
       <Card className="feature-page-card" bordered={false}>
         <ModuleScreenHeader
-          icon={Icons.dollarSign}
+          icon={NavRatesIcon}
           title={MODULE_TITLES.rates}
           subtitle="Search published line tariffs, view itemized surcharge breakdowns, manage Service Contracts, and request spot rate quotes."
           extra={

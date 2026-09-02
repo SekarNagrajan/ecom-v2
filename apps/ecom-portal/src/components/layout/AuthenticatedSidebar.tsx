@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-02 10:53)
+// Modified by Sekar Nagarajan (2026-09-02 15:18)
 import { useAuthStore, usePermission, useTenantStore } from "@solverminds/auth";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import type { MenuProps } from "antd";
@@ -281,26 +281,11 @@ export function AuthenticatedSidebar({
       ),
     },
     {
-      key: "rates-group",
-      icon: navIcon(NavIcons.rates),
-      title: "Rates",
-      label: "Rates",
-      children: [
-        {
-          key: "rates",
-          icon: navIcon(NavIcons.rates, 20),
-          ...sidebarMenuLabel("Rates", false),
-          disabled: !isGuest && !can("SCH"),
-        },
-        {
-          key: "tariff",
-          icon: navIcon(NavIcons.tariff, 20),
-          ...sidebarMenuLabel("Tariff", false),
-          disabled: !isGuest && !can("SCH"),
-        },
-      ].filter(
-        (child) => isGuest || isSuperUser || tenantModules.includes(child.key),
-      ),
+      key: "rates",
+      icon: navIcon(NavIcons.rates, 20, lock("rates")),
+      ...sidebarMenuLabel("Rates", lock("rates")),
+      disabled: !isGuest && !can("SCH"),
+      className: lock("rates") ? "ant-menu-item-locked" : undefined,
     },
     {
       key: "booking",

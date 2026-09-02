@@ -1,11 +1,10 @@
-// Modified by Sekar Nagarajan (2026-08-28 15:09)
-import { AppButton } from "@solverminds/shared-ui";
+// Modified by Sekar Nagarajan (2026-09-02 15:00)
+import { AppButton, AppTabs } from "@solverminds/shared-ui";
 import {
   Col,
   DatePicker,
   Form,
   Row,
-  Segmented,
   Select,
   Tooltip,
   Typography,
@@ -23,6 +22,35 @@ export type RateSearchMode =
   | "SURCHARGES"
   | "SERVICE_CONTRACTS"
   | "SPOT_QUOTES";
+
+const RATE_SEARCH_MODE_TABS: { key: RateSearchMode; label: string }[] = [
+  { key: "PUBLISHED_TARIFF", label: "Tariff" },
+  { key: "SURCHARGES", label: "Surcharge" },
+  { key: "SERVICE_CONTRACTS", label: "Service Contract" },
+  { key: "SPOT_QUOTES", label: "Request for Quote" },
+];
+
+/** Form.Item adapter: AppTabs uses activeKey, Ant Form passes value. */
+function RateSearchModeTabs({
+  value,
+  onChange,
+}: {
+  value?: RateSearchMode;
+  onChange?: (mode: RateSearchMode) => void;
+}) {
+  return (
+    <AppTabs
+      className="rates-search-mode-tabs"
+      size="large"
+      activeKey={value ?? "PUBLISHED_TARIFF"}
+      onChange={(key) => onChange?.(key as RateSearchMode)}
+      items={RATE_SEARCH_MODE_TABS.map((tab) => ({
+        key: tab.key,
+        label: tab.label,
+      }))}
+    />
+  );
+}
 
 const FALLBACK_PORTS = [
   { value: "USNYC", label: "USNYC - New York, USA" },
@@ -178,30 +206,7 @@ export function RateSearchFilter({
         >
           <div className="rates-search-mode-wrap custom-scroll">
             <Form.Item name="searchMode" className="rates-search-mode-field">
-              <Segmented
-                options={[
-                  {
-                    label: "Tariff",
-                    value: "PUBLISHED_TARIFF",
-                    icon: <AppIcon icon={Icons.dollarSign} size={16} />,
-                  },
-                  {
-                    label: "Surcharge",
-                    value: "SURCHARGES",
-                    icon: <AppIcon icon={Icons.tag} size={16} />,
-                  },
-                  {
-                    label: "Service Contract",
-                    value: "SERVICE_CONTRACTS",
-                    icon: <AppIcon icon={Icons.shieldCheck} size={16} />,
-                  },
-                  {
-                    label: "Request for Quote",
-                    value: "SPOT_QUOTES",
-                    icon: <AppIcon icon={Icons.zap} size={16} />,
-                  },
-                ]}
-              />
+              <RateSearchModeTabs />
             </Form.Item>
           </div>
 

@@ -5,14 +5,10 @@ import { Alert, Card, Empty } from "antd";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
-import { Icons } from "../../components/icons";
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import { MODULE_TITLES } from "../../constants/module-titles";
-import {
-  useVgmSearchQuery,
-  type VgmSearchParams,
-} from "./api/vgm.queries";
+import { useVgmSearchQuery, type VgmSearchParams } from "./api/vgm.queries";
 import { VgmDeclarationForm } from "./components/vgm-declaration-form";
 import { VgmLoadingCenter } from "./components/vgm-loading-center";
 import { VgmModuleStyles } from "./components/vgm-module-styles";
@@ -20,10 +16,11 @@ import { VgmSearchPanel } from "./components/vgm-search-panel";
 import type { VgmSearchValues } from "./types/vgm.types";
 import { vgmSearchSchema } from "./types/vgm.types";
 import { extractVgmErrorMessage } from "./utils/vgm.utils";
+// Modified by Sekar Nagarajan (2026-09-02 15:00)
+import { NavVgmIcon } from "../../components/icons/nav-svg-icons";
 
 export function VgmDashboardRoute() {
-  const [activeReference, setActiveReference] =
-    useState<VgmSearchParams>(null);
+  const [activeReference, setActiveReference] = useState<VgmSearchParams>(null);
 
   const searchForm = useForm<VgmSearchValues>({
     resolver: zodResolver(vgmSearchSchema),
@@ -62,7 +59,7 @@ export function VgmDashboardRoute() {
       <Card className="feature-page-card vgm-page-card" bordered={false}>
         <div className="vgm-page-header">
           <ModuleScreenHeader
-            icon={Icons.shieldCheck}
+            icon={NavVgmIcon}
             title={MODULE_TITLES.vgm}
             subtitle="Search by booking or B/L number, review the voyage route, and submit verified gross mass for each container."
             marginBottom={0}

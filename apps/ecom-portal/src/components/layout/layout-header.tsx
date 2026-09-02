@@ -1,12 +1,11 @@
 // Modified by Sekar Nagarajan (2026-08-24 16:05)
-import { AppButton } from '@solverminds/shared-ui';
-import { useAntdBreakpoint } from '@solverminds/shared-ui/hooks';
-import { Flex, Layout, Typography, theme } from 'antd';
-import React, { useState } from 'react';
+import { AppButton } from "@solverminds/shared-ui";
+import { useAntdBreakpoint } from "@solverminds/shared-ui/hooks";
+import { Flex, Layout, Typography, theme } from "antd";
+import React, { useState } from "react";
 
-import { AppIcon, Icons } from '../icons';
-import { HeaderThemeToggle } from './header-theme-toggle';
-import { UserMenu } from './user-menu';
+import { AppIcon, Icons } from "../icons";
+import { UserMenu } from "./user-menu";
 
 const { Header } = Layout;
 const { Text } = Typography;
@@ -33,22 +32,22 @@ export const LayoutHeader: React.FC = () => {
   return (
     <Header
       style={{
-        width: '100%',
+        width: "100%",
         zIndex: token.zIndexBase + 10,
-        display: 'flex',
-        alignItems: 'center',
+        display: "flex",
+        alignItems: "center",
         gap: token.marginMD,
         paddingInline: headerInlinePadding,
         height: 64,
         background: token.colorBgLayout,
         borderBottom: `1px solid ${token.colorBorderSecondary}`,
-        flex: '0 0 auto',
+        flex: "0 0 auto",
       }}
     >
       <Flex
         vertical
         style={{
-          flex: '0 0 auto',
+          flex: "0 0 auto",
           minWidth: 0,
         }}
       >
@@ -79,15 +78,15 @@ export const LayoutHeader: React.FC = () => {
         align="center"
         gap={token.marginSM}
         style={{
-          marginLeft: 'auto',
-          flex: '0 1 auto',
+          marginLeft: "auto",
+          flex: "0 1 auto",
           minWidth: 0,
-          justifyContent: 'flex-end',
+          justifyContent: "flex-end",
         }}
       >
-        <HeaderThemeToggle />
+        {/* <HeaderThemeToggle /> */}
         <AppButton
-          aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
+          aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
           icon={
             <AppIcon
               icon={isFullscreen ? Icons.minimize : Icons.expand}

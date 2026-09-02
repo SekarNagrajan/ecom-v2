@@ -14,6 +14,8 @@ import { TrackingMovementDrawer } from "./components/TrackingMovementDrawer";
 import { TrackingOverview } from "./components/TrackingOverview";
 import { TrackingSearchFilter } from "./components/TrackingSearchFilter";
 import { useTrackingController } from "./hooks/useTrackingController";
+// Modified by Sekar Nagarajan (2026-09-02 14:56)
+import { NavTrackingIcon } from "../../components/icons/nav-svg-icons";
 
 export function TrackingRoute() {
   const toast = useToast();
@@ -35,7 +37,7 @@ export function TrackingRoute() {
       <TrackingModuleStyles />
       <Card className="feature-page-card" bordered={false}>
         <ModuleScreenHeader
-          icon={Icons.mapPin}
+          icon={NavTrackingIcon}
           title={MODULE_TITLES.tracking}
           subtitle="Track real-time container movements, vessel voyage milestones, port cut-offs, and transport event logs."
           extra={

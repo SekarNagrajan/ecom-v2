@@ -16,6 +16,8 @@ import { ScheduleRatesModal } from "./components/ScheduleRatesModal";
 import { ScheduleSearchFilter } from "./components/ScheduleSearchFilter";
 import { VesselDetailsModal } from "./components/VesselDetailsModal";
 import { useSchedulesController } from "./hooks/useSchedulesController";
+// Modified by Sekar Nagarajan (2026-09-02 14:55)
+import { NavSchedulesIcon } from "../../components/icons/nav-svg-icons";
 
 const { Text } = Typography;
 
@@ -48,7 +50,7 @@ export const SchedulesRoute: React.FC = () => {
 
       <Card className="feature-page-card" bordered={false}>
         <ModuleScreenHeader
-          icon={Icons.calendar}
+          icon={NavSchedulesIcon}
           title={MODULE_TITLES.schedules}
           subtitle="Search sailings by route, vessel, or port — compare transit times, cut-offs, and book directly."
           extra={

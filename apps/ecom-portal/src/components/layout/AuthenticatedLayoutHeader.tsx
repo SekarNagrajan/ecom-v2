@@ -32,7 +32,6 @@ import { MyAlertsView } from "../../features/user-modules/components/MyAlertsVie
 import { ProfileView } from "../../features/user-modules/components/ProfileView";
 import { AppIcon, Icons } from "../icons";
 import { AccountPreferencesDrawer } from "./account-preferences-drawer";
-import { HeaderThemeToggle } from "./header-theme-toggle";
 
 const { Header } = Layout;
 const { Text } = Typography;
@@ -183,7 +182,7 @@ export function AuthenticatedLayoutHeader({
               Register
             </AppButton>
           </Tooltip>
-          <HeaderThemeToggle />
+          {/* <HeaderThemeToggle /> */}
           <Tooltip title="Login">
             <AppButton
               type="primary"
@@ -449,7 +448,7 @@ export function AuthenticatedLayoutHeader({
             </Space>
           ) : null}
 
-          <HeaderThemeToggle />
+          {/* <HeaderThemeToggle /> */}
 
           <Tooltip
             title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}

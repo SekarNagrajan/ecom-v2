@@ -7,6 +7,7 @@ import { AppButton } from "@solverminds/shared-ui";
 import { Col, Empty, Row, Space, Spin } from "antd";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { NavDashboardIcon } from "../../../components/icons/nav-svg-icons";
 import { FeaturePageShell } from "../../../components/shared/feature-page-shell";
 import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
 import { MODULE_TITLES } from "../../../constants/module-titles";
@@ -45,7 +46,7 @@ export function EnhancedDashboardView() {
       <BookingModuleStyles />
       <BlModuleStyles />
       <ModuleScreenHeader
-        icon={Icons.layoutDashboard}
+        icon={NavDashboardIcon}
         title={MODULE_TITLES.dashboard}
         subtitle="Shipment KPIs, ongoing transactions, and operational analytics — parity with the legacy enhanced dashboard."
         extra={

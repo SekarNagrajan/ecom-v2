@@ -25,6 +25,8 @@ import { BookingViewDrawer } from "./components/view/BookingViewDrawer";
 import { useBookingStore } from "./stores/booking.store";
 import type { BookingListDTO } from "./types/booking-list.types";
 import { getBookingListStatusColor } from "./types/booking-list.types";
+// Modified by Sekar Nagarajan (2026-09-02 14:58)
+import { NavBookingIcon } from "../../components/icons/nav-svg-icons";
 
 export function BookingDashboardRoute() {
   const navigate = useNavigate();
@@ -105,7 +107,7 @@ export function BookingDashboardRoute() {
         <div className="booking-page-layout">
           <div className="booking-page-header">
             <ModuleScreenHeader
-              icon={Icons.bookOpen}
+              icon={NavBookingIcon}
               title={MODULE_TITLES.booking}
               subtitle="Create and manage bookings, amend drafts, and track confirmation status."
               marginBottom={0}

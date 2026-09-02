@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-28 15:09)
+// Modified by Sekar Nagarajan (2026-09-02 15:00)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -29,8 +29,32 @@ export function RatesModuleStyles() {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
       }
-      .rates-search-mode-wrap .ant-segmented {
+      .rates-search-mode-tabs.ant-tabs {
+        margin-bottom: 0;
         min-width: max-content;
+      }
+      .rates-search-mode-tabs .ant-tabs-nav {
+        margin-bottom: 0;
+      }
+      .rates-search-mode-tabs .ant-tabs-nav::before {
+        border-bottom-color: ${token.colorBorderSecondary};
+      }
+      .rates-search-mode-tabs .ant-tabs-tab {
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        font-size: ${token.fontSize}px;
+      }
+      .rates-search-mode-tabs .ant-tabs-tab-btn {
+        color: ${token.colorTextSecondary};
+      }
+      .rates-search-mode-tabs .ant-tabs-tab-active .ant-tabs-tab-btn {
+        color: ${token.colorPrimary};
+        font-weight: ${token.fontWeightStrong};
+      }
+      .rates-search-mode-tabs .ant-tabs-ink-bar {
+        background: ${token.colorPrimary};
+      }
+      .rates-search-mode-tabs .ant-tabs-content-holder {
+        display: none;
       }
       .rates-port-label {
         display: inline-flex;
@@ -499,9 +523,6 @@ export function RatesModuleStyles() {
         }
         .rates-search-actions .sm-app-button,
         .rates-search-actions .ant-btn {
-          width: 100%;
-        }
-        .rates-results-bar .ant-segmented {
           width: 100%;
         }
         .rates-card__main {

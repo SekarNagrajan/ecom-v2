@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-27 18:30)
+// Modified by Sekar Nagarajan (2026-09-02 14:39)
 // Lucide icon registry — central map for ecom-portal navigation and actions
 import {
   AlertCircle,
@@ -112,28 +112,44 @@ import {
   Zap,
 } from "lucide-react";
 
+import {
+  NavArrivalNoticeIcon,
+  NavBillOfLadingIcon,
+  NavBookingIcon,
+  NavCarbonCalculatorIcon,
+  NavContainerReleaseIcon,
+  NavCustomerStatementIcon,
+  NavDashboardIcon,
+  NavDeliveryOrderIcon,
+  NavPaymentHistoryIcon,
+  NavRatesIcon,
+  NavSchedulesIcon,
+  NavShippingInstructionIcon,
+  NavTrackingIcon,
+  NavVgmIcon,
+} from "./nav-svg-icons";
 import { ShieldUser } from "./shield-user-icon";
 
 export const NavIcons = {
-  dashboard: LayoutDashboard,
-  schedules: Calendar,
-  tracking: MapPin,
-  rates: DollarSign,
+  dashboard: NavDashboardIcon,
+  schedules: NavSchedulesIcon,
+  tracking: NavTrackingIcon,
+  rates: NavRatesIcon,
   tariff: Tag,
-  booking: BookOpen,
-  shippingInstruction: ClipboardList,
-  vgm: ShieldCheck,
-  billOfLading: FileCheck,
-  deliveryOrder: PackageCheck,
-  arrivalNotice: Bell,
-  containerRelease: Container,
+  booking: NavBookingIcon,
+  shippingInstruction: NavShippingInstructionIcon,
+  vgm: NavVgmIcon,
+  billOfLading: NavBillOfLadingIcon,
+  deliveryOrder: NavContainerReleaseIcon,
+  arrivalNotice: NavArrivalNoticeIcon,
+  containerRelease: NavDeliveryOrderIcon,
   userCreation: UserPlus,
   vendorApprovals: CheckSquare,
   more: Ellipsis,
   admin: Settings,
-  payments: Landmark,
-  customerStatement: Contact,
-  carbon: Cloud,
+  payments: NavPaymentHistoryIcon,
+  customerStatement: NavCustomerStatementIcon,
+  carbon: NavCarbonCalculatorIcon,
   contactUs: Headphones,
   route: Route,
   ellipsisVertical: EllipsisVertical,

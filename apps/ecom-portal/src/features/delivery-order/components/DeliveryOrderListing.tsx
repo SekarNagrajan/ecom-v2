@@ -1,6 +1,9 @@
 // Modified by Sekar Nagarajan (2026-08-26 14:26)
 import { FormattedDate } from "@solverminds/shared-ui";
-import { DataView, type DataViewColumn } from "@solverminds/shared-ui/data-view";
+import {
+  DataView,
+  type DataViewColumn,
+} from "@solverminds/shared-ui/data-view";
 import type { RowDoubleClickedEvent } from "ag-grid-community";
 import { Tag } from "antd";
 import { DateTime } from "luxon";
@@ -30,6 +33,8 @@ import {
 import { DoLoadingCenter } from "./do-loading-center";
 import { DoSearchPanel } from "./do-search-panel";
 import { DoViewDrawer } from "./view/DoViewDrawer";
+// Modified by Sekar Nagarajan (2026-09-02 15:01)
+import { NavContainerReleaseIcon } from "../../../components/icons/nav-svg-icons";
 
 const initialFilters: DOListFilters = {
   fromDate: DateTime.now().minus({ days: 60 }).toISODate() ?? undefined,
@@ -53,9 +58,7 @@ export function DeliveryOrderListing() {
     setSelectedRecord(record);
   };
 
-  const handleRowDoubleClick = (
-    event: RowDoubleClickedEvent<DOSummaryRow>,
-  ) => {
+  const handleRowDoubleClick = (event: RowDoubleClickedEvent<DOSummaryRow>) => {
     const record = event.data;
     if (!record) return;
     handleView(record);
@@ -145,17 +148,14 @@ export function DeliveryOrderListing() {
     <div className="do-page-layout">
       <div className="do-page-header">
         <ModuleScreenHeader
-          icon={Icons.packageCheck}
+          icon={NavContainerReleaseIcon}
           title={MODULE_TITLES.deliveryOrder}
           subtitle="Filter by date range, review POL to POD routing, and print delivery order documents."
           marginBottom={0}
         />
       </div>
 
-      <DoSearchPanel
-        isSearching={isFetching}
-        onSearch={handleSearch}
-      />
+      <DoSearchPanel isSearching={isFetching} onSearch={handleSearch} />
 
       {showLoading ? (
         <DoLoadingCenter fill />

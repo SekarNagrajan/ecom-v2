@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-27 12:00)
+// Modified by Sekar Nagarajan (2026-09-02 15:18)
 /**
  * Public-menu access helpers — parity with JSP menu Category D (public) vs P (privileged).
  * Falls back to hard-coded keys when the backend menu-access API hasn't loaded yet.
@@ -127,9 +127,6 @@ export function appPathnameToMenuKey(pathname: string): string {
 export function menuKeyToOpenGroupKeys(menuKey: string): string[] {
   if (menuKey === "schedules" || menuKey === "tracking") {
     return ["schedules-group"];
-  }
-  if (menuKey === "rates" || menuKey === "tariff") {
-    return ["rates-group"];
   }
   if (
     menuKey === "admin" ||

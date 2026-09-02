@@ -1,9 +1,9 @@
-// Modified by Sekar Nagarajan (2026-08-27 16:08)
+// Modified by Sekar Nagarajan (2026-09-02 15:18)
 import {
-  Outlet,
-  useLocation,
-  useNavigate,
-  useSearch,
+    Outlet,
+    useLocation,
+    useNavigate,
+    useSearch,
 } from "@tanstack/react-router";
 import type { MenuProps } from "antd";
 import { Card, Drawer, Layout, Menu, Tooltip, Typography } from "antd";
@@ -13,15 +13,15 @@ import { useEffect, useState } from "react";
 import { useLoginController } from "../../features/auth/hooks/use-login-controller";
 import { usePostLoginRedirectStore } from "../../features/auth/stores/use-post-login-redirect-store";
 import {
-  appPathnameToMenuKey,
-  isPublicMenuKey,
-  menuKeyToAppPath,
+    appPathnameToMenuKey,
+    isPublicMenuKey,
+    menuKeyToAppPath,
 } from "../../features/auth/utils/public-menu-access";
 import { HeroSearchPanel } from "../../features/landing/components/HeroSearchPanel";
 import { PublicLoginPanel } from "../../features/landing/components/PublicLoginPanel";
 import { useLandingController } from "../../features/landing/hooks/use-landing-controller";
 import { useResponsiveLayout } from "../../hooks/use-responsive-layout";
-import { AppIcon, Icons } from "../icons";
+import { AppIcon, NavIcons } from "../icons";
 import { AppFooter } from "./AppFooter";
 import { PublicLayoutHeader } from "./PublicLayoutHeader";
 
@@ -90,111 +90,99 @@ export function PublicLayout() {
   const menuItems: MenuProps["items"] = [
     {
       key: "home",
-      icon: navIcon(Icons.home),
+      icon: navIcon(NavIcons.dashboard),
       label: menuLabel("Home", false),
     },
     {
       key: "schedules-group",
-      icon: navIcon(Icons.calendar),
+      icon: navIcon(NavIcons.schedules),
       label: "Schedules",
       children: [
         {
           key: "schedules",
-          icon: navIcon(Icons.calendar, 20),
+          icon: navIcon(NavIcons.schedules, 20),
           label: menuLabel("Schedules", false),
         },
         {
           key: "tracking",
-          icon: navIcon(Icons.mapPin, 20),
+          icon: navIcon(NavIcons.tracking, 20),
           label: menuLabel("Tracking", false),
         },
       ],
     },
     {
-      key: "rates-group",
-      icon: navIcon(Icons.dollarSign),
-      label: "Rates",
-      children: [
-        {
-          key: "rates",
-          icon: navIcon(Icons.dollarSign, 20),
-          label: menuLabel("Rates", false),
-        },
-        {
-          key: "tariff",
-          icon: navIcon(Icons.tag, 20),
-          label: menuLabel("Tariff", false),
-        },
-      ],
+      key: "rates",
+      icon: navIcon(NavIcons.rates, 20),
+      label: menuLabel("Rates", false),
     },
     {
       key: "booking",
-      icon: navIcon(Icons.bookOpen, 20, true),
+      icon: navIcon(NavIcons.booking, 20, true),
       label: menuLabel("Booking", true),
       className: "ant-menu-item-locked",
     },
     {
       key: "si",
-      icon: navIcon(Icons.clipboardList, 20, true),
+      icon: navIcon(NavIcons.shippingInstruction, 20, true),
       label: menuLabel("Shipping Instruction", true),
       className: "ant-menu-item-locked",
     },
     {
       key: "vgm",
-      icon: navIcon(Icons.shieldCheck, 20, true),
+      icon: navIcon(NavIcons.vgm, 20, true),
       label: menuLabel("VGM", true),
       className: "ant-menu-item-locked",
     },
     {
       key: "bl",
-      icon: navIcon(Icons.shieldCheck, 20, true),
+      icon: navIcon(NavIcons.billOfLading, 20, true),
       label: menuLabel("Bill of Lading", true),
       className: "ant-menu-item-locked",
     },
     {
       key: "do",
-      icon: navIcon(Icons.truck, 20, true),
+      icon: navIcon(NavIcons.deliveryOrder, 20, true),
       label: menuLabel("Delivery Order", true),
       className: "ant-menu-item-locked",
     },
     {
       key: "arrival-notice",
-      icon: navIcon(Icons.bell, 20, true),
+      icon: navIcon(NavIcons.arrivalNotice, 20, true),
       label: menuLabel("Arrival Notice", true),
       className: "ant-menu-item-locked",
     },
     {
       key: "cro",
-      icon: navIcon(Icons.barcode, 20, true),
+      icon: navIcon(NavIcons.containerRelease, 20, true),
       label: menuLabel("Container Release Order", true),
       className: "ant-menu-item-locked",
     },
     {
       key: "more-group",
-      icon: navIcon(Icons.ellipsis, 20),
+      icon: navIcon(NavIcons.more, 20),
       label: "More",
       children: [
         {
           key: "payments",
-          icon: navIcon(Icons.landmark, 20, true),
+          icon: navIcon(NavIcons.payments, 20, true),
           label: menuLabel("Payment History", true),
           className: "ant-menu-item-locked",
         },
         {
           key: "customer-stmt",
-          icon: navIcon(Icons.contact, 20, true),
+          icon: navIcon(NavIcons.customerStatement, 20, true),
           label: menuLabel("Customer Statement", true),
           className: "ant-menu-item-locked",
         },
         {
           key: "carbon",
-          icon: navIcon(Icons.cloud, 20, true),
+          icon: navIcon(NavIcons.carbon, 20, true),
           label: menuLabel("Carbon Calculator", true),
           className: "ant-menu-item-locked",
         },
         {
           key: "contact-us",
-          icon: navIcon(Icons.headphones, 20),
+          icon: navIcon(NavIcons.contactUs, 20),
           label: menuLabel("Contact Us", false),
         },
       ],
@@ -337,7 +325,7 @@ export function PublicLayout() {
                       }
                     >
                       <span className="pub-landing__card-icon">
-                        <AppIcon icon={Icons.calendar} size={20} />
+                        <AppIcon icon={NavIcons.schedules} size={20} />
                       </span>
                       <Text strong className="pub-landing__card-label">
                         Live sailing
@@ -355,7 +343,7 @@ export function PublicLayout() {
                       }
                     >
                       <span className="pub-landing__card-icon">
-                        <AppIcon icon={Icons.mapPin} size={20} />
+                        <AppIcon icon={NavIcons.tracking} size={20} />
                       </span>
                       <Text strong className="pub-landing__card-label">
                         Real-time
@@ -373,7 +361,7 @@ export function PublicLayout() {
                       onClick={() => landingController.handleTabChange("rates")}
                     >
                       <span className="pub-landing__card-icon">
-                        <AppIcon icon={Icons.dollarSign} size={20} />
+                        <AppIcon icon={NavIcons.rates} size={20} />
                       </span>
                       <Text strong className="pub-landing__card-label">
                         Instant spot-

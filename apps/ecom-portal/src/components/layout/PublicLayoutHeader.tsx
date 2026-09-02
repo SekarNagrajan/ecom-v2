@@ -6,7 +6,6 @@ import { Dropdown, Layout } from "antd";
 import { useState } from "react";
 
 import { AppIcon, Icons } from "../icons";
-import { HeaderThemeToggle } from "./header-theme-toggle";
 
 const { Header } = Layout;
 
@@ -160,7 +159,7 @@ export function PublicLayoutHeader({
           <span className="pub-header-action__label">Login</span>
         </AppButton>
 
-        <HeaderThemeToggle />
+        {/* <HeaderThemeToggle /> */}
 
         <Dropdown
           trigger={["click"]}

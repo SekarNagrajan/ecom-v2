@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-25 17:02)
+// Modified by Sekar Nagarajan (2026-09-02 10:38)
 import { useAuthStore } from "@solverminds/auth";
 import { Layout } from "antd";
 import { useState } from "react";
@@ -15,7 +15,7 @@ import { AuthenticatedSidebar } from "./AuthenticatedSidebar";
 const { Content } = Layout;
 
 export function AuthenticatedLayout() {
-  const [collapsed, setCollapsed] = useState(true);
+  const [collapsed, setCollapsed] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [loginPanelOpen, setLoginPanelOpen] = useState(false);
   const navigate = useNavigate();
@@ -55,7 +55,12 @@ export function AuthenticatedLayout() {
   };
 
   return (
-    <Layout className="app-layout-root" data-viewport-tier={tier}>
+    <Layout
+      className="app-layout-root"
+      data-viewport-tier={tier}
+      data-sidebar-collapsed={collapsed ? "true" : "false"}
+      data-sidebar-mobile={useMobileNav ? "true" : "false"}
+    >
       <AuthenticatedSidebar
         collapsed={collapsed}
         onCollapse={setCollapsed}

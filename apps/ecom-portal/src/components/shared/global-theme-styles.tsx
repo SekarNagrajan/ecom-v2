@@ -1061,10 +1061,61 @@ export function GlobalThemeStyles() {
         background: ${token.colorBgContainer};
         border-right: 1px solid ${token.colorBorderSecondary};
         z-index: 100;
-        overflow-y: auto;
-        overflow-x: hidden;
+        overflow: hidden;
         box-shadow: 2px 0 8px 0 ${tokenMix(token.colorText, 5)};
         transition: all 0.25s cubic-bezier(0.2, 0, 0, 1);
+      }
+      .app-sidebar-sider .ant-layout-sider-children {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-02 10:38) — brand + scroll menu + collapse footer */
+      .app-sidebar-shell {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        min-height: 0;
+      }
+      .app-sidebar-shell__menu {
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+      .app-sidebar-shell__footer {
+        flex-shrink: 0;
+        border-top: 1px solid ${token.colorBorderSecondary};
+        padding: ${token.paddingSM}px;
+        background: ${token.colorBgContainer};
+      }
+      .app-sidebar-collapse-trigger {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: ${token.marginXS}px;
+        width: 100%;
+        min-height: ${token.controlHeightLG}px;
+        padding: 0 ${token.paddingSM}px;
+        border: none;
+        border-radius: ${token.borderRadius}px;
+        background: transparent;
+        color: ${token.colorTextSecondary};
+        cursor: pointer;
+        transition:
+          background 0.2s,
+          color 0.2s;
+      }
+      .app-sidebar-collapse-trigger:hover {
+        background: ${token.colorFillSecondary};
+        color: ${token.colorText};
+      }
+      .app-sidebar-collapse-trigger__label {
+        font-size: ${token.fontSizeSM}px;
+        line-height: 1;
+      }
+      .app-sidebar-sider.ant-layout-sider-collapsed .app-sidebar-collapse-trigger {
+        padding: 0;
       }
       .app-sidebar-sider:not(.ant-layout-sider-collapsed) {
         box-shadow: 8px 0 28px 0 ${tokenMix(token.colorText, 15)};
@@ -1075,7 +1126,7 @@ export function GlobalThemeStyles() {
         align-items: center;
         justify-content: center;
         border-bottom: 1px solid ${token.colorBorderSecondary};
-        border-top: 3px solid ${token.colorPrimary};
+  
         overflow: hidden;
         padding: ${token.paddingSM}px ${token.paddingMD}px;
         background: ${token.colorBgContainer};
@@ -1084,6 +1135,20 @@ export function GlobalThemeStyles() {
       .app-sidebar-brand__logo {
         height: 38px;
         max-width: 100%;
+        object-fit: contain;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-02 10:55) — larger mark icon when sidebar collapsed */
+      .app-sidebar-brand__logo--solverminds {
+        height: 40px;
+        max-width: 180px;
+      }
+      .app-sidebar-sider.ant-layout-sider-collapsed .app-sidebar-brand {
+        padding: ${token.paddingXS}px;
+      }
+      .app-sidebar-brand__logo--mark {
+        height: 52px;
+        width: 52px;
+        max-width: 52px;
         object-fit: contain;
       }
       .app-sidebar-menu {
@@ -1864,7 +1929,11 @@ export function GlobalThemeStyles() {
 
       /* web 992–1599 */
       @media (min-width: 992px) {
-        .app-layout-main {
+        .app-layout-root[data-sidebar-mobile="false"] .app-layout-main {
+          margin-left: 250px;
+        }
+        .app-layout-root[data-sidebar-mobile="false"][data-sidebar-collapsed="true"]
+          .app-layout-main {
           margin-left: 80px;
         }
         .app-content-main {

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-02 11:45)
+// Modified by Sekar Nagarajan (2026-09-02 16:43)
 import { AppButton } from "@solverminds/shared-ui";
 import { Tag, Typography } from "antd";
 import {
@@ -108,6 +108,8 @@ export function BookingCargoListView({
         );
         const hasNumber = Boolean(container?.containerNo?.trim());
         const lineCount = container?.commodities?.length ?? 0;
+        const typeLabel = container?.containerType || "—";
+        const qty = container?.quantity ?? 1;
 
         return (
           <div key={fieldId} className="si-cargo-sicard">
@@ -136,57 +138,52 @@ export function BookingCargoListView({
                   .filter(Boolean)
                   .join(" ")}
               />
+
               <div className="si-cargo-ct-identity">
-                <Text
-                  strong={hasNumber}
-                  className={[
-                    "si-cargo-ct-no",
-                    hasNumber ? undefined : "si-cargo-ct-no--empty",
-                  ]
-                    .filter(Boolean)
-                    .join(" ")}
-                >
-                  {hasNumber
-                    ? container?.containerNo
-                    : `Container ${ci + 1}`}
+                <div className="si-cargo-ct-identity__main">
+                  <Text
+                    strong
+                    className={[
+                      "si-cargo-ct-no",
+                      hasNumber ? undefined : "si-cargo-ct-no--empty",
+                    ]
+                      .filter(Boolean)
+                      .join(" ")}
+                  >
+                    {hasNumber
+                      ? container?.containerNo
+                      : `Container ${ci + 1}`}
+                  </Text>
+                  <span className="si-cargo-type-badge si-cargo-type-badge--primary">
+                    {typeLabel} x {qty}
+                  </span>
+                  <span className="si-cargo-ct-status__tags">
+                    {container?.isSoc ? <Tag>SOC</Tag> : null}
+                    {container?.isOog ? (
+                      <Tag color="purple">OOG</Tag>
+                    ) : null}
+                    {isReeferContainerType(container?.containerType) &&
+                    container?.reeferMode === "operating" ? (
+                      <Tag color="blue">Reefer</Tag>
+                    ) : null}
+                  </span>
+                </div>
+              </div>
+
+              <div className="si-cargo-ct-summary">
+                <Text type="secondary" className="si-cargo-ct-summary__text">
+                  {lineCount}{" "}
+                  {lineCount === 1 ? "Commodity" : "Commodities"}
+                  <span className="si-cargo-ct-summary__dot">·</span>
+                  {sums.packages.toLocaleString()}{" "}
+                  {sums.packages === 1 ? "Package" : "Packages"}
+                  <span className="si-cargo-ct-summary__dot">·</span>
+                  {sums.weight.toLocaleString()} kg
+                  <span className="si-cargo-ct-summary__dot">·</span>
+                  {sums.volume.toFixed(1)} CBM
                 </Text>
-                <span className="si-cargo-ct-status__tags">
-                  {container?.isSoc ? <Tag>SOC</Tag> : null}
-                  {container?.isOog ? <Tag color="orange">OOG</Tag> : null}
-                  {isReeferContainerType(container?.containerType) &&
-                  container?.reeferMode === "operating" ? (
-                    <Tag color="blue">Reefer</Tag>
-                  ) : null}
-                </span>
               </div>
-              <span className="si-cargo-type-badge">
-                {container?.containerType || "—"}
-              </span>
-              <Text type="secondary" className="si-cargo-ct-seal">
-                ×{container?.quantity ?? 1}
-              </Text>
-              <div className="si-cargo-ct-meta si-cargo-ct-meta--commod">
-                <Text className="si-cargo-ct-meta__value">{lineCount}</Text>
-                <span className="si-cargo-ct-meta__label">Commodities</span>
-              </div>
-              <div className="si-cargo-ct-meta si-cargo-ct-meta--pkgs">
-                <Text className="si-cargo-ct-meta__value">
-                  {sums.packages.toLocaleString()}
-                </Text>
-                <span className="si-cargo-ct-meta__label">Packages</span>
-              </div>
-              <div className="si-cargo-ct-meta si-cargo-ct-meta--end si-cargo-ct-meta--kg">
-                <Text className="si-cargo-ct-meta__value">
-                  {sums.weight.toLocaleString()}
-                </Text>
-                <span className="si-cargo-ct-meta__label">kg</span>
-              </div>
-              <div className="si-cargo-ct-meta si-cargo-ct-meta--end si-cargo-ct-meta--cbm">
-                <Text className="si-cargo-ct-meta__value">
-                  {sums.volume.toFixed(1)}
-                </Text>
-                <span className="si-cargo-ct-meta__label">CBM</span>
-              </div>
+
               <span className="si-cargo-ct-status">
                 {issues === 0 ? (
                   <span className="si-cargo-vchip si-cargo-vchip--ok">
@@ -194,10 +191,16 @@ export function BookingCargoListView({
                   </span>
                 ) : (
                   <span className="si-cargo-vchip si-cargo-vchip--warn">
-                    {issues} to fix
+                    <AppIcon
+                      icon={Icons.alertTriangle}
+                      size={12}
+                      tone="edit"
+                    />
+                    {issues} issue{issues === 1 ? "" : "s"}
                   </span>
                 )}
               </span>
+
               <span
                 className="si-cargo-ct-actions"
                 onClick={(e) => e.stopPropagation()}
@@ -294,6 +297,7 @@ function ContainerEditorPanel({
         <Text strong>Commodities</Text>
         <AppButton
           size="medium"
+          className="booking-cargo-commodity-toolbar__add"
           icon={<AppIcon icon={Icons.plus} size={16} />}
           onClick={() => append(createEmptyCommodity())}
         >

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-02 11:27)
+// Modified by Sekar Nagarajan (2026-09-02 16:43)
 import { Flex, Input, InputNumber, Select, Switch, Typography } from "antd";
 import {
   Controller,
@@ -66,24 +66,42 @@ export function CargoCommodityCard({
         <Text type="secondary" className="form-field-label">
           Commodity {mi + 1}
         </Text>
-        <ListActionsRow>
-          <ListActionButton
-            title="Copy Commodity"
-            icon={<AppIcon icon={Icons.copy} size={16} tone="view" />}
-            onClick={onCopy}
-          />
-          <ListActionButton
-            title={
-              canRemove
-                ? "Delete Commodity"
-                : "At Least One Commodity Is Required"
-            }
-            icon={<AppIcon icon={Icons.trash} size={16} tone="delete" />}
-            tone="delete"
-            disabled={!canRemove}
-            onClick={onRemove}
-          />
-        </ListActionsRow>
+        <div className="si-cargo-sitem__head-actions">
+          <div className="si-cargo-sitem__hazardous">
+            <label className="form-field-label">Hazardous</label>
+            <Controller
+              control={control}
+              name={`containers.${ci}.commodities.${mi}.isDangerousGoods`}
+              render={({ field: { value, onChange } }) => (
+                <Switch
+                  size="medium"
+                  className={FORM_YES_NO_SWITCH_CLASS}
+                  checked={value}
+                  onChange={onChange}
+                  {...yesNoSwitchInner}
+                />
+              )}
+            />
+          </div>
+          <ListActionsRow>
+            <ListActionButton
+              title="Copy Commodity"
+              icon={<AppIcon icon={Icons.copy} size={16} tone="view" />}
+              onClick={onCopy}
+            />
+            <ListActionButton
+              title={
+                canRemove
+                  ? "Delete Commodity"
+                  : "At Least One Commodity Is Required"
+              }
+              icon={<AppIcon icon={Icons.trash} size={16} tone="delete" />}
+              tone="delete"
+              disabled={!canRemove}
+              onClick={onRemove}
+            />
+          </ListActionsRow>
+        </div>
       </div>
 
       <div className="si-cargo-sitem__grid si-cargo-sitem__grid--booking">
@@ -98,6 +116,9 @@ export function CargoCommodityCard({
               <HsCodeAutoComplete
                 value={field.value}
                 commodityName={commodityName}
+                status={
+                  cargoFieldError(errors, path("hsCode")) ? "error" : undefined
+                }
                 onChange={field.onChange}
                 onClearName={() => {
                   setValue(`containers.${ci}.commodities.${mi}.commodity`, "", {
@@ -144,7 +165,7 @@ export function CargoCommodityCard({
                 {...field}
                 size="large"
                 options={packageTypes}
-                placeholder="Select Package Type"
+                placeholder="Select package type"
                 className="form-field-full-width"
                 showSearch
                 optionFilterProp="label"
@@ -238,28 +259,6 @@ export function CargoCommodityCard({
               {cargoFieldError(errors, path("volume"))}
             </Text>
           ) : null}
-        </div>
-
-        <div
-          className="form-field-cell booking-cargo-commodity-card__hazardous-check"
-          style={{ marginTop: 2 }}
-        >
-          <label className="form-field-label">Hazardous</label>
-          <Controller
-            control={control}
-            name={`containers.${ci}.commodities.${mi}.isDangerousGoods`}
-            render={({ field: { value, onChange } }) => (
-              <Flex align="center" gap={6}>
-                <Switch
-                  size="medium"
-                  className={FORM_YES_NO_SWITCH_CLASS}
-                  checked={value}
-                  onChange={onChange}
-                  {...yesNoSwitchInner}
-                />
-              </Flex>
-            )}
-          />
         </div>
       </div>
 

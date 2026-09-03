@@ -21,6 +21,7 @@ export function HsCodeAutoComplete({
   onChange,
   onSelectOption,
   onClearName,
+  status,
 }: {
   value?: string;
   /** Commodity / HS description shown with the code in one field. */
@@ -29,6 +30,7 @@ export function HsCodeAutoComplete({
   onSelectOption: (opt: BookingHsCodeOption) => void;
   /** Clears the paired name when the user types a new search. */
   onClearName?: () => void;
+  status?: "error" | "warning";
 }) {
   const [options, setOptions] = useState<BookingHsCodeOption[]>([]);
   const [fetching, setFetching] = useState(false);
@@ -82,8 +84,9 @@ export function HsCodeAutoComplete({
     >
       <Input
         size="large"
-        placeholder="Search commodity code / name"
+        placeholder="Search commodity code or name"
         allowClear
+        status={status}
       />
     </AutoComplete>
   );

@@ -7,9 +7,9 @@ import { useEffect, useState } from "react";
 import { AppIcon, Icons } from "../../components/icons";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import {
-  MODULE_TITLES,
-  WIZARD_STEP_TITLES,
-  formatModuleScreenTitle,
+    MODULE_TITLES,
+    WIZARD_STEP_TITLES,
+    formatModuleScreenTitle,
 } from "../../constants/module-titles";
 import { bookingApi } from "./api/booking.api";
 import { bookingKeys } from "./api/booking.keys";

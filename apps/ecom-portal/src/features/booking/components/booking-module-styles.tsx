@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-01 16:49)
+// Modified by Sekar Nagarajan (2026-09-02 18:21)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -1234,6 +1234,7 @@ export function BookingModuleStyles() {
       .booking-party-block.booking-party-card--shipper {
         background: ${primaryTint8};
         border-color: ${primaryTint14};
+       
       }
       .booking-party-block.booking-party-card--agreementParty {
         background: ${geekblueTint8};
@@ -1273,6 +1274,212 @@ export function BookingModuleStyles() {
       .booking-party-search-hint {
         display: block;
         margin-top: ${token.marginSM}px;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-02 18:01) — Customer Details mock layout */
+      .booking-customer-step {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginLG}px;
+      }
+      .booking-customer-step > .ant-card-body {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginLG}px;
+      }
+      .booking-customer-step__header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: ${token.marginMD}px;
+        flex-wrap: wrap;
+      }
+      .booking-customer-step__header-main {
+        display: flex;
+        align-items: flex-start;
+        gap: ${token.marginMD}px;
+        min-width: 0;
+        flex: 1 1 280px;
+      }
+      .booking-customer-step__header-icon {
+        width: ${token.controlHeightLG}px;
+        height: ${token.controlHeightLG}px;
+        border-radius: ${token.borderRadiusLG}px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        background: ${token.colorPrimaryBg};
+        color: ${token.colorPrimary};
+      }
+      .booking-customer-step__header-copy {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+        min-width: 0;
+      }
+      .booking-customer-step__title {
+        margin: 0 !important;
+        color: ${token.colorTextHeading};
+      }
+      .booking-customer-step__subtitle {
+        display: block;
+        line-height: ${token.lineHeight};
+      }
+      .booking-customer-step__count-badge {
+        display: inline-flex;
+        align-items: center;
+        flex-shrink: 0;
+        min-height: ${token.controlHeight}px;
+        padding: 0 ${token.paddingMD}px;
+        border: 1px solid ${token.colorBorder};
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorBgContainer};
+        color: ${token.colorTextSecondary};
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        white-space: nowrap;
+      }
+      .booking-customer-step__section {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXS}px;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-02 18:21) — Find Customer title + search one row */
+      .booking-customer-step__search-row {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginMD}px;
+        width: 100%;
+      }
+      .booking-customer-step__search-row .booking-customer-step__section-title {
+        flex-shrink: 0;
+        margin: 0;
+        white-space: nowrap;
+      }
+      .booking-customer-step__search-row .booking-party-search-input {
+        flex: 1 1 auto;
+        min-width: 0;
+        width: auto;
+      }
+      @media (max-width: 575px) {
+        .booking-customer-step__search-row {
+          flex-direction: column;
+          align-items: stretch;
+          gap: ${token.marginXS}px;
+        }
+      }
+      .booking-customer-step__section-head {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+        margin-bottom: ${token.marginXS}px;
+      }
+      .booking-customer-step__section-title {
+        display: block;
+        font-size: ${token.fontSizeLG}px;
+        color: ${token.colorTextHeading};
+      }
+      .booking-customer-step__section-hint {
+        display: block;
+        font-size: ${token.fontSizeSM}px;
+      }
+      .booking-customer-step__info {
+        display: flex;
+        align-items: flex-start;
+        gap: ${token.marginSM}px;
+        padding: ${token.paddingMD}px ${token.paddingLG}px;
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorInfoBg};
+        color: ${token.colorInfo};
+      }
+      .booking-customer-step__info-text {
+        color: ${token.colorTextSecondary};
+        line-height: ${token.lineHeight};
+      }
+      .booking-party-grid--surface {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: ${token.marginMD}px;
+        margin-top: ${token.marginSM}px;
+      }
+      .booking-party-grid--surface .booking-party-grid__col {
+        min-width: 0;
+      }
+      .booking-party-card--surface {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginSM}px;
+        width: 100%;
+        height: 100%;
+        padding: ${token.paddingMD}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorBgContainer};
+      }
+      .booking-party-card--surface.booking-party-card--empty {
+        border-style: dashed;
+      }
+      .booking-party-card--surface .booking-party-card__head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: ${token.marginSM}px;
+        min-width: 0;
+      }
+      .booking-party-card--surface .booking-party-card__role {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXS}px;
+        min-width: 0;
+      }
+      .booking-party-card--surface .booking-party-card__role-icon {
+        width: ${token.controlHeightSM}px;
+        height: ${token.controlHeightSM}px;
+        border-radius: ${token.borderRadiusSM}px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        background: ${token.colorPrimaryBg};
+        color: ${token.colorPrimary};
+      }
+      .booking-party-card--surface .booking-party-card__role-label {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .booking-party-card--surface .booking-party-card__actions {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        flex-shrink: 0;
+      }
+      .booking-party-card--surface .booking-party-card__account-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        margin-inline-end: 0;
+        background: ${token.colorPrimaryBg};
+        border-color: ${token.colorPrimaryBorder};
+        color: ${token.colorPrimary};
+      }
+      .booking-party-card--surface .booking-party-card__edit-btn.ant-btn {
+        padding-inline: ${token.paddingXS}px;
+        height: auto;
+        color: ${token.colorPrimary};
+      }
+      .booking-party-card--surface .booking-party-card__more-btn.ant-btn {
+        padding-inline: ${token.paddingXXS}px;
+      }
+      @media (max-width: 991px) {
+        .booking-party-grid--surface {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+      @media (max-width: 575px) {
+        .booking-party-grid--surface {
+          grid-template-columns: 1fr;
+        }
       }
       .booking-party-suggest-option {
         display: flex;
@@ -1323,6 +1530,9 @@ export function BookingModuleStyles() {
       }
       .booking-party-grid__col {
         display: flex;
+        border:1px solid ${token.colorBorder};
+        border-radius: ${token.borderRadiusLG}px;
+        overflow: hidden;
       }
       .booking-party-card.ant-card {
         display: flex;

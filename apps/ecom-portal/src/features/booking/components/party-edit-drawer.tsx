@@ -272,15 +272,6 @@ export function RoleAssignPanel({
             </Text>
           </div>
         </div>
-        <AppButton
-          size="small"
-          danger
-          icon={<AppIcon icon={Icons.x} size={14} tone="delete" />}
-          onClick={() => {
-            setSelected({});
-            onClear();
-          }}
-        ></AppButton>
       </div>
 
       <Text type="secondary" className="booking-party-role-panel__hint">
@@ -321,6 +312,7 @@ export function RoleAssignPanel({
 
       <div className="booking-party-role-actions">
         <AppButton
+          danger
           onClick={() => {
             setSelected({});
             onClear();

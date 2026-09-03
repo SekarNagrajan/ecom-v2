@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-02 14:39)
+// Modified by Sekar Nagarajan (2026-09-02 18:01)
 // Lucide icon registry — central map for ecom-portal navigation and actions
 import {
   AlertCircle,
@@ -50,6 +50,7 @@ import {
   Flag,
   FormInput,
   GripVertical,
+  Handshake,
   Headphones,
   History,
   Home,
@@ -267,5 +268,6 @@ export const Icons = {
   userPlus: UserPlus,
   users: Users,
   building: Building2,
+  handshake: Handshake,
   zap: Zap,
 } as const;

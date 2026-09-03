@@ -7,8 +7,8 @@ import { useState } from "react";
 import { AppIcon, Icons } from "../../components/icons";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import {
-  MODULE_TITLES,
-  WIZARD_STEP_TITLES,
+    MODULE_TITLES,
+    WIZARD_STEP_TITLES,
 } from "../../constants/module-titles";
 import { bookingApi } from "./api/booking.api";
 import { BookingModuleStyles } from "./components/booking-module-styles";

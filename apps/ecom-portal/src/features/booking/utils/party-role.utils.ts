@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-31 22:44)
+// Modified by Sekar Nagarajan (2026-09-02 18:13)
 import type { PartiesData } from "../types/booking.types";
 
 export type PartyRoleKey =
@@ -21,7 +21,7 @@ export interface PartyCardData {
 }
 
 /**
- * Primary parties always shown on the top row.
+ * Primary parties always shown in the Assigned Parties grid.
  * Booking Party (shipper) is view-only; Agreement Party is editable but not deletable.
  */
 export const DEFAULT_PARTY_ROLES: readonly PartyRoleKey[] = [

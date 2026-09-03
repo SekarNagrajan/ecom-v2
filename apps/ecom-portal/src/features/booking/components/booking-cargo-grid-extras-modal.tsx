@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-02 12:25)
+// Modified by Sekar Nagarajan (2026-09-02 16:43)
 import { AppButton, AppModal } from "@solverminds/shared-ui";
 import { Flex, Input, InputNumber, Select, Switch, Typography } from "antd";
 import {
@@ -100,7 +100,7 @@ export function BookingCargoGridExtrasModal({
             />
           </div>
           <div className="form-field-cell">
-            <label className="form-field-label">OL Forward</label>
+            <label className="form-field-label">Overlength Forward</label>
             <Controller
               control={control}
               name={`containers.${ci}.olForward`}
@@ -114,7 +114,7 @@ export function BookingCargoGridExtrasModal({
             />
           </div>
           <div className="form-field-cell">
-            <label className="form-field-label">OL Aft</label>
+            <label className="form-field-label">Overlength Aft</label>
             <Controller
               control={control}
               name={`containers.${ci}.olAft`}
@@ -128,7 +128,7 @@ export function BookingCargoGridExtrasModal({
             />
           </div>
           <div className="form-field-cell">
-            <label className="form-field-label">OW Left</label>
+            <label className="form-field-label">Overwidth Left</label>
             <Controller
               control={control}
               name={`containers.${ci}.owLeft`}
@@ -142,7 +142,7 @@ export function BookingCargoGridExtrasModal({
             />
           </div>
           <div className="form-field-cell">
-            <label className="form-field-label">OW Right</label>
+            <label className="form-field-label">Overwidth Right</label>
             <Controller
               control={control}
               name={`containers.${ci}.owRight`}
@@ -156,7 +156,7 @@ export function BookingCargoGridExtrasModal({
             />
           </div>
           <div className="form-field-cell">
-            <label className="form-field-label">OH</label>
+            <label className="form-field-label">Overheight</label>
             <Controller
               control={control}
               name={`containers.${ci}.oh`}

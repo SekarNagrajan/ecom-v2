@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-02 11:58)
+// Modified by Sekar Nagarajan (2026-09-02 16:43)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
@@ -90,8 +90,8 @@ export function BookingCargoLinesEditor({
 
   const containersWatch = watch("containers") ?? [];
 
-  const attentionCount = containersWatch.reduce(
-    (n, c) => n + (countContainerIssues(c) > 0 ? 1 : 0),
+  const issueCount = containersWatch.reduce(
+    (n, c) => n + countContainerIssues(c),
     0,
   );
   const lineCount = containersWatch.reduce(
@@ -189,28 +189,20 @@ export function BookingCargoLinesEditor({
               </div>
 
               <div className="si-cargo-toolbar__actions">
+                {/* Modified by Sekar Nagarajan (2026-09-02 17:36) */}
                 <Segmented
-                  className="si-cargo-view-segmented"
+                  className="booking-cargo-view-segmented"
+                  size="large"
                   value={viewMode}
                   onChange={(v) => setViewMode(v as CargoViewMode)}
                   options={[
                     {
                       value: "list",
-                      label: (
-                        <span className="si-cargo-view-opt">
-                          <AppIcon icon={Icons.layoutList} size={14} />
-                          List
-                        </span>
-                      ),
+                      icon: <AppIcon icon={Icons.layoutList} size={18} />,
                     },
                     {
                       value: "grid",
-                      label: (
-                        <span className="si-cargo-view-opt">
-                          <AppIcon icon={Icons.layoutGrid} size={14} />
-                          Grid
-                        </span>
-                      ),
+                      icon: <AppIcon icon={Icons.layoutGrid} size={18} />,
                     },
                   ]}
                 />
@@ -258,7 +250,7 @@ export function BookingCargoLinesEditor({
                     icon={<AppIcon icon={Icons.plus} size={13} />}
                     onClick={handleAddContainers}
                   >
-                    Add containers
+                    Add Container
                   </AppButton>
                 </div>
               </div>
@@ -283,10 +275,10 @@ export function BookingCargoLinesEditor({
                 </Text>
                 <Text type="secondary">packages</Text>
               </span>
-              {attentionCount > 0 ? (
+              {issueCount > 0 ? (
                 <span className="si-cargo-vchip si-cargo-vchip--warn">
                   <AppIcon icon={Icons.alertTriangle} size={12} tone="edit" />
-                  {attentionCount} need attention
+                  {issueCount} issue{issueCount === 1 ? "" : "s"} to resolve
                 </span>
               ) : (
                 <span className="si-cargo-vchip si-cargo-vchip--ok">

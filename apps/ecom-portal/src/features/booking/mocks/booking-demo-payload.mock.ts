@@ -4,20 +4,20 @@
  * Cargo: 10 containers × 5 commodities each (50 lines) for Preview / Cargo UI demos.
  */
 import type {
-  BookingPayload,
-  CargoData,
-  CommodityItem,
-  ContainerItem,
-  EnsData,
-  InsuranceData,
-  MasterDetailsData,
-  PartiesData,
-  SelectedRoute,
+    BookingPayload,
+    CargoData,
+    CommodityItem,
+    ContainerItem,
+    EnsData,
+    InsuranceData,
+    MasterDetailsData,
+    PartiesData,
+    SelectedRoute,
 } from "../types/booking.types";
 import {
-  createReferenceField,
-  REFERENCE_FIELD_CATALOG,
-  type ReferenceField,
+    createReferenceField,
+    REFERENCE_FIELD_CATALOG,
+    type ReferenceField,
 } from "../utils/reference-field.utils";
 
 const DEMO_ORIGIN = "AEJEA - Jebel Ali, UAE";
@@ -224,11 +224,9 @@ function buildDemoCommodity(
   containerIndex: number,
   commodityIndex: number,
 ): CommodityItem {
-  const pool = COMMODITY_POOL[(containerIndex + commodityIndex) % COMMODITY_POOL.length];
-  const isDg =
-    containerIndex === 3 && commodityIndex === 0
-      ? true
-      : false;
+  const pool =
+    COMMODITY_POOL[(containerIndex + commodityIndex) % COMMODITY_POOL.length];
+  const isDg = containerIndex === 3 && commodityIndex === 0 ? true : false;
 
   return {
     id: `demo-cgo-${pad2(containerIndex + 1)}-${pad2(commodityIndex + 1)}`,
@@ -239,8 +237,12 @@ function buildDemoCommodity(
     volume: 1.2 + commodityIndex * 0.35 + containerIndex * 0.05,
     packageType: pool.pkg,
     packageQuantity: 12 + commodityIndex * 4 + containerIndex,
-    description: `${pool.description} (C${containerIndex + 1}-L${commodityIndex + 1})`,
-    marksAndNumbers: `MK-${pad2(containerIndex + 1)}${pad2(commodityIndex + 1)}`,
+    description: `${pool.description} (C${containerIndex + 1}-L${
+      commodityIndex + 1
+    })`,
+    marksAndNumbers: `MK-${pad2(containerIndex + 1)}${pad2(
+      commodityIndex + 1,
+    )}`,
     isDangerousGoods: isDg,
     unNumber: isDg ? "1263" : "",
     dgClass: isDg ? "3" : "",
@@ -363,16 +365,17 @@ function buildDemoDocuments() {
 }
 
 function buildDemoReferenceFields(): ReferenceField[] {
-  const values: Partial<Record<(typeof REFERENCE_FIELD_CATALOG)[number]["key"], string>> =
-    {
-      rateRefNo: "RRF-2026-00142",
-      agencyRefNo: "AGY-SIN-88421",
-      oceanFreightTerms: "Prepaid",
-      natCode: "NAT-7781",
-      emptyPickupLocation: "AEJEA Terminal 1 Empty Yard",
-      finalReceiptPlace: "Jebel Ali Container Yard",
-      haulierCode: "HAU-DXB-01",
-    };
+  const values: Partial<
+    Record<(typeof REFERENCE_FIELD_CATALOG)[number]["key"], string>
+  > = {
+    rateRefNo: "RRF-2026-00142",
+    agencyRefNo: "AGY-SIN-88421",
+    oceanFreightTerms: "Prepaid",
+    natCode: "NAT-7781",
+    emptyPickupLocation: "AEJEA Terminal 1 Empty Yard",
+    finalReceiptPlace: "Jebel Ali Container Yard",
+    haulierCode: "HAU-DXB-01",
+  };
 
   return REFERENCE_FIELD_CATALOG.map((item) => {
     const field = createReferenceField(item, values[item.key]);

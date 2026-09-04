@@ -4,12 +4,12 @@ import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { Card, Result, Spin, Steps, Typography, theme } from "antd";
 import { useEffect, useState } from "react";
-import { AppIcon, Icons } from "../../components/icons";
+import { AppIcon, Icons, NavBookingIcon } from "../../components/icons";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import {
-    MODULE_TITLES,
-    WIZARD_STEP_TITLES,
-    formatModuleScreenTitle,
+  MODULE_TITLES,
+  WIZARD_STEP_TITLES,
+  formatModuleScreenTitle,
 } from "../../constants/module-titles";
 import { bookingApi } from "./api/booking.api";
 import { bookingKeys } from "./api/booking.keys";
@@ -185,7 +185,7 @@ export function BookingAmendRoute() {
       <BookingModuleStyles />
       <div className="wizard-page-header">
         <ModuleScreenHeader
-          icon={Icons.bookOpen}
+          icon={NavBookingIcon}
           title={formatModuleScreenTitle(MODULE_TITLES.amendBooking, bookingId)}
           marginBottom={0}
           extra={

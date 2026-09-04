@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-01 16:42)
+// Modified by Sekar Nagarajan (2026-09-03 18:41)
 import { theme } from "antd";
 
 import { tokenMix } from "../../features/theme/utils/token-mix";
@@ -9,9 +9,6 @@ export function GlobalThemeStyles() {
 
   const primaryTint8 = tokenMix(token.colorPrimary, 8);
   const primaryTint12 = tokenMix(token.colorPrimary, 12);
-  const lightSolid18 = tokenMix(token.colorTextLightSolid, 18);
-  const lightSolid15 = tokenMix(token.colorTextLightSolid, 15);
-  const lightSolid85 = tokenMix(token.colorTextLightSolid, 85);
   // Mild status-tag surfaces derived from semantic text colors (not mid-tone *Bg)
   const successTint8 = tokenMix(token.colorSuccess, 8);
   const successTint28 = tokenMix(token.colorSuccess, 28);
@@ -273,6 +270,23 @@ export function GlobalThemeStyles() {
         column-gap: ${token.marginLG}px;
         row-gap: ${token.marginMD}px;
       }
+      /* Modified by Sekar Nagarajan (2026-09-03 14:52) — ENS switch in card header; options row without switch column */
+      .form-ens-card-extra {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginSM}px;
+        flex-shrink: 0;
+      }
+      .form-ens-card-extra-label {
+        margin-bottom: 0;
+        white-space: nowrap;
+      }
+      .form-ens-card--switch-only > .ant-card-body {
+        display: none;
+      }
+      .form-ens-top-row--options {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
       .form-ens-top-row .form-field-cell {
         min-width: 0;
         padding: ${token.paddingXS}px 0;
@@ -344,12 +358,14 @@ export function GlobalThemeStyles() {
       }
       @media (max-width: 1199px) {
         .form-ens-top-row,
+        .form-ens-top-row--options,
         .form-ens-party-grid {
           grid-template-columns: repeat(2, minmax(0, 1fr));
         }
       }
       @media (max-width: 767px) {
         .form-ens-top-row,
+        .form-ens-top-row--options,
         .form-ens-party-grid {
           grid-template-columns: minmax(0, 1fr);
         }
@@ -453,63 +469,25 @@ export function GlobalThemeStyles() {
       }
 
       .booking-template-modal__modal-body {
-        padding: 0 !important;
+        padding: ${token.paddingMD}px ${token.paddingLG}px !important;
       }
-      .booking-template-modal__header {
+      .booking-template-modal__title-block {
         display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: ${token.paddingMD}px ${token.paddingLG}px;
-        background: ${token.colorPrimary};
-        color: ${token.colorTextLightSolid};
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+        min-width: 0;
+        padding-inline-end: ${token.paddingMD}px;
       }
-      .booking-template-modal__header-main {
-        display: flex;
-        align-items: center;
-        gap: ${token.marginSM}px;
-      }
-      .booking-template-modal__header-icon {
-        width: ${token.controlHeightLG}px;
-        height: ${token.controlHeightLG}px;
-        border-radius: ${token.borderRadiusLG}px;
-        background: ${lightSolid18};
-        color: ${token.colorTextLightSolid};
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-      }
-      .booking-template-modal__header-title {
-        color: ${token.colorTextLightSolid};
-        font-size: ${token.fontSizeLG}px;
-        font-weight: ${token.fontWeightStrong};
+      .booking-template-modal__title-sub {
         display: block;
-        line-height: ${token.lineHeight};
-      }
-      .booking-template-modal__header-subtitle {
-        color: ${lightSolid85};
         font-size: ${token.fontSizeSM}px;
-        display: block;
+        font-weight: normal;
         line-height: ${token.lineHeight};
-      }
-      .booking-template-modal__close {
-        border: none;
-        background: ${lightSolid15};
-        color: ${token.colorTextLightSolid};
-        width: ${token.controlHeight}px;
-        height: ${token.controlHeight}px;
-        border-radius: ${token.borderRadiusLG}px;
-        cursor: pointer;
-        font-size: ${token.fontSizeHeading5}px;
-        line-height: 1;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
       }
       .booking-template-modal__body {
-        padding: ${token.paddingMD + 4}px ${token.paddingLG}px ${
-      token.paddingLG
-    }px;
+        padding: 0;
+        max-height: min(70vh, 720px);
+        overflow: auto;
       }
       .booking-template-modal__table {
         border: 1px solid ${token.colorBorderSecondary};
@@ -1842,11 +1820,8 @@ export function GlobalThemeStyles() {
           flex-wrap: wrap;
           gap: ${token.marginXS}px;
         }
-        .booking-template-modal__header {
-          padding: ${token.paddingSM}px ${token.paddingMD}px;
-        }
         .booking-template-modal__body {
-          padding: ${token.paddingMD}px;
+          max-height: min(65vh, 640px);
         }
         .feature-toolbar {
           flex-direction: column;

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-31 18:52)
+// Modified by Sekar Nagarajan (2026-09-05 00:25)
 import { delay, http, HttpResponse } from "msw";
 
 import {
@@ -6,6 +6,7 @@ import {
   type BookingLookupKind,
 } from "../features/booking/mocks/booking-lookups.mock";
 import { searchBookingCustomers } from "../features/booking/mocks/booking-customers.mock";
+import { buildClientDemoBookingPayload } from "../features/booking/mocks/booking-demo-payload.mock";
 import {
   searchHsCodes,
   searchUnNumbers,
@@ -21,7 +22,6 @@ import {
   createEmptyCommodity,
   createEmptyContainer,
 } from "../features/booking/types/booking.types";
-import { MOCK_DEFAULT_REFERENCE_FIELDS } from "../features/booking/utils/reference-field.utils";
 
 /** 20 list rows — Cancelled / Completed / Draft / Submitted / In Transit (4 each). */
 const mockBookings: BookingListDTO[] = [
@@ -36,8 +36,8 @@ const mockBookings: BookingListDTO[] = [
     delivery: "SGSIN - SINGAPORE",
     createdDate: "28-Aug-2026 09:10",
     confirmedDate: "",
-    dgStatus: "N",
-    teusCount: 2,
+    dgStatus: "Y",
+    teusCount: 10,
     submittedDate: "",
   },
   {
@@ -384,54 +384,17 @@ let mockTemplates = [
       documents: [],
     } satisfies BookingPayload,
   },
+  {
+    id: "tmpl-3",
+    templateName: "Client Demo — Full Booking (10×5)",
+    origin: "AEJEA - Jebel Ali, UAE",
+    delivery: "SGSIN - Singapore, Singapore",
+    payload: buildClientDemoBookingPayload(),
+  },
 ];
 
 const bookingDetailsById: Record<string, BookingPayload> = {
-  "bkg-1": {
-    masterDetails: {
-      origin: "AEJEA-JEBEL ALI, UAE",
-      delivery: "SGSIN-SINGAPORE",
-      cargoReadyDate: "2026-09-01",
-      haulageOriginType: "Merchant",
-      haulageDestinationType: "Merchant",
-      carriageContract: "CY/CY",
-      preferredAgency: "AEJEA",
-      selectedRoute: null,
-    },
-    parties: {
-      shipperName: "Electronics Trading LLC",
-      shipperReference: "SHP-001",
-      shipperAddress: "123 Harbor St",
-      shipperCity: "Dubai",
-      shipperCountry: "AE",
-      consigneeName: "Tech Hub Pte Ltd",
-      consigneeAddress: "88 Science Park",
-      consigneeCity: "Singapore",
-      consigneeCountry: "SG",
-      notifyPartyName: "Notify One",
-      notifyParty2Name: "Notify Two",
-      agreementParty: "Logistics Partner",
-      siSubmittingParty: "Logistics Partner",
-    },
-    cargo: buildSampleCargo("GEN-CGO", "20DV", 1, 5000),
-    ens: null,
-    insurance: {
-      isInsuranceRequired: true,
-      currency: "USD",
-      cargoValue: 50000,
-      termsAccepted: true,
-    },
-    documents: [
-      {
-        id: "doc-1",
-        type: "PACKING_LIST",
-        fileName: "packing-list.pdf",
-        uploadedAt: "2026-08-10T08:32:00.000Z",
-      },
-    ],
-    // Existing booking already has references — amend shows them for edit
-    referenceFields: structuredClone(MOCK_DEFAULT_REFERENCE_FIELDS),
-  },
+  "bkg-1": buildClientDemoBookingPayload(),
 };
 
 export const bookingHandlers = [
@@ -538,6 +501,42 @@ export const bookingHandlers = [
     });
   }),
 
+  // Static mutations before `/api/booking/:id*` so they never collide.
+  http.post("*/api/booking/draft", async ({ request }) => {
+    await delay(500);
+    const body = (await request.json()) as BookingPayload;
+    const draftId =
+      body.draftId ||
+      `draft-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+    return HttpResponse.json({ data: { draftId } });
+  }),
+
+  http.post("*/api/booking/submit", async () => {
+    await delay(1500);
+    return HttpResponse.json({
+      data: {
+        bookingReference: `BKG-${new Date().getFullYear()}-${Math.floor(
+          10000 + Math.random() * 90000,
+        )}`,
+        status: "CONFIRMED",
+        submittedAt: new Date().toISOString(),
+      },
+    });
+  }),
+
+  http.put("*/api/booking/amend", async () => {
+    await delay(1500);
+    return HttpResponse.json({
+      data: {
+        bookingReference: `BKG-AMD-${new Date().getFullYear()}-${Math.floor(
+          10000 + Math.random() * 90000,
+        )}`,
+        status: "CONFIRMED",
+        submittedAt: new Date().toISOString(),
+      },
+    });
+  }),
+
   http.get("/api/booking/list", async () => {
     await delay(500);
     return HttpResponse.json({ data: mockBookings });
@@ -560,7 +559,13 @@ export const bookingHandlers = [
   http.get("/api/booking/:id", async ({ params }) => {
     await delay(400);
     const id = String(params.id);
-    if (id === "templates" || id === "list") {
+    if (
+      id === "templates" ||
+      id === "list" ||
+      id === "submit" ||
+      id === "draft" ||
+      id === "amend"
+    ) {
       return new HttpResponse(null, { status: 404 });
     }
     // Modified by Sekar Nagarajan (2026-09-01 12:45) — resolve by list id or bookingNo
@@ -637,41 +642,6 @@ export const bookingHandlers = [
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition": `attachment; filename="booking-${id}.pdf"`,
-      },
-    });
-  }),
-
-  http.post("/api/booking/draft", async ({ request }) => {
-    await delay(500);
-    const body = (await request.json()) as BookingPayload;
-    const draftId =
-      body.draftId ||
-      `draft-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-    return HttpResponse.json({ data: { draftId } });
-  }),
-
-  http.post("/api/booking/submit", async () => {
-    await delay(1500);
-    return HttpResponse.json({
-      data: {
-        bookingReference: `BKG-${new Date().getFullYear()}-${Math.floor(
-          10000 + Math.random() * 90000,
-        )}`,
-        status: "CONFIRMED",
-        submittedAt: new Date().toISOString(),
-      },
-    });
-  }),
-
-  http.put("/api/booking/amend", async () => {
-    await delay(1500);
-    return HttpResponse.json({
-      data: {
-        bookingReference: `BKG-AMD-${new Date().getFullYear()}-${Math.floor(
-          10000 + Math.random() * 90000,
-        )}`,
-        status: "CONFIRMED",
-        submittedAt: new Date().toISOString(),
       },
     });
   }),

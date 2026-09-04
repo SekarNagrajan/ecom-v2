@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-01 16:40)
+// Modified by Sekar Nagarajan (2026-09-03 18:51)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -603,18 +603,18 @@ export function SiModuleStyles() {
         grid-template-columns: 1fr;
         gap: ${token.marginSM}px;
       }
-      .si-cargo-grid,
-      .si-charges-grid {
+      .si-cargo-grid.responsive-table-wrap,
+      .si-charges-grid.responsive-table-wrap {
         height: 280px;
         min-height: 220px;
         width: 100%;
         display: flex;
         flex-direction: column;
       }
-      .si-cargo-grid .ag-theme-alpine,
-      .si-cargo-grid > div,
-      .si-charges-grid .ag-theme-alpine,
-      .si-charges-grid > div {
+      .si-cargo-grid.responsive-table-wrap .ag-theme-alpine,
+      .si-cargo-grid.responsive-table-wrap > div,
+      .si-charges-grid.responsive-table-wrap .ag-theme-alpine,
+      .si-charges-grid.responsive-table-wrap > div {
         flex: 1;
         min-height: 0;
         height: 100%;

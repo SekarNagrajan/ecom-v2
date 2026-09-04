@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-02 17:36)
+// Modified by Sekar Nagarajan (2026-09-03 18:36)
 import { theme } from "antd";
 
 /** Booking-only extensions on top of SI CargoLinesEditorStyles. */
@@ -323,6 +323,12 @@ export function BookingCargoEditorStyles() {
       .si-cargo-grid__th-actions {
         width: 112px;
         min-width: 112px;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-03 18:36) — booking grid sticky header above cell switches */
+      .si-cargo-grid tbody td .si-cargo-grid__switch-cell,
+      .si-cargo-grid tbody td .form-yes-no-switch-wrap {
+        position: relative;
+        z-index: 0;
       }
       .booking-cargo-grid-extras-modal-title {
         margin: 0 !important;

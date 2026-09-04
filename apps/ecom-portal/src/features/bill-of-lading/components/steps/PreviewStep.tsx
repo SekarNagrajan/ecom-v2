@@ -1,43 +1,43 @@
-// Modified by Sekar Nagarajan (2026-09-01 16:40)
+// Modified by Sekar Nagarajan (2026-09-05 01:05)
 /**
- * Preview — summary of all wizard step inputs with Edit → jump to step,
+ * Preview — airy review of wizard inputs with Edit → jump to step,
  * plus BL-specific editable preview fields (AES / UAE / remarks).
  */
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "@solverminds/shared-ui/hooks";
-import {
-  Col,
-  Descriptions,
-  Input,
-  Radio,
-  Row,
-  Select,
-  Table,
-  Tag,
-  Typography,
-} from "antd";
+import { Input, Radio, Select, Tag, Typography } from "antd";
 import { Controller, useForm } from "react-hook-form";
 
 import { AppIcon, Icons } from "../../../../components/icons";
 import { WIZARD_STEP_TITLES } from "../../../../constants/module-titles";
-import { RESPONSIVE_COL } from "../../../../constants/responsive-grid";
-import { SI_CARGO_LINE_COLUMNS } from "../../../shipping-instruction/utils/si-cargo-line-columns";
+import { BookingModuleStyles } from "../../../booking/components/booking-module-styles";
+import { SiPreviewCargoReview } from "../../../shipping-instruction/components/SiPreviewCargoReview";
+import type { SiPartyRoleKey } from "../../../shipping-instruction/utils/si-party.utils";
 import {
   DEFAULT_BL_WIZARD_CONFIG,
   type BLWizardStepId,
 } from "../../config/bl-wizard-config";
 import { useBLWizardConfig } from "../../hooks/use-bl-wizard-config";
-import type { BLPreviewStepValues } from "../../types/bl.types";
+import type { BLParty, BLPreviewStepValues } from "../../types/bl.types";
 import { blPreviewStepSchema } from "../../types/bl.types";
 import { BlWizardFooter } from "../bl-wizard-footer";
 import {
   BlPreviewEmpty,
-  BlPreviewPartyBlock,
+  BlPreviewEmptyPartyCard,
+  BlPreviewFieldGrid,
+  BlPreviewPartyCard,
   BlPreviewSection,
 } from "../preview/bl-preview-section";
 import type { BLWizardStepProps } from "./MasterDetailsStep";
 
-const { Title, Text } = Typography;
+const { Text, Title } = Typography;
+
+const REVIEW_PARTY_ROLES: SiPartyRoleKey[] = [
+  "shipper",
+  "consignee",
+  "notify",
+  "forwarder",
+];
 
 function dash(value?: string | number | null): string {
   if (value === undefined || value === null || value === "") return "—";
@@ -52,6 +52,32 @@ function getPreviewFieldsGridClass(
   if (enableAesNumber) count += 2;
   if (enableUaeBlType) count += 2;
   return `bl-master-detail-grid bl-preview-fields-grid bl-preview-fields-grid--${count}`;
+}
+
+function partyForRole(
+  parties: BLWizardStepProps["data"]["parties"],
+  role: SiPartyRoleKey,
+): BLParty | undefined {
+  switch (role) {
+    case "shipper":
+      return parties.shipper;
+    case "consignee":
+      return parties.consignee;
+    case "notify":
+      return parties.notify;
+    case "notify2":
+      return parties.notify2;
+    case "notify3":
+      return parties.notify3;
+    case "forwarder":
+      return parties.forwarder;
+    case "warehouse":
+      return parties.warehouse;
+    case "agreementParty":
+      return parties.agreementParty;
+    default:
+      return undefined;
+  }
 }
 
 export function PreviewStep({
@@ -115,185 +141,134 @@ export function PreviewStep({
     () => toast.error("Complete preview fields before submit"),
   );
 
+  const masterRows: { label: string; value: string }[] = [
+    { label: "B/L number", value: dash(data.blNo) },
+    { label: "Booking number", value: dash(data.bookingNo) },
+    {
+      label: "SI number",
+      value: dash(data.siNo) === "—" ? "N/A" : dash(data.siNo),
+    },
+    { label: "Agency ref", value: dash(data.agencyRefNo) },
+    { label: "B/L type", value: dash(data.blType) },
+    { label: "Release type", value: releaseLabel },
+    { label: "Freight option", value: dash(data.freightOption) },
+  ];
+  if (config.enableNvocc) {
+    masterRows.push({ label: "NVOCC", value: data.nvocc ? "Yes" : "No" });
+  }
+  if (config.enableT2LFiling) {
+    masterRows.push({
+      label: "T2L filing",
+      value: data.t2lFiling ? "Yes" : "No",
+    });
+  }
+  if (data.origin || data.loadPort || data.dischargePort || data.delivery) {
+    masterRows.push(
+      { label: "Origin", value: dash(data.origin) },
+      { label: "Load port", value: dash(data.loadPort) },
+      { label: "Discharge port", value: dash(data.dischargePort) },
+      { label: "Delivery", value: dash(data.delivery) },
+    );
+  }
+
+  const reviewRoleSet = new Set(REVIEW_PARTY_ROLES);
+  const extraPartyRoles = (
+    ["agreementParty", "notify2", "notify3", "warehouse"] as SiPartyRoleKey[]
+  ).filter((role) => {
+    const party = partyForRole(data.parties, role);
+    return party?.name && !reviewRoleSet.has(role);
+  });
+
+  const summary = [
+    data.blNo?.trim() || data.bookingNo?.trim() || "Draft B/L",
+    data.loadPort && data.dischargePort
+      ? `${data.loadPort} → ${data.dischargePort}`
+      : null,
+    data.routing?.vesselVoyage,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+
   return (
     <div className="form-step-layout">
-      <div className="custom-scroll form-step-scroll bl-preview-scroll">
+      <BookingModuleStyles />
+      <div className="custom-scroll form-step-scroll booking-preview-scroll booking-review bl-preview-scroll">
         <BlPreviewSection
+          variant="airy"
           title={WIZARD_STEP_TITLES.masterDetails}
           onEdit={() => go("master")}
         >
-          <Descriptions
-            size="small"
-            column={{ xs: 1, sm: 2, md: 3 }}
-            className="bl-preview-descriptions"
-          >
-            <Descriptions.Item label="B/L Number">
-              {dash(data.blNo)}
-            </Descriptions.Item>
-            <Descriptions.Item label="Booking Number">
-              {dash(data.bookingNo)}
-            </Descriptions.Item>
-            <Descriptions.Item label="SI Number">
-              {dash(data.siNo) === "—" ? "N/A" : dash(data.siNo)}
-            </Descriptions.Item>
-            <Descriptions.Item label="Agency Ref">
-              {dash(data.agencyRefNo)}
-            </Descriptions.Item>
-            <Descriptions.Item label="B/L Type">
-              {dash(data.blType)}
-            </Descriptions.Item>
-            <Descriptions.Item label="Release Type">
-              {releaseLabel}
-            </Descriptions.Item>
-            <Descriptions.Item label="Freight Option">
-              {dash(data.freightOption)}
-            </Descriptions.Item>
-            {config.enableNvocc ? (
-              <Descriptions.Item label="NVOCC">
-                {data.nvocc ? "Yes" : "No"}
-              </Descriptions.Item>
-            ) : null}
-            {config.enableT2LFiling ? (
-              <Descriptions.Item label="T2L Filing">
-                {data.t2lFiling ? "Yes" : "No"}
-              </Descriptions.Item>
-            ) : null}
-            {data.origin ||
-            data.loadPort ||
-            data.dischargePort ||
-            data.delivery ? (
-              <>
-                <Descriptions.Item label="Origin">
-                  {dash(data.origin)}
-                </Descriptions.Item>
-                <Descriptions.Item label="Load Port">
-                  {dash(data.loadPort)}
-                </Descriptions.Item>
-                <Descriptions.Item label="Discharge Port">
-                  {dash(data.dischargePort)}
-                </Descriptions.Item>
-                <Descriptions.Item label="Delivery">
-                  {dash(data.delivery)}
-                </Descriptions.Item>
-              </>
-            ) : null}
-          </Descriptions>
+          <BlPreviewFieldGrid items={masterRows} />
         </BlPreviewSection>
 
         <BlPreviewSection
+          variant="airy"
           title={WIZARD_STEP_TITLES.parties}
           onEdit={() => go("parties")}
         >
-          {/* Modified by Sekar Nagarajan (2026-08-31 23:43) — role-tinted preview party blocks */}
-          <Row gutter={[24, 24]}>
-            <Col {...RESPONSIVE_COL.third}>
-              <BlPreviewPartyBlock
-                role="Booking Party"
-                roleKey="shipper"
-                name={data.parties.shipper.name}
-                address={data.parties.shipper.address}
-                city={data.parties.shipper.city}
-                country={data.parties.shipper.country}
-              />
-            </Col>
-            {data.parties.agreementParty?.name ? (
-              <Col {...RESPONSIVE_COL.third}>
-                <BlPreviewPartyBlock
-                  role="Agreement Party"
-                  roleKey="agreementParty"
-                  name={data.parties.agreementParty.name}
-                  address={data.parties.agreementParty.address}
-                  city={data.parties.agreementParty.city}
-                  country={data.parties.agreementParty.country}
-                />
-              </Col>
-            ) : null}
-            {data.parties.consignee?.name ? (
-              <Col {...RESPONSIVE_COL.third}>
-                <BlPreviewPartyBlock
-                  role="Consignee"
-                  roleKey="consignee"
-                  name={data.parties.consignee.name}
-                  address={data.parties.consignee.address}
-                  city={data.parties.consignee.city}
-                  country={data.parties.consignee.country}
-                  extra={
-                    data.parties.consignee?.toOrder ? (
-                      <Text type="warning"> (To Order)</Text>
-                    ) : null
-                  }
-                />
-              </Col>
-            ) : null}
-            {data.parties.notify?.name ? (
-              <Col {...RESPONSIVE_COL.third}>
-                <BlPreviewPartyBlock
-                  role="Notify Party"
-                  roleKey="notify"
-                  name={data.parties.notify.name}
-                  address={data.parties.notify.address}
-                  city={data.parties.notify.city}
-                  country={data.parties.notify.country}
-                />
-              </Col>
-            ) : null}
-            {data.parties.forwarder?.name ? (
-              <Col {...RESPONSIVE_COL.third}>
-                <BlPreviewPartyBlock
-                  role="Forwarder"
-                  roleKey="forwarder"
-                  name={data.parties.forwarder.name}
-                  address={data.parties.forwarder.address}
-                  city={data.parties.forwarder.city}
-                  country={data.parties.forwarder.country}
-                />
-              </Col>
-            ) : null}
-            {data.parties.warehouse?.name ? (
-              <Col {...RESPONSIVE_COL.third}>
-                <BlPreviewPartyBlock
-                  role="Warehouse"
-                  roleKey="warehouse"
-                  name={data.parties.warehouse.name}
-                  address={data.parties.warehouse.address}
-                  city={data.parties.warehouse.city}
-                  country={data.parties.warehouse.country}
-                />
-              </Col>
-            ) : null}
-          </Row>
+          <div className="booking-review__party-grid">
+            {REVIEW_PARTY_ROLES.map((role) => {
+              const party = partyForRole(data.parties, role);
+              return (
+                <div key={role} className="booking-party-grid__col">
+                  {party?.name ? (
+                    <BlPreviewPartyCard
+                      roleKey={role}
+                      party={party}
+                      extra={
+                        role === "consignee" &&
+                        data.parties.consignee?.toOrder ? (
+                          <Text type="warning"> (To Order)</Text>
+                        ) : null
+                      }
+                    />
+                  ) : (
+                    <BlPreviewEmptyPartyCard roleKey={role} />
+                  )}
+                </div>
+              );
+            })}
+            {extraPartyRoles.map((role) => {
+              const party = partyForRole(data.parties, role);
+              if (!party?.name) return null;
+              return (
+                <div key={role} className="booking-party-grid__col">
+                  <BlPreviewPartyCard roleKey={role} party={party} />
+                </div>
+              );
+            })}
+          </div>
         </BlPreviewSection>
 
         {config.showRouting ? (
           <BlPreviewSection
+            variant="airy"
             title={WIZARD_STEP_TITLES.routing}
             onEdit={() => go("routing")}
           >
             {data.routing ? (
-              <Descriptions
-                size="small"
-                column={{ xs: 1, sm: 2, md: 3 }}
-                className="bl-preview-descriptions"
-              >
-                <Descriptions.Item label="Vessel / Voyage">
-                  {dash(data.routing.vesselVoyage)}
-                </Descriptions.Item>
-                <Descriptions.Item label="Origin">
-                  {dash(data.routing.originPrint)}
-                </Descriptions.Item>
-                <Descriptions.Item label="POL">
-                  {dash(data.routing.polPrint)}
-                </Descriptions.Item>
-                <Descriptions.Item label="POD">
-                  {dash(data.routing.podPrint)}
-                </Descriptions.Item>
-                <Descriptions.Item label="Delivery">
-                  {dash(data.routing.deliveryPrint)}
-                </Descriptions.Item>
-                <Descriptions.Item label="Schedule Legs">
-                  {data.routing.scheduleLegs?.length ?? 0}
-                </Descriptions.Item>
-              </Descriptions>
+              <BlPreviewFieldGrid
+                items={[
+                  {
+                    label: "Vessel / voyage",
+                    value: dash(data.routing.vesselVoyage),
+                  },
+                  {
+                    label: "Origin",
+                    value: dash(data.routing.originPrint),
+                  },
+                  { label: "POL", value: dash(data.routing.polPrint) },
+                  { label: "POD", value: dash(data.routing.podPrint) },
+                  {
+                    label: "Delivery",
+                    value: dash(data.routing.deliveryPrint),
+                  },
+                  {
+                    label: "Schedule legs",
+                    value: String(data.routing.scheduleLegs?.length ?? 0),
+                  },
+                ]}
+              />
             ) : (
               <BlPreviewEmpty label="No routing details" />
             )}
@@ -301,73 +276,44 @@ export function PreviewStep({
         ) : null}
 
         <BlPreviewSection
+          variant="airy"
           title={WIZARD_STEP_TITLES.cargoDetails}
           onEdit={() => go("cargo")}
         >
-          {data.containers.length === 0 ? (
-            <BlPreviewEmpty label="No containers" />
-          ) : (
-            data.containers.map((container, index) => (
-              <div key={container.id} className="bl-container-block">
-                <div className="bl-container-block__header">
-                  <Text strong className="bl-container-block__title">
-                    Container {index + 1}: {container.containerNo || "—"} (
-                    {container.eqpSize || "—"})
-                  </Text>
-                  <div>
-                    <Text type="success">
-                      Carrier Seal:{" "}
-                      <Text strong>{container.carrierSeal || "N/A"}</Text>
-                    </Text>
-                    {" | "}
-                    <Text type="danger">
-                      Shipper Seal:{" "}
-                      <Text strong>{container.shipperSeal || "N/A"}</Text>
-                    </Text>
-                  </div>
-                </div>
-                <div className="responsive-table-wrap custom-scroll">
-                  <Table
-                    size="small"
-                    dataSource={container.cargoLines}
-                    rowKey="id"
-                    pagination={false}
-                    bordered
-                    columns={SI_CARGO_LINE_COLUMNS}
-                  />
-                </div>
-              </div>
-            ))
-          )}
+          <SiPreviewCargoReview containers={data.containers} />
         </BlPreviewSection>
 
         {config.showInsurance ? (
           <BlPreviewSection
+            variant="airy"
             title={WIZARD_STEP_TITLES.insurance}
             onEdit={() => go("insurance")}
           >
             {data.insurance ? (
-              <Descriptions
-                size="small"
-                column={{ xs: 1, sm: 2, md: 3 }}
-                className="bl-preview-descriptions"
-              >
-                <Descriptions.Item label="Required">
-                  {data.insurance.isInsuranceRequired ? "Yes" : "No"}
-                </Descriptions.Item>
-                <Descriptions.Item label="Opt Out">
-                  {data.insurance.optOut ? "Yes" : "No"}
-                </Descriptions.Item>
-                <Descriptions.Item label="Currency">
-                  {dash(data.insurance.currency)}
-                </Descriptions.Item>
-                <Descriptions.Item label="Cargo Value">
-                  {dash(data.insurance.cargoValue)}
-                </Descriptions.Item>
-                <Descriptions.Item label="Policy No">
-                  {dash(data.insurance.policyNo)}
-                </Descriptions.Item>
-              </Descriptions>
+              <BlPreviewFieldGrid
+                items={[
+                  {
+                    label: "Required",
+                    value: data.insurance.isInsuranceRequired ? "Yes" : "No",
+                  },
+                  {
+                    label: "Opt out",
+                    value: data.insurance.optOut ? "Yes" : "No",
+                  },
+                  {
+                    label: "Currency",
+                    value: dash(data.insurance.currency),
+                  },
+                  {
+                    label: "Cargo value",
+                    value: dash(data.insurance.cargoValue),
+                  },
+                  {
+                    label: "Policy no",
+                    value: dash(data.insurance.policyNo),
+                  },
+                ]}
+              />
             ) : (
               <BlPreviewEmpty />
             )}
@@ -376,6 +322,7 @@ export function PreviewStep({
 
         {config.showCargoProtect ? (
           <BlPreviewSection
+            variant="airy"
             title={WIZARD_STEP_TITLES.cargoProtect}
             onEdit={() => go("cargoProtect")}
           >
@@ -396,6 +343,7 @@ export function PreviewStep({
 
         {config.showChargesInWizard ? (
           <BlPreviewSection
+            variant="airy"
             title={WIZARD_STEP_TITLES.charges}
             onEdit={() => go("charges")}
           >
@@ -416,42 +364,45 @@ export function PreviewStep({
 
         {config.showEns ? (
           <BlPreviewSection
+            variant="airy"
             title={WIZARD_STEP_TITLES.ensDetails}
             onEdit={() => go("ens")}
           >
             {data.ens?.euCustomsZone ? (
-              <Descriptions
-                size="small"
-                column={{ xs: 1, sm: 2, md: 3 }}
-                className="bl-preview-descriptions"
-              >
-                <Descriptions.Item label="EU Customs Zone">
-                  Yes
-                </Descriptions.Item>
-                <Descriptions.Item label="Type of B/L">
-                  {dash(data.ens.blType)}
-                </Descriptions.Item>
-                <Descriptions.Item label="ENS Filing">
-                  {dash(data.ens.ensFilingType)}
-                </Descriptions.Item>
-                <Descriptions.Item label="Payment Method">
-                  {dash(data.ens.paymentMethod)}
-                </Descriptions.Item>
-                {data.ens.ensFilingType === "Single Filing" ? (
-                  <>
-                    <Descriptions.Item label="Buyer">
-                      {dash(data.ens.buyerName)}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="Seller">
-                      {dash(data.ens.sellerName)}
-                    </Descriptions.Item>
-                  </>
-                ) : (
-                  <Descriptions.Item label="Declarant">
-                    {dash(data.ens.declarantName)}
-                  </Descriptions.Item>
-                )}
-              </Descriptions>
+              <BlPreviewFieldGrid
+                items={[
+                  { label: "EU customs zone", value: "Yes" },
+                  {
+                    label: "Type of B/L",
+                    value: dash(data.ens.blType),
+                  },
+                  {
+                    label: "ENS filing",
+                    value: dash(data.ens.ensFilingType),
+                  },
+                  {
+                    label: "Payment method",
+                    value: dash(data.ens.paymentMethod),
+                  },
+                  ...(data.ens.ensFilingType === "Single Filing"
+                    ? [
+                        {
+                          label: "Buyer",
+                          value: dash(data.ens.buyerName),
+                        },
+                        {
+                          label: "Seller",
+                          value: dash(data.ens.sellerName),
+                        },
+                      ]
+                    : [
+                        {
+                          label: "Declarant",
+                          value: dash(data.ens.declarantName),
+                        },
+                      ]),
+                ]}
+              />
             ) : (
               <Tag>ENS not required</Tag>
             )}
@@ -460,6 +411,7 @@ export function PreviewStep({
 
         {config.showChargeTab ? (
           <BlPreviewSection
+            variant="airy"
             title={WIZARD_STEP_TITLES.chargeSummary}
             onEdit={() => go("chargeTab")}
           >
@@ -475,6 +427,7 @@ export function PreviewStep({
         ) : null}
 
         <BlPreviewSection
+          variant="airy"
           title={WIZARD_STEP_TITLES.fileUpload}
           onEdit={() => go("files")}
         >
@@ -492,27 +445,23 @@ export function PreviewStep({
         </BlPreviewSection>
 
         <BlPreviewSection
+          variant="airy"
           title={WIZARD_STEP_TITLES.references}
           onEdit={() => go("references")}
         >
           {data.referenceFields && data.referenceFields.length > 0 ? (
-            <Descriptions
-              size="small"
-              column={{ xs: 1, sm: 2, md: 3 }}
-              className="bl-preview-descriptions"
-            >
-              {data.referenceFields.map((field) => (
-                <Descriptions.Item key={field.id} label={field.name}>
-                  {dash(field.value)}
-                </Descriptions.Item>
-              ))}
-            </Descriptions>
+            <BlPreviewFieldGrid
+              items={data.referenceFields.map((field) => ({
+                label: field.name,
+                value: dash(field.value),
+              }))}
+            />
           ) : (
             <BlPreviewEmpty label="No reference fields" />
           )}
         </BlPreviewSection>
 
-        <BlPreviewSection title="Preview Fields">
+        <BlPreviewSection variant="airy" title="Preview fields">
           <div
             className={getPreviewFieldsGridClass(
               config.enableAesNumber,

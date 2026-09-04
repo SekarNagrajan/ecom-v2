@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-02 11:21)
+// Modified by Sekar Nagarajan (2026-09-03 15:10)
 import { AppButton } from "@solverminds/shared-ui";
 import { Checkbox, Divider, Popover, Segmented, Typography } from "antd";
 import { useMemo, useState } from "react";
@@ -16,7 +16,7 @@ import { ReferenceFieldsStyles } from "./reference-fields-styles";
 
 const { Text, Title } = Typography;
 
-type ReferenceViewMode = "grid" | "list";
+type ReferenceViewMode = "list" | "grid";
 
 export interface ReferenceFieldsPanelProps {
   fields: ReferenceField[];
@@ -220,26 +220,18 @@ export function ReferenceFieldsPanel({
           {fields.length > 0 ? (
             <Segmented
               className="ref-fields-view-segmented"
+              size="large"
               value={viewMode}
               onChange={(value) => setViewMode(value as ReferenceViewMode)}
               options={[
                 {
-                  value: "grid",
-                  label: (
-                    <span className="ref-fields-view-opt">
-                      <AppIcon icon={Icons.layoutGrid} size={14} />
-                      List
-                    </span>
-                  ),
+                  value: "list",
+
+                  icon: <AppIcon icon={Icons.layoutGrid} size={18} />,
                 },
                 {
-                  value: "list",
-                  label: (
-                    <span className="ref-fields-view-opt">
-                      <AppIcon icon={Icons.layoutList} size={14} />
-                      Grid
-                    </span>
-                  ),
+                  value: "grid",
+                  icon: <AppIcon icon={Icons.layoutList} size={18} />,
                 },
               ]}
             />
@@ -273,14 +265,14 @@ export function ReferenceFieldsPanel({
             Click &quot;Add Reference Field&quot; to get started
           </Text>
         </div>
-      ) : viewMode === "grid" ? (
-        <ReferenceFieldsGridView
+      ) : viewMode === "list" ? (
+        <ReferenceFieldsListView
           fields={fields}
           onUpdateValue={updateValue}
           onDelete={deleteField}
         />
       ) : (
-        <ReferenceFieldsListView
+        <ReferenceFieldsGridView
           fields={fields}
           onUpdateValue={updateValue}
           onDelete={deleteField}

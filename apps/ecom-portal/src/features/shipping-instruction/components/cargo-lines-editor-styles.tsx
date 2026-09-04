@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-01 16:46)
+// Modified by Sekar Nagarajan (2026-09-03 18:51)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -9,6 +9,7 @@ export function CargoLinesEditorStyles() {
   const successBg = tokenMix(token.colorSuccess, 12);
   const warningBg = tokenMix(token.colorWarning, 12);
   const fillHover = token.colorFillAlter;
+  const headerBg = token.colorFillAlter;
 
   return (
     <style>{`
@@ -374,17 +375,23 @@ export function CargoLinesEditorStyles() {
         overflow: auto;
       }
       .si-cargo-grid {
+        display: table;
         width: max-content;
         min-width: 100%;
         border-collapse: separate;
         border-spacing: 0;
         font-size: ${token.fontSize}px;
+        table-layout: auto;
+        height: auto;
+        min-height: 0;
       }
       .si-cargo-grid thead th {
         position: sticky;
         top: 0;
-        z-index: 2;
-        background: ${token.colorFillAlter};
+        z-index: 20;
+        /* Opaque sticky header so scrolling rows never bleed through */
+        background-color: ${token.colorBgContainer};
+        background-image: linear-gradient(${headerBg}, ${headerBg});
         text-align: left;
         font-size: ${token.fontSizeSM}px;
         font-weight: 600;
@@ -392,12 +399,15 @@ export function CargoLinesEditorStyles() {
         padding: ${token.paddingSM}px ${token.paddingXS}px;
         white-space: nowrap;
         border-bottom: 1px solid ${token.colorBorderSecondary};
+        box-shadow: 0 1px 0 ${token.colorBorderSecondary};
       }
       .si-cargo-grid tbody td {
         padding: ${token.paddingXXS}px ${token.paddingXS}px;
         border-top: 1px solid ${token.colorBorderSecondary};
         vertical-align: middle;
         background: ${token.colorBgContainer};
+        position: relative;
+        z-index: 0;
       }
       .si-cargo-grid tbody tr:hover td {
         background: ${fillHover};
@@ -405,20 +415,33 @@ export function CargoLinesEditorStyles() {
       .si-cargo-grid tbody tr.si-cargo-grid__grp td {
         border-top: 2px solid ${token.colorBorder};
       }
+      /* Keep AntD cell controls under sticky header while scrolling */
+      .si-cargo-grid tbody td .ant-select,
+      .si-cargo-grid tbody td .ant-select-selector,
+      .si-cargo-grid tbody td .ant-input,
+      .si-cargo-grid tbody td .ant-input-affix-wrapper,
+      .si-cargo-grid tbody td .ant-input-number,
+      .si-cargo-grid tbody td .ant-input-number-group-wrapper,
+      .si-cargo-grid tbody td .ant-switch,
+      .si-cargo-grid tbody td .list-actions-row {
+        position: relative;
+        z-index: 0;
+      }
       .si-cargo-grid__th-actions,
       .si-cargo-grid__td-actions {
         position: sticky;
         left: 0;
-        z-index: 3;
         width: 112px;
         min-width: 112px;
         box-shadow: 1px 0 0 ${token.colorBorderSecondary};
       }
       .si-cargo-grid__th-actions {
-        z-index: 4;
-        background: ${token.colorFillAlter};
+        z-index: 30;
+        background-color: ${token.colorBgContainer};
+        background-image: linear-gradient(${headerBg}, ${headerBg});
       }
       .si-cargo-grid__td-actions {
+        z-index: 10;
         background: ${token.colorBgContainer};
       }
       .si-cargo-grid tbody tr:hover .si-cargo-grid__td-actions {

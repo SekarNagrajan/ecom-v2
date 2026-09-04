@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-01 16:00)
+// Modified by Sekar Nagarajan (2026-09-03 15:59)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { Tag, Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
@@ -39,7 +39,7 @@ export interface BookingRouteCardAction {
 
 interface BookingRouteCardProps {
   route: SelectedRoute;
-  action: BookingRouteCardAction;
+  action?: BookingRouteCardAction;
   detailsMode?: "inline" | "drawer";
   expanded?: boolean;
   onToggle?: () => void;
@@ -639,14 +639,16 @@ export function BookingRouteCard({
         </div>
 
         <div className="booking-routing-card__actions">
-          <AppButton
-            type={action.type ?? "primary"}
-            icon={<AppIcon icon={action.icon} size={14} />}
-            onClick={action.onClick}
-            block
-          >
-            {action.label}
-          </AppButton>
+          {action ? (
+            <AppButton
+              type={action.type ?? "primary"}
+              icon={<AppIcon icon={action.icon} size={14} />}
+              onClick={action.onClick}
+              block
+            >
+              {action.label}
+            </AppButton>
+          ) : null}
           {showDetailsAction ? (
             <AppButton
               type="link"

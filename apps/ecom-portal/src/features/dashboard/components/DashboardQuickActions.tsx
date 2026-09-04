@@ -1,10 +1,10 @@
 // Modified by Sekar Nagarajan (2026-08-24 16:05)
-import { useNavigate } from '@tanstack/react-router';
-import { Card, Col, Row, Typography, theme } from 'antd';
-import type { LucideIcon } from 'lucide-react';
+import { useNavigate } from "@tanstack/react-router";
+import { Card, Col, Row, Typography, theme } from "antd";
+import type { LucideIcon } from "lucide-react";
 
-import { AppIcon, Icons } from '../../../components/icons';
-import type { DashboardQuickAction } from '../mocks/dashboard.mock';
+import { AppIcon, Icons, NavBookingIcon } from "../../../components/icons";
+import type { DashboardQuickAction } from "../mocks/dashboard.mock";
 
 const { Text, Title } = Typography;
 
@@ -42,13 +42,20 @@ export function DashboardQuickActions({ actions }: DashboardQuickActionsProps) {
               style={{
                 borderRadius: 12,
                 border: `1px solid ${token.colorBorder}`,
-                boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
-                cursor: 'pointer',
-                height: '100%',
+                boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
+                cursor: "pointer",
+                height: "100%",
               }}
-              styles={{ body: { padding: '18px 20px' } }}
+              styles={{ body: { padding: "18px 20px" } }}
             >
-              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  justifyContent: "space-between",
+                  gap: 12,
+                }}
+              >
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div
                     style={{
@@ -57,22 +64,35 @@ export function DashboardQuickActions({ actions }: DashboardQuickActionsProps) {
                       borderRadius: 10,
                       background: `${token.colorPrimary}12`,
                       color: token.colorPrimary,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
                       marginBottom: 12,
                     }}
                   >
-                    <AppIcon icon={ACTION_ICONS[action.key] ?? Icons.bookOpen} size={18} />
+                    <AppIcon
+                      icon={ACTION_ICONS[action.key] ?? NavBookingIcon}
+                      size={18}
+                    />
                   </div>
-                  <Title level={5} style={{ margin: 0, fontWeight: 600, fontSize: 15 }}>
+                  <Title
+                    level={5}
+                    style={{ margin: 0, fontWeight: 600, fontSize: 15 }}
+                  >
                     {action.title}
                   </Title>
-                  <Text type="secondary" style={{ fontSize: 12, display: 'block', marginTop: 4 }}>
+                  <Text
+                    type="secondary"
+                    style={{ fontSize: 12, display: "block", marginTop: 4 }}
+                  >
                     {action.description}
                   </Text>
                 </div>
-                <AppIcon icon={Icons.chevronRight} size={12} style={{ marginTop: 4 }} />
+                <AppIcon
+                  icon={Icons.chevronRight}
+                  size={12}
+                  style={{ marginTop: 4 }}
+                />
               </div>
             </Card>
           </Col>

@@ -4,7 +4,7 @@ import { Empty, Radio, Tag, Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
 import { useState } from "react";
 
-import { AppIcon, Icons } from "../../../components/icons";
+import { AppIcon, Icons, NavBookingIcon } from "../../../components/icons";
 import { formatModuleScreenTitle } from "../../../constants/module-titles";
 import { useMCNDetailQuery, useMCNPrintMutation } from "../api/bl.queries";
 import type { MCNDTO } from "../types/bl.types";
@@ -212,7 +212,7 @@ export function ManifestDrawer({
             <ManifestMetaItem icon={Icons.fileCheck} label="B/L No">
               {detail.blNo}
             </ManifestMetaItem>
-            <ManifestMetaItem icon={Icons.bookOpen} label="Booking No">
+            <ManifestMetaItem icon={NavBookingIcon} label="Booking No">
               {detail.bookingNo}
             </ManifestMetaItem>
             <ManifestMetaItem icon={Icons.ship} label="Vessel">

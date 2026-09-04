@@ -364,9 +364,7 @@ export function AuthenticatedLayoutHeader({
               <Text strong className="app-layout-header__tenant-name">
                 {activeTenant.name}
               </Text>
-              <Tag color="blue" className="app-header-tag">
-                {activeTenant.customerCode}
-              </Tag>
+
               {user?.isSessionAdmin && !user?.isImpersonating ? (
                 <Tag
                   icon={<AppIcon icon={Icons.crown} size={16} />}

@@ -1,26 +1,34 @@
-// Modified by Sekar Nagarajan (2026-09-01 18:40)
+// Modified by Sekar Nagarajan (2026-09-04 17:25)
 import { theme } from "antd";
 import { tokenMix } from "../../theme/utils/token-mix";
 
 /** Token-backed Tracking module layout classes (agenct.md). */
 export function TrackingModuleStyles() {
   const { token } = theme.useToken();
+  const mapPulse = tokenMix(token.colorInfo, 50);
+  const mapPinShadow = tokenMix(token.colorText, 40);
+  const mapCoreRing = tokenMix(token.colorText, 30);
 
   return (
     <style>{`
       @keyframes tracking-spin {
         to { transform: rotate(360deg); }
       }
+      @keyframes tracking-map-pulse {
+        0% { transform: scale(0.6); opacity: 0.9; }
+        70% { transform: scale(2.4); opacity: 0; }
+        100% { opacity: 0; }
+      }
 
       .tracking-search-panel.ant-card {
         border-radius: ${token.borderRadiusLG}px;
         background: ${token.colorFillAlter};
         border: 1px solid ${token.colorBorderSecondary};
-        margin-bottom: ${token.marginLG}px;
+        margin-bottom: ${token.marginMD}px;
         box-shadow: none !important;
       }
       .tracking-search-panel .ant-card-body {
-        padding: ${token.paddingLG}px;
+        padding: ${token.paddingSM}px;
       }
       .tracking-search-toolbar {
         display: flex;
@@ -88,10 +96,12 @@ export function TrackingModuleStyles() {
         border: 1px solid ${token.colorBorderSecondary};
         background: ${token.colorBgContainer};
         box-shadow: none !important;
-        margin-bottom: ${token.marginLG}px;
+        margin-bottom: ${token.marginMD}px;
+        border:2px solid ${token.colorBorderSecondary};
+       
       }
       .tracking-overview .ant-card-body {
-        padding: ${token.paddingLG}px;
+        padding: ${token.paddingSM}px;
       }
       .tracking-overview__meta {
         margin-bottom: ${token.marginLG}px;
@@ -234,6 +244,435 @@ export function TrackingModuleStyles() {
       .tracking-pipeline__step--current .tracking-pipeline__step-time {
         color: ${token.colorPrimary};
         font-weight: ${token.fontWeightStrong};
+      }
+
+      /* Vertical pipeline (drawer / narrow column) */
+      .tracking-pipeline--vertical .tracking-pipeline__head {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .tracking-pipeline--vertical .tracking-pipeline__vertical {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        overflow-y: auto;
+        max-height: 420px;
+        padding-right: ${token.paddingXS}px;
+        flex: 1;
+        min-height: 0;
+      }
+      .tracking-pipeline--vertical .tracking-pipeline__step {
+        display: flex;
+        align-items: flex-start;
+        gap: ${token.marginSM}px;
+        text-align: left;
+        flex: none;
+        padding: 0;
+        width: 100%;
+      }
+      .tracking-pipeline--vertical .tracking-pipeline__rail {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: none;
+        width: 32px;
+      }
+      .tracking-pipeline--vertical .tracking-pipeline__badge {
+        width: 32px;
+        height: 32px;
+        margin: 0;
+        flex: none;
+      }
+      .tracking-pipeline--vertical .tracking-pipeline__connector {
+        width: 2px;
+        flex: 1;
+        min-height: ${token.marginMD}px;
+        background: ${token.colorBorderSecondary};
+        margin: ${token.marginXXS}px 0;
+      }
+      .tracking-pipeline--vertical
+        .tracking-pipeline__step--completed
+        .tracking-pipeline__connector {
+        background: ${token.colorSuccess};
+      }
+      .tracking-pipeline--vertical
+        .tracking-pipeline__step--current
+        .tracking-pipeline__connector {
+        background: ${token.colorPrimary};
+      }
+      .tracking-pipeline--vertical .tracking-pipeline__step-body {
+        padding-bottom: ${token.paddingMD}px;
+        min-width: 0;
+        flex: 1;
+      }
+      .tracking-pipeline--vertical .tracking-pipeline__step:last-child
+        .tracking-pipeline__step-body {
+        padding-bottom: 0;
+      }
+
+      .tracking-overview--pipeline.ant-card {
+        margin-bottom: 0;
+        height: 100%;
+      }
+      .tracking-overview--pipeline .ant-card-body {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+      .tracking-overview--pipeline .tracking-pipeline {
+        margin-bottom: 0;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+      }
+
+      .tracking-route-map-card.ant-card {
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorBgContainer};
+        box-shadow: none !important;
+        height: 100%;
+        overflow: hidden;
+      }
+      .tracking-route-map-card .ant-card-head {
+        border-bottom: 1px solid ${token.colorBorderSecondary};
+        min-height: auto;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+      }
+      .tracking-route-map-card .ant-card-head-title {
+        font-size: ${token.fontSize}px;
+        font-weight: ${token.fontWeightStrong};
+        padding: ${token.paddingXXS}px 0;
+      }
+      .tracking-route-map-card__title {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXS}px;
+      }
+      .tracking-route-map-card__ais {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorSuccess};
+        white-space: nowrap;
+      }
+      .tracking-route-map-card .ant-card-extra {
+        margin-inline-start: ${token.marginSM}px;
+      }
+
+      .tracking-live-map-drawer-stack {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginMD}px;
+        width: 100%;
+      }
+      .tracking-live-map-drawer-stack__journey.ant-card {
+        margin-bottom: 0;
+        width: 100%;
+      }
+      .tracking-live-map-drawer-stack__journey .ant-card-head {
+        border-bottom: 1px solid ${token.colorBorderSecondary};
+        min-height: auto;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+      }
+      .tracking-live-map-drawer-stack__journey .ant-card-head-title {
+        font-size: ${token.fontSize}px;
+        font-weight: ${token.fontWeightStrong};
+        padding: ${token.paddingXXS}px 0;
+      }
+      .tracking-live-map-drawer-stack__journey .ant-card-body {
+        padding: ${token.paddingMD}px;
+      }
+      .tracking-live-map-drawer-stack__journey .tracking-pipeline {
+        margin-bottom: 0;
+      }
+      .tracking-live-map-drawer-stack__map {
+        width: 100%;
+        min-width: 0;
+      }
+      .tracking-live-map-drawer-row {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: stretch;
+        gap: ${token.marginMD}px;
+        min-height: 480px;
+        width: 100%;
+        overflow-x: auto;
+      }
+      .tracking-live-map-drawer-row__pipeline {
+        flex: 0 0 280px;
+        width: 280px;
+        max-width: 280px;
+        min-width: 240px;
+      }
+      .tracking-live-map-drawer-row__map {
+        flex: 1 1 auto;
+        min-width: 420px;
+      }
+      .tracking-route-map-card .ant-card-body {
+        padding: 0;
+        height: auto;
+        position: relative;
+      }
+      .tracking-map-shell {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        background: ${token.colorBgContainer};
+      }
+      .tracking-map-voyage {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: stretch;
+        gap: ${token.marginLG}px;
+        width: 100%;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        border-bottom: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorFillAlter};
+        z-index: 2;
+      }
+      .tracking-map-voyage__lead {
+        flex: 1 1 220px;
+        min-width: 180px;
+        max-width: 320px;
+      }
+      .tracking-map-voyage__title {
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: ${token.colorInfo};
+        margin-bottom: ${token.marginXXS}px;
+      }
+      .tracking-map-voyage__progress-row {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: ${token.marginSM}px;
+        margin-bottom: ${token.marginXXS}px;
+      }
+      .tracking-map-voyage__progress-label {
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+      }
+      .tracking-map-voyage__progress-value {
+        font-size: ${token.fontSize}px;
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+      }
+      .tracking-map-voyage__bar {
+        height: 6px;
+        border-radius: ${token.borderRadiusSM}px;
+        background: ${token.colorFillSecondary};
+        overflow: hidden;
+      }
+      .tracking-map-voyage__bar-fill {
+        height: 100%;
+        width: calc(var(--tracking-voyage-progress, 0) * 1%);
+        background: ${token.colorInfo};
+        border-radius: ${token.borderRadiusSM}px;
+        transition: width 0.35s ease;
+      }
+      .tracking-map-voyage__rows {
+        display: flex;
+        flex: 1 1 360px;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: ${token.marginMD}px ${token.marginXL}px;
+        min-width: 0;
+      }
+      .tracking-map-voyage__row {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        min-width: 120px;
+        font-size: ${token.fontSizeSM}px;
+      }
+      .tracking-map-voyage__row span {
+        color: ${token.colorTextSecondary};
+      }
+      .tracking-map-voyage__row strong {
+        color: ${token.colorText};
+        font-weight: ${token.fontWeightStrong};
+      }
+      .tracking-map-stage {
+        position: relative;
+        width: 100%;
+        height: 480px;
+        min-height: 480px;
+        background: ${token.colorFillAlter};
+      }
+      .tracking-map__viewport {
+        width: 100%;
+        height: 100%;
+        min-height: 480px;
+        position: absolute;
+        inset: 0;
+      }
+      .tracking-map-route-svg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        pointer-events: none;
+        overflow: visible;
+      }
+      .tracking-map-route-svg__casing {
+        stroke: ${token.colorText};
+        stroke-width: 6;
+        stroke-opacity: 0.35;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .tracking-map-route-svg__sailed {
+        stroke-width: 3.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .tracking-map-route-svg__remaining {
+        stroke-width: 2.5;
+        stroke-dasharray: 6 6;
+        stroke-opacity: 0.95;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .tracking-map-legend {
+        position: absolute;
+        bottom: ${token.paddingSM}px;
+        left: ${token.paddingSM}px;
+        z-index: 2;
+        display: flex;
+        gap: ${token.marginMD}px;
+        align-items: center;
+        flex-wrap: wrap;
+        max-width: calc(100% - ${token.paddingLG * 2}px);
+        padding: ${token.paddingXS}px ${token.paddingSM}px;
+        border-radius: ${token.borderRadius}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorBgElevated};
+        box-shadow: ${token.boxShadowTertiary};
+        pointer-events: none;
+      }
+      .tracking-map-legend__item {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+      }
+      .tracking-map-legend__dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 9999px;
+        border: 2px solid ${token.colorTextLightSolid};
+        box-shadow: 0 0 0 1px ${token.colorBorder};
+        flex: none;
+      }
+      .tracking-map-legend__dot--origin {
+        background: ${token.colorSuccess};
+      }
+      .tracking-map-legend__dot--vessel {
+        background: ${token.colorInfo};
+      }
+      .tracking-map-legend__dot--wp {
+        background: ${token.colorWarning};
+        border-width: 1.5px;
+      }
+      .tracking-map-legend__dot--dest {
+        background: ${token.colorError};
+      }
+      .tracking-map-legend__line {
+        width: 16px;
+        height: 3px;
+        flex: none;
+        border-radius: 2px;
+      }
+      .tracking-map-legend__line--sailed {
+        background: ${token.colorInfo};
+      }
+      .tracking-map-legend__line--remaining {
+        height: 0;
+        border-top: 2px dashed ${token.colorTextLightSolid};
+        background: transparent;
+        box-shadow: 0 0 0 1px ${tokenMix(token.colorText, 25)};
+      }
+      .tracking-map-pin {
+        width: 16px;
+        height: 16px;
+        border-radius: 9999px;
+        border: 3px solid ${token.colorTextLightSolid};
+        box-shadow: 0 1px 4px ${mapPinShadow};
+        cursor: pointer;
+      }
+      .tracking-map-pin--origin {
+        background: ${token.colorSuccess};
+      }
+      .tracking-map-pin--dest {
+        background: ${token.colorError};
+      }
+      .tracking-map-wp {
+        width: 8px;
+        height: 8px;
+        border-radius: 9999px;
+        background: ${token.colorWarning};
+        border: 1.5px solid ${token.colorTextLightSolid};
+        box-shadow: 0 1px 3px ${mapPinShadow};
+        cursor: pointer;
+      }
+      .tracking-map-vessel {
+        width: 18px;
+        height: 18px;
+        position: relative;
+        cursor: pointer;
+      }
+      .tracking-map-vessel__core {
+        position: absolute;
+        inset: 3px;
+        border-radius: 9999px;
+        background: ${token.colorInfo};
+        border: 2px solid ${token.colorTextLightSolid};
+        box-shadow: 0 0 0 1px ${mapCoreRing};
+      }
+      .tracking-map-vessel__ring {
+        position: absolute;
+        inset: 0;
+        border-radius: 9999px;
+        background: ${mapPulse};
+        animation: tracking-map-pulse 1.8s ease-out infinite;
+      }
+      .tracking-map-pop__role {
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: ${token.colorInfo};
+      }
+      .tracking-map-pop__title {
+        font-size: ${token.fontSize}px;
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+      }
+      .tracking-map-pop__sub {
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+        margin-top: 2px;
+        line-height: 1.5;
+      }
+      .maplibregl-popup-content {
+        border-radius: ${token.borderRadius}px;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        box-shadow: ${token.boxShadowSecondary};
+        font-family: inherit;
+      }
+      .maplibregl-ctrl-group {
+        border-radius: ${token.borderRadiusSM}px !important;
+        overflow: hidden;
       }
 
       .tracking-deadlines {

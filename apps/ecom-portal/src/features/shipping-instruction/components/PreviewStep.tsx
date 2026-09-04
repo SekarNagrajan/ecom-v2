@@ -1,29 +1,65 @@
-// Modified by Sekar Nagarajan (2026-08-31 16:27)
+// Modified by Sekar Nagarajan (2026-09-05 01:05)
 /**
- * Preview — summary of all wizard step inputs with Edit → jump to step.
+ * Preview — airy review of wizard inputs with Edit → jump to step.
  */
 import { AppButton } from "@solverminds/shared-ui";
-import { Col, Descriptions, Row, Table, Tag, Typography } from "antd";
+import { Tag, Typography } from "antd";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { WIZARD_STEP_TITLES } from "../../../constants/module-titles";
-import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
+import { BookingModuleStyles } from "../../booking/components/booking-module-styles";
 import type { SIWizardStepId } from "../config/si-wizard-config";
 import { DEFAULT_SI_WIZARD_CONFIG } from "../config/si-wizard-config";
 import { useSiWizardConfigQuery } from "../hooks/use-si-wizard-config";
-import type { SIWizardStepProps } from "../types/si.types";
-import { SI_CARGO_LINE_COLUMNS } from "../utils/si-cargo-line-columns";
+import type { SIParty, SIWizardStepProps } from "../types/si.types";
+import type { SiPartyRoleKey } from "../utils/si-party.utils";
 import {
   SiPreviewEmpty,
-  SiPreviewPartyBlock,
+  SiPreviewEmptyPartyCard,
+  SiPreviewFieldGrid,
+  SiPreviewPartyCard,
   SiPreviewSection,
 } from "./preview/si-preview-section";
+import { SiPreviewCargoReview } from "./SiPreviewCargoReview";
 
-const { Title, Text } = Typography;
+const { Text, Title } = Typography;
+
+const REVIEW_PARTY_ROLES: SiPartyRoleKey[] = [
+  "shipper",
+  "consignee",
+  "notify",
+  "forwarder",
+];
 
 function dash(value?: string | number | null): string {
   if (value === undefined || value === null || value === "") return "—";
   return String(value);
+}
+
+function partyForRole(
+  parties: SIWizardStepProps["data"]["parties"],
+  role: SiPartyRoleKey,
+): SIParty | undefined {
+  switch (role) {
+    case "shipper":
+      return parties.shipper;
+    case "consignee":
+      return parties.consignee;
+    case "notify":
+      return parties.notify;
+    case "notify2":
+      return parties.notify2;
+    case "notify3":
+      return parties.notify3;
+    case "forwarder":
+      return parties.forwarder;
+    case "warehouse":
+      return parties.warehouse;
+    case "agreementParty":
+      return parties.agreementParty;
+    default:
+      return undefined;
+  }
 }
 
 export function PreviewStep({
@@ -46,182 +82,133 @@ export function PreviewStep({
       ? "Telex Release"
       : dash(data.releaseType);
 
+  const masterRows: { label: string; value: string }[] = [
+    { label: "Booking number", value: dash(data.bookingNo) },
+    {
+      label: "SI number",
+      value: dash(data.siNo) === "—" ? "Draft" : dash(data.siNo),
+    },
+    { label: "Agency ref", value: dash(data.agencyRefNo) },
+    { label: "B/L type", value: dash(data.blType) },
+    { label: "Release type", value: releaseLabel },
+    { label: "Freight option", value: dash(data.freightOption) },
+  ];
+  if (config.enableNvocc) {
+    masterRows.push({ label: "NVOCC", value: data.nvocc ? "Yes" : "No" });
+  }
+  if (config.enableT2LFiling) {
+    masterRows.push({
+      label: "T2L filing",
+      value: data.t2lFiling ? "Yes" : "No",
+    });
+  }
+  if (data.origin || data.loadPort || data.dischargePort || data.delivery) {
+    masterRows.push(
+      { label: "Origin", value: dash(data.origin) },
+      { label: "Load port", value: dash(data.loadPort) },
+      { label: "Discharge port", value: dash(data.dischargePort) },
+      { label: "Delivery", value: dash(data.delivery) },
+    );
+  }
+
+  const reviewRoleSet = new Set(REVIEW_PARTY_ROLES);
+  const extraPartyRoles = (
+    ["agreementParty", "notify2", "notify3", "warehouse"] as SiPartyRoleKey[]
+  ).filter((role) => {
+    const party = partyForRole(data.parties, role);
+    return party?.name && !reviewRoleSet.has(role);
+  });
+
+  const summary = [
+    data.siNo?.trim() || data.bookingNo?.trim() || "Draft SI",
+    data.loadPort && data.dischargePort
+      ? `${data.loadPort} → ${data.dischargePort}`
+      : null,
+    data.routing?.vesselVoyage,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+
   return (
     <div className="form-step-layout">
-      <div className="custom-scroll form-step-scroll si-preview-scroll">
+      <BookingModuleStyles />
+      <div className="custom-scroll form-step-scroll booking-preview-scroll booking-review si-preview-scroll">
         <SiPreviewSection
+          variant="airy"
           title={WIZARD_STEP_TITLES.masterDetails}
           onEdit={() => go("master")}
         >
-          <Descriptions
-            size="small"
-            column={{ xs: 1, sm: 2, md: 3 }}
-            className="si-preview-descriptions"
-          >
-            <Descriptions.Item label="Booking Number">
-              {dash(data.bookingNo)}
-            </Descriptions.Item>
-            <Descriptions.Item label="SI Number">
-              {dash(data.siNo) === "—" ? "Draft" : dash(data.siNo)}
-            </Descriptions.Item>
-            <Descriptions.Item label="Agency Ref">
-              {dash(data.agencyRefNo)}
-            </Descriptions.Item>
-            <Descriptions.Item label="B/L Type">
-              {dash(data.blType)}
-            </Descriptions.Item>
-            <Descriptions.Item label="Release Type">
-              {releaseLabel}
-            </Descriptions.Item>
-            <Descriptions.Item label="Freight Option">
-              {dash(data.freightOption)}
-            </Descriptions.Item>
-            {config.enableNvocc ? (
-              <Descriptions.Item label="NVOCC">
-                {data.nvocc ? "Yes" : "No"}
-              </Descriptions.Item>
-            ) : null}
-            {config.enableT2LFiling ? (
-              <Descriptions.Item label="T2L Filing">
-                {data.t2lFiling ? "Yes" : "No"}
-              </Descriptions.Item>
-            ) : null}
-            {data.origin ||
-            data.loadPort ||
-            data.dischargePort ||
-            data.delivery ? (
-              <>
-                <Descriptions.Item label="Origin">
-                  {dash(data.origin)}
-                </Descriptions.Item>
-                <Descriptions.Item label="Load Port">
-                  {dash(data.loadPort)}
-                </Descriptions.Item>
-                <Descriptions.Item label="Discharge Port">
-                  {dash(data.dischargePort)}
-                </Descriptions.Item>
-                <Descriptions.Item label="Delivery">
-                  {dash(data.delivery)}
-                </Descriptions.Item>
-              </>
-            ) : null}
-          </Descriptions>
+          <SiPreviewFieldGrid items={masterRows} />
         </SiPreviewSection>
 
         <SiPreviewSection
+          variant="airy"
           title={WIZARD_STEP_TITLES.parties}
           onEdit={() => go("parties")}
         >
-          {/* Modified by Sekar Nagarajan (2026-08-31 23:43) — role-tinted preview party blocks */}
-          <Row gutter={[24, 24]}>
-            <Col {...RESPONSIVE_COL.third}>
-              <SiPreviewPartyBlock
-                role="Booking Party"
-                roleKey="shipper"
-                name={data.parties.shipper.name}
-                address={data.parties.shipper.address}
-                city={data.parties.shipper.city}
-                country={data.parties.shipper.country}
-              />
-            </Col>
-            {data.parties.agreementParty?.name ? (
-              <Col {...RESPONSIVE_COL.third}>
-                <SiPreviewPartyBlock
-                  role="Agreement Party"
-                  roleKey="agreementParty"
-                  name={data.parties.agreementParty.name}
-                  address={data.parties.agreementParty.address}
-                  city={data.parties.agreementParty.city}
-                  country={data.parties.agreementParty.country}
-                />
-              </Col>
-            ) : null}
-            {data.parties.consignee?.name ? (
-              <Col {...RESPONSIVE_COL.third}>
-                <SiPreviewPartyBlock
-                  role="Consignee"
-                  roleKey="consignee"
-                  name={data.parties.consignee.name}
-                  address={data.parties.consignee.address}
-                  city={data.parties.consignee.city}
-                  country={data.parties.consignee.country}
-                  extra={
-                    data.parties.consignee.toOrder ? (
-                      <Text type="warning"> (To Order)</Text>
-                    ) : null
-                  }
-                />
-              </Col>
-            ) : null}
-            {data.parties.notify?.name ? (
-              <Col {...RESPONSIVE_COL.third}>
-                <SiPreviewPartyBlock
-                  role="Notify Party"
-                  roleKey="notify"
-                  name={data.parties.notify.name}
-                  address={data.parties.notify.address}
-                  city={data.parties.notify.city}
-                  country={data.parties.notify.country}
-                />
-              </Col>
-            ) : null}
-            {data.parties.forwarder?.name ? (
-              <Col {...RESPONSIVE_COL.third}>
-                <SiPreviewPartyBlock
-                  role="Forwarder"
-                  roleKey="forwarder"
-                  name={data.parties.forwarder.name}
-                  address={data.parties.forwarder.address}
-                  city={data.parties.forwarder.city}
-                  country={data.parties.forwarder.country}
-                />
-              </Col>
-            ) : null}
-            {data.parties.warehouse?.name ? (
-              <Col {...RESPONSIVE_COL.third}>
-                <SiPreviewPartyBlock
-                  role="Warehouse"
-                  roleKey="warehouse"
-                  name={data.parties.warehouse.name}
-                  address={data.parties.warehouse.address}
-                  city={data.parties.warehouse.city}
-                  country={data.parties.warehouse.country}
-                />
-              </Col>
-            ) : null}
-          </Row>
+          <div className="booking-review__party-grid">
+            {REVIEW_PARTY_ROLES.map((role) => {
+              const party = partyForRole(data.parties, role);
+              return (
+                <div key={role} className="booking-party-grid__col">
+                  {party?.name ? (
+                    <SiPreviewPartyCard
+                      roleKey={role}
+                      party={party}
+                      extra={
+                        role === "consignee" &&
+                        data.parties.consignee?.toOrder ? (
+                          <Text type="warning"> (To Order)</Text>
+                        ) : null
+                      }
+                    />
+                  ) : (
+                    <SiPreviewEmptyPartyCard roleKey={role} />
+                  )}
+                </div>
+              );
+            })}
+            {extraPartyRoles.map((role) => {
+              const party = partyForRole(data.parties, role);
+              if (!party?.name) return null;
+              return (
+                <div key={role} className="booking-party-grid__col">
+                  <SiPreviewPartyCard roleKey={role} party={party} />
+                </div>
+              );
+            })}
+          </div>
         </SiPreviewSection>
 
         {config.showRouting ? (
           <SiPreviewSection
+            variant="airy"
             title={WIZARD_STEP_TITLES.routing}
             onEdit={() => go("routing")}
           >
             {data.routing ? (
-              <Descriptions
-                size="small"
-                column={{ xs: 1, sm: 2, md: 3 }}
-                className="si-preview-descriptions"
-              >
-                <Descriptions.Item label="Vessel / Voyage">
-                  {dash(data.routing.vesselVoyage)}
-                </Descriptions.Item>
-                <Descriptions.Item label="Origin">
-                  {dash(data.routing.originPrint)}
-                </Descriptions.Item>
-                <Descriptions.Item label="POL">
-                  {dash(data.routing.polPrint)}
-                </Descriptions.Item>
-                <Descriptions.Item label="POD">
-                  {dash(data.routing.podPrint)}
-                </Descriptions.Item>
-                <Descriptions.Item label="Delivery">
-                  {dash(data.routing.deliveryPrint)}
-                </Descriptions.Item>
-                <Descriptions.Item label="Schedule Legs">
-                  {data.routing.scheduleLegs?.length ?? 0}
-                </Descriptions.Item>
-              </Descriptions>
+              <SiPreviewFieldGrid
+                items={[
+                  {
+                    label: "Vessel / voyage",
+                    value: dash(data.routing.vesselVoyage),
+                  },
+                  {
+                    label: "Origin",
+                    value: dash(data.routing.originPrint),
+                  },
+                  { label: "POL", value: dash(data.routing.polPrint) },
+                  { label: "POD", value: dash(data.routing.podPrint) },
+                  {
+                    label: "Delivery",
+                    value: dash(data.routing.deliveryPrint),
+                  },
+                  {
+                    label: "Schedule legs",
+                    value: String(data.routing.scheduleLegs?.length ?? 0),
+                  },
+                ]}
+              />
             ) : (
               <SiPreviewEmpty label="No routing details" />
             )}
@@ -229,73 +216,44 @@ export function PreviewStep({
         ) : null}
 
         <SiPreviewSection
+          variant="airy"
           title={WIZARD_STEP_TITLES.cargoDetails}
           onEdit={() => go("cargo")}
         >
-          {data.containers.length === 0 ? (
-            <SiPreviewEmpty label="No containers" />
-          ) : (
-            data.containers.map((container, index) => (
-              <div key={container.id} className="si-container-block">
-                <div className="si-container-block__header">
-                  <Text strong className="si-container-block__title">
-                    Container {index + 1}: {container.containerNo || "—"} (
-                    {container.eqpSize || "—"})
-                  </Text>
-                  <div>
-                    <Text type="success">
-                      Carrier Seal:{" "}
-                      <Text strong>{container.carrierSeal || "N/A"}</Text>
-                    </Text>
-                    {" | "}
-                    <Text type="danger">
-                      Shipper Seal:{" "}
-                      <Text strong>{container.shipperSeal || "N/A"}</Text>
-                    </Text>
-                  </div>
-                </div>
-                <div className="responsive-table-wrap custom-scroll">
-                  <Table
-                    size="small"
-                    dataSource={container.cargoLines}
-                    rowKey="id"
-                    pagination={false}
-                    bordered
-                    columns={SI_CARGO_LINE_COLUMNS}
-                  />
-                </div>
-              </div>
-            ))
-          )}
+          <SiPreviewCargoReview containers={data.containers} />
         </SiPreviewSection>
 
         {config.showInsurance ? (
           <SiPreviewSection
+            variant="airy"
             title={WIZARD_STEP_TITLES.insurance}
             onEdit={() => go("insurance")}
           >
             {data.insurance ? (
-              <Descriptions
-                size="small"
-                column={{ xs: 1, sm: 2, md: 3 }}
-                className="si-preview-descriptions"
-              >
-                <Descriptions.Item label="Required">
-                  {data.insurance.isInsuranceRequired ? "Yes" : "No"}
-                </Descriptions.Item>
-                <Descriptions.Item label="Opt Out">
-                  {data.insurance.optOut ? "Yes" : "No"}
-                </Descriptions.Item>
-                <Descriptions.Item label="Currency">
-                  {dash(data.insurance.currency)}
-                </Descriptions.Item>
-                <Descriptions.Item label="Cargo Value">
-                  {dash(data.insurance.cargoValue)}
-                </Descriptions.Item>
-                <Descriptions.Item label="Policy No">
-                  {dash(data.insurance.policyNo)}
-                </Descriptions.Item>
-              </Descriptions>
+              <SiPreviewFieldGrid
+                items={[
+                  {
+                    label: "Required",
+                    value: data.insurance.isInsuranceRequired ? "Yes" : "No",
+                  },
+                  {
+                    label: "Opt out",
+                    value: data.insurance.optOut ? "Yes" : "No",
+                  },
+                  {
+                    label: "Currency",
+                    value: dash(data.insurance.currency),
+                  },
+                  {
+                    label: "Cargo value",
+                    value: dash(data.insurance.cargoValue),
+                  },
+                  {
+                    label: "Policy no",
+                    value: dash(data.insurance.policyNo),
+                  },
+                ]}
+              />
             ) : (
               <SiPreviewEmpty />
             )}
@@ -304,6 +262,7 @@ export function PreviewStep({
 
         {config.showCargoProtect ? (
           <SiPreviewSection
+            variant="airy"
             title={WIZARD_STEP_TITLES.cargoProtect}
             onEdit={() => go("cargoProtect")}
           >
@@ -324,6 +283,7 @@ export function PreviewStep({
 
         {config.showChargesInWizard ? (
           <SiPreviewSection
+            variant="airy"
             title={WIZARD_STEP_TITLES.charges}
             onEdit={() => go("charges")}
           >
@@ -344,43 +304,49 @@ export function PreviewStep({
 
         {config.showEns ? (
           <SiPreviewSection
+            variant="airy"
             title={WIZARD_STEP_TITLES.ensDetails}
             onEdit={() => go("ens")}
           >
             {data.ens?.ensRequired ? (
-              <Descriptions
-                size="small"
-                column={{ xs: 1, sm: 2, md: 3 }}
-                className="si-preview-descriptions"
-              >
-                <Descriptions.Item label="ENS Required">Yes</Descriptions.Item>
-                <Descriptions.Item label="EU Customs Zone">
-                  {data.ens.euCustZone === "Y" ? "Yes" : "No"}
-                </Descriptions.Item>
-                <Descriptions.Item label="Type of B/L">
-                  {dash(data.ens.blTypeEns)}
-                </Descriptions.Item>
-                <Descriptions.Item label="ENS Filing">
-                  {dash(data.ens.ensFillingType)}
-                </Descriptions.Item>
-                <Descriptions.Item label="Payment Method">
-                  {dash(data.ens.paymentMethod)}
-                </Descriptions.Item>
-                {data.ens.ensFillingType === "Single Filing" ? (
-                  <>
-                    <Descriptions.Item label="Buyer">
-                      {dash(data.ens.buyer?.name)}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="Seller">
-                      {dash(data.ens.seller?.name)}
-                    </Descriptions.Item>
-                  </>
-                ) : (
-                  <Descriptions.Item label="Declarant">
-                    {dash(data.ens.declarant?.name)}
-                  </Descriptions.Item>
-                )}
-              </Descriptions>
+              <SiPreviewFieldGrid
+                items={[
+                  { label: "ENS required", value: "Yes" },
+                  {
+                    label: "EU customs zone",
+                    value: data.ens.euCustZone === "Y" ? "Yes" : "No",
+                  },
+                  {
+                    label: "Type of B/L",
+                    value: dash(data.ens.blTypeEns),
+                  },
+                  {
+                    label: "ENS filing",
+                    value: dash(data.ens.ensFillingType),
+                  },
+                  {
+                    label: "Payment method",
+                    value: dash(data.ens.paymentMethod),
+                  },
+                  ...(data.ens.ensFillingType === "Single Filing"
+                    ? [
+                        {
+                          label: "Buyer",
+                          value: dash(data.ens.buyer?.name),
+                        },
+                        {
+                          label: "Seller",
+                          value: dash(data.ens.seller?.name),
+                        },
+                      ]
+                    : [
+                        {
+                          label: "Declarant",
+                          value: dash(data.ens.declarant?.name),
+                        },
+                      ]),
+                ]}
+              />
             ) : (
               <Tag>ENS not required</Tag>
             )}
@@ -389,6 +355,7 @@ export function PreviewStep({
 
         {config.showChargeTab ? (
           <SiPreviewSection
+            variant="airy"
             title={WIZARD_STEP_TITLES.chargeSummary}
             onEdit={() => go("chargeTab")}
           >
@@ -405,6 +372,7 @@ export function PreviewStep({
 
         {config.showFileUpload ? (
           <SiPreviewSection
+            variant="airy"
             title={WIZARD_STEP_TITLES.fileUpload}
             onEdit={() => go("files")}
           >
@@ -423,21 +391,17 @@ export function PreviewStep({
         ) : null}
 
         <SiPreviewSection
+          variant="airy"
           title={WIZARD_STEP_TITLES.references}
           onEdit={() => go("references")}
         >
           {data.referenceFields && data.referenceFields.length > 0 ? (
-            <Descriptions
-              size="small"
-              column={{ xs: 1, sm: 2, md: 3 }}
-              className="si-preview-descriptions"
-            >
-              {data.referenceFields.map((field) => (
-                <Descriptions.Item key={field.id} label={field.name}>
-                  {dash(field.value)}
-                </Descriptions.Item>
-              ))}
-            </Descriptions>
+            <SiPreviewFieldGrid
+              items={data.referenceFields.map((field) => ({
+                label: field.name,
+                value: dash(field.value),
+              }))}
+            />
           ) : (
             <SiPreviewEmpty label="No reference fields" />
           )}

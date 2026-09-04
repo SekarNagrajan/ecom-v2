@@ -4,11 +4,11 @@ import { useToast } from "@solverminds/shared-ui/hooks";
 import { useNavigate } from "@tanstack/react-router";
 import { Card, Result, Space, Steps, Typography, theme } from "antd";
 import { useState } from "react";
-import { AppIcon, Icons } from "../../components/icons";
+import { AppIcon, Icons, NavBookingIcon } from "../../components/icons";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import {
-    MODULE_TITLES,
-    WIZARD_STEP_TITLES,
+  MODULE_TITLES,
+  WIZARD_STEP_TITLES,
 } from "../../constants/module-titles";
 import { bookingApi } from "./api/booking.api";
 import { BookingModuleStyles } from "./components/booking-module-styles";
@@ -141,7 +141,7 @@ export function BookingWizardRoute() {
       <BookingModuleStyles />
       <div className="wizard-page-header">
         <ModuleScreenHeader
-          icon={Icons.bookOpen}
+          icon={NavBookingIcon}
           title={MODULE_TITLES.newBooking}
           marginBottom={0}
           extra={

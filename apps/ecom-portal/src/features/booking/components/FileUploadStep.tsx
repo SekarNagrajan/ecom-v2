@@ -73,11 +73,6 @@ export function FileUploadStep() {
           className="form-step-card form-step-section"
           title="Upload Supporting Documents"
         >
-          <Text type="secondary" className="form-step-hint">
-            Upload MSDS for hazardous cargo, VGM certificates, packing lists, or
-            other supporting documents.
-          </Text>
-
           <div className="booking-upload-type-row">
             <label className="form-field-label">Document Type</label>
             <Select

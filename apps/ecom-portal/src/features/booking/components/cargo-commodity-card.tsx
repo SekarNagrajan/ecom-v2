@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-02 16:43)
+// Modified by Sekar Nagarajan (2026-09-04 19:15)
 import { Flex, Input, InputNumber, Select, Switch, Typography } from "antd";
 import {
   Controller,
@@ -41,6 +41,8 @@ interface CargoCommodityCardProps {
   onCopy: () => void;
   onRemove: () => void;
   canRemove: boolean;
+  /** Hide Copy in review inline editor (Edit + Delete only). */
+  showCopy?: boolean;
 }
 
 /** Commodity card — SI-style sitem grid with booking fields only. */
@@ -57,6 +59,7 @@ export function CargoCommodityCard({
   onCopy,
   onRemove,
   canRemove,
+  showCopy = true,
 }: CargoCommodityCardProps) {
   const path = (field: string) => `containers.${ci}.commodities.${mi}.${field}`;
 
@@ -84,11 +87,13 @@ export function CargoCommodityCard({
             />
           </div>
           <ListActionsRow>
-            <ListActionButton
-              title="Copy Commodity"
-              icon={<AppIcon icon={Icons.copy} size={16} tone="view" />}
-              onClick={onCopy}
-            />
+            {showCopy ? (
+              <ListActionButton
+                title="Copy Commodity"
+                icon={<AppIcon icon={Icons.copy} size={16} tone="view" />}
+                onClick={onCopy}
+              />
+            ) : null}
             <ListActionButton
               title={
                 canRemove
@@ -98,6 +103,11 @@ export function CargoCommodityCard({
               icon={<AppIcon icon={Icons.trash} size={16} tone="delete" />}
               tone="delete"
               disabled={!canRemove}
+              ariaLabel={
+                canRemove
+                  ? "Delete Commodity"
+                  : "At Least One Commodity Is Required"
+              }
               onClick={onRemove}
             />
           </ListActionsRow>

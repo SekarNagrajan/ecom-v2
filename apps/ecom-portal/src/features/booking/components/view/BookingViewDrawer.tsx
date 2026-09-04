@@ -37,7 +37,7 @@ export function BookingViewDrawer({
       classNames={{ body: "booking-drawer-body custom-scroll" }}
       title={
         <div className="booking-drawer-title">
-          <AppIcon icon={Icons.bookOpen} size={22} />
+          <AppIcon icon={Ico} size={22} />
           <div>
             <Title level={4} className="booking-drawer-title__text">
               {formatModuleScreenTitle("View Booking", booking.bookingNo)}

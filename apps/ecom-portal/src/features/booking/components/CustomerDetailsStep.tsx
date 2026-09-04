@@ -79,9 +79,6 @@ function PartyRoleCard({
     <div className="booking-party-card booking-party-card--surface">
       <div className="booking-party-card__head">
         <div className="booking-party-card__role">
-          <span className="booking-party-card__role-icon app-icon-inherit">
-            <AppIcon icon={PARTY_ROLE_ICON[role]} size={16} />
-          </span>
           <Text strong className="booking-party-card__role-label">
             {PARTY_ROLE_LABEL[role]}
           </Text>
@@ -295,18 +292,6 @@ export function CustomerDetailsStep() {
           </section>
 
           <section className="booking-customer-step__section">
-            <div className="booking-customer-step__section-head">
-              <Text strong className="booking-customer-step__section-title">
-                Assigned Parties
-              </Text>
-              <Text
-                type="secondary"
-                className="booking-customer-step__section-hint"
-              >
-                Review the customer assigned to each booking role.
-              </Text>
-            </div>
-
             <div className="booking-party-grid booking-party-grid--surface">
               {DEFAULT_PARTY_ROLES.map((role) => {
                 const card = cards[role];

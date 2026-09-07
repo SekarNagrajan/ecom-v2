@@ -106,7 +106,14 @@ export function BookingCargoGridView({
                 <th
                   key={h}
                   className={
-                    h === "Actions" ? "si-cargo-grid__th-actions" : undefined
+                    h === "Actions"
+                      ? "si-cargo-grid__th-actions"
+                      : h === "SOC" ||
+                          h === "OOG" ||
+                          h === "NOR" ||
+                          h === "Hazardous"
+                        ? "si-cargo-grid__th-switch"
+                        : undefined
                   }
                 >
                   {h}
@@ -269,19 +276,21 @@ export function BookingCargoGridView({
                     </td>
                     <td className="si-cargo-grid__td-switch">
                       {first ? (
-                        <Controller
-                          control={control}
-                          name={`containers.${ci}.isSoc`}
-                          render={({ field: { value, onChange } }) => (
-                            <Switch
-                              size="medium"
-                              className={FORM_YES_NO_SWITCH_CLASS}
-                              checked={value}
-                              onChange={onChange}
-                              {...yesNoSwitchInner}
-                            />
-                          )}
-                        />
+                        <div className="si-cargo-grid__switch-cell">
+                          <Controller
+                            control={control}
+                            name={`containers.${ci}.isSoc`}
+                            render={({ field: { value, onChange } }) => (
+                              <Switch
+                                size="medium"
+                                className={FORM_YES_NO_SWITCH_CLASS}
+                                checked={value}
+                                onChange={onChange}
+                                {...yesNoSwitchInner}
+                              />
+                            )}
+                          />
+                        </div>
                       ) : null}
                     </td>
                     <td className="si-cargo-grid__td-switch">

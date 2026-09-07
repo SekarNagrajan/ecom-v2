@@ -303,17 +303,22 @@ export function BookingCargoEditorStyles() {
         justify-content: flex-end;
         min-height: ${token.controlHeightLG}px;
       }
-      .si-cargo-grid__td-haz {
-        text-align: center;
-      }
-      .si-cargo-grid__td-switch {
-        text-align: center;
+      .si-cargo-grid__th-switch {
+        text-align: center !important;
         min-width: 88px;
       }
+      .si-cargo-grid__td-switch,
+      .si-cargo-grid__td-haz {
+        min-width: 88px;
+        text-align: center;
+        vertical-align: middle;
+      }
       .si-cargo-grid__switch-cell {
-        display: inline-flex;
+        display: flex;
         align-items: center;
         justify-content: center;
+        width: 100%;
+        min-height: ${token.controlHeightLG}px;
         gap: ${token.marginXXS}px;
       }
       .si-cargo-grid__td-actions {

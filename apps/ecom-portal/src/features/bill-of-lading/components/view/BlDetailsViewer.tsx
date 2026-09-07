@@ -6,6 +6,7 @@ import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { AppIcon, Icons } from "../../../../components/icons";
+import { ModuleEmptyState } from "../../../../components/shared/module-empty-state";
 import { RESPONSIVE_COL } from "../../../../constants/responsive-grid";
 import { WIZARD_STEP_TITLES } from "../../../../constants/module-titles";
 import { SI_CARGO_LINE_COL_DEFS } from "../../../shipping-instruction/utils/si-cargo-line-col-defs";
@@ -387,7 +388,12 @@ export function BlDetailsViewer({
                 />
               </div>
             ) : (
-              <Text type="secondary">No routing details.</Text>
+              <ModuleEmptyState
+                artSize="sm"
+                variant="blank"
+                title="No routing details"
+                style={{ padding: 12 }}
+              />
             )}
           </Card>
         </Col>
@@ -444,7 +450,12 @@ export function BlDetailsViewer({
             }
           >
             {data.containers.length === 0 ? (
-              <Text type="secondary">No containers recorded.</Text>
+              <ModuleEmptyState
+                artSize="sm"
+                variant="blank"
+                title="No containers recorded"
+                style={{ padding: 12 }}
+              />
             ) : (
               data.containers.map((c, i) => (
                 <div key={c.id} className="bl-container-block">
@@ -519,7 +530,12 @@ export function BlDetailsViewer({
             }
           >
             {files.length === 0 ? (
-              <Text type="secondary">No documents uploaded.</Text>
+              <ModuleEmptyState
+                artSize="sm"
+                variant="blank"
+                title="No documents uploaded"
+                style={{ padding: 12 }}
+              />
             ) : (
               <div className="bl-meta-grid">
                 {files.map((f) => (
@@ -545,7 +561,12 @@ export function BlDetailsViewer({
             }
           >
             {activity.length === 0 ? (
-              <Text type="secondary">No activity recorded.</Text>
+              <ModuleEmptyState
+                artSize="sm"
+                variant="blank"
+                title="No activity recorded"
+                style={{ padding: 12 }}
+              />
             ) : (
               <ActivitySteps events={activity} />
             )}
@@ -565,7 +586,12 @@ export function BlDetailsViewer({
             }
           >
             {charges.length === 0 ? (
-              <Text type="secondary">No charges recorded.</Text>
+              <ModuleEmptyState
+                artSize="sm"
+                variant="blank"
+                title="No charges recorded"
+                style={{ padding: 12 }}
+              />
             ) : (
               <div className="bl-charges-grid responsive-table-wrap custom-scroll ag-theme-alpine">
                 <ListView

@@ -2,9 +2,10 @@
 // ECharts is available in the monorepo workspace (echarts ^6.0.0)
 // Modified by sekar nagarajan (2026-08-21)
 
-import { Card, Col, Empty, Row, theme } from 'antd';
+import { Card, Col, Row, theme } from 'antd';
 import * as echarts from 'echarts';
 import { useEffect, useRef } from 'react';
+import { ModuleEmptyState } from '../../../components/shared/module-empty-state';
 import type { BookingStatusChartItem } from '../api/dashboard.api';
 
 interface ChartProps {
@@ -110,7 +111,12 @@ export function DashboardCharts({ bookingChart, blChart, siChart }: DashboardCha
       <Col xs={24} md={12}>
         <Card title="Booking Status" style={cardStyle} styles={{ body: { padding: '16px 20px' } }}>
           {bookingChart.length === 0 ? (
-            <Empty style={{ padding: 40 }} />
+            <ModuleEmptyState
+              variant="blank"
+              title="No booking status data"
+              artSize="sm"
+              style={{ padding: 40 }}
+            />
           ) : (
             <EChartsCanvas data={bookingChart} type="bar" height={240} />
           )}
@@ -121,7 +127,12 @@ export function DashboardCharts({ bookingChart, blChart, siChart }: DashboardCha
       <Col xs={24} md={6}>
         <Card title="Bill of Lading Status" style={cardStyle} styles={{ body: { padding: '16px 20px' } }}>
           {blChart.length === 0 ? (
-            <Empty style={{ padding: 40 }} />
+            <ModuleEmptyState
+              variant="blank"
+              title="No B/L status data"
+              artSize="sm"
+              style={{ padding: 40 }}
+            />
           ) : (
             <EChartsCanvas data={blChart} type="pie" height={240} />
           )}
@@ -132,7 +143,12 @@ export function DashboardCharts({ bookingChart, blChart, siChart }: DashboardCha
       <Col xs={24} md={6}>
         <Card title="Shipping Instruction Status" style={cardStyle} styles={{ body: { padding: '16px 20px' } }}>
           {siChart.length === 0 ? (
-            <Empty style={{ padding: 40 }} />
+            <ModuleEmptyState
+              variant="blank"
+              title="No shipping instruction status data"
+              artSize="sm"
+              style={{ padding: 40 }}
+            />
           ) : (
             <EChartsCanvas data={siChart} type="pie" height={240} />
           )}

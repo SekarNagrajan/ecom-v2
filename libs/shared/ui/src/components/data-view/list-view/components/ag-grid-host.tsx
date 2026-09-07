@@ -15,7 +15,14 @@ import type {
   SideBarDef,
 } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import { useCallback, useEffect, useMemo, useRef, type RefObject } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  type ReactNode,
+  type RefObject,
+} from 'react';
 
 import type { DataViewItem } from '../../data-view-item';
 import { useAgGridRuntimeSizing, useAgGridTheme } from '../../theme-utils';
@@ -23,6 +30,7 @@ import { useListViewContext } from '../context';
 import type { ColumnFilterType, ListViewProps } from '../types';
 import { AgGridDateComponent } from './ag-grid-date-component';
 import { AgGridLoadingOverlay } from './ag-grid-loading-overlay';
+import { AgGridNoRowsOverlay } from './ag-grid-no-rows-overlay';
 import { AgGridNumberFloatingFilter } from './ag-grid-number-floating-filter';
 import { AgGridSetFloatingFilter } from './ag-grid-set-floating-filter';
 import { AgGridTextFloatingFilter } from './ag-grid-text-floating-filter';
@@ -64,6 +72,7 @@ type AgGridHostProps<TData extends DataViewItem> = {
   editable: boolean;
   dataMode: NonNullable<ListViewProps<TData>['dataMode']>;
   gridOptions: ListViewProps<TData>['gridOptions'];
+  emptyState?: ReactNode;
   pagination: boolean;
   paginationPageSize: number;
   sideBarProp: ListViewProps<TData>['sideBar'];
@@ -378,6 +387,7 @@ export const AgGridHost = <TData extends DataViewItem>({
   editable,
   dataMode,
   gridOptions,
+  emptyState,
   pagination,
   paginationPageSize,
   sideBarProp,
@@ -468,8 +478,16 @@ export const AgGridHost = <TData extends DataViewItem>({
       // time, reading as two separate loading states.
       loadingCellRenderer:
         gridOptions?.loadingCellRenderer ?? AgGridNoopLoadingCellRenderer,
+      noRowsOverlayComponent:
+        gridOptions?.noRowsOverlayComponent ?? AgGridNoRowsOverlay,
+      noRowsOverlayComponentParams: {
+        ...(gridOptions?.noRowsOverlayComponentParams as
+          | Record<string, unknown>
+          | undefined),
+        emptyState,
+      },
     };
-  }, [gridOptions, resolvedAutoSizeStrategy]);
+  }, [emptyState, gridOptions, resolvedAutoSizeStrategy]);
   /**
    * Normalize `sideBar: true` (AntD-style shorthand) and `sideBar: undefined`
    * (no consumer opinion) to our explicit `DEFAULT_SIDE_BAR` config — keeps

@@ -15,6 +15,7 @@ import {
 import { useEffect, useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import { MODULE_TITLES } from "../../../constants/module-titles";
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import {
@@ -246,6 +247,16 @@ export function MyAlertsView({ open = true, onClose }: MyAlertsViewProps) {
             className="um-alerts-log custom-scroll"
             itemLayout="horizontal"
             dataSource={logs}
+            locale={{
+              emptyText: (
+                <ModuleEmptyState
+                  artSize="sm"
+                  variant="blank"
+                  title="No recent alert activity"
+                  style={{ padding: 12 }}
+                />
+              ),
+            }}
             renderItem={(log) => (
               <List.Item>
                 <List.Item.Meta

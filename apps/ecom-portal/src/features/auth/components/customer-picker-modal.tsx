@@ -6,6 +6,7 @@ import { Input, List, Typography, theme } from 'antd';
 import { useState } from 'react';
 
 import { AppIcon, Icons } from '../../../components/icons';
+import { ModuleEmptyState } from '../../../components/shared/module-empty-state';
 
 const { Text } = Typography;
 
@@ -62,7 +63,16 @@ export function CustomerPickerModal({
       >
         <List
           dataSource={filteredCustomers}
-          locale={{ emptyText: 'No customers found' }}
+          locale={{
+            emptyText: (
+              <ModuleEmptyState
+                artSize="sm"
+                variant="blank"
+                title="No customers found"
+                style={{ padding: 12 }}
+              />
+            ),
+          }}
           renderItem={(customer) => (
             <List.Item
               onClick={() => handleSelect(customer)}

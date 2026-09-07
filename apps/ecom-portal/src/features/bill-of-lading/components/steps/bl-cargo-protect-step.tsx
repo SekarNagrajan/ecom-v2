@@ -1,6 +1,6 @@
 // Modified by Sekar Nagarajan (2026-08-28 11:33)
 import { AppButton } from "@solverminds/shared-ui";
-import { Card, Input, InputNumber, Select, Typography } from "antd";
+import { Card, Input, InputNumber, Select } from "antd";
 import { useState } from "react";
 
 import { AppIcon, Icons } from "../../../../components/icons";
@@ -8,11 +8,10 @@ import {
   ListActionButton,
   ListActionsRow,
 } from "../../../../components/shared/list-action-button";
+import { ModuleEmptyState } from "../../../../components/shared/module-empty-state";
 import type { BLCargoProtectLine } from "../../types/bl.types";
 import { BlWizardFooter } from "../bl-wizard-footer";
 import type { BLWizardStepProps } from "./MasterDetailsStep";
-
-const { Text } = Typography;
 
 function createEmptyLine(): BLCargoProtectLine {
   return {
@@ -126,10 +125,13 @@ export function BlCargoProtectStep({
           }
         >
           {lines.length === 0 ? (
-            <Text type="secondary" className="bl-cargo-protect-empty">
-              No cargo protect lines. Click Add Row to include coverage
-              products.
-            </Text>
+            <ModuleEmptyState
+              artSize="sm"
+              variant="blank"
+              title="No cargo protect lines"
+              message="Click Add Row to include coverage products."
+              style={{ padding: 12 }}
+            />
           ) : (
             <div className="bl-cargo-protect-lines">
               {lines.map((line, index) => (

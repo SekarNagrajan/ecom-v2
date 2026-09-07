@@ -12,6 +12,11 @@ import {
   ListActionButton,
   ListActionsRow,
 } from "../../../components/shared/list-action-button";
+import {
+  ModuleEmptyState,
+  buildClearFiltersAction,
+  buildRetryAction,
+} from "../../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
 import { MODULE_TITLES } from "../../../constants/module-titles";
 import {
@@ -46,12 +51,16 @@ export function ArrivalNoticeListing() {
     data: rows = [],
     isLoading,
     isFetching,
+    isError,
+    refetch,
   } = useArrivalNoticeListQuery(filters.fromDate, filters.toDate);
   const { mutate: downloadDoc } = useArrivalNoticeDownloadMutation();
 
   const handleSearch = (values: ArnSearchValues) => {
     setFilters({ fromDate: values.fromDate, toDate: values.toDate });
   };
+
+  const handleClearFilters = () => setFilters(initialFilters);
 
   const handleView = (anNo: string) => {
     setSelectedAnNo(anNo);
@@ -152,6 +161,21 @@ export function ArrivalNoticeListing() {
   ];
 
   const showLoading = isLoading && rows.length === 0;
+  const emptyState = isError ? (
+    <ModuleEmptyState
+      variant="error"
+      title="Couldn't load arrival notices"
+      message="The request didn't complete. Check your connection and try again."
+      actions={[buildRetryAction(() => void refetch())]}
+    />
+  ) : (
+    <ModuleEmptyState
+      variant="filtered"
+      title="No arrival notices match your search"
+      message="Nothing came back for this date range. Widen the dates or clear the filters to see more results."
+      actions={[buildClearFiltersAction(handleClearFilters)]}
+    />
+  );
 
   return (
     <div className="arn-page-layout">
@@ -168,12 +192,15 @@ export function ArrivalNoticeListing() {
 
       {showLoading ? (
         <ArnLoadingCenter fill />
+      ) : isError && rows.length === 0 ? (
+        emptyState
       ) : (
         <div className="arn-grid-wrap responsive-table-wrap custom-scroll">
           <DataView
             rowData={rows}
             columnDefs={columns}
             loading={isFetching}
+            emptyState={emptyState}
             allowedViewModes={["list"]}
             defaultViewMode="list"
             renderToolbar={() => null}
@@ -184,7 +211,6 @@ export function ArrivalNoticeListing() {
                 getRowId: (params: { data: ArrivalNoticeListDTO }) =>
                   params.data.anNo,
                 onRowDoubleClicked: handleRowDoubleClick,
-                overlayNoRowsTemplate: "No arrival notices found.",
               },
             }}
           />

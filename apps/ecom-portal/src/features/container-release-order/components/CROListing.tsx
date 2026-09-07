@@ -12,6 +12,11 @@ import {
   ListActionButton,
   ListActionsRow,
 } from "../../../components/shared/list-action-button";
+import {
+  ModuleEmptyState,
+  buildClearFiltersAction,
+  buildRetryAction,
+} from "../../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
 import { MODULE_TITLES } from "../../../constants/module-titles";
 import {
@@ -45,12 +50,16 @@ export function CROListing() {
     data: rows = [],
     isLoading,
     isFetching,
+    isError,
+    refetch,
   } = useCROSummaryQuery(filters.fromDate, filters.toDate);
   const { mutate: downloadDoc } = useCRODownloadMutation();
 
   const handleSearch = (values: CroSearchValues) => {
     setFilters({ fromDate: values.fromDate, toDate: values.toDate });
   };
+
+  const handleClearFilters = () => setFilters(initialFilters);
 
   const handleView = (croNo: string) => {
     setSelectedCroNo(croNo);
@@ -158,6 +167,21 @@ export function CROListing() {
   ];
 
   const showLoading = isLoading && rows.length === 0;
+  const emptyState = isError ? (
+    <ModuleEmptyState
+      variant="error"
+      title="Couldn't load container release orders"
+      message="The request didn't complete. Check your connection and try again."
+      actions={[buildRetryAction(() => void refetch())]}
+    />
+  ) : (
+    <ModuleEmptyState
+      variant="filtered"
+      title="No container release orders match your search"
+      message="Nothing came back for this date range. Widen the dates or clear the filters to see more results."
+      actions={[buildClearFiltersAction(handleClearFilters)]}
+    />
+  );
 
   return (
     <div className="cro-page-layout">
@@ -174,12 +198,15 @@ export function CROListing() {
 
       {showLoading ? (
         <CroLoadingCenter fill />
+      ) : isError && rows.length === 0 ? (
+        emptyState
       ) : (
         <div className="cro-grid-wrap responsive-table-wrap custom-scroll">
           <DataView
             rowData={rows}
             columnDefs={columns}
             loading={isFetching}
+            emptyState={emptyState}
             allowedViewModes={["list"]}
             defaultViewMode="list"
             renderToolbar={() => null}
@@ -189,7 +216,6 @@ export function CROListing() {
               gridOptions: {
                 getRowId: (params: { data: CROListDTO }) => params.data.croNo,
                 onRowDoubleClicked: handleRowDoubleClick,
-                overlayNoRowsTemplate: "No container release orders found.",
               },
             }}
           />

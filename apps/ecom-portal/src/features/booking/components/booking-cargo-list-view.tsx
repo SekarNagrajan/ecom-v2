@@ -14,6 +14,7 @@ import {
   ListActionButton,
   ListActionsRow,
 } from "../../../components/shared/list-action-button";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import {
   createEmptyCommodity,
   type CargoData,
@@ -76,17 +77,13 @@ export function BookingCargoListView({
 }: BookingCargoListViewProps) {
   if (pageIndexes.length === 0) {
     return (
-      <div className="si-cargo-empty">
-        <div className="si-cargo-empty__icon">
-          <AppIcon icon={Icons.inbox} size={22} />
-        </div>
-        <Text strong>No containers match</Text>
-        <div>
-          <Text type="secondary">
-            Adjust the search or the &quot;Incomplete only&quot; filter.
-          </Text>
-        </div>
-      </div>
+      <ModuleEmptyState
+        artSize="sm"
+        variant="filtered"
+        title="No containers match"
+        message='Adjust the search or the "Incomplete only" filter.'
+        style={{ padding: 12 }}
+      />
     );
   }
 

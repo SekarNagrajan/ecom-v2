@@ -4,10 +4,11 @@
  */
 import { AppButton, AppModal } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
-import { Alert, Empty, Input, Spin, Tag, Tooltip, Typography } from "antd";
+import { Alert, Input, Spin, Tag, Tooltip, Typography } from "antd";
 import { useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import { useModuleMappingController } from "../hooks/use-admin-controller";
 import type { ModuleMappingCustomer } from "../types/admin.types";
 import { AdminPanelShell } from "./AdminPanelShell";
@@ -208,18 +209,20 @@ export function SpecialPrivilegesView() {
 
         {!selectedCustomer ? (
           <div className="admin-mapping-empty">
-            <Empty
-              image={Empty.PRESENTED_IMAGE_SIMPLE}
-              description="Select a customer to map modules"
-            >
-              <AppButton
-                type="primary"
-                icon={<AppIcon icon={Icons.search} size={16} />}
-                onClick={() => setSearchOpen(true)}
-              >
-                Search Customer
-              </AppButton>
-            </Empty>
+            <ModuleEmptyState
+              variant="blank"
+              title="Select a customer to map modules"
+              actions={[
+                {
+                  key: "search-customer",
+                  label: "Search Customer",
+                  type: "primary",
+                  icon: <AppIcon icon={Icons.search} size={16} />,
+                  onClick: () => setSearchOpen(true),
+                },
+              ]}
+              artSize="md"
+            />
           </div>
         ) : isLoadingMenus ? (
           <div
@@ -283,7 +286,12 @@ export function SpecialPrivilegesView() {
               <Spin size="medium" />
             </div>
           ) : filteredCustomers.length === 0 ? (
-            <Empty description="No customers found" />
+            <ModuleEmptyState
+              variant="filtered"
+              title="No customers found"
+              message="Try a different customer code or company name."
+              artSize="sm"
+            />
           ) : (
             filteredCustomers.map((customer) => (
               <button

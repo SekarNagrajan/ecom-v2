@@ -8,6 +8,7 @@ import {
   Icons,
   NavArrivalNoticeIcon,
 } from "../../../../components/icons";
+import { ModuleEmptyState } from "../../../../components/shared/module-empty-state";
 import {
   useArrivalNoticeDetailQuery,
   useArrivalNoticeDownloadMutation,
@@ -343,7 +344,16 @@ export function AnViewDrawer({ anNo, onClose }: AnViewDrawerProps) {
                   width: 120,
                 },
               ]}
-              locale={{ emptyText: "No containers on this notice" }}
+              locale={{
+                emptyText: (
+                  <ModuleEmptyState
+                    artSize="sm"
+                    variant="blank"
+                    title="No containers on this notice"
+                    style={{ padding: 12 }}
+                  />
+                ),
+              }}
             />
           </section>
 

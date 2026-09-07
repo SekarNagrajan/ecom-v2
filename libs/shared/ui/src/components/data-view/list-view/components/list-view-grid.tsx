@@ -56,6 +56,7 @@ export const ListViewGrid = <TData extends DataViewItem>({
     refreshKey,
     activeProfileId,
     profiles = [],
+    emptyState,
   } = props;
 
   const callbacksRef = useRef({
@@ -193,6 +194,7 @@ export const ListViewGrid = <TData extends DataViewItem>({
         editable={editable}
         dataMode={dataMode}
         gridOptions={gridOptions}
+        emptyState={emptyState}
         pagination={pagination}
         paginationPageSize={paginationPageSize}
         sideBarProp={sideBarProp}

@@ -3,6 +3,7 @@ import { AppButton } from "@solverminds/shared-ui";
 import { Card, Typography } from "antd";
 import type { ReactNode } from "react";
 
+import { ModuleEmptyState } from "../../../../components/shared/module-empty-state";
 import type { SIChargeLine, SIWizardStepProps } from "../../types/si.types";
 
 const { Text, Title } = Typography;
@@ -52,7 +53,12 @@ export function SiChargeTabStep({
           }
         >
           {charges.length === 0 ? (
-            <Text type="secondary">No charges available for this SI.</Text>
+            <ModuleEmptyState
+              artSize="sm"
+              variant="blank"
+              title="No charges available for this SI"
+              style={{ padding: 12 }}
+            />
           ) : (
             <div className="si-charges-lines">
               {charges.map((line, index) => (

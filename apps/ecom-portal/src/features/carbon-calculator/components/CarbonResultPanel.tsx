@@ -3,6 +3,7 @@ import { AppButton } from "@solverminds/shared-ui";
 import { Spin, Table, Typography } from "antd";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import {
   useCarbonComputeQuery,
   useCarbonExportMutation,
@@ -180,7 +181,12 @@ export function CarbonResultPanel({ input }: CarbonResultPanelProps) {
         ) : spinning ? (
           <div className="co2-result-spin-placeholder" aria-hidden />
         ) : !isError ? (
-          <div className="co2-result-idle">No result yet.</div>
+          <ModuleEmptyState
+            artSize="sm"
+            variant="blank"
+            title="No result yet"
+            style={{ padding: 12 }}
+          />
         ) : null}
       </div>
     </Spin>

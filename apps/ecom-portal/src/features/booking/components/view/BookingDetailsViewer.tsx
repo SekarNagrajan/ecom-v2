@@ -5,6 +5,7 @@ import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { AppIcon, Icons } from "../../../../components/icons";
+import { ModuleEmptyState } from "../../../../components/shared/module-empty-state";
 import { bookingApi } from "../../api/booking.api";
 import { bookingKeys } from "../../api/booking.keys";
 import type { BookingActivityEvent } from "../../types/booking.types";
@@ -229,7 +230,12 @@ export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
         >
           <div className="booking-meta-grid">
             {(cargo?.containers ?? []).length === 0 ? (
-              <Text type="secondary">No cargo lines recorded.</Text>
+              <ModuleEmptyState
+                artSize="sm"
+                variant="blank"
+                title="No cargo lines recorded"
+                style={{ padding: 12 }}
+              />
             ) : (
               (cargo?.containers ?? []).map((c, i) => (
                 <MetaItem
@@ -326,7 +332,12 @@ export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
           }
         >
           {documents.length === 0 ? (
-            <Text type="secondary">No documents uploaded.</Text>
+            <ModuleEmptyState
+              artSize="sm"
+              variant="blank"
+              title="No documents uploaded"
+              style={{ padding: 12 }}
+            />
           ) : (
             <div className="booking-meta-grid">
               {documents.map((d) => (
@@ -350,7 +361,12 @@ export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
           {activityLoading ? (
             <Skeleton active paragraph={{ rows: 3 }} />
           ) : activity.length === 0 ? (
-            <Text type="secondary">No activity recorded.</Text>
+            <ModuleEmptyState
+              artSize="sm"
+              variant="blank"
+              title="No activity recorded"
+              style={{ padding: 12 }}
+            />
           ) : (
             <ActivitySteps events={activity} />
           )}

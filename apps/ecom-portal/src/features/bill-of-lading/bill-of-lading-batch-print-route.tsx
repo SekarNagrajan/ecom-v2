@@ -1,11 +1,12 @@
 // Modified by Sekar Nagarajan (2026-08-31 15:25)
 import { AppButton } from "@solverminds/shared-ui";
 import { useNavigate } from "@tanstack/react-router";
-import { Card, Empty, Space, Table, Tag, Typography } from "antd";
+import { Card, Space, Table, Tag, Typography } from "antd";
 import { useState } from "react";
 
 import { AppIcon, Icons, NavIcons } from "../../components/icons";
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
+import { ModuleEmptyState } from "../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import { useBLBatchPrintMutation, useBLListQuery } from "./api/bl.queries";
 import { BlModuleStyles } from "./components/bl-module-styles";
@@ -86,9 +87,11 @@ export function BillOfLadingBatchPrintRoute() {
 
           <div className="bl-batch-page-body">
             {rows.length === 0 && !isLoading ? (
-              <Empty
-                image={Empty.PRESENTED_IMAGE_SIMPLE}
-                description="No confirmed B/Ls eligible for batch original print."
+              <ModuleEmptyState
+                variant="blank"
+                title="No B/Ls eligible for batch print"
+                message="No confirmed B/Ls are currently eligible for batch original print."
+                artSize="md"
               />
             ) : (
               <Table<BLListDTO>

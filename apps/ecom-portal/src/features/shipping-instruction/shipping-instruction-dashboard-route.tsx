@@ -13,6 +13,10 @@ import {
   ListActionButton,
   ListActionsRow,
 } from "../../components/shared/list-action-button";
+import {
+  ModuleEmptyState,
+  buildRetryAction,
+} from "../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import { MODULE_TITLES } from "../../constants/module-titles";
 import { useCancelSiMutation, useSiListQuery } from "./api/si.queries";
@@ -28,7 +32,7 @@ export function ShippingInstructionDashboardRoute() {
   const toast = useToast();
   const [selectedRecord, setSelectedRecord] = useState<SIListDTO | null>(null);
 
-  const { data: siList = [], isLoading } = useSiListQuery();
+  const { data: siList = [], isLoading, isError, refetch } = useSiListQuery();
   const cancelMutation = useCancelSiMutation();
 
   const openWizard = (id: string) => {
@@ -68,6 +72,21 @@ export function ShippingInstructionDashboardRoute() {
     });
   };
 
+  const emptyState = isError ? (
+    <ModuleEmptyState
+      variant="error"
+      title="Couldn't load shipping instructions"
+      message="The request didn't complete. Check your connection and try again."
+      actions={[buildRetryAction(() => void refetch())]}
+    />
+  ) : (
+    <ModuleEmptyState
+      variant="blank"
+      title="No shipping instructions yet"
+      message="Shipping instructions will appear here when they are created for confirmed bookings."
+    />
+  );
+
   return (
     <FeaturePageShell>
       <SiModuleStyles />
@@ -84,9 +103,13 @@ export function ShippingInstructionDashboardRoute() {
 
           <div className="si-grid-wrap">
             <div className="si-list-grid responsive-table-wrap custom-scroll ag-theme-alpine">
-              <ListView
+              {isError && siList.length === 0 && !isLoading ? (
+                emptyState
+              ) : (
+                <ListView
                 rowData={siList}
                 loading={isLoading}
+                emptyState={emptyState}
                 defaultColDef={{ filter: true }}
                 columnDefs={[
                   buildActionsColumn<SIListDTO>({
@@ -253,7 +276,8 @@ export function ShippingInstructionDashboardRoute() {
                 gridOptions={{
                   onRowDoubleClicked: handleRowDoubleClick,
                 }}
-              />
+                />
+              )}
             </div>
           </div>
         </div>

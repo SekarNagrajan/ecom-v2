@@ -1,9 +1,10 @@
 import { SearchOutlined, SendOutlined } from '@ant-design/icons';
-import { Alert, Empty, Flex, Input, Pagination, Spin, theme } from 'antd';
+import { Alert, Flex, Input, Pagination, Spin, theme } from 'antd';
 import type { UIEvent } from 'react';
 
 import { useAntdBreakpoint, useDateFormat } from '../../../hooks';
 import { AppButton } from '../../ui/button';
+import { AppEmptyState } from '../../ui/empty-state';
 import { AppTabs } from '../../ui/tabs';
 import {
   useEmailCenterActions,
@@ -170,9 +171,11 @@ export function EmailSidebar({
           })}
 
           {!isLoadingThreads && threads.length === 0 && (
-            <Empty
-              description="No emails found"
-              image={Empty.PRESENTED_IMAGE_SIMPLE}
+            <AppEmptyState
+              variant="filtered"
+              artSize="sm"
+              title="No emails found"
+              hideArt
             />
           )}
 

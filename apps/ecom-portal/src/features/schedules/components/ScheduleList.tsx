@@ -6,6 +6,7 @@ import { DataView } from "@solverminds/shared-ui/data-view";
 import type { ColDef } from "ag-grid-community";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import type { ScheduleItem } from "../types/schedules.types";
 
 interface ScheduleListProps {
@@ -93,6 +94,13 @@ export function ScheduleList({
       columnDefs={columnDefs}
       rowData={schedules || []}
       loading={isLoading}
+      emptyState={
+        <ModuleEmptyState
+          variant="filtered"
+          title="No sailing schedules found"
+          message="Try different ports or dates to find an available sailing."
+        />
+      }
     />
   );
 }

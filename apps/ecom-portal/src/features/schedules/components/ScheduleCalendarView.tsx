@@ -1,10 +1,11 @@
 // Modified by Sekar Nagarajan (2026-08-25 18:40)
 import { AppButton } from "@solverminds/shared-ui";
-import { Badge, Empty, Space, Tag, Typography } from "antd";
+import { Badge, Space, Tag, Typography } from "antd";
 import dayjs from "dayjs";
 import { useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import { useResponsiveLayout } from "../../../hooks/use-responsive-layout";
 import type { ScheduleItem } from "../types/schedules.types";
 
@@ -45,7 +46,12 @@ function ScheduleAgendaView({
   if (grouped.length === 0) {
     return (
       <div className="schedule-empty">
-        <Empty description="No departures this month for your search" />
+        <ModuleEmptyState
+          variant="filtered"
+          title="No departures this month"
+          message="No sailings match your search for the selected month."
+          artSize="md"
+        />
       </div>
     );
   }

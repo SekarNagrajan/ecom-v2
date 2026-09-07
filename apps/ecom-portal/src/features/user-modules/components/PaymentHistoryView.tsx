@@ -12,6 +12,10 @@ import {
   ListActionButton,
   ListActionsRow,
 } from "../../../components/shared/list-action-button";
+import {
+  ModuleEmptyState,
+  buildRetryAction,
+} from "../../../components/shared/module-empty-state";
 import { MODULE_TITLES } from "../../../constants/module-titles";
 import { usePaymentHistoryQuery } from "../api/user-modules.queries";
 import type { PaymentHistoryRecord } from "../types/user-modules.types";
@@ -51,6 +55,8 @@ export function PaymentHistoryView() {
     data: payments = [],
     isLoading,
     isFetching,
+    isError,
+    refetch,
   } = usePaymentHistoryQuery();
 
   const handleDownloadReceipt = (rec: PaymentHistoryRecord) => {
@@ -157,6 +163,21 @@ export function PaymentHistoryView() {
     },
   ];
 
+  const emptyState = isError ? (
+    <ModuleEmptyState
+      variant="error"
+      title="Couldn't load payment history"
+      message="The request didn't complete. Check your connection and try again."
+      actions={[buildRetryAction(() => void refetch())]}
+    />
+  ) : (
+    <ModuleEmptyState
+      variant="filtered"
+      title="No payment records found"
+      message="Payments for the selected period will appear here once they are processed."
+    />
+  );
+
   return (
     <div className="um-page-layout">
       <UmPanelHeader
@@ -191,6 +212,7 @@ export function PaymentHistoryView() {
           columnDefs={columnDefs}
           rowData={payments}
           loading={isLoading || isFetching}
+          emptyState={emptyState}
           allowedViewModes={["list"]}
           defaultViewMode="list"
           renderToolbar={() => null}
@@ -198,8 +220,6 @@ export function PaymentHistoryView() {
             showToolbar: false,
             gridOptions: {
               domLayout: "autoHeight",
-              overlayNoRowsTemplate:
-                "No payment records found for this period.",
               suppressCellFocus: true,
             },
           }}

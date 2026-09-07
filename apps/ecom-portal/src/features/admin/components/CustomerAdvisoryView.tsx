@@ -15,6 +15,7 @@ import { useForm, type Resolver } from "react-hook-form";
 import { z } from "zod";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import type { CustomerAdvisory } from "../types/admin.types";
 import { AdminPanelShell } from "./AdminPanelShell";
 
@@ -221,6 +222,16 @@ export function CustomerAdvisoryView({
             pagination={false}
             scroll={{ x: true }}
             size="middle"
+            locale={{
+              emptyText: (
+                <ModuleEmptyState
+                  artSize="sm"
+                  variant="blank"
+                  title="No customer advisories published"
+                  style={{ padding: 12 }}
+                />
+              ),
+            }}
           />
         </div>
       </div>

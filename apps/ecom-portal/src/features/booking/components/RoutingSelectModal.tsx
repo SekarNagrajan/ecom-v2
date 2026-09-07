@@ -1,10 +1,14 @@
 // Modified by Sekar Nagarajan (2026-09-01 15:52)
 import { useQuery } from "@tanstack/react-query";
-import { Empty, Spin } from "antd";
+import { Spin } from "antd";
 import { useState } from "react";
 
 import { Icons } from "../../../components/icons";
 import { BookingTemplateModalShell } from "../../../components/shared/booking-template-modal-shell";
+import {
+  buildRetryAction,
+  ModuleEmptyState,
+} from "../../../components/shared/module-empty-state";
 import { bookingApi } from "../api/booking.api";
 import { bookingKeys } from "../api/booking.keys";
 import type { SelectedRoute } from "../types/booking.types";
@@ -33,6 +37,7 @@ export function RoutingSelectModal({
     data: routes = [],
     isFetching,
     isError,
+    refetch,
   } = useQuery({
     queryKey: bookingKeys.routing(origin, delivery, cargoReadyDate),
     queryFn: () =>
@@ -70,11 +75,22 @@ export function RoutingSelectModal({
         ) : null}
 
         {!isFetching && isError ? (
-          <Empty description="Unable to load vessel schedules. Try again." />
+          <ModuleEmptyState
+            variant="error"
+            title="Unable to load vessel schedules"
+            message="Something went wrong while loading routes."
+            actions={[buildRetryAction(() => void refetch())]}
+            artSize="sm"
+          />
         ) : null}
 
         {!isFetching && !isError && routes.length === 0 ? (
-          <Empty description="No records found for this origin and delivery." />
+          <ModuleEmptyState
+            variant="filtered"
+            title="No vessel schedules found"
+            message="No records match this origin, delivery, and cargo-ready date."
+            artSize="sm"
+          />
         ) : null}
 
         {!isFetching && !isError

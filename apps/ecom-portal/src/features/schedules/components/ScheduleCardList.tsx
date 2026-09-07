@@ -1,10 +1,11 @@
 // Modified by Sekar Nagarajan (2026-08-27 23:09)
 import { AppButton } from "@solverminds/shared-ui";
-import { Empty, Space, Spin, Tag, Tooltip, Typography } from "antd";
+import { Spin, Tag, Tooltip, Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
 import { Fragment, useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import type { RouteLeg, ScheduleItem } from "../types/schedules.types";
 
 const { Text, Title } = Typography;
@@ -663,16 +664,11 @@ export function ScheduleCardList({
   if (schedules.length === 0) {
     return (
       <div className="schedule-empty">
-        <Empty
-          image={Empty.PRESENTED_IMAGE_SIMPLE}
-          description={
-            <Space direction="vertical" size={4}>
-              <Text strong>No sailings found</Text>
-              <Text type="secondary">
-                Try adjusting your ports, dates, or search type.
-              </Text>
-            </Space>
-          }
+        <ModuleEmptyState
+          variant="filtered"
+          title="No sailings found"
+          message="Try adjusting your ports, dates, or search type."
+          artSize="md"
         />
       </div>
     );

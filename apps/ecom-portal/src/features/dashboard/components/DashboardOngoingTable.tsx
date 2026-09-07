@@ -4,6 +4,7 @@ import { DataView, DataViewColumn } from "@solverminds/shared-ui/data-view";
 import { Flex, Space, Tag, theme, Tooltip, Typography } from "antd";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import type { DashboardShipment } from "../api/dashboard.api";
 import { filterDashboardShipments } from "../utils/filter-dashboard-shipments";
 
@@ -285,6 +286,17 @@ export function DashboardOngoingTable({
         className="dashboard-ongoing-grid"
         columnDefs={columnDefs}
         rowData={filteredShipments}
+        emptyState={
+          <ModuleEmptyState
+            variant={activeFilter ? "filtered" : "blank"}
+            title="No ongoing transactions found"
+            message={
+              activeFilter
+                ? "No shipments match the selected dashboard filter."
+                : "Your ongoing bookings and bills of lading will appear here."
+            }
+          />
+        }
         allowedViewModes={["list"]}
         renderToolbar={() => (
           <Flex

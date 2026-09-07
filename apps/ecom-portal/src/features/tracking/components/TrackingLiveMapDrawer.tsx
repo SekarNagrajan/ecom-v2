@@ -1,8 +1,9 @@
 // Modified by Sekar Nagarajan (2026-09-04 16:45)
 import { AppDrawer } from "@solverminds/shared-ui";
-import { Card, Empty, Typography } from "antd";
+import { Card, Typography } from "antd";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import type {
   ContainerEquipment,
   TrackingSearchResult,
@@ -102,7 +103,12 @@ export function TrackingLiveMapDrawer({
         </div>
       ) : (
         <div className="tracking-live-map__empty">
-          <Empty description="Live route geometry is not available for this shipment." />
+          <ModuleEmptyState
+            variant="blank"
+            title="Live route unavailable"
+            message="Live route geometry is not available for this shipment."
+            artSize="sm"
+          />
         </div>
       )}
     </AppDrawer>

@@ -6,6 +6,10 @@ import { Space, Typography } from "antd";
 import { useState } from "react";
 
 import { AppIcon, Icons, NavIcons } from "../../../components/icons";
+import {
+  ModuleEmptyState,
+  buildRetryAction,
+} from "../../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
 import { MODULE_TITLES } from "../../../constants/module-titles";
 import {
@@ -30,7 +34,7 @@ const { Text } = Typography;
 
 export function BillOfLadingListing() {
   const navigate = useNavigate();
-  const { data, isLoading } = useBLListQuery({});
+  const { data, isLoading, isError, refetch } = useBLListQuery({});
   const { data: config } = useBLWizardConfig();
   const rows = data?.rows ?? [];
 
@@ -83,6 +87,21 @@ export function BillOfLadingListing() {
     setSelectedRecord(record);
   };
 
+  const emptyState = isError ? (
+    <ModuleEmptyState
+      variant="error"
+      title="Couldn't load bills of lading"
+      message="The request didn't complete. Check your connection and try again."
+      actions={[buildRetryAction(() => void refetch())]}
+    />
+  ) : (
+    <ModuleEmptyState
+      variant="blank"
+      title="No bills of lading yet"
+      message="Bills of lading will appear here once they are created for your shipments."
+    />
+  );
+
   return (
     <div className="bl-page-layout">
       <div className="bl-page-header">
@@ -114,9 +133,13 @@ export function BillOfLadingListing() {
         enabled={config?.enableStripePayment}
       />
 
-      <BillOfLadingListGrid
-        rows={rows}
-        loading={isLoading}
+      {isError && rows.length === 0 && !isLoading ? (
+        emptyState
+      ) : (
+        <BillOfLadingListGrid
+          rows={rows}
+          loading={isLoading}
+          emptyState={emptyState}
         hideAgencyRefColumn={config?.hideAgencyRefColumn}
         showChargeSummary={config?.showChargeSummary}
         showNnPrint={config?.showNnPrint}
@@ -129,8 +152,9 @@ export function BillOfLadingListing() {
         onCancel={(blNo) => cancelBl(blNo)}
         onCharges={setChargesBlNo}
         onManifest={openManifest}
-        onRowDoubleClicked={handleRowDoubleClick}
-      />
+          onRowDoubleClicked={handleRowDoubleClick}
+        />
+      )}
 
       {selectedRecord ? (
         <BlViewDrawer

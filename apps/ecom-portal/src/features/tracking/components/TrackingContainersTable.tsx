@@ -4,6 +4,7 @@ import { DataView, DataViewColumn } from "@solverminds/shared-ui/data-view";
 import { Badge, Flex, Space, Tag, Tooltip, Typography } from "antd";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import type { ContainerEquipment } from "../types/tracking.types";
 
 const { Text } = Typography;
@@ -132,6 +133,13 @@ export function TrackingContainersTable({
         className="tracking-grid"
         columnDefs={columnDefs}
         rowData={containers}
+        emptyState={
+          <ModuleEmptyState
+            variant="blank"
+            title="No containers to track"
+            message="Container tracking details will appear here when equipment is assigned to this shipment."
+          />
+        }
         allowedViewModes={["list"]}
         renderToolbar={() => (
           <Flex

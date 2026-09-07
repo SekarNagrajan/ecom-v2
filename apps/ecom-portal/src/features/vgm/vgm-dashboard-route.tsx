@@ -1,11 +1,11 @@
 // Modified by Sekar Nagarajan (2026-08-26 12:53)
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AppButton } from "@solverminds/shared-ui";
-import { Alert, Card, Empty } from "antd";
+import { Card } from "antd";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
+import { ModuleEmptyState } from "../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import { MODULE_TITLES } from "../../constants/module-titles";
 import { useVgmSearchQuery, type VgmSearchParams } from "./api/vgm.queries";
@@ -76,28 +76,32 @@ export function VgmDashboardRoute() {
 
         {showIdle ? (
           <div className="vgm-idle">
-            <Empty
-              image={Empty.PRESENTED_IMAGE_SIMPLE}
-              description="Search a booking or B/L reference to load VGM declaration details."
+            <ModuleEmptyState
+              variant="blank"
+              title="Search for a VGM declaration"
+              message="Search a booking or B/L reference to load VGM declaration details."
+              artSize="md"
             />
           </div>
         ) : null}
 
         {showError ? (
           <div className="vgm-idle">
-            <Alert
-              type="error"
-              showIcon
-              message="Search failed"
-              description={extractVgmErrorMessage(
+            <ModuleEmptyState
+              variant="error"
+              title="Search failed"
+              message={extractVgmErrorMessage(
                 error,
                 "Invalid Booking or BL Number.",
               )}
-              action={
-                <AppButton size="small" onClick={handleReset}>
-                  Clear
-                </AppButton>
-              }
+              actions={[
+                {
+                  key: "clear",
+                  label: "Clear",
+                  onClick: handleReset,
+                },
+              ]}
+              artSize="md"
             />
           </div>
         ) : null}

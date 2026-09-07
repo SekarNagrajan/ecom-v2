@@ -6,6 +6,7 @@ import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { AppIcon, Icons } from "../../../../components/icons";
+import { ModuleEmptyState } from "../../../../components/shared/module-empty-state";
 import { WIZARD_STEP_TITLES } from "../../../../constants/module-titles";
 import { useSiDetailQuery } from "../../api/si.queries";
 import type { SIChargeLine, SIParty } from "../../types/si.types";
@@ -346,7 +347,12 @@ export function SiDetailsViewer({
               />
             </div>
           ) : (
-            <Text type="secondary">No routing details.</Text>
+            <ModuleEmptyState
+              artSize="sm"
+              variant="blank"
+              title="No routing details"
+              style={{ padding: 12 }}
+            />
           )}
         </Card>
 
@@ -398,7 +404,12 @@ export function SiDetailsViewer({
           }
         >
           {data.containers.length === 0 ? (
-            <Text type="secondary">No containers recorded.</Text>
+            <ModuleEmptyState
+              artSize="sm"
+              variant="blank"
+              title="No containers recorded"
+              style={{ padding: 12 }}
+            />
           ) : (
             data.containers.map((container, index) => (
               <div key={container.id} className="si-container-block">
@@ -475,7 +486,12 @@ export function SiDetailsViewer({
           }
         >
           {files.length === 0 ? (
-            <Text type="secondary">No documents uploaded.</Text>
+            <ModuleEmptyState
+              artSize="sm"
+              variant="blank"
+              title="No documents uploaded"
+              style={{ padding: 12 }}
+            />
           ) : (
             <div className="si-meta-grid">
               {files.map((f) => (
@@ -502,7 +518,12 @@ export function SiDetailsViewer({
           }
         >
           {activity.length === 0 ? (
-            <Text type="secondary">No activity recorded.</Text>
+            <ModuleEmptyState
+              artSize="sm"
+              variant="blank"
+              title="No activity recorded"
+              style={{ padding: 12 }}
+            />
           ) : (
             <ActivitySteps events={activity} />
           )}

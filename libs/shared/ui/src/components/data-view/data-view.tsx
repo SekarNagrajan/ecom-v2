@@ -130,6 +130,7 @@ function DataViewContent<TData extends DataViewItem>({
   onTotalCountChange,
   dataMode,
   externalRefreshKey,
+  emptyState,
   containerRef,
   ...props
 }: DataViewProps<TData> & {
@@ -231,6 +232,7 @@ function DataViewContent<TData extends DataViewItem>({
         }
       : {}),
     ...listOptions,
+    emptyState: listOptions?.emptyState ?? emptyState,
   };
 
   const fetchInterceptor = async (
@@ -405,6 +407,7 @@ function DataViewContent<TData extends DataViewItem>({
       columnDefs,
       externalLoading,
       processedData,
+      emptyState,
     });
     if (activeCardViewProps) {
       content = (

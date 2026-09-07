@@ -1,9 +1,10 @@
 // Modified by Sekar Nagarajan (2026-09-01 12:22)
 import { ListView } from "@solverminds/shared-ui/data-view/list-view";
-import type { ColDef } from "ag-grid-community";
+import type { DataViewColumn } from "@solverminds/shared-ui/data-view";
 import { Card, Typography } from "antd";
 
 import { AppIcon, Icons } from "../../../../components/icons";
+import { ModuleEmptyState } from "../../../../components/shared/module-empty-state";
 
 const { Title } = Typography;
 
@@ -26,7 +27,7 @@ interface HaulageDetails {
   tmsActualDrop: string;
 }
 
-const columns: ColDef<HaulageDetails>[] = [
+const columns: DataViewColumn<HaulageDetails>[] = [
   { field: "containerNo", headerName: "Container No", minWidth: 150 },
   { field: "equipmentType", headerName: "Equipment Type", minWidth: 150 },
   {
@@ -102,6 +103,13 @@ export function HaulageTrackingGrid({ bookingId }: HaulageTrackingGridProps) {
           <ListView
             rowData={mockData}
             columnDefs={columns}
+            emptyState={
+              <ModuleEmptyState
+                variant="blank"
+                title="No haulage tracking details"
+                message="Pickup and drop-off milestones will appear here when haulage is arranged."
+              />
+            }
             showToolbar={false}
             pagination
             paginationPageSize={10}

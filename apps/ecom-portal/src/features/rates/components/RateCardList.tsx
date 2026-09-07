@@ -1,9 +1,10 @@
 // Modified by Sekar Nagarajan (2026-08-28 15:09)
 import { AppButton } from "@solverminds/shared-ui";
-import { Empty, Space, Spin, Tag, Tooltip, Typography } from "antd";
+import { Spin, Tag, Tooltip, Typography } from "antd";
 import { useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import type { SurchargeDTO } from "../types/rates.types";
 import type { RateSearchMode } from "./RateSearchFilter";
 
@@ -366,27 +367,27 @@ export function RateCardList({
   }
 
   if (rates.length === 0) {
+    const actions =
+      allowRfqEmpty && onRequestQuote
+        ? [
+            {
+              key: "request-quote",
+              label: "Request for Quote",
+              type: "primary" as const,
+              icon: <AppIcon icon={Icons.zap} size={16} />,
+              onClick: onRequestQuote,
+            },
+          ]
+        : undefined;
+
     return (
       <div className="rates-empty">
-        <Empty
-          image={Empty.PRESENTED_IMAGE_SIMPLE}
-          description={
-            <Space direction="vertical" size={8}>
-              <Text strong>No rates found</Text>
-              <Text type="secondary">
-                Try adjusting your ports, equipment, or commodity filters.
-              </Text>
-              {allowRfqEmpty && onRequestQuote ? (
-                <AppButton
-                  type="primary"
-                  icon={<AppIcon icon={Icons.zap} size={16} />}
-                  onClick={onRequestQuote}
-                >
-                  Request for Quote
-                </AppButton>
-              ) : null}
-            </Space>
-          }
+        <ModuleEmptyState
+          variant="filtered"
+          title="No rates found"
+          message="Try adjusting your ports, equipment, or commodity filters."
+          actions={actions}
+          artSize="md"
         />
       </div>
     );

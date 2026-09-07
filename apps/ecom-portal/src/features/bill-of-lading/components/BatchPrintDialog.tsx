@@ -1,8 +1,9 @@
 // Modified by Sekar Nagarajan (2026-08-31 15:25)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
-import { Empty, Table, Tag, Typography } from "antd";
+import { Table, Tag, Typography } from "antd";
 import { useState } from "react";
 
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import type { BLListDTO } from "../types/bl.types";
 import { BL_STATUS_LABELS } from "../types/bl.types";
 import { getBLStatusColor, isBatchOriginalPrintEligible } from "../utils/bl-status";
@@ -65,9 +66,11 @@ export function BatchPrintDialog({
       </div>
 
       {eligible.length === 0 ? (
-        <Empty
-          image={Empty.PRESENTED_IMAGE_SIMPLE}
-          description="No confirmed B/Ls eligible for batch original print."
+        <ModuleEmptyState
+          variant="blank"
+          title="No B/Ls eligible for batch print"
+          message="No confirmed B/Ls are currently eligible for batch original print."
+          artSize="sm"
         />
       ) : (
         <div className="responsive-table-wrap custom-scroll">

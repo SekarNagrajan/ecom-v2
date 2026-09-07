@@ -1,15 +1,31 @@
 import { useVirtualizer } from '@tanstack/react-virtual';
-import { theme, Empty, Button, Flex, Typography, Pagination, Spin } from 'antd';
-import { useRef, useState, useEffect, type ReactElement } from 'react';
+import { theme, Button, Flex, Typography, Pagination, Spin } from 'antd';
+import { useRef, useState, useEffect, type ReactElement, type ReactNode } from 'react';
 
 import { useAntdBreakpoint } from '../../../hooks';
 import { TopLoadingBar } from '../../common/top-loading-bar';
+import { AppEmptyState } from '../../ui/empty-state';
 import type { DataViewItem } from '../data-view-item';
 import { CardItem } from './components/card-item';
 import { GridSkeleton } from './components/card-skeleton';
 import type { CardViewProps } from './types';
 
 const { Text } = Typography;
+
+function resolveCardEmptyState(
+  emptyState: ReactNode | undefined,
+  emptyDescription: ReactNode
+) {
+  if (emptyState) return emptyState;
+  return (
+    <AppEmptyState
+      variant="filtered"
+      title={emptyDescription}
+      message="Nothing matches the current filters. Clear filters or adjust your search to see more results."
+      artSize="md"
+    />
+  );
+}
 
 function CardViewComponent<TData extends DataViewItem>({
   data = [] as TData[],
@@ -32,6 +48,7 @@ function CardViewComponent<TData extends DataViewItem>({
   pageSizeOptions = [10, 20, 50, 100],
   totalCount = 0,
   emptyDescription = 'No records found',
+  emptyState,
   enableLongPressSelection = false,
   onPaginationChange,
   gutter,
@@ -232,7 +249,7 @@ function CardViewComponent<TData extends DataViewItem>({
           justify="center"
           style={{ flex: 1, padding: token.paddingXL }}
         >
-          <Empty description={emptyDescription} />
+          {resolveCardEmptyState(emptyState, emptyDescription)}
         </Flex>
       );
     }
@@ -290,7 +307,7 @@ function CardViewComponent<TData extends DataViewItem>({
               justify="center"
               style={{ padding: token.paddingXL }}
             >
-              <Empty description={emptyDescription} />
+              {resolveCardEmptyState(emptyState, emptyDescription)}
             </Flex>
           ) : null}
 

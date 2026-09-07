@@ -1,6 +1,7 @@
 // Modified by Sekar Nagarajan (2026-08-28 11:55)
 import { Table, Typography } from 'antd';
 
+import { ModuleEmptyState } from '../../../components/shared/module-empty-state';
 import type { BLChargesDTO } from '../types/bl.types';
 
 const { Text, Title } = Typography;
@@ -16,7 +17,14 @@ export function BillOfLadingCharges({ charges, loading }: BillOfLadingChargesPro
   }
 
   if (!charges || charges.lines.length === 0) {
-    return <Text type="secondary">No charges available for this B/L.</Text>;
+    return (
+      <ModuleEmptyState
+        artSize="sm"
+        variant="blank"
+        title="No charges available for this B/L"
+        style={{ padding: 12 }}
+      />
+    );
   }
 
   return (

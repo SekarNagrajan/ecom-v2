@@ -4,6 +4,7 @@ import { Checkbox, Divider, Popover, Segmented, Typography } from "antd";
 import { useMemo, useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import {
   createReferenceField,
   REFERENCE_FIELD_CATALOG,
@@ -118,9 +119,13 @@ export function ReferenceFieldsPanel({
       </Text>
 
       {availableCatalogItems.length === 0 ? (
-        <Text type="secondary" className="ref-fields-catalog-picker__empty">
-          All reference fields have been added
-        </Text>
+        <ModuleEmptyState
+          artSize="sm"
+          hideArt
+          variant="blank"
+          title="All reference fields have been added"
+          style={{ padding: 8 }}
+        />
       ) : (
         <>
           <Checkbox
@@ -258,13 +263,13 @@ export function ReferenceFieldsPanel({
       </div>
 
       {fields.length === 0 ? (
-        <div className="ref-fields-empty">
-          <AppIcon icon={Icons.fileText} size={40} tone="muted" />
-          <Text strong>No reference fields added yet</Text>
-          <Text type="secondary">
-            Click &quot;Add Reference Field&quot; to get started
-          </Text>
-        </div>
+        <ModuleEmptyState
+          artSize="sm"
+          variant="blank"
+          title="No reference fields added yet"
+          message='Click "Add Reference Field" to get started.'
+          style={{ padding: 12 }}
+        />
       ) : viewMode === "list" ? (
         <ReferenceFieldsListView
           fields={fields}

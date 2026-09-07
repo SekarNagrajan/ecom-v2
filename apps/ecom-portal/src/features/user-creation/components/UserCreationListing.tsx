@@ -17,6 +17,11 @@ import { useState } from "react";
 
 import { AppIcon, Icons, NavIcons } from "../../../components/icons";
 import { buildActionsColumn } from "../../../components/shared/build-actions-column";
+import {
+  ModuleEmptyState,
+  buildClearFiltersAction,
+  buildRetryAction,
+} from "../../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
 import { MODULE_TITLES } from "../../../constants/module-titles";
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
@@ -44,6 +49,8 @@ export function UserCreationListing() {
     data: subUsers = [],
     isLoading,
     isFetching,
+    isError,
+    refetch,
   } = useSubUsersQuery();
   const { data: limitInfo = EMPTY_USER_LIMIT } = useUserLimitQuery();
   const { mutate: toggleStatus } = useToggleSubUserStatusMutation();
@@ -155,6 +162,29 @@ export function UserCreationListing() {
   ];
 
   const showLoading = isLoading && subUsers.length === 0;
+  const emptyState = isError ? (
+    <ModuleEmptyState
+      variant="error"
+      title="Couldn't load sub-users"
+      message="The request didn't complete. Check your connection and try again."
+      actions={[buildRetryAction(() => void refetch())]}
+    />
+  ) : (
+    <ModuleEmptyState
+      variant={searchTerm ? "filtered" : "blank"}
+      title={searchTerm ? "No sub-users match your search" : "No sub-users yet"}
+      message={
+        searchTerm
+          ? "Try another name or clear the search to see all sub-users."
+          : "Create a sub-user to grant an employee or delegate access."
+      }
+      actions={
+        searchTerm
+          ? [buildClearFiltersAction(() => setSearchTerm(""), "Clear search")]
+          : undefined
+      }
+    />
+  );
 
   return (
     <div className="usc-page-layout">
@@ -235,12 +265,15 @@ export function UserCreationListing() {
 
       {showLoading ? (
         <UscLoadingCenter fill />
+      ) : isError && subUsers.length === 0 ? (
+        emptyState
       ) : (
         <div className="usc-grid-wrap responsive-table-wrap custom-scroll">
           <DataView
             columnDefs={columns}
             rowData={filteredUsers}
             loading={isFetching}
+            emptyState={emptyState}
             allowedViewModes={["list"]}
             defaultViewMode="list"
             renderToolbar={() => null}
@@ -249,7 +282,6 @@ export function UserCreationListing() {
               showToolbar: false,
               gridOptions: {
                 getRowId: (params: { data: SubUser }) => params.data.id,
-                overlayNoRowsTemplate: "No sub-users found.",
               },
             }}
           />

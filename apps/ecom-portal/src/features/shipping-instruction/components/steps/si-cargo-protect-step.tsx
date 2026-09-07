@@ -8,12 +8,13 @@ import {
   ListActionButton,
   ListActionsRow,
 } from "../../../../components/shared/list-action-button";
+import { ModuleEmptyState } from "../../../../components/shared/module-empty-state";
 import type {
   SICargoProtectLine,
   SIWizardStepProps,
 } from "../../types/si.types";
 
-const { Text, Title } = Typography;
+const { Title } = Typography;
 
 function createEmptyLine(): SICargoProtectLine {
   return {
@@ -69,9 +70,13 @@ export function SiCargoProtectStep({
           }
         >
           {lines.length === 0 ? (
-            <Text type="secondary">
-              No cargo protect lines. Click Add Row to include coverage products.
-            </Text>
+            <ModuleEmptyState
+              artSize="sm"
+              variant="blank"
+              title="No cargo protect lines"
+              message="Click Add Row to include coverage products."
+              style={{ padding: 12 }}
+            />
           ) : (
             <div className="si-cargo-protect-lines">
               {lines.map((line, index) => (

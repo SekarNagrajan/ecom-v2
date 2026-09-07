@@ -15,6 +15,11 @@ import {
   ListActionButton,
   ListActionsRow,
 } from "../../../components/shared/list-action-button";
+import {
+  ModuleEmptyState,
+  buildClearFiltersAction,
+  buildRetryAction,
+} from "../../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
 import { MODULE_TITLES } from "../../../constants/module-titles";
 import {
@@ -47,12 +52,20 @@ export function DeliveryOrderListing() {
     null,
   );
 
-  const { data: rows = [], isLoading, isFetching } = useDOSummaryQuery(filters);
+  const {
+    data: rows = [],
+    isLoading,
+    isFetching,
+    isError,
+    refetch,
+  } = useDOSummaryQuery(filters);
   const { mutate: downloadDoc } = useDODownloadMutation();
 
   const handleSearch = (values: DOSearchValues) => {
     setFilters({ fromDate: values.fromDate, toDate: values.toDate });
   };
+
+  const handleClearFilters = () => setFilters(initialFilters);
 
   const handleView = (record: DOSummaryRow) => {
     setSelectedRecord(record);
@@ -143,6 +156,21 @@ export function DeliveryOrderListing() {
   ];
 
   const showLoading = isLoading && rows.length === 0;
+  const emptyState = isError ? (
+    <ModuleEmptyState
+      variant="error"
+      title="Couldn't load delivery orders"
+      message="The request didn't complete. Check your connection and try again."
+      actions={[buildRetryAction(() => void refetch())]}
+    />
+  ) : (
+    <ModuleEmptyState
+      variant="filtered"
+      title="No delivery orders match your search"
+      message="Nothing came back for this date range. Widen the dates or clear the filters to see more results."
+      actions={[buildClearFiltersAction(handleClearFilters)]}
+    />
+  );
 
   return (
     <div className="do-page-layout">
@@ -159,12 +187,15 @@ export function DeliveryOrderListing() {
 
       {showLoading ? (
         <DoLoadingCenter fill />
+      ) : isError && rows.length === 0 ? (
+        emptyState
       ) : (
         <div className="do-grid-wrap responsive-table-wrap custom-scroll">
           <DataView
             rowData={rows}
             columnDefs={columns}
             loading={isFetching}
+            emptyState={emptyState}
             allowedViewModes={["list"]}
             defaultViewMode="list"
             renderToolbar={() => null}

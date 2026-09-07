@@ -3,7 +3,7 @@ import { FormattedDate } from "@solverminds/shared-ui";
 import { DataView, DataViewColumn } from "@solverminds/shared-ui/data-view";
 import type { RowDoubleClickedEvent } from "ag-grid-community";
 import { Tag } from "antd";
-import { useMemo } from "react";
+import { useMemo, type ReactNode } from "react";
 
 import { buildActionsColumn } from "../../../components/shared/build-actions-column";
 import type { BLListDTO, BLPrintType } from "../types/bl.types";
@@ -26,6 +26,7 @@ export interface BillOfLadingListGridProps {
   showNnPrint?: boolean;
   showReadyToConfirm?: boolean;
   enableTermsOnConfirmedEdit?: boolean;
+  emptyState?: ReactNode;
 }
 
 export function BillOfLadingListGrid({
@@ -44,6 +45,7 @@ export function BillOfLadingListGrid({
   showNnPrint = true,
   showReadyToConfirm = false,
   enableTermsOnConfirmedEdit = true,
+  emptyState,
 }: BillOfLadingListGridProps) {
   const columns: DataViewColumn<BLListDTO>[] = useMemo(() => {
     const cols: DataViewColumn<BLListDTO>[] = [
@@ -150,6 +152,7 @@ export function BillOfLadingListGrid({
       <DataView
         rowData={rows}
         loading={loading}
+        emptyState={emptyState}
         columnDefs={columns}
         allowedViewModes={["list"]}
         defaultViewMode="list"

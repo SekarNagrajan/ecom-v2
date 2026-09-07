@@ -15,6 +15,10 @@ import {
   ListActionButton,
   ListActionsRow,
 } from "../../components/shared/list-action-button";
+import {
+  ModuleEmptyState,
+  buildRetryAction,
+} from "../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import { MODULE_TITLES } from "../../constants/module-titles";
 import { bookingApi } from "./api/booking.api";
@@ -38,7 +42,7 @@ export function BookingDashboardRoute() {
     null,
   );
 
-  const { data: bookings = [], isLoading } = useQuery({
+  const { data: bookings = [], isLoading, isError, refetch } = useQuery({
     queryKey: bookingKeys.list(),
     queryFn: async () => {
       const res = await fetch("/api/booking/list");
@@ -100,6 +104,21 @@ export function BookingDashboardRoute() {
     });
   };
 
+  const emptyState = isError ? (
+    <ModuleEmptyState
+      variant="error"
+      title="Couldn't load bookings"
+      message="The request didn't complete. Check your connection and try again."
+      actions={[buildRetryAction(() => void refetch())]}
+    />
+  ) : (
+    <ModuleEmptyState
+      variant="blank"
+      title="No bookings yet"
+      message="Create a booking to start managing your shipments."
+    />
+  );
+
   return (
     <FeaturePageShell>
       <BookingModuleStyles />
@@ -137,9 +156,13 @@ export function BookingDashboardRoute() {
 
           <div className="booking-grid-wrap">
             <div className="booking-list-grid responsive-table-wrap custom-scroll ag-theme-alpine">
-              <ListView
+              {isError && bookings.length === 0 && !isLoading ? (
+                emptyState
+              ) : (
+                <ListView
                 rowData={bookings}
                 loading={isLoading}
+                emptyState={emptyState}
                 defaultColDef={{ filter: true }}
                 columnDefs={[
                   buildActionsColumn<BookingListDTO>({
@@ -276,7 +299,8 @@ export function BookingDashboardRoute() {
                     if (event.data) handleView(event.data);
                   },
                 }}
-              />
+                />
+              )}
             </div>
           </div>
         </div>

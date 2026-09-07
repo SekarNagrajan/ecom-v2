@@ -12,6 +12,7 @@ import {
   ListActionButton,
   ListActionsRow,
 } from "../../../components/shared/list-action-button";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import {
   FORM_YES_NO_SWITCH_CLASS,
   yesNoSwitchInner,
@@ -86,12 +87,12 @@ export function BookingCargoGridView({
 
   if (pageIndexes.length === 0) {
     return (
-      <div className="si-cargo-empty">
-        <div className="si-cargo-empty__icon">
-          <AppIcon icon={Icons.inbox} size={22} />
-        </div>
-        <Text strong>No containers match</Text>
-      </div>
+      <ModuleEmptyState
+        artSize="sm"
+        variant="filtered"
+        title="No containers match"
+        style={{ padding: 12 }}
+      />
     );
   }
 

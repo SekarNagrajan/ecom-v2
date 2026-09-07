@@ -7,6 +7,10 @@ import { Card, Flex, Space, Spin, Tag, Tooltip, Typography } from "antd";
 import { useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import {
+  ModuleEmptyState,
+  buildRetryAction,
+} from "../../../components/shared/module-empty-state";
 import { useQuotesQuery } from "../api/rates.queries";
 import type { QuoteDTO } from "../types/rates.types";
 import { QuoteRequestDrawer } from "./QuoteRequestDrawer";
@@ -18,7 +22,7 @@ export function QuotesView() {
   const navigate = useNavigate();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  const { data: quotes = [], isLoading } = useQuotesQuery();
+  const { data: quotes = [], isLoading, isError, refetch } = useQuotesQuery();
 
   const handleConvertBooking = (quote: QuoteDTO) => {
     toast.info(`Converting Quote ${quote.quoteNo} into e-Booking...`);
@@ -154,6 +158,21 @@ export function QuotesView() {
     },
   ];
 
+  const emptyState = isError ? (
+    <ModuleEmptyState
+      variant="error"
+      title="Couldn't load spot rate quotes"
+      message="The request didn't complete. Check your connection and try again."
+      actions={[buildRetryAction(() => void refetch())]}
+    />
+  ) : (
+    <ModuleEmptyState
+      variant="blank"
+      title="No spot rate quotes yet"
+      message="Request a spot quote to compare pricing for your next shipment."
+    />
+  );
+
   return (
     <div className="rates-stack">
       <Card className="rates-filter-card">
@@ -182,10 +201,15 @@ export function QuotesView() {
         <Card className="rates-grid-panel">
           <div className="rates-grid responsive-table-wrap custom-scroll">
             <DataView
-              data={quotes}
+              rowData={quotes}
+              emptyState={emptyState}
               columnDefs={columnDefs}
-              pagination
-              paginationPageSize={10}
+              listOptions={{
+                gridOptions: {
+                  pagination: true,
+                  paginationPageSize: 10,
+                },
+              }}
               className="rates-grid"
             />
           </div>

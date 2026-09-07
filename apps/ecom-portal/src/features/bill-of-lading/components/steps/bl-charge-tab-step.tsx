@@ -2,6 +2,7 @@
 import { Card, Typography } from "antd";
 import type { ReactNode } from "react";
 
+import { ModuleEmptyState } from "../../../../components/shared/module-empty-state";
 import type { BLChargeLine } from "../../types/bl.types";
 import { BlWizardFooter } from "../bl-wizard-footer";
 import type { BLWizardStepProps } from "./MasterDetailsStep";
@@ -85,9 +86,12 @@ export function BlChargeTabStep({
           title="Charge Summary"
         >
           {charges.length === 0 ? (
-            <Text type="secondary" className="bl-charge-tab-empty">
-              No charges available for this B/L.
-            </Text>
+            <ModuleEmptyState
+              artSize="sm"
+              variant="blank"
+              title="No charges available for this B/L"
+              style={{ padding: 12 }}
+            />
           ) : (
             <div className="bl-charge-tab-lines">
               {charges.map((line, index) => (

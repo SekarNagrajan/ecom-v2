@@ -25,6 +25,7 @@ import {
   ListActionButton,
   ListActionsRow,
 } from "../../../components/shared/list-action-button";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import { adminApi } from "../api/admin.api";
 import { ADMIN_KEYS } from "../hooks/use-admin-controller";
 import {
@@ -483,6 +484,13 @@ export function CutoffConfigView({
           <DataView
             rowData={cutoffConfigs}
             columnDefs={columnDefs}
+            emptyState={
+              <ModuleEmptyState
+                variant="blank"
+                title="No cutoff configurations yet"
+                message="Add a port and terminal cutoff configuration using the form above."
+              />
+            }
             allowedViewModes={["list"]}
             defaultViewMode="list"
             renderToolbar={() => null}
@@ -492,7 +500,6 @@ export function CutoffConfigView({
               sideBar: false,
               gridOptions: {
                 getRowId: (params: { data: CutoffConfig }) => params.data.id,
-                overlayNoRowsTemplate: 'No cutoff configurations found.',
               },
             }}
           />

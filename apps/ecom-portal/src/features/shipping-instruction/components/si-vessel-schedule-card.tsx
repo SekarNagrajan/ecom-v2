@@ -9,6 +9,7 @@ import { Tag, Tooltip, Typography, theme } from "antd";
 import { useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import { ScheduleModuleStyles } from "../../schedules/components/schedule-module-styles";
 import type {
   RouteLeg,
@@ -397,11 +398,12 @@ export function SiVesselScheduleCard({
     return (
       <>
         <ScheduleModuleStyles />
-        <div className="schedule-empty">
-          <Text type="secondary" className="schedule-empty__text">
-            No schedule available for this booking.
-          </Text>
-        </div>
+        <ModuleEmptyState
+          artSize="sm"
+          variant="blank"
+          title="No schedule available for this booking"
+          style={{ padding: 12 }}
+        />
       </>
     );
   }

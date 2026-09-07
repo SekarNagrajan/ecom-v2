@@ -2,7 +2,7 @@
 import { useConfirm, useToast } from "@solverminds/shared-ui/hooks";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { Flex, Table, Typography } from "antd";
+import { Table, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
 
 import { AppIcon, Icons } from "../../../components/icons";
@@ -15,6 +15,7 @@ import {
   ListActionButton,
   ListActionsRow,
 } from "../../../components/shared/list-action-button";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import { bookingApi } from "../api/booking.api";
 import { useBookingStore } from "../stores/booking.store";
 import type { BookingTemplate } from "../types/booking.types";
@@ -166,15 +167,12 @@ export function ManageTemplateModal({
         tableLayout="fixed"
         locale={{
           emptyText: (
-            <Flex
-              vertical
-              align="center"
-              gap={8}
-              className="booking-template-modal__empty"
-            >
-              <AppIcon icon={Icons.inbox} size={28} />
-              <Text type="secondary">No templates saved yet</Text>
-            </Flex>
+            <ModuleEmptyState
+              artSize="sm"
+              variant="blank"
+              title="No templates saved yet"
+              style={{ padding: 12 }}
+            />
           ),
         }}
       />

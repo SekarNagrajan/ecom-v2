@@ -5,6 +5,11 @@ import { Card, Flex, Select, Space, Spin, Tag, Tooltip, Typography } from "antd"
 import { useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import {
+  ModuleEmptyState,
+  buildClearFiltersAction,
+  buildRetryAction,
+} from "../../../components/shared/module-empty-state";
 import { useContractsQuery } from "../api/rates.queries";
 import type { ContractDTO } from "../types/rates.types";
 import { ContractSurchargeModal } from "./ContractSurchargeModal";
@@ -19,7 +24,8 @@ export function ContractView() {
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data: contracts = [], isLoading } = useContractsQuery({ pol, pod });
+  const { data: contracts = [], isLoading, isError, refetch } =
+    useContractsQuery({ pol, pod });
 
   const handleOpenSurcharges = (contract: ContractDTO) => {
     setSelectedContract(contract);
@@ -153,6 +159,31 @@ export function ContractView() {
     },
   ];
 
+  const emptyState = isError ? (
+    <ModuleEmptyState
+      variant="error"
+      title="Couldn't load service contracts"
+      message="The request didn't complete. Check your connection and try again."
+      actions={[buildRetryAction(() => void refetch())]}
+    />
+  ) : (
+    <ModuleEmptyState
+      variant={pol || pod ? "filtered" : "blank"}
+      title="No service contracts found"
+      message="Try a different port combination or clear the filters to see more contracts."
+      actions={
+        pol || pod
+          ? [
+              buildClearFiltersAction(() => {
+                setPol(undefined);
+                setPod(undefined);
+              }),
+            ]
+          : undefined
+      }
+    />
+  );
+
   return (
     <div className="rates-stack">
       <Card className="rates-filter-card">
@@ -194,10 +225,15 @@ export function ContractView() {
         <Card className="rates-grid-panel">
           <div className="rates-grid responsive-table-wrap custom-scroll">
             <DataView
-              data={contracts}
+              rowData={contracts}
+              emptyState={emptyState}
               columnDefs={columnDefs}
-              pagination
-              paginationPageSize={10}
+              listOptions={{
+                gridOptions: {
+                  pagination: true,
+                  paginationPageSize: 10,
+                },
+              }}
               className="rates-grid"
             />
           </div>

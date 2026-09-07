@@ -4,11 +4,12 @@
  * KPI filter cards → Upcoming Shipment Planning → Ongoing Transactions, plus analytics sections.
  */
 import { AppButton } from "@solverminds/shared-ui";
-import { Col, Empty, Row, Space, Spin } from "antd";
+import { Col, Row, Space, Spin } from "antd";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { NavDashboardIcon } from "../../../components/icons/nav-svg-icons";
 import { FeaturePageShell } from "../../../components/shared/feature-page-shell";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
 import { MODULE_TITLES } from "../../../constants/module-titles";
 import { BlModuleStyles } from "../../bill-of-lading/components/bl-module-styles";
@@ -79,7 +80,12 @@ export function EnhancedDashboardView() {
               onFilterChange={controller.handleFilterChange}
             />
           ) : !controller.isLoading ? (
-            <Empty description="Dashboard summary unavailable" />
+            <ModuleEmptyState
+              variant="error"
+              title="Dashboard summary unavailable"
+              message="Refresh the dashboard to try loading the summary again."
+              artSize="md"
+            />
           ) : null}
         </Spin>
 

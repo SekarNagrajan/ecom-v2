@@ -4,6 +4,7 @@ import type { TableProps } from "antd";
 import { Card, Descriptions, Table, Tag, Typography } from "antd";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import type {
   ContainerEquipment,
   ContainerMovementEvent,
@@ -126,6 +127,16 @@ export function TrackingMovementDrawer({
           rowKey="id"
           pagination={false}
           size="small"
+          locale={{
+            emptyText: (
+              <ModuleEmptyState
+                artSize="sm"
+                variant="blank"
+                title="No movement events recorded"
+                style={{ padding: 12 }}
+              />
+            ),
+          }}
         />
       </div>
     </AppDrawer>

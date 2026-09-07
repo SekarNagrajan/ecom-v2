@@ -14,6 +14,10 @@ import {
   ListActionButton,
   ListActionsRow,
 } from "../../../components/shared/list-action-button";
+import {
+  ModuleEmptyState,
+  buildRetryAction,
+} from "../../../components/shared/module-empty-state";
 import { MODULE_TITLES } from "../../../constants/module-titles";
 import { useQuotesQuery } from "../api/user-modules.queries";
 import type { QuoteItem } from "../types/user-modules.types";
@@ -39,7 +43,13 @@ function formatUsd(amount: number) {
 
 export function QuotesView() {
   const navigate = useNavigate();
-  const { data: quotes = [], isLoading, isFetching } = useQuotesQuery();
+  const {
+    data: quotes = [],
+    isLoading,
+    isFetching,
+    isError,
+    refetch,
+  } = useQuotesQuery();
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [selectedQuote, setSelectedQuote] = useState<QuoteItem | null>(null);
 
@@ -143,6 +153,21 @@ export function QuotesView() {
     },
   ];
 
+  const emptyState = isError ? (
+    <ModuleEmptyState
+      variant="error"
+      title="Couldn't load your quotes"
+      message="The request didn't complete. Check your connection and try again."
+      actions={[buildRetryAction(() => void refetch())]}
+    />
+  ) : (
+    <ModuleEmptyState
+      variant="blank"
+      title="No quotes yet"
+      message="Request a rate to receive and compare a shipment quote."
+    />
+  );
+
   return (
     <div className="um-page-layout">
       <UmPanelHeader
@@ -166,6 +191,7 @@ export function QuotesView() {
           columnDefs={columnDefs}
           rowData={quotes}
           loading={isLoading || isFetching}
+          emptyState={emptyState}
           allowedViewModes={["list"]}
           defaultViewMode="list"
           renderToolbar={() => null}
@@ -173,8 +199,6 @@ export function QuotesView() {
             showToolbar: false,
             gridOptions: {
               domLayout: "autoHeight",
-              overlayNoRowsTemplate:
-                "No quotes yet. Request a rate to get started.",
               suppressCellFocus: true,
             },
           }}

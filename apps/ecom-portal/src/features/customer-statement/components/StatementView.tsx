@@ -7,6 +7,10 @@ import {
   useStatementExportMutation,
   useStatementQuery,
 } from '../api/customer-statement.queries';
+import {
+  ModuleEmptyState,
+  buildRetryAction,
+} from '../../../components/shared/module-empty-state';
 import type {
   StatementCriteria,
   StatementLine,
@@ -31,8 +35,29 @@ function MoneyCell({ value, currency }: { value?: string; currency: string }) {
 }
 
 export function StatementView({ criteria }: StatementViewProps) {
-  const { data: statement, isLoading, isFetching } = useStatementQuery(criteria);
+  const {
+    data: statement,
+    isLoading,
+    isFetching,
+    isError,
+    refetch,
+  } = useStatementQuery(criteria);
   const exportMutation = useStatementExportMutation();
+
+  const emptyState = isError ? (
+    <ModuleEmptyState
+      variant="error"
+      title="Couldn't load the customer statement"
+      message="The request didn't complete. Check your connection and try again."
+      actions={[buildRetryAction(() => void refetch())]}
+    />
+  ) : (
+    <ModuleEmptyState
+      variant="filtered"
+      title="No transactions for this period"
+      message="Choose a different statement period to view account activity."
+    />
+  );
 
   const columns: DataViewColumn<StatementLine>[] = [
     {
@@ -110,6 +135,7 @@ export function StatementView({ criteria }: StatementViewProps) {
                 rowData={statement.lines}
                 columnDefs={columns}
                 loading={false}
+                emptyState={emptyState}
                 allowedViewModes={['list']}
                 defaultViewMode="list"
                 renderToolbar={() => null}
@@ -119,7 +145,6 @@ export function StatementView({ criteria }: StatementViewProps) {
                   gridOptions: {
                     getRowId: (params: { data: StatementLine }) =>
                       `${params.data.docNo}-${params.data.date}`,
-                    overlayNoRowsTemplate: 'No transactions for this period.',
                   },
                 }}
               />
@@ -153,7 +178,7 @@ export function StatementView({ criteria }: StatementViewProps) {
             </div>
           </>
         ) : !isLoading ? (
-          <p className="stmt-empty-hint">No transactions for this period.</p>
+          emptyState
         ) : (
           <div className="stmt-empty-hint" />
         )}

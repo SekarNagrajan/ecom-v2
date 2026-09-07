@@ -3,6 +3,7 @@ import { AppButton } from "@solverminds/shared-ui";
 import { Card, Table, Typography } from "antd";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import type { BookingRateOption } from "../api/booking.api";
 
 const { Text } = Typography;
@@ -127,7 +128,16 @@ export function BookingSelectedRatePanel({
               ),
             },
           ]}
-          locale={{ emptyText: "No rates for this lane" }}
+          locale={{
+            emptyText: (
+              <ModuleEmptyState
+                artSize="sm"
+                variant="blank"
+                title="No rates for this lane"
+                style={{ padding: 12 }}
+              />
+            ),
+          }}
         />
       </div>
     </Card>

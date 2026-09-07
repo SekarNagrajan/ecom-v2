@@ -8,6 +8,10 @@ import { useState } from 'react';
 import { AppIcon, Icons, NavIcons } from '../../components/icons';
 import { buildActionsColumn } from '../../components/shared/build-actions-column';
 import { FeaturePageShell } from '../../components/shared/feature-page-shell';
+import {
+  ModuleEmptyState,
+  buildRetryAction,
+} from '../../components/shared/module-empty-state';
 import { ModuleScreenHeader } from '../../components/shared/module-screen-header';
 import { useMCNListQuery, useMCNPrintMutation } from './api/bl.queries';
 import { BlModuleStyles } from './components/bl-module-styles';
@@ -18,7 +22,7 @@ const { Text } = Typography;
 
 export function BillOfLadingMcnListRoute() {
   const navigate = useNavigate();
-  const { data: rows = [], isLoading } = useMCNListQuery();
+  const { data: rows = [], isLoading, isError, refetch } = useMCNListQuery();
   const { mutate: printMcn } = useMCNPrintMutation();
   const [manifestMcnId, setManifestMcnId] = useState<string | null>(null);
 
@@ -67,6 +71,21 @@ export function BillOfLadingMcnListRoute() {
     { field: 'delivery', headerName: 'Delivery', width: 180 },
   ];
 
+  const emptyState = isError ? (
+    <ModuleEmptyState
+      variant="error"
+      title="Couldn't load manifests"
+      message="The request didn't complete. Check your connection and try again."
+      actions={[buildRetryAction(() => void refetch())]}
+    />
+  ) : (
+    <ModuleEmptyState
+      variant="blank"
+      title="No manifests yet"
+      message="Manifest cargo notifications will appear here when they are available."
+    />
+  );
+
   return (
     <FeaturePageShell>
       <BlModuleStyles />
@@ -85,7 +104,16 @@ export function BillOfLadingMcnListRoute() {
             <Text type="secondary">{rows.length} Manifest(s)</Text>
           </div>
           <div className="bl-grid-wrap responsive-table-wrap">
-            <DataView rowData={rows} loading={isLoading} columnDefs={columns} />
+            {isError && rows.length === 0 && !isLoading ? (
+              emptyState
+            ) : (
+              <DataView
+                rowData={rows}
+                loading={isLoading}
+                columnDefs={columns}
+                emptyState={emptyState}
+              />
+            )}
           </div>
         </div>
       </Card>

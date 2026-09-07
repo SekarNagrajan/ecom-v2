@@ -5,6 +5,11 @@ import { Card, Flex, Select, Space, Spin, Tag, Tooltip, Typography } from "antd"
 import { useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import {
+  ModuleEmptyState,
+  buildClearFiltersAction,
+  buildRetryAction,
+} from "../../../components/shared/module-empty-state";
 import { useSurchargesQuery } from "../api/rates.queries";
 import type { SurchargeDTO } from "../types/rates.types";
 
@@ -14,7 +19,8 @@ export function SurchargeView() {
   const [pol, setPol] = useState<string | undefined>();
   const [pod, setPod] = useState<string | undefined>();
 
-  const { data: surcharges = [], isLoading } = useSurchargesQuery({ pol, pod });
+  const { data: surcharges = [], isLoading, isError, refetch } =
+    useSurchargesQuery({ pol, pod });
 
   const columnDefs: DataViewColumn<SurchargeDTO>[] = [
     {
@@ -121,6 +127,31 @@ export function SurchargeView() {
     },
   ];
 
+  const emptyState = isError ? (
+    <ModuleEmptyState
+      variant="error"
+      title="Couldn't load surcharges"
+      message="The request didn't complete. Check your connection and try again."
+      actions={[buildRetryAction(() => void refetch())]}
+    />
+  ) : (
+    <ModuleEmptyState
+      variant={pol || pod ? "filtered" : "blank"}
+      title="No surcharges found"
+      message="Try a different port combination or clear the filters to see more charges."
+      actions={
+        pol || pod
+          ? [
+              buildClearFiltersAction(() => {
+                setPol(undefined);
+                setPod(undefined);
+              }),
+            ]
+          : undefined
+      }
+    />
+  );
+
   return (
     <div className="rates-stack">
       <Card className="rates-filter-card">
@@ -162,10 +193,15 @@ export function SurchargeView() {
         <Card className="rates-grid-panel">
           <div className="rates-grid responsive-table-wrap custom-scroll">
             <DataView
-              data={surcharges}
+              rowData={surcharges}
+              emptyState={emptyState}
               columnDefs={columnDefs}
-              pagination
-              paginationPageSize={10}
+              listOptions={{
+                gridOptions: {
+                  pagination: true,
+                  paginationPageSize: 10,
+                },
+              }}
               className="rates-grid"
             />
           </div>

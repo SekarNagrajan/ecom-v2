@@ -10,6 +10,7 @@ import {
   ListActionButton,
   ListActionsRow,
 } from "../../../components/shared/list-action-button";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import { MODULE_TITLES } from "../../../constants/module-titles";
 import type {
   ApprovalStatus,
@@ -250,6 +251,13 @@ export function VendorApprovalsView() {
           className="va-data-view"
           columnDefs={columnDefs}
           rowData={items}
+          emptyState={
+            <ModuleEmptyState
+              variant="blank"
+              title="No approval requests to review"
+              message="New booking, shipping instruction, and VGM approval requests will appear here."
+            />
+          }
           allowedViewModes={["list"]}
           defaultViewMode="list"
           renderToolbar={() => null}
@@ -257,7 +265,6 @@ export function VendorApprovalsView() {
             showToolbar: false,
             gridOptions: {
               domLayout: "autoHeight",
-              overlayNoRowsTemplate: "No approval requests to review.",
               suppressCellFocus: true,
             },
           }}

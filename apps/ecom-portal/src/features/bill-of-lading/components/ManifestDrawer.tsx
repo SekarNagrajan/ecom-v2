@@ -1,10 +1,11 @@
 // Modified by Sekar Nagarajan (2026-08-31 15:20)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
-import { Empty, Radio, Tag, Typography } from "antd";
+import { Radio, Tag, Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
 import { useState } from "react";
 
 import { AppIcon, Icons, NavBookingIcon } from "../../../components/icons";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import { formatModuleScreenTitle } from "../../../constants/module-titles";
 import { useMCNDetailQuery, useMCNPrintMutation } from "../api/bl.queries";
 import type { MCNDTO } from "../types/bl.types";
@@ -115,26 +116,20 @@ export function ManifestDrawer({
       }
     >
       {!mcnId ? (
-        <Empty
-          image={Empty.PRESENTED_IMAGE_SIMPLE}
-          description={
-            <span className="bl-manifest-empty">
-              <AppIcon icon={Icons.info} size={16} />
-              No MCN is linked to this Bill of Lading yet.
-            </span>
-          }
+        <ModuleEmptyState
+          variant="blank"
+          title="No manifest linked"
+          message="No MCN is linked to this Bill of Lading yet."
+          artSize="sm"
         />
       ) : isLoading ? (
         <BlLoadingCenter />
       ) : !detail ? (
-        <Empty
-          image={Empty.PRESENTED_IMAGE_SIMPLE}
-          description={
-            <span className="bl-manifest-empty">
-              <AppIcon icon={Icons.alert} size={16} />
-              Manifest {mcnId} was not found.
-            </span>
-          }
+        <ModuleEmptyState
+          variant="error"
+          title="Manifest not found"
+          message={`Manifest ${mcnId} was not found.`}
+          artSize="sm"
         />
       ) : status ? (
         <>

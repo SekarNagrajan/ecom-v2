@@ -5,6 +5,11 @@ import { Card, Flex, Select, Space, Spin, Tag, Tooltip, Typography } from "antd"
 import { useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import {
+  ModuleEmptyState,
+  buildClearFiltersAction,
+  buildRetryAction,
+} from "../../../components/shared/module-empty-state";
 import { useTariffsQuery } from "../api/rates.queries";
 import type { TariffDTO } from "../types/rates.types";
 
@@ -14,7 +19,7 @@ export function TariffView() {
   const [loadPort, setLoadPort] = useState<string | undefined>();
   const [dischPort, setDischPort] = useState<string | undefined>();
 
-  const { data: tariffs = [], isLoading } = useTariffsQuery({
+  const { data: tariffs = [], isLoading, isError, refetch } = useTariffsQuery({
     loadPort,
     dischPort,
   });
@@ -121,6 +126,31 @@ export function TariffView() {
     },
   ];
 
+  const emptyState = isError ? (
+    <ModuleEmptyState
+      variant="error"
+      title="Couldn't load published tariffs"
+      message="The request didn't complete. Check your connection and try again."
+      actions={[buildRetryAction(() => void refetch())]}
+    />
+  ) : (
+    <ModuleEmptyState
+      variant={loadPort || dischPort ? "filtered" : "blank"}
+      title="No published tariffs found"
+      message="Try a different port combination or clear the filters to see more tariffs."
+      actions={
+        loadPort || dischPort
+          ? [
+              buildClearFiltersAction(() => {
+                setLoadPort(undefined);
+                setDischPort(undefined);
+              }),
+            ]
+          : undefined
+      }
+    />
+  );
+
   return (
     <div className="rates-stack">
       <Card className="rates-filter-card">
@@ -166,10 +196,15 @@ export function TariffView() {
         <Card className="rates-grid-panel">
           <div className="rates-grid responsive-table-wrap custom-scroll">
             <DataView
-              data={tariffs}
+              rowData={tariffs}
+              emptyState={emptyState}
               columnDefs={columnDefs}
-              pagination
-              paginationPageSize={10}
+              listOptions={{
+                gridOptions: {
+                  pagination: true,
+                  paginationPageSize: 10,
+                },
+              }}
               className="rates-grid"
             />
           </div>

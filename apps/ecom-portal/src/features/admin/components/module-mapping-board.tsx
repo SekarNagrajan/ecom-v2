@@ -16,10 +16,11 @@ import {
 } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { AppButton, AppCheckbox } from "@solverminds/shared-ui";
-import { Empty, Input, Tag, Tooltip, Typography } from "antd";
+import { Input, Tag, Tooltip, Typography } from "antd";
 import { useState, type ReactNode } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import type { ModuleMappingMenu } from "../types/admin.types";
 
 const { Text } = Typography;
@@ -252,7 +253,15 @@ function MappingDropColumn({
         />
       </div>
       <div className="admin-mapping-column__list custom-scroll">
-        {isEmpty ? <Empty description={emptyText} /> : children}
+        {isEmpty ? (
+          <ModuleEmptyState
+            variant={search ? "filtered" : "blank"}
+            title={emptyText}
+            artSize="sm"
+          />
+        ) : (
+          children
+        )}
       </div>
     </div>
   );

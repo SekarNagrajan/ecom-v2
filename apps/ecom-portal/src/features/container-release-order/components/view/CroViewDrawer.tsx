@@ -8,6 +8,7 @@ import {
   Icons,
   NavDeliveryOrderIcon,
 } from "../../../../components/icons";
+import { ModuleEmptyState } from "../../../../components/shared/module-empty-state";
 import {
   useCRODetailQuery,
   useCRODownloadMutation,
@@ -292,7 +293,16 @@ export function CroViewDrawer({ croNo, onClose }: CroViewDrawerProps) {
                   width: 120,
                 },
               ]}
-              locale={{ emptyText: "No containers on this release" }}
+              locale={{
+                emptyText: (
+                  <ModuleEmptyState
+                    artSize="sm"
+                    variant="blank"
+                    title="No containers on this release"
+                    style={{ padding: 12 }}
+                  />
+                ),
+              }}
             />
           </section>
 

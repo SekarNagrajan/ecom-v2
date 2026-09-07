@@ -87,7 +87,7 @@ export function HaulageTrackingGrid({ bookingId }: HaulageTrackingGridProps) {
   if (!bookingId) return null;
 
   return (
-    <div className="booking-view-row booking-view-row--1">
+    <div className="booking-view-row">
       <Card
         className="booking-panel"
         title={

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-02 15:00)
+// Modified by Sekar Nagarajan (2026-09-07 18:59)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -474,8 +474,21 @@ export function RatesModuleStyles() {
       }
       .rates-drawer-body.custom-scroll {
         overflow-y: auto;
-        max-height: calc(100vh - 105px);
+        max-height: calc(100vh - 100px);
         padding: ${token.paddingLG}px;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-07 18:56) — quote request footer actions */
+      .rates-drawer-footer {
+        padding: ${token.paddingMD}px ${token.paddingLG}px !important;
+        border-top: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorBgContainer};
+      }
+      .rates-drawer-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: ${token.marginSM}px;
+        align-items: center;
+        justify-content: flex-end;
       }
       .rates-drawer-meta {
         display: flex;
@@ -485,6 +498,16 @@ export function RatesModuleStyles() {
       }
       .rates-input-full.ant-input-number {
         width: 100%;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-07 18:59) — two-column quote form rows */
+      .rates-drawer-form-row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0 ${token.marginMD}px;
+        width: 100%;
+      }
+      .rates-drawer-form-row .ant-form-item {
+        min-width: 0;
       }
 
       @media (min-width: 768px) {
@@ -524,6 +547,18 @@ export function RatesModuleStyles() {
         .rates-search-actions .sm-app-button,
         .rates-search-actions .ant-btn {
           width: 100%;
+        }
+        .rates-drawer-actions {
+          width: 100%;
+          justify-content: stretch;
+        }
+        .rates-drawer-actions .sm-app-button,
+        .rates-drawer-actions .ant-btn {
+          flex: 1;
+        }
+        .rates-drawer-form-row {
+          grid-template-columns: 1fr;
+          gap: 0;
         }
         .rates-card__main {
           padding: ${token.paddingMD}px;

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-01 12:52)
+// Modified by Sekar Nagarajan (2026-09-07 18:42)
 /**
  * Enhanced Dashboard — JSP parity with enhancedDashboard.jsp:
  * KPI filter cards → Upcoming Shipment Planning → Ongoing Transactions, plus analytics sections.
@@ -32,6 +32,7 @@ import { DashboardModuleStyles } from "./dashboard-module-styles";
 import { DashboardKpiCards } from "./DashboardKpiCards";
 import { DashboardOngoingTable } from "./DashboardOngoingTable";
 import { LaneOpportunitySection, TopActiveLanesSection } from "./LanesSection";
+import { PlanningDayBookingsDrawer } from "./PlanningDayBookingsDrawer";
 import { ShipmentIntelligenceSection } from "./ShipmentIntelligenceSection";
 import { ShipmentPlanningSection } from "./ShipmentPlanningSection";
 import { VolumeAnalyticsSection } from "./VolumeAnalyticsSection";
@@ -93,6 +94,8 @@ export function EnhancedDashboardView() {
           <ShipmentPlanningSection
             kpis={MOCK_PLANNING_KPIS}
             calendar={MOCK_CALENDAR_WEEKS}
+            onDayClick={controller.handlePlanningDayClick}
+            onViewAll={controller.handleViewAllPlanning}
           />
         </Spin>
 
@@ -139,6 +142,14 @@ export function EnhancedDashboardView() {
           </Spin>
         </div>
       </Space>
+
+      {controller.planningDay ? (
+        <PlanningDayBookingsDrawer
+          selection={controller.planningDay}
+          onClose={controller.handleClosePlanningDayDrawer}
+          onViewBooking={controller.handleViewPlanningBooking}
+        />
+      ) : null}
 
       {controller.selectedBooking ? (
         <BookingViewDrawer

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-07 16:56)
+// Modified by Sekar Nagarajan (2026-09-07 17:24)
 import { useAuthStore, useTenantStore } from "@solverminds/auth";
 import { queryClient } from "@solverminds/platform";
 import { AppConfigProvider } from "@solverminds/shared-ui/providers";
@@ -9,10 +9,14 @@ import ReactDOM from "react-dom/client";
 
 import { router } from "./app/router";
 import { TenantThemeProvider } from "./components/providers/TenantThemeProvider";
+import { SESSION_EXPIRED_SEARCH_REASON } from "./features/auth/api/session-expiry";
 import { ThemePreferencesProvider } from "./features/theme/providers/theme-preferences-provider";
 import { useAppConfigStore } from "./features/theme/stores/app-config.store";
+import { installPreloadErrorHandler } from "./utils/preload-error-handler";
 
 import "@solverminds/shared-ui/styles.css";
+
+installPreloadErrorHandler();
 
 function AppRoot() {
   const config = useAppConfigStore((state) => state.config);
@@ -42,7 +46,13 @@ function AppRoot() {
 function wireUnauthorizedListener(): void {
   window.addEventListener("ecom:unauthorized", () => {
     useAuthStore.getState().logout();
-    router.navigate({ to: "/" });
+    void router.navigate({
+      to: "/",
+      search: {
+        login: true,
+        reason: SESSION_EXPIRED_SEARCH_REASON,
+      } as never,
+    });
   });
 }
 
@@ -57,7 +67,7 @@ async function bootstrap() {
 
   wireUnauthorizedListener();
 
-  // Session restore runs in root beforeLoad so PublicPendingFallback can show.
+  // Session + tenant restore run in root beforeLoad so PublicPendingFallback can show.
   ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>

@@ -587,6 +587,20 @@ export function GlobalThemeStyles() {
         min-height: 0;
         padding: ${token.paddingSM}px;
       }
+      /* Sticky 404 — no scrollbars inside the content pane */
+      .app-content-main:has(.ecom-not-found) {
+        overflow: hidden;
+        padding: 0;
+      }
+      .app-content-inner:has(.ecom-not-found) {
+        min-height: 0;
+        flex: 1;
+        overflow: hidden;
+      }
+      .ecom-not-found {
+        width: 100%;
+        max-width: 100%;
+      }
       .app-content-inner {
         min-height: 100%;
         display: flex;

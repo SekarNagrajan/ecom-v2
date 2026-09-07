@@ -1,18 +1,26 @@
-// Modified by Sekar Nagarajan (2026-08-31 17:03)
-import { useAuthStore } from "@solverminds/auth";
+// Modified by Sekar Nagarajan (2026-09-07 17:24)
+import { useAuthStore, useTenantStore } from "@solverminds/auth";
+import { env, queryClient } from "@solverminds/platform";
 import {
   createRootRoute,
   createRoute,
   createRouter,
+  isRedirect,
   Outlet,
   redirect,
 } from "@tanstack/react-router";
 
+import { RootErrorComponent } from "../components/error/root-error";
 import { AuthenticatedLayout } from "../components/layout/AuthenticatedLayout";
+import { LayoutSkeleton } from "../components/layout/layout-skeleton";
 import { PublicLayout } from "../components/layout/PublicLayout";
+import { AppRoutePendingFallback } from "../components/pending/app-route-pending";
 import { PublicPendingFallback } from "../components/pending/public-pending";
+import { NotFound } from "../components/shared/not-found";
 import { AdminRoute } from "../features/admin/admin-route";
 import { rehydrateSession } from "../features/auth/api/rehydrate-session";
+import { SESSION_EXPIRED_SEARCH_REASON } from "../features/auth/api/session-expiry";
+import { redirectForMissingCapability } from "../features/auth/utils/capability-guard";
 import {
   DEFAULT_ADMIN_SECTION,
   isAdminSectionKey,
@@ -51,6 +59,7 @@ import { SchedulesRoute } from "../features/schedules/schedules-route";
 import { ShippingInstructionDashboardRoute } from "../features/shipping-instruction/shipping-instruction-dashboard-route";
 import { ShippingInstructionViewRoute } from "../features/shipping-instruction/shipping-instruction-view-route";
 import { ShippingInstructionWizardRoute } from "../features/shipping-instruction/shipping-instruction-wizard-route";
+import { publicTenantQueryOptions } from "../features/tenant/api/tenant.queries";
 import { TrackingRoute } from "../features/tracking/tracking-route";
 import { userCreationRoute } from "../features/user-creation/user-creation-route";
 import {
@@ -80,7 +89,6 @@ function assertCapability(code: string) {
     if (!user) {
       throw redirect({ to: "/", search: { login: true } as never });
     }
-    // Modified by Sekar Nagarajan (2026-08-31 17:03) — tenant admin bypass (STMT/CO2 parity)
     if (
       user.role === "ADMIN" ||
       user.isTenantAdmin ||
@@ -90,7 +98,9 @@ function assertCapability(code: string) {
       return;
     }
     if (!user.capabilities.includes(code)) {
-      throw redirect({ to: "/app/dashboard" });
+      redirectForMissingCapability(
+        `You do not have access to this module (${code}).`,
+      );
     }
   };
 }
@@ -101,7 +111,9 @@ function assertAdminAccess() {
     throw redirect({ to: "/", search: { login: true } as never });
   }
   if (user.role !== "ADMIN") {
-    throw redirect({ to: "/app/dashboard" });
+    redirectForMissingCapability(
+      "You do not have access to the admin control panel.",
+    );
   }
 }
 
@@ -111,7 +123,7 @@ function assertVendorAccess() {
     throw redirect({ to: "/", search: { login: true } as never });
   }
   if (user.role !== "VENDOR" && user.role !== "ADMIN") {
-    throw redirect({ to: "/app/dashboard" });
+    redirectForMissingCapability("You do not have vendor access.");
   }
 }
 
@@ -121,8 +133,13 @@ function assertSuperuserAccess() {
     throw redirect({ to: "/", search: { login: true } as never });
   }
   if (!user.isSessionAdmin && user.role !== "ADMIN") {
-    throw redirect({ to: "/app/dashboard" });
+    redirectForMissingCapability("You do not have superuser access.");
   }
+}
+
+function resolveSessionSplashTitle(): string {
+  const tenantName = useTenantStore.getState().activeTenant?.name;
+  return tenantName || env.VITE_APP_TITLE;
 }
 
 // ---------------------------------------------------------------------------
@@ -131,12 +148,29 @@ function assertSuperuserAccess() {
 const rootRoute = createRootRoute({
   beforeLoad: async () => {
     await rehydrateSession();
+
+    try {
+      const tenant = await queryClient.ensureQueryData(
+        publicTenantQueryOptions(),
+      );
+      useTenantStore.getState().setCustomTenant(tenant);
+    } catch (error) {
+      if (isRedirect(error)) throw error;
+      throw error instanceof Error
+        ? error
+        : new Error(
+            "Failed to load organization configuration. Please refresh the page or contact support.",
+          );
+    }
   },
   pendingComponent: () => (
     <PublicPendingFallback
-      title="Solverminds E-Commerce Portal"
+      title={resolveSessionSplashTitle()}
       message="Verifying your session..."
     />
+  ),
+  errorComponent: ({ error, reset }) => (
+    <RootErrorComponent error={error} reset={reset} />
   ),
   component: () => <Outlet />,
 });
@@ -160,9 +194,14 @@ const indexRoute = createRoute({
   path: "/",
   validateSearch: (search: Record<string, unknown>) => ({
     login: search.login as boolean | undefined,
+    reason:
+      search.reason === SESSION_EXPIRED_SEARCH_REASON
+        ? SESSION_EXPIRED_SEARCH_REASON
+        : undefined,
   }),
   component: () => null,
 });
+
 
 const registerRoute = createRoute({
   getParentRoute: () => publicRoute,
@@ -237,6 +276,7 @@ export const appRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/app",
   component: () => <AuthenticatedLayout />,
+  pendingComponent: () => <LayoutSkeleton />,
   beforeLoad: ({ location }) => {
     const isPublicSearchModule =
       location.pathname.startsWith("/app/schedules") ||
@@ -311,6 +351,7 @@ const bookingDashboardRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/booking",
   beforeLoad: assertCapability("BKG"),
+  pendingComponent: () => <AppRoutePendingFallback />,
   component: () => <BookingDashboardRoute />,
 });
 
@@ -340,6 +381,7 @@ const shippingInstructionDashboardRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/shipping-instruction",
   beforeLoad: assertCapability("SI"),
+  pendingComponent: () => <AppRoutePendingFallback />,
   component: () => <ShippingInstructionDashboardRoute />,
 });
 
@@ -385,6 +427,7 @@ const blDashboardRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/bl",
   beforeLoad: assertCapability("BL"),
+  pendingComponent: () => <AppRoutePendingFallback />,
   component: () => <BillOfLadingDashboardRoute />,
 });
 
@@ -442,6 +485,7 @@ const deliveryOrderRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/delivery-order",
   beforeLoad: assertCapability("DO"),
+  pendingComponent: () => <AppRoutePendingFallback />,
   component: DeliveryOrderRoute,
 });
 
@@ -598,7 +642,14 @@ const routeTree = rootRoute.addChildren([
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const router = createRouter({
   routeTree,
+  defaultPreload: "intent",
+  defaultPreloadDelay: 200,
   defaultPendingMs: 200,
+  defaultPendingMinMs: 300,
+  defaultPendingComponent: () => (
+    <PublicPendingFallback message="Loading page..." />
+  ),
+  defaultNotFoundComponent: () => <NotFound />,
 } as any);
 
 declare module "@tanstack/react-router" {

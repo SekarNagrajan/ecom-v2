@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-01 12:22)
+// Modified by Sekar Nagarajan (2026-09-07 18:37)
 import { useQuery } from "@tanstack/react-query";
 import { Card, Result, Skeleton, Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
@@ -159,8 +159,7 @@ export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
 
   return (
     <div className="booking-stack booking-view-sections">
-      {/* Row 1: Master Details | Parties */}
-      <div className="booking-view-row booking-view-row--2">
+      <div className="booking-view-row">
         <Card
           className="booking-panel"
           title={
@@ -169,7 +168,7 @@ export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
             </SectionTitle>
           }
         >
-          <div className="booking-meta-grid">
+          <div className="booking-meta-grid booking-meta-grid--row custom-scroll">
             <MetaItem label="Origin" value={booking.masterDetails.origin} />
             <MetaItem label="Delivery" value={booking.masterDetails.delivery} />
             <MetaItem
@@ -190,7 +189,9 @@ export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
             />
           </div>
         </Card>
+      </div>
 
+      <div className="booking-view-row">
         <Card
           className="booking-panel"
           title={
@@ -199,7 +200,7 @@ export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
             </SectionTitle>
           }
         >
-          <div className="booking-meta-grid">
+          <div className="booking-meta-grid booking-meta-grid--row custom-scroll">
             <MetaItem label="Shipper" value={booking.parties.shipperName} />
             <MetaItem label="Consignee" value={booking.parties.consigneeName} />
             <MetaItem
@@ -218,8 +219,7 @@ export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
         </Card>
       </div>
 
-      {/* Row 2: Cargo & Equipment | Insurance */}
-      <div className="booking-view-row booking-view-row--2">
+      <div className="booking-view-row">
         <Card
           className="booking-panel"
           title={
@@ -228,51 +228,118 @@ export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
             </SectionTitle>
           }
         >
-          <div className="booking-meta-grid">
-            {(cargo?.containers ?? []).length === 0 ? (
-              <ModuleEmptyState
-                artSize="sm"
-                variant="blank"
-                title="No cargo lines recorded"
-                style={{ padding: 12 }}
-              />
-            ) : (
-              (cargo?.containers ?? []).map((c, i) => (
-                <MetaItem
-                  key={c.id}
-                  label={`Container ${i + 1}`}
-                  value={`${c.quantity}x ${c.containerType} · ${c.commodities
-                    .map((m) =>
-                      [
-                        m.hsCode,
-                        m.commodity || m.description,
-                        `${m.packageQuantity} ${m.packageType}`,
-                        `${m.weight} kg`,
-                        `${m.volume} m³`,
-                        m.marksAndNumbers ? `Marks: ${m.marksAndNumbers}` : "",
+          {(cargo?.containers ?? []).length === 0 ? (
+            <ModuleEmptyState
+              artSize="sm"
+              variant="blank"
+              title="No cargo lines recorded"
+              className="booking-cargo-equip-empty"
+            />
+          ) : (
+            <div className="booking-cargo-equip custom-scroll">
+              <div className="booking-cargo-equip__head" role="row">
+                <span className="booking-cargo-equip__cell booking-cargo-equip__cell--qty">
+                  Qty
+                </span>
+                <span className="booking-cargo-equip__cell booking-cargo-equip__cell--type">
+                  Equipment
+                </span>
+                <span className="booking-cargo-equip__cell booking-cargo-equip__cell--flags">
+                  Flags
+                </span>
+                <span className="booking-cargo-equip__cell booking-cargo-equip__cell--comm">
+                  Commodity
+                </span>
+                <span className="booking-cargo-equip__cell booking-cargo-equip__cell--hs">
+                  HS
+                </span>
+                <span className="booking-cargo-equip__cell booking-cargo-equip__cell--pkg">
+                  Packages
+                </span>
+                <span className="booking-cargo-equip__cell booking-cargo-equip__cell--wt">
+                  Weight
+                </span>
+                <span className="booking-cargo-equip__cell booking-cargo-equip__cell--vol">
+                  Volume
+                </span>
+                <span className="booking-cargo-equip__cell booking-cargo-equip__cell--dg">
+                  DG
+                </span>
+              </div>
+              {(cargo?.containers ?? []).flatMap((container) => {
+                const lines =
+                  container.commodities.length > 0
+                    ? container.commodities
+                    : [null];
+                const flags = [
+                  container.eqpStatus === "EMPTY" ? "Empty" : null,
+                  container.isSoc ? "SOC" : null,
+                  container.isOog ? "OOG" : null,
+                  container.reeferMode && container.reeferMode !== "none"
+                    ? container.reeferMode.toUpperCase()
+                    : null,
+                ].filter(Boolean);
+
+                return lines.map((commodity, commodityIndex) => (
+                  <div
+                    key={`${container.id}-${commodity?.id ?? "empty"}-${commodityIndex}`}
+                    className="booking-cargo-equip__row"
+                    role="row"
+                  >
+                    <span className="booking-cargo-equip__cell booking-cargo-equip__cell--qty">
+                      {commodityIndex === 0 ? container.quantity : ""}
+                    </span>
+                    <span className="booking-cargo-equip__cell booking-cargo-equip__cell--type">
+                      {commodityIndex === 0 ? container.containerType : ""}
+                    </span>
+                    <span className="booking-cargo-equip__cell booking-cargo-equip__cell--flags">
+                      {commodityIndex === 0
+                        ? flags.length > 0
+                          ? flags.join(" · ")
+                          : "—"
+                        : ""}
+                    </span>
+                    <span className="booking-cargo-equip__cell booking-cargo-equip__cell--comm">
+                      {commodity?.commodity ||
+                        commodity?.description ||
+                        "—"}
+                    </span>
+                    <span className="booking-cargo-equip__cell booking-cargo-equip__cell--hs">
+                      {commodity?.hsCode || "—"}
+                    </span>
+                    <span className="booking-cargo-equip__cell booking-cargo-equip__cell--pkg">
+                      {commodity
+                        ? `${commodity.packageQuantity} ${commodity.packageType}`
+                        : "—"}
+                    </span>
+                    <span className="booking-cargo-equip__cell booking-cargo-equip__cell--wt">
+                      {commodity ? `${commodity.weight} kg` : "—"}
+                    </span>
+                    <span className="booking-cargo-equip__cell booking-cargo-equip__cell--vol">
+                      {commodity ? `${commodity.volume} m³` : "—"}
+                    </span>
+                    <span
+                      className={[
+                        "booking-cargo-equip__cell",
+                        "booking-cargo-equip__cell--dg",
+                        commodity?.isDangerousGoods
+                          ? "booking-cargo-equip__cell--dg-yes"
+                          : "",
                       ]
                         .filter(Boolean)
-                        .join(" · "),
-                    )
-                    .join("; ")}`}
-                />
-              ))
-            )}
-            <MetaItem
-              label="Hazardous"
-              value={
-                (cargo?.containers ?? []).some((c) =>
-                  c.commodities.some((m) => m.isDangerousGoods),
-                ) ? (
-                  <Text type="danger">Yes</Text>
-                ) : (
-                  "No"
-                )
-              }
-            />
-          </div>
+                        .join(" ")}
+                    >
+                      {commodity?.isDangerousGoods ? "Yes" : "No"}
+                    </span>
+                  </div>
+                ));
+              })}
+            </div>
+          )}
         </Card>
+      </div>
 
+      <div className="booking-view-row">
         <Card
           className="booking-panel"
           title={
@@ -282,7 +349,7 @@ export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
           }
         >
           {insuranceRequired && booking.insurance ? (
-            <div className="booking-meta-grid">
+            <div className="booking-meta-grid booking-meta-grid--row custom-scroll">
               <MetaItem
                 label="Cargo Value"
                 value={`${booking.insurance.cargoValue} ${booking.insurance.currency}`}
@@ -298,9 +365,8 @@ export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
         </Card>
       </div>
 
-      {/* ENS full-width when present */}
       {booking.ens?.euCustomsZone ? (
-        <div className="booking-view-row booking-view-row--1">
+        <div className="booking-view-row">
           <Card
             className="booking-panel"
             title={
@@ -309,7 +375,7 @@ export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
               </SectionTitle>
             }
           >
-            <div className="booking-meta-grid">
+            <div className="booking-meta-grid booking-meta-grid--row custom-scroll">
               <MetaItem label="BL Type" value={booking.ens.blType} />
               <MetaItem label="Filing Type" value={booking.ens.ensFilingType} />
               <MetaItem
@@ -321,8 +387,7 @@ export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
         </div>
       ) : null}
 
-      {/* Row 3: Documents */}
-      <div className="booking-view-row booking-view-row--1">
+      <div className="booking-view-row">
         <Card
           className="booking-panel"
           title={
@@ -336,10 +401,10 @@ export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
               artSize="sm"
               variant="blank"
               title="No documents uploaded"
-              style={{ padding: 12 }}
+              className="booking-cargo-equip-empty"
             />
           ) : (
-            <div className="booking-meta-grid">
+            <div className="booking-meta-grid booking-meta-grid--row custom-scroll">
               {documents.map((d) => (
                 <MetaItem key={d.id} label={d.type} value={d.fileName} />
               ))}
@@ -348,8 +413,7 @@ export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
         </Card>
       </div>
 
-      {/* Activity — vertical icon steps */}
-      <div className="booking-view-row booking-view-row--1">
+      <div className="booking-view-row">
         <Card
           className="booking-panel"
           title={
@@ -365,7 +429,7 @@ export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
               artSize="sm"
               variant="blank"
               title="No activity recorded"
-              style={{ padding: 12 }}
+              className="booking-cargo-equip-empty"
             />
           ) : (
             <ActivitySteps events={activity} />

@@ -3,7 +3,7 @@ import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { useNavigate } from "@tanstack/react-router";
 import { Space, Tag, Tooltip, Typography } from "antd";
 
-import { AppIcon, Icons } from "../../../../components/icons";
+import { AppIcon, Icons, NavBookingIcon } from "../../../../components/icons";
 import { formatModuleScreenTitle } from "../../../../constants/module-titles";
 import type { BookingListDTO } from "../../types/booking-list.types";
 import { getBookingListStatusColor } from "../../types/booking-list.types";
@@ -33,11 +33,11 @@ export function BookingViewDrawer({
     <AppDrawer
       open
       onClose={onClose}
-      dialogSize="md"
+      dialogSize="xl"
       classNames={{ body: "booking-drawer-body custom-scroll" }}
       title={
         <div className="booking-drawer-title">
-          <AppIcon icon={Ico} size={22} />
+          <AppIcon icon={NavBookingIcon} size={22} />
           <div>
             <Title level={4} className="booking-drawer-title__text">
               {formatModuleScreenTitle("View Booking", booking.bookingNo)}

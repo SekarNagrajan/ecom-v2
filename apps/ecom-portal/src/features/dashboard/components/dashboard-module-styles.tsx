@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-02 12:08)
+// Modified by Sekar Nagarajan (2026-09-07 18:49)
 import { theme } from "antd";
 import { tokenMix } from "../../theme/utils/token-mix";
 
@@ -562,16 +562,22 @@ export function DashboardModuleStyles() {
       .dashboard-cal-cell {
         width: 26px;
         height: 24px;
+        border: 0;
         border-radius: ${token.borderRadiusSM}px;
         display: flex;
         align-items: center;
         justify-content: center;
         margin: 0 auto;
         font-size: ${token.fontSizeSM}px;
+        padding: 0;
+        background: transparent;
+        font: inherit;
+        color: inherit;
       }
       .dashboard-cal-cell--0 {
         color: ${token.colorTextQuaternary};
         background: transparent;
+        cursor: default;
       }
       .dashboard-cal-cell--low {
         color: ${token.colorPrimary};
@@ -587,6 +593,166 @@ export function DashboardModuleStyles() {
         color: ${token.colorPrimary};
         background: ${primaryTint40};
         font-weight: ${token.fontWeightStrong};
+      }
+      /* Modified by Sekar Nagarajan (2026-09-07 18:42) — clickable planning day counts */
+      .dashboard-cal-cell--clickable {
+        cursor: pointer;
+        transition: box-shadow 0.15s ease, transform 0.15s ease;
+      }
+      .dashboard-cal-cell--clickable:hover,
+      .dashboard-cal-cell--clickable:focus-visible {
+        box-shadow: 0 0 0 2px ${token.colorPrimaryBorder};
+        transform: translateY(-1px);
+        outline: none;
+      }
+      .dashboard-cal-cell--clickable:disabled {
+        cursor: default;
+        transform: none;
+        box-shadow: none;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-07 18:49) — tiled planning day drawer header */
+      .dashboard-planning-day-drawer__header-wrap.ant-drawer-header {
+        padding-block: ${token.paddingMD}px;
+      }
+      .dashboard-planning-day-drawer__header {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginSM}px;
+        width: 100%;
+        min-width: 0;
+        padding-right: ${token.paddingLG}px;
+      }
+      .dashboard-planning-day-drawer__brand {
+        display: flex;
+        align-items: flex-start;
+        gap: ${token.marginSM}px;
+        min-width: 0;
+      }
+      .dashboard-planning-day-drawer__icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorPrimaryBg};
+        color: ${token.colorPrimary};
+        flex-shrink: 0;
+      }
+      .dashboard-planning-day-drawer__brand-copy {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+      }
+      .dashboard-planning-day-drawer__eyebrow {
+        display: block;
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+        line-height: 1.2;
+      }
+      .dashboard-planning-day-drawer__heading {
+        margin: 0 !important;
+        line-height: 1.25 !important;
+      }
+      .dashboard-planning-day-drawer__tiles {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: ${token.marginXS}px;
+        width: 100%;
+      }
+      .dashboard-planning-day-tile {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        gap: ${token.marginXXS}px;
+        min-width: 0;
+        min-height: 64px;
+        padding: ${token.paddingXS}px ${token.paddingSM}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorFillAlter};
+      }
+      .dashboard-planning-day-tile--primary {
+        background: ${token.colorPrimaryBg};
+        border-color: ${token.colorPrimaryBorder};
+      }
+      .dashboard-planning-day-tile--range {
+        grid-column: span 1;
+      }
+      .dashboard-planning-day-tile__label {
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorTextSecondary};
+        line-height: 1.2;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+      }
+      .dashboard-planning-day-tile__value {
+        font-size: ${token.fontSizeLG}px;
+        font-weight: 800;
+        color: ${token.colorText};
+        line-height: 1.15;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 100%;
+      }
+      .dashboard-planning-day-tile__value--sm {
+        font-size: ${token.fontSize}px;
+        font-weight: ${token.fontWeightStrong};
+      }
+      .dashboard-planning-day-tile--primary .dashboard-planning-day-tile__value {
+        color: ${token.colorPrimary};
+      }
+      .dashboard-planning-day-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginSM}px;
+      }
+      .dashboard-planning-day-list__item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: ${token.marginMD}px;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorFillAlter};
+      }
+      .dashboard-planning-day-list__copy {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+      }
+      .dashboard-planning-day-list__no {
+        font-size: ${token.fontSize}px;
+      }
+      .dashboard-planning-day-list__route {
+        font-size: ${token.fontSizeSM}px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .dashboard-planning-day-list__tags {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginXS}px;
+        flex-wrap: wrap;
+        
+      }
+      @media (max-width: 575px) {
+        .dashboard-planning-day-drawer__tiles {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .dashboard-planning-day-tile--range {
+          grid-column: span 2;
+        }
       }
       .dashboard-legend {
         display: flex;
@@ -617,12 +783,21 @@ export function DashboardModuleStyles() {
         flex-shrink: 0;
       }
       .dashboard-dot--primary { background: ${token.colorPrimary}; }
-      .dashboard-dot--success { background: ${token.colorSuccess}; }
-      .dashboard-dot--warning { background: ${token.colorWarning}; }
-      .dashboard-dot--error { background: ${token.colorError}; }
-      .dashboard-dot--info { background: ${token.colorInfo}; }
-      .dashboard-dot--purple { background: ${token.purple}; }
-      .dashboard-dot--neutral { background: ${token.colorTextQuaternary}; }
+      .dashboard-dot--success { background: ${tokenMix(
+        token.colorSuccess,
+        12,
+      )}; }
+      .dashboard-dot--warning { background: ${tokenMix(
+        token.colorWarning,
+        12,
+      )}; }
+      .dashboard-dot--error { background: ${tokenMix(token.colorError, 12)}; }
+      .dashboard-dot--info { background: ${tokenMix(token.colorInfo, 12)}; }
+      .dashboard-dot--purple { background: ${tokenMix(token.purple, 12)}; }
+      .dashboard-dot--neutral { background: ${tokenMix(
+        token.colorTextQuaternary,
+        12,
+      )}; }
       .dashboard-donut {
         width: 100%;
         height: ${token.controlHeightLG * 5}px;

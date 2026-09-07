@@ -174,6 +174,8 @@ export function CroModuleStyles() {
       .cro-status-tag.ant-tag {
         margin: 0;
         border-radius: ${token.borderRadiusSM}px;
+        background: ${tokenMix(token.colorSuccess, 8)};
+        color: ${token.colorSuccess};
       }
 
       /* —— CRO view drawer (parity with DO/AN airy redesign) —— */

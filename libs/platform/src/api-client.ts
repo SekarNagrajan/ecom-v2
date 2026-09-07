@@ -17,41 +17,61 @@ export interface ApiResponse<T = any> {
 }
 
 export const apiClient: AxiosInstance = axios.create({
-  baseURL: env.VITE_API_URL,
+  // Mock/MSW uses relative `/api/*` paths; real mode uses the configured API host.
+  baseURL: env.VITE_API_MODE === "mock" ? "" : env.VITE_API_URL,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
   timeout: 30000,
 });
 
 // Request interceptor to attach Bearer token
 apiClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem('ecom_auth_token');
+  const token = localStorage.getItem("ecom_auth_token");
   if (token && config.headers) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
 
-// Response interceptor to handle unified envelope and 401 refresh
+// Response interceptor — 401 clears session and opens login with session-expired reason
 apiClient.interceptors.response.use(
   (response: AxiosResponse<ApiResponse>) => {
     return response;
   },
   async (error: AxiosError<ApiResponse>) => {
     if (error.response?.status === 401) {
-      // Trigger logout or token refresh event
-      window.dispatchEvent(new CustomEvent('ecom:unauthorized'));
+      const url = error.config?.url ?? "";
+      // Session probe / login failures are handled by callers — don't hard-redirect.
+      const isAuthProbe =
+        url.includes("/api/auth/me") ||
+        url.includes("/api/auth/login") ||
+        url.includes("/api/auth/admin-login");
+      if (!isAuthProbe) {
+        window.dispatchEvent(
+          new CustomEvent("ecom:unauthorized", {
+            detail: { reason: "session-expired" },
+          }),
+        );
+      }
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 export function extractApiError(error: unknown): string {
   if (axios.isAxiosError(error)) {
-    const apiError = error.response?.data?.error;
-    if (apiError?.message) {
-      return apiError.message;
+    const data = error.response?.data as
+      | ApiResponse
+      | { message?: string }
+      | undefined;
+    if (data && typeof data === "object") {
+      if ("error" in data && data.error?.message) {
+        return data.error.message;
+      }
+      if ("message" in data && typeof data.message === "string" && data.message) {
+        return data.message;
+      }
     }
     if (error.message) {
       return error.message;
@@ -60,5 +80,5 @@ export function extractApiError(error: unknown): string {
   if (error instanceof Error) {
     return error.message;
   }
-  return 'An unexpected network error occurred. Please try again.';
+  return "An unexpected network error occurred. Please try again.";
 }

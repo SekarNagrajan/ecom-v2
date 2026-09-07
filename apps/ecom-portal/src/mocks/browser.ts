@@ -12,8 +12,10 @@ import { croHandlers } from './cro.handlers';
 import { customerStatementHandlers } from './customer-statement.handlers';
 import { deliveryOrderHandlers } from './delivery-order.handlers';
 import { landingHandlers } from './landing.handlers';
+import { publicTenantHandlers } from './public-tenant.handlers';
 import { ratesHandlers } from './rates.handlers';
 import { registrationHandlers } from './registration.handlers';
+import { siHandlers } from './si.handlers';
 import { userCreationHandlers } from './user-creation.handlers';
 import { userModulesHandlers } from './user-modules.handlers';
 
@@ -22,6 +24,7 @@ import { userModulesHandlers } from './user-modules.handlers';
  * Import and start this in main.tsx before ReactDOM.createRoot.
  */
 export const worker = setupWorker(
+  ...publicTenantHandlers,
   ...authAdminHandlers,
   ...landingHandlers,
   ...registrationHandlers,
@@ -32,6 +35,7 @@ export const worker = setupWorker(
   ...userModulesHandlers,
   ...ratesHandlers,
   ...bookingHandlers,
+  ...siHandlers,
   ...deliveryOrderHandlers,
   ...blHandlers,
   ...croHandlers,

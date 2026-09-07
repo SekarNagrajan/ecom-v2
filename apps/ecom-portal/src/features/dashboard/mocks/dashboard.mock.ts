@@ -1,6 +1,8 @@
 // Extended mock data for the rich logistics dashboard design
 // Parity: enhancedDashboard.jsp + Rocket dashboard reference layout
-// Modified by Sekar Nagarajan (2026-08-24 15:35)
+// Modified by Sekar Nagarajan (2026-09-07 18:42)
+
+import type { BookingListDTO } from "../../booking/types/booking-list.types";
 
 export interface VolumeKpi {
   label: string;
@@ -50,10 +52,26 @@ export interface PlanningKpi {
   atRisk: number;
 }
 
+export type CalendarWeekday = "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun";
+
+export interface CalendarDayCell {
+  count: number;
+  bookings: BookingListDTO[];
+}
+
 export interface CalendarWeek {
   week: string;
   dateRange: string;
-  days: { mon: number; tue: number; wed: number; thu: number; fri: number; sat: number; sun: number; total: number };
+  days: Record<CalendarWeekday, CalendarDayCell> & { total: number };
+}
+
+/** Day selection payload when a calendar count is clicked. */
+export interface PlanningDaySelection {
+  week: string;
+  day: CalendarWeekday;
+  dayLabel: string;
+  dateRange: string;
+  bookings: BookingListDTO[];
 }
 
 export interface IntelligenceBreakdown {
@@ -163,21 +181,197 @@ export const MOCK_PLANNING_KPIS: PlanningKpi = {
   atRisk: 3,
 };
 
+/** Pool of list rows (ids match booking MSW detail fallbacks). */
+const PLANNING_BOOKING_POOL: BookingListDTO[] = [
+  {
+    id: "bkg-1",
+    bookingNo: "AE01444001",
+    onlineRefNo: "BKON7101",
+    agencyRefNo: "AGY-1001",
+    status: "Draft",
+    origin: "AEJEA - JEBEL ALI",
+    delivery: "SGSIN - SINGAPORE",
+    createdDate: "28-Aug-2026 09:10",
+    confirmedDate: "",
+    dgStatus: "Y",
+    teusCount: 10,
+    submittedDate: "",
+  },
+  {
+    id: "bkg-5",
+    bookingNo: "AE01444005",
+    onlineRefNo: "BKON7105",
+    agencyRefNo: "AGY-1005",
+    status: "Submitted",
+    origin: "AEJEA - JEBEL ALI",
+    delivery: "GBFEL - FELIXSTOWE",
+    createdDate: "24-Aug-2026 08:15",
+    confirmedDate: "",
+    dgStatus: "N",
+    teusCount: 5,
+    submittedDate: "24-Aug-2026 10:02",
+  },
+  {
+    id: "bkg-9",
+    bookingNo: "AE01444009",
+    onlineRefNo: "BKON7109",
+    agencyRefNo: "AGY-1009",
+    status: "Confirmed",
+    origin: "AEJEA - JEBEL ALI",
+    delivery: "SGSIN - SINGAPORE",
+    createdDate: "10-Aug-2026 08:32",
+    confirmedDate: "11-Aug-2026 00:26",
+    dgStatus: "N",
+    teusCount: 5,
+    submittedDate: "10-Aug-2026 08:32",
+  },
+  {
+    id: "bkg-2",
+    bookingNo: "IN01444002",
+    onlineRefNo: "BKON7102",
+    agencyRefNo: "",
+    status: "Draft",
+    origin: "INNSA - NHAVA SHEVA",
+    delivery: "NLRTM - ROTTERDAM",
+    createdDate: "27-Aug-2026 14:22",
+    confirmedDate: "",
+    dgStatus: "N",
+    teusCount: 1,
+    submittedDate: "",
+  },
+  {
+    id: "bkg-6",
+    bookingNo: "SGSIN44006",
+    onlineRefNo: "BKON7106",
+    agencyRefNo: "AGY-1006",
+    status: "Submitted",
+    origin: "SGSIN - SINGAPORE",
+    delivery: "JPTYO - TOKYO",
+    createdDate: "23-Aug-2026 13:30",
+    confirmedDate: "",
+    dgStatus: "N",
+    teusCount: 2,
+    submittedDate: "23-Aug-2026 15:11",
+  },
+  {
+    id: "bkg-10",
+    bookingNo: "CNSHA44010",
+    onlineRefNo: "BKON7110",
+    agencyRefNo: "AGY-1010",
+    status: "Confirmed",
+    origin: "CNSHA - SHANGHAI",
+    delivery: "USLAX - LOS ANGELES",
+    createdDate: "08-Aug-2026 12:00",
+    confirmedDate: "09-Aug-2026 06:15",
+    dgStatus: "N",
+    teusCount: 8,
+    submittedDate: "08-Aug-2026 12:30",
+  },
+  {
+    id: "bkg-3",
+    bookingNo: "CNSHA44003",
+    onlineRefNo: "BKON7103",
+    agencyRefNo: "AGY-1003",
+    status: "Draft",
+    origin: "CNSHA - SHANGHAI",
+    delivery: "USLAX - LOS ANGELES",
+    createdDate: "26-Aug-2026 11:05",
+    confirmedDate: "",
+    dgStatus: "Y",
+    teusCount: 4,
+    submittedDate: "",
+  },
+  {
+    id: "bkg-11",
+    bookingNo: "INNSA44011",
+    onlineRefNo: "BKON7111",
+    agencyRefNo: "",
+    status: "In Transit",
+    origin: "INNSA - NHAVA SHEVA",
+    delivery: "DEHAM - HAMBURG",
+    createdDate: "05-Aug-2026 09:50",
+    confirmedDate: "06-Aug-2026 11:10",
+    dgStatus: "Y",
+    teusCount: 3,
+    submittedDate: "05-Aug-2026 10:20",
+  },
+  {
+    id: "bkg-13",
+    bookingNo: "AE01444013",
+    onlineRefNo: "BKON7113",
+    agencyRefNo: "AGY-1013",
+    status: "Completed",
+    origin: "AEJEA - JEBEL ALI",
+    delivery: "SGSIN - SINGAPORE",
+    createdDate: "15-Jul-2026 10:00",
+    confirmedDate: "16-Jul-2026 09:00",
+    dgStatus: "N",
+    teusCount: 2,
+    submittedDate: "15-Jul-2026 10:30",
+  },
+  {
+    id: "bkg-7",
+    bookingNo: "USNYC44007",
+    onlineRefNo: "BKON7107",
+    agencyRefNo: "",
+    status: "Submitted",
+    origin: "USNYC - NEW YORK",
+    delivery: "NLRTM - ROTTERDAM",
+    createdDate: "22-Aug-2026 07:45",
+    confirmedDate: "",
+    dgStatus: "Y",
+    teusCount: 6,
+    submittedDate: "22-Aug-2026 09:20",
+  },
+];
+
+function planningDay(count: number, offset: number): CalendarDayCell {
+  const bookings = Array.from({ length: count }, (_, index) => {
+    const source =
+      PLANNING_BOOKING_POOL[(offset + index) % PLANNING_BOOKING_POOL.length];
+    return { ...source };
+  });
+  return { count: bookings.length, bookings };
+}
+
+function planningWeekDays(
+  counts: [number, number, number, number, number, number, number],
+  offset: number,
+): CalendarWeek["days"] {
+  const keys: CalendarWeekday[] = [
+    "mon",
+    "tue",
+    "wed",
+    "thu",
+    "fri",
+    "sat",
+    "sun",
+  ];
+  const days = {} as Record<CalendarWeekday, CalendarDayCell>;
+  let total = 0;
+  keys.forEach((key, index) => {
+    const cell = planningDay(counts[index], offset + index * 3);
+    days[key] = cell;
+    total += cell.count;
+  });
+  return { ...days, total };
+}
+
 export const MOCK_CALENDAR_WEEKS: CalendarWeek[] = [
   {
-    week: 'W22',
-    dateRange: '19–25 May',
-    days: { mon: 3, tue: 1, wed: 4, thu: 2, fri: 4, sat: 2, sun: 3, total: 19 },
+    week: "W22",
+    dateRange: "19–25 May",
+    days: planningWeekDays([3, 1, 4, 2, 4, 2, 3], 0),
   },
   {
-    week: 'W23',
-    dateRange: '26 May–1 Jun',
-    days: { mon: 4, tue: 1, wed: 5, thu: 2, fri: 4, sat: 1, sun: 3, total: 20 },
+    week: "W23",
+    dateRange: "26 May–1 Jun",
+    days: planningWeekDays([4, 1, 5, 2, 4, 1, 3], 7),
   },
   {
-    week: 'W24',
-    dateRange: '2–8 Jun',
-    days: { mon: 2, tue: 1, wed: 3, thu: 1, fri: 2, sat: 1, sun: 2, total: 12 },
+    week: "W24",
+    dateRange: "2–8 Jun",
+    days: planningWeekDays([2, 1, 3, 1, 2, 1, 2], 14),
   },
 ];
 

@@ -171,6 +171,8 @@ export function DoModuleStyles() {
       .do-status-tag.ant-tag {
         margin: 0;
         border-radius: ${token.borderRadiusSM}px;
+        background: ${tokenMix(token.colorSuccess, 8)};
+        color: ${token.colorSuccess};
       }
 
       /* —— DO view drawer (airy redesign) —— */

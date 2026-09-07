@@ -11,6 +11,7 @@ import type { LucideIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { useLoginController } from "../../features/auth/hooks/use-login-controller";
+import { SESSION_EXPIRED_SEARCH_REASON } from "../../features/auth/api/session-expiry";
 import { usePostLoginRedirectStore } from "../../features/auth/stores/use-post-login-redirect-store";
 import {
     appPathnameToMenuKey,
@@ -40,7 +41,10 @@ function menuLabel(text: string, locked: boolean) {
 }
 
 export function PublicLayout() {
-  const search = useSearch({ strict: false }) as { login?: boolean };
+  const search = useSearch({ strict: false }) as {
+    login?: boolean;
+    reason?: typeof SESSION_EXPIRED_SEARCH_REASON;
+  };
   const navigate = useNavigate();
   const location = useLocation();
   const { useMobileNav, stackHero, tier } = useResponsiveLayout();
@@ -52,6 +56,7 @@ export function PublicLayout() {
     (s) => s.consumeIntendedPath,
   );
 
+  const sessionExpired = search.reason === SESSION_EXPIRED_SEARCH_REASON;
   const [loginPanelOpen, setLoginPanelOpen] = useState(Boolean(search.login));
   const [collapsed, setCollapsed] = useState(true);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -395,6 +400,7 @@ export function PublicLayout() {
           clearIntendedPath();
         }}
         controller={loginController}
+        sessionExpired={sessionExpired}
       />
     </Layout>
   );

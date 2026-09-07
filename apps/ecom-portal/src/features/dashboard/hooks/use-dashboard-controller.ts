@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-01 12:52)
+// Modified by Sekar Nagarajan (2026-09-07 18:42)
 /**
  * Dashboard controller — enhancedDashboard.jsp parity.
  * Loads summary via dashboardApi (mock until REST facade exists).
@@ -14,6 +14,7 @@ import {
   type DashboardShipment,
   type DashboardSummaryResponse,
 } from "../api/dashboard.api";
+import type { PlanningDaySelection } from "../mocks/dashboard.mock";
 import { getDashboardFilterLabel } from "../utils/filter-dashboard-shipments";
 import { mapDashboardShipmentToBlList } from "../utils/map-dashboard-shipment-to-bl";
 import { mapDashboardShipmentToBookingList } from "../utils/map-dashboard-shipment-to-booking";
@@ -41,6 +42,10 @@ export function useDashboardController() {
   );
   // Modified by Sekar Nagarajan (2026-09-01 12:52) — BL view drawer from ongoing table
   const [selectedBl, setSelectedBl] = useState<BLListDTO | null>(null);
+  // Modified by Sekar Nagarajan (2026-09-07 18:42) — planning calendar day bookings
+  const [planningDay, setPlanningDay] = useState<PlanningDaySelection | null>(
+    null,
+  );
 
   const loadSummary = async () => {
     setIsLoading(true);
@@ -70,6 +75,7 @@ export function useDashboardController() {
       return;
     }
     setSelectedBl(null);
+    setPlanningDay(null);
     setSelectedBooking(mapDashboardShipmentToBookingList(shipment));
   };
 
@@ -83,11 +89,34 @@ export function useDashboardController() {
       return;
     }
     setSelectedBooking(null);
+    setPlanningDay(null);
     setSelectedBl(mapDashboardShipmentToBlList(shipment));
   };
 
   const handleCloseBlDrawer = () => {
     setSelectedBl(null);
+  };
+
+  const handlePlanningDayClick = (selection: PlanningDaySelection) => {
+    if (selection.bookings.length === 0) return;
+    setSelectedBl(null);
+    if (selection.bookings.length === 1) {
+      setPlanningDay(null);
+      setSelectedBooking(selection.bookings[0]);
+      return;
+    }
+    setSelectedBooking(null);
+    setPlanningDay(selection);
+  };
+
+  const handleClosePlanningDayDrawer = () => {
+    setPlanningDay(null);
+  };
+
+  const handleViewPlanningBooking = (booking: BookingListDTO) => {
+    setPlanningDay(null);
+    setSelectedBl(null);
+    setSelectedBooking(booking);
   };
 
   // Modified by Sekar Nagarajan (2026-09-01 12:41) — open Create SI wizard with selected row seed
@@ -119,6 +148,10 @@ export function useDashboardController() {
     navigate({ to: "/app/booking/new" as never });
   };
 
+  const handleViewAllPlanning = () => {
+    navigate({ to: "/app/booking" as never });
+  };
+
   return {
     summary,
     isLoading,
@@ -128,13 +161,18 @@ export function useDashboardController() {
     setTrendPeriod,
     selectedBooking,
     selectedBl,
+    planningDay,
     loadSummary,
     handleFilterChange,
     handleViewBooking,
     handleCloseBookingDrawer,
     handleViewBl,
     handleCloseBlDrawer,
+    handlePlanningDayClick,
+    handleClosePlanningDayDrawer,
+    handleViewPlanningBooking,
     handleCreateSi,
     handleCreateBooking,
+    handleViewAllPlanning,
   };
 }

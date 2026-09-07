@@ -1,18 +1,47 @@
-// Modified by Sekar Nagarajan (2026-08-25 18:20)
+// Modified by Sekar Nagarajan (2026-09-07 18:42)
 import { AppButton } from "@solverminds/shared-ui";
 import { Card, Tooltip, Typography } from "antd";
 
-import type { CalendarWeek, PlanningKpi } from "../mocks/dashboard.mock";
+import type {
+  CalendarDayCell,
+  CalendarWeek,
+  CalendarWeekday,
+  PlanningDaySelection,
+  PlanningKpi,
+} from "../mocks/dashboard.mock";
 
 const { Text, Title } = Typography;
 
-const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as const;
+const DAYS: { key: CalendarWeekday; label: string }[] = [
+  { key: "mon", label: "Mon" },
+  { key: "tue", label: "Tue" },
+  { key: "wed", label: "Wed" },
+  { key: "thu", label: "Thu" },
+  { key: "fri", label: "Fri" },
+  { key: "sat", label: "Sat" },
+  { key: "sun", label: "Sun" },
+];
 
-function calCellClass(count: number): string {
-  if (count === 0) return "dashboard-cal-cell dashboard-cal-cell--0";
-  if (count <= 2) return "dashboard-cal-cell dashboard-cal-cell--low";
-  if (count <= 4) return "dashboard-cal-cell dashboard-cal-cell--mid";
-  return "dashboard-cal-cell dashboard-cal-cell--high";
+function calCellClass(count: number, clickable: boolean): string {
+  const tone =
+    count === 0
+      ? "dashboard-cal-cell--0"
+      : count <= 2
+        ? "dashboard-cal-cell--low"
+        : count <= 4
+          ? "dashboard-cal-cell--mid"
+          : "dashboard-cal-cell--high";
+  return [
+    "dashboard-cal-cell",
+    tone,
+    clickable ? "dashboard-cal-cell--clickable" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+}
+
+function bookingCountLabel(count: number): string {
+  return `${count} ${count === 1 ? "booking" : "bookings"}`;
 }
 
 interface PlanningKpiTileProps {
@@ -43,12 +72,32 @@ function PlanningKpiTile({
 interface ShipmentPlanningProps {
   kpis: PlanningKpi;
   calendar: CalendarWeek[];
+  onDayClick?: (selection: PlanningDaySelection) => void;
+  onViewAll?: () => void;
 }
 
 export function ShipmentPlanningSection({
   kpis,
   calendar,
+  onDayClick,
+  onViewAll,
 }: ShipmentPlanningProps) {
+  const handleDayActivate = (
+    week: CalendarWeek,
+    day: CalendarWeekday,
+    dayLabel: string,
+    cell: CalendarDayCell,
+  ) => {
+    if (cell.count <= 0 || cell.bookings.length === 0) return;
+    onDayClick?.({
+      week: week.week,
+      day,
+      dayLabel,
+      dateRange: week.dateRange,
+      bookings: cell.bookings,
+    });
+  };
+
   return (
     <Card
       className="dashboard-panel"
@@ -59,7 +108,7 @@ export function ShipmentPlanningSection({
       }
       extra={
         <Tooltip title="View All Upcoming Bookings">
-          <AppButton type="link" size="small">
+          <AppButton type="link" size="small" onClick={onViewAll}>
             View All
           </AppButton>
         </Tooltip>
@@ -93,8 +142,8 @@ export function ShipmentPlanningSection({
             <tr>
               <th>Week</th>
               {DAYS.map((d) => (
-                <th key={d} className="is-center">
-                  {d}
+                <th key={d.key} className="is-center">
+                  {d.label}
                 </th>
               ))}
               <th className="is-center">Total</th>
@@ -115,15 +164,37 @@ export function ShipmentPlanningSection({
                     {week.dateRange}
                   </Text>
                 </td>
-                {(Object.entries(week.days) as [string, number][])
-                  .filter(([k]) => k !== "total")
-                  .map(([day, count]) => (
-                    <td key={day} className="is-center">
-                      <Tooltip title={`${count} booking(s)`}>
-                        <div className={calCellClass(count)}>{count || ""}</div>
+                {DAYS.map(({ key, label }) => {
+                  const cell = week.days[key];
+                  const clickable = cell.count > 0;
+                  return (
+                    <td key={key} className="is-center">
+                      <Tooltip
+                        title={
+                          clickable
+                            ? `${bookingCountLabel(cell.count)} — click to view`
+                            : "No bookings"
+                        }
+                      >
+                        <button
+                          type="button"
+                          className={calCellClass(cell.count, clickable)}
+                          disabled={!clickable}
+                          aria-label={
+                            clickable
+                              ? `${label} ${week.week}: ${bookingCountLabel(cell.count)}`
+                              : `${label} ${week.week}: no bookings`
+                          }
+                          onClick={() =>
+                            handleDayActivate(week, key, label, cell)
+                          }
+                        >
+                          {cell.count || ""}
+                        </button>
                       </Tooltip>
                     </td>
-                  ))}
+                  );
+                })}
                 <td className="is-center dashboard-table__rank">
                   {week.days.total}
                 </td>

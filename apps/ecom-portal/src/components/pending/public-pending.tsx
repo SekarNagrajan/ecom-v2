@@ -1,9 +1,14 @@
-// Modified by Sekar Nagarajan (2026-09-07 16:56)
+// Modified by Sekar Nagarajan (2026-09-07 17:24)
+import { env } from "@solverminds/platform";
 import type { CSSProperties } from "react";
 
 interface PublicPendingFallbackProps {
   title?: string;
   message?: string;
+}
+
+function defaultTitle() {
+  return env.VITE_APP_TITLE;
 }
 
 const wrapperStyle: CSSProperties = {
@@ -53,7 +58,7 @@ const messageStyle: CSSProperties = {
 };
 
 export function PublicPendingFallback({
-  title = "Solverminds E-Commerce Portal",
+  title = defaultTitle(),
   message = "Verifying your session...",
 }: PublicPendingFallbackProps) {
   return (

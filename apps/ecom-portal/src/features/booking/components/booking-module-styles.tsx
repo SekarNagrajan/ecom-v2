@@ -34,24 +34,19 @@ export function BookingModuleStyles() {
         gap: ${token.marginLG}px;
         width: 100%;
       }
-      /* Modified by Sekar Nagarajan (2026-09-01 12:22) — view drawer section rows */
+      /* Modified by Sekar Nagarajan (2026-09-07 18:37) — full-width single-row sections */
       .booking-view-sections {
         width: 100%;
       }
       .booking-view-row {
         display: grid;
+        grid-template-columns: 1fr;
         gap: ${token.marginMD}px;
         width: 100%;
         align-items: stretch;
       }
-      .booking-view-row--2 {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-      .booking-view-row--1 {
-        grid-template-columns: 1fr;
-      }
       .booking-view-row .booking-panel.ant-card {
-        height: 100%;
+        height: auto;
         margin: 0;
       }
 
@@ -282,6 +277,18 @@ export function BookingModuleStyles() {
       .booking-meta-grid--3 {
         grid-template-columns: repeat(3, minmax(0, 1fr));
       }
+      /* Modified by Sekar Nagarajan (2026-09-07 18:37) — single-row field strip */
+      .booking-meta-grid--row {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: ${token.marginMD}px ${token.marginLG}px;
+        overflow-x: auto;
+        width: 100%;
+      }
+      .booking-meta-grid--row > .booking-meta-item {
+        flex: 1 1 0;
+        min-width: 7.5rem;
+      }
       .booking-meta-item__label {
         display: block;
         font-size: ${token.fontSizeSM}px;
@@ -292,6 +299,77 @@ export function BookingModuleStyles() {
         font-weight: ${token.fontWeightStrong};
         color: ${token.colorText};
         word-break: break-word;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-07 18:34) — cargo equip single-row grid */
+      .booking-cargo-equip-empty {
+        padding: ${token.paddingSM}px;
+      }
+      .booking-cargo-equip {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto;
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+      }
+      .booking-cargo-equip__head,
+      .booking-cargo-equip__row {
+        display: grid;
+        grid-template-columns:
+          minmax(2.5rem, 0.45fr)
+          minmax(4.5rem, 0.7fr)
+          minmax(4rem, 0.75fr)
+          minmax(8rem, 1.6fr)
+          minmax(4.5rem, 0.7fr)
+          minmax(5rem, 0.85fr)
+          minmax(4.5rem, 0.7fr)
+          minmax(4.5rem, 0.7fr)
+          minmax(2.75rem, 0.45fr);
+        gap: ${token.marginXS}px;
+        align-items: center;
+        min-width: 640px;
+      }
+      .booking-cargo-equip__head {
+        padding: ${token.paddingXXS}px ${token.paddingXS}px;
+        border-bottom: 1px solid ${token.colorBorderSecondary};
+      }
+      .booking-cargo-equip__head .booking-cargo-equip__cell {
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+        font-weight: ${token.fontWeightStrong};
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+      }
+      .booking-cargo-equip__row {
+        padding: ${token.paddingXS}px;
+        border-radius: ${token.borderRadiusSM}px;
+        background: ${token.colorFillAlter};
+      }
+      .booking-cargo-equip__cell {
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorText};
+        line-height: 1.35;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .booking-cargo-equip__cell--comm {
+        white-space: normal;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+      }
+      .booking-cargo-equip__cell--qty,
+      .booking-cargo-equip__cell--type {
+        font-weight: ${token.fontWeightStrong};
+      }
+      .booking-cargo-equip__cell--flags {
+        color: ${token.colorTextSecondary};
+      }
+      .booking-cargo-equip__cell--dg-yes {
+        color: ${token.colorError};
+        font-weight: ${token.fontWeightStrong};
       }
       .booking-grid-wrap {
         height: 280px;
@@ -1017,9 +1095,6 @@ export function BookingModuleStyles() {
         }
       }
       @media (max-width: 991px) {
-        .booking-view-row--2 {
-          grid-template-columns: 1fr;
-        }
         .booking-selected-route__content {
           flex-wrap: wrap;
         }

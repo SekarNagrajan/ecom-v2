@@ -1,4 +1,5 @@
 // Modified by Sekar Nagarajan (2026-08-31 15:01)
+import { MOCK_DEFAULT_REFERENCE_FIELDS } from "../../booking/utils/reference-field.utils";
 import type { SIDTO, SIListDTO } from "../types/si.types";
 
 export const MOCK_SI_LIST: SIListDTO[] = [
@@ -107,9 +108,141 @@ export const MOCK_SI_LIST: SIListDTO[] = [
     submittedDate: null,
     createdDate: "2026-08-30T09:00:00Z",
   },
+  // Booking/BL parity — expand across Create SI / Draft / Submitted / Accepted / Declined / Locked
+  {
+    id: "SI1007",
+    siNo: "SIN998289",
+    bookingNo: "BKG-778905",
+    blNo: "BL-V1-001",
+    status: "Draft",
+    blStatus: "Draft",
+    agencyRefNo: "AGY-4461",
+    origin: "AEJEA - JEBEL ALI",
+    delivery: "SGSIN - SINGAPORE",
+    submittedDate: null,
+    createdDate: "2026-08-23T09:00:00Z",
+  },
+  {
+    id: "SI1008",
+    siNo: "SIN998290",
+    bookingNo: "BKG-778910",
+    blNo: "BL-998830",
+    status: "Draft",
+    blStatus: "Draft",
+    agencyRefNo: "AGY-4470",
+    origin: "MYPKG - PORT KLANG",
+    delivery: "NLRTM - ROTTERDAM",
+    submittedDate: null,
+    createdDate: "2026-08-25T07:00:00Z",
+  },
+  {
+    id: "SI1009",
+    siNo: "SIN998291",
+    bookingNo: "BKG-778920",
+    blNo: null,
+    status: "Submitted",
+    blStatus: null,
+    agencyRefNo: "AGY-4480",
+    origin: "HKHKG - HONG KONG",
+    delivery: "AUFRE - FREMANTLE",
+    submittedDate: "2026-08-24T11:00:00Z",
+    createdDate: "2026-08-23T11:00:00Z",
+  },
+  {
+    id: "SI1010",
+    siNo: "SIN998292",
+    bookingNo: "BKG-778912",
+    blNo: "BL-998832",
+    status: "Submitted",
+    blStatus: "Draft",
+    agencyRefNo: "AGY-4472",
+    origin: "INNSA - NHAVA SHEVA",
+    delivery: "AEJEA - JEBEL ALI",
+    submittedDate: "2026-08-24T14:00:00Z",
+    createdDate: "2026-08-24T13:00:00Z",
+  },
+  {
+    id: "SI1011",
+    siNo: "SIN998293",
+    bookingNo: "BKG-778913",
+    blNo: "BL-998833",
+    status: "Accepted",
+    blStatus: "Confirmed",
+    agencyRefNo: "AGY-4473",
+    origin: "SGSIN - SINGAPORE",
+    delivery: "AUFRE - FREMANTLE",
+    submittedDate: "2026-08-20T10:00:00Z",
+    createdDate: "2026-08-19T10:00:00Z",
+  },
+  {
+    id: "SI1012",
+    siNo: "SIN998294",
+    bookingNo: "BKG-778921",
+    blNo: "BL-998840",
+    status: "Accepted",
+    blStatus: "Issued",
+    agencyRefNo: "AGY-4481",
+    origin: "TWKHH - KAOHSIUNG",
+    delivery: "USLAX - LOS ANGELES",
+    submittedDate: "2026-08-18T09:00:00Z",
+    createdDate: "2026-08-17T09:00:00Z",
+  },
+  {
+    id: "SI1013",
+    siNo: "SIN998295",
+    bookingNo: "BKG-778922",
+    blNo: null,
+    status: "Declined",
+    blStatus: null,
+    agencyRefNo: "AGY-4482",
+    origin: "GBFEL - FELIXSTOWE",
+    delivery: "SGSIN - SINGAPORE",
+    submittedDate: "2026-08-17T12:00:00Z",
+    createdDate: "2026-08-16T12:00:00Z",
+  },
+  {
+    id: "SI1014",
+    siNo: "SIN998296",
+    bookingNo: "BKG-778923",
+    blNo: null,
+    status: "Locked",
+    blStatus: "Draft",
+    agencyRefNo: "AGY-4483",
+    origin: "NLRTM - ROTTERDAM",
+    delivery: "CNSHA - SHANGHAI",
+    submittedDate: "2026-08-15T08:00:00Z",
+    createdDate: "2026-08-14T08:00:00Z",
+  },
+  {
+    id: "SI1015",
+    siNo: "SIN998297",
+    bookingNo: "BKG-778924",
+    blNo: "BL-LOCKED-01",
+    status: "Locked",
+    blStatus: "Draft",
+    agencyRefNo: "AGY-4462",
+    origin: "SGSIN - SINGAPORE",
+    delivery: "HKHKG - HONG KONG",
+    submittedDate: "2026-08-22T11:00:00Z",
+    createdDate: "2026-08-21T11:00:00Z",
+  },
+  {
+    id: "SI1016",
+    siNo: null,
+    bookingNo: "BKG-778925",
+    blNo: null,
+    status: "Create SI",
+    blStatus: null,
+    agencyRefNo: "AGY-4484",
+    origin: "USLAX - LOS ANGELES",
+    delivery: "JPOSA - OSAKA",
+    submittedDate: null,
+    createdDate: "2026-08-26T10:00:00Z",
+  },
 ];
 
-export const MOCK_SI_DETAIL: SIDTO = {
+/** Shared detail template — cloned and overlaid per list row in getMockSiDetail. */
+const SI_DETAIL_BASE: SIDTO = {
   id: "SI1003",
   bookingNo: "BKG-778901",
   siNo: "SIN998285",
@@ -287,3 +420,40 @@ export const MOCK_SI_DETAIL: SIDTO = {
   referenceFields: [],
   preview: {},
 };
+
+function buildDetailFromList(row: SIListDTO): SIDTO {
+  return {
+    ...structuredClone(SI_DETAIL_BASE),
+    id: row.id,
+    bookingNo: row.bookingNo,
+    siNo: row.siNo,
+    blNo: row.blNo,
+    agencyRefNo: row.agencyRefNo,
+    origin: row.origin,
+    loadPort: row.origin,
+    delivery: row.delivery,
+    dischargePort: row.delivery,
+    // Existing SI (has SI no) keeps saved references; create/new starts empty
+    referenceFields: row.siNo
+      ? structuredClone(MOCK_DEFAULT_REFERENCE_FIELDS)
+      : [],
+  };
+}
+
+/**
+ * Resolve SI detail by id or booking no (dashboard Create SI).
+ * Falls back to buildDetailFromList for any list row — same pattern as BL getMockBLDetail.
+ */
+export function getMockSiDetail(id: string): SIDTO | undefined {
+  if (!id) return undefined;
+  const listRow = MOCK_SI_LIST.find(
+    (row) => row.id === id || row.bookingNo === id,
+  );
+  if (listRow) {
+    return buildDetailFromList(listRow);
+  }
+  return undefined;
+}
+
+/** @deprecated Prefer getMockSiDetail — kept for any legacy imports */
+export const MOCK_SI_DETAIL: SIDTO = structuredClone(SI_DETAIL_BASE);

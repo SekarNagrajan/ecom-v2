@@ -26,12 +26,15 @@ interface PublicLoginPanelProps {
   onClose: () => void;
   /** Login controller from `useLoginController` hook */
   controller: ReturnType<typeof useLoginController>;
+  /** Shown when redirected after a dead session (CRM parity). */
+  sessionExpired?: boolean;
 }
 
 export function PublicLoginPanel({
   open,
   onClose,
   controller,
+  sessionExpired = false,
 }: PublicLoginPanelProps) {
   const { token } = theme.useToken();
   const navigate = useNavigate();
@@ -101,6 +104,15 @@ export function PublicLoginPanel({
           </Flex>
 
           <div className="pub-login-panel__body">
+            {sessionExpired && (
+              <Alert
+                type="warning"
+                showIcon
+                message="Session expired"
+                description="Your session has ended. Please sign in again to continue."
+                className="pub-login-panel__alert"
+              />
+            )}
             {serverError && (
               <Alert
                 id="login-error-alert"

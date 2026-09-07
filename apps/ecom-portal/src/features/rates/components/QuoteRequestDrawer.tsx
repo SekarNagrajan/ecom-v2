@@ -1,10 +1,10 @@
-// Modified by Sekar Nagarajan (2026-08-28 15:09)
+// Modified by Sekar Nagarajan (2026-09-07 18:59)
 // QuoteRequestDrawer — ApplicationResource_en.properties Request for Quote fields
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
-import { Form, Input, InputNumber, Select, Space, Typography } from "antd";
+import { Form, Input, InputNumber, Select, Typography } from "antd";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -47,6 +47,7 @@ export function QuoteRequestDrawer({
 }: QuoteRequestDrawerProps) {
   const toast = useToast();
   const createMutation = useCreateQuoteMutation();
+  const isSubmitting = createMutation.isPending;
 
   const {
     control,
@@ -64,7 +65,8 @@ export function QuoteRequestDrawer({
     reset({
       ...DEFAULT_QUOTE_VALUES,
       ...initialValues,
-      eqpQuantity: initialValues?.eqpQuantity ?? DEFAULT_QUOTE_VALUES.eqpQuantity,
+      eqpQuantity:
+        initialValues?.eqpQuantity ?? DEFAULT_QUOTE_VALUES.eqpQuantity,
       cargoWeightKg:
         initialValues?.cargoWeightKg ?? DEFAULT_QUOTE_VALUES.cargoWeightKg,
       commodity:
@@ -99,18 +101,25 @@ export function QuoteRequestDrawer({
       open={open}
       onClose={onClose}
       width={520}
-      classNames={{ body: "rates-drawer-body custom-scroll" }}
-      extra={
-        <Space size={8}>
-          <AppButton onClick={onClose}>Cancel</AppButton>
+      maskClosable={!isSubmitting}
+      keyboard={!isSubmitting}
+      classNames={{
+        body: "rates-drawer-body custom-scroll",
+        footer: "rates-drawer-footer",
+      }}
+      footer={
+        <div className="rates-drawer-actions custom-scroll">
+          <AppButton danger onClick={onClose} disabled={isSubmitting}>
+            Cancel
+          </AppButton>
           <AppButton
             type="primary"
-            loading={createMutation.isPending}
+            loading={isSubmitting}
             onClick={handleSubmit(onSubmit)}
           >
             Submit Request for Quote
           </AppButton>
-        </Space>
+        </div>
       }
     >
       <Form layout="vertical" requiredMark={false}>
@@ -221,108 +230,119 @@ export function QuoteRequestDrawer({
           />
         </Form.Item>
 
-        <Form.Item
-          label={
-            <span className="form-field-label">
-              Cargo Quantity <Text type="danger">*</Text>
-            </span>
-          }
-          validateStatus={errors.eqpQuantity ? "error" : ""}
-          help={
-            errors.eqpQuantity ? (
-              <Text type="danger" className="form-field-error">
-                {errors.eqpQuantity.message}
-              </Text>
-            ) : undefined
-          }
-        >
-          <Controller
-            name="eqpQuantity"
-            control={control}
-            render={({ field }) => (
-              <InputNumber {...field} min={1} size="large" className="rates-input-full" />
-            )}
-          />
-        </Form.Item>
+        <div className="rates-drawer-form-row">
+          <Form.Item
+            label={
+              <span className="form-field-label">
+                Cargo Quantity <Text type="danger">*</Text>
+              </span>
+            }
+            validateStatus={errors.eqpQuantity ? "error" : ""}
+            help={
+              errors.eqpQuantity ? (
+                <Text type="danger" className="form-field-error">
+                  {errors.eqpQuantity.message}
+                </Text>
+              ) : undefined
+            }
+          >
+            <Controller
+              name="eqpQuantity"
+              control={control}
+              render={({ field }) => (
+                <InputNumber
+                  {...field}
+                  min={1}
+                  size="large"
+                  className="rates-input-full"
+                />
+              )}
+            />
+          </Form.Item>
 
-        <Form.Item
-          label={
-            <span className="form-field-label">
-              Commodity <Text type="danger">*</Text>
-            </span>
-          }
-          validateStatus={errors.commodity ? "error" : ""}
-          help={
-            errors.commodity ? (
-              <Text type="danger" className="form-field-error">
-                {errors.commodity.message}
-              </Text>
-            ) : undefined
-          }
-        >
-          <Controller
-            name="commodity"
-            control={control}
-            render={({ field }) => (
-              <Input
-                {...field}
-                size="large"
-                placeholder="e.g. General Cargo / Machinery"
-              />
-            )}
-          />
-        </Form.Item>
+          <Form.Item
+            label={
+              <span className="form-field-label">
+                Commodity <Text type="danger">*</Text>
+              </span>
+            }
+            validateStatus={errors.commodity ? "error" : ""}
+            help={
+              errors.commodity ? (
+                <Text type="danger" className="form-field-error">
+                  {errors.commodity.message}
+                </Text>
+              ) : undefined
+            }
+          >
+            <Controller
+              name="commodity"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  size="large"
+                  placeholder="e.g. General Cargo / Machinery"
+                />
+              )}
+            />
+          </Form.Item>
+        </div>
 
-        <Form.Item
-          label={
-            <span className="form-field-label">
-              Cargo Weight (kg) <Text type="danger">*</Text>
-            </span>
-          }
-          validateStatus={errors.cargoWeightKg ? "error" : ""}
-          help={
-            errors.cargoWeightKg ? (
-              <Text type="danger" className="form-field-error">
-                {errors.cargoWeightKg.message}
-              </Text>
-            ) : undefined
-          }
-        >
-          <Controller
-            name="cargoWeightKg"
-            control={control}
-            render={({ field }) => (
-              <InputNumber
-                {...field}
-                min={100}
-                size="large"
-                className="rates-input-full"
-                addonAfter="kg"
-              />
-            )}
-          />
-        </Form.Item>
+        <div className="rates-drawer-form-row">
+          <Form.Item
+            label={
+              <span className="form-field-label">
+                Cargo Weight (kg) <Text type="danger">*</Text>
+              </span>
+            }
+            validateStatus={errors.cargoWeightKg ? "error" : ""}
+            help={
+              errors.cargoWeightKg ? (
+                <Text type="danger" className="form-field-error">
+                  {errors.cargoWeightKg.message}
+                </Text>
+              ) : undefined
+            }
+          >
+            <Controller
+              name="cargoWeightKg"
+              control={control}
+              render={({ field }) => (
+                <InputNumber
+                  {...field}
+                  min={100}
+                  size="large"
+                  className="rates-input-full"
+                  addonAfter="kg"
+                />
+              )}
+            />
+          </Form.Item>
 
-        <Form.Item
-          label={
-            <span className="form-field-label">Expected Target Rate (USD)</span>
-          }
-        >
-          <Controller
-            name="expectedAmountUsd"
-            control={control}
-            render={({ field }) => (
-              <InputNumber
-                {...field}
-                min={0}
-                size="large"
-                className="rates-input-full"
-                prefix="$"
-                addonAfter="USD"
-              />
-            )}
-          />
-        </Form.Item>
+          <Form.Item
+            label={
+              <span className="form-field-label">
+                Expected Target Rate (USD)
+              </span>
+            }
+          >
+            <Controller
+              name="expectedAmountUsd"
+              control={control}
+              render={({ field }) => (
+                <InputNumber
+                  {...field}
+                  min={0}
+                  size="large"
+                  className="rates-input-full"
+                  prefix="$"
+                  addonAfter="USD"
+                />
+              )}
+            />
+          </Form.Item>
+        </div>
 
         <Form.Item label={<span className="form-field-label">Comments</span>}>
           <Controller

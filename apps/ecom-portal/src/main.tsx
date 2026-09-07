@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-27 12:15)
+// Modified by Sekar Nagarajan (2026-09-07 16:56)
 import { useAuthStore, useTenantStore } from "@solverminds/auth";
 import { queryClient } from "@solverminds/platform";
 import { AppConfigProvider } from "@solverminds/shared-ui/providers";
@@ -9,7 +9,6 @@ import ReactDOM from "react-dom/client";
 
 import { router } from "./app/router";
 import { TenantThemeProvider } from "./components/providers/TenantThemeProvider";
-import { fetchCurrentUser } from "./features/auth/api/auth.api";
 import { ThemePreferencesProvider } from "./features/theme/providers/theme-preferences-provider";
 import { useAppConfigStore } from "./features/theme/stores/app-config.store";
 
@@ -40,29 +39,9 @@ function AppRoot() {
   );
 }
 
-async function rehydrateSession(): Promise<void> {
-  const token = localStorage.getItem("ecom_auth_token");
-  if (!token) return;
-
-  const { setRehydrating, login, logout } = useAuthStore.getState();
-  setRehydrating(true);
-
-  try {
-    const user = await fetchCurrentUser(token);
-    login(token, user);
-    if (user.tenantId) {
-      useTenantStore.getState().setTenant(user.tenantId);
-    }
-  } catch {
-    localStorage.removeItem("ecom_auth_token");
-    logout();
-  }
-}
-
 function wireUnauthorizedListener(): void {
   window.addEventListener("ecom:unauthorized", () => {
-    const { logout } = useAuthStore.getState();
-    logout();
+    useAuthStore.getState().logout();
     router.navigate({ to: "/" });
   });
 }
@@ -77,8 +56,8 @@ async function bootstrap() {
   }
 
   wireUnauthorizedListener();
-  await rehydrateSession();
 
+  // Session restore runs in root beforeLoad so PublicPendingFallback can show.
   ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>

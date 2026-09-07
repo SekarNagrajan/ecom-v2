@@ -10,7 +10,9 @@ import {
 
 import { AuthenticatedLayout } from "../components/layout/AuthenticatedLayout";
 import { PublicLayout } from "../components/layout/PublicLayout";
+import { PublicPendingFallback } from "../components/pending/public-pending";
 import { AdminRoute } from "../features/admin/admin-route";
+import { rehydrateSession } from "../features/auth/api/rehydrate-session";
 import {
   DEFAULT_ADMIN_SECTION,
   isAdminSectionKey,
@@ -127,6 +129,15 @@ function assertSuperuserAccess() {
 // 1. Root Route
 // ---------------------------------------------------------------------------
 const rootRoute = createRootRoute({
+  beforeLoad: async () => {
+    await rehydrateSession();
+  },
+  pendingComponent: () => (
+    <PublicPendingFallback
+      title="Solverminds E-Commerce Portal"
+      message="Verifying your session..."
+    />
+  ),
   component: () => <Outlet />,
 });
 
@@ -585,7 +596,10 @@ const routeTree = rootRoute.addChildren([
 // 5. Create Router
 // ---------------------------------------------------------------------------
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const router = createRouter({ routeTree } as any);
+export const router = createRouter({
+  routeTree,
+  defaultPendingMs: 200,
+} as any);
 
 declare module "@tanstack/react-router" {
   interface Register {

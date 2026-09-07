@@ -172,6 +172,8 @@ export function DoModuleStyles() {
       .do-status-tag.ant-tag {
         margin: 0;
         border-radius: ${token.borderRadiusSM}px;
+        background: ${tokenMix(token.colorSuccess, 8)};
+      
       }
       .do-drawer-title {
         display: flex;

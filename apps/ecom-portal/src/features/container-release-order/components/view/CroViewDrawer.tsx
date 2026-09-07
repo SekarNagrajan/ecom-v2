@@ -1,6 +1,6 @@
 // Created by Sekar Nagarajan (2026-08-26 14:57)
 import { AppButton, AppDrawer, FormattedDate } from "@solverminds/shared-ui";
-import { Alert, Table, Tag, Tooltip, Typography } from "antd";
+import { Table, Tag, Tooltip, Typography } from "antd";
 
 import { AppIcon, Icons } from "../../../../components/icons";
 import {
@@ -103,7 +103,7 @@ export function CroViewDrawer({ croNo, onClose }: CroViewDrawerProps) {
         <CroLoadingCenter />
       ) : (
         <>
-          {eligibility ? (
+          {/* {eligibility ? (
             <Alert
               type={alertType}
               showIcon
@@ -122,7 +122,7 @@ export function CroViewDrawer({ croNo, onClose }: CroViewDrawerProps) {
                 ) : null
               }
             />
-          ) : null}
+          ) : null} */}
 
           <div className="cro-route-strip">
             <div className="cro-route-port cro-route-port--origin">

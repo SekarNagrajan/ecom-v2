@@ -1,6 +1,6 @@
 // Modified by Sekar Nagarajan (2026-08-26 14:34)
-import { AppButton, AppDrawer, FormattedDate } from "@solverminds/shared-ui";
-import { Tag, Tooltip, Typography } from "antd";
+import { AppDrawer, FormattedDate } from "@solverminds/shared-ui";
+import { Tag, Typography } from "antd";
 
 import { AppIcon, Icons } from "../../../../components/icons";
 import { formatModuleScreenTitle } from "../../../../constants/module-titles";
@@ -57,20 +57,20 @@ export function DoViewDrawer({ record, onClose }: DoViewDrawerProps) {
           </div>
         </div>
       }
-      extra={
-        <div className="do-drawer-actions custom-scroll">
-          <Tooltip title="Print Delivery Order">
-            <AppButton
-              type="primary"
-              icon={<AppIcon icon={Icons.printer} size={16} tone="print" />}
-              loading={isDownloading}
-              onClick={() => downloadDoc(record.delordno)}
-            >
-              Print
-            </AppButton>
-          </Tooltip>
-        </div>
-      }
+      // extra={
+      //   <div className="do-drawer-actions custom-scroll">
+      //     <Tooltip title="Print Delivery Order">
+      //       <AppButton
+      //         type="primary"
+      //         icon={<AppIcon icon={Icons.printer} size={16} tone="print" />}
+      //         loading={isDownloading}
+      //         onClick={() => downloadDoc(record.delordno)}
+      //       >
+      //         Print
+      //       </AppButton>
+      //     </Tooltip>
+      //   </div>
+      // }
     >
       <div className="do-route-strip">
         <div className="do-route-port do-route-port--origin">

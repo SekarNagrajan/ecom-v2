@@ -87,8 +87,8 @@ function buildReviewSummary(
           route.isDirect
             ? ", Direct"
             : route.shipmentKind
-              ? `, ${route.shipmentKind}`
-              : ""
+            ? `, ${route.shipmentKind}`
+            : ""
         }`
       : "";
   return [
@@ -185,7 +185,8 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
       ]
     : [{ label: "ENS required", value: "No" }];
 
-  const originCode = route?.polPortId || portCodeFromValue(masterDetails.origin);
+  const originCode =
+    route?.polPortId || portCodeFromValue(masterDetails.origin);
   const destCode =
     route?.podPortId || portCodeFromValue(masterDetails.delivery);
 
@@ -336,7 +337,9 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
                 <div key={doc.id} className="booking-review__doc-chip">
                   <span className="booking-review__doc-chip-name">
                     <AppIcon icon={Icons.fileText} size={16} />
-                    <span className="booking-review__value">{doc.fileName}</span>
+                    <span className="booking-review__value">
+                      {doc.fileName}
+                    </span>
                   </span>
                   <span className="booking-review__label">
                     {formatDocumentType(doc.type)}
@@ -392,7 +395,6 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
         <Flex gap="small" wrap="wrap">
           <AppButton
             type="primary"
-            icon={<AppIcon icon={Icons.check} size={16} />}
             onClick={onSubmit}
             loading={isSubmitting}
             disabled={!termsAccepted}

@@ -1,4 +1,4 @@
-// Created by Sekar Nagarajan (2026-08-26 14:57)
+// Modified by Sekar Nagarajan (2026-09-07 12:28)
 import type {
   CROPrintStatus,
   CROReleaseStatus,
@@ -30,7 +30,7 @@ export function getCroPrintStatusLabel(
 export function getCroPrintStatusColor(
   status: CROPrintStatus | string,
 ): string {
-  return status === "Y" ? "success" : "default";
+  return status === "Y" ? "success" : "warning";
 }
 
 export function isCroPrinted(status: CROPrintStatus | string): boolean {

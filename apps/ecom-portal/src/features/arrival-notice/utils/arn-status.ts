@@ -1,4 +1,4 @@
-// Created by Sekar Nagarajan (2026-08-26 14:50)
+// Modified by Sekar Nagarajan (2026-09-07 12:14)
 import type { ArrivalNoticePrintStatus } from "../types/arrival-notice.types";
 
 export function getArnPrintStatusLabel(
@@ -10,7 +10,7 @@ export function getArnPrintStatusLabel(
 export function getArnPrintStatusColor(
   status: ArrivalNoticePrintStatus | string,
 ): string {
-  return status === "Y" ? "success" : "default";
+  return status === "Y" ? "success" : "warning";
 }
 
 export function isArnPrinted(status: ArrivalNoticePrintStatus | string): boolean {

@@ -1,12 +1,11 @@
-// Modified by Sekar Nagarajan (2026-08-26 14:46)
+// Modified by Sekar Nagarajan (2026-09-07 12:22)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
 
 export function DoModuleStyles() {
   const { token } = theme.useToken();
-  const primaryTint8 = tokenMix(token.colorPrimary, 8);
-  const successTint8 = tokenMix(token.colorSuccess, 8);
+  const infoTint8 = tokenMix(token.colorInfo, 8);
 
   return (
     <style>{`
@@ -172,104 +171,156 @@ export function DoModuleStyles() {
       .do-status-tag.ant-tag {
         margin: 0;
         border-radius: ${token.borderRadiusSM}px;
-        background: ${tokenMix(token.colorSuccess, 8)};
-      
       }
+
+      /* —— DO view drawer (airy redesign) —— */
       .do-drawer-title {
         display: flex;
         align-items: flex-start;
-        gap: ${token.marginSM}px;
+        gap: ${token.marginMD}px;
+      }
+      .do-drawer-title__icon {
+        width: ${token.controlHeightLG}px;
+        height: ${token.controlHeightLG}px;
+        border-radius: ${token.borderRadiusLG}px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        background: ${token.colorPrimaryBg};
+        color: ${token.colorPrimary};
+      }
+      .do-drawer-title__copy {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+      }
+      .do-drawer-title__eyebrow {
+        display: block;
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: ${token.colorTextSecondary};
+        line-height: 1.2;
       }
       .do-drawer-title__text {
         margin: 0 !important;
-        line-height: 1.25 !important;
+        line-height: 1.2 !important;
+        color: ${token.colorText} !important;
+        font-weight: ${token.fontWeightStrong} !important;
+        font-size: ${token.fontSizeHeading4}px !important;
+      }
+      .do-drawer-title__text .ant-typography-copy {
+        color: ${token.colorTextSecondary};
+        margin-inline-start: ${token.marginXS}px;
+      }
+      .do-drawer-title__text .ant-typography-copy:hover {
+        color: ${token.colorPrimary};
+      }
+      .do-drawer-title__meta-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: ${token.marginSM}px;
       }
       .do-drawer-title__meta {
         font-size: ${token.fontSizeSM}px;
-        display: block;
-        margin-top: ${token.marginXXS}px;
+        margin: 0;
       }
-      .do-drawer-title__tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: ${token.marginXXS}px;
-        margin-top: ${token.marginXXS}px;
-      }
-      .do-drawer-actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: ${token.marginXS}px;
-        align-items: center;
+      .do-drawer-title__bl {
+        color: ${token.colorInfo};
+        font-weight: ${token.fontWeightStrong};
       }
       .do-drawer-body.custom-scroll {
         display: flex;
         flex-direction: column;
-        gap: ${token.marginLG}px;
+        gap: ${token.marginMD}px;
         padding: ${token.paddingLG}px;
         overflow-y: auto;
-        max-height: calc(100vh - 105px);
+        background: ${token.colorBgLayout};
       }
-      .do-meta-grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: ${token.marginMD}px ${token.marginLG}px;
+      .do-drawer-footer {
+        padding: ${token.paddingMD}px ${token.paddingLG}px !important;
+        border-top: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorBgContainer};
       }
-      .do-meta-item {
+      .do-drawer-actions {
         display: flex;
-        flex-direction: column;
-        gap: ${token.marginXXS}px;
-        min-width: 0;
-      }
-      .do-meta-item .form-field-label {
-        margin-bottom: 0;
-      }
-      .do-meta-item__value {
-        font-weight: ${token.fontWeightStrong};
-        color: ${token.colorText};
-        word-break: break-word;
+        flex-wrap: wrap;
+        gap: ${token.marginSM}px;
+        align-items: center;
+        justify-content: flex-end;
       }
       .do-route-strip {
         display: flex;
-        align-items: stretch;
-        gap: ${token.marginMD}px;
+        flex-direction: column;
+        gap: ${token.marginSM}px;
+        width: 100%;
+        padding: ${token.paddingLG}px;
+        border-radius: ${token.borderRadiusLG + 2}px;
+        background: ${token.colorBgContainer};
+        border: 1px solid ${token.colorBorderSecondary};
+        border-left: 4px solid ${token.colorPrimary};
+        border-right: 4px solid ${token.colorSuccess};
+        box-shadow: ${token.boxShadowTertiary};
+      }
+      .do-route-strip__eyebrow {
+        display: block;
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: ${token.colorTextTertiary};
+        line-height: 1.2;
+      }
+      .do-route-strip__body {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        align-items: center;
+        column-gap: ${token.marginLG}px;
         width: 100%;
       }
       .do-route-port {
-        flex: 1;
         min-width: 0;
-        padding: ${token.paddingMD}px;
-        border-radius: ${token.borderRadiusLG}px;
-        background: ${token.colorFillAlter};
-        border: 1px solid ${token.colorBorderSecondary};
-      }
-      .do-route-port--origin {
-        border-left: 4px solid ${token.colorPrimary};
-        background: linear-gradient(180deg, ${primaryTint8} 0%, ${
-      token.colorFillAlter
-    } 100%);
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
       }
       .do-route-port--delivery {
-        border-left: 4px solid ${token.colorSuccess};
-        background: linear-gradient(180deg, ${successTint8} 0%, ${
-      token.colorFillAlter
-    } 100%);
+        align-items: flex-end;
+        text-align: right;
       }
       .do-route-port__label {
-        display: flex;
+        display: inline-flex;
         align-items: center;
-        gap: ${token.marginXXS}px;
+        gap: ${token.marginXS}px;
         font-size: ${token.fontSizeSM}px;
         font-weight: ${token.fontWeightStrong};
-        color: ${token.colorTextSecondary};
+        color: ${token.colorTextTertiary};
         text-transform: uppercase;
-        letter-spacing: 0.04em;
-        margin-bottom: ${token.marginXXS}px;
+        letter-spacing: 0.06em;
+        line-height: 1.2;
+      }
+      .do-route-port__pin {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .do-route-port__pin--origin {
+        color: ${token.colorPrimary};
+      }
+      .do-route-port__pin--delivery {
+        color: ${token.colorSuccess};
       }
       .do-route-port__code {
         margin: 0 !important;
-        font-size: ${token.fontSizeHeading4}px !important;
-        line-height: 1.15 !important;
+        font-size: ${token.fontSizeHeading3}px !important;
+        line-height: 1.1 !important;
         font-weight: ${token.fontWeightStrong} !important;
+        letter-spacing: 0.01em;
       }
       .do-route-port__code--origin {
         color: ${token.colorPrimary} !important;
@@ -279,33 +330,38 @@ export function DoModuleStyles() {
       }
       .do-route-port__name {
         display: block;
-        margin-top: ${token.marginXXS}px;
-        font-size: ${token.fontSizeSM}px;
-        color: ${token.colorTextSecondary};
+        margin: 0;
+        font-size: ${token.fontSize}px;
+        line-height: 1.35;
+        color: ${token.colorText};
       }
       .do-route-connector {
         flex: 0 0 auto;
-        min-width: 96px;
+        width: 176px;
+        max-width: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: ${token.marginXXS}px;
+        gap: ${token.marginXS}px;
         text-align: center;
-        padding: ${token.paddingXS}px 0;
+        padding: ${token.paddingXXS}px 0;
       }
       .do-route-connector__label {
         font-size: ${token.fontSizeSM}px;
         font-weight: ${token.fontWeightStrong};
+        letter-spacing: 0.01em;
+        padding: 2px ${token.paddingSM}px;
+        border-radius: ${token.borderRadiusLG * 2}px;
+        background: ${token.colorFillTertiary};
         color: ${token.colorTextSecondary};
-        text-transform: uppercase;
-        letter-spacing: 0.03em;
+        white-space: nowrap;
+        line-height: 1.5;
       }
       .do-route-connector__line {
         display: flex;
         align-items: center;
-        width: 100%;
-        max-width: 120px;
+        width: 250%;
         color: ${token.colorPrimary};
       }
       .do-route-connector__dot {
@@ -323,10 +379,78 @@ export function DoModuleStyles() {
       .do-route-connector__track {
         flex: 1;
         height: 2px;
-        margin: 0 ${token.marginXXS}px;
-        background: linear-gradient(90deg, ${token.colorPrimary} 0%, ${
-      token.colorSuccess
-    } 100%);
+        min-width: ${token.marginSM}px;
+      }
+      .do-route-connector__track--origin {
+        background: ${token.colorPrimary};
+        margin-right: ${token.marginXXS}px;
+      }
+      .do-route-connector__track--delivery {
+        background: ${token.colorSuccess};
+        margin-left: ${token.marginXXS}px;
+      }
+      .do-route-connector__ship {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: ${token.colorPrimary};
+        flex-shrink: 0;
+        line-height: 0;
+      }
+      .do-route-connector__arrow {
+        display: inline-flex;
+        align-items: center;
+        color: ${token.colorPrimary};
+        flex-shrink: 0;
+        margin-left: 2px;
+        margin-right: ${token.marginXXS}px;
+        line-height: 0;
+      }
+      .do-drawer-section {
+        padding: ${token.paddingMD}px ${token.paddingLG}px;
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorBgContainer};
+        border: 1px solid ${token.colorBorderSecondary};
+      }
+      .do-drawer-section__head {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginSM}px;
+        margin-bottom: ${token.marginMD}px;
+        color: ${token.colorPrimary};
+      }
+      .do-drawer-section__title {
+        margin: 0 !important;
+        color: ${token.colorPrimary} !important;
+        font-size: ${token.fontSizeLG}px !important;
+      }
+      .do-meta-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: ${token.marginMD}px ${token.marginLG}px;
+      }
+      .do-meta-item {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+        min-width: 0;
+      }
+      .do-meta-item .form-field-label {
+        margin-bottom: 0;
+        color: ${token.colorTextSecondary};
+      }
+      .do-meta-item__value {
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+        word-break: break-word;
+      }
+      .do-drawer-alert.ant-alert {
+        border-radius: ${token.borderRadiusLG}px;
+        border-color: ${tokenMix(token.colorInfo, 28)};
+        background: ${infoTint8};
+      }
+      .do-drawer-alert .ant-alert-message {
+        color: ${token.colorText};
       }
 
       @media (max-width: 767px) {
@@ -356,18 +480,22 @@ export function DoModuleStyles() {
         .do-grid-wrap {
           padding: 0 ${token.paddingMD}px ${token.paddingMD}px;
         }
-        .do-route-strip {
-          flex-direction: column;
+        .do-route-strip__body {
+          grid-template-columns: 1fr;
+          row-gap: ${token.marginMD}px;
+        }
+        .do-route-port--delivery {
+          align-items: flex-start;
+          text-align: left;
         }
         .do-route-connector {
-          min-width: 0;
           width: 100%;
           flex-direction: row;
           justify-content: center;
           gap: ${token.marginSM}px;
         }
         .do-route-connector__line {
-          max-width: 80px;
+          max-width: 180px;
         }
         .do-meta-grid {
           grid-template-columns: 1fr;
@@ -377,8 +505,10 @@ export function DoModuleStyles() {
         }
         .do-drawer-actions {
           width: 100%;
+          justify-content: stretch;
         }
-        .do-drawer-actions .sm-app-button {
+        .do-drawer-actions .sm-app-button,
+        .do-drawer-actions .ant-btn {
           flex: 1;
         }
       }

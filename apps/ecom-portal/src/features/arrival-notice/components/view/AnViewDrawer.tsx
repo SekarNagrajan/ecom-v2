@@ -1,12 +1,13 @@
-// Created by Sekar Nagarajan (2026-08-26 14:50)
+// Modified by Sekar Nagarajan (2026-09-07 12:17)
 import { AppButton, AppDrawer, FormattedDate } from "@solverminds/shared-ui";
-import { Table, Tag, Tooltip, Typography } from "antd";
+import { Alert, Table, Tag, Typography } from "antd";
+import type { ReactNode } from "react";
 
-import { AppIcon, Icons } from "../../../../components/icons";
 import {
-  formatModuleScreenTitle,
-  MODULE_TITLES,
-} from "../../../../constants/module-titles";
+  AppIcon,
+  Icons,
+  NavArrivalNoticeIcon,
+} from "../../../../components/icons";
 import {
   useArrivalNoticeDetailQuery,
   useArrivalNoticeDownloadMutation,
@@ -27,6 +28,21 @@ interface AnViewDrawerProps {
   onClose: () => void;
 }
 
+function MetaField({
+  label,
+  children,
+}: {
+  label: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className="arn-meta-item">
+      <span className="form-field-label">{label}</span>
+      <span className="arn-meta-item__value">{children}</span>
+    </div>
+  );
+}
+
 export function AnViewDrawer({ anNo, onClose }: AnViewDrawerProps) {
   const { data: arnData, isLoading } = useArrivalNoticeDetailQuery(anNo);
   const { mutate: downloadDoc, isPending: isDownloading } =
@@ -36,49 +52,80 @@ export function AnViewDrawer({ anNo, onClose }: AnViewDrawerProps) {
   const showDischargeName = dischargePort.name !== dischargePort.code;
   const chargeLines = arnData?.chargeLines ?? [];
   const freeTime = arnData?.freeTime;
+  const statusLabel = arnData
+    ? getArnPrintStatusLabel(arnData.printStatus)
+    : "";
+  const statusColor = arnData
+    ? getArnPrintStatusColor(arnData.printStatus)
+    : "default";
+  const lastFreeDay = freeTime?.lastFreeDay || arnData?.lastFreeDay;
+
+  const handleDownload = () => {
+    downloadDoc(anNo);
+  };
 
   return (
     <AppDrawer
       open
       onClose={onClose}
       dialogSize="md"
-      classNames={{ body: "arn-drawer-body custom-scroll" }}
+      classNames={{
+        body: "arn-drawer-body custom-scroll",
+        footer: "arn-drawer-footer",
+      }}
       title={
         <div className="arn-drawer-title">
-          <AppIcon icon={Icons.bell} size={22} />
-          <div>
-            <Title level={4} className="arn-drawer-title__text">
-              {formatModuleScreenTitle(MODULE_TITLES.arrivalNotice, anNo)}
+          <span className="arn-drawer-title__icon app-icon-inherit">
+            <AppIcon icon={NavArrivalNoticeIcon} size={22} />
+          </span>
+          <div className="arn-drawer-title__copy">
+            <Text className="arn-drawer-title__eyebrow">Arrival Notice</Text>
+            <Title
+              level={5}
+              className="arn-drawer-title__text"
+              copyable={{
+                text: anNo,
+                tooltips: ["Copy AN number", "Copied"],
+              }}
+            >
+              {anNo}
             </Title>
-            <Text type="secondary" className="arn-drawer-title__meta">
-              B/L: <strong>{arnData?.blNumber || "—"}</strong>
-            </Text>
-            {arnData ? (
-              <div className="arn-drawer-title__tags">
-                <Tag
-                  className="arn-status-tag"
-                  color={getArnPrintStatusColor(arnData.printStatus)}
-                >
-                  {getArnPrintStatusLabel(arnData.printStatus)}
+            <div className="arn-drawer-title__meta-row">
+              <Text type="secondary" className="arn-drawer-title__meta">
+                B/L:{" "}
+                <span className="arn-drawer-title__bl">
+                  {arnData?.blNumber || "—"}
+                </span>
+              </Text>
+              {arnData ? (
+                <Tag className="arn-status-tag" color={statusColor}>
+                  {statusLabel}
                 </Tag>
-              </div>
-            ) : null}
+              ) : null}
+            </div>
           </div>
         </div>
       }
-      extra={
+      footer={
         <div className="arn-drawer-actions custom-scroll">
-          <Tooltip title="Print Arrival Notice">
-            <AppButton
-              type="primary"
-              icon={<AppIcon icon={Icons.printer} size={16} tone="print" />}
-              loading={isDownloading}
-              disabled={!arnData}
-              onClick={() => downloadDoc(anNo)}
-            >
-              Print
-            </AppButton>
-          </Tooltip>
+          <AppButton
+            type="default"
+            icon={<AppIcon icon={Icons.download} size={16} tone="download" />}
+            loading={isDownloading}
+            disabled={!arnData}
+            onClick={handleDownload}
+          >
+            Download PDF
+          </AppButton>
+          <AppButton
+            type="primary"
+            icon={<AppIcon icon={Icons.printer} size={16} />}
+            loading={isDownloading}
+            disabled={!arnData}
+            onClick={handleDownload}
+          >
+            Print Arrival Notice
+          </AppButton>
         </div>
       }
     >
@@ -87,160 +134,153 @@ export function AnViewDrawer({ anNo, onClose }: AnViewDrawerProps) {
       ) : (
         <>
           <div className="arn-route-strip">
-            <div className="arn-route-port arn-route-port--vessel">
-              <div className="arn-route-port__label">
-                <AppIcon icon={Icons.ship} size={14} />
-                Vessel / Voyage
-              </div>
-              <Title
-                level={4}
-                className="arn-route-port__code arn-route-port__code--vessel"
-              >
-                {arnData.vessel || "—"}
-              </Title>
-              <Text className="arn-route-port__name">
-                {arnData.voyage || "—"}
-              </Text>
-            </div>
-
-            <div className="arn-route-connector">
-              <span className="arn-route-connector__label">Arriving</span>
-              <div className="arn-route-connector__line">
-                <span className="arn-route-connector__dot arn-route-connector__dot--vessel" />
-                <span className="arn-route-connector__track" />
-                <AppIcon icon={Icons.arrowRight} size={14} tone="navigate" />
-                <span className="arn-route-connector__track" />
-                <span className="arn-route-connector__dot arn-route-connector__dot--discharge" />
-              </div>
-              <AppIcon icon={Icons.bell} size={16} />
-            </div>
-
-            <div className="arn-route-port arn-route-port--discharge">
-              <div className="arn-route-port__label">
-                <AppIcon icon={Icons.truck} size={14} />
-                Discharge
-              </div>
-              <Title
-                level={4}
-                className="arn-route-port__code arn-route-port__code--discharge"
-              >
-                {dischargePort.code || "—"}
-              </Title>
-              {showDischargeName ? (
+            <Text className="arn-route-strip__eyebrow">Vessel to Port</Text>
+            <div className="arn-route-strip__body">
+              <div className="arn-route-port arn-route-port--vessel">
+                <div className="arn-route-port__label">
+                  <span className="arn-route-port__pin arn-route-port__pin--vessel app-icon-inherit">
+                    <AppIcon icon={Icons.ship} size={15} />
+                  </span>
+                  Vessel
+                </div>
+                <Title
+                  level={3}
+                  className="arn-route-port__code arn-route-port__code--vessel"
+                >
+                  {arnData.vessel || "—"}
+                </Title>
                 <Text className="arn-route-port__name">
-                  {dischargePort.name}
+                  {arnData.voyage || "—"}
                 </Text>
-              ) : null}
+              </div>
+
+              <div className="arn-route-connector" aria-hidden>
+                <div className="arn-route-connector__line">
+                  <span className="arn-route-connector__dot arn-route-connector__dot--vessel" />
+                  <span className="arn-route-connector__track arn-route-connector__track--vessel" />
+                  <span className="arn-route-connector__ship app-icon-inherit">
+                    <AppIcon icon={Icons.bell} size={16} />
+                  </span>
+                  <span className="arn-route-connector__track arn-route-connector__track--discharge" />
+                  <span className="arn-route-connector__dot arn-route-connector__dot--discharge" />
+                </div>
+                <span className="arn-route-connector__label">Arriving</span>
+              </div>
+
+              <div className="arn-route-port arn-route-port--discharge">
+                <div className="arn-route-port__label">
+                  <span className="arn-route-port__pin arn-route-port__pin--discharge app-icon-inherit">
+                    <AppIcon icon={Icons.mapPin} size={15} />
+                  </span>
+                  Discharge
+                </div>
+                <Title
+                  level={3}
+                  className="arn-route-port__code arn-route-port__code--discharge"
+                >
+                  {dischargePort.code || "—"}
+                </Title>
+                <Text className="arn-route-port__name">
+                  {showDischargeName
+                    ? dischargePort.name
+                    : dischargePort.code || "—"}
+                </Text>
+              </div>
             </div>
           </div>
 
-          <div className="arn-meta-grid">
-            <div className="arn-meta-item">
-              <span className="form-field-label">AN No</span>
-              <span className="arn-meta-item__value">{arnData.anNo}</span>
+          <section className="arn-drawer-section">
+            <div className="arn-drawer-section__head">
+              <AppIcon icon={Icons.bell} size={16} />
+              <Text strong className="arn-drawer-section__title">
+                Arrival Notice Details
+              </Text>
             </div>
-            <div className="arn-meta-item">
-              <span className="form-field-label">B/L Number</span>
-              <span className="arn-meta-item__value">
+            <div className="arn-meta-grid">
+              <MetaField label="AN Number">{arnData.anNo}</MetaField>
+              <MetaField label="B/L Number">
                 {arnData.blNumber || "—"}
-              </span>
-            </div>
-            <div className="arn-meta-item">
-              <span className="form-field-label">ETA</span>
-              <span className="arn-meta-item__value">
+              </MetaField>
+              <MetaField label="ETA">
                 {arnData.etaDate ? (
                   <FormattedDate value={arnData.etaDate} />
                 ) : (
                   "—"
                 )}
-              </span>
-            </div>
-            <div className="arn-meta-item">
-              <span className="form-field-label">Arrival Date</span>
-              <span className="arn-meta-item__value">
+              </MetaField>
+              <MetaField label="Arrival Date">
                 {arnData.arrivalDate ? (
                   <FormattedDate value={arnData.arrivalDate} />
                 ) : (
                   "—"
                 )}
-              </span>
-            </div>
-            <div className="arn-meta-item">
-              <span className="form-field-label">Terminal</span>
-              <span className="arn-meta-item__value">
-                {arnData.terminal || "—"}
-              </span>
-            </div>
-            <div className="arn-meta-item">
-              <span className="form-field-label">Consignee</span>
-              <span className="arn-meta-item__value">
-                {arnData.consignee || "—"}
-              </span>
-            </div>
-            <div className="arn-meta-item">
-              <span className="form-field-label">Notify Party</span>
-              <span className="arn-meta-item__value">
-                {arnData.notifyParty || "—"}
-              </span>
-            </div>
-            <div className="arn-meta-item">
-              <span className="form-field-label">Manifest / IGM</span>
-              <span className="arn-meta-item__value">
-                {arnData.manifestRef || arnData.igmNo || "—"}
-              </span>
-            </div>
-            <div className="arn-meta-item">
-              <span className="form-field-label">Charges Due</span>
-              <span className="arn-meta-item__value">
+              </MetaField>
+              <MetaField label="Charges Due">
                 {arnData.chargesDue > 0
                   ? formatArnAmount(arnData.chargesDue, arnData.currency)
                   : "—"}
-              </span>
-            </div>
-            <div className="arn-meta-item">
-              <span className="form-field-label">Print Status</span>
-              <span className="arn-meta-item__value">
-                <Tag
-                  className="arn-status-tag"
-                  color={getArnPrintStatusColor(arnData.printStatus)}
-                >
-                  {getArnPrintStatusLabel(arnData.printStatus)}
+              </MetaField>
+              <MetaField label="Print Status">
+                <Tag className="arn-status-tag" color={statusColor}>
+                  {statusLabel}
                 </Tag>
-              </span>
+              </MetaField>
             </div>
-          </div>
+          </section>
+
+          <section className="arn-drawer-section">
+            <div className="arn-drawer-section__head">
+              <AppIcon icon={Icons.ship} size={16} />
+              <Text strong className="arn-drawer-section__title">
+                Shipment Details
+              </Text>
+            </div>
+            <div className="arn-meta-grid">
+              <MetaField label="Vessel">{arnData.vessel || "—"}</MetaField>
+              <MetaField label="Voyage">{arnData.voyage || "—"}</MetaField>
+              <MetaField label="Terminal">{arnData.terminal || "—"}</MetaField>
+              <MetaField label="Consignee">
+                {arnData.consignee || "—"}
+              </MetaField>
+              <MetaField label="Notify Party">
+                {arnData.notifyParty || "—"}
+              </MetaField>
+              <MetaField label="Manifest / IGM">
+                {arnData.manifestRef || arnData.igmNo || "—"}
+              </MetaField>
+            </div>
+          </section>
 
           {freeTime ? (
-            <div className="arn-free-time-card">
-              <span className="arn-free-time-card__title">Free Time</span>
-              <div className="arn-free-time-card__grid">
-                <div className="arn-meta-item">
-                  <span className="form-field-label">Free Days</span>
-                  <span className="arn-meta-item__value">{freeTime.days}</span>
-                </div>
-                <div className="arn-meta-item">
-                  <span className="form-field-label">Last Free Day</span>
-                  <span className="arn-meta-item__value">
-                    <FormattedDate value={freeTime.lastFreeDay} />
-                  </span>
-                </div>
+            <section className="arn-drawer-section">
+              <div className="arn-drawer-section__head">
+                <AppIcon icon={Icons.clock} size={16} />
+                <Text strong className="arn-drawer-section__title">
+                  Free Time
+                </Text>
+              </div>
+              <div className="arn-meta-grid arn-meta-grid--free-time">
+                <MetaField label="Free Days">{freeTime.days}</MetaField>
+                <MetaField label="Last Free Day">
+                  <FormattedDate value={freeTime.lastFreeDay} />
+                </MetaField>
                 {arnData.demurrageFrom ? (
-                  <div className="arn-meta-item">
-                    <span className="form-field-label">Demurrage From</span>
-                    <span className="arn-meta-item__value">
-                      <FormattedDate value={arnData.demurrageFrom} />
-                    </span>
-                  </div>
+                  <MetaField label="Demurrage From">
+                    <FormattedDate value={arnData.demurrageFrom} />
+                  </MetaField>
                 ) : null}
               </div>
-            </div>
+            </section>
           ) : null}
 
           {chargeLines.length > 0 ? (
-            <div>
-              <Title level={5} className="arn-section-title">
-                Charges
-              </Title>
+            <section className="arn-drawer-section">
+              <div className="arn-drawer-section__head">
+                <AppIcon icon={Icons.fileText} size={16} />
+                <Text strong className="arn-drawer-section__title">
+                  Charges
+                </Text>
+              </div>
               <Table<ArrivalNoticeChargeLine>
                 className="arn-charges-table"
                 size="small"
@@ -268,13 +308,16 @@ export function AnViewDrawer({ anNo, onClose }: AnViewDrawerProps) {
                   },
                 ]}
               />
-            </div>
+            </section>
           ) : null}
 
-          <div>
-            <Title level={5} className="arn-section-title">
-              Containers
-            </Title>
+          <section className="arn-drawer-section">
+            <div className="arn-drawer-section__head">
+              <AppIcon icon={Icons.container} size={16} />
+              <Text strong className="arn-drawer-section__title">
+                Containers
+              </Text>
+            </div>
             <Table
               className="arn-containers-table"
               size="small"
@@ -302,7 +345,21 @@ export function AnViewDrawer({ anNo, onClose }: AnViewDrawerProps) {
               ]}
               locale={{ emptyText: "No containers on this notice" }}
             />
-          </div>
+          </section>
+
+          {lastFreeDay ? (
+            <Alert
+              type="info"
+              showIcon
+              className="arn-drawer-alert"
+              icon={<AppIcon icon={Icons.info} size={16} />}
+              message={
+                <span>
+                  Free time ends on <FormattedDate value={lastFreeDay} />.
+                </span>
+              }
+            />
+          ) : null}
         </>
       )}
     </AppDrawer>

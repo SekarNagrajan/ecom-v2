@@ -1,15 +1,18 @@
-// Modified by Sekar Nagarajan (2026-08-26 14:34)
-import { AppDrawer, FormattedDate } from "@solverminds/shared-ui";
-import { Tag, Typography } from "antd";
+// Modified by Sekar Nagarajan (2026-09-07 12:22)
+import { AppButton, AppDrawer, FormattedDate } from "@solverminds/shared-ui";
+import { Alert, Tag, Typography } from "antd";
+import type { ReactNode } from "react";
 
-import { AppIcon, Icons } from "../../../../components/icons";
-import { formatModuleScreenTitle } from "../../../../constants/module-titles";
+import {
+  AppIcon,
+  Icons,
+  NavContainerReleaseIcon,
+} from "../../../../components/icons";
 import { useDODownloadMutation } from "../../api/delivery-order.queries";
 import type { DOSummaryRow } from "../../types/delivery-order.types";
 import {
   getDoPrintStatusColor,
   getDoPrintStatusLabel,
-  isDoPrinted,
 } from "../../utils/do-status";
 import { parsePortLabel } from "../../utils/do.utils";
 
@@ -20,167 +23,216 @@ interface DoViewDrawerProps {
   onClose: () => void;
 }
 
+function MetaField({
+  label,
+  children,
+}: {
+  label: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className="do-meta-item">
+      <span className="form-field-label">{label}</span>
+      <span className="do-meta-item__value">{children}</span>
+    </div>
+  );
+}
+
 export function DoViewDrawer({ record, onClose }: DoViewDrawerProps) {
   const { mutate: downloadDoc, isPending: isDownloading } =
     useDODownloadMutation();
 
   const originPort = parsePortLabel(record.loadport || "");
   const deliveryPort = parsePortLabel(record.dischargeport || "");
-  const printed = isDoPrinted(record.printstatus);
   const showOriginName = originPort.name !== originPort.code;
   const showDeliveryName = deliveryPort.name !== deliveryPort.code;
+  const statusLabel = getDoPrintStatusLabel(record.printstatus);
+  const statusColor = getDoPrintStatusColor(record.printstatus);
+
+  const handleDownload = () => {
+    downloadDoc(record.delordno);
+  };
 
   return (
     <AppDrawer
       open
       onClose={onClose}
-      dialogSize="sm"
-      classNames={{ body: "do-drawer-body custom-scroll" }}
+      dialogSize="md"
+      classNames={{
+        body: "do-drawer-body custom-scroll",
+        footer: "do-drawer-footer",
+      }}
       title={
         <div className="do-drawer-title">
-          <AppIcon icon={Icons.packageCheck} size={22} />
-          <div>
-            <Title level={4} className="do-drawer-title__text">
-              {formatModuleScreenTitle("Delivery Order", record.delordno)}
+          <span className="do-drawer-title__icon app-icon-inherit">
+            <AppIcon icon={NavContainerReleaseIcon} size={22} />
+          </span>
+          <div className="do-drawer-title__copy">
+            <Text className="do-drawer-title__eyebrow">Delivery Order</Text>
+            <Title
+              level={5}
+              className="do-drawer-title__text"
+              copyable={{
+                text: record.delordno,
+                tooltips: ["Copy DO number", "Copied"],
+              }}
+            >
+              {record.delordno}
             </Title>
-            <Text type="secondary" className="do-drawer-title__meta">
-              B/L: <strong>{record.blnumber || "—"}</strong>
-            </Text>
-            <div className="do-drawer-title__tags">
-              <Tag
-                className="do-status-tag"
-                color={getDoPrintStatusColor(record.printstatus)}
-              >
-                {getDoPrintStatusLabel(record.printstatus)}
+            <div className="do-drawer-title__meta-row">
+              <Text type="secondary" className="do-drawer-title__meta">
+                B/L:{" "}
+                <span className="do-drawer-title__bl">
+                  {record.blnumber || "—"}
+                </span>
+              </Text>
+              <Tag className="do-status-tag" color={statusColor}>
+                {statusLabel}
               </Tag>
             </div>
           </div>
         </div>
       }
-      // extra={
-      //   <div className="do-drawer-actions custom-scroll">
-      //     <Tooltip title="Print Delivery Order">
-      //       <AppButton
-      //         type="primary"
-      //         icon={<AppIcon icon={Icons.printer} size={16} tone="print" />}
-      //         loading={isDownloading}
-      //         onClick={() => downloadDoc(record.delordno)}
-      //       >
-      //         Print
-      //       </AppButton>
-      //     </Tooltip>
-      //   </div>
-      // }
+      footer={
+        <div className="do-drawer-actions custom-scroll">
+          <AppButton
+            type="default"
+            icon={<AppIcon icon={Icons.download} size={16} tone="download" />}
+            loading={isDownloading}
+            onClick={handleDownload}
+          >
+            Download PDF
+          </AppButton>
+          <AppButton
+            type="primary"
+            icon={<AppIcon icon={Icons.printer} size={16} />}
+            loading={isDownloading}
+            onClick={handleDownload}
+          >
+            Print Delivery Order
+          </AppButton>
+        </div>
+      }
     >
       <div className="do-route-strip">
-        <div className="do-route-port do-route-port--origin">
-          <div className="do-route-port__label">
-            <AppIcon icon={Icons.mapPin} size={14} />
-            Origin
+        <Text className="do-route-strip__eyebrow">Port to Port</Text>
+        <div className="do-route-strip__body">
+          <div className="do-route-port do-route-port--origin">
+            <div className="do-route-port__label">
+              <span className="do-route-port__pin do-route-port__pin--origin app-icon-inherit">
+                <AppIcon icon={Icons.mapPin} size={15} />
+              </span>
+              Origin
+            </div>
+            <Title
+              level={3}
+              className="do-route-port__code do-route-port__code--origin"
+            >
+              {originPort.code || "—"}
+            </Title>
+            <Text className="do-route-port__name">
+              {showOriginName ? originPort.name : originPort.code || "—"}
+            </Text>
           </div>
-          <Title
-            level={4}
-            className="do-route-port__code do-route-port__code--origin"
-          >
-            {originPort.code || "—"}
-          </Title>
-          {showOriginName ? (
-            <Text className="do-route-port__name">{originPort.name}</Text>
-          ) : null}
-        </div>
 
-        <div className="do-route-connector">
-          <span className="do-route-connector__label">Port to Port</span>
-          <div className="do-route-connector__line">
-            <span className="do-route-connector__dot do-route-connector__dot--origin" />
-            <span className="do-route-connector__track" />
-            <AppIcon icon={Icons.arrowRight} size={14} />
-            <span className="do-route-connector__track" />
-            <span className="do-route-connector__dot do-route-connector__dot--delivery" />
-          </div>
-          <AppIcon icon={Icons.truck} size={16} />
-        </div>
+          <div className="do-route-connector" aria-hidden>
+            <div className="do-route-connector__line">
+              <span className="do-route-connector__dot do-route-connector__dot--origin" />
+              <span className="do-route-connector__track do-route-connector__track--origin" />
+              <span className="do-route-connector__ship app-icon-inherit">
+                <AppIcon icon={Icons.ship} size={16} />
+              </span>
+              <span className="do-route-connector__track do-route-connector__track--delivery" />
 
-        <div className="do-route-port do-route-port--delivery">
-          <div className="do-route-port__label">
-            <AppIcon icon={Icons.mapPin} size={14} />
-            Delivery
+              <span className="do-route-connector__dot do-route-connector__dot--delivery" />
+            </div>
+            <span className="do-route-connector__label">Port to Port</span>
           </div>
-          <Title
-            level={4}
-            className="do-route-port__code do-route-port__code--delivery"
-          >
-            {deliveryPort.code || "—"}
-          </Title>
-          {showDeliveryName ? (
-            <Text className="do-route-port__name">{deliveryPort.name}</Text>
-          ) : null}
+
+          <div className="do-route-port do-route-port--delivery">
+            <div className="do-route-port__label">
+              <span className="do-route-port__pin do-route-port__pin--delivery app-icon-inherit">
+                <AppIcon icon={Icons.mapPin} size={15} />
+              </span>
+              Delivery
+            </div>
+            <Title
+              level={3}
+              className="do-route-port__code do-route-port__code--delivery"
+            >
+              {deliveryPort.code || "—"}
+            </Title>
+            <Text className="do-route-port__name">
+              {showDeliveryName ? deliveryPort.name : deliveryPort.code || "—"}
+            </Text>
+          </div>
         </div>
       </div>
 
-      <div className="do-meta-grid">
-        <div className="do-meta-item">
-          <span className="form-field-label">DO No</span>
-          <span className="do-meta-item__value">{record.delordno}</span>
+      <section className="do-drawer-section">
+        <div className="do-drawer-section__head">
+          <AppIcon icon={Icons.fileText} size={16} />
+          <Text strong className="do-drawer-section__title">
+            Delivery Order Details
+          </Text>
         </div>
-        <div className="do-meta-item">
-          <span className="form-field-label">DO Date</span>
-          <span className="do-meta-item__value">
+        <div className="do-meta-grid">
+          <MetaField label="DO Number">{record.delordno}</MetaField>
+          <MetaField label="DO Date">
             {record.delorddate ? (
               <FormattedDate value={record.delorddate} />
             ) : (
               "—"
             )}
-          </span>
-        </div>
-        <div className="do-meta-item">
-          <span className="form-field-label">B/L Number</span>
-          <span className="do-meta-item__value">{record.blnumber || "—"}</span>
-        </div>
-        <div className="do-meta-item">
-          <span className="form-field-label">Terminal</span>
-          <span className="do-meta-item__value">{record.terminal || "—"}</span>
-        </div>
-        <div className="do-meta-item">
-          <span className="form-field-label">Vessel</span>
-          <span className="do-meta-item__value">{record.vessel || "—"}</span>
-        </div>
-        <div className="do-meta-item">
-          <span className="form-field-label">Voyage</span>
-          <span className="do-meta-item__value">{record.voyage || "—"}</span>
-        </div>
-        <div className="do-meta-item">
-          <span className="form-field-label">Bound</span>
-          <span className="do-meta-item__value">{record.bound || "—"}</span>
-        </div>
-        <div className="do-meta-item">
-          <span className="form-field-label">Arrival Date</span>
-          <span className="do-meta-item__value">
-            {record.arrdate ? <FormattedDate value={record.arrdate} /> : "—"}
-          </span>
-        </div>
-        <div className="do-meta-item">
-          <span className="form-field-label">Valid Till</span>
-          <span className="do-meta-item__value">
+          </MetaField>
+          <MetaField label="Valid Until">
             {record.dovaliditydate ? (
               <FormattedDate value={record.dovaliditydate} />
             ) : (
               "—"
             )}
-          </span>
-        </div>
-        <div className="do-meta-item">
-          <span className="form-field-label">Print Status</span>
-          <span className="do-meta-item__value">
-            <Tag
-              className="do-status-tag"
-              color={getDoPrintStatusColor(record.printstatus)}
-            >
-              {getDoPrintStatusLabel(record.printstatus)}
+          </MetaField>
+          <MetaField label="Print Status">
+            <Tag className="do-status-tag" color={statusColor}>
+              {statusLabel}
             </Tag>
-          </span>
+          </MetaField>
         </div>
-      </div>
+      </section>
+
+      <section className="do-drawer-section">
+        <div className="do-drawer-section__head">
+          <AppIcon icon={Icons.ship} size={16} />
+          <Text strong className="do-drawer-section__title">
+            Shipment Details
+          </Text>
+        </div>
+        <div className="do-meta-grid">
+          <MetaField label="B/L Number">{record.blnumber || "—"}</MetaField>
+          <MetaField label="Terminal">{record.terminal || "—"}</MetaField>
+          <MetaField label="Vessel">{record.vessel || "—"}</MetaField>
+          <MetaField label="Voyage">{record.voyage || "—"}</MetaField>
+          <MetaField label="Bound">{record.bound || "—"}</MetaField>
+          <MetaField label="Arrival Date">
+            {record.arrdate ? <FormattedDate value={record.arrdate} /> : "—"}
+          </MetaField>
+        </div>
+      </section>
+
+      {record.dovaliditydate ? (
+        <Alert
+          type="info"
+          showIcon
+          className="do-drawer-alert"
+          icon={<AppIcon icon={Icons.info} size={16} />}
+          message={
+            <span>
+              This delivery order is valid until{" "}
+              <FormattedDate value={record.dovaliditydate} />.
+            </span>
+          }
+        />
+      ) : null}
     </AppDrawer>
   );
 }

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-01 12:52)
+// Modified by Sekar Nagarajan (2026-09-08 12:25)
 import { AppButton } from "@solverminds/shared-ui";
 import { DataView, DataViewColumn } from "@solverminds/shared-ui/data-view";
 import { Flex, Space, Tag, theme, Tooltip, Typography } from "antd";
@@ -281,7 +281,10 @@ export function DashboardOngoingTable({
   ];
 
   return (
-    <div className="dashboard-ongoing-panel custom-scroll">
+    <div
+      id="dashboard-ongoing-transactions"
+      className="dashboard-ongoing-panel custom-scroll"
+    >
       <DataView
         className="dashboard-ongoing-grid"
         columnDefs={columnDefs}

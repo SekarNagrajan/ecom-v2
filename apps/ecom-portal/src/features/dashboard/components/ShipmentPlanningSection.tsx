@@ -27,10 +27,10 @@ function calCellClass(count: number, clickable: boolean): string {
     count === 0
       ? "dashboard-cal-cell--0"
       : count <= 2
-        ? "dashboard-cal-cell--low"
-        : count <= 4
-          ? "dashboard-cal-cell--mid"
-          : "dashboard-cal-cell--high";
+      ? "dashboard-cal-cell--low"
+      : count <= 4
+      ? "dashboard-cal-cell--mid"
+      : "dashboard-cal-cell--high";
   return [
     "dashboard-cal-cell",
     tone,
@@ -182,7 +182,9 @@ export function ShipmentPlanningSection({
                           disabled={!clickable}
                           aria-label={
                             clickable
-                              ? `${label} ${week.week}: ${bookingCountLabel(cell.count)}`
+                              ? `${label} ${week.week}: ${bookingCountLabel(
+                                  cell.count,
+                                )}`
                               : `${label} ${week.week}: no bookings`
                           }
                           onClick={() =>

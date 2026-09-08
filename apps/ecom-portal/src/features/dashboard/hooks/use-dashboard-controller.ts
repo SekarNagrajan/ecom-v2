@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-07 18:42)
+// Modified by Sekar Nagarajan (2026-09-08 12:27)
 /**
  * Dashboard controller — enhancedDashboard.jsp parity.
  * Loads summary via dashboardApi (mock until REST facade exists).
@@ -19,12 +19,19 @@ import { getDashboardFilterLabel } from "../utils/filter-dashboard-shipments";
 import { mapDashboardShipmentToBlList } from "../utils/map-dashboard-shipment-to-bl";
 import { mapDashboardShipmentToBookingList } from "../utils/map-dashboard-shipment-to-booking";
 
+const ONGOING_TRANSACTIONS_ANCHOR_ID = "dashboard-ongoing-transactions";
+
 function formatDashboardPort(
   portId?: string,
   portDesc?: string,
 ): string | undefined {
   if (portId && portDesc) return `${portId} - ${portDesc}`;
   return portId || portDesc || undefined;
+}
+
+function scrollToOngoingTransactions() {
+  const panel = document.getElementById(ONGOING_TRANSACTIONS_ANCHOR_ID);
+  panel?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 export function useDashboardController() {
@@ -64,9 +71,17 @@ export function useDashboardController() {
     void loadSummary();
   }, []);
 
+  // Modified by Sekar Nagarajan (2026-09-08 12:27) — all KPI clicks filter + scroll to ongoing
   const handleFilterChange = (filter: string, label: string) => {
     setActiveFilter(filter);
     setFilterLabel(label || getDashboardFilterLabel(filter));
+    requestAnimationFrame(() => {
+      scrollToOngoingTransactions();
+    });
+  };
+
+  const handleViewShipments = () => {
+    handleFilterChange("all", "Total Shipments");
   };
 
   const handleViewBooking = (shipment: DashboardShipment) => {
@@ -164,6 +179,7 @@ export function useDashboardController() {
     planningDay,
     loadSummary,
     handleFilterChange,
+    handleViewShipments,
     handleViewBooking,
     handleCloseBookingDrawer,
     handleViewBl,

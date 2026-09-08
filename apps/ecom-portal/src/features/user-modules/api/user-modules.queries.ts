@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 16:00)
+// Modified by Sekar Nagarajan (2026-09-08 11:01)
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -7,6 +7,7 @@ import type {
   ChangePasswordPayload,
   CreateQuoteRequestPayload,
   CustomerProfile,
+  PaymentHistoryQuery,
 } from "../types/user-modules.types";
 import { userModulesApi } from "./user-modules.api";
 import { userModulesKeys } from "./user-modules.keys";
@@ -108,9 +109,9 @@ export function useCreateQuoteMutation() {
   });
 }
 
-export function usePaymentHistoryQuery() {
+export function usePaymentHistoryQuery(query: PaymentHistoryQuery = {}) {
   return useQuery({
-    queryKey: userModulesKeys.payments(),
-    queryFn: () => userModulesApi.getPaymentHistory(),
+    queryKey: userModulesKeys.payments(query.fromDate, query.toDate),
+    queryFn: () => userModulesApi.getPaymentHistory(query),
   });
 }

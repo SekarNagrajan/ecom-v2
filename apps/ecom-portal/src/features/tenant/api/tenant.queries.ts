@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-07 17:24)
+// Modified by Sekar Nagarajan (2026-09-08 10:50)
 import { queryOptions } from "@tanstack/react-query";
 
 import { fetchPublicTenant } from "./tenant.api";
@@ -13,5 +13,5 @@ export const publicTenantQueryOptions = () =>
     queryKey: tenantKeys.public(),
     queryFn: fetchPublicTenant,
     staleTime: Infinity,
-    retry: false,
+    retry: 1,
   });

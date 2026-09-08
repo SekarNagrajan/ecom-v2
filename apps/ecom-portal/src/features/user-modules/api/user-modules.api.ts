@@ -1,10 +1,11 @@
-// Modified by Sekar Nagarajan (2026-08-26 16:00)
+// Modified by Sekar Nagarajan (2026-09-08 11:01)
 import type {
   AlertHistoryLog,
   AlertPreference,
   ChangePasswordPayload,
   CreateQuoteRequestPayload,
   CustomerProfile,
+  PaymentHistoryQuery,
   PaymentHistoryRecord,
   QuoteItem,
 } from '../types/user-modules.types';
@@ -82,8 +83,14 @@ export const userModulesApi = {
   },
 
   // 5. Payment History
-  async getPaymentHistory(): Promise<PaymentHistoryRecord[]> {
-    const res = await fetch('/api/v1/user/payments');
+  async getPaymentHistory(query?: PaymentHistoryQuery): Promise<PaymentHistoryRecord[]> {
+    const params = new URLSearchParams();
+    if (query?.fromDate) params.set('fromDate', query.fromDate);
+    if (query?.toDate) params.set('toDate', query.toDate);
+    const qs = params.toString();
+    const res = await fetch(
+      qs ? `/api/v1/user/payments?${qs}` : '/api/v1/user/payments',
+    );
     if (!res.ok) throw new Error('Failed to fetch payment history');
     return res.json();
   },

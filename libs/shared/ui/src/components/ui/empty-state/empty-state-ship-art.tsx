@@ -1,8 +1,8 @@
 // Modified by Sekar Nagarajan (2026-09-07 17:36)
-import { theme } from 'antd';
-import { useId } from 'react';
+import { theme } from "antd";
+import { useId } from "react";
 
-import type { AppEmptyStateVariant } from './types';
+import type { AppEmptyStateVariant } from "./types";
 
 type EmptyStateShipArtProps = {
   variant?: AppEmptyStateVariant;
@@ -17,8 +17,8 @@ type EmptyStateShipArtProps = {
  * Accent fills use the theme primary token so the art tracks tenant branding.
  */
 export function EmptyStateShipArt({
-  variant = 'filtered',
-  width = '100%',
+  variant = "filtered",
+  width = "100%",
   className,
   animated = true,
 }: EmptyStateShipArtProps) {
@@ -27,19 +27,19 @@ export function EmptyStateShipArt({
   const descId = `${reactId}-desc`;
   const styleId = `${reactId}-motion`;
   const { token } = theme.useToken();
-  const showSparseContainers = variant === 'blank' || variant === 'error';
+  const showSparseContainers = variant === "blank" || variant === "error";
   const primary = token.colorPrimary;
   const primarySurface = token.colorPrimaryBg;
 
   return (
     <svg
       className={[
-        'empty-ship-art',
-        animated ? 'empty-ship-art--animated' : '',
+        "empty-ship-art",
+        animated ? "empty-ship-art--animated" : "",
         className,
       ]
         .filter(Boolean)
-        .join(' ')}
+        .join(" ")}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 260 200"
       width={width}
@@ -99,13 +99,7 @@ export function EmptyStateShipArt({
       ) : null}
 
       {/* soft ground */}
-      <ellipse
-        cx="130"
-        cy="176"
-        rx="112"
-        ry="12"
-        fill={primarySurface}
-      />
+      <ellipse cx="130" cy="176" rx="112" ry="12" fill={primarySurface} />
 
       {/* water */}
       <path

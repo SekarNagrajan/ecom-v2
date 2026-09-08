@@ -43,7 +43,7 @@ export function AccountPreferencesDrawer({
   return (
     <AppDrawer
       mask={{ blur: false }}
-      width="50%"
+      width="40%"
       onClose={onClose}
       open={open}
       title={

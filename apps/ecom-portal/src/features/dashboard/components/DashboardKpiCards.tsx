@@ -1,7 +1,7 @@
-// Modified by Sekar Nagarajan (2026-09-01 11:25)
+// Modified by Sekar Nagarajan (2026-09-08 12:25)
 /**
  * KPI cards — enhancedDashboard.jsp parity (Total / Confirmed / SI / Payment / lifecycle).
- * Visual layout matches dashboard stat cards: eyebrow label, metric, trend, icon top-right.
+ * Layout: Total Shipments hero + Shipment Progress strip + Action Required panel.
  */
 import { Card, Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
@@ -17,10 +17,11 @@ type KpiTrendDirection = "up" | "down" | "neutral";
 interface DashboardKpiCardsProps {
   counts: DashboardCounts;
   onFilterChange: (filter: string, label: string) => void;
+  onViewShipments: () => void;
   activeFilter: string;
 }
 
-interface KpiCard {
+interface ProgressMetric {
   key: string;
   label: string;
   value: string;
@@ -30,21 +31,22 @@ interface KpiCard {
   tone: KpiTone;
 }
 
+interface ActionItem {
+  key: string;
+  label: string;
+  value: string;
+  detail: string;
+  icon: LucideIcon;
+  tone: "warning" | "error";
+}
+
 export function DashboardKpiCards({
   counts,
   onFilterChange,
+  onViewShipments,
   activeFilter,
 }: DashboardKpiCardsProps) {
-  const cards: KpiCard[] = [
-    {
-      key: "all",
-      label: "Total Shipments",
-      value: String(counts.totCou),
-      trend: "Across all lifecycle stages",
-      trendDirection: "neutral",
-      icon: Icons.ship,
-      tone: "primary",
-    },
+  const progressMetrics: ProgressMetric[] = [
     {
       key: "bkConfirmed",
       label: "Booking Confirmed",
@@ -53,26 +55,6 @@ export function DashboardKpiCards({
       trendDirection: "up",
       icon: Icons.notebook,
       tone: "success",
-    },
-    {
-      key: "siPending",
-      label: "SI Pending",
-      value: String(counts.siPending),
-      trend: "2 overdue cutoff",
-      trendDirection: "down",
-      icon: Icons.fileText,
-      tone: "warning",
-    },
-    {
-      key: "payPending",
-      label: "Payment Pending",
-      value: String(counts.payPending),
-      trend: `USD ${counts.pendingAmount.toLocaleString("en-US", {
-        minimumFractionDigits: 0,
-      })} outstanding`,
-      trendDirection: "down",
-      icon: Icons.creditCard,
-      tone: "error",
     },
     {
       key: "origin",
@@ -103,66 +85,174 @@ export function DashboardKpiCards({
     },
   ];
 
-  return (
-    <div className="dashboard-kpi-row">
-      {cards.map((card) => {
-        const isActive = activeFilter === card.key;
-        const trendIcon =
-          card.trendDirection === "up"
-            ? Icons.arrowUp
-            : card.trendDirection === "down"
-              ? Icons.arrowDown
-              : null;
+  const actionItems: ActionItem[] = [
+    {
+      key: "siPending",
+      label: "SI Pending",
+      value: String(counts.siPending),
+      detail: "2 overdue cutoff",
+      icon: Icons.fileText,
+      tone: "warning",
+    },
+    {
+      key: "payPending",
+      label: "Payment Pending",
+      value: String(counts.payPending),
+      detail: `USD ${counts.pendingAmount.toLocaleString("en-US", {
+        minimumFractionDigits: 0,
+      })} outstanding`,
+      icon: Icons.creditCard,
+      tone: "error",
+    },
+  ];
 
-        return (
-          <div key={card.key} className="dashboard-kpi-col">
-            <Card
-              hoverable
-              className={[
-                "dashboard-kpi-card",
-                `dashboard-kpi-card--tone-${card.tone}`,
-                isActive ? "dashboard-kpi-card--active" : "",
-              ]
-                .filter(Boolean)
-                .join(" ")}
-              onClick={() => onFilterChange(card.key, card.label)}
-            >
-              <div className="dashboard-kpi-card__body">
-                <div className="dashboard-kpi-card__head">
-                  <div className="dashboard-kpi-card__main">
-                    <Text className="dashboard-kpi-card__eyebrow">
-                      {card.label}
-                    </Text>
-                    <Title
-                      level={3}
-                      className={`dashboard-kpi-card__metric dashboard-kpi-card__metric--${card.tone}`}
-                    >
-                      {card.value}
-                    </Title>
-                  </div>
-                  <div
-                    className={`dashboard-kpi-card__icon dashboard-kpi-card__icon--${card.tone}`}
-                  >
-                    <AppIcon icon={card.icon} size={20} />
-                  </div>
-                </div>
-                <div
-                  className={`dashboard-kpi-card__trend dashboard-kpi-card__trend--${card.trendDirection}`}
-                >
-                  {trendIcon ? (
-                    <span className="dashboard-kpi-card__trend-icon app-icon-inherit">
-                      <AppIcon icon={trendIcon} size={11} />
-                    </span>
-                  ) : null}
-                  <Text className="dashboard-kpi-card__trend-text">
-                    {card.trend}
-                  </Text>
-                </div>
-              </div>
-            </Card>
+  return (
+    <div className="dashboard-kpi-overview">
+      <Card
+        className="dashboard-kpi-total"
+        onClick={() => onFilterChange("all", "Total Shipments")}
+      >
+        <div className="dashboard-kpi-total__accent" aria-hidden />
+        <div className="dashboard-kpi-total__body">
+          <div className="dashboard-kpi-total__head">
+            <div className="dashboard-kpi-total__icon app-icon-inherit">
+              <AppIcon icon={Icons.ship} size={16} />
+            </div>
+            <Text className="dashboard-kpi-total__eyebrow">
+              Total Shipments
+            </Text>
           </div>
-        );
-      })}
+          <Title level={2} className="dashboard-kpi-total__metric">
+            {counts.totCou}
+          </Title>
+          <Text className="dashboard-kpi-total__subtitle">
+            Across all lifecycle stages
+          </Text>
+          <button
+            type="button"
+            className="dashboard-kpi-total__link"
+            onClick={(event) => {
+              event.stopPropagation();
+              onViewShipments();
+            }}
+          >
+            View shipments
+            <span className="dashboard-kpi-total__link-arrow app-icon-inherit">
+              <AppIcon icon={Icons.arrowRight} size={12} />
+            </span>
+          </button>
+        </div>
+      </Card>
+
+      <Card className="dashboard-kpi-progress">
+        <div className="dashboard-kpi-progress__header">
+          <Title level={5} className="dashboard-kpi-progress__title">
+            Shipment Progress
+          </Title>
+          <Text className="dashboard-kpi-progress__subtitle">
+            Current operational status
+          </Text>
+        </div>
+        <div className="dashboard-kpi-progress__grid">
+          {progressMetrics.map((metric) => {
+            const isActive = activeFilter === metric.key;
+            return (
+              <button
+                key={metric.key}
+                type="button"
+                className={[
+                  "dashboard-kpi-progress__cell",
+                  `dashboard-kpi-progress__cell--tone-${metric.tone}`,
+                  isActive ? "dashboard-kpi-progress__cell--active" : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
+                onClick={() => onFilterChange(metric.key, metric.label)}
+              >
+                <div
+                  className={`dashboard-kpi-progress__icon dashboard-kpi-progress__icon--${metric.tone} app-icon-inherit`}
+                >
+                  <AppIcon icon={metric.icon} size={13} />
+                </div>
+                <Text className="dashboard-kpi-progress__label">
+                  {metric.label}
+                </Text>
+                <Title
+                  level={3}
+                  className={`dashboard-kpi-progress__metric dashboard-kpi-progress__metric--${metric.tone}`}
+                >
+                  {metric.value}
+                </Title>
+                <Text
+                  className={`dashboard-kpi-progress__trend dashboard-kpi-progress__trend--${metric.trendDirection}`}
+                >
+                  {metric.trend}
+                </Text>
+              </button>
+            );
+          })}
+        </div>
+      </Card>
+
+      <Card className="dashboard-kpi-action">
+        <div className="dashboard-kpi-action__header">
+          <div className="dashboard-kpi-action__header-icon app-icon-inherit">
+            <AppIcon icon={Icons.alertTriangle} size={14} />
+          </div>
+          <div className="dashboard-kpi-action__header-copy">
+            <Title level={5} className="dashboard-kpi-action__title">
+              Action Required
+            </Title>
+            <Text className="dashboard-kpi-action__subtitle">
+              Items requiring your attention
+            </Text>
+          </div>
+        </div>
+        <div className="dashboard-kpi-action__list">
+          {actionItems.map((item) => {
+            const isActive = activeFilter === item.key;
+            return (
+              <button
+                key={item.key}
+                type="button"
+                className={[
+                  "dashboard-kpi-action__row",
+                  `dashboard-kpi-action__row--tone-${item.tone}`,
+                  isActive ? "dashboard-kpi-action__row--active" : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
+                onClick={() => onFilterChange(item.key, item.label)}
+              >
+                <div
+                  className={`dashboard-kpi-action__row-icon dashboard-kpi-action__row-icon--${item.tone} app-icon-inherit`}
+                >
+                  <AppIcon icon={item.icon} size={13} />
+                </div>
+                <div className="dashboard-kpi-action__row-main">
+                  <Text className="dashboard-kpi-action__row-label">
+                    {item.label}
+                  </Text>
+                  <Title
+                    level={3}
+                    className={`dashboard-kpi-action__row-value dashboard-kpi-action__row-value--${item.tone}`}
+                  >
+                    {item.value}
+                  </Title>
+                </div>
+                <div className="dashboard-kpi-action__row-meta">
+                  <Text className="dashboard-kpi-action__row-detail">
+                    {item.detail}
+                  </Text>
+                  <span className="dashboard-kpi-action__row-chevron app-icon-inherit">
+                    <AppIcon icon={Icons.chevronRight} size={14} />
+                  </span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </Card>
     </div>
   );
 }

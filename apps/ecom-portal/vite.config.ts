@@ -1,13 +1,13 @@
-// Modified by Sekar Nagarajan (2026-09-05 00:25)
+// Modified by Sekar Nagarajan (2026-09-08 10:50)
 import { defineConfig, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 
 /**
- * Dev-only fallback for booking mutations when the MSW service worker
- * does not intercept (e.g. after a long HMR session or SW not claimed).
- * MSW still owns these routes when active; this only runs if the request
- * reaches Vite.
+ * Dev-only fallback for booking mutations / public tenant when the MSW
+ * service worker does not intercept (e.g. after a long HMR session or SW
+ * not claimed). MSW still owns these routes when active; this only runs if
+ * the request reaches Vite.
  */
 function bookingMockApiPlugin(): Plugin {
   const json = (res: import('http').ServerResponse, body: unknown, status = 200) => {
@@ -21,6 +21,42 @@ function bookingMockApiPlugin(): Plugin {
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
         const url = req.url?.split('?')[0] ?? '';
+        // Modified by Sekar Nagarajan (2026-09-08 10:50) — public tenant bootstrap fallback
+        if (req.method === 'GET' && url === '/api/public/tenant') {
+          return json(res, {
+            status: 'SUCCESS',
+            data: {
+              id: 'TENANT_01',
+              name: 'SVM Shipping Lines',
+              customerCode: 'CUST001',
+              logoUrl: '/logos/tenant_01.png',
+              primaryColor: '#1890ff',
+              features: {
+                defaultLandingRoute: '/app/dashboard',
+                enableInsurance: true,
+                enableProductDashboard: true,
+                customerStatementEngine: 'INVOICE',
+                allowedModules: [
+                  'dashboard',
+                  'schedules',
+                  'tracking',
+                  'rates',
+                  'booking',
+                  'si',
+                  'vgm',
+                  'bl',
+                  'do',
+                  'arrival-notice',
+                  'cro',
+                  'payments',
+                  'customer-stmt',
+                  'carbon',
+                  'contact-us',
+                ],
+              },
+            },
+          });
+        }
         if (req.method === 'POST' && url === '/api/booking/submit') {
           return json(res, {
             data: {

@@ -1,13 +1,14 @@
-// Modified by Sekar Nagarajan (2026-09-07 17:24)
+// Modified by Sekar Nagarajan (2026-09-08 10:50)
 import { PRECONFIGURED_TENANTS } from "@solverminds/auth";
 import { http, HttpResponse } from "msw";
 
 /**
  * GET /api/public/tenant — org branding for session splash / theme gate.
  * Host hint via `X-Tenant-Host` or falls back to TENANT_01.
+ * Wildcard path so the SW still matches after HMR / absolute origins.
  */
 export const publicTenantHandlers = [
-  http.get("/api/public/tenant", ({ request }) => {
+  http.get("*/api/public/tenant", ({ request }) => {
     const hostHint =
       request.headers.get("X-Tenant-Host") ||
       (typeof window !== "undefined" ? window.location.hostname : "");

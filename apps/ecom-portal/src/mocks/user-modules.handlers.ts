@@ -1,12 +1,15 @@
-// Modified by sekar nagarajan (2026-08-21)
+// Modified by Sekar Nagarajan (2026-09-08 11:01)
 import { http, HttpResponse } from 'msw';
 import type {
   AlertHistoryLog,
   AlertPreference,
   CustomerProfile,
-  PaymentHistoryRecord,
   QuoteItem,
 } from '../features/user-modules/types/user-modules.types';
+import {
+  filterPaymentsByDateRange,
+  MOCK_PAYMENT_HISTORY,
+} from './payment-history.mock-data';
 
 let mockProfile: CustomerProfile = {
   loginName: 'APEX_GLOBAL_USER',
@@ -122,47 +125,6 @@ const mockAlertLogs: AlertHistoryLog[] = [
   },
 ];
 
-const mockPaymentHistory: PaymentHistoryRecord[] = [
-  {
-    id: 'pay-1',
-    paymentRefNo: 'PAY-2026-9910',
-    invoiceNo: 'INV-2026-4410',
-    blNumber: 'BL-USNYC-88912',
-    gateway: 'STRIPE',
-    amount: 2170.0,
-    currency: 'USD',
-    paymentDate: '2026-08-20 16:50',
-    status: 'SUCCESSFUL',
-    payerName: 'Apex Logistics Global',
-    receiptUrl: '#',
-  },
-  {
-    id: 'pay-2',
-    paymentRefNo: 'PAY-2026-9911',
-    invoiceNo: 'INV-2026-4411',
-    blNumber: 'BL-NLRTM-77123',
-    gateway: 'NGENIUS',
-    amount: 1700.0,
-    currency: 'USD',
-    paymentDate: '2026-08-15 11:20',
-    status: 'SUCCESSFUL',
-    payerName: 'Apex Logistics Global',
-    receiptUrl: '#',
-  },
-  {
-    id: 'pay-3',
-    paymentRefNo: 'PAY-2026-9912',
-    invoiceNo: 'INV-2026-4412',
-    blNumber: 'BL-DEHAM-99410',
-    gateway: 'BANK_TRANSFER',
-    amount: 3050.0,
-    currency: 'USD',
-    paymentDate: '2026-08-10 14:10',
-    status: 'PENDING',
-    payerName: 'Apex Logistics Global',
-  },
-];
-
 export const userModulesHandlers = [
   // 1. Profile
   http.get('/api/v1/user/profile', () => {
@@ -234,8 +196,16 @@ export const userModulesHandlers = [
     return HttpResponse.json(mockAlertLogs);
   }),
 
-  // 5. Payments
-  http.get('/api/v1/user/payments', () => {
-    return HttpResponse.json(mockPaymentHistory);
+  // 5. Payments — optional ?fromDate=&toDate= (YYYY-MM-DD, inclusive)
+  http.get('*/api/v1/user/payments', ({ request }) => {
+    const url = new URL(request.url);
+    const fromDate = url.searchParams.get('fromDate') || undefined;
+    const toDate = url.searchParams.get('toDate') || undefined;
+    const rows = filterPaymentsByDateRange(
+      MOCK_PAYMENT_HISTORY,
+      fromDate,
+      toDate,
+    );
+    return HttpResponse.json(rows);
   }),
 ];

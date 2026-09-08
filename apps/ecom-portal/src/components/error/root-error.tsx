@@ -1,7 +1,11 @@
-// Modified by Sekar Nagarajan (2026-09-07 17:24)
+// Modified by Sekar Nagarajan (2026-09-08 10:50)
 /**
  * Root error UI — plain CSS (no AntD) so the error chunk stays light.
  */
+import { queryClient } from "@solverminds/platform";
+
+import { tenantKeys } from "../../features/tenant/api/tenant.queries";
+
 export function RootErrorComponent({
   error,
   reset,
@@ -9,6 +13,12 @@ export function RootErrorComponent({
   error: Error;
   reset: () => void;
 }) {
+  const handleRetry = () => {
+    // Clear failed root bootstrap queries so beforeLoad can fetch fresh.
+    void queryClient.resetQueries({ queryKey: tenantKeys.all });
+    reset();
+  };
+
   return (
     <div
       style={{
@@ -79,7 +89,7 @@ export function RootErrorComponent({
         <div style={{ display: "flex", gap: 12 }}>
           <button
             type="button"
-            onClick={reset}
+            onClick={handleRetry}
             style={{
               border: "none",
               borderRadius: 8,

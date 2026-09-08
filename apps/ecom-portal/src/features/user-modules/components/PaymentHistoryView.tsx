@@ -1,12 +1,19 @@
-// Modified by Sekar Nagarajan (2026-08-26 16:20)
+// Modified by Sekar Nagarajan (2026-09-08 11:08)
 import {
   DataView,
   type DataViewColumn,
 } from "@solverminds/shared-ui/data-view";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { DatePicker, Space, Tag, Typography } from "antd";
+import type { Dayjs } from "dayjs";
+import dayjs from "dayjs";
+import { useState } from "react";
 
-import { AppIcon, Icons } from "../../../components/icons";
+import {
+  AppIcon,
+  Icons,
+  NavPaymentHistoryIcon,
+} from "../../../components/icons";
 import { buildActionsColumn } from "../../../components/shared/build-actions-column";
 import {
   ListActionButton,
@@ -23,6 +30,8 @@ import { UmPanelHeader } from "./um-panel-header";
 
 const { Text } = Typography;
 const { RangePicker } = DatePicker;
+
+type DateRangeValue = [Dayjs | null, Dayjs | null] | null;
 
 const STATUS_META: Record<
   PaymentHistoryRecord["status"],
@@ -43,24 +52,55 @@ const GATEWAY_META: Record<
   BANK_TRANSFER: { color: "blue", label: "Bank Transfer" },
 };
 
+/** Default: last 120 days — covers Jun–Sep mock seeds for demo. */
+function defaultDateRange(): [Dayjs, Dayjs] {
+  return [dayjs().subtract(120, "day"), dayjs()];
+}
+
+function toQueryDates(range: DateRangeValue): {
+  fromDate?: string;
+  toDate?: string;
+} {
+  if (!range?.[0] || !range?.[1]) return {};
+  return {
+    fromDate: range[0].format("YYYY-MM-DD"),
+    toDate: range[1].format("YYYY-MM-DD"),
+  };
+}
+
 function formatMoney(amount: number, currency: string) {
-  return `$${amount.toLocaleString(undefined, {
-    minimumFractionDigits: 2,
-  })} ${currency}`;
+  try {
+    return new Intl.NumberFormat(undefined, {
+      style: "currency",
+      currency,
+      minimumFractionDigits: 2,
+    }).format(amount);
+  } catch {
+    return `${amount.toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+    })} ${currency}`;
+  }
 }
 
 export function PaymentHistoryView() {
   const toast = useToast();
+  const [dateRange, setDateRange] = useState<DateRangeValue>(defaultDateRange);
+  const query = toQueryDates(dateRange);
+
   const {
     data: payments = [],
     isLoading,
     isFetching,
     isError,
     refetch,
-  } = usePaymentHistoryQuery();
+  } = usePaymentHistoryQuery(query);
 
   const handleDownloadReceipt = (rec: PaymentHistoryRecord) => {
     toast.info(`Downloading PDF receipt for ${rec.paymentRefNo}...`);
+  };
+
+  const handleRangeChange = (values: DateRangeValue) => {
+    setDateRange(values);
   };
 
   const settledTotal = payments
@@ -69,6 +109,7 @@ export function PaymentHistoryView() {
   const successfulCount = payments.filter(
     (p) => p.status === "SUCCESSFUL",
   ).length;
+  const pendingCount = payments.filter((p) => p.status === "PENDING").length;
 
   const columnDefs: DataViewColumn<PaymentHistoryRecord>[] = [
     buildActionsColumn<PaymentHistoryRecord>({
@@ -102,7 +143,6 @@ export function PaymentHistoryView() {
       minWidth: 150,
       cellRenderer: (params: { value?: string }) => (
         <Space size={6}>
-          <AppIcon icon={Icons.creditCard} size={16} />
           <strong>{params.value}</strong>
         </Space>
       ),
@@ -136,10 +176,14 @@ export function PaymentHistoryView() {
       cellRenderer: (params: { data?: PaymentHistoryRecord }) => {
         const rec = params.data;
         if (!rec) return null;
+        const tone =
+          rec.status === "SUCCESSFUL"
+            ? "um-amount-success"
+            : rec.status === "FAILED"
+            ? "um-amount-primary"
+            : undefined;
         return (
-          <span className="um-amount-success">
-            {formatMoney(rec.amount, rec.currency)}
-          </span>
+          <span className={tone}>{formatMoney(rec.amount, rec.currency)}</span>
         );
       },
     },
@@ -147,7 +191,7 @@ export function PaymentHistoryView() {
       headerName: "Paid On",
       field: "paymentDate",
       sortable: true,
-      width: 120,
+      width: 150,
     },
     {
       headerName: "Status",
@@ -163,6 +207,7 @@ export function PaymentHistoryView() {
     },
   ];
 
+  const hasRange = Boolean(query.fromDate && query.toDate);
   const emptyState = isError ? (
     <ModuleEmptyState
       variant="error"
@@ -174,18 +219,30 @@ export function PaymentHistoryView() {
     <ModuleEmptyState
       variant="filtered"
       title="No payment records found"
-      message="Payments for the selected period will appear here once they are processed."
+      message={
+        hasRange
+          ? `No payments between ${query.fromDate} and ${query.toDate}. Clear or widen the date range.`
+          : "Payments will appear here once they are processed."
+      }
     />
   );
 
   return (
     <div className="um-page-layout">
       <UmPanelHeader
-        icon={Icons.creditCard}
+        icon={NavPaymentHistoryIcon}
         title={MODULE_TITLES.paymentHistory}
         description="Review online payments, invoice settlements, and download PDF receipts."
         extra={
-          <RangePicker size="large" className="um-range-picker" allowClear />
+          <RangePicker
+            size="large"
+            className="um-range-picker"
+            allowClear
+            value={dateRange}
+            onChange={handleRangeChange}
+            format="DD-MMM-YYYY"
+            placeholder={["From date", "To date"]}
+          />
         }
       />
 
@@ -201,7 +258,11 @@ export function PaymentHistoryView() {
           <span className="um-summary-chip__value">{successfulCount}</span>
         </div>
         <div className="um-summary-chip">
-          <span className="um-summary-chip__label">Total</span>
+          <span className="um-summary-chip__label">Pending</span>
+          <span className="um-summary-chip__value">{pendingCount}</span>
+        </div>
+        <div className="um-summary-chip">
+          <span className="um-summary-chip__label">In range</span>
           <span className="um-summary-chip__value">{payments.length}</span>
         </div>
       </div>
@@ -218,9 +279,14 @@ export function PaymentHistoryView() {
           renderToolbar={() => null}
           listOptions={{
             showToolbar: false,
+            pagination: true,
+            paginationPageSize: 10,
+            pageSizeOptions: [10, 20, 50],
             gridOptions: {
               domLayout: "autoHeight",
               suppressCellFocus: true,
+              pagination: true,
+              paginationPageSize: 10,
             },
           }}
         />

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-31 11:25)
+// Modified by Sekar Nagarajan (2026-09-08 16:40)
 import { AppButton } from "@solverminds/shared-ui";
 import { Col, DatePicker, Form, Row, Select, Tabs, Typography } from "antd";
 import dayjs from "dayjs";
@@ -11,6 +11,8 @@ import type {
 
 const { RangePicker } = DatePicker;
 const { Text } = Typography;
+
+const SEARCH_ROW_GUTTER: [number, number] = [12, 8];
 
 const POPULAR_PORTS = [
   { value: "USNYC", label: "USNYC - New York, USA" },
@@ -28,10 +30,14 @@ const POPULAR_VESSELS = [
   { value: "SMVY", label: "SOLVERMINDS VOYAGER (SMVY)" },
   { value: "GLHZ", label: "GLOBAL HORIZON (GLHZ)" },
   { value: "OCPN", label: "OCEAN PIONEER (OCPN)" },
+  { value: "PCMR", label: "PACIFIC MERCHANT (PCMR)" },
+  { value: "MRST", label: "MERCHANT STAR (MRST)" },
+  { value: "ATBR", label: "ATLANTIC BRIDGE (ATBR)" },
 ];
 
 interface ScheduleSearchFilterProps {
   onSearch: (params: ScheduleSearchParams) => void;
+  onReset?: () => void;
   isLoading?: boolean;
 }
 
@@ -77,6 +83,7 @@ function SearchActionsField({
 
 export function ScheduleSearchFilter({
   onSearch,
+  onReset,
   isLoading,
 }: ScheduleSearchFilterProps) {
   const [form] = Form.useForm();
@@ -91,6 +98,13 @@ export function ScheduleSearchFilter({
 
   const handleReset = () => {
     form.resetFields();
+    onReset?.();
+  };
+
+  const handleSearchTypeChange = (key: string) => {
+    form.setFieldValue("searchType", key as ScheduleSearchType);
+    // Clear prior results when switching Point to Point / By Vessel / By Port
+    onReset?.();
   };
 
   const handleFinish = (values: Record<string, unknown>) => {
@@ -147,9 +161,7 @@ export function ScheduleSearchFilter({
             </Form.Item>
             <Tabs
               activeKey={searchType}
-              onChange={(key) =>
-                form.setFieldValue("searchType", key as ScheduleSearchType)
-              }
+              onChange={handleSearchTypeChange}
               className="schedule-search-tabs"
               items={[
                 {
@@ -171,7 +183,7 @@ export function ScheduleSearchFilter({
           </div>
 
           {searchType === "POINT_TO_POINT" && (
-            <Row gutter={[16, 16]}>
+            <Row gutter={SEARCH_ROW_GUTTER}>
               <Col xs={24} md={11} lg={6}>
                 <Form.Item
                   name="polCode"
@@ -263,7 +275,7 @@ export function ScheduleSearchFilter({
           )}
 
           {searchType === "VESSEL_SCHEDULE" && (
-            <Row gutter={[16, 16]}>
+            <Row gutter={SEARCH_ROW_GUTTER}>
               <Col xs={24} lg={9}>
                 <Form.Item
                   name="vesselCode"
@@ -306,7 +318,7 @@ export function ScheduleSearchFilter({
           )}
 
           {searchType === "PORT_SCHEDULE" && (
-            <Row gutter={[16, 16]}>
+            <Row gutter={SEARCH_ROW_GUTTER}>
               <Col xs={24} lg={9}>
                 <Form.Item
                   name="portCode"

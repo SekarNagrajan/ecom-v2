@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-27 23:09)
+// Modified by Sekar Nagarajan (2026-09-08 17:10)
 import { AppButton } from "@solverminds/shared-ui";
 import { Spin, Tag, Tooltip, Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
@@ -368,13 +368,12 @@ function RouteStopTimes({ eta, etd }: { eta?: string; etd?: string }) {
 
 function ScheduleRouteDetails({
   item,
-  onClose,
   onViewVessel,
 }: {
   item: ScheduleItem;
-  onClose: () => void;
   onViewVessel: (vesselCode: string) => void;
 }) {
+  // Modified by Sekar Nagarajan (2026-09-08 16:45)
   const stops = buildRouteStops(item);
 
   return (
@@ -422,6 +421,57 @@ function ScheduleRouteDetails({
           );
         })}
       </ol>
+
+      <div className="schedule-route-details__deadlines">
+        <Text className="schedule-route-details__deadlines-title">
+          Cut-offs
+        </Text>
+        <div className="schedule-card__deadlines">
+          <Tooltip title="Container Gate-In Closing">
+            <div className="schedule-card__deadline">
+              <span className="schedule-card__deadline-icon schedule-card__deadline-icon--gate app-icon-inherit">
+                <AppIcon icon={Icons.container} size={14} />
+              </span>
+              <span>
+                <span className="schedule-card__deadline-label">Gate-In</span>
+                <span className="schedule-card__deadline-value">
+                  {item.deadlines.containerGateIn}
+                </span>
+              </span>
+            </div>
+          </Tooltip>
+          <Tooltip title="Shipping Instruction Document Closing">
+            <div className="schedule-card__deadline">
+              <span className="schedule-card__deadline-icon schedule-card__deadline-icon--si app-icon-inherit">
+                <AppIcon icon={Icons.clipboardList} size={14} />
+              </span>
+              <span>
+                <span className="schedule-card__deadline-label">
+                  SI Cut-Off
+                </span>
+                <span className="schedule-card__deadline-value">
+                  {item.deadlines.siDocClosing}
+                </span>
+              </span>
+            </div>
+          </Tooltip>
+          <Tooltip title="Verified Gross Mass (VGM) Closing">
+            <div className="schedule-card__deadline">
+              <span className="schedule-card__deadline-icon schedule-card__deadline-icon--vgm app-icon-inherit">
+                <AppIcon icon={Icons.shieldCheck} size={14} />
+              </span>
+              <span>
+                <span className="schedule-card__deadline-label">
+                  VGM Cut-Off
+                </span>
+                <span className="schedule-card__deadline-value">
+                  {item.deadlines.vgmClosing}
+                </span>
+              </span>
+            </div>
+          </Tooltip>
+        </div>
+      </div>
     </div>
   );
 }
@@ -544,7 +594,7 @@ function ScheduleCard({
             Book Now
           </AppButton>
           <AppButton
-            icon={<AppIcon icon={Icons.fileText} size={16} tone="download" />}
+            className="schedule-card__actions-quote"
             onClick={() => onViewRates(item)}
             block
           >
@@ -552,14 +602,15 @@ function ScheduleCard({
           </AppButton>
           <AppButton
             type="link"
-            icon={
-              expanded ? (
-                <AppIcon icon={Icons.route} size={14} />
-              ) : (
-                <AppIcon icon={Icons.route} size={14} />
-              )
-            }
+            className={[
+              "schedule-card__details-toggle",
+              expanded ? "schedule-card__details-toggle--open" : undefined,
+            ]
+              .filter(Boolean)
+              .join(" ")}
+            icon={<AppIcon icon={Icons.route} size={14} />}
             onClick={() => setExpanded(!expanded)}
+            aria-expanded={expanded}
             block
           >
             {expanded ? "Close Details" : "Show Details"}
@@ -583,59 +634,17 @@ function ScheduleCard({
         </div>
       </div>
 
-      {expanded ? (
-        <ScheduleRouteDetails
-          item={item}
-          onClose={() => setExpanded(false)}
-          onViewVessel={onViewVessel}
-        />
-      ) : null}
-
-      <div className="schedule-card__footer">
-        <div className="schedule-card__deadlines">
-          <Tooltip title="Container Gate-In Closing">
-            <div className="schedule-card__deadline">
-              <span className="schedule-card__deadline-icon schedule-card__deadline-icon--gate app-icon-inherit">
-                <AppIcon icon={Icons.container} size={14} />
-              </span>
-              <span>
-                <span className="schedule-card__deadline-label">Gate-In</span>
-                <span className="schedule-card__deadline-value">
-                  {item.deadlines.containerGateIn}
-                </span>
-              </span>
-            </div>
-          </Tooltip>
-          <Tooltip title="Shipping Instruction Document Closing">
-            <div className="schedule-card__deadline">
-              <span className="schedule-card__deadline-icon schedule-card__deadline-icon--si app-icon-inherit">
-                <AppIcon icon={Icons.clipboardList} size={14} />
-              </span>
-              <span>
-                <span className="schedule-card__deadline-label">
-                  SI Cut-Off
-                </span>
-                <span className="schedule-card__deadline-value">
-                  {item.deadlines.siDocClosing}
-                </span>
-              </span>
-            </div>
-          </Tooltip>
-          <Tooltip title="Verified Gross Mass (VGM) Closing">
-            <div className="schedule-card__deadline">
-              <span className="schedule-card__deadline-icon schedule-card__deadline-icon--vgm app-icon-inherit">
-                <AppIcon icon={Icons.shieldCheck} size={14} />
-              </span>
-              <span>
-                <span className="schedule-card__deadline-label">
-                  VGM Cut-Off
-                </span>
-                <span className="schedule-card__deadline-value">
-                  {item.deadlines.vgmClosing}
-                </span>
-              </span>
-            </div>
-          </Tooltip>
+      <div
+        className={[
+          "schedule-card__details-panel",
+          expanded ? "schedule-card__details-panel--open" : undefined,
+        ]
+          .filter(Boolean)
+          .join(" ")}
+        aria-hidden={!expanded}
+      >
+        <div className="schedule-card__details-panel-inner">
+          <ScheduleRouteDetails item={item} onViewVessel={onViewVessel} />
         </div>
       </div>
     </article>
@@ -652,11 +661,12 @@ export function ScheduleCardList({
 }: ScheduleCardListProps) {
   if (isLoading) {
     return (
-      <div className="schedule-empty">
+      <div
+        className="schedule-empty module-loading-center"
+        role="status"
+        aria-label="Loading"
+      >
         <Spin size="medium" />
-        <Text type="secondary" className="schedule-empty__text">
-          Searching sailings…
-        </Text>
       </div>
     );
   }

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-31 11:25)
+// Modified by Sekar Nagarajan (2026-09-08 17:10)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -13,7 +13,7 @@ export function ScheduleModuleStyles() {
         border-radius: ${token.borderRadiusLG}px;
         background: ${token.colorBgContainer};
         border: 1px solid ${token.colorBorderSecondary};
-        margin-bottom: ${token.marginLG}px;
+        margin-bottom: ${token.marginMD}px;
         overflow: hidden;
       }
       .schedule-search-panel__header {
@@ -47,12 +47,18 @@ export function ScheduleModuleStyles() {
         display: block;
       }
       .schedule-search-panel__body {
-        padding: ${token.paddingLG}px;
+        padding: ${token.paddingMD}px ${token.paddingMD}px ${token.paddingSM}px;
         background: ${token.colorFillAlter};
       }
-      /* Modified by Sekar Nagarajan (2026-08-31 11:25) — Tabs as view/search-type switcher */
+      .schedule-search-panel__body .ant-form-item {
+        margin-bottom: ${token.marginSM}px;
+      }
+      .schedule-search-panel__body .ant-form-item-label {
+        padding-bottom: ${token.paddingXXS}px;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-08 16:40) — tighter spacing; tab font size unchanged */
       .schedule-search-type-wrap {
-        margin-bottom: ${token.marginMD}px;
+        margin-bottom: ${token.marginSM}px;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
       }
@@ -62,14 +68,35 @@ export function ScheduleModuleStyles() {
       .schedule-search-tabs .ant-tabs-nav {
         margin-bottom: 0;
       }
+      .schedule-search-tabs .ant-tabs-nav::before {
+        border-bottom-color: ${token.colorBorderSecondary};
+      }
+      .schedule-search-tabs .ant-tabs-tab {
+        padding: ${token.paddingXS}px ${token.paddingSM}px;
+        font-size: ${token.fontSize}px;
+        line-height: ${token.lineHeight};
+      }
       .schedule-search-tabs .ant-tabs-content-holder {
         display: none;
       }
+      /* Hide Ant Design tabs overflow / more control on the search type bar */
+      .schedule-search-tabs .ant-tabs-nav-operations {
+        display: none !important;
+      }
+        .schedule-card__actions-quote{
+        background: ${token.colorWarning};
+        color: ${token.colorWhite};
+        }
+        .schedule-card__actions-quote:hover{
+        background: ${token.colorWarningTextHover};
+        border-color: ${token.colorWarningHover};
+        }
       .schedule-tab-label {
         display: inline-flex;
         align-items: center;
         gap: ${token.marginXXS}px;
         line-height: 1;
+        font-size: ${token.fontSize}px;
       }
       .schedule-tab-label .app-icon {
         display: block;
@@ -456,13 +483,42 @@ export function ScheduleModuleStyles() {
         font-size: ${token.fontSizeSM}px;
       }
 
-      /* Show Details — numbered vertical Route timeline */
+      /* Show Details — smooth expand / collapse panel */
+      .schedule-card__details-panel {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 0.32s ease;
+      }
+      .schedule-card__details-panel--open {
+        grid-template-rows: 1fr;
+      }
+      .schedule-card__details-panel-inner {
+        overflow: hidden;
+        min-height: 0;
+      }
+      .schedule-card__details-toggle .app-icon {
+        transition: transform 0.28s ease;
+      }
+      .schedule-card__details-toggle--open .app-icon {
+        transform: rotate(180deg);
+      }
       .schedule-route-details {
         margin: 0 ${token.marginLG}px ${token.marginMD}px;
         padding: ${token.paddingMD}px ${token.paddingLG}px;
         border: 1px solid ${token.colorBorderSecondary};
         border-radius: ${token.borderRadiusLG}px;
         background: ${token.colorBgContainer};
+        opacity: 0;
+        transform: translateY(-${token.marginXS}px);
+        transition:
+          opacity 0.24s ease,
+          transform 0.32s ease;
+        pointer-events: none;
+      }
+      .schedule-card__details-panel--open .schedule-route-details {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
       }
       .schedule-route-details__header {
         display: flex;
@@ -476,6 +532,20 @@ export function ScheduleModuleStyles() {
         margin: 0 !important;
         color: ${token.colorPrimary} !important;
         font-weight: ${token.fontWeightStrong} !important;
+      }
+      .schedule-route-details__deadlines {
+        margin-top: ${token.marginMD}px;
+        padding-top: ${token.paddingMD}px;
+        border-top: 1px solid ${token.colorBorderSecondary};
+      }
+      .schedule-route-details__deadlines-title {
+        display: block;
+        margin-bottom: ${token.marginSM}px;
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorTextSecondary};
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
       }
       .schedule-route-timeline {
         list-style: none;
@@ -611,6 +681,14 @@ export function ScheduleModuleStyles() {
         border-radius: ${token.borderRadiusLG}px;
         border: 1px dashed ${token.colorBorder};
         background: ${token.colorFillAlter};
+      }
+      .schedule-empty.module-loading-center,
+      .module-loading-center {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        min-height: ${token.controlHeightLG * 4}px;
       }
       .schedule-date-range {
         width: 100%;
@@ -947,7 +1025,7 @@ export function ScheduleModuleStyles() {
 
       @media (max-width: 767px) {
         .schedule-search-panel__body {
-          padding: ${token.paddingMD}px;
+          padding: ${token.paddingSM}px;
         }
         .schedule-port-swap-field {
           padding-bottom: ${token.paddingXS}px;

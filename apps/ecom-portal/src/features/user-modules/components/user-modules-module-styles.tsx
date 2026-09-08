@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-08 11:08)
+// Modified by Sekar Nagarajan (2026-09-08 15:20)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -271,6 +271,40 @@ export function UserModulesModuleStyles() {
         gap: ${token.marginMD}px;
         width: 100%;
         min-width: 0;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-08 15:20) — profile photo entry card */
+      .um-profile-photo-card {
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorBgContainer};
+        padding: ${token.paddingMD}px;
+        width: 100%;
+      }
+      .um-profile-photo-trigger {
+        border: none;
+        background: none;
+        padding: 0;
+        cursor: pointer;
+        position: relative;
+        border-radius: 50%;
+        flex-shrink: 0;
+        line-height: 0;
+      }
+      .um-profile-photo-overlay {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.45);
+        color: ${token.colorWhite};
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.15s ease-in-out;
+        pointer-events: none;
+      }
+      .um-profile-photo-overlay--visible {
+        opacity: 1;
       }
       .um-form-section > .ant-row {
         width: 100%;

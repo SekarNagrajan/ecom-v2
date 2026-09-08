@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-27 11:40)
+// Modified by Sekar Nagarajan (2026-09-08 15:20)
 import { setupWorker } from 'msw/browser';
 import { adminHandlers } from './admin.handlers';
 import { arrivalNoticeHandlers } from './arrival-notice.handlers';
@@ -12,6 +12,7 @@ import { croHandlers } from './cro.handlers';
 import { customerStatementHandlers } from './customer-statement.handlers';
 import { deliveryOrderHandlers } from './delivery-order.handlers';
 import { landingHandlers } from './landing.handlers';
+import { profilePhotoHandlers } from './profile-photo.handlers';
 import { publicTenantHandlers } from './public-tenant.handlers';
 import { ratesHandlers } from './rates.handlers';
 import { registrationHandlers } from './registration.handlers';
@@ -33,6 +34,7 @@ export const worker = setupWorker(
   ...adminHandlers,
   ...userCreationHandlers,
   ...userModulesHandlers,
+  ...profilePhotoHandlers,
   ...ratesHandlers,
   ...bookingHandlers,
   ...siHandlers,

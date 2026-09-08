@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-02 10:38)
+// Modified by Sekar Nagarajan (2026-09-08 15:20)
 import { useAuthStore } from "@solverminds/auth";
 import { Outlet, useNavigate } from "@tanstack/react-router";
 import { Layout } from "antd";
@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useLoginController } from "../../features/auth/hooks/use-login-controller";
 import { usePostLoginRedirectStore } from "../../features/auth/stores/use-post-login-redirect-store";
 import { PublicLoginPanel } from "../../features/landing/components/PublicLoginPanel";
+import { ProfilePhotoProvider } from "../../features/profile-photo/providers/profile-photo-provider";
 import { useResponsiveLayout } from "../../hooks/use-responsive-layout";
 import { AppFooter } from "./AppFooter";
 import { AuthenticatedLayoutHeader } from "./AuthenticatedLayoutHeader";
@@ -55,50 +56,52 @@ export function AuthenticatedLayout() {
   };
 
   return (
-    <Layout
-      className="app-layout-root"
-      data-viewport-tier={tier}
-      data-sidebar-collapsed={collapsed ? "true" : "false"}
-      data-sidebar-mobile={useMobileNav ? "true" : "false"}
-    >
-      <AuthenticatedSidebar
-        collapsed={collapsed}
-        onCollapse={setCollapsed}
-        isMobile={useMobileNav}
-        mobileOpen={mobileNavOpen}
-        onMobileClose={() => setMobileNavOpen(false)}
-        isGuest={!isAuthenticated}
-        onLoginRequired={openLoginPanel}
-      />
-      <Layout className="app-layout-main">
-        <AuthenticatedLayoutHeader
-          onLogout={onLogout}
-          compactHeader={compactHeader}
-          onMobileMenuOpen={() => setMobileNavOpen(true)}
-          showMobileMenu={useMobileNav}
+    <ProfilePhotoProvider>
+      <Layout
+        className="app-layout-root"
+        data-viewport-tier={tier}
+        data-sidebar-collapsed={collapsed ? "true" : "false"}
+        data-sidebar-mobile={useMobileNav ? "true" : "false"}
+      >
+        <AuthenticatedSidebar
+          collapsed={collapsed}
+          onCollapse={setCollapsed}
+          isMobile={useMobileNav}
+          mobileOpen={mobileNavOpen}
+          onMobileClose={() => setMobileNavOpen(false)}
           isGuest={!isAuthenticated}
-          onLoginClick={() => openLoginPanel(null)}
+          onLoginRequired={openLoginPanel}
         />
-        <Content className="app-layout-content">
-          <div className="app-content-inner">
-            <main className="app-content-main custom-scroll">
-              <Outlet />
-            </main>
-          </div>
-        </Content>
-        <AppFooter />
-      </Layout>
+        <Layout className="app-layout-main">
+          <AuthenticatedLayoutHeader
+            onLogout={onLogout}
+            compactHeader={compactHeader}
+            onMobileMenuOpen={() => setMobileNavOpen(true)}
+            showMobileMenu={useMobileNav}
+            isGuest={!isAuthenticated}
+            onLoginClick={() => openLoginPanel(null)}
+          />
+          <Content className="app-layout-content">
+            <div className="app-content-inner">
+              <main className="app-content-main custom-scroll">
+                <Outlet />
+              </main>
+            </div>
+          </Content>
+          <AppFooter />
+        </Layout>
 
-      {!isAuthenticated ? (
-        <PublicLoginPanel
-          open={loginPanelOpen}
-          onClose={() => {
-            setLoginPanelOpen(false);
-            clearIntendedPath();
-          }}
-          controller={loginController}
-        />
-      ) : null}
-    </Layout>
+        {!isAuthenticated ? (
+          <PublicLoginPanel
+            open={loginPanelOpen}
+            onClose={() => {
+              setLoginPanelOpen(false);
+              clearIntendedPath();
+            }}
+            controller={loginController}
+          />
+        ) : null}
+      </Layout>
+    </ProfilePhotoProvider>
   );
 }

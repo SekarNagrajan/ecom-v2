@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-27 12:34)
+// Modified by Sekar Nagarajan (2026-09-08 15:20)
 
 import {
   PRECONFIGURED_TENANTS,
@@ -26,6 +26,7 @@ import { useState } from "react";
 import { CustomerPickerModal } from "../../features/auth/components/customer-picker-modal";
 import { useImpersonationController } from "../../features/auth/hooks/use-impersonation-controller";
 import { ContactUsDrawer } from "../../features/contact-us/components/ContactUsDrawer";
+import { useProfilePhoto } from "../../features/profile-photo/providers/profile-photo-provider";
 import { useThemePreferences } from "../../features/theme/providers/theme-preferences-provider";
 import { ChangePasswordView } from "../../features/user-modules/components/ChangePasswordView";
 import { MyAlertsView } from "../../features/user-modules/components/MyAlertsView";
@@ -58,6 +59,7 @@ export function AuthenticatedLayoutHeader({
   const navigate = useNavigate();
   const toast = useToast();
   const confirm = useConfirm();
+  const { photoUrl } = useProfilePhoto();
   const user = useAuthStore((state) => state.user);
   const { isImpersonating: isImpersonatingFn } = usePermission();
   const setActiveSubCustomer = useAuthStore(
@@ -477,8 +479,12 @@ export function AuthenticatedLayoutHeader({
                 className="app-header-user-trigger"
                 aria-label="Open account menu"
               >
-                <Avatar className="app-header-avatar" size="default">
-                  {initials}
+                <Avatar
+                  className="app-header-avatar"
+                  size="default"
+                  src={photoUrl ?? undefined}
+                >
+                  {photoUrl ? null : initials}
                 </Avatar>
                 <div className="app-header-user-meta">
                   <Text strong className="app-header-user-name">

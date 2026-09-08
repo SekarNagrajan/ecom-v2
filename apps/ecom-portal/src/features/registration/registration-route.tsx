@@ -124,7 +124,7 @@ export function RegistrationRoute({ onCancel }: RegistrationRouteProps) {
 
                     <Flex className="form-step-footer form-step-footer--split">
                       <AppButton
-                        size="large"
+                        size="medium"
                         onClick={controller.prevStep}
                         disabled={
                           controller.currentStep === 0 ||
@@ -137,7 +137,7 @@ export function RegistrationRoute({ onCancel }: RegistrationRouteProps) {
                       {controller.currentStep < 3 ? (
                         <AppButton
                           type="primary"
-                          size="large"
+                          size="medium"
                           onClick={controller.nextStep}
                         >
                           Next
@@ -145,7 +145,7 @@ export function RegistrationRoute({ onCancel }: RegistrationRouteProps) {
                       ) : (
                         <AppButton
                           type="primary"
-                          size="large"
+                          size="medium"
                           htmlType="submit"
                           loading={controller.isSubmitting}
                         >
@@ -166,7 +166,7 @@ export function RegistrationRoute({ onCancel }: RegistrationRouteProps) {
                     <AppButton
                       type="primary"
                       key="home"
-                      size="large"
+                      size="medium"
                       onClick={onCancel}
                     >
                       Back to Home

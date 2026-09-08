@@ -1,24 +1,28 @@
 // Modified by Sekar Nagarajan (2026-08-28 11:15)
-import { AppButton } from '@solverminds/shared-ui';
-import { Card, Col, Row, Space, Table, Tag, Typography } from 'antd';
+import { AppButton } from "@solverminds/shared-ui";
+import { Card, Col, Row, Space, Table, Tag, Typography } from "antd";
 
-import { Icons } from '../../../components/icons';
-import { ModuleScreenHeader } from '../../../components/shared/module-screen-header';
-import { RESPONSIVE_COL } from '../../../constants/responsive-grid';
-import { MODULE_TITLES, WIZARD_STEP_TITLES, formatModuleScreenTitle } from '../../../constants/module-titles';
-import { SI_CARGO_LINE_COLUMNS } from '../../shipping-instruction/utils/si-cargo-line-columns';
-import type { BLDTO } from '../types/bl.types';
-import { BL_STATUS_LABELS } from '../types/bl.types';
-import { getBLStatusColor } from '../utils/bl-status';
-import { BlLoadingCenter } from './bl-loading-center';
+import { NavBillOfLadingIcon } from "../../../components/icons";
+import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
+import {
+  MODULE_TITLES,
+  WIZARD_STEP_TITLES,
+  formatModuleScreenTitle,
+} from "../../../constants/module-titles";
+import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
+import { SI_CARGO_LINE_COLUMNS } from "../../shipping-instruction/utils/si-cargo-line-columns";
+import type { BLDTO } from "../types/bl.types";
+import { BL_STATUS_LABELS } from "../types/bl.types";
+import { getBLStatusColor } from "../utils/bl-status";
+import { BlLoadingCenter } from "./bl-loading-center";
 
 const { Title, Text } = Typography;
 
-const TIMELINE_STEPS: Array<{ key: BLDTO['status']; label: string }> = [
-  { key: 'D', label: BL_STATUS_LABELS.D },
-  { key: 'S', label: BL_STATUS_LABELS.S },
-  { key: 'C', label: BL_STATUS_LABELS.C },
-  { key: 'I', label: BL_STATUS_LABELS.I },
+const TIMELINE_STEPS: Array<{ key: BLDTO["status"]; label: string }> = [
+  { key: "D", label: BL_STATUS_LABELS.D },
+  { key: "S", label: BL_STATUS_LABELS.S },
+  { key: "C", label: BL_STATUS_LABELS.C },
+  { key: "I", label: BL_STATUS_LABELS.I },
 ];
 
 interface BillOfLadingViewProps {
@@ -28,7 +32,7 @@ interface BillOfLadingViewProps {
   onEdit?: () => void;
   onVerify?: () => void;
   onCancel?: () => void;
-  onPrint?: (type: 'draft' | 'original' | 'nn') => void;
+  onPrint?: (type: "draft" | "original" | "nn") => void;
   onCharges?: () => void;
   extra?: React.ReactNode;
 }
@@ -58,31 +62,38 @@ export function BillOfLadingView({
     <Space direction="vertical" size="large" className="feature-page-stack">
       <Card className="feature-page-card" bordered={false}>
         <ModuleScreenHeader
-          icon={Icons.fileCheck}
-          title={formatModuleScreenTitle(MODULE_TITLES.billOfLading, detail.blNo)}
+          icon={NavBillOfLadingIcon}
+          title={formatModuleScreenTitle(
+            MODULE_TITLES.billOfLading,
+            detail.blNo,
+          )}
           marginBottom={0}
           extra={
             <Space wrap>
-              {onCharges ? <AppButton onClick={onCharges}>Charges</AppButton> : null}
-              {onPrint && detail.status !== 'I' ? (
-                <AppButton onClick={() => onPrint('draft')}>Draft Print</AppButton>
+              {onCharges ? (
+                <AppButton onClick={onCharges}>Charges</AppButton>
               ) : null}
-              {onPrint && detail.status === 'C' && detail.printCount > 0 ? (
-                <AppButton type="primary" onClick={() => onPrint('original')}>
+              {onPrint && detail.status !== "I" ? (
+                <AppButton onClick={() => onPrint("draft")}>
+                  Draft Print
+                </AppButton>
+              ) : null}
+              {onPrint && detail.status === "C" && detail.printCount > 0 ? (
+                <AppButton type="primary" onClick={() => onPrint("original")}>
                   Original Print
                 </AppButton>
               ) : null}
-              {onVerify && detail.status === 'D' ? (
+              {onVerify && detail.status === "D" ? (
                 <AppButton type="primary" onClick={onVerify}>
                   Accept
                 </AppButton>
               ) : null}
-              {onCancel && detail.status === 'S' ? (
+              {onCancel && detail.status === "S" ? (
                 <AppButton danger onClick={onCancel}>
                   Cancel
                 </AppButton>
               ) : null}
-              {onEdit && detail.status !== 'I' ? (
+              {onEdit && detail.status !== "I" ? (
                 <AppButton onClick={onEdit}>Edit</AppButton>
               ) : null}
               {extra}
@@ -95,12 +106,12 @@ export function BillOfLadingView({
             <span
               key={step.key}
               className={[
-                'bl-view-timeline__step',
-                index < statusIndex ? 'is-done' : undefined,
-                index === statusIndex ? 'is-current' : undefined,
+                "bl-view-timeline__step",
+                index < statusIndex ? "is-done" : undefined,
+                index === statusIndex ? "is-current" : undefined,
               ]
                 .filter(Boolean)
-                .join(' ')}
+                .join(" ")}
             >
               {step.label}
             </span>
@@ -111,7 +122,11 @@ export function BillOfLadingView({
         </Tag>
       </Card>
 
-      <Card className="feature-page-card" title={<Title level={5}>{WIZARD_STEP_TITLES.masterDetails}</Title>} size="small">
+      <Card
+        className="feature-page-card"
+        title={<Title level={5}>{WIZARD_STEP_TITLES.masterDetails}</Title>}
+        size="small"
+      >
         <Row gutter={[24, 24]}>
           <Col {...RESPONSIVE_COL.formThird}>
             <Text className="form-field-label">Booking Number</Text>
@@ -127,7 +142,9 @@ export function BillOfLadingView({
           </Col>
           <Col {...RESPONSIVE_COL.formThird}>
             <Text className="form-field-label">Release Type</Text>
-            <Text strong>{detail.releaseType === 'O' ? 'Original' : 'Telex'}</Text>
+            <Text strong>
+              {detail.releaseType === "O" ? "Original" : "Telex"}
+            </Text>
           </Col>
           <Col {...RESPONSIVE_COL.formThird}>
             <Text className="form-field-label">Freight Option</Text>
@@ -143,7 +160,11 @@ export function BillOfLadingView({
       </Card>
 
       {detail.routing ? (
-        <Card className="feature-page-card" title={<Title level={5}>{WIZARD_STEP_TITLES.routing}</Title>} size="small">
+        <Card
+          className="feature-page-card"
+          title={<Title level={5}>{WIZARD_STEP_TITLES.routing}</Title>}
+          size="small"
+        >
           <Row gutter={[24, 24]}>
             <Col {...RESPONSIVE_COL.formQuarter}>
               <Text className="form-field-label">Origin (Print)</Text>
@@ -171,7 +192,11 @@ export function BillOfLadingView({
         </Card>
       ) : null}
 
-      <Card className="feature-page-card" title={<Title level={5}>Parties</Title>} size="small">
+      <Card
+        className="feature-page-card"
+        title={<Title level={5}>Parties</Title>}
+        size="small"
+      >
         <Row gutter={[24, 24]}>
           <Col {...RESPONSIVE_COL.third}>
             <div className="bl-party-block">
@@ -183,8 +208,10 @@ export function BillOfLadingView({
           <Col {...RESPONSIVE_COL.third}>
             <div className="bl-party-block">
               <Text className="form-field-label">
-                CONSIGNEE{' '}
-                {detail.parties.consignee.toOrder ? <Text type="warning">(TO ORDER)</Text> : null}
+                CONSIGNEE{" "}
+                {detail.parties.consignee.toOrder ? (
+                  <Text type="warning">(TO ORDER)</Text>
+                ) : null}
               </Text>
               <Text strong>{detail.parties.consignee.name}</Text>
               <Text>{detail.parties.consignee.address}</Text>
@@ -217,33 +244,47 @@ export function BillOfLadingView({
       </Card>
 
       {detail.charges && detail.charges.length > 0 ? (
-        <Card className="feature-page-card" title={<Title level={5}>Charges</Title>} size="small">
+        <Card
+          className="feature-page-card"
+          title={<Title level={5}>Charges</Title>}
+          size="small"
+        >
           <Table
             size="small"
             pagination={false}
             rowKey="id"
             dataSource={detail.charges}
             columns={[
-              { title: 'Code', dataIndex: 'chargeCode' },
-              { title: 'Description', dataIndex: 'description' },
-              { title: 'P/C/E', dataIndex: 'prepaidCollect', width: 90 },
-              { title: 'Payor', dataIndex: 'payByCustType' },
+              { title: "Code", dataIndex: "chargeCode" },
+              { title: "Description", dataIndex: "description" },
+              { title: "P/C/E", dataIndex: "prepaidCollect", width: 90 },
+              { title: "Payor", dataIndex: "payByCustType" },
             ]}
           />
         </Card>
       ) : null}
 
       {detail.insurance?.isInsuranceRequired ? (
-        <Card className="feature-page-card" title={<Title level={5}>Insurance</Title>} size="small">
+        <Card
+          className="feature-page-card"
+          title={<Title level={5}>Insurance</Title>}
+          size="small"
+        >
           <Text>
             Coverage: {detail.insurance.currency} {detail.insurance.cargoValue}
-            {detail.insurance.policyNo ? ` · Policy ${detail.insurance.policyNo}` : ''}
+            {detail.insurance.policyNo
+              ? ` · Policy ${detail.insurance.policyNo}`
+              : ""}
           </Text>
         </Card>
       ) : null}
 
       {detail.preview && Object.keys(detail.preview).length > 0 ? (
-        <Card className="feature-page-card" title={<Title level={5}>Preview Fields</Title>} size="small">
+        <Card
+          className="feature-page-card"
+          title={<Title level={5}>Preview Fields</Title>}
+          size="small"
+        >
           <Row gutter={[24, 24]}>
             {detail.preview.declaredValue ? (
               <Col {...RESPONSIVE_COL.formThird}>
@@ -261,7 +302,11 @@ export function BillOfLadingView({
         </Card>
       ) : null}
 
-      <Card className="feature-page-card" title={<Title level={5}>Cargo & Containers</Title>} size="small">
+      <Card
+        className="feature-page-card"
+        title={<Title level={5}>Cargo & Containers</Title>}
+        size="small"
+      >
         {detail.containers.map((c, i) => (
           <div key={c.id} className="bl-container-block">
             <div className="bl-container-block__header">

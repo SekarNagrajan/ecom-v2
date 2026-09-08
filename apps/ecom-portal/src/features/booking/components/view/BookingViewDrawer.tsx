@@ -1,7 +1,7 @@
-// Modified by Sekar Nagarajan (2026-09-01 12:45)
+// Modified by Sekar Nagarajan (2026-09-08 14:58)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { useNavigate } from "@tanstack/react-router";
-import { Space, Tag, Tooltip, Typography } from "antd";
+import { Flex, Tag, Tooltip, Typography } from "antd";
 
 import { AppIcon, Icons, NavBookingIcon } from "../../../../components/icons";
 import { formatModuleScreenTitle } from "../../../../constants/module-titles";
@@ -23,7 +23,6 @@ export function BookingViewDrawer({
 }: BookingViewDrawerProps) {
   const navigate = useNavigate();
 
-  // Modified by Sekar Nagarajan (2026-09-01 12:45) — Edit opens amend; Close next to it
   const handleEdit = () => {
     onClose();
     navigate({ to: `/app/booking/${booking.id}/amend` });
@@ -33,54 +32,62 @@ export function BookingViewDrawer({
     <AppDrawer
       open
       onClose={onClose}
-      dialogSize="xl"
-      classNames={{ body: "booking-drawer-body custom-scroll" }}
+      dialogSize="lg"
+      classNames={{
+        body: "booking-drawer-body custom-scroll",
+        footer: "booking-drawer-footer-bar",
+      }}
       title={
         <div className="booking-drawer-title">
           <AppIcon icon={NavBookingIcon} size={22} />
-          <div>
+          <div className="booking-drawer-title__copy">
             <Title level={4} className="booking-drawer-title__text">
               {formatModuleScreenTitle("View Booking", booking.bookingNo)}
             </Title>
-            <Text type="secondary" className="booking-drawer-title__meta">
-              Online Ref: <strong>{booking.onlineRefNo}</strong>
-              {booking.agencyRefNo ? (
-                <>
-                  {" "}
-                  · Agency: <strong>{booking.agencyRefNo}</strong>
-                </>
-              ) : null}
-            </Text>
-            <div className="booking-drawer-title__tags">
-              <Tag color={getBookingListStatusColor(booking.status)}>
-                {booking.status}
-              </Tag>
-              {booking.dgStatus === "Y" ? (
-                <Tag color="error">Dangerous Goods</Tag>
-              ) : (
-                <Tag color="default">Non-DG</Tag>
-              )}
+            <div className="booking-drawer-title__row">
+              <Text type="secondary" className="booking-drawer-title__meta">
+                Online Ref: <strong>{booking.onlineRefNo}</strong>
+                {booking.agencyRefNo ? (
+                  <>
+                    {" "}
+                    · Agency: <strong>{booking.agencyRefNo}</strong>
+                  </>
+                ) : null}
+              </Text>
+              <div className="booking-drawer-title__tags">
+                <Tag color={getBookingListStatusColor(booking.status)}>
+                  {booking.status}
+                </Tag>
+                {booking.dgStatus === "Y" ? (
+                  <Tag color="error">Dangerous Goods</Tag>
+                ) : (
+                  <Tag color="default">Non-DG</Tag>
+                )}
+              </div>
             </div>
           </div>
         </div>
       }
-      extra={
-        <div className="booking-drawer-actions custom-scroll">
-          <Space size="small" wrap>
-            <Tooltip title="Edit / Amend This Booking">
-              <AppButton
-                type="primary"
-                icon={<AppIcon icon={Icons.squarePen} size={16} tone="edit" />}
-                onClick={handleEdit}
-              >
-                Edit
-              </AppButton>
-            </Tooltip>
-          </Space>
-        </div>
+      footer={
+        <Flex
+          justify="flex-end"
+          align="center"
+          gap="small"
+          wrap
+          className="booking-drawer-actions custom-scroll"
+        >
+          <Tooltip title="Edit / Amend This Booking">
+            <AppButton
+              type="primary"
+              icon={<AppIcon icon={Icons.squarePen} size={16} tone="edit" />}
+              onClick={handleEdit}
+            >
+              Edit
+            </AppButton>
+          </Tooltip>
+        </Flex>
       }
     >
-      {/* Route hero */}
       <div className="booking-route-strip">
         <div className="booking-route-port booking-route-port--origin">
           <div className="booking-route-port__label">
@@ -121,7 +128,6 @@ export function BookingViewDrawer({
         </div>
       </div>
 
-      {/* Summary chips */}
       <div className="booking-summary-chips">
         <div className="booking-summary-chip">
           <span className="booking-summary-chip__icon booking-summary-chip__icon--ref app-icon-inherit">

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-01 16:32)
+// Modified by Sekar Nagarajan (2026-09-08 15:03)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -148,10 +148,15 @@ export function BlModuleStyles() {
         max-height: calc(100vh - 105px);
         padding: ${token.paddingLG}px;
       }
+      /* Modified by Sekar Nagarajan (2026-09-08 15:03) — title meta+tags one row; footer bar */
       .bl-drawer-title {
         display: flex;
         align-items: flex-start;
         gap: ${token.marginSM}px;
+      }
+      .bl-drawer-title__copy {
+        min-width: 0;
+        flex: 1;
       }
       .bl-drawer-title__text {
         margin: 0 !important;
@@ -160,13 +165,23 @@ export function BlModuleStyles() {
       .bl-drawer-title__meta {
         font-size: ${token.fontSizeSM}px;
         display: block;
+        margin: 0;
+      }
+      .bl-drawer-title__row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: ${token.marginXS}px ${token.marginMD}px;
         margin-top: ${token.marginXXS}px;
       }
       .bl-drawer-title__tags {
         display: flex;
         flex-wrap: wrap;
         gap: ${token.marginXXS}px;
-        margin-top: ${token.marginXXS}px;
+        margin: 0;
+      }
+      .bl-drawer-footer-bar.ant-drawer-footer {
+        padding: ${token.paddingSM}px ${token.paddingLG}px;
       }
       /* Modified by Sekar Nagarajan (2026-08-31 17:25) — light Confirmed / success badge */
       .bl-drawer-title__tags .ant-tag-success,
@@ -277,12 +292,20 @@ export function BlModuleStyles() {
         align-items: center;
         gap: ${token.marginXS}px;
       }
-      /* Modified by Sekar Nagarajan (2026-09-01 13:06) — section stack + side-by-side lines */
+      /* Modified by Sekar Nagarajan (2026-09-08 15:03) — airy preview stack (Booking/SI parity) */
       .bl-view-sections {
         display: flex;
         flex-direction: column;
         gap: ${token.marginLG}px;
         width: 100%;
+      }
+      .bl-view-sections--single {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginLG}px;
+      }
+      .bl-view-sections--single .booking-review__section {
+        margin: 0;
       }
       .bl-view-row-line {
         width: 100%;

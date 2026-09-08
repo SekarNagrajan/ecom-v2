@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-25 19:25)
+// Modified by Sekar Nagarajan (2026-09-08 14:23)
 import { AppButton } from "@solverminds/shared-ui";
 import { DataView, DataViewColumn } from "@solverminds/shared-ui/data-view";
 import { useToast } from "@solverminds/shared-ui/hooks";
@@ -26,7 +26,7 @@ export function QuotesView() {
 
   const handleConvertBooking = (quote: QuoteDTO) => {
     toast.info(`Converting Quote ${quote.quoteNo} into e-Booking...`);
-    navigate({ to: "/schedules" as never });
+    navigate({ to: "/app/schedules" });
   };
 
   const columnDefs: DataViewColumn<QuoteDTO>[] = [

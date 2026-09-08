@@ -213,11 +213,14 @@ export function UserModulesModuleStyles() {
       }
       .um-quote-desc.ant-descriptions .ant-descriptions-item-label {
         font-weight: ${token.fontWeightStrong};
+        font-color: ${token.colorText};
         width: 180px;
         background: ${token.colorFillAlter};
+        color: ${token.colorText};
       }
       .um-quote-desc.ant-descriptions .ant-descriptions-item-content {
         background: ${token.colorBgContainer};
+        color: ${token.colorText};
       }
 
       .um-verified-tag.ant-tag {

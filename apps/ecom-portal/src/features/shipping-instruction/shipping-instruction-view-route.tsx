@@ -4,7 +4,11 @@ import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { Card, Result, Space } from "antd";
 
-import { AppIcon, Icons } from "../../components/icons";
+import {
+  AppIcon,
+  Icons,
+  NavShippingInstructionIcon,
+} from "../../components/icons";
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import {
@@ -64,7 +68,7 @@ export function ShippingInstructionViewRoute() {
       <Space direction="vertical" size="large" className="feature-page-stack">
         <Card className="feature-page-card" bordered={false}>
           <ModuleScreenHeader
-            icon={Icons.clipboardList}
+            icon={NavShippingInstructionIcon}
             title={formatModuleScreenTitle(
               MODULE_TITLES.shippingInstruction,
               listRow?.siNo || id,

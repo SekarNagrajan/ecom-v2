@@ -3,7 +3,11 @@ import { AppButton } from "@solverminds/shared-ui";
 import { useNavigate, useParams, useSearch } from "@tanstack/react-router";
 import { Card, Result, Steps, Typography, theme } from "antd";
 
-import { AppIcon, Icons } from "../../components/icons";
+import {
+  AppIcon,
+  Icons,
+  NavShippingInstructionIcon,
+} from "../../components/icons";
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import {
@@ -166,7 +170,7 @@ export function ShippingInstructionWizardRoute() {
       <Card className="wizard-page-card">
         <div className="wizard-page-header">
           <ModuleScreenHeader
-            icon={Icons.clipboardList}
+            icon={NavShippingInstructionIcon}
             title={formatModuleScreenTitle(
               MODULE_TITLES.shippingInstruction,
               siDetails?.bookingNo,

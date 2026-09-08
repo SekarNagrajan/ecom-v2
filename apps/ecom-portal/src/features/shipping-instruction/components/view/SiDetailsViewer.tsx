@@ -1,19 +1,26 @@
-// Modified by Sekar Nagarajan (2026-09-01 12:29)
+// Modified by Sekar Nagarajan (2026-09-08 14:54)
 import { ListView } from "@solverminds/shared-ui/data-view/list-view";
-import { Card, Typography } from "antd";
+import { Typography } from "antd";
 import type { ColDef } from "ag-grid-community";
 import type { LucideIcon } from "lucide-react";
-import type { ReactNode } from "react";
 
 import { AppIcon, Icons } from "../../../../components/icons";
-import { ModuleEmptyState } from "../../../../components/shared/module-empty-state";
 import { WIZARD_STEP_TITLES } from "../../../../constants/module-titles";
+import { BookingModuleStyles } from "../../../booking/components/booking-module-styles";
 import { useSiDetailQuery } from "../../api/si.queries";
-import type { SIChargeLine, SIParty } from "../../types/si.types";
-import { SI_CARGO_LINE_COL_DEFS } from "../../utils/si-cargo-line-col-defs";
+import type { SIChargeLine, SIParty, SIDTO } from "../../types/si.types";
+import type { SiPartyRoleKey } from "../../utils/si-party.utils";
+import {
+  SiPreviewEmpty,
+  SiPreviewEmptyPartyCard,
+  SiPreviewFieldGrid,
+  SiPreviewPartyCard,
+  SiPreviewSection,
+} from "../preview/si-preview-section";
 import { SiLoadingCenter } from "../si-loading-center";
+import { SiPreviewCargoReview } from "../SiPreviewCargoReview";
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 export interface SiViewActivityHints {
   createdDate?: string | null;
@@ -42,63 +49,42 @@ type ActivityTone =
   | "info"
   | "muted";
 
-function MetaItem({ label, value }: { label: string; value: ReactNode }) {
-  return (
-    <div className="si-meta-item">
-      <span className="si-meta-item__label">{label}</span>
-      <span className="si-meta-item__value">{value}</span>
-    </div>
-  );
+const REVIEW_PARTY_ROLES: SiPartyRoleKey[] = [
+  "shipper",
+  "consignee",
+  "notify",
+  "forwarder",
+];
+
+function dash(value?: string | number | null): string {
+  if (value === undefined || value === null || value === "") return "—";
+  return String(value);
 }
 
-function SectionTitle({
-  icon,
-  children,
-}: {
-  icon: ReactNode;
-  children: ReactNode;
-}) {
-  return (
-    <span className="si-section-title-row">
-      {icon}
-      <Title level={5} className="si-section-title">
-        {children}
-      </Title>
-    </span>
-  );
-}
-
-function PartyBlock({
-  label,
-  party,
-  roleClass,
-  extra,
-}: {
-  label: string;
-  party?: SIParty & { toOrder?: boolean };
-  roleClass: string;
-  extra?: ReactNode;
-}) {
-  if (!party) {
-    return (
-      <div className={`si-party-block ${roleClass}`}>
-        <Text className="form-field-label">{label}</Text>
-        <Text type="secondary">N/A</Text>
-      </div>
-    );
+function partyForRole(
+  parties: SIDTO["parties"],
+  role: SiPartyRoleKey,
+): SIParty | undefined {
+  switch (role) {
+    case "shipper":
+      return parties.shipper;
+    case "consignee":
+      return parties.consignee;
+    case "notify":
+      return parties.notify;
+    case "notify2":
+      return parties.notify2;
+    case "notify3":
+      return parties.notify3;
+    case "forwarder":
+      return parties.forwarder;
+    case "warehouse":
+      return parties.warehouse;
+    case "agreementParty":
+      return parties.agreementParty;
+    default:
+      return undefined;
   }
-  return (
-    <div className={`si-party-block ${roleClass}`}>
-      <Text className="form-field-label">
-        {label} {extra}
-      </Text>
-      <Text strong>{party.name}</Text>
-      <Text>{party.address}</Text>
-      <Text>
-        {[party.city, party.country].filter(Boolean).join(", ")}
-      </Text>
-    </div>
-  );
 }
 
 function getActivityStepVisual(action: string): {
@@ -109,7 +95,11 @@ function getActivityStepVisual(action: string): {
   if (key.includes("cancel") || key.includes("reject")) {
     return { icon: Icons.circleX, tone: "error" };
   }
-  if (key.includes("confirm") || key.includes("approv") || key.includes("linked")) {
+  if (
+    key.includes("confirm") ||
+    key.includes("approv") ||
+    key.includes("linked")
+  ) {
     return { icon: Icons.checkCircle, tone: "success" };
   }
   if (key.includes("submit") || key.includes("sent")) {
@@ -146,7 +136,9 @@ function ActivitySteps({ events }: { events: ActivityEvent[] }) {
               >
                 <AppIcon icon={visual.icon} size={14} />
               </span>
-              {!isLast ? <span className="si-activity-steps__connector" /> : null}
+              {!isLast ? (
+                <span className="si-activity-steps__connector" />
+              ) : null}
             </div>
             <div className="si-activity-steps__body">
               <Text strong className="si-activity-steps__action">
@@ -241,9 +233,9 @@ export function SiDetailsViewer({
 
   if (isError || !data) {
     return (
-      <Card className="si-panel feature-page-card" size="small">
+      <div className="si-panel">
         <Text type="danger">Unable to load Shipping Instruction details.</Text>
-      </Card>
+      </div>
     );
   }
 
@@ -257,303 +249,193 @@ export function SiDetailsViewer({
     hints: activityHints,
   });
 
+  const reviewRoleSet = new Set(REVIEW_PARTY_ROLES);
+  const extraPartyRoles = (
+    ["agreementParty", "notify2", "notify3", "warehouse"] as SiPartyRoleKey[]
+  ).filter((role) => {
+    const party = partyForRole(data.parties, role);
+    return party?.name && !reviewRoleSet.has(role);
+  });
+
+  const masterRows = [
+    { label: "Booking number", value: dash(data.bookingNo) },
+    {
+      label: "SI number",
+      value: dash(data.siNo) === "—" ? "Draft" : dash(data.siNo),
+    },
+    { label: "B/L type", value: dash(data.blType) },
+    {
+      label: "Release type",
+      value: data.releaseType === "O" ? "Original" : "Telex",
+    },
+    { label: "Freight option", value: dash(data.freightOption) },
+    { label: "Agency ref", value: dash(data.agencyRefNo) },
+  ];
+
   return (
-    <div className="booking-stack si-view-sections">
-      {/* Row 1: Master | Parties */}
-      <div className="si-view-row si-view-row--2">
-        <Card
-          className="si-panel feature-page-card"
-          size="small"
-          title={
-            <SectionTitle icon={<AppIcon icon={Icons.ship} size={16} />}>
-              {WIZARD_STEP_TITLES.masterDetails}
-            </SectionTitle>
-          }
-        >
-          <div className="si-meta-grid">
-            <MetaItem label="Booking Number" value={data.bookingNo} />
-            <MetaItem label="SI Number" value={data.siNo || "Draft"} />
-            <MetaItem label="B/L Type" value={data.blType} />
-            <MetaItem
-              label="Release Type"
-              value={data.releaseType === "O" ? "Original" : "Telex"}
-            />
-            <MetaItem label="Freight Option" value={data.freightOption} />
-            <MetaItem label="Agency Ref" value={data.agencyRefNo || "N/A"} />
-          </div>
-        </Card>
+    <div className="booking-review si-view-sections si-view-sections--single">
+      <BookingModuleStyles />
 
-        <Card
-          className="si-panel feature-page-card"
-          size="small"
-          title={
-            <SectionTitle icon={<AppIcon icon={Icons.users} size={16} />}>
-              Parties
-            </SectionTitle>
-          }
-        >
-          <div className="si-party-grid">
-            <PartyBlock
-              label="Shipper"
-              party={data.parties.shipper}
-              roleClass="booking-party-card--shipper"
-            />
-            <PartyBlock
-              label="Consignee"
-              party={data.parties.consignee}
-              roleClass="booking-party-card--consignee"
-              extra={
-                data.parties.consignee?.toOrder ? (
-                  <Text type="warning">(To Order)</Text>
-                ) : null
-              }
-            />
-            <PartyBlock
-              label="Notify Party"
-              party={data.parties.notify}
-              roleClass="booking-party-card--notify"
-            />
-          </div>
-        </Card>
-      </div>
+      <SiPreviewSection
+        variant="airy"
+        title={WIZARD_STEP_TITLES.masterDetails}
+      >
+        <SiPreviewFieldGrid items={masterRows} />
+      </SiPreviewSection>
 
-      {/* Row 2: Routing | Insurance */}
-      <div className="si-view-row si-view-row--2">
-        <Card
-          className="si-panel feature-page-card"
-          size="small"
-          title={
-            <SectionTitle icon={<AppIcon icon={Icons.anchor} size={16} />}>
-              {WIZARD_STEP_TITLES.routing}
-            </SectionTitle>
-          }
-        >
-          {data.routing ? (
-            <div className="si-meta-grid">
-              <MetaItem
-                label="Vessel / Voyage"
-                value={data.routing.vesselVoyage || "N/A"}
-              />
-              <MetaItem label="Origin (Print)" value={data.routing.originPrint} />
-              <MetaItem label="POL (Print)" value={data.routing.polPrint} />
-              <MetaItem label="POD (Print)" value={data.routing.podPrint} />
-              <MetaItem
-                label="Delivery (Print)"
-                value={data.routing.deliveryPrint}
-              />
-              <MetaItem
-                label="Schedule Legs"
-                value={String(data.routing.scheduleLegs?.length ?? 0)}
-              />
-            </div>
-          ) : (
-            <ModuleEmptyState
-              artSize="sm"
-              variant="blank"
-              title="No routing details"
-              style={{ padding: 12 }}
-            />
-          )}
-        </Card>
-
-        <Card
-          className="si-panel feature-page-card"
-          size="small"
-          title={
-            <SectionTitle icon={<AppIcon icon={Icons.shieldCheck} size={16} />}>
-              {WIZARD_STEP_TITLES.insurance}
-            </SectionTitle>
-          }
-        >
-          {insuranceRequired && data.insurance ? (
-            <div className="si-meta-grid">
-              <MetaItem
-                label="Cargo Value"
-                value={`${data.insurance.cargoValue ?? "—"} ${data.insurance.currency}`}
-              />
-              <MetaItem
-                label="Policy No"
-                value={data.insurance.policyNo || "N/A"}
-              />
-              <MetaItem
-                label="Terms Accepted"
-                value={data.insurance.termsAccepted ? "Yes" : "No"}
-              />
-              <MetaItem
-                label="Opt Out"
-                value={data.insurance.optOut ? "Yes" : "No"}
-              />
-            </div>
-          ) : (
-            <Text type="secondary">
-              Insurance not required for this shipping instruction.
-            </Text>
-          )}
-        </Card>
-      </div>
-
-      {/* Cargo */}
-      <div className="si-view-row si-view-row--1">
-        <Card
-          className="si-panel feature-page-card"
-          size="small"
-          title={
-            <SectionTitle icon={<AppIcon icon={Icons.boxes} size={16} />}>
-              Cargo & Containers
-            </SectionTitle>
-          }
-        >
-          {data.containers.length === 0 ? (
-            <ModuleEmptyState
-              artSize="sm"
-              variant="blank"
-              title="No containers recorded"
-              style={{ padding: 12 }}
-            />
-          ) : (
-            data.containers.map((container, index) => (
-              <div key={container.id} className="si-container-block">
-                <div className="si-container-block__header">
-                  <Text strong className="si-container-block__title">
-                    Container {index + 1}: {container.containerNo || "—"} (
-                    {container.eqpSize || "—"})
-                  </Text>
-                  <div>
-                    <Text type="secondary">
-                      Carrier Seal:{" "}
-                      <Text strong>{container.carrierSeal || "N/A"}</Text>
-                    </Text>
-                    {" · "}
-                    <Text type="secondary">
-                      Shipper Seal:{" "}
-                      <Text strong>{container.shipperSeal || "N/A"}</Text>
-                    </Text>
-                  </div>
-                </div>
-                <div className="si-cargo-grid responsive-table-wrap custom-scroll ag-theme-alpine">
-                  <ListView
-                    rowData={container.cargoLines}
-                    columnDefs={SI_CARGO_LINE_COL_DEFS}
-                    showToolbar={false}
-                    pagination
-                    paginationPageSize={10}
-                    gridOptions={{ animateRows: true }}
+      <SiPreviewSection variant="airy" title={WIZARD_STEP_TITLES.parties}>
+        <div className="booking-review__party-grid">
+          {REVIEW_PARTY_ROLES.map((role) => {
+            const party = partyForRole(data.parties, role);
+            return (
+              <div key={role} className="booking-party-grid__col">
+                {party?.name ? (
+                  <SiPreviewPartyCard
+                    roleKey={role}
+                    party={party}
+                    extra={
+                      role === "consignee" &&
+                      data.parties.consignee?.toOrder ? (
+                        <Text type="warning"> (To Order)</Text>
+                      ) : null
+                    }
                   />
-                </div>
+                ) : (
+                  <SiPreviewEmptyPartyCard roleKey={role} />
+                )}
               </div>
-            ))
-          )}
-        </Card>
-      </div>
-
-      {/* ENS */}
-      {data.ens?.ensRequired ? (
-        <div className="si-view-row si-view-row--1">
-          <Card
-            className="si-panel feature-page-card"
-            size="small"
-            title={
-              <SectionTitle icon={<AppIcon icon={Icons.fileText} size={16} />}>
-                ENS Details
-              </SectionTitle>
-            }
-          >
-            <div className="si-meta-grid">
-              <MetaItem label="EU Customs Zone" value={data.ens.euCustZone} />
-              <MetaItem label="B/L Type (ENS)" value={data.ens.blTypeEns} />
-              <MetaItem label="Filing Type" value={data.ens.ensFillingType} />
-              <MetaItem label="Payment Method" value={data.ens.paymentMethod} />
-              <MetaItem
-                label="Declarant"
-                value={data.ens.declarant?.name || "N/A"}
-              />
-              <MetaItem label="Buyer" value={data.ens.buyer?.name || "N/A"} />
-              <MetaItem label="Seller" value={data.ens.seller?.name || "N/A"} />
-            </div>
-          </Card>
+            );
+          })}
+          {extraPartyRoles.map((role) => {
+            const party = partyForRole(data.parties, role);
+            if (!party?.name) return null;
+            return (
+              <div key={role} className="booking-party-grid__col">
+                <SiPreviewPartyCard roleKey={role} party={party} />
+              </div>
+            );
+          })}
         </div>
+      </SiPreviewSection>
+
+      <SiPreviewSection variant="airy" title={WIZARD_STEP_TITLES.routing}>
+        {data.routing ? (
+          <SiPreviewFieldGrid
+            items={[
+              {
+                label: "Vessel / voyage",
+                value: dash(data.routing.vesselVoyage),
+              },
+              { label: "Origin", value: dash(data.routing.originPrint) },
+              { label: "POL", value: dash(data.routing.polPrint) },
+              { label: "POD", value: dash(data.routing.podPrint) },
+              {
+                label: "Delivery",
+                value: dash(data.routing.deliveryPrint),
+              },
+              {
+                label: "Schedule legs",
+                value: String(data.routing.scheduleLegs?.length ?? 0),
+              },
+            ]}
+          />
+        ) : (
+          <SiPreviewEmpty label="No routing details" />
+        )}
+      </SiPreviewSection>
+
+      <SiPreviewSection variant="airy" title={WIZARD_STEP_TITLES.insurance}>
+        {insuranceRequired && data.insurance ? (
+          <SiPreviewFieldGrid
+            items={[
+              {
+                label: "Cargo value",
+                value: `${dash(data.insurance.cargoValue)} ${dash(
+                  data.insurance.currency,
+                )}`,
+              },
+              {
+                label: "Policy no",
+                value: dash(data.insurance.policyNo),
+              },
+              {
+                label: "Terms accepted",
+                value: data.insurance.termsAccepted ? "Yes" : "No",
+              },
+              {
+                label: "Opt out",
+                value: data.insurance.optOut ? "Yes" : "No",
+              },
+            ]}
+          />
+        ) : (
+          <SiPreviewEmpty label="Insurance not required for this shipping instruction." />
+        )}
+      </SiPreviewSection>
+
+      <SiPreviewSection variant="airy" title={WIZARD_STEP_TITLES.cargoDetails}>
+        <SiPreviewCargoReview containers={data.containers} />
+      </SiPreviewSection>
+
+      {data.ens?.ensRequired ? (
+        <SiPreviewSection
+          variant="airy"
+          title={WIZARD_STEP_TITLES.ensDetails}
+        >
+          <SiPreviewFieldGrid
+            items={[
+              { label: "EU customs zone", value: dash(data.ens.euCustZone) },
+              { label: "B/L type (ENS)", value: dash(data.ens.blTypeEns) },
+              { label: "Filing type", value: dash(data.ens.ensFillingType) },
+              {
+                label: "Payment method",
+                value: dash(data.ens.paymentMethod),
+              },
+              {
+                label: "Declarant",
+                value: dash(data.ens.declarant?.name),
+              },
+              { label: "Buyer", value: dash(data.ens.buyer?.name) },
+              { label: "Seller", value: dash(data.ens.seller?.name) },
+            ]}
+          />
+        </SiPreviewSection>
       ) : null}
 
-      {/* Documents */}
-      <div className="si-view-row si-view-row--1">
-        <Card
-          className="si-panel feature-page-card"
-          size="small"
-          title={
-            <SectionTitle icon={<AppIcon icon={Icons.inbox} size={16} />}>
-              Documents
-            </SectionTitle>
-          }
-        >
-          {files.length === 0 ? (
-            <ModuleEmptyState
-              artSize="sm"
-              variant="blank"
-              title="No documents uploaded"
-              style={{ padding: 12 }}
-            />
-          ) : (
-            <div className="si-meta-grid">
-              {files.map((f) => (
-                <MetaItem
-                  key={f.id}
-                  label={f.fileType || "File"}
-                  value={`${f.fileName} (${f.sizeKb} KB)`}
-                />
-              ))}
-            </div>
-          )}
-        </Card>
-      </div>
+      <SiPreviewSection variant="airy" title={WIZARD_STEP_TITLES.fileUpload}>
+        {files.length === 0 ? (
+          <SiPreviewEmpty label="No documents uploaded" />
+        ) : (
+          <SiPreviewFieldGrid
+            items={files.map((file) => ({
+              label: file.fileType || "File",
+              value: `${file.fileName} (${file.sizeKb} KB)`,
+            }))}
+          />
+        )}
+      </SiPreviewSection>
 
-      {/* Activity */}
-      <div className="si-view-row si-view-row--1">
-        <Card
-          className="si-panel feature-page-card"
-          size="small"
-          title={
-            <SectionTitle icon={<AppIcon icon={Icons.history} size={16} />}>
-              Activity
-            </SectionTitle>
-          }
-        >
-          {activity.length === 0 ? (
-            <ModuleEmptyState
-              artSize="sm"
-              variant="blank"
-              title="No activity recorded"
-              style={{ padding: 12 }}
-            />
-          ) : (
-            <ActivitySteps events={activity} />
-          )}
-        </Card>
-      </div>
+      <SiPreviewSection variant="airy" title="Activity">
+        {activity.length === 0 ? (
+          <SiPreviewEmpty label="No activity recorded" />
+        ) : (
+          <ActivitySteps events={activity} />
+        )}
+      </SiPreviewSection>
 
-      {/* Charges */}
       {charges.length > 0 ? (
-        <div className="si-view-row si-view-row--1">
-          <Card
-            className="si-panel feature-page-card"
-            size="small"
-            title={
-              <SectionTitle icon={<AppIcon icon={Icons.banknote} size={16} />}>
-                Charges
-              </SectionTitle>
-            }
-          >
-            <div className="si-charges-grid responsive-table-wrap custom-scroll ag-theme-alpine">
-              <ListView
-                rowData={charges}
-                columnDefs={CHARGE_COL_DEFS}
-                showToolbar={false}
-                pagination
-                paginationPageSize={10}
-                gridOptions={{ animateRows: true }}
-              />
-            </div>
-          </Card>
-        </div>
+        <SiPreviewSection variant="airy" title={WIZARD_STEP_TITLES.charges}>
+          <div className="si-charges-grid responsive-table-wrap custom-scroll ag-theme-alpine">
+            <ListView
+              rowData={charges}
+              columnDefs={CHARGE_COL_DEFS}
+              showToolbar={false}
+              pagination
+              paginationPageSize={10}
+              gridOptions={{ animateRows: true }}
+            />
+          </div>
+        </SiPreviewSection>
       ) : null}
     </div>
   );

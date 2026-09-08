@@ -209,7 +209,7 @@ export function ChangePasswordView({
           open={open}
           onClose={handleClose}
           placement="right"
-          dialogSize="md"
+          dialogSize="sm"
           destroyOnClose
           maskClosable={!isPending}
           keyboard={!isPending}

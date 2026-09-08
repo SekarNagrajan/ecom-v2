@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-03 18:51)
+// Modified by Sekar Nagarajan (2026-09-08 14:54)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -562,9 +562,17 @@ export function SiModuleStyles() {
         gap: ${token.marginXS}px;
       }
 
-      /* Modified by Sekar Nagarajan (2026-09-01 12:29) — SI view drawer section rows */
+      /* Modified by Sekar Nagarajan (2026-09-08 14:54) — SI view single-row preview sections */
       .si-view-sections {
         width: 100%;
+      }
+      .si-view-sections--single {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginLG}px;
+      }
+      .si-view-sections--single .booking-review__section {
+        margin: 0;
       }
       .si-view-row {
         display: grid;
@@ -715,19 +723,36 @@ export function SiModuleStyles() {
       .si-drawer-title__meta {
         font-size: ${token.fontSizeSM}px;
         display: block;
+        margin: 0;
+      }
+      .si-drawer-title__copy {
+        min-width: 0;
+        flex: 1;
+      }
+      .si-drawer-title__row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: ${token.marginXS}px ${token.marginMD}px;
         margin-top: ${token.marginXXS}px;
       }
       .si-drawer-title__tags {
         display: flex;
         flex-wrap: wrap;
         gap: ${token.marginXXS}px;
-        margin-top: ${token.marginXXS}px;
+        margin: 0;
       }
       .si-drawer-actions {
         display: flex;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         gap: ${token.marginXS}px;
         align-items: center;
+        justify-content: flex-end;
+        width: 100%;
+        overflow-x: auto;
+      }
+      .si-drawer-footer-bar.ant-drawer-footer {
+        padding: ${token.paddingSM}px ${token.paddingLG}px;
       }
       .si-drawer-body.custom-scroll {
         overflow-y: auto;

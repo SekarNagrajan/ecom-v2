@@ -5,7 +5,7 @@ import type { MenuProps } from "antd";
 import { Dropdown, Space } from "antd";
 import { useState } from "react";
 
-import { AppIcon, Icons } from "../../../components/icons";
+import { AppIcon, Icons, NavBillOfLadingIcon } from "../../../components/icons";
 import {
   ListActionButton,
   ListActionsRow,
@@ -174,7 +174,7 @@ export function BillOfLadingRowActions({
     moreItems.push({
       key: "manifest",
       label: "Manifest",
-      icon: <AppIcon icon={Icons.fileCheck} size={16} tone="navigate" />,
+      icon: <AppIcon icon={NavBillOfLadingIcon} size={16} tone="navigate" />,
       onClick: ({ domEvent }) => {
         domEvent.stopPropagation();
         onManifest(row.blNo, row.mcnNo);

@@ -1,46 +1,32 @@
-// Modified by Sekar Nagarajan (2026-09-07 18:37)
+// Modified by Sekar Nagarajan (2026-09-08 14:58)
 import { useQuery } from "@tanstack/react-query";
-import { Card, Result, Skeleton, Typography } from "antd";
+import { Result, Skeleton, Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
-import type { ReactNode } from "react";
 
 import { AppIcon, Icons } from "../../../../components/icons";
-import { ModuleEmptyState } from "../../../../components/shared/module-empty-state";
+import { WIZARD_STEP_TITLES } from "../../../../constants/module-titles";
 import { bookingApi } from "../../api/booking.api";
 import { bookingKeys } from "../../api/booking.keys";
 import type { BookingActivityEvent } from "../../types/booking.types";
 import { migrateLegacyCargo } from "../../types/booking.types";
+import {
+  partiesToCards,
+  type PartyRoleKey,
+} from "../../utils/party-role.utils";
+import { BookingModuleStyles } from "../booking-module-styles";
+import { PreviewCargoReview } from "../preview/PreviewCargoReview";
+import {
+  BookingPreviewEmpty,
+  BookingPreviewEmptyPartyCard,
+  BookingPreviewFieldGrid,
+  BookingPreviewPartyCard,
+  BookingPreviewSection,
+} from "../preview/booking-preview-section";
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 interface BookingDetailsViewerProps {
   bookingId?: string;
-}
-
-function MetaItem({ label, value }: { label: string; value: ReactNode }) {
-  return (
-    <div className="booking-meta-item">
-      <span className="booking-meta-item__label">{label}</span>
-      <span className="booking-meta-item__value">{value}</span>
-    </div>
-  );
-}
-
-function SectionTitle({
-  icon,
-  children,
-}: {
-  icon: ReactNode;
-  children: ReactNode;
-}) {
-  return (
-    <span className="booking-section-title">
-      {icon}
-      <Title level={5} className="booking-panel__title">
-        {children}
-      </Title>
-    </span>
-  );
 }
 
 type ActivityTone =
@@ -51,12 +37,24 @@ type ActivityTone =
   | "info"
   | "muted";
 
+const REVIEW_PARTY_ROLES: PartyRoleKey[] = [
+  "shipper",
+  "consignee",
+  "notifyParty",
+  "forwarder",
+];
+
+function dash(value?: string | number | null): string {
+  if (value === undefined || value === null || value === "") return "—";
+  return String(value);
+}
+
 function getActivityStepVisual(action: string): {
   icon: LucideIcon;
   tone: ActivityTone;
 } {
   const key = action.toLowerCase();
-              if (key.includes("cancel") || key.includes("reject")) {
+  if (key.includes("cancel") || key.includes("reject")) {
     return { icon: Icons.circleX, tone: "error" };
   }
   if (key.includes("confirm") || key.includes("approv")) {
@@ -65,7 +63,11 @@ function getActivityStepVisual(action: string): {
   if (key.includes("amend") || key.includes("edit") || key.includes("update")) {
     return { icon: Icons.squarePen, tone: "warning" };
   }
-  if (key.includes("submit") || key.includes("sent") || key.includes("forward")) {
+  if (
+    key.includes("submit") ||
+    key.includes("sent") ||
+    key.includes("forward")
+  ) {
     return { icon: Icons.send, tone: "info" };
   }
   if (key.includes("creat") || key.includes("draft") || key.includes("new")) {
@@ -143,9 +145,9 @@ export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
 
   if (isLoading) {
     return (
-      <Card className="booking-panel">
+      <div className="booking-panel">
         <Skeleton active paragraph={{ rows: 8 }} />
-      </Card>
+      </div>
     );
   }
 
@@ -156,286 +158,133 @@ export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
   const cargo = booking.cargo;
   const documents = booking.documents ?? [];
   const insuranceRequired = Boolean(booking.insurance?.isInsuranceRequired);
+  const partyCards = partiesToCards(booking.parties);
+  const reviewRoleSet = new Set(REVIEW_PARTY_ROLES);
+  const extraPartyEntries = (
+    Object.entries(partyCards) as [PartyRoleKey, (typeof partyCards)[PartyRoleKey]][]
+  ).filter(([role, card]) => card && !reviewRoleSet.has(role));
+
+  const masterRows = [
+    { label: "Origin", value: dash(booking.masterDetails.origin) },
+    { label: "Delivery", value: dash(booking.masterDetails.delivery) },
+    {
+      label: "Cargo ready date",
+      value: dash(booking.masterDetails.cargoReadyDate),
+    },
+    {
+      label: "Haulage origin",
+      value: dash(booking.masterDetails.haulageOriginType),
+    },
+    {
+      label: "Haulage destination",
+      value: dash(booking.masterDetails.haulageDestinationType),
+    },
+    {
+      label: "Carriage contract",
+      value: dash(booking.masterDetails.carriageContract),
+    },
+  ];
 
   return (
-    <div className="booking-stack booking-view-sections">
-      <div className="booking-view-row">
-        <Card
-          className="booking-panel"
-          title={
-            <SectionTitle icon={<AppIcon icon={Icons.ship} size={16} />}>
-              Master Details
-            </SectionTitle>
-          }
-        >
-          <div className="booking-meta-grid booking-meta-grid--row custom-scroll">
-            <MetaItem label="Origin" value={booking.masterDetails.origin} />
-            <MetaItem label="Delivery" value={booking.masterDetails.delivery} />
-            <MetaItem
-              label="Cargo Ready Date"
-              value={booking.masterDetails.cargoReadyDate}
-            />
-            <MetaItem
-              label="Haulage Origin"
-              value={booking.masterDetails.haulageOriginType}
-            />
-            <MetaItem
-              label="Haulage Destination"
-              value={booking.masterDetails.haulageDestinationType}
-            />
-            <MetaItem
-              label="Carriage Contract"
-              value={booking.masterDetails.carriageContract || "N/A"}
-            />
-          </div>
-        </Card>
-      </div>
+    <div className="booking-review booking-view-sections booking-view-sections--single">
+      <BookingModuleStyles />
 
-      <div className="booking-view-row">
-        <Card
-          className="booking-panel"
-          title={
-            <SectionTitle icon={<AppIcon icon={Icons.users} size={16} />}>
-              Parties
-            </SectionTitle>
-          }
-        >
-          <div className="booking-meta-grid booking-meta-grid--row custom-scroll">
-            <MetaItem label="Shipper" value={booking.parties.shipperName} />
-            <MetaItem label="Consignee" value={booking.parties.consigneeName} />
-            <MetaItem
-              label="Notify 2"
-              value={booking.parties.notifyParty2Name || "N/A"}
-            />
-            <MetaItem
-              label="Agreement Party"
-              value={booking.parties.agreementParty}
-            />
-            <MetaItem
-              label="SI Submitting Party"
-              value={booking.parties.siSubmittingParty}
-            />
-          </div>
-        </Card>
-      </div>
+      <BookingPreviewSection variant="airy" title="Master details">
+        <BookingPreviewFieldGrid items={masterRows} />
+      </BookingPreviewSection>
 
-      <div className="booking-view-row">
-        <Card
-          className="booking-panel"
-          title={
-            <SectionTitle icon={<AppIcon icon={Icons.boxes} size={16} />}>
-              Cargo & Equipment
-            </SectionTitle>
-          }
-        >
-          {(cargo?.containers ?? []).length === 0 ? (
-            <ModuleEmptyState
-              artSize="sm"
-              variant="blank"
-              title="No cargo lines recorded"
-              className="booking-cargo-equip-empty"
-            />
-          ) : (
-            <div className="booking-cargo-equip custom-scroll">
-              <div className="booking-cargo-equip__head" role="row">
-                <span className="booking-cargo-equip__cell booking-cargo-equip__cell--qty">
-                  Qty
-                </span>
-                <span className="booking-cargo-equip__cell booking-cargo-equip__cell--type">
-                  Equipment
-                </span>
-                <span className="booking-cargo-equip__cell booking-cargo-equip__cell--flags">
-                  Flags
-                </span>
-                <span className="booking-cargo-equip__cell booking-cargo-equip__cell--comm">
-                  Commodity
-                </span>
-                <span className="booking-cargo-equip__cell booking-cargo-equip__cell--hs">
-                  HS
-                </span>
-                <span className="booking-cargo-equip__cell booking-cargo-equip__cell--pkg">
-                  Packages
-                </span>
-                <span className="booking-cargo-equip__cell booking-cargo-equip__cell--wt">
-                  Weight
-                </span>
-                <span className="booking-cargo-equip__cell booking-cargo-equip__cell--vol">
-                  Volume
-                </span>
-                <span className="booking-cargo-equip__cell booking-cargo-equip__cell--dg">
-                  DG
-                </span>
+      <BookingPreviewSection variant="airy" title="Customer details">
+        <div className="booking-review__party-grid">
+          {REVIEW_PARTY_ROLES.map((role) => {
+            const card = partyCards[role];
+            return (
+              <div key={role} className="booking-party-grid__col">
+                {card ? (
+                  <BookingPreviewPartyCard role={role} card={card} />
+                ) : (
+                  <BookingPreviewEmptyPartyCard role={role} />
+                )}
               </div>
-              {(cargo?.containers ?? []).flatMap((container) => {
-                const lines =
-                  container.commodities.length > 0
-                    ? container.commodities
-                    : [null];
-                const flags = [
-                  container.eqpStatus === "EMPTY" ? "Empty" : null,
-                  container.isSoc ? "SOC" : null,
-                  container.isOog ? "OOG" : null,
-                  container.reeferMode && container.reeferMode !== "none"
-                    ? container.reeferMode.toUpperCase()
-                    : null,
-                ].filter(Boolean);
-
-                return lines.map((commodity, commodityIndex) => (
-                  <div
-                    key={`${container.id}-${commodity?.id ?? "empty"}-${commodityIndex}`}
-                    className="booking-cargo-equip__row"
-                    role="row"
-                  >
-                    <span className="booking-cargo-equip__cell booking-cargo-equip__cell--qty">
-                      {commodityIndex === 0 ? container.quantity : ""}
-                    </span>
-                    <span className="booking-cargo-equip__cell booking-cargo-equip__cell--type">
-                      {commodityIndex === 0 ? container.containerType : ""}
-                    </span>
-                    <span className="booking-cargo-equip__cell booking-cargo-equip__cell--flags">
-                      {commodityIndex === 0
-                        ? flags.length > 0
-                          ? flags.join(" · ")
-                          : "—"
-                        : ""}
-                    </span>
-                    <span className="booking-cargo-equip__cell booking-cargo-equip__cell--comm">
-                      {commodity?.commodity ||
-                        commodity?.description ||
-                        "—"}
-                    </span>
-                    <span className="booking-cargo-equip__cell booking-cargo-equip__cell--hs">
-                      {commodity?.hsCode || "—"}
-                    </span>
-                    <span className="booking-cargo-equip__cell booking-cargo-equip__cell--pkg">
-                      {commodity
-                        ? `${commodity.packageQuantity} ${commodity.packageType}`
-                        : "—"}
-                    </span>
-                    <span className="booking-cargo-equip__cell booking-cargo-equip__cell--wt">
-                      {commodity ? `${commodity.weight} kg` : "—"}
-                    </span>
-                    <span className="booking-cargo-equip__cell booking-cargo-equip__cell--vol">
-                      {commodity ? `${commodity.volume} m³` : "—"}
-                    </span>
-                    <span
-                      className={[
-                        "booking-cargo-equip__cell",
-                        "booking-cargo-equip__cell--dg",
-                        commodity?.isDangerousGoods
-                          ? "booking-cargo-equip__cell--dg-yes"
-                          : "",
-                      ]
-                        .filter(Boolean)
-                        .join(" ")}
-                    >
-                      {commodity?.isDangerousGoods ? "Yes" : "No"}
-                    </span>
-                  </div>
-                ));
-              })}
-            </div>
+            );
+          })}
+          {extraPartyEntries.map(([role, card]) =>
+            card ? (
+              <div key={role} className="booking-party-grid__col">
+                <BookingPreviewPartyCard role={role} card={card} />
+              </div>
+            ) : null,
           )}
-        </Card>
-      </div>
+        </div>
+      </BookingPreviewSection>
 
-      <div className="booking-view-row">
-        <Card
-          className="booking-panel"
-          title={
-            <SectionTitle icon={<AppIcon icon={Icons.shieldCheck} size={16} />}>
-              Insurance Details
-            </SectionTitle>
-          }
-        >
-          {insuranceRequired && booking.insurance ? (
-            <div className="booking-meta-grid booking-meta-grid--row custom-scroll">
-              <MetaItem
-                label="Cargo Value"
-                value={`${booking.insurance.cargoValue} ${booking.insurance.currency}`}
-              />
-              <MetaItem
-                label="Terms Accepted"
-                value={booking.insurance.termsAccepted ? "Yes" : "No"}
-              />
-            </div>
-          ) : (
-            <Text type="secondary">Insurance not required for this booking.</Text>
-          )}
-        </Card>
-      </div>
+      <BookingPreviewSection variant="airy" title="Cargo details">
+        <PreviewCargoReview containers={cargo?.containers ?? []} />
+      </BookingPreviewSection>
+
+      <BookingPreviewSection variant="airy" title="Insurance details">
+        {insuranceRequired && booking.insurance ? (
+          <BookingPreviewFieldGrid
+            items={[
+              {
+                label: "Cargo value",
+                value: `${dash(booking.insurance.cargoValue)} ${dash(
+                  booking.insurance.currency,
+                )}`,
+              },
+              {
+                label: "Terms accepted",
+                value: booking.insurance.termsAccepted ? "Yes" : "No",
+              },
+            ]}
+          />
+        ) : (
+          <BookingPreviewEmpty label="Insurance not required for this booking." />
+        )}
+      </BookingPreviewSection>
 
       {booking.ens?.euCustomsZone ? (
-        <div className="booking-view-row">
-          <Card
-            className="booking-panel"
-            title={
-              <SectionTitle icon={<AppIcon icon={Icons.fileText} size={16} />}>
-                ENS Details
-              </SectionTitle>
-            }
-          >
-            <div className="booking-meta-grid booking-meta-grid--row custom-scroll">
-              <MetaItem label="BL Type" value={booking.ens.blType} />
-              <MetaItem label="Filing Type" value={booking.ens.ensFilingType} />
-              <MetaItem
-                label="Declarant Name"
-                value={booking.ens.declarantName}
-              />
-            </div>
-          </Card>
-        </div>
+        <BookingPreviewSection
+          variant="airy"
+          title={WIZARD_STEP_TITLES.ensDetails}
+        >
+          <BookingPreviewFieldGrid
+            items={[
+              { label: "BL type", value: dash(booking.ens.blType) },
+              {
+                label: "Filing type",
+                value: dash(booking.ens.ensFilingType),
+              },
+              {
+                label: "Declarant name",
+                value: dash(booking.ens.declarantName),
+              },
+            ]}
+          />
+        </BookingPreviewSection>
       ) : null}
 
-      <div className="booking-view-row">
-        <Card
-          className="booking-panel"
-          title={
-            <SectionTitle icon={<AppIcon icon={Icons.inbox} size={16} />}>
-              Documents
-            </SectionTitle>
-          }
-        >
-          {documents.length === 0 ? (
-            <ModuleEmptyState
-              artSize="sm"
-              variant="blank"
-              title="No documents uploaded"
-              className="booking-cargo-equip-empty"
-            />
-          ) : (
-            <div className="booking-meta-grid booking-meta-grid--row custom-scroll">
-              {documents.map((d) => (
-                <MetaItem key={d.id} label={d.type} value={d.fileName} />
-              ))}
-            </div>
-          )}
-        </Card>
-      </div>
+      <BookingPreviewSection variant="airy" title="Documents">
+        {documents.length === 0 ? (
+          <BookingPreviewEmpty label="No documents uploaded" />
+        ) : (
+          <BookingPreviewFieldGrid
+            items={documents.map((doc) => ({
+              label: doc.type,
+              value: doc.fileName,
+            }))}
+          />
+        )}
+      </BookingPreviewSection>
 
-      <div className="booking-view-row">
-        <Card
-          className="booking-panel"
-          title={
-            <SectionTitle icon={<AppIcon icon={Icons.history} size={16} />}>
-              Activity
-            </SectionTitle>
-          }
-        >
-          {activityLoading ? (
-            <Skeleton active paragraph={{ rows: 3 }} />
-          ) : activity.length === 0 ? (
-            <ModuleEmptyState
-              artSize="sm"
-              variant="blank"
-              title="No activity recorded"
-              className="booking-cargo-equip-empty"
-            />
-          ) : (
-            <ActivitySteps events={activity} />
-          )}
-        </Card>
-      </div>
+      <BookingPreviewSection variant="airy" title="Activity">
+        {activityLoading ? (
+          <Skeleton active paragraph={{ rows: 3 }} />
+        ) : activity.length === 0 ? (
+          <BookingPreviewEmpty label="No activity recorded" />
+        ) : (
+          <ActivitySteps events={activity} />
+        )}
+      </BookingPreviewSection>
     </div>
   );
 }

@@ -8,7 +8,6 @@ import { useToast } from "@solverminds/shared-ui/hooks";
 import { Input, Radio, Select, Tag, Typography } from "antd";
 import { Controller, useForm } from "react-hook-form";
 
-import { AppIcon, Icons } from "../../../../components/icons";
 import { WIZARD_STEP_TITLES } from "../../../../constants/module-titles";
 import { BookingModuleStyles } from "../../../booking/components/booking-module-styles";
 import { SiPreviewCargoReview } from "../../../shipping-instruction/components/SiPreviewCargoReview";
@@ -560,7 +559,6 @@ export function PreviewStep({
         onCancel={onCancel}
         onNext={handleSubmitBl}
         nextLabel="Submit B/L"
-        nextIcon={<AppIcon icon={Icons.check} size={16} />}
         nextLoading={isSubmitting}
         isSubmitting={isSubmitting}
       />

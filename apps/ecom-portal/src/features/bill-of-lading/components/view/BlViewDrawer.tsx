@@ -1,9 +1,13 @@
-// Modified by Sekar Nagarajan (2026-09-01 13:04)
+// Modified by Sekar Nagarajan (2026-09-08 15:03)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { useNavigate } from "@tanstack/react-router";
-import { Space, Tag, Tooltip, Typography } from "antd";
+import { Flex, Tag, Tooltip, Typography } from "antd";
 
-import { AppIcon, Icons } from "../../../../components/icons";
+import {
+  AppIcon,
+  Icons,
+  NavBillOfLadingIcon,
+} from "../../../../components/icons";
 import { formatModuleScreenTitle } from "../../../../constants/module-titles";
 import type { BLListDTO } from "../../types/bl.types";
 import {
@@ -36,56 +40,70 @@ export function BlViewDrawer({ record, onClose }: BlViewDrawerProps) {
       <AppDrawer
         open
         onClose={onClose}
-        dialogSize="md"
-        classNames={{ body: "bl-drawer-body custom-scroll" }}
+        dialogSize="lg"
+        classNames={{
+          body: "bl-drawer-body custom-scroll",
+          footer: "bl-drawer-footer-bar",
+        }}
         title={
           <div className="bl-drawer-title">
-            <AppIcon icon={Icons.fileCheck} size={22} />
-            <div>
+            <AppIcon icon={NavBillOfLadingIcon} size={22} />
+            <div className="bl-drawer-title__copy">
               <Title level={4} className="bl-drawer-title__text">
                 {formatModuleScreenTitle("View Bill of Lading", record.blNo)}
               </Title>
-              <Text type="secondary" className="bl-drawer-title__meta">
-                Booking: <strong>{record.bookingNo}</strong>
-                {record.agencyRefNo ? (
-                  <>
-                    {" "}
-                    · Agency: <strong>{record.agencyRefNo}</strong>
-                  </>
-                ) : null}
-              </Text>
-              <div className="bl-drawer-title__tags">
-                <Tag
-                  className="bl-status-tag"
-                  color={getBLListStatusColor(record)}
-                >
-                  {record.isLocked ? "Locked" : getBLStatusLabel(record.status)}
-                </Tag>
-                {record.mcnNo ? (
-                  <Tag color="default">MCN: {record.mcnNo}</Tag>
-                ) : null}
+              <div className="bl-drawer-title__row">
+                <Text type="secondary" className="bl-drawer-title__meta">
+                  Booking: <strong>{record.bookingNo}</strong>
+                  {record.agencyRefNo ? (
+                    <>
+                      {" "}
+                      · Agency: <strong>{record.agencyRefNo}</strong>
+                    </>
+                  ) : null}
+                </Text>
+                <div className="bl-drawer-title__tags">
+                  <Tag
+                    className="bl-status-tag"
+                    color={getBLListStatusColor(record)}
+                  >
+                    {record.isLocked
+                      ? "Locked"
+                      : getBLStatusLabel(record.status)}
+                  </Tag>
+                  {record.mcnNo ? (
+                    <Tag color="default">MCN: {record.mcnNo}</Tag>
+                  ) : null}
+                </div>
               </div>
             </div>
           </div>
         }
-        extra={
-          <div className="bl-drawer-actions custom-scroll">
-            <Space size="small" wrap>
-              {showEdit ? (
-                <Tooltip title="Edit Bill of Lading">
-                  <AppButton
-                    type="primary"
-                    icon={
-                      <AppIcon icon={Icons.squarePen} size={16} tone="edit" />
-                    }
-                    onClick={handleEdit}
-                  >
-                    Edit
-                  </AppButton>
-                </Tooltip>
-              ) : null}
-            </Space>
-          </div>
+        footer={
+          <Flex
+            justify="flex-end"
+            align="center"
+            gap="small"
+            wrap
+            className="bl-drawer-actions custom-scroll"
+          >
+            <Tooltip title="Close">
+              <AppButton onClick={onClose}>Close</AppButton>
+            </Tooltip>
+            {showEdit ? (
+              <Tooltip title="Edit Bill of Lading">
+                <AppButton
+                  type="primary"
+                  icon={
+                    <AppIcon icon={Icons.squarePen} size={16} tone="edit" />
+                  }
+                  onClick={handleEdit}
+                >
+                  Edit
+                </AppButton>
+              </Tooltip>
+            ) : null}
+          </Flex>
         }
       >
         <div className="bl-view-route-strip">

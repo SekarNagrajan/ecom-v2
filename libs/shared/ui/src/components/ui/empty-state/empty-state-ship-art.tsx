@@ -1,8 +1,11 @@
-// Modified by Sekar Nagarajan (2026-09-07 17:36)
+// Modified by Sekar Nagarajan (2026-09-08 14:20)
 import { theme } from "antd";
 import { useId } from "react";
 
 import type { AppEmptyStateVariant } from "./types";
+
+const VIEWBOX_WIDTH = 260;
+const VIEWBOX_HEIGHT = 200;
 
 type EmptyStateShipArtProps = {
   variant?: AppEmptyStateVariant;
@@ -30,6 +33,11 @@ export function EmptyStateShipArt({
   const showSparseContainers = variant === "blank" || variant === "error";
   const primary = token.colorPrimary;
   const primarySurface = token.colorPrimaryBg;
+  // SVG height must be a length — "auto" is invalid and throws in React.
+  const height =
+    typeof width === "number"
+      ? Math.round((width * VIEWBOX_HEIGHT) / VIEWBOX_WIDTH)
+      : undefined;
 
   return (
     <svg
@@ -41,9 +49,9 @@ export function EmptyStateShipArt({
         .filter(Boolean)
         .join(" ")}
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 260 200"
+      viewBox={`0 0 ${VIEWBOX_WIDTH} ${VIEWBOX_HEIGHT}`}
       width={width}
-      height="auto"
+      height={height}
       role="img"
       aria-labelledby={`${titleId} ${descId}`}
     >

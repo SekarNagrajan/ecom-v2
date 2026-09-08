@@ -49,7 +49,12 @@ export function BlWizardFooter({
   );
 
   const cancelButton = onCancel ? (
-    <AppButton htmlType="button" onClick={onCancel} disabled={isSubmitting}>
+    <AppButton
+      danger
+      htmlType="button"
+      onClick={onCancel}
+      disabled={isSubmitting}
+    >
       Cancel
     </AppButton>
   ) : null;

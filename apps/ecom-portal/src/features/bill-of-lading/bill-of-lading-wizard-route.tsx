@@ -5,7 +5,7 @@ import { useNavigate, useParams } from "@tanstack/react-router";
 import { Card, Result, Space, Steps, theme } from "antd";
 import { useMemo, useState } from "react";
 
-import { AppIcon, Icons } from "../../components/icons";
+import { AppIcon, Icons, NavBillOfLadingIcon } from "../../components/icons";
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import {
@@ -162,7 +162,7 @@ export function BillOfLadingWizardRoute() {
         <Card className="wizard-page-card">
           <div className="wizard-page-header">
             <ModuleScreenHeader
-              icon={Icons.fileCheck}
+              icon={NavBillOfLadingIcon}
               title={formatModuleScreenTitle(MODULE_TITLES.billOfLading, blNo)}
               marginBottom={0}
             />
@@ -206,7 +206,7 @@ export function BillOfLadingWizardRoute() {
         <Card className="wizard-page-card">
           <div className="wizard-page-header">
             <ModuleScreenHeader
-              icon={Icons.fileCheck}
+              icon={NavBillOfLadingIcon}
               title={formatModuleScreenTitle(MODULE_TITLES.billOfLading, blNo)}
               marginBottom={0}
             />
@@ -234,7 +234,7 @@ export function BillOfLadingWizardRoute() {
       <Card className="wizard-page-card">
         <div className="wizard-page-header">
           <ModuleScreenHeader
-            icon={Icons.fileCheck}
+            icon={NavBillOfLadingIcon}
             title={formatModuleScreenTitle(MODULE_TITLES.billOfLading, blNo)}
             marginBottom={0}
             extra={

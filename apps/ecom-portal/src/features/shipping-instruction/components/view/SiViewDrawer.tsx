@@ -1,9 +1,13 @@
-// Modified by Sekar Nagarajan (2026-09-01 12:29)
+// Modified by Sekar Nagarajan (2026-09-08 14:58)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { useNavigate } from "@tanstack/react-router";
-import { Tag, Tooltip, Typography } from "antd";
+import { Flex, Tag, Tooltip, Typography } from "antd";
 
-import { AppIcon, Icons } from "../../../../components/icons";
+import {
+  AppIcon,
+  Icons,
+  NavShippingInstructionIcon,
+} from "../../../../components/icons";
 import { formatModuleScreenTitle } from "../../../../constants/module-titles";
 import type { SIListDTO } from "../../types/si.types";
 import { canOpenSiWizard, getSiStatusTagColor } from "../../utils/si-status";
@@ -29,41 +33,55 @@ export function SiViewDrawer({ record, onClose }: SiViewDrawerProps) {
     <AppDrawer
       open
       onClose={onClose}
-      dialogSize="md"
-      classNames={{ body: "si-drawer-body custom-scroll" }}
+      dialogSize="lg"
+      classNames={{
+        body: "si-drawer-body custom-scroll",
+        footer: "si-drawer-footer-bar",
+      }}
       title={
         <div className="si-drawer-title">
-          <AppIcon icon={Icons.clipboardList} size={22} />
-          <div>
+          <AppIcon icon={NavShippingInstructionIcon} size={22} />
+          <div className="si-drawer-title__copy">
             <Title level={4} className="si-drawer-title__text">
               {formatModuleScreenTitle(
                 "View Shipping Instruction",
                 record.siNo || record.bookingNo,
               )}
             </Title>
-            <Text type="secondary" className="si-drawer-title__meta">
-              Booking: <strong>{record.bookingNo}</strong>
-              {record.agencyRefNo ? (
-                <>
-                  {" "}
-                  · Agency: <strong>{record.agencyRefNo}</strong>
-                </>
-              ) : null}
-            </Text>
-            <div className="si-drawer-title__tags">
-              <Tag color={getSiStatusTagColor(record.status)}>
-                {record.status}
-              </Tag>
-              {record.blStatus ? (
-                <Tag color="default">B/L: {record.blStatus}</Tag>
-              ) : null}
+            <div className="si-drawer-title__row">
+              <Text type="secondary" className="si-drawer-title__meta">
+                Booking: <strong>{record.bookingNo}</strong>
+                {record.agencyRefNo ? (
+                  <>
+                    {" "}
+                    · Agency: <strong>{record.agencyRefNo}</strong>
+                  </>
+                ) : null}
+              </Text>
+              <div className="si-drawer-title__tags">
+                <Tag color={getSiStatusTagColor(record.status)}>
+                  {record.status}
+                </Tag>
+                {record.blStatus ? (
+                  <Tag color="default">B/L: {record.blStatus}</Tag>
+                ) : null}
+              </div>
             </div>
           </div>
         </div>
       }
-      extra={
-        showEdit ? (
-          <div className="si-drawer-actions custom-scroll">
+      footer={
+        <Flex
+          justify="flex-end"
+          align="center"
+          gap="small"
+          wrap
+          className="si-drawer-actions custom-scroll"
+        >
+          <Tooltip title="Close">
+            <AppButton onClick={onClose}>Close</AppButton>
+          </Tooltip>
+          {showEdit ? (
             <Tooltip title="Edit Shipping Instruction">
               <AppButton
                 type="primary"
@@ -73,8 +91,8 @@ export function SiViewDrawer({ record, onClose }: SiViewDrawerProps) {
                 Edit SI
               </AppButton>
             </Tooltip>
-          </div>
-        ) : null
+          ) : null}
+        </Flex>
       }
     >
       <div className="si-route-strip">

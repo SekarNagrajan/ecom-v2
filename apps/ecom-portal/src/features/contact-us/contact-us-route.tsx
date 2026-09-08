@@ -7,8 +7,8 @@ import { AppIcon, Icons } from "../../components/icons";
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
 import { MODULE_TITLES } from "../../constants/module-titles";
 import { ContactPanelHeader } from "./components/contact-panel-header";
-import { ContactUsForm } from "./components/ContactUsForm";
 import { ContactUsModuleStyles } from "./components/contact-us-module-styles";
+import { ContactUsForm } from "./components/ContactUsForm";
 import { useContactUsController } from "./hooks/use-contact-us-controller";
 
 /**
@@ -69,18 +69,18 @@ export function ContactUsRoute() {
                 description="Have a question or need help? Send us a message and we will get back to you promptly."
               />
 
-              <form
-                onSubmit={controller.handleSubmit}
-                className="contact-form"
-              >
+              <form onSubmit={controller.handleSubmit} className="contact-form">
                 <div className="contact-form__scroll custom-scroll">
                   <ContactUsForm controller={controller} />
                 </div>
 
                 <div className="form-step-footer">
                   <AppButton
-                    size="large"
-                    icon={<AppIcon icon={Icons.refreshCw} size={16} />}
+                    danger
+                    size="medium"
+                    icon={
+                      <AppIcon icon={Icons.refreshCw} size={16} tone="delete" />
+                    }
                     onClick={controller.handleReset}
                     disabled={controller.isSubmitting}
                   >
@@ -88,7 +88,7 @@ export function ContactUsRoute() {
                   </AppButton>
                   <AppButton
                     type="primary"
-                    size="large"
+                    size="medium"
                     htmlType="submit"
                     icon={<AppIcon icon={Icons.send} size={16} />}
                     loading={controller.isSubmitting}

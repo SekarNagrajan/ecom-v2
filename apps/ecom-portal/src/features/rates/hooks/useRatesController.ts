@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-28 15:07)
+// Modified by Sekar Nagarajan (2026-09-08 14:23)
 // Controller hook for Rates — mode-aware cards + surcharge rollup (JSP parity)
 
 import { useToast } from "@solverminds/shared-ui/hooks";
@@ -263,7 +263,7 @@ export function useRatesController() {
     toast.success(
       `Selected rate ${rate.code} (${rate.currency} $${rate.totalEstimatedAmount.toFixed(2)}). Proceeding to Schedules & Booking...`,
     );
-    navigate({ to: "/schedules" as never });
+    navigate({ to: "/app/schedules" });
   };
 
   const handleViewSurcharges = (rate: CombinedRateItem) => {

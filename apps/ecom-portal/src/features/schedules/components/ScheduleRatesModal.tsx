@@ -13,7 +13,7 @@ import {
 } from "antd";
 import { useState } from "react";
 
-import { AppIcon, Icons } from "../../../components/icons";
+import { AppIcon, Icons, NavRatesIcon } from "../../../components/icons";
 import type { ScheduleItem } from "../types/schedules.types";
 
 const { Text, Title } = Typography;
@@ -121,7 +121,7 @@ export function ScheduleRatesModal({
       classNames={{ body: "schedule-drawer-body custom-scroll" }}
       title={
         <Space align="center" size={8} className="schedule-drawer-title">
-          <AppIcon icon={Icons.dollarSign} size={20} />
+          <AppIcon icon={NavRatesIcon} size={20} />
           <Title level={4} className="schedule-drawer-title__text">
             Freight Rates & Surcharge Estimator
           </Title>

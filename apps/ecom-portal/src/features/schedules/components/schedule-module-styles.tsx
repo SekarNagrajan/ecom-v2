@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-08 17:10)
+// Modified by Sekar Nagarajan (2026-09-08 17:15)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -131,6 +131,26 @@ export function ScheduleModuleStyles() {
         .schedule-tab-label
         .app-icon {
         color: ${token.colorText};
+      }
+      .schedule-results-tabs--icon-only.ant-segmented .ant-segmented-item {
+        min-width: ${token.controlHeightSM}px;
+        min-height: ${token.controlHeightSM}px;
+      }
+      .schedule-results-tabs--icon-only.ant-segmented
+        .ant-segmented-item-label {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: ${token.controlHeightSM}px;
+        padding-inline: ${token.paddingXXS}px;
+        line-height: 1;
+      }
+      .schedule-tab-label--icon-only {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: ${token.controlHeight}px;
+        min-height: ${token.controlHeight}px;
       }
       .schedule-port-swap-field .ant-form-item-control-input-content {
         display: flex;

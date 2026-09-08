@@ -1,7 +1,7 @@
-// Modified by Sekar Nagarajan (2026-09-08 16:25)
+// Modified by Sekar Nagarajan (2026-09-08 17:15)
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
-import { Card, Segmented, Space, Spin, Typography } from "antd";
+import { Card, Segmented, Space, Spin, Tooltip, Typography } from "antd";
 import React from "react";
 
 import { AppIcon, Icons } from "../../components/icons";
@@ -117,24 +117,32 @@ export const SchedulesRoute: React.FC = () => {
               <Segmented
                 value={viewMode}
                 onChange={(value) => setViewMode(value as "LIST" | "CALENDAR")}
-                className="schedule-results-tabs"
+                className="schedule-results-tabs schedule-results-tabs--icon-only"
                 options={[
                   {
                     value: "LIST",
                     label: (
-                      <span className="schedule-tab-label">
-                        <AppIcon icon={Icons.list} size={14} />
-                        List
-                      </span>
+                      <Tooltip title="List View">
+                        <span
+                          className="schedule-tab-label schedule-tab-label--icon-only"
+                          aria-label="List View"
+                        >
+                          <AppIcon icon={Icons.list} size={22} />
+                        </span>
+                      </Tooltip>
                     ),
                   },
                   {
                     value: "CALENDAR",
                     label: (
-                      <span className="schedule-tab-label">
-                        <AppIcon icon={Icons.calendar} size={14} />
-                        Calendar
-                      </span>
+                      <Tooltip title="Calendar View">
+                        <span
+                          className="schedule-tab-label schedule-tab-label--icon-only"
+                          aria-label="Calendar View"
+                        >
+                          <AppIcon icon={Icons.calendar} size={22} />
+                        </span>
+                      </Tooltip>
                     ),
                   },
                 ]}

@@ -47,6 +47,8 @@ export const BE_COLOR_MAP = {
   MARITIME: "#1B6DAB",
   /** Brighter maritime variant — Appearance / header primary swatches only */
   HARBOR: "#3B7DDD",
+  // Modified by Sekar Nagarajan (2026-09-08 15:45) — signal/action primary swatch
+  SIGNAL: "#0a91ff",
   GOLD: "#faad14",
   // Modified by Sekar Nagarajan (2026-08-31 12:52) — success emerald #047857
   GREEN: "#047857",

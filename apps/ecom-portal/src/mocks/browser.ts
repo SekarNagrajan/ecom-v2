@@ -13,6 +13,7 @@ import { customerStatementHandlers } from './customer-statement.handlers';
 import { deliveryOrderHandlers } from './delivery-order.handlers';
 import { landingHandlers } from './landing.handlers';
 import { profilePhotoHandlers } from './profile-photo.handlers';
+import { dashboardExportHandlers } from './dashboard-export.handlers';
 import { publicTenantHandlers } from './public-tenant.handlers';
 import { ratesHandlers } from './rates.handlers';
 import { registrationHandlers } from './registration.handlers';
@@ -35,6 +36,7 @@ export const worker = setupWorker(
   ...userCreationHandlers,
   ...userModulesHandlers,
   ...profilePhotoHandlers,
+  ...dashboardExportHandlers,
   ...ratesHandlers,
   ...bookingHandlers,
   ...siHandlers,

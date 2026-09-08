@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-08 12:25)
+// Modified by Sekar Nagarajan (2026-09-08 16:10)
 /**
  * Enhanced Dashboard — JSP parity with enhancedDashboard.jsp:
  * KPI filter cards → Upcoming Shipment Planning → Ongoing Transactions, plus analytics sections.
@@ -28,6 +28,8 @@ import {
   MOCK_VOLUME_KPIS,
   MOCK_VOLUME_TREND,
 } from "../mocks/dashboard.mock";
+import { filterDashboardShipments } from "../utils/filter-dashboard-shipments";
+import { DashboardExportButton } from "./dashboard-export-button";
 import { DashboardModuleStyles } from "./dashboard-module-styles";
 import { DashboardKpiCards } from "./DashboardKpiCards";
 import { DashboardOngoingTable } from "./DashboardOngoingTable";
@@ -41,6 +43,11 @@ export function EnhancedDashboardView() {
   const controller = useDashboardController();
   const counts = controller.summary?.counts;
   const shipments = controller.summary?.shipments ?? [];
+  // Modified by Sekar Nagarajan (2026-09-08 16:10)
+  const filteredShipmentCount = filterDashboardShipments(
+    shipments,
+    controller.activeFilter,
+  ).length;
 
   return (
     <FeaturePageShell>
@@ -60,6 +67,13 @@ export function EnhancedDashboardView() {
             >
               Create Booking
             </AppButton>
+            <DashboardExportButton
+              activeFilter={controller.activeFilter}
+              filterLabel={controller.filterLabel}
+              shipmentCount={filteredShipmentCount}
+              totalShipmentCount={shipments.length}
+              disabled={!controller.summary || controller.isLoading}
+            />
             <AppButton
               danger
               icon={<AppIcon icon={Icons.refreshCw} size={16} tone="delete" />}

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-08 17:15)
+// Modified by Sekar Nagarajan (2026-09-08 17:55)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -15,6 +15,91 @@ export function ScheduleModuleStyles() {
         border: 1px solid ${token.colorBorderSecondary};
         margin-bottom: ${token.marginMD}px;
         overflow: hidden;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-08 17:55) — header portal compact strip */
+      .schedule-search-sentinel {
+        width: 100%;
+      }
+      .schedule-search-sentinel--pinned {
+        margin-bottom: 0;
+      }
+      .schedule-search-sentinel__spacer {
+        height: var(--schedule-search-placeholder-height, 120px);
+        width: 100%;
+        pointer-events: none;
+        visibility: hidden;
+      }
+      .schedule-search-panel--header {
+        margin-bottom: 0;
+        border: none;
+        border-radius: ${token.borderRadius}px;
+        background: transparent;
+        overflow: visible;
+        width: 100%;
+        min-width: 0;
+        animation: schedule-header-search-in 0.28s ease both;
+      }
+      .schedule-search-panel--header .schedule-search-panel__body {
+        padding: 0;
+        background: transparent;
+      }
+      .schedule-search-panel--header .schedule-search-type-wrap {
+        display: none;
+      }
+      .schedule-search-panel--header .schedule-search-panel__body > .ant-form {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginXS}px;
+        flex-wrap: nowrap;
+        min-width: 0;
+      }
+      .schedule-search-panel--header .ant-form-item {
+        margin-bottom: 0 !important;
+      }
+      .schedule-search-panel--header .ant-form-item-label {
+        display: none;
+      }
+      .schedule-search-panel--header .ant-row {
+        flex: 1 1 auto;
+        min-width: 0;
+        flex-wrap: nowrap !important;
+      }
+      .schedule-search-panel--header .schedule-date-range {
+        min-width: 200px;
+      }
+      .schedule-search-panel--header .ant-select-single.ant-select-sm,
+      .schedule-search-panel--header .ant-select-single:not(.ant-select-customize-input) .ant-select-selector,
+      .schedule-search-panel--header .ant-picker {
+        height: ${token.controlHeight}px !important;
+      }
+      .schedule-search-actions--compact {
+        display: inline-flex;
+        gap: ${token.marginXXS}px;
+        align-items: center;
+        width: auto;
+        min-height: ${token.controlHeight}px;
+      }
+      .schedule-search-actions--compact .schedule-search-actions__icon-btn.sm-app-button,
+      .schedule-search-actions--compact .schedule-search-actions__icon-btn.ant-btn {
+        width: ${token.controlHeight}px;
+        height: ${token.controlHeight}px;
+        min-width: ${token.controlHeight}px;
+        min-height: ${token.controlHeight}px;
+        padding: 0;
+        flex: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      @keyframes schedule-header-search-in {
+        from {
+          opacity: 0;
+          transform: translateY(-${token.marginSM}px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
       .schedule-search-panel__header {
         display: flex;

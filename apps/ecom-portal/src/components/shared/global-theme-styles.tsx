@@ -1,6 +1,7 @@
-// Modified by Sekar Nagarajan (2026-09-03 18:41)
+// Modified by Sekar Nagarajan (2026-09-10 21:49)
 import { theme } from "antd";
 
+import { BE_COLOR_MAP } from "../../features/theme/utils/config-mapper";
 import { tokenMix } from "../../features/theme/utils/token-mix";
 
 /** App-wide CSS classes backed by Ant Design theme tokens. Prefer className over inline style. */
@@ -20,8 +21,78 @@ export function GlobalThemeStyles() {
   const infoTint8 = tokenMix(token.colorInfo, 8);
   const infoTint28 = tokenMix(token.colorInfo, 28);
 
+  const charcoalBlue = BE_COLOR_MAP.CHARCOAL_BLUE;
+  const verdigris = BE_COLOR_MAP.VERDIGRIS;
+  const tuscanSun = BE_COLOR_MAP.TUSCAN_SUN;
+  const sandyBrown = BE_COLOR_MAP.SANDY_BROWN;
+  const burntPeach = BE_COLOR_MAP.BURNT_PEACH;
+
   return (
     <style>{`
+      /* Warm earth palette — style-action bg / color utilities */
+      :root {
+        --charcoal-blue: ${charcoalBlue};
+        --verdigris: ${verdigris};
+        --tuscan-sun: ${tuscanSun};
+        --sandy-brown: ${sandyBrown};
+        --burnt-peach: ${burntPeach};
+      }
+      .style-action--charcoal-blue {
+        color: ${charcoalBlue};
+        background: ${tokenMix(charcoalBlue, 12)};
+        border-color: ${tokenMix(charcoalBlue, 28)};
+      }
+      .style-action--charcoal-blue:hover,
+      .style-action--charcoal-blue:focus-visible {
+        color: ${token.colorTextLightSolid};
+        background: ${charcoalBlue};
+        border-color: ${charcoalBlue};
+      }
+      .style-action--verdigris {
+        color: ${verdigris};
+        background: ${tokenMix(verdigris, 12)};
+        border-color: ${tokenMix(verdigris, 28)};
+      }
+      .style-action--verdigris:hover,
+      .style-action--verdigris:focus-visible {
+        color: ${token.colorTextLightSolid};
+        background: ${verdigris};
+        border-color: ${verdigris};
+      }
+      .style-action--tuscan-sun {
+        color: ${tuscanSun};
+        background: ${tokenMix(tuscanSun, 12)};
+        border-color: ${tokenMix(tuscanSun, 28)};
+      }
+      .style-action--tuscan-sun:hover,
+      .style-action--tuscan-sun:focus-visible {
+        color: ${charcoalBlue};
+        background: ${tuscanSun};
+        border-color: ${tuscanSun};
+      }
+      .style-action--sandy-brown {
+        color: ${sandyBrown};
+        background: ${tokenMix(sandyBrown, 12)};
+        border-color: ${tokenMix(sandyBrown, 28)};
+      }
+      .style-action--sandy-brown:hover,
+      .style-action--sandy-brown:focus-visible {
+        color: ${token.colorTextLightSolid};
+        background: ${sandyBrown};
+        border-color: ${sandyBrown};
+      }
+      .style-action--burnt-peach {
+        color: ${burntPeach};
+        background: ${tokenMix(burntPeach, 12)};
+        border-color: ${tokenMix(burntPeach, 28)};
+      }
+      .style-action--burnt-peach:hover,
+      .style-action--burnt-peach:focus-visible {
+        color: ${token.colorTextLightSolid};
+        background: ${burntPeach};
+        border-color: ${burntPeach};
+      }
+
       /* Project-wide custom scrollbar (agenct.md UI #1) */
       .custom-scroll {
         scrollbar-width: thin;
@@ -978,6 +1049,18 @@ export function GlobalThemeStyles() {
         flex-wrap: wrap;
         justify-content: flex-end;
       }
+      /* Modified by Sekar Nagarajan (2026-09-08 17:55) — Schedules pinned search portal target */
+      .app-header-schedules-search-slot {
+        display: flex;
+        align-items: center;
+        flex: 1 1 auto;
+        min-width: 0;
+        max-width: min(920px, 58vw);
+        overflow: visible;
+      }
+      .app-header-schedules-search-slot:empty {
+        display: none;
+      }
       .app-header-brand-home {
         display: inline-flex;
         align-items: center;
@@ -1222,6 +1305,11 @@ export function GlobalThemeStyles() {
         border-bottom: 1px solid ${token.colorBorderSecondary};
         z-index: 90;
         gap: ${token.marginSM}px;
+      }
+      .app-layout-header:has(.app-header-schedules-search-slot:not(:empty)) {
+        height: auto;
+        min-height: 64px;
+        padding-block: ${token.paddingXS}px;
       }
       .app-layout-header__left {
         display: flex;
@@ -1505,6 +1593,8 @@ export function GlobalThemeStyles() {
         background-repeat: no-repeat;
         opacity: 1;
         z-index: 0;
+        transform: scale(1.05);
+        transform-origin: center center;
       }
       /* Dark mode — navy logistics hero */
       html.dark .pub-layout-bg {
@@ -1605,12 +1695,13 @@ export function GlobalThemeStyles() {
       }
       .pub-landing__cards {
         display: flex;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         gap: ${token.marginMD}px;
+        overflow-x: auto;
       }
       .pub-landing__card.ant-card {
-        flex: 1 1 140px;
-        min-width: 140px;
+        flex: 1 1 0;
+        min-width: 0;
         border-radius: ${token.borderRadiusLG}px;
         cursor: pointer;
         border: 1px solid ${token.colorPrimary};
@@ -1619,10 +1710,13 @@ export function GlobalThemeStyles() {
         border-color: ${token.colorPrimary};
       }
       .pub-landing__card .ant-card-body {
-        padding: ${token.paddingMD}px;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
         display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
         align-items: center;
         gap: ${token.marginSM}px;
+        white-space: nowrap;
       }
       .pub-landing__card-icon {
         background: ${token.colorPrimaryBg};
@@ -1630,10 +1724,12 @@ export function GlobalThemeStyles() {
         padding: ${token.paddingXS}px;
         border-radius: ${token.borderRadius}px;
         display: inline-flex;
+        flex-shrink: 0;
       }
       .pub-landing__card-label {
-        font-size: ${token.fontSizeSM}px;
+        font-size: ${token.fontSizeLG}px;
         line-height: 1.2;
+        white-space: nowrap;
       }
       .pub-landing__panel {
         width: 100%;

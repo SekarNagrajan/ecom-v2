@@ -116,9 +116,10 @@ export function TrackingSearchTab({
           Track shipment
         </AppButton>
         <AppButton
+          danger
           size="large"
           htmlType="button"
-          icon={<AppIcon icon={Icons.refreshCw} size={16} />}
+          icon={<AppIcon icon={Icons.refreshCw} size={16} tone="delete" />}
           onClick={handleReset}
           aria-label="Reset tracking search"
         >

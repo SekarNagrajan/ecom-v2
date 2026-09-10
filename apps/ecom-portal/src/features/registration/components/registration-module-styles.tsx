@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-27 22:15)
+// Modified by Sekar Nagarajan (2026-09-10 21:38)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -15,10 +15,11 @@ export function RegistrationModuleStyles() {
         flex: 1;
         display: flex;
         flex-direction: column;
+        justify-content: flex-start;
         width: 100%;
-        height: 100%;
         min-height: 0;
-        overflow: hidden;
+        max-height: 100%;
+        overflow: auto;
       }
       .reg-page__toolbar {
         flex-shrink: 0;
@@ -31,14 +32,16 @@ export function RegistrationModuleStyles() {
         border: 1px solid ${token.colorPrimary};
         display: flex;
         flex-direction: column;
-        flex: 1;
+        flex: 0 1 auto;
+        width: 100%;
         min-height: 0;
+        max-height: 100%;
         overflow: hidden;
       }
       .reg-page-card > .ant-card-body {
         display: flex;
         flex-direction: column;
-        flex: 1;
+        flex: 0 1 auto;
         min-height: 0;
         overflow: hidden;
         border: none;
@@ -51,7 +54,7 @@ export function RegistrationModuleStyles() {
         font-size: ${token.fontSizeHeading4}px;
       }
       .reg-page__body {
-        flex: 1;
+        flex: 0 1 auto;
         min-height: 0;
         overflow: hidden;
         display: flex;
@@ -67,14 +70,14 @@ export function RegistrationModuleStyles() {
         flex-shrink: 0;
       }
       .reg-form {
-        flex: 1;
+        flex: 0 1 auto;
         display: flex;
         flex-direction: column;
         min-height: 0;
         overflow: hidden;
       }
       .reg-form__scroll {
-        flex: 1;
+        flex: 0 1 auto;
         min-height: 0;
         overflow-y: auto;
         overflow-x: hidden;
@@ -84,9 +87,10 @@ export function RegistrationModuleStyles() {
       }
       .reg-page .form-step-footer {
         flex-shrink: 0;
+        margin-top: ${token.marginSM}px;
       }
       .reg-step-body {
-        padding: ${token.paddingMD}px 0;
+        padding: ${token.paddingSM}px 0 0;
       }
       .reg-step-body .ant-row {
         width: 100%;
@@ -105,7 +109,7 @@ export function RegistrationModuleStyles() {
         min-width: 0;
       }
       .reg-success {
-        flex: 1;
+        flex: 0 1 auto;
         display: flex;
         align-items: center;
         justify-content: center;

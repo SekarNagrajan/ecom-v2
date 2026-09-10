@@ -98,9 +98,9 @@ export function PublicLoginPanel({
             <Title level={2} className="pub-login-panel__title">
               Login to your Account
             </Title>
-            <Text type="secondary" className="pub-login-panel__subtitle">
+            {/* <Text type="secondary" className="pub-login-panel__subtitle">
               Welcome to E-COM PORTAL. Enter your credentials to continue.
-            </Text>
+            </Text> */}
           </Flex>
 
           <div className="pub-login-panel__body">

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-27 22:15)
+// Modified by Sekar Nagarajan (2026-09-10 21:33)
 import { useToast } from "@solverminds/shared-ui/hooks";
 import {
   AutoComplete,
@@ -130,8 +130,8 @@ export function CompanyInfoStep() {
         )}
       />
 
-      {customerType === "EXISTING" ? (
-        <Row gutter={[16, 16]}>
+      <Row gutter={[16, 16]}>
+        {customerType === "EXISTING" ? (
           <Col {...RESPONSIVE_COL.formThird}>
             <Flex vertical gap={8}>
               <FieldLabel required>Customer Code</FieldLabel>
@@ -161,10 +161,8 @@ export function CompanyInfoStep() {
               />
             </Flex>
           </Col>
-        </Row>
-      ) : null}
+        ) : null}
 
-      <Row gutter={[16, 16]}>
         <Col {...RESPONSIVE_COL.formThird}>
           <Flex vertical gap={8}>
             <FieldLabel required>Company Name</FieldLabel>
@@ -234,39 +232,81 @@ export function CompanyInfoStep() {
           </Flex>
         </Col>
 
-        <Col {...RESPONSIVE_COL.formThird}>
-          <Flex vertical gap={8}>
-            <FieldLabel required>Controlling Agency</FieldLabel>
-            <Controller
-              name="location"
-              control={control}
-              render={({ field }) => (
-                <div>
-                  <Select
-                    {...field}
-                    value={field.value || undefined}
-                    size="large"
-                    placeholder="Controlling Agency"
-                    status={errors.location ? "error" : undefined}
-                    className="reg-field-full"
-                    options={[
-                      { value: "AGENCY_US", label: "US Agency" },
-                      { value: "AGENCY_GB", label: "UK Agency" },
-                      { value: "AGENCY_SG", label: "Singapore Agency" },
-                    ]}
-                  />
-                  {errors.location ? (
-                    <Text type="danger" className="form-field-error">
-                      {errors.location.message}
-                    </Text>
-                  ) : null}
-                </div>
-              )}
-            />
-          </Flex>
-        </Col>
+        {customerType !== "EXISTING" ? (
+          <Col {...RESPONSIVE_COL.formThird}>
+            <Flex vertical gap={8}>
+              <FieldLabel required>Controlling Agency</FieldLabel>
+              <Controller
+                name="location"
+                control={control}
+                render={({ field }) => (
+                  <div>
+                    <Select
+                      {...field}
+                      value={field.value || undefined}
+                      size="large"
+                      placeholder="Controlling Agency"
+                      status={errors.location ? "error" : undefined}
+                      className="reg-field-full"
+                      options={[
+                        { value: "AGENCY_US", label: "US Agency" },
+                        { value: "AGENCY_GB", label: "UK Agency" },
+                        { value: "AGENCY_SG", label: "Singapore Agency" },
+                      ]}
+                    />
+                    {errors.location ? (
+                      <Text type="danger" className="form-field-error">
+                        {errors.location.message}
+                      </Text>
+                    ) : null}
+                  </div>
+                )}
+              />
+            </Flex>
+          </Col>
+        ) : null}
+      </Row>
 
-        <Col {...RESPONSIVE_COL.formThird}>
+      <Row gutter={[16, 16]}>
+        {customerType === "EXISTING" ? (
+          <Col {...RESPONSIVE_COL.formQuarter}>
+            <Flex vertical gap={8}>
+              <FieldLabel required>Controlling Agency</FieldLabel>
+              <Controller
+                name="location"
+                control={control}
+                render={({ field }) => (
+                  <div>
+                    <Select
+                      {...field}
+                      value={field.value || undefined}
+                      size="large"
+                      placeholder="Controlling Agency"
+                      status={errors.location ? "error" : undefined}
+                      className="reg-field-full"
+                      options={[
+                        { value: "AGENCY_US", label: "US Agency" },
+                        { value: "AGENCY_GB", label: "UK Agency" },
+                        { value: "AGENCY_SG", label: "Singapore Agency" },
+                      ]}
+                    />
+                    {errors.location ? (
+                      <Text type="danger" className="form-field-error">
+                        {errors.location.message}
+                      </Text>
+                    ) : null}
+                  </div>
+                )}
+              />
+            </Flex>
+          </Col>
+        ) : null}
+
+        <Col
+          {...(customerType === "EXISTING"
+            ? RESPONSIVE_COL.formQuarter
+            : RESPONSIVE_COL.formThird)}
+        >
           <Flex vertical gap={8}>
             <FieldLabel required>City</FieldLabel>
             <Controller
@@ -291,7 +331,11 @@ export function CompanyInfoStep() {
           </Flex>
         </Col>
 
-        <Col {...RESPONSIVE_COL.formThird}>
+        <Col
+          {...(customerType === "EXISTING"
+            ? RESPONSIVE_COL.formQuarter
+            : RESPONSIVE_COL.formThird)}
+        >
           <Flex vertical gap={8}>
             <FieldLabel>Postal Code</FieldLabel>
             <Controller
@@ -304,20 +348,11 @@ export function CompanyInfoStep() {
           </Flex>
         </Col>
 
-        <Col {...RESPONSIVE_COL.formThird}>
-          <Flex vertical gap={8}>
-            <FieldLabel>Tax ID</FieldLabel>
-            <Controller
-              name="taxId"
-              control={control}
-              render={({ field }) => (
-                <Input {...field} size="large" placeholder="Tax ID" />
-              )}
-            />
-          </Flex>
-        </Col>
-
-        <Col {...RESPONSIVE_COL.formThird}>
+        <Col
+          {...(customerType === "EXISTING"
+            ? RESPONSIVE_COL.formQuarter
+            : RESPONSIVE_COL.formThird)}
+        >
           <Flex vertical gap={8}>
             <FieldLabel required>Address 1</FieldLabel>
             <Controller
@@ -341,8 +376,10 @@ export function CompanyInfoStep() {
             />
           </Flex>
         </Col>
+      </Row>
 
-        <Col {...RESPONSIVE_COL.formThird}>
+      <Row gutter={[16, 16]}>
+        <Col {...RESPONSIVE_COL.formQuarter}>
           <Flex vertical gap={8}>
             <FieldLabel>Address 2</FieldLabel>
             <Controller
@@ -355,7 +392,7 @@ export function CompanyInfoStep() {
           </Flex>
         </Col>
 
-        <Col {...RESPONSIVE_COL.formThird}>
+        <Col {...RESPONSIVE_COL.formQuarter}>
           <Flex vertical gap={8}>
             <FieldLabel>Website</FieldLabel>
             <Controller
@@ -368,7 +405,7 @@ export function CompanyInfoStep() {
           </Flex>
         </Col>
 
-        <Col {...RESPONSIVE_COL.formThird}>
+        <Col {...RESPONSIVE_COL.formQuarter}>
           <Flex vertical gap={8}>
             <FieldLabel>Recent BL/Booking number</FieldLabel>
             <Controller
@@ -385,7 +422,7 @@ export function CompanyInfoStep() {
           </Flex>
         </Col>
 
-        <Col {...RESPONSIVE_COL.formThird}>
+        <Col {...RESPONSIVE_COL.formQuarter}>
           <Flex vertical gap={8}>
             <FieldLabel required>Company Phone</FieldLabel>
             <Flex gap={8}>

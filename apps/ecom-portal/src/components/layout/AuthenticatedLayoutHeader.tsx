@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-08 15:20)
+// Modified by Sekar Nagarajan (2026-09-08 17:45)
 
 import {
   PRECONFIGURED_TENANTS,
@@ -27,6 +27,10 @@ import { CustomerPickerModal } from "../../features/auth/components/customer-pic
 import { useImpersonationController } from "../../features/auth/hooks/use-impersonation-controller";
 import { ContactUsDrawer } from "../../features/contact-us/components/ContactUsDrawer";
 import { useProfilePhoto } from "../../features/profile-photo/providers/profile-photo-provider";
+import {
+  SCHEDULES_HEADER_SEARCH_SLOT_ID,
+  useSchedulesHeaderSearchStore,
+} from "../../features/schedules/stores/schedules-header-search.store";
 import { useThemePreferences } from "../../features/theme/providers/theme-preferences-provider";
 import { ChangePasswordView } from "../../features/user-modules/components/ChangePasswordView";
 import { MyAlertsView } from "../../features/user-modules/components/MyAlertsView";
@@ -109,6 +113,9 @@ export function AuthenticatedLayoutHeader({
 
   const [preferencesOpen, setPreferencesOpen] = useState(false);
   const preferencesController = useThemePreferences();
+  const schedulesSearchActive = useSchedulesHeaderSearchStore(
+    (state) => state.active,
+  );
 
   // Cpanel system admin — customer-scope only (not dual tenant + customer pickers)
   const isCpanelAdmin = user?.adminUserType === "A" && user?.loginType === "V";
@@ -151,6 +158,12 @@ export function AuthenticatedLayoutHeader({
         </div>
 
         <div className="app-header-actions">
+          {schedulesSearchActive ? (
+            <div
+              id={SCHEDULES_HEADER_SEARCH_SLOT_ID}
+              className="app-header-schedules-search-slot"
+            />
+          ) : null}
           <Tooltip title="Go To Home">
             <AppButton
               type="text"
@@ -386,13 +399,19 @@ export function AuthenticatedLayoutHeader({
                 </Tag>
               ) : null}
             </div>
-            <Text type="secondary" className="app-layout-header__welcome">
+            {/* <Text type="secondary" className="app-layout-header__welcome">
               Welcome to E-COM PORTAL
-            </Text>
+            </Text> */}
           </div>
         </div>
 
         <div className="app-header-actions">
+          {schedulesSearchActive ? (
+            <div
+              id={SCHEDULES_HEADER_SEARCH_SLOT_ID}
+              className="app-header-schedules-search-slot"
+            />
+          ) : null}
           {/* Customer scope: superuser / cpanel default-customer list / sub-accounts */}
           {(user?.isSessionAdmin ||
             isCpanelAdmin ||

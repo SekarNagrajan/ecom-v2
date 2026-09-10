@@ -9,6 +9,7 @@ export { AppIconStyles } from "./app-icon-styles";
 export {
   NavArrivalNoticeIcon,
   NavBillOfLadingIcon,
+  NavBookingDocIcon,
   NavBookingIcon,
   NavCarbonCalculatorIcon,
   NavContainerReleaseIcon,
@@ -17,8 +18,10 @@ export {
   NavDeliveryOrderIcon,
   NavPaymentHistoryIcon,
   NavRatesIcon,
+  NavRoutePinsIcon,
   NavSchedulesIcon,
   NavShippingInstructionIcon,
   NavTrackingIcon,
+  NavVesselIcon,
   NavVgmIcon,
 } from "./nav-svg-icons";

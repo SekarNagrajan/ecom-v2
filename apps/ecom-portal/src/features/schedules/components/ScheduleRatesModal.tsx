@@ -13,7 +13,7 @@ import {
 } from "antd";
 import { useState } from "react";
 
-import { AppIcon, Icons, NavRatesIcon } from "../../../components/icons";
+import { AppIcon, NavRatesIcon } from "../../../components/icons";
 import type { ScheduleItem } from "../types/schedules.types";
 
 const { Text, Title } = Typography;
@@ -134,7 +134,6 @@ export function ScheduleRatesModal({
           </AppButton>
           <AppButton
             type="primary"
-            icon={<AppIcon icon={Icons.notebook} size={16} tone="create" />}
             onClick={() => {
               onClose();
               onProceedBooking(schedule);
@@ -146,7 +145,7 @@ export function ScheduleRatesModal({
       }
     >
       <div className="schedule-route-banner">
-        <Text type="secondary" className="schedule-route-banner__meta">
+        <Text type="primary" className="schedule-route-banner__meta">
           Route: <b>{schedule.polPortName}</b> → <b>{schedule.podPortName}</b> |
           Service: <b>{schedule.serviceCode}</b>
         </Text>

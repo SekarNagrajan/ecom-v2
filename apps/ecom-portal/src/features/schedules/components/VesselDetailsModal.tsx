@@ -3,6 +3,7 @@ import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { Card, Descriptions, Table, Tag, Typography } from "antd";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { NavVesselIcon } from "../../../components/icons/nav-svg-icons";
 import type { VesselParticulars } from "../types/schedules.types";
 
 const { Text, Title } = Typography;
@@ -44,8 +45,8 @@ export function VesselDetailsModal({
             status === "COMPLETED"
               ? "green"
               : status === "IN_PORT"
-                ? "processing"
-                : "default"
+              ? "processing"
+              : "default"
           }
         >
           {status}
@@ -62,7 +63,7 @@ export function VesselDetailsModal({
       classNames={{ body: "schedule-drawer-body custom-scroll" }}
       title={
         <div className="schedule-drawer-title">
-          <AppIcon icon={Icons.compass} size={20} />
+          <AppIcon icon={NavVesselIcon} size={20} />
           <div>
             <Title level={4} className="schedule-drawer-title__text">
               {vessel.vesselName}

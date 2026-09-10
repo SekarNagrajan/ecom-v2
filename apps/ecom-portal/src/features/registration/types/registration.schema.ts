@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-25 16:15)
+// Modified by Sekar Nagarajan (2026-09-10 21:29)
 import { z } from "zod";
 
 export const RegistrationSchema = z
@@ -25,7 +25,10 @@ export const RegistrationSchema = z
     companyDomain: z.string().optional(),
 
     // Step 2: User Info
-    email: z.string().min(1, "Email is required").email("Invalid email address"),
+    email: z
+      .string()
+      .min(1, "Email is required")
+      .email("Invalid email address"),
     password: z.string().min(8, "Password must be at least 8 characters"),
     confirmPassword: z.string().min(1, "Please confirm your password"),
     firstName: z.string().min(1, "First Name is required"),
@@ -57,6 +60,16 @@ export const RegistrationSchema = z
   })
   .refine(
     (data) => {
+      if (data.customerType !== "EXISTING") return true;
+      return Boolean(data.customerCode?.trim());
+    },
+    {
+      message: "Customer Code is required",
+      path: ["customerCode"],
+    },
+  )
+  .refine(
+    (data) => {
       const hasPhone = data.companyPhoneCountryCode && data.companyPhoneNo;
       const hasMobile = data.companyMobileCode && data.companyMobileNo;
       return Boolean(hasPhone || hasMobile);
@@ -64,7 +77,7 @@ export const RegistrationSchema = z
     {
       message: "Either Company Phone or Company Mobile is required",
       path: ["companyPhoneNo"],
-    }
+    },
   );
 
 export type RegistrationFormData = z.infer<typeof RegistrationSchema>;

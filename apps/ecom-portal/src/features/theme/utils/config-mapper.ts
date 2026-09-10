@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 17:40)
+// Modified by Sekar Nagarajan (2026-09-10 21:49)
 
 /**
  * BE ↔ UI theme config mapper.
@@ -57,6 +57,12 @@ export const BE_COLOR_MAP = {
   CYAN: "#13c2c2",
   ORANGE: "#fa8c16",
   GREY: "#8c8c8c",
+  // Modified by Sekar Nagarajan (2026-09-10 21:49) — warm earth palette for style actions
+  CHARCOAL_BLUE: "#264653",
+  VERDIGRIS: "#2a9d8f",
+  TUSCAN_SUN: "#e9c46a",
+  SANDY_BROWN: "#f4a261",
+  BURNT_PEACH: "#e76f51",
 } as const;
 
 export const mapBeToUiConfig = (

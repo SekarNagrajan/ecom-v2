@@ -1,22 +1,22 @@
-// Modified by Sekar Nagarajan (2026-09-02 15:18)
+// Modified by Sekar Nagarajan (2026-09-10 20:55)
 import {
-    Outlet,
-    useLocation,
-    useNavigate,
-    useSearch,
+  Outlet,
+  useLocation,
+  useNavigate,
+  useSearch,
 } from "@tanstack/react-router";
 import type { MenuProps } from "antd";
 import { Card, Drawer, Layout, Menu, Tooltip, Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
-import { useLoginController } from "../../features/auth/hooks/use-login-controller";
 import { SESSION_EXPIRED_SEARCH_REASON } from "../../features/auth/api/session-expiry";
+import { useLoginController } from "../../features/auth/hooks/use-login-controller";
 import { usePostLoginRedirectStore } from "../../features/auth/stores/use-post-login-redirect-store";
 import {
-    appPathnameToMenuKey,
-    isPublicMenuKey,
-    menuKeyToAppPath,
+  appPathnameToMenuKey,
+  isPublicMenuKey,
+  menuKeyToAppPath,
 } from "../../features/auth/utils/public-menu-access";
 import { HeroSearchPanel } from "../../features/landing/components/HeroSearchPanel";
 import { PublicLoginPanel } from "../../features/landing/components/PublicLoginPanel";
@@ -317,7 +317,7 @@ export function PublicLayout() {
                     seconds — all from one quick-action workspace in the Carrier
                     Portal.
                   </Text>
-                  <div className="pub-landing__cards">
+                  <div className="pub-landing__cards custom-scroll">
                     <Card
                       size="small"
                       className={
@@ -333,7 +333,7 @@ export function PublicLayout() {
                         <AppIcon icon={NavIcons.schedules} size={20} />
                       </span>
                       <Text strong className="pub-landing__card-label">
-                        Live sailing
+                        Find sailings
                       </Text>
                     </Card>
                     <Card
@@ -351,9 +351,7 @@ export function PublicLayout() {
                         <AppIcon icon={NavIcons.tracking} size={20} />
                       </span>
                       <Text strong className="pub-landing__card-label">
-                        Real-time
-                        <br />
-                        tracking
+                        Follow cargo
                       </Text>
                     </Card>
                     <Card
@@ -369,9 +367,7 @@ export function PublicLayout() {
                         <AppIcon icon={NavIcons.rates} size={20} />
                       </span>
                       <Text strong className="pub-landing__card-label">
-                        Instant spot-
-                        <br />
-                        rate quotes
+                        Get quotes
                       </Text>
                     </Card>
                   </div>

@@ -117,6 +117,7 @@ import {
 import {
   NavArrivalNoticeIcon,
   NavBillOfLadingIcon,
+  NavBookingDocIcon,
   NavBookingIcon,
   NavCarbonCalculatorIcon,
   NavContainerReleaseIcon,
@@ -125,9 +126,11 @@ import {
   NavDeliveryOrderIcon,
   NavPaymentHistoryIcon,
   NavRatesIcon,
+  NavRoutePinsIcon,
   NavSchedulesIcon,
   NavShippingInstructionIcon,
   NavTrackingIcon,
+  NavVesselIcon,
   NavVgmIcon,
 } from "./nav-svg-icons";
 import { ShieldUser } from "./shield-user-icon";
@@ -139,6 +142,9 @@ export const NavIcons = {
   rates: NavRatesIcon,
   tariff: Tag,
   booking: NavBookingIcon,
+  bookingDoc: NavBookingDocIcon,
+  vessel: NavVesselIcon,
+  routePins: NavRoutePinsIcon,
   shippingInstruction: NavShippingInstructionIcon,
   vgm: NavVgmIcon,
   billOfLading: NavBillOfLadingIcon,

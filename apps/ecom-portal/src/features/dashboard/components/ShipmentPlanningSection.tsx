@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-07 18:42)
+// Modified by Sekar Nagarajan (2026-09-10 22:00)
 import { AppButton } from "@solverminds/shared-ui";
 import { Card, Tooltip, Typography } from "antd";
 
@@ -47,7 +47,16 @@ function bookingCountLabel(count: number): string {
 interface PlanningKpiTileProps {
   label: string;
   value: number;
-  tone?: "default" | "primary" | "error" | "warning";
+  tone?:
+    | "default"
+    | "primary"
+    | "error"
+    | "warning"
+    | "sandy-brown"
+    | "burnt-peach"
+    | "verdigris"
+    | "tuscan-sun"
+    | "charcoal-blue";
 }
 
 function PlanningKpiTile({
@@ -118,6 +127,7 @@ export function ShipmentPlanningSection({
         <PlanningKpiTile
           label="Bookings (Next 7 Days)"
           value={kpis.bookingsNext7Days}
+          tone="verdigris"
         />
         <PlanningKpiTile
           label="FEUs"
@@ -125,11 +135,15 @@ export function ShipmentPlanningSection({
           tone="primary"
         />
         <PlanningKpiTile
-          label="Missing SI"
+          label="Pending SI"
           value={kpis.missingSI}
-          tone="error"
+          tone="warning"
         />
-        <PlanningKpiTile label="At Risk" value={kpis.atRisk} tone="warning" />
+        <PlanningKpiTile
+          label="Payment Pending"
+          value={kpis.atRisk}
+          tone="sandy-brown"
+        />
       </div>
 
       <Text className="dashboard-subsection-label">

@@ -5,6 +5,7 @@ import type { LucideIcon } from "lucide-react";
 import { Fragment, useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { NavVesselIcon } from "../../../components/icons/nav-svg-icons";
 import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import type { RouteLeg, ScheduleItem } from "../types/schedules.types";
 
@@ -586,7 +587,7 @@ function ScheduleCard({
         <div className="schedule-card__actions">
           <AppButton
             type="primary"
-            icon={<AppIcon icon={Icons.ship} size={16} />}
+            // icon={<AppIcon icon={NavBookingDocIcon} size={16} />}
             onClick={() => onBookNow(item)}
             disabled={!item.bookingAllowed}
             block
@@ -594,6 +595,8 @@ function ScheduleCard({
             Book Now
           </AppButton>
           <AppButton
+            type="primary"
+            // icon={<AppIcon icon={NavRatesIcon} size={16} />}
             className="schedule-card__actions-quote"
             onClick={() => onViewRates(item)}
             block
@@ -625,7 +628,7 @@ function ScheduleCard({
             </AppButton>
             <AppButton
               size="small"
-              icon={<AppIcon icon={Icons.ship} size={14} tone="view" />}
+              icon={<AppIcon icon={NavVesselIcon} size={14} tone="view" />}
               onClick={() => onViewVessel(item.vesselCode)}
             >
               Vessel

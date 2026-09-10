@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-08 17:15)
+// Modified by Sekar Nagarajan (2026-09-08 17:45)
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { Card, Segmented, Space, Spin, Tooltip, Typography } from "antd";
@@ -11,17 +11,19 @@ import { ModuleEmptyState } from "../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import { MODULE_TITLES } from "../../constants/module-titles";
 import { ScheduleModuleStyles } from "./components/schedule-module-styles";
+import { ScheduleSearchHost } from "./components/schedule-search-host";
 import { ScheduleCalendarView } from "./components/ScheduleCalendarView";
 import { ScheduleCarbonModal } from "./components/ScheduleCarbonModal";
 import { ScheduleCardList } from "./components/ScheduleCardList";
 import { ScheduleRatesModal } from "./components/ScheduleRatesModal";
-import { ScheduleSearchFilter } from "./components/ScheduleSearchFilter";
 import { VesselDetailsModal } from "./components/VesselDetailsModal";
 import { useSchedulesController } from "./hooks/useSchedulesController";
 
+import { NavRoutePinsIcon } from "../../components/icons/nav-svg-icons";
 const { Text } = Typography;
 
 export const SchedulesRoute: React.FC = () => {
+  // Modified by Sekar Nagarajan (2026-09-08 17:45)
   const toast = useToast();
   const {
     viewMode,
@@ -77,7 +79,7 @@ export const SchedulesRoute: React.FC = () => {
           }
         />
 
-        <ScheduleSearchFilter
+        <ScheduleSearchHost
           onSearch={handleSearch}
           onReset={handleResetSearch}
           isLoading={isLoading}
@@ -96,7 +98,7 @@ export const SchedulesRoute: React.FC = () => {
           <>
             <div className="schedule-results-bar">
               <Space align="center" size={10} wrap>
-                <AppIcon icon={Icons.calendar} size={18} />
+                <AppIcon icon={NavRoutePinsIcon} size={18} />
                 <Text className="schedule-results-bar__title">
                   Available Sailings
                 </Text>

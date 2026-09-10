@@ -67,12 +67,17 @@ export const CURRENCY_FORMAT_OPTIONS = [
   { label: "1.234.567,89 (EU)", value: "EU" },
 ] as const;
 
-// Modified by Sekar Nagarajan (2026-09-08 15:45) — Signal Blue #0a91ff primary swatch
+// Modified by Sekar Nagarajan (2026-09-10 21:49) — warm earth palette for style actions
 export const COLOR_OPTIONS = [
   { label: "Maritime Blue", value: BE_COLOR_MAP.MARITIME },
   { label: "Harbor Blue", value: BE_COLOR_MAP.HARBOR },
   { label: "Signal Blue", value: BE_COLOR_MAP.SIGNAL },
   { label: "Ocean Blue", value: BE_COLOR_MAP.BLUE },
+  { label: "Charcoal Blue", value: BE_COLOR_MAP.CHARCOAL_BLUE },
+  { label: "Verdigris", value: BE_COLOR_MAP.VERDIGRIS },
+  { label: "Tuscan Sun", value: BE_COLOR_MAP.TUSCAN_SUN },
+  { label: "Sandy Brown", value: BE_COLOR_MAP.SANDY_BROWN },
+  { label: "Burnt Peach", value: BE_COLOR_MAP.BURNT_PEACH },
   { label: "Sunlit Gold", value: BE_COLOR_MAP.GOLD },
   { label: "Forest Green", value: BE_COLOR_MAP.GREEN },
   { label: "Sunset Red", value: BE_COLOR_MAP.RED },

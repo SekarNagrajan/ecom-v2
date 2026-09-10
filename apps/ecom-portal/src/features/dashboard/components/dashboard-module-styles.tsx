@@ -1,5 +1,6 @@
-// Modified by Sekar Nagarajan (2026-09-08 12:36)
+// Modified by Sekar Nagarajan (2026-09-10 22:00)
 import { theme } from "antd";
+import { BE_COLOR_MAP } from "../../theme/utils/config-mapper";
 import { tokenMix } from "../../theme/utils/token-mix";
 
 /** Token-backed dashboard layout classes (agenct.md) — shared by all dashboard sections. */
@@ -13,6 +14,22 @@ export function DashboardModuleStyles() {
   const errorTint12 = tokenMix(token.colorError, 12);
   const infoTint12 = tokenMix(token.colorInfo, 12);
   const purpleTint12 = tokenMix(token.purple, 12);
+
+  const charcoalBlue = BE_COLOR_MAP.CHARCOAL_BLUE;
+  const charcoalBlueBg = tokenMix(charcoalBlue, 14);
+  const charcoalBlueBorder = tokenMix(charcoalBlue, 32);
+  const verdigris = BE_COLOR_MAP.VERDIGRIS;
+  const verdigrisBg = tokenMix(verdigris, 14);
+  const verdigrisBorder = tokenMix(verdigris, 32);
+  const tuscanSun = BE_COLOR_MAP.TUSCAN_SUN;
+  const tuscanSunBg = tokenMix(tuscanSun, 14);
+  const tuscanSunBorder = tokenMix(tuscanSun, 32);
+  const sandyBrown = BE_COLOR_MAP.SANDY_BROWN;
+  const sandyBrownBg = tokenMix(sandyBrown, 14);
+  const sandyBrownBorder = tokenMix(sandyBrown, 32);
+  const burntPeach = BE_COLOR_MAP.BURNT_PEACH;
+  const burntPeachBg = tokenMix(burntPeach, 14);
+  const burntPeachBorder = tokenMix(burntPeach, 32);
 
   return (
     <style>{`
@@ -608,6 +625,41 @@ export function DashboardModuleStyles() {
       }
       .dashboard-metric-tile--tone-warning .dashboard-metric-tile__value {
         color: ${token.colorWarning} !important;
+      }
+      .dashboard-metric-tile--tone-sandy-brown {
+        background: ${sandyBrownBg};
+        border-color: ${sandyBrownBorder};
+      }
+      .dashboard-metric-tile--tone-sandy-brown .dashboard-metric-tile__value {
+        color: ${sandyBrown} !important;
+      }
+      .dashboard-metric-tile--tone-charcoal-blue {
+        background: ${charcoalBlueBg};
+        border-color: ${charcoalBlueBorder};
+      }
+      .dashboard-metric-tile--tone-charcoal-blue .dashboard-metric-tile__value {
+        color: ${charcoalBlue} !important;
+      }
+      .dashboard-metric-tile--tone-verdigris {
+        background: ${verdigrisBg};
+        border-color: ${verdigrisBorder};
+      }
+      .dashboard-metric-tile--tone-verdigris .dashboard-metric-tile__value {
+        color: ${verdigris} !important;
+      }
+      .dashboard-metric-tile--tone-tuscan-sun {
+        background: ${tuscanSunBg};
+        border-color: ${tuscanSunBorder};
+      }
+      .dashboard-metric-tile--tone-tuscan-sun .dashboard-metric-tile__value {
+        color: ${tuscanSun} !important;
+      }
+      .dashboard-metric-tile--tone-burnt-peach {
+        background: ${burntPeachBg};
+        border-color: ${burntPeachBorder};
+      }
+      .dashboard-metric-tile--tone-burnt-peach .dashboard-metric-tile__value {
+        color: ${burntPeach} !important;
       }
       .dashboard-metric-tile__label {
         font-size: ${token.fontSizeSM}px;

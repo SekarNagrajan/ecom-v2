@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-01 15:52)
+// Modified by Sekar Nagarajan (2026-09-10 22:56)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
@@ -151,7 +151,7 @@ export function MasterDetailsStep() {
       : {
           origin: "",
           delivery: "",
-          cargoReadyDate: "",
+          cargoReadyDate: dayjs().format("YYYY-MM-DD"),
           haulageOriginType: "Merchant",
           haulageDestinationType: "Merchant",
           carriageContract: "",
@@ -523,6 +523,7 @@ export function MasterDetailsStep() {
               <BookingRouteCard
                 key={selectedRoute.routeId}
                 route={selectedRoute}
+                selected
                 detailsMode="drawer"
                 action={{
                   label: "Change Route",
@@ -1080,6 +1081,7 @@ export function MasterDetailsStep() {
         origin={originValue || ""}
         delivery={deliveryValue || ""}
         cargoReadyDate={cargoReadyDate || ""}
+        selectedRouteId={selectedRoute?.routeId ?? null}
         onCancel={() => setIsRoutingModalOpen(false)}
         onSelect={handleRouteSelect}
       />

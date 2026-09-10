@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-01 15:52)
+// Modified by Sekar Nagarajan (2026-09-10 22:13)
 import { useQuery } from "@tanstack/react-query";
 import { Spin } from "antd";
 import { useState } from "react";
@@ -19,6 +19,8 @@ interface RoutingSelectModalProps {
   origin: string;
   delivery: string;
   cargoReadyDate: string;
+  /** Currently chosen route — highlighted in the list when changing route. */
+  selectedRouteId?: string | null;
   onCancel: () => void;
   onSelect: (route: SelectedRoute) => void;
 }
@@ -28,6 +30,7 @@ export function RoutingSelectModal({
   origin,
   delivery,
   cargoReadyDate,
+  selectedRouteId = null,
   onCancel,
   onSelect,
 }: RoutingSelectModalProps) {
@@ -94,23 +97,28 @@ export function RoutingSelectModal({
         ) : null}
 
         {!isFetching && !isError
-          ? routes.map((route) => (
-              <BookingRouteCard
-                key={route.routeId}
-                route={route}
-                expanded={expandedRouteId === route.routeId}
-                onToggle={() =>
-                  setExpandedRouteId((prev) =>
-                    prev === route.routeId ? null : route.routeId,
-                  )
-                }
-                action={{
-                  label: "Select",
-                  icon: Icons.check,
-                  onClick: () => onSelect(route),
-                }}
-              />
-            ))
+          ? routes.map((route) => {
+              const isSelected = selectedRouteId === route.routeId;
+              return (
+                <BookingRouteCard
+                  key={route.routeId}
+                  route={route}
+                  selected={isSelected}
+                  expanded={expandedRouteId === route.routeId}
+                  onToggle={() =>
+                    setExpandedRouteId((prev) =>
+                      prev === route.routeId ? null : route.routeId,
+                    )
+                  }
+                  action={{
+                    label: isSelected ? "Selected" : "Select",
+                    icon: Icons.check,
+                    type: isSelected ? "default" : "primary",
+                    onClick: () => onSelect(route),
+                  }}
+                />
+              );
+            })
           : null}
       </div>
     </BookingTemplateModalShell>

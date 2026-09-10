@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-01 16:05)
+// Modified by Sekar Nagarajan (2026-09-10 22:38)
 import { AppButton } from "@solverminds/shared-ui";
 import { Card, Table, Typography } from "antd";
 
@@ -34,23 +34,20 @@ export function BookingSelectedRatePanel({
       <Card
         size="small"
         title="Rate"
-        className="form-step-card form-step-section booking-selected-rate-panel"
+        className="form-step-card form-step-section booking-selected-rate-panel booking-selected-rate-panel--selected"
         extra={
           <AppButton
             size="small"
             icon={<AppIcon icon={Icons.refreshCw} size={14} />}
             onClick={onChange}
           >
-            Change
+            Change Rate
           </AppButton>
         }
       >
         <dl className="booking-selected-rate-panel__fields">
           <div className="booking-selected-rate-panel__field">
-            <Text
-              type="secondary"
-              className="booking-selected-rate-panel__label"
-            >
+            <Text type="primary" className="booking-selected-rate-panel__label">
               Rate No
             </Text>
             <Text strong className="booking-selected-rate-panel__value">
@@ -58,10 +55,7 @@ export function BookingSelectedRatePanel({
             </Text>
           </div>
           <div className="booking-selected-rate-panel__field">
-            <Text
-              type="secondary"
-              className="booking-selected-rate-panel__label"
-            >
+            <Text type="primary" className="booking-selected-rate-panel__label">
               Equipment
             </Text>
             <Text strong className="booking-selected-rate-panel__value">
@@ -69,10 +63,7 @@ export function BookingSelectedRatePanel({
             </Text>
           </div>
           <div className="booking-selected-rate-panel__field">
-            <Text
-              type="secondary"
-              className="booking-selected-rate-panel__label"
-            >
+            <Text type="primary" className="booking-selected-rate-panel__label">
               Amount
             </Text>
             <Text strong className="booking-selected-rate-panel__value">

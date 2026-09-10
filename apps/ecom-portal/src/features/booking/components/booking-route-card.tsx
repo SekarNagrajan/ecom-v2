@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-03 15:59)
+// Modified by Sekar Nagarajan (2026-09-10 22:56)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { Tag, Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
@@ -43,6 +43,8 @@ interface BookingRouteCardProps {
   detailsMode?: "inline" | "drawer";
   expanded?: boolean;
   onToggle?: () => void;
+  /** When true, show primary color indicator for the currently chosen route. */
+  selected?: boolean;
 }
 
 function isMultimodalRoute(route: SelectedRoute): boolean {
@@ -390,49 +392,67 @@ function RouteStopTimes({ eta, etd }: { eta?: string; etd?: string }) {
 
 function BookingRouteDetails({ route }: { route: SelectedRoute }) {
   const stops = buildRouteStops(route);
+  const hasCutoffs = Boolean(
+    route.gateInCutoff || route.siDocCutoff || route.vgmCutoff,
+  );
 
   return (
     <div className="booking-route-details">
-      <div className="booking-route-details__header">
-        <Title level={5} className="booking-route-details__title">
-          Route
-        </Title>
-      </div>
+      {stops.length > 0 ? (
+        <>
+          <div className="booking-route-details__header">
+            <Title level={5} className="booking-route-details__title">
+              Route
+            </Title>
+          </div>
 
-      <ol className="booking-route-timeline">
-        {stops.map((stop, index) => {
-          const isLast = index === stops.length - 1;
-          return (
-            <li key={stop.id} className="booking-route-stop">
-              <div className="booking-route-stop__rail">
-                <span className="booking-route-stop__node">{stop.index}</span>
-                {isLast ? null : (
-                  <span className="booking-route-stop__line" aria-hidden />
-                )}
-              </div>
-              <div className="booking-route-stop__body">
-                <div className="booking-route-stop__main">
-                  <div className="booking-route-stop__location">
-                    <Text className="booking-route-stop__place">
-                      {portCity(stop.portName).toUpperCase()},{" "}
-                      <span className="booking-route-stop__code">
-                        {stop.portCode}
-                      </span>
-                    </Text>
-                    {stop.terminal ? (
-                      <Text className="booking-route-stop__terminal">
-                        {stop.terminal}
-                      </Text>
-                    ) : null}
-                    <RouteStopBadges badges={stop.badges} />
+          <ol className="booking-route-timeline">
+            {stops.map((stop, index) => {
+              const isLast = index === stops.length - 1;
+              return (
+                <li key={stop.id} className="booking-route-stop">
+                  <div className="booking-route-stop__rail">
+                    <span className="booking-route-stop__node">
+                      {stop.index}
+                    </span>
+                    {isLast ? null : (
+                      <span className="booking-route-stop__line" aria-hidden />
+                    )}
                   </div>
-                  <RouteStopTimes eta={stop.eta} etd={stop.etd} />
-                </div>
-              </div>
-            </li>
-          );
-        })}
-      </ol>
+                  <div className="booking-route-stop__body">
+                    <div className="booking-route-stop__main">
+                      <div className="booking-route-stop__location">
+                        <Text className="booking-route-stop__place">
+                          {portCity(stop.portName).toUpperCase()},{" "}
+                          <span className="booking-route-stop__code">
+                            {stop.portCode}
+                          </span>
+                        </Text>
+                        {stop.terminal ? (
+                          <Text className="booking-route-stop__terminal">
+                            {stop.terminal}
+                          </Text>
+                        ) : null}
+                        <RouteStopBadges badges={stop.badges} />
+                      </div>
+                      <RouteStopTimes eta={stop.eta} etd={stop.etd} />
+                    </div>
+                  </div>
+                </li>
+              );
+            })}
+          </ol>
+        </>
+      ) : null}
+
+      {hasCutoffs ? (
+        <div className="booking-route-details__deadlines">
+          <Text className="booking-route-details__deadlines-title">
+            Cut-offs
+          </Text>
+          <RouteDeadlines route={route} />
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -525,14 +545,6 @@ function BookingRouteDetailsDrawer({
     >
       <div className="booking-route-details-drawer">
         <BookingRouteDetails route={route} />
-        {route.gateInCutoff || route.siDocCutoff || route.vgmCutoff ? (
-          <section className="booking-route-details-drawer__section">
-            <Title level={5} className="booking-route-details__title">
-              Cut-offs
-            </Title>
-            <RouteDeadlines route={route} />
-          </section>
-        ) : null}
       </div>
     </AppDrawer>
   );
@@ -544,12 +556,16 @@ export function BookingRouteCard({
   detailsMode = "inline",
   expanded = false,
   onToggle,
+  selected = false,
 }: BookingRouteCardProps) {
   const [isDetailsDrawerOpen, setIsDetailsDrawerOpen] = useState(false);
   const expandable = canExpandModules(route);
+  const hasCutoffs = Boolean(
+    route.gateInCutoff || route.siDocCutoff || route.vgmCutoff,
+  );
   const label = routingLabel(route);
   const useDrawer = detailsMode === "drawer";
-  const showDetailsAction = useDrawer || expandable;
+  const showDetailsAction = useDrawer || expandable || hasCutoffs;
 
   const handleShowDetails = () => {
     if (useDrawer) {
@@ -563,18 +579,31 @@ export function BookingRouteCard({
     <article
       className={[
         "booking-routing-card",
-        route.isDefaultRoute ? "booking-routing-card--default" : undefined,
+        selected ? "booking-routing-card--selected" : undefined,
       ]
         .filter(Boolean)
         .join(" ")}
+      aria-current={selected ? "true" : undefined}
     >
       <div className="booking-routing-card__main">
         <div className="booking-routing-card__content">
           <div className="booking-routing-card__meta">
-            <Tag color="blue">
+            {/* {selected ? (
+              <Tag
+                color="processing"
+                className="booking-routing-card__selected-tag"
+              >
+                <span
+                  className="booking-routing-card__selected-indicator"
+                  aria-hidden
+                />
+                Selected
+              </Tag>
+            ) : null} */}
+            <Tag color="pink">
               {route.serviceCode} — {route.serviceName}
             </Tag>
-            <Tag>
+            <Tag color="orange">
               {route.vesselName} ({route.voyage}
               {route.bound})
             </Tag>
@@ -582,9 +611,6 @@ export function BookingRouteCard({
 
           <div className="booking-routing-card__route">
             <div className="booking-routing-card__endpoint booking-routing-card__endpoint--origin">
-              {/* <div className="booking-routing-card__date">
-                {formatCardDate(route.etd)}
-              </div> */}
               <Text className="booking-routing-card__place">
                 {portCity(route.polPortName).toUpperCase()},{" "}
                 <span className="booking-routing-card__port-code">
@@ -596,7 +622,7 @@ export function BookingRouteCard({
               </div>
               {route.polTerminal ? (
                 <Text className="booking-routing-card__terminal">
-                  Terminal: {route.polTerminal}
+                  {route.polTerminal}
                 </Text>
               ) : null}
             </div>
@@ -617,9 +643,6 @@ export function BookingRouteCard({
             </div>
 
             <div className="booking-routing-card__endpoint booking-routing-card__endpoint--dest">
-              {/* <div className="booking-routing-card__date">
-                {formatCardDate(route.eta)}
-              </div> */}
               <Text className="booking-routing-card__place">
                 {portCity(route.podPortName).toUpperCase()},{" "}
                 <span className="booking-routing-card__port-code">
@@ -631,7 +654,7 @@ export function BookingRouteCard({
               </div>
               {route.podTerminal ? (
                 <Text className="booking-routing-card__terminal">
-                  Terminal: {route.podTerminal}
+                  {route.podTerminal}
                 </Text>
               ) : null}
             </div>
@@ -652,8 +675,17 @@ export function BookingRouteCard({
           {showDetailsAction ? (
             <AppButton
               type="link"
+              className={[
+                "booking-routing-card__details-toggle",
+                !useDrawer && expanded
+                  ? "booking-routing-card__details-toggle--open"
+                  : undefined,
+              ]
+                .filter(Boolean)
+                .join(" ")}
               icon={<AppIcon icon={Icons.route} size={14} />}
               onClick={handleShowDetails}
+              aria-expanded={useDrawer ? isDetailsDrawerOpen : expanded}
               block
             >
               {useDrawer || !expanded ? "Show Details" : "Close Details"}
@@ -673,12 +705,21 @@ export function BookingRouteCard({
           <div className="booking-routing-card__transport-wrap">
             <TransportTranscript route={route} />
           </div>
-          {expanded ? <BookingRouteDetails route={route} /> : null}
-          {route.gateInCutoff || route.siDocCutoff || route.vgmCutoff ? (
-            <div className="booking-routing-card__footer">
-              <RouteDeadlines route={route} />
+          <div
+            className={[
+              "booking-routing-card__details-panel",
+              expanded
+                ? "booking-routing-card__details-panel--open"
+                : undefined,
+            ]
+              .filter(Boolean)
+              .join(" ")}
+            aria-hidden={!expanded}
+          >
+            <div className="booking-routing-card__details-panel-inner">
+              <BookingRouteDetails route={route} />
             </div>
-          ) : null}
+          </div>
         </>
       )}
     </article>

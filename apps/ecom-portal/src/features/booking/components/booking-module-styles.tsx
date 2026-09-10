@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-08 14:58)
+// Modified by Sekar Nagarajan (2026-09-10 22:56)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -568,8 +568,23 @@ export function BookingModuleStyles() {
         background: ${token.colorBgContainer};
         overflow: visible;
       }
-      .booking-routing-card--default {
-        border-color: ${tokenMix(token.colorWarning, 40)};
+      .booking-routing-card--selected {
+        border-color: ${token.colorPrimary};
+        background: ${tokenMix(token.colorPrimary, 5)};
+        
+      }
+      .booking-routing-card__selected-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+      }
+      .booking-routing-card__selected-indicator {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: ${token.colorPrimary};
+        box-shadow: 0 0 0 3px ${primaryTint28};
+        flex-shrink: 0;
       }
       .booking-routing-card__main {
         display: flex;
@@ -665,7 +680,7 @@ export function BookingModuleStyles() {
         flex: 1 1 0;
         min-width: ${token.marginSM}px;
         height: 0;
-        border-top: 2px dashed ${tokenMix(token.colorPrimary, 55)};
+        border-top: 2px dashed ${tokenMix(token.colorPrimary, 85)};
       }
       .booking-routing-card__connector-pill {
         flex-shrink: 0;
@@ -749,6 +764,40 @@ export function BookingModuleStyles() {
         background: ${token.colorFillAlter};
         flex-shrink: 0;
       }
+      /* Show Details — smooth expand / collapse (ScheduleCardList parity) */
+      .booking-routing-card__details-panel {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 0.32s ease;
+      }
+      .booking-routing-card__details-panel--open {
+        grid-template-rows: 1fr;
+      }
+      .booking-routing-card__details-panel-inner {
+        overflow: hidden;
+        min-height: 0;
+      }
+      .booking-routing-card__details-panel-inner .booking-route-details {
+        opacity: 0;
+        transform: translateY(-${token.marginXS}px);
+        transition:
+          opacity 0.24s ease,
+          transform 0.32s ease;
+        pointer-events: none;
+      }
+      .booking-routing-card__details-panel--open
+        .booking-routing-card__details-panel-inner
+        .booking-route-details {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+      .booking-routing-card__details-toggle .app-icon {
+        transition: transform 0.28s ease;
+      }
+      .booking-routing-card__details-toggle--open .app-icon {
+        transform: rotate(180deg);
+      }
       .booking-routing-card__deadlines {
         display: flex;
         flex-wrap: wrap;
@@ -826,6 +875,18 @@ export function BookingModuleStyles() {
         gap: ${token.marginSM}px;
         margin-bottom: ${token.marginMD}px;
         flex-wrap: wrap;
+      }
+      .booking-route-details__deadlines {
+        margin-top: ${token.marginMD}px;
+        padding-top: ${token.marginMD}px;
+        border-top: 1px solid ${token.colorBorderSecondary};
+      }
+      .booking-route-details__deadlines-title {
+        display: block;
+        margin-bottom: ${token.marginSM}px;
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorTextSecondary};
       }
       .booking-route-details__title {
         margin: 0 !important;
@@ -959,7 +1020,7 @@ export function BookingModuleStyles() {
         .booking-routing-card__route {
           grid-template-columns: minmax(0, 1fr) minmax(160px, 1.15fr) minmax(0, 1fr);
           gap: ${token.marginMD}px;
-          align-items: start;
+          align-items: center;
         }
         .booking-routing-card__endpoint--dest {
           text-align: right;
@@ -967,7 +1028,9 @@ export function BookingModuleStyles() {
         }
         .booking-routing-card__connector {
           align-self: center;
-          padding-top: ${token.paddingLG}px;
+          padding-top: 0;
+          padding-bottom: 0;
+          margin-top: 0;
         }
         .booking-route-stop__main {
           flex-direction: row;
@@ -985,7 +1048,7 @@ export function BookingModuleStyles() {
       @media (min-width: 992px) {
         .booking-routing-card__main {
           flex-direction: row;
-          align-items: flex-start;
+          align-items: stretch;
           gap: ${token.marginLG}px;
         }
         .booking-routing-card__actions {
@@ -994,7 +1057,9 @@ export function BookingModuleStyles() {
           border-left: 1px solid ${token.colorBorderSecondary};
           padding-top: 0;
           padding-left: ${token.paddingMD}px;
-          justify-content: flex-start;
+          margin-top: 0;
+          justify-content: center;
+          align-self: stretch;
         }
       }
 
@@ -1031,6 +1096,18 @@ export function BookingModuleStyles() {
         height: 100%;
         display: flex;
         flex-direction: column;
+      }
+      .booking-selected-rate-panel--selected.ant-card {
+        border-color: ${token.colorSuccess};
+        background: ${successTint8};
+        
+      }
+      .booking-selected-rate-panel--selected > .ant-card-head {
+        background: transparent;
+        border-bottom-color: ${successTint8};
+      }
+      .booking-selected-rate-panel--selected > .ant-card-body {
+        background: transparent;
       }
       .booking-selected-rate-panel > .ant-card-body {
         flex: 1;

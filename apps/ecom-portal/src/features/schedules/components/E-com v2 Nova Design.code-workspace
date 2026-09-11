@@ -1,8 +1,11 @@
 {
-	"folders": [
-		{
-			"path": "../../../../../.."
-		}
-	],
-	"settings": {}
+  "folders": [
+    {
+      "path": "../../../../../.."
+    },
+    {
+      "path": "../../../../../../../../../SQL Server Management Studio/CRM UI DESIGN/crm-development/crmUI-development"
+    }
+  ],
+  "settings": {}
 }

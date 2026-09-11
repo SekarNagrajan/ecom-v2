@@ -1,5 +1,5 @@
-// Modified by sekar nagarajan (2026-08-21 23:32)
-import { ContractDTO, ContractFilters, CreateQuoteInput, QuoteDTO, SurchargeDTO, SurchargeFilters, TariffDTO, TariffFilters } from '../types/rates.types';
+// Modified by Sekar Nagarajan (2026-09-11 16:25)
+import { ContractDTO, ContractFilters, CreateQuoteInput, QuoteDTO, ShareRateMailInput, ShareRateMailResponse, SurchargeDTO, SurchargeFilters, TariffDTO, TariffFilters } from '../types/rates.types';
 
 export const fetchTariffs = async (filters?: TariffFilters): Promise<TariffDTO[]> => {
   const params = new URLSearchParams();
@@ -50,6 +50,22 @@ export const createQuoteRequest = async (input: CreateQuoteInput): Promise<Quote
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(input),
   });
+  const json = await res.json();
+  return json.data;
+};
+
+/** POST /api/v1/rates/share-mail — share rate quote(s) by email */
+export const shareRateByMail = async (
+  input: ShareRateMailInput,
+): Promise<ShareRateMailResponse> => {
+  const res = await fetch('/api/v1/rates/share-mail', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(input),
+  });
+  if (!res.ok) {
+    throw new Error('Failed to share rate quote by email');
+  }
   const json = await res.json();
   return json.data;
 };

@@ -1,14 +1,6 @@
-// Modified by Sekar Nagarajan (2026-09-02 15:00)
+// Modified by Sekar Nagarajan (2026-09-11 17:28)
 import { AppButton, AppTabs } from "@solverminds/shared-ui";
-import {
-  Col,
-  DatePicker,
-  Form,
-  Row,
-  Select,
-  Tooltip,
-  Typography,
-} from "antd";
+import { DatePicker, Form, Select, Tooltip, Typography } from "antd";
 import dayjs from "dayjs";
 import { useMemo, useState } from "react";
 
@@ -92,6 +84,9 @@ export interface RateSearchParams {
 
 interface RateSearchFilterProps {
   onSearch: (params: RateSearchParams) => void;
+  onReset?: () => void;
+  /** Clears results when Tariff / Surcharge / Contract / RFQ tab changes. */
+  onSearchModeChange?: (mode: RateSearchMode) => void;
   isLoading?: boolean;
   onRequestQuote?: () => void;
 }
@@ -117,6 +112,8 @@ function usePortSelectOptions(initialQuery = "") {
 
 export function RateSearchFilter({
   onSearch,
+  onReset,
+  onSearchModeChange,
   isLoading,
   onRequestQuote,
 }: RateSearchFilterProps) {
@@ -150,27 +147,11 @@ export function RateSearchFilter({
     form.resetFields();
     polAC.setQuery("USNYC");
     podAC.setQuery("SGSIN");
+    onReset?.();
   };
 
   const handleFinish = (values: Record<string, unknown>) => {
     const mode = values.searchMode as RateSearchMode;
-    if (mode === "SPOT_QUOTES" && onRequestQuote) {
-      onSearch({
-        searchMode: mode,
-        polCode: values.polCode as string,
-        podCode: values.podCode as string,
-        eqpType: values.eqpType as string,
-        commodity: values.commodity as string,
-        fromDate: values.shipmentDate
-          ? (values.shipmentDate as dayjs.Dayjs).format("YYYY-MM-DD")
-          : undefined,
-        toDate: values.toDate
-          ? (values.toDate as dayjs.Dayjs).format("YYYY-MM-DD")
-          : undefined,
-      });
-      return;
-    }
-
     onSearch({
       searchMode: mode,
       polCode: values.polCode as string,
@@ -202,6 +183,14 @@ export function RateSearchFilter({
             shipmentDate: dayjs(),
             toDate: dayjs().add(90, "day"),
           }}
+          onValuesChange={(changed) => {
+            if (
+              changed.searchMode &&
+              typeof changed.searchMode === "string"
+            ) {
+              onSearchModeChange?.(changed.searchMode as RateSearchMode);
+            }
+          }}
           onFinish={handleFinish}
         >
           <div className="rates-search-mode-wrap custom-scroll">
@@ -210,8 +199,8 @@ export function RateSearchFilter({
             </Form.Item>
           </div>
 
-          <Row gutter={[16, 8]} align="bottom">
-            <Col xs={24} md={11} lg={showEquipment ? 7 : 8}>
+          <div className="rates-search-fields-row custom-scroll">
+            <div className="rates-search-field rates-search-field--port">
               <Form.Item
                 name="polCode"
                 label={
@@ -234,24 +223,29 @@ export function RateSearchFilter({
                   }
                 />
               </Form.Item>
-            </Col>
+            </div>
 
-            <Col xs={24} md={2} lg={1} className="rates-port-swap-col">
-              <div className="rates-port-swap">
-                <Tooltip title="Swap Origin and Delivery">
-                  <AppButton
-                    type="default"
-                    size="large"
-                    shape="circle"
-                    icon={<AppIcon icon={Icons.arrowLeftRight} size={16} />}
-                    onClick={handleSwapPorts}
-                    aria-label="Swap origin and delivery ports"
-                  />
-                </Tooltip>
-              </div>
-            </Col>
+            <div className="rates-search-field rates-search-field--swap">
+              <Form.Item
+                label={<SearchActionsLabel />}
+                className="rates-search-swap-field"
+              >
+                <div className="rates-port-swap">
+                  <Tooltip title="Swap Origin and Delivery">
+                    <AppButton
+                      type="default"
+                      size="large"
+                      shape="circle"
+                      icon={<AppIcon icon={Icons.arrowLeftRight} size={16} />}
+                      onClick={handleSwapPorts}
+                      aria-label="Swap origin and delivery ports"
+                    />
+                  </Tooltip>
+                </div>
+              </Form.Item>
+            </div>
 
-            <Col xs={24} md={11} lg={showEquipment ? 7 : 8}>
+            <div className="rates-search-field rates-search-field--port">
               <Form.Item
                 name="podCode"
                 label={
@@ -274,10 +268,10 @@ export function RateSearchFilter({
                   }
                 />
               </Form.Item>
-            </Col>
+            </div>
 
             {showEquipment ? (
-              <Col xs={24} md={12} lg={9}>
+              <div className="rates-search-field rates-search-field--eqp">
                 <Form.Item
                   name="eqpType"
                   label={
@@ -288,25 +282,23 @@ export function RateSearchFilter({
                 >
                   <Select size="large" options={EQUIPMENT_TYPES} />
                 </Form.Item>
-              </Col>
+              </div>
             ) : null}
-          </Row>
 
-          <Row gutter={[16, 8]} align="bottom">
             {showCommodity ? (
-              <Col xs={24} md={8} lg={isRfqMode ? 8 : 6}>
+              <div className="rates-search-field rates-search-field--commodity">
                 <Form.Item
                   name="commodity"
                   label={<span className="form-field-label">Commodity</span>}
                 >
                   <Select size="large" options={COMMODITIES} />
                 </Form.Item>
-              </Col>
+              </div>
             ) : null}
 
             {showShipmentDate ? (
               <>
-                <Col xs={24} md={8} lg={showCommodity ? 5 : 7}>
+                <div className="rates-search-field rates-search-field--date">
                   <Form.Item
                     name="shipmentDate"
                     label={
@@ -321,8 +313,8 @@ export function RateSearchFilter({
                       format="YYYY-MM-DD"
                     />
                   </Form.Item>
-                </Col>
-                <Col xs={24} md={8} lg={showCommodity ? 5 : 7}>
+                </div>
+                <div className="rates-search-field rates-search-field--date">
                   <Form.Item
                     name="toDate"
                     label={
@@ -337,15 +329,11 @@ export function RateSearchFilter({
                       format="YYYY-MM-DD"
                     />
                   </Form.Item>
-                </Col>
+                </div>
               </>
             ) : null}
 
-            <Col
-              xs={24}
-              md={showShipmentDate ? 24 : 16}
-              lg={isRfqMode ? 16 : showCommodity ? 8 : 10}
-            >
+            <div className="rates-search-field rates-search-field--actions">
               <Form.Item
                 label={<SearchActionsLabel />}
                 className="rates-search-actions-field"
@@ -381,7 +369,7 @@ export function RateSearchFilter({
                       loading={isLoading}
                       htmlType="submit"
                     >
-                      Search Rates
+                      Search
                     </AppButton>
                   )}
                   {!isRfqMode ? (
@@ -427,8 +415,8 @@ export function RateSearchFilter({
                   )}
                 </div>
               </Form.Item>
-            </Col>
-          </Row>
+            </div>
+          </div>
         </Form>
       </div>
     </div>

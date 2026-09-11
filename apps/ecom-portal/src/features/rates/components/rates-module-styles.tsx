@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-07 18:59)
+// Modified by Sekar Nagarajan (2026-09-11 17:33)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -56,6 +56,79 @@ export function RatesModuleStyles() {
       .rates-search-mode-tabs .ant-tabs-content-holder {
         display: none;
       }
+      .rates-search-fields-row {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: flex-end;
+        gap: ${token.marginMD}px;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: ${token.paddingXXS}px;
+      }
+      .rates-search-field {
+        flex: 1 1 0;
+        min-width: 156px;
+        max-width: 100%;
+      }
+      .rates-search-field--port {
+        flex: 1.2 1 0;
+        min-width: 180px;
+      }
+      .rates-search-field--swap {
+        flex: 0 0 ${token.controlHeightLG}px;
+        width: ${token.controlHeightLG}px;
+        min-width: ${token.controlHeightLG}px;
+        max-width: ${token.controlHeightLG}px;
+        align-self: flex-end;
+        padding-bottom: 0;
+      }
+      .rates-search-field--eqp,
+      .rates-search-field--commodity {
+        flex: 1 1 0;
+        min-width: 156px;
+      }
+      .rates-search-field--date {
+        flex: 0.95 1 0;
+        min-width: 144px;
+      }
+      .rates-search-field--actions {
+        flex: 0 0 auto;
+        min-width: max-content;
+        align-self: flex-end;
+      }
+      .rates-search-fields-row .ant-form-item {
+        margin-bottom: 0 !important;
+        width: 100%;
+      }
+      .rates-search-fields-row .ant-form-item-label {
+        padding: 0 !important;
+        margin-bottom: ${token.marginXS}px !important;
+        line-height: ${token.lineHeight};
+        height: auto !important;
+        overflow: visible !important;
+      }
+      .rates-search-fields-row .ant-form-item-label > label {
+        height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        line-height: ${token.lineHeight} !important;
+        font-size: ${token.fontSizeSM}px;
+        white-space: nowrap;
+      }
+      .rates-search-fields-row .form-field-label {
+        margin-bottom: 0 !important;
+        display: inline-flex;
+        line-height: inherit;
+      }
+      .rates-search-fields-row .ant-form-item-control-input {
+        min-height: ${token.controlHeightLG}px;
+      }
+      .rates-search-fields-row .ant-select,
+      .rates-search-fields-row .ant-picker,
+      .rates-search-fields-row .rates-date-range {
+        width: 100%;
+      }
       .rates-port-label {
         display: inline-flex;
         align-items: center;
@@ -82,6 +155,15 @@ export function RatesModuleStyles() {
         justify-content: center;
         padding-bottom: ${token.marginSM}px;
       }
+      .rates-search-swap-field .ant-form-item-label > label,
+      .rates-search-actions-field .ant-form-item-label > label {
+        visibility: hidden;
+      }
+      .rates-search-swap-field .ant-form-item-label,
+      .rates-search-actions-field .ant-form-item-label {
+        margin-bottom: ${token.marginXS}px !important;
+        min-height: calc(${token.fontSizeSM}px * ${token.lineHeight});
+      }
       .rates-port-swap {
         display: flex;
         align-items: center;
@@ -94,40 +176,34 @@ export function RatesModuleStyles() {
         height: ${token.controlHeightLG}px;
         min-width: ${token.controlHeightLG}px;
       }
-      .rates-search-actions-field {
+      .rates-search-actions-field,
+      .rates-search-swap-field {
         margin-bottom: 0 !important;
-      }
-      .rates-search-actions-field .ant-form-item-label {
-        min-height: ${token.fontSizeSM * token.lineHeight + token.marginSM}px;
-      }
-      .rates-search-actions-field .ant-form-item-label > label {
-        visibility: hidden;
       }
       .rates-search-actions {
         display: flex;
-        gap: ${token.marginXS}px;
+        gap: ${token.marginSM}px;
         width: 100%;
         align-items: center;
         justify-content: flex-end;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         min-height: ${token.controlHeightLG}px;
       }
       .rates-search-actions .sm-app-button,
       .rates-search-actions .ant-btn {
         min-height: ${token.controlHeightLG}px;
+        height: ${token.controlHeightLG}px;
+        white-space: nowrap;
       }
       .rates-search-actions .sm-app-button.ant-btn-primary,
       .rates-search-actions .ant-btn-primary {
-        flex: 1;
-        min-width: 140px;
+        flex: 0 0 auto;
+        min-width: 0;
       }
       .rates-date-range {
         width: 100%;
       }
       .rates-search-panel__body .ant-form-item {
-        margin-bottom: ${token.marginSM}px;
-      }
-      .rates-search-panel__body .ant-row:last-child .ant-form-item {
         margin-bottom: 0;
       }
 
@@ -509,6 +585,68 @@ export function RatesModuleStyles() {
       .rates-drawer-form-row .ant-form-item {
         min-width: 0;
       }
+        .rates-card__actions-button{
+        background: ${token.colorWarning};
+        border: 1px solid ${token.colorWarningBorder};
+        color: ${token.colorTextLightSolid};
+        }
+
+      /* Modified by Sekar Nagarajan (2026-09-11 16:25) — share via mail drawer */
+      .rates-share-mail-form {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginMD}px;
+      }
+      .rates-share-mail-summary {
+        padding: ${token.paddingMD}px;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorFillAlter};
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXS}px;
+      }
+      .rates-share-mail-summary__title {
+        margin: 0;
+        color: ${token.colorText};
+      }
+      .rates-share-mail-summary__list {
+        margin: 0;
+        padding-left: ${token.paddingLG}px;
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+      }
+      .rates-share-mail-editor {
+        width: 100%;
+        min-width: 0;
+        margin-top: ${token.marginSM}px;
+        --rte-content-padding-block: ${token.paddingMD}px;
+        --rte-content-padding-inline: ${token.paddingLG}px;
+      }
+      .rates-share-mail-editor .ant-form-item {
+        margin-bottom: 0;
+      }
+      .rates-share-mail-editor .ProseMirror {
+        font-family: ${token.fontFamily};
+        line-height: 1.55;
+        padding: ${token.paddingMD}px ${token.paddingLG}px;
+        margin: 0;
+        min-height: ${token.controlHeightLG * 6}px;
+        box-sizing: border-box;
+      }
+      .rates-share-mail-editor .ProseMirror > * + * {
+        margin-top: ${token.marginSM}px;
+      }
+      .rates-share-mail-editor .ProseMirror p,
+      .rates-share-mail-editor .ProseMirror ul,
+      .rates-share-mail-editor .ProseMirror ol {
+        margin-block: ${token.marginXS}px;
+      }
+      .rates-share-mail-editor .ProseMirror ul,
+      .rates-share-mail-editor .ProseMirror ol {
+        padding-inline-start: ${token.paddingLG}px;
+      }
 
       @media (min-width: 768px) {
         .rates-card__route {
@@ -536,17 +674,39 @@ export function RatesModuleStyles() {
         .rates-search-panel__body {
           padding: ${token.paddingMD}px;
         }
+        .rates-search-fields-row {
+          flex-wrap: wrap;
+          overflow-x: visible;
+        }
+        .rates-search-field {
+          flex: 1 1 calc(50% - ${token.marginSM}px);
+          min-width: calc(50% - ${token.marginSM}px);
+          max-width: none;
+        }
+        .rates-search-field--swap {
+          flex: 0 0 100%;
+          width: 100%;
+          min-width: 100%;
+          max-width: none;
+          display: flex;
+          justify-content: center;
+        }
+        .rates-search-field--actions {
+          flex: 1 1 100%;
+          min-width: 100%;
+        }
         .rates-port-swap-col {
           align-items: center;
           padding-bottom: ${token.paddingXS}px;
           padding-top: ${token.paddingXXS}px;
         }
         .rates-search-actions {
-          flex-direction: column;
+          flex-wrap: wrap;
+          justify-content: stretch;
         }
         .rates-search-actions .sm-app-button,
         .rates-search-actions .ant-btn {
-          width: 100%;
+          flex: 1 1 auto;
         }
         .rates-drawer-actions {
           width: 100%;

@@ -292,4 +292,33 @@ export const ratesHandlers = [
     mockQuotes.unshift(newQuote);
     return HttpResponse.json({ success: true, data: newQuote });
   }),
+
+  // Modified by Sekar Nagarajan (2026-09-11 16:25) — share rate quote via email
+  http.post('/api/v1/rates/share-mail', async ({ request }) => {
+    const input = (await request.json()) as {
+      to: string;
+      cc?: string;
+      subject: string;
+      message: string;
+      rates?: unknown[];
+    };
+    if (!input?.to?.trim() || !input?.subject?.trim() || !input?.message?.trim()) {
+      return HttpResponse.json(
+        { success: false, message: 'Recipient, subject, and message are required.' },
+        { status: 400 },
+      );
+    }
+    await new Promise((resolve) => setTimeout(resolve, 450));
+    const recipients = [input.to, ...(input.cc ? input.cc.split(',') : [])]
+      .map((v) => v.trim())
+      .filter(Boolean);
+    return HttpResponse.json({
+      success: true,
+      data: {
+        success: true,
+        messageId: `mail-${Date.now()}`,
+        recipientCount: recipients.length,
+      },
+    });
+  }),
 ];

@@ -32,6 +32,9 @@
       "@solverminds/shared-ui/data-view/list-view": ["libs/shared/ui/src/components/data-view/list-view/index.ts"],
       "@solverminds/shared-ui/data-view/kanban-view": ["libs/shared/ui/src/components/data-view/kanban-view/index.ts"],
       "@solverminds/shared-ui/data-view/card-view": ["libs/shared/ui/src/components/data-view/card-view/index.ts"],
+      "@solverminds/shared-ui/editor": ["libs/shared/ui/src/components/ui/rich-text-editor/index.ts"],
+      "@solverminds/shared-ui/form-editor": ["libs/shared/ui/src/components/form-fields/rich-text-editor/index.ts"],
+      "@solverminds/shared-ui/email": ["libs/shared/ui/src/components/email/index.ts"],
       "@solverminds/shared-ui/*": ["libs/shared/ui/src/*"],
       "@solverminds/shared-util": ["libs/shared-util/src/index.ts"]
     }

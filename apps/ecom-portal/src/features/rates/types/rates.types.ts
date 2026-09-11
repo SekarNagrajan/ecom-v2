@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-28 15:07)
+// Modified by Sekar Nagarajan (2026-09-11 16:25)
 
 export interface TariffDTO {
   id: string;
@@ -113,4 +113,39 @@ export interface CreateQuoteInput {
   cargoWeightKg: number;
   expectedAmountUsd?: number;
   comments?: string;
+}
+
+// Modified by Sekar Nagarajan (2026-09-11 16:25) — share rate quote via email
+export interface ShareRateMailRateSummary {
+  id: string;
+  type: string;
+  code: string;
+  title: string;
+  originPort: string;
+  originPortName: string;
+  deliveryPort: string;
+  deliveryPortName: string;
+  eqpType: string;
+  commodity: string;
+  commodityName: string;
+  currency: string;
+  baseAmount: number;
+  surchargeAmount: number;
+  totalEstimatedAmount: number;
+  effectiveFrom: string;
+  effectiveTo: string;
+}
+
+export interface ShareRateMailInput {
+  to: string;
+  cc?: string;
+  subject: string;
+  message: string;
+  rates: ShareRateMailRateSummary[];
+}
+
+export interface ShareRateMailResponse {
+  success: boolean;
+  messageId: string;
+  recipientCount: number;
 }

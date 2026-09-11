@@ -1,9 +1,10 @@
-// Modified by Sekar Nagarajan (2026-08-28 15:07)
+// Modified by Sekar Nagarajan (2026-09-11 17:28)
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { Card, Space, Spin, Typography } from "antd";
 
 import { AppIcon, Icons } from "../../components/icons";
+import { NavRatesIcon } from "../../components/icons/nav-svg-icons";
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import { MODULE_TITLES } from "../../constants/module-titles";
@@ -13,9 +14,8 @@ import { RateCardList } from "./components/RateCardList";
 import { RateDataView } from "./components/RateDataView";
 import { RateSearchFilter } from "./components/RateSearchFilter";
 import { RatesModuleStyles } from "./components/rates-module-styles";
+import { ShareRateMailDrawer } from "./components/ShareRateMailDrawer";
 import { useRatesController } from "./hooks/useRatesController";
-// Modified by Sekar Nagarajan (2026-09-02 14:57)
-import { NavRatesIcon } from "../../components/icons/nav-svg-icons";
 
 const { Text } = Typography;
 
@@ -28,11 +28,15 @@ export function RatesRoute() {
     setSearchMode,
     resultsTitle,
     cardRates,
+    hasSearched,
     isLoading,
     handleSearch,
+    handleReset,
+    handleSearchModeChange,
     handleBookNow,
     handleViewSurcharges,
     handleShareRate,
+    handleShareResultsViaMail,
     handleRequestQuote,
     selectedContract,
     isSurchargeModalOpen,
@@ -40,6 +44,9 @@ export function RatesRoute() {
     isQuoteDrawerOpen,
     quoteDefaults,
     handleCloseQuoteDrawer,
+    isShareMailOpen,
+    shareMailRates,
+    handleCloseShareMail,
   } = useRatesController();
 
   return (
@@ -64,9 +71,7 @@ export function RatesRoute() {
               </AppButton>
               <AppButton
                 icon={<AppIcon icon={Icons.mail} size={16} tone="navigate" />}
-                onClick={() =>
-                  toast.info("Opening freight rate quote email share dialog...")
-                }
+                onClick={handleShareResultsViaMail}
               >
                 Share via Mail
               </AppButton>
@@ -76,16 +81,19 @@ export function RatesRoute() {
 
         <RateSearchFilter
           onSearch={handleSearch}
+          onReset={handleReset}
+          onSearchModeChange={handleSearchModeChange}
           isLoading={isLoading}
           onRequestQuote={handleRequestQuote}
         />
 
-        {/* Modified by Sekar Nagarajan (2026-08-28 15:07) — schedules-style results bar */}
         <div className="rates-results-bar">
           <Space align="center" size={10} wrap>
             <AppIcon icon={Icons.dollarSign} size={18} />
             <Text className="rates-results-bar__title">{resultsTitle}</Text>
-            <span className="rates-results-bar__count">{cardRates.length}</span>
+            <span className="rates-results-bar__count">
+              {hasSearched ? cardRates.length : 0}
+            </span>
             {isLoading ? <Spin size="small" /> : null}
           </Space>
         </div>
@@ -94,6 +102,7 @@ export function RatesRoute() {
           <RateCardList
             rates={cardRates}
             isLoading={isLoading}
+            hasSearched={hasSearched}
             searchMode={searchMode}
             onBookNow={handleBookNow}
             onViewSurcharges={handleViewSurcharges}
@@ -119,6 +128,12 @@ export function RatesRoute() {
           open={isQuoteDrawerOpen}
           onClose={handleCloseQuoteDrawer}
           initialValues={quoteDefaults}
+        />
+
+        <ShareRateMailDrawer
+          open={isShareMailOpen}
+          onClose={handleCloseShareMail}
+          rates={shareMailRates}
         />
       </Card>
     </FeaturePageShell>

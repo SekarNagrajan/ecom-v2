@@ -302,11 +302,11 @@ export function AuthenticatedLayoutHeader({
       label: "My Alert",
       icon: <AppIcon icon={Icons.bell} size={16} />,
     },
-    {
-      key: "payment-history",
-      label: "Payment History",
-      icon: <AppIcon icon={Icons.landmark} size={16} />,
-    },
+    // {
+    //   key: "payment-history",
+    //   label: "Payment History",
+    //   icon: <AppIcon icon={Icons.landmark} size={16} />,
+    // },
     ...(user?.isSessionAdmin || user?.role === "ADMIN"
       ? [
           {

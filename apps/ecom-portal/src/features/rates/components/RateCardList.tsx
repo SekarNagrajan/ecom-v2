@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-28 15:09)
+// Modified by Sekar Nagarajan (2026-09-11 17:23)
 import { AppButton } from "@solverminds/shared-ui";
 import { Spin, Tag, Tooltip, Typography } from "antd";
 import { useState } from "react";
@@ -40,6 +40,8 @@ export interface CombinedRateItem {
 interface RateCardListProps {
   rates: CombinedRateItem[];
   isLoading?: boolean;
+  /** False until the user clicks Search — show idle empty state. */
+  hasSearched?: boolean;
   searchMode?: RateSearchMode;
   onBookNow: (rate: CombinedRateItem) => void;
   onViewSurcharges: (rate: CombinedRateItem) => void;
@@ -211,7 +213,7 @@ function RateCard({
           ) : null}
           {showSurcharges ? (
             <AppButton
-              icon={<AppIcon icon={Icons.tag} size={16} tone="view" />}
+              className="rates-card__actions-button"
               onClick={() => onViewSurcharges(item)}
               block
             >
@@ -344,6 +346,7 @@ function RateCard({
 export function RateCardList({
   rates,
   isLoading,
+  hasSearched = true,
   searchMode = "PUBLISHED_TARIFF",
   onBookNow,
   onViewSurcharges,
@@ -362,6 +365,19 @@ export function RateCardList({
         <Text type="secondary" className="rates-empty__text">
           Searching freight rates…
         </Text>
+      </div>
+    );
+  }
+
+  if (!hasSearched) {
+    return (
+      <div className="rates-empty">
+        <ModuleEmptyState
+          variant="blank"
+          title="Search for rates"
+          message="Choose origin, delivery, and filters, then click Search to load matching rates."
+          artSize="md"
+        />
       </div>
     );
   }

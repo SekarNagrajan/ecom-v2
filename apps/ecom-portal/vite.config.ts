@@ -1,7 +1,39 @@
-// Modified by Sekar Nagarajan (2026-09-08 10:50)
+// Modified by Sekar Nagarajan (2026-09-11 16:37)
+import fs from "fs";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import { defineConfig, type Plugin } from "vite";
+
+/** Resolve a package that may only exist under pnpm's virtual store. */
+function resolveWorkspacePackage(packageName: string): string | undefined {
+  const rootNodeModules = path.resolve(__dirname, "../../node_modules");
+  const direct = path.join(rootNodeModules, packageName);
+  if (fs.existsSync(direct)) {
+    return direct;
+  }
+
+  const [scope, name] = packageName.startsWith("@")
+    ? packageName.split("/")
+    : [null, packageName];
+  const pnpmDir = path.join(rootNodeModules, ".pnpm");
+  if (!fs.existsSync(pnpmDir)) return undefined;
+
+  const prefix = scope ? `${scope}+${name}@` : `${name}@`;
+  const match = fs
+    .readdirSync(pnpmDir)
+    .find((entry) => entry.startsWith(prefix));
+  if (!match) return undefined;
+
+  const candidate = path.join(
+    pnpmDir,
+    match,
+    "node_modules",
+    ...(scope ? [scope, name] : [name]),
+  );
+  return fs.existsSync(candidate) ? candidate : undefined;
+}
+
+const tiptapCorePath = resolveWorkspacePackage("@tiptap/core");
 
 /**
  * Dev-only fallback for booking mutations / public tenant when the MSW
@@ -110,6 +142,9 @@ export default defineConfig({
   plugins: [react(), bookingMockApiPlugin()],
   resolve: {
     alias: {
+      ...(tiptapCorePath
+        ? { "@tiptap/core": tiptapCorePath }
+        : {}),
       "@solverminds/platform": path.resolve(
         __dirname,
         "../../libs/platform/src/index.ts",
@@ -157,6 +192,18 @@ export default defineConfig({
       "@solverminds/shared-ui/data-view": path.resolve(
         __dirname,
         "../../libs/shared/ui/src/components/data-view/index.ts",
+      ),
+      "@solverminds/shared-ui/editor": path.resolve(
+        __dirname,
+        "../../libs/shared/ui/src/components/ui/rich-text-editor/index.ts",
+      ),
+      "@solverminds/shared-ui/form-editor": path.resolve(
+        __dirname,
+        "../../libs/shared/ui/src/components/form-fields/rich-text-editor/index.ts",
+      ),
+      "@solverminds/shared-ui/email": path.resolve(
+        __dirname,
+        "../../libs/shared/ui/src/components/email/index.ts",
       ),
       "@solverminds/shared-ui": path.resolve(
         __dirname,

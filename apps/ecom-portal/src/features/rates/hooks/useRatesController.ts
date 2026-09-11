@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-08 14:23)
+// Modified by Sekar Nagarajan (2026-09-11 17:28)
 // Controller hook for Rates — mode-aware cards + surcharge rollup (JSP parity)
 
 import { useToast } from "@solverminds/shared-ui/hooks";
@@ -25,21 +25,28 @@ const RESULTS_TITLE: Record<RateSearchMode, string> = {
   SPOT_QUOTES: "Spot Rate Quotes",
 };
 
+const DEFAULT_SEARCH_PARAMS: RateSearchParams = {
+  searchMode: "PUBLISHED_TARIFF",
+  polCode: "USNYC",
+  podCode: "SGSIN",
+  eqpType: "40' High Cube Dry",
+  commodity: "GEN-CGO",
+};
+
 export function useRatesController() {
   const toast = useToast();
   const navigate = useNavigate();
   const [viewMode, setViewMode] = useState<"CARD" | "DATAVIEW">("CARD");
-  const [searchParams, setSearchParams] = useState<RateSearchParams>({
-    searchMode: "PUBLISHED_TARIFF",
-    polCode: "USNYC",
-    podCode: "SGSIN",
-    eqpType: "40' High Cube Dry",
-    commodity: "GEN-CGO",
-  });
+  const [searchParams, setSearchParams] =
+    useState<RateSearchParams>(DEFAULT_SEARCH_PARAMS);
+  /** Results only after explicit Search (or deep-link from landing). */
+  const [hasSearched, setHasSearched] = useState(false);
   const [isQuoteDrawerOpen, setIsQuoteDrawerOpen] = useState(false);
   const [quoteDefaults, setQuoteDefaults] = useState<
     Partial<CreateQuoteInput> | undefined
   >(undefined);
+  const [isShareMailOpen, setIsShareMailOpen] = useState(false);
+  const [shareMailRates, setShareMailRates] = useState<CombinedRateItem[]>([]);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -54,6 +61,7 @@ export function useRatesController() {
         podCode: pod || prev.podCode,
         eqpType: eqp || prev.eqpType,
       }));
+      setHasSearched(true);
     }
   }, []);
 
@@ -72,33 +80,52 @@ export function useRatesController() {
       ? searchParams.eqpType
       : undefined;
 
-  const { data: tariffs = [], isLoading: isTariffsLoading } = useTariffsQuery({
-    loadPort: searchParams.polCode,
-    dischPort: searchParams.podCode,
-    eqpType: eqpFilter,
-    commodity: commodityFilter,
-  });
+  const fetchTariffs = hasSearched && mode === "PUBLISHED_TARIFF";
+  const fetchContracts = hasSearched && mode === "SERVICE_CONTRACTS";
+  const fetchSurcharges =
+    hasSearched && (mode === "PUBLISHED_TARIFF" || mode === "SURCHARGES");
+  const fetchQuotes = hasSearched && mode === "SPOT_QUOTES";
+
+  const { data: tariffs = [], isLoading: isTariffsLoading } = useTariffsQuery(
+    {
+      loadPort: searchParams.polCode,
+      dischPort: searchParams.podCode,
+      eqpType: eqpFilter,
+      commodity: commodityFilter,
+    },
+    { enabled: fetchTariffs },
+  );
 
   const { data: contracts = [], isLoading: isContractsLoading } =
-    useContractsQuery({
-      pol: searchParams.polCode,
-      pod: searchParams.podCode,
-    });
+    useContractsQuery(
+      {
+        pol: searchParams.polCode,
+        pod: searchParams.podCode,
+      },
+      { enabled: fetchContracts },
+    );
 
   const { data: surcharges = [], isLoading: isSurchargesLoading } =
-    useSurchargesQuery({
-      pol: searchParams.polCode,
-      pod: searchParams.podCode,
-      eqpType: eqpFilter,
-    });
+    useSurchargesQuery(
+      {
+        pol: searchParams.polCode,
+        pod: searchParams.podCode,
+        eqpType: eqpFilter,
+      },
+      { enabled: fetchSurcharges },
+    );
 
-  const { data: quotes = [], isLoading: isQuotesLoading } = useQuotesQuery();
+  const { data: quotes = [], isLoading: isQuotesLoading } = useQuotesQuery({
+    enabled: fetchQuotes,
+  });
 
-  const isLoading =
-    isTariffsLoading ||
-    isContractsLoading ||
-    (mode === "SURCHARGES" && isSurchargesLoading) ||
-    (mode === "SPOT_QUOTES" && isQuotesLoading);
+  const isLoading = !hasSearched
+    ? false
+    : (mode === "PUBLISHED_TARIFF" &&
+        (isTariffsLoading || isSurchargesLoading)) ||
+      (mode === "SERVICE_CONTRACTS" && isContractsLoading) ||
+      (mode === "SURCHARGES" && isSurchargesLoading) ||
+      (mode === "SPOT_QUOTES" && isQuotesLoading);
 
   const surchargeRollup = surcharges.reduce((sum, s) => sum + s.amount, 0);
   const hasNorSurcharge = surcharges.some((s) => s.isNor);
@@ -221,20 +248,22 @@ export function useRatesController() {
     }));
 
   let cardRates: CombinedRateItem[] = [];
-  switch (mode) {
-    case "SERVICE_CONTRACTS":
-      cardRates = contractCards;
-      break;
-    case "SURCHARGES":
-      cardRates = surchargeCards;
-      break;
-    case "SPOT_QUOTES":
-      cardRates = quoteCards;
-      break;
-    case "PUBLISHED_TARIFF":
-    default:
-      cardRates = tariffCards;
-      break;
+  if (hasSearched) {
+    switch (mode) {
+      case "SERVICE_CONTRACTS":
+        cardRates = contractCards;
+        break;
+      case "SURCHARGES":
+        cardRates = surchargeCards;
+        break;
+      case "SPOT_QUOTES":
+        cardRates = quoteCards;
+        break;
+      case "PUBLISHED_TARIFF":
+      default:
+        cardRates = tariffCards;
+        break;
+    }
   }
 
   const openQuoteDrawer = (defaults?: Partial<CreateQuoteInput>) => {
@@ -250,6 +279,7 @@ export function useRatesController() {
 
   const handleSearch = (params: RateSearchParams) => {
     setSearchParams(params);
+    setHasSearched(true);
     if (params.searchMode === "SPOT_QUOTES" && viewMode === "CARD") {
       toast.info("Showing spot quotes for this lane…");
     } else {
@@ -257,6 +287,16 @@ export function useRatesController() {
         `Searching ${RESULTS_TITLE[params.searchMode]} for ${params.polCode || "All"} → ${params.podCode || "All"}...`,
       );
     }
+  };
+
+  const handleReset = () => {
+    setSearchParams(DEFAULT_SEARCH_PARAMS);
+    setHasSearched(false);
+  };
+
+  const handleSearchModeChange = (nextMode: RateSearchMode) => {
+    setSearchParams((prev) => ({ ...prev, searchMode: nextMode }));
+    setHasSearched(false);
   };
 
   const handleBookNow = (rate: CombinedRateItem) => {
@@ -296,7 +336,22 @@ export function useRatesController() {
   };
 
   const handleShareRate = (rate: CombinedRateItem) => {
-    toast.info(`Opening rate quote email share dialog for ${rate.code}...`);
+    setShareMailRates([rate]);
+    setIsShareMailOpen(true);
+  };
+
+  const handleShareResultsViaMail = () => {
+    if (cardRates.length === 0) {
+      toast.warning("Search for rates first, then share the results by email.");
+      return;
+    }
+    setShareMailRates(cardRates);
+    setIsShareMailOpen(true);
+  };
+
+  const handleCloseShareMail = () => {
+    setIsShareMailOpen(false);
+    setShareMailRates([]);
   };
 
   const handleRequestQuote = () => {
@@ -313,15 +368,21 @@ export function useRatesController() {
     setViewMode,
     searchParams,
     searchMode: searchParams.searchMode,
-    setSearchMode: (nextMode: RateSearchMode) =>
-      setSearchParams((prev) => ({ ...prev, searchMode: nextMode })),
+    setSearchMode: (nextMode: RateSearchMode) => {
+      setSearchParams((prev) => ({ ...prev, searchMode: nextMode }));
+      setHasSearched(false);
+    },
     resultsTitle: RESULTS_TITLE[mode],
     cardRates,
+    hasSearched,
     isLoading,
     handleSearch,
+    handleReset,
+    handleSearchModeChange,
     handleBookNow,
     handleViewSurcharges,
     handleShareRate,
+    handleShareResultsViaMail,
     handleRequestQuote,
     selectedContract,
     isSurchargeModalOpen,
@@ -329,5 +390,8 @@ export function useRatesController() {
     isQuoteDrawerOpen,
     quoteDefaults,
     handleCloseQuoteDrawer: () => setIsQuoteDrawerOpen(false),
+    isShareMailOpen,
+    shareMailRates,
+    handleCloseShareMail,
   };
 }

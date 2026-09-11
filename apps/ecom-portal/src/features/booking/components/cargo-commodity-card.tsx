@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-04 19:15)
+// Modified by Sekar Nagarajan (2026-09-11 11:49)
 import { Flex, Input, InputNumber, Select, Switch, Typography } from "antd";
 import {
   Controller,
@@ -163,10 +163,35 @@ export function CargoCommodityCard({
           ) : null}
         </div>
 
-        <div className="form-field-cell">
+        <div className="form-field-cell si-cargo-sitem__weight">
           <label className="form-field-label">
-            Package Type <Text type="danger">*</Text>
+            Weight <Text type="danger">*</Text>
           </label>
+          <Controller
+            control={control}
+            name={`containers.${ci}.commodities.${mi}.weight`}
+            render={({ field }) => (
+              <InputNumber
+                {...field}
+                min={1}
+                size="large"
+                className="form-field-full-width"
+                addonAfter="kg"
+                status={
+                  cargoFieldError(errors, path("weight")) ? "error" : undefined
+                }
+              />
+            )}
+          />
+          {cargoFieldError(errors, path("weight")) ? (
+            <Text type="danger" className="form-field-error">
+              {cargoFieldError(errors, path("weight"))}
+            </Text>
+          ) : null}
+        </div>
+
+        <div className="form-field-cell si-cargo-sitem__pkg">
+          <label className="form-field-label">Package Type</label>
           <Controller
             control={control}
             name={`containers.${ci}.commodities.${mi}.packageType`}
@@ -195,10 +220,8 @@ export function CargoCommodityCard({
           ) : null}
         </div>
 
-        <div className="form-field-cell si-cargo-sitem__narrow">
-          <label className="form-field-label">
-            Quantity <Text type="danger">*</Text>
-          </label>
+        <div className="form-field-cell si-cargo-sitem__qty">
+          <label className="form-field-label">Quantity</label>
           <Controller
             control={control}
             name={`containers.${ci}.commodities.${mi}.packageQuantity`}
@@ -206,7 +229,7 @@ export function CargoCommodityCard({
               <QuantityStepper
                 value={field.value}
                 onChange={field.onChange}
-                min={1}
+                min={0}
               />
             )}
           />
@@ -217,37 +240,8 @@ export function CargoCommodityCard({
           ) : null}
         </div>
 
-        <div className="form-field-cell si-cargo-sitem__narrow">
-          <label className="form-field-label">
-            Weight <Text type="danger">*</Text>
-          </label>
-          <Controller
-            control={control}
-            name={`containers.${ci}.commodities.${mi}.weight`}
-            render={({ field }) => (
-              <InputNumber
-                {...field}
-                min={1}
-                size="large"
-                className="form-field-full-width"
-                addonAfter="kg"
-                status={
-                  cargoFieldError(errors, path("weight")) ? "error" : undefined
-                }
-              />
-            )}
-          />
-          {cargoFieldError(errors, path("weight")) ? (
-            <Text type="danger" className="form-field-error">
-              {cargoFieldError(errors, path("weight"))}
-            </Text>
-          ) : null}
-        </div>
-
-        <div className="form-field-cell si-cargo-sitem__narrow">
-          <label className="form-field-label">
-            Volume <Text type="danger">*</Text>
-          </label>
+        <div className="form-field-cell si-cargo-sitem__volume">
+          <label className="form-field-label">Volume</label>
           <Controller
             control={control}
             name={`containers.${ci}.commodities.${mi}.volume`}

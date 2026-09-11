@@ -62,7 +62,7 @@ export function TrackingContainersTable({
       },
     },
     {
-      headerName: "Container No & Seal",
+      headerName: "Container No ",
       field: "containerNo",
       sortable: true,
       width: 250,
@@ -72,9 +72,9 @@ export function TrackingContainersTable({
         return (
           <div className="tracking-cell-stack">
             <Text className="tracking-cell-title">{record.containerNo}</Text>
-            <Text className="tracking-cell-sub">
+            {/* <Text className="tracking-cell-sub">
               Seal: {record.sealNo} | {record.containerType}
-            </Text>
+            </Text> */}
           </div>
         );
       },

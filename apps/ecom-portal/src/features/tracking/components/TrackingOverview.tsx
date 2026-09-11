@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-04 17:15)
+// Modified by Sekar Nagarajan (2026-09-11 13:05)
 import { AppButton } from "@solverminds/shared-ui";
 import { Card, Col, Row, Space, Tooltip, Typography } from "antd";
 import { useState } from "react";
@@ -111,10 +111,9 @@ export function TrackingOverview({ data }: TrackingOverviewProps) {
                 aria-controls="tracking-overview-journey"
                 onClick={() => setJourneyOpen((open) => !open)}
                 icon={
-                  <AppIcon
-                    icon={journeyOpen ? Icons.chevronUp : Icons.chevronDown}
-                    size={20}
-                  />
+                  <span className="tracking-overview__toggle-chevron app-icon-inherit">
+                    <AppIcon icon={Icons.chevronDown} size={20} />
+                  </span>
                 }
               />
             </Tooltip>
@@ -122,60 +121,68 @@ export function TrackingOverview({ data }: TrackingOverviewProps) {
         </Row>
       </div>
 
-      {journeyOpen ? (
-        <div
-          id="tracking-overview-journey"
-          className="tracking-overview__journey"
-        >
-          <TrackingPipeline milestones={data.milestones} eta={data.eta} />
+      <div
+        id="tracking-overview-journey"
+        className={[
+          "tracking-overview__journey-panel",
+          journeyOpen ? "tracking-overview__journey-panel--open" : undefined,
+        ]
+          .filter(Boolean)
+          .join(" ")}
+        aria-hidden={!journeyOpen}
+      >
+        <div className="tracking-overview__journey-panel-inner">
+          <div className="tracking-overview__journey">
+            <TrackingPipeline milestones={data.milestones} eta={data.eta} />
 
-          <div className="tracking-deadlines">
-            <Space size={6}>
-              <AppIcon icon={Icons.calendar} size={16} />
-              <strong>Cut-Off Deadlines:</strong>
-            </Space>
-            <Tooltip title="Container Gate-In Closing">
-              <div className="tracking-deadline">
-                <span className="tracking-deadline__icon tracking-deadline__icon--gate app-icon-inherit">
-                  <AppIcon icon={Icons.container} size={14} />
-                </span>
-                <span>
-                  <span className="tracking-deadline__label">Gate-In</span>
-                  <span className="tracking-deadline__value">
-                    {data.deadlines.containerGateIn}
+            <div className="tracking-deadlines">
+              <Space size={6}>
+                <AppIcon icon={Icons.calendar} size={16} />
+                <strong>Cut-Off Deadlines:</strong>
+              </Space>
+              <Tooltip title="Container Gate-In Closing">
+                <div className="tracking-deadline">
+                  <span className="tracking-deadline__icon tracking-deadline__icon--gate app-icon-inherit">
+                    <AppIcon icon={Icons.container} size={14} />
                   </span>
-                </span>
-              </div>
-            </Tooltip>
-            <Tooltip title="Shipping Instruction Document Closing">
-              <div className="tracking-deadline">
-                <span className="tracking-deadline__icon tracking-deadline__icon--si app-icon-inherit">
-                  <AppIcon icon={Icons.clipboardList} size={14} />
-                </span>
-                <span>
-                  <span className="tracking-deadline__label">SI Cut-Off</span>
-                  <span className="tracking-deadline__value">
-                    {data.deadlines.siDocClosing}
+                  <span>
+                    <span className="tracking-deadline__label">Gate-In</span>
+                    <span className="tracking-deadline__value">
+                      {data.deadlines.containerGateIn}
+                    </span>
                   </span>
-                </span>
-              </div>
-            </Tooltip>
-            <Tooltip title="Verified Gross Mass (VGM) Closing">
-              <div className="tracking-deadline">
-                <span className="tracking-deadline__icon tracking-deadline__icon--vgm app-icon-inherit">
-                  <AppIcon icon={Icons.shieldCheck} size={14} />
-                </span>
-                <span>
-                  <span className="tracking-deadline__label">VGM Cut-Off</span>
-                  <span className="tracking-deadline__value">
-                    {data.deadlines.vgmClosing}
+                </div>
+              </Tooltip>
+              <Tooltip title="Shipping Instruction Document Closing">
+                <div className="tracking-deadline">
+                  <span className="tracking-deadline__icon tracking-deadline__icon--si app-icon-inherit">
+                    <AppIcon icon={Icons.clipboardList} size={14} />
                   </span>
-                </span>
-              </div>
-            </Tooltip>
+                  <span>
+                    <span className="tracking-deadline__label">SI Cut-Off</span>
+                    <span className="tracking-deadline__value">
+                      {data.deadlines.siDocClosing}
+                    </span>
+                  </span>
+                </div>
+              </Tooltip>
+              <Tooltip title="Verified Gross Mass (VGM) Closing">
+                <div className="tracking-deadline">
+                  <span className="tracking-deadline__icon tracking-deadline__icon--vgm app-icon-inherit">
+                    <AppIcon icon={Icons.shieldCheck} size={14} />
+                  </span>
+                  <span>
+                    <span className="tracking-deadline__label">VGM Cut-Off</span>
+                    <span className="tracking-deadline__value">
+                      {data.deadlines.vgmClosing}
+                    </span>
+                  </span>
+                </div>
+              </Tooltip>
+            </div>
           </div>
         </div>
-      ) : null}
+      </div>
     </Card>
   );
 }

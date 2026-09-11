@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-02 16:43)
+// Modified by Sekar Nagarajan (2026-09-11 11:36)
 import {
   Col,
   Input,
@@ -22,7 +22,10 @@ import {
   FORM_YES_NO_SWITCH_CLASS,
   yesNoSwitchInner,
 } from "../../../components/shared/yes-no-switch";
-import type { CargoData } from "../types/booking.types";
+import {
+  applyContainerTypeToMockNo,
+  type CargoData,
+} from "../types/booking.types";
 import { isReeferContainerType } from "../utils/booking-cargo-completeness";
 import { cargoFieldError } from "../utils/cargo-field-error";
 import { QuantityStepper } from "./quantity-stepper";
@@ -99,6 +102,13 @@ export function BookingCargoContainerFields({
                 optionFilterProp="label"
                 onChange={(value: string) => {
                   field.onChange(value);
+                  setValue(
+                    `containers.${ci}.containerNo`,
+                    applyContainerTypeToMockNo(
+                      watch(`containers.${ci}.containerNo`),
+                      value,
+                    ),
+                  );
                   if (!isReeferContainerType(value)) {
                     setValue(`containers.${ci}.reeferMode`, "none");
                   } else if (reeferMode === "none") {

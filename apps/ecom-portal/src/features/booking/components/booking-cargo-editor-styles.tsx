@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-03 18:36)
+// Modified by Sekar Nagarajan (2026-09-11 11:49)
 import { theme } from "antd";
 
 /** Booking-only extensions on top of SI CargoLinesEditorStyles. */
@@ -138,14 +138,48 @@ export function BookingCargoEditorStyles() {
         background: ${token.colorBgContainer};
       }
 
+      /* Modified by Sekar Nagarajan (2026-09-11 11:49) — Commodity / Weight / Package Type / Qty / Volume */
       .si-cargo-sitem__grid--booking {
         grid-template-columns:
-          minmax(0, 1.8fr)
-          minmax(0, 1.2fr)
-          ${token.controlHeightLG * 4.5}px
-          minmax(110px, 0.9fr)
-          minmax(110px, 0.9fr);
+          minmax(220px, 2.2fr)
+          minmax(150px, 1fr)
+          minmax(220px, 1.8fr)
+          minmax(150px, 1fr)
+          minmax(150px, 1fr);
         align-items: start;
+      }
+      .si-cargo-sitem__grid--booking .form-field-cell {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+      }
+      .si-cargo-sitem__grid--booking .form-field-label {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        white-space: nowrap;
+        min-height: ${token.lineHeight * token.fontSize}px;
+        margin: 0;
+      }
+      .si-cargo-sitem__grid--booking .si-cargo-sitem__hs,
+      .si-cargo-sitem__grid--booking .si-cargo-sitem__weight,
+      .si-cargo-sitem__grid--booking .si-cargo-sitem__pkg,
+      .si-cargo-sitem__grid--booking .si-cargo-sitem__qty,
+      .si-cargo-sitem__grid--booking .si-cargo-sitem__volume {
+        width: 100%;
+      }
+      .si-cargo-sitem__grid--booking .si-cargo-sitem__pkg .ant-select,
+      .si-cargo-sitem__grid--booking .si-cargo-sitem__weight .ant-input-number,
+      .si-cargo-sitem__grid--booking .si-cargo-sitem__weight .ant-input-number-group-wrapper,
+      .si-cargo-sitem__grid--booking .si-cargo-sitem__volume .ant-input-number,
+      .si-cargo-sitem__grid--booking .si-cargo-sitem__volume .ant-input-number-group-wrapper,
+      .si-cargo-sitem__grid--booking .si-cargo-sitem__qty .booking-qty-stepper {
+        width: 100%;
+        max-width: 100%;
+      }
+      .si-cargo-sitem__grid--booking .si-cargo-sitem__qty .booking-qty-stepper {
+        min-width: ${token.controlHeightLG * 4.5}px;
       }
       .si-cargo-sitem__head-actions {
         display: inline-flex;
@@ -329,6 +363,87 @@ export function BookingCargoEditorStyles() {
         width: 112px;
         min-width: 112px;
       }
+      /* Modified by Sekar Nagarajan (2026-09-10 23:25)
+         Must beat .si-cargo-grid tbody td position:relative (higher specificity),
+         otherwise left shifts cells and Container No appears under Type. */
+      .si-cargo-grid thead th.si-cargo-grid__th-actions,
+      .si-cargo-grid tbody td.si-cargo-grid__td-actions {
+        position: sticky;
+        left: 0;
+        width: 112px;
+        min-width: 112px;
+        max-width: 112px;
+        box-shadow: none;
+        overflow: hidden;
+      }
+      .si-cargo-grid thead th.si-cargo-grid__th-actions {
+        z-index: 32;
+      }
+      .si-cargo-grid tbody td.si-cargo-grid__td-actions {
+        z-index: 12;
+        background: ${token.colorBgContainer};
+      }
+      .si-cargo-grid tbody tr:hover td.si-cargo-grid__td-actions {
+        background: ${token.colorFillAlter};
+      }
+      .si-cargo-grid thead th.si-cargo-grid__th-container,
+      .si-cargo-grid tbody td.si-cargo-grid__td-container {
+        position: sticky;
+        left: 112px;
+        width: 160px;
+        min-width: 160px;
+        max-width: 160px;
+        box-shadow: none;
+        overflow: hidden;
+      }
+      .si-cargo-grid thead th.si-cargo-grid__th-type,
+      .si-cargo-grid tbody td.si-cargo-grid__td-type {
+        position: sticky;
+        left: 272px;
+        width: 112px;
+        min-width: 112px;
+        max-width: 112px;
+        box-shadow: 1px 0 0 ${token.colorBorderSecondary};
+        overflow: hidden;
+      }
+      .si-cargo-grid thead th.si-cargo-grid__th-container,
+      .si-cargo-grid thead th.si-cargo-grid__th-type {
+        z-index: 31;
+        background-color: ${token.colorBgContainer};
+        background-image: linear-gradient(
+          ${token.colorFillAlter},
+          ${token.colorFillAlter}
+        );
+      }
+      .si-cargo-grid thead th.si-cargo-grid__th-type {
+        z-index: 30;
+      }
+      .si-cargo-grid tbody td.si-cargo-grid__td-container {
+        z-index: 11;
+        background: ${token.colorBgContainer};
+      }
+      .si-cargo-grid tbody td.si-cargo-grid__td-type {
+        z-index: 10;
+        background: ${token.colorBgContainer};
+      }
+      .si-cargo-grid tbody tr:hover td.si-cargo-grid__td-container,
+      .si-cargo-grid tbody tr:hover td.si-cargo-grid__td-type {
+        background: ${token.colorFillAlter};
+      }
+      .si-cargo-grid tbody td.si-cargo-grid__td-container .si-cargo-grid__field--container {
+        min-width: 0 !important;
+        width: 100%;
+        max-width: 100%;
+      }
+      .si-cargo-grid tbody td.si-cargo-grid__td-type .si-cargo-grid__field--kind {
+        min-width: 0 !important;
+        width: 100%;
+        max-width: 100%;
+      }
+      .si-cargo-grid tbody td.si-cargo-grid__td-type .ant-select-selection-item {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
       /* Modified by Sekar Nagarajan (2026-09-03 18:36) — booking grid sticky header above cell switches */
       .si-cargo-grid tbody td .si-cargo-grid__switch-cell,
       .si-cargo-grid tbody td .form-yes-no-switch-wrap {
@@ -410,7 +525,14 @@ export function BookingCargoEditorStyles() {
         .si-cargo-sitem__grid--booking {
           grid-template-columns: repeat(2, minmax(0, 1fr));
         }
-        .si-cargo-sitem__grid--booking .si-cargo-sitem__narrow {
+        .si-cargo-sitem__grid--booking .si-cargo-sitem__hs {
+          grid-column: 1 / -1;
+        }
+        .si-cargo-sitem__grid--booking .si-cargo-sitem__pkg {
+          grid-column: 1 / -1;
+        }
+        .si-cargo-sitem__grid--booking .si-cargo-sitem__qty .booking-qty-stepper {
+          min-width: 0;
           width: 100%;
         }
         .booking-oog-form-grid {

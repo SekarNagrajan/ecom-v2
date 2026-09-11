@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-08 17:10)
+// Modified by Sekar Nagarajan (2026-09-11 12:35)
 import { AppButton } from "@solverminds/shared-ui";
 import { Spin, Tag, Tooltip, Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
@@ -190,6 +190,26 @@ function formatDetailDateTime(value: string): { date: string; time: string } {
   return { date: `${mm}/${dd}/${yyyy}`, time: `${hh}:${min} LT` };
 }
 
+function parseScheduleInstant(value: string | undefined): number | null {
+  if (!value?.trim()) return null;
+  const parsed = new Date(value.replace(" ", "T"));
+  const ms = parsed.getTime();
+  return Number.isNaN(ms) ? null : ms;
+}
+
+/**
+ * Rail segment after `from` toward `to`:
+ * completed (stronger solid) once the next stop is reached; otherwise upcoming (lighter solid).
+ */
+function isRouteSegmentCompleted(from: RouteStop, to: RouteStop): boolean {
+  const arrivedAtNext = parseScheduleInstant(to.eta ?? to.etd);
+  if (arrivedAtNext !== null) {
+    return arrivedAtNext <= Date.now();
+  }
+  const departedFrom = parseScheduleInstant(from.etd ?? from.eta);
+  return departedFrom !== null && departedFrom <= Date.now();
+}
+
 function legOutboundBadges(
   leg: RouteLeg,
   options?: { includeRoad?: boolean },
@@ -210,7 +230,7 @@ function legOutboundBadges(
 }
 
 /**
- * Builds numbered Route timeline stops from existing legs + terminals.
+ * Builds Route timeline stops from existing legs + terminals.
  * Origin → ETD only; hubs → ETA + ETD; destination → ETA only.
  */
 function buildRouteStops(item: ScheduleItem): RouteStop[] {
@@ -388,12 +408,32 @@ function ScheduleRouteDetails({
       <ol className="schedule-route-timeline">
         {stops.map((stop, index) => {
           const isLast = index === stops.length - 1;
+          const nextStop = stops[index + 1];
+          const segmentCompleted =
+            !isLast && nextStop
+              ? isRouteSegmentCompleted(stop, nextStop)
+              : false;
+          // Departure / hub outbound → ship; arrival-only (destination) → map pin
+          const nodeIcon = stop.etd ? Icons.ship : Icons.mapPin;
           return (
             <li key={stop.id} className="schedule-route-stop">
               <div className="schedule-route-stop__rail">
-                <span className="schedule-route-stop__node">{stop.index}</span>
+                <span
+                  className="schedule-route-stop__node app-icon-inherit"
+                  aria-label={stop.etd ? "Departure" : "Arrival"}
+                >
+                  <AppIcon icon={nodeIcon} size={14} />
+                </span>
                 {isLast ? null : (
-                  <span className="schedule-route-stop__line" aria-hidden />
+                  <span
+                    className={[
+                      "schedule-route-stop__line",
+                      segmentCompleted
+                        ? "schedule-route-stop__line--solid"
+                        : "schedule-route-stop__line--dotted",
+                    ].join(" ")}
+                    aria-hidden
+                  />
                 )}
               </div>
               <div className="schedule-route-stop__body">

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-08 16:25)
+// Modified by Sekar Nagarajan (2026-09-11 00:07)
 // Schedule mocks split by card case: Direct (merchant) vs Transshipment
 
 import type {
@@ -258,6 +258,90 @@ export const MOCK_DIRECT_MERCHANT_SCHEDULES: ScheduleItem[] = [
  * Card transcript: vessel · hub port · vessel (…).
  */
 export const MOCK_TRANSSHIPMENT_SCHEDULES: ScheduleItem[] = [
+  // Modified by Sekar Nagarajan (2026-09-11 00:07)
+  // Timeline demo (as of ~2026-09-11): solid completed legs + dotted in-progress leg
+  {
+    id: "SCH-TS-TIMELINE",
+    serviceCode: "GALEX",
+    serviceName: "GALEX Asia–Europe",
+    isDefaultRoute: true,
+    polPortId: "CNHUA",
+    polPortName: "Huangpu (Guangzhou)",
+    podPortId: "NLRTM",
+    podPortName: "Rotterdam (Port of Rotterdam)",
+    polTerminal: "Huangpu Xingang Terminal",
+    podTerminal: "ECT Delta Terminal",
+    etd: "2026-08-28 10:00",
+    eta: "2026-09-22 16:00",
+    transitTimeDays: 25,
+    isDirect: false,
+    transshipmentCount: 2,
+    isMultimodal: false,
+    vesselName: "COSCO SHIPPING GALAXY",
+    vesselCode: "CSGX",
+    voyage: "033W",
+    bound: "W",
+    deadlines: {
+      containerGateIn: "2026-08-26 18:00",
+      siDocClosing: "2026-08-26 12:00",
+      vgmClosing: "2026-08-26 14:00",
+    },
+    distanceKm: 16800,
+    bookingAllowed: true,
+    legs: [
+      {
+        id: "LEG-TS-TIMELINE-1",
+        legType: "Feeder",
+        vesselName: "COSCO SHIPPING GALAXY",
+        vesselCode: "CSGX",
+        voyage: "033W",
+        bound: "W",
+        serviceName: "GALEX",
+        serviceCode: "GALEX",
+        polPortId: "CNHUA",
+        polPortName: "Huangpu",
+        podPortId: "SGSIN",
+        podPortName: "Singapore",
+        etd: "2026-08-28 10:00",
+        eta: "2026-09-04 08:00",
+        terminal: "Huangpu Xingang Terminal",
+      },
+      {
+        id: "LEG-TS-TIMELINE-2",
+        legType: "Mainline",
+        vesselName: "MSC ISTANBUL",
+        vesselCode: "MSCI",
+        voyage: "118W",
+        bound: "W",
+        serviceName: "Lion Service",
+        serviceCode: "LION",
+        polPortId: "SGSIN",
+        polPortName: "Singapore",
+        podPortId: "AEJEA",
+        podPortName: "Jebel Ali",
+        etd: "2026-09-05 14:00",
+        eta: "2026-09-09 06:00",
+        terminal: "PSA Pasir Panjang Terminal",
+      },
+      {
+        id: "LEG-TS-TIMELINE-3",
+        legType: "Mainline",
+        vesselName: "MAERSK EDINBURGH",
+        vesselCode: "MAED",
+        voyage: "241W",
+        bound: "W",
+        serviceName: "AE10",
+        serviceCode: "AE10",
+        polPortId: "AEJEA",
+        polPortName: "Jebel Ali",
+        podPortId: "NLRTM",
+        podPortName: "Rotterdam",
+        etd: "2026-09-10 09:00",
+        eta: "2026-09-22 16:00",
+        terminal: "DP World Jebel Ali",
+      },
+    ],
+  },
   {
     id: "SCH-TS-001",
     serviceCode: "AUE",

@@ -1,6 +1,7 @@
-// Modified by Sekar Nagarajan (2026-09-10 22:56)
+// Modified by Sekar Nagarajan (2026-09-11 11:59)
 import { theme } from "antd";
 
+import { BE_COLOR_MAP } from "../../theme/utils/config-mapper";
 import { tokenMix } from "../../theme/utils/token-mix";
 
 /** Token-backed Booking module layout classes (agenct.md). */
@@ -25,6 +26,9 @@ export function BookingModuleStyles() {
   const primaryTint28 = tokenMix(token.colorPrimary, 28);
   const successTint28 = tokenMix(token.colorSuccess, 28);
   const errorTint28 = tokenMix(token.colorError, 28);
+  const sandyBrown = BE_COLOR_MAP.SANDY_BROWN;
+  const sandyBrownBg = tokenMix(sandyBrown, 14);
+  const sandyBrownBorder = tokenMix(sandyBrown, 32);
 
   return (
     <style>{`
@@ -535,13 +539,13 @@ export function BookingModuleStyles() {
         height: ${token.controlHeightLG}px;
         min-width: ${token.controlHeightLG}px;
       }
+      /* Modified by Sekar Nagarajan (2026-09-10 23:45) — tone-sandy-brown Select Template */
       .booking-template-select-btn.ant-btn-primary {
-        background: ${token.colorWarning};
-        border-color: ${token.colorWarning};
+        color: ${token.colorTextLightSolid} !important;
+        background: ${token.colorWarning} !important;
+        border-color: ${token.colorWarning} !important;
       }
-      .booking-template-select-btn.ant-btn-primary:hover {
-        opacity: 0.9;
-      }
+      
 
       /* Modified by Sekar Nagarajan (2026-08-27 23:34) — fix card overlap */
       .booking-routing-modal {
@@ -922,13 +926,18 @@ export function BookingModuleStyles() {
         justify-content: center;
         flex-shrink: 0;
         z-index: 1;
+        line-height: 1;
+      }
+      .booking-route-stop__node .app-icon {
+        display: block;
       }
       .booking-route-stop__line {
         flex: 1;
         width: 0;
         min-height: ${token.controlHeightLG}px;
         margin: ${token.marginXXS}px 0;
-        border-left: 2px dashed ${tokenMix(token.colorPrimary, 45)};
+        /* Modified by Sekar Nagarajan (2026-09-11 11:59) — always solid (no progress state) */
+        border-left: 2px solid ${token.colorPrimary};
       }
       .booking-route-stop__body {
         min-width: 0;
@@ -1098,8 +1107,8 @@ export function BookingModuleStyles() {
         flex-direction: column;
       }
       .booking-selected-rate-panel--selected.ant-card {
-        border-color: ${token.colorSuccess};
-        background: ${successTint8};
+        border-color: ${token.colorWarning};
+        background: ${warningTint8};
         
       }
       .booking-selected-rate-panel--selected > .ant-card-head {
@@ -1306,6 +1315,14 @@ export function BookingModuleStyles() {
       .booking-upload-type {
         margin-bottom: ${token.marginMD}px;
         max-width: 320px;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-11 11:54) — gap between doc type and Dragger */
+      .booking-upload-type-row {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+        margin-bottom: ${token.marginLG}px;
+        max-width: 420px;
       }
       .booking-upload-list {
         margin: ${token.marginMD}px 0 0;
@@ -2750,6 +2767,80 @@ export function BookingModuleStyles() {
         .booking-cargo-edit-panel__fields {
           grid-template-columns: 1fr;
         }
+      }
+
+      /* Modified by Sekar Nagarajan (2026-09-10 23:31) — outlined confirmation card */
+      .wizard-confirmation {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: ${token.paddingXL}px ${token.paddingLG}px;
+      }
+      .booking-confirmation-card.ant-card {
+        width: 100%;
+        max-width: 520px;
+        border: 1px solid ${token.colorBorder};
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorBgContainer};
+        box-shadow: none;
+      }
+      .booking-confirmation-card > .ant-card-body {
+        padding: ${token.paddingXL}px ${token.paddingLG}px;
+      }
+      .booking-confirmation-card__body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: ${token.marginSM}px;
+      }
+      .booking-confirmation-card__icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: ${token.controlHeightLG * 1.75}px;
+        height: ${token.controlHeightLG * 1.75}px;
+        border-radius: 50%;
+        border: 1px solid ${successTint14};
+        background: ${successTint8};
+        color: ${token.colorSuccess};
+        margin-bottom: ${token.marginXS}px;
+      }
+      .booking-confirmation-card__title.ant-typography {
+        margin: 0 !important;
+        color: ${token.colorTextHeading};
+      }
+      .booking-confirmation-card__message.ant-typography {
+        margin: 0;
+        max-width: 36em;
+      }
+      .booking-confirmation-card__ref {
+        width: 100%;
+        margin-top: ${token.marginSM}px;
+        padding: ${token.paddingMD}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorFillAlter};
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+      }
+      .booking-confirmation-card__ref-label.ant-typography {
+        margin: 0;
+        font-size: ${token.fontSizeSM}px;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+      }
+      .booking-confirmation-card__ref-value.ant-typography {
+        margin: 0;
+        font-size: ${token.fontSizeHeading5}px;
+        color: ${token.colorPrimary};
+        word-break: break-all;
+      }
+      .booking-confirmation-card__actions {
+        margin-top: ${token.marginMD}px;
+        justify-content: center;
       }
     `}</style>
   );

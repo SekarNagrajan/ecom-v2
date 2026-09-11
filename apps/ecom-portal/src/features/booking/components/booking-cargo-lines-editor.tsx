@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-02 16:43)
+// Modified by Sekar Nagarajan (2026-09-11 11:52)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
@@ -20,6 +20,7 @@ import {
   cargoSchema,
   createEmptyCommodity,
   createEmptyContainer,
+  syncMockContainerSeqFromNos,
   type CargoData,
   type CommodityItem,
   type ContainerItem,
@@ -126,10 +127,11 @@ export function BookingCargoLinesEditor({
 
   const handleAddContainers = () => {
     const qty = Math.max(1, Math.min(MAX_ADD_QTY, addQty || 1));
+    syncMockContainerSeqFromNos(
+      getValues("containers").map((c) => c.containerNo),
+    );
     for (let i = 0; i < qty; i += 1) {
-      const next = createEmptyContainer();
-      next.containerType = addType;
-      appendContainer(next);
+      appendContainer(createEmptyContainer(addType));
     }
     setAddQty(1);
     setPage(Math.floor((containersWatch.length + qty - 1) / PAGE_SIZE));
@@ -138,9 +140,14 @@ export function BookingCargoLinesEditor({
   const handleDuplicateContainer = (index: number) => {
     const current = getValues(`containers.${index}`);
     if (!current) return;
+    syncMockContainerSeqFromNos(
+      getValues("containers").map((c) => c.containerNo),
+    );
+    const fresh = createEmptyContainer(current.containerType);
     const clone: ContainerItem = {
       ...structuredClone(current),
-      id: createEmptyContainer().id,
+      id: fresh.id,
+      containerNo: fresh.containerNo,
       commodities: (current.commodities ?? []).map((line) => ({
         ...structuredClone(line),
         id: createEmptyCommodity().id,

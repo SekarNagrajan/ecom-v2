@@ -1,7 +1,7 @@
-// Modified by Sekar Nagarajan (2026-08-25 16:55)
-// Landing controller — public SCH/TRK/RAT search; Category P tabs force login (JSP openNav parity)
+// Modified by Sekar Nagarajan (2026-09-11 14:35)
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "@tanstack/react-router";
 import dayjs from "dayjs";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -27,7 +27,9 @@ interface UseLandingControllerOptions {
 export function useLandingController({
   onLoginRequired,
 }: UseLandingControllerOptions) {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<LandingTab>("schedules");
+  const [isSearching, setIsSearching] = useState(false);
   const setIntendedPath = usePostLoginRedirectStore((s) => s.setIntendedPath);
   const { data: tabConfigData } = useTabConfig();
   const tabConfig = tabConfigData ?? {
@@ -49,6 +51,29 @@ export function useLandingController({
     setActiveTab(tab);
   };
 
+  const navigateWithSearch = (
+    pathname: "/app/schedules" | "/app/tracking" | "/app/rates",
+    params: URLSearchParams,
+  ) => {
+    setIsSearching(true);
+    const search = Object.fromEntries(params.entries());
+    const startedAt = Date.now();
+    const minSpinnerMs = 450;
+
+    void navigate({
+      to: pathname,
+      search: search as never,
+      replace: false,
+    })
+      .catch(() => {
+        // Keep the landing panel interactive if navigation is blocked
+      })
+      .finally(() => {
+        const wait = Math.max(0, minSpinnerMs - (Date.now() - startedAt));
+        window.setTimeout(() => setIsSearching(false), wait);
+      });
+  };
+
   const scheduleForm = useForm<ScheduleSearchForm>({
     resolver: zodResolver(scheduleSearchSchema),
     defaultValues: {
@@ -61,6 +86,7 @@ export function useLandingController({
 
   const handleScheduleSubmit = (e?: React.FormEvent) => {
     if (e && e.preventDefault) e.preventDefault();
+    if (isSearching) return;
     if (requireLoginForTab("schedules")) {
       const path = landingTabToAppPath("schedules");
       setIntendedPath(path);
@@ -80,7 +106,7 @@ export function useLandingController({
       toDate,
       schetype: "loginschedule",
     });
-    window.location.href = `/app/schedules?${params.toString()}`;
+    navigateWithSearch("/app/schedules", params);
   };
 
   const trackingForm = useForm<TrackingSearchForm>({
@@ -93,6 +119,7 @@ export function useLandingController({
 
   const handleTrackingSubmit = (e?: React.FormEvent) => {
     if (e && e.preventDefault) e.preventDefault();
+    if (isSearching) return;
     if (requireLoginForTab("tracking")) {
       const path = landingTabToAppPath("tracking");
       setIntendedPath(path);
@@ -106,7 +133,7 @@ export function useLandingController({
       logintracno: trackNo,
       tracktype: "logintracking",
     });
-    window.location.href = `/app/tracking?${params.toString()}`;
+    navigateWithSearch("/app/tracking", params);
   };
 
   const ratesForm = useForm<RatesSearchForm>({
@@ -122,6 +149,7 @@ export function useLandingController({
 
   const handleRatesSubmit = (e?: React.FormEvent) => {
     if (e && e.preventDefault) e.preventDefault();
+    if (isSearching) return;
     if (requireLoginForTab("rates")) {
       const path = landingTabToAppPath("rates");
       setIntendedPath(path);
@@ -145,13 +173,14 @@ export function useLandingController({
       shipmentdate: shipmentDate,
       loginratetype: "loginratetype",
     });
-    window.location.href = `/app/rates?${params.toString()}`;
+    navigateWithSearch("/app/rates", params);
   };
 
   return {
     activeTab,
     handleTabChange,
     tabConfig,
+    isSearching,
     scheduleForm,
     handleScheduleSubmit,
     trackingForm,

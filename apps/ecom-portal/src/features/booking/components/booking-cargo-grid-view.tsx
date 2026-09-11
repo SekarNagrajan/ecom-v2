@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-02 12:22)
+// Modified by Sekar Nagarajan (2026-09-11 11:36)
 import { Input, InputNumber, Select, Switch, Typography } from "antd";
 import { useState } from "react";
 import {
@@ -17,7 +17,11 @@ import {
   FORM_YES_NO_SWITCH_CLASS,
   yesNoSwitchInner,
 } from "../../../components/shared/yes-no-switch";
-import type { CargoData, ContainerItem } from "../types/booking.types";
+import {
+  applyContainerTypeToMockNo,
+  type CargoData,
+  type ContainerItem,
+} from "../types/booking.types";
 import { isReeferContainerType } from "../utils/booking-cargo-completeness";
 import {
   BookingCargoGridExtrasModal,
@@ -27,6 +31,13 @@ import { HsCodeAutoComplete } from "./cargo-code-lookups";
 import { QuantityStepper } from "./quantity-stepper";
 
 const { Text } = Typography;
+
+/** Short type code for the grid Type cell (e.g. 20DC → 20 DC). */
+function formatGridContainerType(code: string | undefined): string {
+  const raw = (code ?? "").trim().toUpperCase();
+  if (!raw) return "";
+  return raw.replace(/^(\d+)([A-Z].*)$/, "$1 $2");
+}
 
 interface LookupOpt {
   value: string;
@@ -108,12 +119,16 @@ export function BookingCargoGridView({
                   className={
                     h === "Actions"
                       ? "si-cargo-grid__th-actions"
-                      : h === "SOC" ||
-                          h === "OOG" ||
-                          h === "NOR" ||
-                          h === "Hazardous"
-                        ? "si-cargo-grid__th-switch"
-                        : undefined
+                      : h === "Container No"
+                        ? "si-cargo-grid__th-container"
+                        : h === "Type"
+                          ? "si-cargo-grid__th-type"
+                          : h === "SOC" ||
+                              h === "OOG" ||
+                              h === "NOR" ||
+                              h === "Hazardous"
+                            ? "si-cargo-grid__th-switch"
+                            : undefined
                   }
                 >
                   {h}
@@ -220,8 +235,23 @@ export function BookingCargoGridView({
                               popupMatchSelectWidth={220}
                               className="si-cargo-grid__field si-cargo-grid__field--kind"
                               placeholder="Type"
+                              optionLabelProp="value"
+                              labelRender={({ value }) =>
+                                formatGridContainerType(
+                                  typeof value === "string"
+                                    ? value
+                                    : String(value ?? ""),
+                                )
+                              }
                               onChange={(value: string) => {
                                 field.onChange(value);
+                                setValue(
+                                  `containers.${ci}.containerNo`,
+                                  applyContainerTypeToMockNo(
+                                    containersWatch[ci]?.containerNo,
+                                    value,
+                                  ),
+                                );
                                 if (!isReeferContainerType(value)) {
                                   setValue(
                                     `containers.${ci}.reeferMode`,

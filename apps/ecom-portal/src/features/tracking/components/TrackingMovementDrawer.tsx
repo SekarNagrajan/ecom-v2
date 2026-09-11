@@ -1,9 +1,13 @@
-// Modified by Sekar Nagarajan (2026-08-25 19:15)
+// Modified by Sekar Nagarajan (2026-09-11 12:40)
 import { AppDrawer } from "@solverminds/shared-ui";
-import type { TableProps } from "antd";
-import { Card, Descriptions, Table, Tag, Typography } from "antd";
+import { Typography } from "antd";
+import type { LucideIcon } from "lucide-react";
 
-import { AppIcon, Icons } from "../../../components/icons";
+import {
+  AppIcon,
+  Icons,
+  NavDeliveryOrderIcon,
+} from "../../../components/icons";
 import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import type {
   ContainerEquipment,
@@ -18,6 +22,158 @@ interface TrackingMovementDrawerProps {
   onClose: () => void;
 }
 
+const STATUS_LABEL: Record<ContainerEquipment["status"], string> = {
+  IN_TRANSIT: "In Transit",
+  DELIVERED: "Delivered",
+  GATE_IN: "Gate In",
+  LOADED: "Loaded",
+  DISCHARGED: "Discharged",
+};
+
+const TRANSPORT_ICON: Record<
+  ContainerMovementEvent["transportMode"],
+  LucideIcon
+> = {
+  VESSEL: Icons.ship,
+  TRUCK: Icons.truck,
+  RAIL: Icons.truck,
+  BARGE: Icons.anchor,
+};
+
+const TRANSPORT_LABEL: Record<ContainerMovementEvent["transportMode"], string> =
+  {
+    VESSEL: "Vessel",
+    TRUCK: "Truck",
+    RAIL: "Rail",
+    BARGE: "Barge",
+  };
+
+function formatWeight(kg: number): string {
+  return `${kg.toLocaleString("en-US")} kg`;
+}
+
+function sortMovementsNewestFirst(
+  movements: ContainerMovementEvent[],
+): ContainerMovementEvent[] {
+  return [...movements].sort((a, b) =>
+    a.eventDate < b.eventDate ? 1 : a.eventDate > b.eventDate ? -1 : 0,
+  );
+}
+
+function MovementEventCard({
+  event,
+  isLatest,
+  isLast,
+}: {
+  event: ContainerMovementEvent;
+  isLatest: boolean;
+  isLast: boolean;
+}) {
+  const modeIcon = TRANSPORT_ICON[event.transportMode];
+  const vesselLine =
+    event.vesselName || event.voyage
+      ? [event.vesselName, event.voyage ? `Voy ${event.voyage}` : null]
+          .filter(Boolean)
+          .join(" · ")
+      : null;
+
+  return (
+    <li
+      className={[
+        "tracking-movement-event",
+        isLatest ? "tracking-movement-event--latest" : "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
+    >
+      <div className="tracking-movement-event__rail" aria-hidden>
+        <span className="tracking-movement-event__node app-icon-inherit">
+          <AppIcon icon={modeIcon} size={14} />
+        </span>
+        {isLast ? null : <span className="tracking-movement-event__line" />}
+      </div>
+
+      <div className="tracking-movement-event__body">
+        <div className="tracking-movement-event__head">
+          <div className="tracking-movement-event__title-block">
+            <Text strong className="tracking-movement-event__name">
+              {event.eventName}
+            </Text>
+            <div className="tracking-movement-event__chips">
+              <span className="tracking-movement-chip tracking-movement-chip--code">
+                {event.eventCode}
+              </span>
+              <span className="tracking-movement-chip tracking-movement-chip--mode">
+                {TRANSPORT_LABEL[event.transportMode]}
+              </span>
+              {event.isActual ? (
+                <span className="tracking-movement-chip tracking-movement-chip--actual">
+                  Actual
+                </span>
+              ) : (
+                <span className="tracking-movement-chip tracking-movement-chip--estimate">
+                  Estimated
+                </span>
+              )}
+              {isLatest ? (
+                <span className="tracking-movement-chip tracking-movement-chip--latest">
+                  Latest
+                </span>
+              ) : null}
+            </div>
+          </div>
+          <time
+            className="tracking-movement-event__time"
+            dateTime={event.eventDate.replace(" ", "T")}
+          >
+            {event.eventDate}
+          </time>
+        </div>
+
+        <div className="tracking-movement-event__meta">
+          <div className="tracking-movement-event__meta-item">
+            <span className="tracking-movement-event__meta-icon app-icon-inherit">
+              <AppIcon icon={Icons.mapPin} size={14} />
+            </span>
+            <div className="tracking-movement-event__meta-copy">
+              <Text className="tracking-movement-event__meta-value">
+                {event.locationName}
+                {event.locationCode ? (
+                  <span className="tracking-movement-event__meta-code">
+                    {" "}
+                    ({event.locationCode})
+                  </span>
+                ) : null}
+              </Text>
+              {event.facility ? (
+                <Text
+                  type="secondary"
+                  className="tracking-movement-event__meta-sub"
+                >
+                  {event.facility}
+                </Text>
+              ) : null}
+            </div>
+          </div>
+
+          {vesselLine ? (
+            <div className="tracking-movement-event__meta-item">
+              <span className="tracking-movement-event__meta-icon app-icon-inherit">
+                <AppIcon icon={Icons.ship} size={14} />
+              </span>
+              <div className="tracking-movement-event__meta-copy">
+                <Text className="tracking-movement-event__meta-value">
+                  {vesselLine}
+                </Text>
+              </div>
+            </div>
+          ) : null}
+        </div>
+      </div>
+    </li>
+  );
+}
+
 export function TrackingMovementDrawer({
   container,
   open,
@@ -25,53 +181,22 @@ export function TrackingMovementDrawer({
 }: TrackingMovementDrawerProps) {
   if (!container) return null;
 
-  const columns: TableProps<ContainerMovementEvent>["columns"] = [
+  const movements = sortMovementsNewestFirst(container.movements);
+  const statusClass = `tracking-movement-status tracking-movement-status--${container.status
+    .toLowerCase()
+    .replace(/_/g, "-")}`;
+
+  const summaryItems = [
+    { label: "Container No", value: container.containerNo },
+    { label: "Size / Type", value: container.containerType },
+    { label: "Seal No", value: container.sealNo },
+    { label: "Tare Weight", value: formatWeight(container.tareWeightKg) },
+    { label: "Payload", value: formatWeight(container.payloadKg) },
     {
-      title: "Event Code & Name",
-      dataIndex: "eventName",
-      key: "eventName",
-      render: (
-        val: string,
-        record: { eventCode: string; transportMode: string },
-      ) => (
-        <div>
-          <Text className="tracking-event-name">{val}</Text>
-          <Tag color="blue">{record.eventCode}</Tag>
-        </div>
+      label: "Current Status",
+      value: (
+        <span className={statusClass}>{STATUS_LABEL[container.status]}</span>
       ),
-    },
-    {
-      title: "Location & Facility",
-      dataIndex: "locationName",
-      key: "locationName",
-      render: (val: string, record: { facility: string }) => (
-        <div>
-          <Text className="tracking-event-loc">{val}</Text>
-          <Text type="secondary" className="tracking-event-facility">
-            {record.facility}
-          </Text>
-        </div>
-      ),
-    },
-    {
-      title: "Vessel / Voyage",
-      dataIndex: "vesselName",
-      key: "vesselName",
-      render: (val: string, record: { voyage?: string }) =>
-        val ? (
-          <div>
-            <Text className="tracking-event-loc">{val}</Text>
-            <Tag color="purple">Voy: {record.voyage || "-"}</Tag>
-          </div>
-        ) : (
-          <Text type="secondary">-</Text>
-        ),
-    },
-    {
-      title: "Timestamp",
-      dataIndex: "eventDate",
-      key: "eventDate",
-      render: (val: string) => <Tag color="green">{val}</Tag>,
     },
   ];
 
@@ -79,66 +204,91 @@ export function TrackingMovementDrawer({
     <AppDrawer
       open={open}
       onClose={onClose}
-      width="50%"
-      classNames={{ body: "tracking-drawer-body custom-scroll" }}
+      dialogSize="md"
+      classNames={{
+        header: "tracking-movement-drawer__header-wrap",
+        body: "tracking-drawer-body tracking-movement-drawer custom-scroll",
+      }}
       title={
-        <div className="tracking-drawer-title">
-          <AppIcon icon={Icons.history} size={20} tone="history" />
-          <div>
-            <Title level={4} className="tracking-drawer-title__text">
-              Container Movement History & Events
+        <div className="tracking-movement-drawer__header">
+          <span className="tracking-movement-drawer__header-icon app-icon-inherit">
+            <AppIcon icon={NavDeliveryOrderIcon} size={20} />
+          </span>
+          <div className="tracking-movement-drawer__header-copy">
+            <Text className="tracking-movement-drawer__eyebrow">
+              Container movement
+            </Text>
+            <Title level={5} className="tracking-movement-drawer__heading">
+              {container.containerNo}
             </Title>
-            <Text type="secondary" className="tracking-drawer-title__meta">
-              Container No: <strong>{container.containerNo}</strong> | Seal:{" "}
-              {container.sealNo}
+            <Text type="secondary" className="tracking-movement-drawer__meta">
+              {container.latestActivity}
+              {" · "}
+              {container.activityLocation}
             </Text>
           </div>
         </div>
       }
     >
-      <Card type="inner" className="tracking-drawer-panel">
-        <Descriptions column={{ xs: 1, sm: 2, md: 3 }} size="small">
-          <Descriptions.Item label="Container No">
-            <strong>{container.containerNo}</strong>
-          </Descriptions.Item>
-          <Descriptions.Item label="Size / Type">
-            {container.containerType}
-          </Descriptions.Item>
-          <Descriptions.Item label="Seal No">{container.sealNo}</Descriptions.Item>
-          <Descriptions.Item label="Tare Weight">
-            {container.tareWeightKg} KG
-          </Descriptions.Item>
-          <Descriptions.Item label="Payload Weight">
-            {container.payloadKg} KG
-          </Descriptions.Item>
-          <Descriptions.Item label="Current Status">
-            <Tag color="cyan">{container.status}</Tag>
-          </Descriptions.Item>
-        </Descriptions>
-      </Card>
+      <section
+        className="tracking-movement-summary"
+        aria-label="Container summary"
+      >
+        <div className="tracking-movement-summary__grid">
+          {summaryItems.map((item) => (
+            <div key={item.label} className="tracking-movement-summary__cell">
+              <Text className="tracking-movement-summary__label">
+                {item.label}
+              </Text>
+              <div className="tracking-movement-summary__value">
+                {item.value}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
 
-      <Title level={5} className="tracking-drawer-section-title">
-        Chronological Event Log
-      </Title>
-      <div className="responsive-table-wrap custom-scroll">
-        <Table
-          columns={columns}
-          dataSource={container.movements}
-          rowKey="id"
-          pagination={false}
-          size="small"
-          locale={{
-            emptyText: (
-              <ModuleEmptyState
-                artSize="sm"
-                variant="blank"
-                title="No movement events recorded"
-                style={{ padding: 12 }}
+      <section
+        className="tracking-movement-timeline-section"
+        aria-label="Movement event log"
+      >
+        <div className="tracking-movement-timeline-section__head">
+          <Title
+            level={5}
+            className="tracking-movement-timeline-section__title"
+          >
+            Event timeline
+          </Title>
+          <Text
+            type="secondary"
+            className="tracking-movement-timeline-section__count"
+          >
+            {movements.length} {movements.length === 1 ? "event" : "events"} ·
+            newest first
+          </Text>
+        </div>
+
+        {movements.length > 0 ? (
+          <ol className="tracking-movement-timeline">
+            {movements.map((event, index) => (
+              <MovementEventCard
+                key={event.id}
+                event={event}
+                isLatest={index === 0}
+                isLast={index === movements.length - 1}
               />
-            ),
-          }}
-        />
-      </div>
+            ))}
+          </ol>
+        ) : (
+          <div className="tracking-movement-empty">
+            <ModuleEmptyState
+              artSize="sm"
+              variant="blank"
+              title="No movement events recorded"
+            />
+          </div>
+        )}
+      </section>
     </AppDrawer>
   );
 }

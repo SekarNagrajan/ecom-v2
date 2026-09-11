@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-25 15:45)
+// Modified by Sekar Nagarajan (2026-09-11 14:30)
 import { AppButton } from "@solverminds/shared-ui";
 import { Flex, Input, theme } from "antd";
 import { Controller, type UseFormReturn } from "react-hook-form";
@@ -11,12 +11,14 @@ interface TrackingSearchTabProps {
   form: UseFormReturn<TrackingSearchForm>;
   onSubmit: React.FormEventHandler<HTMLFormElement>;
   showImageCaptcha?: boolean;
+  isSearching?: boolean;
 }
 
 export function TrackingSearchTab({
   form,
   onSubmit,
   showImageCaptcha = true,
+  isSearching = false,
 }: TrackingSearchTabProps) {
   const { token } = theme.useToken();
   const {
@@ -108,10 +110,16 @@ export function TrackingSearchTab({
           size="large"
           htmlType="submit"
           id="tracking-search-btn"
+          loading={isSearching}
+          disabled={isSearching}
           onClick={(e) =>
             onSubmit(e as unknown as React.FormEvent<HTMLFormElement>)
           }
-          icon={<AppIcon icon={Icons.search} size={16} />}
+          icon={
+            isSearching ? undefined : (
+              <AppIcon icon={Icons.search} size={16} />
+            )
+          }
         >
           Track shipment
         </AppButton>
@@ -119,6 +127,7 @@ export function TrackingSearchTab({
           danger
           size="large"
           htmlType="button"
+          disabled={isSearching}
           icon={<AppIcon icon={Icons.refreshCw} size={16} tone="delete" />}
           onClick={handleReset}
           aria-label="Reset tracking search"

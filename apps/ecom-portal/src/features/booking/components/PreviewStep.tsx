@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-05 00:18)
+// Modified by Sekar Nagarajan (2026-09-11 12:12)
 /**
  * Preview — airy review of all wizard inputs with Edit → jump to step.
  * Layout: header + section stack (route, master, parties, cargo, ENS,
@@ -13,14 +13,13 @@ import { AppIcon, Icons } from "../../../components/icons";
 import { WIZARD_STEP_TITLES } from "../../../constants/module-titles";
 import { useBookingStore } from "../stores/booking.store";
 import type { SelectedRoute } from "../types/booking.types";
-import { partiesToCards, type PartyRoleKey } from "../utils/party-role.utils";
+import { orderedAssignedParties } from "../utils/party-role.utils";
 import { BookingModuleStyles } from "./booking-module-styles";
 import { PreviewCargoReview } from "./preview/PreviewCargoReview";
 import { PreviewRouteBand } from "./preview/PreviewRouteBand";
 import { PreviewSummaryStrip } from "./preview/PreviewSummaryStrip";
 import {
   BookingPreviewEmpty,
-  BookingPreviewEmptyPartyCard,
   BookingPreviewFieldGrid,
   BookingPreviewPartyCard,
   BookingPreviewSection,
@@ -36,13 +35,6 @@ const BOOKING_STEP = {
   files: 5,
   references: 6,
 } as const;
-
-const REVIEW_PARTY_ROLES: PartyRoleKey[] = [
-  "shipper",
-  "consignee",
-  "notifyParty",
-  "forwarder",
-];
 
 function dash(value?: string | number | null): string {
   if (value === undefined || value === null || value === "") return "—";
@@ -138,14 +130,7 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
   } = payload;
   const route = masterDetails.selectedRoute;
 
-  const partyCards = partiesToCards(parties);
-  const reviewRoleSet = new Set<PartyRoleKey>(REVIEW_PARTY_ROLES);
-  const extraPartyEntries = (
-    Object.entries(partyCards) as [
-      PartyRoleKey,
-      (typeof partyCards)[PartyRoleKey],
-    ][]
-  ).filter(([role, card]) => card && !reviewRoleSet.has(role));
+  const partyEntries = orderedAssignedParties(parties);
 
   const masterRows: { label: string; value: string }[] = [
     { label: "Origin", value: dash(masterDetails.origin) },
@@ -235,27 +220,17 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
           title="Customer details"
           onEdit={() => go(BOOKING_STEP.parties)}
         >
-          <div className="booking-review__party-grid">
-            {REVIEW_PARTY_ROLES.map((role) => {
-              const card = partyCards[role];
-              return (
-                <div key={role} className="booking-party-grid__col">
-                  {card ? (
-                    <BookingPreviewPartyCard role={role} card={card} />
-                  ) : (
-                    <BookingPreviewEmptyPartyCard role={role} />
-                  )}
-                </div>
-              );
-            })}
-            {extraPartyEntries.map(([role, card]) =>
-              card ? (
+          {partyEntries.length > 0 ? (
+            <div className="booking-review__party-grid">
+              {partyEntries.map(([role, card]) => (
                 <div key={role} className="booking-party-grid__col">
                   <BookingPreviewPartyCard role={role} card={card} />
                 </div>
-              ) : null,
-            )}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <BookingPreviewEmpty label="No parties assigned" />
+          )}
         </BookingPreviewSection>
 
         <BookingPreviewSection

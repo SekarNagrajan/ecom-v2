@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-27 22:15)
+// Modified by Sekar Nagarajan (2026-09-11 11:43)
 import { AppButton } from "@solverminds/shared-ui";
 import { useAntdBreakpoint } from "@solverminds/shared-ui/hooks";
 import { Card, Flex, Result, Steps, Typography } from "antd";
@@ -63,7 +63,7 @@ export function RegistrationRoute({ onCancel }: RegistrationRouteProps) {
         </Flex>
 
         <Card className="reg-page-card">
-          <Flex vertical gap={24} className="reg-page__body">
+          <Flex vertical gap={16} className="reg-page__body">
             <div className="reg-page__header">
               <Title level={2} className="reg-page__title">
                 {controller.isSuccess

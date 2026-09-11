@@ -1,8 +1,8 @@
-// Modified by Sekar Nagarajan (2026-08-31 14:46)
+// Modified by Sekar Nagarajan (2026-09-10 23:31)
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { useNavigate } from "@tanstack/react-router";
-import { Card, Result, Space, Steps, Typography, theme } from "antd";
+import { Card, Space, Steps, Typography, theme } from "antd";
 import { useState } from "react";
 import { AppIcon, Icons, NavBookingIcon } from "../../components/icons";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
@@ -23,7 +23,7 @@ import { ReferenceInformationStep } from "./components/ReferenceInformationStep"
 import { useBookingWizard } from "./hooks/use-booking-wizard";
 import { useBookingStore } from "./stores/booking.store";
 
-const { Text } = Typography;
+const { Text, Title } = Typography;
 
 const PIPELINE_ICON_SIZE = 25;
 
@@ -175,46 +175,62 @@ export function BookingWizardRoute() {
 
       {confirmation ? (
         <div className="wizard-confirmation">
-          <Result
-            status="success"
-            icon={<AppIcon icon={Icons.checkCircle} size={60} tone="approve" />}
-            title="Booking Submitted Successfully"
-            subTitle={
-              <div>
-                Your booking request has been forwarded to the carrier.
-                <div
-                  style={{
-                    marginTop: token.marginSM,
-                    fontSize: token.fontSizeLG,
-                  }}
-                >
-                  Booking Reference:{" "}
-                  <Text
-                    copyable
-                    strong
-                    style={{
-                      fontSize: token.fontSizeHeading5,
-                      color: token.colorPrimary,
-                    }}
-                  >
-                    {confirmation.bookingReference}
-                  </Text>
-                </div>
-              </div>
-            }
-            extra={[
-              <AppButton
-                type="primary"
-                key="dashboard"
-                onClick={() => navigate({ to: "/app/booking" })}
+          <Card variant="outlined" className="booking-confirmation-card">
+            <div className="booking-confirmation-card__body">
+              <div
+                className="booking-confirmation-card__icon"
+                aria-hidden
               >
-                Go to Dashboard
-              </AppButton>,
-              <AppButton key="new" onClick={handleStartOver}>
-                Create Another Booking
-              </AppButton>,
-            ]}
-          />
+                <AppIcon
+                  icon={Icons.checkCircle}
+                  size={36}
+                  tone="approve"
+                />
+              </div>
+              <Title
+                level={3}
+                className="booking-confirmation-card__title"
+              >
+                Booking Submitted Successfully
+              </Title>
+              <Text
+                type="secondary"
+                className="booking-confirmation-card__message"
+              >
+                Your booking request has been forwarded to the carrier.
+              </Text>
+              <div className="booking-confirmation-card__ref">
+                <Text
+                  type="secondary"
+                  className="booking-confirmation-card__ref-label"
+                >
+                  Booking Reference
+                </Text>
+                <Text
+                  copyable
+                  strong
+                  className="booking-confirmation-card__ref-value"
+                >
+                  {confirmation.bookingReference}
+                </Text>
+              </div>
+              <Space
+                wrap
+                size="middle"
+                className="booking-confirmation-card__actions"
+              >
+                <AppButton
+                  type="primary"
+                  onClick={() => navigate({ to: "/app/booking" })}
+                >
+                  Go to Dashboard
+                </AppButton>
+                <AppButton onClick={handleStartOver}>
+                  Create Another Booking
+                </AppButton>
+              </Space>
+            </div>
+          </Card>
         </div>
       ) : (
         <div className="wizard-page-body">

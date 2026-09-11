@@ -148,10 +148,10 @@ export function AuthenticatedLayoutHeader({
                     E-Com Portal
                   </Text>
                 </div>
-                <Text type="secondary" className="app-layout-header__welcome">
+                {/* <Text type="secondary" className="app-layout-header__welcome">
                   Browse schedules, tracking, and rates — sign in for more
                   modules
-                </Text>
+                </Text> */}
               </div>
             </button>
           </Tooltip>

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-02 18:13)
+// Modified by Sekar Nagarajan (2026-09-11 12:12)
 import type { PartiesData } from "../types/booking.types";
 
 export type PartyRoleKey =
@@ -179,13 +179,55 @@ export function partiesToCards(
   return cards;
 }
 
+/** `cardsToParties` mirrors the Booking Party into the required
+ *  `siSubmittingParty` field when the user never assigned one, so a value that
+ *  still matches the Booking Party is a derived default, not an assignment. */
+function isDerivedSiSubmittingParty(parties: PartiesData): boolean {
+  return (
+    !!parties.siSubmittingParty &&
+    parties.siSubmittingParty === parties.shipperName &&
+    (parties.siSubmittingPartyContact || "") === (parties.shipperContact || "")
+  );
+}
+
+// Modified by Sekar Nagarajan (2026-09-11 12:12)
+/** Cards the user actually assigned — drops the derived SI Submitting Party so
+ *  revisiting Customer Details does not grow an extra card. */
+export function assignedPartyCards(
+  parties: PartiesData | null | undefined,
+): Partial<Record<PartyRoleKey, PartyCardData>> {
+  const cards = partiesToCards(parties);
+  if (parties && isDerivedSiSubmittingParty(parties)) {
+    delete cards.siSubmittingParty;
+  }
+  return cards;
+}
+
+/** Assigned parties in the order Customer Details renders them: the default
+ *  roles first, then any extra role in `PARTY_ROLE_OPTIONS` order. */
+export function orderedAssignedParties(
+  parties: PartiesData | null | undefined,
+): [PartyRoleKey, PartyCardData][] {
+  const cards = assignedPartyCards(parties);
+  const order: PartyRoleKey[] = [
+    ...DEFAULT_PARTY_ROLES,
+    ...PARTY_ROLE_OPTIONS.map((option) => option.key).filter(
+      (key) => !DEFAULT_PARTY_ROLES.includes(key),
+    ),
+  ];
+  return order.flatMap((role) => {
+    const card = cards[role];
+    return card ? [[role, card] as [PartyRoleKey, PartyCardData]] : [];
+  });
+}
+
 // Modified by Sekar Nagarajan (2026-08-31 23:08)
 /** Use saved parties when present; otherwise seed ecom-app mock defaults.
  *  Auto-populates agreementParty from shipper when missing. */
 export function initialPartyCards(
   parties: PartiesData | null | undefined,
 ): Partial<Record<PartyRoleKey, PartyCardData>> {
-  const fromPayload = partiesToCards(parties);
+  const fromPayload = assignedPartyCards(parties);
   if (Object.keys(fromPayload).length > 0) {
     if (!fromPayload.agreementParty && fromPayload.shipper) {
       fromPayload.agreementParty = { ...fromPayload.shipper };

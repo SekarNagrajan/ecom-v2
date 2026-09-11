@@ -333,7 +333,7 @@ export function PublicLayout() {
                         <AppIcon icon={NavIcons.schedules} size={20} />
                       </span>
                       <Text strong className="pub-landing__card-label">
-                        Find sailings
+                        Search schedule
                       </Text>
                     </Card>
                     <Card
@@ -351,7 +351,7 @@ export function PublicLayout() {
                         <AppIcon icon={NavIcons.tracking} size={20} />
                       </span>
                       <Text strong className="pub-landing__card-label">
-                        Follow cargo
+                        Track your cargo
                       </Text>
                     </Card>
                     <Card
@@ -367,7 +367,7 @@ export function PublicLayout() {
                         <AppIcon icon={NavIcons.rates} size={20} />
                       </span>
                       <Text strong className="pub-landing__card-label">
-                        Get quotes
+                        Know your rates
                       </Text>
                     </Card>
                   </div>

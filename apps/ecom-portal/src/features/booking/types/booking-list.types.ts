@@ -28,13 +28,13 @@ export interface BookingListDTO {
 export function getBookingListStatusColor(status: BookingListStatus): string {
   switch (status) {
     case "Draft":
-      return "default";
+      return "#d4b106";
     case "Submitted":
     case "Awaiting Acceptance":
       return "processing";
     case "Confirmed":
     case "Completed":
-      return "success";
+      return "#389e0d";
     case "In Transit":
       return "cyan";
     case "Cancelled":

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-25 15:49)
+// Modified by Sekar Nagarajan (2026-09-11 14:30)
 import { AppButton } from "@solverminds/shared-ui";
 import { AutoComplete, Button, DatePicker, Flex, Input, theme } from "antd";
 import dayjs from "dayjs";
@@ -12,6 +12,7 @@ import type { ScheduleSearchForm } from "../types/landing.types";
 interface ScheduleSearchTabProps {
   form: UseFormReturn<ScheduleSearchForm>;
   onSubmit: React.FormEventHandler<HTMLFormElement>;
+  isSearching?: boolean;
 }
 
 function usePortAutocomplete(initialQuery = "") {
@@ -40,7 +41,11 @@ function usePortAutocomplete(initialQuery = "") {
   return { query, setQuery, options, isFetching };
 }
 
-export function ScheduleSearchTab({ form, onSubmit }: ScheduleSearchTabProps) {
+export function ScheduleSearchTab({
+  form,
+  onSubmit,
+  isSearching = false,
+}: ScheduleSearchTabProps) {
   const { token } = theme.useToken();
   const {
     control,
@@ -291,10 +296,16 @@ export function ScheduleSearchTab({ form, onSubmit }: ScheduleSearchTabProps) {
           type="primary"
           size="large"
           htmlType="submit"
+          loading={isSearching}
+          disabled={isSearching}
           onClick={(e) =>
             onSubmit(e as unknown as React.FormEvent<HTMLFormElement>)
           }
-          icon={<AppIcon icon={Icons.search} size={16} />}
+          icon={
+            isSearching ? undefined : (
+              <AppIcon icon={Icons.search} size={16} />
+            )
+          }
         >
           Search sailings
         </AppButton>
@@ -302,6 +313,7 @@ export function ScheduleSearchTab({ form, onSubmit }: ScheduleSearchTabProps) {
           danger
           size="large"
           htmlType="button"
+          disabled={isSearching}
           icon={<AppIcon icon={Icons.refreshCw} size={16} tone="delete" />}
           onClick={handleReset}
           aria-label="Reset schedule search"

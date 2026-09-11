@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-10 21:38)
+// Modified by Sekar Nagarajan (2026-09-11 12:05)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -18,7 +18,6 @@ export function RegistrationModuleStyles() {
         justify-content: flex-start;
         width: 100%;
         min-height: 0;
-        max-height: 100%;
         overflow: auto;
       }
       .reg-page__toolbar {
@@ -35,18 +34,17 @@ export function RegistrationModuleStyles() {
         flex: 0 1 auto;
         width: 100%;
         min-height: 0;
-        max-height: 100%;
-        overflow: hidden;
+        overflow: visible;
       }
       .reg-page-card > .ant-card-body {
         display: flex;
         flex-direction: column;
         flex: 0 1 auto;
         min-height: 0;
-        overflow: hidden;
+        overflow: visible;
         border: none;
         border-radius: 0;
-        padding: ${token.paddingLG}px ${token.paddingXL}px;
+        padding: ${token.paddingMD}px ${token.paddingXL}px;
       }
       .reg-page__title {
         margin: 0;
@@ -56,7 +54,7 @@ export function RegistrationModuleStyles() {
       .reg-page__body {
         flex: 0 1 auto;
         min-height: 0;
-        overflow: hidden;
+        overflow: visible;
         display: flex;
         flex-direction: column;
       }
@@ -74,20 +72,21 @@ export function RegistrationModuleStyles() {
         display: flex;
         flex-direction: column;
         min-height: 0;
-        overflow: hidden;
+        overflow: visible;
+        gap: ${token.marginSM}px;
       }
+      /* Modified by Sekar Nagarajan (2026-09-11 12:05) — hug form; no empty scroll gap above actions */
       .reg-form__scroll {
         flex: 0 1 auto;
         min-height: 0;
-        overflow-y: auto;
-        overflow-x: hidden;
+        overflow: visible;
         background: ${token.colorBgContainer};
         border-radius: ${token.borderRadiusLG}px;
-        padding-right: ${token.paddingSM}px;
       }
       .reg-page .form-step-footer {
         flex-shrink: 0;
-        margin-top: ${token.marginSM}px;
+        margin-top: 0;
+        padding: ${token.paddingXS}px 0 0;
       }
       .reg-step-body {
         padding: ${token.paddingSM}px 0 0;
@@ -207,24 +206,6 @@ export function RegistrationModuleStyles() {
         }
       }
 
-      /* House custom-scroll — 6px thin thumb (agenct.md) */
-      .reg-form__scroll.custom-scroll {
-        scrollbar-width: thin;
-        scrollbar-color: ${token.colorTextQuaternary} transparent;
-      }
-      .reg-form__scroll.custom-scroll::-webkit-scrollbar {
-        width: 6px;
-      }
-      .reg-form__scroll.custom-scroll::-webkit-scrollbar-track {
-        background: transparent;
-      }
-      .reg-form__scroll.custom-scroll::-webkit-scrollbar-thumb {
-        background-color: ${token.colorTextQuaternary};
-        border-radius: 20px;
-      }
-      .reg-form__scroll.custom-scroll::-webkit-scrollbar-thumb:hover {
-        background-color: ${token.colorTextTertiary};
-      }
       .reg-terms-box.custom-scroll {
         scrollbar-width: thin;
         scrollbar-color: ${token.colorTextQuaternary} transparent;

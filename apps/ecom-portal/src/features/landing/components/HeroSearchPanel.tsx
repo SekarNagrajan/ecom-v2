@@ -1,5 +1,5 @@
-// Modified by Sekar Nagarajan (2026-08-25 17:25)
-import { Flex, Grid, Tabs, theme } from "antd";
+// Modified by Sekar Nagarajan (2026-09-11 14:35)
+import { Flex, Grid, Spin, Tabs, theme } from "antd";
 import { AppIcon, Icons } from "../../../components/icons";
 
 import type { useLandingController } from "../hooks/use-landing-controller";
@@ -17,6 +17,7 @@ export function HeroSearchPanel({ controller }: HeroSearchPanelProps) {
   const { token } = theme.useToken();
   const screens = Grid.useBreakpoint();
   const isMobile = !screens.md;
+  const isSearching = controller.isSearching;
 
   const tabLabelStyle = {
     fontSize: 16,
@@ -37,6 +38,7 @@ export function HeroSearchPanel({ controller }: HeroSearchPanelProps) {
         <ScheduleSearchTab
           form={controller.scheduleForm}
           onSubmit={controller.handleScheduleSubmit}
+          isSearching={isSearching}
         />
       ),
     },
@@ -53,6 +55,7 @@ export function HeroSearchPanel({ controller }: HeroSearchPanelProps) {
           form={controller.trackingForm}
           onSubmit={controller.handleTrackingSubmit}
           showImageCaptcha
+          isSearching={isSearching}
         />
       ),
     },
@@ -68,6 +71,7 @@ export function HeroSearchPanel({ controller }: HeroSearchPanelProps) {
         <RatesSearchTab
           form={controller.ratesForm}
           onSubmit={controller.handleRatesSubmit}
+          isSearching={isSearching}
         />
       ),
     },
@@ -75,11 +79,14 @@ export function HeroSearchPanel({ controller }: HeroSearchPanelProps) {
 
   return (
     <div
-      className={
+      className={[
         isMobile
           ? "pub-landing__search-card pub-landing__search-card--mobile"
-          : "pub-landing__search-card"
-      }
+          : "pub-landing__search-card",
+        isSearching ? "pub-landing__search-card--loading" : undefined,
+      ]
+        .filter(Boolean)
+        .join(" ")}
     >
       <Tabs
         activeKey={controller.activeTab}
@@ -104,6 +111,16 @@ export function HeroSearchPanel({ controller }: HeroSearchPanelProps) {
             : "pub-landing__search-tabs-pad"
         }
       />
+
+      {isSearching ? (
+        <div
+          className="pub-landing__search-loading module-loading-center"
+          role="status"
+          aria-label="Loading"
+        >
+          <Spin size="medium" />
+        </div>
+      ) : null}
     </div>
   );
 }

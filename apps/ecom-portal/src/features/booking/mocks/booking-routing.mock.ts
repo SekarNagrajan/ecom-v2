@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 18:43)
+// Modified by Sekar Nagarajan (2026-09-11 00:18)
 /**
  * Mock sailings for booking Select Vessel/Route popup.
  * Parity: ebookRoutingDetails / eBookingRouteDetails (incl. TS / multimodal module details).
@@ -38,6 +38,93 @@ function pickTsHub(pol: string, pod: string): string {
   return hubs.find((h) => h !== pol && h !== pod) ?? "NLRTM";
 }
 
+/**
+ * Huangpu → Rotterdam timeline demo (as of ~2026-09-11):
+ * two completed (solid) segments + one in-progress (dotted) leg.
+ */
+function buildTimelineDemoRoute(): SelectedRoute {
+  const timelineLegs: BookingRouteLeg[] = [
+    {
+      id: "LEG-TS-TIMELINE-1",
+      legType: "Feeder",
+      vesselName: "COSCO SHIPPING GALAXY",
+      vesselCode: "CSGX",
+      voyage: "033W",
+      bound: "W",
+      serviceName: "GALEX",
+      serviceCode: "GALEX",
+      polPortId: "CNHUA",
+      polPortName: "Huangpu",
+      podPortId: "SGSIN",
+      podPortName: "Singapore",
+      etd: "2026-08-28 10:00",
+      eta: "2026-09-04 08:00",
+      terminal: "Huangpu Xingang Terminal",
+    },
+    {
+      id: "LEG-TS-TIMELINE-2",
+      legType: "Mainline",
+      vesselName: "MSC ISTANBUL",
+      vesselCode: "MSCI",
+      voyage: "118W",
+      bound: "W",
+      serviceName: "Lion Service",
+      serviceCode: "LION",
+      polPortId: "SGSIN",
+      polPortName: "Singapore",
+      podPortId: "AEJEA",
+      podPortName: "Jebel Ali",
+      etd: "2026-09-05 14:00",
+      eta: "2026-09-09 06:00",
+      terminal: "PSA Pasir Panjang Terminal",
+    },
+    {
+      id: "LEG-TS-TIMELINE-3",
+      legType: "Mainline",
+      vesselName: "MAERSK EDINBURGH",
+      vesselCode: "MAED",
+      voyage: "241W",
+      bound: "W",
+      serviceName: "AE10",
+      serviceCode: "AE10",
+      polPortId: "AEJEA",
+      polPortName: "Jebel Ali",
+      podPortId: "NLRTM",
+      podPortName: "Rotterdam",
+      etd: "2026-09-10 09:00",
+      eta: "2026-09-22 16:00",
+      terminal: "DP World Jebel Ali",
+    },
+  ];
+
+  return {
+    routeId: "RT-CNHUA-NLRTM-TIMELINE",
+    serviceCode: "GALEX",
+    serviceName: "GALEX Asia–Europe",
+    vesselCode: "CSGX",
+    vesselName: "COSCO SHIPPING GALAXY",
+    voyage: "033W",
+    bound: "W",
+    polPortId: "CNHUA",
+    polPortName: "Huangpu (Guangzhou)",
+    podPortId: "NLRTM",
+    podPortName: "Rotterdam (Port of Rotterdam)",
+    polTerminal: "Huangpu Xingang Terminal",
+    podTerminal: "ECT Delta Terminal",
+    etd: "2026-08-28 10:00",
+    eta: "2026-09-22 16:00",
+    transitTimeDays: 25,
+    isDirect: false,
+    isDefaultRoute: true,
+    transshipmentCount: 2,
+    shipmentKind: "Transshipment",
+    gateInCutoff: "2026-08-26 18:00",
+    siDocCutoff: "2026-08-26 12:00",
+    vgmCutoff: "2026-08-26 14:00",
+    legs: timelineLegs,
+  };
+}
+
 export function buildMockBookingRoutes(
   params: BookingRoutingSearchParams,
 ): SelectedRoute[] {
@@ -46,6 +133,20 @@ export function buildMockBookingRoutes(
   const ready = params.cargoReadyDate || new Date().toISOString().slice(0, 10);
   const tsHub = pickTsHub(pol, pod);
 
+  // Modified by Sekar Nagarajan (2026-09-11 00:18) — timeline rail demo for CNHUA → NLRTM
+  if (pol === "CNHUA" && pod === "NLRTM") {
+    return [buildTimelineDemoRoute(), ...buildStandardMockRoutes(pol, pod, ready, tsHub)];
+  }
+
+  return buildStandardMockRoutes(pol, pod, ready, tsHub);
+}
+
+function buildStandardMockRoutes(
+  pol: string,
+  pod: string,
+  ready: string,
+  tsHub: string,
+): SelectedRoute[] {
   const etd1 = addDays(ready, 4);
   const eta1 = addDays(ready, 26);
   const etd2 = addDays(ready, 7);

@@ -11,7 +11,14 @@ import type { DashboardCounts } from "../api/dashboard.api";
 
 const { Text, Title } = Typography;
 
-type KpiTone = "primary" | "success" | "warning" | "error" | "purple" | "info";
+type KpiTone =
+  | "primary"
+  | "success"
+  | "warning"
+  | "error"
+  | "purple"
+  | "info"
+  | "orange";
 type KpiTrendDirection = "up" | "down" | "neutral";
 
 interface DashboardKpiCardsProps {
@@ -37,7 +44,7 @@ interface ActionItem {
   value: string;
   detail: string;
   icon: LucideIcon;
-  tone: "warning" | "error";
+  tone: "warning" | "error" | "orange";
 }
 
 export function DashboardKpiCards({

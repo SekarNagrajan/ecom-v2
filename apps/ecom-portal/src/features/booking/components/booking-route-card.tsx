@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-10 22:56)
+// Modified by Sekar Nagarajan (2026-09-11 11:59)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { Tag, Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
@@ -409,14 +409,21 @@ function BookingRouteDetails({ route }: { route: SelectedRoute }) {
           <ol className="booking-route-timeline">
             {stops.map((stop, index) => {
               const isLast = index === stops.length - 1;
+              const nodeIcon = stop.etd ? Icons.ship : Icons.mapPin;
               return (
                 <li key={stop.id} className="booking-route-stop">
                   <div className="booking-route-stop__rail">
-                    <span className="booking-route-stop__node">
-                      {stop.index}
+                    <span
+                      className="booking-route-stop__node app-icon-inherit"
+                      aria-label={stop.etd ? "Departure" : "Arrival"}
+                    >
+                      <AppIcon icon={nodeIcon} size={14} />
                     </span>
                     {isLast ? null : (
-                      <span className="booking-route-stop__line" aria-hidden />
+                      <span
+                        className="booking-route-stop__line"
+                        aria-hidden
+                      />
                     )}
                   </div>
                   <div className="booking-route-stop__body">

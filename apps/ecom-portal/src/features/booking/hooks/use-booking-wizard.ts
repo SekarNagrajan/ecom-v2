@@ -21,7 +21,6 @@ export function useBookingWizard(isEditMode = false) {
     onSuccess: (response) => {
       if (response.data) {
         setConfirmation(response.data);
-        message.success("Booking submitted successfully");
       }
     },
     onError: () => {

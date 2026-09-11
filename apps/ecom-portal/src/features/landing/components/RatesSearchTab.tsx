@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-25 15:45)
+// Modified by Sekar Nagarajan (2026-09-11 14:30)
 import { AppButton } from "@solverminds/shared-ui";
 import {
   AutoComplete,
@@ -22,6 +22,7 @@ import { ImageCaptcha } from "./ImageCaptcha";
 interface RatesSearchTabProps {
   form: UseFormReturn<RatesSearchForm>;
   onSubmit: React.FormEventHandler<HTMLFormElement>;
+  isSearching?: boolean;
 }
 
 function usePortAutocomplete(initialQuery = "") {
@@ -50,7 +51,11 @@ function usePortAutocomplete(initialQuery = "") {
   return { query, setQuery, options, isFetching };
 }
 
-export function RatesSearchTab({ form, onSubmit }: RatesSearchTabProps) {
+export function RatesSearchTab({
+  form,
+  onSubmit,
+  isSearching = false,
+}: RatesSearchTabProps) {
   const { token } = theme.useToken();
   const {
     control,
@@ -317,10 +322,16 @@ export function RatesSearchTab({ form, onSubmit }: RatesSearchTabProps) {
           type="primary"
           size="large"
           htmlType="submit"
+          loading={isSearching}
+          disabled={isSearching}
           onClick={(e) =>
             onSubmit(e as unknown as React.FormEvent<HTMLFormElement>)
           }
-          icon={<AppIcon icon={Icons.search} size={16} />}
+          icon={
+            isSearching ? undefined : (
+              <AppIcon icon={Icons.search} size={16} />
+            )
+          }
         >
           Get Rates
         </AppButton>
@@ -328,6 +339,7 @@ export function RatesSearchTab({ form, onSubmit }: RatesSearchTabProps) {
           danger
           size="large"
           htmlType="button"
+          disabled={isSearching}
           icon={<AppIcon icon={Icons.refreshCw} size={16} tone="delete" />}
           onClick={handleReset}
           aria-label="Reset rates search"

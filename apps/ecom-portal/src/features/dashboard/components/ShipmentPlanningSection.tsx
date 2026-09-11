@@ -130,19 +130,19 @@ export function ShipmentPlanningSection({
           tone="verdigris"
         />
         <PlanningKpiTile
-          label="FEUs"
+          label="TEUs"
           value={kpis.feusNext7Days}
           tone="primary"
         />
         <PlanningKpiTile
-          label="Pending SI"
+          label="SI Pending"
           value={kpis.missingSI}
           tone="warning"
         />
         <PlanningKpiTile
           label="Payment Pending"
           value={kpis.atRisk}
-          tone="sandy-brown"
+          tone="error"
         />
       </div>
 

@@ -38,6 +38,7 @@ export function BookingSelectedRatePanel({
         extra={
           <AppButton
             size="small"
+            type="default"
             icon={<AppIcon icon={Icons.refreshCw} size={14} />}
             onClick={onChange}
           >

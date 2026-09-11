@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-31 14:46)
+// Modified by Sekar Nagarajan (2026-09-11 11:52)
 import { z } from "zod";
 import type { ApiResponse } from "../../../types/api.types";
 import type { BookingRateOption } from "../mocks/booking-rates.mock";
@@ -121,7 +121,7 @@ export const partiesSchema = z.object({
   shipperCountry: z.string().optional(),
   shipperEmail: z.string().email("Invalid email").optional().or(z.literal("")),
   shipperPhone: z.string().optional(),
-  consigneeName: z.string().min(3, "Consignee Name is required"),
+  consigneeName: z.string().optional(),
   consigneeContact: z.string().optional(),
   consigneeAddress: z.string().optional(),
   consigneeCity: z.string().optional(),
@@ -159,16 +159,82 @@ const newId = () =>
     ? crypto.randomUUID()
     : `id-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
 
+/** Sequential suffix for mock container numbers (…TNB1, …TNB2, …). Starts at 1. */
+let mockContainerSeq = 0;
+
+/** Reset so the next mock number uses …TNB1 (or continue after `startAt`). */
+export function resetMockContainerSeq(startAt = 0): void {
+  mockContainerSeq = Math.max(0, startAt);
+}
+
+/** Advance the sequencer past any …TNBn values already present. */
+export function syncMockContainerSeqFromNos(
+  containerNos: Array<string | undefined>,
+): void {
+  let max = 0;
+  for (const no of containerNos) {
+    const match = (no ?? "").trim().match(/TNB(\d+)$/i);
+    if (match?.[1]) {
+      max = Math.max(max, Number(match[1]));
+    }
+  }
+  if (max > mockContainerSeq) {
+    mockContainerSeq = max;
+  }
+}
+
+/** Normalize equipment type to a 4-char mock prefix (e.g. 20DC, 40HC). */
+export function mockContainerTypeCode(containerType?: string): string {
+  const raw = (containerType ?? "20DC").replace(/[^a-zA-Z0-9]/g, "").toUpperCase();
+  const code = raw.slice(0, 4);
+  return code.padEnd(4, "X");
+}
+
+/**
+ * Mock container number: {type}TNB{n} — e.g. 20DCTNB1, 40HCTNB2.
+ * `n` starts at 1 and increments for each new number (unless uniqueIndex is passed).
+ */
+export function createMockContainerNo(
+  containerType = "20DC",
+  uniqueIndex?: number,
+): string {
+  const typeCode = mockContainerTypeCode(containerType);
+  let seq: number;
+  if (uniqueIndex !== undefined && uniqueIndex > 0) {
+    seq = uniqueIndex;
+    if (uniqueIndex > mockContainerSeq) {
+      mockContainerSeq = uniqueIndex;
+    }
+  } else {
+    seq = ++mockContainerSeq;
+  }
+  return `${typeCode}TNB${seq}`;
+}
+
+/** Keep unique suffix when type changes on an existing mock number. */
+export function applyContainerTypeToMockNo(
+  containerNo: string | undefined,
+  containerType: string,
+): string {
+  const current = (containerNo ?? "").trim();
+  const typeCode = mockContainerTypeCode(containerType);
+  const match = current.match(/^.{4}(TN.*)$/i);
+  if (match?.[1]) {
+    return `${typeCode}${match[1].toUpperCase()}`;
+  }
+  return createMockContainerNo(containerType);
+}
+
 export const commodityItemSchema = z.object({
   id: z.string().min(1),
   commodity: z.string().optional(),
-  hsCode: z.string().min(1, "Commodity Code is required"),
+  hsCode: z.string().min(1, "Commodity is required"),
   classCode: z.string().optional(),
   weight: z.number().min(1, "Weight is required"),
-  volume: z.number().min(0, "Volume is required"),
-  packageType: z.string().min(1, "Package Type is required"),
-  packageQuantity: z.number().min(1, "Quantity is required"),
-  description: z.string().min(1, "Commodity Description is required"),
+  volume: z.number().min(0).optional(),
+  packageType: z.string().optional(),
+  packageQuantity: z.number().min(0).optional(),
+  description: z.string().optional(),
   marksAndNumbers: z.string().optional(),
   isDangerousGoods: z.boolean().default(false),
   unNumber: z.string().optional(),
@@ -283,12 +349,16 @@ export function createEmptyCommodity(): CommodityItem {
   };
 }
 
-export function createEmptyContainer(): ContainerItem {
+export function createEmptyContainer(
+  containerType = "20DC",
+  options?: { allocateMockNo?: boolean },
+): ContainerItem {
+  const allocateMockNo = options?.allocateMockNo !== false;
   return {
     id: newId(),
     // Modified by Sekar Nagarajan (2026-08-28 12:04)
-    containerType: "20DC",
-    containerNo: "",
+    containerType,
+    containerNo: allocateMockNo ? createMockContainerNo(containerType) : "",
     quantity: 1,
     eqpStatus: "LADEN",
     tareWeight: undefined,
@@ -311,6 +381,7 @@ export function createEmptyContainer(): ContainerItem {
 }
 
 export function defaultCargoData(): CargoData {
+  resetMockContainerSeq(0);
   return { containers: [createEmptyContainer()] };
 }
 
@@ -319,46 +390,49 @@ export function migrateLegacyCargo(legacy: unknown): CargoData {
   if (!legacy || typeof legacy !== "object") return defaultCargoData();
   const raw = legacy as Record<string, unknown>;
   if (Array.isArray(raw.containers) && raw.containers.length > 0) {
-    return {
-      containers: (raw.containers as Record<string, unknown>[]).map(
-        (containerRaw) => {
-          const base = createEmptyContainer();
-          const commoditiesRaw = Array.isArray(containerRaw.commodities)
-            ? containerRaw.commodities
-            : [];
-          return {
-            ...base,
-            ...containerRaw,
-            id: String(containerRaw.id ?? base.id),
-            containerNo: String(
+    const containers = (raw.containers as Record<string, unknown>[]).map(
+      (containerRaw) => {
+        const type = String(containerRaw.containerType ?? "20DC");
+        const base = createEmptyContainer(type, { allocateMockNo: false });
+        const commoditiesRaw = Array.isArray(containerRaw.commodities)
+          ? containerRaw.commodities
+          : [];
+        return {
+          ...base,
+          ...containerRaw,
+          id: String(containerRaw.id ?? base.id),
+          containerType: type,
+          containerNo:
+            String(
               containerRaw.containerNo ?? containerRaw.containerNumber ?? "",
-            ),
-            commodities:
-              commoditiesRaw.length > 0
-                ? commoditiesRaw.map((item) => {
-                    const row = (item ?? {}) as Record<string, unknown>;
-                    const empty = createEmptyCommodity();
-                    return {
-                      ...empty,
-                      ...row,
-                      id: String(row.id ?? empty.id),
-                      commodity: String(row.commodity ?? ""),
-                      hsCode: String(row.hsCode ?? ""),
-                      weight: Number(row.weight ?? 1) || 1,
-                      volume: typeof row.volume === "number" ? row.volume : 0,
-                      packageType: String(row.packageType ?? ""),
-                      packageQuantity: Number(row.packageQuantity ?? 1) || 1,
-                      description: String(
-                        row.description ?? row.commodity ?? "",
-                      ),
-                      marksAndNumbers: String(row.marksAndNumbers ?? ""),
-                    } as CommodityItem;
-                  })
-                : [createEmptyCommodity()],
-          } as ContainerItem;
-        },
-      ),
-    };
+            ).trim() || createMockContainerNo(type),
+          commodities:
+            commoditiesRaw.length > 0
+              ? commoditiesRaw.map((item) => {
+                  const row = (item ?? {}) as Record<string, unknown>;
+                  const empty = createEmptyCommodity();
+                  return {
+                    ...empty,
+                    ...row,
+                    id: String(row.id ?? empty.id),
+                    commodity: String(row.commodity ?? ""),
+                    hsCode: String(row.hsCode ?? ""),
+                    weight: Number(row.weight ?? 1) || 1,
+                    volume: typeof row.volume === "number" ? row.volume : 0,
+                    packageType: String(row.packageType ?? ""),
+                    packageQuantity: Number(row.packageQuantity ?? 1) || 1,
+                    description: String(
+                      row.description ?? row.commodity ?? "",
+                    ),
+                    marksAndNumbers: String(row.marksAndNumbers ?? ""),
+                  } as CommodityItem;
+                })
+              : [createEmptyCommodity()],
+        } as ContainerItem;
+      },
+    );
+    syncMockContainerSeqFromNos(containers.map((c) => c.containerNo));
+    return { containers };
   }
   const commodity = createEmptyCommodity();
   commodity.commodity = String(raw.commodity ?? "");

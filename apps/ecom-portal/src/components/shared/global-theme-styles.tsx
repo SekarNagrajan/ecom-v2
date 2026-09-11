@@ -1745,6 +1745,21 @@ export function GlobalThemeStyles() {
         width: 100%;
         overflow: hidden;
         border: 1px solid ${token.colorBorderSecondary};
+        position: relative;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-11 14:35) — search action spinner overlay */
+      .pub-landing__search-card--loading {
+        pointer-events: none;
+      }
+      .pub-landing__search-loading.module-loading-center {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 160px;
+        background: ${tokenMix(token.colorBgContainer, 72)};
       }
       .pub-landing__search-tabs {
         padding: ${token.paddingMD}px ${token.paddingLG * 2}px 0;

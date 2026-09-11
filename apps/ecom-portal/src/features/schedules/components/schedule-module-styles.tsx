@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-08 17:55)
+// Modified by Sekar Nagarajan (2026-09-11 12:35)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -681,13 +681,24 @@ export function ScheduleModuleStyles() {
         justify-content: center;
         flex-shrink: 0;
         z-index: 1;
+        line-height: 1;
+      }
+      .schedule-route-stop__node .app-icon {
+        display: block;
       }
       .schedule-route-stop__line {
         flex: 1;
         width: 0;
         min-height: ${token.controlHeightLG}px;
         margin: ${token.marginXXS}px 0;
-        border-left: 2px dashed ${tokenMix(token.colorPrimary, 45)};
+        border-left: 2px solid ${tokenMix(token.colorPrimary, 45)};
+      }
+      /* Modified by Sekar Nagarajan (2026-09-11 12:35) — solid rail; stronger color = completed */
+      .schedule-route-stop__line--solid {
+        border-left-color: ${token.colorPrimary};
+      }
+      .schedule-route-stop__line--dotted {
+        border-left-color: ${tokenMix(token.colorPrimary, 45)};
       }
       .schedule-route-stop__body {
         min-width: 0;

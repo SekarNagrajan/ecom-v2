@@ -1,4 +1,4 @@
-// Created by Sekar Nagarajan (2026-09-03 16:12)
+// Modified by Sekar Nagarajan (2026-09-11 11:36)
 /**
  * Full client-demo BookingPayload — all wizard steps populated.
  * Cargo: 10 containers × 5 commodities each (50 lines) for Preview / Cargo UI demos.
@@ -14,6 +14,7 @@ import type {
     PartiesData,
     SelectedRoute,
 } from "../types/booking.types";
+import { createMockContainerNo } from "../types/booking.types";
 import {
     createReferenceField,
     REFERENCE_FIELD_CATALOG,
@@ -260,7 +261,7 @@ function buildDemoContainer(index: number): ContainerItem {
   return {
     id: `demo-ctn-${pad2(index + 1)}`,
     containerType: type,
-    containerNo: `MSCU${String(4500000 + index * 111)}`,
+    containerNo: createMockContainerNo(type, index + 1),
     quantity: 1,
     eqpStatus: "LADEN",
     tareWeight: type.startsWith("20") ? 2200 : 3900,

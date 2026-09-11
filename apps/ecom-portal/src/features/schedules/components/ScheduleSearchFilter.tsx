@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-08 17:55)
+// Modified by Sekar Nagarajan (2026-09-11 00:14)
 import { AppButton } from "@solverminds/shared-ui";
 import {
   Col,
@@ -30,6 +30,7 @@ const POPULAR_PORTS = [
   { value: "SGSIN", label: "SGSIN - Singapore, Singapore" },
   { value: "NLRTM", label: "NLRTM - Rotterdam, Netherlands" },
   { value: "CNSHA", label: "CNSHA - Shanghai, China" },
+  { value: "CNHUA", label: "CNHUA - Huangpu (Guangzhou), China" },
   { value: "DEHAM", label: "DEHAM - Hamburg, Germany" },
   { value: "AEJEA", label: "AEJEA - Jebel Ali, UAE" },
   { value: "USLAX", label: "USLAX - Los Angeles, USA" },

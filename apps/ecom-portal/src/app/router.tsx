@@ -277,6 +277,8 @@ export const appRoute = createRoute({
   path: "/app",
   component: () => <AuthenticatedLayout />,
   pendingComponent: () => <LayoutSkeleton />,
+  // Avoid full-layout skeleton flash for fast SPA navigations (landing search)
+  pendingMs: 400,
   beforeLoad: ({ location }) => {
     const isPublicSearchModule =
       location.pathname.startsWith("/app/schedules") ||
@@ -301,6 +303,7 @@ const dashboardRoute = createRoute({
 const schedulesRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/schedules",
+  pendingComponent: () => <AppRoutePendingFallback />,
   component: () => <SchedulesRoute />,
 });
 
@@ -308,6 +311,7 @@ const schedulesRoute = createRoute({
 const trackingRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/tracking",
+  pendingComponent: () => <AppRoutePendingFallback />,
   component: () => <TrackingRoute />,
 });
 
@@ -315,6 +319,7 @@ const trackingRoute = createRoute({
 const ratesRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/rates",
+  pendingComponent: () => <AppRoutePendingFallback />,
   component: () => <RatesRoute />,
 });
 

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-10 22:56)
+// Modified by Sekar Nagarajan (2026-09-11 00:18)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
@@ -51,9 +51,14 @@ const POPULAR_PORTS = [
     label: "NLRTM - Rotterdam, Netherlands",
   },
   { value: "CNSHA - Shanghai, China", label: "CNSHA - Shanghai, China" },
+  {
+    value: "CNHUA - Huangpu (Guangzhou), China",
+    label: "CNHUA - Huangpu (Guangzhou), China",
+  },
   { value: "DEHAM - Hamburg, Germany", label: "DEHAM - Hamburg, Germany" },
   { value: "INNSA - Nhava Sheva, India", label: "INNSA - Nhava Sheva, India" },
   { value: "AEDXB - Jebel Ali, UAE", label: "AEDXB - Jebel Ali, UAE" },
+  { value: "AEJEA - Jebel Ali, UAE", label: "AEJEA - Jebel Ali, UAE" },
   { value: "GBFEL - Felixstowe, UK", label: "GBFEL - Felixstowe, UK" },
 ];
 
@@ -347,7 +352,6 @@ export function MasterDetailsStep() {
             <AppButton
               type="primary"
               className="booking-template-select-btn"
-              icon={<AppIcon icon={Icons.notebook} size={16} />}
               onClick={() => setIsTemplateModalOpen(true)}
             >
               Select Template
@@ -600,7 +604,7 @@ export function MasterDetailsStep() {
                 render={({ field }) => (
                   <Select
                     {...field}
-                    size="large"
+                    size="medium"
                     placeholder="Select Carriage Contract"
                     options={carriageContracts}
                     className="form-field-full-width"
@@ -618,7 +622,7 @@ export function MasterDetailsStep() {
                 control={control}
                 name="onlineBookingNo"
                 render={({ field }) => (
-                  <Input {...field} disabled size="large" />
+                  <Input {...field} disabled size="medium" />
                 )}
               />
             </Col>
@@ -646,7 +650,7 @@ export function MasterDetailsStep() {
                 render={({ field }) => (
                   <Select
                     {...field}
-                    size="large"
+                    size="medium"
                     options={agencies}
                     className="form-field-full-width"
                     allowClear

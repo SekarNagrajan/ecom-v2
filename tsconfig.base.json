@@ -35,6 +35,7 @@
       "@solverminds/shared-ui/editor": ["libs/shared/ui/src/components/ui/rich-text-editor/index.ts"],
       "@solverminds/shared-ui/form-editor": ["libs/shared/ui/src/components/form-fields/rich-text-editor/index.ts"],
       "@solverminds/shared-ui/email": ["libs/shared/ui/src/components/email/index.ts"],
+      "@solverminds/shared-ui/chart": ["libs/shared/ui/src/components/chart/index.ts"],
       "@solverminds/shared-ui/*": ["libs/shared/ui/src/*"],
       "@solverminds/shared-util": ["libs/shared-util/src/index.ts"]
     }

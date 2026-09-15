@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-25 13:00)
+// Modified by Sekar Nagarajan (2026-09-15 12:31)
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -9,9 +9,10 @@ import {
   type CarbonInputFormValues,
 } from '../types/carbon.types';
 
+/** Demo defaults — SGSIN→NLRTM resolves to a 4-leg multimodal showcase. */
 const DEFAULT_VALUES: CarbonInputFormValues = {
-  origin: '',
-  destination: '',
+  origin: 'SGSIN',
+  destination: 'NLRTM',
   cargoWeightKg: 14000,
   equipment: '40HC',
   containerCount: 1,
@@ -30,16 +31,9 @@ export function useCarbonCalculator() {
 
   const handleCalculate = form.handleSubmit((values) => {
     const parsed = carbonInputSchema.parse(values);
-    const input: CarbonInput = {
-      ...parsed,
-      legs: [
-        {
-          mode: 'SEA',
-          from: parsed.origin,
-          to: parsed.destination,
-        },
-      ],
-    };
+    // Omit legs so the mock engine expands a multimodal showcase itinerary
+    // (scope / leg / mode charts need varied series data).
+    const input: CarbonInput = { ...parsed };
     setActiveInput(input);
   });
 

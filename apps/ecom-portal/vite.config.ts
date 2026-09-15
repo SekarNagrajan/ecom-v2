@@ -205,6 +205,10 @@ export default defineConfig({
         __dirname,
         "../../libs/shared/ui/src/components/email/index.ts",
       ),
+      "@solverminds/shared-ui/chart": path.resolve(
+        __dirname,
+        "../../libs/shared/ui/src/components/chart/index.ts",
+      ),
       "@solverminds/shared-ui": path.resolve(
         __dirname,
         "../../libs/shared/ui/src/index.ts",

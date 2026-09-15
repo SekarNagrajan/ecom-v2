@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-25 13:00)
+// Modified by Sekar Nagarajan (2026-09-15 12:31)
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -120,5 +120,45 @@ describe('carbon-calculator mock engine', () => {
     expect(result.totalCo2eKg).toBe(
       result.legs[0]!.co2eKg + result.legs[1]!.co2eKg
     );
+  });
+
+  it('expands showcase multimodal legs when client omits legs', () => {
+    const result = computeMockCarbon({
+      origin: 'SGSIN',
+      destination: 'NLRTM',
+      cargoWeightKg: 14000,
+      equipment: '40HC',
+      containerCount: 1,
+      fuelType: 'VLSFO',
+      unit: 'kg',
+    });
+    expect(result.legs.length).toBeGreaterThanOrEqual(3);
+    const modes = new Set(result.legs.map((leg) => leg.mode));
+    expect(modes.size).toBeGreaterThanOrEqual(2);
+    expect(result.ttwCo2eKg + result.wttCo2eKg).toBe(result.totalCo2eKg);
+  });
+
+  it('varies tank-to-wheel share by fuel type', () => {
+    const vlsfo = computeMockCarbon({
+      origin: 'SGSIN',
+      destination: 'NLRTM',
+      cargoWeightKg: 14000,
+      equipment: '40HC',
+      containerCount: 1,
+      fuelType: 'VLSFO',
+      unit: 'kg',
+    });
+    const lng = computeMockCarbon({
+      origin: 'SGSIN',
+      destination: 'NLRTM',
+      cargoWeightKg: 14000,
+      equipment: '40HC',
+      containerCount: 1,
+      fuelType: 'LNG',
+      unit: 'kg',
+    });
+    expect(vlsfo.totalCo2eKg).toBe(lng.totalCo2eKg);
+    expect(lng.ttwCo2eKg).toBeLessThan(vlsfo.ttwCo2eKg);
+    expect(lng.wttCo2eKg).toBeGreaterThan(vlsfo.wttCo2eKg);
   });
 });

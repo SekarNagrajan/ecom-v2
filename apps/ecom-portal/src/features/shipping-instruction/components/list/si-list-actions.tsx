@@ -27,11 +27,10 @@ export function SiListActions({
 }: SiListActionsProps) {
   const confirm = useConfirm();
 
-  const stop =
-    (fn: () => void) => (event: MouseEvent<HTMLElement>) => {
-      event.stopPropagation();
-      fn();
-    };
+  const stop = (fn: () => void) => (event: MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    fn();
+  };
 
   return (
     <ListActionsRow>

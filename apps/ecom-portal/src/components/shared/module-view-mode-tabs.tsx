@@ -31,7 +31,10 @@ export interface ModuleViewModeTabsProps {
 /**
  * Icon-only list/card switcher sized to align with module header AppButtons.
  */
-export function ModuleViewModeTabs({ value, onChange }: ModuleViewModeTabsProps) {
+export function ModuleViewModeTabs({
+  value,
+  onChange,
+}: ModuleViewModeTabsProps) {
   const { token } = theme.useToken();
 
   const rootStyle = {

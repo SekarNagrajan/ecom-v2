@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-28 11:52)
+// Modified by Sekar Nagarajan (2026-09-15 11:20)
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { Card, List, Select, Typography, Upload } from "antd";
@@ -10,7 +10,12 @@ import type { SIFileItem, SIWizardStepProps } from "../../types/si.types";
 const { Text } = Typography;
 const { Dragger } = Upload;
 
-const FILE_CATEGORIES = ["VGM", "DG", "LOI", "OTHER"] as const;
+const FILE_CATEGORIES: { value: string; label: string }[] = [
+  { value: "VGM", label: "VGM" },
+  { value: "DG", label: "Dangerous Goods (DG)" },
+  { value: "LOI", label: "Letter of Indemnity (LOI)" },
+  { value: "OTHER", label: "Other" },
+];
 
 export function SiFileUploadStep({
   data,
@@ -21,21 +26,32 @@ export function SiFileUploadStep({
   isSubmitting,
 }: SIWizardStepProps) {
   const toast = useToast();
-  const [category, setCategory] =
-    useState<(typeof FILE_CATEGORIES)[number]>("OTHER");
+  const [docType, setDocType] = useState<string>("OTHER");
   const [files, setFiles] = useState<SIFileItem[]>(() => data.files ?? []);
+  const [uploading, setUploading] = useState(false);
 
   const handleUpload = (file: File) => {
-    const item: SIFileItem = {
-      id: `file-${crypto.randomUUID()}`,
-      fileName: file.name,
-      fileType: category,
-      uploadedAt: new Date().toISOString(),
-      sizeKb: Math.max(1, Math.round(file.size / 1024)),
-    };
-    setFiles((prev) => [...prev, item]);
-    toast.success(`${file.name} added (${category}).`);
+    setUploading(true);
+    try {
+      const item: SIFileItem = {
+        id: `file-${crypto.randomUUID()}`,
+        fileName: file.name,
+        fileType: docType,
+        uploadedAt: new Date().toISOString(),
+        sizeKb: Math.max(1, Math.round(file.size / 1024)),
+      };
+      setFiles((prev) => [...prev, item]);
+      toast.success(`${file.name} uploaded successfully.`);
+    } catch {
+      toast.error(`${file.name} upload failed.`);
+    } finally {
+      setUploading(false);
+    }
     return false;
+  };
+
+  const handleRemove = (id: string) => {
+    setFiles((prev) => prev.filter((f) => f.id !== id));
   };
 
   const handleNext = () => {
@@ -50,51 +66,53 @@ export function SiFileUploadStep({
           className="form-step-card form-step-section"
           title="Upload Supporting Documents"
         >
-          <Text type="secondary" className="form-step-hint">
-            Upload VGM, DG declarations, seaway LOI, or other supporting files.
-          </Text>
-
-          <div className="booking-upload-type-row">
-            <label className="form-field-label">Document Category</label>
+          <div className="si-upload-type-row">
+            <label className="form-field-label">Document Type</label>
             <Select
               size="large"
               className="form-field-full-width"
-              value={category}
-              onChange={setCategory}
-              options={FILE_CATEGORIES.map((c) => ({ value: c, label: c }))}
+              value={docType}
+              onChange={setDocType}
+              options={FILE_CATEGORIES}
+              placeholder="Select document type"
             />
           </div>
 
           <Dragger
+            name="file"
             multiple
-            beforeUpload={handleUpload}
             showUploadList={false}
-            className="form-step-section"
+            disabled={uploading || isSubmitting}
+            beforeUpload={(file) => {
+              void handleUpload(file);
+              return false;
+            }}
           >
             <p className="ant-upload-drag-icon">
-              <AppIcon icon={Icons.inbox} size={32} />
+              <AppIcon icon={Icons.inbox} size={16} />
             </p>
-            <p className="ant-upload-text">Click or drag files to upload</p>
+            <p className="ant-upload-text">
+              Click or drag file to this area to upload
+            </p>
+            <p className="ant-upload-hint">
+              Selected type: {docType}. Files are attached to this shipping
+              instruction.
+            </p>
           </Dragger>
 
           {files.length > 0 ? (
             <List
-              className="form-step-section"
-              size="small"
-              bordered
+              className="si-upload-list"
+              header={<Text strong>Uploaded Documents</Text>}
               dataSource={files}
-              renderItem={(item) => (
+              renderItem={(item: SIFileItem) => (
                 <List.Item
                   actions={[
                     <AppButton
                       key="remove"
                       type="link"
                       danger
-                      onClick={() =>
-                        setFiles((prev) =>
-                          prev.filter((f) => f.id !== item.id),
-                        )
-                      }
+                      onClick={() => handleRemove(item.id)}
                     >
                       Remove
                     </AppButton>,
@@ -102,7 +120,7 @@ export function SiFileUploadStep({
                 >
                   <List.Item.Meta
                     title={item.fileName}
-                    description={`${item.fileType} · ${item.sizeKb} KB`}
+                    description={`${item.fileType} · ${item.sizeKb} KB · ${item.uploadedAt}`}
                   />
                 </List.Item>
               )}
@@ -111,7 +129,6 @@ export function SiFileUploadStep({
         </Card>
       </div>
 
-      {/* Modified by Sekar Nagarajan (2026-08-28 12:40) */}
       <div className="form-step-footer">
         <AppButton
           onClick={onPrevious}

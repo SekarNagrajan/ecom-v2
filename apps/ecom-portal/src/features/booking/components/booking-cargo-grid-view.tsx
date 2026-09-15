@@ -120,15 +120,15 @@ export function BookingCargoGridView({
                     h === "Actions"
                       ? "si-cargo-grid__th-actions"
                       : h === "Container No"
-                        ? "si-cargo-grid__th-container"
-                        : h === "Type"
-                          ? "si-cargo-grid__th-type"
-                          : h === "SOC" ||
-                              h === "OOG" ||
-                              h === "NOR" ||
-                              h === "Hazardous"
-                            ? "si-cargo-grid__th-switch"
-                            : undefined
+                      ? "si-cargo-grid__th-container"
+                      : h === "Type"
+                      ? "si-cargo-grid__th-type"
+                      : h === "SOC" ||
+                        h === "OOG" ||
+                        h === "NOR" ||
+                        h === "Hazardous"
+                      ? "si-cargo-grid__th-switch"
+                      : undefined
                   }
                 >
                   {h}
@@ -267,10 +267,7 @@ export function BookingCargoGridView({
                                 }
                                 const currentMode =
                                   containersWatch[ci]?.reeferMode;
-                                if (
-                                  currentMode === "none" ||
-                                  !currentMode
-                                ) {
+                                if (currentMode === "none" || !currentMode) {
                                   setValue(
                                     `containers.${ci}.reeferMode`,
                                     "operating",
@@ -603,13 +600,13 @@ export function BookingCargoGridView({
           </tbody>
         </table>
       </div>
-      <div className="si-cargo-grid-hint">
+      {/* <div className="si-cargo-grid-hint">
         <Text type="secondary">
           Toggle OOG, NOR off (operating reefer), or Hazardous to open a popup
           for detail fields. SOC is a flag only. NOR appears for reefer
           types.
         </Text>
-      </div>
+      </div> */}
 
       <BookingCargoGridExtrasModal
         open={extrasTarget !== null}

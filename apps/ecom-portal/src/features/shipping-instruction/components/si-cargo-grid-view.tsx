@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-28 17:58)
+// Modified by Sekar Nagarajan (2026-09-15 11:15)
 import { Input, InputNumber, Select, Typography } from "antd";
 import {
   Controller,
@@ -49,6 +49,15 @@ const GRID_HEADERS = [
   "Marks & numbers",
 ] as const;
 
+function gridHeaderClass(
+  header: (typeof GRID_HEADERS)[number],
+): string | undefined {
+  if (header === "Actions") return "si-cargo-grid__th-actions";
+  if (header === "Container No") return "si-cargo-grid__th-container";
+  if (header === "Type") return "si-cargo-grid__th-type";
+  return undefined;
+}
+
 export function SiCargoGridView({
   pageIndexes,
   containersWatch,
@@ -77,12 +86,7 @@ export function SiCargoGridView({
           <thead>
             <tr>
               {GRID_HEADERS.map((h) => (
-                <th
-                  key={h}
-                  className={
-                    h === "Actions" ? "si-cargo-grid__th-actions" : undefined
-                  }
-                >
+                <th key={h} className={gridHeaderClass(h)}>
                   {h}
                 </th>
               ))}
@@ -338,13 +342,14 @@ export function SiCargoGridView({
           </tbody>
         </table>
       </div>
-      <div className="si-cargo-grid-hint">
+      {/* <div className="si-cargo-grid-hint">
         <Text type="secondary">
-          Same fields as List view. Container No., Type, and seals edit once per
-          container — continuation rows show 〃. Add / copy / delete apply to
-          commodity lines.
+          Same fields as List view. Actions, Container No., and Type stay fixed
+          while other columns scroll. Seals edit once per container —
+          continuation rows show 〃. Add / copy / delete apply to commodity
+          lines.
         </Text>
-      </div>
+      </div> */}
     </div>
   );
 }

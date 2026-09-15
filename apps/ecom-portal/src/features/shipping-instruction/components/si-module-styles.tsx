@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-08 14:54)
+// Modified by Sekar Nagarajan (2026-09-15 11:20)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -1555,6 +1555,19 @@ export function SiModuleStyles() {
         .si-ens-party-grid {
           grid-template-columns: minmax(0, 1fr);
         }
+      }
+
+      /* Modified by Sekar Nagarajan (2026-09-15 11:20) — booking FileUploadStep parity */
+      .si-upload-type-row {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+        margin-bottom: ${token.marginLG}px;
+        max-width: 420px;
+      }
+      .si-upload-list {
+        margin: ${token.marginMD}px 0 0;
+        padding-inline-start: ${token.paddingLG}px;
       }
 
       @media (max-width: 767px) {

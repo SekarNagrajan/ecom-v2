@@ -1,4 +1,4 @@
-// Created by Sekar Nagarajan (2026-08-28 11:15)
+// Modified by Sekar Nagarajan (2026-09-15 11:10)
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { Card, List, Select, Typography, Upload } from "antd";
@@ -12,11 +12,14 @@ import type { BLWizardStepProps } from "./MasterDetailsStep";
 const { Text } = Typography;
 const { Dragger } = Upload;
 
-const FILE_CATEGORIES: BLFileUploadItem["category"][] = [
-  "VGM",
-  "DG",
-  "LOI",
-  "OTHER",
+const FILE_CATEGORIES: {
+  value: BLFileUploadItem["category"];
+  label: string;
+}[] = [
+  { value: "VGM", label: "VGM" },
+  { value: "DG", label: "Dangerous Goods (DG)" },
+  { value: "LOI", label: "Letter of Indemnity (LOI)" },
+  { value: "OTHER", label: "Other" },
 ];
 
 export function BlFileUploadStep({
@@ -24,12 +27,11 @@ export function BlFileUploadStep({
   onNext,
   onPrevious,
   onUpdate,
-  onGoToStep,
   isFirstStep,
   isSubmitting,
 }: BLWizardStepProps) {
   const toast = useToast();
-  const [category, setCategory] =
+  const [docType, setDocType] =
     useState<BLFileUploadItem["category"]>("OTHER");
   const [files, setFiles] = useState<BLFileUploadItem[]>(
     () => data.files ?? [],
@@ -38,15 +40,20 @@ export function BlFileUploadStep({
 
   const handleUpload = (file: File) => {
     setUploading(true);
-    const item: BLFileUploadItem = {
-      id: `file-${crypto.randomUUID()}`,
-      category,
-      fileName: file.name,
-      uploadedAt: new Date().toISOString(),
-    };
-    setFiles((prev) => [...prev, item]);
-    toast.success(`${file.name} added (${category}).`);
-    setUploading(false);
+    try {
+      const item: BLFileUploadItem = {
+        id: `file-${crypto.randomUUID()}`,
+        category: docType,
+        fileName: file.name,
+        uploadedAt: new Date().toISOString(),
+      };
+      setFiles((prev) => [...prev, item]);
+      toast.success(`${file.name} uploaded successfully.`);
+    } catch {
+      toast.error(`${file.name} upload failed.`);
+    } finally {
+      setUploading(false);
+    }
     return false;
   };
 
@@ -66,19 +73,15 @@ export function BlFileUploadStep({
           className="form-step-card form-step-section"
           title="Upload Supporting Documents"
         >
-          <Text type="secondary" className="form-step-hint">
-            Upload VGM certificates, dangerous goods declarations, letters of
-            indemnity, or other supporting documents.
-          </Text>
-
-          <div className="booking-upload-type-row">
-            <label className="form-field-label">Document Category</label>
+          <div className="bl-upload-type-row">
+            <label className="form-field-label">Document Type</label>
             <Select
               size="large"
               className="form-field-full-width"
-              value={category}
-              onChange={setCategory}
-              options={FILE_CATEGORIES.map((c) => ({ value: c, label: c }))}
+              value={docType}
+              onChange={setDocType}
+              options={FILE_CATEGORIES}
+              placeholder="Select document type"
             />
           </div>
 
@@ -88,7 +91,7 @@ export function BlFileUploadStep({
             showUploadList={false}
             disabled={uploading || isSubmitting}
             beforeUpload={(file) => {
-              handleUpload(file);
+              void handleUpload(file);
               return false;
             }}
           >
@@ -99,16 +102,16 @@ export function BlFileUploadStep({
               Click or drag file to this area to upload
             </p>
             <p className="ant-upload-hint">
-              Selected category: {category}. Files are attached to this B/L.
+              Selected type: {docType}. Files are attached to this B/L request.
             </p>
           </Dragger>
 
           {files.length > 0 ? (
             <List
-              className="booking-upload-list"
+              className="bl-upload-list"
               header={<Text strong>Uploaded Documents</Text>}
               dataSource={files}
-              renderItem={(item) => (
+              renderItem={(item: BLFileUploadItem) => (
                 <List.Item
                   actions={[
                     <AppButton

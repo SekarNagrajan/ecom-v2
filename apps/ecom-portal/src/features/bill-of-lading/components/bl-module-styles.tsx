@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-08 15:03)
+// Modified by Sekar Nagarajan (2026-09-15 11:10)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -1376,6 +1376,18 @@ export function BlModuleStyles() {
       .bl-excel-import-toolbar .bl-excel-import {
         display: inline-flex;
         justify-content: flex-end;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-15 11:10) — booking FileUploadStep parity */
+      .bl-upload-type-row {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+        margin-bottom: ${token.marginLG}px;
+        max-width: 420px;
+      }
+      .bl-upload-list {
+        margin: ${token.marginMD}px 0 0;
+        padding-inline-start: ${token.paddingLG}px;
       }
       @media (max-width: 1199px) {
         .bl-preview-fields-grid--4,

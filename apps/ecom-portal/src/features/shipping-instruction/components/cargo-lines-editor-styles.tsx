@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-03 18:51)
+// Modified by Sekar Nagarajan (2026-09-15 11:15)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -427,25 +427,76 @@ export function CargoLinesEditorStyles() {
         position: relative;
         z-index: 0;
       }
-      .si-cargo-grid__th-actions,
-      .si-cargo-grid__td-actions {
+      /* Modified by Sekar Nagarajan (2026-09-15 11:15)
+         Sticky Actions + Container No + Type (booking cargo grid parity).
+         Must beat .si-cargo-grid tbody td position:relative (higher specificity). */
+      .si-cargo-grid thead th.si-cargo-grid__th-actions,
+      .si-cargo-grid tbody td.si-cargo-grid__td-actions {
         position: sticky;
         left: 0;
         width: 112px;
         min-width: 112px;
-        box-shadow: 1px 0 0 ${token.colorBorderSecondary};
+        max-width: 112px;
+        box-shadow: none;
+        overflow: hidden;
       }
-      .si-cargo-grid__th-actions {
-        z-index: 30;
+      .si-cargo-grid thead th.si-cargo-grid__th-actions {
+        z-index: 32;
         background-color: ${token.colorBgContainer};
         background-image: linear-gradient(${headerBg}, ${headerBg});
       }
-      .si-cargo-grid__td-actions {
+      .si-cargo-grid tbody td.si-cargo-grid__td-actions {
+        z-index: 12;
+        background: ${token.colorBgContainer};
+      }
+      .si-cargo-grid tbody tr:hover td.si-cargo-grid__td-actions {
+        background: ${fillHover};
+      }
+      .si-cargo-grid thead th.si-cargo-grid__th-container,
+      .si-cargo-grid tbody td.si-cargo-grid__td-container {
+        position: sticky;
+        left: 112px;
+        width: 160px;
+        min-width: 160px;
+        max-width: 160px;
+        box-shadow: none;
+        overflow: hidden;
+      }
+      .si-cargo-grid thead th.si-cargo-grid__th-type,
+      .si-cargo-grid tbody td.si-cargo-grid__td-type {
+        position: sticky;
+        left: 272px;
+        width: 112px;
+        min-width: 112px;
+        max-width: 112px;
+        box-shadow: 1px 0 0 ${token.colorBorderSecondary};
+        overflow: hidden;
+      }
+      .si-cargo-grid thead th.si-cargo-grid__th-container,
+      .si-cargo-grid thead th.si-cargo-grid__th-type {
+        z-index: 31;
+        background-color: ${token.colorBgContainer};
+        background-image: linear-gradient(${headerBg}, ${headerBg});
+      }
+      .si-cargo-grid thead th.si-cargo-grid__th-type {
+        z-index: 30;
+      }
+      .si-cargo-grid tbody td.si-cargo-grid__td-container {
+        z-index: 11;
+        background: ${token.colorBgContainer};
+      }
+      .si-cargo-grid tbody td.si-cargo-grid__td-type {
         z-index: 10;
         background: ${token.colorBgContainer};
       }
-      .si-cargo-grid tbody tr:hover .si-cargo-grid__td-actions {
+      .si-cargo-grid tbody tr:hover td.si-cargo-grid__td-container,
+      .si-cargo-grid tbody tr:hover td.si-cargo-grid__td-type {
         background: ${fillHover};
+      }
+      .si-cargo-grid tbody td.si-cargo-grid__td-container .si-cargo-grid__field--container {
+        min-width: 0 !important;
+        width: 100%;
+        max-width: 100%;
       }
       .si-cargo-grid__td-actions .list-actions-row {
         display: inline-flex;

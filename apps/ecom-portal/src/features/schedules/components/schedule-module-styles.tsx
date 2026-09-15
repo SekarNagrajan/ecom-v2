@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-11 12:35)
+// Modified by Sekar Nagarajan (2026-09-15 13:10)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -187,56 +187,6 @@ export function ScheduleModuleStyles() {
         display: block;
         flex: none;
       }
-      .schedule-results-tabs.ant-tabs {
-        margin-bottom: 0;
-        flex-shrink: 0;
-      }
-      .schedule-results-tabs .ant-tabs-nav {
-        margin-bottom: 0;
-      }
-      .schedule-results-tabs .ant-tabs-content-holder {
-        display: none;
-      }
-      /* Modified by Sekar Nagarajan (2026-09-01 13:00) — default segment style (not primary) */
-      .schedule-results-tabs.ant-segmented .ant-segmented-item-selected {
-        background: ${token.colorBgElevated} !important;
-        color: ${token.colorText} !important;
-      }
-      .schedule-results-tabs.ant-segmented
-        .ant-segmented-item-selected
-        .ant-segmented-item-label {
-        color: ${token.colorText} !important;
-      }
-      .schedule-results-tabs.ant-segmented .ant-segmented-thumb {
-        background: ${token.colorBgElevated} !important;
-        box-shadow: ${token.boxShadowSecondary} !important;
-      }
-      .schedule-results-tabs.ant-segmented
-        .ant-segmented-item-selected
-        .schedule-tab-label
-        .app-icon {
-        color: ${token.colorText};
-      }
-      .schedule-results-tabs--icon-only.ant-segmented .ant-segmented-item {
-        min-width: ${token.controlHeightSM}px;
-        min-height: ${token.controlHeightSM}px;
-      }
-      .schedule-results-tabs--icon-only.ant-segmented
-        .ant-segmented-item-label {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-height: ${token.controlHeightSM}px;
-        padding-inline: ${token.paddingXXS}px;
-        line-height: 1;
-      }
-      .schedule-tab-label--icon-only {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-width: ${token.controlHeight}px;
-        min-height: ${token.controlHeight}px;
-      }
       .schedule-port-swap-field .ant-form-item-control-input-content {
         display: flex;
         align-items: center;
@@ -297,6 +247,106 @@ export function ScheduleModuleStyles() {
         font-weight: ${token.fontWeightStrong};
       }
 
+      /* Available Sailings — unselected white/black; selected primary/white */
+      .schedule-results-bar .schedule-view-mode-tabs.ant-segmented {
+        background: ${token.colorBgContainer};
+        border-color: ${token.colorBorder};
+        flex-shrink: 0;
+        margin-left: auto;
+      }
+      .schedule-results-bar .schedule-view-mode-tabs.ant-segmented
+        .ant-segmented-item {
+        color: ${token.colorText};
+      }
+      .schedule-results-bar .schedule-view-mode-tabs.ant-segmented
+        .ant-segmented-item:not(.ant-segmented-item-selected) .app-icon {
+        color: ${token.colorText} !important;
+      }
+      .schedule-results-bar .schedule-view-mode-tabs.ant-segmented
+        .ant-segmented-item:hover:not(.ant-segmented-item-selected):not(
+          .ant-segmented-item-disabled
+        ) {
+        color: ${token.colorText};
+      }
+      .schedule-results-bar .schedule-view-mode-tabs.ant-segmented
+        .ant-segmented-thumb {
+        background: ${token.colorPrimary} !important;
+      }
+      .schedule-results-bar .schedule-view-mode-tabs.ant-segmented
+        .ant-segmented-item-selected {
+        background: ${token.colorPrimary} !important;
+        color: ${token.colorTextLightSolid} !important;
+      }
+      .schedule-results-bar .schedule-view-mode-tabs.ant-segmented
+        .ant-segmented-item-selected .app-icon {
+        color: ${token.colorTextLightSolid} !important;
+      }
+      .schedule-results-bar .schedule-view-mode-tabs__icon {
+        align-items: center;
+        display: inline-flex;
+        justify-content: center;
+        line-height: 1;
+      }
+
+      .schedule-grid-wrap {
+        width: 100%;
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+      }
+      .schedule-grid-wrap--no-toolbar .schedule-data-view > .ant-card:first-child {
+        display: none;
+      }
+      .schedule-list-grid {
+        width: 100%;
+        flex: 1 1 auto;
+        max-height: 500px;
+        height: 500px;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      .schedule-list-grid > * {
+        flex: 1;
+        min-height: 0;
+        height: 100%;
+      }
+      .schedule-list-grid .schedule-data-view {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-height: 0;
+        height: 100%;
+        max-height: 100%;
+      }
+      .schedule-list-grid .schedule-data-view .ant-card {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+      }
+      .schedule-list-grid .schedule-data-view .ant-card > .ant-card-body {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow: hidden;
+      }
+      .schedule-list-grid .ag-theme-alpine,
+      .schedule-list-grid .ag-root-wrapper {
+        height: 100% !important;
+        max-height: 100%;
+        min-height: 0;
+      }
+      .schedule-card-view-panel.module-card-view-panel--active {
+        margin-bottom: ${token.marginMD}px;
+      }
+      .schedule-card-view-panel .schedule-card-list {
+        padding: ${token.paddingMD}px;
+      }
       .schedule-card-list {
         display: flex;
         flex-direction: column;
@@ -1055,13 +1105,82 @@ export function ScheduleModuleStyles() {
         font-size: ${token.fontSizeSM}px;
         margin: 0 !important;
       }
+      .schedule-list-grid .ag-row.schedule-list-row--recommended,
+      .schedule-list-grid .ag-row.schedule-list-row--recommended .ag-cell {
+        background: ${tokenMix(token.colorWarning, 10)} !important;
+      }
+      .schedule-list-grid .ag-row.schedule-list-row--recommended:hover,
+      .schedule-list-grid .ag-row.schedule-list-row--recommended:hover .ag-cell {
+        background: ${tokenMix(token.colorWarning, 10)} !important;
+      }
+      .schedule-list-legend {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginXS}px;
+        margin-top: ${token.marginSM}px;
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+        line-height: ${token.lineHeightSM};
+        font-weight: ${token.fontWeightStrong};
+      }
+      .schedule-list-legend__swatch {
+        flex: 0 0 auto;
+        width: ${token.fontSizeLG}px;
+        height: ${token.fontSizeLG}px;
+        border-radius: ${token.borderRadiusSM}px;
+        background: ${tokenMix(token.colorWarning, 20)};
+        border: 1px solid ${tokenMix(token.colorWarning, 40)};
+      }
+      .schedule-list-legend__text {
+        min-width: 0;
+      }
       .schedule-list-cell__title {
         font-weight: ${token.fontWeightStrong};
         color: ${token.colorText};
+        line-height: ${token.lineHeightSM};
       }
       .schedule-list-cell__sub {
         font-size: ${token.fontSizeSM}px;
         color: ${token.colorTextSecondary};
+        line-height: ${token.lineHeightSM};
+        margin-top: ${token.marginXXS}px;
+      }
+      .schedule-list-cell__tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: ${token.marginXXS}px;
+        align-items: center;
+      }
+      .schedule-list-cell__tags .ant-tag {
+        margin-inline-end: 0;
+      }
+      .schedule-list-cell__cutoffs {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+        font-variant-numeric: tabular-nums;
+      }
+      .schedule-list-cell__cutoff-row {
+        display: flex;
+        align-items: baseline;
+        gap: ${token.marginXS}px;
+        min-width: 0;
+        line-height: ${token.lineHeightSM};
+      }
+      .schedule-list-cell__cutoff-label {
+        flex: 0 0 auto;
+        min-width: 3.25em;
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextTertiary};
+      }
+      .schedule-list-cell__cutoff-value {
+        flex: 1 1 auto;
+        min-width: 0;
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorText};
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
       .schedule-filter-card.ant-card {
         margin-bottom: ${token.marginMD}px;
@@ -1150,9 +1269,6 @@ export function ScheduleModuleStyles() {
           flex-direction: column;
         }
         .schedule-search-actions .sm-app-button {
-          width: 100%;
-        }
-        .schedule-results-bar .schedule-results-tabs {
           width: 100%;
         }
         .schedule-card__main {

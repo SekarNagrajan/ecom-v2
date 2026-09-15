@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-08 16:25)
+// Modified by Sekar Nagarajan (2026-09-15 12:53)
 // Schedule Feature Controller — results only after Search (or landing deep-link)
 
 import { useToast } from "@solverminds/shared-ui/hooks";
@@ -11,6 +11,7 @@ import type {
   ScheduleSearchParams,
   VesselParticulars,
 } from "../types/schedules.types";
+import { useScheduleViewMode } from "./use-schedule-view-mode";
 
 function readDeepLinkSearchParams(): ScheduleSearchParams | null {
   const searchParams = new URLSearchParams(window.location.search);
@@ -55,7 +56,7 @@ export function useSchedulesController() {
   const navigate = useNavigate();
   const toast = useToast();
 
-  const [viewMode, setViewMode] = useState<"LIST" | "CALENDAR">("LIST");
+  const { viewMode, setViewMode } = useScheduleViewMode();
   const [schedules, setSchedules] = useState<ScheduleItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);

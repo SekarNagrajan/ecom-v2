@@ -1,12 +1,13 @@
-// Modified by Sekar Nagarajan (2026-09-08 17:45)
+// Modified by Sekar Nagarajan (2026-09-15 13:00)
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
-import { Card, Segmented, Space, Spin, Tooltip, Typography } from "antd";
+import { Card, Space, Spin, Typography } from "antd";
 import React from "react";
 
 import { AppIcon, Icons } from "../../components/icons";
 import { NavSchedulesIcon } from "../../components/icons/nav-svg-icons";
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
+import { ModuleCardViewPanel } from "../../components/shared/module-card-view-panel";
 import { ModuleEmptyState } from "../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import { MODULE_TITLES } from "../../constants/module-titles";
@@ -15,15 +16,17 @@ import { ScheduleSearchHost } from "./components/schedule-search-host";
 import { ScheduleCalendarView } from "./components/ScheduleCalendarView";
 import { ScheduleCarbonModal } from "./components/ScheduleCarbonModal";
 import { ScheduleCardList } from "./components/ScheduleCardList";
+import { ScheduleList } from "./components/ScheduleList";
 import { ScheduleRatesModal } from "./components/ScheduleRatesModal";
+import { ScheduleViewModeTabs } from "./components/schedule-view-mode-tabs";
 import { VesselDetailsModal } from "./components/VesselDetailsModal";
 import { useSchedulesController } from "./hooks/useSchedulesController";
 
 import { NavRoutePinsIcon } from "../../components/icons/nav-svg-icons";
+
 const { Text } = Typography;
 
 export const SchedulesRoute: React.FC = () => {
-  // Modified by Sekar Nagarajan (2026-09-08 17:45)
   const toast = useToast();
   const {
     viewMode,
@@ -115,39 +118,9 @@ export const SchedulesRoute: React.FC = () => {
                   </span>
                 ) : null}
               </Space>
-
-              <Segmented
+              <ScheduleViewModeTabs
                 value={viewMode}
-                onChange={(value) => setViewMode(value as "LIST" | "CALENDAR")}
-                className="schedule-results-tabs schedule-results-tabs--icon-only"
-                options={[
-                  {
-                    value: "LIST",
-                    label: (
-                      <Tooltip title="List View">
-                        <span
-                          className="schedule-tab-label schedule-tab-label--icon-only"
-                          aria-label="List View"
-                        >
-                          <AppIcon icon={Icons.list} size={22} />
-                        </span>
-                      </Tooltip>
-                    ),
-                  },
-                  {
-                    value: "CALENDAR",
-                    label: (
-                      <Tooltip title="Calendar View">
-                        <span
-                          className="schedule-tab-label schedule-tab-label--icon-only"
-                          aria-label="Calendar View"
-                        >
-                          <AppIcon icon={Icons.calendar} size={22} />
-                        </span>
-                      </Tooltip>
-                    ),
-                  },
-                ]}
+                onChange={setViewMode}
               />
             </div>
 
@@ -159,8 +132,8 @@ export const SchedulesRoute: React.FC = () => {
               >
                 <Spin size="medium" />
               </div>
-            ) : viewMode === "LIST" ? (
-              <ScheduleCardList
+            ) : viewMode === "list" ? (
+              <ScheduleList
                 schedules={schedules}
                 isLoading={false}
                 onBookNow={handleBookNow}
@@ -168,6 +141,20 @@ export const SchedulesRoute: React.FC = () => {
                 onViewRates={handleOpenRates}
                 onOpenCarbonModal={handleOpenCarbon}
               />
+            ) : viewMode === "card" ? (
+              <ModuleCardViewPanel
+                active
+                className="schedule-card-view-panel"
+              >
+                <ScheduleCardList
+                  schedules={schedules}
+                  isLoading={false}
+                  onBookNow={handleBookNow}
+                  onViewVessel={handleViewVessel}
+                  onViewRates={handleOpenRates}
+                  onOpenCarbonModal={handleOpenCarbon}
+                />
+              </ModuleCardViewPanel>
             ) : (
               <ScheduleCalendarView
                 schedules={schedules}

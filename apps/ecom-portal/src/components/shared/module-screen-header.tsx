@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-15 11:55)
+// Modified by Sekar Nagarajan (2026-09-15 12:53)
 import { Typography, theme } from "antd";
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
@@ -19,6 +19,11 @@ export interface ModuleScreenHeaderProps {
   viewMode?: ModuleListViewMode;
   onViewModeChange?: (mode: ModuleListViewMode) => void;
   /**
+   * Custom view-mode control (e.g. Schedules list/card/calendar).
+   * When set, used instead of the built-in list/card tabs.
+   */
+  viewModeControl?: ReactNode;
+  /**
    * Where to place the list/card toggle relative to `extra` actions.
    * Defaults to `after` (e.g. after New Booking).
    */
@@ -33,16 +38,17 @@ export function ModuleScreenHeader({
   title,
   viewMode,
   onViewModeChange,
+  viewModeControl,
   viewModePlacement = "after",
 }: ModuleScreenHeaderProps) {
   const { token } = theme.useToken();
-  const showViewMode = Boolean(viewMode && onViewModeChange);
-  const hasActions = showViewMode || Boolean(extra);
-
-  const viewModeTabs =
-    showViewMode && viewMode && onViewModeChange ? (
+  const builtInTabs =
+    !viewModeControl && viewMode && onViewModeChange ? (
       <ModuleViewModeTabs value={viewMode} onChange={onViewModeChange} />
     ) : null;
+  const viewModeTabs = viewModeControl ?? builtInTabs;
+  const showViewMode = Boolean(viewModeTabs);
+  const hasActions = showViewMode || Boolean(extra);
 
   return (
     <div

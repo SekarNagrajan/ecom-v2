@@ -13,6 +13,10 @@ import {
 } from "../features/booking/mocks/booking-hs-un.mock";
 import { buildMockBookingRates } from "../features/booking/mocks/booking-rates.mock";
 import { buildMockBookingRoutes } from "../features/booking/mocks/booking-routing.mock";
+import type {
+  BulkBookingImportResult,
+  BookingImportPayload,
+} from "../features/booking-import/types/booking-import.types";
 import type { BookingListDTO } from "../features/booking/types/booking-list.types";
 import type {
   BookingActivityEvent,
@@ -23,8 +27,103 @@ import {
   createEmptyContainer,
 } from "../features/booking/types/booking.types";
 
+function formatListDate(date = new Date()): string {
+  const day = String(date.getDate()).padStart(2, "0");
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const month = months[date.getMonth()];
+  const year = date.getFullYear();
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  return `${day}-${month}-${year} ${hours}:${minutes}`;
+}
+
+function createBookingFromPayload(payload: BookingPayload): {
+  listRow: BookingListDTO;
+  bookingReference: string;
+} {
+  const bookingReference = `BKG-${new Date().getFullYear()}-${Math.floor(
+    10000 + Math.random() * 90000,
+  )}`;
+  const id = `bkg-import-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+  const master = payload.masterDetails;
+  const cargo = payload.cargo;
+  const teusCount =
+    cargo?.containers.reduce((sum, container) => sum + (container.quantity || 0), 0) ??
+    1;
+  const now = formatListDate();
+
+  const listRow: BookingListDTO = {
+    id,
+    bookingNo: bookingReference,
+    onlineRefNo: master?.onlineBookingNo || `BKON${Math.floor(1000 + Math.random() * 9000)}`,
+    agencyRefNo: master?.agencyReference || "",
+    status: "Submitted",
+    origin: master?.origin || "",
+    delivery: master?.delivery || "",
+    createdDate: now,
+    confirmedDate: "",
+    dgStatus: "N",
+    teusCount,
+    submittedDate: now,
+  };
+
+  return { listRow, bookingReference };
+}
+
+function validateImportPayload(
+  payload: BookingImportPayload,
+  rowNumber: number,
+): string | null {
+  if (!payload.masterDetails?.origin?.trim()) {
+    return `Row ${rowNumber}: Origin is required`;
+  }
+  if (!payload.masterDetails?.delivery?.trim()) {
+    return `Row ${rowNumber}: Delivery is required`;
+  }
+  if (!payload.masterDetails?.cargoReadyDate?.trim()) {
+    return `Row ${rowNumber}: Cargo Ready Date is required`;
+  }
+  if (!payload.parties?.shipperName?.trim()) {
+    return `Row ${rowNumber}: Shipper Name is required`;
+  }
+  if (!payload.parties?.agreementParty?.trim()) {
+    return `Row ${rowNumber}: Agreement Party is required`;
+  }
+  if (!payload.parties?.siSubmittingParty?.trim()) {
+    return `Row ${rowNumber}: SI Submitting Party is required`;
+  }
+  const container = payload.cargo?.containers?.[0];
+  if (!container?.containerType?.trim()) {
+    return `Row ${rowNumber}: Container Type is required`;
+  }
+  if (!container.quantity || container.quantity < 1) {
+    return `Row ${rowNumber}: Quantity must be at least 1`;
+  }
+  const commodity = container.commodities?.[0];
+  if (!commodity?.hsCode?.trim()) {
+    return `Row ${rowNumber}: HS Code is required`;
+  }
+  if (!commodity.weight || commodity.weight < 1) {
+    return `Row ${rowNumber}: Weight must be at least 1`;
+  }
+  return null;
+}
+
 /** 20 list rows — Cancelled / Completed / Draft / Submitted / In Transit (4 each). */
-const mockBookings: BookingListDTO[] = [
+let mockBookings: BookingListDTO[] = [
   // Draft (4)
   {
     id: "bkg-1",
@@ -511,17 +610,64 @@ export const bookingHandlers = [
     return HttpResponse.json({ data: { draftId } });
   }),
 
-  http.post("*/api/booking/submit", async () => {
+  http.post("*/api/booking/submit", async ({ request }) => {
     await delay(1500);
+    const body = (await request.json()) as BookingPayload;
+    const { listRow, bookingReference } = createBookingFromPayload(body);
+    mockBookings = [listRow, ...mockBookings];
     return HttpResponse.json({
       data: {
-        bookingReference: `BKG-${new Date().getFullYear()}-${Math.floor(
-          10000 + Math.random() * 90000,
-        )}`,
+        bookingReference,
         status: "CONFIRMED",
         submittedAt: new Date().toISOString(),
       },
     });
+  }),
+
+  http.post("*/api/booking/import", async ({ request }) => {
+    await delay(800);
+    const body = (await request.json()) as {
+      dryRun?: boolean;
+      bookings?: BookingImportPayload[];
+    };
+    const dryRun = Boolean(body.dryRun);
+    const bookings = Array.isArray(body.bookings) ? body.bookings : [];
+
+    const created: BulkBookingImportResult["created"] = [];
+    const errors: BulkBookingImportResult["errors"] = [];
+
+    bookings.forEach((payload, index) => {
+      const rowNumber = index + 1;
+      const validationError = validateImportPayload(payload, rowNumber);
+      if (validationError) {
+        errors.push({
+          rowNumber,
+          field: null,
+          message: validationError,
+        });
+        return;
+      }
+
+      if (dryRun) {
+        created.push({ rowNumber, bookingReference: null });
+        return;
+      }
+
+      const { listRow, bookingReference } = createBookingFromPayload(payload);
+      mockBookings = [listRow, ...mockBookings];
+      created.push({ rowNumber, bookingReference });
+    });
+
+    const result: BulkBookingImportResult = {
+      totalRows: bookings.length,
+      successCount: created.length,
+      failedCount: errors.length,
+      dryRun,
+      created,
+      errors,
+    };
+
+    return HttpResponse.json({ data: result });
   }),
 
   http.put("*/api/booking/amend", async () => {
@@ -564,7 +710,8 @@ export const bookingHandlers = [
       id === "list" ||
       id === "submit" ||
       id === "draft" ||
-      id === "amend"
+      id === "amend" ||
+      id === "import"
     ) {
       return new HttpResponse(null, { status: 404 });
     }

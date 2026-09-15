@@ -6,6 +6,7 @@ export const MODULE_TITLES = {
   rates: "Rates",
   tariff: "Tariff",
   booking: "Booking",
+  bookingImport: "Import Booking",
   newBooking: "New Booking",
   amendBooking: "Amend Booking",
   viewBooking: "View Booking",

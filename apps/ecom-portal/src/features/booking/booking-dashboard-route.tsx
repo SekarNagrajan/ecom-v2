@@ -1,11 +1,14 @@
 // Modified by Sekar Nagarajan (2026-09-15 11:40)
 import { AppButton } from "@solverminds/shared-ui";
-import { DataView, type DataViewColumn } from "@solverminds/shared-ui/data-view";
+import {
+  DataView,
+  type DataViewColumn,
+} from "@solverminds/shared-ui/data-view";
 import { useConfirm, useToast } from "@solverminds/shared-ui/hooks";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import type { RowDoubleClickedEvent } from "ag-grid-community";
-import { Card, Space, Tag } from "antd";
+import { Card, Dropdown, Space, Tag } from "antd";
 import { useCallback, useMemo, useState } from "react";
 
 import { AppIcon, Icons } from "../../components/icons";
@@ -18,12 +21,12 @@ import {
   ListActionButton,
   ListActionsRow,
 } from "../../components/shared/list-action-button";
+import { ModuleCardViewPanel } from "../../components/shared/module-card-view-panel";
 import {
   ModuleEmptyState,
   buildRetryAction,
 } from "../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
-import { ModuleCardViewPanel } from "../../components/shared/module-card-view-panel";
 import { MODULE_TITLES } from "../../constants/module-titles";
 import { bookingApi } from "./api/booking.api";
 import { bookingKeys } from "./api/booking.keys";
@@ -53,7 +56,12 @@ export function BookingDashboardRoute() {
     onPaginationChange: onCardPaginationChange,
   } = useModuleCardPagination();
 
-  const { data: bookings = [], isLoading, isError, refetch } = useQuery({
+  const {
+    data: bookings = [],
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery({
     queryKey: bookingKeys.list(),
     queryFn: async () => {
       const res = await fetch("/api/booking/list");
@@ -192,9 +200,7 @@ export function BookingDashboardRoute() {
               />
               <ListActionButton
                 title="Cancel Booking"
-                icon={
-                  <AppIcon icon={Icons.circleX} size={16} tone="reject" />
-                }
+                icon={<AppIcon icon={Icons.circleX} size={16} tone="reject" />}
                 danger
                 onClick={(e) => {
                   e.stopPropagation();
@@ -205,7 +211,13 @@ export function BookingDashboardRoute() {
           );
         },
       }),
-      { field: "bookingNo", headerName: "Booking No", minWidth: 140, flex: 1.1, isPrimary: true },
+      {
+        field: "bookingNo",
+        headerName: "Booking No",
+        minWidth: 140,
+        flex: 1.1,
+        isPrimary: true,
+      },
       {
         field: "onlineRefNo",
         headerName: "Online Ref",
@@ -236,7 +248,13 @@ export function BookingDashboardRoute() {
           );
         },
       },
-      { field: "origin", headerName: "Origin", minWidth: 120, flex: 1, isSecondary: true },
+      {
+        field: "origin",
+        headerName: "Origin",
+        minWidth: 120,
+        flex: 1,
+        isSecondary: true,
+      },
       { field: "delivery", headerName: "Delivery", minWidth: 120, flex: 1 },
       { field: "createdDate", headerName: "Created", minWidth: 110, flex: 0.9 },
       {
@@ -266,20 +284,11 @@ export function BookingDashboardRoute() {
         flex: 0.9,
       },
     ],
-    [
-      handleAmend,
-      handleCancel,
-      handleDownloadPdf,
-      handleDuplicate,
-      handleView,
-    ],
+    [handleAmend, handleCancel, handleDownloadPdf, handleDuplicate, handleView],
   );
 
   const renderCard = useCallback(
-    (
-      item: BookingListDTO,
-      state: { isSelected: boolean },
-    ) => (
+    (item: BookingListDTO, state: { isSelected: boolean }) => (
       <BookingListCard
         booking={item}
         isSelected={state.isSelected}
@@ -290,13 +299,7 @@ export function BookingDashboardRoute() {
         onCancel={handleCancel}
       />
     ),
-    [
-      handleAmend,
-      handleCancel,
-      handleDownloadPdf,
-      handleDuplicate,
-      handleView,
-    ],
+    [handleAmend, handleCancel, handleDownloadPdf, handleDuplicate, handleView],
   );
 
   return (
@@ -321,16 +324,47 @@ export function BookingDashboardRoute() {
                   >
                     Manage Template
                   </AppButton>
-                  <AppButton
-                    type="primary"
-                    icon={<AppIcon icon={Icons.plus} size={16} />}
-                    onClick={() => {
-                      useBookingStore.getState().resetWizard();
-                      navigate({ to: "/app/booking/new" });
+                  <Dropdown
+                    menu={{
+                      items: [
+                        {
+                          key: "new-booking",
+                          label: "New Booking",
+                          icon: <AppIcon icon={Icons.plus} size={16} />,
+                          onClick: () => {
+                            useBookingStore.getState().resetWizard();
+                            navigate({ to: "/app/booking/new" });
+                          },
+                        },
+                        {
+                          key: "import-booking",
+                          label: "Import Booking",
+                          icon: <AppIcon icon={Icons.upload} size={16} />,
+                          onClick: () => {
+                            navigate({ to: "/app/booking/import" });
+                          },
+                        },
+                      ],
                     }}
+                    trigger={["click"]}
+                    placement="bottomRight"
                   >
-                    New Booking
-                  </AppButton>
+                    <AppButton
+                      type="primary"
+                      icon={<AppIcon icon={Icons.plus} size={16} />}
+                    >
+                      <span
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: 6,
+                        }}
+                      >
+                        New Booking
+                        <AppIcon icon={Icons.chevronDown} size={14} />
+                      </span>
+                    </AppButton>
+                  </Dropdown>
                 </Space>
               }
             />
@@ -354,7 +388,7 @@ export function BookingDashboardRoute() {
                     renderToolbar={() => null}
                     className="booking-data-view"
                     listOptions={{
-                      showToolbar: false,
+                      showToolbar: true,
                       sideBar: false,
                       defaultColDef: { filter: true },
                       gridOptions: {

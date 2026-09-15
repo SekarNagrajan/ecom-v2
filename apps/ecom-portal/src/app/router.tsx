@@ -47,6 +47,7 @@ import { BookingAmendRoute } from "../features/booking/booking-amend-route";
 import { BookingDashboardRoute } from "../features/booking/booking-dashboard-route";
 import { BookingViewRoute } from "../features/booking/booking-view-route";
 import { BookingWizardRoute } from "../features/booking/booking-wizard-route";
+import { BookingImportRoute } from "../features/booking-import/booking-import-route";
 import { CarbonCalculatorRoute } from "../features/carbon-calculator/carbon-calculator-route";
 import { ContactUsRoute } from "../features/contact-us/contact-us-route";
 import { ContainerReleaseOrderRoute } from "../features/container-release-order/container-release-order-route";
@@ -360,6 +361,14 @@ const bookingDashboardRoute = createRoute({
   component: () => <BookingDashboardRoute />,
 });
 
+const bookingImportRoute = createRoute({
+  getParentRoute: () => appRoute,
+  path: "/booking/import",
+  beforeLoad: assertCapability("BKG"),
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: () => <BookingImportRoute />,
+});
+
 const bookingWizardRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/booking/new",
@@ -610,6 +619,7 @@ const routeTree = rootRoute.addChildren([
     trackingRoute,
     ratesRoute,
     bookingDashboardRoute,
+    bookingImportRoute,
     bookingWizardRoute,
     bookingViewRoute,
     bookingAmendRoute,

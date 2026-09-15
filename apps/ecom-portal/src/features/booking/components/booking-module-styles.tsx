@@ -451,6 +451,10 @@ export function BookingModuleStyles() {
       .booking-page-header .module-screen-header__actions .ant-space {
         align-items: center;
       }
+      .booking-page-header .module-screen-header__actions .ant-dropdown-trigger {
+        display: inline-flex;
+        align-items: center;
+      }
       .booking-page-header .module-view-mode-tabs.ant-segmented {
         flex-shrink: 0;
       }

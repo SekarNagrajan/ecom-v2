@@ -1,6 +1,6 @@
 // Modified by Sekar Nagarajan (2026-09-11 16:37)
-import fs from "fs";
 import react from "@vitejs/plugin-react";
+import fs from "fs";
 import path from "path";
 import { defineConfig, type Plugin } from "vite";
 
@@ -142,9 +142,7 @@ export default defineConfig({
   plugins: [react(), bookingMockApiPlugin()],
   resolve: {
     alias: {
-      ...(tiptapCorePath
-        ? { "@tiptap/core": tiptapCorePath }
-        : {}),
+      ...(tiptapCorePath ? { "@tiptap/core": tiptapCorePath } : {}),
       "@solverminds/platform": path.resolve(
         __dirname,
         "../../libs/platform/src/index.ts",

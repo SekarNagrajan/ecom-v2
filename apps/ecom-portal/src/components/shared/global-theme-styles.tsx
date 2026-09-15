@@ -492,8 +492,10 @@ export function GlobalThemeStyles() {
         display: none !important;
       }
 
-      /* Modified by Sekar Nagarajan (2026-08-31 13:00) — mild tint bg from text color (colorSuccessText / seed) */
-      .ag-cell .ant-tag {
+      /* Modified by Sekar Nagarajan (2026-08-31 13:00) — mild tint bg from text color (colorSuccessText / seed)
+         Also applied to .module-status-tag so card-view status chips match AG Grid. */
+      .ag-cell .ant-tag,
+      .module-status-tag.ant-tag {
         font-weight: ${token.fontWeightStrong};
         border-width: 1px;
         border-style: solid;
@@ -501,7 +503,11 @@ export function GlobalThemeStyles() {
       .ag-cell .ant-tag-success,
       .ag-cell .ant-tag-filled.ant-tag-success,
       .ag-cell .ant-tag-green,
-      .ag-cell .ant-tag-filled.ant-tag-green {
+      .ag-cell .ant-tag-filled.ant-tag-green,
+      .module-status-tag.ant-tag-success,
+      .module-status-tag.ant-tag-filled.ant-tag-success,
+      .module-status-tag.ant-tag-green,
+      .module-status-tag.ant-tag-filled.ant-tag-green {
         color: ${token.colorSuccessText};
         background: ${successTint8};
         border-color: ${successTint28};
@@ -509,31 +515,45 @@ export function GlobalThemeStyles() {
       .ag-cell .ant-tag-processing,
       .ag-cell .ant-tag-filled.ant-tag-processing,
       .ag-cell .ant-tag-blue,
-      .ag-cell .ant-tag-filled.ant-tag-blue {
+      .ag-cell .ant-tag-filled.ant-tag-blue,
+      .module-status-tag.ant-tag-processing,
+      .module-status-tag.ant-tag-filled.ant-tag-processing,
+      .module-status-tag.ant-tag-blue,
+      .module-status-tag.ant-tag-filled.ant-tag-blue {
         color: ${token.colorPrimary};
         background: ${primaryTint8};
         border-color: ${primaryTint28};
       }
       .ag-cell .ant-tag-error,
-      .ag-cell .ant-tag-filled.ant-tag-error {
+      .ag-cell .ant-tag-filled.ant-tag-error,
+      .module-status-tag.ant-tag-error,
+      .module-status-tag.ant-tag-filled.ant-tag-error {
         color: ${token.colorErrorText};
         background: ${errorTint8};
         border-color: ${errorTint28};
       }
       .ag-cell .ant-tag-warning,
-      .ag-cell .ant-tag-filled.ant-tag-warning {
+      .ag-cell .ant-tag-filled.ant-tag-warning,
+      .module-status-tag.ant-tag-warning,
+      .module-status-tag.ant-tag-filled.ant-tag-warning,
+      .module-status-tag.ant-tag-gold,
+      .module-status-tag.ant-tag-filled.ant-tag-gold {
         color: ${token.colorWarningText};
         background: ${warningTint8};
         border-color: ${warningTint28};
       }
       .ag-cell .ant-tag-default,
-      .ag-cell .ant-tag-filled.ant-tag-default {
+      .ag-cell .ant-tag-filled.ant-tag-default,
+      .module-status-tag.ant-tag-default,
+      .module-status-tag.ant-tag-filled.ant-tag-default {
         color: ${token.colorTextSecondary};
         background: ${token.colorFillAlter};
         border-color: ${token.colorBorderSecondary};
       }
       .ag-cell .ant-tag-cyan,
-      .ag-cell .ant-tag-filled.ant-tag-cyan {
+      .ag-cell .ant-tag-filled.ant-tag-cyan,
+      .module-status-tag.ant-tag-cyan,
+      .module-status-tag.ant-tag-filled.ant-tag-cyan {
         color: ${token.colorInfoText};
         background: ${infoTint8};
         border-color: ${infoTint28};
@@ -705,6 +725,82 @@ export function GlobalThemeStyles() {
       }
       .module-screen-header__extra {
         flex-shrink: 0;
+      }
+      .module-screen-header__actions {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: ${token.marginSM}px;
+        justify-content: flex-end;
+      }
+      /* List/card toggle — match AppButton height + 16px icon alignment */
+      .module-view-mode-tabs.ant-segmented {
+        align-items: center;
+        background: ${token.colorFillAlter};
+        border: 1px solid ${token.colorBorder};
+        border-radius: ${token.borderRadius}px;
+        display: inline-flex;
+        height: ${token.controlHeight}px;
+        min-height: ${token.controlHeight}px;
+        padding: ${token.paddingXXS}px;
+      }
+      .module-view-mode-tabs.ant-segmented .ant-segmented-group {
+        align-items: center;
+        display: flex;
+        gap: 0;
+        height: 100%;
+      }
+      .module-view-mode-tabs.ant-segmented .ant-segmented-item {
+        align-items: center;
+        display: inline-flex;
+        height: ${token.controlHeight - token.paddingXXS * 2}px;
+        justify-content: center;
+        min-height: ${token.controlHeight - token.paddingXXS * 2}px;
+        min-width: ${token.controlHeight - token.paddingXXS * 2}px;
+        width: ${token.controlHeight - token.paddingXXS * 2}px;
+      }
+      .module-view-mode-tabs.ant-segmented .ant-segmented-item-label {
+        align-items: center;
+        display: inline-flex;
+        height: 100%;
+        justify-content: center;
+        line-height: 1;
+        min-height: 100%;
+        padding: 0;
+        width: 100%;
+      }
+      .module-view-mode-tabs__icon {
+        align-items: center;
+        display: inline-flex;
+        height: 16px;
+        justify-content: center;
+        line-height: 1;
+        width: 16px;
+      }
+      .module-view-mode-tabs__icon .anticon {
+        display: inline-flex;
+        font-size: 16px;
+        line-height: 1;
+      }
+      /* Outlined host for card-view only — cards sit inside this frame */
+      .module-card-view-panel {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        height: 100%;
+        min-height: 0;
+        width: 100%;
+      }
+      .module-card-view-panel--active {
+        background: ${token.colorFillAlter};
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG}px;
+        overflow: hidden;
+      }
+      .module-card-view-panel--active > * {
+        flex: 1;
+        min-height: 0;
+        height: 100%;
       }
       .wizard-page-card {
         border-radius: ${token.borderRadiusLG}px;

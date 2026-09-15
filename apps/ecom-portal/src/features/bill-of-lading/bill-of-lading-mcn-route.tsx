@@ -103,7 +103,7 @@ export function BillOfLadingMcnListRoute() {
           <div className="bl-toolbar">
             <Text type="secondary">{rows.length} Manifest(s)</Text>
           </div>
-          <div className="bl-grid-wrap responsive-table-wrap">
+          <div className="bl-grid-wrap bl-grid-wrap--no-toolbar responsive-table-wrap">
             {isError && rows.length === 0 && !isLoading ? (
               emptyState
             ) : (
@@ -112,6 +112,10 @@ export function BillOfLadingMcnListRoute() {
                 loading={isLoading}
                 columnDefs={columns}
                 emptyState={emptyState}
+                allowedViewModes={['list']}
+                defaultViewMode="list"
+                renderToolbar={() => null}
+                listOptions={{ showToolbar: false, sideBar: false }}
               />
             )}
           </div>

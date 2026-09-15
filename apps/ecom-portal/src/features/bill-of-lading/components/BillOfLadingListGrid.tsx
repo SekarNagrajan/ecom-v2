@@ -1,18 +1,27 @@
-// Modified by Sekar Nagarajan (2026-08-31 17:21)
+// Modified by Sekar Nagarajan (2026-09-15 11:55)
 import { FormattedDate } from "@solverminds/shared-ui";
-import { DataView, DataViewColumn } from "@solverminds/shared-ui/data-view";
+import {
+  DataView,
+  type DataViewColumn,
+} from "@solverminds/shared-ui/data-view";
 import type { RowDoubleClickedEvent } from "ag-grid-community";
 import { Tag } from "antd";
-import { useMemo, type ReactNode } from "react";
+import { useCallback, useMemo, type ReactNode } from "react";
 
 import { buildActionsColumn } from "../../../components/shared/build-actions-column";
+import { ModuleCardViewPanel } from "../../../components/shared/module-card-view-panel";
+import { useModuleCardPagination } from "../../../components/shared/hooks/use-module-card-pagination";
+import type { ModuleListViewMode } from "../../../components/shared/hooks/use-module-view-mode";
 import type { BLListDTO, BLPrintType } from "../types/bl.types";
 import { getBLListStatusColor } from "../utils/bl-status";
 import { BillOfLadingRowActions } from "./BillOfLadingRowActions";
+import { BlListCard } from "./list/bl-list-card";
 
 export interface BillOfLadingListGridProps {
   rows: BLListDTO[];
   loading: boolean;
+  viewMode: ModuleListViewMode;
+  onViewModeChange: (mode: ModuleListViewMode) => void;
   onView: (blNo: string) => void;
   onEdit: (blNo: string) => void;
   onPrint: (blNo: string, type: BLPrintType) => void;
@@ -32,6 +41,8 @@ export interface BillOfLadingListGridProps {
 export function BillOfLadingListGrid({
   rows,
   loading,
+  viewMode,
+  onViewModeChange,
   onView,
   onEdit,
   onPrint,
@@ -47,6 +58,12 @@ export function BillOfLadingListGrid({
   enableTermsOnConfirmedEdit = true,
   emptyState,
 }: BillOfLadingListGridProps) {
+  const {
+    page: cardPage,
+    pageSize: cardPageSize,
+    onPaginationChange: onCardPaginationChange,
+  } = useModuleCardPagination();
+
   const columns: DataViewColumn<BLListDTO>[] = useMemo(() => {
     const cols: DataViewColumn<BLListDTO>[] = [
       {
@@ -83,7 +100,7 @@ export function BillOfLadingListGrid({
           if (!params.data) return null;
           return (
             <Tag
-              className="bl-status-tag"
+              className="bl-status-tag module-status-tag"
               color={getBLListStatusColor(params.data)}
             >
               {params.data.isLocked ? "Locked" : params.data.statusLabel}
@@ -97,6 +114,7 @@ export function BillOfLadingListGrid({
         width: 150,
         pinned: "left",
         colId: "blNo",
+        isPrimary: true,
       },
       { field: "mcnNo", headerName: "MCN No", width: 170 },
       { field: "bookingNo", headerName: "Booking No", width: 140 },
@@ -111,7 +129,7 @@ export function BillOfLadingListGrid({
     }
 
     cols.push(
-      { field: "origin", headerName: "Origin", width: 180 },
+      { field: "origin", headerName: "Origin", width: 180, isSecondary: true },
       { field: "loadPort", headerName: "Load", width: 180 },
       { field: "dischargePort", headerName: "Discharge", width: 180 },
       { field: "delivery", headerName: "Delivery", width: 180 },
@@ -147,25 +165,79 @@ export function BillOfLadingListGrid({
     showReadyToConfirm,
   ]);
 
-  return (
-    <div className="bl-grid-wrap responsive-table-wrap custom-scroll">
-      <DataView
-        rowData={rows}
-        loading={loading}
-        emptyState={emptyState}
-        columnDefs={columns}
-        allowedViewModes={["list"]}
-        defaultViewMode="list"
-        renderToolbar={() => null}
-        className="bl-data-view"
-        listOptions={{
-          showToolbar: false,
-          gridOptions: {
-            getRowId: (params) => params.data.blNo,
-            onRowDoubleClicked: onRowDoubleClicked,
-          },
-        }}
+  const renderCard = useCallback(
+    (item: BLListDTO, state: { isSelected: boolean }) => (
+      <BlListCard
+        row={item}
+        isSelected={state.isSelected}
+        onView={onView}
+        onEdit={onEdit}
+        onPrint={onPrint}
+        onVerify={onVerify}
+        onCancel={onCancel}
+        onCharges={onCharges}
+        onManifest={onManifest}
+        showChargeSummary={showChargeSummary}
+        showNnPrint={showNnPrint}
+        showReadyToConfirm={showReadyToConfirm}
+        enableTermsOnConfirmedEdit={enableTermsOnConfirmedEdit}
+        hideAgencyRef={hideAgencyRefColumn}
       />
+    ),
+    [
+      enableTermsOnConfirmedEdit,
+      hideAgencyRefColumn,
+      onCancel,
+      onCharges,
+      onEdit,
+      onManifest,
+      onPrint,
+      onVerify,
+      onView,
+      showChargeSummary,
+      showNnPrint,
+      showReadyToConfirm,
+    ],
+  );
+
+  return (
+    <div className="bl-grid-wrap bl-grid-wrap--no-toolbar responsive-table-wrap custom-scroll">
+      <ModuleCardViewPanel active={viewMode === "card"}>
+        <DataView
+          key={viewMode}
+          rowData={rows}
+          loading={loading}
+          emptyState={emptyState}
+          columnDefs={columns}
+          defaultViewMode={viewMode}
+          allowedViewModes={["list", "card"]}
+          onViewModeChange={onViewModeChange}
+          renderToolbar={() => null}
+          className="bl-data-view"
+          listOptions={{
+            showToolbar: false,
+            sideBar: false,
+            gridOptions: {
+              getRowId: (params) => params.data.blNo,
+              onRowDoubleClicked: onRowDoubleClicked,
+            },
+          }}
+          cardOptions={{
+            idField: "blNo",
+            renderCard,
+            minCardWidth: 360,
+            paginationMode: "pagination",
+            page: cardPage,
+            pageSize: cardPageSize,
+            totalCount: rows.length,
+            onPaginationChange: onCardPaginationChange,
+            enableLongPressSelection: false,
+            surfacePadding: 16,
+            gutter: [16, 16],
+            surfaceBackground: "transparent",
+          }}
+        />
+      </ModuleCardViewPanel>
     </div>
   );
 }

@@ -11,6 +11,7 @@ import {
   buildRetryAction,
 } from "../../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
+import { useModuleViewMode } from "../../../components/shared/hooks/use-module-view-mode";
 import { MODULE_TITLES } from "../../../constants/module-titles";
 import {
   useBLBatchPrintMutation,
@@ -37,6 +38,7 @@ export function BillOfLadingListing() {
   const { data, isLoading, isError, refetch } = useBLListQuery({});
   const { data: config } = useBLWizardConfig();
   const rows = data?.rows ?? [];
+  const { viewMode, setViewMode } = useModuleViewMode("ecom.bl.viewMode");
 
   const [selectedRecord, setSelectedRecord] = useState<BLListDTO | null>(null);
   const [selectedBlNos, setSelectedBlNos] = useState<string[]>([]);
@@ -110,20 +112,20 @@ export function BillOfLadingListing() {
           title={MODULE_TITLES.billOfLading}
           subtitle="Review B/L status, verify drafts, and print transport documents."
           marginBottom={0}
+          viewMode={viewMode}
+          onViewModeChange={setViewMode}
+          viewModePlacement="after"
+          extra={
+            <Space wrap align="center" className="custom-scroll">
+              <AppButton
+                icon={<AppIcon icon={Icons.printer} size={16} tone="print" />}
+                onClick={() => setBatchOpen(true)}
+              >
+                Batch Original Print
+              </AppButton>
+            </Space>
+          }
         />
-        <div className="bl-toolbar custom-scroll">
-          <Space>
-            <AppButton
-              icon={<AppIcon icon={Icons.printer} size={16} tone="print" />}
-              onClick={() => setBatchOpen(true)}
-            >
-              Batch Original Print
-            </AppButton>
-            {/* <AppButton onClick={() => navigate({ to: "/app/bl/batch-print" })}>
-              Batch Print Page
-            </AppButton> */}
-          </Space>
-        </div>
       </div>
 
       <BlPaymentBar
@@ -140,6 +142,8 @@ export function BillOfLadingListing() {
           rows={rows}
           loading={isLoading}
           emptyState={emptyState}
+          viewMode={viewMode}
+          onViewModeChange={setViewMode}
         hideAgencyRefColumn={config?.hideAgencyRefColumn}
         showChargeSummary={config?.showChargeSummary}
         showNnPrint={config?.showNnPrint}

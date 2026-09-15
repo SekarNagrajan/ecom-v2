@@ -443,13 +443,184 @@ export function BookingModuleStyles() {
       }
       .booking-page-header {
         flex-shrink: 0;
-        padding: ${token.paddingMD}px ${token.paddingLG}px 0;
+        padding: ${token.paddingMD}px ${token.paddingXL}px 0;
+      }
+      .booking-page-header .module-screen-header__actions {
+        align-items: center;
+      }
+      .booking-page-header .module-screen-header__actions .ant-space {
+        align-items: center;
+      }
+      .booking-page-header .module-view-mode-tabs.ant-segmented {
+        flex-shrink: 0;
+      }
+      /* Card view — compact action row icon alignment */
+      .booking-list-grid .list-actions-row {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: ${token.marginXXS}px;
+      }
+      .booking-list-grid .list-action-button.ant-btn {
+        align-items: center;
+        display: inline-flex;
+        height: ${token.controlHeightSM}px;
+        justify-content: center;
+        min-width: ${token.controlHeightSM}px;
+        padding-inline: ${token.paddingXXS}px;
+      }
+
+      /* Booking record card — scannable title / lane / labeled meta / actions */
+      .booking-record-card {
+        height: 100%;
+      }
+      .booking-record-card__body {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        gap: ${token.marginSM}px;
+        min-height: 0;
+        padding: ${token.paddingMD}px ${token.paddingMD}px ${token.paddingSM}px;
+      }
+      .booking-record-card__header {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXS}px;
+        min-width: 0;
+      }
+      .booking-record-card__title-row {
+        align-items: center;
+        display: flex;
+        gap: ${token.marginSM}px;
+        min-width: 0;
+      }
+      .booking-record-card__title {
+        color: ${token.colorTextHeading};
+        flex: 1;
+        font-size: ${token.fontSizeLG}px;
+        font-weight: ${token.fontWeightStrong};
+        line-height: 1.3;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .booking-record-card__status.ant-tag {
+        flex-shrink: 0;
+        margin-inline-end: 0;
+        max-width: 40%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .booking-record-card__lane {
+        align-items: center;
+        color: ${token.colorTextSecondary};
+        display: flex;
+        font-size: ${token.fontSizeSM}px;
+        gap: ${token.marginXXS}px;
+        line-height: ${token.lineHeightSM};
+        min-width: 0;
+      }
+      .booking-record-card__lane > span {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .booking-record-card__lane .app-icon {
+        color: ${token.colorPrimary};
+        flex-shrink: 0;
+      }
+      .booking-record-card__meta {
+        align-content: flex-start;
+        background: ${token.colorFillTertiary};
+        border-radius: ${token.borderRadius}px;
+        display: grid;
+        flex: 1;
+        gap: ${token.marginSM}px ${token.marginMD}px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        margin-top: ${token.marginXXS}px;
+        min-height: 0;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+      }
+      .booking-record-card__meta-item {
+        align-items: flex-start;
+        display: flex;
+        gap: ${token.marginXS}px;
+        min-width: 0;
+      }
+      .booking-record-card__meta-icon {
+        color: ${token.colorPrimary};
+        display: inline-flex;
+        flex-shrink: 0;
+        line-height: 1;
+        margin-top: 2px;
+      }
+      .booking-record-card__meta-copy {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        gap: 1px;
+        min-width: 0;
+      }
+      .booking-record-card__meta-label {
+        color: ${token.colorTextTertiary};
+        font-size: ${token.fontSizeSM - 1}px;
+        line-height: 1.2;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+      }
+      .booking-record-card__meta-value {
+        color: ${token.colorText};
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        line-height: 1.35;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .booking-record-card__footer {
+        border-top: 1px solid ${token.colorBorderSecondary};
+        display: flex;
+        flex-shrink: 0;
+        margin-top: auto;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+      }
+      .booking-record-card__footer .list-actions-row {
+        gap: ${token.marginXS}px;
+        height: auto;
+        width: 100%;
+      }
+      .booking-record-card__footer .list-action-button.ant-btn {
+        height: ${token.controlHeightSM}px;
+        min-width: ${token.controlHeightSM}px;
+      }
+
+      /* AG Grid list — clearer column widths + vertical cell alignment */
+      .booking-list-grid .ag-theme-alpine .ag-header-cell-label,
+      .booking-list-grid .ag-theme-alpine .ag-cell {
+        align-items: center;
+      }
+      .booking-list-grid .ag-theme-alpine .ag-cell {
+        display: flex;
+        line-height: 1.35;
+      }
+      .booking-list-grid .ag-theme-alpine .ag-cell .list-actions-row {
+        width: 100%;
+      }
+      .booking-list-grid .booking-list-status-tag.ant-tag {
+        margin-inline-end: 0;
+      }
+      .booking-list-grid .ag-theme-alpine .booking-list-cell--center {
+        justify-content: center;
+        text-align: center;
       }
       .booking-grid-wrap {
         flex: 1;
         min-height: calc(100vh - 280px);
         width: 100%;
-        padding: ${token.paddingMD}px ${token.paddingLG}px ${token.paddingLG}px;
+        padding: ${token.paddingMD}px ${token.paddingXL}px ${token.paddingLG}px;
         display: flex;
         flex-direction: column;
       }
@@ -457,6 +628,10 @@ export function BookingModuleStyles() {
         flex: 1;
         min-height: 0;
         height: 100%;
+      }
+      /* View-mode toggle lives in ModuleScreenHeader — hide empty DataView toolbar card */
+      .booking-grid-wrap--no-toolbar .booking-data-view > .ant-card:first-child {
+        display: none;
       }
       .booking-list-grid {
         width: 100%;
@@ -474,6 +649,9 @@ export function BookingModuleStyles() {
       .booking-list-grid .ag-theme-alpine,
       .booking-list-grid .ag-root-wrapper {
         height: 100% !important;
+        min-height: calc(100vh - 280px);
+      }
+      .booking-list-grid .booking-data-view {
         min-height: calc(100vh - 280px);
       }
 

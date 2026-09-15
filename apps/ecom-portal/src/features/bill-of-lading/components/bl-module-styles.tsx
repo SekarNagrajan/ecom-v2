@@ -59,8 +59,160 @@ export function BlModuleStyles() {
       }
       .bl-page-header {
         flex-shrink: 0;
-        padding: ${token.paddingMD}px ${token.paddingLG}px 0;
+        padding: ${token.paddingMD}px ${token.paddingXL}px 0;
       }
+      .bl-page-header .module-screen-header__actions {
+        align-items: center;
+      }
+      .bl-page-header .module-screen-header__actions .ant-space {
+        align-items: center;
+      }
+      .bl-page-header .module-view-mode-tabs.ant-segmented {
+        flex-shrink: 0;
+      }
+      /* Card view — compact action row icon alignment */
+      .bl-grid-wrap .list-actions-row {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: ${token.marginXXS}px;
+      }
+      .bl-grid-wrap .list-action-button.ant-btn {
+        align-items: center;
+        display: inline-flex;
+        height: ${token.controlHeightSM}px;
+        justify-content: center;
+        min-width: ${token.controlHeightSM}px;
+        padding-inline: ${token.paddingXXS}px;
+      }
+
+      /* BL record card — padding / margin for scannable layout */
+      .bl-record-card {
+        height: 100%;
+      }
+      .bl-record-card__body {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        gap: ${token.marginSM}px;
+        min-height: 0;
+        padding: ${token.paddingMD}px ${token.paddingMD}px ${token.paddingSM}px;
+      }
+      .bl-record-card__header {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXS}px;
+        min-width: 0;
+      }
+      .bl-record-card__title-row {
+        align-items: center;
+        display: flex;
+        gap: ${token.marginSM}px;
+        min-width: 0;
+      }
+      .bl-record-card__title {
+        color: ${token.colorTextHeading};
+        flex: 1;
+        font-size: ${token.fontSizeLG}px;
+        font-weight: ${token.fontWeightStrong};
+        line-height: 1.3;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .bl-record-card__status.ant-tag {
+        flex-shrink: 0;
+        margin-inline-end: 0;
+        max-width: 40%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .bl-record-card__lane {
+        align-items: center;
+        color: ${token.colorTextSecondary};
+        display: flex;
+        font-size: ${token.fontSizeSM}px;
+        gap: ${token.marginXS}px;
+        line-height: ${token.lineHeightSM};
+        min-width: 0;
+      }
+      .bl-record-card__lane > span {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .bl-record-card__lane .app-icon {
+        color: ${token.colorPrimary};
+        flex-shrink: 0;
+      }
+      .bl-record-card__meta {
+        align-content: flex-start;
+        background: ${token.colorFillTertiary};
+        border-radius: ${token.borderRadius}px;
+        display: grid;
+        flex: 1;
+        gap: ${token.marginSM}px ${token.marginMD}px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        margin-top: ${token.marginXXS}px;
+        min-height: 0;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+      }
+      .bl-record-card__meta-item {
+        align-items: flex-start;
+        display: flex;
+        gap: ${token.marginXS}px;
+        min-width: 0;
+      }
+      .bl-record-card__meta-icon {
+        color: ${token.colorPrimary};
+        display: inline-flex;
+        flex-shrink: 0;
+        line-height: 1;
+        margin-top: 2px;
+      }
+      .bl-record-card__meta-copy {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        gap: 2px;
+        min-width: 0;
+      }
+      .bl-record-card__meta-label {
+        color: ${token.colorTextTertiary};
+        font-size: ${Math.max(Number(token.fontSizeSM) - 1, 11)}px;
+        letter-spacing: 0.02em;
+        line-height: 1.2;
+        text-transform: uppercase;
+      }
+      .bl-record-card__meta-value {
+        color: ${token.colorText};
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        line-height: 1.35;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .bl-record-card__footer {
+        border-top: 1px solid ${token.colorBorderSecondary};
+        display: flex;
+        flex-shrink: 0;
+        margin-top: auto;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+      }
+      .bl-record-card__footer .list-actions-row {
+        gap: ${token.marginXS}px;
+        height: auto;
+        width: 100%;
+      }
+      .bl-record-card__footer .list-action-button.ant-btn {
+        height: ${token.controlHeightSM}px;
+        min-width: ${token.controlHeightSM}px;
+      }
+
       .bl-toolbar {
         display: flex;
         flex-wrap: wrap;
@@ -87,18 +239,19 @@ export function BlModuleStyles() {
         flex: 1;
         min-height: calc(100vh - 280px);
         width: 100%;
-        padding: 0 ${token.paddingLG}px ${token.paddingLG}px;
+        padding: 0 ${token.paddingXL}px ${token.paddingLG}px;
         display: flex;
         flex-direction: column;
-      }
-      /* Hide DataView search / view-mode / Filters & Sort toolbar card */
-      .bl-grid-wrap > .ant-flex > .ant-card:first-child {
-        display: none;
       }
       .bl-grid-wrap > * {
         flex: 1;
         min-height: 0;
         height: 100%;
+      }
+      /* MCN (and other list-only hosts) still pass renderToolbar={() => null} */
+      .bl-grid-wrap--no-toolbar > .ant-flex > .ant-card:first-child,
+      .bl-grid-wrap--no-toolbar .bl-data-view > .ant-card:first-child {
+        display: none;
       }
       .bl-grid-wrap .bl-data-view {
         min-height: calc(100vh - 280px);

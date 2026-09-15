@@ -369,8 +369,9 @@ function CardViewComponent<TData extends DataViewItem>({
                     left: 0,
                     width: '100%',
                     transform: `translateY(${virtualRow.start}px)`,
-                    // padding: `0 ${effectiveSurfacePadding}px`,
+                    padding: `0 ${effectiveSurfacePadding}px`,
                     paddingBottom: verticalGutter,
+                    boxSizing: 'border-box',
                   }}
                 >
                   <div

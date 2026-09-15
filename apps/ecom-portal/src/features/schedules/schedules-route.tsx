@@ -13,12 +13,12 @@ import { ModuleScreenHeader } from "../../components/shared/module-screen-header
 import { MODULE_TITLES } from "../../constants/module-titles";
 import { ScheduleModuleStyles } from "./components/schedule-module-styles";
 import { ScheduleSearchHost } from "./components/schedule-search-host";
+import { ScheduleViewModeTabs } from "./components/schedule-view-mode-tabs";
 import { ScheduleCalendarView } from "./components/ScheduleCalendarView";
 import { ScheduleCarbonModal } from "./components/ScheduleCarbonModal";
 import { ScheduleCardList } from "./components/ScheduleCardList";
 import { ScheduleList } from "./components/ScheduleList";
 import { ScheduleRatesModal } from "./components/ScheduleRatesModal";
-import { ScheduleViewModeTabs } from "./components/schedule-view-mode-tabs";
 import { VesselDetailsModal } from "./components/VesselDetailsModal";
 import { useSchedulesController } from "./hooks/useSchedulesController";
 
@@ -118,10 +118,7 @@ export const SchedulesRoute: React.FC = () => {
                   </span>
                 ) : null}
               </Space>
-              <ScheduleViewModeTabs
-                value={viewMode}
-                onChange={setViewMode}
-              />
+              <ScheduleViewModeTabs value={viewMode} onChange={setViewMode} />
             </div>
 
             {isLoading ? (
@@ -142,10 +139,7 @@ export const SchedulesRoute: React.FC = () => {
                 onOpenCarbonModal={handleOpenCarbon}
               />
             ) : viewMode === "card" ? (
-              <ModuleCardViewPanel
-                active
-                className="schedule-card-view-panel"
-              >
+              <ModuleCardViewPanel active className="schedule-card-view-panel">
                 <ScheduleCardList
                   schedules={schedules}
                   isLoading={false}

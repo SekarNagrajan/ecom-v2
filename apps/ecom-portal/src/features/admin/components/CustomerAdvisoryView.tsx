@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 16:57)
+// Modified by Sekar Nagarajan (2026-09-11 18:25)
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AppButton,
@@ -15,6 +15,7 @@ import { useForm, type Resolver } from "react-hook-form";
 import { z } from "zod";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { useAiTextAssist } from "../../ai-assist";
 import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import type { CustomerAdvisory } from "../types/admin.types";
 import { AdminPanelShell } from "./AdminPanelShell";
@@ -180,6 +181,8 @@ export function CustomerAdvisoryView({
     },
   ];
 
+  const { textareaAssistProps } = useAiTextAssist();
+
   return (
     <AdminPanelShell
       icon={Icons.bell}
@@ -290,6 +293,7 @@ export function CustomerAdvisoryView({
             rows={4}
             className="custom-scroll"
             formItemProps={FIELD_ITEM_PROPS}
+            {...textareaAssistProps}
           />
         </div>
       </AppDrawer>

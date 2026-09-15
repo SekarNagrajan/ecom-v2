@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 16:15)
+// Modified by Sekar Nagarajan (2026-09-11 18:25)
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AppButton,
@@ -14,6 +14,7 @@ import { useForm, type Resolver } from "react-hook-form";
 import { AppIcon, Icons } from "../../../components/icons";
 import { MODULE_TITLES } from "../../../constants/module-titles";
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
+import { useAiTextAssist } from "../../ai-assist";
 import { useCreateQuoteMutation } from "../api/user-modules.queries";
 import type { CreateQuoteRequestPayload } from "../types/user-modules.types";
 import { createQuoteRequestSchema } from "../types/user-modules.types";
@@ -99,6 +100,8 @@ export function QuotesCreateDrawer({ open, onClose }: QuotesCreateDrawerProps) {
     await createQuote(values);
     handleClose();
   });
+
+  const { textareaAssistProps } = useAiTextAssist();
 
   return (
     <AppDrawer
@@ -202,6 +205,7 @@ export function QuotesCreateDrawer({ open, onClose }: QuotesCreateDrawerProps) {
               rows={4}
               placeholder="Enter any special handling notes, target rates, or commodity specs..."
               formItemProps={FIELD_ITEM_PROPS}
+              {...textareaAssistProps}
             />
           </Col>
         </Row>

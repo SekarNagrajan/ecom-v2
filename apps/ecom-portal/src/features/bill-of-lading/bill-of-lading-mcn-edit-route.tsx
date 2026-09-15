@@ -1,6 +1,6 @@
-// Created by Sekar Nagarajan (2026-08-28 12:00)
+// Modified by Sekar Nagarajan (2026-09-11 18:25)
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AppButton } from "@solverminds/shared-ui";
+import { AppButton, AppTextarea } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { Card, Col, Input, Row, Typography } from "antd";
 import { useNavigate, useParams } from "@tanstack/react-router";
@@ -8,6 +8,7 @@ import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { AppIcon, Icons } from "../../components/icons";
+import { useAiTextAssist } from "../ai-assist";
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import { RESPONSIVE_COL } from "../../constants/responsive-grid";
@@ -31,6 +32,7 @@ type McnEditValues = z.infer<typeof mcnEditSchema>;
 export function BillOfLadingMcnEditRoute() {
   const navigate = useNavigate();
   const toast = useToast();
+  const { textareaAssistProps } = useAiTextAssist();
   const { mcnId } = useParams({ strict: false }) as { mcnId: string };
   const { data: detail, isLoading } = useMCNDetailQuery(mcnId);
   const { mutate: printMcn } = useMCNPrintMutation();
@@ -134,7 +136,7 @@ export function BillOfLadingMcnEditRoute() {
                   control={control}
                   name="remarks"
                   render={({ field }) => (
-                    <Input.TextArea {...field} rows={3} />
+                    <AppTextarea {...field} rows={3} {...textareaAssistProps} />
                   )}
                 />
               </div>

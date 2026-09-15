@@ -1,5 +1,6 @@
-// Modified by Sekar Nagarajan (2026-09-01 16:46)
-import { Input, InputNumber, Select, Typography } from "antd";
+// Modified by Sekar Nagarajan (2026-09-11 18:25)
+import { AppTextarea } from "@solverminds/shared-ui";
+import { InputNumber, Select, Typography } from "antd";
 import {
   Controller,
   type Control,
@@ -7,6 +8,7 @@ import {
 } from "react-hook-form";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { useAiTextAssist } from "../../ai-assist";
 import {
   ListActionButton,
   ListActionsRow,
@@ -17,7 +19,6 @@ import { cargoFieldError } from "../../booking/utils/cargo-field-error";
 import type { SiCargoStepForm } from "../types/si.types";
 
 const { Text } = Typography;
-const { TextArea } = Input;
 
 interface LookupOpt {
   value: string;
@@ -50,6 +51,8 @@ export function SiCargoLineCard({
   onRemove,
   canRemove,
 }: SiCargoLineCardProps) {
+  const { textareaAssistProps } = useAiTextAssist();
+
   const path = (field: string) => `containers.${ci}.cargoLines.${mi}.${field}`;
 
   return (
@@ -216,7 +219,7 @@ export function SiCargoLineCard({
             control={control}
             name={`containers.${ci}.cargoLines.${mi}.description`}
             render={({ field }) => (
-              <TextArea
+              <AppTextarea
                 {...field}
                 value={field.value ?? ""}
                 size="large"
@@ -228,6 +231,7 @@ export function SiCargoLineCard({
                     ? "error"
                     : undefined
                 }
+                {...textareaAssistProps}
               />
             )}
           />
@@ -244,13 +248,14 @@ export function SiCargoLineCard({
             control={control}
             name={`containers.${ci}.cargoLines.${mi}.marksAndNumbers`}
             render={({ field }) => (
-              <TextArea
+              <AppTextarea
                 {...field}
                 value={field.value ?? ""}
                 size="large"
                 rows={3}
                 placeholder="Marks & numbers"
                 className="form-field-full-width"
+                {...textareaAssistProps}
               />
             )}
           />

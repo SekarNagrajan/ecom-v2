@@ -1,14 +1,15 @@
-// Modified by Sekar Nagarajan (2026-09-07 18:59)
+// Modified by Sekar Nagarajan (2026-09-11 18:25)
 // QuoteRequestDrawer — ApplicationResource_en.properties Request for Quote fields
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AppButton, AppDrawer } from "@solverminds/shared-ui";
+import { AppButton, AppDrawer, AppTextarea } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { Form, Input, InputNumber, Select, Typography } from "antd";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { useAiTextAssist } from "../../ai-assist";
 import { useCreateQuoteMutation } from "../api/rates.queries";
 import type { CreateQuoteInput } from "../types/rates.types";
 
@@ -46,6 +47,7 @@ export function QuoteRequestDrawer({
   initialValues,
 }: QuoteRequestDrawerProps) {
   const toast = useToast();
+  const { textareaAssistProps } = useAiTextAssist();
   const createMutation = useCreateQuoteMutation();
   const isSubmitting = createMutation.isPending;
 
@@ -349,10 +351,11 @@ export function QuoteRequestDrawer({
             name="comments"
             control={control}
             render={({ field }) => (
-              <Input.TextArea
+              <AppTextarea
                 {...field}
                 rows={3}
                 placeholder="Special stowage or temperature requirements..."
+                {...textareaAssistProps}
               />
             )}
           />

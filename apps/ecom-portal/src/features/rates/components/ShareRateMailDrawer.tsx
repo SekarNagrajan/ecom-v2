@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-11 16:31)
+// Modified by Sekar Nagarajan (2026-09-11 18:25)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { FormRichTextEditor } from "@solverminds/shared-ui/form-editor";
@@ -9,6 +9,7 @@ import { Controller, FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { useAiTextAssist } from "../../ai-assist";
 import { useShareRateMailMutation } from "../api/rates.queries";
 import {
   buildShareRateMessage,
@@ -79,6 +80,7 @@ export function ShareRateMailDrawer({
 }: ShareRateMailDrawerProps) {
   const { token } = theme.useToken();
   const toast = useToast();
+  const { richTextAssistProps } = useAiTextAssist();
   const shareMutation = useShareRateMailMutation();
   const isSubmitting = shareMutation.isPending;
 
@@ -284,6 +286,7 @@ export function ShareRateMailDrawer({
                 showToolbar
                 toolbarPosition="top"
                 placeholder="Compose your rate quote message…"
+                {...richTextAssistProps}
               />
             </div>
           </Form>

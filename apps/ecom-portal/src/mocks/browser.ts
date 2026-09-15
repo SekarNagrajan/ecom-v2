@@ -1,6 +1,7 @@
-// Modified by Sekar Nagarajan (2026-09-08 15:20)
+// Modified by Sekar Nagarajan (2026-09-11 18:25)
 import { setupWorker } from 'msw/browser';
 import { adminHandlers } from './admin.handlers';
+import { aiAssistHandlers } from './ai-assist.handlers';
 import { arrivalNoticeHandlers } from './arrival-notice.handlers';
 import { authAdminHandlers } from './auth-admin.handlers';
 import { authHandlers } from './auth.handlers';
@@ -32,6 +33,7 @@ export const worker = setupWorker(
   ...registrationHandlers,
   ...authHandlers,
   ...contactUsHandlers,
+  ...aiAssistHandlers,
   ...adminHandlers,
   ...userCreationHandlers,
   ...userModulesHandlers,

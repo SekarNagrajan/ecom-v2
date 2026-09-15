@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-11 12:05)
+// Modified by Sekar Nagarajan (2026-09-15 10:40)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -18,7 +18,7 @@ export function RegistrationModuleStyles() {
         justify-content: flex-start;
         width: 100%;
         min-height: 0;
-        overflow: auto;
+        overflow: hidden;
       }
       .reg-page__toolbar {
         flex-shrink: 0;
@@ -31,17 +31,17 @@ export function RegistrationModuleStyles() {
         border: 1px solid ${token.colorPrimary};
         display: flex;
         flex-direction: column;
-        flex: 0 1 auto;
+        flex: 1 1 auto;
         width: 100%;
         min-height: 0;
-        overflow: visible;
+        overflow: hidden;
       }
       .reg-page-card > .ant-card-body {
         display: flex;
         flex-direction: column;
-        flex: 0 1 auto;
+        flex: 1 1 auto;
         min-height: 0;
-        overflow: visible;
+        overflow: hidden;
         border: none;
         border-radius: 0;
         padding: ${token.paddingMD}px ${token.paddingXL}px;
@@ -52,9 +52,9 @@ export function RegistrationModuleStyles() {
         font-size: ${token.fontSizeHeading4}px;
       }
       .reg-page__body {
-        flex: 0 1 auto;
+        flex: 1 1 auto;
         min-height: 0;
-        overflow: visible;
+        overflow: hidden;
         display: flex;
         flex-direction: column;
       }
@@ -68,25 +68,30 @@ export function RegistrationModuleStyles() {
         flex-shrink: 0;
       }
       .reg-form {
-        flex: 0 1 auto;
+        flex: 1 1 auto;
         display: flex;
         flex-direction: column;
         min-height: 0;
-        overflow: visible;
+        overflow: hidden;
         gap: ${token.marginSM}px;
       }
-      /* Modified by Sekar Nagarajan (2026-09-11 12:05) — hug form; no empty scroll gap above actions */
+      /* Form fields scroll here; footer stays pinned below (avoids Previous over phone fields) */
       .reg-form__scroll {
-        flex: 0 1 auto;
+        flex: 1 1 auto;
         min-height: 0;
-        overflow: visible;
+        overflow-x: hidden;
+        overflow-y: auto;
         background: ${token.colorBgContainer};
         border-radius: ${token.borderRadiusLG}px;
+        padding-right: ${token.paddingXXS}px;
       }
       .reg-page .form-step-footer {
         flex-shrink: 0;
         margin-top: 0;
-        padding: ${token.paddingXS}px 0 0;
+        padding: ${token.paddingSM}px 0 0;
+        background: ${token.colorBgContainer};
+        border-top: 1px solid ${token.colorBorderSecondary};
+        z-index: 1;
       }
       .reg-step-body {
         padding: ${token.paddingSM}px 0 0;
@@ -108,7 +113,7 @@ export function RegistrationModuleStyles() {
         min-width: 0;
       }
       .reg-success {
-        flex: 0 1 auto;
+        flex: 1 1 auto;
         display: flex;
         align-items: center;
         justify-content: center;

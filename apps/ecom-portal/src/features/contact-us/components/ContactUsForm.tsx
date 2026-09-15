@@ -1,10 +1,11 @@
-// Modified by Sekar Nagarajan (2026-08-26 16:30)
+// Modified by Sekar Nagarajan (2026-09-11 18:25)
 import { FormInput, FormSelect, FormTextarea } from "@solverminds/shared-ui";
 import { Col, Descriptions, Row, Typography } from "antd";
 import { useEffect, useRef } from "react";
 import { useWatch } from "react-hook-form";
 
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
+import { useAiTextAssist } from "../../ai-assist";
 import type { useContactUsController } from "../hooks/use-contact-us-controller";
 
 const { Text } = Typography;
@@ -45,6 +46,7 @@ export function ContactUsForm({ controller }: ContactUsFormProps) {
     states,
     statesLoading,
   } = controller;
+  const { textareaAssistProps } = useAiTextAssist();
 
   const selectedCountry =
     useWatch({ control: form.control, name: "country" }) ?? "";
@@ -205,6 +207,7 @@ export function ContactUsForm({ controller }: ContactUsFormProps) {
         rows={5}
         showCount
         formItemProps={FIELD_ITEM_PROPS}
+        {...textareaAssistProps}
       />
     </div>
   );

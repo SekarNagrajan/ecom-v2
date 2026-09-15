@@ -1,11 +1,14 @@
-// Modified by Sekar Nagarajan (2026-09-15 13:00)
+// Modified by Sekar Nagarajan (2026-09-15 15:05)
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { Card, Space, Spin, Typography } from "antd";
 import React from "react";
 
 import { AppIcon, Icons } from "../../components/icons";
-import { NavSchedulesIcon } from "../../components/icons/nav-svg-icons";
+import {
+  NavRoutePinsIcon,
+  NavSchedulesIcon,
+} from "../../components/icons/nav-svg-icons";
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
 import { ModuleCardViewPanel } from "../../components/shared/module-card-view-panel";
 import { ModuleEmptyState } from "../../components/shared/module-empty-state";
@@ -19,10 +22,9 @@ import { ScheduleCarbonModal } from "./components/ScheduleCarbonModal";
 import { ScheduleCardList } from "./components/ScheduleCardList";
 import { ScheduleList } from "./components/ScheduleList";
 import { ScheduleRatesModal } from "./components/ScheduleRatesModal";
+import { ShareScheduleMailDrawer } from "./components/ShareScheduleMailDrawer";
 import { VesselDetailsModal } from "./components/VesselDetailsModal";
 import { useSchedulesController } from "./hooks/useSchedulesController";
-
-import { NavRoutePinsIcon } from "../../components/icons/nav-svg-icons";
 
 const { Text } = Typography;
 
@@ -49,6 +51,9 @@ export const SchedulesRoute: React.FC = () => {
     handleOpenCarbon,
     handleCloseCarbon,
     handleBookNow,
+    handleShareResultsViaMail,
+    isShareMailOpen,
+    handleCloseShareMail,
   } = useSchedulesController();
 
   return (
@@ -61,7 +66,7 @@ export const SchedulesRoute: React.FC = () => {
           title={MODULE_TITLES.schedules}
           subtitle="Search sailings by route, vessel, or port — compare transit times, cut-offs, and book directly."
           extra={
-            <Space align="center" size={12} wrap>
+            <Space align="center" size={12} wrap className="custom-scroll">
               <AppButton
                 icon={
                   <AppIcon icon={Icons.download} size={16} tone="download" />
@@ -73,10 +78,10 @@ export const SchedulesRoute: React.FC = () => {
               </AppButton>
               <AppButton
                 icon={<AppIcon icon={Icons.mail} size={16} tone="navigate" />}
-                onClick={() => toast.info("Opening share dialog…")}
+                onClick={handleShareResultsViaMail}
                 disabled={!hasSearched || schedules.length === 0}
               >
-                Share
+                Share via Mail
               </AppButton>
             </Space>
           }
@@ -152,7 +157,10 @@ export const SchedulesRoute: React.FC = () => {
             ) : (
               <ScheduleCalendarView
                 schedules={schedules}
-                onSelectSchedule={handleBookNow}
+                onBookNow={handleBookNow}
+                onViewVessel={handleViewVessel}
+                onViewRates={handleOpenRates}
+                onOpenCarbonModal={handleOpenCarbon}
               />
             )}
           </>
@@ -175,6 +183,12 @@ export const SchedulesRoute: React.FC = () => {
           schedule={carbonSchedule}
           open={isCarbonModalOpen}
           onClose={handleCloseCarbon}
+        />
+
+        <ShareScheduleMailDrawer
+          open={isShareMailOpen}
+          onClose={handleCloseShareMail}
+          schedules={schedules}
         />
       </Card>
     </FeaturePageShell>

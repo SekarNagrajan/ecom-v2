@@ -122,3 +122,39 @@ export interface CarbonCalculationResult {
   ttwCo2eTons: number; // Tank to Wheel
   wttCo2eTons: number; // Well to Tank
 }
+
+/** POST /api/v1/schedules/share-mail — share sailing results by email */
+export interface ShareScheduleMailSummary {
+  id: string;
+  serviceCode: string;
+  serviceName: string;
+  vesselName: string;
+  voyage: string;
+  bound: string;
+  polPortId: string;
+  polPortName: string;
+  podPortId: string;
+  podPortName: string;
+  etd: string;
+  eta: string;
+  transitTimeDays: number;
+  isDirect: boolean;
+  transshipmentCount: number;
+  isDefaultRoute: boolean;
+  gateIn: string;
+  siClosing: string;
+}
+
+export interface ShareScheduleMailInput {
+  to: string;
+  cc?: string;
+  subject: string;
+  message: string;
+  schedules: ShareScheduleMailSummary[];
+}
+
+export interface ShareScheduleMailResponse {
+  success: boolean;
+  messageId: string;
+  recipientCount: number;
+}

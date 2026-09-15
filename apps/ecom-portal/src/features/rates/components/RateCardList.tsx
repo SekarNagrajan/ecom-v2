@@ -202,12 +202,7 @@ function RateCard({
 
         <div className="rates-card__actions">
           {showBook ? (
-            <AppButton
-              type="primary"
-              icon={<AppIcon icon={Icons.notebook} size={16} tone="create" />}
-              onClick={() => onBookNow(item)}
-              block
-            >
+            <AppButton type="primary" onClick={() => onBookNow(item)} block>
               Book at This Rate
             </AppButton>
           ) : null}

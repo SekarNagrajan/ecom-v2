@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-08 16:25)
+// Modified by Sekar Nagarajan (2026-09-15 15:00)
 // Schedules API — mock search over Direct + Transshipment catalogues
 
 import {
@@ -8,6 +8,8 @@ import {
 import type {
   ScheduleItem,
   ScheduleSearchParams,
+  ShareScheduleMailInput,
+  ShareScheduleMailResponse,
   VesselParticulars,
 } from "../types/schedules.types";
 
@@ -93,5 +95,21 @@ export const schedulesApi = {
   async getVesselDetails(vesselCode: string): Promise<VesselParticulars | null> {
     await new Promise((resolve) => setTimeout(resolve, 200));
     return MOCK_VESSELS[vesselCode] || MOCK_VESSELS.AGEX;
+  },
+
+  /** POST /api/v1/schedules/share-mail — share sailing results by email */
+  async shareSchedulesByMail(
+    input: ShareScheduleMailInput,
+  ): Promise<ShareScheduleMailResponse> {
+    const res = await fetch("/api/v1/schedules/share-mail", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(input),
+    });
+    if (!res.ok) {
+      throw new Error("Failed to share sailing schedules by email");
+    }
+    const json = await res.json();
+    return json.data;
   },
 };

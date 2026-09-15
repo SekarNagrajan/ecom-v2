@@ -964,8 +964,8 @@ export function TrackingModuleStyles() {
         width: 40px;
         height: 40px;
         border-radius: ${token.borderRadiusLG}px;
-        background: ${tokenMix(token.purple, 12)};
-        color: ${token.purple};
+        background: ${tokenMix(token.colorInfo, 10)};
+        color: ${token.colorInfo};
         display: inline-flex;
         align-items: center;
         justify-content: center;

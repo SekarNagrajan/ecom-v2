@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-15 12:53)
+// Modified by Sekar Nagarajan (2026-09-15 15:05)
 // Schedule Feature Controller — results only after Search (or landing deep-link)
 
 import { useToast } from "@solverminds/shared-ui/hooks";
@@ -73,6 +73,7 @@ export function useSchedulesController() {
     null,
   );
   const [isCarbonModalOpen, setIsCarbonModalOpen] = useState(false);
+  const [isShareMailOpen, setIsShareMailOpen] = useState(false);
 
   async function fetchSchedules(params: ScheduleSearchParams) {
     setHasSearched(true);
@@ -143,6 +144,20 @@ export function useSchedulesController() {
     navigate({ to: "/app/booking/new" });
   };
 
+  const handleShareResultsViaMail = () => {
+    if (!hasSearched || schedules.length === 0) {
+      toast.warning(
+        "Search for sailings first, then share the results by email.",
+      );
+      return;
+    }
+    setIsShareMailOpen(true);
+  };
+
+  const handleCloseShareMail = () => {
+    setIsShareMailOpen(false);
+  };
+
   return {
     viewMode,
     setViewMode,
@@ -164,5 +179,8 @@ export function useSchedulesController() {
     handleOpenCarbon,
     handleCloseCarbon,
     handleBookNow,
+    handleShareResultsViaMail,
+    isShareMailOpen,
+    handleCloseShareMail,
   };
 }

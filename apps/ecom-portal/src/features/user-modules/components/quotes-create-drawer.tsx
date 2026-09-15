@@ -11,7 +11,7 @@ import {
 import { Col, Row, Typography } from "antd";
 import { useForm, type Resolver } from "react-hook-form";
 
-import { AppIcon, Icons } from "../../../components/icons";
+import { AppIcon, Icons, NavRatesIcon } from "../../../components/icons";
 import { MODULE_TITLES } from "../../../constants/module-titles";
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import { useAiTextAssist } from "../../ai-assist";
@@ -108,7 +108,7 @@ export function QuotesCreateDrawer({ open, onClose }: QuotesCreateDrawerProps) {
       open={open}
       onClose={handleClose}
       placement="right"
-      dialogSize="md"
+      dialogSize="sm"
       destroyOnClose
       maskClosable={!isSubmitting}
       keyboard={!isSubmitting}
@@ -120,9 +120,9 @@ export function QuotesCreateDrawer({ open, onClose }: QuotesCreateDrawerProps) {
       styles={{ body: { padding: 0 } }}
       title={
         <UmPanelHeader
-          icon={Icons.edit}
+          icon={NavRatesIcon}
           title={MODULE_TITLES.quotes}
-          description="Submit a new ocean freight rate quotation request for the selected trade lane."
+          description="Submit a new ocean freight rate quotation request."
           compact
         />
       }

@@ -1,36 +1,41 @@
 // Modified by Sekar Nagarajan (2026-08-25 12:55)
-import { FormattedDate } from '@solverminds/shared-ui';
-import { DataView, type DataViewColumn } from '@solverminds/shared-ui/data-view';
-import { Spin } from 'antd';
-
+import { FormattedDate } from "@solverminds/shared-ui";
 import {
-  useStatementExportMutation,
-  useStatementQuery,
-} from '../api/customer-statement.queries';
+  DataView,
+  type DataViewColumn,
+} from "@solverminds/shared-ui/data-view";
+import { Spin } from "antd";
+
 import {
   ModuleEmptyState,
   buildRetryAction,
-} from '../../../components/shared/module-empty-state';
+} from "../../../components/shared/module-empty-state";
+import {
+  useStatementExportMutation,
+  useStatementQuery,
+} from "../api/customer-statement.queries";
 import type {
   StatementCriteria,
   StatementLine,
-} from '../types/customer-statement.types';
+} from "../types/customer-statement.types";
 import {
   STATEMENT_DOCTYPE_LABELS,
   formatStatementAmount,
-} from '../types/customer-statement.types';
-import { StatementSummaryHeader } from './StatementSummaryHeader';
+} from "../types/customer-statement.types";
+import { StatementSummaryHeader } from "./StatementSummaryHeader";
 
 interface StatementViewProps {
   criteria: StatementCriteria;
 }
 
 function MoneyCell({ value, currency }: { value?: string; currency: string }) {
-  if (!value || value === '0' || value === '0.00') {
+  if (!value || value === "0" || value === "0.00") {
     return <span className="stmt-money-cell">—</span>;
   }
   return (
-    <span className="stmt-money-cell">{formatStatementAmount(value, currency)}</span>
+    <span className="stmt-money-cell">
+      {formatStatementAmount(value, currency)}
+    </span>
   );
 }
 
@@ -61,42 +66,48 @@ export function StatementView({ criteria }: StatementViewProps) {
 
   const columns: DataViewColumn<StatementLine>[] = [
     {
-      field: 'date',
-      headerName: 'Date',
+      field: "date",
+      headerName: "Date",
       width: 130,
       cellRenderer: (p: { value?: string }) =>
-        p.value ? <FormattedDate value={p.value} /> : '—',
+        p.value ? <FormattedDate value={p.value} /> : "—",
     },
     {
-      field: 'docType',
-      headerName: 'Type',
+      field: "docType",
+      headerName: "Type",
       width: 130,
-      cellRenderer: (p: { value?: StatementLine['docType'] }) =>
-        p.value ? STATEMENT_DOCTYPE_LABELS[p.value] : '—',
+      cellRenderer: (p: { value?: StatementLine["docType"] }) =>
+        p.value ? STATEMENT_DOCTYPE_LABELS[p.value] : "—",
     },
-    { field: 'docNo', headerName: 'Doc No', width: 140 },
-    { field: 'reference', headerName: 'Reference', flex: 1, minWidth: 140 },
+    { field: "docNo", headerName: "Doc No", width: 140 },
+    { field: "reference", headerName: "Reference", flex: 1, minWidth: 140 },
     {
-      field: 'debit',
-      headerName: 'Debit',
+      field: "debit",
+      headerName: "Debit",
       width: 150,
       cellRenderer: (params: { data?: StatementLine }) =>
         params.data ? (
-          <MoneyCell value={params.data.debit} currency={params.data.currency} />
+          <MoneyCell
+            value={params.data.debit}
+            currency={params.data.currency}
+          />
         ) : null,
     },
     {
-      field: 'credit',
-      headerName: 'Credit',
+      field: "credit",
+      headerName: "Credit",
       width: 150,
       cellRenderer: (params: { data?: StatementLine }) =>
         params.data ? (
-          <MoneyCell value={params.data.credit} currency={params.data.currency} />
+          <MoneyCell
+            value={params.data.credit}
+            currency={params.data.currency}
+          />
         ) : null,
     },
     {
-      field: 'runningBalance',
-      headerName: 'Balance',
+      field: "runningBalance",
+      headerName: "Balance",
       width: 160,
       cellRenderer: (params: { data?: StatementLine }) =>
         params.data ? (
@@ -109,9 +120,9 @@ export function StatementView({ criteria }: StatementViewProps) {
   ];
 
   const exportingPdf =
-    exportMutation.isPending && exportMutation.variables?.format === 'pdf';
+    exportMutation.isPending && exportMutation.variables?.format === "pdf";
   const exportingXlsx =
-    exportMutation.isPending && exportMutation.variables?.format === 'xlsx';
+    exportMutation.isPending && exportMutation.variables?.format === "xlsx";
 
   return (
     <div className="stmt-result-wrap">
@@ -123,10 +134,10 @@ export function StatementView({ criteria }: StatementViewProps) {
               exportingPdf={exportingPdf}
               exportingXlsx={exportingXlsx}
               onExportPdf={() =>
-                exportMutation.mutate({ criteria, format: 'pdf' })
+                exportMutation.mutate({ criteria, format: "pdf" })
               }
               onExportXlsx={() =>
-                exportMutation.mutate({ criteria, format: 'xlsx' })
+                exportMutation.mutate({ criteria, format: "xlsx" })
               }
             />
 
@@ -136,12 +147,12 @@ export function StatementView({ criteria }: StatementViewProps) {
                 columnDefs={columns}
                 loading={false}
                 emptyState={emptyState}
-                allowedViewModes={['list']}
+                allowedViewModes={["list"]}
                 defaultViewMode="list"
                 renderToolbar={() => null}
                 className="stmt-data-view"
                 listOptions={{
-                  showToolbar: false,
+                  showToolbar: true,
                   gridOptions: {
                     getRowId: (params: { data: StatementLine }) =>
                       `${params.data.docNo}-${params.data.date}`,
@@ -156,7 +167,7 @@ export function StatementView({ criteria }: StatementViewProps) {
                 <span className="stmt-totals-strip__value">
                   {formatStatementAmount(
                     statement.totals.totalDebit,
-                    statement.currency
+                    statement.currency,
                   )}
                 </span>
               </div>
@@ -165,14 +176,17 @@ export function StatementView({ criteria }: StatementViewProps) {
                 <span className="stmt-totals-strip__value">
                   {formatStatementAmount(
                     statement.totals.totalCredit,
-                    statement.currency
+                    statement.currency,
                   )}
                 </span>
               </div>
               <div className="stmt-totals-strip__item">
                 <span className="stmt-totals-strip__label">Net</span>
                 <span className="stmt-totals-strip__value">
-                  {formatStatementAmount(statement.totals.net, statement.currency)}
+                  {formatStatementAmount(
+                    statement.totals.net,
+                    statement.currency,
+                  )}
                 </span>
               </div>
             </div>

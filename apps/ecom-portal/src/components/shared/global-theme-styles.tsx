@@ -717,6 +717,23 @@ export function GlobalThemeStyles() {
         margin: 0 !important;
         font-weight: ${token.fontWeightStrong} !important;
       }
+      .module-screen-header__record-count.ant-badge {
+        display: inline-flex;
+        align-items: center;
+        line-height: 1;
+      }
+      .module-screen-header__record-count.ant-badge .ant-badge-count {
+        background: ${token.colorError};
+        color: ${token.colorTextLightSolid};
+        box-shadow: none;
+        font-weight: ${token.fontWeightStrong};
+        min-width: ${token.fontSizeLG + 8}px;
+        height: ${token.fontSizeLG + 8}px;
+        line-height: ${token.fontSizeLG + 8}px;
+        border-radius: ${token.borderRadiusSM}px;
+        font-size: ${token.fontSizeSM}px;
+        padding: 0 ${token.paddingXXS + 2}px;
+      }
       .module-screen-header__subtitle {
         display: block;
         margin-top: ${token.marginXXS}px;

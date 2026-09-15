@@ -1,6 +1,7 @@
 // Modified by Sekar Nagarajan (2026-08-26 14:26)
 import type { ApiResponse } from "../../../types/api.types";
 import {
+  filterMockDeliveryOrders,
   markDoPrinted,
   mockDeliveryOrders,
 } from "../mocks/do.mock";
@@ -48,8 +49,8 @@ async function mockListFallback(
   filters: DOListFilters,
 ): Promise<ApiResponse<DOSummaryRow[]> | null> {
   if (!import.meta.env.DEV) return null;
-  void filters;
-  return { data: mockDeliveryOrders.map((row) => ({ ...row })) };
+  const filtered = filterMockDeliveryOrders(mockDeliveryOrders, filters);
+  return { data: filtered.map((row) => ({ ...row })) };
 }
 
 /** Delivery Order API — REST with DEV mock fallback (agenct parity). */

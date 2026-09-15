@@ -168,6 +168,7 @@ export function ShippingInstructionDashboardRoute() {
             <ModuleScreenHeader
               icon={NavShippingInstructionIcon}
               title={MODULE_TITLES.shippingInstructions}
+              recordCount={siList.length}
               subtitle="Review SI status, open drafts, and submit shipping instructions for confirmed bookings."
               marginBottom={0}
               viewMode={viewMode}

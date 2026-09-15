@@ -76,7 +76,14 @@ export function LayoutSkeleton() {
         </Sider>
       ) : null}
 
-      <Layout style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0 }}>
+      <Layout
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          flex: 1,
+          minHeight: 0,
+        }}
+      >
         <Header
           style={{
             height: HEADER_HEIGHT,
@@ -88,8 +95,16 @@ export function LayoutSkeleton() {
             lineHeight: "normal",
           }}
         >
-          <Skeleton.Button active size="small" style={{ width: 180, height: 22 }} />
-          <Flex align="center" gap={token.marginSM} style={{ marginLeft: "auto" }}>
+          <Skeleton.Button
+            active
+            size="small"
+            style={{ width: 180, height: 22 }}
+          />
+          <Flex
+            align="center"
+            gap={token.marginSM}
+            style={{ marginLeft: "auto" }}
+          >
             <Skeleton.Avatar active shape="circle" size={32} />
           </Flex>
         </Header>
@@ -102,7 +117,7 @@ export function LayoutSkeleton() {
             background: token.colorBgLayout,
           }}
         >
-          <Spin size="large" />
+          <Spin size="medium" />
         </Content>
       </Layout>
     </Layout>

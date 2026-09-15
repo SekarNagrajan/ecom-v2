@@ -25,7 +25,7 @@ export function AppPendingFallback({
         backgroundColor: token.colorBgContainer,
       }}
     >
-      <Spin size="large" style={{ marginBottom: token.marginMD }} />
+      <Spin size="medium" style={{ marginBottom: token.marginMD }} />
       <Text type="secondary">{message}</Text>
     </Flex>
   );

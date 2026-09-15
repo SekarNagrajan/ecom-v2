@@ -232,6 +232,7 @@ export function PaymentHistoryView() {
       <UmPanelHeader
         icon={NavPaymentHistoryIcon}
         title={MODULE_TITLES.paymentHistory}
+        recordCount={payments.length}
         description="Review online payments, invoice settlements, and download PDF receipts."
         extra={
           <RangePicker

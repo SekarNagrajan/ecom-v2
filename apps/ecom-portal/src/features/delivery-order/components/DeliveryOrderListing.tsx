@@ -178,6 +178,7 @@ export function DeliveryOrderListing() {
         <ModuleScreenHeader
           icon={NavContainerReleaseIcon}
           title={MODULE_TITLES.deliveryOrder}
+          recordCount={rows.length}
           subtitle="Filter by date range, review POL to POD routing, and print delivery order documents."
           marginBottom={0}
         />

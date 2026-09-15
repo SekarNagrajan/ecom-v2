@@ -1,6 +1,9 @@
 // Modified by Sekar Nagarajan (2026-08-26 14:57)
 import { FormattedDate } from "@solverminds/shared-ui";
-import { DataView, type DataViewColumn } from "@solverminds/shared-ui/data-view";
+import {
+  DataView,
+  type DataViewColumn,
+} from "@solverminds/shared-ui/data-view";
 import type { RowDoubleClickedEvent } from "ag-grid-community";
 import { Tag } from "antd";
 import { DateTime } from "luxon";
@@ -19,10 +22,7 @@ import {
 } from "../../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
 import { MODULE_TITLES } from "../../../constants/module-titles";
-import {
-  useCRODownloadMutation,
-  useCROSummaryQuery,
-} from "../api/cro.queries";
+import { useCRODownloadMutation, useCROSummaryQuery } from "../api/cro.queries";
 import type {
   CROListDTO,
   CROListFilters,
@@ -65,9 +65,7 @@ export function CROListing() {
     setSelectedCroNo(croNo);
   };
 
-  const handleRowDoubleClick = (
-    event: RowDoubleClickedEvent<CROListDTO>,
-  ) => {
+  const handleRowDoubleClick = (event: RowDoubleClickedEvent<CROListDTO>) => {
     const croNo = event.data?.croNo;
     if (croNo) handleView(croNo);
   };
@@ -189,6 +187,7 @@ export function CROListing() {
         <ModuleScreenHeader
           icon={NavIcons.containerRelease}
           title={MODULE_TITLES.containerReleaseOrder}
+          recordCount={rows.length}
           subtitle="Filter by date range, review load-to-discharge routing, and print container release orders."
           marginBottom={0}
         />

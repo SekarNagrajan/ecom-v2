@@ -1,6 +1,9 @@
 // Modified by Sekar Nagarajan (2026-08-26 14:50)
 import { FormattedDate } from "@solverminds/shared-ui";
-import { DataView, type DataViewColumn } from "@solverminds/shared-ui/data-view";
+import {
+  DataView,
+  type DataViewColumn,
+} from "@solverminds/shared-ui/data-view";
 import type { RowDoubleClickedEvent } from "ag-grid-community";
 import { Tag } from "antd";
 import { DateTime } from "luxon";
@@ -24,9 +27,9 @@ import {
   useArrivalNoticeListQuery,
 } from "../api/arrival-notice.queries";
 import type {
+  ArnSearchValues,
   ArrivalNoticeListDTO,
   ArrivalNoticeListFilters,
-  ArnSearchValues,
 } from "../types/arrival-notice.types";
 import {
   formatArnAmount,
@@ -183,6 +186,7 @@ export function ArrivalNoticeListing() {
         <ModuleScreenHeader
           icon={NavIcons.arrivalNotice}
           title={MODULE_TITLES.arrivalNotice}
+          recordCount={rows.length}
           subtitle="Filter by date range, review vessel and charges, and print arrival notices."
           marginBottom={0}
         />

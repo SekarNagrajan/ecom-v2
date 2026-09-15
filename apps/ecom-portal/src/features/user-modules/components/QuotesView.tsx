@@ -8,7 +8,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { Space, Tag } from "antd";
 import { useState } from "react";
 
-import { AppIcon, Icons } from "../../../components/icons";
+import { AppIcon, Icons, NavRatesIcon } from "../../../components/icons";
 import { buildActionsColumn } from "../../../components/shared/build-actions-column";
 import {
   ListActionButton,
@@ -171,8 +171,9 @@ export function QuotesView() {
   return (
     <div className="um-page-layout">
       <UmPanelHeader
-        icon={Icons.fileText}
+        icon={NavRatesIcon}
         title={MODULE_TITLES.quotes}
+        recordCount={quotes.length}
         description="Request a rate, review quotes, and book when an offer is ready."
         extra={
           <AppButton

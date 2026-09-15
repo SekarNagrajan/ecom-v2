@@ -94,6 +94,11 @@ export function UserModulesModuleStyles() {
         gap: ${token.marginXXS}px;
         min-width: 0;
       }
+      .um-panel-header__title-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
       .um-panel-header__title {
         margin: 0 !important;
         line-height: 1.25 !important;

@@ -1,5 +1,5 @@
-// Modified by Sekar Nagarajan (2026-09-15 12:53)
-import { Typography, theme } from "antd";
+// Modified by Sekar Nagarajan (2026-09-15 18:35)
+import { Badge, Typography, theme } from "antd";
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -13,6 +13,8 @@ export interface ModuleScreenHeaderProps {
   extra?: ReactNode;
   icon: LucideIcon;
   marginBottom?: number;
+  /** Grid / list record count shown as a red badge next to the title. */
+  recordCount?: number;
   subtitle?: string;
   title: string;
   /** When set with `onViewModeChange`, renders list/card toggle in the header. */
@@ -34,6 +36,7 @@ export function ModuleScreenHeader({
   extra,
   icon,
   marginBottom,
+  recordCount,
   subtitle,
   title,
   viewMode,
@@ -49,6 +52,8 @@ export function ModuleScreenHeader({
   const viewModeTabs = viewModeControl ?? builtInTabs;
   const showViewMode = Boolean(viewModeTabs);
   const hasActions = showViewMode || Boolean(extra);
+  const showRecordCount =
+    typeof recordCount === "number" && Number.isFinite(recordCount);
 
   return (
     <div
@@ -64,6 +69,15 @@ export function ModuleScreenHeader({
           <Title level={4} className="module-screen-header__title">
             {title}
           </Title>
+          {showRecordCount ? (
+            <Badge
+              count={recordCount}
+              overflowCount={9999}
+              showZero
+              className="module-screen-header__record-count"
+              title={`${recordCount} record${recordCount === 1 ? "" : "s"}`}
+            />
+          ) : null}
         </div>
         {subtitle ? (
           <Text type="secondary" className="module-screen-header__subtitle">

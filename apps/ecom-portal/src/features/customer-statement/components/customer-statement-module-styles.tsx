@@ -168,6 +168,16 @@ export function CustomerStatementModuleStyles() {
         display: flex;
         flex-direction: column;
       }
+      /* Hide empty DataView search / view-mode toolbar card */
+      .stmt-grid-wrap > .ant-flex > .ant-card:first-child,
+      .stmt-grid-wrap .stmt-data-view > .ant-card:first-child {
+        display: none !important;
+      }
+      .stmt-grid-wrap > .ant-flex {
+        flex: 1;
+        min-height: 0;
+        height: 100%;
+      }
       .stmt-grid-wrap .ag-theme-alpine,
       .stmt-grid-wrap .ag-root-wrapper {
         height: 100%;

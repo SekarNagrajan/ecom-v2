@@ -110,6 +110,7 @@ export function BillOfLadingListing() {
         <ModuleScreenHeader
           icon={NavIcons.billOfLading}
           title={MODULE_TITLES.billOfLading}
+          recordCount={rows.length}
           subtitle="Review B/L status, verify drafts, and print transport documents."
           marginBottom={0}
           viewMode={viewMode}

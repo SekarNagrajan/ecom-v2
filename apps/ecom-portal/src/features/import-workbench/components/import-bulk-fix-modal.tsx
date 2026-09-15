@@ -256,7 +256,7 @@ function MetaChip({
   value,
   tone,
 }: {
-  icon: typeof Icons.info;
+  icon?: typeof Icons.info;
   label: string;
   value: string | number;
   tone?: "default" | "warning" | "error" | "success";
@@ -266,10 +266,10 @@ function MetaChip({
     tone === "error"
       ? token.colorError
       : tone === "warning"
-      ? token.colorWarning
-      : tone === "success"
-      ? token.colorSuccess
-      : token.colorTextSecondary;
+        ? token.colorWarning
+        : tone === "success"
+          ? token.colorSuccess
+          : token.colorTextSecondary;
 
   return (
     <div
@@ -286,7 +286,9 @@ function MetaChip({
       }}
     >
       <Flex align="center" gap={token.marginXXS}>
-        <AppIcon icon={icon} size={14} style={{ color: toneColor }} />
+        {icon ? (
+          <AppIcon icon={icon} size={14} style={{ color: toneColor }} />
+        ) : null}
         <Typography.Text
           type="secondary"
           style={{ fontSize: token.fontSizeSM, lineHeight: 1.2 }}

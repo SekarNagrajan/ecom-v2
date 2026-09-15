@@ -1,15 +1,24 @@
-// Modified by Sekar Nagarajan (2026-08-26 14:26)
+// Modified by Sekar Nagarajan (2026-09-15 18:45)
 import { http, HttpResponse } from "msw";
 
 import {
+  filterMockDeliveryOrders,
   markDoPrinted,
   mockDeliveryOrders,
 } from "../features/delivery-order/mocks/do.mock";
 
 export const deliveryOrderHandlers = [
-  http.get("/api/ecom/imp/delivery-orders", async () => {
+  http.get("/api/ecom/imp/delivery-orders", async ({ request }) => {
+    const url = new URL(request.url);
+    const fromDate = url.searchParams.get("fromDate") ?? undefined;
+    const toDate = url.searchParams.get("toDate") ?? undefined;
+    const filtered = filterMockDeliveryOrders(mockDeliveryOrders, {
+      fromDate,
+      toDate,
+    });
+
     return HttpResponse.json({
-      data: mockDeliveryOrders.map((row) => ({ ...row })),
+      data: filtered.map((row) => ({ ...row })),
     });
   }),
 

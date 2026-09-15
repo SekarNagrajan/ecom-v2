@@ -311,6 +311,7 @@ export function BookingDashboardRoute() {
             <ModuleScreenHeader
               icon={NavBookingIcon}
               title={MODULE_TITLES.booking}
+              recordCount={bookings.length}
               subtitle="Create and manage bookings, amend drafts, and track confirmation status."
               marginBottom={0}
               viewMode={viewMode}
@@ -388,7 +389,7 @@ export function BookingDashboardRoute() {
                     renderToolbar={() => null}
                     className="booking-data-view"
                     listOptions={{
-                      showToolbar: true,
+                      showToolbar: false,
                       sideBar: false,
                       defaultColDef: { filter: true },
                       gridOptions: {

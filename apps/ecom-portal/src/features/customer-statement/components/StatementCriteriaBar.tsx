@@ -62,7 +62,6 @@ export function StatementCriteriaBar({
         <ModuleScreenHeader
           icon={NavIcons.customerStatement}
           title={MODULE_TITLES.customerStatement}
-          subtitle="Select account, currency, and period to view and export your statement."
           marginBottom={0}
         />
       </div>

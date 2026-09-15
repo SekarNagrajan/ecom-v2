@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-11 17:33)
+// Modified by Sekar Nagarajan (2026-09-15 15:30)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -235,6 +235,127 @@ export function RatesModuleStyles() {
       .rates-results-bar__title {
         font-size: ${token.fontSizeLG}px;
         font-weight: ${token.fontWeightStrong};
+      }
+
+      /* List/card toggle — inactive primary icons; active white on primary */
+      .rates-results-bar .module-view-mode-tabs.ant-segmented {
+        background: ${token.colorBgContainer};
+        border-color: ${token.colorBorder};
+        flex-shrink: 0;
+        margin-left: auto;
+      }
+      .rates-results-bar .module-view-mode-tabs.ant-segmented
+        .ant-segmented-item {
+        color: ${token.colorPrimary};
+      }
+      .rates-results-bar .module-view-mode-tabs.ant-segmented
+        .ant-segmented-item:not(.ant-segmented-item-selected) .app-icon {
+        color: ${token.colorPrimary} !important;
+      }
+      .rates-results-bar .module-view-mode-tabs.ant-segmented
+        .ant-segmented-thumb {
+        background: ${token.colorPrimary} !important;
+      }
+      .rates-results-bar .module-view-mode-tabs.ant-segmented
+        .ant-segmented-item-selected {
+        background: ${token.colorPrimary} !important;
+        color: ${token.colorTextLightSolid} !important;
+      }
+      .rates-results-bar .module-view-mode-tabs.ant-segmented
+        .ant-segmented-item-selected .app-icon {
+        color: ${token.colorTextLightSolid} !important;
+      }
+
+      .rates-card-view-panel.module-card-view-panel--active {
+        margin-bottom: ${token.marginMD}px;
+      }
+      .rates-grid-wrap {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+      }
+      .rates-grid-wrap--no-toolbar .rates-data-view > .ant-card:first-child {
+        display: none;
+      }
+      .rates-list-grid {
+        width: 100%;
+        flex: 1 1 auto;
+        max-height: 500px;
+        height: 500px;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      .rates-list-grid > * {
+        flex: 1;
+        min-height: 0;
+        height: 100%;
+      }
+      .rates-list-grid .rates-data-view {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-height: 0;
+        height: 100%;
+        max-height: 100%;
+      }
+      .rates-list-grid .rates-data-view .ant-card {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+      }
+      .rates-list-grid .rates-data-view .ant-card > .ant-card-body {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow: hidden;
+      }
+      .rates-list-grid .ag-theme-alpine,
+      .rates-list-grid .ag-root-wrapper {
+        height: 100% !important;
+        max-height: 100%;
+        min-height: 0;
+      }
+      .rates-list-grid .ag-row.rates-list-row--recommended,
+      .rates-list-grid .ag-row.rates-list-row--recommended .ag-cell {
+        background: ${tokenMix(token.colorWarning, 10)} !important;
+      }
+      .rates-list-grid .ag-row.rates-list-row--recommended:hover,
+      .rates-list-grid .ag-row.rates-list-row--recommended:hover .ag-cell {
+        background: ${tokenMix(token.colorWarning, 16)} !important;
+      }
+      .rates-list-legend {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginXS}px;
+        margin-top: ${token.marginSM}px;
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+        line-height: ${token.lineHeightSM};
+      }
+      .rates-list-legend__swatch {
+        flex: 0 0 auto;
+        width: ${token.fontSizeLG}px;
+        height: ${token.fontSizeLG}px;
+        border-radius: ${token.borderRadiusSM}px;
+        background: ${tokenMix(token.colorWarning, 10)};
+        border: 1px solid ${tokenMix(token.colorWarning, 40)};
+      }
+      .rates-list-cell__title {
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+        line-height: ${token.lineHeightSM};
+      }
+      .rates-list-cell__sub {
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+        line-height: ${token.lineHeightSM};
+        margin-top: ${token.marginXXS}px;
       }
 
       .rates-card-list {

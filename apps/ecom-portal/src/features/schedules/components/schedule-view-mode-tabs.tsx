@@ -6,7 +6,7 @@ import { AppIcon, Icons } from "../../../components/icons";
 import type { ScheduleViewMode } from "../hooks/use-schedule-view-mode";
 
 const VIEW_MODE_TOOLTIP_DELAY = 0.5;
-const VIEW_MODE_ICON_SIZE = 18;
+const VIEW_MODE_ICON_SIZE = 16;
 
 function ViewModeIcon({
   title,

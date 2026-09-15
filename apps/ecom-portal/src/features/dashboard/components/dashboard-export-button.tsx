@@ -50,8 +50,8 @@ export function DashboardExportButton({
         shipmentCount === undefined
           ? "Current dashboard data"
           : totalShipmentCount !== undefined
-            ? `${shipmentCount} of ${totalShipmentCount}`
-            : String(shipmentCount),
+          ? `${shipmentCount} of ${totalShipmentCount}`
+          : String(shipmentCount),
     },
   ];
 
@@ -107,7 +107,7 @@ export function DashboardExportButton({
     <>
       <Tooltip title="Export Report">
         <AppButton
-          icon={<AppIcon icon={Icons.download} size={16} />}
+          icon={<AppIcon icon={Icons.download} size={16} tone="download" />}
           onClick={() => setOpen(true)}
           disabled={disabled}
           loading={(isGenerating || isDownloading) && !open}

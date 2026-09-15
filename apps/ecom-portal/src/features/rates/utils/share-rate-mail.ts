@@ -1,6 +1,8 @@
 // Modified by Sekar Nagarajan (2026-09-11 16:31)
-import type { CombinedRateItem } from "../components/RateCardList";
-import type { ShareRateMailRateSummary } from "../types/rates.types";
+import type {
+  CombinedRateItem,
+  ShareRateMailRateSummary,
+} from "../types/rates.types";
 
 function money(currency: string, amount: number): string {
   return `${currency} ${amount.toFixed(2)}`;

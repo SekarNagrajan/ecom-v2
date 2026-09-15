@@ -454,6 +454,25 @@ export function BookingModuleStyles() {
       .booking-page-header .module-view-mode-tabs.ant-segmented {
         flex-shrink: 0;
       }
+      .booking-page-header .module-view-mode-tabs.ant-segmented
+        .ant-segmented-item:not(.ant-segmented-item-selected)
+        .app-icon {
+        color: ${token.colorPrimary} !important;
+      }
+      .booking-page-header .module-view-mode-tabs.ant-segmented
+        .ant-segmented-thumb {
+        background: ${token.colorPrimary} !important;
+      }
+      .booking-page-header .module-view-mode-tabs.ant-segmented
+        .ant-segmented-item-selected {
+        background: ${token.colorPrimary} !important;
+        color: ${token.colorTextLightSolid} !important;
+      }
+      .booking-page-header .module-view-mode-tabs.ant-segmented
+        .ant-segmented-item-selected
+        .app-icon {
+        color: ${token.colorTextLightSolid} !important;
+      }
       /* Card view — compact action row icon alignment */
       .booking-list-grid .list-actions-row {
         align-items: center;

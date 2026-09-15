@@ -17,7 +17,7 @@ import {
   stripHtml,
   toShareRateSummary,
 } from "../utils/share-rate-mail";
-import type { CombinedRateItem } from "./RateCardList";
+import type { CombinedRateItem } from "../types/rates.types";
 
 const { Text } = Typography;
 

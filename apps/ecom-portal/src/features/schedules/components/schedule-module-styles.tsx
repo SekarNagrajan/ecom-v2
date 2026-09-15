@@ -246,7 +246,7 @@ export function ScheduleModuleStyles() {
         font-weight: ${token.fontWeightStrong};
       }
 
-      /* Available Sailings — unselected white/black; selected primary/white */
+      /* Available Sailings — inactive primary icons; active white on primary */
       .schedule-results-bar .schedule-view-mode-tabs.ant-segmented {
         background: ${token.colorBgContainer};
         border-color: ${token.colorBorder};
@@ -255,17 +255,17 @@ export function ScheduleModuleStyles() {
       }
       .schedule-results-bar .schedule-view-mode-tabs.ant-segmented
         .ant-segmented-item {
-        color: ${token.colorText};
+        color: ${token.colorPrimary};
       }
       .schedule-results-bar .schedule-view-mode-tabs.ant-segmented
         .ant-segmented-item:not(.ant-segmented-item-selected) .app-icon {
-        color: ${token.colorText} !important;
+        color: ${token.colorPrimary} !important;
       }
       .schedule-results-bar .schedule-view-mode-tabs.ant-segmented
         .ant-segmented-item:hover:not(.ant-segmented-item-selected):not(
           .ant-segmented-item-disabled
         ) {
-        color: ${token.colorText};
+        color: ${token.colorPrimary};
       }
       .schedule-results-bar .schedule-view-mode-tabs.ant-segmented
         .ant-segmented-thumb {

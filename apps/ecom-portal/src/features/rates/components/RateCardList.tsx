@@ -1,41 +1,16 @@
-// Modified by Sekar Nagarajan (2026-09-11 17:23)
+// Modified by Sekar Nagarajan (2026-09-15 15:30)
 import { AppButton } from "@solverminds/shared-ui";
 import { Spin, Tag, Tooltip, Typography } from "antd";
 import { useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
-import type { SurchargeDTO } from "../types/rates.types";
+import type { CombinedRateItem } from "../types/rates.types";
 import type { RateSearchMode } from "./RateSearchFilter";
 
-const { Text } = Typography;
+export type { CombinedRateItem } from "../types/rates.types";
 
-export interface CombinedRateItem {
-  id: string;
-  type: "TARIFF" | "CONTRACT" | "SURCHARGE" | "QUOTE";
-  title: string;
-  code: string;
-  originPort: string;
-  originPortName: string;
-  deliveryPort: string;
-  deliveryPortName: string;
-  eqpType: string;
-  commodity: string;
-  commodityName: string;
-  currency: string;
-  baseAmount: number;
-  surchargeAmount: number;
-  totalEstimatedAmount: number;
-  effectiveFrom: string;
-  effectiveTo: string;
-  isRecommended?: boolean;
-  surcharges?: SurchargeDTO[];
-  soc?: string;
-  nor?: boolean;
-  carrTerms?: string;
-  transService?: string;
-  quoteStatus?: string;
-}
+const { Text } = Typography;
 
 interface RateCardListProps {
   rates: CombinedRateItem[];

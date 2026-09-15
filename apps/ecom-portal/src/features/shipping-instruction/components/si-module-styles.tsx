@@ -70,6 +70,25 @@ export function SiModuleStyles() {
       .si-page-header .module-view-mode-tabs.ant-segmented {
         flex-shrink: 0;
       }
+      .si-page-header .module-view-mode-tabs.ant-segmented
+        .ant-segmented-item:not(.ant-segmented-item-selected)
+        .app-icon {
+        color: ${token.colorPrimary} !important;
+      }
+      .si-page-header .module-view-mode-tabs.ant-segmented
+        .ant-segmented-thumb {
+        background: ${token.colorPrimary} !important;
+      }
+      .si-page-header .module-view-mode-tabs.ant-segmented
+        .ant-segmented-item-selected {
+        background: ${token.colorPrimary} !important;
+        color: ${token.colorTextLightSolid} !important;
+      }
+      .si-page-header .module-view-mode-tabs.ant-segmented
+        .ant-segmented-item-selected
+        .app-icon {
+        color: ${token.colorTextLightSolid} !important;
+      }
       /* Card view — compact action row icon alignment */
       .si-list-grid .list-actions-row {
         align-items: center;

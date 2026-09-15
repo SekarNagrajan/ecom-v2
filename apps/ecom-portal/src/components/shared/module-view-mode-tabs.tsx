@@ -1,12 +1,12 @@
-// Modified by Sekar Nagarajan (2026-09-15 12:00)
-import { AppstoreOutlined, UnorderedListOutlined } from "@ant-design/icons";
+// Modified by Sekar Nagarajan (2026-09-15 15:30)
 import { Segmented, Tooltip, theme } from "antd";
 import { startTransition, type CSSProperties, type ReactNode } from "react";
 
+import { AppIcon, Icons } from "../icons";
 import type { ModuleListViewMode } from "./hooks/use-module-view-mode";
 
 const VIEW_MODE_TOOLTIP_DELAY = 0.5;
-/** Match AppButton / header action icon size (16px). */
+/** Match AppButton / header action icon size. */
 const VIEW_MODE_ICON_SIZE = 16;
 
 function ViewModeIcon({
@@ -30,6 +30,7 @@ export interface ModuleViewModeTabsProps {
 
 /**
  * Icon-only list/card switcher sized to align with module header AppButtons.
+ * Inactive: primary icons; active: white icons on primary background.
  */
 export function ModuleViewModeTabs({
   value,
@@ -58,9 +59,7 @@ export function ModuleViewModeTabs({
           value: "list",
           icon: (
             <ViewModeIcon title="List View">
-              <UnorderedListOutlined
-                style={{ fontSize: VIEW_MODE_ICON_SIZE }}
-              />
+              <AppIcon icon={Icons.list} size={VIEW_MODE_ICON_SIZE} />
             </ViewModeIcon>
           ),
         },
@@ -68,7 +67,7 @@ export function ModuleViewModeTabs({
           value: "card",
           icon: (
             <ViewModeIcon title="Card View">
-              <AppstoreOutlined style={{ fontSize: VIEW_MODE_ICON_SIZE }} />
+              <AppIcon icon={Icons.layoutGrid} size={VIEW_MODE_ICON_SIZE} />
             </ViewModeIcon>
           ),
         },

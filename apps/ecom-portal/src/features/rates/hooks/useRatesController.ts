@@ -1,22 +1,26 @@
-// Modified by Sekar Nagarajan (2026-09-11 17:28)
+// Modified by Sekar Nagarajan (2026-09-15 15:30)
 // Controller hook for Rates — mode-aware cards + surcharge rollup (JSP parity)
 
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 
+import { useModuleViewMode } from "../../../components/shared/hooks/use-module-view-mode";
 import {
   useContractsQuery,
   useQuotesQuery,
   useSurchargesQuery,
   useTariffsQuery,
 } from "../api/rates.queries";
-import type { CombinedRateItem } from "../components/RateCardList";
 import type {
   RateSearchMode,
   RateSearchParams,
 } from "../components/RateSearchFilter";
-import type { ContractDTO, CreateQuoteInput } from "../types/rates.types";
+import type {
+  CombinedRateItem,
+  ContractDTO,
+  CreateQuoteInput,
+} from "../types/rates.types";
 
 const RESULTS_TITLE: Record<RateSearchMode, string> = {
   PUBLISHED_TARIFF: "Published Freight Rates",
@@ -33,10 +37,12 @@ const DEFAULT_SEARCH_PARAMS: RateSearchParams = {
   commodity: "GEN-CGO",
 };
 
+const RATES_VIEW_MODE_KEY = "ecom.rates.viewMode";
+
 export function useRatesController() {
   const toast = useToast();
   const navigate = useNavigate();
-  const [viewMode, setViewMode] = useState<"CARD" | "DATAVIEW">("CARD");
+  const { viewMode, setViewMode } = useModuleViewMode(RATES_VIEW_MODE_KEY);
   const [searchParams, setSearchParams] =
     useState<RateSearchParams>(DEFAULT_SEARCH_PARAMS);
   /** Results only after explicit Search (or deep-link from landing). */
@@ -280,7 +286,7 @@ export function useRatesController() {
   const handleSearch = (params: RateSearchParams) => {
     setSearchParams(params);
     setHasSearched(true);
-    if (params.searchMode === "SPOT_QUOTES" && viewMode === "CARD") {
+    if (params.searchMode === "SPOT_QUOTES" && viewMode === "card") {
       toast.info("Showing spot quotes for this lane…");
     } else {
       toast.info(

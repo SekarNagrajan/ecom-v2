@@ -115,6 +115,34 @@ export interface CreateQuoteInput {
   comments?: string;
 }
 
+/** Unified search-result row for Rates list + card views. */
+export interface CombinedRateItem {
+  id: string;
+  type: "TARIFF" | "CONTRACT" | "SURCHARGE" | "QUOTE";
+  title: string;
+  code: string;
+  originPort: string;
+  originPortName: string;
+  deliveryPort: string;
+  deliveryPortName: string;
+  eqpType: string;
+  commodity: string;
+  commodityName: string;
+  currency: string;
+  baseAmount: number;
+  surchargeAmount: number;
+  totalEstimatedAmount: number;
+  effectiveFrom: string;
+  effectiveTo: string;
+  isRecommended?: boolean;
+  surcharges?: SurchargeDTO[];
+  soc?: string;
+  nor?: boolean;
+  carrTerms?: string;
+  transService?: string;
+  quoteStatus?: string;
+}
+
 // Modified by Sekar Nagarajan (2026-09-11 16:25) — share rate quote via email
 export interface ShareRateMailRateSummary {
   id: string;

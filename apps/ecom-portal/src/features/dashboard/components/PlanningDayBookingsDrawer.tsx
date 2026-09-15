@@ -52,7 +52,7 @@ export function PlanningDayBookingsDrawer({
             </div>
           </div>
 
-          <div className="dashboard-planning-day-drawer__tiles">
+          {/* <div className="dashboard-planning-day-drawer__tiles">
             <div className="dashboard-planning-day-tile">
               <span className="dashboard-planning-day-tile__label">Day</span>
               <span className="dashboard-planning-day-tile__value">
@@ -79,7 +79,7 @@ export function PlanningDayBookingsDrawer({
                 {count}
               </span>
             </div>
-          </div>
+          </div> */}
         </div>
       }
     >
@@ -100,7 +100,10 @@ export function PlanningDayBookingsDrawer({
                 {booking.origin} → {booking.delivery}
               </Text>
               <div className="dashboard-planning-day-list__tags">
-                <Tag color={getBookingListStatusColor(booking.status)}>
+                <Tag
+                  className="module-status-tag"
+                  color={getBookingListStatusColor(booking.status)}
+                >
                   {booking.status}
                 </Tag>
                 <Text type="secondary">{booking.teusCount} TEU</Text>

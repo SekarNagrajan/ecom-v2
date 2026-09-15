@@ -733,10 +733,10 @@ export function GlobalThemeStyles() {
         gap: ${token.marginSM}px;
         justify-content: flex-end;
       }
-      /* List/card toggle — match AppButton height + 16px icon alignment */
+      /* List/card toggle — inactive icons primary; active white on primary bg */
       .module-view-mode-tabs.ant-segmented {
         align-items: center;
-        background: ${token.colorFillAlter};
+        background: ${token.colorBgContainer};
         border: 1px solid ${token.colorBorder};
         border-radius: ${token.borderRadius}px;
         display: inline-flex;
@@ -752,12 +752,36 @@ export function GlobalThemeStyles() {
       }
       .module-view-mode-tabs.ant-segmented .ant-segmented-item {
         align-items: center;
+        color: ${token.colorPrimary};
         display: inline-flex;
         height: ${token.controlHeight - token.paddingXXS * 2}px;
         justify-content: center;
         min-height: ${token.controlHeight - token.paddingXXS * 2}px;
         min-width: ${token.controlHeight - token.paddingXXS * 2}px;
         width: ${token.controlHeight - token.paddingXXS * 2}px;
+      }
+      .module-view-mode-tabs.ant-segmented
+        .ant-segmented-item:not(.ant-segmented-item-selected)
+        .app-icon {
+        color: ${token.colorPrimary} !important;
+      }
+      .module-view-mode-tabs.ant-segmented
+        .ant-segmented-item:hover:not(.ant-segmented-item-selected):not(
+          .ant-segmented-item-disabled
+        ) {
+        color: ${token.colorPrimary};
+      }
+      .module-view-mode-tabs.ant-segmented .ant-segmented-thumb {
+        background: ${token.colorPrimary} !important;
+      }
+      .module-view-mode-tabs.ant-segmented .ant-segmented-item-selected {
+        background: ${token.colorPrimary} !important;
+        color: ${token.colorTextLightSolid} !important;
+      }
+      .module-view-mode-tabs.ant-segmented
+        .ant-segmented-item-selected
+        .app-icon {
+        color: ${token.colorTextLightSolid} !important;
       }
       .module-view-mode-tabs.ant-segmented .ant-segmented-item-label {
         align-items: center;
@@ -777,7 +801,8 @@ export function GlobalThemeStyles() {
         line-height: 1;
         width: 16px;
       }
-      .module-view-mode-tabs__icon .anticon {
+      .module-view-mode-tabs__icon .anticon,
+      .module-view-mode-tabs__icon .app-icon {
         display: inline-flex;
         font-size: 16px;
         line-height: 1;

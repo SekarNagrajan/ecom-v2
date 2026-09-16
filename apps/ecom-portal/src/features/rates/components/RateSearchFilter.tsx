@@ -184,10 +184,7 @@ export function RateSearchFilter({
             toDate: dayjs().add(90, "day"),
           }}
           onValuesChange={(changed) => {
-            if (
-              changed.searchMode &&
-              typeof changed.searchMode === "string"
-            ) {
+            if (changed.searchMode && typeof changed.searchMode === "string") {
               onSearchModeChange?.(changed.searchMode as RateSearchMode);
             }
           }}

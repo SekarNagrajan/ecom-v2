@@ -619,6 +619,16 @@ export function DashboardModuleStyles() {
       .dashboard-metric-tile--tone-error .dashboard-metric-tile__value {
         color: ${token.colorError} !important;
       }
+        .dashboard-ongoing-count{
+        background-color: ${token.colorError};
+        color: ${token.colorWhite};
+        padding: ${token.paddingXS}px ${token.paddingSM}px;
+        border-radius: ${token.borderRadiusSM}px;
+      margin-left: ${token.marginXXS}px;
+        font-weight: ${token.fontWeightStrong};
+        font-size: ${token.fontSizeSM}px;
+        line-height: ${token.lineHeight};
+        }
       .dashboard-metric-tile--tone-warning {
         background: ${token.colorWarningBg};
         border-color: ${token.colorWarningBorder};

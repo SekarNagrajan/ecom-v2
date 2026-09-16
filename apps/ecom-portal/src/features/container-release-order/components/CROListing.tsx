@@ -189,7 +189,6 @@ export function CROListing() {
         <ModuleScreenHeader
           icon={NavIcons.containerRelease}
           title={MODULE_TITLES.containerReleaseOrder}
-          recordCount={rows.length}
           subtitle="Filter by date range, review load-to-discharge routing, and print container release orders."
           marginBottom={0}
         />
@@ -214,7 +213,7 @@ export function CROListing() {
             className="cro-data-view"
             listOptions={{
               ...profileHandlers,
-              showToolbar: { showTotalCount: false, fullScreen: false },
+              showToolbar: { showTotalCount: true, fullScreen: true },
               sideBar: false,
               pagination: true,
               paginationPageSize: 20,

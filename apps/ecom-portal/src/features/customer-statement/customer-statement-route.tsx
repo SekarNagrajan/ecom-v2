@@ -1,12 +1,12 @@
 // Modified by Sekar Nagarajan (2026-09-16 11:25)
-import { Card } from 'antd';
-import { useCallback, useState } from 'react';
+import { Card } from "antd";
+import { useCallback, useState } from "react";
 
-import { FeaturePageShell } from '../../components/shared/feature-page-shell';
-import { StatementCriteriaBar } from './components/StatementCriteriaBar';
-import { StatementView } from './components/StatementView';
-import { CustomerStatementModuleStyles } from './components/customer-statement-module-styles';
-import { useStatementController } from './hooks/use-statement-controller';
+import { FeaturePageShell } from "../../components/shared/feature-page-shell";
+import { StatementCriteriaBar } from "./components/StatementCriteriaBar";
+import { StatementView } from "./components/StatementView";
+import { CustomerStatementModuleStyles } from "./components/customer-statement-module-styles";
+import { useStatementController } from "./hooks/use-statement-controller";
 
 export function CustomerStatementRoute() {
   const {
@@ -39,7 +39,6 @@ export function CustomerStatementRoute() {
             fromDate={fromDate}
             toDate={toDate}
             criteriaError={criteriaError}
-            recordCount={recordCount}
             onAccountChange={handleAccountChange}
             onCurrencyChange={setCurrency}
             onFromDateChange={setFromDate}

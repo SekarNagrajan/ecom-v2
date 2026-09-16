@@ -175,7 +175,6 @@ export function QuotesView() {
       <UmPanelHeader
         icon={NavRatesIcon}
         title={MODULE_TITLES.quotes}
-        recordCount={quotes.length}
         description="Request a rate, review quotes, and book when an offer is ready."
         extra={
           <AppButton
@@ -200,7 +199,7 @@ export function QuotesView() {
           renderToolbar={() => null}
           listOptions={{
             ...profileHandlers,
-            showToolbar: { showTotalCount: false, fullScreen: false },
+            showToolbar: { showTotalCount: true, fullScreen: true },
             pagination: true,
             paginationPageSize: 10,
             pageSizeOptions: [10, 20, 50, 100],

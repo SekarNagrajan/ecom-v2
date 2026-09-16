@@ -890,9 +890,21 @@ export function TrackingModuleStyles() {
         font-size: ${token.fontSizeLG}px;
         font-weight: ${token.fontWeightStrong};
       }
-      .tracking-results-count.ant-badge .ant-badge-count {
-        background: ${token.colorError};
-        box-shadow: none;
+      .tracking-results-count {
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorTextSecondary};
+        line-height: 1.2;
+        background-color: ${token.colorError};
+        color: ${token.colorWhite};
+        padding: ${token.paddingXXS}px ${token.paddingXS}px;
+        border-radius: ${token.borderRadiusSM}px;
+        min-width: ${token.controlHeightSM}px;
+        height: ${token.controlHeightSM}px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
       }
       .tracking-grid {
         flex: 1;

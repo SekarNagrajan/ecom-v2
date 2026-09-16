@@ -39,7 +39,6 @@ export function TrackingRoute() {
         <ModuleScreenHeader
           icon={NavTrackingIcon}
           title={MODULE_TITLES.tracking}
-          recordCount={trackingResult?.containers.length}
           subtitle="Track real-time container movements, vessel voyage milestones, port cut-offs, and transport event logs."
           extra={
             <Space align="center" size={12} wrap>

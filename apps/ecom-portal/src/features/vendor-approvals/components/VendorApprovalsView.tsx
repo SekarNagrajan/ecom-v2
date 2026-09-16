@@ -1,5 +1,8 @@
 // Modified by Sekar Nagarajan (2026-08-26 16:25)
-import { DataView, type DataViewColumn } from "@solverminds/shared-ui/data-view";
+import {
+  DataView,
+  type DataViewColumn,
+} from "@solverminds/shared-ui/data-view";
 import { useConfirm, useToast } from "@solverminds/shared-ui/hooks";
 import { Badge, Tag, Typography } from "antd";
 import { useState } from "react";
@@ -84,7 +87,10 @@ export function VendorApprovalsView() {
   const { profileHandlers } = useLocalGridProfiles("vendor-approvals");
   const [items, setItems] = useState<VendorApprovalItem[]>(INITIAL_ITEMS);
 
-  const applyStatus = (id: string, status: Exclude<ApprovalStatus, "PENDING">) => {
+  const applyStatus = (
+    id: string,
+    status: Exclude<ApprovalStatus, "PENDING">,
+  ) => {
     setItems((prev) =>
       prev.map((item) => (item.id === id ? { ...item, status } : item)),
     );
@@ -124,7 +130,11 @@ export function VendorApprovalsView() {
         const rec = params.data;
         if (!rec) return null;
         if (rec.status !== "PENDING") {
-          return <Text type="secondary" className="va-status-done">Done</Text>;
+          return (
+            <Text type="secondary" className="va-status-done">
+              Done
+            </Text>
+          );
         }
         return (
           <ListActionsRow>
@@ -274,7 +284,7 @@ export function VendorApprovalsView() {
           renderToolbar={() => null}
           listOptions={{
             ...profileHandlers,
-            showToolbar: { showTotalCount: false, fullScreen: false },
+            showToolbar: { showTotalCount: false, fullScreen: true },
             pagination: true,
             paginationPageSize: 20,
             pageSizeOptions: [10, 20, 50, 100],

@@ -188,7 +188,6 @@ export function ArrivalNoticeListing() {
         <ModuleScreenHeader
           icon={NavIcons.arrivalNotice}
           title={MODULE_TITLES.arrivalNotice}
-          recordCount={rows.length}
           subtitle="Filter by date range, review vessel and charges, and print arrival notices."
           marginBottom={0}
         />
@@ -213,7 +212,7 @@ export function ArrivalNoticeListing() {
             className="arn-data-view"
             listOptions={{
               ...profileHandlers,
-              showToolbar: { showTotalCount: false, fullScreen: false },
+              showToolbar: { showTotalCount: true, fullScreen: true },
               sideBar: false,
               pagination: true,
               paginationPageSize: 20,

@@ -30,8 +30,12 @@ export function ContractView() {
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data: contracts = [], isLoading, isError, refetch } =
-    useContractsQuery({ pol, pod });
+  const {
+    data: contracts = [],
+    isLoading,
+    isError,
+    refetch,
+  } = useContractsQuery({ pol, pod });
 
   const handleOpenSurcharges = (contract: ContractDTO) => {
     setSelectedContract(contract);
@@ -232,7 +236,7 @@ export function ContractView() {
               columnDefs={columnDefs}
               listOptions={{
                 ...profileHandlers,
-                showToolbar: { showTotalCount: false, fullScreen: false },
+                showToolbar: { showTotalCount: false, fullScreen: true },
                 sideBar: false,
                 pagination: true,
                 paginationPageSize: 10,

@@ -1,9 +1,14 @@
-// Modified by Sekar Nagarajan (2026-09-01 17:40)
+// Modified by Sekar Nagarajan (2026-09-16 14:24)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
-import { Input, Segmented, Tooltip, Typography } from "antd";
-import { useState, type ReactNode } from "react";
+import { Input, Segmented, Tooltip, Typography, theme } from "antd";
+import {
+  startTransition,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
 import { useFieldArray, useForm, type Resolver } from "react-hook-form";
 
 import { AppIcon, Icons } from "../../../components/icons";
@@ -27,8 +32,24 @@ const { Text } = Typography;
 
 const PAGE_SIZE = 12; // containers per page
 const MAX_ADD_QTY = 20; // keep bulk-add manageable
+const VIEW_MODE_TOOLTIP_DELAY = 0.5;
+const VIEW_MODE_ICON_SIZE = 16;
 
 type CargoViewMode = "list" | "grid";
+
+function CargoViewModeIcon({
+  title,
+  children,
+}: {
+  title: string;
+  children: ReactNode;
+}) {
+  return (
+    <Tooltip title={title} mouseEnterDelay={VIEW_MODE_TOOLTIP_DELAY}>
+      <span className="module-view-mode-tabs__icon">{children}</span>
+    </Tooltip>
+  );
+}
 
 interface CargoLinesEditorProps {
   containers: SIContainer[];
@@ -52,10 +73,14 @@ export function CargoLinesEditor({
   endActions,
 }: CargoLinesEditorProps) {
   const toast = useToast();
+  const { token } = theme.useToken();
   const { data: packageTypes = [] } = useBookingLookups("packageTypes");
   const { data: containerTypes = [] } = useBookingLookups("containerTypes");
 
   const [viewMode, setViewMode] = useState<CargoViewMode>("list");
+  const viewModeRootStyle = {
+    ["--module-view-mode-h" as string]: `${token.controlHeight}px`,
+  } as CSSProperties;
   const [search, setSearch] = useState("");
   const [incompleteOnly, setIncompleteOnly] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(
@@ -199,29 +224,41 @@ export function CargoLinesEditor({
                 </Tooltip>
               </div>
 
-              {/* Modified by Sekar Nagarajan (2026-08-28 18:02) */}
               <div className="si-cargo-toolbar__actions">
                 <Segmented
-                  className="si-cargo-view-segmented"
+                  className="module-view-mode-tabs si-cargo-view-tabs"
+                  size="middle"
                   value={viewMode}
-                  onChange={(v) => setViewMode(v as CargoViewMode)}
+                  aria-label="Cargo view mode"
+                  style={viewModeRootStyle}
+                  onChange={(next) => {
+                    startTransition(() => {
+                      if (next === "list" || next === "grid") {
+                        setViewMode(next);
+                      }
+                    });
+                  }}
                   options={[
                     {
                       value: "list",
-                      label: (
-                        <span className="si-cargo-view-opt">
-                          <AppIcon icon={Icons.layoutList} size={14} />
-                          List
-                        </span>
+                      icon: (
+                        <CargoViewModeIcon title="List View">
+                          <AppIcon
+                            icon={Icons.list}
+                            size={VIEW_MODE_ICON_SIZE}
+                          />
+                        </CargoViewModeIcon>
                       ),
                     },
                     {
                       value: "grid",
-                      label: (
-                        <span className="si-cargo-view-opt">
-                          <AppIcon icon={Icons.layoutGrid} size={14} />
-                          Grid
-                        </span>
+                      icon: (
+                        <CargoViewModeIcon title="Grid View">
+                          <AppIcon
+                            icon={Icons.layoutGrid}
+                            size={VIEW_MODE_ICON_SIZE}
+                          />
+                        </CargoViewModeIcon>
                       ),
                     },
                   ]}

@@ -180,7 +180,6 @@ export function DeliveryOrderListing() {
         <ModuleScreenHeader
           icon={NavContainerReleaseIcon}
           title={MODULE_TITLES.deliveryOrder}
-          recordCount={rows.length}
           subtitle="Filter by date range, review POL to POD routing, and print delivery order documents."
           marginBottom={0}
         />
@@ -205,7 +204,7 @@ export function DeliveryOrderListing() {
             className="do-data-view"
             listOptions={{
               ...profileHandlers,
-              showToolbar: { showTotalCount: false, fullScreen: false },
+              showToolbar: { showTotalCount: true, fullScreen: true },
               sideBar: false,
               pagination: true,
               paginationPageSize: 20,

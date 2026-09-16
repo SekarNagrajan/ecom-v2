@@ -1,10 +1,11 @@
-// Modified by Sekar Nagarajan (2026-09-16 11:48)
+// Modified by Sekar Nagarajan (2026-09-16 12:13)
 import { AppButton } from "@solverminds/shared-ui";
 import {
   DataView,
   type DataViewColumn,
 } from "@solverminds/shared-ui/data-view";
-import { Spin, Typography } from "antd";
+import { Segmented, Spin, Tooltip, Typography } from "antd";
+import { startTransition, useState, type ReactNode } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
@@ -19,12 +20,31 @@ import { CarbonResultCharts } from "./CarbonResultCharts";
 
 const { Text } = Typography;
 
+type CarbonBreakdownView = "list" | "chart";
+
+const VIEW_MODE_TOOLTIP_DELAY = 0.5;
+const VIEW_MODE_ICON_SIZE = 16;
+
 interface CarbonResultPanelProps {
   input: CarbonInput;
 }
 
 interface CarbonLegRow extends CarbonLegResult {
   id: string;
+}
+
+function ViewModeIcon({
+  title,
+  children,
+}: {
+  title: string;
+  children: ReactNode;
+}) {
+  return (
+    <Tooltip title={title} mouseEnterDelay={VIEW_MODE_TOOLTIP_DELAY}>
+      <span className="module-view-mode-tabs__icon">{children}</span>
+    </Tooltip>
+  );
 }
 
 function formatIntensity(value: number, digits = 2): string {
@@ -50,6 +70,8 @@ export function CarbonResultPanel({ input }: CarbonResultPanelProps) {
     error,
   } = useCarbonComputeQuery(input);
   const exportMutation = useCarbonExportMutation();
+  const [breakdownView, setBreakdownView] =
+    useState<CarbonBreakdownView>("list");
 
   const unit = input.unit;
   const spinning = isLoading || isFetching;
@@ -160,7 +182,7 @@ export function CarbonResultPanel({ input }: CarbonResultPanelProps) {
                   {formatCo2e(pickDisplayTotal(result, unit), unit)}
                 </p>
               </div>
-              <div className="co2-kpi-card">
+              <div className="co2-kpi-card co2-kpi-card--ttw">
                 <span className="co2-kpi-card__label">Tank-to-wheel</span>
                 <p className="co2-kpi-card__value co2-kpi-card__value--sm">
                   {formatCo2e(
@@ -169,7 +191,7 @@ export function CarbonResultPanel({ input }: CarbonResultPanelProps) {
                   )}
                 </p>
               </div>
-              <div className="co2-kpi-card">
+              <div className="co2-kpi-card co2-kpi-card--wtt">
                 <span className="co2-kpi-card__label">Well-to-tank</span>
                 <p className="co2-kpi-card__value co2-kpi-card__value--sm">
                   {formatCo2e(
@@ -179,7 +201,7 @@ export function CarbonResultPanel({ input }: CarbonResultPanelProps) {
                 </p>
               </div>
               {result.intensity.perTeu != null ? (
-                <div className="co2-kpi-card">
+                <div className="co2-kpi-card co2-kpi-card--per-teu">
                   <span className="co2-kpi-card__label">Per TEU</span>
                   <p className="co2-kpi-card__value co2-kpi-card__value--sm">
                     {formatIntensity(result.intensity.perTeu)} t CO₂e
@@ -187,7 +209,7 @@ export function CarbonResultPanel({ input }: CarbonResultPanelProps) {
                 </div>
               ) : null}
               {result.intensity.perTonneKm != null ? (
-                <div className="co2-kpi-card">
+                <div className="co2-kpi-card co2-kpi-card--per-tkm">
                   <span className="co2-kpi-card__label">Per tonne-km</span>
                   <p className="co2-kpi-card__value co2-kpi-card__value--sm">
                     {formatIntensity(result.intensity.perTonneKm)} g CO₂e
@@ -196,18 +218,56 @@ export function CarbonResultPanel({ input }: CarbonResultPanelProps) {
               ) : null}
             </div>
 
-            <CarbonResultCharts result={result} unit={unit} />
-
-            {legRows.length > 0 ? (
-              <div className="co2-legs-block">
-                <div className="co2-legs-block__header">
-                  <Text strong className="co2-legs-title">
-                    Per-leg Breakdown{" "}
-                    <span className="co2-legs-block__count">
+            <div className="co2-breakdown-block">
+              <div className="co2-breakdown-block__header">
+                <Text strong className="co2-breakdown-title">
+                  Emissions Breakdown
+                  {legRows.length > 0 ? (
+                    <span className="co2-breakdown-block__count">
                       {legRows.length}
                     </span>
-                  </Text>
-                </div>
+                  ) : null}
+                </Text>
+                <Segmented
+                  className="module-view-mode-tabs co2-breakdown-view-tabs"
+                  size="middle"
+                  value={breakdownView}
+                  aria-label="Breakdown view mode"
+                  onChange={(next) => {
+                    startTransition(() => {
+                      if (next === "list" || next === "chart") {
+                        setBreakdownView(next);
+                      }
+                    });
+                  }}
+                  options={[
+                    {
+                      value: "list",
+                      icon: (
+                        <ViewModeIcon title="Grid View">
+                          <AppIcon
+                            icon={Icons.list}
+                            size={VIEW_MODE_ICON_SIZE}
+                          />
+                        </ViewModeIcon>
+                      ),
+                    },
+                    {
+                      value: "chart",
+                      icon: (
+                        <ViewModeIcon title="Chart View">
+                          <AppIcon
+                            icon={Icons.barChart}
+                            size={VIEW_MODE_ICON_SIZE}
+                          />
+                        </ViewModeIcon>
+                      ),
+                    },
+                  ]}
+                />
+              </div>
+
+              {breakdownView === "list" ? (
                 <div className="co2-legs-table responsive-table-wrap custom-scroll">
                   <DataView
                     className="co2-legs-data-view"
@@ -224,8 +284,8 @@ export function CarbonResultPanel({ input }: CarbonResultPanelProps) {
                     renderToolbar={() => null}
                     listOptions={{
                       showToolbar: {
-                        showTotalCount: true,
-                        fullScreen: false,
+                        showTotalCount: false,
+                        fullScreen: true,
                       },
                       sideBar: false,
                       pagination: true,
@@ -240,8 +300,10 @@ export function CarbonResultPanel({ input }: CarbonResultPanelProps) {
                     }}
                   />
                 </div>
-              </div>
-            ) : null}
+              ) : (
+                <CarbonResultCharts result={result} unit={unit} />
+              )}
+            </div>
 
             <div className="co2-info-strip">
               <AppIcon icon={Icons.info} size={16} />

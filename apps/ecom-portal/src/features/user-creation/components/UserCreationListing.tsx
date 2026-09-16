@@ -1,6 +1,9 @@
 // Created by Sekar Nagarajan (2026-08-26 15:06)
 import { AppButton } from "@solverminds/shared-ui";
-import { DataView, type DataViewColumn } from "@solverminds/shared-ui/data-view";
+import {
+  DataView,
+  type DataViewColumn,
+} from "@solverminds/shared-ui/data-view";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import {
   Alert,
@@ -33,13 +36,10 @@ import {
 } from "../api/user-creation.queries";
 import type { SubUser } from "../types/user-creation.types";
 import { EMPTY_USER_LIMIT } from "../types/user-creation.types";
-import {
-  filterSubUsers,
-  getSubUserFullName,
-} from "../utils/usc.utils";
+import { filterSubUsers, getSubUserFullName } from "../utils/usc.utils";
+import { UscCreateDrawer } from "./upsert/UscCreateDrawer";
 import { UscLoadingCenter } from "./usc-loading-center";
 import { UscSearchPanel } from "./usc-search-panel";
-import { UscCreateDrawer } from "./upsert/UscCreateDrawer";
 
 export function UserCreationListing() {
   const toast = useToast();
@@ -208,9 +208,7 @@ export function UserCreationListing() {
               <AppButton
                 type="primary"
                 size="large"
-                icon={
-                  <AppIcon icon={Icons.userPlus} size={16} tone="create" />
-                }
+                icon={<AppIcon icon={Icons.userPlus} size={16} tone="create" />}
                 disabled={limitInfo.limitReached}
                 onClick={() => setIsDrawerOpen(true)}
               >
@@ -283,7 +281,7 @@ export function UserCreationListing() {
             className="usc-data-view"
             listOptions={{
               ...profileHandlers,
-              showToolbar: { showTotalCount: false, fullScreen: false },
+              showToolbar: { showTotalCount: false, fullScreen: true },
               sideBar: false,
               pagination: true,
               paginationPageSize: 20,

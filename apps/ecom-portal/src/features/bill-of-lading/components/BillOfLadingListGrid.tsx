@@ -9,9 +9,9 @@ import { Tag } from "antd";
 import { useCallback, useMemo, type ReactNode } from "react";
 
 import { buildActionsColumn } from "../../../components/shared/build-actions-column";
-import { ModuleCardViewPanel } from "../../../components/shared/module-card-view-panel";
 import { useModuleCardPagination } from "../../../components/shared/hooks/use-module-card-pagination";
 import type { ModuleListViewMode } from "../../../components/shared/hooks/use-module-view-mode";
+import { ModuleCardViewPanel } from "../../../components/shared/module-card-view-panel";
 import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
 import type { BLListDTO, BLPrintType } from "../types/bl.types";
 import { getBLListStatusColor } from "../utils/bl-status";
@@ -218,7 +218,7 @@ export function BillOfLadingListGrid({
           className="bl-data-view"
           listOptions={{
             ...profileHandlers,
-            showToolbar: { showTotalCount: false, fullScreen: false },
+            showToolbar: { showTotalCount: false, fullScreen: true },
             sideBar: false,
             pagination: true,
             paginationPageSize: 20,

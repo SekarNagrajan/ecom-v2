@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-16 11:48)
+// Modified by Sekar Nagarajan (2026-09-16 12:20)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -6,6 +6,10 @@ import { tokenMix } from "../../theme/utils/token-mix";
 export function CarbonCalculatorModuleStyles() {
   const { token } = theme.useToken();
   const primaryTint8 = tokenMix(token.colorPrimary, 8);
+  const successTint8 = tokenMix(token.colorSuccess, 8);
+  const warningTint8 = tokenMix(token.colorWarning, 8);
+  const infoTint8 = tokenMix(token.colorInfo, 8);
+  const errorTint8 = tokenMix(token.colorError, 8);
 
   return (
     <style>{`
@@ -105,14 +109,8 @@ export function CarbonCalculatorModuleStyles() {
         display: flex;
         align-items: center;
         justify-content: center;
-        min-height: 160px;
-        padding: ${token.paddingXL}px;
-        text-align: center;
-        color: ${token.colorTextSecondary};
-        font-size: ${token.fontSize}px;
-        border-radius: ${token.borderRadiusLG}px;
-        border: 1px dashed ${token.colorBorderSecondary};
-        background: ${token.colorFillAlter};
+        min-height: 240px;
+        padding: ${token.paddingLG}px;
       }
       .co2-result-panel {
         display: flex;
@@ -185,15 +183,48 @@ export function CarbonCalculatorModuleStyles() {
           ${token.colorBgContainer} 100%
         );
       }
+      .co2-kpi-card--ttw {
+        border-color: ${token.colorSuccessBorder};
+        background: linear-gradient(
+          180deg,
+          ${successTint8} 0%,
+          ${token.colorBgContainer} 100%
+        );
+      }
+      .co2-kpi-card--wtt {
+        border-color: ${token.colorWarningBorder};
+        background: linear-gradient(
+          180deg,
+          ${warningTint8} 0%,
+          ${token.colorBgContainer} 100%
+        );
+      }
+      .co2-kpi-card--per-teu {
+        border-color: ${token.colorInfoBorder};
+        background: linear-gradient(
+          180deg,
+          ${infoTint8} 0%,
+          ${token.colorBgContainer} 100%
+        );
+      }
+      .co2-kpi-card--per-tkm {
+        border-color: ${token.colorErrorBorder};
+        background: linear-gradient(
+          180deg,
+          ${errorTint8} 0%,
+          ${token.colorBgContainer} 100%
+        );
+      }
       .co2-kpi-card__label {
         display: block;
         font-size: ${token.fontSizeSM}px;
         color: ${token.colorTextSecondary};
         line-height: ${token.lineHeightSM};
+        font-weight: ${token.fontWeightStrong};
       }
       .co2-kpi-card__value {
         font-variant-numeric: tabular-nums;
-        font-size: ${token.fontSizeHeading3}px;
+        font-size: ${token.fontSizeHeading4}px;
         font-weight: ${token.fontWeightStrong};
         color: ${token.colorText};
         margin: 0;
@@ -201,7 +232,7 @@ export function CarbonCalculatorModuleStyles() {
         word-break: break-word;
       }
       .co2-kpi-card__value--sm {
-        font-size: ${token.fontSizeLG}px;
+        font-size: ${token.fontSizeMD}px;
       }
       .co2-charts {
         display: grid;
@@ -244,32 +275,39 @@ export function CarbonCalculatorModuleStyles() {
       .co2-chart-card__canvas {
         width: 100%;
       }
-      .co2-legs-block {
+      .co2-breakdown-block {
         display: flex;
         flex-direction: column;
         gap: ${token.marginSM}px;
       }
-      .co2-legs-block__header {
+      .co2-breakdown-block__header {
         display: flex;
-        align-items: baseline;
+        align-items: center;
         justify-content: space-between;
         gap: ${token.marginSM}px;
         flex-wrap: wrap;
       }
-      .co2-legs-title {
+      .co2-breakdown-title {
         margin: 0;
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXS}px;
       }
-      .co2-legs-block__count {
-        font-size: ${token.fontSizeSM}px;
-        color: ${token.colorTextSecondary};
-        background-color: ${token.colorError};
+      .co2-breakdown-block__count {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: ${token.controlHeightSM}px;
+        height: ${token.controlHeightSM}px;
+        padding: 0 ${token.paddingXS}px;
+        border-radius: ${token.borderRadiusSM}px;
+        background: ${token.colorError};
         color: ${token.colorWhite};
-        padding: ${token.paddingXS}px ${token.paddingSM}px;
-        border-radius: ${token.borderRadiusLG}px;
-       
-        font-weight: ${token.fontWeightStrong};
         font-size: ${token.fontSizeSM}px;
-        line-height: ${token.lineHeight};
+        font-weight: ${token.fontWeightStrong};
+        font-variant-numeric: tabular-nums;
+        line-height: 1;
+        margin-left: ${token.marginXS}px;
       }
       .co2-legs-table {
         height: 320px;

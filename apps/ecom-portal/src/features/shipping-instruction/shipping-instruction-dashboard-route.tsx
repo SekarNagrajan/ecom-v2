@@ -1,5 +1,8 @@
 // Modified by Sekar Nagarajan (2026-09-15 11:45)
-import { DataView, type DataViewColumn } from "@solverminds/shared-ui/data-view";
+import {
+  DataView,
+  type DataViewColumn,
+} from "@solverminds/shared-ui/data-view";
 import { useConfirm, useToast } from "@solverminds/shared-ui/hooks";
 import { useNavigate } from "@tanstack/react-router";
 import type { RowDoubleClickedEvent } from "ag-grid-community";
@@ -11,12 +14,12 @@ import { buildActionsColumn } from "../../components/shared/build-actions-column
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
 import { useModuleCardPagination } from "../../components/shared/hooks/use-module-card-pagination";
 import { useModuleViewMode } from "../../components/shared/hooks/use-module-view-mode";
+import { ModuleCardViewPanel } from "../../components/shared/module-card-view-panel";
 import {
   ModuleEmptyState,
   buildRetryAction,
 } from "../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
-import { ModuleCardViewPanel } from "../../components/shared/module-card-view-panel";
 import { useLocalGridProfiles } from "../../components/shared/use-local-grid-profiles";
 import { MODULE_TITLES } from "../../constants/module-titles";
 import { useCancelSiMutation, useSiListQuery } from "./api/si.queries";
@@ -198,7 +201,7 @@ export function ShippingInstructionDashboardRoute() {
                     className="si-data-view"
                     listOptions={{
                       ...profileHandlers,
-                      showToolbar: { showTotalCount: false, fullScreen: false },
+                      showToolbar: { showTotalCount: false, fullScreen: true },
                       sideBar: false,
                       pagination: true,
                       paginationPageSize: 20,

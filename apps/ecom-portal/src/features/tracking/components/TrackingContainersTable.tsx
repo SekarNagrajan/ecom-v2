@@ -142,13 +142,16 @@ export function TrackingContainersTable({
             className="tracking-results-toolbar"
           >
             <Text className="tracking-results-title">
-              Transport Equipment & Containers
+              Transport Equipment & Containers{" "}
+              <span className="tracking-results-count">
+                {containers.length}
+              </span>
             </Text>
           </Flex>
         )}
         listOptions={{
           ...profileHandlers,
-          showToolbar: { showTotalCount: false, fullScreen: false },
+          showToolbar: { showTotalCount: false, fullScreen: true },
           sideBar: false,
           pagination: true,
           paginationPageSize: 20,

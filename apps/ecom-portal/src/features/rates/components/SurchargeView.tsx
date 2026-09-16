@@ -25,8 +25,12 @@ export function SurchargeView() {
   const [pol, setPol] = useState<string | undefined>();
   const [pod, setPod] = useState<string | undefined>();
 
-  const { data: surcharges = [], isLoading, isError, refetch } =
-    useSurchargesQuery({ pol, pod });
+  const {
+    data: surcharges = [],
+    isLoading,
+    isError,
+    refetch,
+  } = useSurchargesQuery({ pol, pod });
 
   const columnDefs: DataViewColumn<SurchargeDTO>[] = [
     buildActionsColumn<SurchargeDTO>({
@@ -201,7 +205,7 @@ export function SurchargeView() {
               columnDefs={columnDefs}
               listOptions={{
                 ...profileHandlers,
-                showToolbar: { showTotalCount: false, fullScreen: false },
+                showToolbar: { showTotalCount: false, fullScreen: true },
                 sideBar: false,
                 pagination: true,
                 paginationPageSize: 10,

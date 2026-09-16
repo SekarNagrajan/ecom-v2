@@ -25,7 +25,12 @@ export function TariffView() {
   const [loadPort, setLoadPort] = useState<string | undefined>();
   const [dischPort, setDischPort] = useState<string | undefined>();
 
-  const { data: tariffs = [], isLoading, isError, refetch } = useTariffsQuery({
+  const {
+    data: tariffs = [],
+    isLoading,
+    isError,
+    refetch,
+  } = useTariffsQuery({
     loadPort,
     dischPort,
   });
@@ -204,7 +209,7 @@ export function TariffView() {
               columnDefs={columnDefs}
               listOptions={{
                 ...profileHandlers,
-                showToolbar: { showTotalCount: false, fullScreen: false },
+                showToolbar: { showTotalCount: false, fullScreen: true },
                 sideBar: false,
                 pagination: true,
                 paginationPageSize: 10,

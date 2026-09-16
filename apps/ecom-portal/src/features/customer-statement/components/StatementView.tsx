@@ -65,12 +65,7 @@ export function StatementView({
     if (!isLoading && !isFetching) {
       onRecordCountChange(0);
     }
-  }, [
-    statement?.lines,
-    isLoading,
-    isFetching,
-    onRecordCountChange,
-  ]);
+  }, [statement?.lines, isLoading, isFetching, onRecordCountChange]);
 
   useEffect(() => {
     return () => {
@@ -182,7 +177,7 @@ export function StatementView({
                 className="stmt-data-view"
                 listOptions={{
                   ...profileHandlers,
-                  showToolbar: { showTotalCount: false, fullScreen: false },
+                  showToolbar: { showTotalCount: true, fullScreen: true },
                   sideBar: false,
                   pagination: true,
                   paginationPageSize: 20,

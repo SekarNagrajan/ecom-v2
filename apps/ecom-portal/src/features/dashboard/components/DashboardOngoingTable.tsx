@@ -313,7 +313,9 @@ export function DashboardOngoingTable({
               <Text strong>
                 Ongoing Transactions
                 {filterLabel !== "Total Shipments" ? ` — ${filterLabel}` : ""}
-                {` (${filteredShipments.length})`}
+                <span className="dashboard-ongoing-count">
+                  {filteredShipments.length}
+                </span>
               </Text>
             </Space>
           </Flex>

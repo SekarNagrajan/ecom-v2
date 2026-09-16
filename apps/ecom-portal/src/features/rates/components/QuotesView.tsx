@@ -205,7 +205,7 @@ export function QuotesView() {
               columnDefs={columnDefs}
               listOptions={{
                 ...profileHandlers,
-                showToolbar: { showTotalCount: false, fullScreen: false },
+                showToolbar: { showTotalCount: false, fullScreen: true },
                 sideBar: false,
                 pagination: true,
                 paginationPageSize: 10,

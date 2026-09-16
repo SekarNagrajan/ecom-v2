@@ -234,7 +234,6 @@ export function PaymentHistoryView() {
       <UmPanelHeader
         icon={NavPaymentHistoryIcon}
         title={MODULE_TITLES.paymentHistory}
-        recordCount={payments.length}
         description="Review online payments, invoice settlements, and download PDF receipts."
         extra={
           <RangePicker
@@ -249,7 +248,7 @@ export function PaymentHistoryView() {
         }
       />
 
-      <div className="um-summary-strip" aria-label="Payment summary">
+      {/* <div className="um-summary-strip" aria-label="Payment summary">
         <div className="um-summary-chip um-summary-chip--success">
           <span className="um-summary-chip__label">Settled</span>
           <span className="um-summary-chip__value">
@@ -268,7 +267,7 @@ export function PaymentHistoryView() {
           <span className="um-summary-chip__label">In range</span>
           <span className="um-summary-chip__value">{payments.length}</span>
         </div>
-      </div>
+      </div> */}
 
       <div className="um-grid-wrap um-payments-grid responsive-table-wrap custom-scroll">
         <DataView
@@ -282,7 +281,7 @@ export function PaymentHistoryView() {
           renderToolbar={() => null}
           listOptions={{
             ...profileHandlers,
-            showToolbar: { showTotalCount: false, fullScreen: false },
+            showToolbar: { showTotalCount: true, fullScreen: true },
             pagination: true,
             paginationPageSize: 10,
             pageSizeOptions: [10, 20, 50, 100],

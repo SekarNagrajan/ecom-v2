@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-15 11:15)
+// Modified by Sekar Nagarajan (2026-09-16 14:24)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -45,37 +45,6 @@ export function CargoLinesEditorStyles() {
       }
       .si-cargo-toolbar__actions {
         justify-content: flex-end;
-      }
-      /* Modified by Sekar Nagarajan (2026-08-28 18:02) — icon + label baseline align */
-      .si-cargo-view-opt {
-        display: inline-flex;
-        align-items: center;
-        gap: ${token.marginXXS}px;
-        line-height: 1;
-      }
-      .si-cargo-view-opt .app-icon {
-        display: block;
-        flex: none;
-      }
-      /* Modified by Sekar Nagarajan (2026-09-01 11:11) — default segment style (not primary) */
-      .si-cargo-view-segmented.ant-segmented .ant-segmented-item-selected {
-        background: ${token.colorBgElevated} !important;
-        color: ${token.colorText} !important;
-      }
-      .si-cargo-view-segmented.ant-segmented
-        .ant-segmented-item-selected
-        .ant-segmented-item-label {
-        color: ${token.colorText} !important;
-      }
-      .si-cargo-view-segmented.ant-segmented .ant-segmented-thumb {
-        background: ${token.colorBgElevated} !important;
-        box-shadow: ${token.boxShadowSecondary} !important;
-      }
-      .si-cargo-view-segmented.ant-segmented
-        .ant-segmented-item-selected
-        .si-cargo-view-opt
-        .app-icon {
-        color: ${token.colorText};
       }
       .si-cargo-toolbar__search {
         flex: 1 1 220px;

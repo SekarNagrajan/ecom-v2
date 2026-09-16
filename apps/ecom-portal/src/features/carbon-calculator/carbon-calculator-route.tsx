@@ -1,18 +1,20 @@
-// Modified by Sekar Nagarajan (2026-08-25 13:10)
-import { Card } from 'antd';
+// Modified by Sekar Nagarajan (2026-09-16 12:20)
+import { Card } from "antd";
 
-import { NavIcons } from '../../components/icons';
-import { FeaturePageShell } from '../../components/shared/feature-page-shell';
-import { ModuleScreenHeader } from '../../components/shared/module-screen-header';
-import { MODULE_TITLES } from '../../constants/module-titles';
-import { useCarbonComputeQuery } from './api/carbon.queries';
-import { CarbonCalculatorForm } from './components/CarbonCalculatorForm';
-import { CarbonResultPanel } from './components/CarbonResultPanel';
-import { CarbonCalculatorModuleStyles } from './components/carbon-calculator-module-styles';
-import { useCarbonCalculator } from './hooks/use-carbon-calculator';
+import { NavIcons } from "../../components/icons";
+import { FeaturePageShell } from "../../components/shared/feature-page-shell";
+import { ModuleEmptyState } from "../../components/shared/module-empty-state";
+import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
+import { MODULE_TITLES } from "../../constants/module-titles";
+import { useCarbonComputeQuery } from "./api/carbon.queries";
+import { CarbonCalculatorForm } from "./components/CarbonCalculatorForm";
+import { CarbonResultPanel } from "./components/CarbonResultPanel";
+import { CarbonCalculatorModuleStyles } from "./components/carbon-calculator-module-styles";
+import { useCarbonCalculator } from "./hooks/use-carbon-calculator";
 
 export function CarbonCalculatorRoute() {
-  const { form, activeInput, handleCalculate, handleReset } = useCarbonCalculator();
+  const { form, activeInput, handleCalculate, handleReset } =
+    useCarbonCalculator();
   const { isFetching, isLoading } = useCarbonComputeQuery(activeInput);
   const calculating = Boolean(activeInput) && (isLoading || isFetching);
 
@@ -42,7 +44,13 @@ export function CarbonCalculatorRoute() {
               <CarbonResultPanel input={activeInput} />
             ) : (
               <div className="co2-result-idle">
-                Choose origin, destination, and cargo details, then select Calculate.
+                <ModuleEmptyState
+                  artSize="sm"
+                  variant="blank"
+                  title="No estimate yet"
+                  message="Choose origin, destination, and cargo details, then select Calculate."
+                  className="co2-result-empty"
+                />
               </div>
             )}
           </div>

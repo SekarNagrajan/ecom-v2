@@ -1,6 +1,6 @@
 @layer theme, base, antd, components, utilities;
 
-@import 'tailwindcss';
+@import "tailwindcss";
 
 /* nx-tailwind-sources:start */
 /* nx-tailwind-sources:end */
@@ -96,4 +96,110 @@
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background-color: rgba(0, 0, 0, 0.25);
+}
+
+/*
+ * AG Grid DataView scrollbars — native viewports are hidden; the visible
+ * bars live on these fake scroll containers. Size is 8px; keep in sync with
+ * `scrollbarWidth: 8` in ag-grid-host so layout stays aligned.
+ */
+.ag-body-vertical-scroll-viewport,
+.ag-body-horizontal-scroll-viewport,
+.ag-horizontal-left-spacer,
+.ag-horizontal-right-spacer,
+.ag-virtual-list-viewport,
+.ag-side-buttons,
+.ag-filter-list,
+.ag-column-select-virtual-list-viewport,
+.ag-column-drop.ag-column-drop-horizontal {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.ag-body-vertical-scroll-viewport::-webkit-scrollbar,
+.ag-body-horizontal-scroll-viewport::-webkit-scrollbar,
+.ag-horizontal-left-spacer::-webkit-scrollbar,
+.ag-horizontal-right-spacer::-webkit-scrollbar,
+.ag-virtual-list-viewport::-webkit-scrollbar,
+.ag-side-buttons::-webkit-scrollbar,
+.ag-filter-list::-webkit-scrollbar,
+.ag-column-select-virtual-list-viewport::-webkit-scrollbar,
+.ag-column-drop.ag-column-drop-horizontal::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.ag-body-vertical-scroll-viewport::-webkit-scrollbar-track,
+.ag-body-horizontal-scroll-viewport::-webkit-scrollbar-track,
+.ag-horizontal-left-spacer::-webkit-scrollbar-track,
+.ag-horizontal-right-spacer::-webkit-scrollbar-track,
+.ag-virtual-list-viewport::-webkit-scrollbar-track,
+.ag-side-buttons::-webkit-scrollbar-track,
+.ag-filter-list::-webkit-scrollbar-track,
+.ag-column-select-virtual-list-viewport::-webkit-scrollbar-track,
+.ag-column-drop.ag-column-drop-horizontal::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ag-body-vertical-scroll-viewport::-webkit-scrollbar-thumb,
+.ag-body-horizontal-scroll-viewport::-webkit-scrollbar-thumb,
+.ag-horizontal-left-spacer::-webkit-scrollbar-thumb,
+.ag-horizontal-right-spacer::-webkit-scrollbar-thumb,
+.ag-virtual-list-viewport::-webkit-scrollbar-thumb,
+.ag-side-buttons::-webkit-scrollbar-thumb,
+.ag-filter-list::-webkit-scrollbar-thumb,
+.ag-column-select-virtual-list-viewport::-webkit-scrollbar-thumb,
+.ag-column-drop.ag-column-drop-horizontal::-webkit-scrollbar-thumb {
+  background-color: rgba(234, 234, 234, 0.35);
+  border-radius: 8px;
+}
+
+.ag-body-vertical-scroll-viewport::-webkit-scrollbar-thumb:hover,
+.ag-body-horizontal-scroll-viewport::-webkit-scrollbar-thumb:hover,
+.ag-horizontal-left-spacer::-webkit-scrollbar-thumb:hover,
+.ag-horizontal-right-spacer::-webkit-scrollbar-thumb:hover,
+.ag-virtual-list-viewport::-webkit-scrollbar-thumb:hover,
+.ag-side-buttons::-webkit-scrollbar-thumb:hover,
+.ag-filter-list::-webkit-scrollbar-thumb:hover,
+.ag-column-select-virtual-list-viewport::-webkit-scrollbar-thumb:hover,
+.ag-column-drop.ag-column-drop-horizontal::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(234, 234, 234, 0.35);
+}
+
+html.dark .ag-body-vertical-scroll-viewport,
+html.dark .ag-body-horizontal-scroll-viewport,
+html.dark .ag-horizontal-left-spacer,
+html.dark .ag-horizontal-right-spacer,
+html.dark .ag-virtual-list-viewport,
+html.dark .ag-side-buttons,
+html.dark .ag-filter-list,
+html.dark .ag-column-select-virtual-list-viewport,
+html.dark .ag-column-drop.ag-column-drop-horizontal {
+  scrollbar-color: rgba(255, 255, 255, 0.28) transparent;
+}
+
+html.dark .ag-body-vertical-scroll-viewport::-webkit-scrollbar-thumb,
+html.dark .ag-body-horizontal-scroll-viewport::-webkit-scrollbar-thumb,
+html.dark .ag-horizontal-left-spacer::-webkit-scrollbar-thumb,
+html.dark .ag-horizontal-right-spacer::-webkit-scrollbar-thumb,
+html.dark .ag-virtual-list-viewport::-webkit-scrollbar-thumb,
+html.dark .ag-side-buttons::-webkit-scrollbar-thumb,
+html.dark .ag-filter-list::-webkit-scrollbar-thumb,
+html.dark .ag-column-select-virtual-list-viewport::-webkit-scrollbar-thumb,
+html.dark .ag-column-drop.ag-column-drop-horizontal::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.28);
+}
+
+html.dark .ag-body-vertical-scroll-viewport::-webkit-scrollbar-thumb:hover,
+html.dark .ag-body-horizontal-scroll-viewport::-webkit-scrollbar-thumb:hover,
+html.dark .ag-horizontal-left-spacer::-webkit-scrollbar-thumb:hover,
+html.dark .ag-horizontal-right-spacer::-webkit-scrollbar-thumb:hover,
+html.dark .ag-virtual-list-viewport::-webkit-scrollbar-thumb:hover,
+html.dark .ag-side-buttons::-webkit-scrollbar-thumb:hover,
+html.dark .ag-filter-list::-webkit-scrollbar-thumb:hover,
+html.dark
+  .ag-column-select-virtual-list-viewport::-webkit-scrollbar-thumb:hover,
+html.dark
+  .ag-column-drop.ag-column-drop-horizontal::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.42);
 }

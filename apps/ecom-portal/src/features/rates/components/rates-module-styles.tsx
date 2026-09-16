@@ -58,22 +58,21 @@ export function RatesModuleStyles() {
       }
       .rates-search-fields-row {
         display: flex;
-        flex-wrap: nowrap;
+        flex-wrap: wrap;
         align-items: flex-end;
         gap: ${token.marginMD}px;
         width: 100%;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        padding-bottom: ${token.paddingXXS}px;
+        min-width: 0;
+        overflow-x: hidden;
       }
       .rates-search-field {
-        flex: 1 1 0;
-        min-width: 156px;
+        flex: 1 1 140px;
+        min-width: 0;
         max-width: 100%;
       }
       .rates-search-field--port {
-        flex: 1.2 1 0;
-        min-width: 180px;
+        flex: 1.2 1 160px;
+        min-width: 0;
       }
       .rates-search-field--swap {
         flex: 0 0 ${token.controlHeightLG}px;
@@ -85,16 +84,16 @@ export function RatesModuleStyles() {
       }
       .rates-search-field--eqp,
       .rates-search-field--commodity {
-        flex: 1 1 0;
-        min-width: 156px;
+        flex: 1 1 140px;
+        min-width: 0;
       }
       .rates-search-field--date {
-        flex: 0.95 1 0;
-        min-width: 144px;
+        flex: 1 1 132px;
+        min-width: 0;
       }
       .rates-search-field--actions {
         flex: 0 0 auto;
-        min-width: max-content;
+        min-width: 0;
         align-self: flex-end;
       }
       .rates-search-fields-row .ant-form-item {
@@ -797,7 +796,7 @@ export function RatesModuleStyles() {
         }
         .rates-search-fields-row {
           flex-wrap: wrap;
-          overflow-x: visible;
+          overflow-x: hidden;
         }
         .rates-search-field {
           flex: 1 1 calc(50% - ${token.marginSM}px);

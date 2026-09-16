@@ -236,7 +236,7 @@ export function PaymentHistoryView() {
         description="Review online payments, invoice settlements, and download PDF receipts."
         extra={
           <RangePicker
-            size="large"
+            size="medium"
             className="um-range-picker"
             allowClear
             value={dateRange}
@@ -280,14 +280,12 @@ export function PaymentHistoryView() {
           renderToolbar={() => null}
           listOptions={{
             showToolbar: false,
-            pagination: true,
-            paginationPageSize: 10,
-            pageSizeOptions: [10, 20, 50],
+
+            pagination: false,
             gridOptions: {
               domLayout: "autoHeight",
               suppressCellFocus: true,
-              pagination: true,
-              paginationPageSize: 10,
+              pagination: false,
             },
           }}
         />

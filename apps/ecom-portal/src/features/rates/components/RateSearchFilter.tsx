@@ -199,7 +199,7 @@ export function RateSearchFilter({
             </Form.Item>
           </div>
 
-          <div className="rates-search-fields-row custom-scroll">
+          <div className="rates-search-fields-row">
             <div className="rates-search-field rates-search-field--port">
               <Form.Item
                 name="polCode"

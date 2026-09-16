@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-15 12:23)
+// Modified by Sekar Nagarajan (2026-09-16 11:48)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -262,17 +262,44 @@ export function CarbonCalculatorModuleStyles() {
       .co2-legs-block__count {
         font-size: ${token.fontSizeSM}px;
         color: ${token.colorTextSecondary};
+        background-color: ${token.colorError};
+        color: ${token.colorWhite};
+        padding: ${token.paddingXS}px ${token.paddingSM}px;
+        border-radius: ${token.borderRadiusLG}px;
+       
+        font-weight: ${token.fontWeightStrong};
+        font-size: ${token.fontSizeSM}px;
+        line-height: ${token.lineHeight};
       }
       .co2-legs-table {
+        height: 320px;
+        min-height: 240px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
         border-radius: ${token.borderRadiusLG}px;
         border: 1px solid ${token.colorBorderSecondary};
-        overflow: auto;
-      }
-      .co2-legs-table .ant-table {
+        overflow: hidden;
         font-variant-numeric: tabular-nums;
       }
-      .co2-legs-table .ant-table-wrapper .ant-table {
-        border-radius: ${token.borderRadiusLG}px;
+      .co2-legs-table > div,
+      .co2-legs-table .co2-legs-data-view {
+        flex: 1;
+        min-height: 0;
+        height: 100%;
+        width: 100%;
+      }
+      .co2-legs-table .co2-legs-data-view.ant-flex,
+      .co2-legs-table > .ant-flex {
+        gap: 0 !important;
+      }
+      .co2-legs-table > .ant-flex > .ant-card:first-child,
+      .co2-legs-table .co2-legs-data-view > .ant-card:first-child {
+        display: none !important;
+      }
+      .co2-legs-data-view .sm-data-view-toolbar,
+      .co2-legs-data-view .data-view-toolbar {
+        display: none !important;
       }
       .co2-info-strip {
         display: flex;
@@ -289,7 +316,9 @@ export function CarbonCalculatorModuleStyles() {
       input:-webkit-autofill,
       input:-webkit-autofill:hover,
       input:-webkit-autofill:focus {
-        -webkit-box-shadow: 0 0 0 1000px ${token.colorBgContainer} inset !important;
+        -webkit-box-shadow: 0 0 0 1000px ${
+          token.colorBgContainer
+        } inset !important;
         transition: background-color 50000s ease-in-out 0s !important;
       }
     `}</style>

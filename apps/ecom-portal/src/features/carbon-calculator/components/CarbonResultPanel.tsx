@@ -1,6 +1,10 @@
-// Modified by Sekar Nagarajan (2026-09-15 12:23)
+// Modified by Sekar Nagarajan (2026-09-16 11:48)
 import { AppButton } from "@solverminds/shared-ui";
-import { Spin, Table, Typography } from "antd";
+import {
+  DataView,
+  type DataViewColumn,
+} from "@solverminds/shared-ui/data-view";
+import { Spin, Typography } from "antd";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
@@ -19,11 +23,22 @@ interface CarbonResultPanelProps {
   input: CarbonInput;
 }
 
+interface CarbonLegRow extends CarbonLegResult {
+  id: string;
+}
+
 function formatIntensity(value: number, digits = 2): string {
   return value.toLocaleString("en-US", {
     minimumFractionDigits: digits,
     maximumFractionDigits: digits,
   });
+}
+
+function toLegRows(legs: CarbonLegResult[]): CarbonLegRow[] {
+  return legs.map((leg, index) => ({
+    ...leg,
+    id: `${leg.mode}-${leg.from}-${leg.to}-${index}`,
+  }));
 }
 
 export function CarbonResultPanel({ input }: CarbonResultPanelProps) {
@@ -39,6 +54,57 @@ export function CarbonResultPanel({ input }: CarbonResultPanelProps) {
   const unit = input.unit;
   const spinning = isLoading || isFetching;
   const laneLabel = `${input.origin} → ${input.destination}`;
+  const legRows = result ? toLegRows(result.legs) : [];
+
+  const legColumnDefs: DataViewColumn<CarbonLegRow>[] = [
+    {
+      headerName: "Mode",
+      field: "mode",
+      minWidth: 120,
+      flex: 1,
+      valueFormatter: (params) =>
+        transportModeLabel(params.value as CarbonLegResult["mode"]),
+    },
+    {
+      headerName: "From",
+      field: "from",
+      minWidth: 100,
+      flex: 1,
+    },
+    {
+      headerName: "To",
+      field: "to",
+      minWidth: 100,
+      flex: 1,
+    },
+    {
+      headerName: "Distance (km)",
+      field: "distanceKm",
+      minWidth: 130,
+      flex: 1,
+      type: "rightAligned",
+      valueFormatter: (params) =>
+        typeof params.value === "number"
+          ? params.value.toLocaleString("en-US")
+          : "",
+    },
+    {
+      headerName: unit === "kg" ? "CO₂e (kg)" : "CO₂e (t)",
+      field: unit === "kg" ? "co2eKg" : "co2eTonnes",
+      minWidth: 130,
+      flex: 1,
+      type: "rightAligned",
+      valueFormatter: (params) => {
+        if (typeof params.value !== "number") return "";
+        return unit === "kg"
+          ? params.value.toLocaleString("en-US")
+          : params.value.toLocaleString("en-US", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            });
+      },
+    },
+  ];
 
   if (spinning && !result) {
     return (
@@ -132,64 +198,46 @@ export function CarbonResultPanel({ input }: CarbonResultPanelProps) {
 
             <CarbonResultCharts result={result} unit={unit} />
 
-            {result.legs.length > 0 ? (
+            {legRows.length > 0 ? (
               <div className="co2-legs-block">
                 <div className="co2-legs-block__header">
                   <Text strong className="co2-legs-title">
-                    Per-leg Breakdown
+                    Per-leg Breakdown{" "}
+                    <span className="co2-legs-block__count">
+                      {legRows.length}
+                    </span>
                   </Text>
-                  <span className="co2-legs-block__count">
-                    {result.legs.length} leg
-                    {result.legs.length === 1 ? "" : "s"}
-                  </span>
                 </div>
                 <div className="co2-legs-table responsive-table-wrap custom-scroll">
-                  <Table<CarbonLegResult>
-                    size="small"
-                    pagination={false}
-                    rowKey={(row) => `${row.mode}-${row.from}-${row.to}`}
-                    dataSource={result.legs}
-                    columns={[
-                      {
-                        title: "Mode",
-                        dataIndex: "mode",
-                        key: "mode",
-                        width: 120,
-                        render: (mode: CarbonLegResult["mode"]) =>
-                          transportModeLabel(mode),
+                  <DataView
+                    className="co2-legs-data-view"
+                    columnDefs={legColumnDefs}
+                    rowData={legRows}
+                    emptyState={
+                      <ModuleEmptyState
+                        variant="blank"
+                        title="No leg breakdown"
+                        message="Per-leg emissions will appear here when the estimate includes transport legs."
+                      />
+                    }
+                    allowedViewModes={["list"]}
+                    renderToolbar={() => null}
+                    listOptions={{
+                      showToolbar: {
+                        showTotalCount: true,
+                        fullScreen: false,
                       },
-                      {
-                        title: "From",
-                        dataIndex: "from",
-                        key: "from",
-                        width: 90,
+                      sideBar: false,
+                      pagination: true,
+                      paginationPageSize: 10,
+                      pageSizeOptions: [10, 20, 50],
+                      defaultColDef: { filter: true },
+                      gridOptions: {
+                        animateRows: true,
+                        getRowId: (params: { data: CarbonLegRow }) =>
+                          params.data.id,
                       },
-                      {
-                        title: "To",
-                        dataIndex: "to",
-                        key: "to",
-                        width: 90,
-                      },
-                      {
-                        title: "Distance (km)",
-                        dataIndex: "distanceKm",
-                        key: "distanceKm",
-                        align: "right",
-                        render: (v: number) => v.toLocaleString("en-US"),
-                      },
-                      {
-                        title: unit === "kg" ? "CO₂e (kg)" : "CO₂e (t)",
-                        key: "co2e",
-                        align: "right",
-                        render: (_: unknown, row: CarbonLegResult) =>
-                          unit === "kg"
-                            ? row.co2eKg.toLocaleString("en-US")
-                            : row.co2eTonnes.toLocaleString("en-US", {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2,
-                              }),
-                      },
-                    ]}
+                    }}
                   />
                 </div>
               </div>

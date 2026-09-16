@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 17:24)
+// Modified by Sekar Nagarajan (2026-09-16 11:43)
 import { theme } from "antd";
 
 export function VgmModuleStyles() {
@@ -144,25 +144,101 @@ export function VgmModuleStyles() {
         font-weight: ${token.fontWeightStrong};
         color: ${token.colorText};
       }
-      /* Modified by Sekar Nagarajan (2026-09-01 00:47) — meta details in card header (right side) */
-      .vgm-header-extra {
+      /* Booking / B/L Details — TrackingOverview-style meta + expand */
+      .vgm-reference-card > .ant-card-head {
         display: flex;
         align-items: center;
-        justify-content: flex-end;
-        flex-wrap: wrap;
-        gap: ${token.marginMD}px ${token.marginLG}px;
       }
-      .vgm-meta-row--header {
+      .vgm-reference-card__ref-tag {
+        margin-inline-end: 0;
+      }
+      .vgm-reference-overview__meta {
         margin-bottom: 0;
-        gap: ${token.marginSM}px ${token.marginLG}px;
       }
-      .vgm-meta-row--header .vgm-meta-item {
-        min-width: auto;
+      .vgm-reference-meta-item {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginSM}px;
+        min-width: 0;
       }
-      /* Modified by Sekar Nagarajan (2026-09-01 10:58) — schedule-card embed in collapsible card */
-      .vgm-reference-schedule-wrap {
-        margin: calc(-1 * ${token.paddingLG}px);
+      .vgm-reference-meta-item__label {
+        font-size: ${token.fontSizeSM}px;
+        display: block;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+      .vgm-reference-meta-item__value {
+        font-size: ${token.fontSizeLG}px;
+        display: block;
+        line-height: 1.3;
+        word-break: break-word;
+      }
+      .vgm-reference-meta-item__sub {
+        display: block;
+        font-size: ${token.fontSizeSM}px;
+        line-height: 1.35;
+      }
+      .vgm-reference-overview__toggle-col {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+      }
+      .vgm-reference-overview__toggle.ant-btn {
+        width: 36px;
+        height: 36px;
+        padding: 0;
+      }
+      .vgm-reference-overview__toggle--open {
+        background: ${token.colorPrimaryBg};
+        color: ${token.colorPrimary};
+      }
+      .vgm-reference-overview__toggle-chevron {
+        display: inline-flex;
+        transition: transform 0.35s ease;
+      }
+      .vgm-reference-overview__toggle--open
+        .vgm-reference-overview__toggle-chevron {
+        transform: rotate(180deg);
+      }
+      .vgm-reference-overview__route-panel {
+        display: grid;
+        grid-template-rows: 0fr;
+        opacity: 0;
+        transition:
+          grid-template-rows 0.35s ease,
+          opacity 0.28s ease;
+      }
+      .vgm-reference-overview__route-panel--open {
+        grid-template-rows: 1fr;
+        opacity: 1;
+      }
+      .vgm-reference-overview__route-panel-inner {
+        overflow: hidden;
+        min-height: 0;
+      }
+      .vgm-reference-overview__route {
+        margin-top: ${token.marginMD}px;
+        padding-top: ${token.marginMD}px;
+        border-top: 1px solid ${token.colorBorderSecondary};
+      }
+      .vgm-reference-overview__route-panel:not(
+          .vgm-reference-overview__route-panel--open
+        )
+        .vgm-reference-overview__route {
         margin-top: 0;
+        padding-top: 0;
+        border-top-color: transparent;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .vgm-reference-overview__route-panel,
+        .vgm-reference-overview__toggle-chevron {
+          transition: none;
+        }
+      }
+      @media (max-width: 991px) {
+        .vgm-reference-overview__toggle-col {
+          justify-content: flex-start;
+        }
       }
       /* Modified by Sekar Nagarajan (2026-09-01 00:56) — declaration fields 5-column grid */
       .vgm-declaration-grid {

@@ -195,7 +195,7 @@ export function ShippingInstructionWizardRoute() {
             <Result
               status="success"
               icon={
-                <AppIcon icon={Icons.checkCircle} size={16} tone="approve" />
+                <AppIcon icon={Icons.checkCircle} size={64} tone="approve" />
               }
               title="Shipping Instruction Submitted Successfully"
               subTitle={

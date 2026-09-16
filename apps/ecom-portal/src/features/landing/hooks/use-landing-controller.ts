@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-11 14:35)
+// Modified by Sekar Nagarajan (2026-09-16 16:32)
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "@tanstack/react-router";
@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 
 import { usePostLoginRedirectStore } from "../../auth/stores/use-post-login-redirect-store";
 import { landingTabToAppPath } from "../../auth/utils/public-menu-access";
+import { validateCaptcha } from "../api/landing.api";
 import { useTabConfig } from "../api/landing.queries";
 import {
   type LandingTab,
@@ -23,6 +24,8 @@ interface UseLandingControllerOptions {
   /** Called when an explicit login action is triggered (optional intended path). */
   onLoginRequired: (intendedPath?: string) => void;
 }
+
+const INCORRECT_CAPTCHA_MESSAGE = "Captcha Entered Incorrectly";
 
 export function useLandingController({
   onLoginRequired,
@@ -126,14 +129,26 @@ export function useLandingController({
       onLoginRequired(path);
       return;
     }
-    const values = trackingForm.getValues();
-    const trackNo = values.trackingNumber?.trim() || "SMLU8829102";
-    const params = new URLSearchParams({
-      trackingNumber: trackNo,
-      logintracno: trackNo,
-      tracktype: "logintracking",
-    });
-    navigateWithSearch("/app/tracking", params);
+
+    void trackingForm.handleSubmit(async (values) => {
+      const captchaCode = values.captcha.trim();
+      const captchaOk = await validateCaptcha(captchaCode);
+      if (!captchaOk) {
+        trackingForm.setError("captcha", {
+          type: "remote",
+          message: INCORRECT_CAPTCHA_MESSAGE,
+        });
+        return;
+      }
+
+      const trackNo = values.trackingNumber?.trim() || "SMLU8829102";
+      const params = new URLSearchParams({
+        trackingNumber: trackNo,
+        logintracno: trackNo,
+        tracktype: "logintracking",
+      });
+      navigateWithSearch("/app/tracking", params);
+    })();
   };
 
   const ratesForm = useForm<RatesSearchForm>({
@@ -156,24 +171,36 @@ export function useLandingController({
       onLoginRequired(path);
       return;
     }
-    const values = ratesForm.getValues();
-    const polCode = values.pol ? values.pol.split(" - ")[0].trim() : "USNYC";
-    const podCode = values.pod ? values.pod.split(" - ")[0].trim() : "SGSIN";
-    const eqp = values.equipmentType || "20' Dry Standard";
-    const shipmentDate =
-      values.shipmentDate || dayjs().add(7, "day").format("YYYY-MM-DD");
 
-    const params = new URLSearchParams({
-      pol: polCode,
-      pod: podCode,
-      ratepol: polCode,
-      ratepod: podCode,
-      eqpType: eqp,
-      rateseqp: eqp,
-      shipmentdate: shipmentDate,
-      loginratetype: "loginratetype",
-    });
-    navigateWithSearch("/app/rates", params);
+    void ratesForm.handleSubmit(async (values) => {
+      const captchaCode = values.captcha.trim();
+      const captchaOk = await validateCaptcha(captchaCode, "LoginRate");
+      if (!captchaOk) {
+        ratesForm.setError("captcha", {
+          type: "remote",
+          message: INCORRECT_CAPTCHA_MESSAGE,
+        });
+        return;
+      }
+
+      const polCode = values.pol ? values.pol.split(" - ")[0].trim() : "USNYC";
+      const podCode = values.pod ? values.pod.split(" - ")[0].trim() : "SGSIN";
+      const eqp = values.equipmentType || "20' Dry Standard";
+      const shipmentDate =
+        values.shipmentDate || dayjs().add(7, "day").format("YYYY-MM-DD");
+
+      const params = new URLSearchParams({
+        pol: polCode,
+        pod: podCode,
+        ratepol: polCode,
+        ratepod: podCode,
+        eqpType: eqp,
+        rateseqp: eqp,
+        shipmentdate: shipmentDate,
+        loginratetype: "loginratetype",
+      });
+      navigateWithSearch("/app/rates", params);
+    })();
   };
 
   return {

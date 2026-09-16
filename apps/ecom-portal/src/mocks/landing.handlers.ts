@@ -473,9 +473,12 @@ export const landingHandlers = [
     });
   }),
 
-  // Captcha validation
-  http.get("/api/captcha/validate", () => {
-    return HttpResponse.json({ valid: true });
+  // Captcha validation — mock image shows "A8K2F" (case-insensitive).
+  http.get("/api/captcha/validate", ({ request }) => {
+    const url = new URL(request.url);
+    const code = (url.searchParams.get("code") ?? "").trim().toUpperCase();
+    const valid = code === "A8K2F";
+    return HttpResponse.json({ valid });
   }),
 
   // Login — mock success/failure

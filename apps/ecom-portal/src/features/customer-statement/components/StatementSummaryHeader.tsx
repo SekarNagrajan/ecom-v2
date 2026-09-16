@@ -47,7 +47,7 @@ export function StatementSummaryHeader({
               Export PDF
             </AppButton>
             <AppButton
-              type="primary"
+              type="default"
               icon={<AppIcon icon={Icons.download} size={16} tone="download" />}
               loading={exportingXlsx}
               onClick={onExportXlsx}

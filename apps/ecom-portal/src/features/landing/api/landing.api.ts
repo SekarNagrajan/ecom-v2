@@ -1,3 +1,4 @@
+// Modified by Sekar Nagarajan (2026-09-16 16:32)
 import type { EquipmentType, PortOption, TabConfig } from '../types/landing.types';
 
 // ---------------------------------------------------------------------------
@@ -42,10 +43,32 @@ export async function fetchTabConfig(): Promise<TabConfig> {
 }
 
 /** Validate image captcha code — parity with JSP remote validation rule. */
-export async function validateCaptcha(captchaCode: string, type = ''): Promise<boolean> {
-  const params = new URLSearchParams({ code: captchaCode });
-  if (type) params.set('type', type);
+export async function validateCaptcha(
+  captchaCode: string,
+  type = "",
+): Promise<boolean> {
+  const trimmed = captchaCode.trim();
+  if (!trimmed) {
+    return false;
+  }
 
-  const res = await fetch(`/api/captcha/validate?${params.toString()}`);
-  return res.ok;
+  const params = new URLSearchParams({ code: trimmed });
+  if (type) params.set("type", type);
+
+  try {
+    const res = await fetch(`/api/captcha/validate?${params.toString()}`);
+    if (!res.ok) {
+      return false;
+    }
+    const json = (await res.json()) as { valid?: boolean; data?: boolean };
+    if (typeof json.valid === "boolean") {
+      return json.valid;
+    }
+    if (typeof json.data === "boolean") {
+      return json.data;
+    }
+    return true;
+  } catch {
+    return false;
+  }
 }

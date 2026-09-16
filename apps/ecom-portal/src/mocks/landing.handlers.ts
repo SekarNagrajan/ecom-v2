@@ -2,12 +2,12 @@
 import { PRECONFIGURED_TENANTS } from "@solverminds/auth";
 import { http, HttpResponse } from "msw";
 import type { LoginSuccessResponse } from "../features/auth/types/auth.types";
-import { registerMockToken } from "./auth-admin.mock-data";
 import type {
   EquipmentType,
   PortOption,
   TabConfig,
 } from "../features/landing/types/landing.types";
+import { registerMockToken } from "./auth-admin.mock-data";
 
 // ---------------------------------------------------------------------------
 // Mock data

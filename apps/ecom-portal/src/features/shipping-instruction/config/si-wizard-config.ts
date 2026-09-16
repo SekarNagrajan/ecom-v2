@@ -24,6 +24,8 @@ export interface SIWizardConfig {
   showEns: boolean;
   showFileUpload: boolean;
   showExcelImport: boolean;
+  // Modified by Sekar Nagarajan (2026-09-16 15:32) — legacy Enable_SI_Smart_Import
+  showSmartImport: boolean;
   enableNvocc: boolean;
   enableT2LFiling: boolean;
   enableTensDocumentation: boolean;
@@ -35,7 +37,7 @@ export interface SIWizardConfig {
   allowedFileExtensions: string[];
 }
 
-// Modified by Sekar Nagarajan (2026-08-28 15:10)
+// Modified by Sekar Nagarajan (2026-09-16 15:32)
 export const DEFAULT_SI_WIZARD_CONFIG: SIWizardConfig = {
   showRouting: false,
   showInsurance: false,
@@ -45,6 +47,7 @@ export const DEFAULT_SI_WIZARD_CONFIG: SIWizardConfig = {
   showEns: true,
   showFileUpload: true,
   showExcelImport: true,
+  showSmartImport: true,
   enableNvocc: true,
   enableT2LFiling: true,
   enableTensDocumentation: true,

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-15 11:10)
+// Modified by Sekar Nagarajan (2026-09-16 14:46)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -1538,14 +1538,53 @@ export function BlModuleStyles() {
         gap: ${token.marginXS}px;
         flex-wrap: wrap;
       }
-      /* Modified by Sekar Nagarajan (2026-09-01 17:50) — excel actions right, no card border */
+      /* Modified by Sekar Nagarajan (2026-09-16 15:12) — shared cargo Excel modal (aliases keep BL parity) */
+      .cargo-excel-import-modal.ant-modal,
+      .bl-cargo-import-modal.ant-modal {
+        width: 90vw !important;
+        max-width: 90vw;
+        top: 1vh;
+        padding-bottom: 0;
+      }
+      .cargo-excel-import-modal .ant-modal-content,
+      .bl-cargo-import-modal .ant-modal-content {
+        max-height: 84vh;
+        display: flex;
+        flex-direction: column;
+      }
+      .cargo-excel-import-modal__body,
+      .bl-cargo-import-modal__body {
+        padding: ${token.paddingMD}px !important;
+        flex: 1;
+        min-height: 0;
+        max-height: none;
+        overflow: auto;
+      }
+      .cargo-excel-import-modal__content,
+      .bl-cargo-import-modal__content {
+        display: flex;
+        flex-direction: column;
+        min-height: 60vh;
+        height: 70vh;
+      }
+      .cargo-excel-import-modal__content .booking-import-page,
+      .cargo-excel-import-modal__content > *,
+      .bl-cargo-import-modal__content .booking-import-page,
+      .bl-cargo-import-modal__content > * {
+        flex: 1;
+        min-height: 0;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-16 15:12) — excel actions right, no card border */
+      .cargo-excel-import-toolbar,
       .bl-excel-import-toolbar {
         border: none;
         margin-bottom: ${token.marginMD}px;
         margin-right: ${token.marginXXL}px;
         margin-top: ${token.marginXL}px;
       }
-      .bl-excel-import-toolbar .bl-excel-import {
+      .cargo-excel-import-toolbar .cargo-excel-import,
+      .bl-excel-import-toolbar .bl-excel-import,
+      .bl-excel-import-toolbar .cargo-excel-import {
         display: inline-flex;
         justify-content: flex-end;
       }

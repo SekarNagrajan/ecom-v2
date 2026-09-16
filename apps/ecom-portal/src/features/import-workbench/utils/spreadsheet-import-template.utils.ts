@@ -1,9 +1,9 @@
 import type {
-  SpreadsheetImportAdapter,
-  SpreadsheetImportFieldDefinition,
-} from '../types/import-workbench.types';
+    SpreadsheetImportAdapter,
+    SpreadsheetImportFieldDefinition,
+} from "../types/import-workbench.types";
 
-const HEADER_FONT_WEIGHT = 'bold' as const;
+const HEADER_FONT_WEIGHT = "bold" as const;
 
 /**
  * Approximate character-width that maps an AG Grid pixel width (used in the
@@ -17,20 +17,20 @@ const MIN_TEMPLATE_COLUMN_WIDTH = 12;
 const MAX_TEMPLATE_COLUMN_WIDTH = 60;
 const FALLBACK_TEMPLATE_COLUMN_WIDTH = 18;
 
-const FALLBACK_FILE_NAME_SLUG = 'import';
+const FALLBACK_FILE_NAME_SLUG = "import";
 
 function buildTemplateFileName(entityLabel: string): string {
   const slug =
     entityLabel
       .trim()
       .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-|-$/g, '') || FALLBACK_FILE_NAME_SLUG;
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "") || FALLBACK_FILE_NAME_SLUG;
   return `${slug}-template.xlsx`;
 }
 
 function pickTemplateExampleValue<TValues extends object>(
-  field: SpreadsheetImportFieldDefinition<TValues>
+  field: SpreadsheetImportFieldDefinition<TValues>,
 ): string {
   // Prefer the curated `defaultDisplayValue` for select-driven columns
   // (lookup defaults like "New" / "Email") so the example row imports
@@ -40,23 +40,23 @@ function pickTemplateExampleValue<TValues extends object>(
   }
 
   const firstExample = field.exampleValues?.[0];
-  if (typeof firstExample === 'string' && firstExample.length > 0) {
+  if (typeof firstExample === "string" && firstExample.length > 0) {
     return firstExample;
   }
 
-  return '';
+  return "";
 }
 
 function buildTemplateColumnWidth<TValues extends object>(
-  field: SpreadsheetImportFieldDefinition<TValues>
+  field: SpreadsheetImportFieldDefinition<TValues>,
 ): number {
-  if (typeof field.width !== 'number' || !Number.isFinite(field.width)) {
+  if (typeof field.width !== "number" || !Number.isFinite(field.width)) {
     return FALLBACK_TEMPLATE_COLUMN_WIDTH;
   }
   const characters = Math.round(field.width / TEMPLATE_PIXELS_PER_CHARACTER);
   return Math.min(
     MAX_TEMPLATE_COLUMN_WIDTH,
-    Math.max(MIN_TEMPLATE_COLUMN_WIDTH, characters)
+    Math.max(MIN_TEMPLATE_COLUMN_WIDTH, characters),
   );
 }
 
@@ -85,9 +85,9 @@ function buildTemplateColumnWidth<TValues extends object>(
  */
 export async function downloadSpreadsheetImportTemplate<
   TValues extends object,
-  TPayload
+  TPayload,
 >(adapter: SpreadsheetImportAdapter<TValues, TPayload>): Promise<void> {
-  const { default: writeXlsxFile } = await import('write-excel-file/browser');
+  const { default: writeXlsxFile } = await import("write-excel-file/browser");
 
   // Required columns first, then optional — matches empty-state Column Guide.
   const orderedFields = [

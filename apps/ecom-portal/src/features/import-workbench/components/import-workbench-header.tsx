@@ -74,9 +74,6 @@ export function ImportWorkbenchHeader<TValues extends object>({
           />
           <div className="import-wb__title-text">
             <Typography.Title level={4}>{title}</Typography.Title>
-            {subtitle ? (
-              <Typography.Text type="secondary">{subtitle}</Typography.Text>
-            ) : null}
           </div>
         </div>
 

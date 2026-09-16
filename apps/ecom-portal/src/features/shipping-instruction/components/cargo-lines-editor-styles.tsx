@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-16 14:24)
+// Modified by Sekar Nagarajan (2026-09-16 15:52)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -589,6 +589,155 @@ export function CargoLinesEditorStyles() {
         .si-cargo-ct-meta--kg { grid-column: 2; grid-row: 4; }
         .si-cargo-ct-meta--cbm { display: none; }
         .si-cargo-ct-status { grid-column: 2 / 4; grid-row: 5; justify-self: start; }
+      }
+
+      /* Shared SI / BL cargo Excel + Smart Import toolbar */
+      .cargo-excel-import-toolbar {
+        border: none;
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+        margin-bottom: ${token.marginMD}px;
+        margin-top: ${token.marginMD}px;
+        padding-inline: ${token.paddingMD}px;
+      }
+      .cargo-excel-import-toolbar .cargo-excel-import {
+        display: inline-flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-end;
+        gap: ${token.marginSM}px;
+      }
+      .cargo-excel-import-modal.ant-modal {
+        width: 90vw !important;
+        max-width: 90vw;
+        top: 1vh;
+        padding-bottom: 0;
+      }
+      .cargo-excel-import-modal .ant-modal-content {
+        max-height: 84vh;
+        display: flex;
+        flex-direction: column;
+      }
+      .cargo-excel-import-modal__body {
+        padding: ${token.paddingMD}px !important;
+        flex: 1;
+        min-height: 0;
+        max-height: none;
+        overflow: auto;
+      }
+      .cargo-excel-import-modal__content {
+        display: flex;
+        flex-direction: column;
+        min-height: 60vh;
+        height: 70vh;
+      }
+      .cargo-excel-import-modal__content .booking-import-page,
+      .cargo-excel-import-modal__content > * {
+        flex: 1;
+        min-height: 0;
+      }
+
+      /* Smart Import modal — autoHeight grid; scroll shell for many rows */
+      .cargo-smart-import-modal.ant-modal {
+        width: 92vw !important;
+        max-width: 92vw;
+        top: 1vh;
+        padding-bottom: 0;
+      }
+      .cargo-smart-import-modal .ant-modal-content {
+        max-height: 88vh;
+        display: flex;
+        flex-direction: column;
+      }
+      .cargo-smart-import-modal .ant-modal-header,
+      .cargo-smart-import-modal .ant-modal-footer {
+        flex-shrink: 0;
+      }
+      .cargo-smart-import-modal__body {
+        padding: ${token.paddingMD}px !important;
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        overflow: auto !important;
+        display: flex !important;
+        flex-direction: column;
+      }
+      .cargo-smart-import-modal__content {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginSM}px;
+        min-height: 0;
+      }
+      .cargo-smart-import-modal__banner {
+        flex-shrink: 0;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        background: ${token.colorFillAlter};
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG}px;
+      }
+      .cargo-smart-import-modal__hint {
+        margin-bottom: 0 !important;
+        font-size: ${token.fontSize}px;
+        color: ${token.colorTextSecondary};
+        line-height: ${token.lineHeight};
+      }
+      .cargo-smart-import-grid {
+        width: 100%;
+        max-height: 62vh;
+        overflow: auto;
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorBgContainer};
+      }
+      .cargo-smart-import-grid--empty {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 160px;
+        padding: ${token.paddingLG}px;
+      }
+      .cargo-smart-import-list {
+        width: 100%;
+        height: auto !important;
+      }
+      .cargo-smart-import-cell--readonly {
+        background: ${token.colorFillAlter} !important;
+        color: ${token.colorTextSecondary};
+      }
+      .cargo-smart-import-col--readonly {
+        background: ${token.colorFillAlter} !important;
+      }
+      .cargo-smart-import-cell--editable {
+        background: ${token.colorBgContainer};
+      }
+      .cargo-smart-import-cell--numeric {
+        text-align: right;
+      }
+      .cargo-smart-import-cell--row-no {
+        text-align: center;
+        font-variant-numeric: tabular-nums;
+        justify-content: center;
+      }
+      .cargo-smart-import-cell--soc {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .cargo-smart-import-cell--soc .ag-checkbox-input-wrapper,
+      .cargo-smart-import-cell--soc .ag-cell-wrapper {
+        justify-content: center;
+      }
+      .cargo-smart-import-modal__footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: ${token.marginMD}px;
+        width: 100%;
+        flex-wrap: wrap;
+      }
+      .cargo-smart-import-modal__footer-meta {
+        font-size: ${token.fontSizeSM}px;
       }
     `}</style>
   );

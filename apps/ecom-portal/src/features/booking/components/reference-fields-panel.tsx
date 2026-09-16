@@ -225,7 +225,7 @@ export function ReferenceFieldsPanel({
           {fields.length > 0 ? (
             <Segmented
               className="ref-fields-view-segmented"
-              size="large"
+              size="medium"
               value={viewMode}
               onChange={(value) => setViewMode(value as ReferenceViewMode)}
               options={[

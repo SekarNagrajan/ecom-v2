@@ -1,19 +1,22 @@
 // Created by Sekar Nagarajan (2026-09-08 15:44)
 import { DateTime } from "luxon";
 
-import type { DashboardCounts, DashboardShipment } from "../features/dashboard/api/dashboard.api";
+import type {
+    DashboardCounts,
+    DashboardShipment,
+} from "../features/dashboard/api/dashboard.api";
 import {
-  MOCK_DASHBOARD_COUNTS,
-  MOCK_DASHBOARD_SHIPMENTS,
-  MOCK_TOP_CONSIGNEES,
-  MOCK_TOP_LANES,
-  MOCK_VOLUME_KPIS,
-  MOCK_VOLUME_TREND,
+    MOCK_DASHBOARD_COUNTS,
+    MOCK_DASHBOARD_SHIPMENTS,
+    MOCK_TOP_CONSIGNEES,
+    MOCK_TOP_LANES,
+    MOCK_VOLUME_KPIS,
+    MOCK_VOLUME_TREND,
 } from "../features/dashboard/mocks/dashboard.mock";
 import type { DashboardReport } from "../features/dashboard/types/dashboard-export.types";
 import {
-  filterDashboardShipments,
-  getDashboardFilterLabel,
+    filterDashboardShipments,
+    getDashboardFilterLabel,
 } from "../features/dashboard/utils/filter-dashboard-shipments";
 
 export interface BuildMockDashboardReportArgs {

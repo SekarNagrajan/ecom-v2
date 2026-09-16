@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-10 22:00)
+// Modified by Sekar Nagarajan (2026-09-16 17:07)
 import { theme } from "antd";
 import { BE_COLOR_MAP } from "../../theme/utils/config-mapper";
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -529,6 +529,24 @@ export function DashboardModuleStyles() {
       .dashboard-amount-strong {
         font-weight: ${token.fontWeightStrong};
         font-size: ${token.fontSize}px;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-16 17:07) — volume stage segmented */
+      .dashboard-volume-panel .ant-card-head {
+        flex-wrap: wrap;
+        gap: ${token.marginXS}px;
+      }
+      .dashboard-volume-panel .ant-card-extra {
+        margin-inline-start: 0;
+      }
+      .dashboard-volume-stage-segmented {
+        max-width: 100%;
+      }
+      .dashboard-volume-stage-segmented .ant-segmented-group {
+        flex-wrap: wrap;
+      }
+      .dashboard-volume-stage-label {
+        font-weight: ${token.fontWeightStrong};
+        font-size: ${token.fontSizeSM}px;
       }
       .dashboard-volume-panel .ant-card-body {
         container-type: inline-size;

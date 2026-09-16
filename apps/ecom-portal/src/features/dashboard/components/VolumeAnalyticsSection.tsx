@@ -1,11 +1,20 @@
-// Modified by Sekar Nagarajan (2026-09-02 12:08)
-import { Card, Select, Tooltip, Typography } from "antd";
+// Modified by Sekar Nagarajan (2026-09-16 17:07)
+import { Card, Segmented, Select, Tooltip, Typography } from "antd";
 import * as echarts from "echarts";
 import { useLayoutEffect, useRef } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { useChartTokens } from "../../theme/utils/use-portal-chart-tokens";
-import type { VolumeKpi, VolumeTrendPoint } from "../mocks/dashboard.mock";
+import type {
+  VolumeAnalyticsStage,
+  VolumeKpi,
+  VolumeTrendPeriod,
+  VolumeTrendPoint,
+} from "../mocks/dashboard.mock";
+import {
+  VOLUME_ANALYTICS_STAGE_OPTIONS,
+  VOLUME_TREND_PERIOD_OPTIONS,
+} from "../mocks/dashboard.mock";
 
 const { Text, Title } = Typography;
 
@@ -71,8 +80,8 @@ function Sparkline({ data, color }: SparklineProps) {
 
 interface VolumeTrendChartProps {
   data: VolumeTrendPoint[];
-  period: string;
-  onPeriodChange: (v: string) => void;
+  period: VolumeTrendPeriod;
+  onPeriodChange: (v: VolumeTrendPeriod) => void;
 }
 
 function VolumeTrendChart({
@@ -236,12 +245,19 @@ function VolumeTrendChart({
     chart.resize();
   }, [data, chartTokens]);
 
+  const periodHint =
+    period === "Weekly"
+      ? "Weekly FEU volume over the selected stage"
+      : period === "Quarterly"
+        ? "Quarterly FEU volume over the selected stage"
+        : "Monthly FEU volume over the selected stage";
+
   return (
     <div ref={wrapRef} className="dashboard-trend-wrap">
       <div className="dashboard-trend-head">
         <Text strong className="dashboard-metric-tile__label">
           Volume Trend (FEUs){" "}
-          <Tooltip title="Monthly FEU Volume Over The Selected Period">
+          <Tooltip title={periodHint}>
             <AppIcon icon={Icons.info} size={12} />
           </Tooltip>
         </Text>
@@ -250,11 +266,7 @@ function VolumeTrendChart({
           value={period}
           onChange={onPeriodChange}
           className="dashboard-select-sm"
-          options={[
-            { value: "Monthly", label: "Monthly" },
-            { value: "Weekly", label: "Weekly" },
-            { value: "Quarterly", label: "Quarterly" },
-          ]}
+          options={[...VOLUME_TREND_PERIOD_OPTIONS]}
         />
       </div>
       <div ref={containerRef} className="dashboard-trend-chart" />
@@ -265,17 +277,24 @@ function VolumeTrendChart({
 interface VolumeAnalyticsProps {
   kpis: VolumeKpi[];
   trend: VolumeTrendPoint[];
-  trendPeriod: string;
-  onTrendPeriodChange: (v: string) => void;
+  trendPeriod: VolumeTrendPeriod;
+  volumeStage: VolumeAnalyticsStage;
+  onTrendPeriodChange: (v: VolumeTrendPeriod) => void;
+  onVolumeStageChange: (v: VolumeAnalyticsStage) => void;
 }
 
 export function VolumeAnalyticsSection({
   kpis,
   trend,
   trendPeriod,
+  volumeStage,
   onTrendPeriodChange,
+  onVolumeStageChange,
 }: VolumeAnalyticsProps) {
   const chartTokens = useChartTokens();
+  const stageLabel =
+    VOLUME_ANALYTICS_STAGE_OPTIONS.find((o) => o.value === volumeStage)
+      ?.label ?? "All Volume";
 
   return (
     <Card
@@ -283,7 +302,24 @@ export function VolumeAnalyticsSection({
       title={
         <Text strong className="dashboard-panel__title">
           Shipment Volume Analytics (FEUs){" "}
+          <Text type="secondary" className="dashboard-volume-stage-label">
+            · {stageLabel}
+          </Text>
         </Text>
+      }
+      extra={
+        <Segmented
+          size="middle"
+          className="dashboard-volume-stage-segmented"
+          value={volumeStage}
+          onChange={(value) =>
+            onVolumeStageChange(value as VolumeAnalyticsStage)
+          }
+          options={VOLUME_ANALYTICS_STAGE_OPTIONS.map((option) => ({
+            value: option.value,
+            label: option.label,
+          }))}
+        />
       }
     >
       <div className="dashboard-volume-analytics-grid">

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-08 12:27)
+// Modified by Sekar Nagarajan (2026-09-16 17:07)
 /**
  * Dashboard controller — enhancedDashboard.jsp parity.
  * Loads summary via dashboardApi (mock until REST facade exists).
@@ -13,6 +13,9 @@ import {
   dashboardApi,
   type DashboardShipment,
   type DashboardSummaryResponse,
+  type VolumeAnalyticsResponse,
+  type VolumeAnalyticsStage,
+  type VolumeTrendPeriod,
 } from "../api/dashboard.api";
 import type { PlanningDaySelection } from "../mocks/dashboard.mock";
 import { getDashboardFilterLabel } from "../utils/filter-dashboard-shipments";
@@ -42,7 +45,11 @@ export function useDashboardController() {
   const [isLoading, setIsLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState("all");
   const [filterLabel, setFilterLabel] = useState("Total Shipments");
-  const [trendPeriod, setTrendPeriod] = useState("Monthly");
+  const [trendPeriod, setTrendPeriod] = useState<VolumeTrendPeriod>("Monthly");
+  const [volumeStage, setVolumeStage] = useState<VolumeAnalyticsStage>("all");
+  const [volumeAnalytics, setVolumeAnalytics] =
+    useState<VolumeAnalyticsResponse | null>(null);
+  const [isVolumeLoading, setIsVolumeLoading] = useState(true);
   // Modified by Sekar Nagarajan (2026-09-01 12:45) — booking view drawer from ongoing table
   const [selectedBooking, setSelectedBooking] = useState<BookingListDTO | null>(
     null,
@@ -70,6 +77,35 @@ export function useDashboardController() {
   useEffect(() => {
     void loadSummary();
   }, []);
+
+  // External API sync when analytics stage or trend period changes.
+  useEffect(() => {
+    let cancelled = false;
+    setIsVolumeLoading(true);
+    void (async () => {
+      try {
+        const data = await dashboardApi.getVolumeAnalytics({
+          stage: volumeStage,
+          period: trendPeriod,
+        });
+        if (!cancelled) {
+          setVolumeAnalytics(data);
+        }
+      } catch {
+        if (!cancelled) {
+          toast.error("Failed to load volume analytics");
+          setVolumeAnalytics(null);
+        }
+      } finally {
+        if (!cancelled) {
+          setIsVolumeLoading(false);
+        }
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [volumeStage, trendPeriod]);
 
   // Modified by Sekar Nagarajan (2026-09-08 12:27) — all KPI clicks filter + scroll to ongoing
   const handleFilterChange = (filter: string, label: string) => {
@@ -167,13 +203,23 @@ export function useDashboardController() {
     navigate({ to: "/app/booking" as never });
   };
 
+  const handleTrendPeriodChange = (period: VolumeTrendPeriod) => {
+    setTrendPeriod(period);
+  };
+
+  const handleVolumeStageChange = (stage: VolumeAnalyticsStage) => {
+    setVolumeStage(stage);
+  };
+
   return {
     summary,
     isLoading,
     activeFilter,
     filterLabel,
     trendPeriod,
-    setTrendPeriod,
+    volumeStage,
+    volumeAnalytics,
+    isVolumeLoading,
     selectedBooking,
     selectedBl,
     planningDay,
@@ -190,5 +236,7 @@ export function useDashboardController() {
     handleCreateSi,
     handleCreateBooking,
     handleViewAllPlanning,
+    handleTrendPeriodChange,
+    handleVolumeStageChange,
   };
 }

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-08 16:10)
+// Modified by Sekar Nagarajan (2026-09-16 17:07)
 /**
  * Enhanced Dashboard — JSP parity with enhancedDashboard.jsp:
  * KPI filter cards → Upcoming Shipment Planning → Ongoing Transactions, plus analytics sections.
@@ -25,8 +25,6 @@ import {
   MOCK_PLANNING_KPIS,
   MOCK_TOP_CONSIGNEES,
   MOCK_TOP_LANES,
-  MOCK_VOLUME_KPIS,
-  MOCK_VOLUME_TREND,
 } from "../mocks/dashboard.mock";
 import { filterDashboardShipments } from "../utils/filter-dashboard-shipments";
 import { DashboardExportButton } from "./dashboard-export-button";
@@ -125,12 +123,14 @@ export function EnhancedDashboardView() {
           />
         </Spin>
 
-        <Spin spinning={controller.isLoading}>
+        <Spin spinning={controller.isVolumeLoading}>
           <VolumeAnalyticsSection
-            kpis={MOCK_VOLUME_KPIS}
-            trend={MOCK_VOLUME_TREND}
+            kpis={controller.volumeAnalytics?.kpis ?? []}
+            trend={controller.volumeAnalytics?.trend ?? []}
             trendPeriod={controller.trendPeriod}
-            onTrendPeriodChange={controller.setTrendPeriod}
+            volumeStage={controller.volumeStage}
+            onTrendPeriodChange={controller.handleTrendPeriodChange}
+            onVolumeStageChange={controller.handleVolumeStageChange}
           />
         </Spin>
 

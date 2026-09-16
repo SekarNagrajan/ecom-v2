@@ -1,29 +1,44 @@
 // Dashboard API types and service
 // Business parity with: enhancedDashboard.jsp, dashboard.jsp, DashBoardCharts.jsp
+// Modified by Sekar Nagarajan (2026-09-16 17:07)
 
 import type {
+  BookingStatusChartItem,
   DashboardCounts,
   DashboardShipment,
-  BookingStatusChartItem,
-  TopDestinationItem,
   PortPairChartItem,
+  TopDestinationItem,
   UnclearedCargoItem,
-} from '../mocks/dashboard.mock';
+  VolumeAnalyticsResponse,
+  VolumeAnalyticsStage,
+  VolumeTrendPeriod,
+} from "../mocks/dashboard.mock";
 import {
+  getMockVolumeAnalytics,
+  MOCK_BL_CHART_DATA,
+  MOCK_BOOKING_CHART_DATA,
   MOCK_DASHBOARD_COUNTS,
   MOCK_DASHBOARD_SHIPMENTS,
-  MOCK_BOOKING_CHART_DATA,
-  MOCK_BL_CHART_DATA,
+  MOCK_OUTSTANDING_BALANCE,
+  MOCK_PORT_PAIRS,
   MOCK_SI_CHART_DATA,
   MOCK_TOP_DESTINATIONS,
-  MOCK_PORT_PAIRS,
   MOCK_UNCLEARED_CARGO,
   MOCK_UNCLEARED_DELIVERED,
   MOCK_UNCLEARED_REMAINING,
-  MOCK_OUTSTANDING_BALANCE,
-} from '../mocks/dashboard.mock';
+} from "../mocks/dashboard.mock";
 
-export type { DashboardCounts, DashboardShipment, BookingStatusChartItem, TopDestinationItem, PortPairChartItem, UnclearedCargoItem };
+export type {
+  BookingStatusChartItem,
+  DashboardCounts,
+  DashboardShipment,
+  PortPairChartItem,
+  TopDestinationItem,
+  UnclearedCargoItem,
+  VolumeAnalyticsResponse,
+  VolumeAnalyticsStage,
+  VolumeTrendPeriod,
+};
 
 export interface DashboardSummaryResponse {
   counts: DashboardCounts;
@@ -37,6 +52,11 @@ export interface DashboardSummaryResponse {
   unclearedDelivered: number;
   unclearedRemaining: number;
   outstandingBalance: number;
+}
+
+export interface VolumeAnalyticsQuery {
+  stage?: VolumeAnalyticsStage;
+  period?: VolumeTrendPeriod;
 }
 
 const simulateDelay = (ms = 400) =>
@@ -58,5 +78,13 @@ export const dashboardApi = {
       unclearedRemaining: MOCK_UNCLEARED_REMAINING,
       outstandingBalance: MOCK_OUTSTANDING_BALANCE,
     };
+  },
+
+  /** Volume KPIs + trend for a lifecycle stage and trend granularity. */
+  async getVolumeAnalytics(
+    query: VolumeAnalyticsQuery = {},
+  ): Promise<VolumeAnalyticsResponse> {
+    await simulateDelay(220);
+    return getMockVolumeAnalytics(query.stage ?? "all", query.period ?? "Monthly");
   },
 };

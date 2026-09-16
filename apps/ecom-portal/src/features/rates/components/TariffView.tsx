@@ -1,21 +1,27 @@
 // Modified by Sekar Nagarajan (2026-08-25 19:25)
-import { AppButton } from "@solverminds/shared-ui";
 import { DataView, DataViewColumn } from "@solverminds/shared-ui/data-view";
-import { Card, Flex, Select, Space, Spin, Tag, Tooltip, Typography } from "antd";
+import { Card, Flex, Select, Space, Spin, Tag, Typography } from "antd";
 import { useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { buildActionsColumn } from "../../../components/shared/build-actions-column";
+import {
+  ListActionButton,
+  ListActionsRow,
+} from "../../../components/shared/list-action-button";
 import {
   ModuleEmptyState,
   buildClearFiltersAction,
   buildRetryAction,
 } from "../../../components/shared/module-empty-state";
+import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
 import { useTariffsQuery } from "../api/rates.queries";
 import type { TariffDTO } from "../types/rates.types";
 
 const { Text } = Typography;
 
 export function TariffView() {
+  const { profileHandlers } = useLocalGridProfiles("rates-tariff");
   const [loadPort, setLoadPort] = useState<string | undefined>();
   const [dischPort, setDischPort] = useState<string | undefined>();
 
@@ -25,28 +31,25 @@ export function TariffView() {
   });
 
   const columnDefs: DataViewColumn<TariffDTO>[] = [
-    {
-      headerName: "Actions",
+    buildActionsColumn<TariffDTO>({
       field: "id",
-      sortable: false,
       width: 110,
-      pinned: "left",
       cellRenderer: (params: { data?: TariffDTO }) => {
         const record = params.data;
         if (!record) return null;
         return (
-          <Tooltip title="View Published Tariff Terms">
-            <AppButton
-              type="text"
-              size="small"
+          <ListActionsRow>
+            <ListActionButton
+              title="View Published Tariff Terms"
               icon={
                 <AppIcon icon={Icons.eye} size={16} gridAction tone="view" />
               }
+              onClick={() => undefined}
             />
-          </Tooltip>
+          </ListActionsRow>
         );
       },
-    },
+    }),
     {
       headerName: "Port of Load",
       field: "loadPort",
@@ -200,12 +203,16 @@ export function TariffView() {
               emptyState={emptyState}
               columnDefs={columnDefs}
               listOptions={{
-                gridOptions: {
-                  pagination: true,
-                  paginationPageSize: 10,
-                },
+                ...profileHandlers,
+                showToolbar: { showTotalCount: false, fullScreen: false },
+                sideBar: false,
+                pagination: true,
+                paginationPageSize: 10,
+                pageSizeOptions: [10, 20, 50, 100],
+                defaultColDef: { filter: true },
               }}
               className="rates-grid"
+              renderToolbar={() => null}
             />
           </div>
         </Card>

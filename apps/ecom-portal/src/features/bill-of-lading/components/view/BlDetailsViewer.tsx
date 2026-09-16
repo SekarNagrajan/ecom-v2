@@ -454,8 +454,10 @@ export function BlDetailsViewer({
               rowData={charges}
               columnDefs={CHARGE_COL_DEFS}
               showToolbar={false}
+              sideBar={false}
               pagination
               paginationPageSize={10}
+              pageSizeOptions={[10, 20, 50]}
               gridOptions={{ animateRows: true }}
             />
           </div>

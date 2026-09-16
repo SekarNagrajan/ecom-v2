@@ -76,6 +76,10 @@ export function ImportReviewGridSection<TValues extends object>({
               columnDefs={columnDefs}
               style={{ height: "100%" }}
               showToolbar={false}
+              sideBar={false}
+              pagination
+              paginationPageSize={50}
+              pageSizeOptions={[20, 50, 100]}
               editable
               cellSelection
               onGridReady={onGridReady}

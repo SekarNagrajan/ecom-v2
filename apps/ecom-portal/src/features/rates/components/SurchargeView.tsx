@@ -1,21 +1,27 @@
 // Modified by Sekar Nagarajan (2026-08-25 19:25)
-import { AppButton } from "@solverminds/shared-ui";
 import { DataView, DataViewColumn } from "@solverminds/shared-ui/data-view";
-import { Card, Flex, Select, Space, Spin, Tag, Tooltip, Typography } from "antd";
+import { Card, Flex, Select, Space, Spin, Tag, Typography } from "antd";
 import { useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { buildActionsColumn } from "../../../components/shared/build-actions-column";
+import {
+  ListActionButton,
+  ListActionsRow,
+} from "../../../components/shared/list-action-button";
 import {
   ModuleEmptyState,
   buildClearFiltersAction,
   buildRetryAction,
 } from "../../../components/shared/module-empty-state";
+import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
 import { useSurchargesQuery } from "../api/rates.queries";
 import type { SurchargeDTO } from "../types/rates.types";
 
 const { Text } = Typography;
 
 export function SurchargeView() {
+  const { profileHandlers } = useLocalGridProfiles("rates-surcharge");
   const [pol, setPol] = useState<string | undefined>();
   const [pod, setPod] = useState<string | undefined>();
 
@@ -23,20 +29,16 @@ export function SurchargeView() {
     useSurchargesQuery({ pol, pod });
 
   const columnDefs: DataViewColumn<SurchargeDTO>[] = [
-    {
-      headerName: "Actions",
+    buildActionsColumn<SurchargeDTO>({
       field: "id",
-      sortable: false,
       width: 110,
-      pinned: "left",
       cellRenderer: (params: { data?: SurchargeDTO }) => {
         const record = params.data;
         if (!record) return null;
         return (
-          <Tooltip title="View Surcharge History">
-            <AppButton
-              type="text"
-              size="small"
+          <ListActionsRow>
+            <ListActionButton
+              title="View Surcharge History"
               icon={
                 <AppIcon
                   icon={Icons.history}
@@ -45,11 +47,12 @@ export function SurchargeView() {
                   tone="history"
                 />
               }
+              onClick={() => undefined}
             />
-          </Tooltip>
+          </ListActionsRow>
         );
       },
-    },
+    }),
     {
       headerName: "Charge Name",
       field: "chargeName",
@@ -197,12 +200,16 @@ export function SurchargeView() {
               emptyState={emptyState}
               columnDefs={columnDefs}
               listOptions={{
-                gridOptions: {
-                  pagination: true,
-                  paginationPageSize: 10,
-                },
+                ...profileHandlers,
+                showToolbar: { showTotalCount: false, fullScreen: false },
+                sideBar: false,
+                pagination: true,
+                paginationPageSize: 10,
+                pageSizeOptions: [10, 20, 50, 100],
+                defaultColDef: { filter: true },
               }}
               className="rates-grid"
+              renderToolbar={() => null}
             />
           </div>
         </Card>

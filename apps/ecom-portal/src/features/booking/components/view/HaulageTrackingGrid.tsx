@@ -111,8 +111,10 @@ export function HaulageTrackingGrid({ bookingId }: HaulageTrackingGridProps) {
               />
             }
             showToolbar={false}
+            sideBar={false}
             pagination
             paginationPageSize={10}
+            pageSizeOptions={[10, 20, 50]}
             gridOptions={{
               animateRows: true,
               getRowId: (params) => params.data.id,

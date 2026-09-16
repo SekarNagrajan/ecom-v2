@@ -21,6 +21,7 @@ import {
   buildRetryAction,
 } from "../../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
+import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
 import { MODULE_TITLES } from "../../../constants/module-titles";
 import { useCRODownloadMutation, useCROSummaryQuery } from "../api/cro.queries";
 import type {
@@ -43,6 +44,7 @@ const initialFilters: CROListFilters = {
 };
 
 export function CROListing() {
+  const { profileHandlers } = useLocalGridProfiles("container-release-order");
   const [filters, setFilters] = useState<CROListFilters>(initialFilters);
   const [selectedCroNo, setSelectedCroNo] = useState<string | null>(null);
 
@@ -211,7 +213,13 @@ export function CROListing() {
             renderToolbar={() => null}
             className="cro-data-view"
             listOptions={{
-              showToolbar: false,
+              ...profileHandlers,
+              showToolbar: { showTotalCount: false, fullScreen: false },
+              sideBar: false,
+              pagination: true,
+              paginationPageSize: 20,
+              pageSizeOptions: [10, 20, 50, 100],
+              defaultColDef: { filter: true },
               gridOptions: {
                 getRowId: (params: { data: CROListDTO }) => params.data.croNo,
                 onRowDoubleClicked: handleRowDoubleClick,

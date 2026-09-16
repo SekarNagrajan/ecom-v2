@@ -279,10 +279,9 @@ export function RatesModuleStyles() {
       }
       .rates-list-grid {
         width: 100%;
-        flex: 1 1 auto;
-        max-height: 500px;
-        height: 500px;
-        min-height: 0;
+        flex: 1;
+        min-height: calc(100vh - 360px);
+        height: 100%;
         display: flex;
         flex-direction: column;
         overflow: hidden;
@@ -296,9 +295,8 @@ export function RatesModuleStyles() {
         display: flex;
         flex-direction: column;
         flex: 1;
-        min-height: 0;
+        min-height: calc(100vh - 360px);
         height: 100%;
-        max-height: 100%;
       }
       .rates-list-grid .rates-data-view .ant-card {
         flex: 1;
@@ -317,8 +315,7 @@ export function RatesModuleStyles() {
       .rates-list-grid .ag-theme-alpine,
       .rates-list-grid .ag-root-wrapper {
         height: 100% !important;
-        max-height: 100%;
-        min-height: 0;
+        min-height: calc(100vh - 360px);
       }
       .rates-list-grid .ag-row.rates-list-row--recommended,
       .rates-list-grid .ag-row.rates-list-row--recommended .ag-cell {
@@ -625,8 +622,18 @@ export function RatesModuleStyles() {
         max-width: 100%;
       }
       .rates-grid {
-        height: 480px;
-        min-height: 320px;
+        min-height: calc(100vh - 480px);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+      .rates-grid > .ant-flex > .ant-card:first-child {
+        display: none !important;
+      }
+      .rates-grid .ag-theme-alpine,
+      .rates-grid .ag-root-wrapper {
+        height: 100% !important;
+        min-height: 360px;
       }
       .rates-cell-stack {
         display: flex;

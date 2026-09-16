@@ -12,6 +12,7 @@ import { buildActionsColumn } from "../../../components/shared/build-actions-col
 import { ModuleCardViewPanel } from "../../../components/shared/module-card-view-panel";
 import { useModuleCardPagination } from "../../../components/shared/hooks/use-module-card-pagination";
 import type { ModuleListViewMode } from "../../../components/shared/hooks/use-module-view-mode";
+import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
 import type { BLListDTO, BLPrintType } from "../types/bl.types";
 import { getBLListStatusColor } from "../utils/bl-status";
 import { BillOfLadingRowActions } from "./BillOfLadingRowActions";
@@ -58,6 +59,7 @@ export function BillOfLadingListGrid({
   enableTermsOnConfirmedEdit = true,
   emptyState,
 }: BillOfLadingListGridProps) {
+  const { profileHandlers } = useLocalGridProfiles("bill-of-lading");
   const {
     page: cardPage,
     pageSize: cardPageSize,
@@ -215,8 +217,13 @@ export function BillOfLadingListGrid({
           renderToolbar={() => null}
           className="bl-data-view"
           listOptions={{
-            showToolbar: false,
+            ...profileHandlers,
+            showToolbar: { showTotalCount: false, fullScreen: false },
             sideBar: false,
+            pagination: true,
+            paginationPageSize: 20,
+            pageSizeOptions: [10, 20, 50, 100],
+            defaultColDef: { filter: true },
             gridOptions: {
               getRowId: (params) => params.data.blNo,
               onRowDoubleClicked: onRowDoubleClicked,

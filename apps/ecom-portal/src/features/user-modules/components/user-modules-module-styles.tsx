@@ -42,6 +42,8 @@ export function UserModulesModuleStyles() {
         gap: ${token.marginLG}px;
         width: 100%;
         min-width: 0;
+        flex: 1;
+        min-height: 0;
       }
       .um-page-layout > .module-screen-header {
         margin-bottom: 0;
@@ -189,12 +191,29 @@ export function UserModulesModuleStyles() {
         width: 100%;
         min-width: 0;
         min-height: 0;
-        overflow-x: auto;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
       }
-      /* Modified by Sekar Nagarajan (2026-09-08 11:08) — ~10-row viewport; rest via pagination */
+      /* Flex-fill grid + ListView pagination (CRM parity) */
       .um-grid-wrap .um-data-view {
         width: 100%;
+        flex: 1;
         min-height: 0;
+        display: flex;
+        flex-direction: column;
+      }
+      .um-payments-grid .um-data-view,
+      .um-quotes-grid .um-data-view {
+        min-height: calc(100vh - 360px);
+      }
+      .um-payments-grid .ag-theme-alpine,
+      .um-payments-grid .ag-root-wrapper,
+      .um-quotes-grid .ag-theme-alpine,
+      .um-quotes-grid .ag-root-wrapper {
+        height: 100% !important;
+        min-height: 360px;
       }
       .um-payments-grid .um-data-view .ag-paging-panel {
         border-top: 1px solid ${token.colorBorderSecondary};

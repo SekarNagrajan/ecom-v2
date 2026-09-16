@@ -13,6 +13,7 @@ import {
   buildRetryAction,
 } from '../../components/shared/module-empty-state';
 import { ModuleScreenHeader } from '../../components/shared/module-screen-header';
+import { useLocalGridProfiles } from '../../components/shared/use-local-grid-profiles';
 import { useMCNListQuery, useMCNPrintMutation } from './api/bl.queries';
 import { BlModuleStyles } from './components/bl-module-styles';
 import { ManifestDrawer } from './components/ManifestDrawer';
@@ -22,6 +23,7 @@ const { Text } = Typography;
 
 export function BillOfLadingMcnListRoute() {
   const navigate = useNavigate();
+  const { profileHandlers } = useLocalGridProfiles("bl-mcn");
   const { data: rows = [], isLoading, isError, refetch } = useMCNListQuery();
   const { mutate: printMcn } = useMCNPrintMutation();
   const [manifestMcnId, setManifestMcnId] = useState<string | null>(null);
@@ -95,6 +97,7 @@ export function BillOfLadingMcnListRoute() {
             <ModuleScreenHeader
               icon={NavIcons.billOfLading}
               title="Manifest (MCN)"
+              recordCount={rows.length}
               subtitle="Manifest cargo notification — view and print from the side drawer."
               marginBottom={0}
               extra={<AppButton onClick={() => navigate({ to: '/app/bl' })}>Back to B/L</AppButton>}
@@ -115,7 +118,15 @@ export function BillOfLadingMcnListRoute() {
                 allowedViewModes={['list']}
                 defaultViewMode="list"
                 renderToolbar={() => null}
-                listOptions={{ showToolbar: false, sideBar: false }}
+                listOptions={{
+                  ...profileHandlers,
+                  showToolbar: { showTotalCount: false, fullScreen: false },
+                  sideBar: false,
+                  pagination: true,
+                  paginationPageSize: 20,
+                  pageSizeOptions: [10, 20, 50, 100],
+                  defaultColDef: { filter: true },
+                }}
               />
             )}
           </div>

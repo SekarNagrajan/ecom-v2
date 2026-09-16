@@ -877,9 +877,14 @@ export function TrackingModuleStyles() {
         border-radius: ${token.borderRadiusLG}px;
         padding: ${token.paddingMD}px ${token.paddingLG}px;
         border: 1px solid ${token.colorBorderSecondary};
+        display: flex;
+        flex-direction: column;
+        min-height: calc(100vh - 420px);
+        overflow: hidden;
       }
       .tracking-results-toolbar {
         width: 100%;
+        flex-shrink: 0;
       }
       .tracking-results-title {
         font-size: ${token.fontSizeLG}px;
@@ -890,7 +895,15 @@ export function TrackingModuleStyles() {
         box-shadow: none;
       }
       .tracking-grid {
-        min-height: 320px;
+        flex: 1;
+        min-height: 360px;
+        display: flex;
+        flex-direction: column;
+      }
+      .tracking-grid .ag-theme-alpine,
+      .tracking-grid .ag-root-wrapper {
+        height: 100% !important;
+        min-height: 360px;
       }
       .tracking-cell-stack {
         display: flex;

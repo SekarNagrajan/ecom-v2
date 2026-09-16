@@ -299,10 +299,9 @@ export function ScheduleModuleStyles() {
       }
       .schedule-list-grid {
         width: 100%;
-        flex: 1 1 auto;
-        max-height: 500px;
-        height: 500px;
-        min-height: 0;
+        flex: 1;
+        min-height: calc(100vh - 360px);
+        height: 100%;
         display: flex;
         flex-direction: column;
         overflow: hidden;
@@ -316,9 +315,8 @@ export function ScheduleModuleStyles() {
         display: flex;
         flex-direction: column;
         flex: 1;
-        min-height: 0;
+        min-height: calc(100vh - 360px);
         height: 100%;
-        max-height: 100%;
       }
       .schedule-list-grid .schedule-data-view .ant-card {
         flex: 1;
@@ -337,8 +335,7 @@ export function ScheduleModuleStyles() {
       .schedule-list-grid .ag-theme-alpine,
       .schedule-list-grid .ag-root-wrapper {
         height: 100% !important;
-        max-height: 100%;
-        min-height: 0;
+        min-height: calc(100vh - 360px);
       }
       .schedule-card-view-panel.module-card-view-panel--active {
         margin-bottom: ${token.marginMD}px;

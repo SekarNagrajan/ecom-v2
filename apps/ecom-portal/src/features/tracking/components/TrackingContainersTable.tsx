@@ -1,10 +1,15 @@
-// Modified by Sekar Nagarajan (2026-09-01 14:38)
-import { AppButton } from "@solverminds/shared-ui";
+// Modified by Sekar Nagarajan (2026-09-16 11:25)
 import { DataView, DataViewColumn } from "@solverminds/shared-ui/data-view";
-import { Badge, Flex, Space, Tag, Tooltip, Typography } from "antd";
+import { Flex, Tag, Typography } from "antd";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { buildActionsColumn } from "../../../components/shared/build-actions-column";
+import {
+  ListActionButton,
+  ListActionsRow,
+} from "../../../components/shared/list-action-button";
 import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
+import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
 import type { ContainerEquipment } from "../types/tracking.types";
 
 const { Text } = Typography;
@@ -20,47 +25,39 @@ export function TrackingContainersTable({
   onViewMovements,
   onViewLiveMap,
 }: TrackingContainersTableProps) {
+  const { profileHandlers } = useLocalGridProfiles("tracking");
   const columnDefs: DataViewColumn<ContainerEquipment>[] = [
-    {
-      headerName: "Actions",
+    buildActionsColumn<ContainerEquipment>({
       field: "containerNo",
-      sortable: false,
       width: 140,
-      pinned: "left",
       cellRenderer: (params: { data?: ContainerEquipment }) => {
         const record = params.data;
         if (!record) return null;
         return (
-          <Space size={6}>
-            <Tooltip title="View Container Event Log & Movements">
-              <AppButton
-                type="text"
-                size="small"
-                icon={
-                  <AppIcon icon={Icons.eye} size={16} gridAction tone="view" />
-                }
-                onClick={() => onViewMovements(record)}
-              />
-            </Tooltip>
-            <Tooltip title="Container Live Map">
-              <AppButton
-                type="text"
-                size="small"
-                icon={
-                  <AppIcon
-                    icon={Icons.mapPin}
-                    size={16}
-                    gridAction
-                    tone="reject"
-                  />
-                }
-                onClick={() => onViewLiveMap(record)}
-              />
-            </Tooltip>
-          </Space>
+          <ListActionsRow>
+            <ListActionButton
+              title="View Container Event Log & Movements"
+              icon={
+                <AppIcon icon={Icons.eye} size={16} gridAction tone="view" />
+              }
+              onClick={() => onViewMovements(record)}
+            />
+            <ListActionButton
+              title="Container Live Map"
+              icon={
+                <AppIcon
+                  icon={Icons.mapPin}
+                  size={16}
+                  gridAction
+                  tone="reject"
+                />
+              }
+              onClick={() => onViewLiveMap(record)}
+            />
+          </ListActionsRow>
         );
       },
-    },
+    }),
     {
       headerName: "Container No ",
       field: "containerNo",
@@ -72,9 +69,6 @@ export function TrackingContainersTable({
         return (
           <div className="tracking-cell-stack">
             <Text className="tracking-cell-title">{record.containerNo}</Text>
-            {/* <Text className="tracking-cell-sub">
-              Seal: {record.sealNo} | {record.containerType}
-            </Text> */}
           </div>
         );
       },
@@ -147,22 +141,21 @@ export function TrackingContainersTable({
             justify="space-between"
             className="tracking-results-toolbar"
           >
-            <Space align="center" size={8}>
-              <Text className="tracking-results-title">
-                Transport Equipment & Containers
-              </Text>
-              <Badge
-                count={containers.length}
-                className="tracking-results-count"
-              />
-            </Space>
+            <Text className="tracking-results-title">
+              Transport Equipment & Containers
+            </Text>
           </Flex>
         )}
         listOptions={{
+          ...profileHandlers,
+          showToolbar: { showTotalCount: false, fullScreen: false },
+          sideBar: false,
+          pagination: true,
+          paginationPageSize: 20,
+          pageSizeOptions: [10, 20, 50, 100],
+          defaultColDef: { filter: true },
           gridOptions: {
-            domLayout: "autoHeight",
             animateRows: true,
-            pagination: false,
           },
         }}
       />

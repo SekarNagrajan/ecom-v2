@@ -21,6 +21,7 @@ import {
   buildRetryAction,
 } from "../../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
+import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
 import { MODULE_TITLES } from "../../../constants/module-titles";
 import {
   useArrivalNoticeDownloadMutation,
@@ -46,6 +47,7 @@ const initialFilters: ArrivalNoticeListFilters = {
 };
 
 export function ArrivalNoticeListing() {
+  const { profileHandlers } = useLocalGridProfiles("arrival-notice");
   const [filters, setFilters] =
     useState<ArrivalNoticeListFilters>(initialFilters);
   const [selectedAnNo, setSelectedAnNo] = useState<string | null>(null);
@@ -210,7 +212,13 @@ export function ArrivalNoticeListing() {
             renderToolbar={() => null}
             className="arn-data-view"
             listOptions={{
-              showToolbar: false,
+              ...profileHandlers,
+              showToolbar: { showTotalCount: false, fullScreen: false },
+              sideBar: false,
+              pagination: true,
+              paginationPageSize: 20,
+              pageSizeOptions: [10, 20, 50, 100],
+              defaultColDef: { filter: true },
               gridOptions: {
                 getRowId: (params: { data: ArrivalNoticeListDTO }) =>
                   params.data.anNo,

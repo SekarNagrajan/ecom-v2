@@ -1,7 +1,7 @@
 // Modified by Sekar Nagarajan (2026-08-26 16:25)
 import { DataView, type DataViewColumn } from "@solverminds/shared-ui/data-view";
 import { useConfirm, useToast } from "@solverminds/shared-ui/hooks";
-import { Tag, Typography } from "antd";
+import { Badge, Tag, Typography } from "antd";
 import { useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
@@ -11,6 +11,7 @@ import {
   ListActionsRow,
 } from "../../../components/shared/list-action-button";
 import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
+import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
 import { MODULE_TITLES } from "../../../constants/module-titles";
 import type {
   ApprovalStatus,
@@ -80,6 +81,7 @@ const STATUS_META: Record<ApprovalStatus, { color: string; label: string }> = {
 export function VendorApprovalsView() {
   const toast = useToast();
   const confirm = useConfirm();
+  const { profileHandlers } = useLocalGridProfiles("vendor-approvals");
   const [items, setItems] = useState<VendorApprovalItem[]>(INITIAL_ITEMS);
 
   const applyStatus = (id: string, status: Exclude<ApprovalStatus, "PENDING">) => {
@@ -220,9 +222,18 @@ export function VendorApprovalsView() {
             <AppIcon icon={Icons.checkSquare} size={24} />
           </span>
           <div className="va-panel-header__copy">
-            <Title level={4} className="va-panel-header__title">
-              {MODULE_TITLES.agencyApprovals}
-            </Title>
+            <div className="va-panel-header__title-row">
+              <Title level={4} className="va-panel-header__title">
+                {MODULE_TITLES.agencyApprovals}
+              </Title>
+              <Badge
+                count={items.length}
+                overflowCount={9999}
+                showZero
+                className="module-screen-header__record-count"
+                title={`${items.length} record${items.length === 1 ? "" : "s"}`}
+              />
+            </div>
             <Text type="secondary" className="va-panel-header__description">
               Review and process customer bookings, shipping instructions, and
               VGM submissions.
@@ -262,9 +273,14 @@ export function VendorApprovalsView() {
           defaultViewMode="list"
           renderToolbar={() => null}
           listOptions={{
-            showToolbar: false,
+            ...profileHandlers,
+            showToolbar: { showTotalCount: false, fullScreen: false },
+            pagination: true,
+            paginationPageSize: 20,
+            pageSizeOptions: [10, 20, 50, 100],
+            sideBar: false,
+            defaultColDef: { filter: true },
             gridOptions: {
-              domLayout: "autoHeight",
               suppressCellFocus: true,
             },
           }}

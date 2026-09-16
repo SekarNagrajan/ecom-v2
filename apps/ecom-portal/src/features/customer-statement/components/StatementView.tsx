@@ -5,11 +5,13 @@ import {
   type DataViewColumn,
 } from "@solverminds/shared-ui/data-view";
 import { Spin } from "antd";
+import { useEffect } from "react";
 
 import {
   ModuleEmptyState,
   buildRetryAction,
 } from "../../../components/shared/module-empty-state";
+import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
 import {
   useStatementExportMutation,
   useStatementQuery,
@@ -26,6 +28,7 @@ import { StatementSummaryHeader } from "./StatementSummaryHeader";
 
 interface StatementViewProps {
   criteria: StatementCriteria;
+  onRecordCountChange?: (count: number | undefined) => void;
 }
 
 function MoneyCell({ value, currency }: { value?: string; currency: string }) {
@@ -39,7 +42,11 @@ function MoneyCell({ value, currency }: { value?: string; currency: string }) {
   );
 }
 
-export function StatementView({ criteria }: StatementViewProps) {
+export function StatementView({
+  criteria,
+  onRecordCountChange,
+}: StatementViewProps) {
+  const { profileHandlers } = useLocalGridProfiles("customer-statement");
   const {
     data: statement,
     isLoading,
@@ -48,6 +55,28 @@ export function StatementView({ criteria }: StatementViewProps) {
     refetch,
   } = useStatementQuery(criteria);
   const exportMutation = useStatementExportMutation();
+
+  useEffect(() => {
+    if (!onRecordCountChange) return;
+    if (statement?.lines) {
+      onRecordCountChange(statement.lines.length);
+      return;
+    }
+    if (!isLoading && !isFetching) {
+      onRecordCountChange(0);
+    }
+  }, [
+    statement?.lines,
+    isLoading,
+    isFetching,
+    onRecordCountChange,
+  ]);
+
+  useEffect(() => {
+    return () => {
+      onRecordCountChange?.(undefined);
+    };
+  }, [onRecordCountChange]);
 
   const emptyState = isError ? (
     <ModuleEmptyState
@@ -152,7 +181,13 @@ export function StatementView({ criteria }: StatementViewProps) {
                 renderToolbar={() => null}
                 className="stmt-data-view"
                 listOptions={{
-                  showToolbar: true,
+                  ...profileHandlers,
+                  showToolbar: { showTotalCount: false, fullScreen: false },
+                  sideBar: false,
+                  pagination: true,
+                  paginationPageSize: 20,
+                  pageSizeOptions: [10, 20, 50, 100],
+                  defaultColDef: { filter: true },
                   gridOptions: {
                     getRowId: (params: { data: StatementLine }) =>
                       `${params.data.docNo}-${params.data.date}`,

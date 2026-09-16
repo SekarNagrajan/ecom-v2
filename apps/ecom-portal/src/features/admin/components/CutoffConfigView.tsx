@@ -26,6 +26,7 @@ import {
   ListActionsRow,
 } from "../../../components/shared/list-action-button";
 import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
+import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
 import { adminApi } from "../api/admin.api";
 import { ADMIN_KEYS } from "../hooks/use-admin-controller";
 import {
@@ -87,6 +88,7 @@ export function CutoffConfigView({
 }: CutoffConfigViewProps) {
   const toast = useToast();
   const confirm = useConfirm();
+  const { profileHandlers } = useLocalGridProfiles("admin-cutoff");
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -336,6 +338,7 @@ export function CutoffConfigView({
     <AdminPanelShell
       icon={Icons.clock}
       title="Cutoff Configuration"
+      recordCount={cutoffConfigs.length}
       subtitle="Configure port and terminal closing hours for CFS, VGM, documents, EDI, and gate-in."
     >
       <div className="admin-cutoff-form">
@@ -496,8 +499,13 @@ export function CutoffConfigView({
             renderToolbar={() => null}
             className="admin-cutoff-data-view"
             listOptions={{
-              showToolbar: false,
+              ...profileHandlers,
+              showToolbar: { showTotalCount: false, fullScreen: false },
               sideBar: false,
+              pagination: true,
+              paginationPageSize: 20,
+              pageSizeOptions: [10, 20, 50, 100],
+              defaultColDef: { filter: true },
               gridOptions: {
                 getRowId: (params: { data: CutoffConfig }) => params.data.id,
               },

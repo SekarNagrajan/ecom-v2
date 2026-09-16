@@ -1,5 +1,6 @@
-// Modified by Sekar Nagarajan (2026-08-25 12:45)
+// Modified by Sekar Nagarajan (2026-09-16 11:25)
 import { Card } from 'antd';
+import { useCallback, useState } from 'react';
 
 import { FeaturePageShell } from '../../components/shared/feature-page-shell';
 import { StatementCriteriaBar } from './components/StatementCriteriaBar';
@@ -21,6 +22,11 @@ export function CustomerStatementRoute() {
     handleAccountChange,
     handleSearch,
   } = useStatementController();
+  const [recordCount, setRecordCount] = useState<number | undefined>();
+
+  const handleRecordCountChange = useCallback((count: number | undefined) => {
+    setRecordCount(count);
+  }, []);
 
   return (
     <FeaturePageShell>
@@ -33,13 +39,19 @@ export function CustomerStatementRoute() {
             fromDate={fromDate}
             toDate={toDate}
             criteriaError={criteriaError}
+            recordCount={recordCount}
             onAccountChange={handleAccountChange}
             onCurrencyChange={setCurrency}
             onFromDateChange={setFromDate}
             onToDateChange={setToDate}
             onSearch={handleSearch}
           />
-          {activeCriteria ? <StatementView criteria={activeCriteria} /> : null}
+          {activeCriteria ? (
+            <StatementView
+              criteria={activeCriteria}
+              onRecordCountChange={handleRecordCountChange}
+            />
+          ) : null}
         </div>
       </Card>
     </FeaturePageShell>

@@ -64,6 +64,11 @@ export function VendorApprovalsModuleStyles() {
         gap: ${token.marginXXS}px;
         min-width: 0;
       }
+      .va-panel-header__title-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
       .va-panel-header__title {
         margin: 0 !important;
         line-height: 1.25 !important;
@@ -121,11 +126,22 @@ export function VendorApprovalsModuleStyles() {
         width: 100%;
         min-width: 0;
         min-height: 0;
-        overflow-x: auto;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
       }
       .va-grid-wrap .va-data-view {
-        min-height: 320px;
         width: 100%;
+        flex: 1;
+        min-height: calc(100vh - 360px);
+        display: flex;
+        flex-direction: column;
+      }
+      .va-approvals-grid .ag-theme-alpine,
+      .va-approvals-grid .ag-root-wrapper {
+        height: 100% !important;
+        min-height: 360px;
       }
       /* Hide empty DataView toolbar Card */
       .va-approvals-grid > .ant-flex > .ant-card:first-child {

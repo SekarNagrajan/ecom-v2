@@ -23,6 +23,7 @@ import {
   buildRetryAction,
 } from "../../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
+import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
 import { MODULE_TITLES } from "../../../constants/module-titles";
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import {
@@ -42,6 +43,7 @@ import { UscCreateDrawer } from "./upsert/UscCreateDrawer";
 
 export function UserCreationListing() {
   const toast = useToast();
+  const { profileHandlers } = useLocalGridProfiles("user-creation");
   const [searchTerm, setSearchTerm] = useState("");
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
@@ -192,6 +194,7 @@ export function UserCreationListing() {
         <ModuleScreenHeader
           icon={NavIcons.userCreation}
           title={MODULE_TITLES.userCreation}
+          recordCount={filteredUsers.length}
           subtitle="Create and manage sub-user credentials for company employees, agents, and delegates."
           marginBottom={0}
           extra={
@@ -279,7 +282,13 @@ export function UserCreationListing() {
             renderToolbar={() => null}
             className="usc-data-view"
             listOptions={{
-              showToolbar: false,
+              ...profileHandlers,
+              showToolbar: { showTotalCount: false, fullScreen: false },
+              sideBar: false,
+              pagination: true,
+              paginationPageSize: 20,
+              pageSizeOptions: [10, 20, 50, 100],
+              defaultColDef: { filter: true },
               gridOptions: {
                 getRowId: (params: { data: SubUser }) => params.data.id,
               },

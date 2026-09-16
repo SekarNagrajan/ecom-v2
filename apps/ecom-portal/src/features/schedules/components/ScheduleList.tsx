@@ -14,6 +14,7 @@ import {
   ListActionsRow,
 } from "../../../components/shared/list-action-button";
 import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
+import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
 import type { ScheduleItem } from "../types/schedules.types";
 import {
   formatCutoffValue,
@@ -38,6 +39,7 @@ export function ScheduleList({
   onViewRates,
   onOpenCarbonModal,
 }: ScheduleListProps) {
+  const { profileHandlers } = useLocalGridProfiles("schedules");
   const columnDefs = useMemo<DataViewColumn<ScheduleItem>[]>(
     () => [
       buildActionsColumn<ScheduleItem>({
@@ -271,12 +273,14 @@ export function ScheduleList({
           renderToolbar={() => null}
           className="schedule-data-view"
           listOptions={{
-            showToolbar: false,
+            ...profileHandlers,
+            showToolbar: { showTotalCount: false, fullScreen: false },
             sideBar: false,
+            pagination: true,
+            paginationPageSize: 20,
+            pageSizeOptions: [10, 20, 50, 100],
             defaultColDef: { filter: true },
-
             gridOptions: {
-              // Fixed-height list (max 500px): normal layout scrolls rows inside the grid.
               getRowId: (params) => params.data.id,
               getRowClass: (params) =>
                 params.data?.isDefaultRoute

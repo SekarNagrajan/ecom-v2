@@ -22,6 +22,7 @@ interface StatementCriteriaBarProps {
   fromDate: string;
   toDate: string;
   criteriaError: string | null;
+  recordCount?: number;
   onAccountChange: (accountId: string, currency: string) => void;
   onCurrencyChange: (currency: string) => void;
   onFromDateChange: (value: string) => void;
@@ -38,6 +39,7 @@ export function StatementCriteriaBar({
   fromDate,
   toDate,
   criteriaError,
+  recordCount,
   onAccountChange,
   onCurrencyChange,
   onFromDateChange,
@@ -62,6 +64,7 @@ export function StatementCriteriaBar({
         <ModuleScreenHeader
           icon={NavIcons.customerStatement}
           title={MODULE_TITLES.customerStatement}
+          recordCount={recordCount}
           marginBottom={0}
         />
       </div>

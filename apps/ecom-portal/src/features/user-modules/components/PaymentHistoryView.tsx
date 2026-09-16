@@ -23,6 +23,7 @@ import {
   ModuleEmptyState,
   buildRetryAction,
 } from "../../../components/shared/module-empty-state";
+import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
 import { MODULE_TITLES } from "../../../constants/module-titles";
 import { usePaymentHistoryQuery } from "../api/user-modules.queries";
 import type { PaymentHistoryRecord } from "../types/user-modules.types";
@@ -84,6 +85,7 @@ function formatMoney(amount: number, currency: string) {
 
 export function PaymentHistoryView() {
   const toast = useToast();
+  const { profileHandlers } = useLocalGridProfiles("payment-history");
   const [dateRange, setDateRange] = useState<DateRangeValue>(defaultDateRange);
   const query = toQueryDates(dateRange);
 
@@ -279,13 +281,15 @@ export function PaymentHistoryView() {
           defaultViewMode="list"
           renderToolbar={() => null}
           listOptions={{
-            showToolbar: false,
-
-            pagination: false,
+            ...profileHandlers,
+            showToolbar: { showTotalCount: false, fullScreen: false },
+            pagination: true,
+            paginationPageSize: 10,
+            pageSizeOptions: [10, 20, 50, 100],
+            sideBar: false,
+            defaultColDef: { filter: true },
             gridOptions: {
-              domLayout: "autoHeight",
               suppressCellFocus: true,
-              pagination: false,
             },
           }}
         />

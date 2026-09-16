@@ -17,6 +17,7 @@ import {
 } from "../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import { ModuleCardViewPanel } from "../../components/shared/module-card-view-panel";
+import { useLocalGridProfiles } from "../../components/shared/use-local-grid-profiles";
 import { MODULE_TITLES } from "../../constants/module-titles";
 import { useCancelSiMutation, useSiListQuery } from "./api/si.queries";
 import { SiListActions } from "./components/list/si-list-actions";
@@ -32,6 +33,7 @@ export function ShippingInstructionDashboardRoute() {
   const navigate = useNavigate();
   const confirm = useConfirm();
   const toast = useToast();
+  const { profileHandlers } = useLocalGridProfiles("shipping-instruction");
   const [selectedRecord, setSelectedRecord] = useState<SIListDTO | null>(null);
   const { viewMode, setViewMode } = useModuleViewMode(VIEW_MODE_KEY);
   const {
@@ -195,8 +197,12 @@ export function ShippingInstructionDashboardRoute() {
                     renderToolbar={() => null}
                     className="si-data-view"
                     listOptions={{
-                      showToolbar: false,
+                      ...profileHandlers,
+                      showToolbar: { showTotalCount: false, fullScreen: false },
                       sideBar: false,
+                      pagination: true,
+                      paginationPageSize: 20,
+                      pageSizeOptions: [10, 20, 50, 100],
                       defaultColDef: { filter: true },
                       gridOptions: {
                         getRowId: (params) => params.data.id,

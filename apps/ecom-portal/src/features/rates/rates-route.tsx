@@ -57,6 +57,7 @@ export function RatesRoute() {
         <ModuleScreenHeader
           icon={NavRatesIcon}
           title={MODULE_TITLES.rates}
+          recordCount={hasSearched ? cardRates.length : undefined}
           subtitle="Search published line tariffs, view itemized surcharge breakdowns, manage Service Contracts, and request spot rate quotes."
           extra={
             <Space align="center" size={12} wrap className="custom-scroll">

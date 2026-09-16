@@ -64,6 +64,7 @@ export const SchedulesRoute: React.FC = () => {
         <ModuleScreenHeader
           icon={NavSchedulesIcon}
           title={MODULE_TITLES.schedules}
+          recordCount={hasSearched ? schedules.length : undefined}
           subtitle="Search sailings by route, vessel, or port — compare transit times, cut-offs, and book directly."
           extra={
             <Space align="center" size={12} wrap className="custom-scroll">

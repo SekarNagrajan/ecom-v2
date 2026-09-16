@@ -3,14 +3,20 @@ import { AppButton } from "@solverminds/shared-ui";
 import { DataView, DataViewColumn } from "@solverminds/shared-ui/data-view";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { useNavigate } from "@tanstack/react-router";
-import { Card, Flex, Space, Spin, Tag, Tooltip, Typography } from "antd";
+import { Card, Flex, Space, Spin, Tag, Typography } from "antd";
 import { useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { buildActionsColumn } from "../../../components/shared/build-actions-column";
+import {
+  ListActionButton,
+  ListActionsRow,
+} from "../../../components/shared/list-action-button";
 import {
   ModuleEmptyState,
   buildRetryAction,
 } from "../../../components/shared/module-empty-state";
+import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
 import { useQuotesQuery } from "../api/rates.queries";
 import type { QuoteDTO } from "../types/rates.types";
 import { QuoteRequestDrawer } from "./QuoteRequestDrawer";
@@ -20,6 +26,7 @@ const { Text } = Typography;
 export function QuotesView() {
   const toast = useToast();
   const navigate = useNavigate();
+  const { profileHandlers } = useLocalGridProfiles("rates-rfq");
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const { data: quotes = [], isLoading, isError, refetch } = useQuotesQuery();
@@ -30,49 +37,41 @@ export function QuotesView() {
   };
 
   const columnDefs: DataViewColumn<QuoteDTO>[] = [
-    {
-      headerName: "Actions",
+    buildActionsColumn<QuoteDTO>({
       field: "id",
-      sortable: false,
       width: 120,
-      pinned: "left",
       cellRenderer: (params: { data?: QuoteDTO }) => {
         const record = params.data;
         if (!record) return null;
         return (
-          <Space size={4}>
-            <Tooltip title="Convert Quote into e-Booking">
-              <AppButton
-                type="text"
-                size="small"
-                disabled={
-                  record.status === "EXPIRED" ||
-                  record.status === "PENDING_REVIEW"
-                }
-                icon={
-                  <AppIcon
-                    icon={Icons.arrowRight}
-                    size={16}
-                    gridAction
-                    tone="navigate"
-                  />
-                }
-                onClick={() => handleConvertBooking(record)}
-              />
-            </Tooltip>
-            <Tooltip title="View Quotation Terms & Conditions">
-              <AppButton
-                type="text"
-                size="small"
-                icon={
-                  <AppIcon icon={Icons.eye} size={16} gridAction tone="view" />
-                }
-              />
-            </Tooltip>
-          </Space>
+          <ListActionsRow>
+            <ListActionButton
+              title="Convert Quote into e-Booking"
+              disabled={
+                record.status === "EXPIRED" ||
+                record.status === "PENDING_REVIEW"
+              }
+              icon={
+                <AppIcon
+                  icon={Icons.arrowRight}
+                  size={16}
+                  gridAction
+                  tone="navigate"
+                />
+              }
+              onClick={() => handleConvertBooking(record)}
+            />
+            <ListActionButton
+              title="View Quotation Terms & Conditions"
+              icon={
+                <AppIcon icon={Icons.eye} size={16} gridAction tone="view" />
+              }
+              onClick={() => undefined}
+            />
+          </ListActionsRow>
         );
       },
-    },
+    }),
     {
       headerName: "Quote Ref No",
       field: "quoteNo",
@@ -205,12 +204,16 @@ export function QuotesView() {
               emptyState={emptyState}
               columnDefs={columnDefs}
               listOptions={{
-                gridOptions: {
-                  pagination: true,
-                  paginationPageSize: 10,
-                },
+                ...profileHandlers,
+                showToolbar: { showTotalCount: false, fullScreen: false },
+                sideBar: false,
+                pagination: true,
+                paginationPageSize: 10,
+                pageSizeOptions: [10, 20, 50, 100],
+                defaultColDef: { filter: true },
               }}
               className="rates-grid"
+              renderToolbar={() => null}
             />
           </div>
         </Card>

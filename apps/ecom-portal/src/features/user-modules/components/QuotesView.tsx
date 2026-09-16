@@ -18,6 +18,7 @@ import {
   ModuleEmptyState,
   buildRetryAction,
 } from "../../../components/shared/module-empty-state";
+import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
 import { MODULE_TITLES } from "../../../constants/module-titles";
 import { useQuotesQuery } from "../api/user-modules.queries";
 import type { QuoteItem } from "../types/user-modules.types";
@@ -43,6 +44,7 @@ function formatUsd(amount: number) {
 
 export function QuotesView() {
   const navigate = useNavigate();
+  const { profileHandlers } = useLocalGridProfiles("quotes");
   const {
     data: quotes = [],
     isLoading,
@@ -197,9 +199,14 @@ export function QuotesView() {
           defaultViewMode="list"
           renderToolbar={() => null}
           listOptions={{
-            showToolbar: false,
+            ...profileHandlers,
+            showToolbar: { showTotalCount: false, fullScreen: false },
+            pagination: true,
+            paginationPageSize: 10,
+            pageSizeOptions: [10, 20, 50, 100],
+            sideBar: false,
+            defaultColDef: { filter: true },
             gridOptions: {
-              domLayout: "autoHeight",
               suppressCellFocus: true,
             },
           }}

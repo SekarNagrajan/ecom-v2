@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-10 21:49)
+// Modified by Sekar Nagarajan (2026-09-17 11:56)
 import { theme } from "antd";
 
 import { BE_COLOR_MAP } from "../../features/theme/utils/config-mapper";
@@ -2020,6 +2020,9 @@ export function GlobalThemeStyles() {
         }
         .pub-header-lang-trigger__code {
           display: inline;
+        }
+        .app-header-action__label {
+          display: none;
         }
         .pub-layout-page--outlet {
           padding: ${token.paddingSM}px;

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-08 17:45)
+// Modified by Sekar Nagarajan (2026-09-17 11:56)
 
 import {
   PRECONFIGURED_TENANTS,
@@ -37,6 +37,7 @@ import { MyAlertsView } from "../../features/user-modules/components/MyAlertsVie
 import { ProfileView } from "../../features/user-modules/components/ProfileView";
 import { AppIcon, Icons } from "../icons";
 import { AccountPreferencesDrawer } from "./account-preferences-drawer";
+import { HeaderLanguageSelect } from "./header-language-select";
 
 const { Header } = Layout;
 const { Text } = Typography;
@@ -209,6 +210,7 @@ export function AuthenticatedLayoutHeader({
               Login
             </AppButton>
           </Tooltip>
+          <HeaderLanguageSelect buttonClassName="app-header-action" />
         </div>
       </Header>
     );
@@ -468,6 +470,8 @@ export function AuthenticatedLayoutHeader({
           ) : null}
 
           {/* <HeaderThemeToggle /> */}
+
+          <HeaderLanguageSelect buttonClassName="app-header-action" />
 
           <Tooltip
             title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}

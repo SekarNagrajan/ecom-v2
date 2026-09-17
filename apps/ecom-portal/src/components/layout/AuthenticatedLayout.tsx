@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-08 15:20)
+// Modified by Sekar Nagarajan (2026-09-17 11:44)
 import { useAuthStore } from "@solverminds/auth";
 import { Outlet, useNavigate } from "@tanstack/react-router";
 import { Layout } from "antd";
@@ -9,6 +9,7 @@ import { usePostLoginRedirectStore } from "../../features/auth/stores/use-post-l
 import { PublicLoginPanel } from "../../features/landing/components/PublicLoginPanel";
 import { ProfilePhotoProvider } from "../../features/profile-photo/providers/profile-photo-provider";
 import { useResponsiveLayout } from "../../hooks/use-responsive-layout";
+import { CookieConsentBanner } from "../shared/cookie-consent-banner";
 import { AppFooter } from "./AppFooter";
 import { AuthenticatedLayoutHeader } from "./AuthenticatedLayoutHeader";
 import { AuthenticatedSidebar } from "./AuthenticatedSidebar";
@@ -101,6 +102,8 @@ export function AuthenticatedLayout() {
             controller={loginController}
           />
         ) : null}
+
+        <CookieConsentBanner />
       </Layout>
     </ProfilePhotoProvider>
   );

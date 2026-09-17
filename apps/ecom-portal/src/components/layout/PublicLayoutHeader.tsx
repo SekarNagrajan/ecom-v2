@@ -1,52 +1,12 @@
-// Modified by Sekar Nagarajan (2026-08-25 17:25)
+// Modified by Sekar Nagarajan (2026-09-17 11:56)
 import { AppButton } from "@solverminds/shared-ui";
 import { Link } from "@tanstack/react-router";
-import type { MenuProps } from "antd";
-import { Dropdown, Layout } from "antd";
-import { useState } from "react";
+import { Layout } from "antd";
 
 import { AppIcon, Icons } from "../icons";
+import { HeaderLanguageSelect } from "./header-language-select";
 
 const { Header } = Layout;
-
-export type PublicLanguageCode = "en" | "zh" | "ma" | "es";
-
-const PUBLIC_LANGUAGES: Array<{
-  key: PublicLanguageCode;
-  label: string;
-  nativeName: string;
-  detail: string;
-  shortCode: string;
-}> = [
-  {
-    key: "en",
-    label: "English",
-    nativeName: "English",
-    detail: "Default portal language",
-    shortCode: "EN",
-  },
-  {
-    key: "zh",
-    label: "Chinese",
-    nativeName: "中文",
-    detail: "Simplified Chinese (中文)",
-    shortCode: "ZH",
-  },
-  {
-    key: "ma",
-    label: "Malay",
-    nativeName: "Bahasa Melayu",
-    detail: "Bahasa Melayu",
-    shortCode: "MS",
-  },
-  {
-    key: "es",
-    label: "Spanish",
-    nativeName: "Español",
-    detail: "Español (Spanish)",
-    shortCode: "ES",
-  },
-];
 
 interface PublicLayoutHeaderProps {
   /** Company logo URL — loaded from config / static asset */
@@ -71,28 +31,6 @@ export function PublicLayoutHeader({
   collapsed,
   onToggleCollapse,
 }: PublicLayoutHeaderProps) {
-  const [language, setLanguage] = useState<PublicLanguageCode>("en");
-  const selectedLanguage =
-    PUBLIC_LANGUAGES.find((item) => item.key === language) ??
-    PUBLIC_LANGUAGES[0];
-
-  const languageItems: MenuProps["items"] = PUBLIC_LANGUAGES.map((item) => ({
-    key: item.key,
-    label: (
-      <div className="pub-header-lang-item">
-        <span className="pub-header-lang-item__name">
-          {item.nativeName}
-          {item.nativeName !== item.label ? ` · ${item.label}` : ""}
-        </span>
-        <span className="pub-header-lang-item__detail">{item.detail}</span>
-      </div>
-    ),
-  }));
-
-  const onLanguageClick: MenuProps["onClick"] = ({ key }) => {
-    setLanguage(key as PublicLanguageCode);
-  };
-
   return (
     <Header className="pub-layout-header">
       <div className="pub-layout-header__left">
@@ -161,34 +99,7 @@ export function PublicLayoutHeader({
 
         {/* <HeaderThemeToggle /> */}
 
-        <Dropdown
-          trigger={["click"]}
-          placement="bottomRight"
-          menu={{
-            items: languageItems,
-            selectable: true,
-            selectedKeys: [language],
-            onClick: onLanguageClick,
-          }}
-        >
-          <AppButton
-            type="text"
-            className="pub-header-action"
-            aria-label={`Language: ${selectedLanguage.label}`}
-            aria-haspopup="menu"
-          >
-            <span className="pub-header-lang-trigger">
-              <AppIcon icon={Icons.globe} size={16} />
-              <span className="pub-header-lang-trigger__code">
-                {selectedLanguage.shortCode}
-              </span>
-              <span className="pub-header-action__label">
-                {selectedLanguage.label}
-              </span>
-              <AppIcon icon={Icons.chevronDown} size={14} />
-            </span>
-          </AppButton>
-        </Dropdown>
+        <HeaderLanguageSelect buttonClassName="pub-header-action" />
       </div>
     </Header>
   );

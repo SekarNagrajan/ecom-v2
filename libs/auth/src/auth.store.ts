@@ -1,5 +1,5 @@
 // Modified by Sekar Nagarajan (2026-08-27 11:25)
-import { create } from 'zustand';
+import { create } from "zustand";
 
 export interface SubCustomerAccount {
   custCode: string;
@@ -7,20 +7,20 @@ export interface SubCustomerAccount {
 }
 
 /** Legacy SESSION_LOGIN_TYPE: U = customer, V = vendor/admin */
-export type SessionLoginType = 'U' | 'V';
+export type SessionLoginType = "U" | "V";
 
 /** Legacy ecom_adminuser_details.usertype: A = System Admin, V = Vendor, C = Customer Impersonation */
-export type AdminUserType = 'A' | 'V' | 'C';
+export type AdminUserType = "A" | "V" | "C";
 
 /** React entry-point identifier sent with admin login requests */
-export type LoginEntryType = 'cpanel' | 'eadmin' | 'admin';
+export type LoginEntryType = "cpanel" | "eadmin" | "admin";
 
 export interface UserProfile {
   id: string;
   name: string;
   email: string;
   company: string;
-  role: 'CUSTOMER' | 'VENDOR' | 'ADMIN';
+  role: "CUSTOMER" | "VENDOR" | "ADMIN";
   capabilities: string[];
   customerCode?: string;
   tenantId?: string;
@@ -37,7 +37,7 @@ export interface UserProfile {
   impersonatedCustomer?: SubCustomerAccount;
   vendorId?: string;
   vendorMenuList?: string[];
-  menuCategories?: Record<string, 'D' | 'P'>;
+  menuCategories?: Record<string, "D" | "P">;
 }
 
 interface AuthState {
@@ -53,7 +53,7 @@ interface AuthState {
   setRehydrating: (value: boolean) => void;
 }
 
-const AUTH_TOKEN_KEY = 'ecom_auth_token';
+const AUTH_TOKEN_KEY = "ecom_auth_token";
 
 export const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: false,
@@ -66,13 +66,16 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
   logout: () => {
     localStorage.removeItem(AUTH_TOKEN_KEY);
-    set({ isAuthenticated: false, isRehydrating: false, token: null, user: null });
+    set({
+      isAuthenticated: false,
+      isRehydrating: false,
+      token: null,
+      user: null,
+    });
   },
   setActiveSubCustomer: (custCode: string) => {
     set((state) => ({
-      user: state.user
-        ? { ...state.user, activeSubCustomer: custCode }
-        : null,
+      user: state.user ? { ...state.user, activeSubCustomer: custCode } : null,
     }));
   },
   setImpersonatedCustomer: (customer: SubCustomerAccount) => {

@@ -1,12 +1,12 @@
 // Modified by Sekar Nagarajan (2026-08-25 13:00)
-import { AppButton } from '@solverminds/shared-ui';
-import { Col, DatePicker, Row, Select } from 'antd';
-import dayjs from 'dayjs';
+import { AppButton } from "@solverminds/shared-ui";
+import { Col, DatePicker, Row, Select } from "antd";
+import dayjs from "dayjs";
 
-import { AppIcon, Icons, NavIcons } from '../../../components/icons';
-import { ModuleScreenHeader } from '../../../components/shared/module-screen-header';
-import { MODULE_TITLES } from '../../../constants/module-titles';
-import { useStatementAccountsQuery } from '../api/customer-statement.queries';
+import { AppIcon, Icons, NavIcons } from "../../../components/icons";
+import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
+import { MODULE_TITLES } from "../../../constants/module-titles";
+import { useStatementAccountsQuery } from "../api/customer-statement.queries";
 
 /** Five fields in one row on md+ (spans sum to 24). Stack on mobile. */
 const CRITERIA_COL = {
@@ -27,10 +27,7 @@ interface StatementCriteriaBarProps {
   onCurrencyChange: (currency: string) => void;
   onFromDateChange: (value: string) => void;
   onToDateChange: (value: string) => void;
-  onSearch: (override?: {
-    accountId?: string;
-    currency?: string;
-  }) => void;
+  onSearch: (override?: { accountId?: string; currency?: string }) => void;
 }
 
 export function StatementCriteriaBar({
@@ -49,7 +46,7 @@ export function StatementCriteriaBar({
   const { data: accounts = [], isLoading } = useStatementAccountsQuery();
 
   const currencyOptions = Array.from(
-    new Set(accounts.map((a) => a.currency).filter(Boolean))
+    new Set(accounts.map((a) => a.currency).filter(Boolean)),
   ).map((code) => ({ value: code, label: code }));
 
   const resolvedAccountId = accountId || accounts[0]?.accountId;
@@ -64,7 +61,7 @@ export function StatementCriteriaBar({
         <ModuleScreenHeader
           icon={NavIcons.customerStatement}
           title={MODULE_TITLES.customerStatement}
-          recordCount={recordCount}
+          // recordCount={recordCount}
           marginBottom={0}
         />
       </div>
@@ -109,7 +106,9 @@ export function StatementCriteriaBar({
                 <DatePicker
                   size="large"
                   value={fromDate ? dayjs(fromDate) : null}
-                  onChange={(d) => onFromDateChange(d ? d.format('YYYY-MM-DD') : '')}
+                  onChange={(d) =>
+                    onFromDateChange(d ? d.format("YYYY-MM-DD") : "")
+                  }
                   allowClear={false}
                 />
               </div>
@@ -120,14 +119,18 @@ export function StatementCriteriaBar({
                 <DatePicker
                   size="large"
                   value={toDate ? dayjs(toDate) : null}
-                  onChange={(d) => onToDateChange(d ? d.format('YYYY-MM-DD') : '')}
+                  onChange={(d) =>
+                    onToDateChange(d ? d.format("YYYY-MM-DD") : "")
+                  }
                   allowClear={false}
                 />
               </div>
             </Col>
             <Col {...CRITERIA_COL.action}>
               <div className="stmt-search-actions-field">
-                <span className="stmt-search-actions-field__spacer form-field-label">Show</span>
+                <span className="stmt-search-actions-field__spacer form-field-label">
+                  Show
+                </span>
                 <div className="stmt-search-actions">
                   <AppButton
                     type="primary"
@@ -149,7 +152,9 @@ export function StatementCriteriaBar({
         </div>
       </div>
 
-      {criteriaError ? <p className="stmt-criteria-error">{criteriaError}</p> : null}
+      {criteriaError ? (
+        <p className="stmt-criteria-error">{criteriaError}</p>
+      ) : null}
     </>
   );
 }

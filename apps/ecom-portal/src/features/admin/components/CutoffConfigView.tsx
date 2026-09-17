@@ -338,7 +338,7 @@ export function CutoffConfigView({
     <AdminPanelShell
       icon={Icons.clock}
       title="Cutoff Configuration"
-      recordCount={cutoffConfigs.length}
+      // recordCount={cutoffConfigs.length}
       subtitle="Configure port and terminal closing hours for CFS, VGM, documents, EDI, and gate-in."
     >
       <div className="admin-cutoff-form">
@@ -500,7 +500,7 @@ export function CutoffConfigView({
             className="admin-cutoff-data-view"
             listOptions={{
               ...profileHandlers,
-              showToolbar: { showTotalCount: false, fullScreen: true },
+              showToolbar: { showTotalCount: true, fullScreen: true },
               sideBar: true,
               pagination: true,
               paginationPageSize: 20,

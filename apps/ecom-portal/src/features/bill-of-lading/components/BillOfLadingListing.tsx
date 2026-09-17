@@ -6,12 +6,12 @@ import { Space, Typography } from "antd";
 import { useState } from "react";
 
 import { AppIcon, Icons, NavIcons } from "../../../components/icons";
+import { useModuleViewMode } from "../../../components/shared/hooks/use-module-view-mode";
 import {
   ModuleEmptyState,
   buildRetryAction,
 } from "../../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
-import { useModuleViewMode } from "../../../components/shared/hooks/use-module-view-mode";
 import { MODULE_TITLES } from "../../../constants/module-titles";
 import {
   useBLBatchPrintMutation,
@@ -110,7 +110,7 @@ export function BillOfLadingListing() {
         <ModuleScreenHeader
           icon={NavIcons.billOfLading}
           title={MODULE_TITLES.billOfLading}
-          recordCount={rows.length}
+          // recordCount={rows.length}
           subtitle="Review B/L status, verify drafts, and print transport documents."
           marginBottom={0}
           viewMode={viewMode}
@@ -145,18 +145,18 @@ export function BillOfLadingListing() {
           emptyState={emptyState}
           viewMode={viewMode}
           onViewModeChange={setViewMode}
-        hideAgencyRefColumn={config?.hideAgencyRefColumn}
-        showChargeSummary={config?.showChargeSummary}
-        showNnPrint={config?.showNnPrint}
-        showReadyToConfirm={config?.showReadyToConfirm}
-        enableTermsOnConfirmedEdit={config?.enableTermsOnConfirmedEdit}
-        onView={handleView}
-        onEdit={(blNo) => navigate({ to: `/app/bl/${blNo}/edit` })}
-        onPrint={handlePrint}
-        onVerify={(blNo) => verifyBl(blNo)}
-        onCancel={(blNo) => cancelBl(blNo)}
-        onCharges={setChargesBlNo}
-        onManifest={openManifest}
+          hideAgencyRefColumn={config?.hideAgencyRefColumn}
+          showChargeSummary={config?.showChargeSummary}
+          showNnPrint={config?.showNnPrint}
+          showReadyToConfirm={config?.showReadyToConfirm}
+          enableTermsOnConfirmedEdit={config?.enableTermsOnConfirmedEdit}
+          onView={handleView}
+          onEdit={(blNo) => navigate({ to: `/app/bl/${blNo}/edit` })}
+          onPrint={handlePrint}
+          onVerify={(blNo) => verifyBl(blNo)}
+          onCancel={(blNo) => cancelBl(blNo)}
+          onCharges={setChargesBlNo}
+          onManifest={openManifest}
           onRowDoubleClicked={handleRowDoubleClick}
         />
       )}

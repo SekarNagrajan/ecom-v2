@@ -111,9 +111,9 @@ export const SchedulesRoute: React.FC = () => {
                 <Text className="schedule-results-bar__title">
                   Available Sailings
                 </Text>
-                <span className="schedule-results-bar__count">
+                {/* <span className="schedule-results-bar__count">
                   {schedules.length}
-                </span>
+                </span> */}
                 {isLoading ? (
                   <span
                     className="module-loading-center"

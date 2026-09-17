@@ -723,8 +723,8 @@ export function GlobalThemeStyles() {
         line-height: 1;
       }
       .module-screen-header__record-count.ant-badge .ant-badge-count {
-        background: ${token.colorError};
-        color: ${token.colorTextLightSolid};
+        background: ${token.colorPrimaryBg};
+        color: ${token.colorText};
         box-shadow: none;
         font-weight: ${token.fontWeightStrong};
         min-width: ${token.fontSizeLG + 8}px;
@@ -1512,7 +1512,8 @@ export function GlobalThemeStyles() {
         font-size: ${token.fontSizeSM}px;
       }
 
-      /* Public (pre-login) header */
+      /* Public (pre-login) header — height matches authenticated .app-layout-header */
+      /* Modified by Sekar Nagarajan (2026-09-17 20:50) */
       .pub-layout-header.ant-layout-header {
         position: sticky;
         top: 0;
@@ -1522,8 +1523,8 @@ export function GlobalThemeStyles() {
         justify-content: space-between;
         gap: ${token.marginSM}px;
         padding-inline: ${token.paddingLG}px;
-        height: 48px;
-        line-height: 48px;
+        height: 54px;
+        line-height: 54px;
         background: ${token.colorBgContainer};
         border-bottom: 1px solid ${token.colorBorderSecondary};
       }
@@ -1541,7 +1542,7 @@ export function GlobalThemeStyles() {
         min-width: 0;
       }
       .pub-layout-header__logo {
-        max-height: 32px;
+        max-height: 40px;
         object-fit: contain;
       }
       .pub-layout-header__brand {
@@ -2006,6 +2007,8 @@ export function GlobalThemeStyles() {
       /* mobile < 768 */
       @media (max-width: 767px) {
         .pub-layout-header.ant-layout-header {
+          height: 56px;
+          line-height: 56px;
           padding-inline: ${token.paddingSM}px;
         }
         .pub-header-action__label {

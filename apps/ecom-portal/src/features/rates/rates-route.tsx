@@ -94,9 +94,9 @@ export function RatesRoute() {
           <Space align="center" size={10} wrap>
             <AppIcon icon={Icons.dollarSign} size={18} />
             <Text className="rates-results-bar__title">{resultsTitle}</Text>
-            <span className="rates-results-bar__count">
+            {/* <span className="rates-results-bar__count">
               {hasSearched ? cardRates.length : 0}
-            </span>
+            </span> */}
             {isLoading ? (
               <span
                 className="module-loading-center"

@@ -236,7 +236,7 @@ export function ContractView() {
               columnDefs={columnDefs}
               listOptions={{
                 ...profileHandlers,
-                showToolbar: { showTotalCount: false, fullScreen: true },
+                showToolbar: { showTotalCount: true, fullScreen: true },
                 sideBar: true,
                 pagination: true,
                 paginationPageSize: 10,

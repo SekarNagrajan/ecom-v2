@@ -1,7 +1,9 @@
-// Modified by Sekar Nagarajan (2026-09-10 22:00)
+// Modified by Sekar Nagarajan (2026-09-17 18:24)
 import { AppButton } from "@solverminds/shared-ui";
 import { Card, Tooltip, Typography } from "antd";
+import type { LucideIcon } from "lucide-react";
 
+import { AppIcon, Icons, NavBookingIcon } from "../../../components/icons";
 import type {
   CalendarDayCell,
   CalendarWeek,
@@ -10,7 +12,7 @@ import type {
   PlanningKpi,
 } from "../mocks/dashboard.mock";
 
-const { Text, Title } = Typography;
+const { Text } = Typography;
 
 const DAYS: { key: CalendarWeekday; label: string }[] = [
   { key: "mon", label: "Mon" },
@@ -44,36 +46,28 @@ function bookingCountLabel(count: number): string {
   return `${count} ${count === 1 ? "booking" : "bookings"}`;
 }
 
-interface PlanningKpiTileProps {
+type PlanningStatTone = "bookings" | "teus" | "si" | "payment";
+
+interface PlanningStatProps {
   label: string;
   value: number;
-  tone?:
-    | "default"
-    | "primary"
-    | "error"
-    | "warning"
-    | "sandy-brown"
-    | "burnt-peach"
-    | "verdigris"
-    | "tuscan-sun"
-    | "charcoal-blue";
+  icon: LucideIcon;
+  tone: PlanningStatTone;
 }
 
-function PlanningKpiTile({
-  label,
-  value,
-  tone = "default",
-}: PlanningKpiTileProps) {
+/** Inline planning stat — strip layout, not a bordered summary card. */
+function PlanningStat({ label, value, icon, tone }: PlanningStatProps) {
   return (
-    <div
-      className={`dashboard-metric-tile dashboard-metric-tile--center dashboard-metric-tile--tone-${tone}`}
-    >
-      <Text ellipsis className="dashboard-metric-tile__label">
-        {label}
-      </Text>
-      <Title level={3} className="dashboard-metric-tile__value">
-        {value}
-      </Title>
+    <div className={`dashboard-planning-stat dashboard-planning-stat--${tone}`}>
+      <span
+        className={`dashboard-planning-stat__icon dashboard-planning-stat__icon--${tone} app-icon-inherit`}
+      >
+        <AppIcon icon={icon} size={15} />
+      </span>
+      <div className="dashboard-planning-stat__copy">
+        <Text className="dashboard-planning-stat__label">{label}</Text>
+        <Text className="dashboard-planning-stat__value">{value}</Text>
+      </div>
     </div>
   );
 }
@@ -123,32 +117,36 @@ export function ShipmentPlanningSection({
         </Tooltip>
       }
     >
-      <div className="dashboard-planning-kpis">
-        <PlanningKpiTile
+      <div className="dashboard-planning-kpis" role="list">
+        <PlanningStat
           label="Bookings (Next 7 Days)"
           value={kpis.bookingsNext7Days}
-          tone="verdigris"
+          icon={NavBookingIcon}
+          tone="bookings"
         />
-        <PlanningKpiTile
+        <PlanningStat
           label="TEUs"
           value={kpis.feusNext7Days}
-          tone="primary"
+          icon={Icons.packageCheck}
+          tone="teus"
         />
-        <PlanningKpiTile
+        <PlanningStat
           label="SI Pending"
           value={kpis.missingSI}
-          tone="warning"
+          icon={Icons.fileText}
+          tone="si"
         />
-        <PlanningKpiTile
+        <PlanningStat
           label="Payment Pending"
           value={kpis.atRisk}
-          tone="error"
+          icon={Icons.creditCard}
+          tone="payment"
         />
       </div>
 
-      <Text className="dashboard-subsection-label">
+      {/* <Text className="dashboard-subsection-label">
         Upcoming Bookings Calendar (May / Jun 2025)
-      </Text>
+      </Text> */}
 
       <div className="dashboard-table-wrap custom-scroll">
         <table className="dashboard-table">
@@ -225,12 +223,12 @@ export function ShipmentPlanningSection({
             Bookings
           </span>
           <span className="dashboard-legend__item">
-            <span className="dashboard-legend__dot dashboard-legend__dot--error" />
-            Missing SI
+            <span className="dashboard-legend__dot dashboard-legend__dot--warning" />
+            Pending SI
           </span>
           <span className="dashboard-legend__item">
-            <span className="dashboard-legend__dot dashboard-legend__dot--warning" />
-            At Risk
+            <span className="dashboard-legend__dot dashboard-legend__dot--verdigris" />
+            Payment Pending
           </span>
         </div>
       </div>

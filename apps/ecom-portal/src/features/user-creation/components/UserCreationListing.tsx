@@ -194,7 +194,7 @@ export function UserCreationListing() {
         <ModuleScreenHeader
           icon={NavIcons.userCreation}
           title={MODULE_TITLES.userCreation}
-          recordCount={filteredUsers.length}
+          // recordCount={filteredUsers.length}
           subtitle="Create and manage sub-user credentials for company employees, agents, and delegates."
           marginBottom={0}
           extra={
@@ -281,7 +281,7 @@ export function UserCreationListing() {
             className="usc-data-view"
             listOptions={{
               ...profileHandlers,
-              showToolbar: { showTotalCount: false, fullScreen: true },
+              showToolbar: { showTotalCount: true, fullScreen: true },
               sideBar: true,
               pagination: true,
               paginationPageSize: 20,

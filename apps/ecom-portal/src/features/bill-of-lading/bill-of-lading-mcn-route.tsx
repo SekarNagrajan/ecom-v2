@@ -108,7 +108,7 @@ export function BillOfLadingMcnListRoute() {
             <ModuleScreenHeader
               icon={NavIcons.billOfLading}
               title="Manifest (MCN)"
-              recordCount={rows.length}
+              // recordCount={rows.length}
               subtitle="Manifest cargo notification — view and print from the side drawer."
               marginBottom={0}
               extra={
@@ -135,7 +135,7 @@ export function BillOfLadingMcnListRoute() {
                 renderToolbar={() => null}
                 listOptions={{
                   ...profileHandlers,
-                  showToolbar: { showTotalCount: false, fullScreen: true },
+                  showToolbar: { showTotalCount: true, fullScreen: true },
                   sideBar: true,
                   pagination: true,
                   paginationPageSize: 20,

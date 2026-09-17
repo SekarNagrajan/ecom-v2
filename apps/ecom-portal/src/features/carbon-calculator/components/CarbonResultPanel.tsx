@@ -284,7 +284,7 @@ export function CarbonResultPanel({ input }: CarbonResultPanelProps) {
                     renderToolbar={() => null}
                     listOptions={{
                       showToolbar: {
-                        showTotalCount: false,
+                        showTotalCount: true,
                         fullScreen: true,
                       },
                       sideBar: true,

@@ -230,7 +230,7 @@ export function RateList({
           className="rates-data-view"
           listOptions={{
             ...profileHandlers,
-            showToolbar: { showTotalCount: false, fullScreen: true },
+            showToolbar: { showTotalCount: true, fullScreen: true },
             sideBar: true,
             pagination: true,
             paginationPageSize: 20,

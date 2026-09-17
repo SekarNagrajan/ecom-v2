@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-10 21:49)
+// Modified by Sekar Nagarajan (2026-09-17 18:32)
 
 /**
  * BE ↔ UI theme config mapper.
@@ -63,6 +63,8 @@ export const BE_COLOR_MAP = {
   TUSCAN_SUN: "#e9c46a",
   SANDY_BROWN: "#f4a261",
   BURNT_PEACH: "#e76f51",
+  // Modified by Sekar Nagarajan (2026-09-17 18:32) — In Transit KPI accent
+  TERRA_COTTA: "#d66853",
 } as const;
 
 export const mapBeToUiConfig = (

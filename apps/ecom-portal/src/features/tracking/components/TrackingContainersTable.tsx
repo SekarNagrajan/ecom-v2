@@ -143,15 +143,15 @@ export function TrackingContainersTable({
           >
             <Text className="tracking-results-title">
               Transport Equipment & Containers{" "}
-              <span className="tracking-results-count">
+              {/* <span className="tracking-results-count">
                 {containers.length}
-              </span>
+              </span> */}
             </Text>
           </Flex>
         )}
         listOptions={{
           ...profileHandlers,
-          showToolbar: { showTotalCount: false, fullScreen: true },
+          showToolbar: { showTotalCount: true, fullScreen: true },
           sideBar: true,
           pagination: true,
           paginationPageSize: 20,

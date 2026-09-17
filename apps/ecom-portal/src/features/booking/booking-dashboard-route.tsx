@@ -313,7 +313,7 @@ export function BookingDashboardRoute() {
             <ModuleScreenHeader
               icon={NavBookingIcon}
               title={MODULE_TITLES.booking}
-              recordCount={bookings.length}
+              // recordCount={bookings.length}
               subtitle="Create and manage bookings, amend drafts, and track confirmation status."
               marginBottom={0}
               viewMode={viewMode}
@@ -392,7 +392,7 @@ export function BookingDashboardRoute() {
                     className="booking-data-view"
                     listOptions={{
                       ...profileHandlers,
-                      showToolbar: { showTotalCount: false, fullScreen: true },
+                      showToolbar: { showTotalCount: true, fullScreen: true },
                       sideBar: true,
                       pagination: true,
                       paginationPageSize: 20,

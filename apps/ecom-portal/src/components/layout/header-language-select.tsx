@@ -83,7 +83,8 @@ export function HeaderLanguageSelect({
   buttonClassName = "app-header-action",
   showLabel = true,
 }: HeaderLanguageSelectProps) {
-  const [language, setLanguage] = useState<PortalLanguageCode>(readStoredLanguage);
+  const [language, setLanguage] =
+    useState<PortalLanguageCode>(readStoredLanguage);
   const selectedLanguage =
     PORTAL_LANGUAGES.find((item) => item.key === language) ??
     PORTAL_LANGUAGES[0];

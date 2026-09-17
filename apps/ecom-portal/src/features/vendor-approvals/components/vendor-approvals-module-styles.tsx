@@ -1,9 +1,9 @@
-// Modified by Sekar Nagarajan (2026-08-26 16:30)
+// Modified by Sekar Nagarajan (2026-09-16 17:38)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
 
-/** Token-backed styles for Agency Approvals (page + grid). */
+/** Token-backed styles for Agency Approvals — VGM/ARN page shell parity. */
 export function VendorApprovalsModuleStyles() {
   const { token } = theme.useToken();
   const primaryTint8 = tokenMix(token.colorPrimary, 8);
@@ -17,80 +17,45 @@ export function VendorApprovalsModuleStyles() {
       .feature-page-card.va-page-card > .ant-card-body {
         display: flex;
         flex-direction: column;
-        gap: ${token.marginLG}px;
-        padding: ${token.paddingMD}px ${token.paddingLG}px ${token.paddingLG}px !important;
+        padding: 0 !important;
         min-height: calc(100vh - 160px);
+        overflow: hidden;
         min-width: 0;
       }
 
       .va-page-layout {
         display: flex;
         flex-direction: column;
-        gap: ${token.marginLG}px;
-        width: 100%;
-        min-width: 0;
-      }
-
-      .va-panel-header {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: ${token.marginMD}px;
-        width: 100%;
-        flex-wrap: wrap;
-      }
-      .va-panel-header__main {
-        display: flex;
-        align-items: flex-start;
-        gap: ${token.marginSM}px;
-        min-width: 0;
         flex: 1;
-      }
-      .va-panel-header__icon {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        width: ${token.controlHeightLG}px;
-        height: ${token.controlHeightLG}px;
-        border-radius: ${token.borderRadiusLG}px;
-        background: ${primaryTint8};
-        color: ${token.colorPrimary};
-      }
-      .va-panel-header__copy {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: ${token.marginXXS}px;
+        width: 100%;
         min-width: 0;
-      }
-      .va-panel-header__title-row {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-      .va-panel-header__title {
-        margin: 0 !important;
-        line-height: 1.25 !important;
-        font-weight: ${token.fontWeightStrong} !important;
-      }
-      .va-panel-header__description {
-        display: block;
-        margin: 0;
-        font-size: ${token.fontSizeSM}px;
-        line-height: ${token.lineHeight};
+        min-height: 0;
+        overflow: hidden;
       }
 
+      .va-page-header {
+        flex-shrink: 0;
+        padding: ${token.paddingMD}px ${token.paddingLG}px 0;
+      }
+
+      /* Summary band — same role as VGM/ARN search panel chrome */
+      .va-summary-panel {
+        flex-shrink: 0;
+        margin: ${token.marginMD}px ${token.paddingLG}px ${token.marginMD}px;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorFillAlter};
+        overflow: hidden;
+      }
       .va-summary-strip {
-        display: flex;
-        flex-wrap: nowrap;
-        align-items: stretch;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: ${token.marginSM}px;
-        width: 100%;
+        padding: ${token.paddingMD}px ${token.paddingLG}px;
+        min-width: 0;
       }
       .va-summary-chip {
         display: flex;
-        flex: 1 1 0;
         flex-direction: column;
         align-items: flex-start;
         justify-content: center;
@@ -98,38 +63,74 @@ export function VendorApprovalsModuleStyles() {
         min-width: 0;
         padding: ${token.paddingSM}px ${token.paddingMD}px;
         border-radius: ${token.borderRadiusLG}px;
-        border: 1px solid ${token.colorPrimaryBorder};
-        background: ${token.colorBgContainerDisabled};
+        border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorBgContainer};
       }
       .va-summary-chip__label {
         font-size: ${token.fontSizeSM}px;
-        line-height: ${token.lineHeight};
+        line-height: 1.2;
         color: ${token.colorTextSecondary};
+        white-space: nowrap;
       }
       .va-summary-chip__value {
         font-size: ${token.fontSizeHeading4}px;
-        line-height: 1.2;
+        line-height: 1.1;
         font-weight: ${token.fontWeightStrong};
+        font-variant-numeric: tabular-nums;
         color: ${token.colorText};
       }
-      .va-summary-chip--primary .va-summary-chip__value {
-        color: ${token.colorPrimary};
-      }
-      .va-summary-chip--success .va-summary-chip__value {
-        color: ${token.colorSuccess};
+      .va-summary-chip--warning {
+        background: ${token.colorWarningBg};
+        border-color: ${token.colorWarningBorder};
       }
       .va-summary-chip--warning .va-summary-chip__value {
         color: ${token.colorWarning};
       }
+      .va-summary-chip--success {
+        background: ${tokenMix(token.colorSuccess, 8)};
+        border-color: ${tokenMix(token.colorSuccess, 10)};
+      }
+      .va-summary-chip--success .va-summary-chip__value {
+        color: ${token.colorSuccess};
+      }
+      .va-summary-chip--error {
+        background: ${token.colorErrorBg};
+        border-color: ${token.colorErrorBorder};
+      }
+      .va-summary-chip--error .va-summary-chip__value {
+        color: ${token.colorError};
+      }
+      .va-summary-chip--neutral {
+        background: ${primaryTint8};
+        border-color: ${token.colorPrimaryBorder};
+      }
+      .va-summary-chip--neutral .va-summary-chip__value {
+        color: ${token.colorPrimary};
+      }
 
       .va-grid-wrap {
-        width: 100%;
-        min-width: 0;
-        min-height: 0;
         flex: 1;
+        min-height: 0;
+        width: 100%;
+        padding: 0 ${token.paddingLG}px ${token.paddingLG}px;
         display: flex;
         flex-direction: column;
         overflow: hidden;
+      }
+      /* Hide empty DataView toolbar Card */
+      .va-approvals-grid > .ant-flex > .ant-card:first-child {
+        display: none !important;
+      }
+      .va-approvals-grid > .ant-flex {
+        flex: 1;
+        min-height: 0;
+        height: 100%;
+        gap: 0 !important;
+      }
+      .va-approvals-grid > * {
+        flex: 1;
+        min-height: 0;
+        height: 100%;
       }
       .va-grid-wrap .va-data-view {
         width: 100%;
@@ -143,13 +144,6 @@ export function VendorApprovalsModuleStyles() {
         height: 100% !important;
         min-height: 360px;
       }
-      /* Hide empty DataView toolbar Card */
-      .va-approvals-grid > .ant-flex > .ant-card:first-child {
-        display: none !important;
-      }
-      .va-approvals-grid > .ant-flex {
-        gap: 0 !important;
-      }
       .va-data-view .sm-data-view-toolbar,
       .va-data-view .data-view-toolbar {
         display: none !important;
@@ -161,23 +155,19 @@ export function VendorApprovalsModuleStyles() {
       }
 
       @media (max-width: 767px) {
-        .feature-page-card.va-page-card > .ant-card-body {
-          padding: ${token.paddingSM}px ${token.paddingMD}px ${token.paddingMD}px !important;
-          gap: ${token.marginMD}px;
+        .va-page-header {
+          padding: ${token.paddingSM}px ${token.paddingMD}px 0;
         }
-        .va-page-layout {
-          gap: ${token.marginMD}px;
+        .va-summary-panel {
+          margin: ${token.marginSM}px ${token.paddingMD}px ${token.marginSM}px;
         }
         .va-summary-strip {
-          flex-wrap: wrap;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          padding: ${token.paddingSM}px ${token.paddingMD}px;
           gap: ${token.marginXS}px;
         }
-        .va-summary-chip {
-          flex: 1 1 calc(50% - ${token.marginXS}px);
-          min-width: 0;
-        }
-        .va-summary-chip:last-child {
-          flex: 1 1 100%;
+        .va-grid-wrap {
+          padding: 0 ${token.paddingMD}px ${token.paddingMD}px;
         }
       }
     `}</style>

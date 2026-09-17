@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-15 14:50)
+// Modified by Sekar Nagarajan (2026-09-17 10:58)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -1380,52 +1380,227 @@ export function ScheduleModuleStyles() {
         margin: 0 !important;
         color: ${token.colorPrimary} !important;
       }
-      .schedule-co2-result-head {
+
+      /* Modified by Sekar Nagarajan (2026-09-17 10:54) — carbon drawer layout */
+      .schedule-co2-layout {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
+        flex-direction: column;
+        gap: ${token.marginLG}px;
+      }
+      .schedule-co2-section-title {
+        display: block;
         margin-bottom: ${token.marginSM}px;
+      }
+      .schedule-co2-route {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginSM}px;
+        padding: ${token.paddingMD}px;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorFillAlter};
+      }
+      .schedule-co2-route__lane {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: ${token.marginSM}px;
+        min-width: 0;
+      }
+      .schedule-co2-port {
+        display: inline-flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+        min-width: 0;
+        padding: ${token.paddingXS}px ${token.paddingSM}px;
+        border-radius: ${token.borderRadius}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorBgContainer};
+      }
+      .schedule-co2-port__code {
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorPrimary};
+        line-height: 1.2;
+      }
+      .schedule-co2-port__name {
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+        line-height: 1.3;
+      }
+      .schedule-co2-route__meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: ${token.marginSM}px ${token.marginMD}px;
+        align-items: center;
+      }
+      .schedule-co2-meta-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        min-width: 0;
+      }
+      .schedule-co2-criteria {
+        display: flex;
+        flex-direction: column;
+      }
+      .schedule-co2-criteria__row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+        gap: ${token.marginMD}px;
+        align-items: end;
+      }
+      .schedule-co2-field {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXS}px;
+        min-width: 0;
+      }
+      .schedule-co2-actions-field {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXS}px;
+        flex-shrink: 0;
+      }
+      .schedule-co2-actions-field__spacer {
+        visibility: hidden;
+        user-select: none;
+        line-height: ${token.lineHeight};
+      }
+      .schedule-co2-calc-btn.ant-btn,
+      .schedule-co2-calc-btn.sm-app-button {
+        height: ${token.controlHeightLG}px;
+        min-width: 120px;
+      }
+      .schedule-co2-results__head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         gap: ${token.marginSM}px;
         flex-wrap: wrap;
+        margin-bottom: ${token.marginSM}px;
       }
-      .schedule-co2-metric-grid {
+      .schedule-co2-results__head .schedule-co2-section-title {
+        margin-bottom: 0;
+      }
+      .schedule-co2-verified {
+        display: inline-flex;
+        align-items: center;
+        padding: 0 ${token.paddingSM}px;
+        border-radius: ${token.borderRadiusSM}px;
+        border: 1px solid ${token.colorSuccessBorder};
+        background: ${token.colorSuccessBg};
+        color: ${token.colorSuccess};
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        line-height: ${token.lineHeight};
+        white-space: nowrap;
+      }
+      .schedule-co2-kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: ${token.marginSM}px;
+      }
+      .schedule-co2-kpi {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+        min-width: 0;
+        padding: ${token.paddingMD}px;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorBgContainer};
+      }
+      .schedule-co2-kpi--total {
+        border-color: ${token.colorSuccessBorder};
+        background: ${tokenMix(token.colorSuccess, 8)};
+      }
+      .schedule-co2-kpi--ttw {
+        border-color: ${token.colorWarningBorder};
+        background: ${tokenMix(token.colorWarning, 8)};
+      }
+      .schedule-co2-kpi--wtt {
+        border-color: ${tokenMix(token.purple, 32)};
+        background: ${tokenMix(token.purple, 8)};
+      }
+      .schedule-co2-kpi__label {
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+        line-height: 1.2;
+      }
+      .schedule-co2-kpi__value {
+        margin: 0;
+        font-size: ${token.fontSizeHeading3}px;
+        font-weight: ${token.fontWeightStrong};
+        font-variant-numeric: tabular-nums;
+        line-height: 1.15;
+        color: ${token.colorText};
+      }
+      .schedule-co2-kpi--total .schedule-co2-kpi__value {
+        color: ${token.colorSuccess};
+      }
+      .schedule-co2-kpi--ttw .schedule-co2-kpi__value {
+        color: ${token.colorInfo};
+      }
+      .schedule-co2-kpi--wtt .schedule-co2-kpi__value {
+        color: ${token.purple};
+      }
+      .schedule-co2-kpi__unit {
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+      }
+      .schedule-co2-kpi__hint {
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+        line-height: 1.3;
+      }
+      .schedule-co2-idle {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: ${token.marginXS}px;
         text-align: center;
-      }
-      .schedule-co2-metric.ant-card {
-        border-radius: ${token.borderRadius}px;
-        text-align: center;
-        box-shadow: none !important;
-      }
-      .schedule-co2-metric__label {
-        font-size: ${token.fontSizeSM}px;
-      }
-      .schedule-co2-metric__value {
-        margin: ${token.marginXXS}px 0 !important;
-      }
-      .schedule-co2-metric__value--success {
-        color: ${token.colorSuccess} !important;
-      }
-      .schedule-co2-metric__value--info {
-        color: ${token.colorInfo} !important;
-      }
-      .schedule-co2-metric__value--purple {
-        color: ${token.purple} !important;
-      }
-      .schedule-co2-metric__unit {
-        font-size: ${token.fontSizeSM}px;
-      }
-      .schedule-co2-metric__hint {
-        font-size: ${token.fontSizeSM}px;
-      }
-      .schedule-co2-note.ant-card {
-        border-radius: ${token.borderRadius}px;
+        padding: ${token.paddingLG}px ${token.paddingMD}px;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px dashed ${token.colorBorder};
         background: ${token.colorFillAlter};
-        box-shadow: none !important;
-        margin-top: ${token.marginMD}px;
+      }
+      .schedule-co2-idle__hint {
+        max-width: 36ch;
+        font-size: ${token.fontSizeSM}px;
+        line-height: 1.4;
+      }
+      .schedule-co2-note {
+        display: flex;
+        align-items: flex-start;
+        gap: ${token.marginSM}px;
+        padding: ${token.paddingMD}px;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px solid ${token.colorPrimary};
+        background: ${token.colorPrimaryBg};
+      }
+      .schedule-co2-note__title {
+        display: block;
+        margin-bottom: ${token.marginXXS}px;
       }
       .schedule-co2-note__text {
+        display: block;
         font-size: ${token.fontSizeSM}px;
-        margin: 0 !important;
+        line-height: 1.45;
+      }
+      @media (max-width: 575px) {
+        .schedule-co2-criteria__row,
+        .schedule-co2-kpi-grid {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .schedule-co2-calc-btn.ant-btn,
+        .schedule-co2-calc-btn.sm-app-button {
+          width: 100%;
+        }
+        .schedule-co2-actions-field__spacer {
+          display: none;
+        }
       }
       .schedule-list-grid .ag-row.schedule-list-row--recommended,
       .schedule-list-grid .ag-row.schedule-list-row--recommended .ag-cell {

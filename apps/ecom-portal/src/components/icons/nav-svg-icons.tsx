@@ -350,3 +350,23 @@ export const NavCarbonCalculatorIcon = createNavSvgIcon(
   "0 0 18 18",
   1.25,
 );
+
+// Modified by Sekar Nagarajan (2026-09-16 17:58) — optical scale to match sibling nav icons
+export const NavAgencyApprovalIcon = createNavSvgIcon(
+  "NavAgencyApprovalIcon",
+  0,
+  0,
+  [
+    {
+      d: "M4.6 2 H13.4 A1.6 1.6 0 0 1 15 3.6 V14.4 A1.6 1.6 0 0 1 13.4 16 H4.6 A1.6 1.6 0 0 1 3 14.4 V3.6 A1.6 1.6 0 0 1 4.6 2 Z M5.2 3.3 H12.8 A0.9 0.9 0 0 1 13.7 4.2 V13.8 A0.9 0.9 0 0 1 12.8 14.7 H5.2 A0.9 0.9 0 0 1 4.3 13.8 V4.2 A0.9 0.9 0 0 1 5.2 3.3 Z",
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+    },
+    { d: "M5.4 6 H11.2 V7 H5.4 Z" },
+    {
+      d: "M7.06 11.31 L8.34 12.66 L11.26 9.06 L12.2 10 L8.38 14.13 L6.2 12.14 Z",
+    },
+  ],
+  "0 0 18 18",
+  1.35,
+);

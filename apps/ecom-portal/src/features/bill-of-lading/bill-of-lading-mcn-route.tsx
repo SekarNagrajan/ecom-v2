@@ -136,7 +136,7 @@ export function BillOfLadingMcnListRoute() {
                 listOptions={{
                   ...profileHandlers,
                   showToolbar: { showTotalCount: false, fullScreen: true },
-                  sideBar: false,
+                  sideBar: true,
                   pagination: true,
                   paginationPageSize: 20,
                   pageSizeOptions: [10, 20, 50, 100],

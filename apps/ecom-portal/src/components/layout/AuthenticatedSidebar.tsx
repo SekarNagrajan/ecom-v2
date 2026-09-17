@@ -23,6 +23,7 @@ import {
   menuKeyToOpenGroupKeys,
 } from "../../features/auth/utils/public-menu-access";
 import { AppIcon, Icons, NavIcons } from "../icons";
+import { NavAgencyApprovalIcon } from "../icons/nav-svg-icons";
 
 const { Sider } = Layout;
 
@@ -394,7 +395,7 @@ export function AuthenticatedSidebar({
           ? {
               key: "vendor-approvals",
               icon: navIcon(
-                NavIcons.vendorApprovals,
+                NavAgencyApprovalIcon,
                 20,
                 lock("vendor-approvals"),
               ),

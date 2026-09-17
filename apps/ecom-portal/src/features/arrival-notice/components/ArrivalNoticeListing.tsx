@@ -213,7 +213,7 @@ export function ArrivalNoticeListing() {
             listOptions={{
               ...profileHandlers,
               showToolbar: { showTotalCount: true, fullScreen: true },
-              sideBar: false,
+              sideBar: true,
               pagination: true,
               paginationPageSize: 20,
               pageSizeOptions: [10, 20, 50, 100],

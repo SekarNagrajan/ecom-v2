@@ -285,7 +285,7 @@ export function PaymentHistoryView() {
             pagination: true,
             paginationPageSize: 10,
             pageSizeOptions: [10, 20, 50, 100],
-            sideBar: false,
+            sideBar: true,
             defaultColDef: { filter: true },
             gridOptions: {
               suppressCellFocus: true,

@@ -130,7 +130,10 @@ function BreakdownTable({ data, dimensionLabel }: BreakdownTableProps) {
               row.tone as DashboardTone,
             );
             return (
-              <tr key={row.name} className={idx % 2 === 1 ? "is-alt" : undefined}>
+              <tr
+                key={row.name}
+                className={idx % 2 === 1 ? "is-alt" : undefined}
+              >
                 <td>
                   <span className="dashboard-name-cell">
                     <span
@@ -254,10 +257,7 @@ export function InteractiveShipmentIntelligenceCard() {
           <div className="dashboard-intelligence-chart">
             <DonutChart data={current.data} totalFeus={totalFeus} />
           </div>
-          <BreakdownTable
-            data={current.data}
-            dimensionLabel={current.column}
-          />
+          <BreakdownTable data={current.data} dimensionLabel={current.column} />
         </div>
       </div>
     </Card>
@@ -313,7 +313,10 @@ export function TopConsigneesCard({ consignees }: TopConsigneesProps) {
                 c.tone as DashboardTone,
               );
               return (
-                <tr key={c.name} className={idx % 2 === 1 ? "is-alt" : undefined}>
+                <tr
+                  key={c.name}
+                  className={idx % 2 === 1 ? "is-alt" : undefined}
+                >
                   <td className="is-center">
                     <span className="dashboard-rank-badge">{idx + 1}</span>
                   </td>

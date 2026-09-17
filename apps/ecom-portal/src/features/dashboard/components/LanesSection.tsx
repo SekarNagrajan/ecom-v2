@@ -23,9 +23,13 @@ function LaneRoute({
 }) {
   return (
     <span className={`dashboard-lane-route dashboard-lane-route--${tone}`}>
-      <span className="dashboard-port-chip dashboard-port-chip--pol">{pol}</span>
+      <span className="dashboard-port-chip dashboard-port-chip--pol">
+        {pol}
+      </span>
       <AppIcon icon={Icons.arrowRight} size={12} />
-      <span className="dashboard-port-chip dashboard-port-chip--pod">{pod}</span>
+      <span className="dashboard-port-chip dashboard-port-chip--pod">
+        {pod}
+      </span>
     </span>
   );
 }

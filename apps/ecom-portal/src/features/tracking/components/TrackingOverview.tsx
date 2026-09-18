@@ -3,7 +3,7 @@ import { AppButton } from "@solverminds/shared-ui";
 import { Card, Col, Row, Space, Tooltip, Typography } from "antd";
 import { useState } from "react";
 
-import { AppIcon, Icons } from "../../../components/icons";
+import { AppIcon, Icons, NavBookingIcon } from "../../../components/icons";
 import type { TrackingSearchResult } from "../types/tracking.types";
 import { TrackingPipeline } from "./TrackingPipeline";
 
@@ -61,7 +61,7 @@ export function TrackingOverview({ data }: TrackingOverviewProps) {
 
           <Col xs={24} sm={12} lg={5}>
             <div className="tracking-meta-item">
-              <AppIcon icon={Icons.notebook} size={22} tone="print" />
+              <AppIcon icon={NavBookingIcon} size={22} tone="view" />
               <div>
                 <Text type="secondary" className="tracking-meta-item__label">
                   Booking & BL Ref
@@ -95,9 +95,7 @@ export function TrackingOverview({ data }: TrackingOverviewProps) {
 
           <Col xs={24} lg={2} className="tracking-overview__toggle-col">
             <Tooltip
-              title={
-                journeyOpen ? "Hide Cargo Journey" : "Show Cargo Journey"
-              }
+              title={journeyOpen ? "Hide Cargo Journey" : "Show Cargo Journey"}
             >
               <AppButton
                 appVariant="ghost"
@@ -172,7 +170,9 @@ export function TrackingOverview({ data }: TrackingOverviewProps) {
                     <AppIcon icon={Icons.shieldCheck} size={14} />
                   </span>
                   <span>
-                    <span className="tracking-deadline__label">VGM Cut-Off</span>
+                    <span className="tracking-deadline__label">
+                      VGM Cut-Off
+                    </span>
                     <span className="tracking-deadline__value">
                       {data.deadlines.vgmClosing}
                     </span>

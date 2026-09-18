@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-31 17:03)
+// Modified by Sekar Nagarajan (2026-09-17 21:00)
 import { PRECONFIGURED_TENANTS } from "@solverminds/auth";
 import { http, HttpResponse } from "msw";
 import type { LoginSuccessResponse } from "../features/auth/types/auth.types";
@@ -10,29 +10,27 @@ import type {
 import { registerMockToken } from "./auth-admin.mock-data";
 
 // ---------------------------------------------------------------------------
-// Mock data
+// Mock data — landing Origin / Delivery typeahead (schedule + rates)
 // ---------------------------------------------------------------------------
 const MOCK_PORTS: PortOption[] = [
-  { portCode: "SGSIN", portName: "Singapore", label: "SGSIN - Singapore" },
-  { portCode: "CNSHA", portName: "Shanghai", label: "CNSHA - Shanghai" },
-  { portCode: "USNYC", portName: "New York", label: "USNYC - New York" },
-  { portCode: "GBFXT", portName: "Felixstowe", label: "GBFXT - Felixstowe" },
+  { portCode: "AEDXB", portName: "DUBAI", label: "AEDXB - DUBAI" },
   {
-    portCode: "AEDXB",
-    portName: "Dubai (Jebel Ali)",
-    label: "AEDXB - Dubai (Jebel Ali)",
+    portCode: "AEJEA",
+    portName: "JEBEL ALI, UAE",
+    label: "AEJEA - JEBEL ALI, UAE",
   },
-  { portCode: "DEHAM", portName: "Hamburg", label: "DEHAM - Hamburg" },
-  { portCode: "NLRTM", portName: "Rotterdam", label: "NLRTM - Rotterdam" },
-  { portCode: "INMAA", portName: "Chennai", label: "INMAA - Chennai" },
   {
-    portCode: "INMUN",
-    portName: "Mumbai (JNPT)",
-    label: "INMUN - Mumbai (JNPT)",
+    portCode: "CNSHA",
+    portName: "SHANGHAI HONGQIAO INT APT",
+    label: "CNSHA - SHANGHAI HONGQIAO INT APT",
   },
-  { portCode: "INPAV", portName: "Pipavav", label: "INPAV - Pipavav" },
-  { portCode: "HKHKG", portName: "Hong Kong", label: "HKHKG - Hong Kong" },
-  { portCode: "JPYOK", portName: "Yokohama", label: "JPYOK - Yokohama" },
+  { portCode: "INMUN", portName: "MUNDRA", label: "INMUN - MUNDRA" },
+  {
+    portCode: "INNSA",
+    portName: "NHAVA SHEVA,MUMBAI",
+    label: "INNSA - NHAVA SHEVA,MUMBAI",
+  },
+  { portCode: "SGSIN", portName: "SINGAPORE", label: "SGSIN - SINGAPORE" },
 ];
 
 const MOCK_EQUIPMENT_TYPES: EquipmentType[] = [

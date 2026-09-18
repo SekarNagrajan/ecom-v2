@@ -2,6 +2,7 @@
 import { z } from "zod";
 import type { ApiResponse } from "../../../types/api.types";
 import type { BookingRateOption } from "../mocks/booking-rates.mock";
+import { defaultTareWeightKg } from "../utils/default-tare-weight";
 import type { ReferenceField } from "../utils/reference-field.utils";
 
 /** One sail/move leg — JSP Route row inside a routing option (module details). */
@@ -354,6 +355,7 @@ export function createEmptyContainer(
   options?: { allocateMockNo?: boolean },
 ): ContainerItem {
   const allocateMockNo = options?.allocateMockNo !== false;
+  // Modified by Sekar Nagarajan (2026-09-17 23:28) — auto tare from container type (JSP getTareweight parity)
   return {
     id: newId(),
     // Modified by Sekar Nagarajan (2026-08-28 12:04)
@@ -361,7 +363,7 @@ export function createEmptyContainer(
     containerNo: allocateMockNo ? createMockContainerNo(containerType) : "",
     quantity: 1,
     eqpStatus: "LADEN",
-    tareWeight: undefined,
+    tareWeight: defaultTareWeightKg(containerType),
     isSoc: false,
     reeferMode: "none",
     setTemp: undefined,

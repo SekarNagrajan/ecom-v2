@@ -1,7 +1,8 @@
-// Modified by Sekar Nagarajan (2026-09-17 18:24)
+// Modified by Sekar Nagarajan (2026-09-17 22:18)
 import { AppButton } from "@solverminds/shared-ui";
 import { Card, Tooltip, Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
+import type { ReactNode } from "react";
 
 import { AppIcon, Icons, NavBookingIcon } from "../../../components/icons";
 import type {
@@ -29,10 +30,10 @@ function calCellClass(count: number, clickable: boolean): string {
     count === 0
       ? "dashboard-cal-cell--0"
       : count <= 2
-      ? "dashboard-cal-cell--low"
-      : count <= 4
-      ? "dashboard-cal-cell--mid"
-      : "dashboard-cal-cell--high";
+        ? "dashboard-cal-cell--low"
+        : count <= 4
+          ? "dashboard-cal-cell--mid"
+          : "dashboard-cal-cell--high";
   return [
     "dashboard-cal-cell",
     tone,
@@ -44,6 +45,83 @@ function calCellClass(count: number, clickable: boolean): string {
 
 function bookingCountLabel(count: number): string {
   return `${count} ${count === 1 ? "booking" : "bookings"}`;
+}
+
+function dayAriaLabel(cell: CalendarDayCell): string {
+  if (cell.count <= 0) return "No bookings";
+  const parts = [bookingCountLabel(cell.count)];
+  if (cell.missingSI > 0) {
+    parts.push(
+      `${cell.missingSI} pending shipping instruction${cell.missingSI === 1 ? "" : "s"}`,
+    );
+  }
+  if (cell.pendingPayment > 0) {
+    parts.push(
+      `${cell.pendingPayment} payment${cell.pendingPayment === 1 ? "" : "s"} pending`,
+    );
+  }
+  return parts.join(", ");
+}
+
+/** Compact status dots under the day count — details live in the tooltip. */
+function DayStatusDots({
+  missingSI,
+  pendingPayment,
+}: {
+  missingSI: number;
+  pendingPayment: number;
+}) {
+  if (missingSI <= 0 && pendingPayment <= 0) {
+    return <span className="dashboard-cal-status" aria-hidden />;
+  }
+  return (
+    <span className="dashboard-cal-status" aria-hidden>
+      {missingSI > 0 ? (
+        <span className="dashboard-cal-status__dot dashboard-cal-status__dot--si" />
+      ) : null}
+      {pendingPayment > 0 ? (
+        <span className="dashboard-cal-status__dot dashboard-cal-status__dot--pay" />
+      ) : null}
+    </span>
+  );
+}
+
+function DayTooltipBody({
+  cell,
+  isTotal = false,
+}: {
+  cell: Pick<CalendarDayCell, "count" | "missingSI" | "pendingPayment">;
+  isTotal?: boolean;
+}): ReactNode {
+  if (cell.count <= 0) return "No bookings this day";
+  return (
+    <div className="dashboard-cal-tip">
+      <Text className="dashboard-cal-tip__title">
+        {isTotal ? "Week total" : bookingCountLabel(cell.count)}
+        {!isTotal && cell.count > 0 ? " — click to view" : null}
+      </Text>
+      {(cell.missingSI > 0 || cell.pendingPayment > 0) && (
+        <ul className="dashboard-cal-tip__list">
+          {cell.missingSI > 0 ? (
+            <li className="dashboard-cal-tip__row">
+              <span className="dashboard-cal-status__dot dashboard-cal-status__dot--si" />
+              <span>
+                {cell.missingSI} need shipping instruction
+              </span>
+            </li>
+          ) : null}
+          {cell.pendingPayment > 0 ? (
+            <li className="dashboard-cal-tip__row">
+              <span className="dashboard-cal-status__dot dashboard-cal-status__dot--pay" />
+              <span>
+                {cell.pendingPayment} payment pending
+              </span>
+            </li>
+          ) : null}
+        </ul>
+      )}
+    </div>
+  );
 }
 
 type PlanningStatTone = "bookings" | "teus" | "si" | "payment";
@@ -181,36 +259,56 @@ export function ShipmentPlanningSection({
                   const clickable = cell.count > 0;
                   return (
                     <td key={key} className="is-center">
-                      <Tooltip
-                        title={
-                          clickable
-                            ? `${bookingCountLabel(cell.count)} — click to view`
-                            : "No bookings"
-                        }
-                      >
+                      <Tooltip title={<DayTooltipBody cell={cell} />}>
                         <button
                           type="button"
-                          className={calCellClass(cell.count, clickable)}
+                          className={[
+                            "dashboard-cal-day",
+                            clickable ? "dashboard-cal-day--clickable" : "",
+                          ]
+                            .filter(Boolean)
+                            .join(" ")}
                           disabled={!clickable}
-                          aria-label={
-                            clickable
-                              ? `${label} ${week.week}: ${bookingCountLabel(
-                                  cell.count,
-                                )}`
-                              : `${label} ${week.week}: no bookings`
-                          }
+                          aria-label={`${label} ${week.week}: ${dayAriaLabel(cell)}`}
                           onClick={() =>
                             handleDayActivate(week, key, label, cell)
                           }
                         >
-                          {cell.count || ""}
+                          <span className={calCellClass(cell.count, clickable)}>
+                            {cell.count || "—"}
+                          </span>
+                          <DayStatusDots
+                            missingSI={cell.missingSI}
+                            pendingPayment={cell.pendingPayment}
+                          />
                         </button>
                       </Tooltip>
                     </td>
                   );
                 })}
                 <td className="is-center dashboard-table__rank">
-                  {week.days.total}
+                  <Tooltip
+                    title={
+                      <DayTooltipBody
+                        isTotal
+                        cell={{
+                          count: week.days.total,
+                          missingSI: week.days.totalMissingSI,
+                          pendingPayment: week.days.totalPendingPayment,
+                        }}
+                      />
+                    }
+                  >
+                    <div className="dashboard-cal-day">
+                      <span className="dashboard-cal-cell dashboard-cal-cell--mid">
+                        {week.days.total}
+                      </span>
+                      <DayStatusDots
+                        missingSI={week.days.totalMissingSI}
+                        pendingPayment={week.days.totalPendingPayment}
+                      />
+                    </div>
+                  </Tooltip>
                 </td>
               </tr>
             ))}

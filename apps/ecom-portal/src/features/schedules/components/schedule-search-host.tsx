@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-08 17:55)
+// Modified by Sekar Nagarajan (2026-09-17 21:14)
 import { AppButton, AppModal } from "@solverminds/shared-ui";
 import { Form, Tooltip } from "antd";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -21,7 +21,8 @@ export interface ScheduleSearchHostProps {
 
 /**
  * Single search form that portals into the auth header when scrolled off-screen.
- * Keeps a height-matched placeholder in-page so layout does not jump (avoids IO flicker).
+ * Uses a 1px pin sentinel (not a height-matched spacer) so results sit flush
+ * under the header with no empty white gap.
  */
 export function ScheduleSearchHost({
   onSearch,
@@ -29,8 +30,7 @@ export function ScheduleSearchHost({
   isLoading,
 }: ScheduleSearchHostProps) {
   const [form] = Form.useForm();
-  const sentinelRef = useRef<HTMLDivElement>(null);
-  const placeholderHeightRef = useRef(0);
+  const pinSentinelRef = useRef<HTMLDivElement>(null);
   const [slotEl, setSlotEl] = useState<HTMLElement | null>(null);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
 
@@ -47,36 +47,9 @@ export function ScheduleSearchHost({
     };
   }, [resetStore, setActive]);
 
-  // Measure in-page panel height while visible so the pinned placeholder keeps layout stable.
-  useEffect(() => {
-    if (pinned) {
-      return;
-    }
-    const node = sentinelRef.current;
-    if (!node) {
-      return;
-    }
-
-    const updateHeight = () => {
-      const height = Math.round(node.getBoundingClientRect().height);
-      if (height > 0) {
-        placeholderHeightRef.current = height;
-        node.style.setProperty(
-          "--schedule-search-placeholder-height",
-          `${height}px`,
-        );
-      }
-    };
-
-    updateHeight();
-    const observer = new ResizeObserver(updateHeight);
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [pinned]);
-
   useEffect(() => {
     const root = document.querySelector(".app-content-main");
-    const target = sentinelRef.current;
+    const target = pinSentinelRef.current;
     if (!root || !target) {
       return;
     }
@@ -84,12 +57,14 @@ export function ScheduleSearchHost({
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry) return;
+        // Pin once the in-page search origin scrolls under the sticky header.
         setPinned(!entry.isIntersecting);
       },
       {
         root,
         threshold: 0,
-        rootMargin: "-8px 0px 0px 0px",
+        // Match app header height so unpin happens as search would reappear.
+        rootMargin: "-64px 0px 0px 0px",
       },
     );
 
@@ -122,20 +97,6 @@ export function ScheduleSearchHost({
       setSlotEl(resolveSlot());
     });
     return () => cancelAnimationFrame(frame);
-  }, [pinned]);
-
-  useLayoutEffect(() => {
-    const node = sentinelRef.current;
-    if (!node) {
-      return;
-    }
-    const height = placeholderHeightRef.current;
-    if (pinned && height > 0) {
-      node.style.setProperty(
-        "--schedule-search-placeholder-height",
-        `${height}px`,
-      );
-    }
   }, [pinned]);
 
   const handleSearch = (params: ScheduleSearchParams) => {
@@ -173,8 +134,14 @@ export function ScheduleSearchHost({
 
   return (
     <>
+      {/* Stable 1px marker — height never collapses, so pin/unpin does not flicker */}
       <div
-        ref={sentinelRef}
+        ref={pinSentinelRef}
+        className="schedule-search-pin-sentinel"
+        aria-hidden
+      />
+
+      <div
         className={[
           "schedule-search-sentinel",
           pinned ? "schedule-search-sentinel--pinned" : undefined,
@@ -182,9 +149,7 @@ export function ScheduleSearchHost({
           .filter(Boolean)
           .join(" ")}
       >
-        {pinned ? (
-          <div className="schedule-search-sentinel__spacer" aria-hidden />
-        ) : (
+        {pinned ? null : (
           <ScheduleSearchFilter {...filterProps} variant="page" />
         )}
       </div>

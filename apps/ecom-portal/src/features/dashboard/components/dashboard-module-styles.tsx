@@ -62,7 +62,10 @@ export function DashboardModuleStyles() {
         border: 1px solid ${token.colorBorderSecondary};
         border-radius: ${token.borderRadiusLG}px;
         background: ${token.colorBgContainer};
-        box-shadow: 0 ${token.marginXXS}px ${token.marginSM}px ${tokenMix(token.colorText, 6)};
+        box-shadow: 0 ${token.marginXXS}px ${token.marginSM}px ${tokenMix(
+      token.colorText,
+      6,
+    )};
         text-align: left;
         font: inherit;
         cursor: pointer;
@@ -88,7 +91,10 @@ export function DashboardModuleStyles() {
       .dashboard-summary-card:hover,
       .dashboard-summary-card:focus-visible,
       .dashboard-summary-card--active {
-        box-shadow: 0 ${token.marginXXS}px ${token.marginMD}px ${tokenMix(token.colorText, 10)};
+        box-shadow: 0 ${token.marginXXS}px ${token.marginMD}px ${tokenMix(
+      token.colorText,
+      10,
+    )};
         outline: none;
         transform: translateY(-1px);
       }
@@ -306,10 +312,11 @@ export function DashboardModuleStyles() {
         flex: 1;
         height: 100%;
       }
-      /* CSS twin row without Ant Col stretch quirks */
+      /* CSS twin row — equal columns to match Top Active Lanes / Lane Opportunities */
+      /* Modified by Sekar Nagarajan (2026-09-17 22:08) */
       .dashboard-equal-row.dashboard-intelligence-row {
         display: grid;
-        grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
         gap: ${token.marginMD}px;
         align-items: stretch;
       }
@@ -1012,6 +1019,79 @@ export function DashboardModuleStyles() {
         font: inherit;
         color: inherit;
       }
+      /* Modified by Sekar Nagarajan (2026-09-17 22:18) — status dots + friendly tooltips */
+      .dashboard-cal-day {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        width: 100%;
+        margin: 0 auto;
+        border: 0;
+        padding: ${token.paddingXXS}px 0;
+        background: transparent;
+        font: inherit;
+        color: inherit;
+      }
+      .dashboard-cal-day--clickable {
+        cursor: pointer;
+        border-radius: ${token.borderRadiusSM}px;
+        transition: box-shadow 0.15s ease, transform 0.15s ease;
+      }
+      .dashboard-cal-day--clickable:hover,
+      .dashboard-cal-day--clickable:focus-visible {
+        box-shadow: 0 0 0 2px ${token.colorPrimaryBorder};
+        transform: translateY(-1px);
+        outline: none;
+      }
+      .dashboard-cal-day--clickable:disabled {
+        cursor: default;
+        transform: none;
+        box-shadow: none;
+      }
+      .dashboard-cal-status {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: ${token.marginXXS}px;
+        min-height: 6px;
+      }
+      .dashboard-cal-status__dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .dashboard-cal-status__dot--si {
+        background: ${token.colorWarning};
+      }
+      .dashboard-cal-status__dot--pay {
+        background: ${verdigris};
+      }
+      .dashboard-cal-tip {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+      }
+      .dashboard-cal-tip__title {
+        color: inherit !important;
+        font-weight: ${token.fontWeightStrong};
+      }
+      .dashboard-cal-tip__list {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+      }
+      .dashboard-cal-tip__row {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginXS}px;
+        font-size: ${token.fontSizeSM}px;
+        opacity: 0.92;
+      }
       .dashboard-cal-cell--0 {
         color: ${token.colorTextQuaternary};
         background: transparent;
@@ -1035,18 +1115,9 @@ export function DashboardModuleStyles() {
       /* Modified by Sekar Nagarajan (2026-09-07 18:42) — clickable planning day counts */
       .dashboard-cal-cell--clickable {
         cursor: pointer;
-        transition: box-shadow 0.15s ease, transform 0.15s ease;
-      }
-      .dashboard-cal-cell--clickable:hover,
-      .dashboard-cal-cell--clickable:focus-visible {
-        box-shadow: 0 0 0 2px ${token.colorPrimaryBorder};
-        transform: translateY(-1px);
-        outline: none;
       }
       .dashboard-cal-cell--clickable:disabled {
         cursor: default;
-        transform: none;
-        box-shadow: none;
       }
       /* Modified by Sekar Nagarajan (2026-09-07 18:49) — tiled planning day drawer header */
       .dashboard-planning-day-drawer__header-wrap.ant-drawer-header {
@@ -1154,7 +1225,7 @@ export function DashboardModuleStyles() {
       }
       .dashboard-planning-day-list__item {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: space-between;
         gap: ${token.marginMD}px;
         padding: ${token.paddingSM}px ${token.paddingMD}px;
@@ -1164,6 +1235,7 @@ export function DashboardModuleStyles() {
       }
       .dashboard-planning-day-list__copy {
         min-width: 0;
+        flex: 1;
         display: flex;
         flex-direction: column;
         gap: ${token.marginXXS}px;
@@ -1182,7 +1254,50 @@ export function DashboardModuleStyles() {
         align-items: center;
         gap: ${token.marginXS}px;
         flex-wrap: wrap;
-        
+      }
+      /* Modified by Sekar Nagarajan (2026-09-17 22:40) — cues top-right with View */
+      .dashboard-planning-day-drawer__summary {
+        display: flex;
+        flex-wrap: wrap;
+        gap: ${token.marginXS}px;
+        margin-top: ${token.marginXXS}px;
+      }
+      .dashboard-planning-day-list__item--attention {
+       
+      }
+      .dashboard-planning-day-list__aside {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: ${token.marginXS}px;
+        flex-shrink: 0;
+        max-width: 48%;
+      }
+      .dashboard-planning-day-cues {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: ${token.marginXXS}px;
+      }
+      .dashboard-planning-day-cue {
+        display: inline-flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: ${token.marginXXS}px;
+        padding: ${token.paddingXXS}px ${token.paddingXS}px;
+        border-radius: ${token.borderRadiusSM}px;
+        font-size: ${token.fontSizeSM}px;
+        line-height: 1.3;
+        text-align: right;
+        white-space: nowrap;
+      }
+      .dashboard-planning-day-cue--si {
+        color: ${token.colorWarning};
+        background: ${token.colorWarningBg};
+      }
+      .dashboard-planning-day-cue--pay {
+        color: ${verdigris};
+        background: ${tokenMix(verdigris, 12)};
       }
       @media (max-width: 575px) {
         .dashboard-planning-day-drawer__tiles {

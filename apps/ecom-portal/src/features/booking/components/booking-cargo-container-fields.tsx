@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-11 11:36)
+// Modified by Sekar Nagarajan (2026-09-17 23:28)
 import {
   Col,
   Input,
@@ -28,6 +28,7 @@ import {
 } from "../types/booking.types";
 import { isReeferContainerType } from "../utils/booking-cargo-completeness";
 import { cargoFieldError } from "../utils/cargo-field-error";
+import { defaultTareWeightKg } from "../utils/default-tare-weight";
 import { QuantityStepper } from "./quantity-stepper";
 
 const { Text } = Typography;
@@ -68,6 +69,7 @@ export function BookingCargoContainerFields({
   const containerType = watch(`containers.${ci}.containerType`);
   const reeferMode = watch(`containers.${ci}.reeferMode`);
   const isOog = watch(`containers.${ci}.isOog`);
+  const isSoc = watch(`containers.${ci}.isSoc`);
   const dimensionUnit = watch(`containers.${ci}.dimensionUnit`) || "CM";
   const dimSuffix = String(dimensionUnit).toLowerCase();
   const showReeferMode = isReeferContainerType(containerType);
@@ -109,6 +111,11 @@ export function BookingCargoContainerFields({
                       value,
                     ),
                   );
+                  // Modified by Sekar Nagarajan (2026-09-17 23:28) — JSP getTareweight on eqp change
+                  const tare = defaultTareWeightKg(value);
+                  if (tare != null) {
+                    setValue(`containers.${ci}.tareWeight`, tare);
+                  }
                   if (!isReeferContainerType(value)) {
                     setValue(`containers.${ci}.reeferMode`, "none");
                   } else if (reeferMode === "none") {
@@ -192,6 +199,8 @@ export function BookingCargoContainerFields({
                 className="form-field-full-width"
                 placeholder="0"
                 addonAfter="kg"
+                // JSP: tare readonly unless SOC — carrier equipment uses master tare
+                readOnly={!isSoc}
               />
             )}
           />

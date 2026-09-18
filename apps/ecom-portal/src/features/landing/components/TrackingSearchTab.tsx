@@ -1,9 +1,10 @@
-// Modified by Sekar Nagarajan (2026-09-11 14:30)
+// Modified by Sekar Nagarajan (2026-09-18 10:45)
 import { AppButton } from "@solverminds/shared-ui";
-import { Flex, Input, theme } from "antd";
+import { Flex, Input, Tabs, theme } from "antd";
 import { Controller, type UseFormReturn } from "react-hook-form";
-import { AppIcon, Icons } from "../../../components/icons";
 
+import { AppIcon, Icons } from "../../../components/icons";
+import type { TrackingSearchType } from "../../tracking/types/tracking.types";
 import type { TrackingSearchForm } from "../types/landing.types";
 import { ImageCaptcha } from "./ImageCaptcha";
 
@@ -12,6 +13,36 @@ interface TrackingSearchTabProps {
   onSubmit: React.FormEventHandler<HTMLFormElement>;
   showImageCaptcha?: boolean;
   isSearching?: boolean;
+}
+
+function fieldLabel(searchType: TrackingSearchType): string {
+  switch (searchType) {
+    case "BOOKING":
+      return "Enter the booking number";
+    case "BL":
+      return "Enter the bill of lading (BL) number";
+    case "CONTAINER":
+      return "Enter the container number";
+    default: {
+      const _exhaustive: never = searchType;
+      return _exhaustive;
+    }
+  }
+}
+
+function fieldPlaceholder(searchType: TrackingSearchType): string {
+  switch (searchType) {
+    case "BOOKING":
+      return "e.g. BKG-2026-9901";
+    case "BL":
+      return "e.g. BL-SHA-88401";
+    case "CONTAINER":
+      return "e.g. SMLU8829102";
+    default: {
+      const _exhaustive: never = searchType;
+      return _exhaustive;
+    }
+  }
 }
 
 export function TrackingSearchTab({
@@ -24,11 +55,27 @@ export function TrackingSearchTab({
   const {
     control,
     reset,
+    watch,
+    setValue,
+    clearErrors,
     formState: { errors },
   } = form;
 
+  const searchType = watch("searchType");
+
   const handleReset = () => {
-    reset();
+    reset({
+      searchType,
+      trackingNumber: "",
+      captcha: "",
+    });
+  };
+
+  const handleTabChange = (key: string) => {
+    const next = key as TrackingSearchType;
+    setValue("searchType", next);
+    setValue("trackingNumber", "");
+    clearErrors("trackingNumber");
   };
 
   const inputStyle = {
@@ -51,10 +98,31 @@ export function TrackingSearchTab({
       onSubmit={onSubmit}
       style={{ width: "100%" }}
     >
+      <Tabs
+        activeKey={searchType}
+        onChange={handleTabChange}
+        className="landing-tracking-search-tabs"
+        style={{ marginBottom: 8 }}
+        items={[
+          {
+            key: "CONTAINER",
+            label: "Container No",
+          },
+          {
+            key: "BOOKING",
+            label: "Booking No",
+          },
+          {
+            key: "BL",
+            label: "Bill of Lading (BL)",
+          },
+        ]}
+      />
+
       <div style={{ marginBottom: 24 }}>
         <div style={{ margin: 0, display: "flex", flexDirection: "column" }}>
           <label style={labelStyle}>
-            BL / Booking / Container Number <span style={asteriskStyle}>*</span>
+            {fieldLabel(searchType)} <span style={asteriskStyle}>*</span>
           </label>
           <Controller
             control={control}
@@ -63,7 +131,8 @@ export function TrackingSearchTab({
               <Input
                 {...field}
                 id="tracking-number"
-                placeholder="e.g. MSKU1234567 or BKG-2024-001"
+                size="large"
+                placeholder={fieldPlaceholder(searchType)}
                 autoComplete="off"
                 allowClear
                 style={inputStyle}
@@ -76,7 +145,7 @@ export function TrackingSearchTab({
                   />
                 }
                 onChange={(e) => {
-                  form.setValue("trackingNumber", e.target.value.toUpperCase());
+                  field.onChange(e.target.value.toUpperCase());
                 }}
               />
             )}
@@ -116,9 +185,7 @@ export function TrackingSearchTab({
             onSubmit(e as unknown as React.FormEvent<HTMLFormElement>)
           }
           icon={
-            isSearching ? undefined : (
-              <AppIcon icon={Icons.search} size={16} />
-            )
+            isSearching ? undefined : <AppIcon icon={Icons.search} size={16} />
           }
         >
           Track shipment

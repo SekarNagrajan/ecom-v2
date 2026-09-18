@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-11 00:14)
+// Modified by Sekar Nagarajan (2026-09-17 21:19)
 import { AppButton } from "@solverminds/shared-ui";
 import {
   Col,
@@ -26,15 +26,18 @@ const SEARCH_ROW_GUTTER: [number, number] = [12, 8];
 const HEADER_ROW_GUTTER: [number, number] = [8, 4];
 
 const POPULAR_PORTS = [
-  { value: "USNYC", label: "USNYC - New York, USA" },
-  { value: "SGSIN", label: "SGSIN - Singapore, Singapore" },
-  { value: "NLRTM", label: "NLRTM - Rotterdam, Netherlands" },
-  { value: "CNSHA", label: "CNSHA - Shanghai, China" },
-  { value: "CNHUA", label: "CNHUA - Huangpu (Guangzhou), China" },
-  { value: "DEHAM", label: "DEHAM - Hamburg, Germany" },
-  { value: "AEJEA", label: "AEJEA - Jebel Ali, UAE" },
-  { value: "USLAX", label: "USLAX - Los Angeles, USA" },
-  { value: "JPTYO", label: "JPTYO - Tokyo, Japan" },
+  { value: "AEDXB", label: "AEDXB - DUBAI" },
+  {
+    value: "AEJEA",
+    label: "AEJEA - JEBEL ALI, UAE",
+  },
+  {
+    value: "CNSHA",
+    label: "CNSHA - SHANGHAI HONGQIAO INT APT",
+  },
+  { value: "INMUN", label: "INMUN - MUNDRA" },
+  { value: "INNSA", label: "INNSA - NHAVA SHEVA,MUMBAI" },
+  { value: "SGSIN", label: "SGSIN - SINGAPORE" },
 ];
 
 const POPULAR_VESSELS = [
@@ -193,8 +196,8 @@ export function ScheduleSearchFilter({
           requiredMark={false}
           initialValues={{
             searchType: "POINT_TO_POINT",
-            polCode: "USNYC",
-            podCode: "SGSIN",
+            polCode: "CNSHA",
+            podCode: "AEJEA",
             dateRange: [dayjs(), dayjs().add(30, "day")],
           }}
           onFinish={handleFinish}
@@ -240,11 +243,15 @@ export function ScheduleSearchFilter({
 
           {searchType === "POINT_TO_POINT" && (
             <Row gutter={gutter} align="middle" wrap={!isHeader}>
+              {/* Modified by Sekar Nagarajan (2026-09-17 21:19) — wider POL/POD in header strip */}
               <Col
                 xs={24}
                 md={isHeader ? undefined : 11}
                 lg={isHeader ? undefined : 6}
-                flex={isHeader ? "1 1 140px" : undefined}
+                flex={isHeader ? "2 1 260px" : undefined}
+                className={
+                  isHeader ? "schedule-search-header-col--port" : undefined
+                }
               >
                 <Form.Item
                   name="polCode"
@@ -264,6 +271,8 @@ export function ScheduleSearchFilter({
                       isHeader ? "Origin (POL)" : "Where are you shipping from?"
                     }
                     options={POPULAR_PORTS}
+                    optionLabelProp="label"
+                    popupMatchSelectWidth={360}
                     aria-label="Origin Port (POL)"
                     filterOption={(input, option) =>
                       (option?.label ?? "")
@@ -279,6 +288,9 @@ export function ScheduleSearchFilter({
                 md={isHeader ? undefined : 2}
                 lg={isHeader ? undefined : 1}
                 flex={isHeader ? "0 0 auto" : undefined}
+                className={
+                  isHeader ? "schedule-search-header-col--swap" : undefined
+                }
               >
                 <Form.Item
                   label={isHeader ? null : <SearchActionsLabel />}
@@ -301,7 +313,10 @@ export function ScheduleSearchFilter({
                 xs={24}
                 md={isHeader ? undefined : 11}
                 lg={isHeader ? undefined : 5}
-                flex={isHeader ? "1 1 140px" : undefined}
+                flex={isHeader ? "2 1 260px" : undefined}
+                className={
+                  isHeader ? "schedule-search-header-col--port" : undefined
+                }
               >
                 <Form.Item
                   name="podCode"
@@ -321,6 +336,8 @@ export function ScheduleSearchFilter({
                       isHeader ? "Delivery (POD)" : "Where is cargo going?"
                     }
                     options={POPULAR_PORTS}
+                    optionLabelProp="label"
+                    popupMatchSelectWidth={360}
                     aria-label="Delivery Port (POD)"
                     filterOption={(input, option) =>
                       (option?.label ?? "")
@@ -335,7 +352,10 @@ export function ScheduleSearchFilter({
                 xs={24}
                 md={isHeader ? undefined : 12}
                 lg={isHeader ? undefined : 6}
-                flex={isHeader ? "1 1 180px" : undefined}
+                flex={isHeader ? "0 1 220px" : undefined}
+                className={
+                  isHeader ? "schedule-search-header-col--date" : undefined
+                }
               >
                 <Form.Item
                   name="dateRange"
@@ -361,6 +381,9 @@ export function ScheduleSearchFilter({
                 md={isHeader ? undefined : 12}
                 lg={isHeader ? undefined : 6}
                 flex={isHeader ? "0 0 auto" : undefined}
+                className={
+                  isHeader ? "schedule-search-header-col--actions" : undefined
+                }
               >
                 <SearchActionsField
                   isLoading={isLoading}

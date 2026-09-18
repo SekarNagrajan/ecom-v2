@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-17 11:44)
+// Modified by Sekar Nagarajan (2026-09-17 21:29)
 // Lucide icon registry — central map for ecom-portal navigation and actions
 import {
   AlertCircle,
@@ -101,6 +101,7 @@ import {
   ShoppingCart,
   Smartphone,
   SquarePen,
+  Star,
   StopCircle,
   Sun,
   Tag,
@@ -266,6 +267,7 @@ export const Icons = {
   shoppingCart: ShoppingCart,
   smartphone: Smartphone,
   squarePen: SquarePen,
+  star: Star,
   stopCircle: StopCircle,
   sun: Sun,
   tag: Tag,

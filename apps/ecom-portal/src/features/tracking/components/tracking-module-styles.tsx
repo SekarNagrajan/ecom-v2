@@ -1231,11 +1231,11 @@ export function TrackingModuleStyles() {
       .tracking-movement-event__meta {
         display: flex;
         flex-direction: column;
-        gap: ${token.marginXS}px;
+        gap: ${token.marginXXS}px;
       }
       .tracking-movement-event__meta-item {
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         gap: ${token.marginXS}px;
         min-width: 0;
       }
@@ -1249,30 +1249,38 @@ export function TrackingModuleStyles() {
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-        margin-top: 1px;
       }
+      /* Modified by Sekar Nagarajan (2026-09-17 23:52) — single-row label + value */
       .tracking-movement-event__meta-copy {
         min-width: 0;
         display: flex;
-        flex-direction: column;
-        gap: 1px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: ${token.marginXXS}px;
+      }
+      .tracking-movement-event__meta-label {
+        display: inline;
+        margin: 0;
+        flex-shrink: 0;
+        font-size: ${token.fontSizeSM}px;
+        line-height: 1.4;
       }
       .tracking-movement-event__meta-value {
-        display: block;
+        display: inline;
         margin: 0;
         font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
         color: ${token.colorText};
-        line-height: 1.35;
+        line-height: 1.4;
+        word-break: break-word;
       }
       .tracking-movement-event__meta-code {
         color: ${token.colorTextSecondary};
         font-weight: ${token.fontWeightStrong};
       }
       .tracking-movement-event__meta-sub {
-        display: block;
-        margin: 0;
-        font-size: ${token.fontSizeSM}px;
-        line-height: 1.3;
+        display: none;
       }
       .tracking-movement-empty {
         padding: ${token.paddingMD}px 0;

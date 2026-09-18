@@ -7,7 +7,6 @@ import type { RowDoubleClickedEvent } from "ag-grid-community";
 import { useMemo } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
-import { NavVesselIcon } from "../../../components/icons/nav-svg-icons";
 import { buildActionsColumn } from "../../../components/shared/build-actions-column";
 import {
   ListActionButton,
@@ -44,7 +43,7 @@ export function ScheduleList({
     () => [
       buildActionsColumn<ScheduleItem>({
         field: "id",
-        width: 180,
+        width: 100,
         cellRenderer: (params: { data?: ScheduleItem }) => {
           const record = params.data;
           if (!record) return null;
@@ -71,7 +70,7 @@ export function ScheduleList({
                   onViewRates(record);
                 }}
               />
-              <ListActionButton
+              {/* <ListActionButton
                 title="CO₂ Estimate"
                 icon={
                   <AppIcon icon={Icons.calculator} size={16} tone="track" />
@@ -90,7 +89,7 @@ export function ScheduleList({
                   e.stopPropagation();
                   onViewVessel(record.vesselCode);
                 }}
-              />
+              /> */}
             </ListActionsRow>
           );
         },
@@ -234,16 +233,16 @@ export function ScheduleList({
         valueGetter: (params: { data?: ScheduleItem }) =>
           formatCutoffValue(params.data?.deadlines?.siDocClosing),
       },
-      {
-        headerName: "Distance",
-        field: "distanceKm",
-        width: 110,
-        minWidth: 100,
-        valueFormatter: (params: { value?: number }) =>
-          params.value != null
-            ? `${params.value.toLocaleString("en-US")} km`
-            : "",
-      },
+      // {
+      //   headerName: "Distance",
+      //   field: "distanceKm",
+      //   width: 110,
+      //   minWidth: 100,
+      //   valueFormatter: (params: { value?: number }) =>
+      //     params.value != null
+      //       ? `${params.value.toLocaleString("en-US")} km`
+      //       : "",
+      // },
     ],
     [onBookNow, onViewVessel, onViewRates, onOpenCarbonModal],
   );

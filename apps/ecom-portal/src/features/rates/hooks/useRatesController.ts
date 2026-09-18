@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-15 15:30)
+// Modified by Sekar Nagarajan (2026-09-18 00:15)
 // Controller hook for Rates — mode-aware cards + surcharge rollup (JSP parity)
 
 import { useToast } from "@solverminds/shared-ui/hooks";
@@ -37,12 +37,15 @@ const DEFAULT_SEARCH_PARAMS: RateSearchParams = {
   commodity: "GEN-CGO",
 };
 
-const RATES_VIEW_MODE_KEY = "ecom.rates.viewMode";
+const RATES_VIEW_MODE_KEY = "ecom.rates.viewMode.v2";
 
 export function useRatesController() {
   const toast = useToast();
   const navigate = useNavigate();
-  const { viewMode, setViewMode } = useModuleViewMode(RATES_VIEW_MODE_KEY);
+  const { viewMode, setViewMode } = useModuleViewMode(
+    RATES_VIEW_MODE_KEY,
+    "card",
+  );
   const [searchParams, setSearchParams] =
     useState<RateSearchParams>(DEFAULT_SEARCH_PARAMS);
   /** Results only after explicit Search (or deep-link from landing). */

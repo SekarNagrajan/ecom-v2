@@ -23,7 +23,7 @@ const REVIEW_PARTY_ROLE_LABEL: Record<PartyRoleKey, string> = {
   notifyParty2: "Notify Party 2",
   forwarder: "Freight Forwarder",
   agreementParty: "Agreement Party",
-  siSubmittingParty: "SI Submitting Party",
+  siSubmittingParty: "Shipper",
 };
 
 interface BookingPreviewSectionProps {

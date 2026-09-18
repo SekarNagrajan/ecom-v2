@@ -1,11 +1,10 @@
-// Modified by Sekar Nagarajan (2026-09-11 12:35)
+// Modified by Sekar Nagarajan (2026-09-17 21:29)
 import { AppButton } from "@solverminds/shared-ui";
 import { Spin, Tag, Tooltip, Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
-import { NavVesselIcon } from "../../../components/icons/nav-svg-icons";
 import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import type { RouteLeg, ScheduleItem } from "../types/schedules.types";
 
@@ -128,36 +127,35 @@ function TransportTranscript({
 }) {
   const nodes = buildTransportNodes(item);
 
-  return (
-    <div className="schedule-card__transport custom-scroll">
-      {nodes.map((node, index) => (
-        <Fragment key={`${node.kind}-${index}-${node.label}`}>
-          {index > 0 ? (
-            <span className="schedule-card__transport-rail" aria-hidden />
-          ) : null}
-          {node.kind === "hub" ? (
-            <span className="schedule-card__transport-hub">{node.label}</span>
-          ) : null}
-          {node.kind === "mode" ? (
-            <span className="schedule-card__transport-mode">
-              <AppIcon icon={node.icon} size={14} />
-              <span>{node.label}</span>
-            </span>
-          ) : null}
-          {node.kind === "vessel" ? (
-            <button
-              type="button"
-              className="schedule-card__transport-vessel"
-              onClick={() => onViewVessel(node.vesselCode)}
-            >
-              <AppIcon icon={Icons.ship} size={14} />
-              <span>{node.label}</span>
-            </button>
-          ) : null}
-        </Fragment>
-      ))}
-    </div>
-  );
+  return null;
+  // <div className="schedule-card__transport custom-scroll">
+  //   {nodes.map((node, index) => (
+  //     <Fragment key={`${node.kind}-${index}-${node.label}`}>
+  //       {index > 0 ? (
+  //         <span className="schedule-card__transport-rail" aria-hidden />
+  //       ) : null}
+  //       {node.kind === "hub" ? (
+  //         <span className="schedule-card__transport-hub">{node.label}</span>
+  //       ) : null}
+  //       {node.kind === "mode" ? (
+  //         <span className="schedule-card__transport-mode">
+  //           <AppIcon icon={node.icon} size={14} />
+  //           <span>{node.label}</span>
+  //         </span>
+  //       ) : null}
+  //       {node.kind === "vessel" ? (
+  //         <button
+  //           type="button"
+  //           className="schedule-card__transport-vessel"
+  //           onClick={() => onViewVessel(node.vesselCode)}
+  //         >
+  //           <AppIcon icon={Icons.ship} size={14} />
+  //           <span>{node.label}</span>
+  //         </button>
+  //       ) : null}
+  //     </Fragment>
+  //   ))}
+  // </div>
 }
 
 type RouteStopBadge =
@@ -543,8 +541,23 @@ function ScheduleCard({
       <div className="schedule-card__main">
         <div className="schedule-card__content">
           <div className="schedule-card__meta">
-            {item.isDefaultRoute ? <Tag color="gold">Recommended</Tag> : null}
-            <Tag color="blue">
+            {/* Modified by Sekar Nagarajan (2026-09-17 21:29) — star icons instead of Recommended text */}
+            {item.isDefaultRoute ? (
+              <Tooltip title="Recommended route">
+                <span
+                  className="schedule-card__recommended-stars"
+                  role="img"
+                  aria-label="Recommended route"
+                >
+                  <AppIcon
+                    icon={Icons.star}
+                    size={14}
+                    className="schedule-card__star"
+                  />
+                </span>
+              </Tooltip>
+            ) : null}
+            <Tag color="pink">
               {item.serviceCode} — {item.serviceName}
             </Tag>
             {/* {item.isDirect ? (
@@ -555,17 +568,13 @@ function ScheduleCard({
                 {item.transshipmentCount === 1 ? "Stop" : "Stops"}
               </Tag>
             )} */}
-            {item.isMultimodal ? <Tag color="cyan">Multimodal</Tag> : null}
-            <Tag
-              className="schedule-card__vessel-tag"
-              onClick={() => onViewVessel(item.vesselCode)}
-            >
-              {item.vesselName} ({item.voyage}
-              {item.bound})
+            {/* {item.isMultimodal ? <Tag color="cyan">Multimodal</Tag> : null} */}
+            <Tag color="orange" onClick={() => onViewVessel(item.vesselCode)}>
+              {item.vesselName} ({item.voyage} - {item.bound})
             </Tag>
-            <Text type="secondary" className="schedule-card__distance">
+            {/* <Text type="secondary" className="schedule-card__distance">
               {item.distanceKm.toLocaleString()} km
-            </Text>
+            </Text> */}
           </div>
 
           <div className="schedule-card__route">
@@ -580,7 +589,7 @@ function ScheduleCard({
                 </span>
               </Text>
               <div className="schedule-card__etime">
-                <Tag color="blue">ETD {item.etd}</Tag>
+                <Tag className="schedule-card__etd-tag">ETD {item.etd}</Tag>
               </div>
               <Text className="schedule-card__terminal">
                 Terminal: {item.polTerminal}
@@ -613,7 +622,7 @@ function ScheduleCard({
                 </span>
               </Text>
               <div className="schedule-card__etime">
-                <Tag color="green">ETA {item.eta}</Tag>
+                <Tag className="schedule-card__eta-tag">ETA {item.eta}</Tag>
               </div>
               <Text className="schedule-card__terminal">
                 Terminal: {item.podTerminal}
@@ -658,7 +667,7 @@ function ScheduleCard({
           >
             {expanded ? "Close Details" : "Show Details"}
           </AppButton>
-          <div className="schedule-card__actions-secondary">
+          {/* <div className="schedule-card__actions-secondary">
             <AppButton
               size="small"
               icon={<AppIcon icon={Icons.calculator} size={14} tone="track" />}
@@ -673,7 +682,7 @@ function ScheduleCard({
             >
               Vessel
             </AppButton>
-          </div>
+          </div> */}
         </div>
       </div>
 

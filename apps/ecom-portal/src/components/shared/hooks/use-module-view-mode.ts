@@ -1,25 +1,32 @@
-// Modified by Sekar Nagarajan (2026-09-15 11:35)
+// Modified by Sekar Nagarajan (2026-09-18 00:15)
 import type { DataViewMode } from "@solverminds/shared-ui/data-view";
 import { useCallback, useState } from "react";
 
 export type ModuleListViewMode = "list" | "card";
 
-function readStoredMode(storageKey: string): ModuleListViewMode {
+function readStoredMode(
+  storageKey: string,
+  fallback: ModuleListViewMode,
+): ModuleListViewMode {
   try {
     const value = sessionStorage.getItem(storageKey);
     if (value === "list" || value === "card") return value;
   } catch {
     // sessionStorage may be unavailable
   }
-  return "list";
+  return fallback;
 }
 
 /**
  * Persists list/card view preference in sessionStorage for module dashboards.
+ * @param defaultMode — used when nothing is stored (Booking/SI/BL stay list; Rates uses card).
  */
-export function useModuleViewMode(storageKey: string) {
+export function useModuleViewMode(
+  storageKey: string,
+  defaultMode: ModuleListViewMode = "list",
+) {
   const [viewMode, setViewModeState] = useState<ModuleListViewMode>(() =>
-    readStoredMode(storageKey),
+    readStoredMode(storageKey, defaultMode),
   );
 
   const setViewMode = useCallback(

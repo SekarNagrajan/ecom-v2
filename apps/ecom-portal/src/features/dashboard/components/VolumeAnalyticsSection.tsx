@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-16 17:07)
+// Modified by Sekar Nagarajan (2026-09-17 22:28)
 import { Card, Segmented, Select, Tooltip, Typography } from "antd";
 import * as echarts from "echarts";
 import { useLayoutEffect, useRef } from "react";
@@ -185,7 +185,7 @@ function VolumeTrendChart({
             type: "line",
             lineStyle: { color: chartTokens.colorPrimary, type: "dashed" },
           },
-          formatter: "{b}: <b>{c} FEUs</b>",
+          formatter: "{b}: <b>{c} TEUs</b>",
         },
         grid: { top: 12, right: 12, bottom: 8, left: 8, containLabel: true },
         xAxis: {
@@ -247,16 +247,16 @@ function VolumeTrendChart({
 
   const periodHint =
     period === "Weekly"
-      ? "Weekly FEU volume over the selected stage"
+      ? "Weekly TEU volume over the selected stage"
       : period === "Quarterly"
-        ? "Quarterly FEU volume over the selected stage"
-        : "Monthly FEU volume over the selected stage";
+        ? "Quarterly TEU volume over the selected stage"
+        : "Monthly TEU volume over the selected stage";
 
   return (
     <div ref={wrapRef} className="dashboard-trend-wrap">
       <div className="dashboard-trend-head">
         <Text strong className="dashboard-metric-tile__label">
-          Volume Trend (FEUs){" "}
+          Volume Trend (TEUs){" "}
           <Tooltip title={periodHint}>
             <AppIcon icon={Icons.info} size={12} />
           </Tooltip>
@@ -301,7 +301,7 @@ export function VolumeAnalyticsSection({
       className="dashboard-panel dashboard-volume-panel"
       title={
         <Text strong className="dashboard-panel__title">
-          Shipment Volume Analytics (FEUs){" "}
+          Shipment Volume Analytics (TEUs){" "}
           <Text type="secondary" className="dashboard-volume-stage-label">
             · {stageLabel}
           </Text>

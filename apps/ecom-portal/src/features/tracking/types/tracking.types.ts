@@ -27,8 +27,12 @@ export interface ContainerMovementEvent {
   locationName: string;
   facility: string;
   eventDate: string;
+  /** Carrier / service code shown in Vessel Details (e.g. FIRX). */
+  vesselCode?: string;
   vesselName?: string;
   voyage?: string;
+  /** Bound letter, e.g. W / E. */
+  bound?: string;
   transportMode: "VESSEL" | "RAIL" | "TRUCK" | "BARGE";
   isActual: boolean;
   /** Optional mock coordinates for live-map event trail. */

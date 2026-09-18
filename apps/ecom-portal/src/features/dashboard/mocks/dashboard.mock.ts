@@ -1,6 +1,6 @@
 // Extended mock data for the rich logistics dashboard design
 // Parity: enhancedDashboard.jsp + Rocket dashboard reference layout
-// Modified by Sekar Nagarajan (2026-09-16 17:07)
+// Modified by Sekar Nagarajan (2026-09-17 22:12)
 
 import type { BookingListDTO } from "../../booking/types/booking-list.types";
 
@@ -85,7 +85,9 @@ export interface OpportunityLane {
 export interface PlanningKpi {
   bookingsNext7Days: number;
   feusNext7Days: number;
+  /** Pending SI count — parity with JSP planningMissingSITotal */
   missingSI: number;
+  /** Payment pending count — parity with JSP planningPendingPaymentTotal */
   atRisk: number;
 }
 
@@ -98,15 +100,29 @@ export type CalendarWeekday =
   | "sat"
   | "sun";
 
+/** Planning calendar booking with SI / payment flags (JSP missingSIFlag / pendingPaymentFlag). */
+export interface PlanningBookingDTO extends BookingListDTO {
+  missingSIFlag?: boolean;
+  pendingPaymentFlag?: boolean;
+}
+
 export interface CalendarDayCell {
   count: number;
-  bookings: BookingListDTO[];
+  /** Bookings awaiting SI on this day */
+  missingSI: number;
+  /** Bookings with payment pending on this day */
+  pendingPayment: number;
+  bookings: PlanningBookingDTO[];
 }
 
 export interface CalendarWeek {
   week: string;
   dateRange: string;
-  days: Record<CalendarWeekday, CalendarDayCell> & { total: number };
+  days: Record<CalendarWeekday, CalendarDayCell> & {
+    total: number;
+    totalMissingSI: number;
+    totalPendingPayment: number;
+  };
 }
 
 /** Day selection payload when a calendar count is clicked. */
@@ -115,7 +131,7 @@ export interface PlanningDaySelection {
   day: CalendarWeekday;
   dayLabel: string;
   dateRange: string;
-  bookings: BookingListDTO[];
+  bookings: PlanningBookingDTO[];
 }
 
 export interface IntelligenceBreakdown {
@@ -134,12 +150,13 @@ export interface TopConsignee {
 }
 
 // ─── Volume KPI Cards (All Volume · Monthly baseline) ────────────
+// Modified by Sekar Nagarajan (2026-09-17 22:28)
 export const MOCK_VOLUME_KPIS: VolumeKpi[] = [
   {
     label: "This Week",
     period: "W22, 2025",
     value: 142,
-    unit: "FEUs",
+    unit: "TEUs",
     change: 18,
     changePrev: 125,
     sparkline: [80, 95, 88, 102, 98, 115, 125, 118, 130, 142],
@@ -148,7 +165,7 @@ export const MOCK_VOLUME_KPIS: VolumeKpi[] = [
     label: "This Month",
     period: "Month (May 2025)",
     value: 612,
-    unit: "FEUs",
+    unit: "TEUs",
     change: 14,
     changePrev: 538,
     sparkline: [400, 420, 450, 480, 460, 500, 520, 540, 570, 612],
@@ -157,7 +174,7 @@ export const MOCK_VOLUME_KPIS: VolumeKpi[] = [
     label: "This Quarter",
     period: "Q2, 2025",
     value: 1986,
-    unit: "FEUs",
+    unit: "TEUs",
     change: 9,
     changePrev: 1824,
     sparkline: [1600, 1650, 1700, 1720, 1780, 1820, 1850, 1900, 1950, 1986],
@@ -166,7 +183,7 @@ export const MOCK_VOLUME_KPIS: VolumeKpi[] = [
     label: "This Year",
     period: "Year (2025)",
     value: 7842,
-    unit: "FEUs",
+    unit: "TEUs",
     change: 11,
     changePrev: 7071,
     sparkline: [6000, 6200, 6500, 6700, 6900, 7100, 7250, 7400, 7620, 7842],
@@ -216,7 +233,7 @@ const MOCK_VOLUME_TREND_QUARTERLY: VolumeTrendPoint[] = [
   { month: "Q2 2025", feus: 2620 },
 ];
 
-/** Lifecycle stage share of total FEUs (mock until REST). */
+/** Lifecycle stage share of total TEUs (mock until REST). */
 const VOLUME_STAGE_FACTOR: Record<VolumeAnalyticsStage, number> = {
   all: 1,
   booking: 0.92,
@@ -312,13 +329,6 @@ export const MOCK_OPPORTUNITY_LANES: OpportunityLane[] = [
 ];
 
 // ─── Upcoming Shipment Planning ──────────────────────────────────
-export const MOCK_PLANNING_KPIS: PlanningKpi = {
-  bookingsNext7Days: 26,
-  feusNext7Days: 184,
-  missingSI: 6,
-  atRisk: 3,
-};
-
 /** Pool of list rows (ids match booking MSW detail fallbacks). */
 const PLANNING_BOOKING_POOL: BookingListDTO[] = [
   {
@@ -463,17 +473,46 @@ const PLANNING_BOOKING_POOL: BookingListDTO[] = [
   },
 ];
 
-function planningDay(count: number, offset: number): CalendarDayCell {
-  const bookings = Array.from({ length: count }, (_, index) => {
-    const source =
-      PLANNING_BOOKING_POOL[(offset + index) % PLANNING_BOOKING_POOL.length];
-    return { ...source };
-  });
-  return { count: bookings.length, bookings };
+// Modified by Sekar Nagarajan (2026-09-17 22:32) — SI / payment flags + zero weekday + KPIs
+type DaySeed = {
+  count: number;
+  missingSI?: number;
+  pendingPayment?: number;
+};
+
+function planningDay(seed: DaySeed, offset: number): CalendarDayCell {
+  const count = Math.max(0, seed.count);
+  const missingSI = Math.min(count, seed.missingSI ?? 0);
+  const pendingPayment = Math.min(count, seed.pendingPayment ?? 0);
+
+  const bookings: PlanningBookingDTO[] = Array.from(
+    { length: count },
+    (_, index) => {
+      const source =
+        PLANNING_BOOKING_POOL[(offset + index) % PLANNING_BOOKING_POOL.length];
+      const hasSi = index < missingSI;
+      const hasPay =
+        missingSI + pendingPayment <= count
+          ? index >= missingSI && index < missingSI + pendingPayment
+          : index < pendingPayment;
+      return {
+        ...source,
+        missingSIFlag: hasSi,
+        pendingPaymentFlag: hasPay,
+      };
+    },
+  );
+
+  return {
+    count: bookings.length,
+    missingSI: bookings.filter((b) => b.missingSIFlag).length,
+    pendingPayment: bookings.filter((b) => b.pendingPaymentFlag).length,
+    bookings,
+  };
 }
 
 function planningWeekDays(
-  counts: [number, number, number, number, number, number, number],
+  seeds: [DaySeed, DaySeed, DaySeed, DaySeed, DaySeed, DaySeed, DaySeed],
   offset: number,
 ): CalendarWeek["days"] {
   const keys: CalendarWeekday[] = [
@@ -487,31 +526,107 @@ function planningWeekDays(
   ];
   const days = {} as Record<CalendarWeekday, CalendarDayCell>;
   let total = 0;
+  let totalMissingSI = 0;
+  let totalPendingPayment = 0;
   keys.forEach((key, index) => {
-    const cell = planningDay(counts[index], offset + index * 3);
+    const cell = planningDay(seeds[index], offset + index * 3);
     days[key] = cell;
     total += cell.count;
+    totalMissingSI += cell.missingSI;
+    totalPendingPayment += cell.pendingPayment;
   });
-  return { ...days, total };
+  return { ...days, total, totalMissingSI, totalPendingPayment };
 }
 
 export const MOCK_CALENDAR_WEEKS: CalendarWeek[] = [
   {
     week: "W22",
     dateRange: "19–25 May",
-    days: planningWeekDays([3, 1, 4, 2, 4, 2, 3], 0),
+    // Wed = 0 bookings (empty weekday)
+    days: planningWeekDays(
+      [
+        { count: 3, missingSI: 1, pendingPayment: 1 },
+        { count: 2, missingSI: 1 },
+        { count: 0 },
+        { count: 2, pendingPayment: 1 },
+        { count: 4, missingSI: 2, pendingPayment: 1 },
+        { count: 1 },
+        { count: 2, missingSI: 1 },
+      ],
+      0,
+    ),
   },
   {
     week: "W23",
     dateRange: "26 May–1 Jun",
-    days: planningWeekDays([4, 1, 5, 2, 4, 1, 3], 7),
+    days: planningWeekDays(
+      [
+        { count: 4, missingSI: 1, pendingPayment: 1 },
+        { count: 1, pendingPayment: 1 },
+        { count: 3, missingSI: 1 },
+        { count: 2 },
+        { count: 4, missingSI: 1, pendingPayment: 1 },
+        { count: 1 },
+        { count: 2, missingSI: 1 },
+      ],
+      7,
+    ),
   },
   {
     week: "W24",
     dateRange: "2–8 Jun",
-    days: planningWeekDays([2, 1, 3, 1, 2, 1, 2], 14),
+    days: planningWeekDays(
+      [
+        { count: 2, missingSI: 1 },
+        { count: 1, pendingPayment: 1 },
+        { count: 3, missingSI: 1, pendingPayment: 1 },
+        { count: 1 },
+        { count: 2, pendingPayment: 1 },
+        { count: 1, missingSI: 1 },
+        { count: 2 },
+      ],
+      14,
+    ),
   },
 ];
+
+function sumPlanningFlags(weeks: CalendarWeek[]): {
+  missingSI: number;
+  atRisk: number;
+  week0Feus: number;
+} {
+  let missingSI = 0;
+  let atRisk = 0;
+  let week0Feus = 0;
+  weeks.forEach((week, weekIndex) => {
+    for (const key of [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat",
+      "sun",
+    ] as CalendarWeekday[]) {
+      const cell = week.days[key];
+      missingSI += cell.missingSI;
+      atRisk += cell.pendingPayment;
+      if (weekIndex === 0) {
+        for (const b of cell.bookings) week0Feus += b.teusCount;
+      }
+    }
+  });
+  return { missingSI, atRisk, week0Feus };
+}
+
+const planningFlagTotals = sumPlanningFlags(MOCK_CALENDAR_WEEKS);
+
+export const MOCK_PLANNING_KPIS: PlanningKpi = {
+  bookingsNext7Days: MOCK_CALENDAR_WEEKS[0]?.days.total ?? 0,
+  feusNext7Days: planningFlagTotals.week0Feus,
+  missingSI: planningFlagTotals.missingSI,
+  atRisk: planningFlagTotals.atRisk,
+};
 
 // ─── Shipment Intelligence Breakdown ─────────────────────────────
 export const MOCK_INTELLIGENCE_BY_ORIGIN: IntelligenceBreakdown[] = [

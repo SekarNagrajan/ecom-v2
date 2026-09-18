@@ -23,6 +23,7 @@ import {
   type ContainerItem,
 } from "../types/booking.types";
 import { isReeferContainerType } from "../utils/booking-cargo-completeness";
+import { defaultTareWeightKg } from "../utils/default-tare-weight";
 import {
   BookingCargoGridExtrasModal,
   type BookingCargoGridExtrasTarget,
@@ -252,6 +253,14 @@ export function BookingCargoGridView({
                                     value,
                                   ),
                                 );
+                                // Modified by Sekar Nagarajan (2026-09-17 23:28) — JSP getTareweight on eqp change
+                                const tare = defaultTareWeightKg(value);
+                                if (tare != null) {
+                                  setValue(
+                                    `containers.${ci}.tareWeight`,
+                                    tare,
+                                  );
+                                }
                                 if (!isReeferContainerType(value)) {
                                   setValue(
                                     `containers.${ci}.reeferMode`,

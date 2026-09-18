@@ -116,12 +116,12 @@ export function BookingCargoListView({
               tabIndex={0}
               aria-expanded={open}
               onClick={() =>
-                setExpandedId(open ? null : (container?.id ?? fieldId))
+                setExpandedId(open ? null : container?.id ?? fieldId)
               }
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
-                  setExpandedId(open ? null : (container?.id ?? fieldId));
+                  setExpandedId(open ? null : container?.id ?? fieldId);
                 }
               }}
             >
@@ -147,18 +147,14 @@ export function BookingCargoListView({
                       .filter(Boolean)
                       .join(" ")}
                   >
-                    {hasNumber
-                      ? container?.containerNo
-                      : `Container ${ci + 1}`}
+                    {hasNumber ? container?.containerNo : `Container ${ci + 1}`}
                   </Text>
                   <span className="si-cargo-type-badge si-cargo-type-badge--primary">
                     {typeLabel} x {qty}
                   </span>
                   <span className="si-cargo-ct-status__tags">
                     {container?.isSoc ? <Tag>SOC</Tag> : null}
-                    {container?.isOog ? (
-                      <Tag color="purple">OOG</Tag>
-                    ) : null}
+                    {container?.isOog ? <Tag color="purple">OOG</Tag> : null}
                     {isReeferContainerType(container?.containerType) &&
                     container?.reeferMode === "operating" ? (
                       <Tag color="blue">Reefer</Tag>
@@ -169,8 +165,7 @@ export function BookingCargoListView({
 
               <div className="si-cargo-ct-summary">
                 <Text type="secondary" className="si-cargo-ct-summary__text">
-                  {lineCount}{" "}
-                  {lineCount === 1 ? "Commodity" : "Commodities"}
+                  {lineCount} {lineCount === 1 ? "Commodity" : "Commodities"}
                   <span className="si-cargo-ct-summary__dot">·</span>
                   {sums.packages.toLocaleString()}{" "}
                   {sums.packages === 1 ? "Package" : "Packages"}
@@ -188,11 +183,7 @@ export function BookingCargoListView({
                   </span>
                 ) : (
                   <span className="si-cargo-vchip si-cargo-vchip--warn">
-                    <AppIcon
-                      icon={Icons.alertTriangle}
-                      size={12}
-                      tone="edit"
-                    />
+                    <AppIcon icon={Icons.alertTriangle} size={12} tone="edit" />
                     {issues} issue{issues === 1 ? "" : "s"}
                   </span>
                 )}
@@ -293,9 +284,10 @@ function ContainerEditorPanel({
       <div className="booking-cargo-commodity-toolbar">
         <Text strong>Commodities</Text>
         <AppButton
+          type="primary"
           size="medium"
           className="booking-cargo-commodity-toolbar__add"
-          icon={<AppIcon icon={Icons.plus} size={16} />}
+          icon={<AppIcon icon={Icons.plus} size={16} tone="create" />}
           onClick={() => append(createEmptyCommodity())}
         >
           Add Commodity

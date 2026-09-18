@@ -28,7 +28,7 @@ export function ScheduleFilter({
                 control={form.control}
                 name="originPort"
                 label="Origin Port"
-                placeholder="e.g. USNYC or New York"
+                placeholder="e.g. CNSHA or Shanghai"
               />
             </div>
             <div className="schedule-filter-field">

@@ -2462,6 +2462,21 @@ export function BookingModuleStyles() {
         align-items: center;
         gap: ${token.marginSM}px;
       }
+      /* Modified by Sekar Nagarajan (2026-09-17 23:22) — service / vessel colored tags */
+      .booking-review-route__meta {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: ${token.marginXS}px;
+      }
+      .booking-review-route__tag.ant-tag {
+        margin-inline-end: 0;
+        max-width: 100%;
+        white-space: normal;
+        text-align: center;
+        line-height: 1.35;
+      }
       .booking-review-route__service {
         font-size: ${token.fontSizeSM}px;
         font-weight: ${token.fontWeightStrong};
@@ -2869,6 +2884,10 @@ export function BookingModuleStyles() {
         color: var(--sm-primary);
         width: 48px;
       }
+        .booking-routing-card__eta-tag{
+        background-color: ${tokenMix(token.colorSuccessBg, 20)};
+        color: ${token.colorSuccess};
+        }
       .booking-cargo-commodity-table__name {
         font-weight: ${token.fontWeightStrong};
         color: ${token.colorText};

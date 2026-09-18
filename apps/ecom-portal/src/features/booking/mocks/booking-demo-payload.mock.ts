@@ -264,7 +264,7 @@ function buildDemoContainer(index: number): ContainerItem {
     containerNo: createMockContainerNo(type, index + 1),
     quantity: 1,
     eqpStatus: "LADEN",
-    tareWeight: type.startsWith("20") ? 2200 : 3900,
+    tareWeight: type.startsWith("20") ? 2300 : 3900,
     isSoc: index === 5,
     reeferMode: isReefer ? "operating" : "none",
     setTemp: isReefer ? -18 : undefined,

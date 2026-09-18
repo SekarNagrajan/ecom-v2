@@ -61,7 +61,7 @@ function DonutChart({ data, totalFeus }: DonutChartProps) {
           left: "center",
           top: "52%",
           style: {
-            text: "FEUs",
+            text: "TEUs",
             textAlign: "center",
             fill: chartTokens.colorTextSecondary,
             fontSize: token.fontSizeSM,
@@ -118,7 +118,7 @@ function BreakdownTable({ data, dimensionLabel }: BreakdownTableProps) {
         <thead>
           <tr>
             <th>{dimensionLabel}</th>
-            <th className="is-right">FEUs</th>
+            <th className="is-right">TEUs</th>
             <th className="is-right">Share</th>
             <th>Volume</th>
           </tr>
@@ -247,7 +247,7 @@ export function InteractiveShipmentIntelligenceCard() {
           />
           <div className="dashboard-intelligence-summary">
             <Text type="secondary">Total</Text>
-            <Text strong>{totalFeus.toLocaleString()} FEUs</Text>
+            <Text strong>{totalFeus.toLocaleString()} TEUs</Text>
             <Text type="secondary">·</Text>
             <Text type="secondary">{current.data.length} segments</Text>
           </div>
@@ -301,7 +301,7 @@ export function TopConsigneesCard({ consignees }: TopConsigneesProps) {
             <tr>
               <th className="is-center">#</th>
               <th>Company</th>
-              <th className="is-right">FEUs</th>
+              <th className="is-right">TEUs</th>
               <th className="is-right">Share</th>
               <th>Volume</th>
             </tr>

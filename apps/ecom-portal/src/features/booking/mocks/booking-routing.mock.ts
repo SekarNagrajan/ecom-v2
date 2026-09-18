@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-11 00:18)
+// Modified by Sekar Nagarajan (2026-09-17 22:54)
 /**
  * Mock sailings for booking Select Vessel/Route popup.
  * Parity: ebookRoutingDetails / eBookingRouteDetails (incl. TS / multimodal module details).
@@ -17,6 +17,24 @@ export function extractPortCode(value: string): string {
   if (!trimmed) return "";
   const code = trimmed.split(/[\s-]/)[0] ?? trimmed;
   return code.trim().toUpperCase();
+}
+
+// Modified by Sekar Nagarajan (2026-09-17 23:00) — short city names for route cards (mock-only)
+const PORT_DISPLAY_NAME: Record<string, string> = {
+  AEDXB: "Dubai",
+  AEJEA: "Jebel Ali",
+  CNHUA: "Huangpu",
+  CNSHA: "Shanghai",
+  DEHAM: "Hamburg",
+  INMUN: "Mundra",
+  INNSA: "Nhava Sheva",
+  NLRTM: "Rotterdam",
+  SGSIN: "Singapore",
+  USNYC: "New York",
+};
+
+function portDisplayName(code: string): string {
+  return PORT_DISPLAY_NAME[code] ?? code;
 }
 
 function addDays(isoDate: string, days: number): string {
@@ -130,22 +148,47 @@ export function buildMockBookingRoutes(
 ): SelectedRoute[] {
   const pol = extractPortCode(params.origin) || "USNYC";
   const pod = extractPortCode(params.delivery) || "SGSIN";
+  const polName = portDisplayName(pol);
+  const podName = portDisplayName(pod);
   const ready = params.cargoReadyDate || new Date().toISOString().slice(0, 10);
   const tsHub = pickTsHub(pol, pod);
+  const tsHubName = portDisplayName(tsHub);
 
   // Modified by Sekar Nagarajan (2026-09-11 00:18) — timeline rail demo for CNHUA → NLRTM
   if (pol === "CNHUA" && pod === "NLRTM") {
-    return [buildTimelineDemoRoute(), ...buildStandardMockRoutes(pol, pod, ready, tsHub)];
+    return [
+      buildTimelineDemoRoute(),
+      ...buildStandardMockRoutes(
+        pol,
+        pod,
+        polName,
+        podName,
+        tsHub,
+        tsHubName,
+        ready,
+      ),
+    ];
   }
 
-  return buildStandardMockRoutes(pol, pod, ready, tsHub);
+  return buildStandardMockRoutes(
+    pol,
+    pod,
+    polName,
+    podName,
+    tsHub,
+    tsHubName,
+    ready,
+  );
 }
 
 function buildStandardMockRoutes(
   pol: string,
   pod: string,
-  ready: string,
+  polName: string,
+  podName: string,
   tsHub: string,
+  tsHubName: string,
+  ready: string,
 ): SelectedRoute[] {
   const etd1 = addDays(ready, 4);
   const eta1 = addDays(ready, 26);
@@ -171,12 +214,12 @@ function buildStandardMockRoutes(
       serviceName: "Far East Express 1",
       serviceCode: "FE1",
       polPortId: pol,
-      polPortName: pol,
+      polPortName: polName,
       podPortId: pod,
-      podPortName: pod,
+      podPortName: podName,
       etd: formatDateTime(etd1, "18:00"),
       eta: formatDateTime(eta1, "06:00"),
-      terminal: `${pol} Main Terminal`,
+      terminal: `${polName} Main Terminal`,
     },
   ];
 
@@ -191,12 +234,12 @@ function buildStandardMockRoutes(
       serviceName: "Atlantic Connect",
       serviceCode: "AUE",
       polPortId: pol,
-      polPortName: pol,
+      polPortName: polName,
       podPortId: tsHub,
-      podPortName: tsHub,
+      podPortName: tsHubName,
       etd: formatDateTime(etd2, "14:00"),
       eta: formatDateTime(eta2Ts, "08:00"),
-      terminal: `${pol} East Berth`,
+      terminal: `${polName} East Berth`,
     },
     {
       id: `LEG-${tsHub}-${pod}-T2`,
@@ -208,12 +251,12 @@ function buildStandardMockRoutes(
       serviceName: "Euro-Asia Shuttle",
       serviceCode: "EAS",
       polPortId: tsHub,
-      polPortName: tsHub,
+      polPortName: tsHubName,
       podPortId: pod,
-      podPortName: pod,
+      podPortName: podName,
       etd: formatDateTime(etd2b, "12:00"),
       eta: formatDateTime(eta2, "10:00"),
-      terminal: `${tsHub} Transshipment Yard`,
+      terminal: `${tsHubName} Transshipment Yard`,
     },
   ];
 
@@ -228,12 +271,12 @@ function buildStandardMockRoutes(
       serviceName: "Inland haulage",
       serviceCode: "",
       polPortId: pol,
-      polPortName: `${pol} Inland depot`,
+      polPortName: `${polName} Inland depot`,
       podPortId: pol,
-      podPortName: pol,
+      podPortName: polName,
       etd: formatDateTime(etd3Inland, "08:00"),
       eta: formatDateTime(eta3Inland, "18:00"),
-      terminal: `${pol} Inland depot`,
+      terminal: `${polName} Inland depot`,
     },
     {
       id: `LEG-${pol}-${tsHub}-M2`,
@@ -245,12 +288,12 @@ function buildStandardMockRoutes(
       serviceName: "India Gulf Link",
       serviceCode: "IND",
       polPortId: pol,
-      polPortName: pol,
+      polPortName: polName,
       podPortId: tsHub,
-      podPortName: tsHub,
+      podPortName: tsHubName,
       etd: formatDateTime(etd3a, "09:00"),
       eta: formatDateTime(eta3a, "16:00"),
-      terminal: `${pol} Feeder Yard`,
+      terminal: `${polName} Feeder Yard`,
     },
     {
       id: `LEG-${tsHub}-${pod}-M3`,
@@ -262,12 +305,12 @@ function buildStandardMockRoutes(
       serviceName: "Coastal Feeder",
       serviceCode: "CF1",
       polPortId: tsHub,
-      polPortName: tsHub,
+      polPortName: tsHubName,
       podPortId: pod,
-      podPortName: pod,
+      podPortName: podName,
       etd: formatDateTime(etd3b, "10:00"),
       eta: formatDateTime(eta3, "12:00"),
-      terminal: `${tsHub} Feeder berth`,
+      terminal: `${tsHubName} Feeder berth`,
     },
   ];
 
@@ -281,11 +324,11 @@ function buildStandardMockRoutes(
       voyage: "024",
       bound: "E",
       polPortId: pol,
-      polPortName: pol,
+      polPortName: polName,
       podPortId: pod,
-      podPortName: pod,
-      polTerminal: `${pol} Main Terminal`,
-      podTerminal: `${pod} Main Terminal`,
+      podPortName: podName,
+      polTerminal: `${polName} Main Terminal`,
+      podTerminal: `${podName} Main Terminal`,
       etd: formatDateTime(etd1, "18:00"),
       eta: formatDateTime(eta1, "06:00"),
       transitTimeDays: 22,
@@ -307,11 +350,11 @@ function buildStandardMockRoutes(
       voyage: "109",
       bound: "W",
       polPortId: pol,
-      polPortName: pol,
+      polPortName: polName,
       podPortId: pod,
-      podPortName: pod,
-      polTerminal: `${pol} East Berth`,
-      podTerminal: `${pod} West Berth`,
+      podPortName: podName,
+      polTerminal: `${polName} East Berth`,
+      podTerminal: `${podName} West Berth`,
       etd: formatDateTime(etd2, "14:00"),
       eta: formatDateTime(eta2, "10:00"),
       transitTimeDays: 25,
@@ -333,11 +376,11 @@ function buildStandardMockRoutes(
       voyage: "051",
       bound: "E",
       polPortId: pol,
-      polPortName: pol,
+      polPortName: polName,
       podPortId: pod,
-      podPortName: pod,
-      polTerminal: `${pol} Feeder Yard`,
-      podTerminal: `${pod} PSA Terminal`,
+      podPortName: podName,
+      polTerminal: `${polName} Feeder Yard`,
+      podTerminal: `${podName} PSA Terminal`,
       etd: formatDateTime(etd3a, "09:00"),
       eta: formatDateTime(eta3, "12:00"),
       transitTimeDays: 27,

@@ -30,13 +30,13 @@ export const DEFAULT_PARTY_ROLES: readonly PartyRoleKey[] = [
 ] as const;
 
 export const PARTY_ROLE_OPTIONS: { key: PartyRoleKey; label: string }[] = [
-  { key: "shipper", label: "Booking Party" },
+  // { key: "shipper", label: "Booking Party" },
+  { key: "siSubmittingParty", label: "Shipper" },
   { key: "consignee", label: "Consignee" },
   { key: "notifyParty", label: "Notify Party" },
   { key: "notifyParty2", label: "Notify Party 2" },
   { key: "forwarder", label: "Forwarder" },
-  { key: "agreementParty", label: "Agreement Party" },
-  { key: "siSubmittingParty", label: "SI Submitting Party" },
+  // { key: "agreementParty", label: "Agreement Party" },
 ];
 
 export const PARTY_ROLE_LABEL: Record<PartyRoleKey, string> = {
@@ -46,7 +46,7 @@ export const PARTY_ROLE_LABEL: Record<PartyRoleKey, string> = {
   notifyParty2: "Notify Party 2",
   forwarder: "Forwarder",
   agreementParty: "Agreement Party",
-  siSubmittingParty: "SI Submitting Party",
+  siSubmittingParty: "Shipper",
 };
 
 /** ecom-app CustomerDetailsStep demo seed — used when parties are empty. */

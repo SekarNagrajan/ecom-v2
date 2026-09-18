@@ -323,7 +323,9 @@ export function BookingCargoEditorStyles() {
         margin: ${token.marginLG}px 0 ${token.marginSM}px;
       }
       .booking-cargo-commodity-toolbar__add.ant-btn {
-        border-style: dashed;
+        background-color: ${token.colorWarningAffix};
+        color: ${token.colorTextLightSolid};
+        border: 1px solid ${token.colorWarningBorder};
       }
       .booking-cargo-commodity-card__hazardous-check {
         min-height: ${token.controlHeightLG}px;

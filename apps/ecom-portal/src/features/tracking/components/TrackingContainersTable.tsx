@@ -36,7 +36,7 @@ export function TrackingContainersTable({
         return (
           <ListActionsRow>
             <ListActionButton
-              title="View Container Event Log & Movements"
+              title="View Container Movements"
               icon={
                 <AppIcon icon={Icons.eye} size={16} gridAction tone="view" />
               }

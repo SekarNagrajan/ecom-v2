@@ -420,10 +420,7 @@ function BookingRouteDetails({ route }: { route: SelectedRoute }) {
                       <AppIcon icon={nodeIcon} size={14} />
                     </span>
                     {isLast ? null : (
-                      <span
-                        className="booking-route-stop__line"
-                        aria-hidden
-                      />
+                      <span className="booking-route-stop__line" aria-hidden />
                     )}
                   </div>
                   <div className="booking-route-stop__body">
@@ -611,8 +608,7 @@ export function BookingRouteCard({
               {route.serviceCode} — {route.serviceName}
             </Tag>
             <Tag color="orange">
-              {route.vesselName} ({route.voyage}
-              {route.bound})
+              {route.vesselName} ({route.voyage} - {route.bound})
             </Tag>
           </div>
 

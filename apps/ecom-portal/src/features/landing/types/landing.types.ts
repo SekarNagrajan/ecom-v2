@@ -1,5 +1,7 @@
-// Modified by Sekar Nagarajan (2026-09-16 16:32)
+// Modified by Sekar Nagarajan (2026-09-18 10:45)
 import { z } from "zod";
+
+import type { TrackingSearchType } from "../../tracking/types/tracking.types";
 
 // --------------------------------------------------------------------------
 // Port search
@@ -7,7 +9,7 @@ import { z } from "zod";
 export interface PortOption {
   portCode: string;
   portName: string;
-  /** Combined display label: "SGSIN - Singapore" */
+  /** Combined display label: "CNSHA - SHANGHAI HONGQIAO INTERNATIONAL APT" */
   label: string;
 }
 
@@ -49,10 +51,22 @@ const captchaRequiredSchema = z
   .trim()
   .min(1, "Please Enter The Captcha Code");
 
+export const trackingSearchTypeSchema = z.enum([
+  "CONTAINER",
+  "BOOKING",
+  "BL",
+]);
+
 export const trackingSearchSchema = z.object({
-  trackingNumber: z.string().optional(),
+  searchType: trackingSearchTypeSchema,
+  trackingNumber: z
+    .string()
+    .trim()
+    .min(3, "Please enter a valid Container, Booking, or Bill of Lading (BL) number"),
   captcha: captchaRequiredSchema,
 });
+
+export type LandingTrackingSearchType = TrackingSearchType;
 
 export const ratesSearchSchema = z.object({
   pol: z.string().optional(),

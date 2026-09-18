@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-11 12:40)
+// Modified by Sekar Nagarajan (2026-09-17 23:52)
 import { AppDrawer } from "@solverminds/shared-ui";
 import { Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
@@ -22,14 +22,6 @@ interface TrackingMovementDrawerProps {
   onClose: () => void;
 }
 
-const STATUS_LABEL: Record<ContainerEquipment["status"], string> = {
-  IN_TRANSIT: "In Transit",
-  DELIVERED: "Delivered",
-  GATE_IN: "Gate In",
-  LOADED: "Loaded",
-  DISCHARGED: "Discharged",
-};
-
 const TRANSPORT_ICON: Record<
   ContainerMovementEvent["transportMode"],
   LucideIcon
@@ -40,24 +32,52 @@ const TRANSPORT_ICON: Record<
   BARGE: Icons.anchor,
 };
 
-const TRANSPORT_LABEL: Record<ContainerMovementEvent["transportMode"], string> =
-  {
-    VESSEL: "Vessel",
-    TRUCK: "Truck",
-    RAIL: "Rail",
-    BARGE: "Barge",
-  };
+const MONTH_INDEX: Record<string, number> = {
+  Jan: 0,
+  Feb: 1,
+  Mar: 2,
+  Apr: 3,
+  May: 4,
+  Jun: 5,
+  Jul: 6,
+  Aug: 7,
+  Sep: 8,
+  Oct: 9,
+  Nov: 10,
+  Dec: 11,
+};
 
-function formatWeight(kg: number): string {
-  return `${kg.toLocaleString("en-US")} kg`;
+/** Parse "06-Aug-2026 03:00" (JSP display) for newest-first sort. */
+function parseEventDate(value: string): number {
+  const match = /^(\d{2})-([A-Za-z]{3})-(\d{4})\s+(\d{2}):(\d{2})/.exec(
+    value.trim(),
+  );
+  if (!match) {
+    const fallback = Date.parse(value.replace(" ", "T"));
+    return Number.isNaN(fallback) ? 0 : fallback;
+  }
+  const [, dd, mon, yyyy, hh, mm] = match;
+  const month = MONTH_INDEX[mon] ?? 0;
+  return Date.UTC(Number(yyyy), month, Number(dd), Number(hh), Number(mm));
 }
 
 function sortMovementsNewestFirst(
   movements: ContainerMovementEvent[],
 ): ContainerMovementEvent[] {
-  return [...movements].sort((a, b) =>
-    a.eventDate < b.eventDate ? 1 : a.eventDate > b.eventDate ? -1 : 0,
+  return [...movements].sort(
+    (a, b) => parseEventDate(b.eventDate) - parseEventDate(a.eventDate),
   );
+}
+
+/** JSP-style vessel line: FIRX / NEAPOLI / 02602 / W */
+function formatVesselDetails(event: ContainerMovementEvent): string | null {
+  const parts = [
+    event.vesselCode,
+    event.vesselName,
+    event.voyage,
+    event.bound,
+  ].filter((part): part is string => Boolean(part?.trim()));
+  return parts.length > 0 ? parts.join(" / ") : null;
 }
 
 function MovementEventCard({
@@ -70,12 +90,7 @@ function MovementEventCard({
   isLast: boolean;
 }) {
   const modeIcon = TRANSPORT_ICON[event.transportMode];
-  const vesselLine =
-    event.vesselName || event.voyage
-      ? [event.vesselName, event.voyage ? `Voy ${event.voyage}` : null]
-          .filter(Boolean)
-          .join(" · ")
-      : null;
+  const vesselDetails = formatVesselDetails(event);
 
   return (
     <li
@@ -99,32 +114,10 @@ function MovementEventCard({
             <Text strong className="tracking-movement-event__name">
               {event.eventName}
             </Text>
-            <div className="tracking-movement-event__chips">
-              <span className="tracking-movement-chip tracking-movement-chip--code">
-                {event.eventCode}
-              </span>
-              <span className="tracking-movement-chip tracking-movement-chip--mode">
-                {TRANSPORT_LABEL[event.transportMode]}
-              </span>
-              {event.isActual ? (
-                <span className="tracking-movement-chip tracking-movement-chip--actual">
-                  Actual
-                </span>
-              ) : (
-                <span className="tracking-movement-chip tracking-movement-chip--estimate">
-                  Estimated
-                </span>
-              )}
-              {isLatest ? (
-                <span className="tracking-movement-chip tracking-movement-chip--latest">
-                  Latest
-                </span>
-              ) : null}
-            </div>
           </div>
           <time
             className="tracking-movement-event__time"
-            dateTime={event.eventDate.replace(" ", "T")}
+            dateTime={event.eventDate}
           >
             {event.eventDate}
           </time>
@@ -136,34 +129,33 @@ function MovementEventCard({
               <AppIcon icon={Icons.mapPin} size={14} />
             </span>
             <div className="tracking-movement-event__meta-copy">
+              <Text
+                type="secondary"
+                className="tracking-movement-event__meta-label"
+              >
+                Activity Location:
+              </Text>
               <Text className="tracking-movement-event__meta-value">
                 {event.locationName}
-                {event.locationCode ? (
-                  <span className="tracking-movement-event__meta-code">
-                    {" "}
-                    ({event.locationCode})
-                  </span>
-                ) : null}
+                {event.facility ? ` · ${event.facility}` : ""}
               </Text>
-              {event.facility ? (
-                <Text
-                  type="secondary"
-                  className="tracking-movement-event__meta-sub"
-                >
-                  {event.facility}
-                </Text>
-              ) : null}
             </div>
           </div>
 
-          {vesselLine ? (
+          {vesselDetails ? (
             <div className="tracking-movement-event__meta-item">
               <span className="tracking-movement-event__meta-icon app-icon-inherit">
                 <AppIcon icon={Icons.ship} size={14} />
               </span>
               <div className="tracking-movement-event__meta-copy">
+                <Text
+                  type="secondary"
+                  className="tracking-movement-event__meta-label"
+                >
+                  Vessel Details :
+                </Text>
                 <Text className="tracking-movement-event__meta-value">
-                  {vesselLine}
+                  {vesselDetails}
                 </Text>
               </div>
             </div>
@@ -182,23 +174,6 @@ export function TrackingMovementDrawer({
   if (!container) return null;
 
   const movements = sortMovementsNewestFirst(container.movements);
-  const statusClass = `tracking-movement-status tracking-movement-status--${container.status
-    .toLowerCase()
-    .replace(/_/g, "-")}`;
-
-  const summaryItems = [
-    { label: "Container No", value: container.containerNo },
-    { label: "Size / Type", value: container.containerType },
-    { label: "Seal No", value: container.sealNo },
-    { label: "Tare Weight", value: formatWeight(container.tareWeightKg) },
-    { label: "Payload", value: formatWeight(container.payloadKg) },
-    {
-      label: "Current Status",
-      value: (
-        <span className={statusClass}>{STATUS_LABEL[container.status]}</span>
-      ),
-    },
-  ];
 
   return (
     <AppDrawer
@@ -221,33 +196,15 @@ export function TrackingMovementDrawer({
             <Title level={5} className="tracking-movement-drawer__heading">
               {container.containerNo}
             </Title>
-            <Text type="secondary" className="tracking-movement-drawer__meta">
+            {/* <Text type="secondary" className="tracking-movement-drawer__meta">
               {container.latestActivity}
               {" · "}
               {container.activityLocation}
-            </Text>
+            </Text> */}
           </div>
         </div>
       }
     >
-      <section
-        className="tracking-movement-summary"
-        aria-label="Container summary"
-      >
-        <div className="tracking-movement-summary__grid">
-          {summaryItems.map((item) => (
-            <div key={item.label} className="tracking-movement-summary__cell">
-              <Text className="tracking-movement-summary__label">
-                {item.label}
-              </Text>
-              <div className="tracking-movement-summary__value">
-                {item.value}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
       <section
         className="tracking-movement-timeline-section"
         aria-label="Movement event log"
@@ -263,8 +220,7 @@ export function TrackingMovementDrawer({
             type="secondary"
             className="tracking-movement-timeline-section__count"
           >
-            {movements.length} {movements.length === 1 ? "event" : "events"} ·
-            newest first
+            {movements.length} {movements.length === 1 ? "event" : "events"}
           </Text>
         </div>
 

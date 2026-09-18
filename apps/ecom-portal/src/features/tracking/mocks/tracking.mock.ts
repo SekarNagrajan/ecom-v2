@@ -1,336 +1,368 @@
-// Modified by Sekar Nagarajan (2026-09-01 14:38)
+// Modified by Sekar Nagarajan (2026-09-17 23:50)
 // Container & Cargo Tracking Mock Data Service
-// Parity with Tracking.jsp and TrackingDetails.jsp backend logic
+// Parity with Tracking.jsp / TrackingDetails.jsp — container vs booking/BL result shape
 
-import type { TrackingSearchResult } from "../types/tracking.types";
+import type {
+  ContainerEquipment,
+  ContainerMovementEvent,
+  TrackingSearchResult,
+  TrackingSearchType,
+} from "../types/tracking.types";
 
-/** USNYC → Mid-Atlantic → Azores lane → Med → Suez → Red Sea → Arabian Sea → Malacca → SGSIN */
-const NYC_SIN_ROUTE = {
-  pol: { lat: 40.68, lng: -74.04, label: "USNYC" },
+/** China (Nansha / Xiamen) → Djibouti TS → onward lane waypoints for live map. */
+const SHA_DJI_ROUTE = {
+  pol: { lat: 22.65, lng: 113.68, label: "CNNAN" },
   waypoints: [
-    { lat: 39.5, lng: -65.0, label: "Gulf Stream" },
-    { lat: 37.0, lng: -45.0, label: "N. Atlantic" },
-    { lat: 36.0, lng: -20.0, label: "Azores lane" },
-    { lat: 36.0, lng: -5.5, label: "Gibraltar" },
-    { lat: 35.5, lng: 15.0, label: "C. Mediterranean" },
-    { lat: 31.5, lng: 32.3, label: "Port Said" },
-    { lat: 29.95, lng: 32.55, label: "Suez" },
-    { lat: 20.0, lng: 38.5, label: "Red Sea" },
-    { lat: 12.5, lng: 45.0, label: "Gulf of Aden" },
+    { lat: 20.0, lng: 115.0, label: "S. China Sea" },
+    { lat: 10.0, lng: 110.0, label: "Approaches" },
+    { lat: 5.0, lng: 95.0, label: "Malacca" },
+    { lat: 5.0, lng: 80.0, label: "Indian Ocean" },
     { lat: 8.0, lng: 60.0, label: "Arabian Sea" },
-    { lat: 5.5, lng: 80.0, label: "Indian Ocean" },
-    { lat: 4.0, lng: 95.0, label: "Approaches" },
-    { lat: 2.5, lng: 101.5, label: "Malacca" },
+    { lat: 12.0, lng: 48.0, label: "Gulf of Aden" },
   ],
-  pod: { lat: 1.26, lng: 103.82, label: "SGSIN" },
+  pod: { lat: 11.61, lng: 43.14, label: "DJDJJ" },
 } as const;
 
 const LIVE_AIS = {
-  lat: 29.95,
-  lng: 32.55,
-  speedKn: 14.2,
-  headingDeg: 148,
-  lastUpdate: "2026-09-14 08:30",
-  locationLabel: "Suez Maritime Transit Zone",
+  lat: 12.0,
+  lng: 48.0,
+  speedKn: 12.4,
+  headingDeg: 265,
+  lastUpdate: "06-Aug-2026 03:00",
+  locationLabel: "DJIBOUTI — Transshipment",
   source: "Satellite AIS (mock)",
 } as const;
 
-const SHARED_SHIPMENT: Omit<TrackingSearchResult, "searchKey" | "containers"> = {
-  bookingNo: "BKG-2026-9901",
-  blNo: "BL-NYC-88401",
-  polPortCode: "USNYC",
-  polPortName: "New York (Port of NY & NJ)",
-  polTerminal: "APM Terminals Port Elizabeth",
-  podPortCode: "SGSIN",
-  podPortName: "Singapore (Port of Singapore)",
-  podTerminal: "PSA Pasir Panjang Terminal",
-  vesselCode: "AGEX",
-  vesselName: "ANTIGRAVITY EXPRESS",
-  voyage: "024E",
-  bound: "East",
-  etd: "2026-09-02 18:00",
-  eta: "2026-09-24 06:00",
-  actualEtd: "2026-09-02 19:15",
-  progressPercent: 65,
-  deadlines: {
-    containerGateIn: "2026-09-01 17:00",
-    siDocClosing: "2026-08-31 12:00",
-    vgmClosing: "2026-09-01 12:00",
-  },
-  milestones: [
-    {
-      id: "m1",
-      stepName: "Gate In (POL)",
-      location: "New York, USNYC",
-      timestamp: "2026-08-31 14:30",
-      isCompleted: true,
-      isCurrent: false,
-      transportMode: "TRUCK",
-    },
-    {
-      id: "m2",
-      stepName: "Loaded on Vessel",
-      location: "New York, USNYC",
-      timestamp: "2026-09-02 10:15",
-      isCompleted: true,
-      isCurrent: false,
-      transportMode: "VESSEL",
-    },
-    {
-      id: "m3",
-      stepName: "Vessel Departure",
-      location: "New York, USNYC",
-      timestamp: "2026-09-02 19:15",
-      isCompleted: true,
-      isCurrent: false,
-      transportMode: "VESSEL",
-    },
-    {
-      id: "m4",
-      stepName: "Ocean Transport",
-      location: "North Atlantic / Suez Canal",
-      timestamp: "In Transit",
-      isCompleted: true,
-      isCurrent: true,
-      transportMode: "VESSEL",
-    },
-    {
-      id: "m5",
-      stepName: "Discharge at POD",
-      location: "Singapore, SGSIN",
-      timestamp: "Est. 2026-09-24 06:00",
-      isCompleted: false,
-      isCurrent: false,
-      transportMode: "VESSEL",
-    },
-    {
-      id: "m6",
-      stepName: "Gate Out / Delivered",
-      location: "Singapore, SGSIN",
-      timestamp: "Pending",
-      isCompleted: false,
-      isCurrent: false,
-      transportMode: "TRUCK",
-    },
-  ],
-  routeMap: {
-    pol: { ...NYC_SIN_ROUTE.pol },
-    waypoints: NYC_SIN_ROUTE.waypoints.map((w) => ({ ...w })),
-    pod: { ...NYC_SIN_ROUTE.pod },
-  },
-  liveAis: { ...LIVE_AIS },
-};
+const BOOKING_NO = "BKG-2026-9901";
+const BL_NO = "BL-SHA-88401";
 
-export const MOCK_TRACKING_RESULTS: Record<string, TrackingSearchResult> = {
-  SMLU8829102: {
-    ...SHARED_SHIPMENT,
-    searchKey: "SMLU8829102",
-    containers: [
+function vesselEvent(
+  partial: Omit<ContainerMovementEvent, "transportMode" | "isActual"> & {
+    transportMode?: ContainerMovementEvent["transportMode"];
+    isActual?: boolean;
+  },
+): ContainerMovementEvent {
+  return {
+    transportMode: "VESSEL",
+    isActual: true,
+    facility: "",
+    ...partial,
+  };
+}
+
+/** Primary container timeline — matches JSP-style event log sample. */
+function buildPrimaryMovements(prefix: string): ContainerMovementEvent[] {
+  return [
+    vesselEvent({
+      id: `${prefix}-ev5`,
+      eventCode: "LOAD-TS",
+      eventName: "LOAD TRANSHIPMENT",
+      locationCode: "DJDJJ",
+      locationName: "DJIBOUTI",
+      facility: "Doraleh Multipurpose Port",
+      eventDate: "06-Aug-2026 03:00",
+      vesselCode: "FIRX",
+      vesselName: "NEAPOLI",
+      voyage: "02602",
+      bound: "W",
+      lat: 11.61,
+      lng: 43.14,
+    }),
+    vesselEvent({
+      id: `${prefix}-ev4`,
+      eventCode: "DISC-TS",
+      eventName: "DISCHARGE TRANSHIPMENT",
+      locationCode: "DJDJJ",
+      locationName: "DJIBOUTI",
+      facility: "Doraleh Multipurpose Port",
+      eventDate: "06-Aug-2026 00:00",
+      vesselCode: "ARX",
+      vesselName: "ZHENOVA",
+      voyage: "02614",
+      bound: "W",
+      lat: 11.61,
+      lng: 43.14,
+    }),
+    vesselEvent({
+      id: `${prefix}-ev3`,
+      eventCode: "LOAD",
+      eventName: "LOAD FULL",
+      locationCode: "CNNAN",
+      locationName: "NANSHA, CHINA",
+      facility: "Nansha Phase IV Terminal",
+      eventDate: "06-Jun-2026 04:00",
+      vesselCode: "ARX",
+      vesselName: "ZHENOVA",
+      voyage: "02614",
+      bound: "W",
+      lat: 22.65,
+      lng: 113.68,
+    }),
+    {
+      id: `${prefix}-ev2`,
+      eventCode: "RECV",
+      eventName: "RECEIVED FROM SHIPPER",
+      locationCode: "CNNAN",
+      locationName: "NANSHA, CHINA",
+      facility: "Nansha Inland Depot",
+      eventDate: "30-May-2026 00:01",
+      vesselCode: "ARX",
+      vesselName: "ZHENOVA",
+      voyage: "02614",
+      bound: "W",
+      transportMode: "TRUCK",
+      isActual: true,
+      lat: 22.65,
+      lng: 113.68,
+    },
+    {
+      id: `${prefix}-ev1`,
+      eventCode: "SENT",
+      eventName: "SENT TO SHIPPER",
+      locationCode: "CNXMN",
+      locationName: "XIAMEN, CHINA",
+      facility: "Xiamen Haicang Terminal",
+      eventDate: "27-May-2026 00:01",
+      vesselCode: "ARX",
+      vesselName: "ZHENOVA",
+      voyage: "02614",
+      bound: "W",
+      transportMode: "TRUCK",
+      isActual: true,
+      lat: 24.48,
+      lng: 118.08,
+    },
+  ];
+}
+
+function buildSecondaryMovements(prefix: string): ContainerMovementEvent[] {
+  return [
+    vesselEvent({
+      id: `${prefix}-ev3`,
+      eventCode: "LOAD-TS",
+      eventName: "LOAD TRANSHIPMENT",
+      locationCode: "DJDJJ",
+      locationName: "DJIBOUTI",
+      facility: "Doraleh Multipurpose Port",
+      eventDate: "06-Aug-2026 03:15",
+      vesselCode: "FIRX",
+      vesselName: "NEAPOLI",
+      voyage: "02602",
+      bound: "W",
+      lat: 11.61,
+      lng: 43.14,
+    }),
+    vesselEvent({
+      id: `${prefix}-ev2`,
+      eventCode: "DISC-TS",
+      eventName: "DISCHARGE TRANSHIPMENT",
+      locationCode: "DJDJJ",
+      locationName: "DJIBOUTI",
+      facility: "Doraleh Multipurpose Port",
+      eventDate: "06-Aug-2026 00:20",
+      vesselCode: "ARX",
+      vesselName: "ZHENOVA",
+      voyage: "02614",
+      bound: "W",
+      lat: 11.61,
+      lng: 43.14,
+    }),
+    vesselEvent({
+      id: `${prefix}-ev1`,
+      eventCode: "LOAD",
+      eventName: "LOAD FULL",
+      locationCode: "CNNAN",
+      locationName: "NANSHA, CHINA",
+      facility: "Nansha Phase IV Terminal",
+      eventDate: "06-Jun-2026 05:10",
+      vesselCode: "ARX",
+      vesselName: "ZHENOVA",
+      voyage: "02614",
+      bound: "W",
+      lat: 22.65,
+      lng: 113.68,
+    }),
+  ];
+}
+
+/** All containers on the shared booking / BL. */
+const BOOKING_CONTAINERS: ContainerEquipment[] = [
+  {
+    containerNo: "SMLU8829102",
+    containerType: "40HC",
+    sealNo: "SLM-991823",
+    tareWeightKg: 3900,
+    payloadKg: 24500,
+    latestActivity: "LOAD TRANSHIPMENT",
+    activityLocation: "DJIBOUTI",
+    activityDate: "06-Aug-2026 03:00",
+    status: "IN_TRANSIT",
+    movements: buildPrimaryMovements("c1"),
+  },
+  {
+    containerNo: "SMLU4019283",
+    containerType: "20DC",
+    sealNo: "SLM-991824",
+    tareWeightKg: 2300,
+    payloadKg: 18200,
+    latestActivity: "LOAD TRANSHIPMENT",
+    activityLocation: "DJIBOUTI",
+    activityDate: "06-Aug-2026 03:15",
+    status: "IN_TRANSIT",
+    movements: buildSecondaryMovements("c2"),
+  },
+  {
+    containerNo: "SMLU5520199",
+    containerType: "40HC",
+    sealNo: "SLM-991825",
+    tareWeightKg: 3900,
+    payloadKg: 22100,
+    latestActivity: "DISCHARGE TRANSHIPMENT",
+    activityLocation: "DJIBOUTI",
+    activityDate: "06-Aug-2026 00:20",
+    status: "DISCHARGED",
+    movements: buildSecondaryMovements("c3"),
+  },
+];
+
+const SHARED_SHIPMENT: Omit<TrackingSearchResult, "searchKey" | "containers"> =
+  {
+    bookingNo: BOOKING_NO,
+    blNo: BL_NO,
+    polPortCode: "CNNAN",
+    polPortName: "Nansha, China",
+    polTerminal: "Nansha Phase IV Terminal",
+    podPortCode: "DJDJJ",
+    podPortName: "Djibouti",
+    podTerminal: "Doraleh Multipurpose Port",
+    vesselCode: "FIRX",
+    vesselName: "NEAPOLI",
+    voyage: "02602",
+    bound: "W",
+    etd: "06-Jun-2026 04:00",
+    eta: "20-Aug-2026 08:00",
+    actualEtd: "06-Jun-2026 04:00",
+    progressPercent: 72,
+    deadlines: {
+      containerGateIn: "05-Jun-2026 18:00",
+      siDocClosing: "04-Jun-2026 12:00",
+      vgmClosing: "05-Jun-2026 12:00",
+    },
+    milestones: [
       {
-        containerNo: "SMLU8829102",
-        containerType: "40FT High Cube Dry",
-        sealNo: "SLM-991823",
-        tareWeightKg: 3820,
-        payloadKg: 24500,
-        latestActivity: "Ocean Vessel In-Transit",
-        activityLocation: "Suez Maritime Transit Zone",
-        activityDate: "2026-09-14 08:30",
-        status: "IN_TRANSIT",
-        movements: [
-          {
-            id: "ev1",
-            eventCode: "GTIN",
-            eventName: "Gate In Full Container",
-            locationCode: "USNYC",
-            locationName: "New York Port Terminal",
-            facility: "APM Terminals",
-            eventDate: "2026-08-31 14:30",
-            transportMode: "TRUCK",
-            isActual: true,
-            lat: 40.68,
-            lng: -74.04,
-          },
-          {
-            id: "ev2",
-            eventCode: "LOAD",
-            eventName: "Loaded Container on Board",
-            locationCode: "USNYC",
-            locationName: "New York Port Terminal",
-            facility: "APM Terminals",
-            eventDate: "2026-09-02 10:15",
-            vesselName: "ANTIGRAVITY EXPRESS",
-            voyage: "024E",
-            transportMode: "VESSEL",
-            isActual: true,
-            lat: 40.68,
-            lng: -74.04,
-          },
-          {
-            id: "ev3",
-            eventCode: "VDPT",
-            eventName: "Vessel Departed Origin Port",
-            locationCode: "USNYC",
-            locationName: "New York Port Terminal",
-            facility: "APM Terminals",
-            eventDate: "2026-09-02 19:15",
-            vesselName: "ANTIGRAVITY EXPRESS",
-            voyage: "024E",
-            transportMode: "VESSEL",
-            isActual: true,
-            lat: 40.65,
-            lng: -73.9,
-          },
-          {
-            id: "ev4",
-            eventCode: "POSN",
-            eventName: "AIS Satellite Position Ping",
-            locationCode: "EGSUE",
-            locationName: "Suez Maritime Transit Zone",
-            facility: "Suez Canal Transit",
-            eventDate: "2026-09-14 08:30",
-            vesselName: "ANTIGRAVITY EXPRESS",
-            voyage: "024E",
-            transportMode: "VESSEL",
-            isActual: true,
-            lat: LIVE_AIS.lat,
-            lng: LIVE_AIS.lng,
-          },
-        ],
+        id: "m1",
+        stepName: "Sent to Shipper",
+        location: "Xiamen, China",
+        timestamp: "27-May-2026 00:01",
+        isCompleted: true,
+        isCurrent: false,
+        transportMode: "TRUCK",
       },
       {
-        containerNo: "SMLU4019283",
-        containerType: "20FT Standard Dry",
-        sealNo: "SLM-991824",
-        tareWeightKg: 2200,
-        payloadKg: 18200,
-        latestActivity: "Ocean Vessel In-Transit",
-        activityLocation: "Suez Maritime Transit Zone",
-        activityDate: "2026-09-14 08:30",
-        status: "IN_TRANSIT",
-        movements: [
-          {
-            id: "ev11",
-            eventCode: "GTIN",
-            eventName: "Gate In Full Container",
-            locationCode: "USNYC",
-            locationName: "New York Port Terminal",
-            facility: "APM Terminals",
-            eventDate: "2026-08-31 15:10",
-            transportMode: "TRUCK",
-            isActual: true,
-            lat: 40.68,
-            lng: -74.04,
-          },
-          {
-            id: "ev12",
-            eventCode: "LOAD",
-            eventName: "Loaded Container on Board",
-            locationCode: "USNYC",
-            locationName: "New York Port Terminal",
-            facility: "APM Terminals",
-            eventDate: "2026-09-02 11:00",
-            vesselName: "ANTIGRAVITY EXPRESS",
-            voyage: "024E",
-            transportMode: "VESSEL",
-            isActual: true,
-            lat: 40.68,
-            lng: -74.04,
-          },
-          {
-            id: "ev13",
-            eventCode: "VDPT",
-            eventName: "Vessel Departed Origin Port",
-            locationCode: "USNYC",
-            locationName: "New York Port Terminal",
-            facility: "APM Terminals",
-            eventDate: "2026-09-02 19:15",
-            vesselName: "ANTIGRAVITY EXPRESS",
-            voyage: "024E",
-            transportMode: "VESSEL",
-            isActual: true,
-            lat: 40.65,
-            lng: -73.9,
-          },
-        ],
+        id: "m2",
+        stepName: "Received from Shipper",
+        location: "Nansha, China",
+        timestamp: "30-May-2026 00:01",
+        isCompleted: true,
+        isCurrent: false,
+        transportMode: "TRUCK",
+      },
+      {
+        id: "m3",
+        stepName: "Load Full",
+        location: "Nansha, China",
+        timestamp: "06-Jun-2026 04:00",
+        isCompleted: true,
+        isCurrent: false,
+        transportMode: "VESSEL",
+      },
+      {
+        id: "m4",
+        stepName: "Discharge Transshipment",
+        location: "Djibouti",
+        timestamp: "06-Aug-2026 00:00",
+        isCompleted: true,
+        isCurrent: false,
+        transportMode: "VESSEL",
+      },
+      {
+        id: "m5",
+        stepName: "Load Transshipment",
+        location: "Djibouti",
+        timestamp: "06-Aug-2026 03:00",
+        isCompleted: true,
+        isCurrent: true,
+        transportMode: "VESSEL",
+      },
+      {
+        id: "m6",
+        stepName: "Arrival / Discharge",
+        location: "Final POD",
+        timestamp: "Est. 20-Aug-2026 08:00",
+        isCompleted: false,
+        isCurrent: false,
+        transportMode: "VESSEL",
       },
     ],
-  },
+    routeMap: {
+      pol: { ...SHA_DJI_ROUTE.pol },
+      waypoints: SHA_DJI_ROUTE.waypoints.map((w) => ({ ...w })),
+      pod: { ...SHA_DJI_ROUTE.pod },
+    },
+    liveAis: { ...LIVE_AIS },
+  };
 
-  "BKG-2026-9901": {
+function buildResult(
+  searchKey: string,
+  containers: ContainerEquipment[],
+): TrackingSearchResult {
+  return {
     ...SHARED_SHIPMENT,
-    searchKey: "BKG-2026-9901",
-    containers: [
-      {
-        containerNo: "SMLU8829102",
-        containerType: "40FT High Cube Dry",
-        sealNo: "SLM-991823",
-        tareWeightKg: 3820,
-        payloadKg: 24500,
-        latestActivity: "Ocean Vessel In-Transit",
-        activityLocation: "Suez Maritime Transit Zone",
-        activityDate: "2026-09-14 08:30",
-        status: "IN_TRANSIT",
-        movements: [
-          {
-            id: "ev1",
-            eventCode: "GTIN",
-            eventName: "Gate In Full Container",
-            locationCode: "USNYC",
-            locationName: "New York Port Terminal",
-            facility: "APM Terminals",
-            eventDate: "2026-08-31 14:30",
-            transportMode: "TRUCK",
-            isActual: true,
-            lat: 40.68,
-            lng: -74.04,
-          },
-          {
-            id: "ev2",
-            eventCode: "LOAD",
-            eventName: "Loaded Container on Board",
-            locationCode: "USNYC",
-            locationName: "New York Port Terminal",
-            facility: "APM Terminals",
-            eventDate: "2026-09-02 10:15",
-            vesselName: "ANTIGRAVITY EXPRESS",
-            voyage: "024E",
-            transportMode: "VESSEL",
-            isActual: true,
-            lat: 40.68,
-            lng: -74.04,
-          },
-          {
-            id: "ev3",
-            eventCode: "VDPT",
-            eventName: "Vessel Departed Origin Port",
-            locationCode: "USNYC",
-            locationName: "New York Port Terminal",
-            facility: "APM Terminals",
-            eventDate: "2026-09-02 19:15",
-            vesselName: "ANTIGRAVITY EXPRESS",
-            voyage: "024E",
-            transportMode: "VESSEL",
-            isActual: true,
-            lat: 40.65,
-            lng: -73.9,
-          },
-        ],
-      },
-    ],
-  },
-};
+    searchKey,
+    containers: structuredClone(containers),
+  };
+}
 
-MOCK_TRACKING_RESULTS["BL-NYC-88401"] = {
-  ...MOCK_TRACKING_RESULTS.SMLU8829102,
-  searchKey: "BL-NYC-88401",
-};
+function findContainer(containerNo: string): ContainerEquipment | undefined {
+  const key = containerNo.trim().toUpperCase();
+  return BOOKING_CONTAINERS.find((c) => c.containerNo.toUpperCase() === key);
+}
 
+/**
+ * Mock tracking lookup.
+ * - CONTAINER → single matching container
+ * - BOOKING / BL → all containers on that shipment
+ */
 export async function fetchTrackingDetails(
   searchValue: string,
+  searchType: TrackingSearchType = "CONTAINER",
 ): Promise<TrackingSearchResult | null> {
-  await new Promise((res) => setTimeout(res, 400)); // simulated latency
+  await new Promise((res) => setTimeout(res, 350)); // simulated latency
   const key = searchValue.trim().toUpperCase();
-  return MOCK_TRACKING_RESULTS[key]
-    ? structuredClone(MOCK_TRACKING_RESULTS[key])
-    : null;
+  if (!key) return null;
+
+  if (searchType === "CONTAINER") {
+    const container = findContainer(key);
+    if (!container) return null;
+    return buildResult(container.containerNo, [container]);
+  }
+
+  if (searchType === "BOOKING") {
+    if (key !== BOOKING_NO.toUpperCase()) return null;
+    return buildResult(BOOKING_NO, BOOKING_CONTAINERS);
+  }
+
+  if (searchType === "BL") {
+    if (key !== BL_NO.toUpperCase()) return null;
+    return buildResult(BL_NO, BOOKING_CONTAINERS);
+  }
+
+  return null;
 }
+
+/** Quick-sample values for the search UI. */
+export const TRACKING_MOCK_SAMPLES = {
+  container: "SMLU8829102",
+  booking: BOOKING_NO,
+  bl: BL_NO,
+} as const;

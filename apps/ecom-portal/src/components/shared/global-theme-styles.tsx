@@ -1179,6 +1179,7 @@ export function GlobalThemeStyles() {
       .app-header-brand-detail {
         display: flex;
         flex-direction: column;
+        min-width: 0;
       }
       .app-header-actions {
         display: flex;
@@ -1186,15 +1187,17 @@ export function GlobalThemeStyles() {
         gap: ${token.marginXS}px;
         flex-wrap: wrap;
         justify-content: flex-end;
+        flex: 0 1 auto;
+        min-width: 0;
       }
-      /* Modified by Sekar Nagarajan (2026-09-08 17:55) — Schedules pinned search portal target */
+      /* Modified by Sekar Nagarajan (2026-09-17 21:10) — Schedules pinned search fills middle strip */
       .app-header-schedules-search-slot {
         display: flex;
         align-items: center;
         flex: 1 1 auto;
         min-width: 0;
-        max-width: min(920px, 58vw);
-        overflow: visible;
+        max-width: none;
+        overflow: hidden;
       }
       .app-header-schedules-search-slot:empty {
         display: none;
@@ -1202,6 +1205,7 @@ export function GlobalThemeStyles() {
       .app-header-brand-home {
         display: inline-flex;
         align-items: center;
+        flex-shrink: 0;
         margin: 0;
         padding: ${token.paddingXXS}px ${token.paddingXS}px;
         border: 0;
@@ -1209,6 +1213,7 @@ export function GlobalThemeStyles() {
         background: transparent;
         cursor: pointer;
         text-align: left;
+        white-space: nowrap;
         transition: background-color 0.2s ease;
       }
       .app-header-brand-home:hover,
@@ -1437,6 +1442,7 @@ export function GlobalThemeStyles() {
         background: ${token.colorBgContainer};
         padding: 0 ${token.paddingMD}px;
         height: 64px;
+        line-height: 1.2;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -1444,10 +1450,27 @@ export function GlobalThemeStyles() {
         z-index: 90;
         gap: ${token.marginSM}px;
       }
+      /* Modified by Sekar Nagarajan (2026-09-17 21:10) — fixed height, no padding gap when search pins */
       .app-layout-header:has(.app-header-schedules-search-slot:not(:empty)) {
-        height: auto;
+        height: 64px;
         min-height: 64px;
-        padding-block: ${token.paddingXS}px;
+        padding-block: 0;
+        overflow: hidden;
+      }
+      .app-layout-header:has(.app-header-schedules-search-slot:not(:empty)) .app-layout-header__left {
+        flex: 0 0 auto;
+        min-width: auto;
+      }
+      .app-layout-header:has(.app-header-schedules-search-slot:not(:empty)) .app-header-actions {
+        flex: 0 0 auto;
+        flex-wrap: nowrap;
+        min-width: 0;
+        justify-content: flex-end;
+      }
+      .app-layout-header:has(.app-header-schedules-search-slot:not(:empty)) .app-header-action,
+      .app-layout-header:has(.app-header-schedules-search-slot:not(:empty)) .app-header-action.ant-btn,
+      .app-layout-header:has(.app-header-schedules-search-slot:not(:empty)) .sm-app-button.app-header-action {
+        flex-shrink: 0;
       }
       .app-layout-header__left {
         display: flex;
@@ -1460,11 +1483,12 @@ export function GlobalThemeStyles() {
         display: flex;
         align-items: center;
         gap: ${token.marginXS}px;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
       }
       .app-layout-header__tenant-name {
         font-size: ${token.fontSizeLG}px;
         color: ${token.colorText};
+        white-space: nowrap;
       }
       .app-layout-header__welcome {
         font-size: ${token.fontSizeSM}px;

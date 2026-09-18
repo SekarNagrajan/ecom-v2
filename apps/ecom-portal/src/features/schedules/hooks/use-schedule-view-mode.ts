@@ -1,9 +1,9 @@
-// Modified by Sekar Nagarajan (2026-09-15 12:53)
+// Modified by Sekar Nagarajan (2026-09-18 00:15)
 import { useState } from "react";
 
 export type ScheduleViewMode = "list" | "card" | "calendar";
 
-const STORAGE_KEY = "ecom.schedules.viewMode";
+const STORAGE_KEY = "ecom.schedules.viewMode.v2";
 
 function readStoredMode(): ScheduleViewMode {
   try {
@@ -14,7 +14,8 @@ function readStoredMode(): ScheduleViewMode {
   } catch {
     // sessionStorage may be unavailable
   }
-  return "list";
+  // Default: card view for search results
+  return "card";
 }
 
 /**

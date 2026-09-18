@@ -158,13 +158,15 @@ export function AuthenticatedLayoutHeader({
           </Tooltip>
         </div>
 
+        {/* Modified by Sekar Nagarajan (2026-09-17 21:10) — middle slot avoids flex gaps */}
+        {schedulesSearchActive ? (
+          <div
+            id={SCHEDULES_HEADER_SEARCH_SLOT_ID}
+            className="app-header-schedules-search-slot"
+          />
+        ) : null}
+
         <div className="app-header-actions">
-          {schedulesSearchActive ? (
-            <div
-              id={SCHEDULES_HEADER_SEARCH_SLOT_ID}
-              className="app-header-schedules-search-slot"
-            />
-          ) : null}
           <Tooltip title="Go To Home">
             <AppButton
               type="text"
@@ -407,13 +409,15 @@ export function AuthenticatedLayoutHeader({
           </div>
         </div>
 
+        {/* Modified by Sekar Nagarajan (2026-09-17 21:10) — middle slot avoids flex gaps */}
+        {schedulesSearchActive ? (
+          <div
+            id={SCHEDULES_HEADER_SEARCH_SLOT_ID}
+            className="app-header-schedules-search-slot"
+          />
+        ) : null}
+
         <div className="app-header-actions">
-          {schedulesSearchActive ? (
-            <div
-              id={SCHEDULES_HEADER_SEARCH_SLOT_ID}
-              className="app-header-schedules-search-slot"
-            />
-          ) : null}
           {/* Customer scope: superuser / cpanel default-customer list / sub-accounts */}
           {(user?.isSessionAdmin ||
             isCpanelAdmin ||

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-07 18:49)
+// Modified by Sekar Nagarajan (2026-09-17 22:40)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { Tag, Typography } from "antd";
 
@@ -7,7 +7,10 @@ import {
   getBookingListStatusColor,
   type BookingListDTO,
 } from "../../booking/types/booking-list.types";
-import type { PlanningDaySelection } from "../mocks/dashboard.mock";
+import type {
+  PlanningBookingDTO,
+  PlanningDaySelection,
+} from "../mocks/dashboard.mock";
 
 const { Text, Title } = Typography;
 
@@ -17,12 +20,39 @@ interface PlanningDayBookingsDrawerProps {
   onViewBooking: (booking: BookingListDTO) => void;
 }
 
+function BookingAttentionCues({ booking }: { booking: PlanningBookingDTO }) {
+  if (!booking.missingSIFlag && !booking.pendingPaymentFlag) return null;
+  return (
+    <div className="dashboard-planning-day-cues" role="list">
+      {booking.missingSIFlag ? (
+        <span
+          className="dashboard-planning-day-cue dashboard-planning-day-cue--si"
+          role="listitem"
+        >
+          Needs shipping instruction
+        </span>
+      ) : null}
+      {booking.pendingPaymentFlag ? (
+        <span
+          className="dashboard-planning-day-cue dashboard-planning-day-cue--pay"
+          role="listitem"
+        >
+          Payment still due
+        </span>
+      ) : null}
+    </div>
+  );
+}
+
 export function PlanningDayBookingsDrawer({
   selection,
   onClose,
   onViewBooking,
 }: PlanningDayBookingsDrawerProps) {
-  const count = selection.bookings.length;
+  const pendingSi = selection.bookings.filter((b) => b.missingSIFlag).length;
+  const pendingPay = selection.bookings.filter(
+    (b) => b.pendingPaymentFlag,
+  ).length;
 
   return (
     <AppDrawer
@@ -49,37 +79,22 @@ export function PlanningDayBookingsDrawer({
               >
                 {selection.dayLabel} · {selection.week}
               </Title>
+              {(pendingSi > 0 || pendingPay > 0) && (
+                <div className="dashboard-planning-day-drawer__summary">
+                  {pendingSi > 0 ? (
+                    <span className="dashboard-planning-day-cue dashboard-planning-day-cue--si">
+                      {pendingSi} SI pending
+                    </span>
+                  ) : null}
+                  {pendingPay > 0 ? (
+                    <span className="dashboard-planning-day-cue dashboard-planning-day-cue--pay">
+                      {pendingPay} payment pending
+                    </span>
+                  ) : null}
+                </div>
+              )}
             </div>
           </div>
-
-          {/* <div className="dashboard-planning-day-drawer__tiles">
-            <div className="dashboard-planning-day-tile">
-              <span className="dashboard-planning-day-tile__label">Day</span>
-              <span className="dashboard-planning-day-tile__value">
-                {selection.dayLabel}
-              </span>
-            </div>
-            <div className="dashboard-planning-day-tile">
-              <span className="dashboard-planning-day-tile__label">Week</span>
-              <span className="dashboard-planning-day-tile__value">
-                {selection.week}
-              </span>
-            </div>
-            <div className="dashboard-planning-day-tile dashboard-planning-day-tile--range">
-              <span className="dashboard-planning-day-tile__label">Period</span>
-              <span className="dashboard-planning-day-tile__value dashboard-planning-day-tile__value--sm">
-                {selection.dateRange}
-              </span>
-            </div>
-            <div className="dashboard-planning-day-tile dashboard-planning-day-tile--primary">
-              <span className="dashboard-planning-day-tile__label">
-                Bookings
-              </span>
-              <span className="dashboard-planning-day-tile__value">
-                {count}
-              </span>
-            </div>
-          </div> */}
         </div>
       }
     >
@@ -87,7 +102,14 @@ export function PlanningDayBookingsDrawer({
         {selection.bookings.map((booking) => (
           <li
             key={`${booking.id}-${booking.bookingNo}`}
-            className="dashboard-planning-day-list__item"
+            className={[
+              "dashboard-planning-day-list__item",
+              booking.missingSIFlag || booking.pendingPaymentFlag
+                ? "dashboard-planning-day-list__item--attention"
+                : "",
+            ]
+              .filter(Boolean)
+              .join(" ")}
           >
             <div className="dashboard-planning-day-list__copy">
               <Text strong className="dashboard-planning-day-list__no">
@@ -109,14 +131,17 @@ export function PlanningDayBookingsDrawer({
                 <Text type="secondary">{booking.teusCount} TEU</Text>
               </div>
             </div>
-            <AppButton
-              type="primary"
-              size="small"
-              icon={<AppIcon icon={Icons.eye} size={14} tone="view" />}
-              onClick={() => onViewBooking(booking)}
-            >
-              View
-            </AppButton>
+            <div className="dashboard-planning-day-list__aside">
+              <BookingAttentionCues booking={booking} />
+              <AppButton
+                type="primary"
+                size="small"
+                icon={<AppIcon icon={Icons.eye} size={14} tone="view" />}
+                onClick={() => onViewBooking(booking)}
+              >
+                View
+              </AppButton>
+            </div>
           </li>
         ))}
       </ul>

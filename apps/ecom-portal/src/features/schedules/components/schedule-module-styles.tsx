@@ -15,18 +15,22 @@ export function ScheduleModuleStyles() {
         margin-bottom: ${token.marginMD}px;
         overflow: hidden;
       }
-      /* Modified by Sekar Nagarajan (2026-09-08 17:55) — header portal compact strip */
+      /* Modified by Sekar Nagarajan (2026-09-17 21:14) — collapse in-page search when pinned (no spacer gap) */
+      .schedule-search-pin-sentinel {
+        height: 1px;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        pointer-events: none;
+      }
       .schedule-search-sentinel {
         width: 100%;
       }
       .schedule-search-sentinel--pinned {
+        display: none;
         margin-bottom: 0;
-      }
-      .schedule-search-sentinel__spacer {
-        height: var(--schedule-search-placeholder-height, 120px);
-        width: 100%;
-        pointer-events: none;
-        visibility: hidden;
+        height: 0;
+        overflow: hidden;
       }
       .schedule-search-panel--header {
         margin-bottom: 0;
@@ -62,28 +66,58 @@ export function ScheduleModuleStyles() {
         flex: 1 1 auto;
         min-width: 0;
         flex-wrap: nowrap !important;
+        width: 100%;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-17 21:19) — give POL/POD more width than date */
+      .schedule-search-panel--header .ant-row > .ant-col {
+        max-width: none !important;
+      }
+      .schedule-search-panel--header .schedule-search-header-col--port {
+        flex: 2 1 260px !important;
+        min-width: 220px !important;
+      }
+      .schedule-search-panel--header .schedule-search-header-col--swap,
+      .schedule-search-panel--header .schedule-search-header-col--actions {
+        flex: 0 0 auto !important;
+        min-width: auto !important;
+      }
+      .schedule-search-panel--header .schedule-search-header-col--date {
+        flex: 0 1 220px !important;
+        min-width: 180px !important;
+        max-width: 240px !important;
       }
       .schedule-search-panel--header .schedule-date-range {
-        min-width: 200px;
+        min-width: 0;
+        max-width: 100%;
+      }
+      .schedule-search-panel--header .ant-select,
+      .schedule-search-panel--header .ant-picker {
+        width: 100% !important;
+        max-width: 100%;
+      }
+      .schedule-search-panel--header .schedule-search-header-col--port .ant-select-selection-item {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
       .schedule-search-panel--header .ant-select-single.ant-select-sm,
       .schedule-search-panel--header .ant-select-single:not(.ant-select-customize-input) .ant-select-selector,
       .schedule-search-panel--header .ant-picker {
-        height: ${token.controlHeight}px !important;
+        height: ${token.controlHeightSM}px !important;
       }
       .schedule-search-actions--compact {
         display: inline-flex;
         gap: ${token.marginXXS}px;
         align-items: center;
         width: auto;
-        min-height: ${token.controlHeight}px;
+        min-height: ${token.controlHeightSM}px;
       }
       .schedule-search-actions--compact .schedule-search-actions__icon-btn.sm-app-button,
       .schedule-search-actions--compact .schedule-search-actions__icon-btn.ant-btn {
-        width: ${token.controlHeight}px;
-        height: ${token.controlHeight}px;
-        min-width: ${token.controlHeight}px;
-        min-height: ${token.controlHeight}px;
+        width: ${token.controlHeightSM}px;
+        height: ${token.controlHeightSM}px;
+        min-width: ${token.controlHeightSM}px;
+        min-height: ${token.controlHeightSM}px;
         padding: 0;
         flex: none;
         display: inline-flex;
@@ -384,7 +418,23 @@ export function ScheduleModuleStyles() {
         gap: ${token.marginXS}px;
         align-items: center;
       }
+      /* Modified by Sekar Nagarajan (2026-09-17 21:29) — recommended = gold star icons */
+      .schedule-card__recommended-stars {
+        display: inline-flex;
+        align-items: center;
+        gap: 2px;
+        line-height: 1;
+        color: ${token.colorWarning};
+      }
+      .schedule-card__recommended-stars .schedule-card__star.app-icon,
+      .schedule-card__recommended-stars .schedule-card__star.app-icon svg {
+        color: ${token.colorWarning};
+        fill: ${token.colorWarning};
+      }
       .schedule-card__vessel-tag {
+      background-color: ${tokenMix(token.colorWarning, 20)};
+        color: ${token.colorText};
+        border-color: ${tokenMix(token.colorWarning, 32)};
         cursor: pointer;
       }
       .schedule-card__distance {
@@ -1472,6 +1522,16 @@ export function ScheduleModuleStyles() {
         height: ${token.controlHeightLG}px;
         min-width: 120px;
       }
+        .schedule-card__eta-tag{
+        background-color: ${tokenMix(token.colorSuccess, 10)};
+        color: ${token.colorSuccess};
+        border-color: ${tokenMix(token.colorSuccess, 32)};
+        }
+        .schedule-card__etd-tag{
+        background-color: ${tokenMix(token.colorInfo, 10)};
+        color: ${token.colorInfo};
+        border-color: ${tokenMix(token.colorInfo, 32)};
+        }
       .schedule-co2-results__head {
         display: flex;
         align-items: center;

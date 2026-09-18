@@ -1,5 +1,5 @@
-// Modified by Sekar Nagarajan (2026-09-04 23:45)
-import { Typography } from "antd";
+// Modified by Sekar Nagarajan (2026-09-17 23:22)
+import { Tag, Typography } from "antd";
 
 import type { SelectedRoute } from "../../types/booking.types";
 
@@ -68,22 +68,28 @@ function haulageLine(
   return `${origin} / ${destination}`;
 }
 
+function vesselLabel(route: SelectedRoute): string {
+  const voyage = route.voyage ?? "";
+  const bound = route.bound ?? "";
+  if (voyage || bound) {
+    return `${route.vesselName} (${voyage}${bound ? ` - ${bound}` : ""})`;
+  }
+  return route.vesselName;
+}
+
 /** Airy review route band — matches Booking Preview Airy Review prototype. */
 export function PreviewRouteBand({
   route,
   originCode,
   destCode,
-  carriageContract,
   haulageOrigin,
   haulageDestination,
 }: PreviewRouteBandProps) {
-  const voyage = `${route.voyage ?? ""}${route.bound ?? ""}`;
-  const serviceLine = [
-    route.serviceCode ? `${route.serviceCode} — ${route.serviceName}` : null,
-    voyage ? `${route.vesselName} ${voyage}` : route.vesselName,
-  ]
-    .filter(Boolean)
-    .join(" · ");
+  const serviceTag =
+    route.serviceCode || route.serviceName
+      ? [route.serviceCode, route.serviceName].filter(Boolean).join(" — ")
+      : null;
+  const vesselTag = route.vesselName ? vesselLabel(route) : null;
 
   const originPlace = [
     portPlace(route.polPortName),
@@ -99,12 +105,6 @@ export function PreviewRouteBand({
   ]
     .filter(Boolean)
     .join(" · ");
-
-  const freightLine = [
-    "Sea freight",
-    "Door-to-door",
-    carriageContract ? `FCL (${carriageContract})` : "FCL",
-  ].join(" · ");
 
   const cutoffRows = [
     { label: "Gate-in cut-off", value: formatCutoffValue(route.gateInCutoff) },
@@ -124,14 +124,29 @@ export function PreviewRouteBand({
           <Text strong className="booking-review-route__code">
             {originCode || "—"}
           </Text>
-          <span className="booking-review-route__place">{originPlace || "—"}</span>
+          <span className="booking-review-route__place">
+            {originPlace || "—"}
+          </span>
           <span className="booking-review-route__pill booking-review-route__pill--etd">
             ETD {formatRoutePillDate(route.etd)}
           </span>
         </div>
 
         <div className="booking-review-route__mid">
-          <span className="booking-review-route__service">{serviceLine}</span>
+          {(serviceTag || vesselTag) && (
+            <div className="booking-review-route__meta">
+              {serviceTag ? (
+                <Tag color="pink" className="booking-review-route__tag">
+                  {serviceTag}
+                </Tag>
+              ) : null}
+              {vesselTag ? (
+                <Tag color="orange" className="booking-review-route__tag">
+                  {vesselTag}
+                </Tag>
+              ) : null}
+            </div>
+          )}
           <div className="booking-review-route__rail">
             <span className="booking-review-route__dot booking-review-route__dot--origin" />
             <span className="booking-review-route__dash" />
@@ -141,7 +156,6 @@ export function PreviewRouteBand({
             <span className="booking-review-route__dash" />
             <span className="booking-review-route__dot booking-review-route__dot--dest" />
           </div>
-          <span className="booking-review-route__freight">{freightLine}</span>
         </div>
 
         <div className="booking-review-route__endpoint booking-review-route__endpoint--dest">
@@ -149,7 +163,9 @@ export function PreviewRouteBand({
           <Text strong className="booking-review-route__code">
             {destCode || "—"}
           </Text>
-          <span className="booking-review-route__place">{destPlace || "—"}</span>
+          <span className="booking-review-route__place">
+            {destPlace || "—"}
+          </span>
           <span className="booking-review-route__pill booking-review-route__pill--eta">
             ETA {formatRoutePillDate(route.eta)}
           </span>

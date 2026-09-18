@@ -18,11 +18,11 @@ export function ScheduleListRoutingCell({ record }: { record: ScheduleItem }) {
       >
         {routingLabel}
       </Tag>
-      {record.isMultimodal ? (
+      {/* {record.isMultimodal ? (
         <Tag className="module-status-tag" color="cyan">
           Multimodal
         </Tag>
-      ) : null}
+      ) : null} */}
     </div>
   );
 }

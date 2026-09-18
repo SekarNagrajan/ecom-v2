@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-16 16:32)
+// Modified by Sekar Nagarajan (2026-09-18 10:45)
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "@tanstack/react-router";
@@ -26,6 +26,12 @@ interface UseLandingControllerOptions {
 }
 
 const INCORRECT_CAPTCHA_MESSAGE = "Captcha Entered Incorrectly";
+
+/** Landing schedule/rates defaults — CNSHA → AEJEA. */
+const DEFAULT_POL_LABEL = "CNSHA - SHANGHAI HONGQIAO INT APT";
+const DEFAULT_POD_LABEL = "AEJEA - JEBEL ALI, UAE";
+const DEFAULT_POL_CODE = "CNSHA";
+const DEFAULT_POD_CODE = "AEJEA";
 
 export function useLandingController({
   onLoginRequired,
@@ -80,8 +86,8 @@ export function useLandingController({
   const scheduleForm = useForm<ScheduleSearchForm>({
     resolver: zodResolver(scheduleSearchSchema),
     defaultValues: {
-      pol: "USNYC - New York",
-      pod: "SGSIN - Singapore",
+      pol: DEFAULT_POL_LABEL,
+      pod: DEFAULT_POD_LABEL,
       fromDate: dayjs().format("YYYY-MM-DD"),
       toDate: dayjs().add(14, "day").format("YYYY-MM-DD"),
     },
@@ -97,8 +103,12 @@ export function useLandingController({
       return;
     }
     const values = scheduleForm.getValues();
-    const polCode = values.pol ? values.pol.split(" - ")[0].trim() : "USNYC";
-    const podCode = values.pod ? values.pod.split(" - ")[0].trim() : "SGSIN";
+    const polCode = values.pol
+      ? values.pol.split(" - ")[0].trim()
+      : DEFAULT_POL_CODE;
+    const podCode = values.pod
+      ? values.pod.split(" - ")[0].trim()
+      : DEFAULT_POD_CODE;
     const fromDate = values.fromDate || dayjs().format("YYYY-MM-DD");
     const toDate = values.toDate || dayjs().add(14, "day").format("YYYY-MM-DD");
 
@@ -115,6 +125,7 @@ export function useLandingController({
   const trackingForm = useForm<TrackingSearchForm>({
     resolver: zodResolver(trackingSearchSchema),
     defaultValues: {
+      searchType: "CONTAINER",
       trackingNumber: "SMLU8829102",
       captcha: "",
     },
@@ -141,10 +152,13 @@ export function useLandingController({
         return;
       }
 
-      const trackNo = values.trackingNumber?.trim() || "SMLU8829102";
+      // Modified by Sekar Nagarajan (2026-09-18 10:45)
+      const trackNo = values.trackingNumber.trim();
+      const searchType = values.searchType;
       const params = new URLSearchParams({
         trackingNumber: trackNo,
         logintracno: trackNo,
+        searchType,
         tracktype: "logintracking",
       });
       navigateWithSearch("/app/tracking", params);
@@ -154,8 +168,8 @@ export function useLandingController({
   const ratesForm = useForm<RatesSearchForm>({
     resolver: zodResolver(ratesSearchSchema),
     defaultValues: {
-      pol: "USNYC - New York",
-      pod: "SGSIN - Singapore",
+      pol: DEFAULT_POL_LABEL,
+      pod: DEFAULT_POD_LABEL,
       equipmentType: "20' Dry Standard",
       shipmentDate: dayjs().add(7, "day").format("YYYY-MM-DD"),
       captcha: "",
@@ -183,8 +197,12 @@ export function useLandingController({
         return;
       }
 
-      const polCode = values.pol ? values.pol.split(" - ")[0].trim() : "USNYC";
-      const podCode = values.pod ? values.pod.split(" - ")[0].trim() : "SGSIN";
+      const polCode = values.pol
+        ? values.pol.split(" - ")[0].trim()
+        : DEFAULT_POL_CODE;
+      const podCode = values.pod
+        ? values.pod.split(" - ")[0].trim()
+        : DEFAULT_POD_CODE;
       const eqp = values.equipmentType || "20' Dry Standard";
       const shipmentDate =
         values.shipmentDate || dayjs().add(7, "day").format("YYYY-MM-DD");

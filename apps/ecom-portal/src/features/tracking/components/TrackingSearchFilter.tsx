@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-31 11:25)
+// Modified by Sekar Nagarajan (2026-09-18 10:45)
 import { AppButton } from "@solverminds/shared-ui";
 import { Card, Col, Form, Input, Row, Tabs, Typography } from "antd";
 
@@ -12,63 +12,79 @@ const { Text } = Typography;
 
 interface TrackingSearchFilterProps {
   onSearch: (params: TrackingSearchParams) => void;
+  onSearchTypeChange: (searchType: TrackingSearchType) => void;
+  onReset: () => void;
   isLoading?: boolean;
-  initialValue?: string;
+  searchType: TrackingSearchType;
+  searchValue?: string;
 }
 
 function SearchActionsLabel() {
   return <span className="tracking-search-actions-label">&nbsp;</span>;
 }
 
+function fieldLabel(searchType: TrackingSearchType): string {
+  switch (searchType) {
+    case "BOOKING":
+      return "Booking No";
+    case "BL":
+      return "Bill of Lading (BL) No";
+    case "CONTAINER":
+      return "Container No";
+    default: {
+      const _exhaustive: never = searchType;
+      return _exhaustive;
+    }
+  }
+}
+
+function fieldPlaceholder(searchType: TrackingSearchType): string {
+  switch (searchType) {
+    case "BOOKING":
+      return "e.g. BKG-2026-9901";
+    case "BL":
+      return "e.g. BL-SHA-88401";
+    case "CONTAINER":
+      return "e.g. SMLU8829102";
+    default: {
+      const _exhaustive: never = searchType;
+      return _exhaustive;
+    }
+  }
+}
+
 export function TrackingSearchFilter({
   onSearch,
+  onSearchTypeChange,
+  onReset,
   isLoading,
-  initialValue = "SMLU8829102",
+  searchType,
+  searchValue = "",
 }: TrackingSearchFilterProps) {
-  const [form] = Form.useForm();
-  const searchType: TrackingSearchType =
-    Form.useWatch("searchType", form) || "CONTAINER";
-
-  const handleFinish = (values: {
-    searchType: TrackingSearchType;
-    searchValue: string;
-  }) => {
+  const handleFinish = (values: { searchValue: string }) => {
     onSearch({
-      searchType: values.searchType || "CONTAINER",
+      searchType,
       searchValue: values.searchValue,
     });
   };
 
-  const handleQuickSelect = (value: string) => {
-    form.setFieldsValue({ searchValue: value });
-    form.submit();
-  };
-
-  const handleReset = () => {
-    form.resetFields();
+  const handleTabChange = (key: string) => {
+    onSearchTypeChange(key as TrackingSearchType);
   };
 
   return (
     <Card type="inner" className="tracking-search-panel">
       <Form
-        form={form}
+        key={`${searchType}:${searchValue}`}
         layout="vertical"
         requiredMark={false}
-        initialValues={{
-          searchType: "CONTAINER",
-          searchValue: initialValue,
-        }}
+        initialValues={{ searchValue }}
         onFinish={handleFinish}
       >
         <div className="tracking-search-toolbar">
-          <Form.Item name="searchType" className="tracking-search-type" hidden>
-            <input type="hidden" />
-          </Form.Item>
           <Tabs
             activeKey={searchType}
-            onChange={(key) =>
-              form.setFieldValue("searchType", key as TrackingSearchType)
-            }
+            onChange={handleTabChange}
             className="tracking-search-tabs"
             items={[
               {
@@ -89,26 +105,6 @@ export function TrackingSearchFilter({
               },
             ]}
           />
-
-          {/* <Space size={8} align="center" className="tracking-search-samples">
-            <Text type="secondary" className="tracking-search-samples__label">
-              Quick Samples:
-            </Text>
-            <Tag
-              color="blue"
-              className="tracking-search-sample"
-              onClick={() => handleQuickSelect("SMLU8829102")}
-            >
-              SMLU8829102
-            </Tag>
-            <Tag
-              color="cyan"
-              className="tracking-search-sample"
-              onClick={() => handleQuickSelect("BKG-2026-9901")}
-            >
-              BKG-2026-9901
-            </Tag>
-          </Space> */}
         </div>
 
         <Row gutter={[16, 16]} align="top">
@@ -118,18 +114,20 @@ export function TrackingSearchFilter({
               className="tracking-search-field"
               label={
                 <span className="form-field-label">
-                  Enter Container, Booking or BL Reference Numbers{" "}
-                  <Text type="danger">*</Text>
+                  {fieldLabel(searchType)} <Text type="danger">*</Text>
                 </span>
               }
               rules={[
-                { required: true, message: "Please enter reference number(s)" },
+                {
+                  required: true,
+                  message: `Please enter ${fieldLabel(searchType).toLowerCase()}`,
+                },
               ]}
             >
               <Input
                 size="large"
                 allowClear
-                placeholder="e.g. SMLU8829102, MSKU9012845, BKG-2026-9901"
+                placeholder={fieldPlaceholder(searchType)}
               />
             </Form.Item>
           </Col>
@@ -155,7 +153,7 @@ export function TrackingSearchFilter({
                   icon={
                     <AppIcon icon={Icons.refreshCw} size={16} tone="reject" />
                   }
-                  onClick={handleReset}
+                  onClick={onReset}
                 >
                   Reset
                 </AppButton>

@@ -1,5 +1,5 @@
-// Modified by Sekar Nagarajan (2026-09-15 14:30)
-// Schedule mocks — 30 scenario catalogue (direct, TS, multimodal, booking flags)
+// Modified by Sekar Nagarajan (2026-09-17 21:22)
+// Schedule mocks — direct + TS catalogue (CNSHA→AEJEA: 2 direct + TS via INNSA / LKCMB)
 
 import type {
   CarbonCalculationResult,
@@ -109,13 +109,13 @@ const P = {
   },
   SGSIN: {
     id: "SGSIN",
-    name: "Singapore (Port of Singapore)",
+    name: "Singapore",
     shortName: "Singapore",
     terminal: "PSA Pasir Panjang Terminal",
   },
   CNSHA: {
     id: "CNSHA",
-    name: "Shanghai (Port of Shanghai)",
+    name: "Shanghai Hongqiao Int Apt (CNSHA)",
     shortName: "Shanghai",
     terminal: "Yangshan Deepwater Port",
   },
@@ -157,9 +157,22 @@ const P = {
   },
   AEJEA: {
     id: "AEJEA",
-    name: "Jebel Ali (Port of Jebel Ali)",
+    name: "Jebel Ali, UAE",
     shortName: "Jebel Ali",
     terminal: "DP World Jebel Ali T1",
+  },
+  // Modified by Sekar Nagarajan (2026-09-18 10:33) — Colombo hub for CNSHA→AEJEA TS
+  LKCMB: {
+    id: "LKCMB",
+    name: "Colombo",
+    shortName: "Colombo",
+    terminal: "CICT Colombo",
+  },
+  AEDXB: {
+    id: "AEDXB",
+    name: "Dubai",
+    shortName: "Dubai",
+    terminal: "Port Rashid",
   },
   INMAA: {
     id: "INMAA",
@@ -169,9 +182,15 @@ const P = {
   },
   INNSA: {
     id: "INNSA",
-    name: "Nhava Sheva (JNPT)",
+    name: "Nhava Sheva, Mumbai",
     shortName: "Nhava Sheva",
     terminal: "BMCT Terminal",
+  },
+  INMUN: {
+    id: "INMUN",
+    name: "Mundra",
+    shortName: "Mundra",
+    terminal: "Adani Mundra CT",
   },
   AUSYD: {
     id: "AUSYD",
@@ -307,7 +326,7 @@ function directLeg(
   };
 }
 
-/** 15 direct / merchant sailings — varied corridors, flags, and dates. */
+/** 18 direct / merchant sailings — includes CNSHA→AEJEA landing corridor. */
 const DIRECT_SEEDS: ScheduleSeed[] = [
   directLeg({
     id: "SCH-DIR-001",
@@ -323,8 +342,8 @@ const DIRECT_SEEDS: ScheduleSeed[] = [
     vessel: {
       name: "ANTIGRAVITY EXPRESS",
       code: "AGEX",
-    voyage: "024",
-    bound: "E",
+      voyage: "024",
+      bound: "E",
     },
     distanceKm: 18450,
   }),
@@ -340,8 +359,8 @@ const DIRECT_SEEDS: ScheduleSeed[] = [
     vessel: {
       name: "PACIFIC MERCHANT",
       code: "PCMR",
-    voyage: "118",
-    bound: "W",
+      voyage: "118",
+      bound: "W",
     },
     distanceKm: 9650,
   }),
@@ -358,8 +377,8 @@ const DIRECT_SEEDS: ScheduleSeed[] = [
     vessel: {
       name: "GLOBAL HORIZON",
       code: "GLHZ",
-    voyage: "882",
-    bound: "E",
+      voyage: "882",
+      bound: "E",
     },
     distanceKm: 19100,
   }),
@@ -376,8 +395,8 @@ const DIRECT_SEEDS: ScheduleSeed[] = [
     vessel: {
       name: "OCEAN PIONEER",
       code: "OCPN",
-    voyage: "304",
-    bound: "S",
+      voyage: "304",
+      bound: "S",
     },
     distanceKm: 12200,
   }),
@@ -393,8 +412,8 @@ const DIRECT_SEEDS: ScheduleSeed[] = [
     vessel: {
       name: "MERCHANT STAR",
       code: "MRST",
-    voyage: "041",
-    bound: "E",
+      voyage: "041",
+      bound: "E",
     },
     distanceKm: 18620,
   }),
@@ -430,7 +449,7 @@ const DIRECT_SEEDS: ScheduleSeed[] = [
       name: "BAY OF BENGAL",
       code: "BYBG",
       voyage: "219",
-        bound: "E",
+      bound: "E",
     },
     distanceKm: 2850,
   }),
@@ -576,9 +595,63 @@ const DIRECT_SEEDS: ScheduleSeed[] = [
     },
     distanceKm: 280,
   }),
+  // Modified by Sekar Nagarajan (2026-09-18 10:33)
+  // Landing corridor: 2× DIRECT CNSHA→AEJEA (1 recommended)
+  directLeg({
+    id: "SCH-DIR-016",
+    serviceCode: "FEA1",
+    serviceName: "Far East–Arabia Express",
+    isDefaultRoute: true,
+    pol: P.CNSHA,
+    pod: P.AEJEA,
+    etd: "2026-09-18 14:00",
+    eta: "2026-10-05 08:00",
+    transitTimeDays: 17,
+    vessel: {
+      name: "SOLVERMINDS VOYAGER",
+      code: "SMVY",
+      voyage: "061W",
+      bound: "W",
+    },
+    distanceKm: 11240,
+  }),
+  directLeg({
+    id: "SCH-DIR-019",
+    serviceCode: "AEGX",
+    serviceName: "Asia Emirates Gateway",
+    pol: P.CNSHA,
+    pod: P.AEJEA,
+    etd: "2026-09-25 16:00",
+    eta: "2026-10-12 10:00",
+    transitTimeDays: 17,
+    vessel: {
+      name: "OCEANIC STAR",
+      code: "OCST",
+      voyage: "044W",
+      bound: "W",
+    },
+    distanceKm: 11190,
+  }),
+  directLeg({
+    id: "SCH-DIR-018",
+    serviceCode: "IME",
+    serviceName: "India Middle East",
+    pol: P.INMUN,
+    pod: P.AEDXB,
+    etd: "2026-09-20 11:00",
+    eta: "2026-09-24 06:00",
+    transitTimeDays: 4,
+    vessel: {
+      name: "ARABIAN PEARL",
+      code: "ABPL",
+      voyage: "157",
+      bound: "W",
+    },
+    distanceKm: 1680,
+  }),
 ];
 
-/** 15 transshipment sailings — 1–2 hubs, multimodal, and timeline demo. */
+/** 16 transshipment sailings — 1–2 hubs, multimodal, and timeline demo. */
 const TS_SEEDS: ScheduleSeed[] = [
   {
     id: "SCH-TS-TIMELINE",
@@ -593,8 +666,8 @@ const TS_SEEDS: ScheduleSeed[] = [
     vessel: {
       name: "COSCO SHIPPING GALAXY",
       code: "CSGX",
-    voyage: "033W",
-    bound: "W",
+      voyage: "033W",
+      bound: "W",
     },
     deadlines: defaultDeadlines("2026-08-28 10:00"),
     distanceKm: 16800,
@@ -604,8 +677,8 @@ const TS_SEEDS: ScheduleSeed[] = [
         vessel: {
           name: "COSCO SHIPPING GALAXY",
           code: "CSGX",
-        voyage: "033W",
-        bound: "W",
+          voyage: "033W",
+          bound: "W",
         },
         serviceCode: "GALEX",
         serviceName: "GALEX",
@@ -619,8 +692,8 @@ const TS_SEEDS: ScheduleSeed[] = [
         vessel: {
           name: "MSC ISTANBUL",
           code: "MSCI",
-        voyage: "118W",
-        bound: "W",
+          voyage: "118W",
+          bound: "W",
         },
         serviceCode: "LION",
         serviceName: "Lion Service",
@@ -634,8 +707,8 @@ const TS_SEEDS: ScheduleSeed[] = [
         vessel: {
           name: "MAERSK EDINBURGH",
           code: "MAED",
-        voyage: "241W",
-        bound: "W",
+          voyage: "241W",
+          bound: "W",
         },
         serviceCode: "AE10",
         serviceName: "AE10",
@@ -658,8 +731,8 @@ const TS_SEEDS: ScheduleSeed[] = [
     vessel: {
       name: "SOLVERMINDS VOYAGER",
       code: "SMVY",
-    voyage: "109",
-    bound: "W",
+      voyage: "109",
+      bound: "W",
     },
     deadlines: defaultDeadlines("2026-09-05 14:00"),
     distanceKm: 19800,
@@ -669,8 +742,8 @@ const TS_SEEDS: ScheduleSeed[] = [
         vessel: {
           name: "SOLVERMINDS VOYAGER",
           code: "SMVY",
-        voyage: "109",
-        bound: "W",
+          voyage: "109",
+          bound: "W",
         },
         serviceCode: "TAS",
         serviceName: "Transatlantic Service",
@@ -684,8 +757,8 @@ const TS_SEEDS: ScheduleSeed[] = [
         vessel: {
           name: "PACIFIC HARBOR II",
           code: "PH02",
-        voyage: "044",
-        bound: "E",
+          voyage: "044",
+          bound: "E",
         },
         serviceCode: "EAS",
         serviceName: "Euro-Asia Shuttle",
@@ -708,8 +781,8 @@ const TS_SEEDS: ScheduleSeed[] = [
     vessel: {
       name: "WEST COAST LINER",
       code: "WCLN",
-    voyage: "207",
-    bound: "W",
+      voyage: "207",
+      bound: "W",
     },
     deadlines: defaultDeadlines("2026-09-14 16:00"),
     distanceKm: 11240,
@@ -719,8 +792,8 @@ const TS_SEEDS: ScheduleSeed[] = [
         vessel: {
           name: "WEST COAST LINER",
           code: "WCLN",
-        voyage: "207",
-        bound: "W",
+          voyage: "207",
+          bound: "W",
         },
         serviceCode: "TPE",
         serviceName: "Transpacific Eastbound",
@@ -734,8 +807,8 @@ const TS_SEEDS: ScheduleSeed[] = [
         vessel: {
           name: "YELLOW SEA FEEDER",
           code: "YSFD",
-        voyage: "063",
-        bound: "W",
+          voyage: "063",
+          bound: "W",
         },
         serviceCode: "KCF",
         serviceName: "Korea China Feeder",
@@ -758,8 +831,8 @@ const TS_SEEDS: ScheduleSeed[] = [
     vessel: {
       name: "ATLANTIC BRIDGE",
       code: "ATBR",
-    voyage: "055",
-    bound: "E",
+      voyage: "055",
+      bound: "E",
     },
     deadlines: defaultDeadlines("2026-09-20 08:00"),
     distanceKm: 21450,
@@ -769,8 +842,8 @@ const TS_SEEDS: ScheduleSeed[] = [
         vessel: {
           name: "ATLANTIC BRIDGE",
           code: "ATBR",
-        voyage: "055",
-        bound: "E",
+          voyage: "055",
+          bound: "E",
         },
         serviceCode: "UML",
         serviceName: "US Med Link",
@@ -784,8 +857,8 @@ const TS_SEEDS: ScheduleSeed[] = [
         vessel: {
           name: "MEDITERRANEAN QUEEN",
           code: "MDQN",
-        voyage: "312",
-        bound: "E",
+          voyage: "312",
+          bound: "E",
         },
         serviceCode: "MAM",
         serviceName: "Med Asia Mainline",
@@ -799,8 +872,8 @@ const TS_SEEDS: ScheduleSeed[] = [
         vessel: {
           name: "GULF FEEDER ONE",
           code: "GF01",
-        voyage: "088",
-        bound: "E",
+          voyage: "088",
+          bound: "E",
         },
         serviceCode: "GAF",
         serviceName: "Gulf Asia Feeder",
@@ -823,8 +896,8 @@ const TS_SEEDS: ScheduleSeed[] = [
     vessel: {
       name: "EUROPEAN SPIRIT",
       code: "EUSP",
-    voyage: "490",
-    bound: "E",
+      voyage: "490",
+      bound: "E",
     },
     deadlines: defaultDeadlines("2026-09-11 07:00"),
     distanceKm: 20300,
@@ -834,8 +907,8 @@ const TS_SEEDS: ScheduleSeed[] = [
         vessel: {
           name: "EUROPEAN SPIRIT",
           code: "EUSP",
-        voyage: "490",
-        bound: "E",
+          voyage: "490",
+          bound: "E",
         },
         serviceCode: "NEX",
         serviceName: "North Europe Asia Relay",
@@ -849,8 +922,8 @@ const TS_SEEDS: ScheduleSeed[] = [
         vessel: {
           name: "STRAITS FEEDER",
           code: "STFD",
-        voyage: "151",
-        bound: "N",
+          voyage: "151",
+          bound: "N",
         },
         serviceCode: "SCF",
         serviceName: "Straits China Feeder",
@@ -1399,6 +1472,110 @@ const TS_SEEDS: ScheduleSeed[] = [
       },
     ],
   },
+  // Modified by Sekar Nagarajan (2026-09-17 21:22)
+  // Landing corridor TS: CNSHA → INNSA (hub) → AEJEA
+  {
+    id: "SCH-TS-015",
+    serviceCode: "FEIN",
+    serviceName: "Far East–India–Gulf",
+    pol: P.CNSHA,
+    pod: P.AEJEA,
+    etd: "2026-09-19 08:00",
+    eta: "2026-10-08 14:00",
+    transitTimeDays: 19,
+    vessel: {
+      name: "GLOBAL HORIZON",
+      code: "GLHZ",
+      voyage: "883W",
+      bound: "W",
+    },
+    deadlines: defaultDeadlines("2026-09-19 08:00"),
+    distanceKm: 12840,
+    legs: [
+      {
+        legType: "Mainline",
+        vessel: {
+          name: "GLOBAL HORIZON",
+          code: "GLHZ",
+          voyage: "883W",
+          bound: "W",
+        },
+        serviceCode: "FEIN",
+        serviceName: "Far East–India Feeder",
+        pol: P.CNSHA,
+        pod: P.INNSA,
+        etd: "2026-09-19 08:00",
+        eta: "2026-09-28 16:00",
+      },
+      {
+        legType: "Mainline",
+        vessel: {
+          name: "ARABIAN PEARL",
+          code: "ABPL",
+          voyage: "158W",
+          bound: "W",
+        },
+        serviceCode: "IME",
+        serviceName: "India Middle East",
+        pol: P.INNSA,
+        pod: P.AEJEA,
+        etd: "2026-09-30 10:00",
+        eta: "2026-10-08 14:00",
+      },
+    ],
+  },
+  // Modified by Sekar Nagarajan (2026-09-18 10:33)
+  // Landing corridor TS: CNSHA → LKCMB Colombo (hub) → AEJEA
+  {
+    id: "SCH-TS-016",
+    serviceCode: "MEG2",
+    serviceName: "China Gulf Loop",
+    pol: P.CNSHA,
+    pod: P.AEJEA,
+    etd: "2026-09-22 09:00",
+    eta: "2026-10-10 16:00",
+    transitTimeDays: 18,
+    vessel: {
+      name: "ANTIGRAVITY EXPRESS",
+      code: "AGEX",
+      voyage: "025W",
+      bound: "W",
+    },
+    deadlines: defaultDeadlines("2026-09-22 09:00"),
+    distanceKm: 12160,
+    legs: [
+      {
+        legType: "Mainline",
+        vessel: {
+          name: "ANTIGRAVITY EXPRESS",
+          code: "AGEX",
+          voyage: "025W",
+          bound: "W",
+        },
+        serviceCode: "MEG2",
+        serviceName: "China–Colombo Link",
+        pol: P.CNSHA,
+        pod: P.LKCMB,
+        etd: "2026-09-22 09:00",
+        eta: "2026-09-30 12:00",
+      },
+      {
+        legType: "Feeder",
+        vessel: {
+          name: "INDIAN OCEAN BRIDGE",
+          code: "IOBR",
+          voyage: "092W",
+          bound: "W",
+        },
+        serviceCode: "CMB1",
+        serviceName: "Colombo–Gulf Feeder",
+        pol: P.LKCMB,
+        pod: P.AEJEA,
+        etd: "2026-10-01 18:00",
+        eta: "2026-10-10 16:00",
+      },
+    ],
+  },
 ];
 
 export const MOCK_DIRECT_MERCHANT_SCHEDULES: ScheduleItem[] =
@@ -1407,7 +1584,7 @@ export const MOCK_DIRECT_MERCHANT_SCHEDULES: ScheduleItem[] =
 export const MOCK_TRANSSHIPMENT_SCHEDULES: ScheduleItem[] =
   TS_SEEDS.map(buildSchedule);
 
-/** Combined catalogue used by the mock search API (30 scenarios). */
+/** Combined catalogue used by the mock search API. */
 export const MOCK_SCHEDULES: ScheduleItem[] = [
   ...MOCK_DIRECT_MERCHANT_SCHEDULES,
   ...MOCK_TRANSSHIPMENT_SCHEDULES,

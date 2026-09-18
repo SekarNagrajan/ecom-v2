@@ -249,8 +249,8 @@ function VolumeTrendChart({
     period === "Weekly"
       ? "Weekly TEU volume over the selected stage"
       : period === "Quarterly"
-        ? "Quarterly TEU volume over the selected stage"
-        : "Monthly TEU volume over the selected stage";
+      ? "Quarterly TEU volume over the selected stage"
+      : "Monthly TEU volume over the selected stage";
 
   return (
     <div ref={wrapRef} className="dashboard-trend-wrap">

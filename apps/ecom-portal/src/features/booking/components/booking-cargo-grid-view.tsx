@@ -256,10 +256,7 @@ export function BookingCargoGridView({
                                 // Modified by Sekar Nagarajan (2026-09-17 23:28) — JSP getTareweight on eqp change
                                 const tare = defaultTareWeightKg(value);
                                 if (tare != null) {
-                                  setValue(
-                                    `containers.${ci}.tareWeight`,
-                                    tare,
-                                  );
+                                  setValue(`containers.${ci}.tareWeight`, tare);
                                 }
                                 if (!isReeferContainerType(value)) {
                                   setValue(

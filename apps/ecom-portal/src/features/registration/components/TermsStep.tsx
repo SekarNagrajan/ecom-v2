@@ -27,10 +27,7 @@ export function TermsStep() {
         <Text className="reg-terms-box__para">
           1. Acceptance of Terms: By registering for an account on the E-Com
           Portal, you agree to abide by the{" "}
-          <a
-            href={LEGAL_LINKS.websiteTermsOfUse.href}
-            {...externalLinkProps}
-          >
+          <a href={LEGAL_LINKS.websiteTermsOfUse.href} {...externalLinkProps}>
             {LEGAL_LINKS.websiteTermsOfUse.label}
           </a>
           .

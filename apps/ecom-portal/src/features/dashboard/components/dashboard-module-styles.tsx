@@ -1221,7 +1221,113 @@ export function DashboardModuleStyles() {
         padding: 0;
         display: flex;
         flex-direction: column;
+        gap: ${token.marginMD}px;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-18 12:01) — booking card row (ID | meta | action) */
+      .dashboard-planning-day-card {
+        position: relative;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorBgContainer};
+        box-shadow: ${token.boxShadowTertiary};
+        overflow: hidden;
+      }
+      .dashboard-planning-day-card__accent {
+      
+      }
+      .dashboard-planning-day-card--attention .dashboard-planning-day-card__accent {
+        background: ${token.colorWarning};
+      }
+      .dashboard-planning-day-card__body {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginMD}px;
+        padding: ${token.paddingMD}px ${token.paddingMD}px ${token.paddingMD}px
+          calc(${token.paddingMD}px + 3px);
+        min-width: 0;
+      }
+      .dashboard-planning-day-card__identity {
+        flex: 1 1 0;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXS}px;
+      }
+      .dashboard-planning-day-card__booking-no {
+        font-size: ${token.fontSizeLG}px;
+        color: ${token.colorText} !important;
+        line-height: 1.2;
+      }
+      .dashboard-planning-day-card__route {
+        display: flex;
+        align-items: flex-start;
         gap: ${token.marginSM}px;
+        min-width: 0;
+      }
+      .dashboard-planning-day-card__leg {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+        min-width: 0;
+      }
+      .dashboard-planning-day-card__port-code {
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText} !important;
+        line-height: 1.2;
+      }
+      .dashboard-planning-day-card__port-name {
+        font-size: ${token.fontSizeSM}px;
+        line-height: 1.2;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .dashboard-planning-day-card__arrow {
+        color: ${token.colorTextQuaternary};
+        font-size: ${token.fontSizeLG}px;
+        line-height: 1.2;
+        padding-top: 1px;
+        flex-shrink: 0;
+      }
+      .dashboard-planning-day-card__meta {
+        display: flex;
+        align-items: stretch;
+        gap: ${token.marginLG}px;
+        flex-shrink: 0;
+        padding-inline: ${token.paddingMD}px;
+        border-inline-start: 1px solid ${token.colorBorderSecondary};
+      }
+      .dashboard-planning-day-card__field {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: ${token.marginXXS}px;
+        min-width: 72px;
+      }
+      .dashboard-planning-day-card__field-label {
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: ${token.colorTextSecondary} !important;
+        line-height: 1.2;
+      }
+      .dashboard-planning-day-card__capacity {
+        font-size: ${token.fontSize}px;
+        color: ${token.colorText} !important;
+        line-height: ${token.controlHeightSM}px;
+      }
+      .dashboard-planning-day-card__action {
+        flex-shrink: 0;
+        margin-inline-start: auto;
+      }
+      .dashboard-planning-day-card .dashboard-planning-day-cues {
+        align-items: flex-start;
+        flex-direction: row;
+        flex-wrap: wrap;
       }
       .dashboard-planning-day-list__item {
         display: flex;
@@ -1262,9 +1368,6 @@ export function DashboardModuleStyles() {
         gap: ${token.marginXS}px;
         margin-top: ${token.marginXXS}px;
       }
-      .dashboard-planning-day-list__item--attention {
-       
-      }
       .dashboard-planning-day-list__aside {
         display: flex;
         flex-direction: column;
@@ -1298,6 +1401,29 @@ export function DashboardModuleStyles() {
       .dashboard-planning-day-cue--pay {
         color: ${verdigris};
         background: ${tokenMix(verdigris, 12)};
+      }
+      @media (max-width: 767px) {
+        .dashboard-planning-day-card__body {
+          flex-wrap: wrap;
+          align-items: stretch;
+        }
+        .dashboard-planning-day-card__identity {
+          flex: 1 1 100%;
+        }
+        .dashboard-planning-day-card__meta {
+          border-inline-start: 0;
+          border-block-start: 1px solid ${token.colorBorderSecondary};
+          padding-inline: 0;
+          padding-block-start: ${token.paddingSM}px;
+          flex: 1 1 auto;
+        }
+        .dashboard-planning-day-card__action {
+          margin-inline-start: 0;
+          width: 100%;
+        }
+        .dashboard-planning-day-card__action .ant-btn {
+          width: 100%;
+        }
       }
       @media (max-width: 575px) {
         .dashboard-planning-day-drawer__tiles {
@@ -1428,6 +1554,32 @@ export function DashboardModuleStyles() {
         .dashboard-col-numeric {
           width: 64px;
         }
+      }
+      /* Modified by Sekar Nagarajan (2026-09-18 12:17) — dashboard back-to-top FAB */
+      .dashboard-scroll-top {
+        position: fixed;
+        inset-inline-end: ${token.marginSM}px;
+        inset-block-end: ${token.marginSM}px;
+        z-index: 90;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(${token.marginSM}px);
+        transition:
+          opacity 0.2s ease,
+          transform 0.2s ease;
+      }
+      .dashboard-scroll-top--visible {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+      }
+      .dashboard-scroll-top__btn.ant-btn {
+        width: ${token.controlHeightMD}px;
+        height: ${token.controlHeightMD}px;
+        box-shadow: ${token.boxShadowSecondary};
+      }
+      .dashboard-scroll-top__btn.ant-btn .app-icon {
+        color: ${token.colorTextLightSolid};
       }
     `}</style>
   );

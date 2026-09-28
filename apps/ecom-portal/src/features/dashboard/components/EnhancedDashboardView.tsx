@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-16 17:07)
+// Modified by Sekar Nagarajan (2026-09-18 12:17)
 /**
  * Enhanced Dashboard — JSP parity with enhancedDashboard.jsp:
  * KPI filter cards → Upcoming Shipment Planning → Ongoing Transactions, plus analytics sections.
@@ -179,6 +179,8 @@ export function EnhancedDashboardView() {
           onClose={controller.handleCloseBlDrawer}
         />
       ) : null}
+
+      {/* <DashboardScrollTopButton /> */}
     </FeaturePageShell>
   );
 }

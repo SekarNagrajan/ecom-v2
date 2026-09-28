@@ -132,6 +132,11 @@ export function RegistrationModuleStyles() {
         display: block;
         margin-bottom: ${token.marginSM}px;
       }
+      .reg-terms-box__para a,
+      .reg-step-body .form-field-label a {
+        color: ${token.colorPrimary};
+        text-decoration: underline;
+      }
       .reg-upload-dragger.ant-upload-wrapper .ant-upload-drag {
         padding: ${token.paddingXL}px 0;
         background: ${token.colorFillAlter};

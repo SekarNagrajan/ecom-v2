@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-17 18:32)
+// Modified by Sekar Nagarajan (2026-09-18 12:26)
 
 /**
  * BE ↔ UI theme config mapper.
@@ -93,7 +93,7 @@ export const mapBeToUiConfig = (
         : "normal",
     fontFamily:
       "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-    primaryColor: beConfig.primaryColor || "#1B6DAB",
+    primaryColor: beConfig.primaryColor || BE_COLOR_MAP.SIGNAL,
     secondaryColor: "#595959",
     // Modified by Sekar Nagarajan (2026-08-31 12:52) — success emerald #047857
     successColor: "#047857",

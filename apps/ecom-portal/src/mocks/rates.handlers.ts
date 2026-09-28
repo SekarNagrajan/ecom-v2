@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-28 15:09)
+// Modified by Sekar Nagarajan (2026-09-18 12:55)
 import { http, HttpResponse } from 'msw';
 import { ContractDTO, CreateQuoteInput, QuoteDTO, SurchargeDTO, TariffDTO } from '../features/rates/types/rates.types';
 
@@ -252,23 +252,24 @@ export const mockQuotes: QuoteDTO[] = [
 ];
 
 export const ratesHandlers = [
-  http.get('/api/v1/rates/tariffs', () => {
+  // Wildcard paths — survive absolute URL / SW edge cases (same pattern as SI/BL)
+  http.get('*/api/v1/rates/tariffs', () => {
     return HttpResponse.json({ success: true, data: mockTariffs });
   }),
 
-  http.get('/api/v1/rates/surcharges', () => {
+  http.get('*/api/v1/rates/surcharges', () => {
     return HttpResponse.json({ success: true, data: mockSurcharges });
   }),
 
-  http.get('/api/v1/rates/contracts', () => {
+  http.get('*/api/v1/rates/contracts', () => {
     return HttpResponse.json({ success: true, data: mockContracts });
   }),
 
-  http.get('/api/v1/rates/quotes', () => {
+  http.get('*/api/v1/rates/quotes', () => {
     return HttpResponse.json({ success: true, data: mockQuotes });
   }),
 
-  http.post('/api/v1/rates/quotes', async ({ request }) => {
+  http.post('*/api/v1/rates/quotes', async ({ request }) => {
     const input = (await request.json()) as CreateQuoteInput;
     const newQuote: QuoteDTO = {
       id: `qte-${Date.now()}`,
@@ -294,7 +295,7 @@ export const ratesHandlers = [
   }),
 
   // Modified by Sekar Nagarajan (2026-09-11 16:25) — share rate quote via email
-  http.post('/api/v1/rates/share-mail', async ({ request }) => {
+  http.post('*/api/v1/rates/share-mail', async ({ request }) => {
     const input = (await request.json()) as {
       to: string;
       cc?: string;

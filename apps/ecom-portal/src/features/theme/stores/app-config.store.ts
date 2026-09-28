@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-31 12:55)
+// Modified by Sekar Nagarajan (2026-09-18 12:26)
 import { persist } from 'zustand/middleware';
 import type {
   AppCustomConfig,
@@ -51,9 +51,9 @@ export const useAppConfigStore = create<AppConfigState>()(
     }),
     {
       name: 'ecom-user-theme-config',
-      // Bump when semantic brand colors change so localStorage picks up new defaults
-      version: 1,
-      migrate: (persistedState) => {
+      // v2 — default primary Signal Blue + baseFontSize 14 + Inter
+      version: 2,
+      migrate: (persistedState, version) => {
         const state = persistedState as AppConfigState | undefined;
         if (!state?.config) {
           return { config: DEFAULT_APP_CONFIG } as AppConfigState;
@@ -63,12 +63,28 @@ export const useAppConfigStore = create<AppConfigState>()(
           ? DEFAULT_APP_CONFIG.successColor
           : state.config.successColor;
 
+        // When bumping from v1 → v2, adopt new product defaults if the user was
+        // still on the old Maritime / 28px demo defaults.
+        const wasDemoPrimary =
+          version < 2 &&
+          (state.config.primaryColor === '#1B6DAB' ||
+            state.config.primaryColor === '#1b6dab');
+        const wasDemoFontSize =
+          version < 2 && state.config.baseFontSize === 28;
+
         return {
           ...state,
           config: {
             ...DEFAULT_APP_CONFIG,
             ...state.config,
             successColor: nextSuccess,
+            ...(wasDemoPrimary
+              ? { primaryColor: DEFAULT_APP_CONFIG.primaryColor }
+              : {}),
+            ...(wasDemoFontSize
+              ? { baseFontSize: DEFAULT_APP_CONFIG.baseFontSize }
+              : {}),
+            fontFamily: state.config.fontFamily || DEFAULT_APP_CONFIG.fontFamily,
           },
         };
       },

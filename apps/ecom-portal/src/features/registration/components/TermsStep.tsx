@@ -1,10 +1,16 @@
-// Modified by Sekar Nagarajan (2026-08-27 22:15)
+// Modified by Sekar Nagarajan (2026-09-28 14:57) — GWFC-8388 link to GWF legal pages
 import { Checkbox, Flex, Typography } from "antd";
 import { Controller, useFormContext } from "react-hook-form";
 
+import { LEGAL_LINKS } from "../../../constants/legal-links";
 import type { RegistrationFormData } from "../types/registration.schema";
 
 const { Text, Title } = Typography;
+
+const externalLinkProps = {
+  target: "_blank",
+  rel: "noopener noreferrer",
+} as const;
 
 export function TermsStep() {
   const {
@@ -20,12 +26,23 @@ export function TermsStep() {
         </Title>
         <Text className="reg-terms-box__para">
           1. Acceptance of Terms: By registering for an account on the E-Com
-          Portal, you agree to abide by these terms and conditions.
+          Portal, you agree to abide by the{" "}
+          <a
+            href={LEGAL_LINKS.websiteTermsOfUse.href}
+            {...externalLinkProps}
+          >
+            {LEGAL_LINKS.websiteTermsOfUse.label}
+          </a>
+          .
         </Text>
         <Text className="reg-terms-box__para">
           2. Privacy Policy: We are committed to protecting your privacy. Your
           personal and company information will be handled in accordance with
-          our Privacy Policy and applicable data protection laws.
+          our{" "}
+          <a href={LEGAL_LINKS.privacyPolicy.href} {...externalLinkProps}>
+            {LEGAL_LINKS.privacyPolicy.label}
+          </a>{" "}
+          and applicable data protection laws.
         </Text>
         <Text className="reg-terms-box__para">
           3. Account Security: You are responsible for maintaining the
@@ -50,7 +67,14 @@ export function TermsStep() {
               onChange={(e) => onChange(e.target.checked)}
             >
               <span className="form-field-label">
-                I Agree the terms and condition
+                I agree to the{" "}
+                <a
+                  href={LEGAL_LINKS.websiteTermsOfUse.href}
+                  {...externalLinkProps}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {LEGAL_LINKS.websiteTermsOfUse.label}
+                </a>
                 <Text type="danger"> *</Text>
               </span>
             </Checkbox>

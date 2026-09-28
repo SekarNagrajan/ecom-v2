@@ -8,7 +8,12 @@ import { useNavigate } from "@tanstack/react-router";
 import { Space, Tag } from "antd";
 import { useState } from "react";
 
-import { AppIcon, Icons, NavRatesIcon } from "../../../components/icons";
+import {
+  AppIcon,
+  Icons,
+  NavBookingIcon,
+  NavRatesIcon,
+} from "../../../components/icons";
 import { buildActionsColumn } from "../../../components/shared/build-actions-column";
 import {
   ListActionButton,
@@ -78,9 +83,7 @@ export function QuotesView() {
             {rec.status === "QUOTED" ? (
               <ListActionButton
                 title="Book This Quote"
-                icon={
-                  <AppIcon icon={Icons.notebook} size={16} tone="download" />
-                }
+                icon={<AppIcon icon={NavBookingIcon} size={16} tone="create" />}
                 onClick={(event) => {
                   event.stopPropagation();
                   navigate({ to: "/app/booking/new" });

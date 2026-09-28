@@ -222,11 +222,11 @@ export function CarbonResultPanel({ input }: CarbonResultPanelProps) {
               <div className="co2-breakdown-block__header">
                 <Text strong className="co2-breakdown-title">
                   Emissions Breakdown
-                  {legRows.length > 0 ? (
+                  {/* {legRows.length > 0 ? (
                     <span className="co2-breakdown-block__count">
                       {legRows.length}
                     </span>
-                  ) : null}
+                  ) : null} */}
                 </Text>
                 <Segmented
                   className="module-view-mode-tabs co2-breakdown-view-tabs"

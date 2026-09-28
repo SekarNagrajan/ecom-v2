@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-11 16:37)
+// Modified by Sekar Nagarajan (2026-09-18 12:55)
 import react from "@vitejs/plugin-react";
 import fs from "fs";
 import path from "path";
@@ -36,10 +36,10 @@ function resolveWorkspacePackage(packageName: string): string | undefined {
 const tiptapCorePath = resolveWorkspacePackage("@tiptap/core");
 
 /**
- * Dev-only fallback for booking mutations / public tenant when the MSW
- * service worker does not intercept (e.g. after a long HMR session or SW
- * not claimed). MSW still owns these routes when active; this only runs if
- * the request reaches Vite.
+ * Dev-only fallback for booking / rates / public tenant when the MSW
+ * service worker does not intercept (e.g. after a long HMR session, cookie
+ * clear, or SW not claimed). MSW still owns these routes when active; this
+ * only runs if the request reaches Vite.
  */
 function bookingMockApiPlugin(): Plugin {
   const json = (
@@ -92,6 +92,54 @@ function bookingMockApiPlugin(): Plugin {
               },
             },
           });
+        }
+        // Modified by Sekar Nagarajan (2026-09-18 12:55) — rates quotes fallback when MSW misses
+        if (req.method === "GET" && url === "/api/v1/rates/quotes") {
+          return json(res, { success: true, data: [] });
+        }
+        if (req.method === "POST" && url === "/api/v1/rates/quotes") {
+          let body = "";
+          req.on("data", (chunk) => {
+            body += chunk;
+          });
+          req.on("end", () => {
+            let input: Record<string, unknown> = {};
+            try {
+              input = JSON.parse(body || "{}") as Record<string, unknown>;
+            } catch {
+              /* ignore */
+            }
+            const originPort = String(input.originPort ?? "CNSHA");
+            const deliveryPort = String(input.deliveryPort ?? "AEJEA");
+            json(res, {
+              success: true,
+              data: {
+                id: `qte-${Date.now()}`,
+                quoteNo: `QTE-2026-${Math.floor(1000 + Math.random() * 9000)}`,
+                customerName: "Current Logged-in Customer",
+                originPort,
+                originPortName: `${originPort} Port`,
+                deliveryPort,
+                deliveryPortName: `${deliveryPort} Port`,
+                eqpType: input.eqpType ?? "20' Dry Standard",
+                eqpQuantity: input.eqpQuantity ?? 1,
+                commodity: input.commodity ?? "General Cargo",
+                cargoWeightKg: input.cargoWeightKg ?? 0,
+                quotedAmountUsd: input.expectedAmountUsd ?? 1400,
+                status: "PENDING_REVIEW",
+                validFrom: new Date().toISOString().split("T")[0],
+                validTo: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000)
+                  .toISOString()
+                  .split("T")[0],
+                createdAt: new Date()
+                  .toISOString()
+                  .replace("T", " ")
+                  .substring(0, 16),
+                comments: input.comments,
+              },
+            });
+          });
+          return;
         }
         if (req.method === "POST" && url === "/api/booking/submit") {
           return json(res, {

@@ -2015,17 +2015,54 @@ export function GlobalThemeStyles() {
         min-width: 0;
       }
       .app-footer__inner {
-        display: flex;
-        justify-content: space-between;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
         align-items: center;
         gap: ${token.marginSM}px;
-        flex-wrap: wrap;
         width: 100%;
+      }
+      .app-footer__start {
+        justify-self: start;
+        min-width: 0;
       }
       .app-footer__text {
         font-size: ${token.fontSizeSM}px;
         color: ${token.colorTextSecondary};
         white-space: normal;
+      }
+      .app-footer__copyright {
+        justify-self: center;
+        text-align: center;
+        min-width: 0;
+      }
+      .app-footer__links {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        gap: ${token.marginXXS}px ${token.marginXS}px;
+        justify-self: end;
+        min-width: 0;
+      }
+      .app-footer__link {
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+        text-decoration: none;
+        white-space: nowrap;
+      }
+      .app-footer__link:hover {
+        color: ${token.colorPrimary};
+        text-decoration: underline;
+      }
+      .app-footer__link:focus-visible {
+        outline: 2px solid ${token.colorPrimary};
+        outline-offset: 2px;
+        border-radius: ${token.borderRadiusSM}px;
+      }
+      .app-footer__link-sep {
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextQuaternary};
+        user-select: none;
       }
 
       /* mobile < 768 */
@@ -2066,8 +2103,18 @@ export function GlobalThemeStyles() {
           padding-right: 0;
         }
         .app-footer__inner {
+          display: flex;
           flex-direction: column;
           text-align: center;
+          justify-content: center;
+          align-items: center;
+        }
+        .app-footer__start,
+        .app-footer__copyright,
+        .app-footer__links {
+          justify-self: unset;
+        }
+        .app-footer__links {
           justify-content: center;
         }
         .module-screen-header {

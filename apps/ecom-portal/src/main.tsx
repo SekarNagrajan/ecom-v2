@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-07 17:24)
+// Modified by Sekar Nagarajan (2026-09-18 12:26)
 import { useAuthStore, useTenantStore } from "@solverminds/auth";
 import { queryClient } from "@solverminds/platform";
 import { AppConfigProvider } from "@solverminds/shared-ui/providers";
@@ -12,6 +12,7 @@ import { TenantThemeProvider } from "./components/providers/TenantThemeProvider"
 import { SESSION_EXPIRED_SEARCH_REASON } from "./features/auth/api/session-expiry";
 import { ThemePreferencesProvider } from "./features/theme/providers/theme-preferences-provider";
 import { useAppConfigStore } from "./features/theme/stores/app-config.store";
+import { BE_COLOR_MAP } from "./features/theme/utils/config-mapper";
 import { installPreloadErrorHandler } from "./utils/preload-error-handler";
 
 import "@solverminds/shared-ui/styles.css";
@@ -26,7 +27,7 @@ function AppRoot() {
 
   const mergedConfig = {
     ...config,
-    primaryColor: config.primaryColor || tenantPrimary || "#1B6DAB",
+    primaryColor: config.primaryColor || tenantPrimary || BE_COLOR_MAP.SIGNAL,
   };
 
   return (

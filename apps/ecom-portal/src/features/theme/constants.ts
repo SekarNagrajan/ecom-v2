@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 17:40)
+// Modified by Sekar Nagarajan (2026-09-18 12:26)
 import { type AppCustomConfig } from "@solverminds/shared-ui/providers";
 import { type ColorPickerProps } from "antd";
 
@@ -126,13 +126,13 @@ export const DEFAULT_APP_CONFIG: AppCustomConfig = {
   density: DEFAULT_DENSITY,
   borderRadius: DEFAULT_DENSITY_FIELDS.borderRadius,
 
-  // Typography
+  // Typography — Inter @ 14px is the cleared-storage / first-visit default
   fontFamily: FONT_FAMILY_OPTIONS[0].value,
-  baseFontSize: 28,
+  baseFontSize: BASE_FONT_SIZE_OPTIONS[1].value, // 14px
   lineHeight: DEFAULT_DENSITY_FIELDS.lineHeight,
 
-  // Colors
-  primaryColor: BE_COLOR_MAP.MARITIME,
+  // Colors — Signal Blue primary when no persisted preference exists
+  primaryColor: BE_COLOR_MAP.SIGNAL,
   successColor: BE_COLOR_MAP.GREEN,
   warningColor: BE_COLOR_MAP.GOLD,
   errorColor: BE_COLOR_MAP.RED,

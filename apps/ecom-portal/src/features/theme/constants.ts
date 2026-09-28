@@ -1,9 +1,53 @@
-// Modified by Sekar Nagarajan (2026-09-18 12:26)
-import { type AppCustomConfig } from "@solverminds/shared-ui/providers";
+// Modified by Sekar Nagarajan (2026-09-28 16:17)
+import {
+  ACCESSIBILITY_DEFAULTS,
+  NOTIFICATION_TIMEOUT_OPTIONS,
+  type AppCustomConfig,
+  type ContrastMode,
+  type LetterSpacingLevel,
+  type NotificationBehavior,
+  type ReadingMaskSize,
+} from "@solverminds/shared-ui/providers";
 import { type ColorPickerProps } from "antd";
 
 import { BE_COLOR_MAP } from "./utils/config-mapper";
 import { getDensityThemeFields } from "./utils/density-theme-fields";
+
+export {
+  NOTIFICATION_TIMEOUT_OPTIONS,
+  READING_MASK_FOCUS_HEIGHT_MAX,
+  READING_MASK_FOCUS_HEIGHT_MIN,
+  READING_MASK_FOCUS_WIDTH_MAX,
+  READING_MASK_FOCUS_WIDTH_MIN,
+  READING_MASK_OPACITY_MAX,
+  READING_MASK_OPACITY_MIN,
+  READING_MASK_PRESET_DIMENSIONS,
+} from "@solverminds/shared-ui/providers";
+
+export const READING_MASK_SIZE_OPTIONS: ReadonlyArray<{
+  label: string;
+  value: ReadingMaskSize;
+}> = [
+  { label: "Small", value: "small" },
+  { label: "Medium", value: "medium" },
+  { label: "Large", value: "large" },
+  { label: "Custom", value: "custom" },
+];
+
+export const NOTIFICATION_BEHAVIOR_OPTIONS: ReadonlyArray<{
+  label: string;
+  value: NotificationBehavior;
+}> = [
+  { label: "Auto-Close (Default)", value: "auto" },
+  { label: "Manual Close", value: "manual" },
+];
+
+export const TOAST_TIMEOUT_SELECT_OPTIONS = NOTIFICATION_TIMEOUT_OPTIONS.map(
+  (seconds) => ({
+    label: `${seconds} Sec(s)`,
+    value: seconds,
+  }),
+);
 
 export const INTER_FONT_STACK =
   "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" as const;
@@ -34,6 +78,36 @@ export const BASE_FONT_SIZE_OPTIONS = [
   { label: "18px", value: 18 },
   { label: "28px", value: 28 },
 ] as const;
+
+/** Letter-spacing steps (em) for ABCD tiles — index 0–6. */
+export const LETTER_SPACING_EM: Record<LetterSpacingLevel, number> = {
+  0: 0,
+  1: 0.02,
+  2: 0.04,
+  3: 0.06,
+  4: 0.1,
+  5: 0.14,
+  6: 0.2,
+};
+
+export const LETTER_SPACING_OPTIONS: ReadonlyArray<{
+  label: string;
+  value: LetterSpacingLevel;
+}> = (
+  [0, 1, 2, 3, 4, 5, 6] as const satisfies readonly LetterSpacingLevel[]
+).map((value) => ({ label: "ABCD", value }));
+
+export const CONTRAST_MODE_OPTIONS: ReadonlyArray<{
+  label: string;
+  value: ContrastMode;
+}> = [
+  { label: "Enhanced Contrast", value: "enhanced" },
+  { label: "High Contrast", value: "high" },
+];
+
+export const PAGE_ZOOM_MIN = 100;
+export const PAGE_ZOOM_MAX = 150;
+export const PAGE_ZOOM_STEP = 5;
 
 export const DATE_FORMAT_OPTIONS = [
   { label: "DD/MM/YYYY (31/01/2024)", value: "dd/MM/yyyy" },
@@ -139,4 +213,19 @@ export const DEFAULT_APP_CONFIG: AppCustomConfig = {
   infoColor: BE_COLOR_MAP.BLUE,
   secondaryColor: BE_COLOR_MAP.GOLD,
   neutralColor: BE_COLOR_MAP.GREY,
+
+  // Accessibility — Vision + behavior preferences
+  letterSpacing: ACCESSIBILITY_DEFAULTS.letterSpacing,
+  contrastEnabled: ACCESSIBILITY_DEFAULTS.contrastEnabled,
+  contrastMode: ACCESSIBILITY_DEFAULTS.contrastMode,
+  pageZoom: ACCESSIBILITY_DEFAULTS.pageZoom,
+  readingMask: { ...ACCESSIBILITY_DEFAULTS.readingMask },
+  notifications: {
+    customTimingEnabled:
+      ACCESSIBILITY_DEFAULTS.notifications.customTimingEnabled,
+    success: { ...ACCESSIBILITY_DEFAULTS.notifications.success },
+    info: { ...ACCESSIBILITY_DEFAULTS.notifications.info },
+    warning: { ...ACCESSIBILITY_DEFAULTS.notifications.warning },
+    error: { ...ACCESSIBILITY_DEFAULTS.notifications.error },
+  },
 };

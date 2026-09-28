@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-17 11:56)
+// Modified by Sekar Nagarajan (2026-09-28 15:28)
 import { theme } from "antd";
 
 import { BE_COLOR_MAP } from "../../features/theme/utils/config-mapper";
@@ -2035,13 +2035,20 @@ export function GlobalThemeStyles() {
         text-align: center;
         min-width: 0;
       }
+      .app-footer__end {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: ${token.marginXS}px;
+        justify-self: end;
+        min-width: 0;
+      }
       .app-footer__links {
         display: flex;
         align-items: center;
         justify-content: flex-end;
         flex-wrap: wrap;
         gap: ${token.marginXXS}px ${token.marginXS}px;
-        justify-self: end;
         min-width: 0;
       }
       .app-footer__link {
@@ -2111,8 +2118,14 @@ export function GlobalThemeStyles() {
         }
         .app-footer__start,
         .app-footer__copyright,
+        .app-footer__end,
         .app-footer__links {
           justify-self: unset;
+        }
+        .app-footer__end {
+          width: 100%;
+          justify-content: center;
+          flex-wrap: wrap;
         }
         .app-footer__links {
           justify-content: center;

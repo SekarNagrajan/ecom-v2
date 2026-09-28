@@ -283,7 +283,7 @@ export function AuthenticatedLayoutHeader({
     },
     {
       key: "appearance",
-      label: "Appearance & Theme Settings",
+      label: "Accessibility Controls",
       icon: <AppIcon icon={Icons.palette} size={16} />,
     },
     {

@@ -1,5 +1,6 @@
-// Modified by Sekar Nagarajan (2026-09-15 15:05)
+// Modified by Sekar Nagarajan (2026-09-28 16:17)
 import { setupWorker } from 'msw/browser';
+import { accessibilityHandlers } from './accessibility.handlers';
 import { adminHandlers } from './admin.handlers';
 import { aiAssistHandlers } from './ai-assist.handlers';
 import { arrivalNoticeHandlers } from './arrival-notice.handlers';
@@ -15,6 +16,7 @@ import { deliveryOrderHandlers } from './delivery-order.handlers';
 import { landingHandlers } from './landing.handlers';
 import { profilePhotoHandlers } from './profile-photo.handlers';
 import { dashboardExportHandlers } from './dashboard-export.handlers';
+import { hotlineHandlers } from './hotline.handlers';
 import { publicTenantHandlers } from './public-tenant.handlers';
 import { ratesHandlers } from './rates.handlers';
 import { registrationHandlers } from './registration.handlers';
@@ -34,10 +36,12 @@ export const worker = setupWorker(
   ...registrationHandlers,
   ...authHandlers,
   ...contactUsHandlers,
+  ...hotlineHandlers,
   ...aiAssistHandlers,
   ...adminHandlers,
   ...userCreationHandlers,
   ...userModulesHandlers,
+  ...accessibilityHandlers,
   ...profilePhotoHandlers,
   ...dashboardExportHandlers,
   ...ratesHandlers,

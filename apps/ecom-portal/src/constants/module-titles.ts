@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-31 16:41)
+// Modified by Sekar Nagarajan (2026-09-28 15:28)
 export const MODULE_TITLES = {
   dashboard: "Dashboard",
   schedules: "Schedules",
@@ -26,6 +26,7 @@ export const MODULE_TITLES = {
   customerStatement: "Customer Statement",
   carbonCalculator: "Carbon Calculator",
   contactUs: "Contact Us",
+  agencyHotline: "Agency Hotline",
   quotes: "Quote (Rate Request)",
   myAlerts: "My Alerts",
   profile: "Profile",

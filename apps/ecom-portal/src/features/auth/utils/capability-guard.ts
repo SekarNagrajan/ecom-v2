@@ -1,6 +1,7 @@
-// Modified by Sekar Nagarajan (2026-09-07 17:24)
-import { notification } from "antd";
+// Modified by Sekar Nagarajan (2026-09-28 16:17)
 import { redirect } from "@tanstack/react-router";
+
+import { showPreferenceToast } from "../../theme/utils/show-preference-toast";
 
 const PERMISSION_DENIED_NOTIFICATION_KEY = "ecom-permission-denied";
 
@@ -8,10 +9,9 @@ const PERMISSION_DENIED_NOTIFICATION_KEY = "ecom-permission-denied";
  * Toast + redirect when a capability guard fails (CRM permission-guard parity).
  */
 export function redirectForMissingCapability(message: string): never {
-  notification.error({
+  showPreferenceToast("error", message, {
     key: PERMISSION_DENIED_NOTIFICATION_KEY,
     title: "Access Denied",
-    description: message,
     placement: "topRight",
   });
 

@@ -1,7 +1,7 @@
-// Created by Antigravity (2026-08-22 09:40)
+// Modified by Sekar Nagarajan (2026-09-28 16:17)
 import { useMutation } from "@tanstack/react-query";
-import { message } from "antd";
 import { useState } from "react";
+import { showPreferenceToast } from "../../theme/utils/show-preference-toast";
 import { bookingApi } from "../api/booking.api";
 import { useBookingStore } from "../stores/booking.store";
 import type { BookingConfirmation } from "../types/booking.types";
@@ -24,7 +24,10 @@ export function useBookingWizard(isEditMode = false) {
       }
     },
     onError: () => {
-      message.error("Failed to submit booking. Please try again.");
+      showPreferenceToast(
+        "error",
+        "Failed to submit booking. Please try again.",
+      );
     },
   });
 

@@ -8,7 +8,10 @@
  * backend endpoint exists, ecom persists themeMode in localStorage only
  * (`ecom-user-theme-config`). This mapper is ready for that future path.
  */
-import { type AppCustomConfig } from "@solverminds/shared-ui/providers";
+import {
+  ACCESSIBILITY_DEFAULTS,
+  type AppCustomConfig,
+} from "@solverminds/shared-ui/providers";
 
 import { applyDensityThemeFields } from "./density-theme-fields";
 
@@ -101,6 +104,19 @@ export const mapBeToUiConfig = (
     errorColor: "#ff4d4f",
     infoColor: "#1677ff",
     neutralColor: "#595959",
+    letterSpacing: ACCESSIBILITY_DEFAULTS.letterSpacing,
+    contrastEnabled: ACCESSIBILITY_DEFAULTS.contrastEnabled,
+    contrastMode: ACCESSIBILITY_DEFAULTS.contrastMode,
+    pageZoom: ACCESSIBILITY_DEFAULTS.pageZoom,
+    readingMask: { ...ACCESSIBILITY_DEFAULTS.readingMask },
+    notifications: {
+      customTimingEnabled:
+        ACCESSIBILITY_DEFAULTS.notifications.customTimingEnabled,
+      success: { ...ACCESSIBILITY_DEFAULTS.notifications.success },
+      info: { ...ACCESSIBILITY_DEFAULTS.notifications.info },
+      warning: { ...ACCESSIBILITY_DEFAULTS.notifications.warning },
+      error: { ...ACCESSIBILITY_DEFAULTS.notifications.error },
+    },
   };
 
   return applyDensityThemeFields({

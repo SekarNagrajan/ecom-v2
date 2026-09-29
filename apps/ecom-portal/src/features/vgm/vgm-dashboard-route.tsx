@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
 import { ModuleEmptyState } from "../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
-import { MODULE_TITLES } from "../../constants/module-titles";
+import { useModuleTitles } from "../../i18n/use-module-titles";
 import { useVgmSearchQuery, type VgmSearchParams } from "./api/vgm.queries";
 import { VgmDeclarationForm } from "./components/vgm-declaration-form";
 import { VgmLoadingCenter } from "./components/vgm-loading-center";
@@ -20,6 +20,7 @@ import { extractVgmErrorMessage } from "./utils/vgm.utils";
 import { NavVgmIcon } from "../../components/icons/nav-svg-icons";
 
 export function VgmDashboardRoute() {
+  const MODULE_TITLES = useModuleTitles();
   const [activeReference, setActiveReference] = useState<VgmSearchParams>(null);
 
   const searchForm = useForm<VgmSearchValues>({

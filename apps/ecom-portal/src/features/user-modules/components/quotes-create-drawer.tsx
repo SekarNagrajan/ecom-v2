@@ -12,7 +12,7 @@ import { Col, Row, Typography } from "antd";
 import { useForm, type Resolver } from "react-hook-form";
 
 import { AppIcon, Icons, NavRatesIcon } from "../../../components/icons";
-import { MODULE_TITLES } from "../../../constants/module-titles";
+import { useModuleTitles } from "../../../i18n/use-module-titles";
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import { useAiTextAssist } from "../../ai-assist";
 import { useCreateQuoteMutation } from "../api/user-modules.queries";
@@ -81,6 +81,7 @@ export interface QuotesCreateDrawerProps {
 }
 
 export function QuotesCreateDrawer({ open, onClose }: QuotesCreateDrawerProps) {
+  const MODULE_TITLES = useModuleTitles();
   const { mutateAsync: createQuote, isPending: isSubmitting } =
     useCreateQuoteMutation();
 

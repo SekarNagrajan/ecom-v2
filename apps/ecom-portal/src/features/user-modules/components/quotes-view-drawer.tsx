@@ -3,7 +3,7 @@ import { AppDrawer, FormattedDate } from "@solverminds/shared-ui";
 import { Descriptions, Tag } from "antd";
 
 import { Icons } from "../../../components/icons";
-import { MODULE_TITLES } from "../../../constants/module-titles";
+import { useModuleTitles } from "../../../i18n/use-module-titles";
 import type { QuoteItem } from "../types/user-modules.types";
 import { UmPanelHeader } from "./um-panel-header";
 
@@ -29,6 +29,7 @@ export interface QuotesViewDrawerProps {
 }
 
 export function QuotesViewDrawer({ quote, onClose }: QuotesViewDrawerProps) {
+  const MODULE_TITLES = useModuleTitles();
   const statusMeta = quote ? STATUS_META[quote.status] : null;
 
   return (

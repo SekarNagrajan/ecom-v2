@@ -22,7 +22,7 @@ import {
 } from "../../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
 import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
-import { MODULE_TITLES } from "../../../constants/module-titles";
+import { useModuleTitles } from "../../../i18n/use-module-titles";
 import {
   useDODownloadMutation,
   useDOSummaryQuery,
@@ -48,6 +48,7 @@ const initialFilters: DOListFilters = {
 };
 
 export function DeliveryOrderListing() {
+  const MODULE_TITLES = useModuleTitles();
   const { profileHandlers } = useLocalGridProfiles("delivery-order");
   const [filters, setFilters] = useState<DOListFilters>(initialFilters);
   const [selectedRecord, setSelectedRecord] = useState<DOSummaryRow | null>(

@@ -1,0 +1,32 @@
+{
+  "profile": {
+    "name": "姓名",
+    "company": "公司",
+    "email": "电子邮箱",
+    "role": "角色"
+  },
+  "fields": {
+    "name": "姓名",
+    "companyName": "公司名称",
+    "country": "国家/地区",
+    "state": "省/州",
+    "city": "城市",
+    "phone": "电话",
+    "mobile": "手机",
+    "email": "电子邮箱",
+    "subject": "主题",
+    "message": "留言"
+  },
+  "placeholders": {
+    "name": "请输入您的姓名",
+    "companyName": "请输入公司名称",
+    "country": "选择国家/地区",
+    "state": "选择省/州",
+    "city": "请输入城市",
+    "phone": "请输入电话号码",
+    "mobile": "请输入手机号码",
+    "email": "请输入电子邮箱地址",
+    "subject": "请输入主题",
+    "message": "请在此输入您的留言……"
+  }
+}

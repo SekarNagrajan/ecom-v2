@@ -3,7 +3,7 @@ import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { Result } from "antd";
 
 import { AppIcon, Icons } from "../../../components/icons";
-import { MODULE_TITLES } from "../../../constants/module-titles";
+import { useModuleTitles } from "../../../i18n/use-module-titles";
 import { useContactUsController } from "../hooks/use-contact-us-controller";
 import { ContactPanelHeader } from "./contact-panel-header";
 import { ContactUsModuleStyles } from "./contact-us-module-styles";
@@ -20,6 +20,7 @@ export function ContactUsDrawer({
   onClose,
   defaultSubject = "",
 }: ContactUsDrawerProps) {
+  const MODULE_TITLES = useModuleTitles();
   const controller = useContactUsController({ defaultSubject });
 
   const handleClose = () => {

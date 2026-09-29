@@ -10,10 +10,8 @@ import {
 } from "../../components/icons";
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
-import {
-  MODULE_TITLES,
-  formatModuleScreenTitle,
-} from "../../constants/module-titles";
+import { formatModuleScreenTitle } from "../../constants/module-titles";
+import { useModuleTitles } from "../../i18n/use-module-titles";
 import { useSiDetailQuery } from "./api/si.queries";
 import { SiLoadingCenter } from "./components/si-loading-center";
 import { SiModuleStyles } from "./components/si-module-styles";
@@ -29,6 +27,7 @@ import {
 const { Text } = Typography;
 
 export function ShippingInstructionWizardRoute() {
+  const MODULE_TITLES = useModuleTitles();
   const { token } = theme.useToken();
   const navigate = useNavigate();
   const params = useParams({ from: "/app/shipping-instruction/wizard/$id" });

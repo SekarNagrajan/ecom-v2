@@ -7,10 +7,8 @@ import { Card, Result, Space, Typography } from "antd";
 import { AppIcon, Icons, NavBillOfLadingIcon } from "../../components/icons";
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
-import {
-  MODULE_TITLES,
-  formatModuleScreenTitle,
-} from "../../constants/module-titles";
+import { formatModuleScreenTitle } from "../../constants/module-titles";
+import { useModuleTitles } from "../../i18n/use-module-titles";
 import { sendBLAmendmentMail } from "./api/bl.api";
 import { useBLDetailQuery } from "./api/bl.queries";
 import { BlModuleStyles } from "./components/bl-module-styles";
@@ -18,6 +16,7 @@ import { BlModuleStyles } from "./components/bl-module-styles";
 const { Text, Paragraph } = Typography;
 
 export function BillOfLadingSubmitResultRoute() {
+  const MODULE_TITLES = useModuleTitles();
   const navigate = useNavigate();
   const toast = useToast();
   const { blNo } = useParams({ strict: false }) as { blNo: string };

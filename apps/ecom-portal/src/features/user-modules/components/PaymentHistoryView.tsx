@@ -24,7 +24,7 @@ import {
   buildRetryAction,
 } from "../../../components/shared/module-empty-state";
 import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
-import { MODULE_TITLES } from "../../../constants/module-titles";
+import { useModuleTitles } from "../../../i18n/use-module-titles";
 import { usePaymentHistoryQuery } from "../api/user-modules.queries";
 import type { PaymentHistoryRecord } from "../types/user-modules.types";
 import { UmPanelHeader } from "./um-panel-header";
@@ -84,6 +84,7 @@ function formatMoney(amount: number, currency: string) {
 }
 
 export function PaymentHistoryView() {
+  const MODULE_TITLES = useModuleTitles();
   const toast = useToast();
   const { profileHandlers } = useLocalGridProfiles("payment-history");
   const [dateRange, setDateRange] = useState<DateRangeValue>(defaultDateRange);

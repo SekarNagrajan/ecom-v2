@@ -1,0 +1,7 @@
+{
+  "subtitle": "Track real-time container movements, vessel voyage milestones, port cut-offs, and transport event logs.",
+  "exportingToast": "Exporting container tracking trace history to Excel…",
+  "shareToast": "Opening tracking status email share dialog…",
+  "emptyTitle": "No tracking records found",
+  "emptyMessage": "Try another container, booking, or BL reference for this search type."
+}

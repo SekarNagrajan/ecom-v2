@@ -1,0 +1,8 @@
+{
+  "title": "仪表板",
+  "subtitle": "货运关键指标、进行中的交易和运营分析——与旧版增强仪表板保持一致。",
+  "createBooking": "创建订舱",
+  "refresh": "刷新",
+  "summaryUnavailableTitle": "仪表板摘要不可用",
+  "summaryUnavailableMessage": "请刷新仪表板以重新尝试加载摘要。"
+}

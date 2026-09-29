@@ -1,0 +1,8 @@
+{
+  "title": "Panel",
+  "subtitle": "KPI de envíos, transacciones en curso y análisis operativo — en paridad con el panel mejorado heredado.",
+  "createBooking": "Crear Reserva",
+  "refresh": "Actualizar",
+  "summaryUnavailableTitle": "Resumen del panel no disponible",
+  "summaryUnavailableMessage": "Actualice el panel para intentar cargar el resumen nuevamente."
+}

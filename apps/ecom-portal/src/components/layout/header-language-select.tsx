@@ -1,71 +1,20 @@
 // Created by Sekar Nagarajan (2026-09-17 11:56)
+// Reworked to drive react-i18next + antd ConfigProvider locale.
 import { AppButton } from "@solverminds/shared-ui";
 import type { MenuProps } from "antd";
 import { Dropdown } from "antd";
-import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
+import {
+  LANGUAGE_OPTIONS,
+  LANG_TO_ANTD_LOCALE,
+  type SupportedLanguage,
+} from "../../i18n/config";
+import { useAppConfigStore } from "../../features/theme/stores/app-config.store";
 import { AppIcon, Icons } from "../icons";
 
-export type PortalLanguageCode = "en" | "zh" | "ma" | "es";
-
-const PORTAL_LANGUAGE_STORAGE_KEY = "ecom-portal-language";
-
-const PORTAL_LANGUAGES: Array<{
-  key: PortalLanguageCode;
-  label: string;
-  nativeName: string;
-  detail: string;
-  shortCode: string;
-}> = [
-  {
-    key: "en",
-    label: "English",
-    nativeName: "English",
-    detail: "Default portal language",
-    shortCode: "EN",
-  },
-  {
-    key: "zh",
-    label: "Chinese",
-    nativeName: "中文",
-    detail: "Simplified Chinese (中文)",
-    shortCode: "ZH",
-  },
-  {
-    key: "ma",
-    label: "Malay",
-    nativeName: "Bahasa Melayu",
-    detail: "Bahasa Melayu",
-    shortCode: "MS",
-  },
-  {
-    key: "es",
-    label: "Spanish",
-    nativeName: "Español",
-    detail: "Español (Spanish)",
-    shortCode: "ES",
-  },
-];
-
-function readStoredLanguage(): PortalLanguageCode {
-  if (typeof window === "undefined") {
-    return "en";
-  }
-  try {
-    const stored = window.localStorage.getItem(PORTAL_LANGUAGE_STORAGE_KEY);
-    if (
-      stored === "en" ||
-      stored === "zh" ||
-      stored === "ma" ||
-      stored === "es"
-    ) {
-      return stored;
-    }
-  } catch {
-    // ignore storage failures
-  }
-  return "en";
-}
+/** Public alias kept for backwards compatibility with existing imports. */
+export type PortalLanguageCode = SupportedLanguage;
 
 interface HeaderLanguageSelectProps {
   /** CSS class for the trigger button — pub vs authenticated header chrome */
@@ -76,21 +25,29 @@ interface HeaderLanguageSelectProps {
 
 /**
  * Shared header language dropdown for PublicLayoutHeader and
- * AuthenticatedLayoutHeader (guest + logged-in). Selection persists in
- * localStorage so the choice survives login.
+ * AuthenticatedLayoutHeader (guest + logged-in). Selecting a language calls
+ * `i18n.changeLanguage` (which re-renders every `t()` consumer instantly and
+ * persists to localStorage via the language detector) and syncs the antd
+ * ConfigProvider locale so date pickers / pagination / empty states localize
+ * too. The choice survives refresh and login.
  */
 export function HeaderLanguageSelect({
   buttonClassName = "app-header-action",
   showLabel = true,
 }: HeaderLanguageSelectProps) {
-  const [language, setLanguage] =
-    useState<PortalLanguageCode>(readStoredLanguage);
-  const selectedLanguage =
-    PORTAL_LANGUAGES.find((item) => item.key === language) ??
-    PORTAL_LANGUAGES[0];
+  const { i18n, t } = useTranslation("common");
+  const setConfig = useAppConfigStore((state) => state.setConfig);
+  const config = useAppConfigStore((state) => state.config);
 
-  const languageItems: MenuProps["items"] = PORTAL_LANGUAGES.map((item) => ({
-    key: item.key,
+  const activeCode = (i18n.resolvedLanguage ??
+    i18n.language ??
+    "en") as SupportedLanguage;
+  const selectedLanguage =
+    LANGUAGE_OPTIONS.find((item) => item.code === activeCode) ??
+    LANGUAGE_OPTIONS[0];
+
+  const languageItems: MenuProps["items"] = LANGUAGE_OPTIONS.map((item) => ({
+    key: item.code,
     label: (
       <div className="pub-header-lang-item">
         <span className="pub-header-lang-item__name">
@@ -103,12 +60,12 @@ export function HeaderLanguageSelect({
   }));
 
   const onLanguageClick: MenuProps["onClick"] = ({ key }) => {
-    const next = key as PortalLanguageCode;
-    setLanguage(next);
-    try {
-      window.localStorage.setItem(PORTAL_LANGUAGE_STORAGE_KEY, next);
-    } catch {
-      // ignore storage failures
+    const next = key as SupportedLanguage;
+    void i18n.changeLanguage(next);
+    // Keep antd component chrome (via AppConfigProvider) aligned with the UI language.
+    const nextLocale = LANG_TO_ANTD_LOCALE[next];
+    if (config.locale !== nextLocale) {
+      setConfig({ ...config, locale: nextLocale });
     }
   };
 
@@ -119,14 +76,14 @@ export function HeaderLanguageSelect({
       menu={{
         items: languageItems,
         selectable: true,
-        selectedKeys: [language],
+        selectedKeys: [selectedLanguage.code],
         onClick: onLanguageClick,
       }}
     >
       <AppButton
         type="text"
         className={buttonClassName}
-        aria-label={`Language: ${selectedLanguage.label}`}
+        aria-label={t("languageAria", { language: selectedLanguage.label })}
         aria-haspopup="menu"
       >
         <span className="pub-header-lang-trigger">

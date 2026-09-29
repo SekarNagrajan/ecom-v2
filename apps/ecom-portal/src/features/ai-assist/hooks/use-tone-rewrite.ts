@@ -1,28 +1,30 @@
-// Modified by Sekar Nagarajan (2026-09-11 18:25)
+// Modified by Sekar Nagarajan (2026-09-29 12:30)
 import type { ToneRewriteProp } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
+import { useTranslation } from "react-i18next";
 
 import {
   extractAiAssistError,
   rewriteAiContent,
 } from "../api/ai-assist.api";
 import type { AiRewriteAction } from "../api/ai-assist.types";
-import { AI_REWRITE_DROPDOWN_ACTIONS } from "../utils/rewrite-actions";
+import { getAiRewriteDropdownActions } from "../utils/rewrite-actions";
 
 /**
  * Wires shared-ui `toneRewrite` to ecom `/api/ai/rewrite`.
  * Pass into FormRichTextEditor / RichTextEditor only (not plain FormTextarea).
  */
 export function useToneRewrite(): ToneRewriteProp {
+  const { t } = useTranslation("ai-assist");
   const toast = useToast();
 
   return {
-    actions: AI_REWRITE_DROPDOWN_ACTIONS,
+    actions: getAiRewriteDropdownActions(t),
     rewrite: async (contentHtml: string, actionKey: string) => {
       const trimmed = contentHtml.replace(/<[^>]*>/g, "").trim();
 
       if (!trimmed) {
-        toast.warning("Add message content before rewriting.");
+        toast.warning(t("toasts.rewriteEmptyInput"));
         return contentHtml;
       }
 
@@ -32,9 +34,7 @@ export function useToneRewrite(): ToneRewriteProp {
       });
 
       if (!response.ok || !response.rewritten_html?.trim()) {
-        toast.warning(
-          "Rewrite returned an empty response. No changes applied.",
-        );
+        toast.warning(t("toasts.rewriteEmptyResponse"));
         return contentHtml;
       }
 

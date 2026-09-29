@@ -24,7 +24,7 @@ import {
   buildRetryAction,
 } from "../../../components/shared/module-empty-state";
 import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
-import { MODULE_TITLES } from "../../../constants/module-titles";
+import { useModuleTitles } from "../../../i18n/use-module-titles";
 import { useQuotesQuery } from "../api/user-modules.queries";
 import type { QuoteItem } from "../types/user-modules.types";
 import { QuotesCreateDrawer } from "./quotes-create-drawer";
@@ -48,6 +48,7 @@ function formatUsd(amount: number) {
 }
 
 export function QuotesView() {
+  const MODULE_TITLES = useModuleTitles();
   const navigate = useNavigate();
   const { profileHandlers } = useLocalGridProfiles("quotes");
   const {

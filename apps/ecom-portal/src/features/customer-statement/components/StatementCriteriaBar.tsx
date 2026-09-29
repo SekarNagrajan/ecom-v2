@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 
 import { AppIcon, Icons, NavIcons } from "../../../components/icons";
 import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
-import { MODULE_TITLES } from "../../../constants/module-titles";
+import { useModuleTitles } from "../../../i18n/use-module-titles";
 import { useStatementAccountsQuery } from "../api/customer-statement.queries";
 
 /** Five fields in one row on md+ (spans sum to 24). Stack on mobile. */
@@ -43,6 +43,7 @@ export function StatementCriteriaBar({
   onToDateChange,
   onSearch,
 }: StatementCriteriaBarProps) {
+  const MODULE_TITLES = useModuleTitles();
   const { data: accounts = [], isLoading } = useStatementAccountsQuery();
 
   const currencyOptions = Array.from(

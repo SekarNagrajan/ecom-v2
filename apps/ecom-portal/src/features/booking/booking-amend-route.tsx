@@ -6,11 +6,11 @@ import { Card, Result, Spin, Steps, Typography, theme } from "antd";
 import { useEffect, useState } from "react";
 import { AppIcon, Icons, NavBookingIcon } from "../../components/icons";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
+import { formatModuleScreenTitle } from "../../constants/module-titles";
 import {
-  MODULE_TITLES,
-  WIZARD_STEP_TITLES,
-  formatModuleScreenTitle,
-} from "../../constants/module-titles";
+  useModuleTitles,
+  useWizardStepTitles,
+} from "../../i18n/use-module-titles";
 import { bookingApi } from "./api/booking.api";
 import { bookingKeys } from "./api/booking.keys";
 import { BookingModuleStyles } from "./components/booking-module-styles";
@@ -31,6 +31,8 @@ const { Text } = Typography;
 const PIPELINE_ICON_SIZE = 25;
 
 export function BookingAmendRoute() {
+  const MODULE_TITLES = useModuleTitles();
+  const WIZARD_STEP_TITLES = useWizardStepTitles();
   const { token } = theme.useToken();
   const navigate = useNavigate();
   const { bookingId } = useParams({ strict: false });

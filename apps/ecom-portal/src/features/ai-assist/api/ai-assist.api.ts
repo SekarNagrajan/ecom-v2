@@ -1,4 +1,5 @@
-// Modified by Sekar Nagarajan (2026-09-11 18:25)
+// Modified by Sekar Nagarajan (2026-09-29 12:30)
+import i18n from "../../../i18n/config";
 import type {
   AiGrammarRequest,
   AiGrammarResponse,
@@ -65,5 +66,5 @@ export async function rewriteAiContent(
 export function extractAiAssistError(error: unknown): string {
   if (error instanceof Error && error.message) return error.message;
   if (typeof error === "string" && error.trim()) return error;
-  return "Something went wrong. Please try again.";
+  return i18n.t("ai-assist:errors.generic");
 }

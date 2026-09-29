@@ -1,4 +1,6 @@
-// Modified by Sekar Nagarajan (2026-09-11 18:25)
+// Modified by Sekar Nagarajan (2026-09-29 12:30)
+import { useTranslation } from "react-i18next";
+
 import { useAiDictation } from "./use-ai-dictation";
 import { useGrammarImprove } from "./use-grammar-improve";
 import { useToneRewrite } from "./use-tone-rewrite";
@@ -9,6 +11,7 @@ import { useToneRewrite } from "./use-tone-rewrite";
  * - FormRichTextEditor: also pass `toneRewrite`
  */
 export function useAiTextAssist() {
+  const { t } = useTranslation("ai-assist");
   const grammarImprove = useGrammarImprove();
   const audioDictation = useAiDictation();
   const toneRewrite = useToneRewrite();
@@ -21,21 +24,21 @@ export function useAiTextAssist() {
     textareaAssistProps: {
       grammarImprove,
       audioDictation,
-      grammarImproveTooltip: "Improve grammar",
-      dictationTooltip: "Dictate with AI",
-      dictationRecordingTooltip: "Stop recording",
-      dictationTranscribingTooltip: "Transcribing…",
+      grammarImproveTooltip: t("tooltips.grammarImprove"),
+      dictationTooltip: t("tooltips.dictation"),
+      dictationRecordingTooltip: t("tooltips.dictationRecording"),
+      dictationTranscribingTooltip: t("tooltips.dictationTranscribing"),
     },
     /** Props for FormRichTextEditor (includes tone rewrite) */
     richTextAssistProps: {
       grammarImprove,
       audioDictation,
       toneRewrite,
-      grammarImproveTooltip: "Improve grammar",
-      dictationTooltip: "Dictate with AI",
-      dictationRecordingTooltip: "Stop recording",
-      dictationTranscribingTooltip: "Transcribing…",
-      toneRewriteTooltip: "Rewrite with AI",
+      grammarImproveTooltip: t("tooltips.grammarImprove"),
+      dictationTooltip: t("tooltips.dictation"),
+      dictationRecordingTooltip: t("tooltips.dictationRecording"),
+      dictationTranscribingTooltip: t("tooltips.dictationTranscribing"),
+      toneRewriteTooltip: t("tooltips.toneRewrite"),
     },
   };
 }

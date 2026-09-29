@@ -5,7 +5,7 @@ import { List, Progress, Space, Typography, theme } from "antd";
 import { useForm, useWatch, type Resolver } from "react-hook-form";
 
 import { AppIcon, Icons } from "../../../components/icons";
-import { MODULE_TITLES } from "../../../constants/module-titles";
+import { useModuleTitles } from "../../../i18n/use-module-titles";
 import { useChangePasswordMutation } from "../api/user-modules.queries";
 import type { ChangePasswordPayload } from "../types/user-modules.types";
 import { changePasswordSchema } from "../types/user-modules.types";
@@ -45,6 +45,7 @@ export function ChangePasswordView({
   open = true,
   onClose,
 }: ChangePasswordViewProps) {
+  const MODULE_TITLES = useModuleTitles();
   const { token } = theme.useToken();
   const isDrawer = Boolean(onClose);
   const { mutateAsync: changePassword, isPending } =

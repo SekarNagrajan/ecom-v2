@@ -4,11 +4,11 @@ import { Card, Col, Row, Space, Table, Tag, Typography } from "antd";
 
 import { NavBillOfLadingIcon } from "../../../components/icons";
 import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
+import { formatModuleScreenTitle } from "../../../constants/module-titles";
 import {
-  MODULE_TITLES,
-  WIZARD_STEP_TITLES,
-  formatModuleScreenTitle,
-} from "../../../constants/module-titles";
+  useModuleTitles,
+  useWizardStepTitles,
+} from "../../../i18n/use-module-titles";
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import { SI_CARGO_LINE_COLUMNS } from "../../shipping-instruction/utils/si-cargo-line-columns";
 import type { BLDTO } from "../types/bl.types";
@@ -48,6 +48,8 @@ export function BillOfLadingView({
   onCharges,
   extra,
 }: BillOfLadingViewProps) {
+  const MODULE_TITLES = useModuleTitles();
+  const WIZARD_STEP_TITLES = useWizardStepTitles();
   if (loading) {
     return <BlLoadingCenter fill />;
   }

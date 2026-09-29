@@ -1,61 +1,65 @@
-// Modified by Sekar Nagarajan (2026-09-11 18:25)
+// Modified by Sekar Nagarajan (2026-09-29 12:30)
 import type { ToneRewriteAction } from "@solverminds/shared-ui";
+import type { TFunction } from "i18next";
 
 import type {
   AiRewriteRewriteAction,
   AiRewriteToneAction,
 } from "../api/ai-assist.types";
 
-export const AI_TONE_ACTION_LABELS: Record<AiRewriteToneAction, string> = {
-  engaging: "Engaging",
-  persuasive: "Persuasive",
-  anticipatory: "Anticipatory",
-  assertive: "Assertive",
-  compassionate: "Compassionate",
-  confident: "Confident",
-  constructive: "Constructive",
-  cooperative: "Cooperative",
-  diplomatic: "Diplomatic",
-  empathetic: "Empathetic",
-  friendly: "Friendly",
-  inspirational: "Inspirational",
-  exciting: "Exciting",
-  casual: "Casual",
-};
-
-export const AI_REWRITE_ACTION_LABELS: Record<AiRewriteRewriteAction, string> =
-  {
-    improve: "Improve writing",
-    more_descriptive: "More descriptive",
-    more_detailed: "More detailed",
-    simplify: "Simplify",
-    informative: "Informative",
-    paraphrase: "Paraphrase",
-    fix_mistakes: "Fix spelling & grammar",
-    fluent: "Make it fluent",
-    objective: "Make it objective",
-    professional: "Professional",
-  };
-
-export const AI_REWRITE_DROPDOWN_ACTIONS: ToneRewriteAction[] = [
-  ...(
-    Object.entries(AI_TONE_ACTION_LABELS) as Array<[AiRewriteToneAction, string]>
-  ).map(
-    ([key, label]): ToneRewriteAction => ({
-      key,
-      label,
-      group: "tone",
-    }),
-  ),
-  ...(
-    Object.entries(AI_REWRITE_ACTION_LABELS) as Array<
-      [AiRewriteRewriteAction, string]
-    >
-  ).map(
-    ([key, label]): ToneRewriteAction => ({
-      key,
-      label,
-      group: "rewrite",
-    }),
-  ),
+/** Stable tone action keys — display labels come from i18n. */
+export const AI_TONE_ACTION_KEYS: AiRewriteToneAction[] = [
+  "engaging",
+  "persuasive",
+  "anticipatory",
+  "assertive",
+  "compassionate",
+  "confident",
+  "constructive",
+  "cooperative",
+  "diplomatic",
+  "empathetic",
+  "friendly",
+  "inspirational",
+  "exciting",
+  "casual",
 ];
+
+/** Stable rewrite action keys — display labels come from i18n. */
+export const AI_REWRITE_ACTION_KEYS: AiRewriteRewriteAction[] = [
+  "improve",
+  "more_descriptive",
+  "more_detailed",
+  "simplify",
+  "informative",
+  "paraphrase",
+  "fix_mistakes",
+  "fluent",
+  "objective",
+  "professional",
+];
+
+/**
+ * Build tone/rewrite dropdown actions with localized labels.
+ * Call from a hook with `t` so labels update when the language changes.
+ */
+export function getAiRewriteDropdownActions(
+  t: TFunction<"ai-assist">,
+): ToneRewriteAction[] {
+  return [
+    ...AI_TONE_ACTION_KEYS.map(
+      (key): ToneRewriteAction => ({
+        key,
+        label: t(`tones.${key}`),
+        group: "tone",
+      }),
+    ),
+    ...AI_REWRITE_ACTION_KEYS.map(
+      (key): ToneRewriteAction => ({
+        key,
+        label: t(`rewriteActions.${key}`),
+        group: "rewrite",
+      }),
+    ),
+  ];
+}

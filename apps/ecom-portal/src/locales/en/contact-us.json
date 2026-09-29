@@ -1,0 +1,32 @@
+{
+  "profile": {
+    "name": "Name",
+    "company": "Company",
+    "email": "Email",
+    "role": "Role"
+  },
+  "fields": {
+    "name": "Name",
+    "companyName": "Company Name",
+    "country": "Country",
+    "state": "State",
+    "city": "City",
+    "phone": "Phone",
+    "mobile": "Mobile",
+    "email": "Email",
+    "subject": "Subject",
+    "message": "Message"
+  },
+  "placeholders": {
+    "name": "Enter your name",
+    "companyName": "Enter company name",
+    "country": "Select Country",
+    "state": "Select State",
+    "city": "Enter city",
+    "phone": "Enter phone number",
+    "mobile": "Enter mobile number",
+    "email": "Enter email address",
+    "subject": "Enter subject",
+    "message": "Type your message here..."
+  }
+}

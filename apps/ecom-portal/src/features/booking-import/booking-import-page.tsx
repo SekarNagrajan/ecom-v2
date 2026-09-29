@@ -4,7 +4,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { Card } from "antd";
 
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
-import { MODULE_TITLES } from "../../constants/module-titles";
+import { useModuleTitles } from "../../i18n/use-module-titles";
 import { SpreadsheetImportWorkbench } from "../import-workbench/components/spreadsheet-import-workbench";
 import type {
   SpreadsheetImportCommitResult,
@@ -52,6 +52,7 @@ function toCommitResult(
 }
 
 export function BookingImportPage() {
+  const MODULE_TITLES = useModuleTitles();
   const navigate = useNavigate();
   const toast = useToast();
   const { mutateAsync: dryRunImportBookings } = useDryRunImportBookings();

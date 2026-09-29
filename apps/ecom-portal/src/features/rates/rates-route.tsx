@@ -2,6 +2,7 @@
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { Card, Space, Spin, Typography } from "antd";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../components/icons";
 import { NavRatesIcon } from "../../components/icons/nav-svg-icons";
@@ -9,7 +10,7 @@ import { FeaturePageShell } from "../../components/shared/feature-page-shell";
 import { ModuleCardViewPanel } from "../../components/shared/module-card-view-panel";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import { ModuleViewModeTabs } from "../../components/shared/module-view-mode-tabs";
-import { MODULE_TITLES } from "../../constants/module-titles";
+import { useModuleTitles } from "../../i18n/use-module-titles";
 import { ContractSurchargeModal } from "./components/ContractSurchargeModal";
 import { QuoteRequestDrawer } from "./components/QuoteRequestDrawer";
 import { RateCardList } from "./components/RateCardList";
@@ -23,6 +24,8 @@ const { Text } = Typography;
 
 export function RatesRoute() {
   const toast = useToast();
+  const { t } = useTranslation(["rates", "common"]);
+  const moduleTitles = useModuleTitles();
   const {
     viewMode,
     setViewMode,
@@ -56,27 +59,25 @@ export function RatesRoute() {
       <Card className="feature-page-card" bordered={false}>
         <ModuleScreenHeader
           icon={NavRatesIcon}
-          title={MODULE_TITLES.rates}
-          subtitle="Search published line tariffs, view itemized surcharge breakdowns, manage Service Contracts, and request spot rate quotes."
+          title={moduleTitles.rates}
+          subtitle={t("subtitle")}
           extra={
             <Space align="center" size={12} wrap className="custom-scroll">
               <AppButton
                 icon={
                   <AppIcon icon={Icons.download} size={16} tone="download" />
                 }
-                onClick={() =>
-                  toast.success("Exporting rate search results to Excel...")
-                }
+                onClick={() => toast.success(t("exportingToast"))}
                 disabled={!hasSearched || cardRates.length === 0}
               >
-                Export Excel
+                {t("common:actions.exportExcel")}
               </AppButton>
               <AppButton
                 icon={<AppIcon icon={Icons.mail} size={16} tone="navigate" />}
                 onClick={handleShareResultsViaMail}
                 disabled={!hasSearched || cardRates.length === 0}
               >
-                Share via Mail
+                {t("common:actions.shareViaMail")}
               </AppButton>
             </Space>
           }

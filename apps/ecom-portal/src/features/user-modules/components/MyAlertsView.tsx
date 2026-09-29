@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
-import { MODULE_TITLES } from "../../../constants/module-titles";
+import { useModuleTitles } from "../../../i18n/use-module-titles";
 import {
   useAlertLogsQuery,
   useAlertPreferencesQuery,
@@ -97,6 +97,7 @@ export interface MyAlertsViewProps {
 }
 
 export function MyAlertsView({ open = true, onClose }: MyAlertsViewProps) {
+  const MODULE_TITLES = useModuleTitles();
   const isDrawer = Boolean(onClose);
   const prefsQuery = useAlertPreferencesQuery(open);
   const logsQuery = useAlertLogsQuery(open);

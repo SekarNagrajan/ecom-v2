@@ -12,7 +12,7 @@ import {
   buildRetryAction,
 } from "../../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
-import { MODULE_TITLES } from "../../../constants/module-titles";
+import { useModuleTitles } from "../../../i18n/use-module-titles";
 import {
   useBLBatchPrintMutation,
   useBLCancelMutation,
@@ -34,6 +34,7 @@ import { BlViewDrawer } from "./view/BlViewDrawer";
 const { Text } = Typography;
 
 export function BillOfLadingListing() {
+  const MODULE_TITLES = useModuleTitles();
   const navigate = useNavigate();
   const { data, isLoading, isError, refetch } = useBLListQuery({});
   const { data: config } = useBLWizardConfig();

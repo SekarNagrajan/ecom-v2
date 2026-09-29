@@ -1,9 +1,10 @@
-// Modified by Sekar Nagarajan (2026-09-11 18:25)
+// Modified by Sekar Nagarajan (2026-09-29 12:30)
 import type {
   AudioDictationError,
   AudioDictationProp,
 } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
+import { useTranslation } from "react-i18next";
 
 import {
   extractAiAssistError,
@@ -15,6 +16,7 @@ import {
  * Pass into FormTextarea / AppTextarea / FormRichTextEditor.
  */
 export function useAiDictation(): AudioDictationProp {
+  const { t } = useTranslation("ai-assist");
   const toast = useToast();
 
   return {
@@ -25,27 +27,31 @@ export function useAiDictation(): AudioDictationProp {
     onError: (err: AudioDictationError) => {
       switch (err.kind) {
         case "permission-denied":
-          toast.error(
-            "Microphone access is blocked. Enable it in your browser to dictate.",
-          );
+          toast.error(t("toasts.permissionDenied"));
           return;
         case "unsupported":
-          toast.error("Voice dictation is not supported in this browser.");
+          toast.error(t("toasts.unsupported"));
           return;
         case "no-microphone":
-          toast.error("No microphone detected. Connect one and try again.");
+          toast.error(t("toasts.noMicrophone"));
           return;
         case "recording-failed":
-          toast.error("Recording failed. Please try again.");
+          toast.error(t("toasts.recordingFailed"));
           return;
         case "transcription-failed":
           toast.error(extractAiAssistError(err.cause));
           return;
         case "max-length-exceeded":
           toast.warning(
-            `Transcript truncated by ${err.truncatedChars} characters to fit the field.`,
+            t("toasts.maxLengthExceeded", {
+              truncatedChars: err.truncatedChars,
+            }),
           );
           return;
+        default: {
+          const _exhaustive: never = err;
+          return _exhaustive;
+        }
       }
     },
   };

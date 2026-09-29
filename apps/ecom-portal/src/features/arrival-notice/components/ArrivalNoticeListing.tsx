@@ -22,7 +22,7 @@ import {
 } from "../../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
 import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
-import { MODULE_TITLES } from "../../../constants/module-titles";
+import { useModuleTitles } from "../../../i18n/use-module-titles";
 import {
   useArrivalNoticeDownloadMutation,
   useArrivalNoticeListQuery,
@@ -47,6 +47,7 @@ const initialFilters: ArrivalNoticeListFilters = {
 };
 
 export function ArrivalNoticeListing() {
+  const MODULE_TITLES = useModuleTitles();
   const { profileHandlers } = useLocalGridProfiles("arrival-notice");
   const [filters, setFilters] =
     useState<ArrivalNoticeListFilters>(initialFilters);

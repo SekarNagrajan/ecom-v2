@@ -28,7 +28,7 @@ import {
 } from "../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import { useLocalGridProfiles } from "../../components/shared/use-local-grid-profiles";
-import { MODULE_TITLES } from "../../constants/module-titles";
+import { useModuleTitles } from "../../i18n/use-module-titles";
 import { bookingApi } from "./api/booking.api";
 import { bookingKeys } from "./api/booking.keys";
 import { BookingModuleStyles } from "./components/booking-module-styles";
@@ -42,6 +42,7 @@ import { getBookingListStatusColor } from "./types/booking-list.types";
 const VIEW_MODE_KEY = "ecom.booking.viewMode";
 
 export function BookingDashboardRoute() {
+  const MODULE_TITLES = useModuleTitles();
   const navigate = useNavigate();
   const confirm = useConfirm();
   const toast = useToast();

@@ -3,6 +3,7 @@ import { ArrowLeftOutlined, HomeOutlined } from "@ant-design/icons";
 import { AppEmptyState } from "@solverminds/shared-ui";
 import { useNavigate, useRouter } from "@tanstack/react-router";
 import { Flex, theme } from "antd";
+import { useTranslation } from "react-i18next";
 
 interface NotFoundProps {
   /** When true, covers the viewport. When false (default in-app), fills the content area. */
@@ -13,6 +14,7 @@ interface NotFoundProps {
  * In-shell / full-page 404 — shipping empty art, no scroll (sticky in content pane).
  */
 export function NotFound({ fullScreen = false }: NotFoundProps) {
+  const { t } = useTranslation("common");
   const { token } = theme.useToken();
   const router = useRouter();
   const navigate = useNavigate();
@@ -50,7 +52,7 @@ export function NotFound({ fullScreen = false }: NotFoundProps) {
         variant="blank"
         artSize="md"
         title="404"
-        message="Sorry, the page you visited does not exist."
+        message={t("notFound.subtitle")}
         style={{
           flex: 1,
           maxWidth: "100%",
@@ -60,14 +62,14 @@ export function NotFound({ fullScreen = false }: NotFoundProps) {
         actions={[
           {
             key: "back",
-            label: "Go Back",
+            label: t("actions.back"),
             type: "default",
             icon: <ArrowLeftOutlined />,
             onClick: () => router.history.back(),
           },
           {
             key: "home",
-            label: "Back to Home",
+            label: t("notFound.backHome"),
             type: "primary",
             icon: <HomeOutlined />,
             onClick: () => {

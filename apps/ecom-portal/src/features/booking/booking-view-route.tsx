@@ -6,15 +6,14 @@ import { Card, Space } from "antd";
 import { AppIcon, Icons, NavBookingIcon } from "../../components/icons";
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
-import {
-  MODULE_TITLES,
-  formatModuleScreenTitle,
-} from "../../constants/module-titles";
+import { formatModuleScreenTitle } from "../../constants/module-titles";
+import { useModuleTitles } from "../../i18n/use-module-titles";
 import { BookingModuleStyles } from "./components/booking-module-styles";
 import { BookingDetailsViewer } from "./components/view/BookingDetailsViewer";
 import { HaulageTrackingGrid } from "./components/view/HaulageTrackingGrid";
 
 export function BookingViewRoute() {
+  const MODULE_TITLES = useModuleTitles();
   const navigate = useNavigate();
   const { bookingId } = useParams({ strict: false });
 

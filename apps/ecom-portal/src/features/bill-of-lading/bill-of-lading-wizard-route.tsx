@@ -8,10 +8,8 @@ import { useMemo, useState } from "react";
 import { AppIcon, Icons, NavBillOfLadingIcon } from "../../components/icons";
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
-import {
-  MODULE_TITLES,
-  formatModuleScreenTitle,
-} from "../../constants/module-titles";
+import { formatModuleScreenTitle } from "../../constants/module-titles";
+import { useModuleTitles } from "../../i18n/use-module-titles";
 import { checkVoyageClosed } from "./api/bl.api";
 import {
   useBLDetailQuery,
@@ -37,6 +35,7 @@ const BL_TERMS_HTML =
   "By proceeding with B/L correction you agree to the carrier terms and conditions for document amendments.";
 
 export function BillOfLadingWizardRoute() {
+  const MODULE_TITLES = useModuleTitles();
   const { token } = theme.useToken();
   const navigate = useNavigate();
   const confirm = useConfirm();

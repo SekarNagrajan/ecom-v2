@@ -2,13 +2,14 @@
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { Card, Space } from "antd";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../components/icons";
 import { NavTrackingIcon } from "../../components/icons/nav-svg-icons";
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
 import { ModuleEmptyState } from "../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
-import { MODULE_TITLES } from "../../constants/module-titles";
+import { useModuleTitles } from "../../i18n/use-module-titles";
 import { TrackingModuleStyles } from "./components/tracking-module-styles";
 import { TrackingContainersTable } from "./components/TrackingContainersTable";
 import { TrackingLiveMapDrawer } from "./components/TrackingLiveMapDrawer";
@@ -19,6 +20,8 @@ import { useTrackingController } from "./hooks/useTrackingController";
 
 export function TrackingRoute() {
   const toast = useToast();
+  const { t } = useTranslation(["tracking", "common"]);
+  const moduleTitles = useModuleTitles();
   const {
     isLoading,
     searchParams,
@@ -42,29 +45,23 @@ export function TrackingRoute() {
       <Card className="feature-page-card" bordered={false}>
         <ModuleScreenHeader
           icon={NavTrackingIcon}
-          title={MODULE_TITLES.tracking}
-          subtitle="Track real-time container movements, vessel voyage milestones, port cut-offs, and transport event logs."
+          title={moduleTitles.tracking}
+          subtitle={t("subtitle")}
           extra={
             <Space align="center" size={12} wrap>
               <AppButton
                 icon={
                   <AppIcon icon={Icons.download} size={16} tone="download" />
                 }
-                onClick={() =>
-                  toast.success(
-                    "Exporting container tracking trace history to Excel…",
-                  )
-                }
+                onClick={() => toast.success(t("exportingToast"))}
               >
-                Export Excel
+                {t("common:actions.exportExcel")}
               </AppButton>
               <AppButton
                 icon={<AppIcon icon={Icons.mail} size={16} tone="navigate" />}
-                onClick={() =>
-                  toast.info("Opening tracking status email share dialog…")
-                }
+                onClick={() => toast.info(t("shareToast"))}
               >
-                Share via Mail
+                {t("common:actions.shareViaMail")}
               </AppButton>
             </Space>
           }
@@ -98,8 +95,8 @@ export function TrackingRoute() {
           <ModuleEmptyState
             artSize="sm"
             variant="blank"
-            title="No tracking records found"
-            message="Try another container, booking, or BL reference for this search type."
+            title={t("emptyTitle")}
+            message={t("emptyMessage")}
           />
         ) : null}
 

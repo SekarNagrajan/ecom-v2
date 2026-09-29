@@ -21,7 +21,7 @@ import {
 } from "../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import { useLocalGridProfiles } from "../../components/shared/use-local-grid-profiles";
-import { MODULE_TITLES } from "../../constants/module-titles";
+import { useModuleTitles } from "../../i18n/use-module-titles";
 import { useCancelSiMutation, useSiListQuery } from "./api/si.queries";
 import { SiListActions } from "./components/list/si-list-actions";
 import { SiListCard } from "./components/list/si-list-card";
@@ -33,6 +33,7 @@ import { getSiStatusTagColor } from "./utils/si-status";
 const VIEW_MODE_KEY = "ecom.si.viewMode";
 
 export function ShippingInstructionDashboardRoute() {
+  const MODULE_TITLES = useModuleTitles();
   const navigate = useNavigate();
   const confirm = useConfirm();
   const toast = useToast();

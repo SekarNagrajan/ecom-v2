@@ -27,7 +27,7 @@ import {
 } from "../../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
 import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
-import { MODULE_TITLES } from "../../../constants/module-titles";
+import { useModuleTitles } from "../../../i18n/use-module-titles";
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import {
   useSubUsersQuery,
@@ -42,6 +42,7 @@ import { UscLoadingCenter } from "./usc-loading-center";
 import { UscSearchPanel } from "./usc-search-panel";
 
 export function UserCreationListing() {
+  const MODULE_TITLES = useModuleTitles();
   const toast = useToast();
   const { profileHandlers } = useLocalGridProfiles("user-creation");
   const [searchTerm, setSearchTerm] = useState("");

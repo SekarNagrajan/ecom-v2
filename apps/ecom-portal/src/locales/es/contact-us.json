@@ -1,0 +1,32 @@
+{
+  "profile": {
+    "name": "Nombre",
+    "company": "Empresa",
+    "email": "Correo electrónico",
+    "role": "Rol"
+  },
+  "fields": {
+    "name": "Nombre",
+    "companyName": "Nombre de la Empresa",
+    "country": "País",
+    "state": "Estado",
+    "city": "Ciudad",
+    "phone": "Teléfono",
+    "mobile": "Móvil",
+    "email": "Correo electrónico",
+    "subject": "Asunto",
+    "message": "Mensaje"
+  },
+  "placeholders": {
+    "name": "Ingrese su nombre",
+    "companyName": "Ingrese el nombre de la empresa",
+    "country": "Seleccione País",
+    "state": "Seleccione Estado",
+    "city": "Ingrese la ciudad",
+    "phone": "Ingrese el número de teléfono",
+    "mobile": "Ingrese el número de móvil",
+    "email": "Ingrese la dirección de correo electrónico",
+    "subject": "Ingrese el asunto",
+    "message": "Escriba su mensaje aquí..."
+  }
+}

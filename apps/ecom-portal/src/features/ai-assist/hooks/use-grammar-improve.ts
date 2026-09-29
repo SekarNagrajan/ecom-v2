@@ -1,6 +1,7 @@
-// Modified by Sekar Nagarajan (2026-09-11 18:25)
+// Modified by Sekar Nagarajan (2026-09-29 12:30)
 import type { GrammarImproveProp } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
+import { useTranslation } from "react-i18next";
 
 import {
   checkAiGrammar,
@@ -12,13 +13,14 @@ import {
  * Pass into FormTextarea / AppTextarea / FormRichTextEditor.
  */
 export function useGrammarImprove(): GrammarImproveProp {
+  const { t } = useTranslation("ai-assist");
   const toast = useToast();
 
   return {
     improveGrammar: async (text: string): Promise<string> => {
       const trimmed = text.trim();
       if (!trimmed) {
-        toast.warning("Add text before improving grammar.");
+        toast.warning(t("toasts.grammarEmptyInput"));
         return text;
       }
 
@@ -26,9 +28,7 @@ export function useGrammarImprove(): GrammarImproveProp {
       const corrected = response.data.correctedText;
 
       if (!corrected || typeof corrected !== "string" || !corrected.trim()) {
-        toast.warning(
-          "Grammar service returned an empty response. No changes applied.",
-        );
+        toast.warning(t("toasts.grammarEmptyResponse"));
         return text;
       }
 
@@ -38,9 +38,7 @@ export function useGrammarImprove(): GrammarImproveProp {
       toast.error(extractAiAssistError(error));
     },
     onFormattingLoss: () => {
-      toast.info(
-        "Note: Text formatting (bold, links, lists) will be simplified after grammar correction.",
-      );
+      toast.info(t("toasts.grammarFormattingLoss"));
     },
   };
 }

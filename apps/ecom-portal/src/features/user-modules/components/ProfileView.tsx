@@ -16,7 +16,7 @@ import {
   getUserFullName,
   getUserInitials,
 } from "../../../components/shared/user-name.utils";
-import { MODULE_TITLES } from "../../../constants/module-titles";
+import { useModuleTitles } from "../../../i18n/use-module-titles";
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import { ProfilePhotoModal } from "../../profile-photo/components/profile-photo-modal";
 import { useProfilePhoto } from "../../profile-photo/providers/profile-photo-provider";
@@ -72,6 +72,7 @@ function optLabel(label: string) {
 }
 
 export function ProfileView({ open = true, onClose }: ProfileViewProps) {
+  const MODULE_TITLES = useModuleTitles();
   const { token } = theme.useToken();
   const isDrawer = Boolean(onClose);
   const { data: profile, isLoading } = useProfileQuery(open);

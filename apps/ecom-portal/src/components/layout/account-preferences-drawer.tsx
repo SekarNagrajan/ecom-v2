@@ -1,6 +1,7 @@
 // Modified by Sekar Nagarajan (2026-09-28 15:50)
 import { AppDrawer } from "@solverminds/shared-ui";
 import { Flex, Typography, theme } from "antd";
+import { useTranslation } from "react-i18next";
 
 import { ThemePreferencesPanel } from "../../features/theme/components/theme-preferences-panel";
 import { type useThemePreferencesController } from "../../features/theme/hooks/use-theme-preferences-controller";
@@ -23,15 +24,16 @@ export function AccountPreferencesDrawer({
   open,
   preferencesController,
 }: AccountPreferencesDrawerProps) {
+  const { t } = useTranslation("common");
   const { token } = theme.useToken();
 
   const statusLabel =
     preferencesController.saveStatus === "saving"
-      ? "Saving..."
+      ? t("status.saving")
       : preferencesController.saveStatus === "dirty"
-      ? "Not saved"
+      ? t("status.notSaved")
       : preferencesController.saveStatus === "error"
-      ? "Save failed"
+      ? t("status.saveFailed")
       : null;
 
   const statusColor =
@@ -54,7 +56,7 @@ export function AccountPreferencesDrawer({
         <div className="a11y-prefs-drawer-header">
           <Flex vertical gap={2} style={{ minWidth: 0 }}>
             <Title level={5} className="a11y-prefs-drawer-header__title">
-              Accessibility Controls
+              {t("account.accessibilityControls")}
             </Title>
 
             {statusLabel ? (

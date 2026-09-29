@@ -6,6 +6,7 @@ import { Drawer, Layout, Menu, Tooltip } from "antd";
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import {
   adminSectionToMenuKey,
@@ -63,10 +64,10 @@ function navIcon(Icon: LucideIcon, size = 18, locked = false) {
 }
 
 /** Label + tooltip title for expanded vs icon-rail collapsed menu. */
-function sidebarMenuLabel(text: string, locked: boolean) {
+function sidebarMenuLabel(text: string, locked: boolean, lockedLabel: string) {
   return {
-    title: locked ? "Sign In Required" : text,
-    label: locked ? <Tooltip title="Sign In Required">{text}</Tooltip> : text,
+    title: locked ? lockedLabel : text,
+    label: locked ? <Tooltip title={lockedLabel}>{text}</Tooltip> : text,
   };
 }
 
@@ -83,7 +84,10 @@ function SidebarDesktopShell({
   brandBlock,
   menuBlock,
 }: SidebarDesktopShellProps) {
-  const collapseLabel = collapsed ? "Expand sidebar" : "Collapse sidebar";
+  const { t } = useTranslation("common");
+  const collapseLabel = collapsed
+    ? t("nav.expandSidebar")
+    : t("nav.collapseSidebar");
 
   return (
     <Sider
@@ -143,6 +147,7 @@ export function AuthenticatedSidebar({
   isGuest = false,
   onLoginRequired,
 }: AuthenticatedSidebarProps) {
+  const { t } = useTranslation("common");
   const { can, isAdmin, isVendor, isSuperuser } = usePermission();
   const user = useAuthStore((state) => state.user);
   const activeTenant = useTenantStore((state) => state.activeTenant);
@@ -170,6 +175,7 @@ export function AuthenticatedSidebar({
 
   const lock = (key: string) =>
     isGuest && !isPublicMenuKey(key, menuCategories);
+  const lockedLabel = t("nav.signInRequired");
 
   // Cpanel: Module Mapping / Email Config / Cutoff as sidebar modules
   if (isCpanelAdmin && !isGuest) {
@@ -256,25 +262,25 @@ export function AuthenticatedSidebar({
     {
       key: "dashboard",
       icon: navIcon(NavIcons.dashboard, 20, lock("dashboard")),
-      ...sidebarMenuLabel("Dashboard", lock("dashboard")),
+      ...sidebarMenuLabel(t("nav.dashboard"), lock("dashboard"), lockedLabel),
       className: lock("dashboard") ? "ant-menu-item-locked" : undefined,
     },
     {
       key: "schedules-group",
       icon: navIcon(NavIcons.schedules),
-      title: "Schedules",
-      label: "Schedules",
+      title: t("nav.schedules"),
+      label: t("nav.schedules"),
       children: [
         {
           key: "schedules",
           icon: navIcon(NavIcons.schedules, 20),
-          ...sidebarMenuLabel("Schedules", false),
+          ...sidebarMenuLabel(t("nav.schedules"), false, lockedLabel),
           disabled: !isGuest && !can("SCH"),
         },
         {
           key: "tracking",
           icon: navIcon(NavIcons.tracking, 20),
-          ...sidebarMenuLabel("Tracking", false),
+          ...sidebarMenuLabel(t("nav.tracking"), false, lockedLabel),
           disabled: !isGuest && !can("TRK"),
         },
       ].filter(
@@ -284,61 +290,77 @@ export function AuthenticatedSidebar({
     {
       key: "rates",
       icon: navIcon(NavIcons.rates, 20, lock("rates")),
-      ...sidebarMenuLabel("Rates", lock("rates")),
+      ...sidebarMenuLabel(t("nav.rates"), lock("rates"), lockedLabel),
       disabled: !isGuest && !can("SCH"),
       className: lock("rates") ? "ant-menu-item-locked" : undefined,
     },
     {
       key: "booking",
       icon: navIcon(NavIcons.booking, 20, lock("booking")),
-      ...sidebarMenuLabel("Booking", lock("booking")),
+      ...sidebarMenuLabel(t("nav.booking"), lock("booking"), lockedLabel),
       disabled: !isGuest && !can("BKG"),
       className: lock("booking") ? "ant-menu-item-locked" : undefined,
     },
     {
       key: "si",
       icon: navIcon(NavIcons.shippingInstruction, 20, lock("si")),
-      ...sidebarMenuLabel("Shipping Instruction", lock("si")),
+      ...sidebarMenuLabel(
+        t("nav.shippingInstruction"),
+        lock("si"),
+        lockedLabel,
+      ),
       disabled: !isGuest && !can("SI"),
       className: lock("si") ? "ant-menu-item-locked" : undefined,
     },
     {
       key: "vgm",
       icon: navIcon(NavIcons.vgm, 20, lock("vgm")),
-      ...sidebarMenuLabel("VGM", lock("vgm")),
+      ...sidebarMenuLabel(t("nav.vgm"), lock("vgm"), lockedLabel),
       disabled: !isGuest && !can("VGM"),
       className: lock("vgm") ? "ant-menu-item-locked" : undefined,
     },
     {
       key: "bl",
       icon: navIcon(NavIcons.billOfLading, 20, lock("bl")),
-      ...sidebarMenuLabel("Bill of Lading", lock("bl")),
+      ...sidebarMenuLabel(t("nav.billOfLading"), lock("bl"), lockedLabel),
       disabled: !isGuest && !can("BL"),
       className: lock("bl") ? "ant-menu-item-locked" : undefined,
     },
     {
       key: "do",
       icon: navIcon(NavIcons.deliveryOrder, 20, lock("do")),
-      ...sidebarMenuLabel("Delivery Order", lock("do")),
+      ...sidebarMenuLabel(t("nav.deliveryOrder"), lock("do"), lockedLabel),
       className: lock("do") ? "ant-menu-item-locked" : undefined,
     },
     {
       key: "arrival-notice",
       icon: navIcon(NavIcons.arrivalNotice, 20, lock("arrival-notice")),
-      ...sidebarMenuLabel("Arrival Notice", lock("arrival-notice")),
+      ...sidebarMenuLabel(
+        t("nav.arrivalNotice"),
+        lock("arrival-notice"),
+        lockedLabel,
+      ),
       className: lock("arrival-notice") ? "ant-menu-item-locked" : undefined,
     },
     {
       key: "cro",
       icon: navIcon(NavIcons.containerRelease, 20, lock("cro")),
-      ...sidebarMenuLabel("Container Release Order", lock("cro")),
+      ...sidebarMenuLabel(
+        t("nav.containerReleaseOrder"),
+        lock("cro"),
+        lockedLabel,
+      ),
       disabled: !isGuest && !can("CRO"),
       className: lock("cro") ? "ant-menu-item-locked" : undefined,
     },
     {
       key: "customer-stmt",
       icon: navIcon(NavIcons.customerStatement, 20, lock("customer-stmt")),
-      ...sidebarMenuLabel("Customer Statement", lock("customer-stmt")),
+      ...sidebarMenuLabel(
+        t("nav.customerStatement"),
+        lock("customer-stmt"),
+        lockedLabel,
+      ),
       disabled: !isGuest && !can("STMT"),
       className: lock("customer-stmt") ? "ant-menu-item-locked" : undefined,
     },
@@ -346,15 +368,19 @@ export function AuthenticatedSidebar({
     {
       key: "more-group",
       icon: navIcon(NavIcons.more, 20),
-      title: "More",
-      label: "More",
+      title: t("nav.more"),
+      label: t("nav.more"),
       children: [
         isAdminUser
           ? {
               key: "admin-group",
               icon: navIcon(NavIcons.admin, 20, lock("admin")),
-              title: "Control Panel Admin",
-              ...sidebarMenuLabel("Control Panel Admin", lock("admin")),
+              title: t("nav.controlPanelAdmin"),
+              ...sidebarMenuLabel(
+                t("nav.controlPanelAdmin"),
+                lock("admin"),
+                lockedLabel,
+              ),
               className: lock("admin") ? "ant-menu-item-locked" : undefined,
               children: buildAdminSectionNavItems(
                 resolveAllowedAdminSections(user?.vendorMenuList),
@@ -362,7 +388,7 @@ export function AuthenticatedSidebar({
                 key: adminSectionToMenuKey(item.key),
                 icon: navIcon(item.icon, 18, lock("admin")),
                 title: item.label,
-                ...sidebarMenuLabel(item.label, lock("admin")),
+                ...sidebarMenuLabel(item.label, lock("admin"), lockedLabel),
                 className: lock("admin") ? "ant-menu-item-locked" : undefined,
               })),
             }
@@ -370,14 +396,22 @@ export function AuthenticatedSidebar({
         {
           key: "payments",
           icon: navIcon(NavIcons.payments, 20, lock("payments")),
-          ...sidebarMenuLabel("Payment History", lock("payments")),
+          ...sidebarMenuLabel(
+            t("nav.paymentHistory"),
+            lock("payments"),
+            lockedLabel,
+          ),
           disabled: !isGuest && !can("PAY"),
           className: lock("payments") ? "ant-menu-item-locked" : undefined,
         },
         {
           key: "carbon",
           icon: navIcon(NavIcons.carbon, 20, lock("carbon")),
-          ...sidebarMenuLabel("Carbon Calculator", lock("carbon")),
+          ...sidebarMenuLabel(
+            t("nav.carbonCalculator"),
+            lock("carbon"),
+            lockedLabel,
+          ),
           disabled: !isGuest && !can("CO2"),
           className: lock("carbon") ? "ant-menu-item-locked" : undefined,
         },
@@ -385,7 +419,11 @@ export function AuthenticatedSidebar({
           ? {
               key: "user-creation",
               icon: navIcon(NavIcons.userCreation, 20, lock("user-creation")),
-              ...sidebarMenuLabel("User Creation (USC)", lock("user-creation")),
+              ...sidebarMenuLabel(
+                t("nav.userCreation"),
+                lock("user-creation"),
+                lockedLabel,
+              ),
               className: lock("user-creation")
                 ? "ant-menu-item-locked"
                 : undefined,
@@ -399,7 +437,11 @@ export function AuthenticatedSidebar({
                 20,
                 lock("vendor-approvals"),
               ),
-              ...sidebarMenuLabel("Agency Approvals", lock("vendor-approvals")),
+              ...sidebarMenuLabel(
+                t("nav.agencyApprovals"),
+                lock("vendor-approvals"),
+                lockedLabel,
+              ),
               className: lock("vendor-approvals")
                 ? "ant-menu-item-locked"
                 : undefined,

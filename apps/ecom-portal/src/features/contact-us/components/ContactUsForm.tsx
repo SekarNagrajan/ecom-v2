@@ -3,6 +3,7 @@ import { FormInput, FormSelect, FormTextarea } from "@solverminds/shared-ui";
 import { Col, Descriptions, Row, Typography } from "antd";
 import { useEffect, useRef } from "react";
 import { useWatch } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import { useAiTextAssist } from "../../ai-assist";
@@ -37,6 +38,7 @@ function optLabel(label: string) {
  * Guest: full editable fields (legacy ContactUs.jsp parity).
  */
 export function ContactUsForm({ controller }: ContactUsFormProps) {
+  const { t } = useTranslation("contact-us");
   const {
     form,
     isAuthenticated,
@@ -69,14 +71,18 @@ export function ContactUsForm({ controller }: ContactUsFormProps) {
           column={{ xs: 1, sm: 2 }}
           className="contact-profile-desc"
         >
-          <Descriptions.Item label="Name">{user.name || "-"}</Descriptions.Item>
-          <Descriptions.Item label="Company">
+          <Descriptions.Item label={t("profile.name")}>
+            {user.name || "-"}
+          </Descriptions.Item>
+          <Descriptions.Item label={t("profile.company")}>
             {user.company || "-"}
           </Descriptions.Item>
-          <Descriptions.Item label="Email">
+          <Descriptions.Item label={t("profile.email")}>
             {user.email || "-"}
           </Descriptions.Item>
-          <Descriptions.Item label="Role">{user.role || "-"}</Descriptions.Item>
+          <Descriptions.Item label={t("profile.role")}>
+            {user.role || "-"}
+          </Descriptions.Item>
         </Descriptions>
       ) : (
         <Row gutter={[16, 16]} align="top">
@@ -84,9 +90,9 @@ export function ContactUsForm({ controller }: ContactUsFormProps) {
             <FormInput
               control={form.control}
               name="name"
-              label={reqLabel("Name")}
+              label={reqLabel(t("fields.name"))}
               size="large"
-              placeholder="Enter your name"
+              placeholder={t("placeholders.name")}
               maxLength={100}
               formItemProps={FIELD_ITEM_PROPS}
             />
@@ -95,9 +101,9 @@ export function ContactUsForm({ controller }: ContactUsFormProps) {
             <FormInput
               control={form.control}
               name="companyName"
-              label={reqLabel("Company Name")}
+              label={reqLabel(t("fields.companyName"))}
               size="large"
-              placeholder="Enter company name"
+              placeholder={t("placeholders.companyName")}
               maxLength={50}
               formItemProps={FIELD_ITEM_PROPS}
             />
@@ -106,9 +112,9 @@ export function ContactUsForm({ controller }: ContactUsFormProps) {
             <FormSelect
               control={form.control}
               name="country"
-              label={reqLabel("Country")}
+              label={reqLabel(t("fields.country"))}
               size="large"
-              placeholder="Select Country"
+              placeholder={t("placeholders.country")}
               loading={countriesLoading}
               showSearch
               optionFilterProp="label"
@@ -124,9 +130,9 @@ export function ContactUsForm({ controller }: ContactUsFormProps) {
             <FormSelect
               control={form.control}
               name="state"
-              label={optLabel("State")}
+              label={optLabel(t("fields.state"))}
               size="large"
-              placeholder="Select State"
+              placeholder={t("placeholders.state")}
               loading={statesLoading}
               showSearch
               optionFilterProp="label"
@@ -144,9 +150,9 @@ export function ContactUsForm({ controller }: ContactUsFormProps) {
             <FormInput
               control={form.control}
               name="city"
-              label={reqLabel("City")}
+              label={reqLabel(t("fields.city"))}
               size="large"
-              placeholder="Enter city"
+              placeholder={t("placeholders.city")}
               maxLength={150}
               formItemProps={FIELD_ITEM_PROPS}
             />
@@ -155,9 +161,9 @@ export function ContactUsForm({ controller }: ContactUsFormProps) {
             <FormInput
               control={form.control}
               name="phone"
-              label={optLabel("Phone")}
+              label={optLabel(t("fields.phone"))}
               size="large"
-              placeholder="Enter phone number"
+              placeholder={t("placeholders.phone")}
               maxLength={15}
               formItemProps={FIELD_ITEM_PROPS}
             />
@@ -166,9 +172,9 @@ export function ContactUsForm({ controller }: ContactUsFormProps) {
             <FormInput
               control={form.control}
               name="mobile"
-              label={optLabel("Mobile")}
+              label={optLabel(t("fields.mobile"))}
               size="large"
-              placeholder="Enter mobile number"
+              placeholder={t("placeholders.mobile")}
               maxLength={11}
               formItemProps={FIELD_ITEM_PROPS}
             />
@@ -178,9 +184,9 @@ export function ContactUsForm({ controller }: ContactUsFormProps) {
               control={form.control}
               name="email"
               type="email"
-              label={reqLabel("Email")}
+              label={reqLabel(t("fields.email"))}
               size="large"
-              placeholder="Enter email address"
+              placeholder={t("placeholders.email")}
               maxLength={300}
               formItemProps={FIELD_ITEM_PROPS}
             />
@@ -191,9 +197,9 @@ export function ContactUsForm({ controller }: ContactUsFormProps) {
       <FormInput
         control={form.control}
         name="subject"
-        label={reqLabel("Subject")}
+        label={reqLabel(t("fields.subject"))}
         size="large"
-        placeholder="Enter subject"
+        placeholder={t("placeholders.subject")}
         maxLength={100}
         formItemProps={FIELD_ITEM_PROPS}
       />
@@ -201,8 +207,8 @@ export function ContactUsForm({ controller }: ContactUsFormProps) {
       <FormTextarea
         control={form.control}
         name="message"
-        label={reqLabel("Message")}
-        placeholder="Type your message here..."
+        label={reqLabel(t("fields.message"))}
+        placeholder={t("placeholders.message")}
         maxLength={5000}
         rows={5}
         showCount

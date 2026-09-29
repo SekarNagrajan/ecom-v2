@@ -1,0 +1,8 @@
+{
+  "title": "Dashboard",
+  "subtitle": "Shipment KPIs, ongoing transactions, and operational analytics — parity with the legacy enhanced dashboard.",
+  "createBooking": "Create Booking",
+  "refresh": "Refresh",
+  "summaryUnavailableTitle": "Dashboard summary unavailable",
+  "summaryUnavailableMessage": "Refresh the dashboard to try loading the summary again."
+}

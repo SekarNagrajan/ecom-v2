@@ -1,0 +1,32 @@
+{
+  "profile": {
+    "name": "Nama",
+    "company": "Syarikat",
+    "email": "E-mel",
+    "role": "Peranan"
+  },
+  "fields": {
+    "name": "Nama",
+    "companyName": "Nama Syarikat",
+    "country": "Negara",
+    "state": "Negeri",
+    "city": "Bandar",
+    "phone": "Telefon",
+    "mobile": "Telefon Bimbit",
+    "email": "E-mel",
+    "subject": "Subjek",
+    "message": "Mesej"
+  },
+  "placeholders": {
+    "name": "Masukkan nama anda",
+    "companyName": "Masukkan nama syarikat",
+    "country": "Pilih Negara",
+    "state": "Pilih Negeri",
+    "city": "Masukkan bandar",
+    "phone": "Masukkan nombor telefon",
+    "mobile": "Masukkan nombor telefon bimbit",
+    "email": "Masukkan alamat e-mel",
+    "subject": "Masukkan subjek",
+    "message": "Taip mesej anda di sini..."
+  }
+}

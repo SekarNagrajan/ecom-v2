@@ -7,9 +7,9 @@ import { useState } from "react";
 import { AppIcon, Icons, NavBookingIcon } from "../../components/icons";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import {
-  MODULE_TITLES,
-  WIZARD_STEP_TITLES,
-} from "../../constants/module-titles";
+  useModuleTitles,
+  useWizardStepTitles,
+} from "../../i18n/use-module-titles";
 import { bookingApi } from "./api/booking.api";
 import { BookingModuleStyles } from "./components/booking-module-styles";
 import { CargoStep } from "./components/CargoStep";
@@ -28,6 +28,8 @@ const { Text, Title } = Typography;
 const PIPELINE_ICON_SIZE = 25;
 
 export function BookingWizardRoute() {
+  const MODULE_TITLES = useModuleTitles();
+  const WIZARD_STEP_TITLES = useWizardStepTitles();
   const { token } = theme.useToken();
   const toast = useToast();
   const navigate = useNavigate();

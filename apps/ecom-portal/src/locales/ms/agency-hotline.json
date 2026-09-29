@@ -1,0 +1,16 @@
+{
+  "description": "Hubungi agensi tempatan anda mengikut negara dan pelabuhan.",
+  "countries": {
+    "Malaysia": "Malaysia",
+    "Netherlands": "Belanda",
+    "Singapore": "Singapura",
+    "United Arab Emirates": "Emiriah Arab Bersatu"
+  },
+  "ports": {
+    "Port Klang": "Pelabuhan Klang",
+    "Rotterdam": "Rotterdam",
+    "Singapore": "Singapura",
+    "Dubai": "Dubai",
+    "Jebel Ali": "Jebel Ali"
+  }
+}

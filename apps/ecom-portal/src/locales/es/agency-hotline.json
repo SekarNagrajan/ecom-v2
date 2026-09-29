@@ -1,0 +1,16 @@
+{
+  "description": "Comuníquese con su agencia local por país y puerto.",
+  "countries": {
+    "Malaysia": "Malasia",
+    "Netherlands": "Países Bajos",
+    "Singapore": "Singapur",
+    "United Arab Emirates": "Emiratos Árabes Unidos"
+  },
+  "ports": {
+    "Port Klang": "Puerto Klang",
+    "Rotterdam": "Róterdam",
+    "Singapore": "Singapur",
+    "Dubai": "Dubái",
+    "Jebel Ali": "Jebel Ali"
+  }
+}

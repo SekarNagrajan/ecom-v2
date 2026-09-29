@@ -17,7 +17,7 @@ import {
 import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
 import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
-import { MODULE_TITLES } from "../../../constants/module-titles";
+import { useModuleTitles } from "../../../i18n/use-module-titles";
 import { MOCK_VENDOR_APPROVALS } from "../mocks/vendor-approvals.mock";
 import type {
   ApprovalStatus,
@@ -42,6 +42,7 @@ const STATUS_META: Record<ApprovalStatus, { color: string; label: string }> = {
 };
 
 export function VendorApprovalsView() {
+  const MODULE_TITLES = useModuleTitles();
   const toast = useToast();
   const confirm = useConfirm();
   const { profileHandlers } = useLocalGridProfiles("vendor-approvals");

@@ -5,13 +5,13 @@
  */
 import { AppButton } from "@solverminds/shared-ui";
 import { Col, Row, Space, Spin } from "antd";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { NavDashboardIcon } from "../../../components/icons/nav-svg-icons";
 import { FeaturePageShell } from "../../../components/shared/feature-page-shell";
 import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
-import { MODULE_TITLES } from "../../../constants/module-titles";
 import { BlModuleStyles } from "../../bill-of-lading/components/bl-module-styles";
 import { BlViewDrawer } from "../../bill-of-lading/components/view/BlViewDrawer";
 import { BookingModuleStyles } from "../../booking/components/booking-module-styles";
@@ -38,6 +38,7 @@ import { ShipmentPlanningSection } from "./ShipmentPlanningSection";
 import { VolumeAnalyticsSection } from "./VolumeAnalyticsSection";
 
 export function EnhancedDashboardView() {
+  const { t } = useTranslation("dashboard");
   const controller = useDashboardController();
   const counts = controller.summary?.counts;
   const shipments = controller.summary?.shipments ?? [];
@@ -54,8 +55,8 @@ export function EnhancedDashboardView() {
       <BlModuleStyles />
       <ModuleScreenHeader
         icon={NavDashboardIcon}
-        title={MODULE_TITLES.dashboard}
-        subtitle="Shipment KPIs, ongoing transactions, and operational analytics — parity with the legacy enhanced dashboard."
+        title={t("title")}
+        subtitle={t("subtitle")}
         extra={
           <Space wrap>
             <AppButton
@@ -63,7 +64,7 @@ export function EnhancedDashboardView() {
               icon={<AppIcon icon={Icons.plus} size={16} tone="create" />}
               onClick={controller.handleCreateBooking}
             >
-              Create Booking
+              {t("createBooking")}
             </AppButton>
             <DashboardExportButton
               activeFilter={controller.activeFilter}
@@ -78,7 +79,7 @@ export function EnhancedDashboardView() {
               onClick={() => void controller.loadSummary()}
               loading={controller.isLoading}
             >
-              Refresh
+              {t("refresh")}
             </AppButton>
           </Space>
         }
@@ -96,8 +97,8 @@ export function EnhancedDashboardView() {
           ) : !controller.isLoading ? (
             <ModuleEmptyState
               variant="error"
-              title="Dashboard summary unavailable"
-              message="Refresh the dashboard to try loading the summary again."
+              title={t("summaryUnavailableTitle")}
+              message={t("summaryUnavailableMessage")}
               artSize="md"
             />
           ) : null}

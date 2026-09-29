@@ -1,11 +1,12 @@
 // Modified by Sekar Nagarajan (2026-09-16 12:20)
 import { Card } from "antd";
+import { useTranslation } from "react-i18next";
 
 import { NavIcons } from "../../components/icons";
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
 import { ModuleEmptyState } from "../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
-import { MODULE_TITLES } from "../../constants/module-titles";
+import { useModuleTitles } from "../../i18n/use-module-titles";
 import { useCarbonComputeQuery } from "./api/carbon.queries";
 import { CarbonCalculatorForm } from "./components/CarbonCalculatorForm";
 import { CarbonResultPanel } from "./components/CarbonResultPanel";
@@ -13,6 +14,8 @@ import { CarbonCalculatorModuleStyles } from "./components/carbon-calculator-mod
 import { useCarbonCalculator } from "./hooks/use-carbon-calculator";
 
 export function CarbonCalculatorRoute() {
+  const { t } = useTranslation("carbon-calculator");
+  const moduleTitles = useModuleTitles();
   const { form, activeInput, handleCalculate, handleReset } =
     useCarbonCalculator();
   const { isFetching, isLoading } = useCarbonComputeQuery(activeInput);
@@ -26,8 +29,8 @@ export function CarbonCalculatorRoute() {
           <div className="co2-page-header">
             <ModuleScreenHeader
               icon={NavIcons.carbon}
-              title={MODULE_TITLES.carbonCalculator}
-              subtitle="Estimate shipment CO₂e from trade lane and cargo parameters."
+              title={moduleTitles.carbonCalculator}
+              subtitle={t("subtitle")}
               marginBottom={0}
             />
           </div>

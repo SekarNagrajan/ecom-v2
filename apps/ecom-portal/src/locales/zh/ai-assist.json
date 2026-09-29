@@ -1,0 +1,52 @@
+{
+  "tooltips": {
+    "grammarImprove": "改进语法",
+    "dictation": "AI 语音输入",
+    "dictationRecording": "停止录音",
+    "dictationTranscribing": "正在转写…",
+    "toneRewrite": "使用 AI 改写"
+  },
+  "toasts": {
+    "grammarEmptyInput": "请先输入文本，再进行语法改进。",
+    "grammarEmptyResponse": "语法服务返回了空结果，未做任何更改。",
+    "grammarFormattingLoss": "注意：语法校正后，文本格式（加粗、链接、列表）可能会被简化。",
+    "rewriteEmptyInput": "请先输入消息内容，再进行改写。",
+    "rewriteEmptyResponse": "改写服务返回了空结果，未做任何更改。",
+    "permissionDenied": "麦克风权限已被阻止。请在浏览器中启用权限后再进行语音输入。",
+    "unsupported": "当前浏览器不支持语音输入。",
+    "noMicrophone": "未检测到麦克风。请连接麦克风后重试。",
+    "recordingFailed": "录音失败，请重试。",
+    "maxLengthExceeded": "转写内容已截断 {{truncatedChars}} 个字符，以符合字段长度限制。"
+  },
+  "tones": {
+    "engaging": "引人入胜",
+    "persuasive": "有说服力",
+    "anticipatory": "预判式",
+    "assertive": "果断坚定",
+    "compassionate": "富有同情",
+    "confident": "自信",
+    "constructive": "建设性",
+    "cooperative": "协作",
+    "diplomatic": "外交得体",
+    "empathetic": "有同理心",
+    "friendly": "友好",
+    "inspirational": "鼓舞人心",
+    "exciting": "充满活力",
+    "casual": "轻松随意"
+  },
+  "rewriteActions": {
+    "improve": "改进文笔",
+    "more_descriptive": "更具体生动",
+    "more_detailed": "更详细",
+    "simplify": "简化表达",
+    "informative": "信息更清晰",
+    "paraphrase": "改写表述",
+    "fix_mistakes": "修正拼写与语法",
+    "fluent": "更流畅",
+    "objective": "更客观",
+    "professional": "更专业"
+  },
+  "errors": {
+    "generic": "出现问题，请重试。"
+  }
+}

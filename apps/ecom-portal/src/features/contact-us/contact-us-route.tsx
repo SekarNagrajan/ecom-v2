@@ -5,7 +5,7 @@ import { Card, Result } from "antd";
 
 import { AppIcon, Icons } from "../../components/icons";
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
-import { MODULE_TITLES } from "../../constants/module-titles";
+import { useModuleTitles } from "../../i18n/use-module-titles";
 import { ContactPanelHeader } from "./components/contact-panel-header";
 import { ContactUsModuleStyles } from "./components/contact-us-module-styles";
 import { ContactUsForm } from "./components/ContactUsForm";
@@ -18,6 +18,7 @@ import { useContactUsController } from "./hooks/use-contact-us-controller";
  * Route: /contact-us
  */
 export function ContactUsRoute() {
+  const MODULE_TITLES = useModuleTitles();
   const navigate = useNavigate();
   const search = useSearch({ strict: false }) as Record<string, unknown>;
 

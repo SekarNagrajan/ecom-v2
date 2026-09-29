@@ -1,3 +1,105 @@
 {
-  "subtitle": "Anggarkan CO₂e penghantaran daripada laluan dagangan dan parameter kargo."
+  "subtitle": "Anggarkan CO₂e penghantaran daripada laluan dagangan dan parameter kargo.",
+  "form": {
+    "origin": "Asal",
+    "destination": "Destinasi",
+    "weightKg": "Berat (kg)",
+    "equipment": "Peralatan",
+    "qty": "Kuantiti",
+    "fuel": "Bahan api",
+    "unit": "Unit",
+    "actions": "Tindakan",
+    "placeholders": {
+      "origin": "Asal",
+      "destination": "Destinasi",
+      "equipment": "Peralatan",
+      "fuelOptional": "Opsional"
+    }
+  },
+  "units": {
+    "kgCo2e": "kg CO₂e",
+    "tCo2e": "t CO₂e",
+    "gCo2e": "g CO₂e",
+    "kg": "kg"
+  },
+  "actions": {
+    "calculate": "Kira",
+    "exportPdf": "Eksport PDF"
+  },
+  "empty": {
+    "noEstimateTitle": "Belum ada anggaran",
+    "noEstimateMessage": "Pilih asal, destinasi, dan butiran kargo, kemudian pilih Kira.",
+    "noResultTitle": "Belum ada hasil",
+    "noLegBreakdownTitle": "Tiada pecahan kaki perjalanan",
+    "noLegBreakdownMessage": "Pelepasan setiap kaki perjalanan akan dipaparkan di sini apabila anggaran merangkumi kaki pengangkutan.",
+    "noLegBreakdownAvailable": "Tiada pecahan kaki perjalanan tersedia",
+    "noModeBreakdownAvailable": "Tiada pecahan mod tersedia"
+  },
+  "results": {
+    "containers_one": "{{count}} kontena",
+    "containers_other": "{{count}} kontena",
+    "emissionsBreakdown": "Pecahan Pelepasan",
+    "gridView": "Paparan Grid",
+    "chartView": "Paparan Carta",
+    "methodology": "Metodologi: {{standard}} (versi faktor {{version}}). Angka adalah anggaran; pelepasan sebenar berbeza mengikut kapal, cuaca, dan laluan."
+  },
+  "kpi": {
+    "totalCo2e": "Jumlah CO₂e",
+    "tankToWheel": "Tangki ke roda",
+    "wellToTank": "Telaga ke tangki",
+    "perTeu": "Setiap TEU",
+    "perTonneKm": "Setiap tan-km"
+  },
+  "columns": {
+    "mode": "Mod",
+    "from": "Dari",
+    "to": "Ke",
+    "distanceKm": "Jarak (km)",
+    "co2eKg": "CO₂e (kg)",
+    "co2eT": "CO₂e (t)"
+  },
+  "charts": {
+    "emissionScopeTitle": "Skop Pelepasan",
+    "emissionScopeHint": "Bahagian tangki ke roda vs telaga ke tangki daripada jumlah CO₂e",
+    "byLegTitle": "Mengikut Kaki Pengangkutan",
+    "byLegHint": "Sumbangan CO₂e untuk setiap kaki asal–destinasi",
+    "byModeTitle": "Mengikut Mod Pengangkutan",
+    "byModeHint": "Gabungan CO₂e merentasi laut, jalan, keretapi, dan mod lain",
+    "emissionScopeSeries": "Skop pelepasan",
+    "byModeSeries": "Mengikut mod",
+    "modeTooltip": "Mod: {{mode}}"
+  },
+  "modes": {
+    "SEA": "Laut",
+    "ROAD": "Jalan",
+    "RAIL": "Keretapi",
+    "AIR": "Udara",
+    "INLAND_WATER": "Air pedalaman"
+  },
+  "validation": {
+    "originLocode": "LOCODE asal mestilah 5 aksara.",
+    "destinationLocode": "LOCODE destinasi mestilah 5 aksara.",
+    "cargoWeightPositive": "Berat kargo mestilah lebih daripada sifar.",
+    "equipmentRequired": "Peralatan diperlukan.",
+    "destinationMustDiffer": "Destinasi mestilah berbeza daripada asal."
+  },
+  "errors": {
+    "computeFailed": "Gagal mengira jejak karbon.",
+    "lookupsFailed": "Gagal mendapatkan data carian karbon",
+    "downloadFailed": "Gagal memuat turun PDF anggaran karbon",
+    "networkError": "Ralat rangkaian"
+  },
+  "toasts": {
+    "pdfDownloaded": "PDF anggaran karbon dimuat turun"
+  },
+  "a11y": {
+    "loading": "Memuatkan",
+    "breakdownViewMode": "Mod paparan pecahan",
+    "emissionScopeChart": "Carta skop pelepasan",
+    "scopeSplitChart": "Pecahan CO2e tangki ke roda berbanding telaga ke tangki",
+    "emissionsByLegChart": "Carta pelepasan mengikut kaki",
+    "co2eByLeg": "CO2e mengikut kaki pengangkutan",
+    "emissionsByModeChart": "Carta pelepasan mengikut mod",
+    "co2eByMode": "CO2e mengikut mod pengangkutan"
+  }
 }

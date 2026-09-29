@@ -10,14 +10,15 @@ import {
   Tooltip,
   Typography,
 } from "antd";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useFieldArray, useForm, type Resolver } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { CargoLinesEditorStyles } from "../../shipping-instruction/components/cargo-lines-editor-styles";
 import { useBookingLookups } from "../api/booking.queries";
 import {
-  cargoSchema,
+  createCargoSchema,
   createEmptyCommodity,
   createEmptyContainer,
   syncMockContainerSeqFromNos,
@@ -52,10 +53,13 @@ export function BookingCargoLinesEditor({
   onSubmit,
   onPrevious,
 }: BookingCargoLinesEditorProps) {
+  const { t } = useTranslation(["booking", "common"]);
   const toast = useToast();
   const { data: packageTypes = [] } = useBookingLookups("packageTypes");
   const { data: containerTypes = [] } = useBookingLookups("containerTypes");
   const { data: dgClasses = [] } = useBookingLookups("dgClasses");
+
+  const schema = useMemo(() => createCargoSchema((k) => t(k)), [t]);
 
   const [viewMode, setViewMode] = useState<CargoViewMode>("list");
   const [search, setSearch] = useState("");
@@ -79,7 +83,7 @@ export function BookingCargoLinesEditor({
     watch,
     formState: { errors },
   } = useForm<CargoData>({
-    resolver: zodResolver(cargoSchema) as Resolver<CargoData>,
+    resolver: zodResolver(schema) as Resolver<CargoData>,
     defaultValues,
   });
 
@@ -154,7 +158,7 @@ export function BookingCargoLinesEditor({
       })),
     };
     appendContainer(clone);
-    toast.success("Container duplicated");
+    toast.success(t("wizard.cargo.containerDuplicated"));
   };
 
   return (
@@ -185,7 +189,7 @@ export function BookingCargoLinesEditor({
                   allowClear
                   size="large"
                   className="si-cargo-toolbar__search"
-                  placeholder="Search container or commodity…"
+                  placeholder={t("wizard.cargo.searchPlaceholder")}
                   prefix={<AppIcon icon={Icons.search} size={15} />}
                   value={search}
                   onChange={(e) => {
@@ -214,7 +218,7 @@ export function BookingCargoLinesEditor({
                   ]}
                 />
                 <div className="si-cargo-toolbar__add">
-                  <Tooltip title="Quantity To Add">
+                  <Tooltip title={t("wizard.cargo.quantityToAdd")}>
                     <span>
                       <InputNumber
                         className="si-cargo-toolbar__add-qty"
@@ -236,7 +240,7 @@ export function BookingCargoLinesEditor({
                   >
                     ×
                   </Text>
-                  <Tooltip title="Container Type">
+                  <Tooltip title={t("wizard.cargo.containerType")}>
                     <span>
                       <Select
                         className="si-cargo-toolbar__add-type"
@@ -257,7 +261,7 @@ export function BookingCargoLinesEditor({
                     icon={<AppIcon icon={Icons.plus} size={13} />}
                     onClick={handleAddContainers}
                   >
-                    Add Container
+                    {t("wizard.cargo.addContainerBtn")}
                   </AppButton>
                 </div>
               </div>
@@ -268,29 +272,29 @@ export function BookingCargoLinesEditor({
                 <Text strong className="si-cargo-summary__metric-value">
                   {containersWatch.length}
                 </Text>
-                <Text type="secondary">containers</Text>
+                <Text type="secondary">{t("wizard.cargo.summaryContainers")}</Text>
               </span>
               <span className="si-cargo-summary__metric">
                 <Text strong className="si-cargo-summary__metric-value">
                   {lineCount}
                 </Text>
-                <Text type="secondary">commodities</Text>
+                <Text type="secondary">{t("wizard.cargo.summaryCommodities")}</Text>
               </span>
               <span className="si-cargo-summary__metric">
                 <Text strong className="si-cargo-summary__metric-value">
                   {packageCount.toLocaleString()}
                 </Text>
-                <Text type="secondary">packages</Text>
+                <Text type="secondary">{t("wizard.cargo.summaryPackages")}</Text>
               </span>
               {issueCount > 0 ? (
                 <span className="si-cargo-vchip si-cargo-vchip--warn">
                   <AppIcon icon={Icons.alertTriangle} size={12} tone="edit" />
-                  {issueCount} issue{issueCount === 1 ? "" : "s"} to resolve
+                  {t("wizard.cargo.issueCount", { count: issueCount })}
                 </span>
               ) : (
                 <span className="si-cargo-vchip si-cargo-vchip--ok">
                   <AppIcon icon={Icons.check} size={12} />
-                  All complete
+                  {t("wizard.cargo.allComplete")}
                 </span>
               )}
               {search || incompleteOnly ? (
@@ -298,7 +302,7 @@ export function BookingCargoLinesEditor({
                   type="secondary"
                   className="si-cargo-summary__filter-hint"
                 >
-                  Showing {filteredIndexes.length} of {containersWatch.length}
+                  {t("wizard.cargo.showingFiltered", { shown: filteredIndexes.length, total: containersWatch.length })}
                 </Text>
               ) : null}
             </div>
@@ -324,7 +328,7 @@ export function BookingCargoLinesEditor({
               onDuplicate={handleDuplicateContainer}
               onDelete={(index) => {
                 if (containerFields.length <= 1) {
-                  toast.error("At least one container is required");
+                  toast.error(t("wizard.cargo.atLeastOneContainer"));
                   return;
                 }
                 removeContainer(index);
@@ -362,7 +366,7 @@ export function BookingCargoLinesEditor({
               onRemoveLine={(ci, mi) => {
                 const lines = getValues(`containers.${ci}.commodities`) ?? [];
                 if (lines.length <= 1) {
-                  toast.error("At least one commodity is required");
+                  toast.error(t("wizard.cargo.atLeastOneCommodity"));
                   return;
                 }
                 setValue(
@@ -376,9 +380,7 @@ export function BookingCargoLinesEditor({
           {filteredIndexes.length > PAGE_SIZE ? (
             <div className="si-cargo-pager">
               <Text>
-                {safePage * PAGE_SIZE + 1}–
-                {Math.min((safePage + 1) * PAGE_SIZE, filteredIndexes.length)}{" "}
-                of {filteredIndexes.length}
+                {t("wizard.cargo.pagerRange", { from: safePage * PAGE_SIZE + 1, to: Math.min((safePage + 1) * PAGE_SIZE, filteredIndexes.length), total: filteredIndexes.length })}
               </Text>
               <div className="list-actions-row">
                 <AppButton
@@ -387,7 +389,7 @@ export function BookingCargoLinesEditor({
                   onClick={() => setPage((p) => Math.max(0, p - 1))}
                 />
                 <Text>
-                  Page {safePage + 1} / {pageCount}
+                  {t("wizard.cargo.pagerPage", { page: safePage + 1, pageCount })}
                 </Text>
                 <AppButton
                   disabled={safePage >= pageCount - 1}
@@ -402,10 +404,10 @@ export function BookingCargoLinesEditor({
 
       <div className="form-step-footer">
         <AppButton htmlType="button" onClick={onPrevious}>
-          Previous
+          {t("common:actions.previous")}
         </AppButton>
         <AppButton type="primary" htmlType="submit">
-          Next
+          {t("common:actions.next")}
         </AppButton>
       </div>
     </form>

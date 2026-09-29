@@ -14,7 +14,7 @@ import { CarbonCalculatorModuleStyles } from "./components/carbon-calculator-mod
 import { useCarbonCalculator } from "./hooks/use-carbon-calculator";
 
 export function CarbonCalculatorRoute() {
-  const { t } = useTranslation("carbon-calculator");
+  const { t } = useTranslation(["carbon-calculator", "common"]);
   const moduleTitles = useModuleTitles();
   const { form, activeInput, handleCalculate, handleReset } =
     useCarbonCalculator();
@@ -50,8 +50,8 @@ export function CarbonCalculatorRoute() {
                 <ModuleEmptyState
                   artSize="sm"
                   variant="blank"
-                  title="No estimate yet"
-                  message="Choose origin, destination, and cargo details, then select Calculate."
+                  title={t("empty.noEstimateTitle")}
+                  message={t("empty.noEstimateMessage")}
                   className="co2-result-empty"
                 />
               </div>

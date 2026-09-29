@@ -1,0 +1,66 @@
+{
+  "criteria": {
+    "account": "Akaun",
+    "currency": "Mata Wang",
+    "fromDate": "Dari Tarikh",
+    "toDate": "Hingga Tarikh",
+    "show": "Papar"
+  },
+  "placeholders": {
+    "selectAccount": "Pilih akaun",
+    "currency": "Mata Wang"
+  },
+  "actions": {
+    "exportPdf": "Eksport PDF"
+  },
+  "summary": {
+    "openingBalance": "Baki Pembukaan",
+    "closingBalance": "Baki Penutup",
+    "netMovement": "Pergerakan Bersih"
+  },
+  "columns": {
+    "date": "Tarikh",
+    "type": "Jenis",
+    "docNo": "No. Dokumen",
+    "reference": "Rujukan",
+    "debit": "Debit",
+    "credit": "Kredit",
+    "balance": "Baki"
+  },
+  "totals": {
+    "totalDebit": "Jumlah Debit",
+    "totalCredit": "Jumlah Kredit",
+    "net": "Bersih"
+  },
+  "empty": {
+    "loadErrorTitle": "Tidak dapat memuatkan penyata pelanggan",
+    "loadErrorMessage": "Permintaan tidak selesai. Semak sambungan anda dan cuba lagi.",
+    "noTransactionsTitle": "Tiada transaksi untuk tempoh ini",
+    "noTransactionsMessage": "Pilih tempoh penyata yang berbeza untuk melihat aktiviti akaun."
+  },
+  "errors": {
+    "fetchAccounts": "Gagal mendapatkan akaun penyata",
+    "fetchStatement": "Gagal mendapatkan penyata pelanggan",
+    "download": "Gagal memuat turun eksport penyata"
+  },
+  "docTypes": {
+    "invoice": "Invois",
+    "creditNote": "Nota Kredit",
+    "debitNote": "Nota Debit",
+    "receipt": "Resit",
+    "adjustment": "Pelarasan"
+  },
+  "validation": {
+    "accountRequired": "Akaun diperlukan.",
+    "currencyRequired": "Mata wang diperlukan.",
+    "fromDateRequired": "Dari tarikh diperlukan.",
+    "toDateRequired": "Hingga tarikh diperlukan.",
+    "endAfterStart": "Tarikh tamat mestilah pada atau selepas tarikh mula.",
+    "periodMaxMonths": "Tempoh penyata tidak boleh melebihi 12 bulan.",
+    "invalidCriteria": "Kriteria penyata tidak sah."
+  },
+  "toasts": {
+    "pdfDownloaded": "PDF penyata telah dimuat turun",
+    "excelDownloaded": "Excel penyata telah dimuat turun"
+  }
+}

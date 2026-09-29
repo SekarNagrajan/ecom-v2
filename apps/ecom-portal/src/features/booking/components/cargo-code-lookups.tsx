@@ -1,6 +1,7 @@
 // Modified by Sekar Nagarajan (2026-08-28 12:09)
 import { AutoComplete, Input } from "antd";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { bookingApi } from "../api/booking.api";
 import type {
@@ -32,6 +33,7 @@ export function HsCodeAutoComplete({
   onClearName?: () => void;
   status?: "error" | "warning";
 }) {
+  const { t } = useTranslation(["booking", "common"]);
   const [options, setOptions] = useState<BookingHsCodeOption[]>([]);
   const [fetching, setFetching] = useState(false);
   const [typing, setTyping] = useState(false);
@@ -80,11 +82,11 @@ export function HsCodeAutoComplete({
         onClearName?.();
       }}
       onBlur={() => setTyping(false)}
-      notFoundContent={fetching ? "Searching…" : undefined}
+      notFoundContent={fetching ? t("wizard.parties.searching") : undefined}
     >
       <Input
         size="large"
-        placeholder="Search commodity code or name"
+        placeholder={t("wizard.cargo.searchCommodityPlaceholder")}
         allowClear
         status={status}
       />
@@ -101,6 +103,7 @@ export function UnNumberAutoComplete({
   onChange: (value: string) => void;
   onSelectOption: (opt: BookingUnNumberOption) => void;
 }) {
+  const { t } = useTranslation(["booking", "common"]);
   const [options, setOptions] = useState<BookingUnNumberOption[]>([]);
   const [fetching, setFetching] = useState(false);
 
@@ -134,9 +137,9 @@ export function UnNumberAutoComplete({
         else onChange(String(val));
       }}
       onChange={(val) => onChange(String(val ?? ""))}
-      notFoundContent={fetching ? "Searching…" : undefined}
+      notFoundContent={fetching ? t("wizard.parties.searching") : undefined}
     >
-      <Input size="large" placeholder="e.g. 1993" allowClear />
+      <Input size="large" placeholder={t("wizard.cargo.dg.unPlaceholder")} allowClear />
     </AutoComplete>
   );
 }

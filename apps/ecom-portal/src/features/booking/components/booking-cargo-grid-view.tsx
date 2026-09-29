@@ -1,11 +1,12 @@
 // Modified by Sekar Nagarajan (2026-09-11 11:36)
 import { Input, InputNumber, Select, Switch, Typography } from "antd";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Controller,
   type Control,
   type UseFormSetValue,
 } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import {
@@ -63,21 +64,25 @@ export interface BookingCargoGridViewProps {
  * Grid: commodity fields + SOC/OOG/NOR toggles.
  * OOG / operating reefer / DG detail forms open in a compact popup.
  */
-const GRID_HEADERS = [
-  "Actions",
-  "Container No",
-  "Type",
-  "Qty",
-  "SOC",
-  "OOG",
-  "NOR",
-  "HS Code",
-  "Package Type",
-  "Pkg Qty",
-  "Weight",
-  "Volume",
-  "Hazardous",
+const GRID_HEADER_KEYS = [
+  "cols.actions",
+  "cols.containerNo",
+  "cols.type",
+  "cols.qty",
+  "cols.soc",
+  "cols.oog",
+  "cols.nor",
+  "cols.hsCode",
+  "cols.packageType",
+  "cols.pkgQty",
+  "cols.weight",
+  "cols.volume",
+  "cols.hazardous",
 ] as const;
+
+function makeGridHeaders(t: (key: string) => string) {
+  return GRID_HEADER_KEYS.map((k) => t(`wizard.cargo.${k}`));
+}
 
 export function BookingCargoGridView({
   pageIndexes,
@@ -92,17 +97,19 @@ export function BookingCargoGridView({
   onDuplicateLine,
   onRemoveLine,
 }: BookingCargoGridViewProps) {
+  const { t } = useTranslation(["booking", "common"]);
   const [extrasTarget, setExtrasTarget] =
     useState<BookingCargoGridExtrasTarget | null>(null);
 
   const closeExtras = () => setExtrasTarget(null);
+  const gridHeaders = useMemo(() => makeGridHeaders(t), [t]);
 
   if (pageIndexes.length === 0) {
     return (
       <ModuleEmptyState
         artSize="sm"
         variant="filtered"
-        title="No containers match"
+        title={t("wizard.cargo.noContainersMatch")}
         style={{ padding: 12 }}
       />
     );
@@ -114,20 +121,21 @@ export function BookingCargoGridView({
         <table className="si-cargo-grid">
           <thead>
             <tr>
-              {GRID_HEADERS.map((h) => (
+              {gridHeaders.map((h, idx) => (
                 <th
-                  key={h}
+                  key={GRID_HEADER_KEYS[idx]}
                   className={
-                    h === "Actions"
+                    idx === 0
                       ? "si-cargo-grid__th-actions"
-                      : h === "Container No"
+                      : idx === 1
                       ? "si-cargo-grid__th-container"
-                      : h === "Type"
+                      : idx === 2
                       ? "si-cargo-grid__th-type"
-                      : h === "SOC" ||
-                        h === "OOG" ||
-                        h === "NOR" ||
-                        h === "Hazardous"
+                      : idx === 3 ||
+                        idx === 4 ||
+                        idx === 5 ||
+                        idx === 6 ||
+                        idx === 12
                       ? "si-cargo-grid__th-switch"
                       : undefined
                   }
@@ -156,7 +164,7 @@ export function BookingCargoGridView({
                       <ListActionsRow>
                         {first ? (
                           <ListActionButton
-                            title="Add Commodity Line"
+                            title={t("wizard.cargo.addCommodityLine")}
                             icon={
                               <AppIcon
                                 icon={Icons.plus}
@@ -174,7 +182,7 @@ export function BookingCargoGridView({
                           />
                         )}
                         <ListActionButton
-                          title="Duplicate Commodity Line"
+                          title={t("wizard.cargo.duplicateCommodityLine")}
                           icon={
                             <AppIcon icon={Icons.copy} size={16} tone="view" />
                           }
@@ -184,8 +192,8 @@ export function BookingCargoGridView({
                         <ListActionButton
                           title={
                             canRemove
-                              ? "Delete Commodity Line"
-                              : "At Least One Commodity Is Required"
+                              ? t("wizard.cargo.deleteCommodityLine")
+                              : t("wizard.cargo.atLeastOneCommodityLine")
                           }
                           icon={
                             <AppIcon
@@ -210,7 +218,7 @@ export function BookingCargoGridView({
                               {...field}
                               value={field.value ?? ""}
                               size="large"
-                              placeholder="Container No."
+                              placeholder={t("wizard.cargo.containerNo")}
                               className="si-cargo-grid__field si-cargo-grid__field--container"
                             />
                           )}
@@ -235,7 +243,7 @@ export function BookingCargoGridView({
                               optionFilterProp="label"
                               popupMatchSelectWidth={220}
                               className="si-cargo-grid__field si-cargo-grid__field--kind"
-                              placeholder="Type"
+                              placeholder={t("wizard.cargo.cols.type")}
                               optionLabelProp="value"
                               labelRender={({ value }) =>
                                 formatGridContainerType(
@@ -356,7 +364,7 @@ export function BookingCargoGridView({
                                 />
                                 {value ? (
                                   <ListActionButton
-                                    title="Edit OOG Details"
+                                    title={t("wizard.cargo.editOogDetails")}
                                     icon={
                                       <AppIcon
                                         icon={Icons.edit}
@@ -414,7 +422,7 @@ export function BookingCargoGridView({
                                   />
                                   {field.value === "operating" ? (
                                     <ListActionButton
-                                      title="Edit Reefer Details"
+                                      title={t("wizard.cargo.editReeferDetails")}
                                       icon={
                                         <AppIcon
                                           icon={Icons.edit}
@@ -493,7 +501,7 @@ export function BookingCargoGridView({
                             optionFilterProp="label"
                             popupMatchSelectWidth={220}
                             className="si-cargo-grid__field si-cargo-grid__field--kind"
-                            placeholder="Package Type"
+                            placeholder={t("wizard.cargo.packageTypePlaceholder")}
                           />
                         )}
                       />
@@ -523,8 +531,8 @@ export function BookingCargoGridView({
                             min={1}
                             size="large"
                             className="si-cargo-grid__field si-cargo-grid__field--weight"
-                            addonAfter="kg"
-                            placeholder="kg"
+                            addonAfter={t("wizard.cargo.units.kg")}
+                            placeholder={t("wizard.cargo.units.kg")}
                           />
                         )}
                       />
@@ -539,8 +547,8 @@ export function BookingCargoGridView({
                             min={0}
                             size="large"
                             className="si-cargo-grid__field si-cargo-grid__field--weight"
-                            addonAfter="m³"
-                            placeholder="m³"
+                            addonAfter={t("wizard.cargo.units.m3")}
+                            placeholder={t("wizard.cargo.units.m3")}
                           />
                         )}
                       />
@@ -576,7 +584,7 @@ export function BookingCargoGridView({
                               />
                               {value ? (
                                 <ListActionButton
-                                  title="Edit DG Details"
+                                  title={t("wizard.cargo.editDgDetails")}
                                   icon={
                                     <AppIcon
                                       icon={Icons.edit}

@@ -7,6 +7,7 @@
  */
 import { Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import {
   AppIcon,
@@ -56,72 +57,74 @@ export function DashboardKpiCards({
   onViewShipments: _onViewShipments,
   activeFilter,
 }: DashboardKpiCardsProps) {
+  const { t } = useTranslation(["dashboard", "common", "modules"]);
+
   const cards: SummaryCard[] = [
     {
       key: "total",
       filterKey: "all",
-      title: "Total Shipments",
+      title: t("kpi.totalShipments"),
       value: counts.totCou,
       icon: Icons.ship,
       tone: "purple",
       breakdown: [
-        { label: "Confirmed", value: counts.bkConfirmed },
-        { label: "SI Pending", value: counts.siPending },
+        { label: t("kpi.confirmed"), value: counts.bkConfirmed },
+        { label: t("kpi.siPending"), value: counts.siPending },
       ],
     },
     {
       key: "confirmed",
       filterKey: "bkConfirmed",
-      title: "Booking Confirmed",
+      title: t("kpi.bookingConfirmed"),
       value: counts.bkConfirmed,
       icon: NavBookingIcon,
       tone: "info",
       breakdown: [
-        { label: "At Origin", value: counts.orgCou },
-        { label: "In Transit", value: counts.inTransitCou },
-        { label: "Delivered", value: counts.delCou },
+        { label: t("kpi.atOrigin"), value: counts.orgCou },
+        { label: t("kpi.inTransit"), value: counts.inTransitCou },
+        { label: t("kpi.delivered"), value: counts.delCou },
       ],
     },
     {
       key: "si",
       filterKey: "siPending",
-      title: "SI Pending",
+      title: t("kpi.siPending"),
       value: counts.siPending,
       icon: NavShippingInstructionIcon,
       tone: "warning",
       breakdown: [
-        { label: "Awaiting SI", value: counts.siPending },
-        { label: "Confirmed", value: counts.bkConfirmed },
+        { label: t("kpi.awaitingSi"), value: counts.siPending },
+        { label: t("kpi.confirmed"), value: counts.bkConfirmed },
       ],
     },
     {
       key: "payment",
       filterKey: "payPending",
-      title: "Payment Pending",
+      title: t("kpi.paymentPending"),
       value: counts.payPending,
       icon: NavPaymentHistoryIcon,
       tone: "verdigris",
       breakdown: [
         {
-          label: "Outstanding",
+          label: t("kpi.outstanding"),
           value: `USD ${counts.pendingAmount.toLocaleString("en-US", {
             maximumFractionDigits: 0,
           })}`,
         },
-        { label: "Invoices", value: counts.payPending },
+        { label: t("kpi.invoices"), value: counts.payPending },
       ],
     },
     {
       key: "transit",
       filterKey: "inTransit",
-      title: "In Transit",
+      title: t("kpi.inTransit"),
       value: counts.inTransitCou,
       icon: Icons.truck,
       tone: "terra",
       breakdown: [
-        { label: "At Origin", value: counts.orgCou },
-        { label: "In Transit", value: counts.inTransitCou },
-        { label: "Delivered", value: counts.delCou },
+        { label: t("kpi.atOrigin"), value: counts.orgCou },
+        { label: t("kpi.inTransit"), value: counts.inTransitCou },
+        { label: t("kpi.delivered"), value: counts.delCou },
       ],
     },
   ];
@@ -143,7 +146,10 @@ export function DashboardKpiCards({
               .join(" ")}
             onClick={() => onFilterChange(card.filterKey, card.title)}
             aria-pressed={isActive}
-            aria-label={`${card.title}: ${card.value}`}
+            aria-label={t("a11y.kpiCard", {
+              title: card.title,
+              value: card.value,
+            })}
           >
             <div className="dashboard-summary-card__head">
               <span

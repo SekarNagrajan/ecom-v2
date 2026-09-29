@@ -38,7 +38,7 @@ import { ShipmentPlanningSection } from "./ShipmentPlanningSection";
 import { VolumeAnalyticsSection } from "./VolumeAnalyticsSection";
 
 export function EnhancedDashboardView() {
-  const { t } = useTranslation("dashboard");
+  const { t } = useTranslation(["dashboard", "common", "modules"]);
   const controller = useDashboardController();
   const counts = controller.summary?.counts;
   const shipments = controller.summary?.shipments ?? [];

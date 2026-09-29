@@ -14,6 +14,19 @@ export type DashboardFilterKey =
   | "inTransit"
   | "delivered";
 
+type TranslateFn = (key: string) => string;
+
+const FILTER_I18N_KEYS: Record<DashboardFilterKey, string> = {
+  all: "kpi.totalShipments",
+  bkConfirmed: "kpi.bookingConfirmed",
+  siPending: "kpi.siPending",
+  payPending: "kpi.paymentPending",
+  origin: "kpi.atOrigin",
+  inTransit: "kpi.inTransit",
+  delivered: "kpi.delivered",
+};
+
+/** English fallbacks for non-UI callers (e.g. export Phase 2/3). */
 const FILTER_LABELS: Record<DashboardFilterKey, string> = {
   all: "Total Shipments",
   bkConfirmed: "Booking Confirmed",
@@ -24,8 +37,15 @@ const FILTER_LABELS: Record<DashboardFilterKey, string> = {
   delivered: "Delivered",
 };
 
-export function getDashboardFilterLabel(key: string): string {
-  return FILTER_LABELS[key as DashboardFilterKey] ?? "Total Shipments";
+function resolveFilterKey(key: string): DashboardFilterKey {
+  return key in FILTER_I18N_KEYS ? (key as DashboardFilterKey) : "all";
+}
+
+/** Display label for a dashboard KPI filter key. Pass `t` for language-reactive UI. */
+export function getDashboardFilterLabel(key: string, t?: TranslateFn): string {
+  const filterKey = resolveFilterKey(key);
+  if (t) return t(FILTER_I18N_KEYS[filterKey]);
+  return FILTER_LABELS[filterKey];
 }
 
 function matchesLifecycle(

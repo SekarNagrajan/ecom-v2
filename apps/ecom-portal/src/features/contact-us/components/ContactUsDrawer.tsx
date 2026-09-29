@@ -1,6 +1,7 @@
 // Modified by Sekar Nagarajan (2026-08-26 16:30)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { Result } from "antd";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { useModuleTitles } from "../../../i18n/use-module-titles";
@@ -20,6 +21,7 @@ export function ContactUsDrawer({
   onClose,
   defaultSubject = "",
 }: ContactUsDrawerProps) {
+  const { t } = useTranslation(["contact-us", "common"]);
   const MODULE_TITLES = useModuleTitles();
   const controller = useContactUsController({ defaultSubject });
 
@@ -50,7 +52,7 @@ export function ContactUsDrawer({
           <ContactPanelHeader
             icon={Icons.mail}
             title={MODULE_TITLES.contactUs}
-            description="Have a question or need operational assistance? Submit your inquiry below."
+            description={t("descriptions.drawer")}
             compact
           />
         }
@@ -62,7 +64,7 @@ export function ContactUsDrawer({
                 disabled={controller.isSubmitting}
                 danger
               >
-                Cancel
+                {t("common:actions.cancel")}
               </AppButton>
               <AppButton
                 type="primary"
@@ -70,7 +72,7 @@ export function ContactUsDrawer({
                 loading={controller.isSubmitting}
                 onClick={controller.handleSubmit}
               >
-                Send Message
+                {t("actions.sendMessage")}
               </AppButton>
             </div>
           )
@@ -80,11 +82,11 @@ export function ContactUsDrawer({
           <div className="contact-success custom-scroll">
             <Result
               status="success"
-              title="Message Sent Successfully!"
-              subTitle="Thank you for contacting us. We have received your request and will process it with the concerned department immediately. You will be contacted shortly."
+              title={t("success.title")}
+              subTitle={t("success.drawerSubTitle")}
               extra={[
                 <AppButton type="primary" key="close" onClick={handleClose}>
-                  Close
+                  {t("common:actions.close")}
                 </AppButton>,
               ]}
             />

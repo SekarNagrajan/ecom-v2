@@ -8,6 +8,7 @@ import type { RowDoubleClickedEvent } from "ag-grid-community";
 import { Tag } from "antd";
 import { DateTime } from "luxon";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons, NavIcons } from "../../../components/icons";
 import { buildActionsColumn } from "../../../components/shared/build-actions-column";
@@ -33,6 +34,7 @@ import {
   getCroPrintStatusColor,
   getCroPrintStatusLabel,
   getCroReleaseStatusColor,
+  getCroReleaseStatusLabel,
 } from "../utils/cro-status";
 import { CroLoadingCenter } from "./cro-loading-center";
 import { CroSearchPanel } from "./cro-search-panel";
@@ -44,6 +46,11 @@ const initialFilters: CROListFilters = {
 };
 
 export function CROListing() {
+  const { t } = useTranslation([
+    "container-release-order",
+    "common",
+    "modules",
+  ]);
   const MODULE_TITLES = useModuleTitles();
   const { profileHandlers } = useLocalGridProfiles("container-release-order");
   const [filters, setFilters] = useState<CROListFilters>(initialFilters);
@@ -84,7 +91,7 @@ export function CROListing() {
           return (
             <ListActionsRow>
               <ListActionButton
-                title="View Details"
+                title={t("actions.viewDetails")}
                 icon={<AppIcon icon={Icons.eye} size={16} tone="view" />}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -92,7 +99,7 @@ export function CROListing() {
                 }}
               />
               <ListActionButton
-                title="Print Container Release Order"
+                title={t("actions.printContainerReleaseOrder")}
                 icon={<AppIcon icon={Icons.printer} size={16} tone="print" />}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -105,36 +112,49 @@ export function CROListing() {
       }),
       colId: "actions",
     },
-    { field: "croNo", headerName: "Release No", width: 130, pinned: "left" },
-    { field: "bookingNo", headerName: "Booking No", width: 130 },
+    {
+      field: "croNo",
+      headerName: t("columns.releaseNo"),
+      width: 130,
+      pinned: "left",
+    },
+    { field: "bookingNo", headerName: t("columns.bookingNo"), width: 130 },
     {
       field: "croDate",
-      headerName: "CRO Date",
+      headerName: t("columns.croDate"),
       width: 130,
       cellRenderer: (p: { value?: string }) =>
         p.value ? <FormattedDate value={p.value} /> : "-",
     },
-    { field: "vessel", headerName: "Vessel", width: 140 },
-    { field: "voyage", headerName: "Voyage", width: 100 },
-    { field: "loadPort", headerName: "Load Port", width: 140 },
-    { field: "dischargePort", headerName: "Discharge", width: 140 },
-    { field: "eqpType", headerName: "Cont Type", width: 100 },
-    { field: "qtyBooked", headerName: "Qty Booked", width: 110 },
-    { field: "qtyReleased", headerName: "Qty Released", width: 120 },
+    { field: "vessel", headerName: t("columns.vessel"), width: 140 },
+    { field: "voyage", headerName: t("columns.voyage"), width: 100 },
+    { field: "loadPort", headerName: t("columns.loadPort"), width: 140 },
+    {
+      field: "dischargePort",
+      headerName: t("columns.discharge"),
+      width: 140,
+    },
+    { field: "eqpType", headerName: t("columns.contType"), width: 100 },
+    { field: "qtyBooked", headerName: t("columns.qtyBooked"), width: 110 },
+    {
+      field: "qtyReleased",
+      headerName: t("columns.qtyReleased"),
+      width: 120,
+    },
     {
       field: "emptyReleaseDepot",
-      headerName: "Empty Release Depot",
+      headerName: t("columns.emptyReleaseDepot"),
       width: 170,
     },
     {
       field: "validTo",
-      headerName: "CRO Validity",
+      headerName: t("columns.croValidity"),
       width: 130,
       cellRenderer: (p: { value?: string }) =>
         p.value ? <FormattedDate value={p.value} /> : "-",
     },
     {
-      headerName: "Status",
+      headerName: t("columns.status"),
       field: "releaseStatus",
       width: 120,
       cellRenderer: (params: { data?: CROListDTO }) => {
@@ -144,13 +164,13 @@ export function CROListing() {
             className="cro-status-tag"
             color={getCroReleaseStatusColor(params.data.releaseStatus)}
           >
-            {params.data.releaseStatus}
+            {getCroReleaseStatusLabel(params.data.releaseStatus, t)}
           </Tag>
         );
       },
     },
     {
-      headerName: "Print",
+      headerName: t("common:actions.print"),
       field: "printStatus",
       width: 110,
       cellRenderer: (params: { data?: CROListDTO }) => {
@@ -160,7 +180,7 @@ export function CROListing() {
             className="cro-status-tag"
             color={getCroPrintStatusColor(params.data.printStatus)}
           >
-            {getCroPrintStatusLabel(params.data.printStatus)}
+            {getCroPrintStatusLabel(params.data.printStatus, t)}
           </Tag>
         );
       },
@@ -171,15 +191,15 @@ export function CROListing() {
   const emptyState = isError ? (
     <ModuleEmptyState
       variant="error"
-      title="Couldn't load container release orders"
-      message="The request didn't complete. Check your connection and try again."
+      title={t("empty.loadErrorTitle")}
+      message={t("empty.loadErrorMessage")}
       actions={[buildRetryAction(() => void refetch())]}
     />
   ) : (
     <ModuleEmptyState
       variant="filtered"
-      title="No container release orders match your search"
-      message="Nothing came back for this date range. Widen the dates or clear the filters to see more results."
+      title={t("empty.noResultsTitle")}
+      message={t("empty.noResultsMessage")}
       actions={[buildClearFiltersAction(handleClearFilters)]}
     />
   );
@@ -190,7 +210,7 @@ export function CROListing() {
         <ModuleScreenHeader
           icon={NavIcons.containerRelease}
           title={MODULE_TITLES.containerReleaseOrder}
-          subtitle="Filter by date range, review load-to-discharge routing, and print container release orders."
+          subtitle={t("subtitle")}
           marginBottom={0}
         />
       </div>

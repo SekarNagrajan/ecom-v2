@@ -1,3 +1,105 @@
 {
-  "subtitle": "Estime el CO₂e del envío a partir de la ruta comercial y los parámetros de la carga."
+  "subtitle": "Estime el CO₂e del envío a partir de la ruta comercial y los parámetros de la carga.",
+  "form": {
+    "origin": "Origen",
+    "destination": "Destino",
+    "weightKg": "Peso (kg)",
+    "equipment": "Equipamiento",
+    "qty": "Cant.",
+    "fuel": "Combustible",
+    "unit": "Unidad",
+    "actions": "Acciones",
+    "placeholders": {
+      "origin": "Origen",
+      "destination": "Destino",
+      "equipment": "Equipamiento",
+      "fuelOptional": "Opcional"
+    }
+  },
+  "units": {
+    "kgCo2e": "kg CO₂e",
+    "tCo2e": "t CO₂e",
+    "gCo2e": "g CO₂e",
+    "kg": "kg"
+  },
+  "actions": {
+    "calculate": "Calcular",
+    "exportPdf": "Exportar PDF"
+  },
+  "empty": {
+    "noEstimateTitle": "Aún no hay estimación",
+    "noEstimateMessage": "Elija origen, destino y detalles de la carga, luego seleccione Calcular.",
+    "noResultTitle": "Aún no hay resultado",
+    "noLegBreakdownTitle": "Sin desglose por tramo",
+    "noLegBreakdownMessage": "Las emisiones por tramo aparecerán aquí cuando la estimación incluya tramos de transporte.",
+    "noLegBreakdownAvailable": "No hay desglose por tramo disponible",
+    "noModeBreakdownAvailable": "No hay desglose por modo disponible"
+  },
+  "results": {
+    "containers_one": "{{count}} contenedor",
+    "containers_other": "{{count}} contenedores",
+    "emissionsBreakdown": "Desglose de emisiones",
+    "gridView": "Vista de cuadrícula",
+    "chartView": "Vista de gráfico",
+    "methodology": "Metodología: {{standard}} (versión del factor {{version}}). Las cifras son estimaciones; las emisiones reales varían según el buque, el clima y el enrutamiento."
+  },
+  "kpi": {
+    "totalCo2e": "CO₂e total",
+    "tankToWheel": "Tanque a rueda",
+    "wellToTank": "Pozo a tanque",
+    "perTeu": "Por TEU",
+    "perTonneKm": "Por tonelada-km"
+  },
+  "columns": {
+    "mode": "Modo",
+    "from": "Desde",
+    "to": "Hasta",
+    "distanceKm": "Distancia (km)",
+    "co2eKg": "CO₂e (kg)",
+    "co2eT": "CO₂e (t)"
+  },
+  "charts": {
+    "emissionScopeTitle": "Alcance de emisiones",
+    "emissionScopeHint": "Participación tanque a rueda vs pozo a tanque del CO₂e total",
+    "byLegTitle": "Por tramo de transporte",
+    "byLegHint": "Contribución de CO₂e de cada tramo origen–destino",
+    "byModeTitle": "Por modo de transporte",
+    "byModeHint": "CO₂e combinado de mar, carretera, ferrocarril y otros modos",
+    "emissionScopeSeries": "Alcance de emisiones",
+    "byModeSeries": "Por modo",
+    "modeTooltip": "Modo: {{mode}}"
+  },
+  "modes": {
+    "SEA": "Marítimo",
+    "ROAD": "Carretera",
+    "RAIL": "Ferrocarril",
+    "AIR": "Aéreo",
+    "INLAND_WATER": "Vía fluvial"
+  },
+  "validation": {
+    "originLocode": "El LOCODE de origen debe tener 5 caracteres.",
+    "destinationLocode": "El LOCODE de destino debe tener 5 caracteres.",
+    "cargoWeightPositive": "El peso de la carga debe ser mayor que cero.",
+    "equipmentRequired": "El equipamiento es obligatorio.",
+    "destinationMustDiffer": "El destino debe ser distinto del origen."
+  },
+  "errors": {
+    "computeFailed": "Error al calcular la huella de carbono.",
+    "lookupsFailed": "Error al obtener los catálogos de carbono",
+    "downloadFailed": "Error al descargar el PDF de estimación de carbono",
+    "networkError": "Error de red"
+  },
+  "toasts": {
+    "pdfDownloaded": "PDF de estimación de carbono descargado"
+  },
+  "a11y": {
+    "loading": "Cargando",
+    "breakdownViewMode": "Modo de vista del desglose",
+    "emissionScopeChart": "Gráfico de alcance de emisiones",
+    "scopeSplitChart": "División de CO2e tanque a rueda frente a pozo a tanque",
+    "emissionsByLegChart": "Gráfico de emisiones por tramo",
+    "co2eByLeg": "CO2e por tramo de transporte",
+    "emissionsByModeChart": "Gráfico de emisiones por modo",
+    "co2eByMode": "CO2e por modo de transporte"
+  }
 }

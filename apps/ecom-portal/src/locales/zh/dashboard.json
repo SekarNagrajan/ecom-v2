@@ -4,5 +4,269 @@
   "createBooking": "创建订舱",
   "refresh": "刷新",
   "summaryUnavailableTitle": "仪表板摘要不可用",
-  "summaryUnavailableMessage": "请刷新仪表板以重新尝试加载摘要。"
+  "summaryUnavailableMessage": "请刷新仪表板以重新尝试加载摘要。",
+  "kpi": {
+    "totalShipments": "总货运量",
+    "bookingConfirmed": "订舱已确认",
+    "siPending": "待提交 SI",
+    "paymentPending": "待付款",
+    "inTransit": "运输中",
+    "confirmed": "已确认",
+    "atOrigin": "在起运地",
+    "delivered": "已交付",
+    "awaitingSi": "等待 SI",
+    "outstanding": "未结清",
+    "invoices": "发票"
+  },
+  "ongoing": {
+    "title": "进行中的交易",
+    "columns": {
+      "actions": "操作",
+      "bookingNo": "订舱号",
+      "blNumber": "提单号",
+      "onlineRefNo": "在线参考号",
+      "originPort": "起运港",
+      "deliveryPort": "交货港",
+      "departureDate": "离港日期",
+      "blStatus": "提单状态",
+      "containerNo": "箱号",
+      "teus": "TEUs",
+      "siStatus": "SI 状态",
+      "outstandingBalUsd": "未结余额 (USD)"
+    },
+    "actions": {
+      "viewBookingDetails": "查看订舱详情",
+      "viewBillOfLading": "查看提单",
+      "createShippingInstruction": "创建装船指示 (SI)",
+      "createSi": "创建 SI"
+    },
+    "empty": {
+      "title": "未找到进行中的交易",
+      "filteredMessage": "没有符合所选仪表板筛选条件的货运。",
+      "blankMessage": "您进行中的订舱和提单将显示在此处。"
+    }
+  },
+  "status": {
+    "confirmed": "已确认",
+    "draft": "草稿",
+    "cancelled": "已取消",
+    "issued": "已签发"
+  },
+  "charts": {
+    "bookingStatus": "订舱状态",
+    "blStatus": "提单状态",
+    "siStatus": "装船指示状态",
+    "emptyBooking": "无订舱状态数据",
+    "emptyBl": "无 B/L 状态数据",
+    "emptySi": "无装船指示状态数据"
+  },
+  "a11y": {
+    "backToTop": "回到顶部",
+    "kpiCard": "{{title}}：{{value}}"
+  },
+  "errors": {
+    "fetchSummary": "加载仪表板摘要失败"
+  },
+  "actions": {
+    "viewAll": "查看全部",
+    "viewReport": "查看报告",
+    "view": "查看",
+    "all": "全部",
+    "viewDetails": "查看详情"
+  },
+  "volume": {
+    "title": "货运量分析 (TEUs)",
+    "trendTitle": "货运量趋势 (TEUs)",
+    "periodHintWeekly": "所选阶段的每周 TEU 货运量",
+    "periodHintMonthly": "所选阶段的每月 TEU 货运量",
+    "periodHintQuarterly": "所选阶段的每季度 TEU 货运量",
+    "vsPrev": "较上期 ({{value}})",
+    "tooltipTeus": "{{label}}：<b>{{value}} TEUs</b>",
+    "stages": {
+      "all": "全部运量",
+      "booking": "订舱",
+      "si": "SI",
+      "bl": "B/L",
+      "inTransit": "运输中"
+    },
+    "periods": {
+      "Weekly": "每周",
+      "Monthly": "每月",
+      "Quarterly": "每季度"
+    },
+    "kpiLabels": {
+      "thisWeek": "本周",
+      "thisMonth": "本月",
+      "thisQuarter": "本季度",
+      "thisYear": "本年"
+    }
+  },
+  "planning": {
+    "title": "即将到来的货运计划",
+    "viewAllTooltip": "查看全部即将到来的订舱",
+    "bookingsNext7Days": "订舱（未来 7 天）",
+    "teus": "TEUs",
+    "week": "周",
+    "total": "合计",
+    "legendBookings": "订舱",
+    "legendPendingSi": "待提交 SI",
+    "emptyDay": "无订舱",
+    "emptyDayTooltip": "当天无订舱",
+    "weekTotal": "本周合计",
+    "clickToView": " — 点击查看",
+    "bookingOne": "1 个订舱",
+    "bookingMany": "{{count}} 个订舱",
+    "pendingSiOne": "1 个待提交装船指示",
+    "pendingSiMany": "{{count}} 个待提交装船指示",
+    "paymentOne": "1 笔待付款",
+    "paymentMany": "{{count}} 笔待付款",
+    "needSi": "{{count}} 个需要装船指示",
+    "paymentPendingCount": "{{count}} 笔待付款",
+    "dayAria": "{{day}} {{week}}：{{summary}}",
+    "days": {
+      "mon": "一",
+      "tue": "二",
+      "wed": "三",
+      "thu": "四",
+      "fri": "五",
+      "sat": "六",
+      "sun": "日"
+    }
+  },
+  "planningDrawer": {
+    "eyebrow": "即将到来的订舱",
+    "route": "航线",
+    "status": "状态",
+    "capacity": "运力",
+    "capacityTeu": "{{count}} TEU",
+    "siPending": "待提交 SI",
+    "paymentDue": "待付款",
+    "viewDetails": "查看详情",
+    "empty": "当天无订舱"
+  },
+  "intelligence": {
+    "title": "货运智能分析",
+    "viewReportTooltip": "打开完整智能分析报告",
+    "topConsignees": "主要收货人",
+    "viewAllConsigneesTooltip": "按 FEU 运量查看全部收货人",
+    "total": "合计",
+    "segments": "{{count}} 个分段",
+    "totalTeus": "{{count}} TEUs",
+    "tooltipFeus": "{{name}}：{{value}} FEUs ({{percent}}%)",
+    "columns": {
+      "teus": "TEUs",
+      "share": "占比",
+      "volume": "运量",
+      "company": "公司",
+      "rank": "#"
+    },
+    "dimensions": {
+      "origin": "起运地",
+      "pol": "POL",
+      "pod": "POD",
+      "pickup": "提货地",
+      "consignee": "收货人",
+      "destination": "目的地"
+    },
+    "dimensionColumns": {
+      "origin": "起运地",
+      "pol": "装货港",
+      "pod": "卸货港",
+      "pickup": "提货地",
+      "consignee": "收货人",
+      "destination": "目的地"
+    }
+  },
+  "lanes": {
+    "topActive": "热门活跃航线",
+    "viewAllByFeu": "按 FEU 运量查看全部航线",
+    "recentlyUsed": "最近使用的航线",
+    "recentlyUsedHint": "这些走廊上的最新订舱",
+    "viewAllRecentlyUsed": "查看全部最近使用的航线",
+    "opportunities": "航线机会",
+    "viewAllOpportunities": "查看全部航线机会",
+    "quietContracted": "冷清合约航线",
+    "quietHint": "过去 90 天无活动",
+    "suggestedNew": "建议新航线",
+    "suggestedHint": "基于您的订舱历史",
+    "noActivity": "无活动",
+    "lanePolPod": "航线 (POL → POD)",
+    "feus": "FEUs",
+    "share": "占比",
+    "volume": "运量",
+    "suggestions": {
+      "highPotential": "高潜力",
+      "mediumPotential": "中等潜力"
+    }
+  },
+  "schedules": {
+    "title": "即将到来的船舶船期",
+    "voyageLine": "航次 {{voyage}} · {{service}} · {{pol}} → {{pod}}",
+    "etd": "ETD {{date}}",
+    "cutoff": "SI/VGM 截止：{{date}}"
+  },
+  "recentBookings": {
+    "title": "最近订舱",
+    "viewAll": "查看全部",
+    "voyage": "航次 {{voyage}}",
+    "footer": "显示 {{shown}} / {{total}} 个有效订舱 — 最后更新 {{updated}}",
+    "columns": {
+      "bookingNo": "订舱号",
+      "vesselVoyage": "船名 / 航次",
+      "route": "航线",
+      "etd": "ETD",
+      "status": "状态",
+      "action": "操作"
+    },
+    "status": {
+      "pending": "待处理",
+      "blIssued": "B/L 已签发",
+      "completed": "已完成"
+    }
+  },
+  "notices": {
+    "title": "通知与公告"
+  },
+  "export": {
+    "buttonTooltip": "导出报告",
+    "dialogTitle": "导出报告",
+    "previewTitle": "报告预览",
+    "defaultTitle": "仪表板报告",
+    "reportTitle": "报告标题",
+    "reportTitlePlaceholder": "例如：仪表板报告",
+    "format": "格式",
+    "formatPdf": "PDF",
+    "formatPptx": "PowerPoint",
+    "preview": "预览",
+    "downloadPdf": "下载 PDF",
+    "downloadPptx": "下载 PowerPoint",
+    "generating": "正在生成报告…",
+    "updatingPreview": "正在更新预览…",
+    "previewDisclaimer": "预览 — 最终版式可能略有差异。",
+    "scopeKpiFilter": "KPI 筛选",
+    "scopeShipments": "货运",
+    "currentDashboardData": "当前仪表板数据",
+    "shipmentsOf": "{{shown}} / {{total}}",
+    "ariaPdfPreview": "PDF 预览",
+    "ariaPptxPreview": "PowerPoint 预览",
+    "slideOf": "第 {{current}} 页，共 {{total}} 页",
+    "chartUnavailable": "无法呈现图表。",
+    "chartUnavailableShort": "图表不可用",
+    "continued": "{{title}}（续）",
+    "reportScope": "报告范围",
+    "pageOf": "第 {{page}} 页，共 {{total}} 页",
+    "generatedBy": "生成者：{{name}}",
+    "appliedFilters": "已应用的筛选",
+    "downloaded": "“{{title}}”已下载",
+    "chartsMissingOne": "{{count}} 个图表无法呈现，将显示为占位符。",
+    "chartsMissingOther": "{{count}} 个图表无法呈现，将显示为占位符。",
+    "validation": {
+      "titleMin": "报告标题至少需要 3 个字符",
+      "titleMax": "报告标题最多 150 个字符"
+    },
+    "errors": {
+      "previewFailed": "生成报告预览失败",
+      "downloadFailed": "下载报告失败"
+    }
+  }
 }

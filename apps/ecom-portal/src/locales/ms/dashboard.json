@@ -4,5 +4,269 @@
   "createBooking": "Cipta Tempahan",
   "refresh": "Muat Semula",
   "summaryUnavailableTitle": "Ringkasan papan pemuka tidak tersedia",
-  "summaryUnavailableMessage": "Muat semula papan pemuka untuk cuba memuatkan ringkasan sekali lagi."
+  "summaryUnavailableMessage": "Muat semula papan pemuka untuk cuba memuatkan ringkasan sekali lagi.",
+  "kpi": {
+    "totalShipments": "Jumlah Penghantaran",
+    "bookingConfirmed": "Tempahan Disahkan",
+    "siPending": "SI Menunggu",
+    "paymentPending": "Bayaran Menunggu",
+    "inTransit": "Dalam Transit",
+    "confirmed": "Disahkan",
+    "atOrigin": "Di Asal",
+    "delivered": "Dihantar",
+    "awaitingSi": "Menunggu SI",
+    "outstanding": "Belum Selesai",
+    "invoices": "Invois"
+  },
+  "ongoing": {
+    "title": "Transaksi Berterusan",
+    "columns": {
+      "actions": "Tindakan",
+      "bookingNo": "No. Tempahan",
+      "blNumber": "Nombor BL",
+      "onlineRefNo": "No. Rujukan Dalam Talian",
+      "originPort": "Pelabuhan Asal",
+      "deliveryPort": "Pelabuhan Penghantaran",
+      "departureDate": "Tarikh Berlepas",
+      "blStatus": "Status BL",
+      "containerNo": "No. Kontena",
+      "teus": "TEUs",
+      "siStatus": "Status SI",
+      "outstandingBalUsd": "Baki Belum Selesai (USD)"
+    },
+    "actions": {
+      "viewBookingDetails": "Lihat Butiran Tempahan",
+      "viewBillOfLading": "Lihat Bill of Lading",
+      "createShippingInstruction": "Cipta Shipping Instruction (SI)",
+      "createSi": "Cipta SI"
+    },
+    "empty": {
+      "title": "Tiada transaksi berterusan dijumpai",
+      "filteredMessage": "Tiada penghantaran yang sepadan dengan penapis papan pemuka yang dipilih.",
+      "blankMessage": "Tempahan dan bil muatan berterusan anda akan dipaparkan di sini."
+    }
+  },
+  "status": {
+    "confirmed": "Disahkan",
+    "draft": "Draf",
+    "cancelled": "Dibatalkan",
+    "issued": "Dikeluarkan"
+  },
+  "charts": {
+    "bookingStatus": "Status Tempahan",
+    "blStatus": "Status Bill of Lading",
+    "siStatus": "Status Shipping Instruction",
+    "emptyBooking": "Tiada data status tempahan",
+    "emptyBl": "Tiada data status B/L",
+    "emptySi": "Tiada data status shipping instruction"
+  },
+  "a11y": {
+    "backToTop": "Kembali ke atas",
+    "kpiCard": "{{title}}: {{value}}"
+  },
+  "errors": {
+    "fetchSummary": "Gagal memuatkan ringkasan papan pemuka"
+  },
+  "actions": {
+    "viewAll": "Lihat Semua",
+    "viewReport": "Lihat Laporan",
+    "view": "Lihat",
+    "all": "Semua",
+    "viewDetails": "Lihat butiran"
+  },
+  "volume": {
+    "title": "Analitik Volum Penghantaran (TEUs)",
+    "trendTitle": "Trend Volum (TEUs)",
+    "periodHintWeekly": "Volum TEU mingguan untuk peringkat dipilih",
+    "periodHintMonthly": "Volum TEU bulanan untuk peringkat dipilih",
+    "periodHintQuarterly": "Volum TEU suku tahunan untuk peringkat dipilih",
+    "vsPrev": "vs sebelumnya ({{value}})",
+    "tooltipTeus": "{{label}}: <b>{{value}} TEUs</b>",
+    "stages": {
+      "all": "Semua Volum",
+      "booking": "Tempahan",
+      "si": "SI",
+      "bl": "B/L",
+      "inTransit": "Dalam Transit"
+    },
+    "periods": {
+      "Weekly": "Mingguan",
+      "Monthly": "Bulanan",
+      "Quarterly": "Suku Tahunan"
+    },
+    "kpiLabels": {
+      "thisWeek": "Minggu Ini",
+      "thisMonth": "Bulan Ini",
+      "thisQuarter": "Suku Ini",
+      "thisYear": "Tahun Ini"
+    }
+  },
+  "planning": {
+    "title": "Perancangan Penghantaran Akan Datang",
+    "viewAllTooltip": "Lihat Semua Tempahan Akan Datang",
+    "bookingsNext7Days": "Tempahan (7 Hari Akan Datang)",
+    "teus": "TEUs",
+    "week": "Minggu",
+    "total": "Jumlah",
+    "legendBookings": "Tempahan",
+    "legendPendingSi": "SI Menunggu",
+    "emptyDay": "Tiada tempahan",
+    "emptyDayTooltip": "Tiada tempahan pada hari ini",
+    "weekTotal": "Jumlah minggu",
+    "clickToView": " — klik untuk lihat",
+    "bookingOne": "1 tempahan",
+    "bookingMany": "{{count}} tempahan",
+    "pendingSiOne": "1 arahan penghantaran menunggu",
+    "pendingSiMany": "{{count}} arahan penghantaran menunggu",
+    "paymentOne": "1 bayaran menunggu",
+    "paymentMany": "{{count}} bayaran menunggu",
+    "needSi": "{{count}} memerlukan arahan penghantaran",
+    "paymentPendingCount": "{{count}} bayaran menunggu",
+    "dayAria": "{{day}} {{week}}: {{summary}}",
+    "days": {
+      "mon": "Isn",
+      "tue": "Sel",
+      "wed": "Rab",
+      "thu": "Kha",
+      "fri": "Jum",
+      "sat": "Sab",
+      "sun": "Ahd"
+    }
+  },
+  "planningDrawer": {
+    "eyebrow": "TEMPAHAN AKAN DATANG",
+    "route": "Laluan",
+    "status": "Status",
+    "capacity": "Kapasiti",
+    "capacityTeu": "{{count}} TEU",
+    "siPending": "SI menunggu",
+    "paymentDue": "Bayaran perlu dibayar",
+    "viewDetails": "Lihat butiran",
+    "empty": "Tiada tempahan untuk hari ini"
+  },
+  "intelligence": {
+    "title": "Kepintaran Penghantaran",
+    "viewReportTooltip": "Buka laporan kepintaran penuh",
+    "topConsignees": "Penerima Teratas",
+    "viewAllConsigneesTooltip": "Lihat semua penerima mengikut volum FEU",
+    "total": "Jumlah",
+    "segments": "{{count}} segmen",
+    "totalTeus": "{{count}} TEUs",
+    "tooltipFeus": "{{name}}: {{value}} FEUs ({{percent}}%)",
+    "columns": {
+      "teus": "TEUs",
+      "share": "Bahagian",
+      "volume": "Volum",
+      "company": "Syarikat",
+      "rank": "#"
+    },
+    "dimensions": {
+      "origin": "Asal",
+      "pol": "POL",
+      "pod": "POD",
+      "pickup": "Pengambilan",
+      "consignee": "Penerima",
+      "destination": "Destinasi"
+    },
+    "dimensionColumns": {
+      "origin": "Asal",
+      "pol": "Pelabuhan Muat",
+      "pod": "Pelabuhan Lepas",
+      "pickup": "Pengambilan",
+      "consignee": "Penerima",
+      "destination": "Destinasi"
+    }
+  },
+  "lanes": {
+    "topActive": "Laluan Aktif Teratas",
+    "viewAllByFeu": "Lihat semua laluan mengikut volum FEU",
+    "recentlyUsed": "Laluan Digunakan Baru-baru Ini",
+    "recentlyUsedHint": "Tempahan terkini pada koridor ini",
+    "viewAllRecentlyUsed": "Lihat semua laluan digunakan baru-baru ini",
+    "opportunities": "Peluang Laluan",
+    "viewAllOpportunities": "Lihat semua peluang laluan",
+    "quietContracted": "Laluan Kontrak Senyap",
+    "quietHint": "Tiada aktiviti dalam 90 hari terakhir",
+    "suggestedNew": "Laluan Baharu Dicadangkan",
+    "suggestedHint": "Berdasarkan sejarah tempahan anda",
+    "noActivity": "Tiada Aktiviti",
+    "lanePolPod": "Laluan (POL → POD)",
+    "feus": "FEUs",
+    "share": "Bahagian",
+    "volume": "Volum",
+    "suggestions": {
+      "highPotential": "Potensi Tinggi",
+      "mediumPotential": "Potensi Sederhana"
+    }
+  },
+  "schedules": {
+    "title": "Jadual Kapal Akan Datang",
+    "voyageLine": "Pelayaran {{voyage}} · {{service}} · {{pol}} → {{pod}}",
+    "etd": "ETD {{date}}",
+    "cutoff": "Tarikh tutup SI/VGM: {{date}}"
+  },
+  "recentBookings": {
+    "title": "Tempahan Terkini",
+    "viewAll": "Lihat semua",
+    "voyage": "Pelayaran {{voyage}}",
+    "footer": "Memaparkan {{shown}} daripada {{total}} tempahan aktif — dikemas kini terakhir {{updated}}",
+    "columns": {
+      "bookingNo": "No. Tempahan",
+      "vesselVoyage": "Kapal / Pelayaran",
+      "route": "Laluan",
+      "etd": "ETD",
+      "status": "Status",
+      "action": "Tindakan"
+    },
+    "status": {
+      "pending": "Menunggu",
+      "blIssued": "B/L Dikeluarkan",
+      "completed": "Selesai"
+    }
+  },
+  "notices": {
+    "title": "Notis & Penasihatan"
+  },
+  "export": {
+    "buttonTooltip": "Eksport Laporan",
+    "dialogTitle": "Eksport Laporan",
+    "previewTitle": "Pratonton Laporan",
+    "defaultTitle": "Laporan Papan Pemuka",
+    "reportTitle": "Tajuk Laporan",
+    "reportTitlePlaceholder": "cth. Laporan Papan Pemuka",
+    "format": "Format",
+    "formatPdf": "PDF",
+    "formatPptx": "PowerPoint",
+    "preview": "Pratonton",
+    "downloadPdf": "Muat Turun PDF",
+    "downloadPptx": "Muat Turun PowerPoint",
+    "generating": "Menjana laporan…",
+    "updatingPreview": "Mengemas kini pratonton…",
+    "previewDisclaimer": "Pratonton — susun atur akhir mungkin berbeza sedikit.",
+    "scopeKpiFilter": "Penapis KPI",
+    "scopeShipments": "Penghantaran",
+    "currentDashboardData": "Data papan pemuka semasa",
+    "shipmentsOf": "{{shown}} daripada {{total}}",
+    "ariaPdfPreview": "Pratonton PDF",
+    "ariaPptxPreview": "Pratonton PowerPoint",
+    "slideOf": "Slaid {{current}} daripada {{total}}",
+    "chartUnavailable": "Carta tidak dapat dipaparkan.",
+    "chartUnavailableShort": "Carta tidak tersedia",
+    "continued": "{{title}} (sambungan)",
+    "reportScope": "Skop laporan",
+    "pageOf": "Halaman {{page}} daripada {{total}}",
+    "generatedBy": "Dijana oleh {{name}}",
+    "appliedFilters": "Penapis Digunakan",
+    "downloaded": "\"{{title}}\" dimuat turun",
+    "chartsMissingOne": "{{count}} carta tidak dapat dipaparkan dan muncul sebagai ruang letak.",
+    "chartsMissingOther": "{{count}} carta tidak dapat dipaparkan dan muncul sebagai ruang letak.",
+    "validation": {
+      "titleMin": "Tajuk laporan mestilah sekurang-kurangnya 3 aksara",
+      "titleMax": "Tajuk laporan mestilah paling banyak 150 aksara"
+    },
+    "errors": {
+      "previewFailed": "Gagal menjana pratonton laporan",
+      "downloadFailed": "Gagal memuat turun laporan"
+    }
+  }
 }

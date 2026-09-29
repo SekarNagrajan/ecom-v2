@@ -1,0 +1,92 @@
+{
+  "subtitle": "Tapis mengikut julat tarikh, semak penghalaan muatan ke pelepasan, dan cetak pesanan pelepasan kontena.",
+  "search": {
+    "fromDate": "Dari Tarikh",
+    "toDate": "Hingga Tarikh",
+    "show": "Papar"
+  },
+  "columns": {
+    "releaseNo": "No. Pelepasan",
+    "bookingNo": "No. Tempahan",
+    "croDate": "Tarikh CRO",
+    "vessel": "Kapal",
+    "voyage": "Pelayaran",
+    "loadPort": "Pelabuhan Muat",
+    "discharge": "Pelepasan",
+    "contType": "Jenis Kontena",
+    "qtyBooked": "Kuantiti Ditempah",
+    "qtyReleased": "Kuantiti Dilepaskan",
+    "emptyReleaseDepot": "Depot Pelepasan Kosong",
+    "croValidity": "Kesahan CRO",
+    "status": "Status"
+  },
+  "actions": {
+    "viewDetails": "Lihat Butiran",
+    "printContainerReleaseOrder": "Cetak Pesanan Pelepasan Kontena",
+    "downloadPdf": "Muat Turun PDF",
+    "copyCroNumber": "Salin nombor CRO",
+    "copied": "Disalin"
+  },
+  "empty": {
+    "loadErrorTitle": "Tidak dapat memuatkan pesanan pelepasan kontena",
+    "loadErrorMessage": "Permintaan tidak selesai. Semak sambungan anda dan cuba lagi.",
+    "noResultsTitle": "Tiada pesanan pelepasan kontena yang sepadan dengan carian anda",
+    "noResultsMessage": "Tiada hasil untuk julat tarikh ini. Luaskan tarikh atau kosongkan penapis untuk melihat lebih banyak hasil.",
+    "noContainers": "Tiada kontena pada pelepasan ini"
+  },
+  "errors": {
+    "fetchList": "Gagal mendapatkan ringkasan CRO",
+    "fetchDetail": "Gagal mendapatkan butiran CRO",
+    "fetchEligibility": "Gagal mendapatkan kelayakan",
+    "download": "Gagal memuat turun dokumen CRO"
+  },
+  "toasts": {
+    "documentDownloaded": "Dokumen CRO {{croNo}} telah dimuat turun"
+  },
+  "status": {
+    "printed": "Telah Dicetak",
+    "notPrinted": "Belum Dicetak",
+    "eligible": "Layak",
+    "blocked": "Disekat",
+    "released": "Dilepaskan",
+    "cancelled": "Dibatalkan"
+  },
+  "validation": {
+    "fromDateRequired": "Dari tarikh diperlukan",
+    "toDateRequired": "Hingga tarikh diperlukan",
+    "fromBeforeTo": "Dari tarikh mestilah pada atau sebelum Hingga tarikh"
+  },
+  "drawer": {
+    "bookingPrefix": "Tempahan:",
+    "routeEyebrow": "Pelabuhan ke Pelabuhan",
+    "loadPort": "Pelabuhan Muat",
+    "discharge": "Pelepasan",
+    "sections": {
+      "details": "Butiran Pesanan Pelepasan",
+      "shipment": "Butiran Penghantaran",
+      "containers": "Kontena"
+    },
+    "labels": {
+      "croNumber": "Nombor CRO",
+      "bookingNo": "No. Tempahan",
+      "croDate": "Tarikh CRO",
+      "croValidity": "Kesahan CRO",
+      "releaseStatus": "Status Pelepasan",
+      "printStatus": "Status Cetakan",
+      "vessel": "Kapal",
+      "voyage": "Pelayaran",
+      "contType": "Jenis Kontena",
+      "emptyReleaseDepot": "Depot Pelepasan Kosong",
+      "qtyBooked": "Kuantiti Ditempah",
+      "qtyReleased": "Kuantiti Dilepaskan"
+    },
+    "containerColumns": {
+      "containerNo": "No. Kontena",
+      "sizeType": "Saiz/Jenis",
+      "sealNo": "No. Meterai"
+    },
+    "alerts": {
+      "validUntil": "Pesanan pelepasan ini sah sehingga <date/>."
+    }
+  }
+}

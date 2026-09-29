@@ -4,6 +4,7 @@ import { useToast } from "@solverminds/shared-ui/hooks";
 import { useQuery } from "@tanstack/react-query";
 import { Card, List, Select, Typography, Upload } from "antd";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { bookingApi } from "../api/booking.api";
@@ -15,6 +16,7 @@ const { Text } = Typography;
 const { Dragger } = Upload;
 
 export function FileUploadStep() {
+  const { t } = useTranslation(["booking", "common"]);
   const toast = useToast();
   const { payload, updateDocuments, nextStep, prevStep } = useBookingStore();
   const [docType, setDocType] = useState<string>("PACKING_LIST");
@@ -40,9 +42,9 @@ export function FileUploadStep() {
       formData.append("type", docType);
       const uploaded = await bookingApi.uploadDocument(formData);
       updateDocuments([...documents, uploaded]);
-      toast.success(`${uploaded.fileName} uploaded successfully.`);
+      toast.success(t("wizard.files.uploadSuccess", { fileName: uploaded.fileName }));
     } catch {
-      toast.error(`${file.name} upload failed.`);
+      toast.error(t("wizard.files.uploadFailed", { fileName: file.name }));
     } finally {
       setUploading(false);
     }
@@ -57,9 +59,7 @@ export function FileUploadStep() {
     if (hasDangerousGoods) {
       const hasMsds = documents.some((d) => d.type === "MSDS");
       if (!hasMsds) {
-        toast.error(
-          "MSDS document is required when any commodity is marked as Dangerous Goods.",
-        );
+        toast.error(t("wizard.files.msdsRequired"));
         return;
       }
     }
@@ -71,17 +71,17 @@ export function FileUploadStep() {
       <div className="custom-scroll form-step-scroll">
         <Card
           className="form-step-card form-step-section"
-          title="Upload Supporting Documents"
+          title={t("wizard.files.title")}
         >
           <div className="booking-upload-type-row">
-            <label className="form-field-label">Document Type</label>
+            <label className="form-field-label">{t("wizard.files.documentType")}</label>
             <Select
               size="large"
               className="form-field-full-width"
               value={docType}
               onChange={setDocType}
               options={documentTypes}
-              placeholder="Select document type"
+              placeholder={t("wizard.files.documentTypePlaceholder")}
             />
           </div>
 
@@ -99,18 +99,17 @@ export function FileUploadStep() {
               <AppIcon icon={Icons.inbox} size={16} />
             </p>
             <p className="ant-upload-text">
-              Click or drag file to this area to upload
+              {t("wizard.files.draggerText")}
             </p>
             <p className="ant-upload-hint">
-              Selected type: {docType}. Files are attached to this booking
-              request.
+              {t("wizard.files.draggerHint", { type: docType })}
             </p>
           </Dragger>
 
           {documents.length > 0 ? (
             <List
               className="booking-upload-list"
-              header={<Text strong>Uploaded Documents</Text>}
+              header={<Text strong>{t("wizard.files.uploadedList")}</Text>}
               dataSource={documents}
               renderItem={(item: BookingDocument) => (
                 <List.Item
@@ -121,7 +120,7 @@ export function FileUploadStep() {
                       danger
                       onClick={() => handleRemove(item.id)}
                     >
-                      Remove
+                      {t("wizard.files.remove")}
                     </AppButton>,
                   ]}
                 >
@@ -137,9 +136,9 @@ export function FileUploadStep() {
       </div>
 
       <div className="form-step-footer">
-        <AppButton onClick={prevStep}>Previous</AppButton>
+        <AppButton onClick={prevStep}>{t("common:actions.previous")}</AppButton>
         <AppButton type="primary" onClick={handleNext}>
-          Next
+          {t("common:actions.next")}
         </AppButton>
       </div>
     </div>

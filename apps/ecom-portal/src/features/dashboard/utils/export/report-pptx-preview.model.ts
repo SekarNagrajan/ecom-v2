@@ -13,10 +13,12 @@ import {
   displayReportCell,
   formatDeltaWithArrow,
   iterateReportSections,
+  type ReportExportLabels,
 } from './report-shared.utils';
 
 export interface BuildPptxPreviewOptions {
   formatGeneratedAt: (isoUtc: string) => string;
+  labels: ReportExportLabels;
 }
 
 export type PptxPreviewSlide =
@@ -95,7 +97,10 @@ export function buildPptxPreviewSlides(
       chunks.forEach((chunk, index) => {
         slides.push({
           kind: 'table',
-          title: index === 0 ? section.title : `${section.title} (cont.)`,
+          title:
+            index === 0
+              ? section.title
+              : options.labels.continued.replace('{{title}}', section.title),
           columns: section.columns,
           rows: chunk.map((row) =>
             section.columns.map((col) => displayReportCell(row[col.key]))

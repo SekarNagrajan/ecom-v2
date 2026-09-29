@@ -5,7 +5,8 @@ import {
   type DataViewColumn,
 } from "@solverminds/shared-ui/data-view";
 import { Segmented, Spin, Tooltip, Typography } from "antd";
-import { startTransition, useState, type ReactNode } from "react";
+import { startTransition, useMemo, useState, type ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
@@ -15,7 +16,10 @@ import {
 } from "../api/carbon.queries";
 import type { CarbonInput, CarbonLegResult } from "../types/carbon.types";
 import { formatCo2e, pickDisplayTotal } from "../types/carbon.types";
-import { transportModeLabel } from "../utils/carbon-chart-options";
+import {
+  transportModeLabel,
+  type CarbonModeLabels,
+} from "../utils/carbon-chart-options";
 import { CarbonResultCharts } from "./CarbonResultCharts";
 
 const { Text } = Typography;
@@ -62,6 +66,7 @@ function toLegRows(legs: CarbonLegResult[]): CarbonLegRow[] {
 }
 
 export function CarbonResultPanel({ input }: CarbonResultPanelProps) {
+  const { t, i18n } = useTranslation(["carbon-calculator", "common"]);
   const {
     data: result,
     isLoading,
@@ -78,62 +83,87 @@ export function CarbonResultPanel({ input }: CarbonResultPanelProps) {
   const laneLabel = `${input.origin} → ${input.destination}`;
   const legRows = result ? toLegRows(result.legs) : [];
 
-  const legColumnDefs: DataViewColumn<CarbonLegRow>[] = [
-    {
-      headerName: "Mode",
-      field: "mode",
-      minWidth: 120,
-      flex: 1,
-      valueFormatter: (params) =>
-        transportModeLabel(params.value as CarbonLegResult["mode"]),
-    },
-    {
-      headerName: "From",
-      field: "from",
-      minWidth: 100,
-      flex: 1,
-    },
-    {
-      headerName: "To",
-      field: "to",
-      minWidth: 100,
-      flex: 1,
-    },
-    {
-      headerName: "Distance (km)",
-      field: "distanceKm",
-      minWidth: 130,
-      flex: 1,
-      type: "rightAligned",
-      valueFormatter: (params) =>
-        typeof params.value === "number"
-          ? params.value.toLocaleString("en-US")
-          : "",
-    },
-    {
-      headerName: unit === "kg" ? "CO₂e (kg)" : "CO₂e (t)",
-      field: unit === "kg" ? "co2eKg" : "co2eTonnes",
-      minWidth: 130,
-      flex: 1,
-      type: "rightAligned",
-      valueFormatter: (params) => {
-        if (typeof params.value !== "number") return "";
-        return unit === "kg"
-          ? params.value.toLocaleString("en-US")
-          : params.value.toLocaleString("en-US", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            });
+  const unitLabels = useMemo(
+    () => ({
+      kg: t("units.kgCo2e"),
+      t: t("units.tCo2e"),
+    }),
+    [t, i18n.language],
+  );
+
+  const modeLabels = useMemo<CarbonModeLabels>(
+    () => ({
+      SEA: t("modes.SEA"),
+      ROAD: t("modes.ROAD"),
+      RAIL: t("modes.RAIL"),
+      AIR: t("modes.AIR"),
+      INLAND_WATER: t("modes.INLAND_WATER"),
+    }),
+    [t, i18n.language],
+  );
+
+  const legColumnDefs: DataViewColumn<CarbonLegRow>[] = useMemo(
+    () => [
+      {
+        headerName: t("columns.mode"),
+        field: "mode",
+        minWidth: 120,
+        flex: 1,
+        valueFormatter: (params) =>
+          transportModeLabel(
+            params.value as CarbonLegResult["mode"],
+            modeLabels,
+          ),
       },
-    },
-  ];
+      {
+        headerName: t("columns.from"),
+        field: "from",
+        minWidth: 100,
+        flex: 1,
+      },
+      {
+        headerName: t("columns.to"),
+        field: "to",
+        minWidth: 100,
+        flex: 1,
+      },
+      {
+        headerName: t("columns.distanceKm"),
+        field: "distanceKm",
+        minWidth: 130,
+        flex: 1,
+        type: "rightAligned",
+        valueFormatter: (params) =>
+          typeof params.value === "number"
+            ? params.value.toLocaleString("en-US")
+            : "",
+      },
+      {
+        headerName: unit === "kg" ? t("columns.co2eKg") : t("columns.co2eT"),
+        field: unit === "kg" ? "co2eKg" : "co2eTonnes",
+        minWidth: 130,
+        flex: 1,
+        type: "rightAligned",
+        valueFormatter: (params) => {
+          if (typeof params.value !== "number") return "";
+          return unit === "kg"
+            ? params.value.toLocaleString("en-US")
+            : params.value.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              });
+        },
+      },
+    ],
+    [t, i18n.language, unit, modeLabels],
+  );
 
   if (spinning && !result) {
     return (
       <div
         className="co2-result-loading module-loading-center"
         role="status"
-        aria-label="Loading"
+        aria-label={t("a11y.loading")}
       >
         <Spin size="medium" />
       </div>
@@ -146,7 +176,7 @@ export function CarbonResultPanel({ input }: CarbonResultPanelProps) {
         <Text type="danger" className="co2-result-error form-field-error">
           {error instanceof Error
             ? error.message
-            : "Failed to compute carbon footprint."}
+            : t("errors.computeFailed")}
         </Text>
       ) : null}
 
@@ -157,9 +187,9 @@ export function CarbonResultPanel({ input }: CarbonResultPanelProps) {
               <div className="co2-result-toolbar__meta">
                 <span className="co2-result-toolbar__lane">{laneLabel}</span>
                 <span className="co2-result-toolbar__sub">
-                  {input.equipment} · {input.containerCount} container
-                  {input.containerCount === 1 ? "" : "s"} ·{" "}
-                  {input.cargoWeightKg.toLocaleString("en-US")} kg
+                  {input.equipment} ·{" "}
+                  {t("results.containers", { count: input.containerCount })} ·{" "}
+                  {input.cargoWeightKg.toLocaleString("en-US")} {t("units.kg")}
                 </span>
               </div>
               <AppButton
@@ -171,48 +201,57 @@ export function CarbonResultPanel({ input }: CarbonResultPanelProps) {
                 }
                 onClick={() => exportMutation.mutate(input)}
               >
-                Export PDF
+                {t("actions.exportPdf")}
               </AppButton>
             </div>
 
             <div className="co2-kpi-grid">
               <div className="co2-kpi-card co2-kpi-card--total">
-                <span className="co2-kpi-card__label">Total CO₂e</span>
+                <span className="co2-kpi-card__label">{t("kpi.totalCo2e")}</span>
                 <p className="co2-kpi-card__value">
-                  {formatCo2e(pickDisplayTotal(result, unit), unit)}
+                  {formatCo2e(pickDisplayTotal(result, unit), unit, unitLabels)}
                 </p>
               </div>
               <div className="co2-kpi-card co2-kpi-card--ttw">
-                <span className="co2-kpi-card__label">Tank-to-wheel</span>
+                <span className="co2-kpi-card__label">
+                  {t("kpi.tankToWheel")}
+                </span>
                 <p className="co2-kpi-card__value co2-kpi-card__value--sm">
                   {formatCo2e(
                     unit === "kg" ? result.ttwCo2eKg : result.ttwCo2eTonnes,
                     unit,
+                    unitLabels,
                   )}
                 </p>
               </div>
               <div className="co2-kpi-card co2-kpi-card--wtt">
-                <span className="co2-kpi-card__label">Well-to-tank</span>
+                <span className="co2-kpi-card__label">
+                  {t("kpi.wellToTank")}
+                </span>
                 <p className="co2-kpi-card__value co2-kpi-card__value--sm">
                   {formatCo2e(
                     unit === "kg" ? result.wttCo2eKg : result.wttCo2eTonnes,
                     unit,
+                    unitLabels,
                   )}
                 </p>
               </div>
               {result.intensity.perTeu != null ? (
                 <div className="co2-kpi-card co2-kpi-card--per-teu">
-                  <span className="co2-kpi-card__label">Per TEU</span>
+                  <span className="co2-kpi-card__label">{t("kpi.perTeu")}</span>
                   <p className="co2-kpi-card__value co2-kpi-card__value--sm">
-                    {formatIntensity(result.intensity.perTeu)} t CO₂e
+                    {formatIntensity(result.intensity.perTeu)} {t("units.tCo2e")}
                   </p>
                 </div>
               ) : null}
               {result.intensity.perTonneKm != null ? (
                 <div className="co2-kpi-card co2-kpi-card--per-tkm">
-                  <span className="co2-kpi-card__label">Per tonne-km</span>
+                  <span className="co2-kpi-card__label">
+                    {t("kpi.perTonneKm")}
+                  </span>
                   <p className="co2-kpi-card__value co2-kpi-card__value--sm">
-                    {formatIntensity(result.intensity.perTonneKm)} g CO₂e
+                    {formatIntensity(result.intensity.perTonneKm)}{" "}
+                    {t("units.gCo2e")}
                   </p>
                 </div>
               ) : null}
@@ -221,18 +260,13 @@ export function CarbonResultPanel({ input }: CarbonResultPanelProps) {
             <div className="co2-breakdown-block">
               <div className="co2-breakdown-block__header">
                 <Text strong className="co2-breakdown-title">
-                  Emissions Breakdown
-                  {/* {legRows.length > 0 ? (
-                    <span className="co2-breakdown-block__count">
-                      {legRows.length}
-                    </span>
-                  ) : null} */}
+                  {t("results.emissionsBreakdown")}
                 </Text>
                 <Segmented
                   className="module-view-mode-tabs co2-breakdown-view-tabs"
                   size="middle"
                   value={breakdownView}
-                  aria-label="Breakdown view mode"
+                  aria-label={t("a11y.breakdownViewMode")}
                   onChange={(next) => {
                     startTransition(() => {
                       if (next === "list" || next === "chart") {
@@ -244,7 +278,7 @@ export function CarbonResultPanel({ input }: CarbonResultPanelProps) {
                     {
                       value: "list",
                       icon: (
-                        <ViewModeIcon title="Grid View">
+                        <ViewModeIcon title={t("results.gridView")}>
                           <AppIcon
                             icon={Icons.list}
                             size={VIEW_MODE_ICON_SIZE}
@@ -255,7 +289,7 @@ export function CarbonResultPanel({ input }: CarbonResultPanelProps) {
                     {
                       value: "chart",
                       icon: (
-                        <ViewModeIcon title="Chart View">
+                        <ViewModeIcon title={t("results.chartView")}>
                           <AppIcon
                             icon={Icons.barChart}
                             size={VIEW_MODE_ICON_SIZE}
@@ -276,8 +310,8 @@ export function CarbonResultPanel({ input }: CarbonResultPanelProps) {
                     emptyState={
                       <ModuleEmptyState
                         variant="blank"
-                        title="No leg breakdown"
-                        message="Per-leg emissions will appear here when the estimate includes transport legs."
+                        title={t("empty.noLegBreakdownTitle")}
+                        message={t("empty.noLegBreakdownMessage")}
                       />
                     }
                     allowedViewModes={["list"]}
@@ -308,9 +342,10 @@ export function CarbonResultPanel({ input }: CarbonResultPanelProps) {
             <div className="co2-info-strip">
               <AppIcon icon={Icons.info} size={16} />
               <span>
-                Methodology: {result.methodology.standard} (factor version{" "}
-                {result.methodology.version}). Figures are estimates; actual
-                emissions vary with vessel, weather, and routing.
+                {t("results.methodology", {
+                  standard: result.methodology.standard,
+                  version: result.methodology.version,
+                })}
               </span>
             </div>
           </div>
@@ -319,7 +354,7 @@ export function CarbonResultPanel({ input }: CarbonResultPanelProps) {
         <ModuleEmptyState
           artSize="sm"
           variant="blank"
-          title="No result yet"
+          title={t("empty.noResultTitle")}
           className="co2-result-empty"
         />
       ) : null}

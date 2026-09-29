@@ -1,6 +1,7 @@
 // Created by Sekar Nagarajan (2026-08-28 12:09)
 import { AppButton } from "@solverminds/shared-ui";
 import { Flex, InputNumber, Tooltip } from "antd";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 
@@ -20,6 +21,7 @@ export function QuantityStepper({
   max,
   disabled = false,
 }: QuantityStepperProps) {
+  const { t } = useTranslation("booking");
   const current =
     typeof value === "number" && !Number.isNaN(value) ? value : min;
 
@@ -33,12 +35,15 @@ export function QuantityStepper({
     if (max === undefined || next <= max) onChange(next);
   };
 
+  const decreaseLabel = t("wizard.cargo.stepper.decrease");
+  const increaseLabel = t("wizard.cargo.stepper.increase");
+
   return (
     <Flex align="stretch" className="form-field-full-width booking-qty-stepper">
-      <Tooltip title="Decrease">
+      <Tooltip title={decreaseLabel}>
         <span className="booking-qty-stepper__btn-wrap">
           <AppButton
-            aria-label="Decrease"
+            aria-label={decreaseLabel}
             size="large"
             disabled={disabled || current <= min}
             icon={<AppIcon icon={Icons.minus} size={16} />}
@@ -59,10 +64,10 @@ export function QuantityStepper({
         disabled={disabled}
         className="booking-qty-stepper__input"
       />
-      <Tooltip title="Increase">
+      <Tooltip title={increaseLabel}>
         <span className="booking-qty-stepper__btn-wrap">
           <AppButton
-            aria-label="Increase"
+            aria-label={increaseLabel}
             size="large"
             disabled={disabled || (max !== undefined && current >= max)}
             icon={<AppIcon icon={Icons.plus} size={16} />}

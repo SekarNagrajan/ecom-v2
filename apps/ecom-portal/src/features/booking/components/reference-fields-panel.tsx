@@ -3,10 +3,12 @@ import { AppButton } from "@solverminds/shared-ui";
 import { Checkbox, Divider, Popover, Segmented, Typography } from "antd";
 import { useMemo, useState } from "react";
 
+import { useTranslation } from "react-i18next";
 import { AppIcon, Icons } from "../../../components/icons";
 import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import {
   createReferenceField,
+  localizeReferenceCatalogItem,
   REFERENCE_FIELD_CATALOG,
   type ReferenceField,
   type ReferenceFieldKey,
@@ -31,6 +33,7 @@ export function ReferenceFieldsPanel({
   onChange,
   rateReferenceNo,
 }: ReferenceFieldsPanelProps) {
+  const { t } = useTranslation(["booking", "common"]);
   const [viewMode, setViewMode] = useState<ReferenceViewMode>("list");
   const [catalogOpen, setCatalogOpen] = useState(false);
   const [selectedCatalogKeys, setSelectedCatalogKeys] = useState<
@@ -115,7 +118,7 @@ export function ReferenceFieldsPanel({
       onClick={(event) => event.stopPropagation()}
     >
       <Text strong className="ref-fields-catalog-picker__title">
-        Select reference fields
+        {t("booking:wizard.references.selectFields")}
       </Text>
 
       {availableCatalogItems.length === 0 ? (
@@ -123,7 +126,7 @@ export function ReferenceFieldsPanel({
           artSize="sm"
           hideArt
           variant="blank"
-          title="All reference fields have been added"
+          title={t("booking:wizard.references.allAdded")}
           style={{ padding: 8 }}
         />
       ) : (
@@ -134,7 +137,7 @@ export function ReferenceFieldsPanel({
             indeterminate={someAvailableSelected}
             onChange={(event) => handleSelectAllCatalog(event.target.checked)}
           >
-            Select All
+            {t("booking:wizard.references.selectAll")}
           </Checkbox>
 
           <Divider className="ref-fields-catalog-picker__divider" />
@@ -142,6 +145,7 @@ export function ReferenceFieldsPanel({
           <div className="ref-fields-catalog-picker__list custom-scroll">
             {REFERENCE_FIELD_CATALOG.map((item) => {
               const alreadyAdded = existingKeys.has(item.key);
+              const localized = localizeReferenceCatalogItem(item, t);
               return (
                 <Checkbox
                   key={item.key}
@@ -153,13 +157,13 @@ export function ReferenceFieldsPanel({
                   }
                 >
                   <span className="ref-fields-catalog-item">
-                    <span>{item.label}</span>
+                    <span>{localized.label}</span>
                     {alreadyAdded ? (
                       <Text
                         type="success"
                         className="ref-fields-catalog-item__tag"
                       >
-                        Added
+                        {t("booking:wizard.references.added")}
                       </Text>
                     ) : item.type === "radio" ? (
                       <Text
@@ -179,7 +183,7 @@ export function ReferenceFieldsPanel({
 
       <div className="ref-fields-catalog-picker__footer">
         <AppButton danger onClick={() => handleCatalogOpenChange(false)}>
-          Cancel
+          {t("common:actions.cancel")}
         </AppButton>
         <AppButton
           type="primary"
@@ -188,8 +192,9 @@ export function ReferenceFieldsPanel({
           }
           onClick={addSelectedFields}
         >
-          Add Selected
-          {selectedCatalogKeys.size > 0 ? ` (${selectedCatalogKeys.size})` : ""}
+          {selectedCatalogKeys.size > 0
+            ? t("booking:wizard.references.addSelectedCount", { count: selectedCatalogKeys.size })
+            : t("booking:wizard.references.addSelected")}
         </AppButton>
       </div>
     </div>
@@ -206,7 +211,7 @@ export function ReferenceFieldsPanel({
           <div>
             <div className="ref-fields-header__title-row">
               <Title level={5} className="ref-fields-header__title">
-                References
+                {t("booking:wizard.references.title")}
               </Title>
               {/* {fields.length > 0 ? (
                 <Text type="secondary" className="ref-fields-header__count">
@@ -216,7 +221,7 @@ export function ReferenceFieldsPanel({
               ) : null} */}
             </div>
             <Text type="secondary" className="ref-fields-header__hint">
-              Add reference fields to help identify and track this shipment
+              {t("booking:wizard.references.hint")}
             </Text>
           </div>
         </div>
@@ -256,7 +261,7 @@ export function ReferenceFieldsPanel({
               icon={<AppIcon icon={Icons.plus} size={14} />}
               disabled={availableCatalogItems.length === 0}
             >
-              Add Reference Field
+              {t("booking:wizard.references.addField")}
             </AppButton>
           </Popover>
         </div>
@@ -266,8 +271,8 @@ export function ReferenceFieldsPanel({
         <ModuleEmptyState
           artSize="sm"
           variant="blank"
-          title="No reference fields added yet"
-          message='Click "Add Reference Field" to get started.'
+          title={t("booking:wizard.references.emptyTitle")}
+          message={t("booking:wizard.references.emptyMessage")}
           style={{ padding: 12 }}
         />
       ) : viewMode === "list" ? (

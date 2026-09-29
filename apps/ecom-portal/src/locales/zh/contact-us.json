@@ -28,5 +28,42 @@
     "email": "请输入电子邮箱地址",
     "subject": "请输入主题",
     "message": "请在此输入您的留言……"
+  },
+  "descriptions": {
+    "page": "有疑问或需要帮助？请发送消息，我们会尽快回复您。",
+    "drawer": "有疑问或需要业务协助？请在下方提交您的咨询。"
+  },
+  "success": {
+    "title": "消息发送成功！",
+    "subTitle": "感谢您联系我们。我们已收到您的请求，并将立即转交相关部门处理。我们的工作人员将尽快与您联系。",
+    "drawerSubTitle": "感谢您联系我们。我们已收到您的请求，并将立即转交相关部门处理。我们会尽快与您联系。"
+  },
+  "actions": {
+    "sendMessage": "发送消息"
+  },
+  "defaults": {
+    "customerCodeRequest": "客户代码申请"
+  },
+  "errors": {
+    "sendFailed": "发送消息失败",
+    "sendFailedRetry": "发送消息失败。请重试。"
+  },
+  "validation": {
+    "nameRequired": "姓名为必填项",
+    "nameMax": "姓名不得超过 100 个字符",
+    "companyNameRequired": "公司名称为必填项",
+    "companyNameMax": "公司名称不得超过 50 个字符",
+    "countryRequired": "国家/地区为必填项",
+    "cityRequired": "城市为必填项",
+    "cityMax": "城市不得超过 150 个字符",
+    "phoneMax": "电话不得超过 15 个字符",
+    "mobileMax": "手机不得超过 11 个字符",
+    "emailRequired": "电子邮箱为必填项",
+    "emailInvalid": "电子邮箱地址无效",
+    "emailMax": "电子邮箱不得超过 300 个字符",
+    "subjectRequired": "主题为必填项",
+    "subjectMax": "主题不得超过 100 个字符",
+    "messageRequired": "留言为必填项",
+    "messageMax": "留言不得超过 5000 个字符"
   }
 }

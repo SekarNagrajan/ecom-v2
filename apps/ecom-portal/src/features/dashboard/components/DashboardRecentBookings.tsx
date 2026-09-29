@@ -3,6 +3,7 @@ import { AppButton } from "@solverminds/shared-ui";
 import { useNavigate } from "@tanstack/react-router";
 import { Flex, Table, Tag, Typography, theme } from "antd";
 import type { ColumnsType } from "antd/es/table";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import type { RecentBookingRow } from "../mocks/dashboard.mock";
@@ -18,6 +19,30 @@ const STATUS_COLORS: Record<RecentBookingRow["status"], string> = {
   Completed: "default",
 };
 
+function getRecentBookingStatusLabel(
+  status: RecentBookingRow["status"],
+  t: (key: string) => string,
+): string {
+  switch (status) {
+    case "Confirmed":
+      return t("kpi.confirmed");
+    case "SI Pending":
+      return t("kpi.siPending");
+    case "In Transit":
+      return t("kpi.inTransit");
+    case "Pending":
+      return t("recentBookings.status.pending");
+    case "B/L Issued":
+      return t("recentBookings.status.blIssued");
+    case "Completed":
+      return t("recentBookings.status.completed");
+    default: {
+      const _exhaustive: never = status;
+      return _exhaustive;
+    }
+  }
+}
+
 interface DashboardRecentBookingsProps {
   bookings: RecentBookingRow[];
 }
@@ -25,12 +50,13 @@ interface DashboardRecentBookingsProps {
 export function DashboardRecentBookings({
   bookings,
 }: DashboardRecentBookingsProps) {
+  const { t } = useTranslation(["dashboard", "common", "modules"]);
   const { token } = theme.useToken();
   const navigate = useNavigate();
 
   const columns: ColumnsType<RecentBookingRow> = [
     {
-      title: "Booking No.",
+      title: t("recentBookings.columns.bookingNo"),
       dataIndex: "bookingNo",
       key: "bookingNo",
       width: 140,
@@ -41,7 +67,7 @@ export function DashboardRecentBookings({
       ),
     },
     {
-      title: "Vessel / Voyage",
+      title: t("recentBookings.columns.vesselVoyage"),
       key: "vessel",
       width: 220,
       render: (_, row) => (
@@ -50,13 +76,13 @@ export function DashboardRecentBookings({
             {row.vessel}
           </Text>
           <Text type="secondary" style={{ fontSize: 12 }}>
-            Voy. {row.voyage}
+            {t("recentBookings.voyage", { voyage: row.voyage })}
           </Text>
         </div>
       ),
     },
     {
-      title: "Route",
+      title: t("recentBookings.columns.route"),
       key: "route",
       render: (_, row) => (
         <div>
@@ -70,13 +96,13 @@ export function DashboardRecentBookings({
       ),
     },
     {
-      title: "ETD",
+      title: t("recentBookings.columns.etd"),
       dataIndex: "etd",
       key: "etd",
       width: 120,
     },
     {
-      title: "Status",
+      title: t("recentBookings.columns.status"),
       dataIndex: "status",
       key: "status",
       width: 130,
@@ -85,12 +111,12 @@ export function DashboardRecentBookings({
           color={STATUS_COLORS[status]}
           style={{ margin: 0, borderRadius: 12 }}
         >
-          {status}
+          {getRecentBookingStatusLabel(status, t)}
         </Tag>
       ),
     },
     {
-      title: "Action",
+      title: t("recentBookings.columns.action"),
       key: "action",
       width: 90,
       align: "center",
@@ -101,7 +127,7 @@ export function DashboardRecentBookings({
           icon={<AppIcon icon={Icons.eye} size={16} tone="view" />}
           onClick={() => navigate({ to: "/app/booking" })}
         >
-          View
+          {t("actions.view")}
         </AppButton>
       ),
     },
@@ -118,7 +144,7 @@ export function DashboardRecentBookings({
     >
       <Flex align="center" justify="space-between" style={{ marginBottom: 16 }}>
         <Title level={5} style={{ margin: 0, fontWeight: 600 }}>
-          Recent Bookings
+          {t("recentBookings.title")}
         </Title>
         <AppButton
           type="link"
@@ -126,7 +152,7 @@ export function DashboardRecentBookings({
           size="small"
           onClick={() => navigate({ to: "/app/booking" })}
         >
-          View all
+          {t("recentBookings.viewAll")}
         </AppButton>
       </Flex>
       <Table
@@ -141,8 +167,11 @@ export function DashboardRecentBookings({
         type="secondary"
         style={{ fontSize: 12, display: "block", marginTop: 12 }}
       >
-        Showing {bookings.length} of 24 active bookings — last updated 21 Aug
-        2026, 06:17 SGT
+        {t("recentBookings.footer", {
+          shown: bookings.length,
+          total: 24,
+          updated: "21 Aug 2026, 06:17 SGT",
+        })}
       </Text>
     </div>
   );

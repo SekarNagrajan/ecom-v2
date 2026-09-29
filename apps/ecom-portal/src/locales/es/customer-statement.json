@@ -1,0 +1,66 @@
+{
+  "criteria": {
+    "account": "Cuenta",
+    "currency": "Moneda",
+    "fromDate": "Fecha desde",
+    "toDate": "Fecha hasta",
+    "show": "Mostrar"
+  },
+  "placeholders": {
+    "selectAccount": "Seleccionar cuenta",
+    "currency": "Moneda"
+  },
+  "actions": {
+    "exportPdf": "Exportar PDF"
+  },
+  "summary": {
+    "openingBalance": "Saldo inicial",
+    "closingBalance": "Saldo final",
+    "netMovement": "Movimiento neto"
+  },
+  "columns": {
+    "date": "Fecha",
+    "type": "Tipo",
+    "docNo": "N.º doc.",
+    "reference": "Referencia",
+    "debit": "Débito",
+    "credit": "Crédito",
+    "balance": "Saldo"
+  },
+  "totals": {
+    "totalDebit": "Total débito",
+    "totalCredit": "Total crédito",
+    "net": "Neto"
+  },
+  "empty": {
+    "loadErrorTitle": "No se pudo cargar el estado de cuenta del cliente",
+    "loadErrorMessage": "La solicitud no se completó. Compruebe su conexión e inténtelo de nuevo.",
+    "noTransactionsTitle": "No hay transacciones para este período",
+    "noTransactionsMessage": "Elija un período de estado de cuenta diferente para ver la actividad de la cuenta."
+  },
+  "errors": {
+    "fetchAccounts": "Error al obtener las cuentas del estado de cuenta",
+    "fetchStatement": "Error al obtener el estado de cuenta del cliente",
+    "download": "Error al descargar la exportación del estado de cuenta"
+  },
+  "docTypes": {
+    "invoice": "Factura",
+    "creditNote": "Nota de crédito",
+    "debitNote": "Nota de débito",
+    "receipt": "Recibo",
+    "adjustment": "Ajuste"
+  },
+  "validation": {
+    "accountRequired": "La cuenta es obligatoria.",
+    "currencyRequired": "La moneda es obligatoria.",
+    "fromDateRequired": "La fecha desde es obligatoria.",
+    "toDateRequired": "La fecha hasta es obligatoria.",
+    "endAfterStart": "La fecha de fin debe ser igual o posterior a la fecha de inicio.",
+    "periodMaxMonths": "El período del estado de cuenta no puede superar los 12 meses.",
+    "invalidCriteria": "Criterios de estado de cuenta no válidos."
+  },
+  "toasts": {
+    "pdfDownloaded": "PDF del estado de cuenta descargado",
+    "excelDownloaded": "Excel del estado de cuenta descargado"
+  }
+}

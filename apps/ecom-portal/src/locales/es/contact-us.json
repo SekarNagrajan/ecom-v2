@@ -28,5 +28,42 @@
     "email": "Ingrese la dirección de correo electrónico",
     "subject": "Ingrese el asunto",
     "message": "Escriba su mensaje aquí..."
+  },
+  "descriptions": {
+    "page": "¿Tiene una pregunta o necesita ayuda? Envíenos un mensaje y le responderemos con prontitud.",
+    "drawer": "¿Tiene una pregunta o necesita asistencia operativa? Envíe su consulta a continuación."
+  },
+  "success": {
+    "title": "¡Mensaje enviado correctamente!",
+    "subTitle": "Gracias por contactarnos. Hemos recibido su solicitud y la procesaremos de inmediato con el departamento correspondiente. Uno de nuestros ejecutivos se pondrá en contacto con usted en breve.",
+    "drawerSubTitle": "Gracias por contactarnos. Hemos recibido su solicitud y la procesaremos de inmediato con el departamento correspondiente. Nos pondremos en contacto con usted en breve."
+  },
+  "actions": {
+    "sendMessage": "Enviar mensaje"
+  },
+  "defaults": {
+    "customerCodeRequest": "Solicitud de código de cliente"
+  },
+  "errors": {
+    "sendFailed": "Error al enviar el mensaje",
+    "sendFailedRetry": "Error al enviar el mensaje. Inténtelo de nuevo."
+  },
+  "validation": {
+    "nameRequired": "El nombre es obligatorio",
+    "nameMax": "El nombre debe tener 100 caracteres o menos",
+    "companyNameRequired": "El nombre de la empresa es obligatorio",
+    "companyNameMax": "El nombre de la empresa debe tener 50 caracteres o menos",
+    "countryRequired": "El país es obligatorio",
+    "cityRequired": "La ciudad es obligatoria",
+    "cityMax": "La ciudad debe tener 150 caracteres o menos",
+    "phoneMax": "El teléfono debe tener 15 caracteres o menos",
+    "mobileMax": "El móvil debe tener 11 caracteres o menos",
+    "emailRequired": "El correo electrónico es obligatorio",
+    "emailInvalid": "Dirección de correo electrónico no válida",
+    "emailMax": "El correo electrónico debe tener 300 caracteres o menos",
+    "subjectRequired": "El asunto es obligatorio",
+    "subjectMax": "El asunto debe tener 100 caracteres o menos",
+    "messageRequired": "El mensaje es obligatorio",
+    "messageMax": "El mensaje debe tener 5000 caracteres o menos"
   }
 }

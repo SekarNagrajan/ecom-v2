@@ -1,0 +1,66 @@
+{
+  "criteria": {
+    "account": "账户",
+    "currency": "币种",
+    "fromDate": "开始日期",
+    "toDate": "结束日期",
+    "show": "查询"
+  },
+  "placeholders": {
+    "selectAccount": "选择账户",
+    "currency": "币种"
+  },
+  "actions": {
+    "exportPdf": "导出 PDF"
+  },
+  "summary": {
+    "openingBalance": "期初余额",
+    "closingBalance": "期末余额",
+    "netMovement": "净变动"
+  },
+  "columns": {
+    "date": "日期",
+    "type": "类型",
+    "docNo": "单据号",
+    "reference": "参考号",
+    "debit": "借方",
+    "credit": "贷方",
+    "balance": "余额"
+  },
+  "totals": {
+    "totalDebit": "借方合计",
+    "totalCredit": "贷方合计",
+    "net": "净额"
+  },
+  "empty": {
+    "loadErrorTitle": "无法加载客户对账单",
+    "loadErrorMessage": "请求未完成。请检查网络连接后重试。",
+    "noTransactionsTitle": "该期间没有交易",
+    "noTransactionsMessage": "请选择其他对账期间以查看账户活动。"
+  },
+  "errors": {
+    "fetchAccounts": "获取对账账户失败",
+    "fetchStatement": "获取客户对账单失败",
+    "download": "下载对账单导出文件失败"
+  },
+  "docTypes": {
+    "invoice": "发票",
+    "creditNote": "贷记单",
+    "debitNote": "借记单",
+    "receipt": "收据",
+    "adjustment": "调整"
+  },
+  "validation": {
+    "accountRequired": "账户为必填项。",
+    "currencyRequired": "币种为必填项。",
+    "fromDateRequired": "开始日期为必填项。",
+    "toDateRequired": "结束日期为必填项。",
+    "endAfterStart": "结束日期必须等于或晚于开始日期。",
+    "periodMaxMonths": "对账期间不能超过 12 个月。",
+    "invalidCriteria": "对账条件无效。"
+  },
+  "toasts": {
+    "pdfDownloaded": "对账单 PDF 已下载",
+    "excelDownloaded": "对账单 Excel 已下载"
+  }
+}

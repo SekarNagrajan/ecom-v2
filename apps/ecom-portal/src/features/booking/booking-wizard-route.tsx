@@ -4,6 +4,7 @@ import { useToast } from "@solverminds/shared-ui/hooks";
 import { useNavigate } from "@tanstack/react-router";
 import { Card, Space, Steps, Typography, theme } from "antd";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { AppIcon, Icons, NavBookingIcon } from "../../components/icons";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import {
@@ -28,6 +29,7 @@ const { Text, Title } = Typography;
 const PIPELINE_ICON_SIZE = 25;
 
 export function BookingWizardRoute() {
+  const { t } = useTranslation(["booking", "common", "modules"]);
   const MODULE_TITLES = useModuleTitles();
   const WIZARD_STEP_TITLES = useWizardStepTitles();
   const { token } = theme.useToken();
@@ -48,9 +50,9 @@ export function BookingWizardRoute() {
     setSavingDraft(true);
     try {
       const { draftId } = await bookingApi.saveDraft(payload);
-      toast.success(`Draft saved (${draftId})`);
+      toast.success(t("booking:wizard.toasts.draftSaved", { draftId }));
     } catch {
-      toast.error("Failed to save draft");
+      toast.error(t("booking:wizard.toasts.draftSaveFailed"));
     } finally {
       setSavingDraft(false);
     }
@@ -155,7 +157,7 @@ export function BookingWizardRoute() {
                   disabled={isSubmitting}
                   onClick={() => void handleSaveDraft()}
                 >
-                  Save Draft
+                  {t("booking:wizard.actions.saveDraft")}
                 </AppButton>
               ) : null}
 
@@ -167,7 +169,7 @@ export function BookingWizardRoute() {
                   }
                   onClick={() => navigate({ to: "/app/booking" })}
                 >
-                  Back to Booking
+                  {t("booking:actions.backToBooking")}
                 </AppButton>
               }
             </Space>
@@ -193,20 +195,20 @@ export function BookingWizardRoute() {
                 level={3}
                 className="booking-confirmation-card__title"
               >
-                Booking Submitted Successfully
+                {t("booking:wizard.confirm.submittedTitle")}
               </Title>
               <Text
                 type="secondary"
                 className="booking-confirmation-card__message"
               >
-                Your booking request has been forwarded to the carrier.
+                {t("booking:wizard.confirm.submittedMessage")}
               </Text>
               <div className="booking-confirmation-card__ref">
                 <Text
                   type="secondary"
                   className="booking-confirmation-card__ref-label"
                 >
-                  Booking Reference
+                  {t("booking:wizard.confirm.bookingReference")}
                 </Text>
                 <Text
                   copyable
@@ -225,10 +227,10 @@ export function BookingWizardRoute() {
                   type="primary"
                   onClick={() => navigate({ to: "/app/booking" })}
                 >
-                  Go to Dashboard
+                  {t("booking:wizard.actions.goToDashboard")}
                 </AppButton>
                 <AppButton onClick={handleStartOver}>
-                  Create Another Booking
+                  {t("booking:wizard.actions.createAnother")}
                 </AppButton>
               </Space>
             </div>

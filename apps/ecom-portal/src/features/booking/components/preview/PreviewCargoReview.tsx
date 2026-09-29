@@ -2,6 +2,7 @@
 import { Typography } from "antd";
 import { Fragment, useState } from "react";
 
+import { useTranslation } from "react-i18next";
 import { AppIcon, Icons } from "../../../../components/icons";
 import type { ContainerItem } from "../../types/booking.types";
 import { sumContainerCargo } from "../../utils/booking-cargo-completeness";
@@ -28,7 +29,9 @@ function teuForContainerType(containerType: string): number {
   return 1;
 }
 
-function specialLabel(container: ContainerItem): {
+type SpecialTranslateFn = (key: string, options?: Record<string, unknown>) => string;
+
+function specialLabel(container: ContainerItem, t?: SpecialTranslateFn): {
   kind: SpecialKind;
   label: string;
 } | null {
@@ -41,21 +44,23 @@ function specialLabel(container: ContainerItem): {
     )?.dgClass;
     return {
       kind: "dg",
-      label: dgClass ? `DG · Class ${dgClass}` : "DG",
+      label: dgClass
+        ? (t ? t("wizard.preview.cargo.special.dgClass", { class: dgClass }) : `DG · Class ${dgClass}`)
+        : (t ? t("wizard.preview.cargo.special.dg") : "DG"),
     };
   }
-  if (container.isOog) return { kind: "oog", label: "OOG" };
-  if (container.isSoc) return { kind: "soc", label: "SOC" };
+  if (container.isOog) return { kind: "oog", label: t ? t("wizard.preview.cargo.special.oog") : "OOG" };
+  if (container.isSoc) return { kind: "soc", label: t ? t("wizard.preview.cargo.special.soc") : "SOC" };
   if (container.reeferMode === "operating") {
     return {
       kind: "reefer",
       label:
         container.setTemp !== undefined && container.setTemp !== null
-          ? `Reefer ${container.setTemp}°C`
-          : "Reefer",
+          ? (t ? t("wizard.preview.cargo.special.reeferTemp", { temp: container.setTemp }) : `Reefer ${container.setTemp}°C`)
+          : (t ? t("wizard.preview.cargo.special.reefer") : "Reefer"),
     };
   }
-  if (container.reeferMode === "nor") return { kind: "nor", label: "NOR" };
+  if (container.reeferMode === "nor") return { kind: "nor", label: t ? t("wizard.preview.cargo.special.nor") : "NOR" };
   return null;
 }
 
@@ -91,6 +96,7 @@ function toggleRowId(current: Set<string>, id: string): Set<string> {
  * (collapsed by default); rows expand for read-only details + commodities.
  */
 export function PreviewCargoReview({ containers }: PreviewCargoReviewProps) {
+  const { t } = useTranslation("booking");
   const [tableOpen, setTableOpen] = useState(false);
   const [openRows, setOpenRows] = useState<Set<string>>(new Set());
 
@@ -117,17 +123,18 @@ export function PreviewCargoReview({ containers }: PreviewCargoReviewProps) {
   };
 
   if (containers.length === 0) {
-    return <BookingPreviewEmpty label="No containers" />;
+    return <BookingPreviewEmpty label={t("wizard.preview.empty.noContainers")} />;
   }
 
   return (
     <div className="booking-review__cargo">
       <p className="booking-review__cargo-hint">
-        {totals.containers.toLocaleString()}{" "}
-        {totals.containers === 1 ? "container" : "containers"} ·{" "}
-        {lineCount.toLocaleString()} commodity{" "}
-        {lineCount === 1 ? "line" : "lines"} · expand the summary, then click a
-        row to view details and commodities.
+        {t("wizard.preview.cargo.hint", {
+          containers: totals.containers.toLocaleString(),
+          containerLabel: totals.containers === 1 ? t("wizard.preview.cargo.container") : t("wizard.preview.cargo.containers"),
+          lines: lineCount.toLocaleString(),
+          lineLabel: lineCount === 1 ? t("wizard.preview.cargo.line") : t("wizard.preview.cargo.lines"),
+        })}
       </p>
 
       <div
@@ -141,7 +148,7 @@ export function PreviewCargoReview({ containers }: PreviewCargoReviewProps) {
         tabIndex={0}
         aria-expanded={tableOpen}
         aria-controls="booking-cargo-container-table"
-        aria-label="Toggle container table"
+        aria-label={t("wizard.preview.cargo.toggleTableAria")}
         onClick={toggleTable}
         onKeyDown={(event) => {
           if (event.key === "Enter" || event.key === " ") {
@@ -154,25 +161,25 @@ export function PreviewCargoReview({ containers }: PreviewCargoReviewProps) {
           <span className="booking-cargo-stats__value">
             {totals.containers.toLocaleString()}
           </span>
-          <span className="booking-cargo-stats__label">Total containers</span>
+          <span className="booking-cargo-stats__label">{t("wizard.preview.cargo.totalContainers")}</span>
         </div>
         <div className="booking-cargo-stats__item">
           <span className="booking-cargo-stats__value">
             {formatWeight(totals.weight)}
           </span>
-          <span className="booking-cargo-stats__label">Total weight</span>
+          <span className="booking-cargo-stats__label">{t("wizard.preview.cargo.totalWeight")}</span>
         </div>
         <div className="booking-cargo-stats__item">
           <span className="booking-cargo-stats__value">
             {formatVolume(totals.volume)} CBM
           </span>
-          <span className="booking-cargo-stats__label">Total volume</span>
+          <span className="booking-cargo-stats__label">{t("wizard.preview.cargo.totalVolume")}</span>
         </div>
         <div className="booking-cargo-stats__item booking-cargo-stats__item--last">
           <span className="booking-cargo-stats__value">
             {formatTeu(totals.teu)}
           </span>
-          <span className="booking-cargo-stats__label">Total TEU</span>
+          <span className="booking-cargo-stats__label">{t("wizard.preview.cargo.totalTeu")}</span>
           <AppIcon
             icon={Icons.chevronRight}
             size={16}
@@ -194,20 +201,20 @@ export function PreviewCargoReview({ containers }: PreviewCargoReviewProps) {
           <table className="booking-cargo-table">
             <thead>
               <tr>
-                <th>Container numbers</th>
-                <th>Type</th>
-                <th>Tare weight</th>
-                <th>Carrier seal</th>
-                <th>Shipper seal</th>
-                <th>Special</th>
-                <th aria-label="Expand" />
+                <th>{t("wizard.preview.cargo.colContainerNumbers")}</th>
+                <th>{t("wizard.preview.cargo.colType")}</th>
+                <th>{t("wizard.preview.cargo.colTareWeight")}</th>
+                <th>{t("wizard.preview.cargo.colCarrierSeal")}</th>
+                <th>{t("wizard.preview.cargo.colShipperSeal")}</th>
+                <th>{t("wizard.preview.cargo.colSpecial")}</th>
+                <th aria-label={t("wizard.preview.cargo.expandAria")} />
               </tr>
             </thead>
             <tbody>
               {containers.map((container, containerIndex) => {
                 const rowId = container.id || `container-${containerIndex}`;
                 const rowOpen = openRows.has(rowId);
-                const special = specialLabel(container);
+                const special = specialLabel(container, t);
                 const toggleRow = () => {
                   setOpenRows((current) => toggleRowId(current, rowId));
                 };
@@ -236,7 +243,7 @@ export function PreviewCargoReview({ containers }: PreviewCargoReviewProps) {
                       <td>
                         <span className="booking-cargo-table__no">
                           {container.containerNo?.trim() ||
-                            `Container ${containerIndex + 1}`}
+                            t("wizard.preview.cargo.containerFallback", { n: containerIndex + 1 })}
                         </span>
                       </td>
                       <td>{dash(container.containerType)}</td>
@@ -278,6 +285,7 @@ export function PreviewCargoReview({ containers }: PreviewCargoReviewProps) {
                           <PreviewContainerDetailPanel
                             containerIndex={containerIndex}
                             container={container}
+                            t={t}
                           />
                         </td>
                       </tr>
@@ -293,24 +301,28 @@ export function PreviewCargoReview({ containers }: PreviewCargoReviewProps) {
   );
 }
 
+type TranslateFn = (key: string, options?: Record<string, unknown>) => string;
+
 interface PreviewContainerDetailPanelProps {
   containerIndex: number;
   container: ContainerItem;
+  t: TranslateFn;
 }
 
 function PreviewContainerDetailPanel({
   containerIndex,
   container,
+  t,
 }: PreviewContainerDetailPanelProps) {
   const detailFields = [
     {
-      label: "Container no.",
+      label: t("wizard.preview.cargo.containerNo"),
       value:
-        container.containerNo?.trim() || `Container ${containerIndex + 1}`,
+        container.containerNo?.trim() || t("wizard.preview.cargo.containerFallback", { n: containerIndex + 1 }),
     },
-    { label: "Carrier seal", value: "—" },
-    { label: "Shipper seal", value: "—" },
-    { label: "Tare weight", value: formatTare(container.tareWeight) },
+    { label: t("wizard.preview.cargo.colCarrierSeal"), value: "—" },
+    { label: t("wizard.preview.cargo.colShipperSeal"), value: "—" },
+    { label: t("wizard.preview.cargo.colTareWeight"), value: formatTare(container.tareWeight) },
   ];
 
   return (
@@ -324,16 +336,17 @@ function PreviewContainerDetailPanel({
         ))}
       </div>
 
-      <PreviewCommodityTable commodities={container.commodities ?? []} />
+      <PreviewCommodityTable commodities={container.commodities ?? []} t={t} />
     </div>
   );
 }
 
 interface PreviewCommodityTableProps {
   commodities: NonNullable<ContainerItem["commodities"]>;
+  t: TranslateFn;
 }
 
-function PreviewCommodityTable({ commodities }: PreviewCommodityTableProps) {
+function PreviewCommodityTable({ commodities, t }: PreviewCommodityTableProps) {
   const totalWeight = commodities.reduce(
     (sum, line) => sum + Number(line?.weight || 0),
     0,
@@ -344,10 +357,10 @@ function PreviewCommodityTable({ commodities }: PreviewCommodityTableProps) {
       <div className="booking-cargo-commodity-toolbar">
         <div className="booking-cargo-commodity-toolbar__title">
           <Text strong className="booking-cargo-commodity-toolbar__heading">
-            Commodities ({commodities.length})
+            {t("wizard.preview.cargo.commoditiesTitle", { count: commodities.length })}
           </Text>
           <span className="booking-cargo-commodity-toolbar__weight">
-            Total weight: {formatWeight(totalWeight)}
+            {t("wizard.preview.cargo.totalWeightValue", { weight: formatWeight(totalWeight) })}
           </span>
         </div>
       </div>
@@ -357,12 +370,12 @@ function PreviewCommodityTable({ commodities }: PreviewCommodityTableProps) {
           <thead>
             <tr>
               <th className="booking-cargo-commodity-table__num">#</th>
-              <th>Commodity</th>
-              <th>HS code</th>
-              <th>Package type</th>
-              <th>Packages</th>
-              <th>Weight</th>
-              <th>Volume</th>
+              <th>{t("wizard.preview.cargo.colCommodity")}</th>
+              <th>{t("wizard.preview.cargo.colHsCode")}</th>
+              <th>{t("wizard.preview.cargo.colPackageType")}</th>
+              <th>{t("wizard.preview.cargo.colPackages")}</th>
+              <th>{t("wizard.preview.cargo.colWeight")}</th>
+              <th>{t("wizard.preview.cargo.colVolume")}</th>
             </tr>
           </thead>
           <tbody>

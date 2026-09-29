@@ -17,6 +17,17 @@ export const DEFAULT_TABLE_BODY_ROWS_PER_CHUNK = 12;
 
 export type ReportFileExtension = 'pdf' | 'pptx';
 
+/** Localized chrome strings for PDF/PPTX builders and HTML preview. */
+export interface ReportExportLabels {
+  reportScope: string;
+  chartUnavailable: string;
+  chartUnavailableShort: string;
+  pageOf: string;
+  generatedBy: string;
+  appliedFilters: string;
+  continued: string;
+}
+
 /**
  * `quarterly-pipeline-review-2026-08-06.pdf` (or `.pptx`). Slugified because
  * the title is free text and Windows rejects a fair few filename characters.

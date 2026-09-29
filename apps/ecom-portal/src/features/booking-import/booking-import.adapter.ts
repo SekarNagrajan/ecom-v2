@@ -1,4 +1,5 @@
 // Modified by Sekar Nagarajan (2026-09-15 16:45)
+import type { TFunction } from "i18next";
 import { z } from "zod";
 
 import { BOOKING_LOOKUPS } from "../booking/mocks/booking-lookups.mock";
@@ -15,58 +16,67 @@ import type {
 import { SPREADSHEET_IMPORT_DUPLICATE_ISSUE_CODE } from "../import-workbench/types/import-workbench.types";
 import type { BookingImportValues } from "./types/booking-import.types";
 
-const HAULAGE_OPTIONS = [
-  { label: "Merchant", value: "Merchant" },
-  { label: "Carrier", value: "Carrier" },
-] as const;
-
 const CONTAINER_TYPE_OPTIONS = BOOKING_LOOKUPS.containerTypes.map((option) => ({
   label: option.label,
   value: option.value,
 }));
 
-const bookingImportRowSchema = z.object({
-  origin: z.string().trim().min(1, "Origin is required"),
-  delivery: z.string().trim().min(1, "Delivery is required"),
-  cargoReadyDate: z.string().trim().min(1, "Cargo Ready Date is required"),
-  shipperName: z.string().trim().min(3, "Booking Party is required"),
-  agreementParty: z.string().trim().min(1, "Agreement Party is required"),
-  siSubmittingParty: z.string().trim().min(1, "SI Submitting Party is required"),
-  containerType: z.string().trim().min(1, "Container Type is required"),
-  quantity: z.coerce.number().int().min(1).max(100),
-  hsCode: z.string().trim().min(1, "HS Code is required"),
-  weight: z.coerce.number().min(1, "Weight is required"),
-  haulageOriginType: z.enum(["Carrier", "Merchant"]).default("Merchant"),
-  haulageDestinationType: z.enum(["Carrier", "Merchant"]).default("Merchant"),
-  carriageContract: z.string().optional().default(""),
-  agencyReference: z.string().optional().default(""),
-  customerReference: z.string().optional().default(""),
-  onlineBookingNo: z.string().optional().default(""),
-  shipperContact: z.string().optional().default(""),
-  shipperEmail: z
-    .string()
-    .email("Invalid email")
-    .optional()
-    .or(z.literal(""))
-    .default(""),
-  consigneeName: z.string().optional().default(""),
-  consigneeContact: z.string().optional().default(""),
-  consigneeEmail: z
-    .string()
-    .email("Invalid email")
-    .optional()
-    .or(z.literal(""))
-    .default(""),
-  notifyPartyName: z.string().optional().default(""),
-  notifyPartyContact: z.string().optional().default(""),
-  notifyPartyEmail: z
-    .string()
-    .email("Invalid email")
-    .optional()
-    .or(z.literal(""))
-    .default(""),
-  commodityDescription: z.string().optional().default(""),
-});
+function createBookingImportRowSchema(t: TFunction) {
+  return z.object({
+    origin: z.string().trim().min(1, t("validation.originRequired")),
+    delivery: z.string().trim().min(1, t("validation.deliveryRequired")),
+    cargoReadyDate: z
+      .string()
+      .trim()
+      .min(1, t("validation.cargoReadyDateRequired")),
+    shipperName: z.string().trim().min(3, t("validation.shipperNameRequired")),
+    agreementParty: z
+      .string()
+      .trim()
+      .min(1, t("validation.agreementPartyRequired")),
+    siSubmittingParty: z
+      .string()
+      .trim()
+      .min(1, t("validation.siSubmittingPartyRequired")),
+    containerType: z
+      .string()
+      .trim()
+      .min(1, t("validation.containerTypeRequired")),
+    quantity: z.coerce.number().int().min(1).max(100),
+    hsCode: z.string().trim().min(1, t("validation.hsCodeRequired")),
+    weight: z.coerce.number().min(1, t("validation.weightRequired")),
+    haulageOriginType: z.enum(["Carrier", "Merchant"]).default("Merchant"),
+    haulageDestinationType: z.enum(["Carrier", "Merchant"]).default("Merchant"),
+    carriageContract: z.string().optional().default(""),
+    agencyReference: z.string().optional().default(""),
+    customerReference: z.string().optional().default(""),
+    onlineBookingNo: z.string().optional().default(""),
+    shipperContact: z.string().optional().default(""),
+    shipperEmail: z
+      .string()
+      .email(t("validation.invalidEmail"))
+      .optional()
+      .or(z.literal(""))
+      .default(""),
+    consigneeName: z.string().optional().default(""),
+    consigneeContact: z.string().optional().default(""),
+    consigneeEmail: z
+      .string()
+      .email(t("validation.invalidEmail"))
+      .optional()
+      .or(z.literal(""))
+      .default(""),
+    notifyPartyName: z.string().optional().default(""),
+    notifyPartyContact: z.string().optional().default(""),
+    notifyPartyEmail: z
+      .string()
+      .email(t("validation.invalidEmail"))
+      .optional()
+      .or(z.literal(""))
+      .default(""),
+    commodityDescription: z.string().optional().default(""),
+  });
+}
 
 function createDefaultBookingImportValues(): BookingImportValues {
   return {
@@ -203,19 +213,25 @@ function duplicateKey(values: BookingImportValues): string {
   ].join("|");
 }
 
-export function createBookingImportAdapter(): SpreadsheetImportAdapter<
-  BookingImportValues,
-  BookingPayload
-> {
+export function createBookingImportAdapter(
+  t: TFunction,
+): SpreadsheetImportAdapter<BookingImportValues, BookingPayload> {
+  const rowSchema = createBookingImportRowSchema(t);
+  const haulageOptions = [
+    { label: t("options.haulage.merchant"), value: "Merchant" },
+    { label: t("options.haulage.carrier"), value: "Carrier" },
+  ];
+  const merchantLabel = t("options.haulage.merchant");
+
   return {
-    entityLabel: "bookings",
+    entityLabel: t("entityLabel"),
     maxRowCount: 200,
     createDefaultValues: createDefaultBookingImportValues,
     fields: [
       // Required first
       {
         key: "origin",
-        label: "Origin",
+        label: t("columns.origin"),
         aliases: ["POL", "Place of Receipt", "Origin Port"],
         kind: "text",
         required: true,
@@ -224,7 +240,7 @@ export function createBookingImportAdapter(): SpreadsheetImportAdapter<
       },
       {
         key: "delivery",
-        label: "Delivery",
+        label: t("columns.delivery"),
         aliases: ["POD", "Place of Delivery", "Destination"],
         kind: "text",
         required: true,
@@ -233,7 +249,7 @@ export function createBookingImportAdapter(): SpreadsheetImportAdapter<
       },
       {
         key: "cargoReadyDate",
-        label: "Cargo Ready Date",
+        label: t("columns.cargoReadyDate"),
         aliases: ["CRD", "Ready Date"],
         kind: "date",
         required: true,
@@ -242,7 +258,7 @@ export function createBookingImportAdapter(): SpreadsheetImportAdapter<
       },
       {
         key: "shipperName",
-        label: "Shipper Name",
+        label: t("columns.shipperName"),
         aliases: ["Booking Party", "Shipper"],
         kind: "text",
         required: true,
@@ -251,7 +267,7 @@ export function createBookingImportAdapter(): SpreadsheetImportAdapter<
       },
       {
         key: "agreementParty",
-        label: "Agreement Party",
+        label: t("columns.agreementParty"),
         aliases: ["Contract Party"],
         kind: "text",
         required: true,
@@ -260,7 +276,7 @@ export function createBookingImportAdapter(): SpreadsheetImportAdapter<
       },
       {
         key: "siSubmittingParty",
-        label: "SI Submitting Party",
+        label: t("columns.siSubmittingParty"),
         aliases: ["SI Party"],
         kind: "text",
         required: true,
@@ -269,7 +285,7 @@ export function createBookingImportAdapter(): SpreadsheetImportAdapter<
       },
       {
         key: "containerType",
-        label: "Container Type",
+        label: t("columns.containerType"),
         aliases: ["Equipment Type", "Eqp Type"],
         kind: "select",
         required: true,
@@ -281,7 +297,7 @@ export function createBookingImportAdapter(): SpreadsheetImportAdapter<
       },
       {
         key: "quantity",
-        label: "Quantity",
+        label: t("columns.quantity"),
         aliases: ["Qty", "Container Qty"],
         kind: "number",
         required: true,
@@ -290,7 +306,7 @@ export function createBookingImportAdapter(): SpreadsheetImportAdapter<
       },
       {
         key: "hsCode",
-        label: "HS Code",
+        label: t("columns.hsCode"),
         aliases: ["Commodity", "HS"],
         kind: "text",
         required: true,
@@ -299,7 +315,7 @@ export function createBookingImportAdapter(): SpreadsheetImportAdapter<
       },
       {
         key: "weight",
-        label: "Weight",
+        label: t("columns.weight"),
         aliases: ["Cargo Weight", "Gross Weight"],
         kind: "number",
         required: true,
@@ -309,62 +325,62 @@ export function createBookingImportAdapter(): SpreadsheetImportAdapter<
       // Optional
       {
         key: "haulageOriginType",
-        label: "Haulage Origin Type",
+        label: t("columns.haulageOriginType"),
         aliases: ["Origin Haulage"],
         kind: "select",
-        options: [...HAULAGE_OPTIONS],
-        defaultDisplayValue: "Merchant",
+        options: haulageOptions,
+        defaultDisplayValue: merchantLabel,
         useDefaultOnEmpty: true,
         width: 140,
       },
       {
         key: "haulageDestinationType",
-        label: "Haulage Destination Type",
+        label: t("columns.haulageDestinationType"),
         aliases: ["Destination Haulage"],
         kind: "select",
-        options: [...HAULAGE_OPTIONS],
-        defaultDisplayValue: "Merchant",
+        options: haulageOptions,
+        defaultDisplayValue: merchantLabel,
         useDefaultOnEmpty: true,
         width: 160,
       },
       {
         key: "carriageContract",
-        label: "Carriage Contract",
+        label: t("columns.carriageContract"),
         aliases: ["Contract"],
         kind: "text",
         width: 140,
       },
       {
         key: "agencyReference",
-        label: "Agency Reference",
+        label: t("columns.agencyReference"),
         aliases: ["Agency Ref"],
         kind: "text",
         width: 140,
       },
       {
         key: "customerReference",
-        label: "Customer Reference",
+        label: t("columns.customerReference"),
         aliases: ["Customer Ref", "PO"],
         kind: "text",
         width: 140,
       },
       {
         key: "onlineBookingNo",
-        label: "Online Booking No",
+        label: t("columns.onlineBookingNo"),
         aliases: ["Online Ref", "Booking Ref"],
         kind: "text",
         width: 140,
       },
       {
         key: "shipperContact",
-        label: "Shipper Contact",
+        label: t("columns.shipperContact"),
         aliases: ["Booking Party Contact"],
         kind: "text",
         width: 140,
       },
       {
         key: "shipperEmail",
-        label: "Shipper Email",
+        label: t("columns.shipperEmail"),
         aliases: ["Booking Party Email"],
         kind: "text",
         valueFormat: "email",
@@ -373,21 +389,21 @@ export function createBookingImportAdapter(): SpreadsheetImportAdapter<
       },
       {
         key: "consigneeName",
-        label: "Consignee Name",
+        label: t("columns.consigneeName"),
         aliases: ["Consignee"],
         kind: "text",
         width: 160,
       },
       {
         key: "consigneeContact",
-        label: "Consignee Contact",
+        label: t("columns.consigneeContact"),
         aliases: ["Consignee Contact Name"],
         kind: "text",
         width: 140,
       },
       {
         key: "consigneeEmail",
-        label: "Consignee Email",
+        label: t("columns.consigneeEmail"),
         aliases: ["Consignee Mail"],
         kind: "text",
         valueFormat: "email",
@@ -395,21 +411,21 @@ export function createBookingImportAdapter(): SpreadsheetImportAdapter<
       },
       {
         key: "notifyPartyName",
-        label: "Notify Party Name",
+        label: t("columns.notifyPartyName"),
         aliases: ["Notify"],
         kind: "text",
         width: 160,
       },
       {
         key: "notifyPartyContact",
-        label: "Notify Party Contact",
+        label: t("columns.notifyPartyContact"),
         aliases: ["Notify Contact"],
         kind: "text",
         width: 140,
       },
       {
         key: "notifyPartyEmail",
-        label: "Notify Party Email",
+        label: t("columns.notifyPartyEmail"),
         aliases: ["Notify Email"],
         kind: "text",
         valueFormat: "email",
@@ -417,7 +433,7 @@ export function createBookingImportAdapter(): SpreadsheetImportAdapter<
       },
       {
         key: "commodityDescription",
-        label: "Commodity Description",
+        label: t("columns.commodityDescription"),
         aliases: ["Description", "Cargo Description"],
         kind: "text",
         width: 200,
@@ -434,7 +450,7 @@ export function createBookingImportAdapter(): SpreadsheetImportAdapter<
           String(values.haulageDestinationType ?? "Merchant"),
         ),
       };
-      const parsed = bookingImportRowSchema.safeParse(prepared);
+      const parsed = rowSchema.safeParse(prepared);
       if (parsed.success) {
         const containerOk = CONTAINER_TYPE_OPTIONS.some(
           (option) => option.value === parsed.data.containerType,
@@ -443,7 +459,7 @@ export function createBookingImportAdapter(): SpreadsheetImportAdapter<
           return [
             {
               fieldKey: "containerType",
-              message: "Select a valid container type",
+              message: t("validation.invalidContainerType"),
             },
           ];
         }
@@ -468,8 +484,7 @@ export function createBookingImportAdapter(): SpreadsheetImportAdapter<
           const issue: SpreadsheetImportValidationIssue<BookingImportValues> = {
             code: SPREADSHEET_IMPORT_DUPLICATE_ISSUE_CODE,
             fieldKey: "origin",
-            message:
-              "Duplicate of another row with the same origin, delivery, cargo ready date, and shipper",
+            message: t("errors.duplicateRow"),
           };
           const existing = issuesByRowId.get(row.__rowId) ?? [];
           existing.push(issue);
@@ -483,6 +498,6 @@ export function createBookingImportAdapter(): SpreadsheetImportAdapter<
     },
     toPayload: toBookingPayload,
     getSubmitLabel: (validRowCount) =>
-      `Submit ${validRowCount} Booking${validRowCount === 1 ? "" : "s"}`,
+      t("actions.submit", { count: validRowCount }),
   };
 }

@@ -28,5 +28,42 @@
     "email": "Masukkan alamat e-mel",
     "subject": "Masukkan subjek",
     "message": "Taip mesej anda di sini..."
+  },
+  "descriptions": {
+    "page": "Ada soalan atau memerlukan bantuan? Hantar mesej kepada kami dan kami akan membalas dengan segera.",
+    "drawer": "Ada soalan atau memerlukan bantuan operasi? Serahkan pertanyaan anda di bawah."
+  },
+  "success": {
+    "title": "Mesej Berjaya Dihantar!",
+    "subTitle": "Terima kasih kerana menghubungi kami. Kami telah menerima permintaan anda dan akan memprosesnya dengan jabatan berkenaan serta-merta. Anda akan dihubungi oleh salah seorang eksekutif kami tidak lama lagi.",
+    "drawerSubTitle": "Terima kasih kerana menghubungi kami. Kami telah menerima permintaan anda dan akan memprosesnya dengan jabatan berkenaan serta-merta. Anda akan dihubungi tidak lama lagi."
+  },
+  "actions": {
+    "sendMessage": "Hantar Mesej"
+  },
+  "defaults": {
+    "customerCodeRequest": "Permintaan Kod Pelanggan"
+  },
+  "errors": {
+    "sendFailed": "Gagal menghantar mesej",
+    "sendFailedRetry": "Gagal menghantar mesej. Sila cuba lagi."
+  },
+  "validation": {
+    "nameRequired": "Nama diperlukan",
+    "nameMax": "Nama mestilah 100 aksara atau kurang",
+    "companyNameRequired": "Nama syarikat diperlukan",
+    "companyNameMax": "Nama syarikat mestilah 50 aksara atau kurang",
+    "countryRequired": "Negara diperlukan",
+    "cityRequired": "Bandar diperlukan",
+    "cityMax": "Bandar mestilah 150 aksara atau kurang",
+    "phoneMax": "Telefon mestilah 15 aksara atau kurang",
+    "mobileMax": "Telefon bimbit mestilah 11 aksara atau kurang",
+    "emailRequired": "E-mel diperlukan",
+    "emailInvalid": "Alamat e-mel tidak sah",
+    "emailMax": "E-mel mestilah 300 aksara atau kurang",
+    "subjectRequired": "Subjek diperlukan",
+    "subjectMax": "Subjek mestilah 100 aksara atau kurang",
+    "messageRequired": "Mesej diperlukan",
+    "messageMax": "Mesej mestilah 5000 aksara atau kurang"
   }
 }

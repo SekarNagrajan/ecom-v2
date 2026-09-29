@@ -3,8 +3,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { Alert, Card, Input, Segmented, Space, Switch, Typography } from "antd";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Controller, useForm, type Resolver } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import {
   FORM_YES_NO_SWITCH_CLASS,
@@ -12,7 +13,7 @@ import {
 } from "../../../components/shared/yes-no-switch";
 import { bookingApi } from "../api/booking.api";
 import { useBookingStore } from "../stores/booking.store";
-import { ensSchema, type EnsData } from "../types/booking.types";
+import { createEnsSchema, type EnsData } from "../types/booking.types";
 
 const { Text, Title } = Typography;
 
@@ -38,9 +39,12 @@ const defaults: EnsData = {
 };
 
 export function ENSStep() {
+  const { t } = useTranslation(["booking", "common"]);
   const toast = useToast();
   const { payload, updateEns, nextStep, prevStep } = useBookingStore();
   const [validatingEori, setValidatingEori] = useState(false);
+
+  const schema = useMemo(() => createEnsSchema((k) => t(k)), [t]);
 
   const {
     control,
@@ -51,7 +55,7 @@ export function ENSStep() {
     formState: { errors },
     reset,
   } = useForm<EnsData>({
-    resolver: zodResolver(ensSchema) as Resolver<EnsData>,
+    resolver: zodResolver(schema) as Resolver<EnsData>,
     defaultValues: payload.ens || defaults,
   });
 
@@ -98,7 +102,7 @@ export function ENSStep() {
   const handleValidateEori = async () => {
     const eori = (getValues("declarantEori") || "").trim();
     if (!eori) {
-      toast.error("Enter a Declarant EORI first");
+      toast.error(t("wizard.ens.eoriEnterFirst"));
       return;
     }
     setValidatingEori(true);
@@ -107,7 +111,7 @@ export function ENSStep() {
       if (result.valid) toast.success(result.message);
       else toast.error(result.message);
     } catch {
-      toast.error("EORI validation failed");
+      toast.error(t("wizard.ens.eoriValidationFailed"));
     } finally {
       setValidatingEori(false);
     }
@@ -124,14 +128,14 @@ export function ENSStep() {
           className="form-step-card form-step-section"
           title={
             <Title level={5} className="form-step-card-title">
-              ENS Details
+              {t("wizard.ens.title")}
             </Title>
           }
         >
           {/* Modified by Sekar Nagarajan (2026-09-01 16:36) — shared form-ens layout */}
           <div className="form-ens-required-row form-ens-top-row">
             <div className="form-field-cell">
-              <label className="form-field-label">ENS</label>
+              <label className="form-field-label">{t("wizard.ens.ensLabel")}</label>
               <Controller
                 control={control}
                 name="euCustomsZone"
@@ -151,7 +155,7 @@ export function ENSStep() {
             {ensRequired ? (
               <>
                 <div className="form-field-cell">
-                  <label className="form-field-label">Type of B/L</label>
+                  <label className="form-field-label">{t("wizard.ens.blType")}</label>
                   <Controller
                     control={control}
                     name="blType"
@@ -170,8 +174,8 @@ export function ENSStep() {
                           );
                         }}
                         options={[
-                          { label: "Straight BL", value: "Straight BL" },
-                          { label: "Master BL", value: "Master BL" },
+                          { label: t("wizard.ens.blOptions.straight"), value: "Straight BL" },
+                          { label: t("wizard.ens.blOptions.master"), value: "Master BL" },
                         ]}
                       />
                     )}
@@ -179,7 +183,7 @@ export function ENSStep() {
                 </div>
 
                 <div className="form-field-cell">
-                  <label className="form-field-label">Type of ENS Filing</label>
+                  <label className="form-field-label">{t("wizard.ens.filingType")}</label>
                   <Controller
                     control={control}
                     name="ensFilingType"
@@ -198,9 +202,9 @@ export function ENSStep() {
                           );
                         }}
                         options={[
-                          { label: "Single Filing", value: "Single Filing" },
+                          { label: t("wizard.ens.filingOptions.single"), value: "Single Filing" },
                           {
-                            label: "Multiple Filing",
+                            label: t("wizard.ens.filingOptions.multiple"),
                             value: "Multiple Filing",
                           },
                         ]}
@@ -210,7 +214,7 @@ export function ENSStep() {
                 </div>
 
                 <div className="form-field-cell">
-                  <label className="form-field-label">Method of Payment</label>
+                  <label className="form-field-label">{t("wizard.ens.paymentMethod")}</label>
                   <Controller
                     control={control}
                     name="paymentMethod"
@@ -221,8 +225,8 @@ export function ENSStep() {
                         value={value}
                         onChange={onChange}
                         options={[
-                          { label: "Wire Transfer", value: "Wire Transfer" },
-                          { label: "Not Prepaid", value: "Not Prepaid" },
+                          { label: t("wizard.ens.paymentOptions.wire"), value: "Wire Transfer" },
+                          { label: t("wizard.ens.paymentOptions.notPrepaid"), value: "Not Prepaid" },
                         ]}
                       />
                     )}
@@ -240,13 +244,13 @@ export function ENSStep() {
                   className="form-ens-subcard"
                   title={
                     <Title level={5} className="form-step-card-title">
-                      Supplementary Declarant
+                      {t("wizard.ens.declarant")}
                     </Title>
                   }
                 >
                   <div className="form-ens-party-grid">
                     <div className="form-field-cell">
-                      <label className="form-field-label">Name</label>
+                      <label className="form-field-label">{t("wizard.ens.fields.name")}</label>
                       <Controller
                         control={control}
                         name="declarantName"
@@ -256,7 +260,7 @@ export function ENSStep() {
                       />
                     </div>
                     <div className="form-field-cell">
-                      <label className="form-field-label">Address</label>
+                      <label className="form-field-label">{t("wizard.ens.fields.address")}</label>
                       <Controller
                         control={control}
                         name="declarantAddress"
@@ -266,7 +270,7 @@ export function ENSStep() {
                       />
                     </div>
                     <div className="form-field-cell">
-                      <label className="form-field-label">City</label>
+                      <label className="form-field-label">{t("wizard.ens.fields.city")}</label>
                       <Controller
                         control={control}
                         name="declarantCity"
@@ -276,7 +280,7 @@ export function ENSStep() {
                       />
                     </div>
                     <div className="form-field-cell">
-                      <label className="form-field-label">Country</label>
+                      <label className="form-field-label">{t("wizard.ens.fields.country")}</label>
                       <Controller
                         control={control}
                         name="declarantCountry"
@@ -286,7 +290,7 @@ export function ENSStep() {
                       />
                     </div>
                     <div className="form-field-cell">
-                      <label className="form-field-label">EORI</label>
+                      <label className="form-field-label">{t("wizard.ens.fields.eori")}</label>
                       <Space.Compact className="form-field-full-width">
                         <Controller
                           control={control}
@@ -299,12 +303,12 @@ export function ENSStep() {
                           loading={validatingEori}
                           onClick={handleValidateEori}
                         >
-                          Validate
+                          {t("wizard.ens.fields.validate")}
                         </AppButton>
                       </Space.Compact>
                     </div>
                     <div className="form-field-cell">
-                      <label className="form-field-label">Email</label>
+                      <label className="form-field-label">{t("wizard.ens.fields.email")}</label>
                       <Controller
                         control={control}
                         name="declarantEmail"
@@ -327,13 +331,13 @@ export function ENSStep() {
                     className="form-ens-subcard"
                     title={
                       <Title level={5} className="form-step-card-title">
-                        Buyer
+                        {t("wizard.ens.buyer")}
                       </Title>
                     }
                   >
                     <div className="form-ens-party-grid">
                       <div className="form-field-cell">
-                        <label className="form-field-label">Name</label>
+                        <label className="form-field-label">{t("wizard.ens.fields.name")}</label>
                         <Controller
                           control={control}
                           name="buyerName"
@@ -343,7 +347,7 @@ export function ENSStep() {
                         />
                       </div>
                       <div className="form-field-cell">
-                        <label className="form-field-label">Address</label>
+                        <label className="form-field-label">{t("wizard.ens.fields.address")}</label>
                         <Controller
                           control={control}
                           name="buyerAddress"
@@ -353,7 +357,7 @@ export function ENSStep() {
                         />
                       </div>
                       <div className="form-field-cell">
-                        <label className="form-field-label">City</label>
+                        <label className="form-field-label">{t("wizard.ens.fields.city")}</label>
                         <Controller
                           control={control}
                           name="buyerCity"
@@ -363,7 +367,7 @@ export function ENSStep() {
                         />
                       </div>
                       <div className="form-field-cell">
-                        <label className="form-field-label">Country</label>
+                        <label className="form-field-label">{t("wizard.ens.fields.country")}</label>
                         <Controller
                           control={control}
                           name="buyerCountry"
@@ -380,13 +384,13 @@ export function ENSStep() {
                     className="form-ens-subcard"
                     title={
                       <Title level={5} className="form-step-card-title">
-                        Seller
+                        {t("wizard.ens.seller")}
                       </Title>
                     }
                   >
                     <div className="form-ens-party-grid">
                       <div className="form-field-cell">
-                        <label className="form-field-label">Name</label>
+                        <label className="form-field-label">{t("wizard.ens.fields.name")}</label>
                         <Controller
                           control={control}
                           name="sellerName"
@@ -396,7 +400,7 @@ export function ENSStep() {
                         />
                       </div>
                       <div className="form-field-cell">
-                        <label className="form-field-label">Address</label>
+                        <label className="form-field-label">{t("wizard.ens.fields.address")}</label>
                         <Controller
                           control={control}
                           name="sellerAddress"
@@ -406,7 +410,7 @@ export function ENSStep() {
                         />
                       </div>
                       <div className="form-field-cell">
-                        <label className="form-field-label">City</label>
+                        <label className="form-field-label">{t("wizard.ens.fields.city")}</label>
                         <Controller
                           control={control}
                           name="sellerCity"
@@ -416,7 +420,7 @@ export function ENSStep() {
                         />
                       </div>
                       <div className="form-field-cell">
-                        <label className="form-field-label">Country</label>
+                        <label className="form-field-label">{t("wizard.ens.fields.country")}</label>
                         <Controller
                           control={control}
                           name="sellerCountry"
@@ -434,21 +438,12 @@ export function ENSStep() {
                 type="info"
                 showIcon
                 className="form-ens-notes"
-                message="ENS filing notes"
+                message={t("wizard.ens.notes.title")}
                 description={
                   <>
-                    <div>
-                      Single Filing requires Buyer and Seller details. Multiple
-                      Filing requires Supplementary Declarant details.
-                    </div>
-                    <div>
-                      Straight BL uses Single Filing; Master BL uses Multiple
-                      Filing.
-                    </div>
-                    <div>
-                      Provide accurate EORI and person type where applicable for
-                      EU customs processing.
-                    </div>
+                    <div>{t("wizard.ens.notes.singleFiling")}</div>
+                    <div>{t("wizard.ens.notes.blFilingLink")}</div>
+                    <div>{t("wizard.ens.notes.eoriHint")}</div>
                   </>
                 }
               />
@@ -458,9 +453,9 @@ export function ENSStep() {
       </div>
 
       <div className="form-step-footer">
-        <AppButton onClick={prevStep}>Previous</AppButton>
+        <AppButton onClick={prevStep}>{t("common:actions.previous")}</AppButton>
         <AppButton type="primary" htmlType="submit">
-          Next
+          {t("common:actions.next")}
         </AppButton>
       </div>
     </form>

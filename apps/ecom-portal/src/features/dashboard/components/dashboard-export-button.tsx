@@ -3,6 +3,7 @@ import { AppButton } from "@solverminds/shared-ui";
 import { useDateFormat, useToast } from "@solverminds/shared-ui/hooks";
 import { Tooltip } from "antd";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { useDashboardExport } from "../hooks/use-dashboard-export";
@@ -30,6 +31,7 @@ export function DashboardExportButton({
   totalShipmentCount,
   disabled = false,
 }: DashboardExportButtonProps) {
+  const { t } = useTranslation(["dashboard", "common", "modules"]);
   const toast = useToast();
   const [open, setOpen] = useState(false);
   const [preview, setPreview] = useState<DashboardExportPreviewState | null>(
@@ -40,18 +42,21 @@ export function DashboardExportButton({
     useDashboardExport({ activeFilter });
 
   const resolvedFilterLabel =
-    filterLabel || getDashboardFilterLabel(activeFilter);
+    filterLabel || getDashboardFilterLabel(activeFilter, t);
 
   const scopeRows: DashboardExportScopeRow[] = [
-    { label: "KPI filter", value: resolvedFilterLabel },
+    { label: t("export.scopeKpiFilter"), value: resolvedFilterLabel },
     {
-      label: "Shipments",
+      label: t("export.scopeShipments"),
       value:
         shipmentCount === undefined
-          ? "Current dashboard data"
+          ? t("export.currentDashboardData")
           : totalShipmentCount !== undefined
-          ? `${shipmentCount} of ${totalShipmentCount}`
-          : String(shipmentCount),
+            ? t("export.shipmentsOf", {
+                shown: shipmentCount,
+                total: totalShipmentCount,
+              })
+            : String(shipmentCount),
     },
   ];
 
@@ -91,12 +96,16 @@ export function DashboardExportButton({
       });
       if (result.missingChartCount > 0) {
         toast.warning(
-          `${result.missingChartCount} chart${
-            result.missingChartCount === 1 ? "" : "s"
-          } could not be rendered and appear as placeholders.`,
+          result.missingChartCount === 1
+            ? t("export.chartsMissingOne", {
+                count: result.missingChartCount,
+              })
+            : t("export.chartsMissingOther", {
+                count: result.missingChartCount,
+              }),
         );
       }
-      toast.success(`"${preview.report.title}" downloaded`);
+      toast.success(t("export.downloaded", { title: preview.report.title }));
       handleClose();
     } catch {
       // Hook toasted.
@@ -105,22 +114,22 @@ export function DashboardExportButton({
 
   return (
     <>
-      <Tooltip title="Export Report">
+      <Tooltip title={t("export.buttonTooltip")}>
         <AppButton
           icon={<AppIcon icon={Icons.download} size={16} tone="download" />}
           onClick={() => setOpen(true)}
           disabled={disabled}
           loading={(isGenerating || isDownloading) && !open}
-          aria-label="Export Report"
+          aria-label={t("export.buttonTooltip")}
         >
-          Export
+          {t("common:actions.export")}
         </AppButton>
       </Tooltip>
 
       {open ? (
         <DashboardExportDialog
           open={open}
-          defaultTitle="Dashboard Report"
+          defaultTitle={t("export.defaultTitle")}
           scopeRows={scopeRows}
           generating={isGenerating}
           downloading={isDownloading}

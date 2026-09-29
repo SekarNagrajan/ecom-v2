@@ -1,0 +1,92 @@
+{
+  "subtitle": "Filter by date range, review load-to-discharge routing, and print container release orders.",
+  "search": {
+    "fromDate": "From Date",
+    "toDate": "To Date",
+    "show": "Show"
+  },
+  "columns": {
+    "releaseNo": "Release No",
+    "bookingNo": "Booking No",
+    "croDate": "CRO Date",
+    "vessel": "Vessel",
+    "voyage": "Voyage",
+    "loadPort": "Load Port",
+    "discharge": "Discharge",
+    "contType": "Cont Type",
+    "qtyBooked": "Qty Booked",
+    "qtyReleased": "Qty Released",
+    "emptyReleaseDepot": "Empty Release Depot",
+    "croValidity": "CRO Validity",
+    "status": "Status"
+  },
+  "actions": {
+    "viewDetails": "View Details",
+    "printContainerReleaseOrder": "Print Container Release Order",
+    "downloadPdf": "Download PDF",
+    "copyCroNumber": "Copy CRO number",
+    "copied": "Copied"
+  },
+  "empty": {
+    "loadErrorTitle": "Couldn't load container release orders",
+    "loadErrorMessage": "The request didn't complete. Check your connection and try again.",
+    "noResultsTitle": "No container release orders match your search",
+    "noResultsMessage": "Nothing came back for this date range. Widen the dates or clear the filters to see more results.",
+    "noContainers": "No containers on this release"
+  },
+  "errors": {
+    "fetchList": "Failed to fetch CRO summary",
+    "fetchDetail": "Failed to fetch CRO detail",
+    "fetchEligibility": "Failed to fetch eligibility",
+    "download": "Failed to download CRO document"
+  },
+  "toasts": {
+    "documentDownloaded": "CRO {{croNo}} document downloaded"
+  },
+  "status": {
+    "printed": "Printed",
+    "notPrinted": "Not Printed",
+    "eligible": "Eligible",
+    "blocked": "Blocked",
+    "released": "Released",
+    "cancelled": "Cancelled"
+  },
+  "validation": {
+    "fromDateRequired": "From date is required",
+    "toDateRequired": "To date is required",
+    "fromBeforeTo": "From date must be on or before To date"
+  },
+  "drawer": {
+    "bookingPrefix": "Booking:",
+    "routeEyebrow": "Port to Port",
+    "loadPort": "Load Port",
+    "discharge": "Discharge",
+    "sections": {
+      "details": "Release Order Details",
+      "shipment": "Shipment Details",
+      "containers": "Containers"
+    },
+    "labels": {
+      "croNumber": "CRO Number",
+      "bookingNo": "Booking No",
+      "croDate": "CRO Date",
+      "croValidity": "CRO Validity",
+      "releaseStatus": "Release Status",
+      "printStatus": "Print Status",
+      "vessel": "Vessel",
+      "voyage": "Voyage",
+      "contType": "Cont Type",
+      "emptyReleaseDepot": "Empty Release Depot",
+      "qtyBooked": "Qty Booked",
+      "qtyReleased": "Qty Released"
+    },
+    "containerColumns": {
+      "containerNo": "Container No",
+      "sizeType": "Size/Type",
+      "sealNo": "Seal No"
+    },
+    "alerts": {
+      "validUntil": "This release order is valid until <date/>."
+    }
+  }
+}

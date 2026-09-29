@@ -2,6 +2,7 @@
 import { AppButton } from "@solverminds/shared-ui";
 import { Tooltip } from "antd";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 
@@ -15,6 +16,7 @@ function getDashboardScroller(): HTMLElement | null {
 
 /** Bottom-right control — scrolls the dashboard content pane back to the top. */
 export function DashboardScrollTopButton() {
+  const { t } = useTranslation(["dashboard", "common", "modules"]);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -36,6 +38,8 @@ export function DashboardScrollTopButton() {
     getDashboardScroller()?.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const backToTop = t("a11y.backToTop");
+
   return (
     <div
       className={[
@@ -45,12 +49,12 @@ export function DashboardScrollTopButton() {
         .filter(Boolean)
         .join(" ")}
     >
-      <Tooltip title="Back to top" placement="left">
+      <Tooltip title={backToTop} placement="left">
         <AppButton
           type="primary"
           shape="circle"
           size="large"
-          aria-label="Back to top"
+          aria-label={backToTop}
           className="dashboard-scroll-top__btn"
           icon={<AppIcon icon={Icons.chevronUp} size={20} />}
           onClick={handleScrollTop}

@@ -5,6 +5,7 @@ import {
   type Control,
   type UseFormSetValue,
 } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import {
@@ -61,17 +62,18 @@ export function CargoCommodityCard({
   canRemove,
   showCopy = true,
 }: CargoCommodityCardProps) {
+  const { t } = useTranslation(["booking", "common"]);
   const path = (field: string) => `containers.${ci}.commodities.${mi}.${field}`;
 
   return (
     <div className="si-cargo-sitem">
       <div className="si-cargo-sitem__head">
         <Text type="secondary" className="form-field-label">
-          Commodity {mi + 1}
+          {t("wizard.cargo.commodityLabel", { n: mi + 1 })}
         </Text>
         <div className="si-cargo-sitem__head-actions">
           <div className="si-cargo-sitem__hazardous">
-            <label className="form-field-label">Hazardous</label>
+            <label className="form-field-label">{t("wizard.cargo.hazardous")}</label>
             <Controller
               control={control}
               name={`containers.${ci}.commodities.${mi}.isDangerousGoods`}
@@ -89,7 +91,7 @@ export function CargoCommodityCard({
           <ListActionsRow>
             {showCopy ? (
               <ListActionButton
-                title="Copy Commodity"
+                title={t("wizard.cargo.copyCommodity")}
                 icon={<AppIcon icon={Icons.copy} size={16} tone="view" />}
                 onClick={onCopy}
               />
@@ -97,16 +99,16 @@ export function CargoCommodityCard({
             <ListActionButton
               title={
                 canRemove
-                  ? "Delete Commodity"
-                  : "At Least One Commodity Is Required"
+                  ? t("wizard.cargo.deleteCommodity")
+                  : t("wizard.cargo.atLeastOneCommodityLine")
               }
               icon={<AppIcon icon={Icons.trash} size={16} tone="delete" />}
               tone="delete"
               disabled={!canRemove}
               ariaLabel={
                 canRemove
-                  ? "Delete Commodity"
-                  : "At Least One Commodity Is Required"
+                  ? t("wizard.cargo.deleteCommodity")
+                  : t("wizard.cargo.atLeastOneCommodityLine")
               }
               onClick={onRemove}
             />
@@ -117,7 +119,7 @@ export function CargoCommodityCard({
       <div className="si-cargo-sitem__grid si-cargo-sitem__grid--booking">
         <div className="form-field-cell si-cargo-sitem__hs">
           <label className="form-field-label">
-            Commodity <Text type="danger">*</Text>
+            {t("wizard.cargo.commodity")} <Text type="danger">*</Text>
           </label>
           <Controller
             control={control}
@@ -165,7 +167,7 @@ export function CargoCommodityCard({
 
         <div className="form-field-cell si-cargo-sitem__weight">
           <label className="form-field-label">
-            Weight <Text type="danger">*</Text>
+            {t("wizard.cargo.weight")} <Text type="danger">*</Text>
           </label>
           <Controller
             control={control}
@@ -176,7 +178,7 @@ export function CargoCommodityCard({
                 min={1}
                 size="large"
                 className="form-field-full-width"
-                addonAfter="kg"
+                addonAfter={t("wizard.cargo.units.kg")}
                 status={
                   cargoFieldError(errors, path("weight")) ? "error" : undefined
                 }
@@ -191,7 +193,7 @@ export function CargoCommodityCard({
         </div>
 
         <div className="form-field-cell si-cargo-sitem__pkg">
-          <label className="form-field-label">Package Type</label>
+          <label className="form-field-label">{t("wizard.cargo.packageType")}</label>
           <Controller
             control={control}
             name={`containers.${ci}.commodities.${mi}.packageType`}
@@ -200,7 +202,7 @@ export function CargoCommodityCard({
                 {...field}
                 size="large"
                 options={packageTypes}
-                placeholder="Select package type"
+                placeholder={t("wizard.cargo.packageTypePlaceholder")}
                 className="form-field-full-width"
                 showSearch
                 optionFilterProp="label"
@@ -221,7 +223,7 @@ export function CargoCommodityCard({
         </div>
 
         <div className="form-field-cell si-cargo-sitem__qty">
-          <label className="form-field-label">Quantity</label>
+          <label className="form-field-label">{t("wizard.cargo.quantity")}</label>
           <Controller
             control={control}
             name={`containers.${ci}.commodities.${mi}.packageQuantity`}
@@ -241,7 +243,7 @@ export function CargoCommodityCard({
         </div>
 
         <div className="form-field-cell si-cargo-sitem__volume">
-          <label className="form-field-label">Volume</label>
+          <label className="form-field-label">{t("wizard.cargo.volume")}</label>
           <Controller
             control={control}
             name={`containers.${ci}.commodities.${mi}.volume`}
@@ -251,7 +253,7 @@ export function CargoCommodityCard({
                 min={0}
                 size="large"
                 className="form-field-full-width"
-                addonAfter="m³"
+                addonAfter={t("wizard.cargo.units.m3")}
                 status={
                   cargoFieldError(errors, path("volume")) ? "error" : undefined
                 }
@@ -270,7 +272,7 @@ export function CargoCommodityCard({
         <div className="si-cargo-sitem__grid si-cargo-sitem__grid--booking si-cargo-sitem__dg">
           <div className="form-field-cell">
             <label className="form-field-label">
-              UN No <Text type="danger">*</Text>
+              {t("wizard.cargo.dg.unNo")} <Text type="danger">*</Text>
             </label>
             <Controller
               control={control}
@@ -303,7 +305,7 @@ export function CargoCommodityCard({
           </div>
           <div className="form-field-cell">
             <label className="form-field-label">
-              DG Class <Text type="danger">*</Text>
+              {t("wizard.cargo.dg.dgClass")} <Text type="danger">*</Text>
             </label>
             <Controller
               control={control}
@@ -314,13 +316,13 @@ export function CargoCommodityCard({
                   size="large"
                   options={dgClasses}
                   className="form-field-full-width"
-                  placeholder="DG Class"
+                  placeholder={t("wizard.cargo.dg.dgClassPlaceholder")}
                 />
               )}
             />
           </div>
           <div className="form-field-cell">
-            <label className="form-field-label">Flash Point</label>
+            <label className="form-field-label">{t("wizard.cargo.dg.flashPoint")}</label>
             <Controller
               control={control}
               name={`containers.${ci}.commodities.${mi}.flashPoint`}
@@ -328,14 +330,14 @@ export function CargoCommodityCard({
                 <Input
                   {...field}
                   size="large"
-                  placeholder="e.g. 23 C"
+                  placeholder={t("wizard.cargo.dg.flashPointPlaceholder")}
                   className="form-field-full-width"
                 />
               )}
             />
           </div>
           <div className="form-field-cell">
-            <label className="form-field-label">Shipping Name</label>
+            <label className="form-field-label">{t("wizard.cargo.dg.shippingName")}</label>
             <Controller
               control={control}
               name={`containers.${ci}.commodities.${mi}.shippingName`}
@@ -361,7 +363,7 @@ export function CargoCommodityCard({
                     onChange={onChange}
                     {...yesNoSwitchInner}
                   />
-                  <Text>Marine Pollutant</Text>
+                  <Text>{t("wizard.cargo.dg.marinePollutant")}</Text>
                 </Flex>
               )}
             />

@@ -4,5 +4,269 @@
   "createBooking": "Crear Reserva",
   "refresh": "Actualizar",
   "summaryUnavailableTitle": "Resumen del panel no disponible",
-  "summaryUnavailableMessage": "Actualice el panel para intentar cargar el resumen nuevamente."
+  "summaryUnavailableMessage": "Actualice el panel para intentar cargar el resumen nuevamente.",
+  "kpi": {
+    "totalShipments": "Envíos totales",
+    "bookingConfirmed": "Reserva confirmada",
+    "siPending": "SI pendiente",
+    "paymentPending": "Pago pendiente",
+    "inTransit": "En tránsito",
+    "confirmed": "Confirmado",
+    "atOrigin": "En origen",
+    "delivered": "Entregado",
+    "awaitingSi": "Esperando SI",
+    "outstanding": "Pendiente",
+    "invoices": "Facturas"
+  },
+  "ongoing": {
+    "title": "Transacciones en curso",
+    "columns": {
+      "actions": "Acciones",
+      "bookingNo": "N.º de reserva",
+      "blNumber": "Número BL",
+      "onlineRefNo": "N.º ref. en línea",
+      "originPort": "Puerto de origen",
+      "deliveryPort": "Puerto de entrega",
+      "departureDate": "Fecha de salida",
+      "blStatus": "Estado BL",
+      "containerNo": "N.º de contenedor",
+      "teus": "TEUs",
+      "siStatus": "Estado SI",
+      "outstandingBalUsd": "Saldo pendiente (USD)"
+    },
+    "actions": {
+      "viewBookingDetails": "Ver detalles de la reserva",
+      "viewBillOfLading": "Ver conocimiento de embarque",
+      "createShippingInstruction": "Crear instrucción de embarque (SI)",
+      "createSi": "Crear SI"
+    },
+    "empty": {
+      "title": "No se encontraron transacciones en curso",
+      "filteredMessage": "Ningún envío coincide con el filtro del panel seleccionado.",
+      "blankMessage": "Sus reservas y conocimientos de embarque en curso aparecerán aquí."
+    }
+  },
+  "status": {
+    "confirmed": "Confirmado",
+    "draft": "Borrador",
+    "cancelled": "Cancelado",
+    "issued": "Emitido"
+  },
+  "charts": {
+    "bookingStatus": "Estado de reserva",
+    "blStatus": "Estado del conocimiento de embarque",
+    "siStatus": "Estado de la instrucción de embarque",
+    "emptyBooking": "Sin datos de estado de reserva",
+    "emptyBl": "Sin datos de estado B/L",
+    "emptySi": "Sin datos de estado de instrucción de embarque"
+  },
+  "a11y": {
+    "backToTop": "Volver arriba",
+    "kpiCard": "{{title}}: {{value}}"
+  },
+  "errors": {
+    "fetchSummary": "Error al cargar el resumen del panel"
+  },
+  "actions": {
+    "viewAll": "Ver todo",
+    "viewReport": "Ver informe",
+    "view": "Ver",
+    "all": "Todo",
+    "viewDetails": "Ver detalles"
+  },
+  "volume": {
+    "title": "Análisis de volumen de envíos (TEUs)",
+    "trendTitle": "Tendencia de volumen (TEUs)",
+    "periodHintWeekly": "Volumen semanal de TEU en la etapa seleccionada",
+    "periodHintMonthly": "Volumen mensual de TEU en la etapa seleccionada",
+    "periodHintQuarterly": "Volumen trimestral de TEU en la etapa seleccionada",
+    "vsPrev": "vs anterior ({{value}})",
+    "tooltipTeus": "{{label}}: <b>{{value}} TEUs</b>",
+    "stages": {
+      "all": "Todo el volumen",
+      "booking": "Reserva",
+      "si": "SI",
+      "bl": "B/L",
+      "inTransit": "En tránsito"
+    },
+    "periods": {
+      "Weekly": "Semanal",
+      "Monthly": "Mensual",
+      "Quarterly": "Trimestral"
+    },
+    "kpiLabels": {
+      "thisWeek": "Esta semana",
+      "thisMonth": "Este mes",
+      "thisQuarter": "Este trimestre",
+      "thisYear": "Este año"
+    }
+  },
+  "planning": {
+    "title": "Planificación de envíos próximos",
+    "viewAllTooltip": "Ver todas las reservas próximas",
+    "bookingsNext7Days": "Reservas (próximos 7 días)",
+    "teus": "TEUs",
+    "week": "Semana",
+    "total": "Total",
+    "legendBookings": "Reservas",
+    "legendPendingSi": "SI pendiente",
+    "emptyDay": "Sin reservas",
+    "emptyDayTooltip": "Sin reservas este día",
+    "weekTotal": "Total de la semana",
+    "clickToView": " — clic para ver",
+    "bookingOne": "1 reserva",
+    "bookingMany": "{{count}} reservas",
+    "pendingSiOne": "1 instrucción de embarque pendiente",
+    "pendingSiMany": "{{count}} instrucciones de embarque pendientes",
+    "paymentOne": "1 pago pendiente",
+    "paymentMany": "{{count}} pagos pendientes",
+    "needSi": "{{count}} necesitan instrucción de embarque",
+    "paymentPendingCount": "{{count}} pago pendiente",
+    "dayAria": "{{day}} {{week}}: {{summary}}",
+    "days": {
+      "mon": "Lun",
+      "tue": "Mar",
+      "wed": "Mié",
+      "thu": "Jue",
+      "fri": "Vie",
+      "sat": "Sáb",
+      "sun": "Dom"
+    }
+  },
+  "planningDrawer": {
+    "eyebrow": "RESERVAS PRÓXIMAS",
+    "route": "Ruta",
+    "status": "Estado",
+    "capacity": "Capacidad",
+    "capacityTeu": "{{count}} TEU",
+    "siPending": "SI pendiente",
+    "paymentDue": "Pago pendiente",
+    "viewDetails": "Ver detalles",
+    "empty": "No hay reservas para este día"
+  },
+  "intelligence": {
+    "title": "Inteligencia de envíos",
+    "viewReportTooltip": "Abrir el informe completo de inteligencia",
+    "topConsignees": "Principales consignatarios",
+    "viewAllConsigneesTooltip": "Ver todos los consignatarios por volumen FEU",
+    "total": "Total",
+    "segments": "{{count}} segmentos",
+    "totalTeus": "{{count}} TEUs",
+    "tooltipFeus": "{{name}}: {{value}} FEUs ({{percent}}%)",
+    "columns": {
+      "teus": "TEUs",
+      "share": "Participación",
+      "volume": "Volumen",
+      "company": "Empresa",
+      "rank": "#"
+    },
+    "dimensions": {
+      "origin": "Origen",
+      "pol": "POL",
+      "pod": "POD",
+      "pickup": "Recogida",
+      "consignee": "Consignatario",
+      "destination": "Destino"
+    },
+    "dimensionColumns": {
+      "origin": "Origen",
+      "pol": "Puerto de carga",
+      "pod": "Puerto de descarga",
+      "pickup": "Recogida",
+      "consignee": "Consignatario",
+      "destination": "Destino"
+    }
+  },
+  "lanes": {
+    "topActive": "Rutas activas principales",
+    "viewAllByFeu": "Ver todas las rutas por volumen FEU",
+    "recentlyUsed": "Rutas usadas recientemente",
+    "recentlyUsedHint": "Últimas reservas en estos corredores",
+    "viewAllRecentlyUsed": "Ver todas las rutas usadas recientemente",
+    "opportunities": "Oportunidades de rutas",
+    "viewAllOpportunities": "Ver todas las oportunidades de rutas",
+    "quietContracted": "Rutas contratadas inactivas",
+    "quietHint": "Sin actividad en los últimos 90 días",
+    "suggestedNew": "Nuevas rutas sugeridas",
+    "suggestedHint": "Según su historial de reservas",
+    "noActivity": "Sin actividad",
+    "lanePolPod": "Ruta (POL → POD)",
+    "feus": "FEUs",
+    "share": "Participación",
+    "volume": "Volumen",
+    "suggestions": {
+      "highPotential": "Alto potencial",
+      "mediumPotential": "Potencial medio"
+    }
+  },
+  "schedules": {
+    "title": "Horarios de buques próximos",
+    "voyageLine": "Viaje {{voyage}} · {{service}} · {{pol}} → {{pod}}",
+    "etd": "ETD {{date}}",
+    "cutoff": "Corte SI/VGM: {{date}}"
+  },
+  "recentBookings": {
+    "title": "Reservas recientes",
+    "viewAll": "Ver todo",
+    "voyage": "Viaje {{voyage}}",
+    "footer": "Mostrando {{shown}} de {{total}} reservas activas — última actualización {{updated}}",
+    "columns": {
+      "bookingNo": "N.º de reserva",
+      "vesselVoyage": "Buque / Viaje",
+      "route": "Ruta",
+      "etd": "ETD",
+      "status": "Estado",
+      "action": "Acción"
+    },
+    "status": {
+      "pending": "Pendiente",
+      "blIssued": "B/L emitido",
+      "completed": "Completado"
+    }
+  },
+  "notices": {
+    "title": "Avisos y comunicados"
+  },
+  "export": {
+    "buttonTooltip": "Exportar informe",
+    "dialogTitle": "Exportar informe",
+    "previewTitle": "Vista previa del informe",
+    "defaultTitle": "Informe del panel",
+    "reportTitle": "Título del informe",
+    "reportTitlePlaceholder": "p. ej. Informe del panel",
+    "format": "Formato",
+    "formatPdf": "PDF",
+    "formatPptx": "PowerPoint",
+    "preview": "Vista previa",
+    "downloadPdf": "Descargar PDF",
+    "downloadPptx": "Descargar PowerPoint",
+    "generating": "Generando informe…",
+    "updatingPreview": "Actualizando vista previa…",
+    "previewDisclaimer": "Vista previa — el diseño final puede diferir ligeramente.",
+    "scopeKpiFilter": "Filtro KPI",
+    "scopeShipments": "Envíos",
+    "currentDashboardData": "Datos actuales del panel",
+    "shipmentsOf": "{{shown}} de {{total}}",
+    "ariaPdfPreview": "Vista previa PDF",
+    "ariaPptxPreview": "Vista previa de PowerPoint",
+    "slideOf": "Diapositiva {{current}} de {{total}}",
+    "chartUnavailable": "No se pudo representar el gráfico.",
+    "chartUnavailableShort": "Gráfico no disponible",
+    "continued": "{{title}} (cont.)",
+    "reportScope": "Alcance del informe",
+    "pageOf": "Página {{page}} de {{total}}",
+    "generatedBy": "Generado por {{name}}",
+    "appliedFilters": "Filtros aplicados",
+    "downloaded": "\"{{title}}\" descargado",
+    "chartsMissingOne": "{{count}} gráfico no se pudo representar y aparece como marcador de posición.",
+    "chartsMissingOther": "{{count}} gráficos no se pudieron representar y aparecen como marcadores de posición.",
+    "validation": {
+      "titleMin": "El título del informe debe tener al menos 3 caracteres",
+      "titleMax": "El título del informe debe tener como máximo 150 caracteres"
+    },
+    "errors": {
+      "previewFailed": "Error al generar la vista previa del informe",
+      "downloadFailed": "Error al descargar el informe"
+    }
+  }
 }

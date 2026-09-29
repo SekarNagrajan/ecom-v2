@@ -2,6 +2,7 @@
 import { AppButton } from "@solverminds/shared-ui";
 import { Card, Table, Typography } from "antd";
 
+import { useTranslation } from "react-i18next";
 import { AppIcon, Icons } from "../../../components/icons";
 import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import type { BookingRateOption } from "../api/booking.api";
@@ -29,11 +30,12 @@ export function BookingSelectedRatePanel({
   onSelect,
   onChange,
 }: BookingSelectedRatePanelProps) {
+  const { t } = useTranslation(["booking", "common"]);
   if (selectedRate) {
     return (
       <Card
         size="small"
-        title="Rate"
+        title={t("booking:wizard.rates.title")}
         className="form-step-card form-step-section booking-selected-rate-panel booking-selected-rate-panel--selected"
         extra={
           <AppButton
@@ -42,14 +44,14 @@ export function BookingSelectedRatePanel({
             icon={<AppIcon icon={Icons.refreshCw} size={14} />}
             onClick={onChange}
           >
-            Change Rate
+            {t("booking:wizard.rates.changeRate")}
           </AppButton>
         }
       >
         <dl className="booking-selected-rate-panel__fields">
           <div className="booking-selected-rate-panel__field">
             <Text type="primary" className="booking-selected-rate-panel__label">
-              Rate No
+              {t("booking:wizard.rates.rateNo")}
             </Text>
             <Text strong className="booking-selected-rate-panel__value">
               {selectedRate.rateNo}
@@ -57,7 +59,7 @@ export function BookingSelectedRatePanel({
           </div>
           <div className="booking-selected-rate-panel__field">
             <Text type="primary" className="booking-selected-rate-panel__label">
-              Equipment
+              {t("booking:wizard.rates.equipment")}
             </Text>
             <Text strong className="booking-selected-rate-panel__value">
               {selectedRate.eqpType}
@@ -65,7 +67,7 @@ export function BookingSelectedRatePanel({
           </div>
           <div className="booking-selected-rate-panel__field">
             <Text type="primary" className="booking-selected-rate-panel__label">
-              Amount
+              {t("booking:wizard.rates.amount")}
             </Text>
             <Text strong className="booking-selected-rate-panel__value">
               {formatRateAmount(selectedRate)}
@@ -79,7 +81,7 @@ export function BookingSelectedRatePanel({
   return (
     <Card
       size="small"
-      title="Available Rates"
+      title={t("booking:wizard.rates.availableTitle")}
       className="form-step-card form-step-section booking-selected-rate-panel booking-selected-rate-panel--table"
     >
       <div className="booking-rates-table custom-scroll">
@@ -90,14 +92,14 @@ export function BookingSelectedRatePanel({
           pagination={false}
           dataSource={rates}
           columns={[
-            { title: "Rate No", dataIndex: "rateNo" },
+            { title: t("booking:wizard.rates.rateNo"), dataIndex: "rateNo" },
             {
-              title: "Equipment",
+              title: t("booking:wizard.rates.equipment"),
               dataIndex: "eqpType",
               width: 140,
             },
             {
-              title: "Amount",
+              title: t("booking:wizard.rates.amount"),
               key: "amount",
               width: 140,
               render: (_: unknown, row: BookingRateOption) =>
@@ -115,7 +117,7 @@ export function BookingSelectedRatePanel({
                   disabled={selecting}
                   onClick={() => void onSelect(row)}
                 >
-                  Select
+                  {t("common:actions.select")}
                 </AppButton>
               ),
             },
@@ -125,7 +127,7 @@ export function BookingSelectedRatePanel({
               <ModuleEmptyState
                 artSize="sm"
                 variant="blank"
-                title="No rates for this lane"
+                title={t("booking:wizard.rates.emptyLane")}
                 style={{ padding: 12 }}
               />
             ),

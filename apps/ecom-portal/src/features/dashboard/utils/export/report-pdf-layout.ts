@@ -8,6 +8,7 @@ import type {
   DashboardReportSection,
   DashboardReportTableSection,
 } from "../../types/dashboard-export.types";
+import type { ReportExportLabels } from "./report-shared.utils";
 import {
   CHART_PRINT,
   CONTENT_WIDTH,
@@ -31,6 +32,7 @@ export function drawHeaderBlock(
   doc: jsPDF,
   report: DashboardReport,
   formattedGeneratedAt: string,
+  labels: ReportExportLabels,
 ): number {
   let y: number = PAGE.marginTop;
 
@@ -52,7 +54,7 @@ export function drawHeaderBlock(
   y += SPACING.afterMeta;
 
   if (report.appliedFilters.length > 0) {
-    y = drawScopePanel(doc, y, report.appliedFilters);
+    y = drawScopePanel(doc, y, report.appliedFilters, labels);
   }
 
   y += 8;
@@ -67,6 +69,7 @@ function drawScopePanel(
   doc: jsPDF,
   y: number,
   filters: DashboardReport["appliedFilters"],
+  labels: ReportExportLabels,
 ): number {
   const panelPadding = 12;
   const panelTitleHeight = 14;
@@ -86,7 +89,7 @@ function drawScopePanel(
   doc.setFont(FONT.family, "bold");
   doc.setFontSize(FONT.small);
   doc.setTextColor(...INK.body);
-  doc.text("Report scope", innerX, cursorY);
+  doc.text(labels.reportScope, innerX, cursorY);
   cursorY += panelTitleHeight;
 
   const columnWidth =
@@ -250,6 +253,7 @@ function drawChartSection(
   y: number,
   section: DashboardReportChartSection,
   pngDataUrl: string | undefined,
+  labels: ReportExportLabels,
 ): number {
   let cursor = ensureSpace(doc, y, CHART_PRINT.height + 70);
   cursor = drawSectionHeading(doc, cursor, section);
@@ -258,7 +262,7 @@ function drawChartSection(
     doc.setFont(FONT.family, "italic");
     doc.setFontSize(FONT.body);
     doc.setTextColor(...INK.muted);
-    doc.text("Chart could not be rendered.", PAGE.marginX, cursor);
+    doc.text(labels.chartUnavailable, PAGE.marginX, cursor);
     return cursor + 20 + SPACING.afterSection;
   }
 
@@ -356,12 +360,19 @@ export function drawSection(
   y: number,
   section: DashboardReportSection,
   chartImages: Map<string, string>,
+  labels: ReportExportLabels,
 ): number {
   switch (section.type) {
     case "KPI":
       return drawKpiSection(doc, y, section);
     case "CHART":
-      return drawChartSection(doc, y, section, chartImages.get(section.id));
+      return drawChartSection(
+        doc,
+        y,
+        section,
+        chartImages.get(section.id),
+        labels,
+      );
     case "TABLE":
       return drawTableSection(doc, y, section);
     default: {
@@ -371,7 +382,11 @@ export function drawSection(
   }
 }
 
-export function drawFooters(doc: jsPDF, report: DashboardReport): void {
+export function drawFooters(
+  doc: jsPDF,
+  report: DashboardReport,
+  labels: ReportExportLabels,
+): void {
   const total = doc.getNumberOfPages();
   const footerY = PAGE.height - PAGE.marginBottom + 22;
 
@@ -389,8 +404,15 @@ export function drawFooters(doc: jsPDF, report: DashboardReport): void {
     doc.setFontSize(FONT.small);
     doc.setTextColor(...INK.muted);
     doc.text(report.title, PAGE.marginX, footerY);
-    doc.text(`Page ${page} of ${total}`, PAGE.width - PAGE.marginX, footerY, {
-      align: "right",
-    });
+    doc.text(
+      labels.pageOf
+        .replace("{{page}}", String(page))
+        .replace("{{total}}", String(total)),
+      PAGE.width - PAGE.marginX,
+      footerY,
+      {
+        align: "right",
+      },
+    );
   }
 }

@@ -4,6 +4,7 @@ import { Tag, Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
 import { Fragment, useState } from "react";
 
+import { useTranslation } from "react-i18next";
 import { AppIcon, Icons } from "../../../components/icons";
 import type { BookingRouteLeg, SelectedRoute } from "../types/booking.types";
 
@@ -55,22 +56,34 @@ function isMultimodalRoute(route: SelectedRoute): boolean {
   );
 }
 
-function routingLabel(route: SelectedRoute): string {
+type TranslateFn = (key: string, options?: Record<string, unknown>) => string;
+
+function routingLabel(route: SelectedRoute, t?: TranslateFn): string {
   if (isMultimodalRoute(route)) {
     const moduleCount = Math.max(
       (route.legs?.length ?? 1) - 1,
       route.transshipmentCount ?? 0,
     );
+    if (t) {
+      return moduleCount > 0
+        ? t("booking:wizard.routeKind.multimodalCount", { count: moduleCount })
+        : t("booking:wizard.routeKind.multimodal");
+    }
     return moduleCount > 0 ? `Multimodal (${moduleCount})` : "Multimodal";
   }
   if (!route.isDirect) {
     const stops =
       route.transshipmentCount ?? Math.max((route.legs?.length ?? 1) - 1, 0);
+    if (t) {
+      return stops > 0
+        ? t("booking:wizard.routeKind.stops", { count: stops })
+        : t("booking:wizard.routeKind.transshipment");
+    }
     return stops > 0
       ? `${stops} ${stops === 1 ? "Stop" : "Stops"}`
       : "Transshipment";
   }
-  return "Direct";
+  return t ? t("booking:wizard.routeKind.direct") : "Direct";
 }
 
 function canExpandModules(route: SelectedRoute): boolean {
@@ -289,7 +302,7 @@ function buildRouteStops(route: SelectedRoute): RouteStop[] {
   return stops.map((stop, index) => ({ ...stop, index: index + 1 }));
 }
 
-function TransportTranscript({ route }: { route: SelectedRoute }) {
+function TransportTranscript({ route, t }: { route: SelectedRoute; t: TranslateFn }) {
   const nodes = buildTransportNodes(route);
 
   return (
@@ -390,7 +403,7 @@ function RouteStopTimes({ eta, etd }: { eta?: string; etd?: string }) {
   );
 }
 
-function BookingRouteDetails({ route }: { route: SelectedRoute }) {
+function BookingRouteDetails({ route, t }: { route: SelectedRoute; t: TranslateFn }) {
   const stops = buildRouteStops(route);
   const hasCutoffs = Boolean(
     route.gateInCutoff || route.siDocCutoff || route.vgmCutoff,
@@ -402,7 +415,7 @@ function BookingRouteDetails({ route }: { route: SelectedRoute }) {
         <>
           <div className="booking-route-details__header">
             <Title level={5} className="booking-route-details__title">
-              Route
+              {t("booking:wizard.routing.routeTitle")}
             </Title>
           </div>
 
@@ -415,7 +428,7 @@ function BookingRouteDetails({ route }: { route: SelectedRoute }) {
                   <div className="booking-route-stop__rail">
                     <span
                       className="booking-route-stop__node app-icon-inherit"
-                      aria-label={stop.etd ? "Departure" : "Arrival"}
+                      aria-label={stop.etd ? t("booking:wizard.routing.departure") : t("booking:wizard.routing.arrival")}
                     >
                       <AppIcon icon={nodeIcon} size={14} />
                     </span>
@@ -452,16 +465,16 @@ function BookingRouteDetails({ route }: { route: SelectedRoute }) {
       {hasCutoffs ? (
         <div className="booking-route-details__deadlines">
           <Text className="booking-route-details__deadlines-title">
-            Cut-offs
+            {t("booking:wizard.routing.cutoffs")}
           </Text>
-          <RouteDeadlines route={route} />
+          <RouteDeadlines route={route} t={t} />
         </div>
       ) : null}
     </div>
   );
 }
 
-function RouteDeadlines({ route }: { route: SelectedRoute }) {
+function RouteDeadlines({ route, t }: { route: SelectedRoute; t: TranslateFn }) {
   if (!(route.gateInCutoff || route.siDocCutoff || route.vgmCutoff)) {
     return null;
   }
@@ -475,7 +488,7 @@ function RouteDeadlines({ route }: { route: SelectedRoute }) {
           </span>
           <span>
             <span className="booking-routing-card__deadline-label">
-              Gate-In
+              {t("booking:wizard.routing.gateIn")}
             </span>
             <span className="booking-routing-card__deadline-value">
               {route.gateInCutoff}
@@ -490,7 +503,7 @@ function RouteDeadlines({ route }: { route: SelectedRoute }) {
           </span>
           <span>
             <span className="booking-routing-card__deadline-label">
-              SI Cut-Off
+              {t("booking:wizard.routing.siCutoff")}
             </span>
             <span className="booking-routing-card__deadline-value">
               {route.siDocCutoff}
@@ -505,7 +518,7 @@ function RouteDeadlines({ route }: { route: SelectedRoute }) {
           </span>
           <span>
             <span className="booking-routing-card__deadline-label">
-              VGM Cut-Off
+              {t("booking:wizard.routing.vgmCutoff")}
             </span>
             <span className="booking-routing-card__deadline-value">
               {route.vgmCutoff}
@@ -521,10 +534,12 @@ function BookingRouteDetailsDrawer({
   route,
   open,
   onClose,
+  t,
 }: {
   route: SelectedRoute;
   open: boolean;
   onClose: () => void;
+  t: TranslateFn;
 }) {
   return (
     <AppDrawer
@@ -537,7 +552,7 @@ function BookingRouteDetailsDrawer({
           <AppIcon icon={Icons.route} size={22} />
           <div>
             <Title level={4} className="booking-drawer-title__text">
-              Route Details
+              {t("booking:wizard.routing.routeDetails")}
             </Title>
             <Text type="secondary" className="booking-drawer-title__meta">
               {route.vesselName} ({route.voyage}
@@ -548,7 +563,7 @@ function BookingRouteDetailsDrawer({
       }
     >
       <div className="booking-route-details-drawer">
-        <BookingRouteDetails route={route} />
+        <BookingRouteDetails route={route} t={t} />
       </div>
     </AppDrawer>
   );
@@ -562,12 +577,13 @@ export function BookingRouteCard({
   onToggle,
   selected = false,
 }: BookingRouteCardProps) {
+  const { t } = useTranslation(["booking", "common"]);
   const [isDetailsDrawerOpen, setIsDetailsDrawerOpen] = useState(false);
   const expandable = canExpandModules(route);
   const hasCutoffs = Boolean(
     route.gateInCutoff || route.siDocCutoff || route.vgmCutoff,
   );
-  const label = routingLabel(route);
+  const label = routingLabel(route, t);
   const useDrawer = detailsMode === "drawer";
   const showDetailsAction = useDrawer || expandable || hasCutoffs;
 
@@ -635,7 +651,7 @@ export function BookingRouteCard({
                 <span className="booking-routing-card__connector-dot" />
                 <span className="booking-routing-card__connector-rail" />
                 <span className="booking-routing-card__connector-pill">
-                  {route.transitTimeDays} Days
+                  {t("booking:wizard.routing.days", { count: route.transitTimeDays })}
                 </span>
                 <span className="booking-routing-card__connector-rail" />
                 <span className="booking-routing-card__connector-dot" />
@@ -691,7 +707,7 @@ export function BookingRouteCard({
               aria-expanded={useDrawer ? isDetailsDrawerOpen : expanded}
               block
             >
-              {useDrawer || !expanded ? "Show Details" : "Close Details"}
+              {useDrawer || !expanded ? t("booking:wizard.routing.showDetails") : t("booking:wizard.routing.closeDetails")}
             </AppButton>
           ) : null}
         </div>
@@ -702,11 +718,12 @@ export function BookingRouteCard({
           route={route}
           open={isDetailsDrawerOpen}
           onClose={() => setIsDetailsDrawerOpen(false)}
+          t={t}
         />
       ) : (
         <>
           <div className="booking-routing-card__transport-wrap">
-            <TransportTranscript route={route} />
+            <TransportTranscript route={route} t={t} />
           </div>
           <div
             className={[
@@ -720,7 +737,7 @@ export function BookingRouteCard({
             aria-hidden={!expanded}
           >
             <div className="booking-routing-card__details-panel-inner">
-              <BookingRouteDetails route={route} />
+              <BookingRouteDetails route={route} t={t} />
             </div>
           </div>
         </>

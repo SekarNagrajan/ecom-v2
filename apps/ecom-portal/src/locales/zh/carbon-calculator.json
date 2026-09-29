@@ -1,3 +1,105 @@
 {
-  "subtitle": "根据贸易航线和货物参数估算货运的 CO₂e 排放量。"
+  "subtitle": "根据贸易航线和货物参数估算货运的 CO₂e 排放量。",
+  "form": {
+    "origin": "起运地",
+    "destination": "目的地",
+    "weightKg": "重量 (kg)",
+    "equipment": "设备",
+    "qty": "数量",
+    "fuel": "燃料",
+    "unit": "单位",
+    "actions": "操作",
+    "placeholders": {
+      "origin": "起运地",
+      "destination": "目的地",
+      "equipment": "设备",
+      "fuelOptional": "可选"
+    }
+  },
+  "units": {
+    "kgCo2e": "kg CO₂e",
+    "tCo2e": "t CO₂e",
+    "gCo2e": "g CO₂e",
+    "kg": "kg"
+  },
+  "actions": {
+    "calculate": "计算",
+    "exportPdf": "导出 PDF"
+  },
+  "empty": {
+    "noEstimateTitle": "暂无估算",
+    "noEstimateMessage": "请选择起运地、目的地和货物详情，然后点击计算。",
+    "noResultTitle": "暂无结果",
+    "noLegBreakdownTitle": "无航段明细",
+    "noLegBreakdownMessage": "当估算包含运输航段时，各航段排放将显示在此处。",
+    "noLegBreakdownAvailable": "暂无航段明细",
+    "noModeBreakdownAvailable": "暂无运输方式明细"
+  },
+  "results": {
+    "containers_one": "{{count}} 个集装箱",
+    "containers_other": "{{count}} 个集装箱",
+    "emissionsBreakdown": "排放明细",
+    "gridView": "表格视图",
+    "chartView": "图表视图",
+    "methodology": "方法学：{{standard}}（因子版本 {{version}}）。数据为估算值；实际排放会因船舶、天气和航线而异。"
+  },
+  "kpi": {
+    "totalCo2e": "总 CO₂e",
+    "tankToWheel": "油箱到车轮",
+    "wellToTank": "油井到油箱",
+    "perTeu": "每 TEU",
+    "perTonneKm": "每吨公里"
+  },
+  "columns": {
+    "mode": "方式",
+    "from": "起点",
+    "to": "终点",
+    "distanceKm": "距离 (km)",
+    "co2eKg": "CO₂e (kg)",
+    "co2eT": "CO₂e (t)"
+  },
+  "charts": {
+    "emissionScopeTitle": "排放范围",
+    "emissionScopeHint": "油箱到车轮与油井到油箱占全部 CO₂e 的份额",
+    "byLegTitle": "按运输航段",
+    "byLegHint": "各起运地–目的地航段的 CO₂e 贡献",
+    "byModeTitle": "按运输方式",
+    "byModeHint": "海运、公路、铁路及其他方式的合计 CO₂e",
+    "emissionScopeSeries": "排放范围",
+    "byModeSeries": "按方式",
+    "modeTooltip": "方式：{{mode}}"
+  },
+  "modes": {
+    "SEA": "海运",
+    "ROAD": "公路",
+    "RAIL": "铁路",
+    "AIR": "空运",
+    "INLAND_WATER": "内河水运"
+  },
+  "validation": {
+    "originLocode": "起运地 LOCODE 必须为 5 个字符。",
+    "destinationLocode": "目的地 LOCODE 必须为 5 个字符。",
+    "cargoWeightPositive": "货物重量必须大于零。",
+    "equipmentRequired": "设备为必填项。",
+    "destinationMustDiffer": "目的地必须与起运地不同。"
+  },
+  "errors": {
+    "computeFailed": "计算碳足迹失败。",
+    "lookupsFailed": "获取碳计算器查找数据失败",
+    "downloadFailed": "下载碳估算 PDF 失败",
+    "networkError": "网络错误"
+  },
+  "toasts": {
+    "pdfDownloaded": "碳估算 PDF 已下载"
+  },
+  "a11y": {
+    "loading": "加载中",
+    "breakdownViewMode": "明细视图模式",
+    "emissionScopeChart": "排放范围图表",
+    "scopeSplitChart": "油箱到车轮与油井到油箱 CO2e 占比",
+    "emissionsByLegChart": "按航段排放图表",
+    "co2eByLeg": "按运输航段的 CO2e",
+    "emissionsByModeChart": "按方式排放图表",
+    "co2eByMode": "按运输方式的 CO2e"
+  }
 }

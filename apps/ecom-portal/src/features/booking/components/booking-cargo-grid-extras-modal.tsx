@@ -6,6 +6,7 @@ import {
   type Control,
   type UseFormSetValue,
 } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import {
   FORM_YES_NO_SWITCH_CLASS,
@@ -37,11 +38,14 @@ interface BookingCargoGridExtrasModalProps {
   onClose: () => void;
 }
 
-function modalTitle(target: BookingCargoGridExtrasTarget | null): string {
-  if (!target) return "Container details";
-  if (target.kind === "oog") return "OOG Details";
-  if (target.kind === "reefer") return "Reefer Details";
-  return `DG Details — Commodity ${target.commodityIndex + 1}`;
+function modalTitle(
+  target: BookingCargoGridExtrasTarget | null,
+  t: (key: string, opts?: Record<string, unknown>) => string,
+): string {
+  if (!target) return t("wizard.cargo.containerDetails");
+  if (target.kind === "oog") return t("wizard.cargo.oog.title");
+  if (target.kind === "reefer") return t("wizard.cargo.reefer.title");
+  return t("wizard.cargo.dg.titleCommodity", { n: target.commodityIndex + 1 });
 }
 
 /** Compact popup for grid-toggled OOG / reefer / DG detail fields. */
@@ -54,6 +58,7 @@ export function BookingCargoGridExtrasModal({
   setValue,
   onClose,
 }: BookingCargoGridExtrasModalProps) {
+  const { t } = useTranslation(["booking", "common"]);
   const ci = target?.containerIndex ?? 0;
   const mi = target?.kind === "dg" ? target.commodityIndex : 0;
   const dgPath = (field: string) =>
@@ -68,12 +73,12 @@ export function BookingCargoGridExtrasModal({
       centered
       title={
         <Title level={5} className="booking-cargo-grid-extras-modal-title">
-          {modalTitle(target)}
+          {modalTitle(target, t)}
         </Title>
       }
       footer={
         <AppButton type="primary" onClick={onClose}>
-          Done
+          {t("wizard.cargo.done")}
         </AppButton>
       }
     >
@@ -81,7 +86,7 @@ export function BookingCargoGridExtrasModal({
         <div className="booking-cargo-grid-extras-modal-fields">
           <div className="form-field-cell">
             <label className="form-field-label">
-              Dimension Unit <Text type="danger">*</Text>
+              {t("wizard.cargo.oog.dimensionUnit")} <Text type="danger">*</Text>
             </label>
             <Controller
               control={control}
@@ -100,7 +105,7 @@ export function BookingCargoGridExtrasModal({
             />
           </div>
           <div className="form-field-cell">
-            <label className="form-field-label">Overlength Forward</label>
+            <label className="form-field-label">{t("wizard.cargo.oog.olForward")}</label>
             <Controller
               control={control}
               name={`containers.${ci}.olForward`}
@@ -114,7 +119,7 @@ export function BookingCargoGridExtrasModal({
             />
           </div>
           <div className="form-field-cell">
-            <label className="form-field-label">Overlength Aft</label>
+            <label className="form-field-label">{t("wizard.cargo.oog.olAft")}</label>
             <Controller
               control={control}
               name={`containers.${ci}.olAft`}
@@ -128,7 +133,7 @@ export function BookingCargoGridExtrasModal({
             />
           </div>
           <div className="form-field-cell">
-            <label className="form-field-label">Overwidth Left</label>
+            <label className="form-field-label">{t("wizard.cargo.oog.owLeft")}</label>
             <Controller
               control={control}
               name={`containers.${ci}.owLeft`}
@@ -142,7 +147,7 @@ export function BookingCargoGridExtrasModal({
             />
           </div>
           <div className="form-field-cell">
-            <label className="form-field-label">Overwidth Right</label>
+            <label className="form-field-label">{t("wizard.cargo.oog.owRight")}</label>
             <Controller
               control={control}
               name={`containers.${ci}.owRight`}
@@ -156,7 +161,7 @@ export function BookingCargoGridExtrasModal({
             />
           </div>
           <div className="form-field-cell">
-            <label className="form-field-label">Overheight</label>
+            <label className="form-field-label">{t("wizard.cargo.oog.overheight")}</label>
             <Controller
               control={control}
               name={`containers.${ci}.oh`}
@@ -176,7 +181,7 @@ export function BookingCargoGridExtrasModal({
         <div className="booking-cargo-grid-extras-modal-fields">
           <div className="form-field-cell">
             <label className="form-field-label">
-              Set Temp <Text type="danger">*</Text>
+              {t("wizard.cargo.reefer.setTemp")} <Text type="danger">*</Text>
             </label>
             <Controller
               control={control}
@@ -196,7 +201,7 @@ export function BookingCargoGridExtrasModal({
             ) : null}
           </div>
           <div className="form-field-cell">
-            <label className="form-field-label">Min Temp</label>
+            <label className="form-field-label">{t("wizard.cargo.reefer.minTemp")}</label>
             <Controller
               control={control}
               name={`containers.${ci}.minTemp`}
@@ -210,7 +215,7 @@ export function BookingCargoGridExtrasModal({
             />
           </div>
           <div className="form-field-cell">
-            <label className="form-field-label">Max Temp</label>
+            <label className="form-field-label">{t("wizard.cargo.reefer.maxTemp")}</label>
             <Controller
               control={control}
               name={`containers.${ci}.maxTemp`}
@@ -225,7 +230,7 @@ export function BookingCargoGridExtrasModal({
           </div>
           <div className="form-field-cell">
             <label className="form-field-label">
-              Temp Unit <Text type="danger">*</Text>
+              {t("wizard.cargo.reefer.tempUnit")} <Text type="danger">*</Text>
             </label>
             <Controller
               control={control}
@@ -235,8 +240,14 @@ export function BookingCargoGridExtrasModal({
                   {...field}
                   size="large"
                   options={[
-                    { value: "Celsius", label: "Celsius" },
-                    { value: "Fahrenheit", label: "Fahrenheit" },
+                    {
+                      value: "Celsius",
+                      label: t("wizard.cargo.reefer.celsius"),
+                    },
+                    {
+                      value: "Fahrenheit",
+                      label: t("wizard.cargo.reefer.fahrenheit"),
+                    },
                   ]}
                   className="form-field-full-width"
                 />
@@ -250,7 +261,7 @@ export function BookingCargoGridExtrasModal({
         <div className="booking-cargo-grid-extras-modal-fields">
           <div className="form-field-cell">
             <label className="form-field-label">
-              UN No <Text type="danger">*</Text>
+              {t("wizard.cargo.dg.unNo")} <Text type="danger">*</Text>
             </label>
             <Controller
               control={control}
@@ -283,7 +294,7 @@ export function BookingCargoGridExtrasModal({
           </div>
           <div className="form-field-cell">
             <label className="form-field-label">
-              DG Class <Text type="danger">*</Text>
+              {t("wizard.cargo.dg.dgClass")} <Text type="danger">*</Text>
             </label>
             <Controller
               control={control}
@@ -294,13 +305,13 @@ export function BookingCargoGridExtrasModal({
                   size="large"
                   options={dgClasses}
                   className="form-field-full-width"
-                  placeholder="DG Class"
+                  placeholder={t("wizard.cargo.dg.dgClassPlaceholder")}
                 />
               )}
             />
           </div>
           <div className="form-field-cell">
-            <label className="form-field-label">Flash Point</label>
+            <label className="form-field-label">{t("wizard.cargo.dg.flashPoint")}</label>
             <Controller
               control={control}
               name={`containers.${ci}.commodities.${mi}.flashPoint`}
@@ -308,14 +319,14 @@ export function BookingCargoGridExtrasModal({
                 <Input
                   {...field}
                   size="large"
-                  placeholder="e.g. 23 C"
+                  placeholder={t("wizard.cargo.dg.flashPointPlaceholder")}
                   className="form-field-full-width"
                 />
               )}
             />
           </div>
           <div className="form-field-cell">
-            <label className="form-field-label">Shipping Name</label>
+            <label className="form-field-label">{t("wizard.cargo.dg.shippingName")}</label>
             <Controller
               control={control}
               name={`containers.${ci}.commodities.${mi}.shippingName`}
@@ -341,7 +352,7 @@ export function BookingCargoGridExtrasModal({
                     onChange={onChange}
                     {...yesNoSwitchInner}
                   />
-                  <Text>Marine Pollutant</Text>
+                  <Text>{t("wizard.cargo.dg.marinePollutant")}</Text>
                 </Flex>
               )}
             />

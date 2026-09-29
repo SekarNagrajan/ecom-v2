@@ -16,6 +16,7 @@ import {
   type UseFormSetValue,
   type UseFormWatch,
 } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import {
@@ -66,6 +67,7 @@ export function BookingCargoContainerFields({
   watch,
   setValue,
 }: BookingCargoContainerFieldsProps) {
+  const { t } = useTranslation(["booking", "common"]);
   const containerType = watch(`containers.${ci}.containerType`);
   const reeferMode = watch(`containers.${ci}.reeferMode`);
   const isOog = watch(`containers.${ci}.isOog`);
@@ -88,7 +90,7 @@ export function BookingCargoContainerFields({
       >
         <div className="form-field-cell">
           <label className="form-field-label">
-            Container Type <Text type="danger">*</Text>
+            {t("wizard.cargo.containerTypeRequired")} <Text type="danger">*</Text>
           </label>
           <Controller
             control={control}
@@ -98,7 +100,7 @@ export function BookingCargoContainerFields({
                 {...field}
                 size="large"
                 options={containerTypes}
-                placeholder="Select Container Type"
+                placeholder={t("wizard.cargo.containerTypePlaceholder")}
                 className="form-field-full-width"
                 showSearch
                 optionFilterProp="label"
@@ -133,7 +135,7 @@ export function BookingCargoContainerFields({
         </div>
 
         <div className="form-field-cell">
-          <label className="form-field-label">Container No.</label>
+          <label className="form-field-label">{t("wizard.cargo.containerNo")}</label>
           <Controller
             control={control}
             name={`containers.${ci}.containerNo`}
@@ -142,7 +144,7 @@ export function BookingCargoContainerFields({
                 {...field}
                 value={field.value ?? ""}
                 size="large"
-                placeholder="Container No."
+                placeholder={t("wizard.cargo.containerNo")}
                 className="form-field-full-width"
               />
             )}
@@ -151,7 +153,7 @@ export function BookingCargoContainerFields({
 
         <div className="form-field-cell booking-cargo-container-row__qty">
           <label className="form-field-label">
-            Quantity <Text type="danger">*</Text>
+            {t("wizard.cargo.quantity")} <Text type="danger">*</Text>
           </label>
           <Controller
             control={control}
@@ -168,7 +170,7 @@ export function BookingCargoContainerFields({
         </div>
 
         <div className="form-field-cell">
-          <label className="form-field-label">Equipment Status</label>
+          <label className="form-field-label">{t("wizard.cargo.equipmentStatus")}</label>
           <Controller
             control={control}
             name={`containers.${ci}.eqpStatus`}
@@ -187,7 +189,7 @@ export function BookingCargoContainerFields({
         </div>
 
         <div className="form-field-cell">
-          <label className="form-field-label">Tare Weight</label>
+          <label className="form-field-label">{t("wizard.cargo.tareWeight")}</label>
           <Controller
             control={control}
             name={`containers.${ci}.tareWeight`}
@@ -198,7 +200,7 @@ export function BookingCargoContainerFields({
                 size="large"
                 className="form-field-full-width"
                 placeholder="0"
-                addonAfter="kg"
+                addonAfter={t("wizard.cargo.units.kg")}
                 // JSP: tare readonly unless SOC — carrier equipment uses master tare
                 readOnly={!isSoc}
               />
@@ -208,7 +210,7 @@ export function BookingCargoContainerFields({
 
         <div className="form-field-cell booking-cargo-container-row__switch">
           <label className="form-field-label">
-            SOC <FieldHint title="Shipper Owned Container" />
+            {t("wizard.cargo.soc")} <FieldHint title={t("wizard.cargo.socHint")} />
           </label>
           <div className="form-yes-no-switch-wrap">
             <Controller
@@ -228,7 +230,7 @@ export function BookingCargoContainerFields({
 
         <div className="form-field-cell booking-cargo-container-row__switch">
           <label className="form-field-label">
-            OOG <FieldHint title="Out of Gauge" />
+            {t("wizard.cargo.oogLabel")} <FieldHint title={t("wizard.cargo.oogHint")} />
           </label>
           <div className="form-yes-no-switch-wrap">
             <Controller
@@ -249,7 +251,7 @@ export function BookingCargoContainerFields({
         {showReeferMode ? (
           <div className="form-field-cell booking-cargo-container-row__switch">
             <label className="form-field-label">
-              NOR <FieldHint title="Non-Operating Reefer" />
+              {t("wizard.cargo.norLabel")} <FieldHint title={t("wizard.cargo.norHint")} />
             </label>
             <div className="form-yes-no-switch-wrap">
               <Controller
@@ -275,14 +277,14 @@ export function BookingCargoContainerFields({
         <div className="booking-cargo-detail__section booking-cargo-detail__section--oog">
           <div className="booking-cargo-detail__section-head">
             <Text strong className="booking-cargo-detail__section-title">
-              Reefer Details
+              {t("wizard.cargo.reefer.title")}
             </Text>
           </div>
           <Row gutter={[24, 24]}>
             <Col xs={24} md={6}>
               <div className="form-field-cell" style={{ marginTop: -3 }}>
                 <label className="form-field-label">
-                  Set Temp <Text type="danger">*</Text>
+                  {t("wizard.cargo.reefer.setTemp")} <Text type="danger">*</Text>
                 </label>
                 <Controller
                   control={control}
@@ -304,7 +306,7 @@ export function BookingCargoContainerFields({
             </Col>
             <Col xs={24} md={6}>
               <div className="form-field-cell">
-                <label className="form-field-label">Min Temp</label>
+                <label className="form-field-label">{t("wizard.cargo.reefer.minTemp")}</label>
                 <Controller
                   control={control}
                   name={`containers.${ci}.minTemp`}
@@ -320,7 +322,7 @@ export function BookingCargoContainerFields({
             </Col>
             <Col xs={24} md={6}>
               <div className="form-field-cell">
-                <label className="form-field-label">Max Temp</label>
+                <label className="form-field-label">{t("wizard.cargo.reefer.maxTemp")}</label>
                 <Controller
                   control={control}
                   name={`containers.${ci}.maxTemp`}
@@ -337,7 +339,7 @@ export function BookingCargoContainerFields({
             <Col xs={24} md={6}>
               <div className="form-field-cell" style={{ marginTop: -3 }}>
                 <label className="form-field-label">
-                  Temp Unit <Text type="danger">*</Text>
+                  {t("wizard.cargo.reefer.tempUnit")} <Text type="danger">*</Text>
                 </label>
                 <Controller
                   control={control}
@@ -347,8 +349,14 @@ export function BookingCargoContainerFields({
                       {...field}
                       size="large"
                       options={[
-                        { value: "Celsius", label: "Celsius" },
-                        { value: "Fahrenheit", label: "Fahrenheit" },
+                        {
+                          value: "Celsius",
+                          label: t("wizard.cargo.reefer.celsius"),
+                        },
+                        {
+                          value: "Fahrenheit",
+                          label: t("wizard.cargo.reefer.fahrenheit"),
+                        },
                       ]}
                       className="form-field-full-width"
                     />
@@ -364,17 +372,17 @@ export function BookingCargoContainerFields({
         <div className="booking-cargo-detail__section booking-cargo-detail__section--oog">
           <div className="booking-cargo-detail__section-head">
             <Text strong className="booking-cargo-detail__section-title">
-              Out-of-Gauge Details
+              {t("wizard.cargo.oog.title")}
             </Text>
             <Tag color="purple" className="booking-cargo-detail__section-tag">
               OOG
             </Tag>
-            <FieldHint title="Enter over-length, over-width and over-height measurements" />
+            <FieldHint title={t("wizard.cargo.oog.hint")} />
           </div>
           <div className="booking-oog-form-grid">
             <div className="form-field-cell" style={{ marginTop: -3 }}>
               <label className="form-field-label">
-                Dimension Unit <Text type="danger">*</Text>
+                {t("wizard.cargo.oog.dimensionUnit")} <Text type="danger">*</Text>
               </label>
               <Controller
                 control={control}
@@ -393,7 +401,7 @@ export function BookingCargoContainerFields({
               />
             </div>
             <div className="form-field-cell">
-              <label className="form-field-label">Overlength Forward</label>
+              <label className="form-field-label">{t("wizard.cargo.oog.olForward")}</label>
               <Controller
                 control={control}
                 name={`containers.${ci}.olForward`}
@@ -408,7 +416,7 @@ export function BookingCargoContainerFields({
               />
             </div>
             <div className="form-field-cell">
-              <label className="form-field-label">Overlength Aft</label>
+              <label className="form-field-label">{t("wizard.cargo.oog.olAft")}</label>
               <Controller
                 control={control}
                 name={`containers.${ci}.olAft`}
@@ -423,7 +431,7 @@ export function BookingCargoContainerFields({
               />
             </div>
             <div className="form-field-cell">
-              <label className="form-field-label">Overwidth Left</label>
+              <label className="form-field-label">{t("wizard.cargo.oog.owLeft")}</label>
               <Controller
                 control={control}
                 name={`containers.${ci}.owLeft`}
@@ -438,7 +446,7 @@ export function BookingCargoContainerFields({
               />
             </div>
             <div className="form-field-cell">
-              <label className="form-field-label">Overwidth Right</label>
+              <label className="form-field-label">{t("wizard.cargo.oog.owRight")}</label>
               <Controller
                 control={control}
                 name={`containers.${ci}.owRight`}
@@ -453,7 +461,7 @@ export function BookingCargoContainerFields({
               />
             </div>
             <div className="form-field-cell">
-              <label className="form-field-label">Overheight</label>
+              <label className="form-field-label">{t("wizard.cargo.oog.overheight")}</label>
               <Controller
                 control={control}
                 name={`containers.${ci}.oh`}

@@ -11,12 +11,13 @@ import {
 import type {
   CarbonLegResult,
   CarbonResultDTO,
+  Co2eUnitLabels,
   DisplayUnit,
   TransportMode,
 } from "../types/carbon.types";
 import { formatCo2e } from "../types/carbon.types";
 
-const MODE_LABELS: Record<TransportMode, string> = {
+const DEFAULT_MODE_LABELS: Record<TransportMode, string> = {
   SEA: "Sea",
   ROAD: "Road",
   RAIL: "Rail",
@@ -24,8 +25,23 @@ const MODE_LABELS: Record<TransportMode, string> = {
   INLAND_WATER: "Inland water",
 };
 
-export function transportModeLabel(mode: TransportMode | string): string {
-  return MODE_LABELS[mode as TransportMode] ?? String(mode);
+export type CarbonModeLabels = Record<TransportMode, string>;
+
+export interface CarbonChartCopy {
+  modes: CarbonModeLabels;
+  tankToWheel: string;
+  wellToTank: string;
+  emissionScope: string;
+  byMode: string;
+  modeTooltip: (mode: string) => string;
+  unitLabels: Co2eUnitLabels;
+}
+
+export function transportModeLabel(
+  mode: TransportMode | string,
+  modeLabels: CarbonModeLabels = DEFAULT_MODE_LABELS,
+): string {
+  return modeLabels[mode as TransportMode] ?? String(mode);
 }
 
 /** Stable token colors per mode — shared by leg bars and mode donut. */
@@ -73,17 +89,18 @@ export function createCarbonScopeDonutOption(args: {
   result: CarbonResultDTO;
   unit: DisplayUnit;
   tokens: ChartTokens;
+  copy: CarbonChartCopy;
 }): ECOption {
-  const { result, unit, tokens } = args;
+  const { result, unit, tokens, copy } = args;
   const { ttw, wtt } = scopeValues(result, unit);
   const slices = [
     {
-      name: "Tank-to-wheel",
+      name: copy.tankToWheel,
       value: ttw,
       itemStyle: { color: tokens.colorPrimary },
     },
     {
-      name: "Well-to-tank",
+      name: copy.wellToTank,
       value: wtt,
       itemStyle: { color: tokens.colorSuccess },
     },
@@ -98,7 +115,7 @@ export function createCarbonScopeDonutOption(args: {
         if (!point || point.value == null) return "";
         const value = Number(point.value);
         const percent = Math.round(point.percent ?? 0);
-        return `${point.name}<br/>${formatCo2e(value, unit)} (${percent}%)`;
+        return `${point.name}<br/>${formatCo2e(value, unit, copy.unitLabels)} (${percent}%)`;
       },
     }),
     legend: createBaseLegend(tokens, {
@@ -110,7 +127,7 @@ export function createCarbonScopeDonutOption(args: {
     }),
     series: [
       {
-        name: "Emission scope",
+        name: copy.emissionScope,
         type: "pie",
         radius: ["42%", "64%"],
         center: ["50%", "44%"],
@@ -128,13 +145,16 @@ export function createCarbonLegsBarOption(args: {
   legs: CarbonLegResult[];
   unit: DisplayUnit;
   tokens: ChartTokens;
+  copy: CarbonChartCopy;
 }): ECOption {
-  const { legs, unit, tokens } = args;
+  const { legs, unit, tokens, copy } = args;
   const categories = legs.map(
-    (leg) => `${leg.from} → ${leg.to} (${transportModeLabel(leg.mode)})`,
+    (leg) =>
+      `${leg.from} → ${leg.to} (${transportModeLabel(leg.mode, copy.modes)})`,
   );
   const axis = createBaseAxisStyle(tokens);
-  const unitSuffix = unit === "kg" ? "kg CO₂e" : "t CO₂e";
+  const unitSuffix =
+    unit === "kg" ? copy.unitLabels.kg : copy.unitLabels.t;
 
   const modeOrder: TransportMode[] = [
     "SEA",
@@ -157,8 +177,10 @@ export function createCarbonLegsBarOption(args: {
         const point = points.find((p) => p.value != null && p.value !== "-");
         if (!point || point.value == null) return "";
         const leg = legs[point.dataIndex ?? -1];
-        const mode = leg ? transportModeLabel(leg.mode) : point.seriesName;
-        return `${point.name}<br/>Mode: ${mode}<br/>${formatCo2e(Number(point.value), unit)}`;
+        const mode = leg
+          ? transportModeLabel(leg.mode, copy.modes)
+          : point.seriesName;
+        return `${point.name}<br/>${copy.modeTooltip(String(mode))}<br/>${formatCo2e(Number(point.value), unit, copy.unitLabels)}`;
       },
     }),
     legend: createBaseLegend(tokens, {
@@ -207,7 +229,7 @@ export function createCarbonLegsBarOption(args: {
       splitLine: { show: false },
     },
     series: modesPresent.map((mode) => ({
-      name: transportModeLabel(mode),
+      name: transportModeLabel(mode, copy.modes),
       type: "bar" as const,
       barMaxWidth: 28,
       // Overlay mode series in the same category slot so only the matching bar shows.
@@ -237,14 +259,15 @@ export function createCarbonModeDonutOption(args: {
   legs: CarbonLegResult[];
   unit: DisplayUnit;
   tokens: ChartTokens;
+  copy: CarbonChartCopy;
 }): ECOption {
-  const { legs, unit, tokens } = args;
+  const { legs, unit, tokens, copy } = args;
   const byMode = new Map<TransportMode, number>();
   for (const leg of legs) {
     byMode.set(leg.mode, (byMode.get(leg.mode) ?? 0) + legCo2e(leg, unit));
   }
   const slices = Array.from(byMode.entries()).map(([mode, value]) => ({
-    name: transportModeLabel(mode),
+    name: transportModeLabel(mode, copy.modes),
     value,
     itemStyle: {
       color: modeColor(mode, tokens),
@@ -259,7 +282,7 @@ export function createCarbonModeDonutOption(args: {
         const point = Array.isArray(params) ? params[0] : params;
         if (!point || point.value == null) return "";
         const percent = Math.round(point.percent ?? 0);
-        return `${point.name}<br/>${formatCo2e(Number(point.value), unit)} (${percent}%)`;
+        return `${point.name}<br/>${formatCo2e(Number(point.value), unit, copy.unitLabels)} (${percent}%)`;
       },
     }),
     legend: createBaseLegend(tokens, {
@@ -271,7 +294,7 @@ export function createCarbonModeDonutOption(args: {
     }),
     series: [
       {
-        name: "By mode",
+        name: copy.byMode,
         type: "pie",
         radius: ["42%", "64%"],
         center: ["50%", "44%"],

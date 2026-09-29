@@ -8,6 +8,7 @@ import {
   type UseFormSetValue,
   type UseFormWatch,
 } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import {
@@ -75,13 +76,15 @@ export function BookingCargoListView({
   onDuplicate,
   onDelete,
 }: BookingCargoListViewProps) {
+  const { t } = useTranslation(["booking", "common"]);
+
   if (pageIndexes.length === 0) {
     return (
       <ModuleEmptyState
         artSize="sm"
         variant="filtered"
-        title="No containers match"
-        message='Adjust the search or the "Incomplete only" filter.'
+        title={t("wizard.cargo.noContainersMatch")}
+        message={t("wizard.cargo.noContainersMatchHint")}
         style={{ padding: 12 }}
       />
     );
@@ -147,7 +150,7 @@ export function BookingCargoListView({
                       .filter(Boolean)
                       .join(" ")}
                   >
-                    {hasNumber ? container?.containerNo : `Container ${ci + 1}`}
+                    {hasNumber ? container?.containerNo : t("wizard.cargo.containerLabel", { n: ci + 1 })}
                   </Text>
                   <span className="si-cargo-type-badge si-cargo-type-badge--primary">
                     {typeLabel} x {qty}
@@ -165,10 +168,9 @@ export function BookingCargoListView({
 
               <div className="si-cargo-ct-summary">
                 <Text type="secondary" className="si-cargo-ct-summary__text">
-                  {lineCount} {lineCount === 1 ? "Commodity" : "Commodities"}
+                  {t("wizard.cargo.commodityCount", { count: lineCount })}
                   <span className="si-cargo-ct-summary__dot">·</span>
-                  {sums.packages.toLocaleString()}{" "}
-                  {sums.packages === 1 ? "Package" : "Packages"}
+                  {t("wizard.cargo.packageCount", { count: sums.packages })}
                   <span className="si-cargo-ct-summary__dot">·</span>
                   {sums.weight.toLocaleString()} kg
                   <span className="si-cargo-ct-summary__dot">·</span>
@@ -179,12 +181,12 @@ export function BookingCargoListView({
               <span className="si-cargo-ct-status">
                 {issues === 0 ? (
                   <span className="si-cargo-vchip si-cargo-vchip--ok">
-                    Complete
+                    {t("wizard.cargo.complete")}
                   </span>
                 ) : (
                   <span className="si-cargo-vchip si-cargo-vchip--warn">
                     <AppIcon icon={Icons.alertTriangle} size={12} tone="edit" />
-                    {issues} issue{issues === 1 ? "" : "s"}
+                    {t("wizard.cargo.issuesBadge", { count: issues })}
                   </span>
                 )}
               </span>
@@ -196,12 +198,12 @@ export function BookingCargoListView({
               >
                 <ListActionsRow>
                   <ListActionButton
-                    title="Duplicate Container"
+                    title={t("wizard.cargo.duplicateContainer")}
                     icon={<AppIcon icon={Icons.copy} size={16} tone="view" />}
                     onClick={() => onDuplicate(ci)}
                   />
                   <ListActionButton
-                    title="Delete Container"
+                    title={t("wizard.cargo.deleteContainer")}
                     icon={
                       <AppIcon icon={Icons.trash} size={16} tone="delete" />
                     }
@@ -264,6 +266,7 @@ function ContainerEditorPanel({
   toastError,
   toastSuccess,
 }: ContainerEditorPanelProps) {
+  const { t } = useTranslation(["booking", "common"]);
   const { fields, append, remove, insert } = useFieldArray({
     control,
     name: `containers.${ci}.commodities`,
@@ -282,7 +285,7 @@ function ContainerEditorPanel({
       />
 
       <div className="booking-cargo-commodity-toolbar">
-        <Text strong>Commodities</Text>
+        <Text strong>{t("wizard.cargo.commoditiesTitle")}</Text>
         <AppButton
           type="primary"
           size="medium"
@@ -290,7 +293,7 @@ function ContainerEditorPanel({
           icon={<AppIcon icon={Icons.plus} size={16} tone="create" />}
           onClick={() => append(createEmptyCommodity())}
         >
-          Add Commodity
+          {t("wizard.cargo.addCommodity")}
         </AppButton>
       </div>
 
@@ -314,11 +317,11 @@ function ContainerEditorPanel({
               id: createEmptyCommodity().id,
             };
             insert(mi + 1, copy);
-            toastSuccess("Commodity copied");
+            toastSuccess(t("wizard.cargo.commodityCopied"));
           }}
           onRemove={() => {
             if (fields.length <= 1) {
-              toastError("At least one commodity is required");
+              toastError(t("wizard.cargo.atLeastOneCommodity"));
               return;
             }
             remove(mi);

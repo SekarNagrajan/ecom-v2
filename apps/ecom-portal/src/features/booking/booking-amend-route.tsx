@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { Card, Result, Spin, Steps, Typography, theme } from "antd";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { AppIcon, Icons, NavBookingIcon } from "../../components/icons";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import { formatModuleScreenTitle } from "../../constants/module-titles";
@@ -31,6 +32,7 @@ const { Text } = Typography;
 const PIPELINE_ICON_SIZE = 25;
 
 export function BookingAmendRoute() {
+  const { t } = useTranslation(["booking", "common", "modules"]);
   const MODULE_TITLES = useModuleTitles();
   const WIZARD_STEP_TITLES = useWizardStepTitles();
   const { token } = theme.useToken();
@@ -167,7 +169,7 @@ export function BookingAmendRoute() {
       >
         <Spin
           size="medium"
-          description="Loading Booking Details..."
+          description={t("booking:wizard.amend.loading")}
           style={{ justifyContent: "center", alignItems: "center" }}
         />
       </Card>
@@ -177,7 +179,7 @@ export function BookingAmendRoute() {
   if (error) {
     return (
       <Card>
-        <Result status="error" title="Failed to load booking for amendment." />
+        <Result status="error" title={t("booking:wizard.amend.loadFailed")} />
       </Card>
     );
   }
@@ -196,7 +198,7 @@ export function BookingAmendRoute() {
               icon={<AppIcon icon={Icons.arrowLeft} size={16} tone="delete" />}
               onClick={() => navigate({ to: "/app/booking" })}
             >
-              Back to Booking
+              {t("booking:actions.backToBooking")}
             </AppButton>
           }
         />
@@ -207,17 +209,17 @@ export function BookingAmendRoute() {
           <Result
             status="success"
             icon={<AppIcon icon={Icons.checkCircle} size={16} tone="approve" />}
-            title="Booking Amendment Submitted Successfully"
+            title={t("booking:wizard.amend.submittedTitle")}
             subTitle={
               <div>
-                Your amendment request has been forwarded to the carrier.
+                {t("booking:wizard.amend.submittedMessage")}
                 <div
                   style={{
                     marginTop: token.marginSM,
                     fontSize: token.fontSizeLG,
                   }}
                 >
-                  Booking Reference:{" "}
+                  {t("booking:wizard.confirm.bookingReference")}:{" "}
                   <Text
                     copyable
                     strong
@@ -237,7 +239,7 @@ export function BookingAmendRoute() {
                 key="dashboard"
                 onClick={() => navigate({ to: "/app/booking" })}
               >
-                Go to Dashboard
+                {t("booking:wizard.actions.goToDashboard")}
               </AppButton>,
             ]}
           />

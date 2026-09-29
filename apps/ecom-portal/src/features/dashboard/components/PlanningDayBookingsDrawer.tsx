@@ -1,8 +1,10 @@
 // Modified by Sekar Nagarajan (2026-09-18 12:01)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { Tag, Typography } from "antd";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons, NavBookingIcon } from "../../../components/icons";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import {
   getBookingListStatusColor,
   type BookingListDTO,
@@ -47,7 +49,15 @@ function titleCasePortName(value: string): string {
     .join(" ");
 }
 
-function BookingAttentionCues({ booking }: { booking: PlanningBookingDTO }) {
+function BookingAttentionCues({
+  booking,
+  siPendingLabel,
+  paymentDueLabel,
+}: {
+  booking: PlanningBookingDTO;
+  siPendingLabel: string;
+  paymentDueLabel: string;
+}) {
   if (!booking.missingSIFlag && !booking.pendingPaymentFlag) return null;
   return (
     <div className="dashboard-planning-day-cues" role="list">
@@ -56,7 +66,7 @@ function BookingAttentionCues({ booking }: { booking: PlanningBookingDTO }) {
           className="dashboard-planning-day-cue dashboard-planning-day-cue--si"
           role="listitem"
         >
-          SI pending
+          {siPendingLabel}
         </span>
       ) : null}
       {booking.pendingPaymentFlag ? (
@@ -64,7 +74,7 @@ function BookingAttentionCues({ booking }: { booking: PlanningBookingDTO }) {
           className="dashboard-planning-day-cue dashboard-planning-day-cue--pay"
           role="listitem"
         >
-          Payment due
+          {paymentDueLabel}
         </span>
       ) : null}
     </div>
@@ -78,6 +88,7 @@ function PlanningBookingCard({
   booking: PlanningBookingDTO;
   onViewBooking: (booking: BookingListDTO) => void;
 }) {
+  const { t } = useTranslation(["dashboard", "common", "modules"]);
   const origin = splitPortLabel(booking.origin);
   const delivery = splitPortLabel(booking.delivery);
   const needsAttention =
@@ -100,7 +111,7 @@ function PlanningBookingCard({
           </Text>
           <div
             className="dashboard-planning-day-card__route"
-            aria-label="Route"
+            aria-label={t("planningDrawer.route")}
           >
             <div className="dashboard-planning-day-card__leg">
               <Text className="dashboard-planning-day-card__port-code">
@@ -128,13 +139,17 @@ function PlanningBookingCard({
               </Text>
             </div>
           </div>
-          <BookingAttentionCues booking={booking} />
+          <BookingAttentionCues
+            booking={booking}
+            siPendingLabel={t("planningDrawer.siPending")}
+            paymentDueLabel={t("planningDrawer.paymentDue")}
+          />
         </div>
 
         <div className="dashboard-planning-day-card__meta">
           <div className="dashboard-planning-day-card__field">
             <Text className="dashboard-planning-day-card__field-label">
-              Status
+              {t("planningDrawer.status")}
             </Text>
             <Tag
               className="module-status-tag"
@@ -145,10 +160,10 @@ function PlanningBookingCard({
           </div>
           <div className="dashboard-planning-day-card__field">
             <Text className="dashboard-planning-day-card__field-label">
-              Capacity
+              {t("planningDrawer.capacity")}
             </Text>
             <Text strong className="dashboard-planning-day-card__capacity">
-              {booking.teusCount} TEU
+              {t("planningDrawer.capacityTeu", { count: booking.teusCount })}
             </Text>
           </div>
         </div>
@@ -160,7 +175,7 @@ function PlanningBookingCard({
             icon={<AppIcon icon={Icons.eye} size={14} tone="view" />}
             onClick={() => onViewBooking(booking)}
           >
-            View details
+            {t("planningDrawer.viewDetails")}
           </AppButton>
         </div>
       </div>
@@ -173,10 +188,7 @@ export function PlanningDayBookingsDrawer({
   onClose,
   onViewBooking,
 }: PlanningDayBookingsDrawerProps) {
-  const pendingSi = selection.bookings.filter((b) => b.missingSIFlag).length;
-  const pendingPay = selection.bookings.filter(
-    (b) => b.pendingPaymentFlag,
-  ).length;
+  const { t } = useTranslation(["dashboard", "common", "modules"]);
 
   return (
     <AppDrawer
@@ -195,7 +207,7 @@ export function PlanningDayBookingsDrawer({
             </span>
             <div className="dashboard-planning-day-drawer__brand-copy">
               <Text className="dashboard-planning-day-drawer__eyebrow">
-                UPCOMING BOOKINGS
+                {t("planningDrawer.eyebrow")}
               </Text>
               <Title
                 level={5}
@@ -203,34 +215,28 @@ export function PlanningDayBookingsDrawer({
               >
                 {selection.dayLabel} · {selection.week}
               </Title>
-              {/* {(pendingSi > 0 || pendingPay > 0) && (
-                <div className="dashboard-planning-day-drawer__summary">
-                  {pendingSi > 0 ? (
-                    <span className="dashboard-planning-day-cue dashboard-planning-day-cue--si">
-                      {pendingSi} SI pending
-                    </span>
-                  ) : null}
-                  {pendingPay > 0 ? (
-                    <span className="dashboard-planning-day-cue dashboard-planning-day-cue--pay">
-                      {pendingPay} payment pending
-                    </span>
-                  ) : null}
-                </div>
-              )} */}
             </div>
           </div>
         </div>
       }
     >
-      <ul className="dashboard-planning-day-list">
-        {selection.bookings.map((booking) => (
-          <PlanningBookingCard
-            key={`${booking.id}-${booking.bookingNo}`}
-            booking={booking}
-            onViewBooking={onViewBooking}
-          />
-        ))}
-      </ul>
+      {selection.bookings.length === 0 ? (
+        <ModuleEmptyState
+          variant="blank"
+          title={t("planningDrawer.empty")}
+          artSize="sm"
+        />
+      ) : (
+        <ul className="dashboard-planning-day-list">
+          {selection.bookings.map((booking) => (
+            <PlanningBookingCard
+              key={`${booking.id}-${booking.bookingNo}`}
+              booking={booking}
+              onViewBooking={onViewBooking}
+            />
+          ))}
+        </ul>
+      )}
     </AppDrawer>
   );
 }

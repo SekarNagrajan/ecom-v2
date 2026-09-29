@@ -3,6 +3,8 @@ import { AppButton } from "@solverminds/shared-ui";
 import { Card, Tooltip, Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons, NavBookingIcon } from "../../../components/icons";
 import type {
@@ -15,14 +17,14 @@ import type {
 
 const { Text } = Typography;
 
-const DAYS: { key: CalendarWeekday; label: string }[] = [
-  { key: "mon", label: "Mon" },
-  { key: "tue", label: "Tue" },
-  { key: "wed", label: "Wed" },
-  { key: "thu", label: "Thu" },
-  { key: "fri", label: "Fri" },
-  { key: "sat", label: "Sat" },
-  { key: "sun", label: "Sun" },
+const DAY_KEYS: CalendarWeekday[] = [
+  "mon",
+  "tue",
+  "wed",
+  "thu",
+  "fri",
+  "sat",
+  "sun",
 ];
 
 function calCellClass(count: number, clickable: boolean): string {
@@ -43,21 +45,29 @@ function calCellClass(count: number, clickable: boolean): string {
     .join(" ");
 }
 
-function bookingCountLabel(count: number): string {
-  return `${count} ${count === 1 ? "booking" : "bookings"}`;
+type TranslateFn = (key: string, options?: Record<string, unknown>) => string;
+
+function bookingCountLabel(count: number, t: TranslateFn): string {
+  return count === 1
+    ? t("planning.bookingOne")
+    : t("planning.bookingMany", { count });
 }
 
-function dayAriaLabel(cell: CalendarDayCell): string {
-  if (cell.count <= 0) return "No bookings";
-  const parts = [bookingCountLabel(cell.count)];
+function dayAriaLabel(cell: CalendarDayCell, t: TranslateFn): string {
+  if (cell.count <= 0) return t("planning.emptyDay");
+  const parts = [bookingCountLabel(cell.count, t)];
   if (cell.missingSI > 0) {
     parts.push(
-      `${cell.missingSI} pending shipping instruction${cell.missingSI === 1 ? "" : "s"}`,
+      cell.missingSI === 1
+        ? t("planning.pendingSiOne")
+        : t("planning.pendingSiMany", { count: cell.missingSI }),
     );
   }
   if (cell.pendingPayment > 0) {
     parts.push(
-      `${cell.pendingPayment} payment${cell.pendingPayment === 1 ? "" : "s"} pending`,
+      cell.pendingPayment === 1
+        ? t("planning.paymentOne")
+        : t("planning.paymentMany", { count: cell.pendingPayment }),
     );
   }
   return parts.join(", ");
@@ -89,32 +99,34 @@ function DayStatusDots({
 function DayTooltipBody({
   cell,
   isTotal = false,
+  t,
 }: {
   cell: Pick<CalendarDayCell, "count" | "missingSI" | "pendingPayment">;
   isTotal?: boolean;
+  t: TranslateFn;
 }): ReactNode {
-  if (cell.count <= 0) return "No bookings this day";
+  if (cell.count <= 0) return t("planning.emptyDayTooltip");
   return (
     <div className="dashboard-cal-tip">
       <Text className="dashboard-cal-tip__title">
-        {isTotal ? "Week total" : bookingCountLabel(cell.count)}
-        {!isTotal && cell.count > 0 ? " — click to view" : null}
+        {isTotal ? t("planning.weekTotal") : bookingCountLabel(cell.count, t)}
+        {!isTotal && cell.count > 0 ? t("planning.clickToView") : null}
       </Text>
       {(cell.missingSI > 0 || cell.pendingPayment > 0) && (
         <ul className="dashboard-cal-tip__list">
           {cell.missingSI > 0 ? (
             <li className="dashboard-cal-tip__row">
               <span className="dashboard-cal-status__dot dashboard-cal-status__dot--si" />
-              <span>
-                {cell.missingSI} need shipping instruction
-              </span>
+              <span>{t("planning.needSi", { count: cell.missingSI })}</span>
             </li>
           ) : null}
           {cell.pendingPayment > 0 ? (
             <li className="dashboard-cal-tip__row">
               <span className="dashboard-cal-status__dot dashboard-cal-status__dot--pay" />
               <span>
-                {cell.pendingPayment} payment pending
+                {t("planning.paymentPendingCount", {
+                  count: cell.pendingPayment,
+                })}
               </span>
             </li>
           ) : null}
@@ -163,6 +175,17 @@ export function ShipmentPlanningSection({
   onDayClick,
   onViewAll,
 }: ShipmentPlanningProps) {
+  const { t } = useTranslation(["dashboard", "common", "modules"]);
+
+  const days = useMemo(
+    () =>
+      DAY_KEYS.map((key) => ({
+        key,
+        label: t(`planning.days.${key}`),
+      })),
+    [t],
+  );
+
   const handleDayActivate = (
     week: CalendarWeek,
     day: CalendarWeekday,
@@ -184,59 +207,55 @@ export function ShipmentPlanningSection({
       className="dashboard-panel"
       title={
         <Text strong className="dashboard-panel__title">
-          Upcoming Shipment Planning
+          {t("planning.title")}
         </Text>
       }
       extra={
-        <Tooltip title="View All Upcoming Bookings">
+        <Tooltip title={t("planning.viewAllTooltip")}>
           <AppButton type="link" size="small" onClick={onViewAll}>
-            View All
+            {t("actions.viewAll")}
           </AppButton>
         </Tooltip>
       }
     >
       <div className="dashboard-planning-kpis" role="list">
         <PlanningStat
-          label="Bookings (Next 7 Days)"
+          label={t("planning.bookingsNext7Days")}
           value={kpis.bookingsNext7Days}
           icon={NavBookingIcon}
           tone="bookings"
         />
         <PlanningStat
-          label="TEUs"
+          label={t("planning.teus")}
           value={kpis.feusNext7Days}
           icon={Icons.packageCheck}
           tone="teus"
         />
         <PlanningStat
-          label="SI Pending"
+          label={t("kpi.siPending")}
           value={kpis.missingSI}
           icon={Icons.fileText}
           tone="si"
         />
         <PlanningStat
-          label="Payment Pending"
+          label={t("kpi.paymentPending")}
           value={kpis.atRisk}
           icon={Icons.creditCard}
           tone="payment"
         />
       </div>
 
-      {/* <Text className="dashboard-subsection-label">
-        Upcoming Bookings Calendar (May / Jun 2025)
-      </Text> */}
-
       <div className="dashboard-table-wrap custom-scroll">
         <table className="dashboard-table">
           <thead>
             <tr>
-              <th>Week</th>
-              {DAYS.map((d) => (
+              <th>{t("planning.week")}</th>
+              {days.map((d) => (
                 <th key={d.key} className="is-center">
                   {d.label}
                 </th>
               ))}
-              <th className="is-center">Total</th>
+              <th className="is-center">{t("planning.total")}</th>
             </tr>
           </thead>
           <tbody>
@@ -254,12 +273,12 @@ export function ShipmentPlanningSection({
                     {week.dateRange}
                   </Text>
                 </td>
-                {DAYS.map(({ key, label }) => {
+                {days.map(({ key, label }) => {
                   const cell = week.days[key];
                   const clickable = cell.count > 0;
                   return (
                     <td key={key} className="is-center">
-                      <Tooltip title={<DayTooltipBody cell={cell} />}>
+                      <Tooltip title={<DayTooltipBody cell={cell} t={t} />}>
                         <button
                           type="button"
                           className={[
@@ -269,7 +288,11 @@ export function ShipmentPlanningSection({
                             .filter(Boolean)
                             .join(" ")}
                           disabled={!clickable}
-                          aria-label={`${label} ${week.week}: ${dayAriaLabel(cell)}`}
+                          aria-label={t("planning.dayAria", {
+                            day: label,
+                            week: week.week,
+                            summary: dayAriaLabel(cell, t),
+                          })}
                           onClick={() =>
                             handleDayActivate(week, key, label, cell)
                           }
@@ -291,6 +314,7 @@ export function ShipmentPlanningSection({
                     title={
                       <DayTooltipBody
                         isTotal
+                        t={t}
                         cell={{
                           count: week.days.total,
                           missingSI: week.days.totalMissingSI,
@@ -318,15 +342,15 @@ export function ShipmentPlanningSection({
         <div className="dashboard-legend">
           <span className="dashboard-legend__item">
             <span className="dashboard-legend__dot dashboard-legend__dot--primary" />
-            Bookings
+            {t("planning.legendBookings")}
           </span>
           <span className="dashboard-legend__item">
             <span className="dashboard-legend__dot dashboard-legend__dot--warning" />
-            Pending SI
+            {t("planning.legendPendingSi")}
           </span>
           <span className="dashboard-legend__item">
             <span className="dashboard-legend__dot dashboard-legend__dot--verdigris" />
-            Payment Pending
+            {t("kpi.paymentPending")}
           </span>
         </div>
       </div>

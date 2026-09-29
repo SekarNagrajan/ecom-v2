@@ -13,6 +13,7 @@ import { drawFooters, drawHeaderBlock, drawSection } from "./report-pdf-layout";
 import {
   buildReportFilename,
   iterateReportSections,
+  type ReportExportLabels,
 } from "./report-shared.utils";
 
 export interface BuildReportPdfOptions {
@@ -20,6 +21,7 @@ export interface BuildReportPdfOptions {
   chartTokens: ChartTokens;
   formatNumber: (value: number) => string;
   formatCurrency: (value: number) => string;
+  labels: ReportExportLabels;
 }
 
 export interface DownloadReportPdfResult {
@@ -61,21 +63,22 @@ export async function buildReportPdf(
     doc,
     report,
     options.formatGeneratedAt(report.generatedAt),
+    options.labels,
   );
 
   iterateReportSections(report, {
     onKpi: (section) => {
-      y = drawSection(doc, y, section, chartImages);
+      y = drawSection(doc, y, section, chartImages, options.labels);
     },
     onChart: (section) => {
-      y = drawSection(doc, y, section, chartImages);
+      y = drawSection(doc, y, section, chartImages, options.labels);
     },
     onTable: (section) => {
-      y = drawSection(doc, y, section, chartImages);
+      y = drawSection(doc, y, section, chartImages, options.labels);
     },
   });
 
-  drawFooters(doc, report);
+  drawFooters(doc, report, options.labels);
 
   return { doc, missingChartCount };
 }

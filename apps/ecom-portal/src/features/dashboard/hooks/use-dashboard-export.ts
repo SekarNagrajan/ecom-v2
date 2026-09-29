@@ -6,12 +6,16 @@ import {
   useToast,
 } from "@solverminds/shared-ui/hooks";
 import { useMutation } from "@tanstack/react-query";
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
+import { useTranslation } from "react-i18next";
 
-import { fetchDashboardReport } from "../api/dashboard-export.api";
 import { useChartTokens } from "../../theme/utils/use-portal-chart-tokens";
+import { fetchDashboardReport } from "../api/dashboard-export.api";
 import type { DashboardReport } from "../types/dashboard-export.types";
-import { buildReportFilename } from "../utils/export/report-shared.utils";
+import {
+  buildReportFilename,
+  type ReportExportLabels,
+} from "../utils/export/report-shared.utils";
 
 export type DashboardExportFormat = "pdf" | "pptx";
 
@@ -47,11 +51,25 @@ export interface UseDashboardExportArgs {
 export function useDashboardExport({
   activeFilter = "all",
 }: UseDashboardExportArgs = {}) {
+  const { t } = useTranslation(["dashboard", "common", "modules"]);
   const toast = useToast();
   const { formatDateTime } = useDateFormat();
   const { formatNumber, formatCurrency } = useNumberFormat();
   const chartTokens = useChartTokens();
   const reportCacheRef = useRef<CachedReport | null>(null);
+
+  const labels: ReportExportLabels = useMemo(
+    () => ({
+      reportScope: t("export.reportScope"),
+      chartUnavailable: t("export.chartUnavailable"),
+      chartUnavailableShort: t("export.chartUnavailableShort"),
+      pageOf: t("export.pageOf"),
+      generatedBy: t("export.generatedBy"),
+      appliedFilters: t("export.appliedFilters"),
+      continued: t("export.continued"),
+    }),
+    [t],
+  );
 
   async function resolveReport(reportTitle: string): Promise<DashboardReport> {
     const cacheKey = `${reportTitle}|${activeFilter ?? "all"}`;
@@ -85,7 +103,8 @@ export function useDashboardExport({
       };
     },
     onError: (error) => {
-      toast.error(extractApiError(error));
+      const message = extractApiError(error);
+      toast.error(message || t("export.errors.previewFailed"));
     },
   });
 
@@ -101,6 +120,7 @@ export function useDashboardExport({
         chartTokens,
         formatNumber: (value: number) => formatNumber(value),
         formatCurrency: (value: number) => formatCurrency(value),
+        labels,
       };
 
       if (format === "pdf") {
@@ -123,7 +143,8 @@ export function useDashboardExport({
       return downloadReportPptx(report, renderOptions);
     },
     onError: (error) => {
-      toast.error(extractApiError(error));
+      const message = extractApiError(error);
+      toast.error(message || t("export.errors.downloadFailed"));
     },
   });
 
@@ -132,5 +153,6 @@ export function useDashboardExport({
     downloadExport: downloadMutation.mutateAsync,
     isGenerating: previewMutation.isPending,
     isDownloading: downloadMutation.isPending,
+    exportLabels: labels,
   };
 }

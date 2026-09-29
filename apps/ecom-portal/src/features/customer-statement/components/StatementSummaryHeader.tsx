@@ -1,6 +1,7 @@
 // Modified by Sekar Nagarajan (2026-08-25 12:45)
 import { AppButton, FormattedDate } from "@solverminds/shared-ui";
 import { Space } from "antd";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import type { StatementDTO } from "../types/customer-statement.types";
@@ -21,6 +22,8 @@ export function StatementSummaryHeader({
   onExportPdf,
   onExportXlsx,
 }: StatementSummaryHeaderProps) {
+  const { t } = useTranslation(["customer-statement", "common", "modules"]);
+
   return (
     <div className="stmt-summary-header">
       <div className="stmt-summary-header__top">
@@ -44,7 +47,7 @@ export function StatementSummaryHeader({
               loading={exportingPdf}
               onClick={onExportPdf}
             >
-              Export PDF
+              {t("actions.exportPdf")}
             </AppButton>
             <AppButton
               type="default"
@@ -52,7 +55,7 @@ export function StatementSummaryHeader({
               loading={exportingXlsx}
               onClick={onExportXlsx}
             >
-              Export Excel
+              {t("common:actions.exportExcel")}
             </AppButton>
           </Space>
         </div>
@@ -60,7 +63,9 @@ export function StatementSummaryHeader({
 
       <div className="stmt-summary-cards">
         <div className="stmt-summary-card stmt-summary-card--opening">
-          <span className="stmt-summary-card__label">Opening Balance</span>
+          <span className="stmt-summary-card__label">
+            {t("summary.openingBalance")}
+          </span>
           <span className="stmt-summary-card__value">
             {formatStatementAmount(
               statement.openingBalance,
@@ -69,7 +74,9 @@ export function StatementSummaryHeader({
           </span>
         </div>
         <div className="stmt-summary-card stmt-summary-card--closing">
-          <span className="stmt-summary-card__label">Closing Balance</span>
+          <span className="stmt-summary-card__label">
+            {t("summary.closingBalance")}
+          </span>
           <span className="stmt-summary-card__value">
             {formatStatementAmount(
               statement.closingBalance,
@@ -78,7 +85,9 @@ export function StatementSummaryHeader({
           </span>
         </div>
         <div className="stmt-summary-card stmt-summary-card--net">
-          <span className="stmt-summary-card__label">Net Movement</span>
+          <span className="stmt-summary-card__label">
+            {t("summary.netMovement")}
+          </span>
           <span className="stmt-summary-card__value">
             {formatStatementAmount(statement.totals.net, statement.currency)}
           </span>

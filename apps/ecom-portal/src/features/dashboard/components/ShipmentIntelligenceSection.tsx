@@ -2,7 +2,8 @@
 import { AppButton } from "@solverminds/shared-ui";
 import { Card, Progress, Segmented, Tooltip, Typography, theme } from "antd";
 import * as echarts from "echarts";
-import { useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { useChartTokens } from "../../theme/utils/use-portal-chart-tokens";
 import type {
@@ -27,6 +28,7 @@ interface DonutChartProps {
 }
 
 function DonutChart({ data, totalFeus }: DonutChartProps) {
+  const { t } = useTranslation(["dashboard", "common", "modules"]);
   const chartTokens = useChartTokens();
   const { token } = theme.useToken();
   const ref = useRef<HTMLDivElement>(null);
@@ -38,7 +40,18 @@ function DonutChart({ data, totalFeus }: DonutChartProps) {
       backgroundColor: "transparent",
       tooltip: {
         trigger: "item",
-        formatter: "{b}: {c} FEUs ({d}%)",
+        formatter: (params: unknown) => {
+          const p = params as {
+            name?: string;
+            value?: number;
+            percent?: number;
+          };
+          return t("intelligence.tooltipFeus", {
+            name: p.name ?? "",
+            value: p.value ?? "",
+            percent: p.percent ?? "",
+          });
+        },
         backgroundColor: chartTokens.colorBgElevated,
         borderColor: chartTokens.colorBorderSecondary,
         textStyle: { color: chartTokens.colorText },
@@ -92,7 +105,7 @@ function DonutChart({ data, totalFeus }: DonutChartProps) {
       observer.disconnect();
       chart.dispose();
     };
-  }, [data, totalFeus, chartTokens, token]);
+  }, [data, totalFeus, chartTokens, token, t]);
 
   return <div ref={ref} className="dashboard-donut" />;
 }
@@ -103,6 +116,7 @@ interface BreakdownTableProps {
 }
 
 function BreakdownTable({ data, dimensionLabel }: BreakdownTableProps) {
+  const { t } = useTranslation(["dashboard", "common", "modules"]);
   const { token } = theme.useToken();
   const max = data[0]?.feus ?? 1;
 
@@ -118,9 +132,9 @@ function BreakdownTable({ data, dimensionLabel }: BreakdownTableProps) {
         <thead>
           <tr>
             <th>{dimensionLabel}</th>
-            <th className="is-right">TEUs</th>
-            <th className="is-right">Share</th>
-            <th>Volume</th>
+            <th className="is-right">{t("intelligence.columns.teus")}</th>
+            <th className="is-right">{t("intelligence.columns.share")}</th>
+            <th>{t("intelligence.columns.volume")}</th>
           </tr>
         </thead>
         <tbody>
@@ -171,50 +185,55 @@ function BreakdownTable({ data, dimensionLabel }: BreakdownTableProps) {
   );
 }
 
-const INTELLIGENCE_DIMENSIONS = [
-  {
-    key: "origin",
-    label: "Origin",
-    column: "Origin",
-    data: MOCK_INTELLIGENCE_BY_ORIGIN,
-  },
-  {
-    key: "pol",
-    label: "POL",
-    column: "Port of Loading",
-    data: MOCK_INTELLIGENCE_BY_POL,
-  },
-  {
-    key: "pod",
-    label: "POD",
-    column: "Port of Discharge",
-    data: MOCK_INTELLIGENCE_BY_POD,
-  },
-  {
-    key: "pickup",
-    label: "Pickup",
-    column: "Pickup",
-    data: MOCK_INTELLIGENCE_BY_ORIGIN,
-  },
-  {
-    key: "consignee",
-    label: "Consignee",
-    column: "Consignee",
-    data: MOCK_INTELLIGENCE_BY_POL,
-  },
-  {
-    key: "destination",
-    label: "Destination",
-    column: "Destination",
-    data: MOCK_INTELLIGENCE_BY_POD,
-  },
-] as const;
-
 export function InteractiveShipmentIntelligenceCard() {
+  const { t } = useTranslation(["dashboard", "common", "modules"]);
   const [activeKey, setActiveKey] = useState<string>("origin");
+
+  const dimensions = useMemo(
+    () =>
+      [
+        {
+          key: "origin",
+          label: t("intelligence.dimensions.origin"),
+          column: t("intelligence.dimensionColumns.origin"),
+          data: MOCK_INTELLIGENCE_BY_ORIGIN,
+        },
+        {
+          key: "pol",
+          label: t("intelligence.dimensions.pol"),
+          column: t("intelligence.dimensionColumns.pol"),
+          data: MOCK_INTELLIGENCE_BY_POL,
+        },
+        {
+          key: "pod",
+          label: t("intelligence.dimensions.pod"),
+          column: t("intelligence.dimensionColumns.pod"),
+          data: MOCK_INTELLIGENCE_BY_POD,
+        },
+        {
+          key: "pickup",
+          label: t("intelligence.dimensions.pickup"),
+          column: t("intelligence.dimensionColumns.pickup"),
+          data: MOCK_INTELLIGENCE_BY_ORIGIN,
+        },
+        {
+          key: "consignee",
+          label: t("intelligence.dimensions.consignee"),
+          column: t("intelligence.dimensionColumns.consignee"),
+          data: MOCK_INTELLIGENCE_BY_POL,
+        },
+        {
+          key: "destination",
+          label: t("intelligence.dimensions.destination"),
+          column: t("intelligence.dimensionColumns.destination"),
+          data: MOCK_INTELLIGENCE_BY_POD,
+        },
+      ] as const,
+    [t],
+  );
+
   const current =
-    INTELLIGENCE_DIMENSIONS.find((d) => d.key === activeKey) ??
-    INTELLIGENCE_DIMENSIONS[0];
+    dimensions.find((d) => d.key === activeKey) ?? dimensions[0];
   const totalFeus = current.data.reduce((sum, row) => sum + row.feus, 0);
 
   return (
@@ -222,13 +241,13 @@ export function InteractiveShipmentIntelligenceCard() {
       className="dashboard-panel"
       title={
         <Text strong className="dashboard-panel__title">
-          Shipment Intelligence
+          {t("intelligence.title")}
         </Text>
       }
       extra={
-        <Tooltip title="Open the full intelligence report">
+        <Tooltip title={t("intelligence.viewReportTooltip")}>
           <AppButton type="link" size="small">
-            View Report
+            {t("actions.viewReport")}
           </AppButton>
         </Tooltip>
       }
@@ -240,16 +259,22 @@ export function InteractiveShipmentIntelligenceCard() {
             className="dashboard-intelligence-segmented"
             value={activeKey}
             onChange={(value) => setActiveKey(String(value))}
-            options={INTELLIGENCE_DIMENSIONS.map((d) => ({
+            options={dimensions.map((d) => ({
               value: d.key,
               label: d.label,
             }))}
           />
           <div className="dashboard-intelligence-summary">
-            <Text type="secondary">Total</Text>
-            <Text strong>{totalFeus.toLocaleString()} TEUs</Text>
+            <Text type="secondary">{t("intelligence.total")}</Text>
+            <Text strong>
+              {t("intelligence.totalTeus", {
+                count: totalFeus.toLocaleString(),
+              })}
+            </Text>
             <Text type="secondary">·</Text>
-            <Text type="secondary">{current.data.length} segments</Text>
+            <Text type="secondary">
+              {t("intelligence.segments", { count: current.data.length })}
+            </Text>
           </div>
         </div>
 
@@ -269,6 +294,7 @@ interface TopConsigneesProps {
 }
 
 export function TopConsigneesCard({ consignees }: TopConsigneesProps) {
+  const { t } = useTranslation(["dashboard", "common", "modules"]);
   const { token } = theme.useToken();
   const max = consignees[0]?.feus ?? 1;
 
@@ -277,13 +303,13 @@ export function TopConsigneesCard({ consignees }: TopConsigneesProps) {
       className="dashboard-panel"
       title={
         <Text strong className="dashboard-panel__title">
-          Top Consignees
+          {t("intelligence.topConsignees")}
         </Text>
       }
       extra={
-        <Tooltip title="View all consignees by FEU volume">
+        <Tooltip title={t("intelligence.viewAllConsigneesTooltip")}>
           <AppButton type="link" size="small">
-            View All
+            {t("actions.viewAll")}
           </AppButton>
         </Tooltip>
       }
@@ -299,11 +325,11 @@ export function TopConsigneesCard({ consignees }: TopConsigneesProps) {
           </colgroup>
           <thead>
             <tr>
-              <th className="is-center">#</th>
-              <th>Company</th>
-              <th className="is-right">TEUs</th>
-              <th className="is-right">Share</th>
-              <th>Volume</th>
+              <th className="is-center">{t("intelligence.columns.rank")}</th>
+              <th>{t("intelligence.columns.company")}</th>
+              <th className="is-right">{t("intelligence.columns.teus")}</th>
+              <th className="is-right">{t("intelligence.columns.share")}</th>
+              <th>{t("intelligence.columns.volume")}</th>
             </tr>
           </thead>
           <tbody>

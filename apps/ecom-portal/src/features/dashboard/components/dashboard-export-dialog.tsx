@@ -2,7 +2,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton, AppModal, FormInput } from "@solverminds/shared-ui";
 import { Flex, Radio, Spin, Typography, theme } from "antd";
+import { useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import type { TFunction } from "i18next";
 import { z } from "zod";
 
 import { AppIcon, Icons } from "../../../components/icons";
@@ -15,16 +18,21 @@ const { Text } = Typography;
 const CONFIGURE_DIALOG_WIDTH = 520;
 const PREVIEW_DIALOG_SIZE = "lg";
 
-const exportFormSchema = z.object({
-  reportTitle: z
-    .string()
-    .trim()
-    .min(3, "Report title must be at least 3 characters")
-    .max(150, "Report title must be at most 150 characters"),
-  format: z.enum(["pdf", "pptx"]),
-});
+function createExportFormSchema(t: TFunction<"dashboard">) {
+  return z.object({
+    reportTitle: z
+      .string()
+      .trim()
+      .min(3, t("export.validation.titleMin"))
+      .max(150, t("export.validation.titleMax")),
+    format: z.enum(["pdf", "pptx"]),
+  });
+}
 
-export type DashboardExportFormValues = z.infer<typeof exportFormSchema>;
+export type DashboardExportFormValues = {
+  reportTitle: string;
+  format: DashboardExportFormat;
+};
 
 export interface DashboardExportScopeRow {
   label: string;
@@ -67,22 +75,28 @@ export function DashboardExportDialog({
   onBackFromPreview,
   onFormatChange,
 }: DashboardExportDialogProps) {
+  const { t } = useTranslation(["dashboard", "common", "modules"]);
   const { token } = theme.useToken();
   const isPreviewMode = preview !== null;
   const busy = generating || downloading;
+  const schema = useMemo(() => createExportFormSchema(t), [t]);
 
   const { control, handleSubmit } = useForm<DashboardExportFormValues>({
-    resolver: zodResolver(exportFormSchema),
+    resolver: zodResolver(schema),
     defaultValues: { reportTitle: defaultTitle, format: "pdf" },
   });
 
   const downloadLabel =
-    preview?.format === "pptx" ? "Download PowerPoint" : "Download PDF";
+    preview?.format === "pptx"
+      ? t("export.downloadPptx")
+      : t("export.downloadPdf");
 
   return (
     <AppModal
       open={open}
-      title={isPreviewMode ? "Report Preview" : "Export Report"}
+      title={
+        isPreviewMode ? t("export.previewTitle") : t("export.dialogTitle")
+      }
       dialogSize={isPreviewMode ? PREVIEW_DIALOG_SIZE : CONFIGURE_DIALOG_WIDTH}
       onCancel={onCancel}
       maskClosable={!busy}
@@ -91,7 +105,7 @@ export function DashboardExportDialog({
         isPreviewMode ? (
           <Flex justify="flex-end" gap={token.marginXS}>
             <AppButton onClick={onBackFromPreview} disabled={busy}>
-              Back
+              {t("common:actions.back")}
             </AppButton>
             <AppButton
               type="primary"
@@ -105,7 +119,7 @@ export function DashboardExportDialog({
         ) : (
           <Flex justify="flex-end" gap={token.marginXS}>
             <AppButton onClick={onCancel} disabled={busy}>
-              Cancel
+              {t("common:actions.cancel")}
             </AppButton>
             <AppButton
               type="primary"
@@ -113,7 +127,7 @@ export function DashboardExportDialog({
               loading={generating}
               onClick={handleSubmit(onPreview)}
             >
-              Preview
+              {t("export.preview")}
             </AppButton>
           </Flex>
         )
@@ -134,15 +148,17 @@ export function DashboardExportDialog({
           <FormInput
             control={control}
             name="reportTitle"
-            label="Report Title"
-            placeholder="e.g. Dashboard Report"
+            label={t("export.reportTitle")}
+            placeholder={t("export.reportTitlePlaceholder")}
             autoFocus
             maxLength={150}
             disabled={busy}
           />
 
           <Flex vertical gap={token.marginXXS}>
-            <Text style={{ fontSize: token.fontSizeSM }}>Format</Text>
+            <Text style={{ fontSize: token.fontSizeSM }}>
+              {t("export.format")}
+            </Text>
             <Controller
               control={control}
               name="format"
@@ -158,8 +174,10 @@ export function DashboardExportDialog({
                     onFormatChange?.(next);
                   }}
                 >
-                  <Radio.Button value="pdf">PDF</Radio.Button>
-                  <Radio.Button value="pptx">PowerPoint</Radio.Button>
+                  <Radio.Button value="pdf">{t("export.formatPdf")}</Radio.Button>
+                  <Radio.Button value="pptx">
+                    {t("export.formatPptx")}
+                  </Radio.Button>
                 </Radio.Group>
               )}
             />
@@ -175,7 +193,7 @@ export function DashboardExportDialog({
             >
               <Spin />
               <Text type="secondary" style={{ fontSize: token.fontSizeSM }}>
-                Generating report…
+                {t("export.generating")}
               </Text>
             </Flex>
           ) : (
@@ -196,6 +214,7 @@ function DashboardExportPreviewPane({
   generating: boolean;
   formatGeneratedAt: (isoUtc: string) => string;
 }) {
+  const { t } = useTranslation(["dashboard", "common", "modules"]);
   const { token } = theme.useToken();
 
   return (
@@ -219,7 +238,7 @@ function DashboardExportPreviewPane({
           >
             <Spin />
             <Text type="secondary" style={{ fontSize: token.fontSizeSM }}>
-              Updating preview…
+              {t("export.updatingPreview")}
             </Text>
           </Flex>
         ) : (
@@ -232,7 +251,7 @@ function DashboardExportPreviewPane({
       </div>
 
       <Text type="secondary" style={{ fontSize: token.fontSizeSM }}>
-        Preview — final layout may differ slightly.
+        {t("export.previewDisclaimer")}
       </Text>
     </Flex>
   );
@@ -243,52 +262,9 @@ function DashboardExportScopeBlock({
 }: {
   rows: DashboardExportScopeRow[];
 }) {
-  const { token } = theme.useToken();
-
   if (rows.length === 0) {
     return null;
   }
 
-  return (
-    <div
-      style={
-        {
-          // backgroundColor: token.colorFillQuaternary,
-          // border: `1px solid ${token.colorBorderSecondary}`,
-          // borderRadius: token.borderRadius,
-          // paddingInline: token.paddingSM,
-          // paddingBlock: token.paddingXS,
-        }
-      }
-    >
-      {/* <Text
-        type="secondary"
-        style={{
-          fontSize: token.fontSizeSM,
-          fontWeight: token.fontWeightStrong,
-          letterSpacing: 0.4,
-          textTransform: "uppercase",
-        }}
-      >
-        Will be exported with
-      </Text>
-      <Flex
-        vertical
-        gap={token.marginXXS}
-        style={{ marginTop: token.marginXS }}
-      >
-        {rows.map((row) => (
-          <Flex key={row.label} gap={token.marginSM}>
-            <Text
-              type="secondary"
-              style={{ fontSize: token.fontSizeSM, minWidth: 90 }}
-            >
-              {row.label}
-            </Text>
-            <Text style={{ fontSize: token.fontSizeSM }}>{row.value}</Text>
-          </Flex>
-        ))}
-      </Flex> */}
-    </div>
-  );
+  return <div />;
 }

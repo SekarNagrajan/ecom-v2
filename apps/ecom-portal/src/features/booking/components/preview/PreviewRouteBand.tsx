@@ -1,6 +1,7 @@
 // Modified by Sekar Nagarajan (2026-09-17 23:22)
 import { Tag, Typography } from "antd";
 
+import { useTranslation } from "react-i18next";
 import type { SelectedRoute } from "../../types/booking.types";
 
 const { Text } = Typography;
@@ -85,6 +86,7 @@ export function PreviewRouteBand({
   haulageOrigin,
   haulageDestination,
 }: PreviewRouteBandProps) {
+  const { t } = useTranslation("booking");
   const serviceTag =
     route.serviceCode || route.serviceName
       ? [route.serviceCode, route.serviceName].filter(Boolean).join(" — ")
@@ -107,11 +109,11 @@ export function PreviewRouteBand({
     .join(" · ");
 
   const cutoffRows = [
-    { label: "Gate-in cut-off", value: formatCutoffValue(route.gateInCutoff) },
-    { label: "SI cut-off", value: formatCutoffValue(route.siDocCutoff) },
-    { label: "VGM cut-off", value: formatCutoffValue(route.vgmCutoff) },
+    { label: t("wizard.preview.route.gateInCutoff"), value: formatCutoffValue(route.gateInCutoff) },
+    { label: t("wizard.preview.route.siCutoff"), value: formatCutoffValue(route.siDocCutoff) },
+    { label: t("wizard.preview.route.vgmCutoff"), value: formatCutoffValue(route.vgmCutoff) },
     {
-      label: "Haulage (O / D)",
+      label: t("wizard.preview.route.haulageOD"),
       value: haulageLine(haulageOrigin, haulageDestination),
     },
   ];
@@ -120,7 +122,7 @@ export function PreviewRouteBand({
     <div className="booking-review-route">
       <div className="booking-review-route__band">
         <div className="booking-review-route__endpoint">
-          <span className="booking-review-route__eyebrow">Origin</span>
+          <span className="booking-review-route__eyebrow">{t("columns.origin")}</span>
           <Text strong className="booking-review-route__code">
             {originCode || "—"}
           </Text>
@@ -151,7 +153,7 @@ export function PreviewRouteBand({
             <span className="booking-review-route__dot booking-review-route__dot--origin" />
             <span className="booking-review-route__dash" />
             <span className="booking-review-route__pill booking-review-route__pill--transit">
-              {route.transitTimeDays} days · {shipmentKindLabel(route)}
+              {t("wizard.preview.route.daysKind", { count: route.transitTimeDays, kind: shipmentKindLabel(route) })}
             </span>
             <span className="booking-review-route__dash" />
             <span className="booking-review-route__dot booking-review-route__dot--dest" />
@@ -159,7 +161,7 @@ export function PreviewRouteBand({
         </div>
 
         <div className="booking-review-route__endpoint booking-review-route__endpoint--dest">
-          <span className="booking-review-route__eyebrow">Destination</span>
+          <span className="booking-review-route__eyebrow">{t("wizard.preview.route.destination")}</span>
           <Text strong className="booking-review-route__code">
             {destCode || "—"}
           </Text>

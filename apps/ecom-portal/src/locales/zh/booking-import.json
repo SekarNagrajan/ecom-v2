@@ -1,0 +1,62 @@
+{
+  "subtitle": "每行填写一笔订舱，然后核对并提交。",
+  "entityLabel": "订舱",
+  "toasts": {
+    "importSuccess_one": "已导入 {{count}} 笔订舱。",
+    "importSuccess_other": "已导入 {{count}} 笔订舱。",
+    "importPartial": "已导入 {{totalRows}} 笔中的 {{successCount}} 笔订舱。请修正剩余行后重新提交。"
+  },
+  "columns": {
+    "origin": "起运地",
+    "delivery": "交货地",
+    "cargoReadyDate": "货物就绪日期",
+    "shipperName": "发货人名称",
+    "agreementParty": "协议方",
+    "siSubmittingParty": "SI 提交方",
+    "containerType": "集装箱类型",
+    "quantity": "数量",
+    "hsCode": "HS 编码",
+    "weight": "重量",
+    "haulageOriginType": "起运地拖车类型",
+    "haulageDestinationType": "交货地拖车类型",
+    "carriageContract": "运输合同",
+    "agencyReference": "代理参考号",
+    "customerReference": "客户参考号",
+    "onlineBookingNo": "在线订舱号",
+    "shipperContact": "发货人联系人",
+    "shipperEmail": "发货人邮箱",
+    "consigneeName": "收货人名称",
+    "consigneeContact": "收货人联系人",
+    "consigneeEmail": "收货人邮箱",
+    "notifyPartyName": "通知方名称",
+    "notifyPartyContact": "通知方联系人",
+    "notifyPartyEmail": "通知方邮箱",
+    "commodityDescription": "货物描述"
+  },
+  "options": {
+    "haulage": {
+      "merchant": "货主",
+      "carrier": "承运人"
+    }
+  },
+  "validation": {
+    "originRequired": "起运地为必填项",
+    "deliveryRequired": "交货地为必填项",
+    "cargoReadyDateRequired": "货物就绪日期为必填项",
+    "shipperNameRequired": "订舱方为必填项",
+    "agreementPartyRequired": "协议方为必填项",
+    "siSubmittingPartyRequired": "SI 提交方为必填项",
+    "containerTypeRequired": "集装箱类型为必填项",
+    "hsCodeRequired": "HS 编码为必填项",
+    "weightRequired": "重量为必填项",
+    "invalidEmail": "邮箱无效",
+    "invalidContainerType": "请选择有效的集装箱类型"
+  },
+  "errors": {
+    "duplicateRow": "与另一行重复：起运地、交货地、货物就绪日期和发货人相同"
+  },
+  "actions": {
+    "submit_one": "提交 {{count}} 笔订舱",
+    "submit_other": "提交 {{count}} 笔订舱"
+  }
+}

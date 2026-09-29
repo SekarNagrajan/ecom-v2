@@ -1,0 +1,92 @@
+{
+  "subtitle": "按日期范围筛选，查看装货港至卸货港路由，并打印集装箱放行单。",
+  "search": {
+    "fromDate": "开始日期",
+    "toDate": "结束日期",
+    "show": "查询"
+  },
+  "columns": {
+    "releaseNo": "放行单号",
+    "bookingNo": "订舱号",
+    "croDate": "CRO 日期",
+    "vessel": "船名",
+    "voyage": "航次",
+    "loadPort": "装货港",
+    "discharge": "卸货港",
+    "contType": "箱型",
+    "qtyBooked": "订舱数量",
+    "qtyReleased": "已放行数量",
+    "emptyReleaseDepot": "空箱放行堆场",
+    "croValidity": "CRO 有效期",
+    "status": "状态"
+  },
+  "actions": {
+    "viewDetails": "查看详情",
+    "printContainerReleaseOrder": "打印集装箱放行单",
+    "downloadPdf": "下载 PDF",
+    "copyCroNumber": "复制 CRO 编号",
+    "copied": "已复制"
+  },
+  "empty": {
+    "loadErrorTitle": "无法加载集装箱放行单",
+    "loadErrorMessage": "请求未完成。请检查网络连接后重试。",
+    "noResultsTitle": "没有符合条件的集装箱放行单",
+    "noResultsMessage": "该日期范围内没有结果。请扩大日期范围或清除筛选条件。",
+    "noContainers": "此放行单没有集装箱"
+  },
+  "errors": {
+    "fetchList": "获取 CRO 列表失败",
+    "fetchDetail": "获取 CRO 详情失败",
+    "fetchEligibility": "获取放行资格失败",
+    "download": "下载 CRO 文件失败"
+  },
+  "toasts": {
+    "documentDownloaded": "CRO {{croNo}} 文件已下载"
+  },
+  "status": {
+    "printed": "已打印",
+    "notPrinted": "未打印",
+    "eligible": "可放行",
+    "blocked": "已冻结",
+    "released": "已放行",
+    "cancelled": "已取消"
+  },
+  "validation": {
+    "fromDateRequired": "开始日期为必填项",
+    "toDateRequired": "结束日期为必填项",
+    "fromBeforeTo": "开始日期必须早于或等于结束日期"
+  },
+  "drawer": {
+    "bookingPrefix": "订舱:",
+    "routeEyebrow": "港到港",
+    "loadPort": "装货港",
+    "discharge": "卸货港",
+    "sections": {
+      "details": "放行单详情",
+      "shipment": "货物详情",
+      "containers": "集装箱"
+    },
+    "labels": {
+      "croNumber": "CRO 编号",
+      "bookingNo": "订舱号",
+      "croDate": "CRO 日期",
+      "croValidity": "CRO 有效期",
+      "releaseStatus": "放行状态",
+      "printStatus": "打印状态",
+      "vessel": "船名",
+      "voyage": "航次",
+      "contType": "箱型",
+      "emptyReleaseDepot": "空箱放行堆场",
+      "qtyBooked": "订舱数量",
+      "qtyReleased": "已放行数量"
+    },
+    "containerColumns": {
+      "containerNo": "箱号",
+      "sizeType": "尺寸/箱型",
+      "sealNo": "铅封号"
+    },
+    "alerts": {
+      "validUntil": "此放行单有效期至 <date/>。"
+    }
+  }
+}

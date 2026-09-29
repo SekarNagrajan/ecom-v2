@@ -4,5 +4,269 @@
   "createBooking": "Create Booking",
   "refresh": "Refresh",
   "summaryUnavailableTitle": "Dashboard summary unavailable",
-  "summaryUnavailableMessage": "Refresh the dashboard to try loading the summary again."
+  "summaryUnavailableMessage": "Refresh the dashboard to try loading the summary again.",
+  "kpi": {
+    "totalShipments": "Total Shipments",
+    "bookingConfirmed": "Booking Confirmed",
+    "siPending": "SI Pending",
+    "paymentPending": "Payment Pending",
+    "inTransit": "In Transit",
+    "confirmed": "Confirmed",
+    "atOrigin": "At Origin",
+    "delivered": "Delivered",
+    "awaitingSi": "Awaiting SI",
+    "outstanding": "Outstanding",
+    "invoices": "Invoices"
+  },
+  "ongoing": {
+    "title": "Ongoing Transactions",
+    "columns": {
+      "actions": "Actions",
+      "bookingNo": "Booking No",
+      "blNumber": "BL Number",
+      "onlineRefNo": "Online Ref No",
+      "originPort": "Origin Port",
+      "deliveryPort": "Delivery Port",
+      "departureDate": "Departure Date",
+      "blStatus": "BL Status",
+      "containerNo": "Container No",
+      "teus": "TEUs",
+      "siStatus": "SI Status",
+      "outstandingBalUsd": "Outstanding Bal (USD)"
+    },
+    "actions": {
+      "viewBookingDetails": "View Booking Details",
+      "viewBillOfLading": "View Bill of Lading",
+      "createShippingInstruction": "Create Shipping Instruction (SI)",
+      "createSi": "Create SI"
+    },
+    "empty": {
+      "title": "No ongoing transactions found",
+      "filteredMessage": "No shipments match the selected dashboard filter.",
+      "blankMessage": "Your ongoing bookings and bills of lading will appear here."
+    }
+  },
+  "status": {
+    "confirmed": "Confirmed",
+    "draft": "Draft",
+    "cancelled": "Cancelled",
+    "issued": "Issued"
+  },
+  "charts": {
+    "bookingStatus": "Booking Status",
+    "blStatus": "Bill of Lading Status",
+    "siStatus": "Shipping Instruction Status",
+    "emptyBooking": "No booking status data",
+    "emptyBl": "No B/L status data",
+    "emptySi": "No shipping instruction status data"
+  },
+  "a11y": {
+    "backToTop": "Back to top",
+    "kpiCard": "{{title}}: {{value}}"
+  },
+  "errors": {
+    "fetchSummary": "Failed to load dashboard summary"
+  },
+  "actions": {
+    "viewAll": "View All",
+    "viewReport": "View Report",
+    "view": "View",
+    "all": "All",
+    "viewDetails": "View details"
+  },
+  "volume": {
+    "title": "Shipment Volume Analytics (TEUs)",
+    "trendTitle": "Volume Trend (TEUs)",
+    "periodHintWeekly": "Weekly TEU volume over the selected stage",
+    "periodHintMonthly": "Monthly TEU volume over the selected stage",
+    "periodHintQuarterly": "Quarterly TEU volume over the selected stage",
+    "vsPrev": "vs prev ({{value}})",
+    "tooltipTeus": "{{label}}: <b>{{value}} TEUs</b>",
+    "stages": {
+      "all": "All Volume",
+      "booking": "Booking",
+      "si": "SI",
+      "bl": "B/L",
+      "inTransit": "In Transit"
+    },
+    "periods": {
+      "Weekly": "Weekly",
+      "Monthly": "Monthly",
+      "Quarterly": "Quarterly"
+    },
+    "kpiLabels": {
+      "thisWeek": "This Week",
+      "thisMonth": "This Month",
+      "thisQuarter": "This Quarter",
+      "thisYear": "This Year"
+    }
+  },
+  "planning": {
+    "title": "Upcoming Shipment Planning",
+    "viewAllTooltip": "View All Upcoming Bookings",
+    "bookingsNext7Days": "Bookings (Next 7 Days)",
+    "teus": "TEUs",
+    "week": "Week",
+    "total": "Total",
+    "legendBookings": "Bookings",
+    "legendPendingSi": "Pending SI",
+    "emptyDay": "No bookings",
+    "emptyDayTooltip": "No bookings this day",
+    "weekTotal": "Week total",
+    "clickToView": " — click to view",
+    "bookingOne": "1 booking",
+    "bookingMany": "{{count}} bookings",
+    "pendingSiOne": "1 pending shipping instruction",
+    "pendingSiMany": "{{count}} pending shipping instructions",
+    "paymentOne": "1 payment pending",
+    "paymentMany": "{{count}} payments pending",
+    "needSi": "{{count}} need shipping instruction",
+    "paymentPendingCount": "{{count}} payment pending",
+    "dayAria": "{{day}} {{week}}: {{summary}}",
+    "days": {
+      "mon": "Mon",
+      "tue": "Tue",
+      "wed": "Wed",
+      "thu": "Thu",
+      "fri": "Fri",
+      "sat": "Sat",
+      "sun": "Sun"
+    }
+  },
+  "planningDrawer": {
+    "eyebrow": "UPCOMING BOOKINGS",
+    "route": "Route",
+    "status": "Status",
+    "capacity": "Capacity",
+    "capacityTeu": "{{count}} TEU",
+    "siPending": "SI pending",
+    "paymentDue": "Payment due",
+    "viewDetails": "View details",
+    "empty": "No bookings for this day"
+  },
+  "intelligence": {
+    "title": "Shipment Intelligence",
+    "viewReportTooltip": "Open the full intelligence report",
+    "topConsignees": "Top Consignees",
+    "viewAllConsigneesTooltip": "View all consignees by FEU volume",
+    "total": "Total",
+    "segments": "{{count}} segments",
+    "totalTeus": "{{count}} TEUs",
+    "tooltipFeus": "{{name}}: {{value}} FEUs ({{percent}}%)",
+    "columns": {
+      "teus": "TEUs",
+      "share": "Share",
+      "volume": "Volume",
+      "company": "Company",
+      "rank": "#"
+    },
+    "dimensions": {
+      "origin": "Origin",
+      "pol": "POL",
+      "pod": "POD",
+      "pickup": "Pickup",
+      "consignee": "Consignee",
+      "destination": "Destination"
+    },
+    "dimensionColumns": {
+      "origin": "Origin",
+      "pol": "Port of Loading",
+      "pod": "Port of Discharge",
+      "pickup": "Pickup",
+      "consignee": "Consignee",
+      "destination": "Destination"
+    }
+  },
+  "lanes": {
+    "topActive": "Top Active Lanes",
+    "viewAllByFeu": "View all lanes by FEU volume",
+    "recentlyUsed": "Recently Used Lanes",
+    "recentlyUsedHint": "Latest bookings on these corridors",
+    "viewAllRecentlyUsed": "View all recently used lanes",
+    "opportunities": "Lane Opportunities",
+    "viewAllOpportunities": "View all lane opportunities",
+    "quietContracted": "Quiet Contracted Lanes",
+    "quietHint": "No activity in the last 90 days",
+    "suggestedNew": "Suggested New Lanes",
+    "suggestedHint": "Based on your booking history",
+    "noActivity": "No Activity",
+    "lanePolPod": "Lane (POL → POD)",
+    "feus": "FEUs",
+    "share": "Share",
+    "volume": "Volume",
+    "suggestions": {
+      "highPotential": "High Potential",
+      "mediumPotential": "Medium Potential"
+    }
+  },
+  "schedules": {
+    "title": "Upcoming Vessel Schedules",
+    "voyageLine": "Voy. {{voyage}} · {{service}} · {{pol}} → {{pod}}",
+    "etd": "ETD {{date}}",
+    "cutoff": "SI/VGM Cutoff: {{date}}"
+  },
+  "recentBookings": {
+    "title": "Recent Bookings",
+    "viewAll": "View all",
+    "voyage": "Voy. {{voyage}}",
+    "footer": "Showing {{shown}} of {{total}} active bookings — last updated {{updated}}",
+    "columns": {
+      "bookingNo": "Booking No.",
+      "vesselVoyage": "Vessel / Voyage",
+      "route": "Route",
+      "etd": "ETD",
+      "status": "Status",
+      "action": "Action"
+    },
+    "status": {
+      "pending": "Pending",
+      "blIssued": "B/L Issued",
+      "completed": "Completed"
+    }
+  },
+  "notices": {
+    "title": "Notices & Advisories"
+  },
+  "export": {
+    "buttonTooltip": "Export Report",
+    "dialogTitle": "Export Report",
+    "previewTitle": "Report Preview",
+    "defaultTitle": "Dashboard Report",
+    "reportTitle": "Report Title",
+    "reportTitlePlaceholder": "e.g. Dashboard Report",
+    "format": "Format",
+    "formatPdf": "PDF",
+    "formatPptx": "PowerPoint",
+    "preview": "Preview",
+    "downloadPdf": "Download PDF",
+    "downloadPptx": "Download PowerPoint",
+    "generating": "Generating report…",
+    "updatingPreview": "Updating preview…",
+    "previewDisclaimer": "Preview — final layout may differ slightly.",
+    "scopeKpiFilter": "KPI filter",
+    "scopeShipments": "Shipments",
+    "currentDashboardData": "Current dashboard data",
+    "shipmentsOf": "{{shown}} of {{total}}",
+    "ariaPdfPreview": "PDF preview",
+    "ariaPptxPreview": "PowerPoint preview",
+    "slideOf": "Slide {{current}} of {{total}}",
+    "chartUnavailable": "Chart could not be rendered.",
+    "chartUnavailableShort": "Chart unavailable",
+    "continued": "{{title}} (cont.)",
+    "reportScope": "Report scope",
+    "pageOf": "Page {{page}} of {{total}}",
+    "generatedBy": "Generated by {{name}}",
+    "appliedFilters": "Applied Filters",
+    "downloaded": "\"{{title}}\" downloaded",
+    "chartsMissingOne": "{{count}} chart could not be rendered and appear as placeholders.",
+    "chartsMissingOther": "{{count}} charts could not be rendered and appear as placeholders.",
+    "validation": {
+      "titleMin": "Report title must be at least 3 characters",
+      "titleMax": "Report title must be at most 150 characters"
+    },
+    "errors": {
+      "previewFailed": "Failed to generate report preview",
+      "downloadFailed": "Failed to download report"
+    }
+  }
 }

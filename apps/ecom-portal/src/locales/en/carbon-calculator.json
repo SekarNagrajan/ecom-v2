@@ -1,3 +1,105 @@
 {
-  "subtitle": "Estimate shipment CO₂e from trade lane and cargo parameters."
+  "subtitle": "Estimate shipment CO₂e from trade lane and cargo parameters.",
+  "form": {
+    "origin": "Origin",
+    "destination": "Destination",
+    "weightKg": "Weight (kg)",
+    "equipment": "Equipment",
+    "qty": "Qty",
+    "fuel": "Fuel",
+    "unit": "Unit",
+    "actions": "Actions",
+    "placeholders": {
+      "origin": "Origin",
+      "destination": "Destination",
+      "equipment": "Equipment",
+      "fuelOptional": "Optional"
+    }
+  },
+  "units": {
+    "kgCo2e": "kg CO₂e",
+    "tCo2e": "t CO₂e",
+    "gCo2e": "g CO₂e",
+    "kg": "kg"
+  },
+  "actions": {
+    "calculate": "Calculate",
+    "exportPdf": "Export PDF"
+  },
+  "empty": {
+    "noEstimateTitle": "No estimate yet",
+    "noEstimateMessage": "Choose origin, destination, and cargo details, then select Calculate.",
+    "noResultTitle": "No result yet",
+    "noLegBreakdownTitle": "No leg breakdown",
+    "noLegBreakdownMessage": "Per-leg emissions will appear here when the estimate includes transport legs.",
+    "noLegBreakdownAvailable": "No leg breakdown available",
+    "noModeBreakdownAvailable": "No mode breakdown available"
+  },
+  "results": {
+    "containers_one": "{{count}} container",
+    "containers_other": "{{count}} containers",
+    "emissionsBreakdown": "Emissions Breakdown",
+    "gridView": "Grid View",
+    "chartView": "Chart View",
+    "methodology": "Methodology: {{standard}} (factor version {{version}}). Figures are estimates; actual emissions vary with vessel, weather, and routing."
+  },
+  "kpi": {
+    "totalCo2e": "Total CO₂e",
+    "tankToWheel": "Tank-to-wheel",
+    "wellToTank": "Well-to-tank",
+    "perTeu": "Per TEU",
+    "perTonneKm": "Per tonne-km"
+  },
+  "columns": {
+    "mode": "Mode",
+    "from": "From",
+    "to": "To",
+    "distanceKm": "Distance (km)",
+    "co2eKg": "CO₂e (kg)",
+    "co2eT": "CO₂e (t)"
+  },
+  "charts": {
+    "emissionScopeTitle": "Emission Scope",
+    "emissionScopeHint": "Tank-to-wheel vs well-to-tank share of total CO₂e",
+    "byLegTitle": "By Transport Leg",
+    "byLegHint": "CO₂e contribution for each origin–destination leg",
+    "byModeTitle": "By Transport Mode",
+    "byModeHint": "Combined CO₂e across sea, road, rail, and other modes",
+    "emissionScopeSeries": "Emission scope",
+    "byModeSeries": "By mode",
+    "modeTooltip": "Mode: {{mode}}"
+  },
+  "modes": {
+    "SEA": "Sea",
+    "ROAD": "Road",
+    "RAIL": "Rail",
+    "AIR": "Air",
+    "INLAND_WATER": "Inland water"
+  },
+  "validation": {
+    "originLocode": "Origin LOCODE must be 5 characters.",
+    "destinationLocode": "Destination LOCODE must be 5 characters.",
+    "cargoWeightPositive": "Cargo weight must be greater than zero.",
+    "equipmentRequired": "Equipment is required.",
+    "destinationMustDiffer": "Destination must differ from origin."
+  },
+  "errors": {
+    "computeFailed": "Failed to compute carbon footprint.",
+    "lookupsFailed": "Failed to fetch carbon lookups",
+    "downloadFailed": "Failed to download carbon estimate PDF",
+    "networkError": "Network error"
+  },
+  "toasts": {
+    "pdfDownloaded": "Carbon estimate PDF downloaded"
+  },
+  "a11y": {
+    "loading": "Loading",
+    "breakdownViewMode": "Breakdown view mode",
+    "emissionScopeChart": "Emission scope chart",
+    "scopeSplitChart": "Tank-to-wheel versus well-to-tank CO2e split",
+    "emissionsByLegChart": "Emissions by leg chart",
+    "co2eByLeg": "CO2e by transport leg",
+    "emissionsByModeChart": "Emissions by mode chart",
+    "co2eByMode": "CO2e by transport mode"
+  }
 }

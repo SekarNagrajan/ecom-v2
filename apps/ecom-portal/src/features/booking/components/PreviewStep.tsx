@@ -9,8 +9,9 @@ import { useNavigate } from "@tanstack/react-router";
 import { Checkbox, Flex, Result } from "antd";
 import { useState } from "react";
 
+import { useTranslation } from "react-i18next";
 import { AppIcon, Icons } from "../../../components/icons";
-import { WIZARD_STEP_TITLES } from "../../../constants/module-titles";
+import { useWizardStepTitles } from "../../../i18n/use-module-titles";
 import { useBookingStore } from "../stores/booking.store";
 import type { SelectedRoute } from "../types/booking.types";
 import { orderedAssignedParties } from "../utils/party-role.utils";
@@ -99,6 +100,8 @@ interface PreviewStepProps {
 }
 
 export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
+  const { t } = useTranslation(["booking", "common", "modules"]);
+  const WIZARD_STEP_TITLES = useWizardStepTitles();
   const navigate = useNavigate();
   const payload = useBookingStore((s) => s.payload);
   const prevStep = useBookingStore((s) => s.prevStep);
@@ -113,8 +116,8 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
     return (
       <Result
         status="warning"
-        title="Missing Information"
-        subTitle="Please go back and complete all previous steps before submitting."
+        title={t("booking:wizard.preview.missingTitle")}
+        subTitle={t("booking:wizard.preview.missingSubtitle")}
       />
     );
   }
@@ -133,33 +136,33 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
   const partyEntries = orderedAssignedParties(parties);
 
   const masterRows: { label: string; value: string }[] = [
-    { label: "Origin", value: dash(masterDetails.origin) },
-    { label: "Delivery", value: dash(masterDetails.delivery) },
-    { label: "Cargo ready date", value: dash(masterDetails.cargoReadyDate) },
-    { label: "Haulage origin", value: dash(masterDetails.haulageOriginType) },
+    { label: t("booking:columns.origin"), value: dash(masterDetails.origin) },
+    { label: t("booking:columns.delivery"), value: dash(masterDetails.delivery) },
+    { label: t("booking:labels.cargoReadyDate"), value: dash(masterDetails.cargoReadyDate) },
+    { label: t("booking:labels.haulageOrigin"), value: dash(masterDetails.haulageOriginType) },
     {
-      label: "Haulage destination",
+      label: t("booking:labels.haulageDestination"),
       value: dash(masterDetails.haulageDestinationType),
     },
-    { label: "Carriage contract", value: dash(masterDetails.carriageContract) },
-    { label: "Preferred agency", value: dash(masterDetails.preferredAgency) },
-    { label: "Rate reference", value: dash(masterDetails.rateReference) },
+    { label: t("booking:labels.carriageContract"), value: dash(masterDetails.carriageContract) },
+    { label: t("booking:wizard.master.preferredAgency"), value: dash(masterDetails.preferredAgency) },
+    { label: t("booking:wizard.master.rateReference"), value: dash(masterDetails.rateReference) },
   ];
 
   const ensRows: { label: string; value: string }[] = ens?.euCustomsZone
     ? [
-        { label: "EU customs zone", value: "Yes" },
-        { label: "BL type", value: dash(ens.blType) },
-        { label: "Filing type", value: dash(ens.ensFilingType) },
-        { label: "Payment method", value: dash(ens.paymentMethod) },
+        { label: t("booking:wizard.preview.euCustomsZone"), value: t("common:actions.yes") },
+        { label: t("booking:labels.blType"), value: dash(ens.blType) },
+        { label: t("booking:labels.filingType"), value: dash(ens.ensFilingType) },
+        { label: t("booking:wizard.preview.paymentMethod"), value: dash(ens.paymentMethod) },
         ...(ens.ensFilingType === "Single Filing"
           ? [
-              { label: "Buyer", value: dash(ens.buyerName) },
-              { label: "Seller", value: dash(ens.sellerName) },
+              { label: t("booking:wizard.preview.buyer"), value: dash(ens.buyerName) },
+              { label: t("booking:wizard.preview.seller"), value: dash(ens.sellerName) },
             ]
           : [
               {
-                label: "Declarant",
+                label: t("booking:wizard.preview.declarant"),
                 value: ens.declarantName
                   ? `${ens.declarantName}${
                       ens.declarantCountry ? ` (${ens.declarantCountry})` : ""
@@ -168,7 +171,7 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
               },
             ]),
       ]
-    : [{ label: "ENS required", value: "No" }];
+    : [{ label: t("booking:wizard.preview.ensRequired"), value: t("common:actions.no") }];
 
   const originCode =
     route?.polPortId || portCodeFromValue(masterDetails.origin);
@@ -190,7 +193,7 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
 
         <BookingPreviewSection
           variant="airy"
-          title="Route & schedule"
+          title={t("booking:wizard.preview.sections.routeSchedule")}
           onEdit={() => go(BOOKING_STEP.master)}
         >
           {route ? (
@@ -203,13 +206,13 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
               haulageDestination={masterDetails.haulageDestinationType}
             />
           ) : (
-            <BookingPreviewEmpty label="No route selected" />
+            <BookingPreviewEmpty label={t("booking:wizard.preview.empty.noRoute")} />
           )}
         </BookingPreviewSection>
 
         <BookingPreviewSection
           variant="airy"
-          title="Master details"
+          title={t("booking:sections.masterDetails")}
           onEdit={() => go(BOOKING_STEP.master)}
         >
           <BookingPreviewFieldGrid items={masterRows} />
@@ -217,7 +220,7 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
 
         <BookingPreviewSection
           variant="airy"
-          title="Customer details"
+          title={t("booking:sections.customerDetails")}
           onEdit={() => go(BOOKING_STEP.parties)}
         >
           {partyEntries.length > 0 ? (
@@ -229,13 +232,13 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
               ))}
             </div>
           ) : (
-            <BookingPreviewEmpty label="No parties assigned" />
+            <BookingPreviewEmpty label={t("booking:wizard.preview.empty.noParties")} />
           )}
         </BookingPreviewSection>
 
         <BookingPreviewSection
           variant="airy"
-          title="Cargo details"
+          title={t("booking:sections.cargoDetails")}
           onEdit={() => go(BOOKING_STEP.cargo)}
         >
           <PreviewCargoReview containers={cargo.containers ?? []} />
@@ -251,29 +254,29 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
 
         <BookingPreviewSection
           variant="airy"
-          title="Insurance & charges"
+          title={t("booking:wizard.preview.sections.insuranceCharges")}
           onEdit={() => go(BOOKING_STEP.insurance)}
         >
           {insurance?.isInsuranceRequired ? (
             <div className="booking-review__grid">
               <div className="booking-review__field">
-                <span className="booking-review__label">Required</span>
-                <span className="booking-review__value">Yes</span>
+                <span className="booking-review__label">{t("booking:wizard.preview.ensRequired")}</span>
+                <span className="booking-review__value">{t("common:actions.yes")}</span>
               </div>
               <div className="booking-review__field">
-                <span className="booking-review__label">Currency</span>
+                <span className="booking-review__label">{t("booking:wizard.preview.currency")}</span>
                 <span className="booking-review__value">
                   {dash(insurance.currency)}
                 </span>
               </div>
               <div className="booking-review__field">
-                <span className="booking-review__label">Terms accepted</span>
+                <span className="booking-review__label">{t("booking:labels.termsAccepted")}</span>
                 <span className="booking-review__value">
-                  {insurance.termsAccepted ? "Yes" : "No"}
+                  {insurance.termsAccepted ? t("common:actions.yes") : t("common:actions.no")}
                 </span>
               </div>
               <div className="booking-review__value-tile">
-                <span className="booking-review__label">Declared value</span>
+                <span className="booking-review__label">{t("booking:wizard.preview.declaredValue")}</span>
                 <span className="booking-review__value-tile-amount">
                   {formatMoney(insurance.cargoValue, insurance.currency)}
                 </span>
@@ -282,19 +285,19 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
           ) : (
             <div className="booking-review__grid">
               <div className="booking-review__field">
-                <span className="booking-review__label">Required</span>
-                <span className="booking-review__value">No</span>
+                <span className="booking-review__label">{t("booking:wizard.preview.ensRequired")}</span>
+                <span className="booking-review__value">{t("common:actions.no")}</span>
               </div>
               <div className="booking-review__field">
-                <span className="booking-review__label">Currency</span>
+                <span className="booking-review__label">{t("booking:wizard.preview.currency")}</span>
                 <span className="booking-review__value">—</span>
               </div>
               <div className="booking-review__field">
-                <span className="booking-review__label">Terms accepted</span>
+                <span className="booking-review__label">{t("booking:labels.termsAccepted")}</span>
                 <span className="booking-review__value">—</span>
               </div>
               <div className="booking-review__value-tile">
-                <span className="booking-review__label">Declared value</span>
+                <span className="booking-review__label">{t("booking:wizard.preview.declaredValue")}</span>
                 <span className="booking-review__value-tile-amount">—</span>
               </div>
             </div>
@@ -303,7 +306,7 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
 
         <BookingPreviewSection
           variant="airy"
-          title="Documents"
+          title={t("booking:sections.documents")}
           onEdit={() => go(BOOKING_STEP.files)}
         >
           {documents.length > 0 ? (
@@ -323,7 +326,7 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
               ))}
             </div>
           ) : (
-            <BookingPreviewEmpty label="No files uploaded" />
+            <BookingPreviewEmpty label={t("booking:wizard.preview.empty.noFiles")} />
           )}
         </BookingPreviewSection>
 
@@ -340,7 +343,7 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
               }))}
             />
           ) : (
-            <BookingPreviewEmpty label="No reference fields" />
+            <BookingPreviewEmpty label={t("booking:wizard.preview.empty.noReferences")} />
           )}
         </BookingPreviewSection>
 
@@ -349,8 +352,7 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
             checked={termsAccepted}
             onChange={(event) => setTermsAccepted(event.target.checked)}
           >
-            I confirm these details are accurate and accept the terms of
-            carriage
+            {t("booking:wizard.preview.termsCheckbox")}
           </Checkbox>
         </div>
       </div>
@@ -358,13 +360,13 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
       <div className="form-step-footer form-step-footer--split">
         <div className="form-step-footer__start custom-scroll">
           <AppButton onClick={prevStep} disabled={isSubmitting}>
-            Previous
+            {t("common:actions.previous")}
           </AppButton>
           <AppButton
             onClick={() => navigate({ to: "/app/booking" })}
             disabled={isSubmitting}
           >
-            Cancel
+            {t("common:actions.cancel")}
           </AppButton>
         </div>
         <Flex gap="small" wrap="wrap">
@@ -374,7 +376,7 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
             loading={isSubmitting}
             disabled={!termsAccepted}
           >
-            Submit Booking
+            {t("booking:wizard.actions.submitBooking")}
           </AppButton>
         </Flex>
       </div>

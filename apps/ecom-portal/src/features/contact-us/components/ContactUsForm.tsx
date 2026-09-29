@@ -38,7 +38,7 @@ function optLabel(label: string) {
  * Guest: full editable fields (legacy ContactUs.jsp parity).
  */
 export function ContactUsForm({ controller }: ContactUsFormProps) {
-  const { t } = useTranslation("contact-us");
+  const { t } = useTranslation(["contact-us", "common"]);
   const {
     form,
     isAuthenticated,

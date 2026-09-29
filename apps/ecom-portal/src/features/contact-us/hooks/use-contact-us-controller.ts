@@ -3,7 +3,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuthStore } from "@solverminds/auth";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { useMutation } from "@tanstack/react-query";
+import { useEffect, useMemo, useRef } from "react";
 import { useForm, useWatch } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { submitContactUs } from "../api/contact-us.api";
 import {
@@ -11,8 +13,8 @@ import {
   useContactUsStates,
 } from "../api/contact-us.queries";
 import {
-  contactUsGuestSchema,
-  contactUsSchema,
+  createContactUsGuestSchema,
+  createContactUsSchema,
   type ContactUsFormData,
 } from "../types/contact-us.schema";
 
@@ -21,13 +23,22 @@ interface UseContactUsControllerOptions {
 }
 
 export function useContactUsController(
-  options: UseContactUsControllerOptions = {}
+  options: UseContactUsControllerOptions = {},
 ) {
+  const { t, i18n } = useTranslation(["contact-us", "common"]);
   const toast = useToast();
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const user = useAuthStore((s) => s.user);
+  const defaultSubject = options.defaultSubject ?? "";
+  const previousDefaultSubject = useRef(defaultSubject);
 
-  const schema = isAuthenticated ? contactUsSchema : contactUsGuestSchema;
+  const schema = useMemo(
+    () =>
+      isAuthenticated
+        ? createContactUsSchema(t)
+        : createContactUsGuestSchema(t),
+    [isAuthenticated, t, i18n.language],
+  );
 
   const form = useForm<ContactUsFormData>({
     resolver: zodResolver(schema),
@@ -40,10 +51,22 @@ export function useContactUsController(
       phone: "",
       mobile: "",
       email: isAuthenticated ? (user?.email ?? "") : "",
-      subject: options.defaultSubject ?? "",
+      subject: defaultSubject,
       message: "",
     },
   });
+
+  // Keep registration default subject language-reactive when the user has not edited it.
+  useEffect(() => {
+    if (defaultSubject === previousDefaultSubject.current) {
+      return;
+    }
+    const current = form.getValues("subject");
+    if (!current || current === previousDefaultSubject.current) {
+      form.setValue("subject", defaultSubject);
+    }
+    previousDefaultSubject.current = defaultSubject;
+  }, [defaultSubject, form]);
 
   const watchedCountry = useWatch({ control: form.control, name: "country" });
   const countriesQuery = useContactUsCountries();
@@ -61,7 +84,7 @@ export function useContactUsController(
       }
     },
     onError: (error: Error) => {
-      toast.error(error.message || "Failed to send message. Please try again.");
+      toast.error(error.message || t("errors.sendFailedRetry"));
     },
   });
 

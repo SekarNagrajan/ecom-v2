@@ -1,6 +1,7 @@
 // Modified by Sekar Nagarajan (2026-09-16 17:13)
 import { AppButton } from "@solverminds/shared-ui";
 import { Card, Progress, Tooltip, Typography } from "antd";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import type {
@@ -34,12 +35,29 @@ function LaneRoute({
   );
 }
 
+function getLaneSuggestionLabel(
+  suggestion: OpportunityLane["suggestion"],
+  t: (key: string) => string,
+): string {
+  switch (suggestion) {
+    case "High Potential":
+      return t("lanes.suggestions.highPotential");
+    case "Medium Potential":
+      return t("lanes.suggestions.mediumPotential");
+    default: {
+      const _exhaustive: never = suggestion;
+      return _exhaustive;
+    }
+  }
+}
+
 interface TopLanesProps {
   lanes: TopLane[];
   lastUsed: LastUsedLane[];
 }
 
 export function TopActiveLanesSection({ lanes, lastUsed }: TopLanesProps) {
+  const { t } = useTranslation(["dashboard", "common", "modules"]);
   const maxFeus = lanes[0]?.feus ?? 1;
 
   return (
@@ -47,13 +65,13 @@ export function TopActiveLanesSection({ lanes, lastUsed }: TopLanesProps) {
       className="dashboard-panel"
       title={
         <Text strong className="dashboard-panel__title">
-          Top Active Lanes
+          {t("lanes.topActive")}
         </Text>
       }
       extra={
-        <Tooltip title="View all lanes by FEU volume">
+        <Tooltip title={t("lanes.viewAllByFeu")}>
           <AppButton type="link" size="small">
-            View All
+            {t("actions.viewAll")}
           </AppButton>
         </Tooltip>
       }
@@ -71,10 +89,10 @@ export function TopActiveLanesSection({ lanes, lastUsed }: TopLanesProps) {
             <thead>
               <tr>
                 <th className="is-center">#</th>
-                <th>Lane (POL → POD)</th>
-                <th className="is-right">FEUs</th>
-                <th className="is-right">Share</th>
-                <th>Volume</th>
+                <th>{t("lanes.lanePolPod")}</th>
+                <th className="is-right">{t("lanes.feus")}</th>
+                <th className="is-right">{t("lanes.share")}</th>
+                <th>{t("lanes.volume")}</th>
               </tr>
             </thead>
             <tbody>
@@ -114,15 +132,15 @@ export function TopActiveLanesSection({ lanes, lastUsed }: TopLanesProps) {
           <div className="dashboard-last-used__head">
             <div>
               <Text className="dashboard-subsection-label">
-                Recently Used Lanes
+                {t("lanes.recentlyUsed")}
               </Text>
               <Text type="secondary" className="dashboard-subsection-hint">
-                Latest bookings on these corridors
+                {t("lanes.recentlyUsedHint")}
               </Text>
             </div>
-            <Tooltip title="View all recently used lanes">
+            <Tooltip title={t("lanes.viewAllRecentlyUsed")}>
               <AppButton type="link" size="small">
-                View All
+                {t("actions.viewAll")}
               </AppButton>
             </Tooltip>
           </div>
@@ -154,18 +172,20 @@ export function LaneOpportunitySection({
   contracted,
   opportunities,
 }: LaneOpportunityProps) {
+  const { t } = useTranslation(["dashboard", "common", "modules"]);
+
   return (
     <Card
       className="dashboard-panel"
       title={
         <Text strong className="dashboard-panel__title">
-          Lane Opportunities
+          {t("lanes.opportunities")}
         </Text>
       }
       extra={
-        <Tooltip title="View all lane opportunities">
+        <Tooltip title={t("lanes.viewAllOpportunities")}>
           <AppButton type="link" size="small">
-            View All
+            {t("actions.viewAll")}
           </AppButton>
         </Tooltip>
       }
@@ -174,10 +194,10 @@ export function LaneOpportunitySection({
         <div className="dashboard-split-stack__block">
           <div className="dashboard-subsection-head">
             <Text className="dashboard-subsection-label">
-              Quiet Contracted Lanes
+              {t("lanes.quietContracted")}
             </Text>
             <Text type="secondary" className="dashboard-subsection-hint">
-              No activity in the last 90 days
+              {t("lanes.quietHint")}
             </Text>
           </div>
           <div className="dashboard-opportunity-list custom-scroll">
@@ -188,7 +208,7 @@ export function LaneOpportunitySection({
               >
                 <LaneRoute pol={lane.pol} pod={lane.pod} tone="muted" />
                 <span className="dashboard-status-pill dashboard-status-pill--idle">
-                  No Activity
+                  {t("lanes.noActivity")}
                 </span>
               </div>
             ))}
@@ -198,10 +218,10 @@ export function LaneOpportunitySection({
         <div className="dashboard-split-stack__block">
           <div className="dashboard-subsection-head">
             <Text className="dashboard-subsection-label">
-              Suggested New Lanes
+              {t("lanes.suggestedNew")}
             </Text>
             <Text type="secondary" className="dashboard-subsection-hint">
-              Based on your booking history
+              {t("lanes.suggestedHint")}
             </Text>
           </div>
           <div className="dashboard-opportunity-list custom-scroll">
@@ -220,7 +240,7 @@ export function LaneOpportunitySection({
                         : "dashboard-status-pill dashboard-status-pill--watch"
                     }
                   >
-                    {lane.suggestion}
+                    {getLaneSuggestionLabel(lane.suggestion, t)}
                   </span>
                 </div>
               );

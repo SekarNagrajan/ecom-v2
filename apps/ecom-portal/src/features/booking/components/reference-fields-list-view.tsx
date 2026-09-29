@@ -1,5 +1,6 @@
 // Created by Sekar Nagarajan (2026-09-02 11:20)
 import { Typography } from "antd";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import {
@@ -11,7 +12,7 @@ import { ReferenceFieldInput } from "./reference-field-input";
 
 const { Text } = Typography;
 
-const TABLE_HEADERS = ["Field Name", "Value", "Actions"] as const;
+const TABLE_HEADER_KEYS = ["colFieldName", "colValue", "colActions"] as const;
 
 export interface ReferenceFieldsListViewProps {
   fields: ReferenceField[];
@@ -25,22 +26,23 @@ export function ReferenceFieldsListView({
   onUpdateValue,
   onDelete,
 }: ReferenceFieldsListViewProps) {
+  const { t } = useTranslation("booking");
   return (
     <div className="ref-fields-table-wrap">
       <div className="custom-scroll ref-fields-table-scroll">
         <table className="ref-fields-table">
           <thead>
             <tr>
-              {TABLE_HEADERS.map((header) => (
+              {TABLE_HEADER_KEYS.map((key) => (
                 <th
-                  key={header}
+                  key={key}
                   className={
-                    header === "Actions"
+                    key === "colActions"
                       ? "ref-fields-table__th-actions"
                       : undefined
                   }
                 >
-                  {header}
+                  {t(`wizard.references.${key}`)}
                 </th>
               ))}
             </tr>
@@ -62,7 +64,7 @@ export function ReferenceFieldsListView({
                 <td className="ref-fields-table__td-actions">
                   <ListActionsRow>
                     <ListActionButton
-                      title="Remove Field"
+                      title={t("wizard.references.removeField")}
                       icon={
                         <AppIcon icon={Icons.trash} size={16} tone="delete" />
                       }

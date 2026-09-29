@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Spin } from "antd";
 import { useState } from "react";
 
+import { useTranslation } from "react-i18next";
 import { Icons } from "../../../components/icons";
 import { BookingTemplateModalShell } from "../../../components/shared/booking-template-modal-shell";
 import {
@@ -34,6 +35,7 @@ export function RoutingSelectModal({
   onCancel,
   onSelect,
 }: RoutingSelectModalProps) {
+  const { t } = useTranslation(["booking", "common"]);
   const [expandedRouteId, setExpandedRouteId] = useState<string | null>(null);
 
   const {
@@ -60,17 +62,19 @@ export function RoutingSelectModal({
       open={open}
       onClose={handleClose}
       icon={Icons.ship}
-      title="Select Vessel / Route"
-      subtitle={`${origin || "—"} → ${delivery || "—"} · Cargo ready ${
-        cargoReadyDate || "—"
-      }`}
+      title={t("booking:wizard.routing.selectVesselRoute")}
+      subtitle={t("booking:wizard.routing.modalSubtitle", {
+        origin: origin || "—",
+        delivery: delivery || "—",
+        date: cargoReadyDate || "—",
+      })}
       dialogSize="xl"
     >
       <div className="booking-routing-modal custom-scroll">
         {isFetching ? (
           <div
             className="booking-routing-modal__loading"
-            aria-label="Loading"
+            aria-label={t("booking:wizard.routing.loadingAria")}
             role="status"
           >
             <Spin size="medium" />
@@ -80,8 +84,8 @@ export function RoutingSelectModal({
         {!isFetching && isError ? (
           <ModuleEmptyState
             variant="error"
-            title="Unable to load vessel schedules"
-            message="Something went wrong while loading routes."
+            title={t("booking:wizard.routing.loadErrorTitle")}
+            message={t("booking:wizard.routing.loadErrorMessage")}
             actions={[buildRetryAction(() => void refetch())]}
             artSize="sm"
           />
@@ -90,8 +94,8 @@ export function RoutingSelectModal({
         {!isFetching && !isError && routes.length === 0 ? (
           <ModuleEmptyState
             variant="filtered"
-            title="No vessel schedules found"
-            message="No records match this origin, delivery, and cargo-ready date."
+            title={t("booking:wizard.routing.emptyTitle")}
+            message={t("booking:wizard.routing.emptyMessage")}
             artSize="sm"
           />
         ) : null}
@@ -111,7 +115,7 @@ export function RoutingSelectModal({
                     )
                   }
                   action={{
-                    label: isSelected ? "Selected" : "Select",
+                    label: isSelected ? t("booking:wizard.routing.selected") : t("common:actions.select"),
                     icon: Icons.check,
                     type: isSelected ? "default" : "primary",
                     onClick: () => onSelect(route),

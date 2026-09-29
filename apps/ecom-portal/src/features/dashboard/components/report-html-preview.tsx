@@ -3,7 +3,8 @@
  * Format-aware HTML report preview — A4 pages (PDF) vs 16:9 slides (PPTX).
  */
 import { Flex, Typography, theme } from "antd";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { useChartTokens } from "../../theme/utils/use-portal-chart-tokens";
 import type { DashboardExportFormat } from "../hooks/use-dashboard-export";
@@ -21,6 +22,7 @@ import {
 import {
   displayReportCell,
   formatDeltaWithArrow,
+  type ReportExportLabels,
 } from "../utils/export/report-shared.utils";
 
 const { Text, Title } = Typography;
@@ -36,14 +38,31 @@ export function ReportHtmlPreview({
   format,
   formatGeneratedAt,
 }: ReportHtmlPreviewProps) {
+  const { t } = useTranslation(["dashboard", "common", "modules"]);
   const { token } = theme.useToken();
 
+  const labels: ReportExportLabels = useMemo(
+    () => ({
+      reportScope: t("export.reportScope"),
+      chartUnavailable: t("export.chartUnavailable"),
+      chartUnavailableShort: t("export.chartUnavailableShort"),
+      pageOf: t("export.pageOf"),
+      generatedBy: t("export.generatedBy"),
+      appliedFilters: t("export.appliedFilters"),
+      continued: t("export.continued"),
+    }),
+    [t],
+  );
+
   if (format === "pptx") {
-    const slides = buildPptxPreviewSlides(report, { formatGeneratedAt });
+    const slides = buildPptxPreviewSlides(report, {
+      formatGeneratedAt,
+      labels,
+    });
     return (
       <div
         role="region"
-        aria-label="PowerPoint preview"
+        aria-label={t("export.ariaPptxPreview")}
         className="custom-scroll"
         style={{
           maxHeight: "60vh",
@@ -64,7 +83,10 @@ export function ReportHtmlPreview({
                   marginBottom: token.marginXXS,
                 }}
               >
-                Slide {index + 1} of {slides.length}
+                {t("export.slideOf", {
+                  current: index + 1,
+                  total: slides.length,
+                })}
               </Text>
               <div
                 style={{
@@ -76,7 +98,7 @@ export function ReportHtmlPreview({
                   overflow: "hidden",
                 }}
               >
-                <SlideBody slide={slide} />
+                <SlideBody slide={slide} chartUnavailable={labels.chartUnavailable} />
               </div>
             </div>
           ))}
@@ -88,7 +110,7 @@ export function ReportHtmlPreview({
   return (
     <div
       role="region"
-      aria-label="PDF preview"
+      aria-label={t("export.ariaPdfPreview")}
       className="custom-scroll"
       style={{
         maxHeight: "60vh",
@@ -140,7 +162,13 @@ export function ReportHtmlPreview({
               return <KpiBlock key={section.id} section={section} />;
             }
             if (section.type === "CHART") {
-              return <ChartBlock key={section.id} section={section} />;
+              return (
+                <ChartBlock
+                  key={section.id}
+                  section={section}
+                  chartUnavailable={labels.chartUnavailable}
+                />
+              );
             }
             return <TableBlock key={section.id} section={section} />;
           })}
@@ -150,7 +178,13 @@ export function ReportHtmlPreview({
   );
 }
 
-function SlideBody({ slide }: { slide: PptxPreviewSlide }) {
+function SlideBody({
+  slide,
+  chartUnavailable,
+}: {
+  slide: PptxPreviewSlide;
+  chartUnavailable: string;
+}) {
   const { token } = theme.useToken();
 
   if (slide.kind === "title") {
@@ -213,7 +247,12 @@ function SlideBody({ slide }: { slide: PptxPreviewSlide }) {
   }
 
   if (slide.kind === "chart") {
-    return <ChartBlock section={slide.section} />;
+    return (
+      <ChartBlock
+        section={slide.section}
+        chartUnavailable={chartUnavailable}
+      />
+    );
   }
 
   return (
@@ -326,7 +365,13 @@ function KpiBlock({ section }: { section: DashboardReportKpiSection }) {
   );
 }
 
-function ChartBlock({ section }: { section: DashboardReportChartSection }) {
+function ChartBlock({
+  section,
+  chartUnavailable,
+}: {
+  section: DashboardReportChartSection;
+  chartUnavailable: string;
+}) {
   // Modified by Sekar Nagarajan (2026-09-08 16:10)
   const chartTokens = useChartTokens();
   const [src, setSrc] = useState<string | null>(null);
@@ -357,7 +402,7 @@ function ChartBlock({ section }: { section: DashboardReportChartSection }) {
           style={{ width: "100%", height: "auto", display: "block" }}
         />
       ) : (
-        <Text type="secondary">Chart could not be rendered.</Text>
+        <Text type="secondary">{chartUnavailable}</Text>
       )}
     </section>
   );

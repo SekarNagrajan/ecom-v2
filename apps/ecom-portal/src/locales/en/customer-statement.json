@@ -1,0 +1,66 @@
+{
+  "criteria": {
+    "account": "Account",
+    "currency": "Currency",
+    "fromDate": "From Date",
+    "toDate": "To Date",
+    "show": "Show"
+  },
+  "placeholders": {
+    "selectAccount": "Select account",
+    "currency": "Currency"
+  },
+  "actions": {
+    "exportPdf": "Export PDF"
+  },
+  "summary": {
+    "openingBalance": "Opening Balance",
+    "closingBalance": "Closing Balance",
+    "netMovement": "Net Movement"
+  },
+  "columns": {
+    "date": "Date",
+    "type": "Type",
+    "docNo": "Doc No",
+    "reference": "Reference",
+    "debit": "Debit",
+    "credit": "Credit",
+    "balance": "Balance"
+  },
+  "totals": {
+    "totalDebit": "Total Debit",
+    "totalCredit": "Total Credit",
+    "net": "Net"
+  },
+  "empty": {
+    "loadErrorTitle": "Couldn't load the customer statement",
+    "loadErrorMessage": "The request didn't complete. Check your connection and try again.",
+    "noTransactionsTitle": "No transactions for this period",
+    "noTransactionsMessage": "Choose a different statement period to view account activity."
+  },
+  "errors": {
+    "fetchAccounts": "Failed to fetch statement accounts",
+    "fetchStatement": "Failed to fetch customer statement",
+    "download": "Failed to download statement export"
+  },
+  "docTypes": {
+    "invoice": "Invoice",
+    "creditNote": "Credit Note",
+    "debitNote": "Debit Note",
+    "receipt": "Receipt",
+    "adjustment": "Adjustment"
+  },
+  "validation": {
+    "accountRequired": "Account is required.",
+    "currencyRequired": "Currency is required.",
+    "fromDateRequired": "From date is required.",
+    "toDateRequired": "To date is required.",
+    "endAfterStart": "End date must be on or after start date.",
+    "periodMaxMonths": "Statement period cannot exceed 12 months.",
+    "invalidCriteria": "Invalid statement criteria."
+  },
+  "toasts": {
+    "pdfDownloaded": "Statement PDF downloaded",
+    "excelDownloaded": "Statement Excel downloaded"
+  }
+}

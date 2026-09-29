@@ -2,12 +2,15 @@
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { AutoComplete, Col, Input, Row, Typography } from "antd";
 import { useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import type { BookingCustomerOption } from "../api/booking.api";
 import { bookingApi } from "../api/booking.api";
 import {
   emptyPartyCard,
+  getPartyRoleLabel,
+  getPartyRoleOptions,
   PARTY_ROLE_LABEL,
   PARTY_ROLE_OPTIONS,
   type PartyCardData,
@@ -37,25 +40,26 @@ export function PartyEditDrawer({
   onSave,
   onClose,
 }: PartyEditDrawerProps) {
+  const { t } = useTranslation(["booking", "common"]);
   return (
     <AppDrawer
       open={open}
       onClose={onClose}
       title={
-        title ?? (roleKey ? `Edit ${PARTY_ROLE_LABEL[roleKey]}` : "Edit Party")
+        title ?? (roleKey ? t("booking:wizard.parties.editRole", { role: getPartyRoleLabel(roleKey, t) }) : t("booking:wizard.parties.editParty"))
       }
       width={480}
       footer={
         <div className="booking-party-drawer-footer">
           <AppButton danger onClick={onClose}>
-            Cancel
+            {t("common:actions.cancel")}
           </AppButton>
           <AppButton
             type="primary"
             onClick={onSave}
             disabled={!value.company.trim()}
           >
-            Update
+            {t("common:actions.save")}
           </AppButton>
         </div>
       }
@@ -63,7 +67,7 @@ export function PartyEditDrawer({
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <label className="form-field-label">
-            Company <Text type="danger">*</Text>
+            {t("booking:wizard.parties.fields.company")} <Text type="danger">*</Text>
           </label>
           <Input
             size="large"
@@ -72,7 +76,7 @@ export function PartyEditDrawer({
           />
         </Col>
         <Col span={24}>
-          <label className="form-field-label">Contact / Code</label>
+          <label className="form-field-label">{t("booking:wizard.parties.fields.contactCode")}</label>
           <Input
             size="large"
             value={value.contact}
@@ -80,7 +84,7 @@ export function PartyEditDrawer({
           />
         </Col>
         <Col span={24}>
-          <label className="form-field-label">Address</label>
+          <label className="form-field-label">{t("booking:wizard.parties.fields.address")}</label>
           <Input
             size="large"
             value={value.address}
@@ -88,7 +92,7 @@ export function PartyEditDrawer({
           />
         </Col>
         <Col span={12}>
-          <label className="form-field-label">City</label>
+          <label className="form-field-label">{t("booking:wizard.parties.fields.city")}</label>
           <Input
             size="large"
             value={value.city}
@@ -96,7 +100,7 @@ export function PartyEditDrawer({
           />
         </Col>
         <Col span={12}>
-          <label className="form-field-label">Country</label>
+          <label className="form-field-label">{t("booking:wizard.parties.fields.country")}</label>
           <Input
             size="large"
             value={value.country}
@@ -104,7 +108,7 @@ export function PartyEditDrawer({
           />
         </Col>
         <Col span={12}>
-          <label className="form-field-label">Email</label>
+          <label className="form-field-label">{t("booking:wizard.parties.fields.email")}</label>
           <Input
             size="large"
             value={value.email}
@@ -112,7 +116,7 @@ export function PartyEditDrawer({
           />
         </Col>
         <Col span={12}>
-          <label className="form-field-label">Phone</label>
+          <label className="form-field-label">{t("booking:wizard.parties.fields.phone")}</label>
           <Input
             size="large"
             value={value.phone}
@@ -135,8 +139,9 @@ export function CustomerSearchAutoComplete({
   value,
   onChange,
   onSelectCustomer,
-  placeholder = "Type customer name or code…",
+  placeholder,
 }: CustomerSearchAutoCompleteProps) {
+  const { t } = useTranslation("booking");
   const [options, setOptions] = useState<BookingCustomerOption[]>([]);
   const [fetching, setFetching] = useState(false);
   const [innerValue, setInnerValue] = useState(value ?? "");
@@ -206,16 +211,16 @@ export function CustomerSearchAutoComplete({
       onChange={(val) => handleChange(String(val ?? ""))}
       notFoundContent={
         fetching
-          ? "Searching…"
+          ? t("wizard.parties.searching")
           : displayValue.trim()
-          ? "No customers found"
+          ? t("wizard.parties.noCustomers")
           : null
       }
     >
       <Input
         size="large"
         allowClear
-        placeholder={placeholder}
+        placeholder={placeholder ?? t("wizard.parties.typeCustomerPlaceholder")}
         prefix={<AppIcon icon={Icons.search} size={16} />}
       />
     </AutoComplete>
@@ -236,9 +241,11 @@ export function RoleAssignPanel({
   onAssign,
   onClear,
 }: RoleAssignPanelProps) {
+  const { t } = useTranslation(["booking", "common"]);
   const [selected, setSelected] = useState<Record<string, boolean>>({});
+  const localizedRoleOptions = getPartyRoleOptions(t);
 
-  const selectedCount = PARTY_ROLE_OPTIONS.filter(
+  const selectedCount = localizedRoleOptions.filter(
     (role) => selected[role.key] && !assignedRoles.includes(role.key),
   ).length;
 
@@ -251,7 +258,7 @@ export function RoleAssignPanel({
   };
 
   const handleAssign = () => {
-    const roles = PARTY_ROLE_OPTIONS.filter(
+    const roles = localizedRoleOptions.filter(
       (role) => selected[role.key] && !assignedRoles.includes(role.key),
     ).map((role) => role.key);
     onAssign(roles);
@@ -275,11 +282,11 @@ export function RoleAssignPanel({
       </div>
 
       <Text type="secondary" className="booking-party-role-panel__hint">
-        Select roles to assign this customer, then click Add Selected.
+        {t("booking:wizard.parties.assignHint")}
       </Text>
 
       <div className="booking-party-role-chips">
-        {PARTY_ROLE_OPTIONS.map((role) => {
+        {localizedRoleOptions.map((role) => {
           const already = assignedRoles.includes(role.key);
           const isSelected = !!selected[role.key] || already;
           return (
@@ -303,7 +310,7 @@ export function RoleAssignPanel({
               )}
               <span>{role.label}</span>
               {already ? (
-                <span className="booking-party-role-chip__tag">Assigned</span>
+                <span className="booking-party-role-chip__tag">{t("booking:wizard.parties.assigned")}</span>
               ) : null}
             </button>
           );
@@ -318,14 +325,14 @@ export function RoleAssignPanel({
             onClear();
           }}
         >
-          Cancel
+          {t("common:actions.cancel")}
         </AppButton>
         <AppButton
           icon={<AppIcon icon={Icons.userPlus} size={16} tone="view" />}
           onClick={handleAssign}
           disabled={selectedCount === 0}
         >
-          Add Selected{selectedCount > 0 ? ` (${selectedCount})` : ""}
+          {selectedCount > 0 ? t("booking:wizard.parties.addSelectedCount", { count: selectedCount }) : t("booking:wizard.parties.addSelected")}
         </AppButton>
       </div>
     </div>

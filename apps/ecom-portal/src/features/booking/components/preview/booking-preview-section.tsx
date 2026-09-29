@@ -8,23 +8,15 @@ import {
   ListActionButton,
   ListActionsRow,
 } from "../../../../components/shared/list-action-button";
+import { useTranslation } from "react-i18next";
 import {
+  getPreviewPartyRoleLabel,
   type PartyCardData,
   type PartyRoleKey,
 } from "../../utils/party-role.utils";
 
 const { Title, Text } = Typography;
 
-/** Airy review party role labels (prototype sentence / uppercase). */
-const REVIEW_PARTY_ROLE_LABEL: Record<PartyRoleKey, string> = {
-  shipper: "Shipper",
-  consignee: "Consignee",
-  notifyParty: "Notify Party",
-  notifyParty2: "Notify Party 2",
-  forwarder: "Freight Forwarder",
-  agreementParty: "Agreement Party",
-  siSubmittingParty: "Shipper",
-};
 
 interface BookingPreviewSectionProps {
   title: string;
@@ -42,6 +34,7 @@ export function BookingPreviewSection({
   className,
   variant = "card",
 }: BookingPreviewSectionProps) {
+  const { t } = useTranslation("booking");
   if (variant === "airy") {
     return (
       <section
@@ -54,13 +47,13 @@ export function BookingPreviewSection({
             {title}
           </Title>
           {onEdit ? (
-            <Tooltip title={`Edit ${title}`}>
+            <Tooltip title={t("wizard.preview.editSection", { title })}>
               <AppButton
                 type="text"
                 size="small"
                 className="booking-review__edit"
                 icon={<AppIcon icon={Icons.edit} size={16} />}
-                aria-label={`Edit ${title}`}
+                aria-label={t("wizard.preview.editSection", { title })}
                 onClick={onEdit}
               />
             </Tooltip>
@@ -89,7 +82,7 @@ export function BookingPreviewSection({
         onEdit ? (
           <ListActionsRow>
             <ListActionButton
-              title={`Edit ${title}`}
+              title={t("wizard.preview.editSection", { title })}
               icon={<AppIcon icon={Icons.edit} size={16} tone="edit" />}
               tone="edit"
               onClick={onEdit}
@@ -104,9 +97,10 @@ export function BookingPreviewSection({
 }
 
 export function BookingPreviewEmpty({ label }: { label?: string }) {
+  const { t } = useTranslation("booking");
   return (
     <Text type="secondary" className="booking-preview-empty">
-      {label ?? "No data provided"}
+      {label ?? t("wizard.preview.empty.noData")}
     </Text>
   );
 }
@@ -151,12 +145,13 @@ export function BookingPreviewPartyCard({
   role: PartyRoleKey;
   card: PartyCardData;
 }) {
+  const { t } = useTranslation("booking");
   const address = partyAddress(card);
 
   return (
     <div className="booking-review__party">
       <span className="booking-review__party-role">
-        {REVIEW_PARTY_ROLE_LABEL[role]}
+        {getPreviewPartyRoleLabel(role, t)}
       </span>
       <Text strong className="booking-review__party-company">
         {card.company}
@@ -172,12 +167,13 @@ export function BookingPreviewPartyCard({
 }
 
 export function BookingPreviewEmptyPartyCard({ role }: { role: PartyRoleKey }) {
+  const { t } = useTranslation("booking");
   return (
     <div className="booking-review__party booking-review__party--empty">
       <span className="booking-review__party-role">
-        {REVIEW_PARTY_ROLE_LABEL[role]}
+        {getPreviewPartyRoleLabel(role, t)}
       </span>
-      <Text type="secondary">Not assigned</Text>
+      <Text type="secondary">{t("wizard.preview.notAssigned")}</Text>
     </div>
   );
 }

@@ -6,6 +6,7 @@ import {
 } from "@solverminds/shared-ui/data-view";
 import { Spin } from "antd";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 import {
   ModuleEmptyState,
@@ -21,8 +22,8 @@ import type {
   StatementLine,
 } from "../types/customer-statement.types";
 import {
-  STATEMENT_DOCTYPE_LABELS,
   formatStatementAmount,
+  getStatementDocTypeLabel,
 } from "../types/customer-statement.types";
 import { StatementSummaryHeader } from "./StatementSummaryHeader";
 
@@ -46,6 +47,7 @@ export function StatementView({
   criteria,
   onRecordCountChange,
 }: StatementViewProps) {
+  const { t } = useTranslation(["customer-statement", "common", "modules"]);
   const { profileHandlers } = useLocalGridProfiles("customer-statement");
   const {
     data: statement,
@@ -76,38 +78,43 @@ export function StatementView({
   const emptyState = isError ? (
     <ModuleEmptyState
       variant="error"
-      title="Couldn't load the customer statement"
-      message="The request didn't complete. Check your connection and try again."
+      title={t("empty.loadErrorTitle")}
+      message={t("empty.loadErrorMessage")}
       actions={[buildRetryAction(() => void refetch())]}
     />
   ) : (
     <ModuleEmptyState
       variant="filtered"
-      title="No transactions for this period"
-      message="Choose a different statement period to view account activity."
+      title={t("empty.noTransactionsTitle")}
+      message={t("empty.noTransactionsMessage")}
     />
   );
 
   const columns: DataViewColumn<StatementLine>[] = [
     {
       field: "date",
-      headerName: "Date",
+      headerName: t("columns.date"),
       width: 130,
       cellRenderer: (p: { value?: string }) =>
         p.value ? <FormattedDate value={p.value} /> : "—",
     },
     {
       field: "docType",
-      headerName: "Type",
+      headerName: t("columns.type"),
       width: 130,
       cellRenderer: (p: { value?: StatementLine["docType"] }) =>
-        p.value ? STATEMENT_DOCTYPE_LABELS[p.value] : "—",
+        p.value ? getStatementDocTypeLabel(p.value, t) : "—",
     },
-    { field: "docNo", headerName: "Doc No", width: 140 },
-    { field: "reference", headerName: "Reference", flex: 1, minWidth: 140 },
+    { field: "docNo", headerName: t("columns.docNo"), width: 140 },
+    {
+      field: "reference",
+      headerName: t("columns.reference"),
+      flex: 1,
+      minWidth: 140,
+    },
     {
       field: "debit",
-      headerName: "Debit",
+      headerName: t("columns.debit"),
       width: 150,
       cellRenderer: (params: { data?: StatementLine }) =>
         params.data ? (
@@ -119,7 +126,7 @@ export function StatementView({
     },
     {
       field: "credit",
-      headerName: "Credit",
+      headerName: t("columns.credit"),
       width: 150,
       cellRenderer: (params: { data?: StatementLine }) =>
         params.data ? (
@@ -131,7 +138,7 @@ export function StatementView({
     },
     {
       field: "runningBalance",
-      headerName: "Balance",
+      headerName: t("columns.balance"),
       width: 160,
       cellRenderer: (params: { data?: StatementLine }) =>
         params.data ? (
@@ -193,7 +200,9 @@ export function StatementView({
 
             <div className="stmt-totals-strip">
               <div className="stmt-totals-strip__item">
-                <span className="stmt-totals-strip__label">Total Debit</span>
+                <span className="stmt-totals-strip__label">
+                  {t("totals.totalDebit")}
+                </span>
                 <span className="stmt-totals-strip__value">
                   {formatStatementAmount(
                     statement.totals.totalDebit,
@@ -202,7 +211,9 @@ export function StatementView({
                 </span>
               </div>
               <div className="stmt-totals-strip__item">
-                <span className="stmt-totals-strip__label">Total Credit</span>
+                <span className="stmt-totals-strip__label">
+                  {t("totals.totalCredit")}
+                </span>
                 <span className="stmt-totals-strip__value">
                   {formatStatementAmount(
                     statement.totals.totalCredit,
@@ -211,7 +222,9 @@ export function StatementView({
                 </span>
               </div>
               <div className="stmt-totals-strip__item">
-                <span className="stmt-totals-strip__label">Net</span>
+                <span className="stmt-totals-strip__label">
+                  {t("totals.net")}
+                </span>
                 <span className="stmt-totals-strip__value">
                   {formatStatementAmount(
                     statement.totals.net,

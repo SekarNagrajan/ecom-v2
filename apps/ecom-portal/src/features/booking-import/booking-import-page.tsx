@@ -2,6 +2,8 @@
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { useNavigate } from "@tanstack/react-router";
 import { Card } from "antd";
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
 import { useModuleTitles } from "../../i18n/use-module-titles";
@@ -52,12 +54,16 @@ function toCommitResult(
 }
 
 export function BookingImportPage() {
+  const { t, i18n } = useTranslation(["booking-import", "common", "modules"]);
   const MODULE_TITLES = useModuleTitles();
   const navigate = useNavigate();
   const toast = useToast();
   const { mutateAsync: dryRunImportBookings } = useDryRunImportBookings();
   const { mutateAsync: commitImportBookings } = useCommitImportBookings();
-  const adapter = createBookingImportAdapter();
+  const adapter = useMemo(
+    () => createBookingImportAdapter(t),
+    [t, i18n.language],
+  );
 
   const handleCancel = () => {
     void navigate({ to: "/app/booking" });
@@ -72,14 +78,15 @@ export function BookingImportPage() {
     const result = await commitImportBookings(payloads);
     if (result.failedCount === 0) {
       toast.success(
-        `Imported ${result.successCount} booking${
-          result.successCount === 1 ? "" : "s"
-        }.`,
+        t("toasts.importSuccess", { count: result.successCount }),
       );
       void navigate({ to: "/app/booking" });
     } else if (result.successCount > 0) {
       toast.warning(
-        `Imported ${result.successCount} of ${result.totalRows} bookings. Fix remaining rows and resubmit.`,
+        t("toasts.importPartial", {
+          successCount: result.successCount,
+          totalRows: result.totalRows,
+        }),
       );
     }
     return toCommitResult(result);
@@ -100,7 +107,7 @@ export function BookingImportPage() {
             onValidate={handleValidate}
             onCommit={handleCommit}
             title={MODULE_TITLES.bookingImport}
-            subtitle="Fill one booking per row, then review and submit."
+            subtitle={t("subtitle")}
           />
         </div>
       </Card>

@@ -49,6 +49,46 @@ export const PARTY_ROLE_LABEL: Record<PartyRoleKey, string> = {
   siSubmittingParty: "Shipper",
 };
 
+/** Preview/review labels — differ for shipper ("Shipper") and forwarder ("Freight Forwarder"). */
+const REVIEW_PARTY_ROLE_LABEL: Record<PartyRoleKey, string> = {
+  shipper: "Shipper",
+  consignee: "Consignee",
+  notifyParty: "Notify Party",
+  notifyParty2: "Notify Party 2",
+  forwarder: "Freight Forwarder",
+  agreementParty: "Agreement Party",
+  siSubmittingParty: "Shipper",
+};
+
+type TranslateFn = (key: string, options?: Record<string, unknown>) => string;
+
+export function getPartyRoleLabel(role: PartyRoleKey, t?: TranslateFn): string {
+  if (!t) return PARTY_ROLE_LABEL[role];
+  switch (role) {
+    case "shipper": return t("wizard.parties.roles.shipper");
+    case "siSubmittingParty": return t("wizard.parties.roles.siSubmittingParty");
+    case "consignee": return t("wizard.parties.roles.consignee");
+    case "notifyParty": return t("wizard.parties.roles.notifyParty");
+    case "notifyParty2": return t("wizard.parties.roles.notifyParty2");
+    case "forwarder": return t("wizard.parties.roles.forwarder");
+    case "agreementParty": return t("wizard.parties.roles.agreementParty");
+    default: { const _exhaustive: never = role; return PARTY_ROLE_LABEL[_exhaustive]; }
+  }
+}
+
+export function getPreviewPartyRoleLabel(role: PartyRoleKey, t?: TranslateFn): string {
+  if (!t) return REVIEW_PARTY_ROLE_LABEL[role];
+  switch (role) {
+    case "shipper": return t("wizard.parties.previewRoles.shipper");
+    case "forwarder": return t("wizard.parties.previewRoles.forwarder");
+    default: return getPartyRoleLabel(role, t);
+  }
+}
+
+export function getPartyRoleOptions(t: TranslateFn): { key: PartyRoleKey; label: string }[] {
+  return PARTY_ROLE_OPTIONS.map((o) => ({ key: o.key, label: getPartyRoleLabel(o.key, t) }));
+}
+
 /** ecom-app CustomerDetailsStep demo seed — used when parties are empty. */
 const BOOKING_PARTY_SEED: PartyCardData = {
   company: "Global Shipping Solutions Ltd.",

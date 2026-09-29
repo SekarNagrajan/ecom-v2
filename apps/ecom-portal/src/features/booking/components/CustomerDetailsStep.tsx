@@ -5,6 +5,7 @@ import { useRouterState } from "@tanstack/react-router";
 import { Card, Tooltip, Typography } from "antd";
 import { useState } from "react";
 
+import { useTranslation } from "react-i18next";
 import { AppIcon, Icons } from "../../../components/icons";
 import type { BookingCustomerOption } from "../api/booking.api";
 import { useBookingStore } from "../stores/booking.store";
@@ -13,6 +14,7 @@ import {
   cardsToParties,
   DEFAULT_PARTY_ROLES,
   emptyPartyCard,
+  getPartyRoleLabel,
   initialPartyCards,
   PARTY_ROLE_LABEL,
   type PartyCardData,
@@ -61,6 +63,7 @@ function PartyRoleCard({
   fromAccount = false,
   onEdit,
   onDelete,
+  t,
 }: {
   role: PartyRoleKey;
   card: PartyCardData;
@@ -70,6 +73,7 @@ function PartyRoleCard({
   fromAccount?: boolean;
   onEdit: () => void;
   onDelete: () => void;
+  t: (key: string, options?: Record<string, unknown>) => string;
 }) {
   const secondary = partySecondaryLines(card);
   const showEdit = !readOnly && canEdit;
@@ -80,30 +84,30 @@ function PartyRoleCard({
       <div className="booking-party-card__head">
         <div className="booking-party-card__role">
           <Text strong className="booking-party-card__role-label">
-            {PARTY_ROLE_LABEL[role]}
+            {getPartyRoleLabel(role, t)}
           </Text>
         </div>
         <div className="booking-party-card__actions">
           {fromAccount ? <AppIcon icon={Icons.lock} size={16} /> : null}
           {showEdit ? (
-            <Tooltip title="Edit Party">
+            <Tooltip title={t("booking:wizard.parties.editParty")}>
               <AppButton
                 type="link"
                 size="small"
                 className="booking-party-card__edit-btn"
-                aria-label="Edit Party"
+                aria-label={t("booking:wizard.parties.editParty")}
                 onClick={onEdit}
                 icon={<AppIcon icon={Icons.edit} size={16} tone="edit" />}
               />
             </Tooltip>
           ) : null}
           {showDelete ? (
-            <Tooltip title="Delete Party">
+            <Tooltip title={t("booking:wizard.parties.deleteParty")}>
               <AppButton
                 type="link"
                 size="small"
                 className="booking-party-card__delete-btn"
-                aria-label="Delete Party"
+                aria-label={t("booking:wizard.parties.deleteParty")}
                 danger
                 onClick={onDelete}
                 icon={<AppIcon icon={Icons.trash} size={16} tone="delete" />}
@@ -129,7 +133,7 @@ function PartyRoleCard({
           ))
         ) : (
           <Text type="secondary" className="booking-party-card__meta">
-            No additional contact details
+            {t("booking:wizard.parties.noContactDetails")}
           </Text>
         )}
       </div>
@@ -140,9 +144,11 @@ function PartyRoleCard({
 function EmptyPartySlot({
   role,
   onAssign,
+  t,
 }: {
   role: PartyRoleKey;
   onAssign: () => void;
+  t: (key: string, options?: Record<string, unknown>) => string;
 }) {
   return (
     <div className="booking-party-card booking-party-card--surface booking-party-card--empty">
@@ -152,18 +158,18 @@ function EmptyPartySlot({
             <AppIcon icon={PARTY_ROLE_ICON[role]} size={16} />
           </span>
           <Text strong className="booking-party-card__role-label">
-            {PARTY_ROLE_LABEL[role]}
+            {getPartyRoleLabel(role, t)}
           </Text>
         </div>
       </div>
       <div className="booking-party-card__empty-body">
-        <Text type="secondary">Not assigned yet</Text>
+        <Text type="secondary">{t("booking:wizard.parties.notAssignedYet")}</Text>
         <AppButton
           size="small"
           icon={<AppIcon icon={Icons.plus} size={14} tone="create" />}
           onClick={onAssign}
         >
-          Assign
+          {t("booking:wizard.parties.assign")}
         </AppButton>
       </div>
     </div>
@@ -171,6 +177,7 @@ function EmptyPartySlot({
 }
 
 export function CustomerDetailsStep() {
+  const { t } = useTranslation(["booking", "common", "modules"]);
   const toast = useToast();
   const isAmend = useRouterState({
     select: (s) => s.location.pathname.includes("/amend"),
@@ -203,7 +210,7 @@ export function CustomerDetailsStep() {
 
   const handleAssignRoles = (roles: PartyRoleKey[]) => {
     if (!selectedCustomer || roles.length === 0) {
-      toast.error("Select at least one role");
+      toast.error(t("booking:wizard.parties.selectRole"));
       return;
     }
     const card: PartyCardData = {
@@ -223,7 +230,7 @@ export function CustomerDetailsStep() {
       return next;
     });
     clearSelectedCustomer();
-    toast.success("Party roles assigned");
+    toast.success(t("booking:wizard.parties.rolesAssigned"));
   };
 
   const handleDeleteCard = (role: PartyRoleKey) => {
@@ -241,7 +248,7 @@ export function CustomerDetailsStep() {
 
   const saveEdit = () => {
     if (!editRole || !editValue.company.trim()) {
-      toast.error("Company is required");
+      toast.error(t("booking:wizard.parties.companyRequired"));
       return;
     }
     setCards((prev) => ({ ...prev, [editRole]: { ...editValue } }));
@@ -254,7 +261,7 @@ export function CustomerDetailsStep() {
     const parsed = partiesSchema.safeParse(parties);
     if (!parsed.success) {
       const first = parsed.error.issues[0];
-      toast.error(first?.message || "Please complete required parties");
+      toast.error(first?.message || t("booking:wizard.parties.completeRequired"));
       return;
     }
     updateParties(parsed.data);
@@ -270,7 +277,7 @@ export function CustomerDetailsStep() {
             <div className="booking-customer-step__search-row">
               <CustomerSearchAutoComplete
                 value={searchQuery}
-                placeholder="Search by customer name or code"
+                placeholder={t("booking:wizard.parties.searchPlaceholder")}
                 onChange={(val) => {
                   setSearchQuery(val);
                   if (!val.trim()) {
@@ -309,11 +316,13 @@ export function CustomerDetailsStep() {
                         canDelete={!isBookingParty && !isAgreementParty}
                         onEdit={() => openEdit(role)}
                         onDelete={() => handleDeleteCard(role)}
+                        t={t}
                       />
                     ) : (
                       <EmptyPartySlot
                         role={role}
                         onAssign={() => openEdit(role)}
+                        t={t}
                       />
                     )}
                   </div>
@@ -326,6 +335,7 @@ export function CustomerDetailsStep() {
                     card={card}
                     onEdit={() => openEdit(role)}
                     onDelete={() => handleDeleteCard(role)}
+                    t={t}
                   />
                 </div>
               ))}
@@ -335,9 +345,9 @@ export function CustomerDetailsStep() {
       </div>
 
       <div className="form-step-footer">
-        <AppButton onClick={prevStep}>Previous</AppButton>
+        <AppButton onClick={prevStep}>{t("common:actions.previous")}</AppButton>
         <AppButton type="primary" onClick={handleNext}>
-          Next
+          {t("common:actions.next")}
         </AppButton>
       </div>
 

@@ -6,6 +6,7 @@
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import type { BLListDTO } from "../../bill-of-lading/types/bl.types";
 import type { BookingListDTO } from "../../booking/types/booking-list.types";
@@ -38,13 +39,16 @@ function scrollToOngoingTransactions() {
 }
 
 export function useDashboardController() {
+  const { t, i18n } = useTranslation("dashboard");
   const navigate = useNavigate();
   const toast = useToast();
 
   const [summary, setSummary] = useState<DashboardSummaryResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState("all");
-  const [filterLabel, setFilterLabel] = useState("Total Shipments");
+  const [filterLabel, setFilterLabel] = useState(() =>
+    getDashboardFilterLabel("all", t),
+  );
   const [trendPeriod, setTrendPeriod] = useState<VolumeTrendPeriod>("Monthly");
   const [volumeStage, setVolumeStage] = useState<VolumeAnalyticsStage>("all");
   const [volumeAnalytics, setVolumeAnalytics] =
@@ -67,7 +71,7 @@ export function useDashboardController() {
       const data = await dashboardApi.getSummary();
       setSummary(data);
     } catch {
-      toast.error("Failed to load dashboard summary");
+      toast.error(t("errors.fetchSummary"));
       setSummary(null);
     } finally {
       setIsLoading(false);
@@ -77,6 +81,11 @@ export function useDashboardController() {
   useEffect(() => {
     void loadSummary();
   }, []);
+
+  // Keep filter chrome labels in sync when the active language changes.
+  useEffect(() => {
+    setFilterLabel(getDashboardFilterLabel(activeFilter, t));
+  }, [activeFilter, i18n.language, t]);
 
   // External API sync when analytics stage or trend period changes.
   useEffect(() => {
@@ -108,16 +117,16 @@ export function useDashboardController() {
   }, [volumeStage, trendPeriod]);
 
   // Modified by Sekar Nagarajan (2026-09-08 12:27) — all KPI clicks filter + scroll to ongoing
-  const handleFilterChange = (filter: string, label: string) => {
+  const handleFilterChange = (filter: string, label?: string) => {
     setActiveFilter(filter);
-    setFilterLabel(label || getDashboardFilterLabel(filter));
+    setFilterLabel(label || getDashboardFilterLabel(filter, t));
     requestAnimationFrame(() => {
       scrollToOngoingTransactions();
     });
   };
 
   const handleViewShipments = () => {
-    handleFilterChange("all", "Total Shipments");
+    handleFilterChange("all", getDashboardFilterLabel("all", t));
   };
 
   const handleViewBooking = (shipment: DashboardShipment) => {

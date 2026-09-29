@@ -1,11 +1,13 @@
-// Modified by Sekar Nagarajan (2026-09-07 12:28)
+// Modified by Sekar Nagarajan (2026-09-29 12:28)
 import type {
   CROPrintStatus,
   CROReleaseStatus,
 } from "../types/cro.types";
 
+type TranslateFn = (key: string) => string;
+
 export function getCroReleaseStatusColor(
-  status: CROReleaseStatus | string,
+  status: CROReleaseStatus,
 ): string {
   switch (status) {
     case "Eligible":
@@ -16,15 +18,38 @@ export function getCroReleaseStatusColor(
       return "error";
     case "Cancelled":
       return "default";
-    default:
-      return "default";
+    default: {
+      const _exhaustive: never = status;
+      return _exhaustive;
+    }
+  }
+}
+
+export function getCroReleaseStatusLabel(
+  status: CROReleaseStatus,
+  t: TranslateFn,
+): string {
+  switch (status) {
+    case "Eligible":
+      return t("status.eligible");
+    case "Blocked":
+      return t("status.blocked");
+    case "Released":
+      return t("status.released");
+    case "Cancelled":
+      return t("status.cancelled");
+    default: {
+      const _exhaustive: never = status;
+      return _exhaustive;
+    }
   }
 }
 
 export function getCroPrintStatusLabel(
   status: CROPrintStatus | string,
+  t: TranslateFn,
 ): string {
-  return status === "Y" ? "Printed" : "Not Printed";
+  return status === "Y" ? t("status.printed") : t("status.notPrinted");
 }
 
 export function getCroPrintStatusColor(

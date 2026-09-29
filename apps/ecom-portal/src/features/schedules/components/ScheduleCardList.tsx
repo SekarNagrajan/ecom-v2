@@ -3,12 +3,18 @@ import { AppButton } from "@solverminds/shared-ui";
 import { Spin, Tag, Tooltip, Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import type { RouteLeg, ScheduleItem } from "../types/schedules.types";
 
 const { Text, Title } = Typography;
+
+type SchedulesTranslateFn = (
+  key: string,
+  options?: { count?: number; [key: string]: unknown },
+) => string;
 
 interface ScheduleCardListProps {
   schedules: ScheduleItem[];
@@ -58,7 +64,10 @@ function vesselLabel(
  * Transshipment: vessel · hub port · vessel
  * Direct ocean: service · vessel
  */
-function buildTransportNodes(item: ScheduleItem): TransportNode[] {
+function buildTransportNodes(
+  item: ScheduleItem,
+  roadLabel: string,
+): TransportNode[] {
   const nodes: TransportNode[] = [];
   const hasInland =
     item.isMultimodal || item.legs.some((leg) => leg.legType === "Inland");
@@ -67,7 +76,7 @@ function buildTransportNodes(item: ScheduleItem): TransportNode[] {
     nodes.push({
       kind: "mode",
       mode: "road",
-      label: "Road",
+      label: roadLabel,
       icon: Icons.truck,
     });
     nodes.push({ kind: "hub", label: item.serviceCode });
@@ -82,7 +91,7 @@ function buildTransportNodes(item: ScheduleItem): TransportNode[] {
       nodes.push({
         kind: "mode",
         mode: "road",
-        label: "Road",
+        label: roadLabel,
         icon: Icons.truck,
       });
       return;
@@ -99,7 +108,7 @@ function buildTransportNodes(item: ScheduleItem): TransportNode[] {
     nodes.push({
       kind: "mode",
       mode: "road",
-      label: "Road",
+      label: roadLabel,
       icon: Icons.truck,
     });
   }
@@ -121,11 +130,13 @@ function buildTransportNodes(item: ScheduleItem): TransportNode[] {
 function TransportTranscript({
   item,
   onViewVessel,
+  roadLabel,
 }: {
   item: ScheduleItem;
   onViewVessel: (vesselCode: string) => void;
+  roadLabel: string;
 }) {
-  const nodes = buildTransportNodes(item);
+  const nodes = buildTransportNodes(item, roadLabel);
 
   return null;
   // <div className="schedule-card__transport custom-scroll">
@@ -311,9 +322,11 @@ function buildRouteStops(item: ScheduleItem): RouteStop[] {
 function RouteStopBadges({
   badges,
   onViewVessel,
+  t,
 }: {
   badges: RouteStopBadge[];
   onViewVessel: (vesselCode: string) => void;
+  t: SchedulesTranslateFn;
 }) {
   if (badges.length === 0) return null;
 
@@ -327,7 +340,7 @@ function RouteStopBadges({
               className="schedule-route-stop__badge schedule-route-stop__badge--road"
             >
               <AppIcon icon={Icons.truck} size={12} />
-              Road
+              {t("card.road")}
             </span>
           );
         }
@@ -388,9 +401,11 @@ function RouteStopTimes({ eta, etd }: { eta?: string; etd?: string }) {
 function ScheduleRouteDetails({
   item,
   onViewVessel,
+  t,
 }: {
   item: ScheduleItem;
   onViewVessel: (vesselCode: string) => void;
+  t: SchedulesTranslateFn;
 }) {
   // Modified by Sekar Nagarajan (2026-09-08 16:45)
   const stops = buildRouteStops(item);
@@ -399,7 +414,7 @@ function ScheduleRouteDetails({
     <div className="schedule-route-details">
       <div className="schedule-route-details__header">
         <Title level={5} className="schedule-route-details__title">
-          Route
+          {t("card.route")}
         </Title>
       </div>
 
@@ -418,7 +433,9 @@ function ScheduleRouteDetails({
               <div className="schedule-route-stop__rail">
                 <span
                   className="schedule-route-stop__node app-icon-inherit"
-                  aria-label={stop.etd ? "Departure" : "Arrival"}
+                  aria-label={
+                    stop.etd ? t("card.departure") : t("card.arrival")
+                  }
                 >
                   <AppIcon icon={nodeIcon} size={14} />
                 </span>
@@ -451,6 +468,7 @@ function ScheduleRouteDetails({
                     <RouteStopBadges
                       badges={stop.badges}
                       onViewVessel={onViewVessel}
+                      t={t}
                     />
                   </div>
                   <RouteStopTimes eta={stop.eta} etd={stop.etd} />
@@ -463,30 +481,32 @@ function ScheduleRouteDetails({
 
       <div className="schedule-route-details__deadlines">
         <Text className="schedule-route-details__deadlines-title">
-          Cut-offs
+          {t("card.cutoffs")}
         </Text>
         <div className="schedule-card__deadlines">
-          <Tooltip title="Container Gate-In Closing">
+          <Tooltip title={t("card.gateInTooltip")}>
             <div className="schedule-card__deadline">
               <span className="schedule-card__deadline-icon schedule-card__deadline-icon--gate app-icon-inherit">
                 <AppIcon icon={Icons.container} size={14} />
               </span>
               <span>
-                <span className="schedule-card__deadline-label">Gate-In</span>
+                <span className="schedule-card__deadline-label">
+                  {t("card.gateIn")}
+                </span>
                 <span className="schedule-card__deadline-value">
                   {item.deadlines.containerGateIn}
                 </span>
               </span>
             </div>
           </Tooltip>
-          <Tooltip title="Shipping Instruction Document Closing">
+          <Tooltip title={t("card.siTooltip")}>
             <div className="schedule-card__deadline">
               <span className="schedule-card__deadline-icon schedule-card__deadline-icon--si app-icon-inherit">
                 <AppIcon icon={Icons.clipboardList} size={14} />
               </span>
               <span>
                 <span className="schedule-card__deadline-label">
-                  SI Cut-Off
+                  {t("card.siCutoff")}
                 </span>
                 <span className="schedule-card__deadline-value">
                   {item.deadlines.siDocClosing}
@@ -494,14 +514,14 @@ function ScheduleRouteDetails({
               </span>
             </div>
           </Tooltip>
-          <Tooltip title="Verified Gross Mass (VGM) Closing">
+          <Tooltip title={t("card.vgmTooltip")}>
             <div className="schedule-card__deadline">
               <span className="schedule-card__deadline-icon schedule-card__deadline-icon--vgm app-icon-inherit">
                 <AppIcon icon={Icons.shieldCheck} size={14} />
               </span>
               <span>
                 <span className="schedule-card__deadline-label">
-                  VGM Cut-Off
+                  {t("card.vgmCutoff")}
                 </span>
                 <span className="schedule-card__deadline-value">
                   {item.deadlines.vgmClosing}
@@ -522,12 +542,11 @@ function ScheduleCard({
   onViewRates,
   onOpenCarbonModal,
 }: ScheduleCardProps) {
+  const { t } = useTranslation(["schedules", "common", "modules"]);
   const [expanded, setExpanded] = useState(false);
   const routingLabel = item.isDirect
-    ? "Direct"
-    : `${item.transshipmentCount} ${
-        item.transshipmentCount === 1 ? "Stop" : "Stops"
-      }`;
+    ? t("list.direct")
+    : t("list.stopCount", { count: item.transshipmentCount });
 
   return (
     <article
@@ -543,11 +562,11 @@ function ScheduleCard({
           <div className="schedule-card__meta">
             {/* Modified by Sekar Nagarajan (2026-09-17 21:29) — star icons instead of Recommended text */}
             {item.isDefaultRoute ? (
-              <Tooltip title="Recommended route">
+              <Tooltip title={t("card.recommendedRoute")}>
                 <span
                   className="schedule-card__recommended-stars"
                   role="img"
-                  aria-label="Recommended route"
+                  aria-label={t("card.recommendedRoute")}
                 >
                   <AppIcon
                     icon={Icons.star}
@@ -589,10 +608,12 @@ function ScheduleCard({
                 </span>
               </Text>
               <div className="schedule-card__etime">
-                <Tag className="schedule-card__etd-tag">ETD {item.etd}</Tag>
+                <Tag className="schedule-card__etd-tag">
+                  {t("card.etd", { value: item.etd })}
+                </Tag>
               </div>
               <Text className="schedule-card__terminal">
-                Terminal: {item.polTerminal}
+                {t("card.terminal", { name: item.polTerminal })}
               </Text>
             </div>
 
@@ -601,7 +622,7 @@ function ScheduleCard({
                 <span className="schedule-card__connector-dot" />
                 <span className="schedule-card__connector-rail" />
                 <span className="schedule-card__connector-pill">
-                  {item.transitTimeDays} Days
+                  {t("card.days", { count: item.transitTimeDays })}
                 </span>
                 <span className="schedule-card__connector-rail" />
                 <span className="schedule-card__connector-dot" />
@@ -622,15 +643,21 @@ function ScheduleCard({
                 </span>
               </Text>
               <div className="schedule-card__etime">
-                <Tag className="schedule-card__eta-tag">ETA {item.eta}</Tag>
+                <Tag className="schedule-card__eta-tag">
+                  {t("card.eta", { value: item.eta })}
+                </Tag>
               </div>
               <Text className="schedule-card__terminal">
-                Terminal: {item.podTerminal}
+                {t("card.terminal", { name: item.podTerminal })}
               </Text>
             </div>
           </div>
 
-          <TransportTranscript item={item} onViewVessel={onViewVessel} />
+          <TransportTranscript
+            item={item}
+            onViewVessel={onViewVessel}
+            roadLabel={t("card.road")}
+          />
         </div>
 
         <div className="schedule-card__actions">
@@ -641,7 +668,7 @@ function ScheduleCard({
             disabled={!item.bookingAllowed}
             block
           >
-            Book Now
+            {t("actions.bookNow")}
           </AppButton>
           <AppButton
             type="primary"
@@ -650,7 +677,7 @@ function ScheduleCard({
             onClick={() => onViewRates(item)}
             block
           >
-            Get a Quote
+            {t("actions.getAQuote")}
           </AppButton>
           <AppButton
             type="link"
@@ -665,7 +692,7 @@ function ScheduleCard({
             aria-expanded={expanded}
             block
           >
-            {expanded ? "Close Details" : "Show Details"}
+            {expanded ? t("actions.closeDetails") : t("actions.showDetails")}
           </AppButton>
           {/* <div className="schedule-card__actions-secondary">
             <AppButton
@@ -696,7 +723,11 @@ function ScheduleCard({
         aria-hidden={!expanded}
       >
         <div className="schedule-card__details-panel-inner">
-          <ScheduleRouteDetails item={item} onViewVessel={onViewVessel} />
+          <ScheduleRouteDetails
+            item={item}
+            onViewVessel={onViewVessel}
+            t={t}
+          />
         </div>
       </div>
     </article>
@@ -711,14 +742,17 @@ export function ScheduleCardList({
   onViewRates,
   onOpenCarbonModal,
 }: ScheduleCardListProps) {
+  const { t } = useTranslation(["schedules", "common", "modules"]);
+
   if (isLoading) {
     return (
       <div
         className="schedule-empty module-loading-center"
         role="status"
-        aria-label="Loading"
+        aria-label={t("a11y.loading")}
       >
         <Spin size="medium" />
+        <Text type="secondary">{t("card.searching")}</Text>
       </div>
     );
   }
@@ -728,8 +762,8 @@ export function ScheduleCardList({
       <div className="schedule-empty">
         <ModuleEmptyState
           variant="filtered"
-          title="No sailings found"
-          message="Try adjusting your ports, dates, or search type."
+          title={t("empty.cardTitle")}
+          message={t("empty.cardMessage")}
           artSize="md"
         />
       </div>

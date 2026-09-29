@@ -3,5 +3,307 @@
   "exportingToast": "Mengeksport hasil jadual…",
   "searchEmptyTitle": "Cari pelayaran",
   "searchEmptyMessage": "Pilih kriteria carian anda dan klik Cari Jadual untuk melihat pelepasan yang tersedia.",
-  "availableSailings": "Pelayaran Tersedia"
+  "availableSailings": "Pelayaran Tersedia",
+  "modes": {
+    "byRoute": "Mengikut Laluan",
+    "byVessel": "Mengikut Kapal",
+    "byPort": "Mengikut Pelabuhan"
+  },
+  "search": {
+    "searchSchedules": "Cari Jadual",
+    "resetAria": "Set semula carian jadual",
+    "originPort": "Pelabuhan Asal (POL)",
+    "originShort": "Asal (POL)",
+    "originPlaceholder": "Dari mana anda menghantar?",
+    "originPortAria": "Pelabuhan asal",
+    "selectOrigin": "Pilih pelabuhan asal",
+    "deliveryPort": "Pelabuhan Penghantaran (POD)",
+    "deliveryShort": "Penghantaran (POD)",
+    "deliveryPlaceholder": "Ke mana kargo dihantar?",
+    "deliveryPortAria": "Pelabuhan penghantaran",
+    "selectDelivery": "Pilih pelabuhan penghantaran",
+    "swapTooltip": "Tukar Asal dan Penghantaran",
+    "swapAria": "Tukar pelabuhan asal dan penghantaran",
+    "departureDateRange": "Julat Tarikh Pelepasan",
+    "departureDateRangeAria": "Julat tarikh pelepasan",
+    "vesselNameCode": "Nama / Kod Kapal",
+    "vesselPlaceholder": "Pilih kapal",
+    "vesselAria": "Kapal",
+    "selectVessel": "Pilih kapal",
+    "voyageDateRange": "Julat Tarikh Pelayaran",
+    "voyageDateRangeAria": "Julat tarikh pelayaran",
+    "portOfCall": "Pelabuhan Singgah",
+    "portOfCallPlaceholder": "Pilih pelabuhan singgah",
+    "portOfCallAria": "Pelabuhan singgah",
+    "selectPort": "Pilih pelabuhan",
+    "arrivalDepartureWindow": "Tetingkap Ketibaan / Pelepasan",
+    "arrivalDepartureWindowAria": "Tetingkap ketibaan dan pelepasan"
+  },
+  "filters": {
+    "originPort": "Pelabuhan Asal",
+    "originPlaceholder": "Masukkan pelabuhan asal",
+    "destinationPort": "Pelabuhan Destinasi",
+    "destinationPlaceholder": "Masukkan pelabuhan destinasi",
+    "searchVesselSchedules": "Cari Jadual Kapal"
+  },
+  "options": {
+    "ports": {
+      "AEDXB": "AEDXB - Dubai",
+      "AEJEA": "AEJEA - Jebel Ali",
+      "CNSHA": "CNSHA - Shanghai",
+      "INMUN": "INMUN - Mundra",
+      "INNSA": "INNSA - Nhava Sheva",
+      "SGSIN": "SGSIN - Singapura"
+    },
+    "vessels": {
+      "AGEX": "AGEX - Antigravity Express",
+      "SMVY": "SMVY - Solverminds Voyager",
+      "GLHZ": "GLHZ - Global Horizon",
+      "OCPN": "OCPN - Ocean Pioneer",
+      "PCMR": "PCMR - Pacific Merchant",
+      "MRST": "MRST - Merchant Star",
+      "ATBR": "ATBR - Atlantic Bridge"
+    }
+  },
+  "viewModes": {
+    "aria": "Mod paparan jadual",
+    "list": "Senarai",
+    "card": "Kad",
+    "calendar": "Kalendar"
+  },
+  "list": {
+    "columns": {
+      "vessel": "Kapal",
+      "voyage": "Pelayaran",
+      "service": "Perkhidmatan",
+      "origin": "Asal",
+      "pol": "POL",
+      "trans1": "Trans 1",
+      "trans2": "Trans 2",
+      "pod": "POD",
+      "delivery": "Penghantaran",
+      "type": "Jenis",
+      "etd": "ETD",
+      "eta": "ETA",
+      "transit": "Transit",
+      "gateIn": "Gate-in",
+      "si": "SI"
+    },
+    "direct": "Terus",
+    "stopCount_one": "{{count}} Hentian",
+    "stopCount_other": "{{count}} Hentian",
+    "recommendedLegend": "Laluan disyorkan"
+  },
+  "card": {
+    "road": "Jalan raya",
+    "route": "Laluan",
+    "departure": "Pelepasan",
+    "arrival": "Ketibaan",
+    "cutoffs": "Tarikh akhir",
+    "gateIn": "Gate-In",
+    "gateInTooltip": "Tarikh akhir gate-in kontena",
+    "siCutoff": "SI",
+    "siTooltip": "Tarikh akhir arahan penghantaran",
+    "vgmCutoff": "VGM",
+    "vgmTooltip": "Tarikh akhir Verified Gross Mass",
+    "recommendedRoute": "Laluan disyorkan",
+    "searching": "Mencari pelayaran…",
+    "etd": "ETD {{value}}",
+    "eta": "ETA {{value}}",
+    "terminal": "Terminal: {{name}}",
+    "days_one": "{{count}} hari",
+    "days_other": "{{count}} hari"
+  },
+  "calendar": {
+    "etd": "ETD",
+    "eta": "ETA",
+    "transit": "Transit",
+    "gateIn": "Gate-In",
+    "si": "SI",
+    "selectDayTitle": "Pilih hari",
+    "selectDayMessage": "Pilih hari pada kalendar untuk melihat pelayaran pada tarikh tersebut.",
+    "noSailingsDayTitle": "Tiada pelayaran pada hari ini",
+    "noSailingsDayMessage": "Cuba hari lain atau laraskan kriteria carian anda.",
+    "noSailingsMonthTitle": "Tiada pelayaran bulan ini",
+    "noSailingsMonthMessage": "Cuba bulan lain atau ubah penapis carian anda.",
+    "sailingsCount_one": "{{count}} pelayaran",
+    "sailingsCount_other": "{{count}} pelayaran",
+    "previousMonth": "Bulan sebelumnya",
+    "today": "Hari ini",
+    "nextMonth": "Bulan seterusnya",
+    "daySailingsAria_one": "{{date}}, {{count}} pelayaran",
+    "daySailingsAria_other": "{{date}}, {{count}} pelayaran",
+    "more": "+{{count}} lagi",
+    "legendAria": "Legenda kalendar",
+    "legendDirect": "Terus",
+    "legendTransshipment": "Transshipment",
+    "legendRecommended": "Disyorkan"
+  },
+  "actions": {
+    "bookNow": "Tempah Sekarang",
+    "getAQuote": "Dapatkan Sebut Harga",
+    "co2Estimate": "Anggaran CO₂",
+    "vesselDetails": "Butiran Kapal",
+    "showDetails": "Tunjuk Butiran",
+    "closeDetails": "Tutup Butiran",
+    "sendEmail": "Hantar E-mel",
+    "downloadSpecsPdf": "Muat Turun Spesifikasi PDF",
+    "calculate": "Kira"
+  },
+  "empty": {
+    "listTitle": "Tiada pelayaran dijumpai",
+    "listMessage": "Cuba pelabuhan, kapal atau julat tarikh yang berbeza.",
+    "cardTitle": "Tiada pelayaran dijumpai",
+    "cardMessage": "Cuba laraskan kriteria carian anda untuk mencari pelepasan yang sepadan."
+  },
+  "a11y": {
+    "loading": "Memuatkan",
+    "recommendedLegend": "Legenda laluan disyorkan"
+  },
+  "details": {
+    "title": "Butiran Jadual: {{vessel}} ({{voyage}})",
+    "vesselAndService": "Kapal & Perkhidmatan",
+    "vesselName": "Nama Kapal",
+    "voyageNumber": "Nombor Pelayaran",
+    "serviceCode": "Kod Perkhidmatan",
+    "routingAndSchedule": "Laluan & Jadual",
+    "originPort": "Pelabuhan Asal",
+    "destinationPort": "Pelabuhan Destinasi",
+    "polTerminal": "Terminal POL",
+    "estimatedDeparture": "Anggaran Pelepasan (ETD)",
+    "estimatedArrival": "Anggaran Ketibaan (ETA)",
+    "transitDuration": "Tempoh Transit",
+    "transitDays": "{{count}} Hari"
+  },
+  "vessel": {
+    "imoCallSign": "IMO: {{imo}} | Tanda Panggilan: {{callSign}}",
+    "specifications": "Spesifikasi Kapal",
+    "portCallSequence": "Urutan Singgah Pelabuhan Pelayaran",
+    "fields": {
+      "vesselCode": "Kod Kapal",
+      "flag": "Bendera",
+      "vesselType": "Jenis Kapal",
+      "operator": "Pengendali",
+      "owner": "Pemilik",
+      "builtYear": "Tahun Dibina",
+      "portOfRegistry": "Pelabuhan Pendaftaran",
+      "lengthOverall": "Panjang Keseluruhan",
+      "teuNominal": "TEU Nominal",
+      "grossTonnage": "Tan Kasar",
+      "netTonnage": "Tan Bersih",
+      "imoLloyds": "IMO / Lloyd's"
+    },
+    "columns": {
+      "portCodeName": "Kod & Nama Pelabuhan",
+      "terminal": "Terminal",
+      "status": "Status"
+    },
+    "status": {
+      "COMPLETED": "Selesai",
+      "IN_PORT": "Di Pelabuhan",
+      "EXPECTED": "Dijangka"
+    }
+  },
+  "ratesModal": {
+    "title": "Anggaran Kadar Pengangkutan & Surcaj",
+    "routeBanner": "Laluan: {{pol}} → {{pod}} | Perkhidmatan: {{service}}",
+    "equipmentSelection": "Pemilihan Peralatan",
+    "eq20ft": "20 FT Standard",
+    "eq40ft": "40 FT Standard",
+    "eq40hc": "40 FT High Cube (HC)",
+    "reeferHint": "Kawalan Suhu Reefer",
+    "commodityName": "Nama Komoditi",
+    "commodityPlaceholder": "cth. Kargo Am, Elektronik, Makanan",
+    "breakdownTitle": "Pecahan Kadar Anggaran",
+    "totalLabel": "Jumlah Anggaran Pengangkutan (USD):",
+    "totalValue": "${{amount}} USD",
+    "columns": {
+      "chargeDescription": "Penerangan Caj",
+      "rateUnit": "Kadar / Unit",
+      "qtyCont": "Kuantiti / Kont",
+      "subtotal": "Jumlah Kecil"
+    },
+    "charges": {
+      "ofr20": "Pengangkutan Laut - 20FT Standard Dry",
+      "ofr40": "Pengangkutan Laut - 40FT Standard Dry",
+      "ofr40hc": "Pengangkutan Laut - 40FT High Cube",
+      "baf": "BAF - Bunker Adjustment Factor",
+      "thc": "THC - Terminal Handling Charge (POL)"
+    }
+  },
+  "carbon": {
+    "title": "Jejak Karbon",
+    "subtitle": "Anggar CO₂e untuk pelayaran jadual ini",
+    "cargoInputs": "Input kargo",
+    "cargoInputsAria": "Input kargo",
+    "containerQty": "Kuantiti kontena (TEU)",
+    "containerQtyAria": "Kuantiti kontena dalam TEU",
+    "cargoWeight": "Berat kargo (tan metrik)",
+    "cargoWeightAria": "Berat kargo dalam tan metrik",
+    "resultsAria": "Hasil pelepasan",
+    "resultsTitle": "Pecahan anggaran CO₂e",
+    "totalCo2e": "Jumlah CO₂e",
+    "totalHint": "Kitaran hayat digabungkan",
+    "tankToWheel": "Tank-to-wheel",
+    "tankToWheelHint": "Pembakaran kapal terus",
+    "wellToTank": "Well-to-tank",
+    "wellToTankHint": "Pengeluaran bahan api hulu",
+    "tonsUnit": "tan",
+    "idleTitle": "Sedia untuk menganggarkan",
+    "idleHint": "Masukkan TEU dan berat kargo, kemudian kira untuk melihat pecahan CO₂e bagi pelayaran ini.",
+    "methodologyAria": "Notis metodologi",
+    "methodologyTitle": "Metodologi",
+    "methodologyText": "Anggaran mengikuti panduan GLEC dan IMO menggunakan 8.5 g CO₂ per tan-km untuk kapal kontena laut. Pelepasan sebenar mungkin berbeza mengikut cuaca, kelajuan dan kesesakan pelabuhan."
+  },
+  "shareMail": {
+    "title": "Kongsi melalui E-mel",
+    "to": "Kepada",
+    "cc": "Sk",
+    "subject": "Subjek",
+    "message": "Mesej",
+    "placeholders": {
+      "to": "penerima@syarikat.com",
+      "cc": "pilihan@syarikat.com",
+      "message": "Karang mesej jadual pelayaran anda…"
+    },
+    "sharingCount_one": "Berkongsi {{count}} pelayaran",
+    "sharingCount_other": "Berkongsi {{count}} pelayaran",
+    "moreSailings_one": "+{{count}} pelayaran lagi",
+    "moreSailings_other": "+{{count}} pelayaran lagi",
+    "validation": {
+      "toRequired": "E-mel penerima diperlukan",
+      "toInvalid": "Masukkan alamat e-mel yang sah (asingkan berbilang dengan koma)",
+      "ccInvalid": "Masukkan alamat e-mel SK yang sah (asingkan dengan koma)",
+      "subjectRequired": "Subjek diperlukan",
+      "subjectMax": "Subjek mestilah 200 aksara atau kurang",
+      "messageRequired": "Mesej diperlukan",
+      "messageMax": "Mesej mestilah 4000 aksara atau kurang"
+    },
+    "toasts": {
+      "success_one": "Jadual berjaya dihantar melalui e-mel ({{count}} penerima).",
+      "success_other": "Jadual berjaya dihantar melalui e-mel ({{count}} penerima).",
+      "error": "Gagal berkongsi jadual pelayaran melalui e-mel. Sila cuba lagi."
+    },
+    "subjectTemplate": {
+      "single": "Jadual pelayaran — {{vessel}} {{voyage}}{{bound}} ({{pol}} → {{pod}})",
+      "multiple": "Jadual pelayaran — {{count}} hasil ({{pol}} → {{pod}})",
+      "empty": "Jadual pelayaran"
+    },
+    "body": {
+      "hello": "Hello,",
+      "intro": "Sila lihat butiran jadual pelayaran di bawah.",
+      "sailingHeading": "Pelayaran {{index}}: {{service}} — {{vessel}} ({{voyage}}{{bound}}){{recommended}}",
+      "recommendedSuffix": " · Laluan disyorkan",
+      "service": "Perkhidmatan: {{value}}",
+      "lane": "Laluan: {{value}}",
+      "etd": "ETD: {{value}}",
+      "eta": "ETA: {{value}}",
+      "transit": "Transit: {{count}} hari",
+      "routing": "Penghalaan: {{value}}",
+      "gateIn": "Tarikh akhir gate-in: {{value}}",
+      "si": "Tarikh akhir SI: {{value}}",
+      "regards": "Salam,",
+      "signature": "E-Com Portal"
+    }
+  }
 }

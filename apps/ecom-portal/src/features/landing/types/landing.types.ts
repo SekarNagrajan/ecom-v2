@@ -1,4 +1,5 @@
 // Modified by Sekar Nagarajan (2026-09-18 10:45)
+import type { TFunction } from "i18next";
 import { z } from "zod";
 
 import type { TrackingSearchType } from "../../tracking/types/tracking.types";
@@ -46,10 +47,9 @@ export const scheduleSearchSchema = z.object({
 });
 
 /** Security Verification — JSP `ecom.msg.entcapchacode` / `ecom.msg.incorrectcaptcha`. */
-const captchaRequiredSchema = z
-  .string()
-  .trim()
-  .min(1, "Please Enter The Captcha Code");
+function captchaRequiredSchema(t: TFunction<"landing">) {
+  return z.string().trim().min(1, t("validation.captchaRequired"));
+}
 
 export const trackingSearchTypeSchema = z.enum([
   "CONTAINER",
@@ -57,25 +57,33 @@ export const trackingSearchTypeSchema = z.enum([
   "BL",
 ]);
 
-export const trackingSearchSchema = z.object({
-  searchType: trackingSearchTypeSchema,
-  trackingNumber: z
-    .string()
-    .trim()
-    .min(3, "Please enter a valid Container, Booking, or Bill of Lading (BL) number"),
-  captcha: captchaRequiredSchema,
-});
+export function createTrackingSearchSchema(t: TFunction<"landing">) {
+  return z.object({
+    searchType: trackingSearchTypeSchema,
+    trackingNumber: z
+      .string()
+      .trim()
+      .min(3, t("validation.trackingNumberMin")),
+    captcha: captchaRequiredSchema(t),
+  });
+}
 
 export type LandingTrackingSearchType = TrackingSearchType;
 
-export const ratesSearchSchema = z.object({
-  pol: z.string().optional(),
-  pod: z.string().optional(),
-  equipmentType: z.string().optional(),
-  shipmentDate: z.string().optional(),
-  captcha: captchaRequiredSchema,
-});
+export function createRatesSearchSchema(t: TFunction<"landing">) {
+  return z.object({
+    pol: z.string().optional(),
+    pod: z.string().optional(),
+    equipmentType: z.string().optional(),
+    shipmentDate: z.string().optional(),
+    captcha: captchaRequiredSchema(t),
+  });
+}
 
 export type ScheduleSearchForm = z.infer<typeof scheduleSearchSchema>;
-export type TrackingSearchForm = z.infer<typeof trackingSearchSchema>;
-export type RatesSearchForm = z.infer<typeof ratesSearchSchema>;
+export type TrackingSearchForm = z.infer<
+  ReturnType<typeof createTrackingSearchSchema>
+>;
+export type RatesSearchForm = z.infer<
+  ReturnType<typeof createRatesSearchSchema>
+>;

@@ -1,0 +1,74 @@
+{
+  "subtitle": "按日期范围筛选，查看 POL 至 POD 路由，并打印交货单文件。",
+  "search": {
+    "fromDate": "开始日期",
+    "toDate": "结束日期",
+    "show": "查询"
+  },
+  "columns": {
+    "doNo": "DO 编号",
+    "doDate": "DO 日期",
+    "blNumber": "B/L 号",
+    "vessel": "船名",
+    "voyage": "航次",
+    "pol": "POL",
+    "pod": "POD",
+    "terminal": "码头",
+    "arrival": "到港",
+    "validTill": "有效期至",
+    "status": "状态"
+  },
+  "actions": {
+    "viewDetails": "查看详情",
+    "printDeliveryOrder": "打印交货单",
+    "downloadPdf": "下载 PDF",
+    "copyDoNumber": "复制 DO 编号",
+    "copied": "已复制"
+  },
+  "empty": {
+    "loadErrorTitle": "无法加载交货单",
+    "loadErrorMessage": "请求未完成。请检查网络连接后重试。",
+    "noResultsTitle": "没有符合条件的交货单",
+    "noResultsMessage": "该日期范围内没有结果。请扩大日期范围或清除筛选条件。"
+  },
+  "errors": {
+    "download": "下载交货单失败。"
+  },
+  "toasts": {
+    "documentDownloaded": "交货单 {{delOrdNo}} 已下载。"
+  },
+  "status": {
+    "printed": "已打印",
+    "notPrinted": "未打印"
+  },
+  "validation": {
+    "fromDateRequired": "开始日期为必填项",
+    "toDateRequired": "结束日期为必填项",
+    "fromBeforeTo": "开始日期必须早于或等于结束日期"
+  },
+  "drawer": {
+    "blPrefix": "B/L:",
+    "routeEyebrow": "港到港",
+    "origin": "起运地",
+    "delivery": "交货地",
+    "sections": {
+      "details": "交货单详情",
+      "shipment": "货物详情"
+    },
+    "labels": {
+      "doNumber": "DO 编号",
+      "doDate": "DO 日期",
+      "validUntil": "有效期至",
+      "printStatus": "打印状态",
+      "blNumber": "B/L 号",
+      "terminal": "码头",
+      "vessel": "船名",
+      "voyage": "航次",
+      "bound": "航向",
+      "arrivalDate": "到港日期"
+    },
+    "alerts": {
+      "validUntil": "此交货单有效期至 <date/>。"
+    }
+  }
+}

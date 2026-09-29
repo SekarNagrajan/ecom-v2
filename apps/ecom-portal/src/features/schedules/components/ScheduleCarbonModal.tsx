@@ -2,6 +2,7 @@
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { InputNumber, Typography } from "antd";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons, NavIcons } from "../../../components/icons";
 import { calculateCarbonEmissions } from "../mocks/schedules.mock";
@@ -23,6 +24,7 @@ export function ScheduleCarbonModal({
   open,
   onClose,
 }: ScheduleCarbonModalProps) {
+  const { t } = useTranslation(["schedules", "common", "modules"]);
   const [boundScheduleId, setBoundScheduleId] = useState<string | null>(null);
   const [containerQty, setContainerQty] = useState(1);
   const [weightTons, setWeightTons] = useState(14);
@@ -78,24 +80,27 @@ export function ScheduleCarbonModal({
           <AppIcon icon={NavIcons.carbon} size={20} />
           <div>
             <Title level={4} className="schedule-drawer-title__text">
-              Carbon Footprint
+              {t("carbon.title")}
             </Title>
             <Text type="secondary" className="schedule-drawer-title__meta">
-              Estimate CO₂e for this schedule voyage
+              {t("carbon.subtitle")}
             </Text>
           </div>
         </div>
       }
     >
       <div className="schedule-co2-layout">
-        <section className="schedule-co2-criteria" aria-label="Cargo inputs">
+        <section
+          className="schedule-co2-criteria"
+          aria-label={t("carbon.cargoInputsAria")}
+        >
           <Text strong className="schedule-co2-section-title">
-            Cargo inputs
+            {t("carbon.cargoInputs")}
           </Text>
           <div className="schedule-co2-criteria__row">
             <label className="schedule-co2-field">
               <span className="form-field-label">
-                Container quantity (TEU) <Text type="danger"> *</Text>
+                {t("carbon.containerQty")} <Text type="danger"> *</Text>
               </span>
               <InputNumber
                 size="large"
@@ -104,12 +109,12 @@ export function ScheduleCarbonModal({
                 value={containerQty}
                 onChange={handleQtyChange}
                 className="schedule-field-full"
-                aria-label="Container quantity in TEU"
+                aria-label={t("carbon.containerQtyAria")}
               />
             </label>
             <label className="schedule-co2-field">
               <span className="form-field-label">
-                Cargo weight (metric tons) <Text type="danger"> *</Text>
+                {t("carbon.cargoWeight")} <Text type="danger"> *</Text>
               </span>
               <InputNumber
                 size="large"
@@ -118,7 +123,7 @@ export function ScheduleCarbonModal({
                 value={weightTons}
                 onChange={handleWeightChange}
                 className="schedule-field-full"
-                aria-label="Cargo weight in metric tons"
+                aria-label={t("carbon.cargoWeightAria")}
               />
             </label>
             <div className="schedule-co2-actions-field">
@@ -132,7 +137,7 @@ export function ScheduleCarbonModal({
                 className="schedule-co2-calc-btn"
                 onClick={handleCalculate}
               >
-                Calculate
+                {t("actions.calculate")}
               </AppButton>
             </div>
           </div>
@@ -141,42 +146,57 @@ export function ScheduleCarbonModal({
         {result ? (
           <section
             className="schedule-co2-results"
-            aria-label="Emission results"
+            aria-label={t("carbon.resultsAria")}
           >
             <div className="schedule-co2-results__head">
               <Text strong className="schedule-co2-section-title">
-                Estimated CO₂e breakdown
+                {t("carbon.resultsTitle")}
               </Text>
             </div>
             <div className="schedule-co2-kpi-grid">
               <div className="schedule-co2-kpi schedule-co2-kpi--total">
-                <span className="schedule-co2-kpi__label">Total CO₂e</span>
+                <span className="schedule-co2-kpi__label">
+                  {t("carbon.totalCo2e")}
+                </span>
                 <p className="schedule-co2-kpi__value">
                   {result.totalCo2eTons.toLocaleString()}
-                  <span className="schedule-co2-kpi__unit"> tons</span>
+                  <span className="schedule-co2-kpi__unit">
+                    {" "}
+                    {t("carbon.tonsUnit")}
+                  </span>
                 </p>
                 <span className="schedule-co2-kpi__hint">
-                  Combined lifecycle
+                  {t("carbon.totalHint")}
                 </span>
               </div>
               <div className="schedule-co2-kpi schedule-co2-kpi--ttw">
-                <span className="schedule-co2-kpi__label">Tank-to-wheel</span>
+                <span className="schedule-co2-kpi__label">
+                  {t("carbon.tankToWheel")}
+                </span>
                 <p className="schedule-co2-kpi__value">
                   {result.ttwCo2eTons.toLocaleString()}
-                  <span className="schedule-co2-kpi__unit"> tons</span>
+                  <span className="schedule-co2-kpi__unit">
+                    {" "}
+                    {t("carbon.tonsUnit")}
+                  </span>
                 </p>
                 <span className="schedule-co2-kpi__hint">
-                  Direct vessel burn
+                  {t("carbon.tankToWheelHint")}
                 </span>
               </div>
               <div className="schedule-co2-kpi schedule-co2-kpi--wtt">
-                <span className="schedule-co2-kpi__label">Well-to-tank</span>
+                <span className="schedule-co2-kpi__label">
+                  {t("carbon.wellToTank")}
+                </span>
                 <p className="schedule-co2-kpi__value">
                   {result.wttCo2eTons.toLocaleString()}
-                  <span className="schedule-co2-kpi__unit"> tons</span>
+                  <span className="schedule-co2-kpi__unit">
+                    {" "}
+                    {t("carbon.tonsUnit")}
+                  </span>
                 </p>
                 <span className="schedule-co2-kpi__hint">
-                  Upstream fuel production
+                  {t("carbon.wellToTankHint")}
                 </span>
               </div>
             </div>
@@ -184,24 +204,24 @@ export function ScheduleCarbonModal({
         ) : (
           <div className="schedule-co2-idle">
             <AppIcon icon={Icons.calculator} size={28} />
-            <Text strong>Ready to estimate</Text>
+            <Text strong>{t("carbon.idleTitle")}</Text>
             <Text type="secondary" className="schedule-co2-idle__hint">
-              Enter TEU and cargo weight, then calculate to see the CO₂e
-              breakdown for this voyage.
+              {t("carbon.idleHint")}
             </Text>
           </div>
         )}
 
-        <aside className="schedule-co2-note" aria-label="Methodology notice">
+        <aside
+          className="schedule-co2-note"
+          aria-label={t("carbon.methodologyAria")}
+        >
           <AppIcon icon={Icons.info} size={16} />
           <div>
             <Text strong className="schedule-co2-note__title">
-              Methodology
+              {t("carbon.methodologyTitle")}
             </Text>
             <Text type="secondary" className="schedule-co2-note__text">
-              Estimates follow GLEC and IMO guidance using 8.5 g CO₂ per
-              tonne-km for ocean container vessels. Actual emissions may vary
-              with weather, speed, and port congestion.
+              {t("carbon.methodologyText")}
             </Text>
           </div>
         </aside>

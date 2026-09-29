@@ -1,0 +1,169 @@
+{
+  "header": {
+    "defaultSubtitle": "上传工作簿，审核行数据，然后提交有效行。",
+    "replaceFile": "替换文件",
+    "downloadTemplate": "下载模板",
+    "exportReview": "导出审核结果",
+    "columnGuide": "列指南"
+  },
+  "empty": {
+    "uploadAria": "上传工作簿",
+    "uploadTitle": "上传工作簿",
+    "uploadHint": "将 Excel 文件拖放到此处，或先下载模板以确保表头与必填列匹配。",
+    "xlsxOnly": "仅限 .xlsx",
+    "headerRequired": "需要表头行",
+    "maxSize": "最大 {{maxMb}} MB",
+    "dropTitle": "拖放工作簿",
+    "dropDescription": "拖放或点击浏览",
+    "columnGuideAria": "列指南",
+    "columnGuideTitle": "列指南",
+    "columnGuideHint": "必填字段会优先出现在模板和此列表中。"
+  },
+  "metrics": {
+    "ariaLabel": "导入审核指标",
+    "file": "文件",
+    "rows": "行数",
+    "invalid": "无效",
+    "issues": "问题",
+    "valid": "有效"
+  },
+  "toolbar": {
+    "allColumns": "全部列",
+    "sheet": "工作表",
+    "allRows": "全部行",
+    "errors": "错误",
+    "addCountryCode": "添加国家代码",
+    "replaceInvalid": "替换无效值",
+    "fillEmpty": "填充空白",
+    "prev": "上一处",
+    "hideErrors": "隐藏错误",
+    "invalidCount": "{{count}} 个无效",
+    "emptyCount": "{{count}} 个空白"
+  },
+  "actions": {
+    "submitDefault": "提交 {{count}} 条{{entityLabel}}"
+  },
+  "status": {
+    "row": "行",
+    "status": "状态",
+    "ready": "就绪",
+    "fixed": "已修复",
+    "errorsCount": "{{count}} 个错误"
+  },
+  "confirms": {
+    "leaveTitle": "离开导入？",
+    "leaveMessage": "已加载的工作簿和修复内容将丢失。留在此页可继续，或放弃并离开。"
+  },
+  "toasts": {
+    "templateFailed": "无法生成导入模板。请重试。"
+  },
+  "errors": {
+    "maxRows": "此工作表有 {{rowCount}} 行。批量导入每个文件最多接受 {{maxRowCount}} 条{{entityLabel}}。请拆分工作簿后重试。",
+    "unableToRead": "无法读取所选的 Excel 文件。"
+  },
+  "a11y": {
+    "previousError": "上一处错误",
+    "nextError": "下一处错误",
+    "toggleErrors": "切换错误面板",
+    "hideErrors": "隐藏错误"
+  },
+  "grid": {
+    "analyzing": "正在分析工作簿…"
+  },
+  "badges": {
+    "required": "必填",
+    "optional": "可选"
+  },
+  "errorsDrawer": {
+    "title": "错误",
+    "titleWithCount": "错误（{{count}}）",
+    "noErrors": "没有验证错误。",
+    "ignoredColumns": "已忽略的列：{{columns}}",
+    "rowField": "第 {{rowNumber}} 行 · {{fieldLabel}}",
+    "serverPrefix": "服务器：{{message}}",
+    "serverField": "服务器",
+    "kinds": {
+      "required": "必填",
+      "selectValid": "请选择有效选项",
+      "invalidLength": "长度无效",
+      "invalidPhone": "无效电话",
+      "invalidEmail": "无效邮箱"
+    }
+  },
+  "bulkFix": {
+    "modes": {
+      "invalid": "替换无效值",
+      "countryCode": "添加国家代码",
+      "empty": "填充空白值"
+    },
+    "descriptions": {
+      "invalid": "仅会更改此列中当前验证失败的单元格。空白单元格保持不变。",
+      "countryCode": "仅会更新缺少国家代码且可被规范化的电话号码。",
+      "empty": "仅会更改此列中的空白单元格。现有值保持不变。"
+    },
+    "labels": {
+      "countryCode": "国家代码",
+      "replacementFor": "{{field}} 的替换值",
+      "fillInto": "填入空白 {{field}} 单元格的值",
+      "matchingCells": "匹配的单元格",
+      "valueType": "值类型",
+      "format": "格式",
+      "missingCountryCode": "缺少国家代码",
+      "otherInvalidPhones": "其他无效电话",
+      "empty": "空白",
+      "phoneE164": "电话（E.164）"
+    },
+    "placeholders": {
+      "select": "请选择…",
+      "selectField": "选择 {{field}}",
+      "enterAmount": "输入金额",
+      "enter": "输入…",
+      "enterField": "输入 {{field}}",
+      "selectCountryCode": "选择国家代码"
+    },
+    "options": {
+      "clearValue": "清除值"
+    },
+    "hints": {
+      "clearOptional": "留空可清除匹配单元格中的此可选字段。",
+      "countryCodeConvert": "选择国家后，匹配的号码将转换为国际格式。",
+      "enterValid": "请输入有效的{{field}}以启用应用。"
+    },
+    "apply": {
+      "replaceCells_one": "替换 {{count}} 个单元格",
+      "replaceCells_other": "替换 {{count}} 个单元格",
+      "updateNumbers_one": "更新 {{count}} 个号码",
+      "updateNumbers_other": "更新 {{count}} 个号码",
+      "fillCells_one": "填充 {{count}} 个单元格",
+      "fillCells_other": "填充 {{count}} 个单元格"
+    }
+  },
+  "fieldOverview": {
+    "requiredFields": "必填字段",
+    "optionalFields": "可选字段",
+    "required": "必填",
+    "optional": "可选",
+    "eg": "例如：{{value}}",
+    "default": "默认：{{value}}",
+    "header": "表头：{{headers}}",
+    "example": "示例：{{value}}"
+  },
+  "columnGuide": {
+    "intro": "在审核或修复工作簿值时，请参考这些示例格式。",
+    "alsoAccepts": "同时接受：{{aliases}}",
+    "format": "格式：{{format}}",
+    "defaultsTo": "为空时默认为 {{value}}",
+    "freeText": "自由文本"
+  },
+  "formatHints": {
+    "phone": "带国家代码的国际格式",
+    "email": "标准电子邮件地址",
+    "currency": "数字金额",
+    "number": "数值"
+  },
+  "phone": {
+    "required": "电话号码为必填项",
+    "invalid": "无效的电话号码",
+    "countryCodeRequired": "需要国家代码。请使用国际格式，例如 +919876543210。"
+  }
+}

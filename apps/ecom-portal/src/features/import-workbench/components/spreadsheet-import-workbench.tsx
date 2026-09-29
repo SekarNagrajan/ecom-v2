@@ -2,6 +2,7 @@
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { Alert, theme } from "antd";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { NavigationBlocker } from "../../../components/shared/navigation-blocker";
 import { useSpreadsheetImportWorkbench } from "../hooks/use-spreadsheet-import-workbench";
@@ -47,6 +48,7 @@ export function SpreadsheetImportWorkbench<TValues extends object, TPayload>({
   subtitle,
   title,
 }: SpreadsheetImportWorkbenchProps<TValues, TPayload>) {
+  const { t } = useTranslation(["import-workbench", "common"]);
   const { token } = theme.useToken();
   const toast = useToast();
   const [isDownloadingTemplate, setIsDownloadingTemplate] = useState(false);
@@ -98,18 +100,35 @@ export function SpreadsheetImportWorkbench<TValues extends object, TPayload>({
   });
   const isBusy = isParsing || isSubmitting;
 
-  const columnDefs = createSpreadsheetImportColumnDefs(adapter, {
-    errorBackground: token.colorErrorBg,
-    errorBorder: token.colorErrorBorder,
-    fixedBackground: token.colorSuccessBg,
-    fixedBorder: token.colorSuccessBorder,
-  }, {
-    highlightedFieldKey: bulkField?.key,
-  });
+  const columnDefs = createSpreadsheetImportColumnDefs(
+    adapter,
+    {
+      errorBackground: token.colorErrorBg,
+      errorBorder: token.colorErrorBorder,
+      fixedBackground: token.colorSuccessBg,
+      fixedBorder: token.colorSuccessBorder,
+    },
+    {
+      highlightedFieldKey: bulkField?.key,
+      labels: {
+        row: t("status.row"),
+        status: t("status.status"),
+        ready: t("status.ready"),
+        fixed: t("status.fixed"),
+        errorsCount: (count) => t("status.errorsCount", { count }),
+        yes: t("common:actions.yes"),
+        no: t("common:actions.no"),
+        emptyValue: "—",
+      },
+    },
+  );
 
   const submitLabel =
     adapter.getSubmitLabel?.(validRowCount) ??
-    `Submit ${validRowCount} ${adapter.entityLabel}`;
+    t("actions.submitDefault", {
+      count: validRowCount,
+      entityLabel: adapter.entityLabel,
+    });
 
   const handleSheetToggle = (sheetName: string) => {
     void handleSheetChange(sheetName);
@@ -136,7 +155,7 @@ export function SpreadsheetImportWorkbench<TValues extends object, TPayload>({
     try {
       await downloadSpreadsheetImportTemplate(adapter);
     } catch {
-      toast.error("Could not generate the import template. Please try again.");
+      toast.error(t("toasts.templateFailed"));
     } finally {
       setIsDownloadingTemplate(false);
     }
@@ -150,8 +169,8 @@ export function SpreadsheetImportWorkbench<TValues extends object, TPayload>({
     <>
       <NavigationBlocker
         shouldBlock={Boolean(selectedFile) && !isSubmitting}
-        title="Leave import?"
-        message="Your loaded workbook and fixes will be lost. Stay on this page to continue, or discard and leave."
+        title={t("confirms.leaveTitle")}
+        message={t("confirms.leaveMessage")}
       />
 
       <div className="import-wb">

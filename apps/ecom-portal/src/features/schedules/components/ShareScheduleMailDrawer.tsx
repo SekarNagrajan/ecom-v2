@@ -4,8 +4,10 @@ import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { FormRichTextEditor } from "@solverminds/shared-ui/form-editor";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { Form, Input, Typography, theme } from "antd";
-import { useEffect } from "react";
+import type { TFunction } from "i18next";
+import { useEffect, useMemo } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { AppIcon, Icons } from "../../../components/icons";
@@ -21,51 +23,56 @@ import {
 
 const { Text } = Typography;
 
-const emailListSchema = z
-  .string()
-  .trim()
-  .min(1, "Recipient email is required")
-  .refine((value) => {
-    const parts = value
-      .split(/[;,]/)
-      .map((p) => p.trim())
-      .filter(Boolean);
-    if (parts.length === 0) return false;
-    return parts.every((part) => z.string().email().safeParse(part).success);
-  }, "Enter a valid email address (separate multiple with commas)");
-
-const optionalEmailListSchema = z
-  .string()
-  .trim()
-  .optional()
-  .refine((value) => {
-    if (!value) return true;
-    const parts = value
-      .split(/[;,]/)
-      .map((p) => p.trim())
-      .filter(Boolean);
-    return parts.every((part) => z.string().email().safeParse(part).success);
-  }, "Enter valid CC email addresses (separate with commas)");
-
-const shareMailSchema = z.object({
-  to: emailListSchema,
-  cc: optionalEmailListSchema,
-  subject: z
+function createShareMailSchema(t: TFunction<"schedules">) {
+  const emailListSchema = z
     .string()
     .trim()
-    .min(1, "Subject is required")
-    .max(200, "Subject must be 200 characters or fewer"),
-  message: z
-    .string()
-    .min(1, "Message is required")
-    .refine((html) => stripHtml(html).length > 0, "Message is required")
-    .refine(
-      (html) => stripHtml(html).length <= 4000,
-      "Message must be 4000 characters or fewer",
-    ),
-});
+    .min(1, t("shareMail.validation.toRequired"))
+    .refine((value) => {
+      const parts = value
+        .split(/[;,]/)
+        .map((p) => p.trim())
+        .filter(Boolean);
+      if (parts.length === 0) return false;
+      return parts.every((part) => z.string().email().safeParse(part).success);
+    }, t("shareMail.validation.toInvalid"));
 
-type ShareMailForm = z.infer<typeof shareMailSchema>;
+  const optionalEmailListSchema = z
+    .string()
+    .trim()
+    .optional()
+    .refine((value) => {
+      if (!value) return true;
+      const parts = value
+        .split(/[;,]/)
+        .map((p) => p.trim())
+        .filter(Boolean);
+      return parts.every((part) => z.string().email().safeParse(part).success);
+    }, t("shareMail.validation.ccInvalid"));
+
+  return z.object({
+    to: emailListSchema,
+    cc: optionalEmailListSchema,
+    subject: z
+      .string()
+      .trim()
+      .min(1, t("shareMail.validation.subjectRequired"))
+      .max(200, t("shareMail.validation.subjectMax")),
+    message: z
+      .string()
+      .min(1, t("shareMail.validation.messageRequired"))
+      .refine(
+        (html) => stripHtml(html).length > 0,
+        t("shareMail.validation.messageRequired"),
+      )
+      .refine(
+        (html) => stripHtml(html).length <= 4000,
+        t("shareMail.validation.messageMax"),
+      ),
+  });
+}
+
+type ShareMailForm = z.infer<ReturnType<typeof createShareMailSchema>>;
 
 interface ShareScheduleMailDrawerProps {
   open: boolean;
@@ -78,11 +85,13 @@ export function ShareScheduleMailDrawer({
   onClose,
   schedules,
 }: ShareScheduleMailDrawerProps) {
+  const { t } = useTranslation(["schedules", "common", "modules"]);
   const { token } = theme.useToken();
   const toast = useToast();
   const { richTextAssistProps } = useAiTextAssist();
   const shareMutation = useShareScheduleMailMutation();
   const isSubmitting = shareMutation.isPending;
+  const shareMailSchema = useMemo(() => createShareMailSchema(t), [t]);
 
   const form = useForm<ShareMailForm>({
     resolver: zodResolver(shareMailSchema),
@@ -106,10 +115,10 @@ export function ShareScheduleMailDrawer({
     reset({
       to: "",
       cc: "",
-      subject: buildShareScheduleSubject(schedules),
-      message: buildShareScheduleMessage(schedules),
+      subject: buildShareScheduleSubject(schedules, t),
+      message: buildShareScheduleMessage(schedules, t),
     });
-  }, [open, schedules, reset]);
+  }, [open, schedules, reset, t]);
 
   const onSubmit = (data: ShareMailForm) => {
     shareMutation.mutate(
@@ -123,17 +132,15 @@ export function ShareScheduleMailDrawer({
       {
         onSuccess: (result) => {
           toast.success(
-            `Schedule emailed successfully (${result.recipientCount} recipient${
-              result.recipientCount === 1 ? "" : "s"
-            }).`,
+            t("shareMail.toasts.success", {
+              count: result.recipientCount,
+            }),
           );
           reset();
           onClose();
         },
         onError: () => {
-          toast.error(
-            "Failed to share sailing schedules by email. Please try again.",
-          );
+          toast.error(t("shareMail.toasts.error"));
         },
       },
     );
@@ -145,9 +152,11 @@ export function ShareScheduleMailDrawer({
     onClose();
   };
 
+  const moreCount = Math.max(schedules.length - 5, 0);
+
   return (
     <AppDrawer
-      title="Share via Mail"
+      title={t("shareMail.title")}
       open={open}
       onClose={handleClose}
       width={740}
@@ -161,7 +170,7 @@ export function ShareScheduleMailDrawer({
       footer={
         <div className="schedule-share-mail-actions custom-scroll">
           <AppButton danger onClick={handleClose} disabled={isSubmitting}>
-            Cancel
+            {t("common:actions.cancel")}
           </AppButton>
           <AppButton
             type="primary"
@@ -169,7 +178,7 @@ export function ShareScheduleMailDrawer({
             icon={<AppIcon icon={Icons.send} size={16} />}
             onClick={handleSubmit(onSubmit)}
           >
-            Send Email
+            {t("actions.sendEmail")}
           </AppButton>
         </div>
       }
@@ -182,24 +191,22 @@ export function ShareScheduleMailDrawer({
         >
           <div className="schedule-share-mail-summary">
             <Text strong className="schedule-share-mail-summary__title">
-              Sharing {schedules.length} sailing
-              {schedules.length === 1 ? "" : "s"}
+              {t("shareMail.sharingCount", { count: schedules.length })}
             </Text>
             <ul className="schedule-share-mail-summary__list">
               {schedules.slice(0, 5).map((item) => (
                 <li key={item.id}>
                   <Text>
                     {item.serviceCode} · {item.vesselName} ({item.voyage}
-                    {item.bound}) · {item.polPortId} → {item.podPortId} · ETD{" "}
-                    {item.etd}
+                    {item.bound}) · {item.polPortId} → {item.podPortId} ·{" "}
+                    {t("calendar.etd")} {item.etd}
                   </Text>
                 </li>
               ))}
-              {schedules.length > 5 ? (
+              {moreCount > 0 ? (
                 <li>
                   <Text type="secondary">
-                    +{schedules.length - 5} more sailing
-                    {schedules.length - 5 === 1 ? "" : "s"}
+                    {t("shareMail.moreSailings", { count: moreCount })}
                   </Text>
                 </li>
               ) : null}
@@ -210,7 +217,7 @@ export function ShareScheduleMailDrawer({
             <Form.Item
               label={
                 <span className="form-field-label">
-                  To
+                  {t("shareMail.to")}
                   <Text type="danger"> *</Text>
                 </span>
               }
@@ -230,7 +237,7 @@ export function ShareScheduleMailDrawer({
                   <Input
                     {...field}
                     size="large"
-                    placeholder="recipient@company.com"
+                    placeholder={t("shareMail.placeholders.to")}
                     status={errors.to ? "error" : undefined}
                     prefix={<AppIcon icon={Icons.mail} size={16} />}
                   />
@@ -239,7 +246,9 @@ export function ShareScheduleMailDrawer({
             </Form.Item>
 
             <Form.Item
-              label={<span className="form-field-label">Cc</span>}
+              label={
+                <span className="form-field-label">{t("shareMail.cc")}</span>
+              }
               validateStatus={errors.cc ? "error" : undefined}
               help={
                 errors.cc ? (
@@ -256,7 +265,7 @@ export function ShareScheduleMailDrawer({
                   <Input
                     {...field}
                     size="large"
-                    placeholder="optional@company.com"
+                    placeholder={t("shareMail.placeholders.cc")}
                     status={errors.cc ? "error" : undefined}
                   />
                 )}
@@ -266,7 +275,7 @@ export function ShareScheduleMailDrawer({
             <Form.Item
               label={
                 <span className="form-field-label">
-                  Subject
+                  {t("shareMail.subject")}
                   <Text type="danger"> *</Text>
                 </span>
               }
@@ -297,7 +306,7 @@ export function ShareScheduleMailDrawer({
               <FormRichTextEditor
                 name="message"
                 control={control}
-                label="Message"
+                label={t("shareMail.message")}
                 required
                 minHeight={token.controlHeightLG * 6}
                 enableLinks
@@ -307,7 +316,7 @@ export function ShareScheduleMailDrawer({
                 enableUndo
                 showToolbar
                 toolbarPosition="top"
-                placeholder="Compose your sailing schedule message…"
+                placeholder={t("shareMail.placeholders.message")}
                 {...richTextAssistProps}
               />
             </div>

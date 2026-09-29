@@ -2,13 +2,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { FieldErrors, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { submitRegistration } from "../api/registration.api";
 import {
-    RegistrationFormData,
-    RegistrationSchema,
+  createRegistrationSchema,
+  type RegistrationFormData,
 } from "../types/registration.schema";
 
 interface UseRegistrationControllerProps {
@@ -20,26 +21,27 @@ export function useRegistrationController({
   onSuccess,
   onCancel,
 }: UseRegistrationControllerProps = {}) {
+  const { t, i18n } = useTranslation(["registration", "common"]);
   const [currentStep, setCurrentStep] = useState(0);
   const toast = useToast();
+  const registrationSchema = useMemo(
+    () => createRegistrationSchema(t),
+    [t, i18n.language],
+  );
 
   const mutation = useMutation({
     mutationFn: (data: RegistrationFormData) => submitRegistration(data),
     onSuccess: () => {
-      toast.success(
-        "Registration successful! Please check your email for activation.",
-      );
+      toast.success(t("toasts.registrationSuccess"));
       onSuccess?.();
     },
     onError: (error: Error) => {
-      toast.error(
-        error.message || "Failed to submit registration. Please try again.",
-      );
+      toast.error(error.message || t("toasts.submitFailed"));
     },
   });
 
   const form = useForm<RegistrationFormData>({
-    resolver: zodResolver(RegistrationSchema),
+    resolver: zodResolver(registrationSchema),
     defaultValues: {
       customerType: "NEW",
       companyName: "",
@@ -119,7 +121,7 @@ export function useRegistrationController({
   };
 
   const onInvalid = (errors: FieldErrors<RegistrationFormData>) => {
-    toast.error("Please complete all required fields correctly.");
+    toast.error(t("toasts.completeRequiredFields"));
     const errorKeys = Object.keys(errors);
 
     const step0Fields = [

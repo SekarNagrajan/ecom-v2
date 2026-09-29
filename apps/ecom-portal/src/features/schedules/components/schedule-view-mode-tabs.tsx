@@ -1,6 +1,7 @@
 // Modified by Sekar Nagarajan (2026-09-15 13:01)
 import { Segmented, Tooltip, theme } from "antd";
 import { startTransition, type CSSProperties, type ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import type { ScheduleViewMode } from "../hooks/use-schedule-view-mode";
@@ -35,6 +36,7 @@ export function ScheduleViewModeTabs({
   value,
   onChange,
 }: ScheduleViewModeTabsProps) {
+  const { t } = useTranslation(["schedules", "common", "modules"]);
   const { token } = theme.useToken();
 
   const rootStyle = {
@@ -46,7 +48,7 @@ export function ScheduleViewModeTabs({
       className="module-view-mode-tabs schedule-view-mode-tabs"
       size="middle"
       value={value}
-      aria-label="Schedule view mode"
+      aria-label={t("viewModes.aria")}
       style={rootStyle}
       onChange={(next) => {
         startTransition(() => {
@@ -59,7 +61,7 @@ export function ScheduleViewModeTabs({
         {
           value: "list",
           icon: (
-            <ViewModeIcon title="List View">
+            <ViewModeIcon title={t("viewModes.list")}>
               <AppIcon icon={Icons.list} size={VIEW_MODE_ICON_SIZE} />
             </ViewModeIcon>
           ),
@@ -67,7 +69,7 @@ export function ScheduleViewModeTabs({
         {
           value: "card",
           icon: (
-            <ViewModeIcon title="Card View">
+            <ViewModeIcon title={t("viewModes.card")}>
               <AppIcon icon={Icons.layoutGrid} size={VIEW_MODE_ICON_SIZE} />
             </ViewModeIcon>
           ),
@@ -75,7 +77,7 @@ export function ScheduleViewModeTabs({
         {
           value: "calendar",
           icon: (
-            <ViewModeIcon title="Calendar View">
+            <ViewModeIcon title={t("viewModes.calendar")}>
               <AppIcon icon={Icons.calendar} size={VIEW_MODE_ICON_SIZE} />
             </ViewModeIcon>
           ),

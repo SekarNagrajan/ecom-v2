@@ -1,6 +1,7 @@
 // Created by Sekar Nagarajan (2026-09-08 15:20)
 import { AppButton } from "@solverminds/shared-ui";
 import { Flex, Typography, theme } from "antd";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { UserAvatar } from "../../../components/shared/user-avatar";
@@ -30,6 +31,7 @@ export function ProfilePhotoViewStep({
   photoUrl,
   roleLabel,
 }: ProfilePhotoViewStepProps) {
+  const { t } = useTranslation(["profile-photo", "common"]);
   const { token } = theme.useToken();
 
   return (
@@ -67,7 +69,7 @@ export function ProfilePhotoViewStep({
           onClick={onChangeImage}
           type="primary"
         >
-          Change Image
+          {t("actions.changeImage")}
         </AppButton>
         {hasPhoto ? (
           <AppButton
@@ -77,7 +79,7 @@ export function ProfilePhotoViewStep({
             onClick={onRemove}
             type="default"
           >
-            Remove Photo
+            {t("actions.removePhoto")}
           </AppButton>
         ) : null}
       </Flex>

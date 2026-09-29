@@ -114,7 +114,8 @@
     "filter": "筛选",
     "yes": "是",
     "no": "否",
-    "ok": "确定"
+    "ok": "确定",
+    "backHome": "返回首页"
   },
   "status": {
     "loading": "加载中……",

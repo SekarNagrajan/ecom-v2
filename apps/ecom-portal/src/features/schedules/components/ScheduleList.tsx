@@ -5,6 +5,7 @@ import {
 } from "@solverminds/shared-ui/data-view";
 import type { RowDoubleClickedEvent } from "ag-grid-community";
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { buildActionsColumn } from "../../../components/shared/build-actions-column";
@@ -38,6 +39,7 @@ export function ScheduleList({
   onViewRates,
   onOpenCarbonModal,
 }: ScheduleListProps) {
+  const { t } = useTranslation(["schedules", "common", "modules"]);
   const { profileHandlers } = useLocalGridProfiles("schedules");
   const columnDefs = useMemo<DataViewColumn<ScheduleItem>[]>(
     () => [
@@ -50,7 +52,7 @@ export function ScheduleList({
           return (
             <ListActionsRow>
               <ListActionButton
-                title="Book Now"
+                title={t("actions.bookNow")}
                 icon={<AppIcon icon={Icons.plus} size={16} tone="create" />}
                 tone="create"
                 disabled={!record.bookingAllowed}
@@ -60,7 +62,7 @@ export function ScheduleList({
                 }}
               />
               <ListActionButton
-                title="Get a Quote"
+                title={t("actions.getAQuote")}
                 icon={
                   <AppIcon icon={Icons.fileText} size={16} tone="navigate" />
                 }
@@ -95,14 +97,14 @@ export function ScheduleList({
         },
       }),
       {
-        headerName: "Vessel",
+        headerName: t("list.columns.vessel"),
         field: "vesselName",
         flex: 1.1,
         minWidth: 150,
         isPrimary: true,
       },
       {
-        headerName: "Voyage",
+        headerName: t("list.columns.voyage"),
         field: "voyage",
         width: 110,
         minWidth: 100,
@@ -115,7 +117,7 @@ export function ScheduleList({
         },
       },
       {
-        headerName: "Service",
+        headerName: t("list.columns.service"),
         field: "serviceCode",
         flex: 1,
         minWidth: 130,
@@ -135,20 +137,20 @@ export function ScheduleList({
         },
       },
       {
-        headerName: "Origin",
+        headerName: t("list.columns.origin"),
         field: "polPortName",
         flex: 1.1,
         minWidth: 140,
         isSecondary: true,
       },
       {
-        headerName: "POL",
+        headerName: t("list.columns.pol"),
         field: "polPortId",
         width: 100,
         minWidth: 90,
       },
       {
-        headerName: "Trans 1",
+        headerName: t("list.columns.trans1"),
         colId: "trans1",
         width: 130,
         minWidth: 120,
@@ -161,7 +163,7 @@ export function ScheduleList({
         },
       },
       {
-        headerName: "Trans 2",
+        headerName: t("list.columns.trans2"),
         colId: "trans2",
         width: 130,
         minWidth: 120,
@@ -174,51 +176,53 @@ export function ScheduleList({
         },
       },
       {
-        headerName: "POD",
+        headerName: t("list.columns.pod"),
         field: "podPortId",
         width: 100,
         minWidth: 90,
       },
       {
-        headerName: "Delivery",
+        headerName: t("list.columns.delivery"),
         field: "podPortName",
         flex: 1.1,
         minWidth: 140,
       },
       {
         // Geo path is Origin / POL / Trans / POD / Delivery; this column is flags only.
-        headerName: "Type",
+        headerName: t("list.columns.type"),
         field: "isDirect",
         width: 180,
         minWidth: 130,
         cellRenderer: (params: { data?: ScheduleItem }) => {
           const record = params.data;
           if (!record) return null;
-          return <ScheduleListRoutingCell record={record} />;
+          return <ScheduleListRoutingCell record={record} t={t} />;
         },
       },
       {
-        headerName: "ETD",
+        headerName: t("list.columns.etd"),
         field: "etd",
         width: 140,
         minWidth: 130,
       },
       {
-        headerName: "ETA",
+        headerName: t("list.columns.eta"),
         field: "eta",
         width: 140,
         minWidth: 130,
       },
       {
-        headerName: "Transit",
+        headerName: t("list.columns.transit"),
         field: "transitTimeDays",
         width: 100,
         minWidth: 90,
         valueFormatter: (params: { value?: number }) =>
-          params.value != null ? `${params.value} days` : "",
+          params.value != null
+            ? t("card.days", { count: params.value })
+            : "",
       },
       {
-        headerName: "Gate-in",
+        headerName: t("list.columns.gateIn"),
         colId: "gateIn",
         width: 140,
         minWidth: 130,
@@ -226,7 +230,7 @@ export function ScheduleList({
           formatCutoffValue(params.data?.deadlines?.containerGateIn),
       },
       {
-        headerName: "SI",
+        headerName: t("list.columns.si"),
         colId: "siCutoff",
         width: 140,
         minWidth: 130,
@@ -244,14 +248,14 @@ export function ScheduleList({
       //       : "",
       // },
     ],
-    [onBookNow, onViewVessel, onViewRates, onOpenCarbonModal],
+    [t, onBookNow, onViewVessel, onViewRates, onOpenCarbonModal],
   );
 
   const emptyState = (
     <ModuleEmptyState
       variant="filtered"
-      title="No sailing schedules found"
-      message="Try different ports or dates to find an available sailing."
+      title={t("empty.listTitle")}
+      message={t("empty.listMessage")}
       artSize="md"
     />
   );
@@ -300,10 +304,12 @@ export function ScheduleList({
         <div
           className="schedule-list-legend"
           role="note"
-          aria-label="Recommended route legend"
+          aria-label={t("a11y.recommendedLegend")}
         >
           <span className="schedule-list-legend__swatch" aria-hidden />
-          <span className="schedule-list-legend__text">Recommended route</span>
+          <span className="schedule-list-legend__text">
+            {t("list.recommendedLegend")}
+          </span>
         </div>
       ) : null}
     </div>

@@ -2,6 +2,7 @@
 import { DataView, DataViewColumn } from "@solverminds/shared-ui/data-view";
 import { Card, Flex, Select, Space, Spin, Tag, Typography } from "antd";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { buildActionsColumn } from "../../../components/shared/build-actions-column";
@@ -22,6 +23,7 @@ import { ContractSurchargeModal } from "./ContractSurchargeModal";
 const { Text } = Typography;
 
 export function ContractView() {
+  const { t } = useTranslation(["rates", "common", "modules"]);
   const { profileHandlers } = useLocalGridProfiles("rates-contract");
   const [pol, setPol] = useState<string | undefined>();
   const [pod, setPod] = useState<string | undefined>();
@@ -52,7 +54,7 @@ export function ContractView() {
         return (
           <ListActionsRow>
             <ListActionButton
-              title="View Subject to Charges Breakdown"
+              title={t("actions.viewSubjectToCharges")}
               icon={
                 <AppIcon icon={Icons.eye} size={16} gridAction tone="view" />
               }
@@ -63,7 +65,7 @@ export function ContractView() {
       },
     }),
     {
-      headerName: "Contract No",
+      headerName: t("contract.columns.contractNo"),
       field: "contractNo",
       minWidth: 160,
       cellRenderer: (params: { data?: ContractDTO }) => (
@@ -73,7 +75,7 @@ export function ContractView() {
       ),
     },
     {
-      headerName: "Rate No",
+      headerName: t("contract.columns.rateNo"),
       field: "rateNo",
       minWidth: 150,
       cellRenderer: (params: { data?: ContractDTO }) => (
@@ -81,12 +83,12 @@ export function ContractView() {
       ),
     },
     {
-      headerName: "Customer Name",
+      headerName: t("contract.columns.customerName"),
       field: "customerName",
       minWidth: 200,
     },
     {
-      headerName: "Port of Load",
+      headerName: t("tariff.columns.portOfLoad"),
       field: "originPort",
       minWidth: 160,
       cellRenderer: (params: { data?: ContractDTO }) => (
@@ -97,7 +99,7 @@ export function ContractView() {
       ),
     },
     {
-      headerName: "Port of Discharge",
+      headerName: t("tariff.columns.portOfDischarge"),
       field: "deliveryPort",
       minWidth: 160,
       cellRenderer: (params: { data?: ContractDTO }) => (
@@ -110,7 +112,7 @@ export function ContractView() {
       ),
     },
     {
-      headerName: "Eqp Type",
+      headerName: t("tariff.columns.eqpType"),
       field: "eqpType",
       minWidth: 160,
       cellRenderer: (params: { data?: ContractDTO }) => (
@@ -118,12 +120,12 @@ export function ContractView() {
       ),
     },
     {
-      headerName: "Commodity",
+      headerName: t("tariff.columns.commodity"),
       field: "commodityName",
       minWidth: 180,
     },
     {
-      headerName: "Agreed Rate",
+      headerName: t("contract.columns.agreedRate"),
       field: "oceanFreight",
       minWidth: 160,
       cellRenderer: (params: { data?: ContractDTO }) => (
@@ -133,7 +135,7 @@ export function ContractView() {
       ),
     },
     {
-      headerName: "Subject to Charges",
+      headerName: t("contract.columns.subjectToCharges"),
       field: "subjectToChargesAmount",
       minWidth: 160,
       cellRenderer: (params: { data?: ContractDTO }) => (
@@ -144,22 +146,25 @@ export function ContractView() {
       ),
     },
     {
-      headerName: "SOC",
+      headerName: t("contract.columns.soc"),
       field: "soc",
       width: 90,
     },
     {
-      headerName: "Trans. Service",
+      headerName: t("contract.columns.transService"),
       field: "carrTerms",
       minWidth: 130,
     },
     {
-      headerName: "Validity Window",
+      headerName: t("contract.columns.validityWindow"),
       field: "effectiveFrom",
       minWidth: 180,
       cellRenderer: (params: { data?: ContractDTO }) => (
         <Text className="rates-cell-sub">
-          {params.data?.effectiveFrom} to {params.data?.effectiveTo}
+          {t("contract.validityRange", {
+            from: params.data?.effectiveFrom,
+            to: params.data?.effectiveTo,
+          })}
         </Text>
       ),
     },
@@ -168,15 +173,15 @@ export function ContractView() {
   const emptyState = isError ? (
     <ModuleEmptyState
       variant="error"
-      title="Couldn't load service contracts"
-      message="The request didn't complete. Check your connection and try again."
+      title={t("errors.contractsLoadTitle")}
+      message={t("errors.loadFailedMessage")}
       actions={[buildRetryAction(() => void refetch())]}
     />
   ) : (
     <ModuleEmptyState
       variant={pol || pod ? "filtered" : "blank"}
-      title="No service contracts found"
-      message="Try a different port combination or clear the filters to see more contracts."
+      title={t("empty.contractsTitle")}
+      message={t("empty.contractsMessage")}
       actions={
         pol || pod
           ? [
@@ -196,38 +201,38 @@ export function ContractView() {
         <Flex gap="middle" align="center" wrap="wrap">
           <Space>
             <AppIcon icon={Icons.filter} size={16} />
-            <Text strong>Filter Contract Rates:</Text>
+            <Text strong>{t("contract.filterHeading")}</Text>
           </Space>
 
           <Select
-            placeholder="Port of Load"
+            placeholder={t("tariff.portOfLoad")}
             allowClear
             size="large"
             className="rates-filter-select"
             value={pol}
             onChange={setPol}
             options={[
-              { label: "USNYC - New York", value: "USNYC" },
-              { label: "DEHAM - Hamburg", value: "DEHAM" },
+              { label: t("options.ports.USNYC_short"), value: "USNYC" },
+              { label: t("options.ports.DEHAM_short"), value: "DEHAM" },
             ]}
           />
 
           <Select
-            placeholder="Port of Discharge"
+            placeholder={t("tariff.portOfDischarge")}
             allowClear
             size="large"
             className="rates-filter-select"
             value={pod}
             onChange={setPod}
             options={[
-              { label: "SGSIN - Singapore", value: "SGSIN" },
-              { label: "CNSHA - Shanghai", value: "CNSHA" },
+              { label: t("options.ports.SGSIN_short"), value: "SGSIN" },
+              { label: t("options.ports.CNSHA_short"), value: "CNSHA" },
             ]}
           />
         </Flex>
       </Card>
 
-      <Spin spinning={isLoading} tip="Loading service contract rates...">
+      <Spin spinning={isLoading} tip={t("contract.loading")}>
         <Card className="rates-grid-panel">
           <div className="rates-grid responsive-table-wrap custom-scroll">
             <DataView

@@ -3,7 +3,9 @@
 
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { useNavigate } from "@tanstack/react-router";
+import type { TFunction } from "i18next";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { useModuleViewMode } from "../../../components/shared/hooks/use-module-view-mode";
 import {
@@ -22,13 +24,6 @@ import type {
   CreateQuoteInput,
 } from "../types/rates.types";
 
-const RESULTS_TITLE: Record<RateSearchMode, string> = {
-  PUBLISHED_TARIFF: "Published Freight Rates",
-  SERVICE_CONTRACTS: "Service Contracts",
-  SURCHARGES: "Surcharges & Accessorials",
-  SPOT_QUOTES: "Spot Rate Quotes",
-};
-
 const DEFAULT_SEARCH_PARAMS: RateSearchParams = {
   searchMode: "PUBLISHED_TARIFF",
   polCode: "USNYC",
@@ -39,7 +34,25 @@ const DEFAULT_SEARCH_PARAMS: RateSearchParams = {
 
 const RATES_VIEW_MODE_KEY = "ecom.rates.viewMode.v2";
 
+function getResultsTitle(mode: RateSearchMode, t: TFunction<"rates">): string {
+  switch (mode) {
+    case "PUBLISHED_TARIFF":
+      return t("modes.results.publishedTariff");
+    case "SERVICE_CONTRACTS":
+      return t("modes.results.serviceContracts");
+    case "SURCHARGES":
+      return t("modes.results.surcharges");
+    case "SPOT_QUOTES":
+      return t("modes.results.spotQuotes");
+    default: {
+      const _exhaustive: never = mode;
+      return _exhaustive;
+    }
+  }
+}
+
 export function useRatesController() {
+  const { t } = useTranslation(["rates", "common", "modules"]);
   const toast = useToast();
   const navigate = useNavigate();
   const { viewMode, setViewMode } = useModuleViewMode(
@@ -174,7 +187,7 @@ export function useRatesController() {
   const tariffCards: CombinedRateItem[] = tariffs.map((trf, idx) => ({
     id: trf.id,
     type: "TARIFF" as const,
-    title: "Published Freight Tariff",
+    title: t("rateCard.tariffDefaultTitle"),
     code: `TRF-${trf.loadPort}-${trf.dischPort}`,
     originPort: trf.loadPort,
     originPortName: trf.loadPortName,
@@ -207,7 +220,9 @@ export function useRatesController() {
     deliveryPortName: sur.dischargeRegion || sur.delivery || "",
     eqpType: sur.eqpType,
     commodity: "",
-    commodityName: sur.isNor ? "NOR applicable" : "Accessorial",
+    commodityName: sur.isNor
+      ? t("rateCard.norApplicable")
+      : t("rateCard.accessorialCommodity"),
     currency: sur.currency,
     baseAmount: sur.amount,
     surchargeAmount: 0,
@@ -269,9 +284,13 @@ export function useRatesController() {
         cardRates = quoteCards;
         break;
       case "PUBLISHED_TARIFF":
-      default:
         cardRates = tariffCards;
         break;
+      default: {
+        const _exhaustive: never = mode;
+        cardRates = _exhaustive;
+        break;
+      }
     }
   }
 
@@ -290,10 +309,14 @@ export function useRatesController() {
     setSearchParams(params);
     setHasSearched(true);
     if (params.searchMode === "SPOT_QUOTES" && viewMode === "card") {
-      toast.info("Showing spot quotes for this lane…");
+      toast.info(t("search.toastSpotQuotes"));
     } else {
       toast.info(
-        `Searching ${RESULTS_TITLE[params.searchMode]} for ${params.polCode || "All"} → ${params.podCode || "All"}...`,
+        t("search.toastSearching", {
+          title: getResultsTitle(params.searchMode, t),
+          pol: params.polCode || t("search.allPorts"),
+          pod: params.podCode || t("search.allPorts"),
+        }),
       );
     }
   };
@@ -310,7 +333,11 @@ export function useRatesController() {
 
   const handleBookNow = (rate: CombinedRateItem) => {
     toast.success(
-      `Selected rate ${rate.code} (${rate.currency} $${rate.totalEstimatedAmount.toFixed(2)}). Proceeding to Schedules & Booking...`,
+      t("toasts.bookSelected", {
+        code: rate.code,
+        currency: rate.currency,
+        amount: rate.totalEstimatedAmount.toFixed(2),
+      }),
     );
     navigate({ to: "/app/schedules" });
   };
@@ -351,7 +378,7 @@ export function useRatesController() {
 
   const handleShareResultsViaMail = () => {
     if (cardRates.length === 0) {
-      toast.warning("Search for rates first, then share the results by email.");
+      toast.warning(t("errors.shareNoResults"));
       return;
     }
     setShareMailRates(cardRates);
@@ -381,7 +408,7 @@ export function useRatesController() {
       setSearchParams((prev) => ({ ...prev, searchMode: nextMode }));
       setHasSearched(false);
     },
-    resultsTitle: RESULTS_TITLE[mode],
+    resultsTitle: getResultsTitle(mode, t),
     cardRates,
     hasSearched,
     isLoading,

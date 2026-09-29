@@ -3,5 +3,307 @@
   "exportingToast": "正在导出船期结果……",
   "searchEmptyTitle": "搜索船期",
   "searchEmptyMessage": "选择您的搜索条件并点击“搜索船期”以查看可用的航班。",
-  "availableSailings": "可用航班"
+  "availableSailings": "可用航班",
+  "modes": {
+    "byRoute": "按航线",
+    "byVessel": "按船舶",
+    "byPort": "按港口"
+  },
+  "search": {
+    "searchSchedules": "搜索船期",
+    "resetAria": "重置船期搜索",
+    "originPort": "起运港 (POL)",
+    "originShort": "起运地 (POL)",
+    "originPlaceholder": "从哪里发运？",
+    "originPortAria": "起运港",
+    "selectOrigin": "请选择起运港",
+    "deliveryPort": "交货港 (POD)",
+    "deliveryShort": "交货地 (POD)",
+    "deliveryPlaceholder": "货物运往哪里？",
+    "deliveryPortAria": "交货港",
+    "selectDelivery": "请选择交货港",
+    "swapTooltip": "交换起运地与交货地",
+    "swapAria": "交换起运港与交货港",
+    "departureDateRange": "开航日期范围",
+    "departureDateRangeAria": "开航日期范围",
+    "vesselNameCode": "船名 / 船舶代码",
+    "vesselPlaceholder": "选择船舶",
+    "vesselAria": "船舶",
+    "selectVessel": "请选择船舶",
+    "voyageDateRange": "航次日期范围",
+    "voyageDateRangeAria": "航次日期范围",
+    "portOfCall": "挂靠港",
+    "portOfCallPlaceholder": "选择挂靠港",
+    "portOfCallAria": "挂靠港",
+    "selectPort": "请选择港口",
+    "arrivalDepartureWindow": "到港 / 离港时间窗",
+    "arrivalDepartureWindowAria": "到港与离港时间窗"
+  },
+  "filters": {
+    "originPort": "起运港",
+    "originPlaceholder": "输入起运港",
+    "destinationPort": "目的港",
+    "destinationPlaceholder": "输入目的港",
+    "searchVesselSchedules": "搜索船舶船期"
+  },
+  "options": {
+    "ports": {
+      "AEDXB": "AEDXB - 迪拜",
+      "AEJEA": "AEJEA - 杰贝阿里",
+      "CNSHA": "CNSHA - 上海",
+      "INMUN": "INMUN - 蒙德拉",
+      "INNSA": "INNSA - 那瓦西瓦",
+      "SGSIN": "SGSIN - 新加坡"
+    },
+    "vessels": {
+      "AGEX": "AGEX - Antigravity Express",
+      "SMVY": "SMVY - Solverminds Voyager",
+      "GLHZ": "GLHZ - Global Horizon",
+      "OCPN": "OCPN - Ocean Pioneer",
+      "PCMR": "PCMR - Pacific Merchant",
+      "MRST": "MRST - Merchant Star",
+      "ATBR": "ATBR - Atlantic Bridge"
+    }
+  },
+  "viewModes": {
+    "aria": "船期视图模式",
+    "list": "列表",
+    "card": "卡片",
+    "calendar": "日历"
+  },
+  "list": {
+    "columns": {
+      "vessel": "船舶",
+      "voyage": "航次",
+      "service": "航线服务",
+      "origin": "起运地",
+      "pol": "POL",
+      "trans1": "中转 1",
+      "trans2": "中转 2",
+      "pod": "POD",
+      "delivery": "交货地",
+      "type": "类型",
+      "etd": "ETD",
+      "eta": "ETA",
+      "transit": "航程",
+      "gateIn": "进场截止",
+      "si": "SI"
+    },
+    "direct": "直达",
+    "stopCount_one": "{{count}} 个中转",
+    "stopCount_other": "{{count}} 个中转",
+    "recommendedLegend": "推荐航线"
+  },
+  "card": {
+    "road": "公路",
+    "route": "航线",
+    "departure": "开航",
+    "arrival": "到港",
+    "cutoffs": "截止时间",
+    "gateIn": "进场",
+    "gateInTooltip": "集装箱进场截止时间",
+    "siCutoff": "SI",
+    "siTooltip": "装运指示截止时间",
+    "vgmCutoff": "VGM",
+    "vgmTooltip": "核实总重量截止时间",
+    "recommendedRoute": "推荐航线",
+    "searching": "正在搜索船期…",
+    "etd": "ETD {{value}}",
+    "eta": "ETA {{value}}",
+    "terminal": "码头：{{name}}",
+    "days_one": "{{count}} 天",
+    "days_other": "{{count}} 天"
+  },
+  "calendar": {
+    "etd": "ETD",
+    "eta": "ETA",
+    "transit": "航程",
+    "gateIn": "进场",
+    "si": "SI",
+    "selectDayTitle": "选择日期",
+    "selectDayMessage": "在日历上选择一天以查看该日船期。",
+    "noSailingsDayTitle": "当日无船期",
+    "noSailingsDayMessage": "请尝试其他日期或调整搜索条件。",
+    "noSailingsMonthTitle": "本月无船期",
+    "noSailingsMonthMessage": "请尝试其他月份或更改搜索筛选。",
+    "sailingsCount_one": "{{count}} 个航班",
+    "sailingsCount_other": "{{count}} 个航班",
+    "previousMonth": "上个月",
+    "today": "今天",
+    "nextMonth": "下个月",
+    "daySailingsAria_one": "{{date}}，{{count}} 个航班",
+    "daySailingsAria_other": "{{date}}，{{count}} 个航班",
+    "more": "+{{count}} 更多",
+    "legendAria": "日历图例",
+    "legendDirect": "直达",
+    "legendTransshipment": "中转",
+    "legendRecommended": "推荐"
+  },
+  "actions": {
+    "bookNow": "立即订舱",
+    "getAQuote": "获取报价",
+    "co2Estimate": "CO₂ 估算",
+    "vesselDetails": "船舶详情",
+    "showDetails": "显示详情",
+    "closeDetails": "关闭详情",
+    "sendEmail": "发送邮件",
+    "downloadSpecsPdf": "下载规格 PDF",
+    "calculate": "计算"
+  },
+  "empty": {
+    "listTitle": "未找到船期",
+    "listMessage": "请尝试不同的港口、船舶或日期范围。",
+    "cardTitle": "未找到船期",
+    "cardMessage": "请调整搜索条件以查找匹配的航班。"
+  },
+  "a11y": {
+    "loading": "加载中",
+    "recommendedLegend": "推荐航线图例"
+  },
+  "details": {
+    "title": "船期详情：{{vessel}}（{{voyage}}）",
+    "vesselAndService": "船舶与航线服务",
+    "vesselName": "船名",
+    "voyageNumber": "航次号",
+    "serviceCode": "服务代码",
+    "routingAndSchedule": "航线与船期",
+    "originPort": "起运港",
+    "destinationPort": "目的港",
+    "polTerminal": "POL 码头",
+    "estimatedDeparture": "预计离港 (ETD)",
+    "estimatedArrival": "预计到港 (ETA)",
+    "transitDuration": "航程时长",
+    "transitDays": "{{count}} 天"
+  },
+  "vessel": {
+    "imoCallSign": "IMO：{{imo}} | 呼号：{{callSign}}",
+    "specifications": "船舶规格",
+    "portCallSequence": "航次挂靠港顺序",
+    "fields": {
+      "vesselCode": "船舶代码",
+      "flag": "船旗",
+      "vesselType": "船舶类型",
+      "operator": "经营人",
+      "owner": "船东",
+      "builtYear": "建造年份",
+      "portOfRegistry": "船籍港",
+      "lengthOverall": "总长",
+      "teuNominal": "标称 TEU",
+      "grossTonnage": "总吨",
+      "netTonnage": "净吨",
+      "imoLloyds": "IMO / Lloyd's"
+    },
+    "columns": {
+      "portCodeName": "港口代码与名称",
+      "terminal": "码头",
+      "status": "状态"
+    },
+    "status": {
+      "COMPLETED": "已完成",
+      "IN_PORT": "在港",
+      "EXPECTED": "预计"
+    }
+  },
+  "ratesModal": {
+    "title": "运价与附加费估算",
+    "routeBanner": "航线：{{pol}} → {{pod}} | 服务：{{service}}",
+    "equipmentSelection": "箱型选择",
+    "eq20ft": "20 英尺标准箱",
+    "eq40ft": "40 英尺标准箱",
+    "eq40hc": "40 英尺高箱 (HC)",
+    "reeferHint": "冷藏温控",
+    "commodityName": "货品名称",
+    "commodityPlaceholder": "例如：普通货物、电子产品、食品",
+    "breakdownTitle": "预估运价明细",
+    "totalLabel": "预估运费合计（USD）：",
+    "totalValue": "${{amount}} USD",
+    "columns": {
+      "chargeDescription": "费用说明",
+      "rateUnit": "单价",
+      "qtyCont": "数量 / 箱",
+      "subtotal": "小计金额"
+    },
+    "charges": {
+      "ofr20": "海运费 - 20FT 标准干箱",
+      "ofr40": "海运费 - 40FT 标准干箱",
+      "ofr40hc": "海运费 - 40FT 高箱",
+      "baf": "BAF - 燃油附加费",
+      "thc": "THC - 码头操作费 (POL)"
+    }
+  },
+  "carbon": {
+    "title": "碳足迹",
+    "subtitle": "估算此船期航次的 CO₂e",
+    "cargoInputs": "货物输入",
+    "cargoInputsAria": "货物输入",
+    "containerQty": "集装箱数量（TEU）",
+    "containerQtyAria": "以 TEU 计的集装箱数量",
+    "cargoWeight": "货物重量（公吨）",
+    "cargoWeightAria": "以公吨计的货物重量",
+    "resultsAria": "排放结果",
+    "resultsTitle": "预估 CO₂e 明细",
+    "totalCo2e": "总 CO₂e",
+    "totalHint": "全生命周期合计",
+    "tankToWheel": "油箱到车轮",
+    "tankToWheelHint": "船舶直接燃烧",
+    "wellToTank": "油井到油箱",
+    "wellToTankHint": "上游燃料生产",
+    "tonsUnit": "吨",
+    "idleTitle": "准备估算",
+    "idleHint": "输入 TEU 与货物重量，然后计算以查看此航次的 CO₂e 明细。",
+    "methodologyAria": "方法说明",
+    "methodologyTitle": "方法",
+    "methodologyText": "估算遵循 GLEC 与 IMO 指南，按海运集装箱船舶每吨公里 8.5 克 CO₂ 计算。实际排放可能因天气、航速和港口拥堵而变化。"
+  },
+  "shareMail": {
+    "title": "通过邮件分享",
+    "to": "收件人",
+    "cc": "抄送",
+    "subject": "主题",
+    "message": "正文",
+    "placeholders": {
+      "to": "recipient@company.com",
+      "cc": "optional@company.com",
+      "message": "撰写您的船期邮件…"
+    },
+    "sharingCount_one": "正在分享 {{count}} 个航班",
+    "sharingCount_other": "正在分享 {{count}} 个航班",
+    "moreSailings_one": "另有 {{count}} 个航班",
+    "moreSailings_other": "另有 {{count}} 个航班",
+    "validation": {
+      "toRequired": "收件人邮箱为必填项",
+      "toInvalid": "请输入有效的邮箱地址（多个地址用逗号分隔）",
+      "ccInvalid": "请输入有效的抄送邮箱地址（用逗号分隔）",
+      "subjectRequired": "主题为必填项",
+      "subjectMax": "主题不得超过 200 个字符",
+      "messageRequired": "正文为必填项",
+      "messageMax": "正文不得超过 4000 个字符"
+    },
+    "toasts": {
+      "success_one": "船期已成功发送（{{count}} 位收件人）。",
+      "success_other": "船期已成功发送（{{count}} 位收件人）。",
+      "error": "通过邮件分享船期失败，请重试。"
+    },
+    "subjectTemplate": {
+      "single": "船期 — {{vessel}} {{voyage}}{{bound}}（{{pol}} → {{pod}}）",
+      "multiple": "船期 — {{count}} 条结果（{{pol}} → {{pod}}）",
+      "empty": "船期"
+    },
+    "body": {
+      "hello": "您好，",
+      "intro": "请查收以下船期详情。",
+      "sailingHeading": "航班 {{index}}：{{service}} — {{vessel}}（{{voyage}}{{bound}}）{{recommended}}",
+      "recommendedSuffix": " · 推荐航线",
+      "service": "服务：{{value}}",
+      "lane": "航线：{{value}}",
+      "etd": "ETD：{{value}}",
+      "eta": "ETA：{{value}}",
+      "transit": "航程：{{count}} 天",
+      "routing": "路由：{{value}}",
+      "gateIn": "进场截止：{{value}}",
+      "si": "SI 截止：{{value}}",
+      "regards": "此致，",
+      "signature": "E-Com Portal"
+    }
+  }
 }

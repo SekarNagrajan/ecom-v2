@@ -1,0 +1,74 @@
+{
+  "subtitle": "Tapis mengikut julat tarikh, semak penghalaan POL ke POD, dan cetak dokumen pesanan penghantaran.",
+  "search": {
+    "fromDate": "Dari Tarikh",
+    "toDate": "Hingga Tarikh",
+    "show": "Papar"
+  },
+  "columns": {
+    "doNo": "No. DO",
+    "doDate": "Tarikh DO",
+    "blNumber": "Nombor B/L",
+    "vessel": "Kapal",
+    "voyage": "Pelayaran",
+    "pol": "POL",
+    "pod": "POD",
+    "terminal": "Terminal",
+    "arrival": "Ketibaan",
+    "validTill": "Sah Sehingga",
+    "status": "Status"
+  },
+  "actions": {
+    "viewDetails": "Lihat Butiran",
+    "printDeliveryOrder": "Cetak Pesanan Penghantaran",
+    "downloadPdf": "Muat Turun PDF",
+    "copyDoNumber": "Salin nombor DO",
+    "copied": "Disalin"
+  },
+  "empty": {
+    "loadErrorTitle": "Tidak dapat memuatkan pesanan penghantaran",
+    "loadErrorMessage": "Permintaan tidak selesai. Semak sambungan anda dan cuba lagi.",
+    "noResultsTitle": "Tiada pesanan penghantaran yang sepadan dengan carian anda",
+    "noResultsMessage": "Tiada hasil untuk julat tarikh ini. Luaskan tarikh atau kosongkan penapis untuk melihat lebih banyak hasil."
+  },
+  "errors": {
+    "download": "Gagal memuat turun Pesanan Penghantaran."
+  },
+  "toasts": {
+    "documentDownloaded": "Pesanan Penghantaran {{delOrdNo}} telah dimuat turun."
+  },
+  "status": {
+    "printed": "Telah Dicetak",
+    "notPrinted": "Belum Dicetak"
+  },
+  "validation": {
+    "fromDateRequired": "Dari tarikh diperlukan",
+    "toDateRequired": "Hingga tarikh diperlukan",
+    "fromBeforeTo": "Dari tarikh mestilah pada atau sebelum Hingga tarikh"
+  },
+  "drawer": {
+    "blPrefix": "B/L:",
+    "routeEyebrow": "Pelabuhan ke Pelabuhan",
+    "origin": "Asal",
+    "delivery": "Penghantaran",
+    "sections": {
+      "details": "Butiran Pesanan Penghantaran",
+      "shipment": "Butiran Penghantaran"
+    },
+    "labels": {
+      "doNumber": "Nombor DO",
+      "doDate": "Tarikh DO",
+      "validUntil": "Sah Sehingga",
+      "printStatus": "Status Cetakan",
+      "blNumber": "Nombor B/L",
+      "terminal": "Terminal",
+      "vessel": "Kapal",
+      "voyage": "Pelayaran",
+      "bound": "Haluan",
+      "arrivalDate": "Tarikh Ketibaan"
+    },
+    "alerts": {
+      "validUntil": "Pesanan penghantaran ini sah sehingga <date/>."
+    }
+  }
+}

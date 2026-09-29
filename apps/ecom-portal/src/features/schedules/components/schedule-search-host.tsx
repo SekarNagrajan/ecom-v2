@@ -3,6 +3,7 @@ import { AppButton, AppModal } from "@solverminds/shared-ui";
 import { Form, Tooltip } from "antd";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { useResponsiveLayout } from "../../../hooks/use-responsive-layout";
@@ -29,6 +30,7 @@ export function ScheduleSearchHost({
   onReset,
   isLoading,
 }: ScheduleSearchHostProps) {
+  const { t } = useTranslation(["schedules", "common", "modules"]);
   const [form] = Form.useForm();
   const pinSentinelRef = useRef<HTMLDivElement>(null);
   const [slotEl, setSlotEl] = useState<HTMLElement | null>(null);
@@ -115,15 +117,17 @@ export function ScheduleSearchHost({
     isLoading,
   };
 
+  const searchSchedulesLabel = t("search.searchSchedules");
+
   const mobileHeaderControl = (
-    <Tooltip title="Search Schedules">
+    <Tooltip title={searchSchedulesLabel}>
       <AppButton
         type="primary"
         shape="circle"
         className="app-header-schedules-search-trigger"
         icon={<AppIcon icon={Icons.search} size={16} />}
         onClick={() => setMobileSearchOpen(true)}
-        aria-label="Search Schedules"
+        aria-label={searchSchedulesLabel}
       />
     </Tooltip>
   );
@@ -165,7 +169,7 @@ export function ScheduleSearchHost({
       {compactHeader ? (
         <AppModal
           open={mobileSearchOpen}
-          title="Search Schedules"
+          title={searchSchedulesLabel}
           onCancel={() => setMobileSearchOpen(false)}
           footer={null}
           dialogSize="md"

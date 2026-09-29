@@ -1,16 +1,24 @@
 // Modified by Sekar Nagarajan (2026-09-15 15:30)
 import { AppButton } from "@solverminds/shared-ui";
 import { Spin, Tag, Tooltip, Typography } from "antd";
+import type { TFunction } from "i18next";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import type { CombinedRateItem } from "../types/rates.types";
 import type { RateSearchMode } from "./RateSearchFilter";
+import {
+  rateTypeLabel,
+  rateTypeTagColor,
+} from "./list/rate-list-cells";
 
 export type { CombinedRateItem } from "../types/rates.types";
 
 const { Text } = Typography;
+
+type RatesTranslateFn = TFunction<"rates">;
 
 interface RateCardListProps {
   rates: CombinedRateItem[];
@@ -26,34 +34,28 @@ interface RateCardListProps {
 
 interface RateCardProps {
   item: CombinedRateItem;
+  t: RatesTranslateFn;
   onBookNow: (rate: CombinedRateItem) => void;
   onViewSurcharges: (rate: CombinedRateItem) => void;
   onShareRate: (rate: CombinedRateItem) => void;
 }
 
-function typeLabel(type: CombinedRateItem["type"]): string {
+function connectorTypeLabel(
+  type: CombinedRateItem["type"],
+  t: RatesTranslateFn,
+): string {
   switch (type) {
-    case "CONTRACT":
-      return "Contract";
     case "SURCHARGE":
-      return "Surcharge";
+      return t("rateCard.connector.accessorial");
     case "QUOTE":
-      return "Quote";
-    default:
-      return "Tariff";
-  }
-}
-
-function typeTagColor(type: CombinedRateItem["type"]): string {
-  switch (type) {
+      return t("rateCard.connector.quotedAmount");
+    case "TARIFF":
     case "CONTRACT":
-      return "purple";
-    case "SURCHARGE":
-      return "orange";
-    case "QUOTE":
-      return "geekblue";
-    default:
-      return "blue";
+      return t("rateCard.connector.allInEstimate");
+    default: {
+      const _exhaustive: never = type;
+      return _exhaustive;
+    }
   }
 }
 
@@ -63,6 +65,7 @@ function portCity(name: string): string {
 
 function RateCard({
   item,
+  t,
   onBookNow,
   onViewSurcharges,
   onShareRate,
@@ -79,6 +82,9 @@ function RateCard({
       ? item.soc
       : undefined;
 
+  const showBreakdownHint =
+    item.type === "TARIFF" || item.type === "CONTRACT";
+
   return (
     <article
       className={[
@@ -92,9 +98,9 @@ function RateCard({
         <div className="rates-card__content">
           <div className="rates-card__meta">
             {item.isRecommended ? (
-              <Tag color="gold">Lowest Published Freight</Tag>
+              <Tag color="gold">{t("rateCard.recommendedTag")}</Tag>
             ) : null}
-            <Tag color={typeTagColor(item.type)}>
+            <Tag color={rateTypeTagColor(item.type)}>
               {item.code} — {item.title}
             </Tag>
             <Tag color="cyan">{item.eqpType}</Tag>
@@ -108,7 +114,7 @@ function RateCard({
               <Tag color="blue">{item.quoteStatus.replace(/_/g, " ")}</Tag>
             ) : null}
             <Text type="secondary" className="rates-card__ref">
-              Ref: {item.id}
+              {t("rateCard.ref", { id: item.id })}
             </Text>
           </div>
 
@@ -119,10 +125,14 @@ function RateCard({
                 <span className="rates-card__port-code">{item.originPort}</span>
               </Text>
               <div className="rates-card__etime">
-                <Tag color="blue">{item.commodityName || "Commodity"}</Tag>
+                <Tag color="blue">
+                  {item.commodityName || t("rateCard.commodityFallback")}
+                </Tag>
               </div>
               <Text className="rates-card__terminal">
-                Commodity: {item.commodity || "—"}
+                {t("rateCard.commodityLabel", {
+                  value: item.commodity || "—",
+                })}
               </Text>
             </div>
 
@@ -137,16 +147,14 @@ function RateCard({
                 <span className="rates-card__connector-dot" />
               </div>
               <Text className="rates-card__connector-type">
-                {item.type === "SURCHARGE"
-                  ? "Accessorial"
-                  : item.type === "QUOTE"
-                  ? "Quoted amount"
-                  : "All-in estimate"}
+                {connectorTypeLabel(item.type, t)}
               </Text>
-              {item.type !== "SURCHARGE" && item.type !== "QUOTE" ? (
+              {showBreakdownHint ? (
                 <Text className="rates-card__connector-hint">
-                  OFR ${item.baseAmount.toFixed(2)} + surcharges $
-                  {item.surchargeAmount.toFixed(2)}
+                  {t("rateCard.connector.breakdown", {
+                    base: item.baseAmount.toFixed(2),
+                    surcharge: item.surchargeAmount.toFixed(2),
+                  })}
                 </Text>
               ) : null}
             </div>
@@ -169,7 +177,10 @@ function RateCard({
                 ) : null}
               </div>
               <Text className="rates-card__terminal">
-                Valid {item.effectiveFrom} → {item.effectiveTo}
+                {t("rateCard.validRange", {
+                  from: item.effectiveFrom,
+                  to: item.effectiveTo,
+                })}
               </Text>
             </div>
           </div>
@@ -178,7 +189,7 @@ function RateCard({
         <div className="rates-card__actions">
           {showBook ? (
             <AppButton type="primary" onClick={() => onBookNow(item)} block>
-              Book at This Rate
+              {t("actions.bookAtThisRate")}
             </AppButton>
           ) : null}
           {showSurcharges ? (
@@ -187,32 +198,17 @@ function RateCard({
               onClick={() => onViewSurcharges(item)}
               block
             >
-              View Surcharges
+              {t("actions.viewSurcharges")}
             </AppButton>
           ) : null}
-          {/* <AppButton
-            type="link"
-            icon={
-              expanded ? (
-                <AppIcon icon={Icons.chevronUp} size={14} />
-              ) : (
-                <AppIcon icon={Icons.chevronDown} size={14} />
-              )
-            }
-            onClick={() => setExpanded(!expanded)}
-            block
-            disabled={!hasSurcharges && item.type !== "QUOTE"}
-          >
-            {expanded ? "Close Details" : "Show Details"}
-          </AppButton> */}
           <div className="rates-card__actions-secondary">
-            <Tooltip title="Share Rate Quote">
+            <Tooltip title={t("actions.shareRateQuote")}>
               <AppButton
                 size="small"
                 icon={<AppIcon icon={Icons.mail} size={14} tone="navigate" />}
                 onClick={() => onShareRate(item)}
               >
-                Share
+                {t("actions.share")}
               </AppButton>
             </Tooltip>
           </div>
@@ -221,7 +217,7 @@ function RateCard({
 
       {expanded && hasSurcharges ? (
         <div className="rates-card__surcharges">
-          <Text strong>Itemized Surcharge Breakdown</Text>
+          <Text strong>{t("rateCard.surchargeBreakdown")}</Text>
           {item.surcharges!.map((sur) => (
             <div key={sur.id} className="rates-card__surcharge-row">
               <div>
@@ -239,33 +235,41 @@ function RateCard({
 
       <div className="rates-card__footer">
         <div className="rates-card__validity">
-          <Tooltip title="Rate Valid From Date">
+          <Tooltip title={t("rateCard.validFromTooltip")}>
             <div className="rates-card__validity-chip">
               <span className="rates-card__validity-icon rates-card__validity-icon--from app-icon-inherit">
                 <AppIcon icon={Icons.calendar} size={14} />
               </span>
               <span>
-                <span className="rates-card__validity-label">Valid From</span>
+                <span className="rates-card__validity-label">
+                  {t("rateCard.validFrom")}
+                </span>
                 <span className="rates-card__validity-value">
                   {item.effectiveFrom}
                 </span>
               </span>
             </div>
           </Tooltip>
-          <Tooltip title="Rate Valid To Date">
+          <Tooltip title={t("rateCard.validToTooltip")}>
             <div className="rates-card__validity-chip">
               <span className="rates-card__validity-icon rates-card__validity-icon--to app-icon-inherit">
                 <AppIcon icon={Icons.clock} size={14} />
               </span>
               <span>
-                <span className="rates-card__validity-label">Valid To</span>
+                <span className="rates-card__validity-label">
+                  {t("rateCard.validTo")}
+                </span>
                 <span className="rates-card__validity-value">
                   {item.effectiveTo}
                 </span>
               </span>
             </div>
           </Tooltip>
-          <Tooltip title={`${typeLabel(item.type)} rate`}>
+          <Tooltip
+            title={t("rateCard.rateTypeTooltip", {
+              type: rateTypeLabel(item.type, t),
+            })}
+          >
             <div className="rates-card__validity-chip">
               <span
                 className={[
@@ -281,16 +285,18 @@ function RateCard({
                     item.type === "CONTRACT"
                       ? Icons.shieldCheck
                       : item.type === "QUOTE"
-                      ? Icons.zap
-                      : Icons.tag
+                        ? Icons.zap
+                        : Icons.tag
                   }
                   size={14}
                 />
               </span>
               <span>
-                <span className="rates-card__validity-label">Rate Type</span>
+                <span className="rates-card__validity-label">
+                  {t("rateCard.rateType")}
+                </span>
                 <span className="rates-card__validity-value">
-                  {typeLabel(item.type)}
+                  {rateTypeLabel(item.type, t)}
                 </span>
               </span>
             </div>
@@ -323,6 +329,8 @@ export function RateCardList({
   onShareRate,
   onRequestQuote,
 }: RateCardListProps) {
+  const { t } = useTranslation(["rates", "common", "modules"]);
+
   const allowRfqEmpty =
     searchMode === "PUBLISHED_TARIFF" ||
     searchMode === "SERVICE_CONTRACTS" ||
@@ -333,7 +341,7 @@ export function RateCardList({
       <div className="rates-empty">
         <Spin size="medium" />
         <Text type="secondary" className="rates-empty__text">
-          Searching freight rates…
+          {t("rateCard.searching")}
         </Text>
       </div>
     );
@@ -344,8 +352,8 @@ export function RateCardList({
       <div className="rates-empty">
         <ModuleEmptyState
           variant="blank"
-          title="Search for rates"
-          message="Choose origin, delivery, and filters, then click Search to load matching rates."
+          title={t("empty.searchTitle")}
+          message={t("empty.searchMessageCard")}
           artSize="md"
         />
       </div>
@@ -358,7 +366,7 @@ export function RateCardList({
         ? [
             {
               key: "request-quote",
-              label: "Request for Quote",
+              label: t("actions.requestForQuote"),
               type: "primary" as const,
               icon: <AppIcon icon={Icons.zap} size={16} />,
               onClick: onRequestQuote,
@@ -370,8 +378,8 @@ export function RateCardList({
       <div className="rates-empty">
         <ModuleEmptyState
           variant="filtered"
-          title="No rates found"
-          message="Try adjusting your ports, equipment, or commodity filters."
+          title={t("empty.noResultsTitle")}
+          message={t("empty.noResultsMessageCard")}
           actions={actions}
           artSize="md"
         />
@@ -385,6 +393,7 @@ export function RateCardList({
         <RateCard
           key={item.id}
           item={item}
+          t={t}
           onBookNow={onBookNow}
           onViewSurcharges={onViewSurcharges}
           onShareRate={onShareRate}

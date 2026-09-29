@@ -1,4 +1,317 @@
 {
-  "subtitle": "Cari tarif talian yang diterbitkan, lihat pecahan caj tambahan terperinci, urus Kontrak Perkhidmatan, dan minta sebut harga kadar spot.",
-  "exportingToast": "Mengeksport hasil carian kadar ke Excel..."
+  "subtitle": "Cari tarif laluan diterbitkan, lihat pecahan surcaj berbutir, urus Kontrak Perkhidmatan, dan minta sebut harga kadar spot.",
+  "exportingToast": "Mengeksport hasil carian kadar ke Excel...",
+  "modes": {
+    "tariff": "Tarif",
+    "surcharge": "Surcaj",
+    "serviceContract": "Kontrak Perkhidmatan",
+    "requestForQuote": "Permintaan Sebut Harga",
+    "publishedLineTariffs": "Tarif Laluan Diterbitkan",
+    "surchargesAccessorials": "Surcaj & Aksesori",
+    "serviceContracts": "Kontrak Perkhidmatan",
+    "spotRateQuotes": "Sebut Harga Kadar Spot",
+    "results": {
+      "publishedTariff": "Kadar Pengangkutan Diterbitkan",
+      "serviceContracts": "Kontrak Perkhidmatan",
+      "surcharges": "Surcaj & Aksesori",
+      "spotQuotes": "Sebut Harga Kadar Spot"
+    }
+  },
+  "search": {
+    "originPort": "Pelabuhan Asal (POL)",
+    "deliveryPort": "Pelabuhan Penghantaran (POD)",
+    "equipmentType": "Jenis Peralatan",
+    "commodity": "Komoditi",
+    "shipmentDate": "Tarikh Penghantaran",
+    "validThrough": "Sah Sehingga",
+    "originPlaceholder": "Dari mana anda menghantar?",
+    "deliveryPlaceholder": "Ke mana kargo dihantar?",
+    "searchingPorts": "Mencari pelabuhan…",
+    "noPortsFound": "Tiada pelabuhan dijumpai",
+    "selectOrigin": "Pilih pelabuhan asal",
+    "selectDelivery": "Pilih pelabuhan penghantaran",
+    "swapTooltip": "Tukar Asal dan Penghantaran",
+    "swapAria": "Tukar pelabuhan asal dan penghantaran",
+    "toastSearching": "Mencari {{title}} untuk {{pol}} → {{pod}}...",
+    "toastSpotQuotes": "Memaparkan sebut harga spot untuk laluan ini…",
+    "allPorts": "Semua"
+  },
+  "options": {
+    "equipment": {
+      "all": "Semua Jenis Peralatan",
+      "20dv": "20' Standard Dry (20DV)",
+      "40hc": "40' High Cube Dry (40HC)",
+      "40rf": "40' Reefer Container (40RF)"
+    },
+    "commodity": {
+      "all": "Semua Komoditi",
+      "genCgo": "GEN-CGO - Barangan Am / Merchandis",
+      "autoParts": "AUTO-PARTS - Alat Ganti Automotif & Jentera",
+      "perishable": "PERISHABLE - Hasil Pertanian Sejuk",
+      "textiles": "TEXTILES - Tekstil & Pakaian"
+    },
+    "ports": {
+      "USNYC": "USNYC - New York, USA",
+      "SGSIN": "SGSIN - Singapura, Singapura",
+      "NLRTM": "NLRTM - Rotterdam, Belanda",
+      "CNSHA": "CNSHA - Shanghai, China",
+      "DEHAM": "DEHAM - Hamburg, Jerman",
+      "INNSA": "INNSA - Nhava Sheva, India",
+      "AEDXB": "AEDXB - Jebel Ali, UAE",
+      "USNYC_short": "USNYC - New York",
+      "DEHAM_short": "DEHAM - Hamburg",
+      "NLRTM_short": "NLRTM - Rotterdam",
+      "INNSA_short": "INNSA - Nhava Sheva",
+      "SGSIN_short": "SGSIN - Singapura",
+      "CNSHA_short": "CNSHA - Shanghai",
+      "AEDXB_short": "AEDXB - Jebel Ali"
+    },
+    "rateType": {
+      "tariff": "Tarif",
+      "contract": "Kontrak",
+      "surcharge": "Surcaj",
+      "quote": "Sebut harga"
+    }
+  },
+  "actions": {
+    "viewQuotes": "Lihat Sebut Harga",
+    "requestForQuote": "Permintaan Sebut Harga",
+    "bookAtThisRate": "Tempah pada Kadar Ini",
+    "viewSurcharges": "Lihat Surcaj",
+    "shareRateQuote": "Kongsi Sebut Harga Kadar",
+    "share": "Kongsi",
+    "viewTariffTerms": "Lihat Terma Tarif Diterbitkan",
+    "convertQuote": "Tukar Sebut Harga kepada e-Tempahan",
+    "viewQuoteTerms": "Lihat Terma & Syarat Sebut Harga",
+    "viewSubjectToCharges": "Lihat Pecahan Caj Tertakluk",
+    "viewSurchargeHistory": "Lihat Sejarah Surcaj",
+    "requestSpotQuote": "Minta Sebut Harga Spot",
+    "submitRequestForQuote": "Hantar Permintaan Sebut Harga",
+    "sendEmail": "Hantar E-mel"
+  },
+  "rateList": {
+    "columns": {
+      "type": "Jenis",
+      "code": "Kod",
+      "origin": "Asal",
+      "originCode": "Kod Asal",
+      "delivery": "Penghantaran",
+      "deliveryCode": "Kod Penghantaran",
+      "equipment": "Peralatan",
+      "commodity": "Komoditi",
+      "currency": "Mata wang",
+      "base": "Asas",
+      "surcharges": "Surcaj",
+      "total": "Jumlah",
+      "validFrom": "Sah Dari",
+      "validTo": "Sah Hingga"
+    },
+    "recommendedLegend": "Pengangkutan diterbitkan terendah (disyorkan)"
+  },
+  "rateCard": {
+    "recommendedTag": "Pengangkutan Diterbitkan Terendah",
+    "ref": "Ruj: {{id}}",
+    "commodityLabel": "Komoditi: {{value}}",
+    "commodityFallback": "Komoditi",
+    "connector": {
+      "accessorial": "Aksesori",
+      "quotedAmount": "Jumlah sebut harga",
+      "allInEstimate": "Anggaran all-in",
+      "breakdown": "OFR ${{base}} + surcaj ${{surcharge}}"
+    },
+    "validRange": "Sah {{from}} → {{to}}",
+    "validFrom": "Sah Dari",
+    "validTo": "Sah Hingga",
+    "rateType": "Jenis Kadar",
+    "rateTypeTooltip": "Kadar {{type}}",
+    "validFromTooltip": "Tarikh Sah Dari Kadar",
+    "validToTooltip": "Tarikh Sah Hingga Kadar",
+    "surchargeBreakdown": "Pecahan Surcaj Berbutir",
+    "tariffDefaultTitle": "Tarif Pengangkutan Diterbitkan",
+    "norApplicable": "NOR terpakai",
+    "accessorialCommodity": "Aksesori",
+    "searching": "Mencari kadar pengangkutan…"
+  },
+  "tariff": {
+    "filterHeading": "Tapis Tarif:",
+    "portOfLoad": "Pelabuhan Muat",
+    "portOfDischarge": "Pelabuhan Nyahmuat",
+    "loading": "Memuatkan tarif pengangkutan diterbitkan...",
+    "commodityCode": "Kod: {{code}}",
+    "columns": {
+      "portOfLoad": "Pelabuhan Muat",
+      "portOfDischarge": "Pelabuhan Nyahmuat",
+      "eqpType": "Jenis Eqp",
+      "commodity": "Komoditi",
+      "currency": "Mata wang",
+      "amount": "Jumlah",
+      "fromDate": "Dari Tarikh",
+      "toDate": "Hingga Tarikh"
+    }
+  },
+  "quotes": {
+    "toolbarTitle": "Pertanyaan & Sebut Harga Kadar Spot",
+    "toolbarSub": "Hantar pertanyaan kadar spot dan tukar sebut harga diluluskan kepada e-Tempahan.",
+    "loading": "Memuatkan permintaan sebut harga...",
+    "pendingPricing": "Menunggu Penetapan Harga",
+    "amountUsd": "${{amount}} USD",
+    "validityRange": "{{from}} hingga {{to}}",
+    "columns": {
+      "quoteRefNo": "No. Ruj Sebut Harga",
+      "customerName": "Nama Pelanggan",
+      "shipmentRoute": "Laluan Penghantaran",
+      "equipmentQty": "Peralatan & Kuantiti",
+      "quotedRateUsd": "Kadar Disebut (USD)",
+      "status": "Status",
+      "validityWindow": "Tempoh Sah"
+    },
+    "status": {
+      "DRAFT": "Draf",
+      "PENDING_REVIEW": "Menunggu Semakan",
+      "QUOTED": "Disebut harga",
+      "ACCEPTED": "Diterima",
+      "EXPIRED": "Tamat tempoh"
+    }
+  },
+  "contract": {
+    "filterHeading": "Tapis Kadar Kontrak:",
+    "loading": "Memuatkan kadar kontrak perkhidmatan...",
+    "validityRange": "{{from}} hingga {{to}}",
+    "columns": {
+      "contractNo": "No. Kontrak",
+      "rateNo": "No. Kadar",
+      "customerName": "Nama Pelanggan",
+      "agreedRate": "Kadar Dipersetujui",
+      "subjectToCharges": "Tertakluk kepada Caj",
+      "soc": "SOC",
+      "transService": "Perkhidmatan Trans.",
+      "validityWindow": "Tempoh Sah"
+    }
+  },
+  "surchargeView": {
+    "filterHeading": "Tapis Surcaj:",
+    "loading": "Memuatkan pecahan surcaj...",
+    "columns": {
+      "chargeName": "Nama Caj",
+      "chargeCode": "Kod Caj",
+      "cargoType": "Jenis Kargo",
+      "nor": "NOR"
+    }
+  },
+  "contractSurcharge": {
+    "title": "Surcaj Termasuk untuk Kontrak {{contractNo}}",
+    "customer": "Pelanggan: {{name}} ({{code}})",
+    "route": "Laluan: {{originName}} ({{origin}}) → {{deliveryName}} ({{delivery}})"
+  },
+  "quoteRequest": {
+    "title": "Permintaan Sebut Harga",
+    "fields": {
+      "portOfLoad": "Pelabuhan Muat (POL)",
+      "portOfDischarge": "Pelabuhan Nyahmuat (POD)",
+      "cargoType": "Jenis Kargo",
+      "cargoQuantity": "Kuantiti Kargo",
+      "commodity": "Komoditi",
+      "cargoWeight": "Berat Kargo (kg)",
+      "expectedRate": "Kadar Sasaran Dijangka (USD)",
+      "comments": "Komen"
+    },
+    "placeholders": {
+      "commodity": "cth. Kargo Am / Jentera",
+      "comments": "Keperluan stowage khas atau suhu..."
+    },
+    "validation": {
+      "portOfLoadRequired": "Pelabuhan Muat diperlukan",
+      "portOfDischargeRequired": "Pelabuhan Nyahmuat diperlukan",
+      "cargoTypeRequired": "Jenis Kargo diperlukan",
+      "cargoQuantityMin": "Kuantiti Kargo mestilah sekurang-kurangnya 1",
+      "commodityRequired": "Komoditi diperlukan",
+      "cargoWeightRequired": "Berat Kargo diperlukan"
+    },
+    "toasts": {
+      "success": "Permintaan Sebut Harga {{quoteNo}} berjaya dihantar!",
+      "error": "Gagal menghantar Permintaan Sebut Harga. Sila cuba lagi."
+    }
+  },
+  "shareMail": {
+    "title": "Kongsi melalui E-mel",
+    "to": "Kepada",
+    "cc": "Sk",
+    "subject": "Subjek",
+    "message": "Mesej",
+    "placeholders": {
+      "to": "penerima@syarikat.com",
+      "cc": "pilihan@syarikat.com",
+      "message": "Karang mesej sebut harga kadar anda…"
+    },
+    "sharingCount_one": "Berkongsi {{count}} kadar",
+    "sharingCount_other": "Berkongsi {{count}} kadar",
+    "moreRates_one": "+{{count}} kadar lagi",
+    "moreRates_other": "+{{count}} kadar lagi",
+    "validation": {
+      "toRequired": "E-mel penerima diperlukan",
+      "toInvalid": "Masukkan alamat e-mel yang sah (asingkan berbilang dengan koma)",
+      "ccInvalid": "Masukkan alamat e-mel SK yang sah (asingkan dengan koma)",
+      "subjectRequired": "Subjek diperlukan",
+      "subjectMax": "Subjek mestilah 200 aksara atau kurang",
+      "messageRequired": "Mesej diperlukan",
+      "messageMax": "Mesej mestilah 4000 aksara atau kurang"
+    },
+    "toasts": {
+      "success_one": "Sebut harga kadar berjaya dihantar melalui e-mel ({{count}} penerima).",
+      "success_other": "Sebut harga kadar berjaya dihantar melalui e-mel ({{count}} penerima).",
+      "error": "Gagal berkongsi sebut harga kadar melalui e-mel. Sila cuba lagi."
+    },
+    "subjectTemplate": {
+      "single": "Sebut harga kadar pengangkutan — {{code}} ({{pol}} → {{pod}})",
+      "multiple": "Sebut harga kadar pengangkutan — {{count}} hasil ({{pol}} → {{pod}})",
+      "empty": "Sebut harga kadar pengangkutan"
+    },
+    "body": {
+      "hello": "Hello,",
+      "intro": "Sila lihat butiran kadar pengangkutan di bawah.",
+      "rateHeading": "Kadar {{index}}: {{code}} ({{type}})",
+      "title": "Tajuk: {{value}}",
+      "lane": "Laluan: {{value}}",
+      "equipment": "Peralatan: {{value}}",
+      "commodity": "Komoditi: {{value}}",
+      "oceanFreight": "Pengangkutan laut: {{value}}",
+      "surcharges": "Surcaj (angg.): {{value}}",
+      "total": "Jumlah (angg.): {{value}}",
+      "validity": "Kesahan: {{from}} hingga {{to}}",
+      "regards": "Salam,",
+      "signature": "E-Com Portal"
+    }
+  },
+  "empty": {
+    "searchTitle": "Cari kadar",
+    "searchMessageList": "Pilih kriteria carian dan klik Cari untuk melihat kadar diterbitkan.",
+    "searchMessageCard": "Pilih asal, penghantaran dan penapis, kemudian klik Cari untuk memuatkan kadar yang sepadan.",
+    "noResultsTitle": "Tiada kadar dijumpai",
+    "noResultsMessageList": "Cuba pelabuhan, peralatan atau penapis komoditi yang berbeza.",
+    "noResultsMessageCard": "Cuba laraskan penapis pelabuhan, peralatan atau komoditi anda.",
+    "tariffTitle": "Tiada tarif diterbitkan dijumpai",
+    "tariffMessage": "Cuba kombinasi pelabuhan lain atau kosongkan penapis untuk melihat lebih banyak tarif.",
+    "quotesTitle": "Belum ada sebut harga kadar spot",
+    "quotesMessage": "Minta sebut harga spot untuk membandingkan harga bagi penghantaran seterusnya.",
+    "contractsTitle": "Tiada kontrak perkhidmatan dijumpai",
+    "contractsMessage": "Cuba kombinasi pelabuhan lain atau kosongkan penapis untuk melihat lebih banyak kontrak.",
+    "surchargesTitle": "Tiada surcaj dijumpai",
+    "surchargesMessage": "Cuba kombinasi pelabuhan lain atau kosongkan penapis untuk melihat lebih banyak caj."
+  },
+  "errors": {
+    "tariffLoadTitle": "Tidak dapat memuatkan tarif diterbitkan",
+    "tariffLoadMessage": "Permintaan tidak selesai. Semak sambungan anda dan cuba lagi.",
+    "shareNoResults": "Cari kadar dahulu, kemudian kongsi hasil melalui e-mel.",
+    "loadFailedMessage": "Permintaan tidak selesai. Semak sambungan anda dan cuba lagi.",
+    "quotesLoadTitle": "Tidak dapat memuatkan sebut harga kadar spot",
+    "contractsLoadTitle": "Tidak dapat memuatkan kontrak perkhidmatan",
+    "surchargesLoadTitle": "Tidak dapat memuatkan surcaj"
+  },
+  "toasts": {
+    "bookSelected": "Kadar {{code}} dipilih ({{currency}} ${{amount}}). Meneruskan ke Jadual & Tempahan...",
+    "convertingQuote": "Menukar Sebut Harga {{quoteNo}} kepada e-Tempahan..."
+  },
+  "a11y": {
+    "recommendedLegend": "Legenda kadar disyorkan"
+  }
 }

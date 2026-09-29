@@ -4,6 +4,7 @@ import { ListView } from "@solverminds/shared-ui/data-view/list-view";
 import { useAntdBreakpoint } from "@solverminds/shared-ui/hooks";
 import type { CellValueChangedEvent, GridReadyEvent } from "ag-grid-community";
 import { Empty, Flex, Spin, theme } from "antd";
+import { useTranslation } from "react-i18next";
 
 import type {
   SpreadsheetImportGridRow,
@@ -45,6 +46,7 @@ export function ImportReviewGridSection<TValues extends object>({
   rows,
   unmatchedHeaders,
 }: ImportReviewGridSectionProps<TValues>) {
+  const { t } = useTranslation(["import-workbench", "common"]);
   const { token } = theme.useToken();
   const { isMobile } = useAntdBreakpoint();
   const gridOptions = createSpreadsheetImportGridOptions<TValues>();
@@ -63,7 +65,7 @@ export function ImportReviewGridSection<TValues extends object>({
             >
               <Spin size="medium" />
               <Empty
-                description="Analyzing workbook..."
+                description={t("grid.analyzing")}
                 image={Empty.PRESENTED_IMAGE_SIMPLE}
               />
             </Flex>

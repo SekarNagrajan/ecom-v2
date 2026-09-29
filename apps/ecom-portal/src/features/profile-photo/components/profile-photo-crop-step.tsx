@@ -4,6 +4,7 @@ import { useToast } from "@solverminds/shared-ui/hooks";
 import { Flex, Slider, theme } from "antd";
 import { useState } from "react";
 import Cropper, { type Area, type Point } from "react-easy-crop";
+import { useTranslation } from "react-i18next";
 
 import { getCroppedImageBlob } from "../utils/crop-image.utils";
 
@@ -25,6 +26,7 @@ export function ProfilePhotoCropStep({
   onCancel,
   onSave,
 }: ProfilePhotoCropStepProps) {
+  const { t } = useTranslation(["profile-photo", "common"]);
   const { token } = theme.useToken();
   const toast = useToast();
   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
@@ -48,7 +50,7 @@ export function ProfilePhotoCropStep({
       const blob = await getCroppedImageBlob(imageSrc, croppedAreaPixels);
       await onSave(blob);
     } catch {
-      toast.error("Failed to process the cropped image. Please try again.");
+      toast.error(t("toasts.cropFailed"));
     } finally {
       setIsProcessing(false);
     }
@@ -93,14 +95,14 @@ export function ProfilePhotoCropStep({
           onClick={onCancel}
           type="default"
         >
-          Cancel
+          {t("common:actions.cancel")}
         </AppButton>
         <AppButton
           loading={isSaving || isProcessing}
           onClick={() => void handleSave()}
           type="primary"
         >
-          Save
+          {t("common:actions.save")}
         </AppButton>
       </Flex>
     </Flex>

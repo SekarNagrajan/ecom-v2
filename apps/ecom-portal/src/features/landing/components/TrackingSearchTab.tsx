@@ -1,7 +1,9 @@
 // Modified by Sekar Nagarajan (2026-09-18 10:45)
 import { AppButton } from "@solverminds/shared-ui";
 import { Flex, Input, Tabs, theme } from "antd";
+import type { TFunction } from "i18next";
 import { Controller, type UseFormReturn } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import type { TrackingSearchType } from "../../tracking/types/tracking.types";
@@ -15,14 +17,17 @@ interface TrackingSearchTabProps {
   isSearching?: boolean;
 }
 
-function fieldLabel(searchType: TrackingSearchType): string {
+function fieldLabel(
+  searchType: TrackingSearchType,
+  t: TFunction<"landing">,
+): string {
   switch (searchType) {
     case "BOOKING":
-      return "Enter the booking number";
+      return t("tracking.fieldLabel.BOOKING");
     case "BL":
-      return "Enter the bill of lading (BL) number";
+      return t("tracking.fieldLabel.BL");
     case "CONTAINER":
-      return "Enter the container number";
+      return t("tracking.fieldLabel.CONTAINER");
     default: {
       const _exhaustive: never = searchType;
       return _exhaustive;
@@ -30,14 +35,17 @@ function fieldLabel(searchType: TrackingSearchType): string {
   }
 }
 
-function fieldPlaceholder(searchType: TrackingSearchType): string {
+function fieldPlaceholder(
+  searchType: TrackingSearchType,
+  t: TFunction<"landing">,
+): string {
   switch (searchType) {
     case "BOOKING":
-      return "e.g. BKG-2026-9901";
+      return t("tracking.fieldPlaceholder.BOOKING");
     case "BL":
-      return "e.g. BL-SHA-88401";
+      return t("tracking.fieldPlaceholder.BL");
     case "CONTAINER":
-      return "e.g. SMLU8829102";
+      return t("tracking.fieldPlaceholder.CONTAINER");
     default: {
       const _exhaustive: never = searchType;
       return _exhaustive;
@@ -51,6 +59,7 @@ export function TrackingSearchTab({
   showImageCaptcha = true,
   isSearching = false,
 }: TrackingSearchTabProps) {
+  const { t } = useTranslation(["landing", "common", "modules"]);
   const { token } = theme.useToken();
   const {
     control,
@@ -106,15 +115,15 @@ export function TrackingSearchTab({
         items={[
           {
             key: "CONTAINER",
-            label: "Container No",
+            label: t("tracking.containerNo"),
           },
           {
             key: "BOOKING",
-            label: "Booking No",
+            label: t("tracking.bookingNo"),
           },
           {
             key: "BL",
-            label: "Bill of Lading (BL)",
+            label: t("tracking.billOfLading"),
           },
         ]}
       />
@@ -122,7 +131,7 @@ export function TrackingSearchTab({
       <div style={{ marginBottom: 24 }}>
         <div style={{ margin: 0, display: "flex", flexDirection: "column" }}>
           <label style={labelStyle}>
-            {fieldLabel(searchType)} <span style={asteriskStyle}>*</span>
+            {fieldLabel(searchType, t)} <span style={asteriskStyle}>*</span>
           </label>
           <Controller
             control={control}
@@ -132,7 +141,7 @@ export function TrackingSearchTab({
                 {...field}
                 id="tracking-number"
                 size="large"
-                placeholder={fieldPlaceholder(searchType)}
+                placeholder={fieldPlaceholder(searchType, t)}
                 autoComplete="off"
                 allowClear
                 style={inputStyle}
@@ -163,7 +172,9 @@ export function TrackingSearchTab({
       {showImageCaptcha && (
         <div style={{ marginBottom: 24 }}>
           <div style={{ margin: 0, display: "flex", flexDirection: "column" }}>
-            <label style={labelStyle}>Security Verification</label>
+            <label style={labelStyle}>
+              {t("tracking.securityVerification")}
+            </label>
             <ImageCaptcha
               control={control}
               name="captcha"
@@ -188,7 +199,7 @@ export function TrackingSearchTab({
             isSearching ? undefined : <AppIcon icon={Icons.search} size={16} />
           }
         >
-          Track shipment
+          {t("tracking.trackShipment")}
         </AppButton>
         <AppButton
           danger
@@ -197,9 +208,9 @@ export function TrackingSearchTab({
           disabled={isSearching}
           icon={<AppIcon icon={Icons.refreshCw} size={16} tone="delete" />}
           onClick={handleReset}
-          aria-label="Reset tracking search"
+          aria-label={t("a11y.resetTrackingSearch")}
         >
-          Reset
+          {t("common:actions.reset")}
         </AppButton>
       </Flex>
     </form>

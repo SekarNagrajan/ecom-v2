@@ -1,0 +1,30 @@
+{
+  "steps": {
+    "view": "Profile Photo",
+    "select": "Upload Photo",
+    "crop": "Crop Profile Photo"
+  },
+  "actions": {
+    "changeImage": "Change Image",
+    "removePhoto": "Remove Photo"
+  },
+  "upload": {
+    "title": "Drag a Profile Photo Here",
+    "selectButton": "Select a photo from your computer",
+    "or": "or"
+  },
+  "helper": "Supports: .jpg, .jpeg, .png, .gif · Maximum size: 2MB",
+  "confirms": {
+    "removeTitle": "Remove profile photo?",
+    "removeContent": "Your avatar will go back to showing your initials."
+  },
+  "toasts": {
+    "updated": "Profile photo updated",
+    "removed": "Profile photo removed",
+    "cropFailed": "Failed to process the cropped image. Please try again."
+  },
+  "errors": {
+    "uploadFailed": "Failed to upload profile photo",
+    "removeFailed": "Failed to remove profile photo"
+  }
+}

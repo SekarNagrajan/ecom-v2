@@ -31,7 +31,7 @@ const { Text } = Typography;
 
 export const SchedulesRoute: React.FC = () => {
   const toast = useToast();
-  const { t } = useTranslation(["schedules", "common"]);
+  const { t } = useTranslation(["schedules", "common", "modules"]);
   const moduleTitles = useModuleTitles();
   const {
     viewMode,
@@ -121,7 +121,7 @@ export const SchedulesRoute: React.FC = () => {
                   <span
                     className="module-loading-center"
                     role="status"
-                    aria-label="Loading"
+                    aria-label={t("a11y.loading")}
                   >
                     <Spin size="small" />
                   </span>
@@ -134,7 +134,7 @@ export const SchedulesRoute: React.FC = () => {
               <div
                 className="schedule-empty module-loading-center"
                 role="status"
-                aria-label="Loading"
+                aria-label={t("a11y.loading")}
               >
                 <Spin size="medium" />
               </div>

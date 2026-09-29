@@ -1,7 +1,8 @@
 // Modified by Sekar Nagarajan (2026-09-11 14:35)
 import { Flex, Grid, Spin, Tabs, theme } from "antd";
-import { AppIcon, Icons } from "../../../components/icons";
+import { useTranslation } from "react-i18next";
 
+import { AppIcon, Icons } from "../../../components/icons";
 import type { useLandingController } from "../hooks/use-landing-controller";
 import type { LandingTab, TabConfig } from "../types/landing.types";
 import { RatesSearchTab } from "./RatesSearchTab";
@@ -14,6 +15,7 @@ interface HeroSearchPanelProps {
 }
 
 export function HeroSearchPanel({ controller }: HeroSearchPanelProps) {
+  const { t } = useTranslation(["landing", "common", "modules"]);
   const { token } = theme.useToken();
   const screens = Grid.useBreakpoint();
   const isMobile = !screens.md;
@@ -31,7 +33,7 @@ export function HeroSearchPanel({ controller }: HeroSearchPanelProps) {
       label: (
         <Flex align="center" gap={8} style={tabLabelStyle}>
           <AppIcon icon={Icons.calendar} size={18} />
-          <span>Schedule</span>
+          <span>{t("tabs.schedule")}</span>
         </Flex>
       ),
       children: (
@@ -47,7 +49,7 @@ export function HeroSearchPanel({ controller }: HeroSearchPanelProps) {
       label: (
         <Flex align="center" gap={8} style={tabLabelStyle}>
           <AppIcon icon={Icons.mapPin} size={18} />
-          <span>Tracking</span>
+          <span>{t("common:nav.tracking")}</span>
         </Flex>
       ),
       children: (
@@ -64,7 +66,7 @@ export function HeroSearchPanel({ controller }: HeroSearchPanelProps) {
       label: (
         <Flex align="center" gap={8} style={tabLabelStyle}>
           <AppIcon icon={Icons.dollarSign} size={18} />
-          <span>Rates</span>
+          <span>{t("common:nav.rates")}</span>
         </Flex>
       ),
       children: (
@@ -116,7 +118,7 @@ export function HeroSearchPanel({ controller }: HeroSearchPanelProps) {
         <div
           className="pub-landing__search-loading module-loading-center"
           role="status"
-          aria-label="Loading"
+          aria-label={t("common:status.loading")}
         >
           <Spin size="medium" />
         </div>

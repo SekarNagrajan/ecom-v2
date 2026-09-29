@@ -3,6 +3,7 @@ import { extractApiError } from "@solverminds/platform";
 import { AppModal } from "@solverminds/shared-ui";
 import { useConfirm, useToast } from "@solverminds/shared-ui/hooks";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { useProfilePhoto } from "../providers/profile-photo-provider";
 import { ProfilePhotoCropStep } from "./profile-photo-crop-step";
@@ -19,12 +20,6 @@ interface ProfilePhotoModalProps {
   roleLabel?: string | null;
 }
 
-const STEP_TITLES: Record<ProfilePhotoModalStep, string> = {
-  view: "Profile Photo",
-  select: "Upload Photo",
-  crop: "Crop Profile Photo",
-};
-
 export function ProfilePhotoModal({
   fullName,
   initials,
@@ -32,12 +27,15 @@ export function ProfilePhotoModal({
   open,
   roleLabel,
 }: ProfilePhotoModalProps) {
+  const { t } = useTranslation(["profile-photo", "common"]);
   const toast = useToast();
   const confirm = useConfirm();
   const { photoUrl, upload, remove, isUploading, isRemoving } =
     useProfilePhoto();
   const [step, setStep] = useState<ProfilePhotoModalStep>("view");
   const [selectedFileUrl, setSelectedFileUrl] = useState<string | null>(null);
+
+  const stepTitle = t(`steps.${step}`);
 
   const releaseSelectedFile = () => {
     if (selectedFileUrl) {
@@ -80,24 +78,24 @@ export function ProfilePhotoModal({
       await upload(blob);
       releaseSelectedFile();
       setStep("view");
-      toast.success("Profile photo updated");
+      toast.success(t("toasts.updated"));
     } catch (error) {
-      toast.error(extractApiError(error));
+      toast.error(extractApiError(error) || t("errors.uploadFailed"));
     }
   };
 
   const handleRemove = () => {
     confirm.danger({
-      title: "Remove profile photo?",
-      content: "Your avatar will go back to showing your initials.",
-      okText: "Remove",
-      cancelText: "Cancel",
+      title: t("confirms.removeTitle"),
+      content: t("confirms.removeContent"),
+      okText: t("common:actions.remove"),
+      cancelText: t("common:actions.cancel"),
       onOk: async () => {
         try {
           await remove();
-          toast.success("Profile photo removed");
+          toast.success(t("toasts.removed"));
         } catch (error) {
-          toast.error(extractApiError(error));
+          toast.error(extractApiError(error) || t("errors.removeFailed"));
         }
       },
     });
@@ -110,7 +108,7 @@ export function ProfilePhotoModal({
       footer={null}
       onCancel={handleDismiss}
       open={open}
-      title={STEP_TITLES[step]}
+      title={stepTitle}
     >
       {step === "view" ? (
         <ProfilePhotoViewStep

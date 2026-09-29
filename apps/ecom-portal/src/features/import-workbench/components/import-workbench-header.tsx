@@ -8,6 +8,7 @@ import {
 import { useAntdBreakpoint } from "@solverminds/shared-ui/hooks";
 import { Typography, theme } from "antd";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import type { SpreadsheetImportFieldDefinition } from "../types/import-workbench.types";
@@ -51,13 +52,15 @@ export function ImportWorkbenchHeader<TValues extends object>({
   onSubmit,
   onValidationError,
   submitLabel,
-  subtitle = "Upload a workbook, review rows, then submit valid bookings.",
+  subtitle,
   title,
 }: ImportWorkbenchHeaderProps<TValues>) {
+  const { t } = useTranslation(["import-workbench", "common"]);
   const { token } = theme.useToken();
   const { isMobile } = useAntdBreakpoint();
   const [isColumnGuideOpen, setIsColumnGuideOpen] = useState(false);
   const hasFile = Boolean(fileName);
+  const resolvedSubtitle = subtitle ?? t("header.defaultSubtitle");
   const columnGuideContent = (
     <ImportColumnGuidePopoverContent fields={fields} />
   );
@@ -70,10 +73,11 @@ export function ImportWorkbenchHeader<TValues extends object>({
             type="text"
             icon={<AppIcon icon={Icons.chevronLeft} size={16} />}
             onClick={onBack}
-            aria-label="Back"
+            aria-label={t("common:actions.back")}
           />
           <div className="import-wb__title-text">
             <Typography.Title level={4}>{title}</Typography.Title>
+            <Typography.Text type="secondary">{resolvedSubtitle}</Typography.Text>
           </div>
         </div>
 
@@ -83,7 +87,7 @@ export function ImportWorkbenchHeader<TValues extends object>({
               mode="button"
               accept={accept}
               maxSizeBytes={maxSizeBytes}
-              buttonLabel="Replace File"
+              buttonLabel={t("header.replaceFile")}
               onFileSelect={onFileSelect}
               onValidationError={onValidationError}
               showFeedback={false}
@@ -97,7 +101,7 @@ export function ImportWorkbenchHeader<TValues extends object>({
               loading={isDownloadingTemplate}
               disabled={disableFileActions}
             >
-              Download Template
+              {t("header.downloadTemplate")}
             </AppButton>
           ) : null}
           {!isMobile ? (
@@ -115,7 +119,7 @@ export function ImportWorkbenchHeader<TValues extends object>({
               }}
             >
               <AppButton icon={<AppIcon icon={Icons.info} size={16} />}>
-                Column Guide
+                {t("header.columnGuide")}
               </AppButton>
             </AppPopover>
           ) : (
@@ -123,7 +127,7 @@ export function ImportWorkbenchHeader<TValues extends object>({
               icon={<AppIcon icon={Icons.info} size={16} />}
               onClick={() => setIsColumnGuideOpen(true)}
             >
-              Column Guide
+              {t("header.columnGuide")}
             </AppButton>
           )}
           {hasFile ? (
@@ -132,7 +136,7 @@ export function ImportWorkbenchHeader<TValues extends object>({
               onClick={onExportReview}
               disabled={!canExport}
             >
-              Export Review
+              {t("header.exportReview")}
             </AppButton>
           ) : null}
           <AppButton
@@ -151,7 +155,7 @@ export function ImportWorkbenchHeader<TValues extends object>({
         <AppDrawer
           open={isColumnGuideOpen}
           onClose={() => setIsColumnGuideOpen(false)}
-          title="Column Guide"
+          title={t("header.columnGuide")}
           placement="bottom"
           dialogSize="xs"
           destroyOnHidden

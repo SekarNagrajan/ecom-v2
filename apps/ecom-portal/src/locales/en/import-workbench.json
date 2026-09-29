@@ -1,0 +1,169 @@
+{
+  "header": {
+    "defaultSubtitle": "Upload a workbook, review rows, then submit valid rows.",
+    "replaceFile": "Replace File",
+    "downloadTemplate": "Download Template",
+    "exportReview": "Export Review",
+    "columnGuide": "Column Guide"
+  },
+  "empty": {
+    "uploadAria": "Upload workbook",
+    "uploadTitle": "Upload workbook",
+    "uploadHint": "Drop your Excel file here, or download the template first so headers match required columns.",
+    "xlsxOnly": ".xlsx only",
+    "headerRequired": "Header row required",
+    "maxSize": "{{maxMb}} MB max",
+    "dropTitle": "Drop workbook",
+    "dropDescription": "Drag and drop or click to browse",
+    "columnGuideAria": "Column guide",
+    "columnGuideTitle": "Column guide",
+    "columnGuideHint": "Required fields appear first in the template and in this list."
+  },
+  "metrics": {
+    "ariaLabel": "Import review metrics",
+    "file": "File",
+    "rows": "Rows",
+    "invalid": "Invalid",
+    "issues": "Issues",
+    "valid": "Valid"
+  },
+  "toolbar": {
+    "allColumns": "All Columns",
+    "sheet": "Sheet",
+    "allRows": "All rows",
+    "errors": "Errors",
+    "addCountryCode": "Add Country Code",
+    "replaceInvalid": "Replace Invalid",
+    "fillEmpty": "Fill Empty",
+    "prev": "Prev",
+    "hideErrors": "Hide Errors",
+    "invalidCount": "{{count}} invalid",
+    "emptyCount": "{{count}} empty"
+  },
+  "actions": {
+    "submitDefault": "Submit {{count}} {{entityLabel}}"
+  },
+  "status": {
+    "row": "Row",
+    "status": "Status",
+    "ready": "Ready",
+    "fixed": "Fixed",
+    "errorsCount": "{{count}} errors"
+  },
+  "confirms": {
+    "leaveTitle": "Leave import?",
+    "leaveMessage": "Your loaded workbook and fixes will be lost. Stay on this page to continue, or discard and leave."
+  },
+  "toasts": {
+    "templateFailed": "Could not generate the import template. Please try again."
+  },
+  "errors": {
+    "maxRows": "This sheet has {{rowCount}} rows. The bulk import accepts a maximum of {{maxRowCount}} {{entityLabel}} per file. Split the workbook and try again.",
+    "unableToRead": "Unable to read the selected Excel file."
+  },
+  "a11y": {
+    "previousError": "Previous error",
+    "nextError": "Next error",
+    "toggleErrors": "Toggle errors",
+    "hideErrors": "Hide errors"
+  },
+  "grid": {
+    "analyzing": "Analyzing workbook..."
+  },
+  "badges": {
+    "required": "Required",
+    "optional": "Optional"
+  },
+  "errorsDrawer": {
+    "title": "Errors",
+    "titleWithCount": "Errors ({{count}})",
+    "noErrors": "No validation errors.",
+    "ignoredColumns": "Ignored columns: {{columns}}",
+    "rowField": "Row {{rowNumber}} · {{fieldLabel}}",
+    "serverPrefix": "Server: {{message}}",
+    "serverField": "Server",
+    "kinds": {
+      "required": "Required",
+      "selectValid": "Select a valid option",
+      "invalidLength": "Invalid length",
+      "invalidPhone": "Invalid phone",
+      "invalidEmail": "Invalid email"
+    }
+  },
+  "bulkFix": {
+    "modes": {
+      "invalid": "Replace Invalid Values",
+      "countryCode": "Add Country Code",
+      "empty": "Fill Empty Values"
+    },
+    "descriptions": {
+      "invalid": "Only cells that currently fail validation for this column will change. Blank cells are left alone.",
+      "countryCode": "Only phone numbers missing a country code will be updated when they can be normalized.",
+      "empty": "Only blank cells in this column will change. Existing values stay untouched."
+    },
+    "labels": {
+      "countryCode": "Country code",
+      "replacementFor": "Replacement value for {{field}}",
+      "fillInto": "Value to fill into empty {{field}} cells",
+      "matchingCells": "Matching cells",
+      "valueType": "Value type",
+      "format": "Format",
+      "missingCountryCode": "Missing country code",
+      "otherInvalidPhones": "Other invalid phones",
+      "empty": "Empty",
+      "phoneE164": "Phone (E.164)"
+    },
+    "placeholders": {
+      "select": "Select…",
+      "selectField": "Select {{field}}",
+      "enterAmount": "Enter amount",
+      "enter": "Enter…",
+      "enterField": "Enter {{field}}",
+      "selectCountryCode": "Select country code"
+    },
+    "options": {
+      "clearValue": "Clear value"
+    },
+    "hints": {
+      "clearOptional": "Leave blank to clear this optional field in matching cells.",
+      "countryCodeConvert": "Choose a country and matching numbers will convert to international format.",
+      "enterValid": "Enter a valid {{field}} to enable apply."
+    },
+    "apply": {
+      "replaceCells_one": "Replace {{count}} cell",
+      "replaceCells_other": "Replace {{count}} cells",
+      "updateNumbers_one": "Update {{count}} number",
+      "updateNumbers_other": "Update {{count}} numbers",
+      "fillCells_one": "Fill {{count}} cell",
+      "fillCells_other": "Fill {{count}} cells"
+    }
+  },
+  "fieldOverview": {
+    "requiredFields": "Required fields",
+    "optionalFields": "Optional fields",
+    "required": "Required",
+    "optional": "Optional",
+    "eg": "e.g. {{value}}",
+    "default": "Default: {{value}}",
+    "header": "Header: {{headers}}",
+    "example": "Example: {{value}}"
+  },
+  "columnGuide": {
+    "intro": "Use these sample formats while reviewing or fixing workbook values.",
+    "alsoAccepts": "Also accepts: {{aliases}}",
+    "format": "Format: {{format}}",
+    "defaultsTo": "Defaults to {{value}} when empty",
+    "freeText": "Free text"
+  },
+  "formatHints": {
+    "phone": "International format with country code",
+    "email": "Standard email address",
+    "currency": "Numeric amount",
+    "number": "Numeric value"
+  },
+  "phone": {
+    "required": "Phone number is required",
+    "invalid": "Invalid phone number",
+    "countryCodeRequired": "Country code is required. Use international format like +919876543210."
+  }
+}

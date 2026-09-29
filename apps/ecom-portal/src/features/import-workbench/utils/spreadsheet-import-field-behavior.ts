@@ -43,23 +43,26 @@ export function isDateTimeImportField<TValues extends object>(
   return field.kind === 'datetime';
 }
 
+type FormatHintTranslateFn = (key: string) => string;
+
 export function getSpreadsheetImportFormatHint<TValues extends object>(
-  field: SpreadsheetImportFieldDefinition<TValues>
+  field: SpreadsheetImportFieldDefinition<TValues>,
+  t?: FormatHintTranslateFn
 ) {
   if (field.importFormatHint) {
     return field.importFormatHint;
   }
 
   if (isPhoneImportField(field)) {
-    return 'International format with country code';
+    return t ? t('formatHints.phone') : 'International format with country code';
   }
 
   if (isEmailImportField(field)) {
-    return 'Standard email address';
+    return t ? t('formatHints.email') : 'Standard email address';
   }
 
   if (isCurrencyAmountImportField(field)) {
-    return 'Numeric amount';
+    return t ? t('formatHints.currency') : 'Numeric amount';
   }
 
   if (field.kind === 'date') {
@@ -71,7 +74,7 @@ export function getSpreadsheetImportFormatHint<TValues extends object>(
   }
 
   if (field.kind === 'number') {
-    return 'Numeric value';
+    return t ? t('formatHints.number') : 'Numeric value';
   }
 
   return null;

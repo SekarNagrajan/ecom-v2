@@ -114,7 +114,8 @@
     "filter": "Tapis",
     "yes": "Ya",
     "no": "Tidak",
-    "ok": "OK"
+    "ok": "OK",
+    "backHome": "Kembali ke Laman Utama"
   },
   "status": {
     "loading": "Memuatkan...",

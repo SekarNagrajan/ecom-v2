@@ -3,5 +3,307 @@
   "exportingToast": "Exportando resultados de itinerarios…",
   "searchEmptyTitle": "Buscar salidas",
   "searchEmptyMessage": "Elija sus criterios de búsqueda y haga clic en Buscar Itinerarios para ver las salidas disponibles.",
-  "availableSailings": "Salidas Disponibles"
+  "availableSailings": "Salidas Disponibles",
+  "modes": {
+    "byRoute": "Por ruta",
+    "byVessel": "Por buque",
+    "byPort": "Por puerto"
+  },
+  "search": {
+    "searchSchedules": "Buscar itinerarios",
+    "resetAria": "Restablecer búsqueda de itinerarios",
+    "originPort": "Puerto de origen (POL)",
+    "originShort": "Origen (POL)",
+    "originPlaceholder": "¿Desde dónde envía?",
+    "originPortAria": "Puerto de origen",
+    "selectOrigin": "Seleccione el puerto de origen",
+    "deliveryPort": "Puerto de entrega (POD)",
+    "deliveryShort": "Entrega (POD)",
+    "deliveryPlaceholder": "¿Hacia dónde va la carga?",
+    "deliveryPortAria": "Puerto de entrega",
+    "selectDelivery": "Seleccione el puerto de entrega",
+    "swapTooltip": "Intercambiar origen y entrega",
+    "swapAria": "Intercambiar puertos de origen y entrega",
+    "departureDateRange": "Rango de fechas de salida",
+    "departureDateRangeAria": "Rango de fechas de salida",
+    "vesselNameCode": "Nombre / código del buque",
+    "vesselPlaceholder": "Seleccione el buque",
+    "vesselAria": "Buque",
+    "selectVessel": "Seleccione el buque",
+    "voyageDateRange": "Rango de fechas del viaje",
+    "voyageDateRangeAria": "Rango de fechas del viaje",
+    "portOfCall": "Puerto de escala",
+    "portOfCallPlaceholder": "Seleccione el puerto de escala",
+    "portOfCallAria": "Puerto de escala",
+    "selectPort": "Seleccione el puerto",
+    "arrivalDepartureWindow": "Ventana de llegada / salida",
+    "arrivalDepartureWindowAria": "Ventana de llegada y salida"
+  },
+  "filters": {
+    "originPort": "Puerto de origen",
+    "originPlaceholder": "Introduzca el puerto de origen",
+    "destinationPort": "Puerto de destino",
+    "destinationPlaceholder": "Introduzca el puerto de destino",
+    "searchVesselSchedules": "Buscar itinerarios de buques"
+  },
+  "options": {
+    "ports": {
+      "AEDXB": "AEDXB - Dubái",
+      "AEJEA": "AEJEA - Jebel Ali",
+      "CNSHA": "CNSHA - Shanghái",
+      "INMUN": "INMUN - Mundra",
+      "INNSA": "INNSA - Nhava Sheva",
+      "SGSIN": "SGSIN - Singapur"
+    },
+    "vessels": {
+      "AGEX": "AGEX - Antigravity Express",
+      "SMVY": "SMVY - Solverminds Voyager",
+      "GLHZ": "GLHZ - Global Horizon",
+      "OCPN": "OCPN - Ocean Pioneer",
+      "PCMR": "PCMR - Pacific Merchant",
+      "MRST": "MRST - Merchant Star",
+      "ATBR": "ATBR - Atlantic Bridge"
+    }
+  },
+  "viewModes": {
+    "aria": "Modo de vista de itinerarios",
+    "list": "Lista",
+    "card": "Tarjeta",
+    "calendar": "Calendario"
+  },
+  "list": {
+    "columns": {
+      "vessel": "Buque",
+      "voyage": "Viaje",
+      "service": "Servicio",
+      "origin": "Origen",
+      "pol": "POL",
+      "trans1": "Trans 1",
+      "trans2": "Trans 2",
+      "pod": "POD",
+      "delivery": "Entrega",
+      "type": "Tipo",
+      "etd": "ETD",
+      "eta": "ETA",
+      "transit": "Tránsito",
+      "gateIn": "Gate-in",
+      "si": "SI"
+    },
+    "direct": "Directo",
+    "stopCount_one": "{{count}} escala",
+    "stopCount_other": "{{count}} escalas",
+    "recommendedLegend": "Ruta recomendada"
+  },
+  "card": {
+    "road": "Carretera",
+    "route": "Ruta",
+    "departure": "Salida",
+    "arrival": "Llegada",
+    "cutoffs": "Cierres",
+    "gateIn": "Gate-In",
+    "gateInTooltip": "Cierre de gate-in de contenedor",
+    "siCutoff": "SI",
+    "siTooltip": "Cierre de instrucción de embarque",
+    "vgmCutoff": "VGM",
+    "vgmTooltip": "Cierre de Verified Gross Mass",
+    "recommendedRoute": "Ruta recomendada",
+    "searching": "Buscando salidas…",
+    "etd": "ETD {{value}}",
+    "eta": "ETA {{value}}",
+    "terminal": "Terminal: {{name}}",
+    "days_one": "{{count}} día",
+    "days_other": "{{count}} días"
+  },
+  "calendar": {
+    "etd": "ETD",
+    "eta": "ETA",
+    "transit": "Tránsito",
+    "gateIn": "Gate-In",
+    "si": "SI",
+    "selectDayTitle": "Seleccione un día",
+    "selectDayMessage": "Elija un día en el calendario para ver las salidas de esa fecha.",
+    "noSailingsDayTitle": "No hay salidas este día",
+    "noSailingsDayMessage": "Pruebe otro día o ajuste sus criterios de búsqueda.",
+    "noSailingsMonthTitle": "No hay salidas este mes",
+    "noSailingsMonthMessage": "Pruebe otro mes o cambie los filtros de búsqueda.",
+    "sailingsCount_one": "{{count}} salida",
+    "sailingsCount_other": "{{count}} salidas",
+    "previousMonth": "Mes anterior",
+    "today": "Hoy",
+    "nextMonth": "Mes siguiente",
+    "daySailingsAria_one": "{{date}}, {{count}} salida",
+    "daySailingsAria_other": "{{date}}, {{count}} salidas",
+    "more": "+{{count}} más",
+    "legendAria": "Leyenda del calendario",
+    "legendDirect": "Directo",
+    "legendTransshipment": "Transbordo",
+    "legendRecommended": "Recomendado"
+  },
+  "actions": {
+    "bookNow": "Reservar ahora",
+    "getAQuote": "Obtener cotización",
+    "co2Estimate": "Estimación de CO₂",
+    "vesselDetails": "Detalles del buque",
+    "showDetails": "Mostrar detalles",
+    "closeDetails": "Cerrar detalles",
+    "sendEmail": "Enviar correo",
+    "downloadSpecsPdf": "Descargar especificaciones PDF",
+    "calculate": "Calcular"
+  },
+  "empty": {
+    "listTitle": "No se encontraron salidas",
+    "listMessage": "Pruebe otros puertos, buques o rangos de fechas.",
+    "cardTitle": "No se encontraron salidas",
+    "cardMessage": "Ajuste sus criterios de búsqueda para encontrar salidas coincidentes."
+  },
+  "a11y": {
+    "loading": "Cargando",
+    "recommendedLegend": "Leyenda de ruta recomendada"
+  },
+  "details": {
+    "title": "Detalles del itinerario: {{vessel}} ({{voyage}})",
+    "vesselAndService": "Buque y servicio",
+    "vesselName": "Nombre del buque",
+    "voyageNumber": "Número de viaje",
+    "serviceCode": "Código de servicio",
+    "routingAndSchedule": "Ruta e itinerario",
+    "originPort": "Puerto de origen",
+    "destinationPort": "Puerto de destino",
+    "polTerminal": "Terminal POL",
+    "estimatedDeparture": "Salida estimada (ETD)",
+    "estimatedArrival": "Llegada estimada (ETA)",
+    "transitDuration": "Duración del tránsito",
+    "transitDays": "{{count}} días"
+  },
+  "vessel": {
+    "imoCallSign": "IMO: {{imo}} | Indicativo: {{callSign}}",
+    "specifications": "Especificaciones del buque",
+    "portCallSequence": "Secuencia de escalas del viaje",
+    "fields": {
+      "vesselCode": "Código del buque",
+      "flag": "Bandera",
+      "vesselType": "Tipo de buque",
+      "operator": "Operador",
+      "owner": "Propietario",
+      "builtYear": "Año de construcción",
+      "portOfRegistry": "Puerto de registro",
+      "lengthOverall": "Eslora total",
+      "teuNominal": "TEU nominal",
+      "grossTonnage": "Arqueo bruto",
+      "netTonnage": "Arqueo neto",
+      "imoLloyds": "IMO / Lloyd's"
+    },
+    "columns": {
+      "portCodeName": "Código y nombre del puerto",
+      "terminal": "Terminal",
+      "status": "Estado"
+    },
+    "status": {
+      "COMPLETED": "Completado",
+      "IN_PORT": "En puerto",
+      "EXPECTED": "Previsto"
+    }
+  },
+  "ratesModal": {
+    "title": "Estimador de tarifas y recargos",
+    "routeBanner": "Ruta: {{pol}} → {{pod}} | Servicio: {{service}}",
+    "equipmentSelection": "Selección de equipo",
+    "eq20ft": "20 FT estándar",
+    "eq40ft": "40 FT estándar",
+    "eq40hc": "40 FT High Cube (HC)",
+    "reeferHint": "Reefer con control de temperatura",
+    "commodityName": "Nombre de la mercancía",
+    "commodityPlaceholder": "p. ej. Carga general, Electrónica, Alimentos",
+    "breakdownTitle": "Desglose estimado de tarifas",
+    "totalLabel": "Flete estimado total (USD):",
+    "totalValue": "${{amount}} USD",
+    "columns": {
+      "chargeDescription": "Descripción del cargo",
+      "rateUnit": "Tarifa / unidad",
+      "qtyCont": "Cant. / cont.",
+      "subtotal": "Subtotal"
+    },
+    "charges": {
+      "ofr20": "Flete marítimo - 20FT Standard Dry",
+      "ofr40": "Flete marítimo - 40FT Standard Dry",
+      "ofr40hc": "Flete marítimo - 40FT High Cube",
+      "baf": "BAF - Factor de ajuste de combustible",
+      "thc": "THC - Cargo de manipulación en terminal (POL)"
+    }
+  },
+  "carbon": {
+    "title": "Huella de carbono",
+    "subtitle": "Estime el CO₂e de este viaje del itinerario",
+    "cargoInputs": "Entradas de carga",
+    "cargoInputsAria": "Entradas de carga",
+    "containerQty": "Cantidad de contenedores (TEU)",
+    "containerQtyAria": "Cantidad de contenedores en TEU",
+    "cargoWeight": "Peso de la carga (toneladas métricas)",
+    "cargoWeightAria": "Peso de la carga en toneladas métricas",
+    "resultsAria": "Resultados de emisiones",
+    "resultsTitle": "Desglose estimado de CO₂e",
+    "totalCo2e": "CO₂e total",
+    "totalHint": "Ciclo de vida combinado",
+    "tankToWheel": "Tank-to-wheel",
+    "tankToWheelHint": "Combustión directa del buque",
+    "wellToTank": "Well-to-tank",
+    "wellToTankHint": "Producción upstream del combustible",
+    "tonsUnit": "toneladas",
+    "idleTitle": "Listo para estimar",
+    "idleHint": "Introduzca TEU y peso de la carga, luego calcule para ver el desglose de CO₂e de este viaje.",
+    "methodologyAria": "Aviso de metodología",
+    "methodologyTitle": "Metodología",
+    "methodologyText": "Las estimaciones siguen la orientación GLEC e IMO usando 8,5 g de CO₂ por tonelada-km para buques portacontenedores oceánicos. Las emisiones reales pueden variar con el clima, la velocidad y la congestión portuaria."
+  },
+  "shareMail": {
+    "title": "Compartir por correo",
+    "to": "Para",
+    "cc": "Cc",
+    "subject": "Asunto",
+    "message": "Mensaje",
+    "placeholders": {
+      "to": "destinatario@empresa.com",
+      "cc": "opcional@empresa.com",
+      "message": "Redacte su mensaje de itinerario…"
+    },
+    "sharingCount_one": "Compartiendo {{count}} salida",
+    "sharingCount_other": "Compartiendo {{count}} salidas",
+    "moreSailings_one": "+{{count}} salida más",
+    "moreSailings_other": "+{{count}} salidas más",
+    "validation": {
+      "toRequired": "El correo del destinatario es obligatorio",
+      "toInvalid": "Introduzca una dirección de correo válida (separe varias con comas)",
+      "ccInvalid": "Introduzca direcciones CC válidas (separe con comas)",
+      "subjectRequired": "El asunto es obligatorio",
+      "subjectMax": "El asunto debe tener 200 caracteres o menos",
+      "messageRequired": "El mensaje es obligatorio",
+      "messageMax": "El mensaje debe tener 4000 caracteres o menos"
+    },
+    "toasts": {
+      "success_one": "Itinerario enviado por correo correctamente ({{count}} destinatario).",
+      "success_other": "Itinerario enviado por correo correctamente ({{count}} destinatarios).",
+      "error": "No se pudo compartir el itinerario por correo. Inténtelo de nuevo."
+    },
+    "subjectTemplate": {
+      "single": "Itinerario de salida — {{vessel}} {{voyage}}{{bound}} ({{pol}} → {{pod}})",
+      "multiple": "Itinerarios de salida — {{count}} resultados ({{pol}} → {{pod}})",
+      "empty": "Itinerarios de salida"
+    },
+    "body": {
+      "hello": "Hola,",
+      "intro": "A continuación encontrará los detalles del itinerario.",
+      "sailingHeading": "Salida {{index}}: {{service}} — {{vessel}} ({{voyage}}{{bound}}){{recommended}}",
+      "recommendedSuffix": " · Ruta recomendada",
+      "service": "Servicio: {{value}}",
+      "lane": "Ruta: {{value}}",
+      "etd": "ETD: {{value}}",
+      "eta": "ETA: {{value}}",
+      "transit": "Tránsito: {{count}} días",
+      "routing": "Enrutamiento: {{value}}",
+      "gateIn": "Cierre gate-in: {{value}}",
+      "si": "Cierre SI: {{value}}",
+      "regards": "Saludos,",
+      "signature": "E-Com Portal"
+    }
+  }
 }

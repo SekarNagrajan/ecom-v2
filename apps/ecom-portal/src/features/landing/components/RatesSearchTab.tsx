@@ -13,8 +13,9 @@ import {
 import dayjs from "dayjs";
 import { useState } from "react";
 import { Controller, type UseFormReturn } from "react-hook-form";
-import { AppIcon, Icons } from "../../../components/icons";
+import { useTranslation } from "react-i18next";
 
+import { AppIcon, Icons } from "../../../components/icons";
 import { useEquipmentTypes, usePortSearch } from "../api/landing.queries";
 import type { RatesSearchForm } from "../types/landing.types";
 import { ImageCaptcha } from "./ImageCaptcha";
@@ -56,6 +57,7 @@ export function RatesSearchTab({
   onSubmit,
   isSearching = false,
 }: RatesSearchTabProps) {
+  const { t } = useTranslation(["landing", "common", "modules"]);
   const { token } = theme.useToken();
   const {
     control,
@@ -103,6 +105,7 @@ export function RatesSearchTab({
     display: "inline-block",
   };
   const asteriskStyle = { color: token.colorError };
+  const datePlaceholder = t("rates.datePlaceholder");
 
   return (
     <form id="rates-search-form" onSubmit={onSubmit} style={{ width: "100%" }}>
@@ -121,7 +124,7 @@ export function RatesSearchTab({
           }}
         >
           <label style={labelStyle}>
-            Origin <span style={asteriskStyle}>*</span>
+            {t("rates.origin")} <span style={asteriskStyle}>*</span>
           </label>
           <Controller
             control={control}
@@ -138,7 +141,7 @@ export function RatesSearchTab({
                 style={{ width: "100%" }}
               >
                 <Input
-                  placeholder="Singapore"
+                  placeholder={t("rates.originPlaceholder")}
                   style={inputStyle}
                   prefix={
                     <AppIcon
@@ -167,6 +170,8 @@ export function RatesSearchTab({
             icon={<AppIcon icon={Icons.arrowLeftRight} size={16} />}
             onClick={handleSwap}
             shape="circle"
+            aria-label={t("rates.swapAria")}
+            title={t("rates.swapAria")}
             style={{
               width: 36,
               height: 36,
@@ -185,7 +190,7 @@ export function RatesSearchTab({
           }}
         >
           <label style={labelStyle}>
-            Delivery <span style={asteriskStyle}>*</span>
+            {t("rates.delivery")} <span style={asteriskStyle}>*</span>
           </label>
           <Controller
             control={control}
@@ -202,7 +207,7 @@ export function RatesSearchTab({
                 style={{ width: "100%" }}
               >
                 <Input
-                  placeholder="Rotterdam"
+                  placeholder={t("rates.deliveryPlaceholder")}
                   style={inputStyle}
                   prefix={
                     <AppIcon
@@ -240,7 +245,7 @@ export function RatesSearchTab({
           }}
         >
           <label style={labelStyle}>
-            Equipment <span style={asteriskStyle}>*</span>
+            {t("rates.equipment")} <span style={asteriskStyle}>*</span>
           </label>
           {eqpLoading ? (
             <Skeleton.Input active style={{ width: "100%", height: 52 }} />
@@ -251,7 +256,7 @@ export function RatesSearchTab({
               render={({ field }) => (
                 <Select
                   {...field}
-                  placeholder="Select Type"
+                  placeholder={t("rates.selectType")}
                   options={eqpOptions}
                   style={{ width: "100%", ...inputStyle }}
                   status={errors.equipmentType ? "error" : undefined}
@@ -277,7 +282,7 @@ export function RatesSearchTab({
           }}
         >
           <label style={labelStyle}>
-            Date <span style={asteriskStyle}>*</span>
+            {t("rates.date")} <span style={asteriskStyle}>*</span>
           </label>
           <Controller
             control={control}
@@ -285,7 +290,7 @@ export function RatesSearchTab({
             render={({ field }) => (
               <DatePicker
                 format="MM/DD/YYYY"
-                placeholder="MM/DD/YYYY"
+                placeholder={datePlaceholder}
                 style={{ width: "100%", ...inputStyle }}
                 value={field.value ? dayjs(field.value) : null}
                 onChange={(date) =>
@@ -307,7 +312,7 @@ export function RatesSearchTab({
 
       <div style={{ marginBottom: 24 }}>
         <div style={{ margin: 0, display: "flex", flexDirection: "column" }}>
-          <label style={labelStyle}>Security Verification</label>
+          <label style={labelStyle}>{t("rates.securityVerification")}</label>
           <ImageCaptcha
             control={control}
             name="captcha"
@@ -333,7 +338,7 @@ export function RatesSearchTab({
             )
           }
         >
-          Get Rates
+          {t("rates.getRates")}
         </AppButton>
         <AppButton
           danger
@@ -342,9 +347,9 @@ export function RatesSearchTab({
           disabled={isSearching}
           icon={<AppIcon icon={Icons.refreshCw} size={16} tone="delete" />}
           onClick={handleReset}
-          aria-label="Reset rates search"
+          aria-label={t("a11y.resetRatesSearch")}
         >
-          Reset
+          {t("common:actions.reset")}
         </AppButton>
       </Flex>
     </form>

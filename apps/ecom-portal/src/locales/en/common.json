@@ -114,7 +114,8 @@
     "filter": "Filter",
     "yes": "Yes",
     "no": "No",
-    "ok": "OK"
+    "ok": "OK",
+    "backHome": "Back to Home"
   },
   "status": {
     "loading": "Loading...",

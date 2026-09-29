@@ -12,6 +12,7 @@ import {
 } from "antd";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import { checkCustomerCode, searchAddress } from "../api/registration.api";
@@ -40,6 +41,7 @@ function FieldLabel({
 }
 
 export function CompanyInfoStep() {
+  const { t } = useTranslation(["registration", "common"]);
   const {
     control,
     watch,
@@ -56,6 +58,21 @@ export function CompanyInfoStep() {
 
   const customerType = watch("customerType");
   const isExisting = customerType === "EXISTING";
+
+  const countryOptions = [
+    { value: "US", label: t("options.countries.US") },
+    { value: "GB", label: t("options.countries.GB") },
+    { value: "CA", label: t("options.countries.CA") },
+    { value: "IN", label: t("options.countries.IN") },
+    { value: "AU", label: t("options.countries.AU") },
+    { value: "SG", label: t("options.countries.SG") },
+  ];
+
+  const agencyOptions = [
+    { value: "AGENCY_US", label: t("options.agencies.AGENCY_US") },
+    { value: "AGENCY_GB", label: t("options.agencies.AGENCY_GB") },
+    { value: "AGENCY_SG", label: t("options.agencies.AGENCY_SG") },
+  ];
 
   const handleSearch = async (value: string) => {
     if (!value) {
@@ -91,7 +108,7 @@ export function CompanyInfoStep() {
       const data = await checkCustomerCode(code);
       if (data.valid) {
         clearErrors("customerCode");
-        toast.success("Customer code verified. Auto-filling details.");
+        toast.success(t("toasts.customerCodeVerified"));
         if (data.companyName) {
           setValue("companyName", data.companyName, { shouldValidate: true });
         }
@@ -107,13 +124,13 @@ export function CompanyInfoStep() {
       } else {
         setError("customerCode", {
           type: "manual",
-          message: "Invalid Customer Code",
+          message: t("validation.invalidCustomerCode"),
         });
       }
     } catch {
       setError("customerCode", {
         type: "manual",
-        message: "Error validating code",
+        message: t("validation.errorValidatingCode"),
       });
     } finally {
       setIsCheckingCode(false);
@@ -123,7 +140,7 @@ export function CompanyInfoStep() {
   const companyNameField = (
     <Col {...COL3}>
       <Flex vertical gap={8}>
-        <FieldLabel required>Company Name</FieldLabel>
+        <FieldLabel required>{t("company.companyName")}</FieldLabel>
         <Controller
           name="companyName"
           control={control}
@@ -140,7 +157,7 @@ export function CompanyInfoStep() {
               >
                 <Input
                   size="large"
-                  placeholder="Company Name"
+                  placeholder={t("company.companyName")}
                   status={errors.companyName ? "error" : undefined}
                 />
               </AutoComplete>
@@ -159,7 +176,7 @@ export function CompanyInfoStep() {
   const countryField = (
     <Col {...COL3}>
       <Flex vertical gap={8}>
-        <FieldLabel required>Country</FieldLabel>
+        <FieldLabel required>{t("company.country")}</FieldLabel>
         <Controller
           name="country"
           control={control}
@@ -169,17 +186,10 @@ export function CompanyInfoStep() {
                 {...field}
                 value={field.value || undefined}
                 size="large"
-                placeholder="Country"
+                placeholder={t("company.country")}
                 status={errors.country ? "error" : undefined}
                 className="reg-field-full"
-                options={[
-                  { value: "US", label: "United States" },
-                  { value: "GB", label: "United Kingdom" },
-                  { value: "CA", label: "Canada" },
-                  { value: "IN", label: "India" },
-                  { value: "AU", label: "Australia" },
-                  { value: "SG", label: "Singapore" },
-                ]}
+                options={countryOptions}
               />
               {errors.country ? (
                 <Text type="danger" className="form-field-error">
@@ -196,7 +206,7 @@ export function CompanyInfoStep() {
   const agencyField = (
     <Col {...COL3}>
       <Flex vertical gap={8}>
-        <FieldLabel required>Controlling Agency</FieldLabel>
+        <FieldLabel required>{t("company.controllingAgency")}</FieldLabel>
         <Controller
           name="location"
           control={control}
@@ -206,14 +216,10 @@ export function CompanyInfoStep() {
                 {...field}
                 value={field.value || undefined}
                 size="large"
-                placeholder="Controlling Agency"
+                placeholder={t("company.controllingAgency")}
                 status={errors.location ? "error" : undefined}
                 className="reg-field-full"
-                options={[
-                  { value: "AGENCY_US", label: "US Agency" },
-                  { value: "AGENCY_GB", label: "UK Agency" },
-                  { value: "AGENCY_SG", label: "Singapore Agency" },
-                ]}
+                options={agencyOptions}
               />
               {errors.location ? (
                 <Text type="danger" className="form-field-error">
@@ -230,7 +236,7 @@ export function CompanyInfoStep() {
   const cityField = (
     <Col {...COL3}>
       <Flex vertical gap={8}>
-        <FieldLabel required>City</FieldLabel>
+        <FieldLabel required>{t("company.city")}</FieldLabel>
         <Controller
           name="city"
           control={control}
@@ -239,7 +245,7 @@ export function CompanyInfoStep() {
               <Input
                 {...field}
                 size="large"
-                placeholder="City"
+                placeholder={t("company.city")}
                 status={errors.city ? "error" : undefined}
               />
               {errors.city ? (
@@ -257,12 +263,16 @@ export function CompanyInfoStep() {
   const postalField = (
     <Col {...COL3}>
       <Flex vertical gap={8}>
-        <FieldLabel>Postal Code</FieldLabel>
+        <FieldLabel>{t("company.postalCode")}</FieldLabel>
         <Controller
           name="postalCode"
           control={control}
           render={({ field }) => (
-            <Input {...field} size="large" placeholder="Postal Code" />
+            <Input
+              {...field}
+              size="large"
+              placeholder={t("company.postalCode")}
+            />
           )}
         />
       </Flex>
@@ -272,7 +282,7 @@ export function CompanyInfoStep() {
   const address1Field = (
     <Col {...COL3}>
       <Flex vertical gap={8}>
-        <FieldLabel required>Address 1</FieldLabel>
+        <FieldLabel required>{t("company.address1")}</FieldLabel>
         <Controller
           name="address1"
           control={control}
@@ -281,7 +291,7 @@ export function CompanyInfoStep() {
               <Input
                 {...field}
                 size="large"
-                placeholder="Address 1"
+                placeholder={t("company.address1")}
                 status={errors.address1 ? "error" : undefined}
               />
               {errors.address1 ? (
@@ -299,12 +309,16 @@ export function CompanyInfoStep() {
   const address2Field = (
     <Col {...COL3}>
       <Flex vertical gap={8}>
-        <FieldLabel>Address 2</FieldLabel>
+        <FieldLabel>{t("company.address2")}</FieldLabel>
         <Controller
           name="address2"
           control={control}
           render={({ field }) => (
-            <Input {...field} size="large" placeholder="Address 2" />
+            <Input
+              {...field}
+              size="large"
+              placeholder={t("company.address2")}
+            />
           )}
         />
       </Flex>
@@ -314,12 +328,16 @@ export function CompanyInfoStep() {
   const websiteField = (
     <Col {...COL3}>
       <Flex vertical gap={8}>
-        <FieldLabel>Website</FieldLabel>
+        <FieldLabel>{t("company.website")}</FieldLabel>
         <Controller
           name="companyDomain"
           control={control}
           render={({ field }) => (
-            <Input {...field} size="large" placeholder="Website" />
+            <Input
+              {...field}
+              size="large"
+              placeholder={t("company.website")}
+            />
           )}
         />
       </Flex>
@@ -329,7 +347,7 @@ export function CompanyInfoStep() {
   const recentBlField = (
     <Col {...COL3}>
       <Flex vertical gap={8}>
-        <FieldLabel>Recent BL/Booking number</FieldLabel>
+        <FieldLabel>{t("company.recentBl")}</FieldLabel>
         <Controller
           name="recentBL"
           control={control}
@@ -337,7 +355,7 @@ export function CompanyInfoStep() {
             <Input
               {...field}
               size="large"
-              placeholder="Recent BL/Booking number"
+              placeholder={t("company.recentBl")}
             />
           )}
         />
@@ -348,7 +366,7 @@ export function CompanyInfoStep() {
   const phoneField = (
     <Col {...COL3}>
       <Flex vertical gap={8}>
-        <FieldLabel required>Company Phone</FieldLabel>
+        <FieldLabel required>{t("company.companyPhone")}</FieldLabel>
         <Flex gap={8}>
           <Controller
             name="companyPhoneCountryCode"
@@ -357,7 +375,7 @@ export function CompanyInfoStep() {
               <Input
                 {...field}
                 size="large"
-                placeholder="+1"
+                placeholder={t("company.phoneCodePlaceholder")}
                 className="reg-phone-code"
               />
             )}
@@ -370,7 +388,7 @@ export function CompanyInfoStep() {
                 <Input
                   {...field}
                   size="large"
-                  placeholder="Phone"
+                  placeholder={t("company.phonePlaceholder")}
                   status={errors.companyPhoneNo ? "error" : undefined}
                 />
               </div>
@@ -393,8 +411,8 @@ export function CompanyInfoStep() {
         control={control}
         render={({ field }) => (
           <Radio.Group {...field} optionType="button" buttonStyle="solid">
-            <Radio value="NEW">New Customer</Radio>
-            <Radio value="EXISTING">Existing Customer</Radio>
+            <Radio value="NEW">{t("company.newCustomer")}</Radio>
+            <Radio value="EXISTING">{t("company.existingCustomer")}</Radio>
           </Radio.Group>
         )}
       />
@@ -405,7 +423,7 @@ export function CompanyInfoStep() {
           <Row gutter={[16, 12]}>
             <Col {...COL3}>
               <Flex vertical gap={8}>
-                <FieldLabel required>Customer Code</FieldLabel>
+                <FieldLabel required>{t("company.customerCode")}</FieldLabel>
                 <Controller
                   name="customerCode"
                   control={control}
@@ -414,7 +432,7 @@ export function CompanyInfoStep() {
                       <Input
                         {...field}
                         size="large"
-                        placeholder="Enter Customer Code"
+                        placeholder={t("company.customerCodePlaceholder")}
                         status={errors.customerCode ? "error" : undefined}
                         onBlur={(e) => {
                           field.onBlur();

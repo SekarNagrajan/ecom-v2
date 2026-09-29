@@ -3,5 +3,307 @@
   "exportingToast": "Exporting schedule results…",
   "searchEmptyTitle": "Search for sailings",
   "searchEmptyMessage": "Choose your search criteria and click Search Schedules to view available departures.",
-  "availableSailings": "Available Sailings"
+  "availableSailings": "Available Sailings",
+  "modes": {
+    "byRoute": "By Route",
+    "byVessel": "By Vessel",
+    "byPort": "By Port"
+  },
+  "search": {
+    "searchSchedules": "Search Schedules",
+    "resetAria": "Reset schedule search",
+    "originPort": "Origin Port (POL)",
+    "originShort": "Origin (POL)",
+    "originPlaceholder": "Where are you shipping from?",
+    "originPortAria": "Origin port",
+    "selectOrigin": "Select origin port",
+    "deliveryPort": "Delivery Port (POD)",
+    "deliveryShort": "Delivery (POD)",
+    "deliveryPlaceholder": "Where is cargo going?",
+    "deliveryPortAria": "Delivery port",
+    "selectDelivery": "Select delivery port",
+    "swapTooltip": "Swap Origin and Delivery",
+    "swapAria": "Swap origin and delivery ports",
+    "departureDateRange": "Departure Date Range",
+    "departureDateRangeAria": "Departure date range",
+    "vesselNameCode": "Vessel Name / Code",
+    "vesselPlaceholder": "Select vessel",
+    "vesselAria": "Vessel",
+    "selectVessel": "Select vessel",
+    "voyageDateRange": "Voyage Date Range",
+    "voyageDateRangeAria": "Voyage date range",
+    "portOfCall": "Port of Call",
+    "portOfCallPlaceholder": "Select port of call",
+    "portOfCallAria": "Port of call",
+    "selectPort": "Select port",
+    "arrivalDepartureWindow": "Arrival / Departure Window",
+    "arrivalDepartureWindowAria": "Arrival and departure window"
+  },
+  "filters": {
+    "originPort": "Origin Port",
+    "originPlaceholder": "Enter origin port",
+    "destinationPort": "Destination Port",
+    "destinationPlaceholder": "Enter destination port",
+    "searchVesselSchedules": "Search Vessel Schedules"
+  },
+  "options": {
+    "ports": {
+      "AEDXB": "AEDXB - Dubai",
+      "AEJEA": "AEJEA - Jebel Ali",
+      "CNSHA": "CNSHA - Shanghai",
+      "INMUN": "INMUN - Mundra",
+      "INNSA": "INNSA - Nhava Sheva",
+      "SGSIN": "SGSIN - Singapore"
+    },
+    "vessels": {
+      "AGEX": "AGEX - Antigravity Express",
+      "SMVY": "SMVY - Solverminds Voyager",
+      "GLHZ": "GLHZ - Global Horizon",
+      "OCPN": "OCPN - Ocean Pioneer",
+      "PCMR": "PCMR - Pacific Merchant",
+      "MRST": "MRST - Merchant Star",
+      "ATBR": "ATBR - Atlantic Bridge"
+    }
+  },
+  "viewModes": {
+    "aria": "Schedule view mode",
+    "list": "List",
+    "card": "Card",
+    "calendar": "Calendar"
+  },
+  "list": {
+    "columns": {
+      "vessel": "Vessel",
+      "voyage": "Voyage",
+      "service": "Service",
+      "origin": "Origin",
+      "pol": "POL",
+      "trans1": "Trans 1",
+      "trans2": "Trans 2",
+      "pod": "POD",
+      "delivery": "Delivery",
+      "type": "Type",
+      "etd": "ETD",
+      "eta": "ETA",
+      "transit": "Transit",
+      "gateIn": "Gate-in",
+      "si": "SI"
+    },
+    "direct": "Direct",
+    "stopCount_one": "{{count}} Stop",
+    "stopCount_other": "{{count}} Stops",
+    "recommendedLegend": "Recommended route"
+  },
+  "card": {
+    "road": "Road",
+    "route": "Route",
+    "departure": "Departure",
+    "arrival": "Arrival",
+    "cutoffs": "Cut-offs",
+    "gateIn": "Gate-In",
+    "gateInTooltip": "Container gate-in cut-off",
+    "siCutoff": "SI",
+    "siTooltip": "Shipping instruction cut-off",
+    "vgmCutoff": "VGM",
+    "vgmTooltip": "Verified Gross Mass cut-off",
+    "recommendedRoute": "Recommended route",
+    "searching": "Searching sailings…",
+    "etd": "ETD {{value}}",
+    "eta": "ETA {{value}}",
+    "terminal": "Terminal: {{name}}",
+    "days_one": "{{count}} day",
+    "days_other": "{{count}} days"
+  },
+  "calendar": {
+    "etd": "ETD",
+    "eta": "ETA",
+    "transit": "Transit",
+    "gateIn": "Gate-In",
+    "si": "SI",
+    "selectDayTitle": "Select a day",
+    "selectDayMessage": "Choose a day on the calendar to view sailings for that date.",
+    "noSailingsDayTitle": "No sailings on this day",
+    "noSailingsDayMessage": "Try another day or adjust your search criteria.",
+    "noSailingsMonthTitle": "No sailings this month",
+    "noSailingsMonthMessage": "Try a different month or change your search filters.",
+    "sailingsCount_one": "{{count}} sailing",
+    "sailingsCount_other": "{{count}} sailings",
+    "previousMonth": "Previous month",
+    "today": "Today",
+    "nextMonth": "Next month",
+    "daySailingsAria_one": "{{date}}, {{count}} sailing",
+    "daySailingsAria_other": "{{date}}, {{count}} sailings",
+    "more": "+{{count}} more",
+    "legendAria": "Calendar legend",
+    "legendDirect": "Direct",
+    "legendTransshipment": "Transshipment",
+    "legendRecommended": "Recommended"
+  },
+  "actions": {
+    "bookNow": "Book Now",
+    "getAQuote": "Get a Quote",
+    "co2Estimate": "CO₂ Estimate",
+    "vesselDetails": "Vessel Details",
+    "showDetails": "Show Details",
+    "closeDetails": "Close Details",
+    "sendEmail": "Send Email",
+    "downloadSpecsPdf": "Download Specs PDF",
+    "calculate": "Calculate"
+  },
+  "empty": {
+    "listTitle": "No sailings found",
+    "listMessage": "Try different ports, vessels, or date ranges.",
+    "cardTitle": "No sailings found",
+    "cardMessage": "Try adjusting your search criteria to find matching departures."
+  },
+  "a11y": {
+    "loading": "Loading",
+    "recommendedLegend": "Recommended route legend"
+  },
+  "details": {
+    "title": "Schedule Details: {{vessel}} ({{voyage}})",
+    "vesselAndService": "Vessel & Service",
+    "vesselName": "Vessel Name",
+    "voyageNumber": "Voyage Number",
+    "serviceCode": "Service Code",
+    "routingAndSchedule": "Routing & Schedule",
+    "originPort": "Origin Port",
+    "destinationPort": "Destination Port",
+    "polTerminal": "POL Terminal",
+    "estimatedDeparture": "Estimated Departure (ETD)",
+    "estimatedArrival": "Estimated Arrival (ETA)",
+    "transitDuration": "Transit Duration",
+    "transitDays": "{{count}} Days"
+  },
+  "vessel": {
+    "imoCallSign": "IMO: {{imo}} | Call Sign: {{callSign}}",
+    "specifications": "Vessel Specifications",
+    "portCallSequence": "Voyage Port Call Sequence",
+    "fields": {
+      "vesselCode": "Vessel Code",
+      "flag": "Flag",
+      "vesselType": "Vessel Type",
+      "operator": "Operator",
+      "owner": "Owner",
+      "builtYear": "Built Year",
+      "portOfRegistry": "Port of Registry",
+      "lengthOverall": "Length Overall",
+      "teuNominal": "TEU Nominal",
+      "grossTonnage": "Gross Tonnage",
+      "netTonnage": "Net Tonnage",
+      "imoLloyds": "IMO / Lloyd's"
+    },
+    "columns": {
+      "portCodeName": "Port Code & Name",
+      "terminal": "Terminal",
+      "status": "Status"
+    },
+    "status": {
+      "COMPLETED": "Completed",
+      "IN_PORT": "In Port",
+      "EXPECTED": "Expected"
+    }
+  },
+  "ratesModal": {
+    "title": "Freight Rates & Surcharge Estimator",
+    "routeBanner": "Route: {{pol}} → {{pod}} | Service: {{service}}",
+    "equipmentSelection": "Equipment Selection",
+    "eq20ft": "20 FT Standard",
+    "eq40ft": "40 FT Standard",
+    "eq40hc": "40 FT High Cube (HC)",
+    "reeferHint": "Reefer Temp Controlled",
+    "commodityName": "Commodity Name",
+    "commodityPlaceholder": "e.g. General Cargo, Electronics, Foodstuffs",
+    "breakdownTitle": "Estimated Rate Breakdown",
+    "totalLabel": "Total Estimated Freight (USD):",
+    "totalValue": "${{amount}} USD",
+    "columns": {
+      "chargeDescription": "Charge Description",
+      "rateUnit": "Rate / Unit",
+      "qtyCont": "Qty / Cont",
+      "subtotal": "Subtotal Amount"
+    },
+    "charges": {
+      "ofr20": "Ocean Freight - 20FT Standard Dry",
+      "ofr40": "Ocean Freight - 40FT Standard Dry",
+      "ofr40hc": "Ocean Freight - 40FT High Cube",
+      "baf": "BAF - Bunker Adjustment Factor",
+      "thc": "THC - Terminal Handling Charge (POL)"
+    }
+  },
+  "carbon": {
+    "title": "Carbon Footprint",
+    "subtitle": "Estimate CO₂e for this schedule voyage",
+    "cargoInputs": "Cargo inputs",
+    "cargoInputsAria": "Cargo inputs",
+    "containerQty": "Container quantity (TEU)",
+    "containerQtyAria": "Container quantity in TEU",
+    "cargoWeight": "Cargo weight (metric tons)",
+    "cargoWeightAria": "Cargo weight in metric tons",
+    "resultsAria": "Emission results",
+    "resultsTitle": "Estimated CO₂e breakdown",
+    "totalCo2e": "Total CO₂e",
+    "totalHint": "Combined lifecycle",
+    "tankToWheel": "Tank-to-wheel",
+    "tankToWheelHint": "Direct vessel burn",
+    "wellToTank": "Well-to-tank",
+    "wellToTankHint": "Upstream fuel production",
+    "tonsUnit": "tons",
+    "idleTitle": "Ready to estimate",
+    "idleHint": "Enter TEU and cargo weight, then calculate to see the CO₂e breakdown for this voyage.",
+    "methodologyAria": "Methodology notice",
+    "methodologyTitle": "Methodology",
+    "methodologyText": "Estimates follow GLEC and IMO guidance using 8.5 g CO₂ per tonne-km for ocean container vessels. Actual emissions may vary with weather, speed, and port congestion."
+  },
+  "shareMail": {
+    "title": "Share via Mail",
+    "to": "To",
+    "cc": "Cc",
+    "subject": "Subject",
+    "message": "Message",
+    "placeholders": {
+      "to": "recipient@company.com",
+      "cc": "optional@company.com",
+      "message": "Compose your sailing schedule message…"
+    },
+    "sharingCount_one": "Sharing {{count}} sailing",
+    "sharingCount_other": "Sharing {{count}} sailings",
+    "moreSailings_one": "+{{count}} more sailing",
+    "moreSailings_other": "+{{count}} more sailings",
+    "validation": {
+      "toRequired": "Recipient email is required",
+      "toInvalid": "Enter a valid email address (separate multiple with commas)",
+      "ccInvalid": "Enter valid CC email addresses (separate with commas)",
+      "subjectRequired": "Subject is required",
+      "subjectMax": "Subject must be 200 characters or fewer",
+      "messageRequired": "Message is required",
+      "messageMax": "Message must be 4000 characters or fewer"
+    },
+    "toasts": {
+      "success_one": "Schedule emailed successfully ({{count}} recipient).",
+      "success_other": "Schedule emailed successfully ({{count}} recipients).",
+      "error": "Failed to share sailing schedules by email. Please try again."
+    },
+    "subjectTemplate": {
+      "single": "Sailing schedule — {{vessel}} {{voyage}}{{bound}} ({{pol}} → {{pod}})",
+      "multiple": "Sailing schedules — {{count}} results ({{pol}} → {{pod}})",
+      "empty": "Sailing schedules"
+    },
+    "body": {
+      "hello": "Hello,",
+      "intro": "Please find the sailing schedule details below.",
+      "sailingHeading": "Sailing {{index}}: {{service}} — {{vessel}} ({{voyage}}{{bound}}){{recommended}}",
+      "recommendedSuffix": " · Recommended route",
+      "service": "Service: {{value}}",
+      "lane": "Lane: {{value}}",
+      "etd": "ETD: {{value}}",
+      "eta": "ETA: {{value}}",
+      "transit": "Transit: {{count}} days",
+      "routing": "Routing: {{value}}",
+      "gateIn": "Gate-in cut-off: {{value}}",
+      "si": "SI cut-off: {{value}}",
+      "regards": "Regards,",
+      "signature": "E-Com Portal"
+    }
+  }
 }

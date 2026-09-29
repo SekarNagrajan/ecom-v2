@@ -3,6 +3,7 @@ import { AppButton, AppTabs } from "@solverminds/shared-ui";
 import { DatePicker, Form, Select, Tooltip, Typography } from "antd";
 import dayjs from "dayjs";
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { usePortSearch } from "../../landing/api/landing.queries";
@@ -15,20 +16,15 @@ export type RateSearchMode =
   | "SERVICE_CONTRACTS"
   | "SPOT_QUOTES";
 
-const RATE_SEARCH_MODE_TABS: { key: RateSearchMode; label: string }[] = [
-  { key: "PUBLISHED_TARIFF", label: "Tariff" },
-  { key: "SURCHARGES", label: "Surcharge" },
-  { key: "SERVICE_CONTRACTS", label: "Service Contract" },
-  { key: "SPOT_QUOTES", label: "Request for Quote" },
-];
-
 /** Form.Item adapter: AppTabs uses activeKey, Ant Form passes value. */
 function RateSearchModeTabs({
   value,
   onChange,
+  items,
 }: {
   value?: RateSearchMode;
   onChange?: (mode: RateSearchMode) => void;
+  items: { key: RateSearchMode; label: string }[];
 }) {
   return (
     <AppTabs
@@ -36,41 +32,13 @@ function RateSearchModeTabs({
       size="large"
       activeKey={value ?? "PUBLISHED_TARIFF"}
       onChange={(key) => onChange?.(key as RateSearchMode)}
-      items={RATE_SEARCH_MODE_TABS.map((tab) => ({
+      items={items.map((tab) => ({
         key: tab.key,
         label: tab.label,
       }))}
     />
   );
 }
-
-const FALLBACK_PORTS = [
-  { value: "USNYC", label: "USNYC - New York, USA" },
-  { value: "SGSIN", label: "SGSIN - Singapore, Singapore" },
-  { value: "NLRTM", label: "NLRTM - Rotterdam, Netherlands" },
-  { value: "CNSHA", label: "CNSHA - Shanghai, China" },
-  { value: "DEHAM", label: "DEHAM - Hamburg, Germany" },
-  { value: "INNSA", label: "INNSA - Nhava Sheva, India" },
-  { value: "AEDXB", label: "AEDXB - Jebel Ali, UAE" },
-];
-
-const EQUIPMENT_TYPES = [
-  { value: "ALL", label: "All Equipment Types" },
-  { value: "20' Standard Dry", label: "20' Standard Dry (20DV)" },
-  { value: "40' High Cube Dry", label: "40' High Cube Dry (40HC)" },
-  { value: "40' Reefer Container", label: "40' Reefer Container (40RF)" },
-];
-
-const COMMODITIES = [
-  { value: "ALL", label: "All Commodities" },
-  { value: "GEN-CGO", label: "GEN-CGO - General Freight / Merchandise" },
-  {
-    value: "AUTO-PARTS",
-    label: "AUTO-PARTS - Automotive Spare Parts & Machinery",
-  },
-  { value: "PERISHABLE", label: "PERISHABLE - Chilled Agricultural Produce" },
-  { value: "TEXTILES", label: "TEXTILES - Textiles & Garments" },
-];
 
 export interface RateSearchParams {
   searchMode: RateSearchMode;
@@ -95,17 +63,20 @@ function SearchActionsLabel() {
   return <span className="rates-search-actions-label">&nbsp;</span>;
 }
 
-function usePortSelectOptions(initialQuery = "") {
+function usePortSelectOptions(
+  initialQuery = "",
+  fallbackPorts: { value: string; label: string }[],
+) {
   const [query, setQuery] = useState(initialQuery);
   const { data: ports = [], isFetching } = usePortSearch(query);
 
   const options = useMemo(() => {
-    if (ports.length === 0) return FALLBACK_PORTS;
+    if (ports.length === 0) return fallbackPorts;
     return ports.map((p) => ({
       value: p.portCode,
       label: `${p.portCode} - ${p.portName}`,
     }));
-  }, [ports]);
+  }, [ports, fallbackPorts]);
 
   return { query, setQuery, options, isFetching };
 }
@@ -117,12 +88,58 @@ export function RateSearchFilter({
   isLoading,
   onRequestQuote,
 }: RateSearchFilterProps) {
+  const { t } = useTranslation(["rates", "common", "modules"]);
   const [form] = Form.useForm();
   const searchMode: RateSearchMode =
     Form.useWatch("searchMode", form) || "PUBLISHED_TARIFF";
 
-  const polAC = usePortSelectOptions("USNYC");
-  const podAC = usePortSelectOptions("SGSIN");
+  const rateSearchModeTabs = useMemo(
+    () =>
+      [
+        { key: "PUBLISHED_TARIFF" as const, label: t("modes.tariff") },
+        { key: "SURCHARGES" as const, label: t("modes.surcharge") },
+        { key: "SERVICE_CONTRACTS" as const, label: t("modes.serviceContract") },
+        { key: "SPOT_QUOTES" as const, label: t("modes.requestForQuote") },
+      ] satisfies { key: RateSearchMode; label: string }[],
+    [t],
+  );
+
+  const fallbackPorts = useMemo(
+    () => [
+      { value: "USNYC", label: t("options.ports.USNYC") },
+      { value: "SGSIN", label: t("options.ports.SGSIN") },
+      { value: "NLRTM", label: t("options.ports.NLRTM") },
+      { value: "CNSHA", label: t("options.ports.CNSHA") },
+      { value: "DEHAM", label: t("options.ports.DEHAM") },
+      { value: "INNSA", label: t("options.ports.INNSA") },
+      { value: "AEDXB", label: t("options.ports.AEDXB") },
+    ],
+    [t],
+  );
+
+  const equipmentTypes = useMemo(
+    () => [
+      { value: "ALL", label: t("options.equipment.all") },
+      { value: "20' Standard Dry", label: t("options.equipment.20dv") },
+      { value: "40' High Cube Dry", label: t("options.equipment.40hc") },
+      { value: "40' Reefer Container", label: t("options.equipment.40rf") },
+    ],
+    [t],
+  );
+
+  const commodities = useMemo(
+    () => [
+      { value: "ALL", label: t("options.commodity.all") },
+      { value: "GEN-CGO", label: t("options.commodity.genCgo") },
+      { value: "AUTO-PARTS", label: t("options.commodity.autoParts") },
+      { value: "PERISHABLE", label: t("options.commodity.perishable") },
+      { value: "TEXTILES", label: t("options.commodity.textiles") },
+    ],
+    [t],
+  );
+
+  const polAC = usePortSelectOptions("USNYC", fallbackPorts);
+  const podAC = usePortSelectOptions("SGSIN", fallbackPorts);
 
   const showCommodity =
     searchMode === "PUBLISHED_TARIFF" ||
@@ -192,7 +209,7 @@ export function RateSearchFilter({
         >
           <div className="rates-search-mode-wrap custom-scroll">
             <Form.Item name="searchMode" className="rates-search-mode-field">
-              <RateSearchModeTabs />
+              <RateSearchModeTabs items={rateSearchModeTabs} />
             </Form.Item>
           </div>
 
@@ -202,21 +219,23 @@ export function RateSearchFilter({
                 name="polCode"
                 label={
                   <span className="form-field-label rates-port-label">
-                    Origin Port (POL) <Text type="danger">*</Text>
+                    {t("search.originPort")} <Text type="danger">*</Text>
                   </span>
                 }
-                rules={[{ required: true, message: "Select origin port" }]}
+                rules={[{ required: true, message: t("search.selectOrigin") }]}
               >
                 <Select
                   size="large"
                   showSearch
-                  placeholder="Where are you shipping from?"
+                  placeholder={t("search.originPlaceholder")}
                   filterOption={false}
                   onSearch={polAC.setQuery}
                   options={polAC.options}
                   loading={polAC.isFetching}
                   notFoundContent={
-                    polAC.isFetching ? "Searching ports…" : "No ports found"
+                    polAC.isFetching
+                      ? t("search.searchingPorts")
+                      : t("search.noPortsFound")
                   }
                 />
               </Form.Item>
@@ -228,14 +247,14 @@ export function RateSearchFilter({
                 className="rates-search-swap-field"
               >
                 <div className="rates-port-swap">
-                  <Tooltip title="Swap Origin and Delivery">
+                  <Tooltip title={t("search.swapTooltip")}>
                     <AppButton
                       type="default"
                       size="large"
                       shape="circle"
                       icon={<AppIcon icon={Icons.arrowLeftRight} size={16} />}
                       onClick={handleSwapPorts}
-                      aria-label="Swap origin and delivery ports"
+                      aria-label={t("search.swapAria")}
                     />
                   </Tooltip>
                 </div>
@@ -247,21 +266,23 @@ export function RateSearchFilter({
                 name="podCode"
                 label={
                   <span className="form-field-label rates-port-label">
-                    Delivery Port (POD) <Text type="danger">*</Text>
+                    {t("search.deliveryPort")} <Text type="danger">*</Text>
                   </span>
                 }
-                rules={[{ required: true, message: "Select delivery port" }]}
+                rules={[{ required: true, message: t("search.selectDelivery") }]}
               >
                 <Select
                   size="large"
                   showSearch
-                  placeholder="Where is cargo going?"
+                  placeholder={t("search.deliveryPlaceholder")}
                   filterOption={false}
                   onSearch={podAC.setQuery}
                   options={podAC.options}
                   loading={podAC.isFetching}
                   notFoundContent={
-                    podAC.isFetching ? "Searching ports…" : "No ports found"
+                    podAC.isFetching
+                      ? t("search.searchingPorts")
+                      : t("search.noPortsFound")
                   }
                 />
               </Form.Item>
@@ -273,11 +294,11 @@ export function RateSearchFilter({
                   name="eqpType"
                   label={
                     <span className="form-field-label rates-port-label">
-                      Equipment Type
+                      {t("search.equipmentType")}
                     </span>
                   }
                 >
-                  <Select size="large" options={EQUIPMENT_TYPES} />
+                  <Select size="large" options={equipmentTypes} />
                 </Form.Item>
               </div>
             ) : null}
@@ -286,9 +307,13 @@ export function RateSearchFilter({
               <div className="rates-search-field rates-search-field--commodity">
                 <Form.Item
                   name="commodity"
-                  label={<span className="form-field-label">Commodity</span>}
+                  label={
+                    <span className="form-field-label">
+                      {t("search.commodity")}
+                    </span>
+                  }
                 >
-                  <Select size="large" options={COMMODITIES} />
+                  <Select size="large" options={commodities} />
                 </Form.Item>
               </div>
             ) : null}
@@ -300,7 +325,7 @@ export function RateSearchFilter({
                     name="shipmentDate"
                     label={
                       <span className="form-field-label rates-port-label">
-                        Shipment Date
+                        {t("search.shipmentDate")}
                       </span>
                     }
                   >
@@ -316,7 +341,7 @@ export function RateSearchFilter({
                     name="toDate"
                     label={
                       <span className="form-field-label rates-port-label">
-                        Valid Through
+                        {t("search.validThrough")}
                       </span>
                     }
                   >
@@ -356,7 +381,7 @@ export function RateSearchFilter({
                           });
                       }}
                     >
-                      Request for Quote
+                      {t("actions.requestForQuote")}
                     </AppButton>
                   ) : (
                     <AppButton
@@ -366,7 +391,7 @@ export function RateSearchFilter({
                       loading={isLoading}
                       htmlType="submit"
                     >
-                      Search
+                      {t("common:actions.search")}
                     </AppButton>
                   )}
                   {!isRfqMode ? (
@@ -382,7 +407,7 @@ export function RateSearchFilter({
                       }
                       onClick={handleReset}
                     >
-                      Reset
+                      {t("common:actions.reset")}
                     </AppButton>
                   ) : (
                     <>
@@ -392,7 +417,7 @@ export function RateSearchFilter({
                         loading={isLoading}
                         htmlType="submit"
                       >
-                        View Quotes
+                        {t("actions.viewQuotes")}
                       </AppButton>
                       <AppButton
                         size="large"
@@ -406,7 +431,7 @@ export function RateSearchFilter({
                         }
                         onClick={handleReset}
                       >
-                        Reset
+                        {t("common:actions.reset")}
                       </AppButton>
                     </>
                   )}

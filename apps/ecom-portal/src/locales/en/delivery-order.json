@@ -1,0 +1,74 @@
+{
+  "subtitle": "Filter by date range, review POL to POD routing, and print delivery order documents.",
+  "search": {
+    "fromDate": "From Date",
+    "toDate": "To Date",
+    "show": "Show"
+  },
+  "columns": {
+    "doNo": "DO No",
+    "doDate": "DO Date",
+    "blNumber": "B/L Number",
+    "vessel": "Vessel",
+    "voyage": "Voyage",
+    "pol": "POL",
+    "pod": "POD",
+    "terminal": "Terminal",
+    "arrival": "Arrival",
+    "validTill": "Valid Till",
+    "status": "Status"
+  },
+  "actions": {
+    "viewDetails": "View Details",
+    "printDeliveryOrder": "Print Delivery Order",
+    "downloadPdf": "Download PDF",
+    "copyDoNumber": "Copy DO number",
+    "copied": "Copied"
+  },
+  "empty": {
+    "loadErrorTitle": "Couldn't load delivery orders",
+    "loadErrorMessage": "The request didn't complete. Check your connection and try again.",
+    "noResultsTitle": "No delivery orders match your search",
+    "noResultsMessage": "Nothing came back for this date range. Widen the dates or clear the filters to see more results."
+  },
+  "errors": {
+    "download": "Failed to download Delivery Order."
+  },
+  "toasts": {
+    "documentDownloaded": "Delivery Order {{delOrdNo}} downloaded."
+  },
+  "status": {
+    "printed": "Printed",
+    "notPrinted": "Not Printed"
+  },
+  "validation": {
+    "fromDateRequired": "From date is required",
+    "toDateRequired": "To date is required",
+    "fromBeforeTo": "From date must be on or before To date"
+  },
+  "drawer": {
+    "blPrefix": "B/L:",
+    "routeEyebrow": "Port to Port",
+    "origin": "Origin",
+    "delivery": "Delivery",
+    "sections": {
+      "details": "Delivery Order Details",
+      "shipment": "Shipment Details"
+    },
+    "labels": {
+      "doNumber": "DO Number",
+      "doDate": "DO Date",
+      "validUntil": "Valid Until",
+      "printStatus": "Print Status",
+      "blNumber": "B/L Number",
+      "terminal": "Terminal",
+      "vessel": "Vessel",
+      "voyage": "Voyage",
+      "bound": "Bound",
+      "arrivalDate": "Arrival Date"
+    },
+    "alerts": {
+      "validUntil": "This delivery order is valid until <date/>."
+    }
+  }
+}

@@ -10,6 +10,7 @@ import { useAppConfig } from "@solverminds/shared-ui/hooks";
 import { Flex, Input, InputNumber, theme, Typography } from "antd";
 import { DateTime } from "luxon";
 import { useState, type ChangeEvent, type CSSProperties } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import type { SpreadsheetImportFieldDefinition } from "../types/import-workbench.types";
@@ -87,8 +88,12 @@ function BulkFixValueField<TValues extends object>({
   onChange: (nextValue: string) => void;
   value: string;
 }) {
+  const { t } = useTranslation(["import-workbench", "common"]);
   const { formattingRegion, currency, currencyDisplay } = useAppConfig();
   const controlStyle: CSSProperties = { width: "100%" };
+  const clearOption = allowEmptyValue
+    ? [{ label: t("bulkFix.options.clearValue"), value: "" }]
+    : [];
 
   if (field.kind === "select") {
     const handleSelectChange = (nextValue: unknown) => {
@@ -101,12 +106,11 @@ function BulkFixValueField<TValues extends object>({
       <AppSelect
         style={controlStyle}
         value={value || undefined}
-        options={[
-          ...(allowEmptyValue ? [{ label: "Clear value", value: "" }] : []),
-          ...(field.options ?? []),
-        ]}
+        options={[...clearOption, ...(field.options ?? [])]}
         onChange={handleSelectChange}
-        placeholder={`Select ${field.label}`}
+        placeholder={t("bulkFix.placeholders.selectField", {
+          field: field.label,
+        })}
       />
     );
   }
@@ -123,12 +127,14 @@ function BulkFixValueField<TValues extends object>({
         style={controlStyle}
         value={value || undefined}
         options={[
-          ...(allowEmptyValue ? [{ label: "Clear value", value: "" }] : []),
-          { label: "Yes", value: "true" },
-          { label: "No", value: "false" },
+          ...clearOption,
+          { label: t("common:actions.yes"), value: "true" },
+          { label: t("common:actions.no"), value: "false" },
         ]}
         onChange={handleBooleanChange}
-        placeholder={`Select ${field.label}`}
+        placeholder={t("bulkFix.placeholders.selectField", {
+          field: field.label,
+        })}
       />
     );
   }
@@ -182,7 +188,11 @@ function BulkFixValueField<TValues extends object>({
         size="large"
         stringMode
         value={value || null}
-        placeholder={isCurrency ? "Enter amount" : `Enter ${field.label}`}
+        placeholder={
+          isCurrency
+            ? t("bulkFix.placeholders.enterAmount")
+            : t("bulkFix.placeholders.enterField", { field: field.label })
+        }
         formatter={(nextValue) => {
           const normalizedValue = String(nextValue ?? "").trim();
 
@@ -221,7 +231,9 @@ function BulkFixValueField<TValues extends object>({
       type="text"
       value={value}
       onChange={handleTextChange}
-      placeholder={`Enter ${field.label}`}
+      placeholder={t("bulkFix.placeholders.enterField", {
+        field: field.label,
+      })}
       allowClear
     />
   );
@@ -234,6 +246,8 @@ function BulkPhoneCountryCodeField({
   onChange: (nextValue: string) => void;
   value: string;
 }) {
+  const { t } = useTranslation(["import-workbench", "common"]);
+
   const handleSelectChange = (nextValue: unknown) => {
     if (typeof nextValue === "string") {
       onChange(nextValue);
@@ -245,7 +259,7 @@ function BulkPhoneCountryCodeField({
       style={{ width: "100%" }}
       value={value || undefined}
       onChange={handleSelectChange}
-      placeholder="Select country code"
+      placeholder={t("bulkFix.placeholders.selectCountryCode")}
     />
   );
 }
@@ -320,6 +334,7 @@ export function ImportBulkFixModal<TValues extends object>({
   onClose,
   open,
 }: ImportBulkFixModalProps<TValues>) {
+  const { t } = useTranslation(["import-workbench", "common"]);
   const { token } = theme.useToken();
   const [replacementValue, setReplacementValue] = useState("");
   const allowEmptyValue = !field.required && mode !== "countryCode";
@@ -338,38 +353,38 @@ export function ImportBulkFixModal<TValues extends object>({
 
   const modeLabel =
     mode === "invalid"
-      ? "Replace Invalid Values"
+      ? t("bulkFix.modes.invalid")
       : mode === "countryCode"
-      ? "Add Country Code"
-      : "Fill Empty Values";
+        ? t("bulkFix.modes.countryCode")
+        : t("bulkFix.modes.empty");
 
   const modeIcon =
     mode === "invalid"
       ? Icons.alertTriangle
       : mode === "countryCode"
-      ? Icons.phone
-      : Icons.formInput;
+        ? Icons.phone
+        : Icons.formInput;
 
   const scopeDescription =
     mode === "invalid"
-      ? "Only cells that currently fail validation for this column will change. Blank cells are left alone."
+      ? t("bulkFix.descriptions.invalid")
       : mode === "countryCode"
-      ? "Only phone numbers missing a country code will be updated when they can be normalized."
-      : "Only blank cells in this column will change. Existing values stay untouched.";
+        ? t("bulkFix.descriptions.countryCode")
+        : t("bulkFix.descriptions.empty");
 
   const valueFieldLabel =
     mode === "countryCode"
-      ? "Country code"
+      ? t("bulkFix.labels.countryCode")
       : mode === "invalid"
-      ? `Replacement value for ${field.label}`
-      : `Value to fill into empty ${field.label} cells`;
+        ? t("bulkFix.labels.replacementFor", { field: field.label })
+        : t("bulkFix.labels.fillInto", { field: field.label });
 
   const applyLabel =
     mode === "invalid"
-      ? `Replace ${affectedCount} cell${affectedCount === 1 ? "" : "s"}`
+      ? t("bulkFix.apply.replaceCells", { count: affectedCount })
       : mode === "countryCode"
-      ? `Update ${affectedCount} number${affectedCount === 1 ? "" : "s"}`
-      : `Fill ${affectedCount} cell${affectedCount === 1 ? "" : "s"}`;
+        ? t("bulkFix.apply.updateNumbers", { count: affectedCount })
+        : t("bulkFix.apply.fillCells", { count: affectedCount });
 
   const handleApply = () => {
     if (mode === "countryCode" && replacementValue.trim()) {
@@ -385,8 +400,9 @@ export function ImportBulkFixModal<TValues extends object>({
   const missingCountryCodeCount =
     issueCodeCounts?.get(PHONE_MISSING_COUNTRY_CODE_ISSUE_CODE) ?? 0;
   const invalidPhoneCount = issueCodeCounts?.get(PHONE_INVALID_ISSUE_CODE) ?? 0;
-  const formatHint = getSpreadsheetImportFormatHint(field);
-  const valueTypeLabel = mode === "countryCode" ? "Phone (E.164)" : field.kind;
+  const formatHint = getSpreadsheetImportFormatHint(field, t);
+  const valueTypeLabel =
+    mode === "countryCode" ? t("bulkFix.labels.phoneE164") : field.kind;
 
   return (
     <AppModal
@@ -402,7 +418,7 @@ export function ImportBulkFixModal<TValues extends object>({
       destroyOnHidden
       footer={
         <Flex justify="end" gap={token.marginSM} style={{ width: "100%" }}>
-          <AppButton onClick={onClose}>Cancel</AppButton>
+          <AppButton onClick={onClose}>{t("common:actions.cancel")}</AppButton>
           <AppButton type="primary" onClick={handleApply} disabled={!canApply}>
             {applyLabel}
           </AppButton>
@@ -434,7 +450,7 @@ export function ImportBulkFixModal<TValues extends object>({
                   fontSize: token.fontSizeSM,
                 }}
               >
-                {field.required ? "Required" : "Optional"}
+                {field.required ? t("badges.required") : t("badges.optional")}
               </Typography.Text>
             </Flex>
             <Typography.Paragraph
@@ -448,34 +464,43 @@ export function ImportBulkFixModal<TValues extends object>({
 
         <Flex gap={token.marginSM} wrap>
           <MetaChip
-            label="Matching cells"
+            label={t("bulkFix.labels.matchingCells")}
             value={affectedCount}
             tone={
               mode === "invalid"
                 ? "error"
                 : mode === "empty"
-                ? "warning"
-                : "default"
+                  ? "warning"
+                  : "default"
             }
           />
-          <MetaChip label="Value type" value={valueTypeLabel} />
-          {formatHint ? <MetaChip label="Format" value={formatHint} /> : null}
+          <MetaChip
+            label={t("bulkFix.labels.valueType")}
+            value={valueTypeLabel}
+          />
+          {formatHint ? (
+            <MetaChip label={t("bulkFix.labels.format")} value={formatHint} />
+          ) : null}
         </Flex>
 
         {field.valueFormat === "phone-e164" ? (
           <Flex gap={token.marginSM} wrap>
             <MetaChip
-              label="Missing country code"
+              label={t("bulkFix.labels.missingCountryCode")}
               value={missingCountryCodeCount}
               tone="warning"
             />
             <MetaChip
               icon={Icons.alertTriangle}
-              label="Other invalid phones"
+              label={t("bulkFix.labels.otherInvalidPhones")}
               value={invalidPhoneCount}
               tone="error"
             />
-            <MetaChip icon={Icons.formInput} label="Empty" value={emptyCount} />
+            <MetaChip
+              icon={Icons.formInput}
+              label={t("bulkFix.labels.empty")}
+              value={emptyCount}
+            />
           </Flex>
         ) : null}
 
@@ -499,7 +524,7 @@ export function ImportBulkFixModal<TValues extends object>({
               type="secondary"
               style={{ fontSize: token.fontSizeSM }}
             >
-              Leave blank to clear this optional field in matching cells.
+              {t("bulkFix.hints.clearOptional")}
             </Typography.Text>
           ) : null}
           {mode === "countryCode" ? (
@@ -507,8 +532,7 @@ export function ImportBulkFixModal<TValues extends object>({
               type="secondary"
               style={{ fontSize: token.fontSizeSM }}
             >
-              Choose a country and matching numbers will convert to
-              international format.
+              {t("bulkFix.hints.countryCodeConvert")}
             </Typography.Text>
           ) : null}
           {!canApply && affectedCount > 0 ? (
@@ -516,7 +540,9 @@ export function ImportBulkFixModal<TValues extends object>({
               type="secondary"
               style={{ fontSize: token.fontSizeSM, color: token.colorWarning }}
             >
-              Enter a valid {field.label.toLowerCase()} to enable apply.
+              {t("bulkFix.hints.enterValid", {
+                field: field.label.toLowerCase(),
+              })}
             </Typography.Text>
           ) : null}
         </Flex>

@@ -1,29 +1,32 @@
+import type { TFunction } from "i18next";
 import {
   parsePhoneNumberFromString,
   type CountryCode,
-} from 'libphonenumber-js/min';
+} from "libphonenumber-js/min";
 
 export const PHONE_MISSING_COUNTRY_CODE_ISSUE_CODE =
-  'phone_missing_country_code';
-export const PHONE_INVALID_ISSUE_CODE = 'phone_invalid';
+  "phone_missing_country_code";
+export const PHONE_INVALID_ISSUE_CODE = "phone_invalid";
+
+type PhoneTranslateFn = TFunction<"import-workbench"> | ((key: string) => string);
 
 export function normalizePhoneImportCandidate(value: string) {
   const trimmedValue = value.trim();
 
   if (!trimmedValue) {
-    return '';
+    return "";
   }
 
-  return trimmedValue.startsWith('00')
+  return trimmedValue.startsWith("00")
     ? `+${trimmedValue.slice(2)}`
     : trimmedValue;
 }
 
 export function normalizeImportedPhoneValue(value: unknown) {
-  const normalizedValue = normalizePhoneImportCandidate(String(value ?? ''));
+  const normalizedValue = normalizePhoneImportCandidate(String(value ?? ""));
 
   if (!normalizedValue) {
-    return '';
+    return "";
   }
 
   const phone = parsePhoneNumberFromString(normalizedValue);
@@ -37,11 +40,11 @@ export function normalizeImportedPhoneValue(value: unknown) {
 
 export function applyPhoneCountryCode(
   value: string,
-  countryCode: CountryCode
+  countryCode: CountryCode,
 ): string | null {
   const normalizedValue = normalizePhoneImportCandidate(value);
 
-  if (!normalizedValue || normalizedValue.startsWith('+')) {
+  if (!normalizedValue || normalizedValue.startsWith("+")) {
     return null;
   }
 
@@ -58,30 +61,31 @@ export function getPhoneImportValidationIssue(
   value: string,
   options: {
     required: boolean;
-  }
+    t: PhoneTranslateFn;
+  },
 ) {
+  const { t } = options;
   const normalizedValue = normalizePhoneImportCandidate(value);
 
   if (!normalizedValue) {
     return options.required
       ? {
-          message: 'Phone number is required',
+          message: t("phone.required"),
         }
       : null;
   }
 
-  if (!normalizedValue.startsWith('+')) {
-    if (normalizedValue.replace(/\D/g, '').length === 0) {
+  if (!normalizedValue.startsWith("+")) {
+    if (normalizedValue.replace(/\D/g, "").length === 0) {
       return {
         code: PHONE_INVALID_ISSUE_CODE,
-        message: 'Invalid phone number',
+        message: t("phone.invalid"),
       };
     }
 
     return {
       code: PHONE_MISSING_COUNTRY_CODE_ISSUE_CODE,
-      message:
-        'Country code is required. Use international format like +919876543210.',
+      message: t("phone.countryCodeRequired"),
     };
   }
 
@@ -90,7 +94,7 @@ export function getPhoneImportValidationIssue(
   if (!phone?.isPossible() || !phone.isValid()) {
     return {
       code: PHONE_INVALID_ISSUE_CODE,
-      message: 'Invalid phone number',
+      message: t("phone.invalid"),
     };
   }
 

@@ -3,6 +3,7 @@ import { AppButton } from "@solverminds/shared-ui";
 import { Segmented, Space, Tag, Tooltip, Typography } from "antd";
 import dayjs, { type Dayjs } from "dayjs";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { NavVesselIcon } from "../../../components/icons/nav-svg-icons";
@@ -29,7 +30,15 @@ import {
 
 const { Text, Title } = Typography;
 
-const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] as const;
+const WEEKDAY_KEYS = [
+  "sun",
+  "mon",
+  "tue",
+  "wed",
+  "thu",
+  "fri",
+  "sat",
+] as const;
 
 interface ScheduleCalendarViewProps {
   schedules: ScheduleItem[];
@@ -68,10 +77,12 @@ function ScheduleCalendarActions({
   onViewRates: (schedule: ScheduleItem) => void;
   onOpenCarbonModal: (schedule: ScheduleItem) => void;
 }) {
+  const { t } = useTranslation(["schedules", "common", "modules"]);
+
   return (
     <ListActionsRow>
       <ListActionButton
-        title="Book Now"
+        title={t("actions.bookNow")}
         icon={<AppIcon icon={Icons.plus} size={16} tone="create" />}
         tone="create"
         disabled={!schedule.bookingAllowed}
@@ -81,7 +92,7 @@ function ScheduleCalendarActions({
         }}
       />
       <ListActionButton
-        title="Get a Quote"
+        title={t("actions.getAQuote")}
         icon={<AppIcon icon={Icons.fileText} size={16} tone="navigate" />}
         tone="navigate"
         onClick={(e) => {
@@ -90,7 +101,7 @@ function ScheduleCalendarActions({
         }}
       />
       <ListActionButton
-        title="CO₂ Estimate"
+        title={t("actions.co2Estimate")}
         icon={<AppIcon icon={Icons.calculator} size={16} tone="track" />}
         tone="track"
         onClick={(e) => {
@@ -99,7 +110,7 @@ function ScheduleCalendarActions({
         }}
       />
       <ListActionButton
-        title="Vessel Details"
+        title={t("actions.vesselDetails")}
         icon={<AppIcon icon={NavVesselIcon} size={16} tone="view" />}
         tone="view"
         onClick={(e) => {
@@ -130,6 +141,7 @@ function ScheduleDaySailingCard({
   onViewRates: (schedule: ScheduleItem) => void;
   onOpenCarbonModal: (schedule: ScheduleItem) => void;
 }) {
+  const { t } = useTranslation(["schedules", "common", "modules"]);
   const anchorTime = getScheduleAnchorTime(schedule, dateAnchor);
 
   return (
@@ -180,32 +192,32 @@ function ScheduleDaySailingCard({
 
       <div className="schedule-calendar-day-card__times">
         <span>
-          <Text type="secondary">ETD </Text>
+          <Text type="secondary">{t("calendar.etd")} </Text>
           {schedule.etd}
         </span>
         <span>
-          <Text type="secondary">ETA </Text>
+          <Text type="secondary">{t("calendar.eta")} </Text>
           {schedule.eta}
         </span>
         <span>
-          <Text type="secondary">Transit </Text>
-          {schedule.transitTimeDays} days
+          <Text type="secondary">{t("calendar.transit")} </Text>
+          {t("card.days", { count: schedule.transitTimeDays })}
         </span>
       </div>
 
       <div className="schedule-calendar-day-card__cutoffs">
         <span>
-          <Text type="secondary">Gate-in </Text>
+          <Text type="secondary">{t("calendar.gateIn")} </Text>
           {formatCutoffValue(schedule.deadlines?.containerGateIn)}
         </span>
         <span>
-          <Text type="secondary">SI </Text>
+          <Text type="secondary">{t("calendar.si")} </Text>
           {formatCutoffValue(schedule.deadlines?.siDocClosing)}
         </span>
       </div>
 
       <div className="schedule-calendar-day-card__footer">
-        <ScheduleListRoutingCell record={schedule} />
+        <ScheduleListRoutingCell record={schedule} t={t} />
         <ScheduleCalendarActions
           schedule={schedule}
           onBookNow={onBookNow}
@@ -239,14 +251,16 @@ function ScheduleDayPanel({
   onViewRates: (schedule: ScheduleItem) => void;
   onOpenCarbonModal: (schedule: ScheduleItem) => void;
 }) {
+  const { t } = useTranslation(["schedules", "common", "modules"]);
+
   if (!selectedDate) {
     return (
       <aside className="schedule-calendar-day-panel">
         <div className="schedule-calendar-day-panel__empty">
           <ModuleEmptyState
             variant="blank"
-            title="Select a day"
-            message="Choose a calendar day to review sailings, cut-offs, and booking actions."
+            title={t("calendar.selectDayTitle")}
+            message={t("calendar.selectDayMessage")}
             artSize="sm"
           />
         </div>
@@ -261,7 +275,7 @@ function ScheduleDayPanel({
           {dayjs(selectedDate).format("ddd, MMM D, YYYY")}
         </Title>
         <Text type="secondary">
-          {sailings.length} sailing{sailings.length === 1 ? "" : "s"} ·{" "}
+          {t("calendar.sailingsCount", { count: sailings.length })} ·{" "}
           {dateAnchor.toUpperCase()}
         </Text>
       </div>
@@ -269,8 +283,8 @@ function ScheduleDayPanel({
         {sailings.length === 0 ? (
           <ModuleEmptyState
             variant="filtered"
-            title="No sailings this day"
-            message="Try another day or switch between ETD and ETA."
+            title={t("calendar.noSailingsDayTitle")}
+            message={t("calendar.noSailingsDayMessage")}
             artSize="sm"
           />
         ) : (
@@ -316,13 +330,15 @@ function ScheduleAgendaView({
   onViewRates: (schedule: ScheduleItem) => void;
   onOpenCarbonModal: (schedule: ScheduleItem) => void;
 }) {
+  const { t } = useTranslation(["schedules", "common", "modules"]);
+
   if (groups.length === 0) {
     return (
       <div className="schedule-empty">
         <ModuleEmptyState
           variant="filtered"
-          title="No sailings this month"
-          message="No sailings match your search for the selected month and date type."
+          title={t("calendar.noSailingsMonthTitle")}
+          message={t("calendar.noSailingsMonthMessage")}
           artSize="md"
         />
       </div>
@@ -346,8 +362,8 @@ function ScheduleAgendaView({
             className="schedule-agenda__day-header"
             onClick={() => onSelectDay(date)}
           >
-            {dayjs(date).format("ddd, MMM D, YYYY")} · {items.length} sailing
-            {items.length === 1 ? "" : "s"}
+            {dayjs(date).format("ddd, MMM D, YYYY")} ·{" "}
+            {t("calendar.sailingsCount", { count: items.length })}
           </button>
           {items.map((sch) => (
             <div
@@ -381,7 +397,7 @@ function ScheduleAgendaView({
                   {sch.serviceCode} · {sch.vesselName} ·{" "}
                   {getScheduleAnchorTime(sch, dateAnchor) || "—"}
                 </Text>
-                <ScheduleListRoutingCell record={sch} />
+                <ScheduleListRoutingCell record={sch} t={t} />
               </div>
               <ScheduleCalendarActions
                 schedule={sch}
@@ -405,6 +421,7 @@ export function ScheduleCalendarView({
   onViewRates,
   onOpenCarbonModal,
 }: ScheduleCalendarViewProps) {
+  const { t } = useTranslation(["schedules", "common", "modules"]);
   const { scrollWideContent } = useResponsiveLayout();
   const [dateAnchor, setDateAnchor] = useState<ScheduleDateAnchor>("etd");
   const [currentMonth, setCurrentMonth] = useState<Dayjs>(() =>
@@ -478,26 +495,26 @@ export function ScheduleCalendarView({
               if (value === "etd" || value === "eta") setDateAnchor(value);
             }}
             options={[
-              { label: "ETD", value: "etd" },
-              { label: "ETA", value: "eta" },
+              { label: t("calendar.etd"), value: "etd" },
+              { label: t("calendar.eta"), value: "eta" },
             ]}
           />
           <Space wrap size={8}>
-            <Tooltip title="Previous Month">
+            <Tooltip title={t("calendar.previousMonth")}>
               <AppButton
-                aria-label="Previous Month"
+                aria-label={t("calendar.previousMonth")}
                 icon={
                   <AppIcon icon={Icons.chevronLeft} size={16} tone="navigate" />
                 }
                 onClick={() => setCurrentMonth((m) => m.subtract(1, "month"))}
               />
             </Tooltip>
-            <Tooltip title="Today">
-              <AppButton onClick={goToday}>Today</AppButton>
+            <Tooltip title={t("calendar.today")}>
+              <AppButton onClick={goToday}>{t("calendar.today")}</AppButton>
             </Tooltip>
-            <Tooltip title="Next Month">
+            <Tooltip title={t("calendar.nextMonth")}>
               <AppButton
-                aria-label="Next Month"
+                aria-label={t("calendar.nextMonth")}
                 icon={
                   <AppIcon icon={Icons.chevronRight} size={16} tone="navigate" />
                 }
@@ -527,8 +544,8 @@ export function ScheduleCalendarView({
         <div className="schedule-calendar__layout">
           <div className="schedule-calendar__month">
             <div className="schedule-calendar__weekdays">
-              {WEEKDAYS.map((day) => (
-                <span key={day}>{day}</span>
+              {WEEKDAY_KEYS.map((key) => (
+                <span key={key}>{t(`calendar.weekdays.${key}`)}</span>
               ))}
             </div>
             <div className="schedule-calendar__grid">
@@ -578,11 +595,14 @@ export function ScheduleCalendarView({
                     role="button"
                     tabIndex={0}
                     aria-pressed={isSelected}
-                    aria-label={`${cell.date.format("MMMM D, YYYY")}${
+                    aria-label={
                       daySailings.length
-                        ? `, ${daySailings.length} sailings`
-                        : ""
-                    }`}
+                        ? t("calendar.daySailingsAria", {
+                            date: cell.date.format("MMMM D, YYYY"),
+                            count: daySailings.length,
+                          })
+                        : cell.date.format("MMMM D, YYYY")
+                    }
                   >
                     <div className="schedule-calendar__cell-day">
                       <span
@@ -646,7 +666,7 @@ export function ScheduleCalendarView({
                             selectDay(cell.dateKey);
                           }}
                         >
-                          +{overflowCount} more
+                          {t("calendar.more", { count: overflowCount })}
                         </button>
                       ) : null}
                     </div>
@@ -658,19 +678,19 @@ export function ScheduleCalendarView({
             <div
               className="schedule-calendar-legend"
               role="note"
-              aria-label="Calendar legend"
+              aria-label={t("calendar.legendAria")}
             >
               <span className="schedule-calendar-legend__item">
                 <span className="schedule-calendar-legend__swatch schedule-calendar-legend__swatch--direct" />
-                Direct
+                {t("calendar.legendDirect")}
               </span>
               <span className="schedule-calendar-legend__item">
                 <span className="schedule-calendar-legend__swatch schedule-calendar-legend__swatch--transshipment" />
-                Transshipment
+                {t("calendar.legendTransshipment")}
               </span>
               <span className="schedule-calendar-legend__item">
                 <span className="schedule-calendar-legend__swatch schedule-calendar-legend__swatch--recommended" />
-                Recommended route
+                {t("calendar.legendRecommended")}
               </span>
             </div>
           </div>

@@ -1,18 +1,28 @@
 // Modified by Sekar Nagarajan (2026-09-15 15:35)
 import { Tag } from "antd";
+import type { TFunction } from "i18next";
 
 import type { CombinedRateItem } from "../../types/rates.types";
 
-export function rateTypeLabel(type: CombinedRateItem["type"]): string {
+type RatesTranslateFn = TFunction<"rates"> | ((key: string) => string);
+
+export function rateTypeLabel(
+  type: CombinedRateItem["type"],
+  t: RatesTranslateFn,
+): string {
   switch (type) {
     case "CONTRACT":
-      return "Contract";
+      return t("options.rateType.contract");
     case "SURCHARGE":
-      return "Surcharge";
+      return t("options.rateType.surcharge");
     case "QUOTE":
-      return "Quote";
-    default:
-      return "Tariff";
+      return t("options.rateType.quote");
+    case "TARIFF":
+      return t("options.rateType.tariff");
+    default: {
+      const _exhaustive: never = type;
+      return _exhaustive;
+    }
   }
 }
 
@@ -24,8 +34,12 @@ export function rateTypeTagColor(type: CombinedRateItem["type"]): string {
       return "orange";
     case "QUOTE":
       return "geekblue";
-    default:
+    case "TARIFF":
       return "blue";
+    default: {
+      const _exhaustive: never = type;
+      return _exhaustive;
+    }
   }
 }
 
@@ -42,10 +56,16 @@ export function canViewRateSurcharges(item: CombinedRateItem): boolean {
   );
 }
 
-export function RateListTypeCell({ record }: { record: CombinedRateItem }) {
+export function RateListTypeCell({
+  record,
+  t,
+}: {
+  record: CombinedRateItem;
+  t: RatesTranslateFn;
+}) {
   return (
     <Tag className="module-status-tag" color={rateTypeTagColor(record.type)}>
-      {rateTypeLabel(record.type)}
+      {rateTypeLabel(record.type, t)}
     </Tag>
   );
 }

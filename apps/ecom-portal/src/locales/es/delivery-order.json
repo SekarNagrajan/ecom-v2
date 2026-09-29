@@ -1,0 +1,74 @@
+{
+  "subtitle": "Filtre por rango de fechas, revise el enrutamiento de POL a POD e imprima documentos de órdenes de entrega.",
+  "search": {
+    "fromDate": "Fecha desde",
+    "toDate": "Fecha hasta",
+    "show": "Mostrar"
+  },
+  "columns": {
+    "doNo": "N.º DO",
+    "doDate": "Fecha DO",
+    "blNumber": "Número B/L",
+    "vessel": "Buque",
+    "voyage": "Viaje",
+    "pol": "POL",
+    "pod": "POD",
+    "terminal": "Terminal",
+    "arrival": "Llegada",
+    "validTill": "Válido hasta",
+    "status": "Estado"
+  },
+  "actions": {
+    "viewDetails": "Ver detalles",
+    "printDeliveryOrder": "Imprimir orden de entrega",
+    "downloadPdf": "Descargar PDF",
+    "copyDoNumber": "Copiar número DO",
+    "copied": "Copiado"
+  },
+  "empty": {
+    "loadErrorTitle": "No se pudieron cargar las órdenes de entrega",
+    "loadErrorMessage": "La solicitud no se completó. Compruebe su conexión e inténtelo de nuevo.",
+    "noResultsTitle": "Ninguna orden de entrega coincide con su búsqueda",
+    "noResultsMessage": "No hay resultados para este rango de fechas. Amplíe las fechas o borre los filtros para ver más resultados."
+  },
+  "errors": {
+    "download": "Error al descargar la orden de entrega."
+  },
+  "toasts": {
+    "documentDownloaded": "Orden de entrega {{delOrdNo}} descargada."
+  },
+  "status": {
+    "printed": "Impreso",
+    "notPrinted": "No impreso"
+  },
+  "validation": {
+    "fromDateRequired": "La fecha desde es obligatoria",
+    "toDateRequired": "La fecha hasta es obligatoria",
+    "fromBeforeTo": "La fecha desde debe ser anterior o igual a la fecha hasta"
+  },
+  "drawer": {
+    "blPrefix": "B/L:",
+    "routeEyebrow": "Puerto a puerto",
+    "origin": "Origen",
+    "delivery": "Entrega",
+    "sections": {
+      "details": "Detalles de la orden de entrega",
+      "shipment": "Detalles del envío"
+    },
+    "labels": {
+      "doNumber": "Número DO",
+      "doDate": "Fecha DO",
+      "validUntil": "Válido hasta",
+      "printStatus": "Estado de impresión",
+      "blNumber": "Número B/L",
+      "terminal": "Terminal",
+      "vessel": "Buque",
+      "voyage": "Viaje",
+      "bound": "Rumbo",
+      "arrivalDate": "Fecha de llegada"
+    },
+    "alerts": {
+      "validUntil": "Esta orden de entrega es válida hasta el <date/>."
+    }
+  }
+}

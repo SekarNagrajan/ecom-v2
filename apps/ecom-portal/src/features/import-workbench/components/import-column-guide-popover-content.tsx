@@ -1,74 +1,77 @@
-import { useAntdBreakpoint } from '@solverminds/shared-ui/hooks';
-import { Flex, Tag, Typography, theme } from 'antd';
+import { useAntdBreakpoint } from "@solverminds/shared-ui/hooks";
+import { Flex, Tag, Typography, theme } from "antd";
+import { useTranslation } from "react-i18next";
 
-import type { SpreadsheetImportFieldDefinition } from '../types/import-workbench.types';
-import { getSpreadsheetImportFormatHint } from '../utils/spreadsheet-import-field-behavior';
+import type { SpreadsheetImportFieldDefinition } from "../types/import-workbench.types";
+import { getSpreadsheetImportFormatHint } from "../utils/spreadsheet-import-field-behavior";
 
 interface ImportColumnGuidePopoverContentProps<TValues extends object> {
   fields: readonly SpreadsheetImportFieldDefinition<TValues>[];
 }
 
 function getFieldExampleValues<TValues extends object>(
-  field: SpreadsheetImportFieldDefinition<TValues>
+  field: SpreadsheetImportFieldDefinition<TValues>,
+  labels: { yes: string; no: string; freeText: string },
 ) {
   if (field.exampleValues && field.exampleValues.length > 0) {
     return [...field.exampleValues];
   }
 
-  if (field.kind === 'boolean') {
-    return ['Yes', 'No'];
+  if (field.kind === "boolean") {
+    return [labels.yes, labels.no];
   }
 
-  if (field.label.toLowerCase().includes('email')) {
-    return ['lead@example.com'];
+  if (field.label.toLowerCase().includes("email")) {
+    return ["lead@example.com"];
   }
 
-  if (field.label.toLowerCase().includes('mobile')) {
-    return ['+919876543210'];
+  if (field.label.toLowerCase().includes("mobile")) {
+    return ["+919876543210"];
   }
 
-  if (field.label.toLowerCase().includes('first name')) {
-    return ['Ava'];
+  if (field.label.toLowerCase().includes("first name")) {
+    return ["Ava"];
   }
 
-  if (field.label.toLowerCase().includes('last name')) {
-    return ['Sharma'];
+  if (field.label.toLowerCase().includes("last name")) {
+    return ["Sharma"];
   }
 
-  if (field.label.toLowerCase().includes('company')) {
-    return ['Northwind Logistics'];
+  if (field.label.toLowerCase().includes("company")) {
+    return ["Northwind Logistics"];
   }
 
-  return ['Free text'];
+  return [labels.freeText];
 }
 
 function getAcceptedValues<TValues extends object>(
-  field: SpreadsheetImportFieldDefinition<TValues>
+  field: SpreadsheetImportFieldDefinition<TValues>,
+  labels: { yes: string; no: string; freeText: string },
 ) {
-  if (field.kind !== 'select') {
-    return getFieldExampleValues(field);
+  if (field.kind !== "select") {
+    return getFieldExampleValues(field, labels);
   }
 
   return (field.options ?? []).map((option) =>
     option.label === option.value
       ? option.label
-      : `${option.label} (${option.value})`
+      : `${option.label} (${option.value})`,
   );
 }
 
 function getDefaultValueLabel<TValues extends object>(
-  field: SpreadsheetImportFieldDefinition<TValues>
+  field: SpreadsheetImportFieldDefinition<TValues>,
 ) {
   if (!field.defaultDisplayValue) {
     return null;
   }
 
-  if (field.kind !== 'select') {
+  if (field.kind !== "select") {
     return field.defaultDisplayValue;
   }
 
   const matchedOption = field.options?.find(
-    (option) => option.label === field.defaultDisplayValue
+    (option) => option.label === field.defaultDisplayValue,
   );
 
   if (!matchedOption || matchedOption.value === field.defaultDisplayValue) {
@@ -85,21 +88,26 @@ function ColumnGuideRow<TValues extends object>({
   field: SpreadsheetImportFieldDefinition<TValues>;
   isLast: boolean;
 }) {
+  const { t } = useTranslation(["import-workbench", "common"]);
   const { token } = theme.useToken();
   const { isExtraSmall } = useAntdBreakpoint();
-  const acceptedValues = getAcceptedValues(field);
+  const acceptedValues = getAcceptedValues(field, {
+    yes: t("common:actions.yes"),
+    no: t("common:actions.no"),
+    freeText: t("columnGuide.freeText"),
+  });
   const defaultValueLabel = getDefaultValueLabel(field);
-  const formatHint = getSpreadsheetImportFormatHint(field);
+  const formatHint = getSpreadsheetImportFormatHint(field, t);
 
   return (
     <div
       style={{
         borderBottom: isLast
-          ? 'none'
+          ? "none"
           : `1px solid ${token.colorBorderSecondary}`,
-        display: 'grid',
+        display: "grid",
         gap: token.marginSM,
-        gridTemplateColumns: isExtraSmall ? '1fr' : '180px minmax(0, 1fr)',
+        gridTemplateColumns: isExtraSmall ? "1fr" : "180px minmax(0, 1fr)",
         padding: token.paddingSM,
       }}
     >
@@ -107,15 +115,17 @@ function ColumnGuideRow<TValues extends object>({
         <Flex align="center" gap={token.marginXS} wrap>
           <Typography.Text strong>{field.label}</Typography.Text>
           <Tag
-            color={field.required ? 'processing' : 'default'}
+            color={field.required ? "processing" : "default"}
             style={{ marginInlineEnd: 0 }}
           >
-            {field.required ? 'Required' : 'Optional'}
+            {field.required ? t("badges.required") : t("badges.optional")}
           </Tag>
         </Flex>
         {field.aliases.length > 0 ? (
           <Typography.Text type="secondary">
-            {`Also accepts: ${field.aliases.join(', ')}`}
+            {t("columnGuide.alsoAccepts", {
+              aliases: field.aliases.join(", "),
+            })}
           </Typography.Text>
         ) : null}
       </Flex>
@@ -137,13 +147,13 @@ function ColumnGuideRow<TValues extends object>({
 
         {formatHint ? (
           <Typography.Text type="secondary">
-            {`Format: ${formatHint}`}
+            {t("columnGuide.format", { format: formatHint })}
           </Typography.Text>
         ) : null}
 
         {defaultValueLabel ? (
           <Typography.Text type="secondary">
-            {`Defaults to ${defaultValueLabel} when empty`}
+            {t("columnGuide.defaultsTo", { value: defaultValueLabel })}
           </Typography.Text>
         ) : null}
       </Flex>
@@ -154,6 +164,7 @@ function ColumnGuideRow<TValues extends object>({
 export function ImportColumnGuidePopoverContent<TValues extends object>({
   fields,
 }: ImportColumnGuidePopoverContentProps<TValues>) {
+  const { t } = useTranslation(["import-workbench", "common"]);
   const { token } = theme.useToken();
 
   return (
@@ -162,19 +173,19 @@ export function ImportColumnGuidePopoverContent<TValues extends object>({
       gap={token.marginSM}
       style={{
         minWidth: 0,
-        width: '100%',
+        width: "100%",
       }}
     >
       <Typography.Text type="secondary">
-        Use these sample formats while reviewing or fixing workbook values.
+        {t("columnGuide.intro")}
       </Typography.Text>
 
       <div
         style={{
           border: `1px solid ${token.colorBorderSecondary}`,
           borderRadius: token.borderRadiusLG,
-          overflow: 'hidden',
-          width: '100%',
+          overflow: "hidden",
+          width: "100%",
         }}
       >
         {fields.map((field, index) => (

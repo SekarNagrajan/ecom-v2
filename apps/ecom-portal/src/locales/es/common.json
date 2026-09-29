@@ -114,7 +114,8 @@
     "filter": "Filtrar",
     "yes": "Sí",
     "no": "No",
-    "ok": "Aceptar"
+    "ok": "Aceptar",
+    "backHome": "Volver al Inicio"
   },
   "status": {
     "loading": "Cargando...",

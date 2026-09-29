@@ -5,6 +5,7 @@ import {
 } from "@solverminds/shared-ui/data-view";
 import type { RowDoubleClickedEvent } from "ag-grid-community";
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { buildActionsColumn } from "../../../components/shared/build-actions-column";
@@ -39,6 +40,7 @@ export function RateList({
   onViewSurcharges,
   onShareRate,
 }: RateListProps) {
+  const { t } = useTranslation(["rates", "common", "modules"]);
   const { profileHandlers } = useLocalGridProfiles("rates-list");
   const columnDefs = useMemo<DataViewColumn<CombinedRateItem>[]>(
     () => [
@@ -52,7 +54,7 @@ export function RateList({
             <ListActionsRow>
               {canBookRate(record) ? (
                 <ListActionButton
-                  title="Book at This Rate"
+                  title={t("actions.bookAtThisRate")}
                   icon={<AppIcon icon={Icons.plus} size={16} tone="create" />}
                   tone="create"
                   onClick={(e) => {
@@ -63,7 +65,7 @@ export function RateList({
               ) : null}
               {canViewRateSurcharges(record) ? (
                 <ListActionButton
-                  title="View Surcharges"
+                  title={t("actions.viewSurcharges")}
                   icon={<AppIcon icon={Icons.eye} size={16} tone="view" />}
                   tone="view"
                   onClick={(e) => {
@@ -73,7 +75,7 @@ export function RateList({
                 />
               ) : null}
               <ListActionButton
-                title="Share Rate Quote"
+                title={t("actions.shareRateQuote")}
                 icon={<AppIcon icon={Icons.mail} size={16} tone="navigate" />}
                 tone="navigate"
                 onClick={(e) => {
@@ -86,62 +88,56 @@ export function RateList({
         },
       }),
       {
-        headerName: "Type",
+        headerName: t("rateList.columns.type"),
         field: "type",
         width: 120,
         minWidth: 110,
         cellRenderer: (params: { data?: CombinedRateItem }) => {
           const record = params.data;
           if (!record) return null;
-          return <RateListTypeCell record={record} />;
+          return <RateListTypeCell record={record} t={t} />;
         },
       },
       {
-        headerName: "Code",
+        headerName: t("rateList.columns.code"),
         field: "code",
         flex: 1,
         minWidth: 120,
         isPrimary: true,
       },
-      // {
-      //   headerName: "Title",
-      //   field: "title",
-      //   flex: 1.2,
-      //   minWidth: 150,
-      // },
       {
-        headerName: "Origin",
+        headerName: t("rateList.columns.origin"),
         field: "originPortName",
         flex: 1.1,
         minWidth: 140,
         isSecondary: true,
       },
       {
-        headerName: "Origin Code",
+        headerName: t("rateList.columns.originCode"),
         field: "originPort",
         width: 120,
         minWidth: 110,
       },
       {
-        headerName: "Delivery",
+        headerName: t("rateList.columns.delivery"),
         field: "deliveryPortName",
         flex: 1.1,
         minWidth: 140,
       },
       {
-        headerName: "Delivery Code",
+        headerName: t("rateList.columns.deliveryCode"),
         field: "deliveryPort",
         width: 120,
         minWidth: 110,
       },
       {
-        headerName: "Equipment",
+        headerName: t("rateList.columns.equipment"),
         field: "eqpType",
         flex: 1,
         minWidth: 130,
       },
       {
-        headerName: "Commodity",
+        headerName: t("rateList.columns.commodity"),
         field: "commodityName",
         flex: 1,
         minWidth: 120,
@@ -152,13 +148,13 @@ export function RateList({
         },
       },
       {
-        headerName: "Currency",
+        headerName: t("rateList.columns.currency"),
         field: "currency",
         width: 100,
         minWidth: 90,
       },
       {
-        headerName: "Base",
+        headerName: t("rateList.columns.base"),
         field: "baseAmount",
         width: 110,
         minWidth: 100,
@@ -166,7 +162,7 @@ export function RateList({
           params.value != null ? formatRateAmount(params.value) : "",
       },
       {
-        headerName: "Surcharges",
+        headerName: t("rateList.columns.surcharges"),
         field: "surchargeAmount",
         width: 110,
         minWidth: 100,
@@ -174,7 +170,7 @@ export function RateList({
           params.value != null ? formatRateAmount(params.value) : "",
       },
       {
-        headerName: "Total",
+        headerName: t("rateList.columns.total"),
         field: "totalEstimatedAmount",
         width: 110,
         minWidth: 100,
@@ -182,33 +178,33 @@ export function RateList({
           params.value != null ? formatRateAmount(params.value) : "",
       },
       {
-        headerName: "Valid From",
+        headerName: t("rateList.columns.validFrom"),
         field: "effectiveFrom",
         width: 120,
         minWidth: 110,
       },
       {
-        headerName: "Valid To",
+        headerName: t("rateList.columns.validTo"),
         field: "effectiveTo",
         width: 120,
         minWidth: 110,
       },
     ],
-    [onBookNow, onViewSurcharges, onShareRate],
+    [t, onBookNow, onViewSurcharges, onShareRate],
   );
 
   const emptyState = !hasSearched ? (
     <ModuleEmptyState
       variant="blank"
-      title="Search for rates"
-      message="Choose your search criteria and click Search to view published rates."
+      title={t("empty.searchTitle")}
+      message={t("empty.searchMessageList")}
       artSize="md"
     />
   ) : (
     <ModuleEmptyState
       variant="filtered"
-      title="No rates found"
-      message="Try different ports, equipment, or commodity filters."
+      title={t("empty.noResultsTitle")}
+      message={t("empty.noResultsMessageList")}
       artSize="md"
     />
   );
@@ -257,11 +253,11 @@ export function RateList({
         <div
           className="rates-list-legend"
           role="note"
-          aria-label="Recommended rate legend"
+          aria-label={t("a11y.recommendedLegend")}
         >
           <span className="rates-list-legend__swatch" aria-hidden />
           <span className="rates-list-legend__text">
-            Lowest published freight (recommended)
+            {t("rateList.recommendedLegend")}
           </span>
         </div>
       ) : null}

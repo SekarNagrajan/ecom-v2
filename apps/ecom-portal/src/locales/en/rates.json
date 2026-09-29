@@ -1,4 +1,317 @@
 {
   "subtitle": "Search published line tariffs, view itemized surcharge breakdowns, manage Service Contracts, and request spot rate quotes.",
-  "exportingToast": "Exporting rate search results to Excel..."
+  "exportingToast": "Exporting rate search results to Excel...",
+  "modes": {
+    "tariff": "Tariff",
+    "surcharge": "Surcharge",
+    "serviceContract": "Service Contract",
+    "requestForQuote": "Request for Quote",
+    "publishedLineTariffs": "Published Line Tariffs",
+    "surchargesAccessorials": "Surcharges & Accessorials",
+    "serviceContracts": "Service Contracts",
+    "spotRateQuotes": "Spot Rate Quotes",
+    "results": {
+      "publishedTariff": "Published Freight Rates",
+      "serviceContracts": "Service Contracts",
+      "surcharges": "Surcharges & Accessorials",
+      "spotQuotes": "Spot Rate Quotes"
+    }
+  },
+  "search": {
+    "originPort": "Origin Port (POL)",
+    "deliveryPort": "Delivery Port (POD)",
+    "equipmentType": "Equipment Type",
+    "commodity": "Commodity",
+    "shipmentDate": "Shipment Date",
+    "validThrough": "Valid Through",
+    "originPlaceholder": "Where are you shipping from?",
+    "deliveryPlaceholder": "Where is cargo going?",
+    "searchingPorts": "Searching ports…",
+    "noPortsFound": "No ports found",
+    "selectOrigin": "Select origin port",
+    "selectDelivery": "Select delivery port",
+    "swapTooltip": "Swap Origin and Delivery",
+    "swapAria": "Swap origin and delivery ports",
+    "toastSearching": "Searching {{title}} for {{pol}} → {{pod}}...",
+    "toastSpotQuotes": "Showing spot quotes for this lane…",
+    "allPorts": "All"
+  },
+  "options": {
+    "equipment": {
+      "all": "All Equipment Types",
+      "20dv": "20' Standard Dry (20DV)",
+      "40hc": "40' High Cube Dry (40HC)",
+      "40rf": "40' Reefer Container (40RF)"
+    },
+    "commodity": {
+      "all": "All Commodities",
+      "genCgo": "GEN-CGO - General Freight / Merchandise",
+      "autoParts": "AUTO-PARTS - Automotive Spare Parts & Machinery",
+      "perishable": "PERISHABLE - Chilled Agricultural Produce",
+      "textiles": "TEXTILES - Textiles & Garments"
+    },
+    "ports": {
+      "USNYC": "USNYC - New York, USA",
+      "SGSIN": "SGSIN - Singapore, Singapore",
+      "NLRTM": "NLRTM - Rotterdam, Netherlands",
+      "CNSHA": "CNSHA - Shanghai, China",
+      "DEHAM": "DEHAM - Hamburg, Germany",
+      "INNSA": "INNSA - Nhava Sheva, India",
+      "AEDXB": "AEDXB - Jebel Ali, UAE",
+      "USNYC_short": "USNYC - New York",
+      "DEHAM_short": "DEHAM - Hamburg",
+      "NLRTM_short": "NLRTM - Rotterdam",
+      "INNSA_short": "INNSA - Nhava Sheva",
+      "SGSIN_short": "SGSIN - Singapore",
+      "CNSHA_short": "CNSHA - Shanghai",
+      "AEDXB_short": "AEDXB - Jebel Ali"
+    },
+    "rateType": {
+      "tariff": "Tariff",
+      "contract": "Contract",
+      "surcharge": "Surcharge",
+      "quote": "Quote"
+    }
+  },
+  "actions": {
+    "viewQuotes": "View Quotes",
+    "requestForQuote": "Request for Quote",
+    "bookAtThisRate": "Book at This Rate",
+    "viewSurcharges": "View Surcharges",
+    "shareRateQuote": "Share Rate Quote",
+    "share": "Share",
+    "viewTariffTerms": "View Published Tariff Terms",
+    "convertQuote": "Convert Quote into e-Booking",
+    "viewQuoteTerms": "View Quotation Terms & Conditions",
+    "viewSubjectToCharges": "View Subject to Charges Breakdown",
+    "viewSurchargeHistory": "View Surcharge History",
+    "requestSpotQuote": "Request Spot Quote",
+    "submitRequestForQuote": "Submit Request for Quote",
+    "sendEmail": "Send Email"
+  },
+  "rateList": {
+    "columns": {
+      "type": "Type",
+      "code": "Code",
+      "origin": "Origin",
+      "originCode": "Origin Code",
+      "delivery": "Delivery",
+      "deliveryCode": "Delivery Code",
+      "equipment": "Equipment",
+      "commodity": "Commodity",
+      "currency": "Currency",
+      "base": "Base",
+      "surcharges": "Surcharges",
+      "total": "Total",
+      "validFrom": "Valid From",
+      "validTo": "Valid To"
+    },
+    "recommendedLegend": "Lowest published freight (recommended)"
+  },
+  "rateCard": {
+    "recommendedTag": "Lowest Published Freight",
+    "ref": "Ref: {{id}}",
+    "commodityLabel": "Commodity: {{value}}",
+    "commodityFallback": "Commodity",
+    "connector": {
+      "accessorial": "Accessorial",
+      "quotedAmount": "Quoted amount",
+      "allInEstimate": "All-in estimate",
+      "breakdown": "OFR ${{base}} + surcharges ${{surcharge}}"
+    },
+    "validRange": "Valid {{from}} → {{to}}",
+    "validFrom": "Valid From",
+    "validTo": "Valid To",
+    "rateType": "Rate Type",
+    "rateTypeTooltip": "{{type}} rate",
+    "validFromTooltip": "Rate Valid From Date",
+    "validToTooltip": "Rate Valid To Date",
+    "surchargeBreakdown": "Itemized Surcharge Breakdown",
+    "tariffDefaultTitle": "Published Freight Tariff",
+    "norApplicable": "NOR applicable",
+    "accessorialCommodity": "Accessorial",
+    "searching": "Searching freight rates…"
+  },
+  "tariff": {
+    "filterHeading": "Filter Tariff:",
+    "portOfLoad": "Port of Load",
+    "portOfDischarge": "Port of Discharge",
+    "loading": "Loading published freight tariffs...",
+    "commodityCode": "Code: {{code}}",
+    "columns": {
+      "portOfLoad": "Port of Load",
+      "portOfDischarge": "Port of Discharge",
+      "eqpType": "Eqp Type",
+      "commodity": "Commodity",
+      "currency": "Currency",
+      "amount": "Amount",
+      "fromDate": "From Date",
+      "toDate": "To Date"
+    }
+  },
+  "quotes": {
+    "toolbarTitle": "Spot Rate Inquiries & Quotes",
+    "toolbarSub": "Submit spot rate inquiries and convert approved quotes into e-Bookings.",
+    "loading": "Loading quotation requests...",
+    "pendingPricing": "Pending Pricing",
+    "amountUsd": "${{amount}} USD",
+    "validityRange": "{{from}} to {{to}}",
+    "columns": {
+      "quoteRefNo": "Quote Ref No",
+      "customerName": "Customer Name",
+      "shipmentRoute": "Shipment Route",
+      "equipmentQty": "Equipment & Qty",
+      "quotedRateUsd": "Quoted Rate (USD)",
+      "status": "Status",
+      "validityWindow": "Validity Window"
+    },
+    "status": {
+      "DRAFT": "Draft",
+      "PENDING_REVIEW": "Pending Review",
+      "QUOTED": "Quoted",
+      "ACCEPTED": "Accepted",
+      "EXPIRED": "Expired"
+    }
+  },
+  "contract": {
+    "filterHeading": "Filter Contract Rates:",
+    "loading": "Loading service contract rates...",
+    "validityRange": "{{from}} to {{to}}",
+    "columns": {
+      "contractNo": "Contract No",
+      "rateNo": "Rate No",
+      "customerName": "Customer Name",
+      "agreedRate": "Agreed Rate",
+      "subjectToCharges": "Subject to Charges",
+      "soc": "SOC",
+      "transService": "Trans. Service",
+      "validityWindow": "Validity Window"
+    }
+  },
+  "surchargeView": {
+    "filterHeading": "Filter Surcharge:",
+    "loading": "Loading surcharge breakdown...",
+    "columns": {
+      "chargeName": "Charge Name",
+      "chargeCode": "Charge Code",
+      "cargoType": "Cargo Type",
+      "nor": "NOR"
+    }
+  },
+  "contractSurcharge": {
+    "title": "Included Surcharges for Contract {{contractNo}}",
+    "customer": "Customer: {{name}} ({{code}})",
+    "route": "Route: {{originName}} ({{origin}}) → {{deliveryName}} ({{delivery}})"
+  },
+  "quoteRequest": {
+    "title": "Request for Quote",
+    "fields": {
+      "portOfLoad": "Port of Load (POL)",
+      "portOfDischarge": "Port of Discharge (POD)",
+      "cargoType": "Cargo Type",
+      "cargoQuantity": "Cargo Quantity",
+      "commodity": "Commodity",
+      "cargoWeight": "Cargo Weight (kg)",
+      "expectedRate": "Expected Target Rate (USD)",
+      "comments": "Comments"
+    },
+    "placeholders": {
+      "commodity": "e.g. General Cargo / Machinery",
+      "comments": "Special stowage or temperature requirements..."
+    },
+    "validation": {
+      "portOfLoadRequired": "Port of Load is required",
+      "portOfDischargeRequired": "Port of Discharge is required",
+      "cargoTypeRequired": "Cargo Type is required",
+      "cargoQuantityMin": "Cargo Quantity must be at least 1",
+      "commodityRequired": "Commodity is required",
+      "cargoWeightRequired": "Cargo Weight is required"
+    },
+    "toasts": {
+      "success": "Request for Quote {{quoteNo}} submitted successfully!",
+      "error": "Failed to submit Request for Quote. Please try again."
+    }
+  },
+  "shareMail": {
+    "title": "Share via Mail",
+    "to": "To",
+    "cc": "Cc",
+    "subject": "Subject",
+    "message": "Message",
+    "placeholders": {
+      "to": "recipient@company.com",
+      "cc": "optional@company.com",
+      "message": "Compose your rate quote message…"
+    },
+    "sharingCount_one": "Sharing {{count}} rate",
+    "sharingCount_other": "Sharing {{count}} rates",
+    "moreRates_one": "+{{count}} more rate",
+    "moreRates_other": "+{{count}} more rates",
+    "validation": {
+      "toRequired": "Recipient email is required",
+      "toInvalid": "Enter a valid email address (separate multiple with commas)",
+      "ccInvalid": "Enter valid CC email addresses (separate with commas)",
+      "subjectRequired": "Subject is required",
+      "subjectMax": "Subject must be 200 characters or fewer",
+      "messageRequired": "Message is required",
+      "messageMax": "Message must be 4000 characters or fewer"
+    },
+    "toasts": {
+      "success_one": "Rate quote emailed successfully ({{count}} recipient).",
+      "success_other": "Rate quote emailed successfully ({{count}} recipients).",
+      "error": "Failed to share rate quote by email. Please try again."
+    },
+    "subjectTemplate": {
+      "single": "Freight rate quote — {{code}} ({{pol}} → {{pod}})",
+      "multiple": "Freight rate quotes — {{count}} results ({{pol}} → {{pod}})",
+      "empty": "Freight rate quotes"
+    },
+    "body": {
+      "hello": "Hello,",
+      "intro": "Please find the freight rate details below.",
+      "rateHeading": "Rate {{index}}: {{code}} ({{type}})",
+      "title": "Title: {{value}}",
+      "lane": "Lane: {{value}}",
+      "equipment": "Equipment: {{value}}",
+      "commodity": "Commodity: {{value}}",
+      "oceanFreight": "Ocean freight: {{value}}",
+      "surcharges": "Surcharges (est.): {{value}}",
+      "total": "Total (est.): {{value}}",
+      "validity": "Validity: {{from}} to {{to}}",
+      "regards": "Regards,",
+      "signature": "E-Com Portal"
+    }
+  },
+  "empty": {
+    "searchTitle": "Search for rates",
+    "searchMessageList": "Choose your search criteria and click Search to view published rates.",
+    "searchMessageCard": "Choose origin, delivery, and filters, then click Search to load matching rates.",
+    "noResultsTitle": "No rates found",
+    "noResultsMessageList": "Try different ports, equipment, or commodity filters.",
+    "noResultsMessageCard": "Try adjusting your ports, equipment, or commodity filters.",
+    "tariffTitle": "No published tariffs found",
+    "tariffMessage": "Try a different port combination or clear the filters to see more tariffs.",
+    "quotesTitle": "No spot rate quotes yet",
+    "quotesMessage": "Request a spot quote to compare pricing for your next shipment.",
+    "contractsTitle": "No service contracts found",
+    "contractsMessage": "Try a different port combination or clear the filters to see more contracts.",
+    "surchargesTitle": "No surcharges found",
+    "surchargesMessage": "Try a different port combination or clear the filters to see more charges."
+  },
+  "errors": {
+    "tariffLoadTitle": "Couldn't load published tariffs",
+    "tariffLoadMessage": "The request didn't complete. Check your connection and try again.",
+    "shareNoResults": "Search for rates first, then share the results by email.",
+    "loadFailedMessage": "The request didn't complete. Check your connection and try again.",
+    "quotesLoadTitle": "Couldn't load spot rate quotes",
+    "contractsLoadTitle": "Couldn't load service contracts",
+    "surchargesLoadTitle": "Couldn't load surcharges"
+  },
+  "toasts": {
+    "bookSelected": "Selected rate {{code}} ({{currency}} ${{amount}}). Proceeding to Schedules & Booking...",
+    "convertingQuote": "Converting Quote {{quoteNo}} into e-Booking..."
+  },
+  "a11y": {
+    "recommendedLegend": "Recommended rate legend"
+  }
 }

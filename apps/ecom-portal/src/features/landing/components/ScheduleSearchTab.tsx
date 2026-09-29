@@ -4,8 +4,9 @@ import { AutoComplete, Button, DatePicker, Flex, Input, theme } from "antd";
 import dayjs from "dayjs";
 import { useState } from "react";
 import { Controller, type UseFormReturn } from "react-hook-form";
-import { AppIcon, Icons } from "../../../components/icons";
+import { useTranslation } from "react-i18next";
 
+import { AppIcon, Icons } from "../../../components/icons";
 import { usePortSearch } from "../api/landing.queries";
 import type { ScheduleSearchForm } from "../types/landing.types";
 
@@ -46,6 +47,7 @@ export function ScheduleSearchTab({
   onSubmit,
   isSearching = false,
 }: ScheduleSearchTabProps) {
+  const { t } = useTranslation(["landing", "common", "modules"]);
   const { token } = theme.useToken();
   const {
     control,
@@ -86,6 +88,7 @@ export function ScheduleSearchTab({
     display: "inline-block",
   };
   const asteriskStyle = { color: token.colorError };
+  const datePlaceholder = t("schedule.datePlaceholder");
 
   return (
     <form
@@ -108,7 +111,7 @@ export function ScheduleSearchTab({
           }}
         >
           <label style={labelStyle}>
-            Origin <span style={asteriskStyle}>*</span>
+            {t("schedule.origin")} <span style={asteriskStyle}>*</span>
           </label>
           <Controller
             control={control}
@@ -125,7 +128,7 @@ export function ScheduleSearchTab({
                 style={{ width: "100%" }}
               >
                 <Input
-                  placeholder="Singapore"
+                  placeholder={t("schedule.originPlaceholder")}
                   style={inputStyle}
                   prefix={
                     <AppIcon
@@ -154,6 +157,8 @@ export function ScheduleSearchTab({
             icon={<AppIcon icon={Icons.arrowLeftRight} size={16} />}
             onClick={handleSwap}
             shape="circle"
+            aria-label={t("schedule.swapAria")}
+            title={t("schedule.swapAria")}
             style={{
               width: 36,
               height: 36,
@@ -172,7 +177,7 @@ export function ScheduleSearchTab({
           }}
         >
           <label style={labelStyle}>
-            Delivery <span style={asteriskStyle}>*</span>
+            {t("schedule.delivery")} <span style={asteriskStyle}>*</span>
           </label>
           <Controller
             control={control}
@@ -189,7 +194,7 @@ export function ScheduleSearchTab({
                 style={{ width: "100%" }}
               >
                 <Input
-                  placeholder="Rotterdam"
+                  placeholder={t("schedule.deliveryPlaceholder")}
                   style={inputStyle}
                   prefix={
                     <AppIcon
@@ -227,7 +232,7 @@ export function ScheduleSearchTab({
           }}
         >
           <label style={labelStyle}>
-            From date <span style={asteriskStyle}>*</span>
+            {t("schedule.fromDate")} <span style={asteriskStyle}>*</span>
           </label>
           <Controller
             control={control}
@@ -235,7 +240,7 @@ export function ScheduleSearchTab({
             render={({ field }) => (
               <DatePicker
                 format="MM/DD/YYYY"
-                placeholder="MM/DD/YYYY"
+                placeholder={datePlaceholder}
                 style={{ width: "100%", ...inputStyle }}
                 value={field.value ? dayjs(field.value) : null}
                 onChange={(date) =>
@@ -263,7 +268,7 @@ export function ScheduleSearchTab({
           }}
         >
           <label style={labelStyle}>
-            To date <span style={asteriskStyle}>*</span>
+            {t("schedule.toDate")} <span style={asteriskStyle}>*</span>
           </label>
           <Controller
             control={control}
@@ -271,7 +276,7 @@ export function ScheduleSearchTab({
             render={({ field }) => (
               <DatePicker
                 format="MM/DD/YYYY"
-                placeholder="MM/DD/YYYY"
+                placeholder={datePlaceholder}
                 style={{ width: "100%", ...inputStyle }}
                 value={field.value ? dayjs(field.value) : null}
                 onChange={(date) =>
@@ -307,7 +312,7 @@ export function ScheduleSearchTab({
             )
           }
         >
-          Search sailings
+          {t("schedule.searchSailings")}
         </AppButton>
         <AppButton
           danger
@@ -316,9 +321,9 @@ export function ScheduleSearchTab({
           disabled={isSearching}
           icon={<AppIcon icon={Icons.refreshCw} size={16} tone="delete" />}
           onClick={handleReset}
-          aria-label="Reset schedule search"
+          aria-label={t("a11y.resetScheduleSearch")}
         >
-          Reset
+          {t("common:actions.reset")}
         </AppButton>
       </Flex>
     </form>

@@ -5,6 +5,7 @@ import { Card, Flex, Result, Steps, Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { FormProvider } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../components/icons";
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
@@ -21,11 +22,11 @@ interface RegistrationRouteProps {
   onCancel: () => void;
 }
 
-const PIPELINE_STEPS: { title: string; icon: LucideIcon; size: number }[] = [
-  { title: "Company Info", icon: Icons.fileText, size: 20 },
-  { title: "User Info", icon: Icons.user, size: 20 },
-  { title: "KYC Upload", icon: Icons.upload, size: 20 },
-  { title: "Terms & Conditions", icon: Icons.shieldCheck, size: 20 },
+const PIPELINE_STEP_META: { icon: LucideIcon; size: number }[] = [
+  { icon: Icons.fileText, size: 20 },
+  { icon: Icons.user, size: 20 },
+  { icon: Icons.upload, size: 20 },
+  { icon: Icons.shieldCheck, size: 20 },
 ];
 
 function pipelineIconClass(stepIndex: number, currentStep: number): string {
@@ -39,9 +40,17 @@ function pipelineIconClass(stepIndex: number, currentStep: number): string {
 }
 
 export function RegistrationRoute({ onCancel }: RegistrationRouteProps) {
+  const { t } = useTranslation(["registration", "common"]);
   const controller = useRegistrationController({ onCancel });
   const { isMobile } = useAntdBreakpoint();
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  const pipelineSteps = [
+    { title: t("steps.companyInfo"), ...PIPELINE_STEP_META[0] },
+    { title: t("steps.userInfo"), ...PIPELINE_STEP_META[1] },
+    { title: t("steps.kycUpload"), ...PIPELINE_STEP_META[2] },
+    { title: t("steps.terms"), ...PIPELINE_STEP_META[3] },
+  ];
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -58,7 +67,7 @@ export function RegistrationRoute({ onCancel }: RegistrationRouteProps) {
             icon={<AppIcon icon={Icons.arrowLeft} size={16} />}
             onClick={onCancel}
           >
-            Back to Home
+            {t("common:actions.backHome")}
           </AppButton>
         </Flex>
 
@@ -67,13 +76,13 @@ export function RegistrationRoute({ onCancel }: RegistrationRouteProps) {
             <div className="reg-page__header">
               <Title level={2} className="reg-page__title">
                 {controller.isSuccess
-                  ? "Registration Complete"
-                  : "Create an Account"}
+                  ? t("header.complete")
+                  : t("header.createAccount")}
               </Title>
               <Text type="secondary" className="reg-page__subtitle">
                 {controller.isSuccess
-                  ? "Your registration has been successfully submitted."
-                  : "Register for the SVM E-Com Portal to manage your bookings and shipments."}
+                  ? t("header.subtitleSuccess")
+                  : t("header.subtitleRegister")}
               </Text>
             </div>
 
@@ -85,7 +94,7 @@ export function RegistrationRoute({ onCancel }: RegistrationRouteProps) {
                   labelPlacement="vertical"
                   className="pipeline-steps"
                   size={isMobile ? "small" : "default"}
-                  items={PIPELINE_STEPS.map((step, index) => ({
+                  items={pipelineSteps.map((step, index) => ({
                     title: (
                       <span
                         className={
@@ -131,7 +140,7 @@ export function RegistrationRoute({ onCancel }: RegistrationRouteProps) {
                           controller.isSubmitting
                         }
                       >
-                        Previous
+                        {t("common:actions.previous")}
                       </AppButton>
 
                       {controller.currentStep < 3 ? (
@@ -140,7 +149,7 @@ export function RegistrationRoute({ onCancel }: RegistrationRouteProps) {
                           size="medium"
                           onClick={controller.nextStep}
                         >
-                          Next
+                          {t("common:actions.next")}
                         </AppButton>
                       ) : (
                         <AppButton
@@ -149,7 +158,7 @@ export function RegistrationRoute({ onCancel }: RegistrationRouteProps) {
                           htmlType="submit"
                           loading={controller.isSubmitting}
                         >
-                          Submit Registration
+                          {t("actions.submitRegistration")}
                         </AppButton>
                       )}
                     </Flex>
@@ -160,8 +169,8 @@ export function RegistrationRoute({ onCancel }: RegistrationRouteProps) {
               <div className="reg-success custom-scroll">
                 <Result
                   status="success"
-                  title="Successfully Submitted Registration!"
-                  subTitle="Your registration request has been forwarded to the selected controlling agency. You will receive an email confirmation shortly."
+                  title={t("success.title")}
+                  subTitle={t("success.subTitle")}
                   extra={[
                     <AppButton
                       type="primary"
@@ -169,7 +178,7 @@ export function RegistrationRoute({ onCancel }: RegistrationRouteProps) {
                       size="medium"
                       onClick={onCancel}
                     >
-                      Back to Home
+                      {t("common:actions.backHome")}
                     </AppButton>,
                   ]}
                 />

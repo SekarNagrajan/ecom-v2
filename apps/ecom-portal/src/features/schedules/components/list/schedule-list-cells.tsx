@@ -1,14 +1,22 @@
 // Modified by Sekar Nagarajan (2026-09-15 14:25)
 import { Tag } from "antd";
-
 import type { ScheduleItem } from "../../types/schedules.types";
 
-export function ScheduleListRoutingCell({ record }: { record: ScheduleItem }) {
+type SchedulesTranslateFn = (
+  key: string,
+  options?: { count?: number; [key: string]: unknown },
+) => string;
+
+export function ScheduleListRoutingCell({
+  record,
+  t,
+}: {
+  record: ScheduleItem;
+  t: SchedulesTranslateFn;
+}) {
   const routingLabel = record.isDirect
-    ? "Direct"
-    : `${record.transshipmentCount} ${
-        record.transshipmentCount === 1 ? "Stop" : "Stops"
-      }`;
+    ? t("list.direct")
+    : t("list.stopCount", { count: record.transshipmentCount });
 
   return (
     <div className="schedule-list-cell__tags">

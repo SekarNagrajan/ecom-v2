@@ -1,4 +1,317 @@
 {
-  "subtitle": "搜索已发布的班轮费率，查看逐项附加费明细，管理服务合约，并申请即期运价报价。",
-  "exportingToast": "正在将运价搜索结果导出到 Excel……"
+  "subtitle": "搜索已发布班轮运价、查看分项附加费明细、管理服务合同，并申请即期运价报价。",
+  "exportingToast": "正在将运价搜索结果导出为 Excel…",
+  "modes": {
+    "tariff": "运价表",
+    "surcharge": "附加费",
+    "serviceContract": "服务合同",
+    "requestForQuote": "询价申请",
+    "publishedLineTariffs": "已发布班轮运价",
+    "surchargesAccessorials": "附加费与杂费",
+    "serviceContracts": "服务合同",
+    "spotRateQuotes": "即期运价报价",
+    "results": {
+      "publishedTariff": "已发布海运运价",
+      "serviceContracts": "服务合同",
+      "surcharges": "附加费与杂费",
+      "spotQuotes": "即期运价报价"
+    }
+  },
+  "search": {
+    "originPort": "起运港 (POL)",
+    "deliveryPort": "交货港 (POD)",
+    "equipmentType": "箱型",
+    "commodity": "货品",
+    "shipmentDate": "装运日期",
+    "validThrough": "有效期至",
+    "originPlaceholder": "从哪里发运？",
+    "deliveryPlaceholder": "货物运往哪里？",
+    "searchingPorts": "正在搜索港口…",
+    "noPortsFound": "未找到港口",
+    "selectOrigin": "请选择起运港",
+    "selectDelivery": "请选择交货港",
+    "swapTooltip": "交换起运港与交货港",
+    "swapAria": "交换起运港与交货港",
+    "toastSearching": "正在搜索 {{title}}：{{pol}} → {{pod}}…",
+    "toastSpotQuotes": "正在显示此航线的即期报价…",
+    "allPorts": "全部"
+  },
+  "options": {
+    "equipment": {
+      "all": "全部箱型",
+      "20dv": "20' 标准干箱 (20DV)",
+      "40hc": "40' 高箱干箱 (40HC)",
+      "40rf": "40' 冷藏箱 (40RF)"
+    },
+    "commodity": {
+      "all": "全部货品",
+      "genCgo": "GEN-CGO - 普通货物 / 商品",
+      "autoParts": "AUTO-PARTS - 汽车零配件与机械",
+      "perishable": "PERISHABLE - 冷藏农产品",
+      "textiles": "TEXTILES - 纺织品与服装"
+    },
+    "ports": {
+      "USNYC": "USNYC - 纽约，美国",
+      "SGSIN": "SGSIN - 新加坡，新加坡",
+      "NLRTM": "NLRTM - 鹿特丹，荷兰",
+      "CNSHA": "CNSHA - 上海，中国",
+      "DEHAM": "DEHAM - 汉堡，德国",
+      "INNSA": "INNSA - 那瓦西瓦，印度",
+      "AEDXB": "AEDXB - 杰贝阿里，阿联酋",
+      "USNYC_short": "USNYC - 纽约",
+      "DEHAM_short": "DEHAM - 汉堡",
+      "NLRTM_short": "NLRTM - 鹿特丹",
+      "INNSA_short": "INNSA - 那瓦西瓦",
+      "SGSIN_short": "SGSIN - 新加坡",
+      "CNSHA_short": "CNSHA - 上海",
+      "AEDXB_short": "AEDXB - 杰贝阿里"
+    },
+    "rateType": {
+      "tariff": "运价表",
+      "contract": "合同",
+      "surcharge": "附加费",
+      "quote": "报价"
+    }
+  },
+  "actions": {
+    "viewQuotes": "查看报价",
+    "requestForQuote": "询价申请",
+    "bookAtThisRate": "按此运价订舱",
+    "viewSurcharges": "查看附加费",
+    "shareRateQuote": "分享运价报价",
+    "share": "分享",
+    "viewTariffTerms": "查看已发布运价条款",
+    "convertQuote": "将报价转换为电子订舱",
+    "viewQuoteTerms": "查看报价条款与条件",
+    "viewSubjectToCharges": "查看应付费用明细",
+    "viewSurchargeHistory": "查看附加费历史",
+    "requestSpotQuote": "申请即期报价",
+    "submitRequestForQuote": "提交询价申请",
+    "sendEmail": "发送邮件"
+  },
+  "rateList": {
+    "columns": {
+      "type": "类型",
+      "code": "代码",
+      "origin": "起运地",
+      "originCode": "起运地代码",
+      "delivery": "交货地",
+      "deliveryCode": "交货地代码",
+      "equipment": "箱型",
+      "commodity": "货品",
+      "currency": "币种",
+      "base": "基础运费",
+      "surcharges": "附加费",
+      "total": "合计",
+      "validFrom": "有效期起",
+      "validTo": "有效期至"
+    },
+    "recommendedLegend": "最低已发布运价（推荐）"
+  },
+  "rateCard": {
+    "recommendedTag": "最低已发布运价",
+    "ref": "编号：{{id}}",
+    "commodityLabel": "货品：{{value}}",
+    "commodityFallback": "货品",
+    "connector": {
+      "accessorial": "杂费",
+      "quotedAmount": "报价金额",
+      "allInEstimate": "全包预估",
+      "breakdown": "海运费 ${{base}} + 附加费 ${{surcharge}}"
+    },
+    "validRange": "有效期 {{from}} → {{to}}",
+    "validFrom": "有效期起",
+    "validTo": "有效期至",
+    "rateType": "运价类型",
+    "rateTypeTooltip": "{{type}}运价",
+    "validFromTooltip": "运价有效起始日期",
+    "validToTooltip": "运价有效截止日期",
+    "surchargeBreakdown": "附加费分项明细",
+    "tariffDefaultTitle": "已发布货运运价表",
+    "norApplicable": "适用 NOR",
+    "accessorialCommodity": "杂费",
+    "searching": "正在搜索运价…"
+  },
+  "tariff": {
+    "filterHeading": "筛选运价表：",
+    "portOfLoad": "装货港",
+    "portOfDischarge": "卸货港",
+    "loading": "正在加载已发布货运运价…",
+    "commodityCode": "代码：{{code}}",
+    "columns": {
+      "portOfLoad": "装货港",
+      "portOfDischarge": "卸货港",
+      "eqpType": "箱型",
+      "commodity": "货品",
+      "currency": "币种",
+      "amount": "金额",
+      "fromDate": "开始日期",
+      "toDate": "结束日期"
+    }
+  },
+  "quotes": {
+    "toolbarTitle": "即期运价询价与报价",
+    "toolbarSub": "提交即期运价询价，并将已批准报价转换为电子订舱。",
+    "loading": "正在加载报价请求…",
+    "pendingPricing": "待定价",
+    "amountUsd": "${{amount}} USD",
+    "validityRange": "{{from}} 至 {{to}}",
+    "columns": {
+      "quoteRefNo": "报价编号",
+      "customerName": "客户名称",
+      "shipmentRoute": "运输路线",
+      "equipmentQty": "箱型与数量",
+      "quotedRateUsd": "报价（USD）",
+      "status": "状态",
+      "validityWindow": "有效期"
+    },
+    "status": {
+      "DRAFT": "草稿",
+      "PENDING_REVIEW": "待审核",
+      "QUOTED": "已报价",
+      "ACCEPTED": "已接受",
+      "EXPIRED": "已过期"
+    }
+  },
+  "contract": {
+    "filterHeading": "筛选合同运价：",
+    "loading": "正在加载服务合同运价…",
+    "validityRange": "{{from}} 至 {{to}}",
+    "columns": {
+      "contractNo": "合同号",
+      "rateNo": "运价编号",
+      "customerName": "客户名称",
+      "agreedRate": "约定运价",
+      "subjectToCharges": "应付费用",
+      "soc": "SOC",
+      "transService": "运输服务",
+      "validityWindow": "有效期"
+    }
+  },
+  "surchargeView": {
+    "filterHeading": "筛选附加费：",
+    "loading": "正在加载附加费明细…",
+    "columns": {
+      "chargeName": "费用名称",
+      "chargeCode": "费用代码",
+      "cargoType": "货物类型",
+      "nor": "NOR"
+    }
+  },
+  "contractSurcharge": {
+    "title": "合同 {{contractNo}} 包含的附加费",
+    "customer": "客户：{{name}}（{{code}}）",
+    "route": "航线：{{originName}}（{{origin}}）→ {{deliveryName}}（{{delivery}}）"
+  },
+  "quoteRequest": {
+    "title": "询价申请",
+    "fields": {
+      "portOfLoad": "装货港 (POL)",
+      "portOfDischarge": "卸货港 (POD)",
+      "cargoType": "货物类型",
+      "cargoQuantity": "货物数量",
+      "commodity": "货品",
+      "cargoWeight": "货物重量（kg）",
+      "expectedRate": "期望目标运价（USD）",
+      "comments": "备注"
+    },
+    "placeholders": {
+      "commodity": "例如：普通货物 / 机械",
+      "comments": "特殊积载或温度要求…"
+    },
+    "validation": {
+      "portOfLoadRequired": "装货港为必填项",
+      "portOfDischargeRequired": "卸货港为必填项",
+      "cargoTypeRequired": "货物类型为必填项",
+      "cargoQuantityMin": "货物数量至少为 1",
+      "commodityRequired": "货品为必填项",
+      "cargoWeightRequired": "货物重量为必填项"
+    },
+    "toasts": {
+      "success": "询价申请 {{quoteNo}} 已成功提交！",
+      "error": "提交询价申请失败，请重试。"
+    }
+  },
+  "shareMail": {
+    "title": "通过邮件分享",
+    "to": "收件人",
+    "cc": "抄送",
+    "subject": "主题",
+    "message": "正文",
+    "placeholders": {
+      "to": "recipient@company.com",
+      "cc": "optional@company.com",
+      "message": "撰写您的运价报价邮件…"
+    },
+    "sharingCount_one": "正在分享 {{count}} 条运价",
+    "sharingCount_other": "正在分享 {{count}} 条运价",
+    "moreRates_one": "另有 {{count}} 条运价",
+    "moreRates_other": "另有 {{count}} 条运价",
+    "validation": {
+      "toRequired": "收件人邮箱为必填项",
+      "toInvalid": "请输入有效的邮箱地址（多个地址用逗号分隔）",
+      "ccInvalid": "请输入有效的抄送邮箱地址（用逗号分隔）",
+      "subjectRequired": "主题为必填项",
+      "subjectMax": "主题不得超过 200 个字符",
+      "messageRequired": "正文为必填项",
+      "messageMax": "正文不得超过 4000 个字符"
+    },
+    "toasts": {
+      "success_one": "运价报价已成功发送（{{count}} 位收件人）。",
+      "success_other": "运价报价已成功发送（{{count}} 位收件人）。",
+      "error": "通过邮件分享运价报价失败，请重试。"
+    },
+    "subjectTemplate": {
+      "single": "货运运价报价 — {{code}}（{{pol}} → {{pod}}）",
+      "multiple": "货运运价报价 — {{count}} 条结果（{{pol}} → {{pod}}）",
+      "empty": "货运运价报价"
+    },
+    "body": {
+      "hello": "您好，",
+      "intro": "请查收以下货运运价详情。",
+      "rateHeading": "运价 {{index}}：{{code}}（{{type}}）",
+      "title": "标题：{{value}}",
+      "lane": "航线：{{value}}",
+      "equipment": "箱型：{{value}}",
+      "commodity": "货品：{{value}}",
+      "oceanFreight": "海运费：{{value}}",
+      "surcharges": "附加费（预估）：{{value}}",
+      "total": "合计（预估）：{{value}}",
+      "validity": "有效期：{{from}} 至 {{to}}",
+      "regards": "此致，",
+      "signature": "E-Com Portal"
+    }
+  },
+  "empty": {
+    "searchTitle": "搜索运价",
+    "searchMessageList": "选择搜索条件并点击搜索以查看已发布运价。",
+    "searchMessageCard": "选择起运地、交货地和筛选条件，然后点击搜索以加载匹配运价。",
+    "noResultsTitle": "未找到运价",
+    "noResultsMessageList": "请尝试不同的港口、箱型或货品筛选。",
+    "noResultsMessageCard": "请调整港口、箱型或货品筛选条件。",
+    "tariffTitle": "未找到已发布运价",
+    "tariffMessage": "请尝试其他港口组合或清除筛选以查看更多运价。",
+    "quotesTitle": "暂无即期运价报价",
+    "quotesMessage": "申请即期报价以比较下一票货物的价格。",
+    "contractsTitle": "未找到服务合同",
+    "contractsMessage": "请尝试其他港口组合或清除筛选以查看更多合同。",
+    "surchargesTitle": "未找到附加费",
+    "surchargesMessage": "请尝试其他港口组合或清除筛选以查看更多费用。"
+  },
+  "errors": {
+    "tariffLoadTitle": "无法加载已发布运价",
+    "tariffLoadMessage": "请求未完成。请检查网络连接后重试。",
+    "shareNoResults": "请先搜索运价，然后再通过电子邮件分享结果。",
+    "loadFailedMessage": "请求未完成。请检查网络连接后重试。",
+    "quotesLoadTitle": "无法加载即期运价报价",
+    "contractsLoadTitle": "无法加载服务合同",
+    "surchargesLoadTitle": "无法加载附加费"
+  },
+  "toasts": {
+    "bookSelected": "已选择运价 {{code}}（{{currency}} ${{amount}}）。正在前往船期与订舱…",
+    "convertingQuote": "正在将报价 {{quoteNo}} 转换为电子订舱…"
+  },
+  "a11y": {
+    "recommendedLegend": "推荐运价图例"
+  }
 }

@@ -3,8 +3,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "@tanstack/react-router";
 import dayjs from "dayjs";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { usePostLoginRedirectStore } from "../../auth/stores/use-post-login-redirect-store";
 import { landingTabToAppPath } from "../../auth/utils/public-menu-access";
@@ -15,17 +16,15 @@ import {
   type RatesSearchForm,
   type ScheduleSearchForm,
   type TrackingSearchForm,
-  ratesSearchSchema,
+  createRatesSearchSchema,
+  createTrackingSearchSchema,
   scheduleSearchSchema,
-  trackingSearchSchema,
 } from "../types/landing.types";
 
 interface UseLandingControllerOptions {
   /** Called when an explicit login action is triggered (optional intended path). */
   onLoginRequired: (intendedPath?: string) => void;
 }
-
-const INCORRECT_CAPTCHA_MESSAGE = "Captcha Entered Incorrectly";
 
 /** Landing schedule/rates defaults — CNSHA → AEJEA. */
 const DEFAULT_POL_LABEL = "CNSHA - SHANGHAI HONGQIAO INT APT";
@@ -36,6 +35,7 @@ const DEFAULT_POD_CODE = "AEJEA";
 export function useLandingController({
   onLoginRequired,
 }: UseLandingControllerOptions) {
+  const { t } = useTranslation(["landing", "common", "modules"]);
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<LandingTab>("schedules");
   const [isSearching, setIsSearching] = useState(false);
@@ -46,6 +46,9 @@ export function useLandingController({
     tracking: "public" as const,
     rates: "public" as const,
   };
+
+  const trackingSchema = useMemo(() => createTrackingSearchSchema(t), [t]);
+  const ratesSchema = useMemo(() => createRatesSearchSchema(t), [t]);
 
   const requireLoginForTab = (tab: LandingTab): boolean =>
     tabConfig[tab] === "login-required";
@@ -123,7 +126,7 @@ export function useLandingController({
   };
 
   const trackingForm = useForm<TrackingSearchForm>({
-    resolver: zodResolver(trackingSearchSchema),
+    resolver: zodResolver(trackingSchema),
     defaultValues: {
       searchType: "CONTAINER",
       trackingNumber: "SMLU8829102",
@@ -147,7 +150,7 @@ export function useLandingController({
       if (!captchaOk) {
         trackingForm.setError("captcha", {
           type: "remote",
-          message: INCORRECT_CAPTCHA_MESSAGE,
+          message: t("errors.captchaIncorrect"),
         });
         return;
       }
@@ -166,7 +169,7 @@ export function useLandingController({
   };
 
   const ratesForm = useForm<RatesSearchForm>({
-    resolver: zodResolver(ratesSearchSchema),
+    resolver: zodResolver(ratesSchema),
     defaultValues: {
       pol: DEFAULT_POL_LABEL,
       pod: DEFAULT_POD_LABEL,
@@ -192,7 +195,7 @@ export function useLandingController({
       if (!captchaOk) {
         ratesForm.setError("captcha", {
           type: "remote",
-          message: INCORRECT_CAPTCHA_MESSAGE,
+          message: t("errors.captchaIncorrect"),
         });
         return;
       }

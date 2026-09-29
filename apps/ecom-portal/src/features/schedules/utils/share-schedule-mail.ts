@@ -1,4 +1,6 @@
 // Modified by Sekar Nagarajan (2026-09-15 15:00)
+import type { TFunction } from "i18next";
+
 import type {
   ScheduleItem,
   ShareScheduleMailSummary,
@@ -16,11 +18,9 @@ function lane(item: ScheduleItem): string {
   return `${item.polPortId} (${item.polPortName}) → ${item.podPortId} (${item.podPortName})`;
 }
 
-function routingLabel(item: ScheduleItem): string {
-  if (item.isDirect) return "Direct";
-  return `${item.transshipmentCount} ${
-    item.transshipmentCount === 1 ? "stop" : "stops"
-  }`;
+function routingLabel(item: ScheduleItem, t: TFunction<"schedules">): string {
+  if (item.isDirect) return t("list.direct");
+  return t("list.stopCount", { count: item.transshipmentCount });
 }
 
 export function toShareScheduleSummary(
@@ -48,55 +48,106 @@ export function toShareScheduleSummary(
   };
 }
 
-export function buildShareScheduleSubject(schedules: ScheduleItem[]): string {
+export function buildShareScheduleSubject(
+  schedules: ScheduleItem[],
+  t: TFunction<"schedules">,
+): string {
   if (schedules.length === 1) {
     const item = schedules[0];
-    return `Sailing schedule — ${item.vesselName} ${item.voyage}${item.bound} (${item.polPortId} → ${item.podPortId})`;
+    return t("shareMail.subjectTemplate.single", {
+      vessel: item.vesselName,
+      voyage: item.voyage,
+      bound: item.bound,
+      pol: item.polPortId,
+      pod: item.podPortId,
+    });
   }
   if (schedules.length > 1) {
     const first = schedules[0];
-    return `Sailing schedules — ${schedules.length} results (${first.polPortId} → ${first.podPortId})`;
+    return t("shareMail.subjectTemplate.multiple", {
+      count: schedules.length,
+      pol: first.polPortId,
+      pod: first.podPortId,
+    });
   }
-  return "Sailing schedules";
+  return t("shareMail.subjectTemplate.empty");
 }
 
 /** HTML body for FormRichTextEditor (Rates share-mail parity). */
-export function buildShareScheduleMessage(schedules: ScheduleItem[]): string {
+export function buildShareScheduleMessage(
+  schedules: ScheduleItem[],
+  t: TFunction<"schedules">,
+): string {
   if (schedules.length === 0) {
-    return "<p>Please find the sailing schedule details below.</p>";
+    return `<p>${escapeHtml(t("shareMail.body.intro"))}</p>`;
   }
 
   const parts: string[] = [
-    "<p>Hello,</p>",
-    "<p>Please find the sailing schedule details below.</p>",
+    `<p>${escapeHtml(t("shareMail.body.hello"))}</p>`,
+    `<p>${escapeHtml(t("shareMail.body.intro"))}</p>`,
   ];
 
   schedules.forEach((item, index) => {
-    const recommended = item.isDefaultRoute ? " · Recommended route" : "";
+    const recommended = item.isDefaultRoute
+      ? t("shareMail.body.recommendedSuffix")
+      : "";
     parts.push(
-      `<p><strong>Sailing ${index + 1}: ${escapeHtml(item.serviceCode)} — ${escapeHtml(item.vesselName)} (${escapeHtml(item.voyage)}${escapeHtml(item.bound)})${escapeHtml(recommended)}</strong></p>`,
+      `<p><strong>${escapeHtml(
+        t("shareMail.body.sailingHeading", {
+          index: index + 1,
+          service: item.serviceCode,
+          vessel: item.vesselName,
+          voyage: item.voyage,
+          bound: item.bound,
+          recommended,
+        }),
+      )}</strong></p>`,
     );
     parts.push("<ul>");
-    parts.push(`<li>Service: ${escapeHtml(item.serviceName)}</li>`);
-    parts.push(`<li>Lane: ${escapeHtml(lane(item))}</li>`);
-    parts.push(`<li>ETD: ${escapeHtml(item.etd)}</li>`);
-    parts.push(`<li>ETA: ${escapeHtml(item.eta)}</li>`);
-    parts.push(`<li>Transit: ${item.transitTimeDays} days</li>`);
-    parts.push(`<li>Routing: ${escapeHtml(routingLabel(item))}</li>`);
+    parts.push(
+      `<li>${escapeHtml(t("shareMail.body.service", { value: item.serviceName }))}</li>`,
+    );
+    parts.push(
+      `<li>${escapeHtml(t("shareMail.body.lane", { value: lane(item) }))}</li>`,
+    );
+    parts.push(
+      `<li>${escapeHtml(t("shareMail.body.etd", { value: item.etd }))}</li>`,
+    );
+    parts.push(
+      `<li>${escapeHtml(t("shareMail.body.eta", { value: item.eta }))}</li>`,
+    );
+    parts.push(
+      `<li>${escapeHtml(
+        t("shareMail.body.transit", { count: item.transitTimeDays }),
+      )}</li>`,
+    );
+    parts.push(
+      `<li>${escapeHtml(
+        t("shareMail.body.routing", { value: routingLabel(item, t) }),
+      )}</li>`,
+    );
     if (item.deadlines?.containerGateIn) {
       parts.push(
-        `<li>Gate-in cut-off: ${escapeHtml(item.deadlines.containerGateIn)}</li>`,
+        `<li>${escapeHtml(
+          t("shareMail.body.gateIn", {
+            value: item.deadlines.containerGateIn,
+          }),
+        )}</li>`,
       );
     }
     if (item.deadlines?.siDocClosing) {
       parts.push(
-        `<li>SI cut-off: ${escapeHtml(item.deadlines.siDocClosing)}</li>`,
+        `<li>${escapeHtml(
+          t("shareMail.body.si", { value: item.deadlines.siDocClosing }),
+        )}</li>`,
       );
     }
     parts.push("</ul>");
   });
 
-  parts.push("<p>Regards,<br/>E-Com Portal</p>");
+  parts.push(
+    `<p>${escapeHtml(t("shareMail.body.regards"))}<br/>${escapeHtml(t("shareMail.body.signature"))}</p>`,
+  );
   return parts.join("");
 }
 

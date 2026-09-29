@@ -24,7 +24,8 @@ const { Text } = Typography;
 
 export function RatesRoute() {
   const toast = useToast();
-  const { t } = useTranslation(["rates", "common"]);
+  const { t } = useTranslation(["rates", "common", "modules"]);
+  const loadingLabel = t("common:status.loading");
   const moduleTitles = useModuleTitles();
   const {
     viewMode,
@@ -102,7 +103,7 @@ export function RatesRoute() {
               <span
                 className="module-loading-center"
                 role="status"
-                aria-label="Loading"
+                aria-label={loadingLabel}
               >
                 <Spin size="small" />
               </span>
@@ -115,7 +116,7 @@ export function RatesRoute() {
           <div
             className="rates-empty module-loading-center"
             role="status"
-            aria-label="Loading"
+            aria-label={loadingLabel}
           >
             <Spin size="medium" />
           </div>

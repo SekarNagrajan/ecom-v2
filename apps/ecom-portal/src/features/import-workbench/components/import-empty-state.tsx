@@ -1,6 +1,7 @@
 // Modified by Sekar Nagarajan (2026-09-15 17:20)
 import { AppFileUpload } from "@solverminds/shared-ui";
 import { Typography, theme } from "antd";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import type { SpreadsheetImportFieldDefinition } from "../types/import-workbench.types";
@@ -23,19 +24,22 @@ export function ImportEmptyState<TValues extends object>({
   onFileSelect,
   onValidationError,
 }: ImportEmptyStateProps<TValues>) {
+  const { t } = useTranslation(["import-workbench", "common"]);
   const { token } = theme.useToken();
   const maxMb = (maxSizeBytes / (1024 * 1024)).toFixed(0);
 
   return (
     <div className="import-wb-empty">
-      <section className="import-wb-empty__upload" aria-label="Upload workbook">
+      <section
+        className="import-wb-empty__upload"
+        aria-label={t("empty.uploadAria")}
+      >
         <div className="import-wb-empty__upload-intro">
           <Typography.Title level={5} style={{ margin: 0 }}>
-            Upload workbook
+            {t("empty.uploadTitle")}
           </Typography.Title>
           <Typography.Text type="secondary">
-            Drop your Excel file here, or download the template first so headers
-            match required columns.
+            {t("empty.uploadHint")}
           </Typography.Text>
         </div>
 
@@ -46,7 +50,7 @@ export function ImportEmptyState<TValues extends object>({
               size={16}
               style={{ color: token.colorPrimary }}
             />
-            <Typography.Text>.xlsx only</Typography.Text>
+            <Typography.Text>{t("empty.xlsxOnly")}</Typography.Text>
           </span>
           <span className="import-wb-empty__hint">
             <AppIcon
@@ -54,7 +58,7 @@ export function ImportEmptyState<TValues extends object>({
               size={16}
               style={{ color: token.colorSuccess }}
             />
-            <Typography.Text>Header row required</Typography.Text>
+            <Typography.Text>{t("empty.headerRequired")}</Typography.Text>
           </span>
           <span className="import-wb-empty__hint">
             <AppIcon
@@ -62,7 +66,9 @@ export function ImportEmptyState<TValues extends object>({
               size={16}
               style={{ color: token.colorWarning }}
             />
-            <Typography.Text>{`${maxMb} MB max`}</Typography.Text>
+            <Typography.Text>
+              {t("empty.maxSize", { maxMb })}
+            </Typography.Text>
           </span>
         </div>
 
@@ -71,8 +77,8 @@ export function ImportEmptyState<TValues extends object>({
             mode="dropzone"
             accept={accept}
             maxSizeBytes={maxSizeBytes}
-            title="Drop workbook"
-            description="Drag and drop or click to browse"
+            title={t("empty.dropTitle")}
+            description={t("empty.dropDescription")}
             onFileSelect={onFileSelect}
             onValidationError={onValidationError}
             showFeedback={false}
@@ -81,13 +87,16 @@ export function ImportEmptyState<TValues extends object>({
         </div>
       </section>
 
-      <aside className="import-wb-empty__guide" aria-label="Column guide">
+      <aside
+        className="import-wb-empty__guide"
+        aria-label={t("empty.columnGuideAria")}
+      >
         <div className="import-wb-empty__guide-head">
           <Typography.Title level={5} style={{ margin: 0 }}>
-            Column guide
+            {t("empty.columnGuideTitle")}
           </Typography.Title>
           <Typography.Text type="secondary">
-            Required fields appear first in the template and in this list.
+            {t("empty.columnGuideHint")}
           </Typography.Text>
         </div>
         <div className="import-wb-empty__guide-body custom-scroll">

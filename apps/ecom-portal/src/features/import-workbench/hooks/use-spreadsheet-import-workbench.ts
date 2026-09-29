@@ -1,3 +1,4 @@
+import { extractApiError } from '@solverminds/platform';
 import { useToast } from '@solverminds/shared-ui/hooks';
 import type {
   CellValueChangedEvent,
@@ -11,8 +12,8 @@ import {
   useRef,
   useState,
 } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import { extractApiError } from '@solverminds/platform';
 import {
   SPREADSHEET_IMPORT_SERVER_ERROR_CODE,
   type SpreadsheetImportAdapter,
@@ -145,6 +146,7 @@ export function useSpreadsheetImportWorkbench<
   onCommit,
   submitDisabledReason,
 }: UseSpreadsheetImportWorkbenchProps<TValues, TPayload>) {
+  const { t } = useTranslation(['import-workbench', 'common']);
   const toast = useToast();
   const gridApiRef = useRef<GridApi<SpreadsheetImportGridRow<TValues>> | null>(
     null
@@ -338,7 +340,11 @@ export function useSpreadsheetImportWorkbench<
           setUnmatchedHeaders([]);
           setActiveIssueId(null);
           setParseError(
-            `This sheet has ${parsedSheet.rows.length} rows. The bulk import accepts a maximum of ${adapter.maxRowCount} ${adapter.entityLabel} per file. Split the workbook and try again.`
+            t('errors.maxRows', {
+              rowCount: parsedSheet.rows.length,
+              maxRowCount: adapter.maxRowCount,
+              entityLabel: adapter.entityLabel,
+            })
           );
         });
         return;
@@ -370,7 +376,7 @@ export function useSpreadsheetImportWorkbench<
         setParseError(
           error instanceof Error
             ? error.message
-            : 'Unable to read the selected Excel file.'
+            : t('errors.unableToRead')
         );
       });
     } finally {

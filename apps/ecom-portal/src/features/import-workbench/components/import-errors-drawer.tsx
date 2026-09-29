@@ -1,11 +1,16 @@
-import { AppButton, AppDrawer } from '@solverminds/shared-ui';
-import { Alert, Card, Empty, Flex, Typography, theme } from 'antd';
+import { AppButton, AppDrawer } from "@solverminds/shared-ui";
+import { Alert, Card, Empty, Flex, Typography, theme } from "antd";
+import { useTranslation } from "react-i18next";
 
-import { AppIcon, Icons } from '../../../components/icons';
+import { AppIcon, Icons } from "../../../components/icons";
 import {
   type SpreadsheetImportIssueRecord,
   SPREADSHEET_IMPORT_SERVER_ERROR_CODE,
-} from '../types/import-workbench.types';
+} from "../types/import-workbench.types";
+import {
+  PHONE_INVALID_ISSUE_CODE,
+  PHONE_MISSING_COUNTRY_CODE_ISSUE_CODE,
+} from "../utils/spreadsheet-import-phone.utils";
 
 interface ImportErrorsDrawerProps<TValues extends object> {
   activeIssueId?: string | null;
@@ -23,28 +28,43 @@ interface ImportErrorActionProps<TValues extends object> {
   onJumpToIssue: (issue: SpreadsheetImportIssueRecord<TValues>) => void;
 }
 
-function getConciseIssueMessage(message: string) {
-  if (message.toLowerCase().includes('is required')) {
-    return 'Required';
+function getConciseIssueMessage(
+  issue: SpreadsheetImportIssueRecord<object>,
+  t: (key: string) => string,
+) {
+  if (
+    issue.code === PHONE_INVALID_ISSUE_CODE ||
+    issue.code === PHONE_MISSING_COUNTRY_CODE_ISSUE_CODE
+  ) {
+    return t("errorsDrawer.kinds.invalidPhone");
   }
 
-  if (message.toLowerCase().includes('select a valid')) {
-    return 'Select a valid option';
+  const message = issue.message.toLowerCase();
+
+  if (message.includes("is required")) {
+    return t("errorsDrawer.kinds.required");
   }
 
-  if (message.toLowerCase().includes('invalid phone number length')) {
-    return 'Invalid length';
+  if (message.includes("select a valid")) {
+    return t("errorsDrawer.kinds.selectValid");
   }
 
-  if (message.toLowerCase().includes('invalid phone number')) {
-    return 'Invalid phone';
+  if (message.includes("invalid phone number length")) {
+    return t("errorsDrawer.kinds.invalidLength");
   }
 
-  if (message.toLowerCase().includes('invalid email address')) {
-    return 'Invalid email';
+  if (message.includes("invalid phone number")) {
+    return t("errorsDrawer.kinds.invalidPhone");
   }
 
-  return message;
+  if (
+    message.includes("invalid email address") ||
+    message.includes("invalid email")
+  ) {
+    return t("errorsDrawer.kinds.invalidEmail");
+  }
+
+  return issue.message;
 }
 
 function ImportErrorAction<TValues extends object>({
@@ -52,9 +72,13 @@ function ImportErrorAction<TValues extends object>({
   issue,
   onJumpToIssue,
 }: ImportErrorActionProps<TValues>) {
+  const { t } = useTranslation(["import-workbench", "common"]);
   const { token } = theme.useToken();
   const isActive = issue.id === activeIssueId;
   const isServerError = issue.code === SPREADSHEET_IMPORT_SERVER_ERROR_CODE;
+  const fieldLabel = isServerError
+    ? t("errorsDrawer.serverField")
+    : issue.fieldLabel;
 
   const handleClick = () => {
     onJumpToIssue(issue);
@@ -67,11 +91,11 @@ function ImportErrorAction<TValues extends object>({
         border: `1px solid ${
           isActive ? token.colorPrimaryBorder : token.colorBorderSecondary
         }`,
-        height: 'auto',
-        justifyContent: 'flex-start',
+        height: "auto",
+        justifyContent: "flex-start",
         paddingBlock: token.paddingXS,
         paddingInline: token.paddingXS,
-        width: '100%',
+        width: "100%",
       }}
       onClick={handleClick}
     >
@@ -79,27 +103,33 @@ function ImportErrorAction<TValues extends object>({
         vertical
         align="start"
         gap={token.marginXXS}
-        style={{ minWidth: 0, width: '100%' }}
+        style={{ minWidth: 0, width: "100%" }}
       >
         <Typography.Text
           strong
           style={{
-            overflowWrap: 'anywhere',
-            whiteSpace: 'normal',
+            overflowWrap: "anywhere",
+            whiteSpace: "normal",
           }}
         >
-          Row {issue.rowNumber} · {issue.fieldLabel}
+          {t("errorsDrawer.rowField", {
+            rowNumber: issue.rowNumber,
+            fieldLabel,
+          })}
         </Typography.Text>
         <Typography.Text
-          type={isServerError ? 'danger' : 'secondary'}
+          type={isServerError ? "danger" : "secondary"}
           style={{
-            overflowWrap: 'anywhere',
-            whiteSpace: 'normal',
+            overflowWrap: "anywhere",
+            whiteSpace: "normal",
           }}
         >
           {isServerError
-            ? `Server: ${issue.message}`
-            : getConciseIssueMessage(issue.message)}
+            ? t("errorsDrawer.serverPrefix", { message: issue.message })
+            : getConciseIssueMessage(
+                issue as SpreadsheetImportIssueRecord<object>,
+                t,
+              )}
         </Typography.Text>
       </Flex>
     </AppButton>
@@ -115,7 +145,14 @@ export function ImportErrorsDrawer<TValues extends object>({
   open,
   unmatchedHeaders,
 }: ImportErrorsDrawerProps<TValues>) {
+  const { t } = useTranslation(["import-workbench", "common"]);
   const { token } = theme.useToken();
+
+  // Hooks must run before early return.
+  const title =
+    issues.length > 0
+      ? t("errorsDrawer.titleWithCount", { count: issues.length })
+      : t("errorsDrawer.title");
 
   if (!open) {
     return null;
@@ -127,13 +164,15 @@ export function ImportErrorsDrawer<TValues extends object>({
         <Alert
           type="warning"
           showIcon
-          message={`Ignored columns: ${unmatchedHeaders.join(', ')}`}
+          message={t("errorsDrawer.ignoredColumns", {
+            columns: unmatchedHeaders.join(", "),
+          })}
         />
       ) : null}
 
       {issues.length === 0 ? (
         <Empty
-          description="No validation errors."
+          description={t("errorsDrawer.noErrors")}
           image={Empty.PRESENTED_IMAGE_SIMPLE}
         />
       ) : (
@@ -143,7 +182,7 @@ export function ImportErrorsDrawer<TValues extends object>({
           style={{
             flex: 1,
             minHeight: 0,
-            overflow: 'auto',
+            overflow: "auto",
             paddingBottom: token.paddingSM,
             paddingInlineEnd: token.paddingXXS,
           }}
@@ -168,7 +207,7 @@ export function ImportErrorsDrawer<TValues extends object>({
       <AppDrawer
         open={open}
         onClose={onClose}
-        title={`Errors${issues.length > 0 ? ` (${issues.length})` : ''}`}
+        title={title}
         dialogSize="fullscreen"
       >
         {content}
@@ -178,28 +217,28 @@ export function ImportErrorsDrawer<TValues extends object>({
 
   return (
     <Card
-      title={`Errors${issues.length > 0 ? ` (${issues.length})` : ''}`}
+      title={title}
       extra={
         <AppButton
           type="text"
           size="small"
           icon={<AppIcon icon={Icons.x} size={16} />}
           onClick={onClose}
-          aria-label="Hide errors"
+          aria-label={t("a11y.hideErrors")}
         />
       }
       style={{
-        height: '100%',
+        height: "100%",
         minHeight: 0,
       }}
       styles={{
         body: {
-          display: 'flex',
-          flexDirection: 'column',
+          display: "flex",
+          flexDirection: "column",
           gap: token.marginSM,
-          height: '100%',
+          height: "100%",
           minHeight: 0,
-          overflow: 'hidden',
+          overflow: "hidden",
           padding: token.paddingSM,
         },
       }}

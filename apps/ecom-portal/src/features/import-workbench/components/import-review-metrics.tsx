@@ -1,5 +1,6 @@
 // Modified by Sekar Nagarajan (2026-09-15 17:20)
 import { theme } from "antd";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 
@@ -18,10 +19,11 @@ export function ImportReviewMetrics({
   rowCount,
   validRowCount,
 }: ImportReviewMetricsProps) {
+  const { t } = useTranslation(["import-workbench", "common"]);
   const { token } = theme.useToken();
 
   return (
-    <div className="import-wb-metrics" aria-label="Import review metrics">
+    <div className="import-wb-metrics" aria-label={t("metrics.ariaLabel")}>
       <div className="import-wb-metric import-wb-metric--file">
         <span className="import-wb-metric__label">
           <AppIcon
@@ -29,15 +31,18 @@ export function ImportReviewMetrics({
             size={14}
             style={{ color: token.colorTextSecondary, marginRight: 4 }}
           />
-          File
+          {t("metrics.file")}
         </span>
-        <span className="import-wb-metric__value import-wb-metric__value--sm" title={fileName}>
+        <span
+          className="import-wb-metric__value import-wb-metric__value--sm"
+          title={fileName}
+        >
           {fileName}
         </span>
       </div>
 
       <div className="import-wb-metric">
-        <span className="import-wb-metric__label">Rows</span>
+        <span className="import-wb-metric__label">{t("metrics.rows")}</span>
         <span className="import-wb-metric__value">{rowCount}</span>
       </div>
 
@@ -46,7 +51,7 @@ export function ImportReviewMetrics({
           invalidRowCount > 0 ? " import-wb-metric--invalid" : ""
         }`}
       >
-        <span className="import-wb-metric__label">Invalid</span>
+        <span className="import-wb-metric__label">{t("metrics.invalid")}</span>
         <span
           className="import-wb-metric__value"
           style={{
@@ -62,7 +67,7 @@ export function ImportReviewMetrics({
           issueCount > 0 ? " import-wb-metric--issues" : ""
         }`}
       >
-        <span className="import-wb-metric__label">Issues</span>
+        <span className="import-wb-metric__label">{t("metrics.issues")}</span>
         <span
           className="import-wb-metric__value"
           style={{
@@ -74,7 +79,7 @@ export function ImportReviewMetrics({
       </div>
 
       <div className="import-wb-metric import-wb-metric--valid">
-        <span className="import-wb-metric__label">Valid</span>
+        <span className="import-wb-metric__label">{t("metrics.valid")}</span>
         <span
           className="import-wb-metric__value"
           style={{ color: token.colorSuccess }}

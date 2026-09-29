@@ -2,6 +2,7 @@
 import { AppButton, AppSelect } from "@solverminds/shared-ui";
 import { useAntdBreakpoint } from "@solverminds/shared-ui/hooks";
 import { Flex, Tag, Typography } from "antd";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import type {
@@ -50,15 +51,17 @@ interface ImportReviewToolbarProps<TValues extends object> {
 
 function renderBulkFieldLabel({
   emptyCount,
+  emptyLabel,
   invalidCount,
+  invalidLabel,
   label,
 }: {
   emptyCount: number;
+  emptyLabel: string;
   invalidCount: number;
+  invalidLabel: string;
   label: string;
 }) {
-  const issueTotal = emptyCount + invalidCount;
-
   return (
     <Flex
       align="center"
@@ -69,17 +72,16 @@ function renderBulkFieldLabel({
     >
       <Typography.Text ellipsis style={{ minWidth: 0, flex: 1 }}>
         {label}
-        {/* {issueTotal > 0 ? ` (${issueTotal})` : ""} */}
       </Typography.Text>
       <Flex gap={4} wrap={false}>
         {invalidCount > 0 ? (
           <Tag color="error" style={{ flexShrink: 0, marginInlineEnd: 0 }}>
-            {invalidCount} invalid
+            {invalidLabel}
           </Tag>
         ) : null}
         {emptyCount > 0 ? (
           <Tag color="warning" style={{ flexShrink: 0, marginInlineEnd: 0 }}>
-            {emptyCount} empty
+            {emptyLabel}
           </Tag>
         ) : null}
       </Flex>
@@ -109,11 +111,13 @@ export function ImportReviewToolbar<TValues extends object>({
   sheetOptions,
   supportedFields,
 }: ImportReviewToolbarProps<TValues>) {
+  const { t } = useTranslation(["import-workbench", "common"]);
   const { isExtraSmall } = useAntdBreakpoint();
+  const allColumnsLabel = t("toolbar.allColumns");
 
   const bulkFieldOptions = [
     {
-      label: "All Columns",
+      label: allColumnsLabel,
       emptyCount: 0,
       invalidCount: 0,
       value: ALL_COLUMNS_VALUE,
@@ -156,8 +160,8 @@ export function ImportReviewToolbar<TValues extends object>({
       typeof value === "string"
         ? value
         : value && typeof value === "object" && "value" in value
-        ? String((value as { value: unknown }).value)
-        : undefined;
+          ? String((value as { value: unknown }).value)
+          : undefined;
 
     if (!nextValue) {
       return;
@@ -179,15 +183,15 @@ export function ImportReviewToolbar<TValues extends object>({
             options={sheetOptions}
             value={selectedSheetName}
             onChange={handleSheetSelect}
-            placeholder="Sheet"
+            placeholder={t("toolbar.sheet")}
           />
         ) : null}
         <AppSelect
           style={{ width: isExtraSmall ? 100 : 120 }}
           value={rowFilter}
           options={[
-            { label: "All rows", value: "all" },
-            { label: "Errors", value: "errors" },
+            { label: t("toolbar.allRows"), value: "all" },
+            { label: t("toolbar.errors"), value: "errors" },
           ]}
           onChange={handleRowFilterSelect}
         />
@@ -218,15 +222,23 @@ export function ImportReviewToolbar<TValues extends object>({
 
             return renderBulkFieldLabel({
               emptyCount,
+              emptyLabel: t("toolbar.emptyCount", { count: emptyCount }),
               invalidCount,
+              invalidLabel: t("toolbar.invalidCount", { count: invalidCount }),
               label: String(option.data.label),
             });
           }}
           labelRender={() =>
             renderBulkFieldLabel({
               emptyCount: selectedBulkFieldOption?.emptyCount ?? 0,
+              emptyLabel: t("toolbar.emptyCount", {
+                count: selectedBulkFieldOption?.emptyCount ?? 0,
+              }),
               invalidCount: selectedBulkFieldOption?.invalidCount ?? 0,
-              label: selectedBulkFieldOption?.label ?? "All Columns",
+              invalidLabel: t("toolbar.invalidCount", {
+                count: selectedBulkFieldOption?.invalidCount ?? 0,
+              }),
+              label: selectedBulkFieldOption?.label ?? allColumnsLabel,
             })
           }
           onChange={handleBulkFieldSelect}
@@ -240,7 +252,7 @@ export function ImportReviewToolbar<TValues extends object>({
             onClick={onAddCountryCode}
             disabled={isBusy || missingCountryCodeCount === 0}
           >
-            {isExtraSmall ? null : "Add Country Code"}
+            {isExtraSmall ? null : t("toolbar.addCountryCode")}
           </AppButton>
         ) : null}
         <AppButton
@@ -250,7 +262,7 @@ export function ImportReviewToolbar<TValues extends object>({
             !bulkField || isBusy || selectedFieldCounts.invalidCount === 0
           }
         >
-          {isExtraSmall ? null : "Replace Invalid"}
+          {isExtraSmall ? null : t("toolbar.replaceInvalid")}
         </AppButton>
         <AppButton
           icon={<AppIcon icon={Icons.settings} size={16} />}
@@ -259,31 +271,35 @@ export function ImportReviewToolbar<TValues extends object>({
             !bulkField || isBusy || selectedFieldCounts.emptyCount === 0
           }
         >
-          {isExtraSmall ? null : "Fill Empty"}
+          {isExtraSmall ? null : t("toolbar.fillEmpty")}
         </AppButton>
         <AppButton
           icon={<AppIcon icon={Icons.chevronLeft} size={16} />}
           onClick={onPreviousError}
           disabled={navigationTargetCount === 0 || isBusy}
-          aria-label="Previous error"
+          aria-label={t("a11y.previousError")}
         >
-          {isExtraSmall ? null : "Prev"}
+          {isExtraSmall ? null : t("toolbar.prev")}
         </AppButton>
         <AppButton
           icon={<AppIcon icon={Icons.chevronRight} size={16} />}
           onClick={onNextError}
           disabled={navigationTargetCount === 0 || isBusy}
-          aria-label="Next error"
+          aria-label={t("a11y.nextError")}
         >
-          {isExtraSmall ? null : "Next"}
+          {isExtraSmall ? null : t("common:actions.next")}
         </AppButton>
         <AppButton
           type={errorsVisible ? "primary" : "default"}
           icon={<AppIcon icon={Icons.alert} size={16} />}
           onClick={onToggleErrors}
-          aria-label="Toggle errors"
+          aria-label={t("a11y.toggleErrors")}
         >
-          {isExtraSmall ? null : errorsVisible ? "Hide Errors" : "Errors"}
+          {isExtraSmall
+            ? null
+            : errorsVisible
+              ? t("toolbar.hideErrors")
+              : t("toolbar.errors")}
         </AppButton>
       </div>
     </div>

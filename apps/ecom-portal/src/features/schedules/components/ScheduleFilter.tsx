@@ -2,6 +2,7 @@
 import { AppButton, FormInput } from "@solverminds/shared-ui";
 import { Card, Space } from "antd";
 import type { UseFormReturn } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 
@@ -18,6 +19,8 @@ export function ScheduleFilter({
   onReset,
   isLoading,
 }: ScheduleFilterProps) {
+  const { t } = useTranslation(["schedules", "common", "modules"]);
+
   return (
     <Card className="schedule-filter-card">
       <form onSubmit={form.handleSubmit(onSearch)}>
@@ -27,16 +30,16 @@ export function ScheduleFilter({
               <FormInput
                 control={form.control}
                 name="originPort"
-                label="Origin Port"
-                placeholder="e.g. CNSHA or Shanghai"
+                label={t("filters.originPort")}
+                placeholder={t("filters.originPlaceholder")}
               />
             </div>
             <div className="schedule-filter-field">
               <FormInput
                 control={form.control}
                 name="destinationPort"
-                label="Destination Port"
-                placeholder="e.g. SGSIN or Singapore"
+                label={t("filters.destinationPort")}
+                placeholder={t("filters.destinationPlaceholder")}
               />
             </div>
           </Space>
@@ -47,14 +50,14 @@ export function ScheduleFilter({
               icon={<AppIcon icon={Icons.search} size={16} />}
               loading={isLoading}
             >
-              Search Vessel Schedules
+              {t("filters.searchVesselSchedules")}
             </AppButton>
             <AppButton
               danger
               onClick={onReset}
               icon={<AppIcon icon={Icons.refreshCw} size={16} tone="delete" />}
             >
-              Reset
+              {t("common:actions.reset")}
             </AppButton>
           </Space>
         </Space>

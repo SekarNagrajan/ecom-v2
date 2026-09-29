@@ -1,4 +1,317 @@
 {
-  "subtitle": "Busque tarifas de línea publicadas, vea desgloses detallados de recargos, gestione Contratos de Servicio y solicite cotizaciones de tarifas spot.",
-  "exportingToast": "Exportando resultados de búsqueda de tarifas a Excel..."
+  "subtitle": "Busque tarifas de línea publicadas, vea desgloses de recargos, gestione contratos de servicio y solicite cotizaciones spot.",
+  "exportingToast": "Exportando resultados de búsqueda de tarifas a Excel...",
+  "modes": {
+    "tariff": "Tarifa",
+    "surcharge": "Recargo",
+    "serviceContract": "Contrato de servicio",
+    "requestForQuote": "Solicitud de cotización",
+    "publishedLineTariffs": "Tarifas de línea publicadas",
+    "surchargesAccessorials": "Recargos y accesorios",
+    "serviceContracts": "Contratos de servicio",
+    "spotRateQuotes": "Cotizaciones spot",
+    "results": {
+      "publishedTariff": "Tarifas de flete publicadas",
+      "serviceContracts": "Contratos de servicio",
+      "surcharges": "Recargos y accesorios",
+      "spotQuotes": "Cotizaciones spot"
+    }
+  },
+  "search": {
+    "originPort": "Puerto de origen (POL)",
+    "deliveryPort": "Puerto de entrega (POD)",
+    "equipmentType": "Tipo de equipo",
+    "commodity": "Mercancía",
+    "shipmentDate": "Fecha de envío",
+    "validThrough": "Válido hasta",
+    "originPlaceholder": "¿Desde dónde envía?",
+    "deliveryPlaceholder": "¿Hacia dónde va la carga?",
+    "searchingPorts": "Buscando puertos…",
+    "noPortsFound": "No se encontraron puertos",
+    "selectOrigin": "Seleccione el puerto de origen",
+    "selectDelivery": "Seleccione el puerto de entrega",
+    "swapTooltip": "Intercambiar origen y entrega",
+    "swapAria": "Intercambiar puertos de origen y entrega",
+    "toastSearching": "Buscando {{title}} para {{pol}} → {{pod}}...",
+    "toastSpotQuotes": "Mostrando cotizaciones spot para esta ruta…",
+    "allPorts": "Todos"
+  },
+  "options": {
+    "equipment": {
+      "all": "Todos los tipos de equipo",
+      "20dv": "20' Standard Dry (20DV)",
+      "40hc": "40' High Cube Dry (40HC)",
+      "40rf": "40' Reefer Container (40RF)"
+    },
+    "commodity": {
+      "all": "Todas las mercancías",
+      "genCgo": "GEN-CGO - Carga general / Mercancía",
+      "autoParts": "AUTO-PARTS - Repuestos automotrices y maquinaria",
+      "perishable": "PERISHABLE - Productos agrícolas refrigerados",
+      "textiles": "TEXTILES - Textiles y prendas"
+    },
+    "ports": {
+      "USNYC": "USNYC - Nueva York, EE. UU.",
+      "SGSIN": "SGSIN - Singapur, Singapur",
+      "NLRTM": "NLRTM - Róterdam, Países Bajos",
+      "CNSHA": "CNSHA - Shanghái, China",
+      "DEHAM": "DEHAM - Hamburgo, Alemania",
+      "INNSA": "INNSA - Nhava Sheva, India",
+      "AEDXB": "AEDXB - Jebel Ali, EAU",
+      "USNYC_short": "USNYC - Nueva York",
+      "DEHAM_short": "DEHAM - Hamburgo",
+      "NLRTM_short": "NLRTM - Róterdam",
+      "INNSA_short": "INNSA - Nhava Sheva",
+      "SGSIN_short": "SGSIN - Singapur",
+      "CNSHA_short": "CNSHA - Shanghái",
+      "AEDXB_short": "AEDXB - Jebel Ali"
+    },
+    "rateType": {
+      "tariff": "Tarifa",
+      "contract": "Contrato",
+      "surcharge": "Recargo",
+      "quote": "Cotización"
+    }
+  },
+  "actions": {
+    "viewQuotes": "Ver cotizaciones",
+    "requestForQuote": "Solicitud de cotización",
+    "bookAtThisRate": "Reservar a esta tarifa",
+    "viewSurcharges": "Ver recargos",
+    "shareRateQuote": "Compartir cotización",
+    "share": "Compartir",
+    "viewTariffTerms": "Ver términos de tarifa publicada",
+    "convertQuote": "Convertir cotización en e-Booking",
+    "viewQuoteTerms": "Ver términos y condiciones de la cotización",
+    "viewSubjectToCharges": "Ver desglose de cargos sujetos",
+    "viewSurchargeHistory": "Ver historial de recargos",
+    "requestSpotQuote": "Solicitar cotización spot",
+    "submitRequestForQuote": "Enviar solicitud de cotización",
+    "sendEmail": "Enviar correo"
+  },
+  "rateList": {
+    "columns": {
+      "type": "Tipo",
+      "code": "Código",
+      "origin": "Origen",
+      "originCode": "Código de origen",
+      "delivery": "Entrega",
+      "deliveryCode": "Código de entrega",
+      "equipment": "Equipo",
+      "commodity": "Mercancía",
+      "currency": "Moneda",
+      "base": "Base",
+      "surcharges": "Recargos",
+      "total": "Total",
+      "validFrom": "Válido desde",
+      "validTo": "Válido hasta"
+    },
+    "recommendedLegend": "Flete publicado más bajo (recomendado)"
+  },
+  "rateCard": {
+    "recommendedTag": "Flete publicado más bajo",
+    "ref": "Ref: {{id}}",
+    "commodityLabel": "Mercancía: {{value}}",
+    "commodityFallback": "Mercancía",
+    "connector": {
+      "accessorial": "Accesorio",
+      "quotedAmount": "Importe cotizado",
+      "allInEstimate": "Estimación todo incluido",
+      "breakdown": "OFR ${{base}} + recargos ${{surcharge}}"
+    },
+    "validRange": "Válido {{from}} → {{to}}",
+    "validFrom": "Válido desde",
+    "validTo": "Válido hasta",
+    "rateType": "Tipo de tarifa",
+    "rateTypeTooltip": "Tarifa {{type}}",
+    "validFromTooltip": "Fecha de inicio de validez",
+    "validToTooltip": "Fecha de fin de validez",
+    "surchargeBreakdown": "Desglose detallado de recargos",
+    "tariffDefaultTitle": "Tarifa de flete publicada",
+    "norApplicable": "NOR aplicable",
+    "accessorialCommodity": "Accesorio",
+    "searching": "Buscando tarifas de flete…"
+  },
+  "tariff": {
+    "filterHeading": "Filtrar tarifa:",
+    "portOfLoad": "Puerto de carga",
+    "portOfDischarge": "Puerto de descarga",
+    "loading": "Cargando tarifas de flete publicadas...",
+    "commodityCode": "Código: {{code}}",
+    "columns": {
+      "portOfLoad": "Puerto de carga",
+      "portOfDischarge": "Puerto de descarga",
+      "eqpType": "Tipo de eqp",
+      "commodity": "Mercancía",
+      "currency": "Moneda",
+      "amount": "Importe",
+      "fromDate": "Desde",
+      "toDate": "Hasta"
+    }
+  },
+  "quotes": {
+    "toolbarTitle": "Consultas y cotizaciones spot",
+    "toolbarSub": "Envíe consultas spot y convierta cotizaciones aprobadas en e-Bookings.",
+    "loading": "Cargando solicitudes de cotización...",
+    "pendingPricing": "Precio pendiente",
+    "amountUsd": "${{amount}} USD",
+    "validityRange": "{{from}} a {{to}}",
+    "columns": {
+      "quoteRefNo": "N.º de cotización",
+      "customerName": "Nombre del cliente",
+      "shipmentRoute": "Ruta de envío",
+      "equipmentQty": "Equipo y cantidad",
+      "quotedRateUsd": "Tarifa cotizada (USD)",
+      "status": "Estado",
+      "validityWindow": "Ventana de validez"
+    },
+    "status": {
+      "DRAFT": "Borrador",
+      "PENDING_REVIEW": "Pendiente de revisión",
+      "QUOTED": "Cotizado",
+      "ACCEPTED": "Aceptado",
+      "EXPIRED": "Vencido"
+    }
+  },
+  "contract": {
+    "filterHeading": "Filtrar tarifas de contrato:",
+    "loading": "Cargando tarifas de contratos de servicio...",
+    "validityRange": "{{from}} a {{to}}",
+    "columns": {
+      "contractNo": "N.º de contrato",
+      "rateNo": "N.º de tarifa",
+      "customerName": "Nombre del cliente",
+      "agreedRate": "Tarifa acordada",
+      "subjectToCharges": "Sujeto a cargos",
+      "soc": "SOC",
+      "transService": "Servicio trans.",
+      "validityWindow": "Ventana de validez"
+    }
+  },
+  "surchargeView": {
+    "filterHeading": "Filtrar recargo:",
+    "loading": "Cargando desglose de recargos...",
+    "columns": {
+      "chargeName": "Nombre del cargo",
+      "chargeCode": "Código del cargo",
+      "cargoType": "Tipo de carga",
+      "nor": "NOR"
+    }
+  },
+  "contractSurcharge": {
+    "title": "Recargos incluidos para el contrato {{contractNo}}",
+    "customer": "Cliente: {{name}} ({{code}})",
+    "route": "Ruta: {{originName}} ({{origin}}) → {{deliveryName}} ({{delivery}})"
+  },
+  "quoteRequest": {
+    "title": "Solicitud de cotización",
+    "fields": {
+      "portOfLoad": "Puerto de carga (POL)",
+      "portOfDischarge": "Puerto de descarga (POD)",
+      "cargoType": "Tipo de carga",
+      "cargoQuantity": "Cantidad de carga",
+      "commodity": "Mercancía",
+      "cargoWeight": "Peso de la carga (kg)",
+      "expectedRate": "Tarifa objetivo esperada (USD)",
+      "comments": "Comentarios"
+    },
+    "placeholders": {
+      "commodity": "p. ej. Carga general / Maquinaria",
+      "comments": "Requisitos especiales de estiba o temperatura..."
+    },
+    "validation": {
+      "portOfLoadRequired": "El puerto de carga es obligatorio",
+      "portOfDischargeRequired": "El puerto de descarga es obligatorio",
+      "cargoTypeRequired": "El tipo de carga es obligatorio",
+      "cargoQuantityMin": "La cantidad de carga debe ser al menos 1",
+      "commodityRequired": "La mercancía es obligatoria",
+      "cargoWeightRequired": "El peso de la carga es obligatorio"
+    },
+    "toasts": {
+      "success": "¡Solicitud de cotización {{quoteNo}} enviada correctamente!",
+      "error": "No se pudo enviar la solicitud de cotización. Inténtelo de nuevo."
+    }
+  },
+  "shareMail": {
+    "title": "Compartir por correo",
+    "to": "Para",
+    "cc": "Cc",
+    "subject": "Asunto",
+    "message": "Mensaje",
+    "placeholders": {
+      "to": "destinatario@empresa.com",
+      "cc": "opcional@empresa.com",
+      "message": "Redacte su mensaje de cotización…"
+    },
+    "sharingCount_one": "Compartiendo {{count}} tarifa",
+    "sharingCount_other": "Compartiendo {{count}} tarifas",
+    "moreRates_one": "+{{count}} tarifa más",
+    "moreRates_other": "+{{count}} tarifas más",
+    "validation": {
+      "toRequired": "El correo del destinatario es obligatorio",
+      "toInvalid": "Introduzca una dirección de correo válida (separe varias con comas)",
+      "ccInvalid": "Introduzca direcciones CC válidas (separe con comas)",
+      "subjectRequired": "El asunto es obligatorio",
+      "subjectMax": "El asunto debe tener 200 caracteres o menos",
+      "messageRequired": "El mensaje es obligatorio",
+      "messageMax": "El mensaje debe tener 4000 caracteres o menos"
+    },
+    "toasts": {
+      "success_one": "Cotización enviada por correo correctamente ({{count}} destinatario).",
+      "success_other": "Cotización enviada por correo correctamente ({{count}} destinatarios).",
+      "error": "No se pudo compartir la cotización por correo. Inténtelo de nuevo."
+    },
+    "subjectTemplate": {
+      "single": "Cotización de flete — {{code}} ({{pol}} → {{pod}})",
+      "multiple": "Cotizaciones de flete — {{count}} resultados ({{pol}} → {{pod}})",
+      "empty": "Cotizaciones de flete"
+    },
+    "body": {
+      "hello": "Hola,",
+      "intro": "A continuación encontrará los detalles de la tarifa de flete.",
+      "rateHeading": "Tarifa {{index}}: {{code}} ({{type}})",
+      "title": "Título: {{value}}",
+      "lane": "Ruta: {{value}}",
+      "equipment": "Equipo: {{value}}",
+      "commodity": "Mercancía: {{value}}",
+      "oceanFreight": "Flete marítimo: {{value}}",
+      "surcharges": "Recargos (est.): {{value}}",
+      "total": "Total (est.): {{value}}",
+      "validity": "Validez: {{from}} a {{to}}",
+      "regards": "Saludos,",
+      "signature": "E-Com Portal"
+    }
+  },
+  "empty": {
+    "searchTitle": "Buscar tarifas",
+    "searchMessageList": "Elija sus criterios de búsqueda y haga clic en Buscar para ver las tarifas publicadas.",
+    "searchMessageCard": "Elija origen, entrega y filtros, luego haga clic en Buscar para cargar las tarifas coincidentes.",
+    "noResultsTitle": "No se encontraron tarifas",
+    "noResultsMessageList": "Pruebe otros puertos, equipos o filtros de mercancía.",
+    "noResultsMessageCard": "Ajuste los filtros de puertos, equipo o mercancía.",
+    "tariffTitle": "No se encontraron tarifas publicadas",
+    "tariffMessage": "Pruebe otra combinación de puertos o borre los filtros para ver más tarifas.",
+    "quotesTitle": "Aún no hay cotizaciones spot",
+    "quotesMessage": "Solicite una cotización spot para comparar precios de su próximo envío.",
+    "contractsTitle": "No se encontraron contratos de servicio",
+    "contractsMessage": "Pruebe otra combinación de puertos o borre los filtros para ver más contratos.",
+    "surchargesTitle": "No se encontraron recargos",
+    "surchargesMessage": "Pruebe otra combinación de puertos o borre los filtros para ver más cargos."
+  },
+  "errors": {
+    "tariffLoadTitle": "No se pudieron cargar las tarifas publicadas",
+    "tariffLoadMessage": "La solicitud no se completó. Compruebe su conexión e inténtelo de nuevo.",
+    "shareNoResults": "Busque tarifas primero y luego comparta los resultados por correo.",
+    "loadFailedMessage": "La solicitud no se completó. Compruebe su conexión e inténtelo de nuevo.",
+    "quotesLoadTitle": "No se pudieron cargar las cotizaciones spot",
+    "contractsLoadTitle": "No se pudieron cargar los contratos de servicio",
+    "surchargesLoadTitle": "No se pudieron cargar los recargos"
+  },
+  "toasts": {
+    "bookSelected": "Tarifa {{code}} seleccionada ({{currency}} ${{amount}}). Continuando a Horarios y reservas...",
+    "convertingQuote": "Convirtiendo la cotización {{quoteNo}} en e-Booking..."
+  },
+  "a11y": {
+    "recommendedLegend": "Leyenda de tarifa recomendada"
+  }
 }

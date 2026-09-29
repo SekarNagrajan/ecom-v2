@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-28 15:28) — hotline icon at footer far right
+// Modified by Sekar Nagarajan (2026-09-29 11:19) — company name links to solverminds.com
 import { Layout, Typography } from "antd";
 
 import { LEGAL_LINKS } from "../../constants/legal-links";
@@ -6,6 +6,8 @@ import { AgencyHotlineWidget } from "../../features/agency-hotline/components/Ag
 
 const { Footer } = Layout;
 const { Text } = Typography;
+
+const SOLVERMINDS_WEBSITE_URL = "https://www.solverminds.com/";
 
 export function AppFooter() {
   return (
@@ -15,8 +17,16 @@ export function AppFooter() {
           <Text className="app-footer__text">Version 1.0.0</Text>
         </div>
         <Text className="app-footer__text app-footer__copyright">
-          Copyright &copy; {new Date().getFullYear()} All rights reserved.
-          Solverminds Solutions &amp; Technologies Pvt.Ltd
+          Copyright &copy; {new Date().getFullYear()} All rights reserved.{" "}
+          <a
+            className="app-footer__link"
+            href={SOLVERMINDS_WEBSITE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Solverminds Solutions and Technologies website"
+          >
+            Solverminds Solutions &amp; Technologies Pvt.Ltd
+          </a>
         </Text>
         <div className="app-footer__end">
           <nav className="app-footer__links" aria-label="Legal">

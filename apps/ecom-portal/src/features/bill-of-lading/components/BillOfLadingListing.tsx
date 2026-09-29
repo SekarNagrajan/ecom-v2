@@ -2,8 +2,9 @@
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { useNavigate } from "@tanstack/react-router";
 import type { RowDoubleClickedEvent } from "ag-grid-community";
-import { Space, Typography } from "antd";
+import { Space } from "antd";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons, NavIcons } from "../../../components/icons";
 import { useModuleViewMode } from "../../../components/shared/hooks/use-module-view-mode";
@@ -31,9 +32,8 @@ import { BlPaymentBar } from "./bl-payment-bar";
 import { ManifestDrawer } from "./ManifestDrawer";
 import { BlViewDrawer } from "./view/BlViewDrawer";
 
-const { Text } = Typography;
-
 export function BillOfLadingListing() {
+  const { t } = useTranslation(["bill-of-lading", "common", "modules"]);
   const MODULE_TITLES = useModuleTitles();
   const navigate = useNavigate();
   const { data, isLoading, isError, refetch } = useBLListQuery({});
@@ -93,15 +93,15 @@ export function BillOfLadingListing() {
   const emptyState = isError ? (
     <ModuleEmptyState
       variant="error"
-      title="Couldn't load bills of lading"
-      message="The request didn't complete. Check your connection and try again."
+      title={t("empty.loadErrorTitle")}
+      message={t("empty.loadErrorMessage")}
       actions={[buildRetryAction(() => void refetch())]}
     />
   ) : (
     <ModuleEmptyState
       variant="blank"
-      title="No bills of lading yet"
-      message="Bills of lading will appear here once they are created for your shipments."
+      title={t("empty.noResultsTitle")}
+      message={t("empty.noResultsMessage")}
     />
   );
 
@@ -112,7 +112,7 @@ export function BillOfLadingListing() {
           icon={NavIcons.billOfLading}
           title={MODULE_TITLES.billOfLading}
           // recordCount={rows.length}
-          subtitle="Review B/L status, verify drafts, and print transport documents."
+          subtitle={t("subtitle")}
           marginBottom={0}
           viewMode={viewMode}
           onViewModeChange={setViewMode}
@@ -123,7 +123,7 @@ export function BillOfLadingListing() {
                 icon={<AppIcon icon={Icons.printer} size={16} tone="print" />}
                 onClick={() => setBatchOpen(true)}
               >
-                Batch Original Print
+                {t("actions.batchOriginalPrint")}
               </AppButton>
             </Space>
           }
@@ -170,7 +170,7 @@ export function BillOfLadingListing() {
       ) : null}
 
       <AppDrawer
-        title="B/L Charge Summary"
+        title={t("drawers.chargeSummary")}
         open={Boolean(chargesBlNo)}
         onClose={() => setChargesBlNo(null)}
         width={720}

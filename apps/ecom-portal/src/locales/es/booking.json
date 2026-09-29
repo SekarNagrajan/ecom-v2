@@ -1,0 +1,124 @@
+{
+  "subtitle": "Cree y gestione reservas, modifique borradores y haga seguimiento del estado de confirmación.",
+  "columns": {
+    "bookingNo": "N.º de reserva",
+    "onlineRef": "Ref. en línea",
+    "agencyRef": "Ref. agencia",
+    "status": "Estado",
+    "origin": "Origen",
+    "delivery": "Entrega",
+    "created": "Creado",
+    "confirmed": "Confirmado",
+    "dg": "DG",
+    "teus": "TEUs",
+    "submitted": "Enviado"
+  },
+  "actions": {
+    "amendment": "Enmienda (Editar)",
+    "duplicate": "Duplicar reserva",
+    "downloadPdf": "Descargar PDF",
+    "cancelBooking": "Cancelar reserva",
+    "manageTemplate": "Gestionar plantilla",
+    "editAmendTooltip": "Editar / Enmendar esta reserva",
+    "backToBooking": "Volver a reservas"
+  },
+  "status": {
+    "draft": "Borrador",
+    "submitted": "Enviado",
+    "confirmed": "Confirmado",
+    "awaitingAcceptance": "Pendiente de aceptación",
+    "inTransit": "En tránsito",
+    "completed": "Completado",
+    "rejected": "Rechazado",
+    "cancelled": "Cancelado"
+  },
+  "empty": {
+    "loadErrorTitle": "No se pudieron cargar las reservas",
+    "loadErrorMessage": "La solicitud no se completó. Compruebe su conexión e inténtelo de nuevo.",
+    "noResultsTitle": "Aún no hay reservas",
+    "noResultsMessage": "Cree una reserva para empezar a gestionar sus envíos.",
+    "unableToLoadDetails": "No se pudieron cargar los detalles de la reserva",
+    "insuranceNotRequired": "No se requiere seguro para esta reserva.",
+    "noDocuments": "No hay documentos cargados",
+    "noActivity": "No hay actividad registrada"
+  },
+  "labels": {
+    "onlineRef": "Ref. en línea",
+    "agency": "Agencia",
+    "dangerousGoods": "Mercancías peligrosas",
+    "nonDg": "No DG",
+    "originPol": "Origen (POL)",
+    "deliveryPod": "Entrega (POD)",
+    "portToPort": "Puerto a puerto",
+    "cargoReadyDate": "Fecha de carga lista",
+    "haulageOrigin": "Origen de acarreo",
+    "haulageDestination": "Destino de acarreo",
+    "carriageContract": "Contrato de transporte",
+    "cargoValue": "Valor de la carga",
+    "termsAccepted": "Términos aceptados",
+    "blType": "Tipo de BL",
+    "filingType": "Tipo de declaración",
+    "declarantName": "Nombre del declarante"
+  },
+  "sections": {
+    "masterDetails": "Datos principales",
+    "customerDetails": "Datos del cliente",
+    "cargoDetails": "Datos de la carga",
+    "insuranceDetails": "Datos del seguro",
+    "documents": "Documentos",
+    "activity": "Actividad"
+  },
+  "confirms": {
+    "cancelTitle": "Cancelar reserva",
+    "cancelContent": "¿Está seguro de que desea cancelar esta reserva?",
+    "deleteTemplateTitle": "Eliminar plantilla",
+    "deleteTemplateContent": "¿Está seguro de que desea eliminar \"{{name}}\"? Esta acción no se puede deshacer."
+  },
+  "toasts": {
+    "duplicated": "Reserva {{bookingNo}} duplicada",
+    "duplicateFailed": "Error al duplicar la reserva {{bookingNo}}",
+    "pdfDownloaded": "PDF de {{bookingNo}} descargado",
+    "pdfDownloadFailed": "Error al descargar PDF de {{bookingNo}}",
+    "cancelled": "Reserva {{bookingNo}} cancelada.",
+    "cancelFailed": "Error al cancelar la reserva {{bookingNo}}.",
+    "templateDeleted": "Plantilla eliminada correctamente",
+    "templateDeleteFailed": "Error al eliminar la plantilla",
+    "templateLoaded": "Plantilla cargada: {{name}}",
+    "templateApplied": "Plantilla aplicada: {{name}}"
+  },
+  "templates": {
+    "manageTitle": "Gestionar plantillas de reserva",
+    "manageSubtitle": "Ver, editar o eliminar sus plantillas de reserva guardadas",
+    "selectTitle": "Seleccionar plantilla de reserva",
+    "selectSubtitle": "Elija una plantilla guardada para rellenar previamente el formulario de reserva",
+    "showingRange": "Mostrando {{from}} a {{to}} de {{total}} registros",
+    "emptyManage": "Aún no hay plantillas guardadas",
+    "emptySelect": "No hay plantillas disponibles",
+    "columns": {
+      "sno": "N.º",
+      "templateName": "Nombre de plantilla",
+      "origin": "Origen",
+      "delivery": "Entrega",
+      "action": "Acción"
+    }
+  },
+  "haulage": {
+    "title": "Detalles de seguimiento de acarreo",
+    "disclaimer": "* Aviso: Todos los tiempos de acarreo están sujetos al tráfico local y las condiciones del terminal.",
+    "emptyTitle": "Sin detalles de seguimiento de acarreo",
+    "emptyMessage": "Los hitos de recogida y entrega aparecerán aquí cuando se organice el acarreo.",
+    "columns": {
+      "containerNo": "N.º de contenedor",
+      "equipmentType": "Tipo de equipo",
+      "customerReference": "Referencia del cliente",
+      "pickupLocCode": "Cód. ubicación recogida",
+      "pickupLocName": "Nombre ubicación recogida",
+      "stopSeq": "Sec. parada",
+      "address": "Dirección",
+      "tmsSchePickup": "TMS Prog. Recogida",
+      "tmsActPickup": "TMS Real Recogida",
+      "tmsScheDrop": "TMS Prog. Entrega",
+      "tmsActDrop": "TMS Real Entrega"
+    }
+  }
+}

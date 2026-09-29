@@ -1,0 +1,362 @@
+{
+  "subtitle": "创建和管理订舱，修改草稿，并跟踪确认状态。",
+  "columns": {
+    "bookingNo": "订舱号",
+    "onlineRef": "在线参考号",
+    "agencyRef": "代理参考号",
+    "status": "状态",
+    "origin": "起运地",
+    "delivery": "交货地",
+    "created": "创建日期",
+    "confirmed": "确认日期",
+    "dg": "DG",
+    "teus": "TEUs",
+    "submitted": "提交日期"
+  },
+  "actions": {
+    "amendment": "更正（编辑）",
+    "duplicate": "复制订舱",
+    "downloadPdf": "下载 PDF",
+    "cancelBooking": "取消订舱",
+    "manageTemplate": "管理模板",
+    "editAmendTooltip": "编辑 / 修改此订舱",
+    "backToBooking": "返回订舱"
+  },
+  "status": {
+    "draft": "草稿",
+    "submitted": "已提交",
+    "confirmed": "已确认",
+    "awaitingAcceptance": "待接受",
+    "inTransit": "运输中",
+    "completed": "已完成",
+    "rejected": "已拒绝",
+    "cancelled": "已取消"
+  },
+  "empty": {
+    "loadErrorTitle": "无法加载订舱",
+    "loadErrorMessage": "请求未完成。请检查网络连接后重试。",
+    "noResultsTitle": "暂无订舱",
+    "noResultsMessage": "创建订舱以开始管理您的货运。",
+    "unableToLoadDetails": "无法加载订舱详情",
+    "insuranceNotRequired": "此订舱无需投保。",
+    "noDocuments": "未上传文件",
+    "noActivity": "暂无活动记录"
+  },
+  "labels": {
+    "onlineRef": "在线参考号",
+    "agency": "代理",
+    "dangerousGoods": "危险品",
+    "nonDg": "非危险品",
+    "originPol": "起运地 (POL)",
+    "deliveryPod": "交货地 (POD)",
+    "portToPort": "港到港",
+    "cargoReadyDate": "货物就绪日期",
+    "haulageOrigin": "拖运起运地",
+    "haulageDestination": "拖运目的地",
+    "carriageContract": "运输合同",
+    "cargoValue": "货值",
+    "termsAccepted": "已接受条款",
+    "blType": "BL 类型",
+    "filingType": "申报类型",
+    "declarantName": "申报人姓名"
+  },
+  "sections": {
+    "masterDetails": "主要信息",
+    "customerDetails": "客户信息",
+    "cargoDetails": "货物信息",
+    "insuranceDetails": "保险信息",
+    "documents": "文件",
+    "activity": "活动记录"
+  },
+  "confirms": {
+    "cancelTitle": "取消订舱",
+    "cancelContent": "确定要取消此订舱吗？",
+    "deleteTemplateTitle": "删除模板",
+    "deleteTemplateContent": "确定要删除「{{name}}」吗？此操作无法撤销。"
+  },
+  "toasts": {
+    "duplicated": "已复制订舱 {{bookingNo}}",
+    "duplicateFailed": "复制订舱 {{bookingNo}} 失败",
+    "pdfDownloaded": "已下载 {{bookingNo}} 的 PDF",
+    "pdfDownloadFailed": "下载 {{bookingNo}} 的 PDF 失败",
+    "cancelled": "订舱 {{bookingNo}} 已取消。",
+    "cancelFailed": "取消订舱 {{bookingNo}} 失败。",
+    "templateDeleted": "模板删除成功",
+    "templateDeleteFailed": "模板删除失败",
+    "templateLoaded": "已加载模板：{{name}}",
+    "templateApplied": "已应用模板：{{name}}"
+  },
+  "templates": {
+    "manageTitle": "管理订舱模板",
+    "manageSubtitle": "查看、编辑或删除您保存的订舱模板",
+    "selectTitle": "选择订舱模板",
+    "selectSubtitle": "选择已保存的模板以预填订舱表单",
+    "showingRange": "显示第 {{from}} 至 {{to}} 条，共 {{total}} 条",
+    "emptyManage": "暂无已保存的模板",
+    "emptySelect": "暂无可用模板",
+    "columns": {
+      "sno": "序号",
+      "templateName": "模板名称",
+      "origin": "起运地",
+      "delivery": "交货地",
+      "action": "操作"
+    }
+  },
+  "haulage": {
+    "title": "拖运跟踪详情",
+    "disclaimer": "* 免责声明：所有拖运时间受当地交通和码头条件影响。",
+    "emptyTitle": "暂无拖运跟踪详情",
+    "emptyMessage": "安排拖运后，提货和交货里程碑将显示在此处。",
+    "columns": {
+      "containerNo": "集装箱号",
+      "equipmentType": "设备类型",
+      "customerReference": "客户参考号",
+      "pickupLocCode": "提货地点代码",
+      "pickupLocName": "提货地点名称",
+      "stopSeq": "停靠顺序",
+      "address": "地址",
+      "tmsSchePickup": "TMS 计划提货",
+      "tmsActPickup": "TMS 实际提货",
+      "tmsScheDrop": "TMS 计划送达",
+      "tmsActDrop": "TMS 实际送达"
+    }
+  },
+  "wizard": {
+    "actions": {
+      "saveDraft": "保存草稿",
+      "goToDashboard": "前往仪表盘",
+      "createAnother": "创建另一个订舱",
+      "selectTemplate": "选择模板",
+      "submitBooking": "提交订舱"
+    },
+    "confirm": {
+      "submittedTitle": "订舱提交成功",
+      "submittedMessage": "您的订舱请求已转发给承运人。",
+      "bookingReference": "订舱参考号"
+    },
+    "amend": {
+      "loading": "正在加载订舱详情…",
+      "loadFailed": "加载订舱修改失败。",
+      "submittedTitle": "订舱修改提交成功",
+      "submittedMessage": "您的修改请求已转发给承运人。"
+    },
+    "toasts": {
+      "draftSaved": "草稿已保存 ({{draftId}})",
+      "draftSaveFailed": "保存草稿失败",
+      "rateSelected": "已选择运价：{{rateNo}}",
+      "rateSelectedWithRoute": "运价 {{rateNo}} 已选择 · 已应用默认航线 ({{service}})",
+      "setCargoReadyForRoute": "设置货物就绪日期以自动应用默认航线，或手动选择船舶/航线。",
+      "noDefaultRoute": "该航线无默认路线。请手动选择船舶/航线。",
+      "routeSelected": "已选择航线：{{service}} · {{vessel}}",
+      "defaultRouteApplied": "已应用默认航线：{{service}}"
+    },
+    "master": {
+      "originPlaceholder": "搜索起运港（例如 USNYC）",
+      "deliveryPlaceholder": "搜索交货港（例如 GBFEL）",
+      "cargoReadyDate": "货物就绪日期",
+      "swapPorts": "交换起运地和交货地",
+      "swapPortsAria": "交换起运港和交货港",
+      "onlineBookingNo": "在线订舱号",
+      "preferredAgency": "首选代理",
+      "agencyPlaceholder": "选择代理",
+      "carriageContractPlaceholder": "选择运输合同",
+      "rateReference": "运价参考"
+    },
+    "haulage": {
+      "carrier": "承运人",
+      "merchant": "货主"
+    },
+    "freight": {
+      "prepaid": "预付",
+      "collect": "到付"
+    },
+    "parties": {
+      "roles": {
+        "shipper": "订舱方",
+        "siSubmittingParty": "发货人",
+        "consignee": "收货人",
+        "notifyParty": "通知方",
+        "notifyParty2": "通知方 2",
+        "forwarder": "货代",
+        "agreementParty": "协议方"
+      },
+      "previewRoles": {
+        "shipper": "发货人",
+        "forwarder": "货运代理"
+      },
+      "editParty": "编辑参与方",
+      "editRole": "编辑 {{role}}",
+      "deleteParty": "删除参与方",
+      "noContactDetails": "无额外联系信息",
+      "notAssignedYet": "尚未指派",
+      "assign": "指派",
+      "assigned": "已指派",
+      "assignHint": "选择要分配给此客户的角色，然后点击"添加所选"。",
+      "addSelected": "添加所选",
+      "addSelectedCount": "添加所选 ({{count}})",
+      "searchPlaceholder": "按客户名称或代码搜索",
+      "typeCustomerPlaceholder": "输入客户名称或代码…",
+      "searching": "搜索中…",
+      "noCustomers": "未找到客户",
+      "selectRole": "请至少选择一个角色",
+      "rolesAssigned": "参与方角色已分配",
+      "companyRequired": "公司为必填项",
+      "completeRequired": "请完善必填的参与方信息",
+      "fields": {
+        "company": "公司",
+        "contactCode": "联系人 / 代码",
+        "address": "地址",
+        "city": "城市",
+        "country": "国家",
+        "email": "邮箱",
+        "phone": "电话"
+      }
+    },
+    "routing": {
+      "selectVesselRoute": "选择船舶 / 航线",
+      "changeRoute": "更换航线",
+      "modalSubtitle": "{{origin}} → {{delivery}} · 货物就绪 {{date}}",
+      "loadingAria": "加载中",
+      "loadErrorTitle": "无法加载船舶班期",
+      "loadErrorMessage": "加载航线时出现问题。",
+      "emptyTitle": "未找到船舶班期",
+      "emptyMessage": "没有匹配此起运地、交货地和货物就绪日期的记录。",
+      "selected": "已选择",
+      "road": "公路",
+      "departure": "出发",
+      "arrival": "到达",
+      "routeTitle": "航线",
+      "routeDetails": "航线详情",
+      "cutoffs": "截止时间",
+      "gateIn": "进闸",
+      "siCutoff": "SI 截止",
+      "vgmCutoff": "VGM 截止",
+      "etd": "ETD",
+      "eta": "ETA",
+      "days": "{{count}} 天",
+      "showDetails": "显示详情",
+      "closeDetails": "关闭详情"
+    },
+    "routeKind": {
+      "direct": "直达",
+      "multimodal": "多式联运",
+      "multimodalCount": "多式联运 ({{count}})",
+      "transshipment": "中转",
+      "stops": "{{count}} 个中转站"
+    },
+    "rates": {
+      "title": "运价",
+      "availableTitle": "可用运价",
+      "changeRate": "更换运价",
+      "rateNo": "运价编号",
+      "equipment": "设备",
+      "amount": "金额",
+      "emptyLane": "此航线无运价"
+    },
+    "references": {
+      "title": "参考信息",
+      "hint": "添加参考字段以帮助识别和跟踪此货运",
+      "addField": "添加参考字段",
+      "selectFields": "选择参考字段",
+      "selectAll": "全选",
+      "added": "已添加",
+      "addSelected": "添加所选",
+      "addSelectedCount": "添加所选 ({{count}})",
+      "allAdded": "所有参考字段已添加",
+      "emptyTitle": "尚未添加参考字段",
+      "emptyMessage": "点击"添加参考字段"开始。",
+      "colFieldName": "字段名称",
+      "colValue": "值",
+      "colActions": "操作",
+      "removeField": "删除字段",
+      "catalog": {
+        "rateReferenceNo": "运价参考号",
+        "rateReferenceNoPlaceholder": "请输入运价参考号",
+        "agencyRefNo": "代理参考号",
+        "agencyRefNoPlaceholder": "请输入代理参考号",
+        "oceanFreightTerms": "海运费条款",
+        "natCode": "NAT 代码",
+        "natCodePlaceholder": "请输入 NAT 代码",
+        "emptyPickupLocation": "空箱提货地点",
+        "emptyPickupLocationPlaceholder": "请输入空箱提货地点",
+        "finalReceiptPlace": "最终收货地",
+        "finalReceiptPlacePlaceholder": "请输入最终收货地",
+        "haulierCode": "拖车公司代码",
+        "haulierCodePlaceholder": "请输入拖车公司代码"
+      }
+    },
+    "preview": {
+      "missingTitle": "信息缺失",
+      "missingSubtitle": "请返回并完成所有之前的步骤后再提交。",
+      "sections": {
+        "routeSchedule": "航线与船期",
+        "insuranceCharges": "保险与费用"
+      },
+      "empty": {
+        "noRoute": "未选择航线",
+        "noParties": "未分配参与方",
+        "noFiles": "未上传文件",
+        "noReferences": "无参考字段",
+        "noContainers": "无集装箱",
+        "noData": "未提供数据"
+      },
+      "editSection": "编辑 {{title}}",
+      "notAssigned": "未分配",
+      "ensRequired": "需要 ENS",
+      "euCustomsZone": "欧盟海关区",
+      "paymentMethod": "付款方式",
+      "buyer": "买方",
+      "seller": "卖方",
+      "declarant": "申报人",
+      "currency": "币种",
+      "declaredValue": "申报价值",
+      "termsCheckbox": "我确认以上信息准确无误，并接受运输条款",
+      "route": {
+        "destination": "目的地",
+        "gateInCutoff": "进闸截止",
+        "siCutoff": "SI 截止",
+        "vgmCutoff": "VGM 截止",
+        "haulageOD": "拖运（起运 / 目的）",
+        "daysKind": "{{count}} 天 · {{kind}}"
+      },
+      "cargo": {
+        "hint": "{{containers}} {{containerLabel}} · {{lines}} 商品 {{lineLabel}} · 展开摘要后点击行查看详情和商品。",
+        "container": "个集装箱",
+        "containers": "个集装箱",
+        "line": "行",
+        "lines": "行",
+        "toggleTableAria": "切换集装箱表格",
+        "totalContainers": "集装箱总数",
+        "totalWeight": "总重量",
+        "totalVolume": "总体积",
+        "totalTeu": "总 TEU",
+        "colContainerNumbers": "集装箱号",
+        "colType": "类型",
+        "colTareWeight": "皮重",
+        "colCarrierSeal": "承运人封条",
+        "colShipperSeal": "发货人封条",
+        "colSpecial": "特殊",
+        "expandAria": "展开",
+        "containerFallback": "集装箱 {{n}}",
+        "containerNo": "集装箱编号",
+        "commoditiesTitle": "商品 ({{count}})",
+        "totalWeightValue": "总重量：{{weight}}",
+        "colCommodity": "商品",
+        "colHsCode": "HS 编码",
+        "colPackageType": "包装类型",
+        "colPackages": "件数",
+        "colWeight": "重量",
+        "colVolume": "体积",
+        "special": {
+          "dg": "DG",
+          "dgClass": "DG · 等级 {{class}}",
+          "oog": "OOG",
+          "soc": "SOC",
+          "reefer": "冷藏",
+          "reeferTemp": "冷藏 {{temp}}°C",
+          "nor": "NOR"
+        }
+      }
+    }
+  }
+}

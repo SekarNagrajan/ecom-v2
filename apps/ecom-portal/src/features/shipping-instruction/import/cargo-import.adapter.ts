@@ -1,4 +1,5 @@
 // Modified by Sekar Nagarajan (2026-09-16 15:12)
+import type { TFunction } from "i18next";
 import { z } from "zod";
 
 import { BOOKING_LOOKUPS } from "../../booking/mocks/booking-lookups.mock";
@@ -22,24 +23,50 @@ const PACKAGE_TYPE_OPTIONS = BOOKING_LOOKUPS.packageTypes.map((option) => ({
   value: option.value,
 }));
 
-const cargoImportRowSchema = z.object({
-  containerNo: z
-    .string()
-    .trim()
-    .min(1, "Container No is required")
-    .max(11, "Container No must be 11 characters or fewer"),
-  containerType: z.string().trim().min(1, "Container Type is required"),
-  carrierSeal: z.string().trim().optional().default(""),
-  shipperSeal: z.string().trim().optional().default(""),
-  marksAndNumbers: z.string().trim().optional().default(""),
-  description: z.string().trim().min(1, "Commodity Description is required"),
-  hsCode: z.string().trim().min(1, "HS Code is required"),
-  commodityCode: z.string().trim().optional().default(""),
-  packageCount: z.coerce.number().int().min(1, "Package Count must be at least 1"),
-  packageType: z.string().trim().min(1, "Package Type is required"),
-  grossWeight: z.coerce.number().min(1, "Gross Weight is required"),
-  volume: z.coerce.number().min(0, "Volume cannot be negative").default(0),
-});
+function msg(t: TFunction | undefined, key: string, fallback: string): string {
+  return t ? t(key, { defaultValue: fallback }) : fallback;
+}
+
+function createCargoImportRowSchema(t?: TFunction) {
+  return z.object({
+    containerNo: z
+      .string()
+      .trim()
+      .min(1, msg(t, "import.validation.containerNoRequired", "Container No is required"))
+      .max(11, msg(t, "import.validation.containerNoMax", "Container No must be 11 characters or fewer")),
+    containerType: z
+      .string()
+      .trim()
+      .min(1, msg(t, "import.validation.containerTypeRequired", "Container Type is required")),
+    carrierSeal: z.string().trim().optional().default(""),
+    shipperSeal: z.string().trim().optional().default(""),
+    marksAndNumbers: z.string().trim().optional().default(""),
+    description: z
+      .string()
+      .trim()
+      .min(1, msg(t, "import.validation.descriptionRequired", "Commodity Description is required")),
+    hsCode: z
+      .string()
+      .trim()
+      .min(1, msg(t, "import.validation.hsCodeRequired", "HS Code is required")),
+    commodityCode: z.string().trim().optional().default(""),
+    packageCount: z.coerce
+      .number()
+      .int()
+      .min(1, msg(t, "import.validation.packageCountMin", "Package Count must be at least 1")),
+    packageType: z
+      .string()
+      .trim()
+      .min(1, msg(t, "import.validation.packageTypeRequired", "Package Type is required")),
+    grossWeight: z.coerce
+      .number()
+      .min(1, msg(t, "import.validation.grossWeightRequired", "Gross Weight is required")),
+    volume: z.coerce
+      .number()
+      .min(0, msg(t, "import.validation.volumeNegative", "Volume cannot be negative"))
+      .default(0),
+  });
+}
 
 function createDefaultCargoImportValues(): CargoImportValues {
   return {
@@ -150,20 +177,25 @@ function lineDuplicateKey(values: CargoImportValues): string {
   ].join("|");
 }
 
-export function createCargoImportAdapter(): SpreadsheetImportAdapter<
-  CargoImportValues,
-  CargoImportPayload
-> {
+export function createCargoImportAdapter(
+  t?: TFunction,
+): SpreadsheetImportAdapter<CargoImportValues, CargoImportPayload> {
+  const rowSchema = createCargoImportRowSchema(t);
+
   return {
-    entityLabel: "cargo lines",
+    entityLabel: msg(t, "import.entityLabel", "cargo lines"),
     maxRowCount: 500,
     createDefaultValues: createDefaultCargoImportValues,
     getSubmitLabel: (validRowCount) =>
-      `Import ${validRowCount} cargo line${validRowCount === 1 ? "" : "s"}`,
+      msg(
+        t,
+        "import.submitLabel",
+        `Import ${validRowCount} cargo line(s)`,
+      ).replace("{{count}}", String(validRowCount)),
     fields: [
       {
         key: "containerNo",
-        label: "Container No",
+        label: msg(t, "import.columns.containerNo", "Container No"),
         aliases: ["Container", "Container Number", "Cntr No"],
         kind: "text",
         required: true,
@@ -172,7 +204,7 @@ export function createCargoImportAdapter(): SpreadsheetImportAdapter<
       },
       {
         key: "containerType",
-        label: "Container Type",
+        label: msg(t, "import.columns.containerType", "Container Type"),
         aliases: ["Equipment Type", "Eqp Type", "Eqp Size", "Type"],
         kind: "select",
         required: true,
@@ -184,7 +216,7 @@ export function createCargoImportAdapter(): SpreadsheetImportAdapter<
       },
       {
         key: "carrierSeal",
-        label: "Carrier Seal",
+        label: msg(t, "import.columns.carrierSeal", "Carrier Seal"),
         aliases: ["Carrier Seal No", "Seal Carrier"],
         kind: "text",
         width: 120,
@@ -192,7 +224,7 @@ export function createCargoImportAdapter(): SpreadsheetImportAdapter<
       },
       {
         key: "shipperSeal",
-        label: "Shipper Seal",
+        label: msg(t, "import.columns.shipperSeal", "Shipper Seal"),
         aliases: ["Shipper Seal No", "Seal Shipper"],
         kind: "text",
         width: 120,
@@ -200,7 +232,7 @@ export function createCargoImportAdapter(): SpreadsheetImportAdapter<
       },
       {
         key: "marksAndNumbers",
-        label: "Marks & Numbers",
+        label: msg(t, "import.columns.marksAndNumbers", "Marks & Numbers"),
         aliases: ["Marks", "Marks and Numbers", "Shipping Marks"],
         kind: "text",
         width: 140,
@@ -208,7 +240,7 @@ export function createCargoImportAdapter(): SpreadsheetImportAdapter<
       },
       {
         key: "description",
-        label: "Commodity Description",
+        label: msg(t, "import.columns.description", "Commodity Description"),
         aliases: ["Description", "Cargo Description", "Commodity"],
         kind: "text",
         required: true,
@@ -217,7 +249,7 @@ export function createCargoImportAdapter(): SpreadsheetImportAdapter<
       },
       {
         key: "hsCode",
-        label: "HS Code",
+        label: msg(t, "import.columns.hsCode", "HS Code"),
         aliases: ["HS", "Harmonized Code", "Commodity HS"],
         kind: "text",
         required: true,
@@ -226,7 +258,7 @@ export function createCargoImportAdapter(): SpreadsheetImportAdapter<
       },
       {
         key: "commodityCode",
-        label: "Commodity Code",
+        label: msg(t, "import.columns.commodityCode", "Commodity Code"),
         aliases: ["Commodity Cd", "CMDTY"],
         kind: "text",
         width: 140,
@@ -234,7 +266,7 @@ export function createCargoImportAdapter(): SpreadsheetImportAdapter<
       },
       {
         key: "packageCount",
-        label: "Package Count",
+        label: msg(t, "import.columns.packageCount", "Package Count"),
         aliases: ["Qty", "Quantity", "Packages", "Pkg Count"],
         kind: "number",
         required: true,
@@ -243,7 +275,7 @@ export function createCargoImportAdapter(): SpreadsheetImportAdapter<
       },
       {
         key: "packageType",
-        label: "Package Type",
+        label: msg(t, "import.columns.packageType", "Package Type"),
         aliases: ["Pkg Type", "Packaging"],
         kind: "select",
         required: true,
@@ -255,7 +287,7 @@ export function createCargoImportAdapter(): SpreadsheetImportAdapter<
       },
       {
         key: "grossWeight",
-        label: "Gross Weight",
+        label: msg(t, "import.columns.grossWeight", "Gross Weight"),
         aliases: ["Weight", "Gross Wt", "Weight Kg"],
         kind: "number",
         required: true,
@@ -264,7 +296,7 @@ export function createCargoImportAdapter(): SpreadsheetImportAdapter<
       },
       {
         key: "volume",
-        label: "Volume",
+        label: msg(t, "import.columns.volume", "Volume"),
         aliases: ["CBM", "Volume CBM", "Cubic Meters"],
         kind: "number",
         width: 100,
@@ -273,7 +305,7 @@ export function createCargoImportAdapter(): SpreadsheetImportAdapter<
     ],
     validateRecord: (values) => {
       const prepared = prepareValues(values);
-      const parsed = cargoImportRowSchema.safeParse(prepared);
+      const parsed = rowSchema.safeParse(prepared);
       if (!parsed.success) {
         return zodIssuesToImportIssues(parsed.error);
       }
@@ -285,7 +317,11 @@ export function createCargoImportAdapter(): SpreadsheetImportAdapter<
       if (!containerOk) {
         issues.push({
           fieldKey: "containerType",
-          message: "Select a valid container type",
+          message: msg(
+            t,
+            "import.validation.invalidContainerType",
+            "Select a valid container type",
+          ),
         });
       }
       const packageOk = PACKAGE_TYPE_OPTIONS.some(
@@ -294,7 +330,11 @@ export function createCargoImportAdapter(): SpreadsheetImportAdapter<
       if (!packageOk) {
         issues.push({
           fieldKey: "packageType",
-          message: "Select a valid package type",
+          message: msg(
+            t,
+            "import.validation.invalidPackageType",
+            "Select a valid package type",
+          ),
         });
       }
       return issues;
@@ -317,8 +357,11 @@ export function createCargoImportAdapter(): SpreadsheetImportAdapter<
           const issue: SpreadsheetImportValidationIssue<CargoImportValues> = {
             code: SPREADSHEET_IMPORT_DUPLICATE_ISSUE_CODE,
             fieldKey: "containerNo",
-            message:
+            message: msg(
+              t,
+              "import.validation.duplicateLine",
               "Duplicate cargo line for the same container, HS code, description, and package count",
+            ),
           };
           const existing = issuesByRowId.get(row.__rowId) ?? [];
           existing.push(issue);

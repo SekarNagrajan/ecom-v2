@@ -4,12 +4,16 @@ import { useConfirm, useToast } from "@solverminds/shared-ui/hooks";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { Card, Result, Space, Steps, theme } from "antd";
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons, NavBillOfLadingIcon } from "../../components/icons";
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import { formatModuleScreenTitle } from "../../constants/module-titles";
-import { useModuleTitles } from "../../i18n/use-module-titles";
+import {
+  useModuleTitles,
+  useWizardStepTitles,
+} from "../../i18n/use-module-titles";
 import { checkVoyageClosed } from "./api/bl.api";
 import {
   useBLDetailQuery,
@@ -31,11 +35,10 @@ import { useBLWizard } from "./hooks/use-bl-wizard";
 import { useBLWizardConfig } from "./hooks/use-bl-wizard-config";
 import type { BLDTO } from "./types/bl.types";
 
-const BL_TERMS_HTML =
-  "By proceeding with B/L correction you agree to the carrier terms and conditions for document amendments.";
-
 export function BillOfLadingWizardRoute() {
+  const { t } = useTranslation(["bill-of-lading", "common", "modules"]);
   const MODULE_TITLES = useModuleTitles();
+  const WIZARD_STEP_TITLES = useWizardStepTitles();
   const { token } = theme.useToken();
   const navigate = useNavigate();
   const confirm = useConfirm();
@@ -52,8 +55,22 @@ export function BillOfLadingWizardRoute() {
   const { data: wizardConfig = DEFAULT_BL_WIZARD_CONFIG } = useBLWizardConfig();
 
   const wizardSteps = useMemo(
-    () => buildBlWizardSteps(wizardConfig),
-    [wizardConfig],
+    () =>
+      buildBlWizardSteps(wizardConfig, {
+        master: WIZARD_STEP_TITLES.masterDetails,
+        parties: WIZARD_STEP_TITLES.parties,
+        routing: WIZARD_STEP_TITLES.routing,
+        cargo: WIZARD_STEP_TITLES.cargoDetails,
+        insurance: WIZARD_STEP_TITLES.insurance,
+        cargoProtect: WIZARD_STEP_TITLES.cargoProtect,
+        charges: WIZARD_STEP_TITLES.charges,
+        ens: WIZARD_STEP_TITLES.ensDetails,
+        chargeTab: WIZARD_STEP_TITLES.chargeSummary,
+        files: WIZARD_STEP_TITLES.fileUpload,
+        references: WIZARD_STEP_TITLES.references,
+        preview: WIZARD_STEP_TITLES.preview,
+      }),
+    [wizardConfig, WIZARD_STEP_TITLES],
   );
 
   const {
@@ -90,8 +107,8 @@ export function BillOfLadingWizardRoute() {
     const { closed } = await checkVoyageClosed(blNo);
     if (closed) {
       confirm.warning({
-        title: "Voyage Closed",
-        content: "This voyage is closed. B/L edit is not permitted.",
+        title: t("confirms.voyageClosedTitle"),
+        content: t("confirms.voyageClosedContent"),
       });
       goDashboard();
       return false;
@@ -169,16 +186,16 @@ export function BillOfLadingWizardRoute() {
           <div className="wizard-confirmation">
             <Result
               status="error"
-              title="Failed to load B/L"
+              title={t("wizard.errors.loadFailedTitle")}
               subTitle={
                 error instanceof Error
                   ? error.message
-                  : "Could not load Bill of Lading for edit."
+                  : t("wizard.errors.loadFailedMessage")
               }
               extra={
                 <Space>
                   <AppButton type="primary" onClick={() => refetch()}>
-                    Retry
+                    {t("wizard.actions.retry")}
                   </AppButton>
                   <AppButton
                     danger
@@ -187,7 +204,7 @@ export function BillOfLadingWizardRoute() {
                     }
                     onClick={goDashboard}
                   >
-                    Back to B/L
+                    {t("wizard.actions.backToBl")}
                   </AppButton>
                 </Space>
               }
@@ -213,11 +230,11 @@ export function BillOfLadingWizardRoute() {
           <div className="wizard-confirmation">
             <Result
               status="info"
-              title="B/L Issued"
-              subTitle="This Bill of Lading has been issued and cannot be edited."
+              title={t("activity.issued")}
+              subTitle={t("wizard.errors.issuedNotEditable")}
               extra={
                 <AppButton onClick={() => navigate({ to: `/app/bl/${blNo}` })}>
-                  View B/L
+                  {t("wizard.actions.viewBl")}
                 </AppButton>
               }
             />
@@ -244,7 +261,7 @@ export function BillOfLadingWizardRoute() {
                 }
                 onClick={goDashboard}
               >
-                Back to B/L
+                {t("wizard.actions.backToBl")}
               </AppButton>
             }
           />
@@ -268,29 +285,28 @@ export function BillOfLadingWizardRoute() {
       </Card>
 
       <AppModal
-        title="B/L Correction — Terms and Conditions"
+        title={t("wizard.terms.modalTitle")}
         open={termsOpen}
         onCancel={() => setTermsOpen(false)}
         footer={
           <>
-            <AppButton onClick={() => setTermsOpen(false)}>Decline</AppButton>
+            <AppButton onClick={() => setTermsOpen(false)}>
+              {t("actions.decline")}
+            </AppButton>
             <AppButton
               type="primary"
               onClick={() => {
                 setTermsAccepted(true);
                 setTermsOpen(false);
-                toast.success("Terms accepted — you may continue editing.");
+                toast.success(t("wizard.toasts.termsAccepted"));
               }}
             >
-              I Agree
+              {t("actions.iAgree")}
             </AppButton>
           </>
         }
       >
-        <div
-          className="bl-terms-body custom-scroll"
-          dangerouslySetInnerHTML={{ __html: BL_TERMS_HTML }}
-        />
+        <div className="bl-terms-body custom-scroll">{t("wizard.terms.body")}</div>
       </AppModal>
     </FeaturePageShell>
   );

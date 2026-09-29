@@ -1,19 +1,25 @@
-// Modified by Sekar Nagarajan (2026-08-25 16:40)
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+// Modified by Sekar Nagarajan (2026-09-29 12:40)
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
-import { requestPasswordReset } from '../api/auth.api';
-import { forgotPasswordSchema, type ForgotPasswordForm } from '../types/auth.types';
+import { requestPasswordReset } from "../api/auth.api";
+import {
+  createForgotPasswordSchema,
+  type ForgotPasswordForm,
+} from "../types/auth.types";
 
 export function useForgotPasswordController() {
+  const { t } = useTranslation("auth");
   const [serverError, setServerError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
+  const schema = useMemo(() => createForgotPasswordSchema(t), [t]);
 
   const form = useForm<ForgotPasswordForm>({
-    resolver: zodResolver(forgotPasswordSchema),
-    defaultValues: { userName: '', captcha: '' },
+    resolver: zodResolver(schema),
+    defaultValues: { userName: "", captcha: "" },
   });
 
   const mutation = useMutation({
@@ -23,7 +29,7 @@ export function useForgotPasswordController() {
       setIsSuccess(true);
     },
     onError: (err: Error) => {
-      setServerError(err.message ?? 'Failed to request password reset');
+      setServerError(err.message ?? t("errors.passwordReset"));
     },
   });
 

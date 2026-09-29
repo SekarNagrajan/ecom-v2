@@ -1,0 +1,362 @@
+{
+  "subtitle": "Create and manage bookings, amend drafts, and track confirmation status.",
+  "columns": {
+    "bookingNo": "Booking No",
+    "onlineRef": "Online Ref",
+    "agencyRef": "Agency Ref",
+    "status": "Status",
+    "origin": "Origin",
+    "delivery": "Delivery",
+    "created": "Created",
+    "confirmed": "Confirmed",
+    "dg": "DG",
+    "teus": "TEUs",
+    "submitted": "Submitted"
+  },
+  "actions": {
+    "amendment": "Amendment (Edit)",
+    "duplicate": "Duplicate Booking",
+    "downloadPdf": "Download PDF",
+    "cancelBooking": "Cancel Booking",
+    "manageTemplate": "Manage Template",
+    "editAmendTooltip": "Edit / Amend This Booking",
+    "backToBooking": "Back to Booking"
+  },
+  "status": {
+    "draft": "Draft",
+    "submitted": "Submitted",
+    "confirmed": "Confirmed",
+    "awaitingAcceptance": "Awaiting Acceptance",
+    "inTransit": "In Transit",
+    "completed": "Completed",
+    "rejected": "Rejected",
+    "cancelled": "Cancelled"
+  },
+  "empty": {
+    "loadErrorTitle": "Couldn't load bookings",
+    "loadErrorMessage": "The request didn't complete. Check your connection and try again.",
+    "noResultsTitle": "No bookings yet",
+    "noResultsMessage": "Create a booking to start managing your shipments.",
+    "unableToLoadDetails": "Failed to load booking details",
+    "insuranceNotRequired": "Insurance not required for this booking.",
+    "noDocuments": "No documents uploaded",
+    "noActivity": "No activity recorded"
+  },
+  "labels": {
+    "onlineRef": "Online Ref",
+    "agency": "Agency",
+    "dangerousGoods": "Dangerous Goods",
+    "nonDg": "Non-DG",
+    "originPol": "Origin (POL)",
+    "deliveryPod": "Delivery (POD)",
+    "portToPort": "Port to Port",
+    "cargoReadyDate": "Cargo ready date",
+    "haulageOrigin": "Haulage origin",
+    "haulageDestination": "Haulage destination",
+    "carriageContract": "Carriage contract",
+    "cargoValue": "Cargo value",
+    "termsAccepted": "Terms accepted",
+    "blType": "BL type",
+    "filingType": "Filing type",
+    "declarantName": "Declarant name"
+  },
+  "sections": {
+    "masterDetails": "Master details",
+    "customerDetails": "Customer details",
+    "cargoDetails": "Cargo details",
+    "insuranceDetails": "Insurance details",
+    "documents": "Documents",
+    "activity": "Activity"
+  },
+  "confirms": {
+    "cancelTitle": "Cancel Booking",
+    "cancelContent": "Are you sure you want to cancel this booking?",
+    "deleteTemplateTitle": "Delete Template",
+    "deleteTemplateContent": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone."
+  },
+  "toasts": {
+    "duplicated": "Duplicated booking {{bookingNo}}",
+    "duplicateFailed": "Failed to duplicate booking {{bookingNo}}",
+    "pdfDownloaded": "Downloaded PDF for {{bookingNo}}",
+    "pdfDownloadFailed": "Failed to download PDF for {{bookingNo}}",
+    "cancelled": "Booking {{bookingNo}} cancelled.",
+    "cancelFailed": "Failed to cancel booking {{bookingNo}}.",
+    "templateDeleted": "Template deleted successfully",
+    "templateDeleteFailed": "Failed to delete template",
+    "templateLoaded": "Loaded template: {{name}}",
+    "templateApplied": "Applied template: {{name}}"
+  },
+  "templates": {
+    "manageTitle": "Manage Booking Templates",
+    "manageSubtitle": "View, edit, or remove your saved booking templates",
+    "selectTitle": "Select Booking Template",
+    "selectSubtitle": "Choose a saved template to pre-fill your booking form",
+    "showingRange": "Showing {{from}} to {{to}} of {{total}} entries",
+    "emptyManage": "No templates saved yet",
+    "emptySelect": "No templates available",
+    "columns": {
+      "sno": "S.No",
+      "templateName": "Template Name",
+      "origin": "Origin",
+      "delivery": "Delivery",
+      "action": "Action"
+    }
+  },
+  "haulage": {
+    "title": "Haulage Tracking Details",
+    "disclaimer": "* Disclaimer: All haulage times are subject to local traffic and terminal conditions.",
+    "emptyTitle": "No haulage tracking details",
+    "emptyMessage": "Pickup and drop-off milestones will appear here when haulage is arranged.",
+    "columns": {
+      "containerNo": "Container No",
+      "equipmentType": "Equipment Type",
+      "customerReference": "Customer Reference",
+      "pickupLocCode": "Pickup Loc Code",
+      "pickupLocName": "Pickup Loc Name",
+      "stopSeq": "Stop Seq",
+      "address": "Address",
+      "tmsSchePickup": "TMS Sche. Pickup",
+      "tmsActPickup": "TMS Act. Pickup",
+      "tmsScheDrop": "TMS Sche. Drop",
+      "tmsActDrop": "TMS Act. Drop"
+    }
+  },
+  "wizard": {
+    "actions": {
+      "saveDraft": "Save Draft",
+      "goToDashboard": "Go to Dashboard",
+      "createAnother": "Create Another Booking",
+      "selectTemplate": "Select Template",
+      "submitBooking": "Submit Booking"
+    },
+    "confirm": {
+      "submittedTitle": "Booking Submitted Successfully",
+      "submittedMessage": "Your booking request has been forwarded to the carrier.",
+      "bookingReference": "Booking Reference"
+    },
+    "amend": {
+      "loading": "Loading Booking Details...",
+      "loadFailed": "Failed to load booking for amendment.",
+      "submittedTitle": "Booking Amendment Submitted Successfully",
+      "submittedMessage": "Your amendment request has been forwarded to the carrier."
+    },
+    "toasts": {
+      "draftSaved": "Draft saved ({{draftId}})",
+      "draftSaveFailed": "Failed to save draft",
+      "rateSelected": "Rate selected: {{rateNo}}",
+      "rateSelectedWithRoute": "Rate {{rateNo}} selected · default route applied ({{service}})",
+      "setCargoReadyForRoute": "Set Cargo Ready Date to auto-apply the default route, or select a vessel/route manually.",
+      "noDefaultRoute": "No default route for this lane. Please select a vessel/route manually.",
+      "routeSelected": "Route selected: {{service}} · {{vessel}}",
+      "defaultRouteApplied": "Default route applied: {{service}}"
+    },
+    "master": {
+      "originPlaceholder": "Search origin port (e.g. USNYC)",
+      "deliveryPlaceholder": "Search delivery port (e.g. GBFEL)",
+      "cargoReadyDate": "Cargo Ready Date",
+      "swapPorts": "Swap Origin and Delivery",
+      "swapPortsAria": "Swap origin and delivery ports",
+      "onlineBookingNo": "Online Booking No",
+      "preferredAgency": "Preferred Agency",
+      "agencyPlaceholder": "Select Agency",
+      "carriageContractPlaceholder": "Select Carriage Contract",
+      "rateReference": "Rate reference"
+    },
+    "haulage": {
+      "carrier": "Carrier",
+      "merchant": "Merchant"
+    },
+    "freight": {
+      "prepaid": "Prepaid",
+      "collect": "Collect"
+    },
+    "parties": {
+      "roles": {
+        "shipper": "Booking Party",
+        "siSubmittingParty": "Shipper",
+        "consignee": "Consignee",
+        "notifyParty": "Notify Party",
+        "notifyParty2": "Notify Party 2",
+        "forwarder": "Forwarder",
+        "agreementParty": "Agreement Party"
+      },
+      "previewRoles": {
+        "shipper": "Shipper",
+        "forwarder": "Freight Forwarder"
+      },
+      "editParty": "Edit Party",
+      "editRole": "Edit {{role}}",
+      "deleteParty": "Delete Party",
+      "noContactDetails": "No additional contact details",
+      "notAssignedYet": "Not assigned yet",
+      "assign": "Assign",
+      "assigned": "Assigned",
+      "assignHint": "Select roles to assign this customer, then click Add Selected.",
+      "addSelected": "Add Selected",
+      "addSelectedCount": "Add Selected ({{count}})",
+      "searchPlaceholder": "Search by customer name or code",
+      "typeCustomerPlaceholder": "Type customer name or code…",
+      "searching": "Searching…",
+      "noCustomers": "No customers found",
+      "selectRole": "Select at least one role",
+      "rolesAssigned": "Party roles assigned",
+      "companyRequired": "Company is required",
+      "completeRequired": "Please complete required parties",
+      "fields": {
+        "company": "Company",
+        "contactCode": "Contact / Code",
+        "address": "Address",
+        "city": "City",
+        "country": "Country",
+        "email": "Email",
+        "phone": "Phone"
+      }
+    },
+    "routing": {
+      "selectVesselRoute": "Select Vessel / Route",
+      "changeRoute": "Change Route",
+      "modalSubtitle": "{{origin}} → {{delivery}} · Cargo ready {{date}}",
+      "loadingAria": "Loading",
+      "loadErrorTitle": "Unable to load vessel schedules",
+      "loadErrorMessage": "Something went wrong while loading routes.",
+      "emptyTitle": "No vessel schedules found",
+      "emptyMessage": "No records match this origin, delivery, and cargo-ready date.",
+      "selected": "Selected",
+      "road": "Road",
+      "departure": "Departure",
+      "arrival": "Arrival",
+      "routeTitle": "Route",
+      "routeDetails": "Route Details",
+      "cutoffs": "Cut-offs",
+      "gateIn": "Gate-In",
+      "siCutoff": "SI Cut-Off",
+      "vgmCutoff": "VGM Cut-Off",
+      "etd": "ETD",
+      "eta": "ETA",
+      "days": "{{count}} Days",
+      "showDetails": "Show Details",
+      "closeDetails": "Close Details"
+    },
+    "routeKind": {
+      "direct": "Direct",
+      "multimodal": "Multimodal",
+      "multimodalCount": "Multimodal ({{count}})",
+      "transshipment": "Transshipment",
+      "stops": "{{count}} Stop(s)"
+    },
+    "rates": {
+      "title": "Rate",
+      "availableTitle": "Available Rates",
+      "changeRate": "Change Rate",
+      "rateNo": "Rate No",
+      "equipment": "Equipment",
+      "amount": "Amount",
+      "emptyLane": "No rates for this lane"
+    },
+    "references": {
+      "title": "References",
+      "hint": "Add reference fields to help identify and track this shipment",
+      "addField": "Add Reference Field",
+      "selectFields": "Select reference fields",
+      "selectAll": "Select All",
+      "added": "Added",
+      "addSelected": "Add Selected",
+      "addSelectedCount": "Add Selected ({{count}})",
+      "allAdded": "All reference fields have been added",
+      "emptyTitle": "No reference fields added yet",
+      "emptyMessage": "Click \"Add Reference Field\" to get started.",
+      "colFieldName": "Field Name",
+      "colValue": "Value",
+      "colActions": "Actions",
+      "removeField": "Remove Field",
+      "catalog": {
+        "rateReferenceNo": "Rate Reference No.",
+        "rateReferenceNoPlaceholder": "Enter rate reference no.",
+        "agencyRefNo": "Agency Ref No.",
+        "agencyRefNoPlaceholder": "Enter agency ref no.",
+        "oceanFreightTerms": "Ocean Freight Terms",
+        "natCode": "NAT Code",
+        "natCodePlaceholder": "Enter nat code",
+        "emptyPickupLocation": "Empty Pickup Location",
+        "emptyPickupLocationPlaceholder": "Enter empty pickup location",
+        "finalReceiptPlace": "Final Receipt Place",
+        "finalReceiptPlacePlaceholder": "Enter final receipt place",
+        "haulierCode": "Haulier Code",
+        "haulierCodePlaceholder": "Enter haulier code"
+      }
+    },
+    "preview": {
+      "missingTitle": "Missing Information",
+      "missingSubtitle": "Please go back and complete all previous steps before submitting.",
+      "sections": {
+        "routeSchedule": "Route & schedule",
+        "insuranceCharges": "Insurance & charges"
+      },
+      "empty": {
+        "noRoute": "No route selected",
+        "noParties": "No parties assigned",
+        "noFiles": "No files uploaded",
+        "noReferences": "No reference fields",
+        "noContainers": "No containers",
+        "noData": "No data provided"
+      },
+      "editSection": "Edit {{title}}",
+      "notAssigned": "Not assigned",
+      "ensRequired": "ENS required",
+      "euCustomsZone": "EU customs zone",
+      "paymentMethod": "Payment method",
+      "buyer": "Buyer",
+      "seller": "Seller",
+      "declarant": "Declarant",
+      "currency": "Currency",
+      "declaredValue": "Declared value",
+      "termsCheckbox": "I confirm these details are accurate and accept the terms of carriage",
+      "route": {
+        "destination": "Destination",
+        "gateInCutoff": "Gate-in cut-off",
+        "siCutoff": "SI cut-off",
+        "vgmCutoff": "VGM cut-off",
+        "haulageOD": "Haulage (O / D)",
+        "daysKind": "{{count}} days · {{kind}}"
+      },
+      "cargo": {
+        "hint": "{{containers}} {{containerLabel}} · {{lines}} commodity {{lineLabel}} · expand the summary, then click a row to view details and commodities.",
+        "container": "container",
+        "containers": "containers",
+        "line": "line",
+        "lines": "lines",
+        "toggleTableAria": "Toggle container table",
+        "totalContainers": "Total containers",
+        "totalWeight": "Total weight",
+        "totalVolume": "Total volume",
+        "totalTeu": "Total TEU",
+        "colContainerNumbers": "Container numbers",
+        "colType": "Type",
+        "colTareWeight": "Tare weight",
+        "colCarrierSeal": "Carrier seal",
+        "colShipperSeal": "Shipper seal",
+        "colSpecial": "Special",
+        "expandAria": "Expand",
+        "containerFallback": "Container {{n}}",
+        "containerNo": "Container no.",
+        "commoditiesTitle": "Commodities ({{count}})",
+        "totalWeightValue": "Total weight: {{weight}}",
+        "colCommodity": "Commodity",
+        "colHsCode": "HS code",
+        "colPackageType": "Package type",
+        "colPackages": "Packages",
+        "colWeight": "Weight",
+        "colVolume": "Volume",
+        "special": {
+          "dg": "DG",
+          "dgClass": "DG · Class {{class}}",
+          "oog": "OOG",
+          "soc": "SOC",
+          "reefer": "Reefer",
+          "reeferTemp": "Reefer {{temp}}°C",
+          "nor": "NOR"
+        }
+      }
+    }
+  }
+}

@@ -10,6 +10,7 @@ import { useNavigate } from "@tanstack/react-router";
 import type { RowDoubleClickedEvent } from "ag-grid-community";
 import { Card, Dropdown, Space, Tag } from "antd";
 import { useCallback, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../components/icons";
 import { NavBookingIcon } from "../../components/icons/nav-svg-icons";
@@ -38,10 +39,12 @@ import { BookingViewDrawer } from "./components/view/BookingViewDrawer";
 import { useBookingStore } from "./stores/booking.store";
 import type { BookingListDTO } from "./types/booking-list.types";
 import { getBookingListStatusColor } from "./types/booking-list.types";
+import { getBookingStatusLabel } from "./utils/booking-status";
 
 const VIEW_MODE_KEY = "ecom.booking.viewMode";
 
 export function BookingDashboardRoute() {
+  const { t } = useTranslation(["booking", "common", "modules"]);
   const MODULE_TITLES = useModuleTitles();
   const navigate = useNavigate();
   const confirm = useConfirm();
@@ -89,10 +92,10 @@ export function BookingDashboardRoute() {
       try {
         const payload = await bookingApi.getBookingById(booking.id);
         useBookingStore.getState().initializeFromBooking(payload);
-        toast.success(`Duplicated booking ${booking.bookingNo}`);
+        toast.success(t("toasts.duplicated", { bookingNo: booking.bookingNo }));
         navigate({ to: "/app/booking/new" });
       } catch {
-        toast.error(`Failed to duplicate booking ${booking.bookingNo}`);
+        toast.error(t("toasts.duplicateFailed", { bookingNo: booking.bookingNo }));
       }
     },
     [navigate, toast],
@@ -108,9 +111,9 @@ export function BookingDashboardRoute() {
         anchor.download = `booking-${booking.id}.pdf`;
         anchor.click();
         URL.revokeObjectURL(url);
-        toast.success(`Downloaded PDF for ${booking.bookingNo}`);
+        toast.success(t("toasts.pdfDownloaded", { bookingNo: booking.bookingNo }));
       } catch {
-        toast.error(`Failed to download PDF for ${booking.bookingNo}`);
+        toast.error(t("toasts.pdfDownloadFailed", { bookingNo: booking.bookingNo }));
       }
     },
     [toast],
@@ -119,10 +122,10 @@ export function BookingDashboardRoute() {
   const handleCancel = useCallback(
     (booking: BookingListDTO) => {
       confirm.danger({
-        title: "Cancel Booking",
-        content: "Are you sure you want to cancel this booking?",
-        okText: "Yes",
-        cancelText: "No",
+        title: t("confirms.cancelTitle"),
+        content: t("confirms.cancelContent"),
+        okText: t("common:actions.yes"),
+        cancelText: t("common:actions.no"),
         onOk: async () => {
           try {
             await bookingApi.cancelBooking(booking.id);
@@ -130,9 +133,9 @@ export function BookingDashboardRoute() {
             await queryClient.invalidateQueries({
               queryKey: bookingKeys.list(),
             });
-            toast.success(`Booking ${booking.bookingNo} cancelled.`);
+            toast.success(t("toasts.cancelled", { bookingNo: booking.bookingNo }));
           } catch {
-            toast.error(`Failed to cancel booking ${booking.bookingNo}.`);
+            toast.error(t("toasts.cancelFailed", { bookingNo: booking.bookingNo }));
           }
         },
       });
@@ -143,15 +146,15 @@ export function BookingDashboardRoute() {
   const emptyState = isError ? (
     <ModuleEmptyState
       variant="error"
-      title="Couldn't load bookings"
-      message="The request didn't complete. Check your connection and try again."
+      title={t("empty.loadErrorTitle")}
+      message={t("empty.loadErrorMessage")}
       actions={[buildRetryAction(() => void refetch())]}
     />
   ) : (
     <ModuleEmptyState
       variant="blank"
-      title="No bookings yet"
-      message="Create a booking to start managing your shipments."
+      title={t("empty.noResultsTitle")}
+      message={t("empty.noResultsMessage")}
     />
   );
 
@@ -166,7 +169,7 @@ export function BookingDashboardRoute() {
           return (
             <ListActionsRow>
               <ListActionButton
-                title="View Booking"
+                title={t("common:actions.view")}
                 icon={<AppIcon icon={Icons.eye} size={16} tone="view" />}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -174,7 +177,7 @@ export function BookingDashboardRoute() {
                 }}
               />
               <ListActionButton
-                title="Amendment (Edit)"
+                title={t("actions.amendment")}
                 icon={<AppIcon icon={Icons.edit} size={16} tone="edit" />}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -182,7 +185,7 @@ export function BookingDashboardRoute() {
                 }}
               />
               <ListActionButton
-                title="Duplicate Booking"
+                title={t("actions.duplicate")}
                 icon={<AppIcon icon={Icons.copy} size={16} tone="create" />}
                 tone="create"
                 onClick={(e) => {
@@ -191,7 +194,7 @@ export function BookingDashboardRoute() {
                 }}
               />
               <ListActionButton
-                title="Download PDF"
+                title={t("actions.downloadPdf")}
                 icon={
                   <AppIcon icon={Icons.fileText} size={16} tone="download" />
                 }
@@ -202,7 +205,7 @@ export function BookingDashboardRoute() {
                 }}
               />
               <ListActionButton
-                title="Cancel Booking"
+                title={t("actions.cancelBooking")}
                 icon={<AppIcon icon={Icons.circleX} size={16} tone="reject" />}
                 danger
                 onClick={(e) => {
@@ -216,26 +219,26 @@ export function BookingDashboardRoute() {
       }),
       {
         field: "bookingNo",
-        headerName: "Booking No",
+        headerName: t("columns.bookingNo"),
         minWidth: 140,
         flex: 1.1,
         isPrimary: true,
       },
       {
         field: "onlineRefNo",
-        headerName: "Online Ref",
+        headerName: t("columns.onlineRef"),
         minWidth: 130,
         flex: 1,
       },
       {
         field: "agencyRefNo",
-        headerName: "Agency Ref",
+        headerName: t("columns.agencyRef"),
         minWidth: 120,
         flex: 1,
       },
       {
         field: "status",
-        headerName: "Status",
+        headerName: t("columns.status"),
         minWidth: 140,
         width: 150,
         flex: 0,
@@ -246,48 +249,48 @@ export function BookingDashboardRoute() {
               className="booking-list-status-tag module-status-tag"
               color={val ? getBookingListStatusColor(val) : "default"}
             >
-              {val}
+              {val ? getBookingStatusLabel(val, t) : val}
             </Tag>
           );
         },
       },
       {
         field: "origin",
-        headerName: "Origin",
+        headerName: t("columns.origin"),
         minWidth: 120,
         flex: 1,
         isSecondary: true,
       },
-      { field: "delivery", headerName: "Delivery", minWidth: 120, flex: 1 },
-      { field: "createdDate", headerName: "Created", minWidth: 110, flex: 0.9 },
+      { field: "delivery", headerName: t("columns.delivery"), minWidth: 120, flex: 1 },
+      { field: "createdDate", headerName: t("columns.created"), minWidth: 110, flex: 0.9 },
       {
         field: "confirmedDate",
-        headerName: "Confirmed",
+        headerName: t("columns.confirmed"),
         minWidth: 110,
         flex: 0.9,
       },
       {
         field: "dgStatus",
-        headerName: "DG",
+        headerName: t("columns.dg"),
         width: 80,
         maxWidth: 90,
         cellClass: "booking-list-cell--center",
       },
       {
         field: "teusCount",
-        headerName: "TEUs",
+        headerName: t("columns.teus"),
         width: 90,
         maxWidth: 100,
         cellClass: "booking-list-cell--center",
       },
       {
         field: "submittedDate",
-        headerName: "Submitted",
+        headerName: t("columns.submitted"),
         minWidth: 110,
         flex: 0.9,
       },
     ],
-    [handleAmend, handleCancel, handleDownloadPdf, handleDuplicate, handleView],
+    [handleAmend, handleCancel, handleDownloadPdf, handleDuplicate, handleView, t],
   );
 
   const renderCard = useCallback(
@@ -315,7 +318,7 @@ export function BookingDashboardRoute() {
               icon={NavBookingIcon}
               title={MODULE_TITLES.booking}
               // recordCount={bookings.length}
-              subtitle="Create and manage bookings, amend drafts, and track confirmation status."
+              subtitle={t("subtitle")}
               marginBottom={0}
               viewMode={viewMode}
               onViewModeChange={setViewMode}
@@ -326,14 +329,14 @@ export function BookingDashboardRoute() {
                     icon={<AppIcon icon={Icons.settings} size={16} />}
                     onClick={() => setIsTemplateModalOpen(true)}
                   >
-                    Manage Template
+                    {t("actions.manageTemplate")}
                   </AppButton>
                   <Dropdown
                     menu={{
                       items: [
                         {
                           key: "new-booking",
-                          label: "New Booking",
+                          label: MODULE_TITLES.newBooking,
                           icon: <AppIcon icon={Icons.plus} size={16} />,
                           onClick: () => {
                             useBookingStore.getState().resetWizard();
@@ -342,7 +345,7 @@ export function BookingDashboardRoute() {
                         },
                         {
                           key: "import-booking",
-                          label: "Import Booking",
+                          label: MODULE_TITLES.bookingImport,
                           icon: <AppIcon icon={Icons.upload} size={16} />,
                           onClick: () => {
                             navigate({ to: "/app/booking/import" });
@@ -364,7 +367,7 @@ export function BookingDashboardRoute() {
                           gap: 6,
                         }}
                       >
-                        New Booking
+                        {MODULE_TITLES.newBooking}
                         <AppIcon icon={Icons.chevronDown} size={14} />
                       </span>
                     </AppButton>

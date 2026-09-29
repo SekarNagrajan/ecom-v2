@@ -1,0 +1,493 @@
+{
+  "subtitle": "Review B/L status, verify drafts, and print transport documents.",
+  "columns": {
+    "status": "Status",
+    "blNumber": "B/L Number",
+    "blNo": "B/L No",
+    "mcnNo": "MCN No",
+    "bookingNo": "Booking No",
+    "siNo": "SI No",
+    "agencyRef": "Agency Ref",
+    "origin": "Origin",
+    "load": "Load",
+    "discharge": "Discharge",
+    "delivery": "Delivery",
+    "confirmedDate": "Confirmed Date",
+    "createdDate": "Created Date",
+    "route": "Route",
+    "code": "Code",
+    "description": "Description",
+    "pce": "P/C/E",
+    "amount": "Amount",
+    "payor": "Payor"
+  },
+  "actions": {
+    "view": "View",
+    "edit": "Edit",
+    "amendment": "Amendment",
+    "accept": "Accept",
+    "readyToConfirm": "Ready to Confirm",
+    "originalPrint": "Original Print",
+    "draftPrint": "Draft Print",
+    "batchOriginalPrint": "Batch Original Print",
+    "printSelected": "Print Selected ({{count}})",
+    "manifest": "Manifest",
+    "chargeSummary": "Charge Summary",
+    "charges": "Charges",
+    "nonNegotiable": "Non Negotiable",
+    "cancel": "Cancel",
+    "locked": "Locked",
+    "more": "More",
+    "moreActions": "More actions",
+    "back": "Back",
+    "close": "Close",
+    "decline": "Decline",
+    "iAgree": "I Agree",
+    "editBillOfLading": "Edit Bill of Lading",
+    "payWithStripeMock": "Pay with Stripe (Mock)",
+    "selectAll": "Select All",
+    "sendAmendmentMail": "Send Amendment Mail"
+  },
+  "empty": {
+    "loadErrorTitle": "Couldn't load bills of lading",
+    "loadErrorMessage": "The request didn't complete. Check your connection and try again.",
+    "noResultsTitle": "No bills of lading yet",
+    "noResultsMessage": "Bills of lading will appear here once they are created for your shipments.",
+    "noCharges": "No charges available for this B/L",
+    "noManifestLinkedTitle": "No manifest linked",
+    "noManifestLinkedMessage": "No MCN is linked to this Bill of Lading yet.",
+    "manifestNotFoundTitle": "Manifest not found",
+    "manifestNotFoundMessage": "Manifest {{mcnId}} was not found.",
+    "unableToLoadDetails": "Unable to load Bill of Lading details.",
+    "blNotFound": "B/L not found.",
+    "noRouting": "No routing details",
+    "insuranceNotRequired": "Insurance not required for this bill of lading.",
+    "noDocuments": "No documents uploaded",
+    "noActivity": "No activity recorded",
+    "batchPrintTitle": "No B/Ls eligible for batch print",
+    "batchPrintMessage": "No confirmed B/Ls are currently eligible for batch original print.",
+    "mcnLoadErrorTitle": "Couldn't load manifests",
+    "mcnLoadErrorMessage": "The request didn't complete. Check your connection and try again.",
+    "mcnEmptyTitle": "No manifests yet",
+    "mcnEmptyMessage": "Manifest cargo notifications will appear here when they are available."
+  },
+  "drawers": {
+    "chargeSummary": "B/L Charge Summary",
+    "batchOriginalPrint": "Batch Original Print",
+    "viewBillOfLading": "View Bill of Lading",
+    "manifest": "Manifest"
+  },
+  "confirms": {
+    "voyageClosedTitle": "Voyage Closed",
+    "voyageClosedContent": "This voyage is closed. B/L edit is not permitted.",
+    "printOriginalTitle": "Print Original B/L",
+    "printOriginalContent": "Confirm printing the original Bill of Lading? This action may be restricted after issue.",
+    "cancelSubmittedTitle": "Cancel Submitted B/L",
+    "cancelSubmittedContent": "Are you sure you want to cancel this submitted B/L?",
+    "editTermsTitle": "Confirmed B/L Edit — Terms",
+    "editTermsBody": "By editing a confirmed B/L you agree to carrier amendment terms and conditions."
+  },
+  "labels": {
+    "booking": "Booking",
+    "bookingNumber": "Booking number",
+    "mcn": "MCN",
+    "agencyRef": "Agency Ref",
+    "load": "Load",
+    "discharge": "Discharge",
+    "created": "Created",
+    "siNumber": "SI number",
+    "blType": "B/L type",
+    "releaseType": "Release type",
+    "freightOption": "Freight option",
+    "route": "Route",
+    "vesselVoyage": "Vessel / voyage",
+    "origin": "Origin",
+    "originPrint": "Origin (Print)",
+    "polPrint": "POL (Print)",
+    "podPrint": "POD (Print)",
+    "delivery": "Delivery",
+    "deliveryPrint": "Delivery (Print)",
+    "scheduleLegs": "Schedule legs",
+    "cargoValue": "Cargo value",
+    "policyNo": "Policy no",
+    "termsAccepted": "Terms accepted",
+    "optOut": "Opt out",
+    "filingType": "Filing type",
+    "paymentMethod": "Payment method",
+    "declarant": "Declarant",
+    "buyer": "Buyer",
+    "seller": "Seller",
+    "file": "File",
+    "activity": "Activity",
+    "parties": "Parties",
+    "charges": "Charges",
+    "insurance": "Insurance",
+    "previewFields": "Preview Fields",
+    "cargoContainers": "Cargo & Containers",
+    "shipper": "SHIPPER",
+    "consignee": "CONSIGNEE",
+    "toOrder": "(TO ORDER)",
+    "notifyParty": "NOTIFY PARTY",
+    "notify2": "NOTIFY 2",
+    "forwarder": "FORWARDER",
+    "original": "Original",
+    "telex": "Telex",
+    "yes": "Yes",
+    "no": "No",
+    "coverage": "Coverage: {{currency}} {{value}}",
+    "policySuffix": " · Policy {{policyNo}}",
+    "containerN": "Container {{n}}: {{containerNo}} ({{eqpSize}})",
+    "declaredValue": "Declared Value",
+    "remarks": "Remarks",
+    "vessel": "Vessel",
+    "voyage": "Voyage",
+    "containers": "Containers",
+    "statusPrefix": "Status: {{status}}",
+    "printCount": "Print count: {{count}}",
+    "fileCount": "{{count}} file(s)",
+    "system": "System"
+  },
+  "card": {
+    "booking": "Booking",
+    "mcn": "MCN",
+    "agencyRef": "Agency Ref",
+    "load": "Load",
+    "discharge": "Discharge",
+    "created": "Created"
+  },
+  "activity": {
+    "draftCreated": "B/L Draft Created",
+    "confirmed": "B/L Confirmed",
+    "issued": "B/L Issued",
+    "locked": "B/L Locked",
+    "printed": "B/L Printed",
+    "documentsUploaded": "Documents Uploaded"
+  },
+  "status": {
+    "draft": "Draft",
+    "submitted": "Submitted",
+    "confirmed": "Confirmed",
+    "issued": "Issued",
+    "locked": "Locked"
+  },
+  "toasts": {
+    "batchPrintDownloaded": "Batch print downloaded",
+    "acceptedAndConfirmed": "B/L accepted and confirmed",
+    "submittedCancelled": "Submitted B/L cancelled",
+    "submittedSuccessfully": "B/L submitted successfully",
+    "issued": "B/L issued",
+    "saved": "B/L saved",
+    "manifestDownloaded": "Manifest downloaded",
+    "selectBlForPayment": "Select at least one B/L for payment",
+    "sameAgencyRequired": "Selected B/Ls must belong to the same issuing agency",
+    "paymentIntentCreated": "Mock payment intent created ({{secret}}…)",
+    "amendmentSent": "Amendment notification sent (mock)",
+    "mcnSaved": "MCN saved",
+    "mcnSubmitted": "MCN submitted"
+  },
+  "batchPrint": {
+    "title": "Batch Original Print",
+    "subtitle": "Select confirmed B/Ls eligible for original print, then print in one batch.",
+    "intro": "Select confirmed B/Ls that are eligible for original print. Locked or unprinted drafts are excluded.",
+    "eligibleCount": "{{count}} eligible"
+  },
+  "payment": {
+    "selectedCount": "{{count}} B/L(s) selected",
+    "mixedAgencies": "Mixed agencies — payment not allowed"
+  },
+  "mcn": {
+    "title": "Manifest (MCN)",
+    "subtitle": "Manifest cargo notification — view and print from the side drawer.",
+    "editTitle": "Edit MCN: {{mcnId}}",
+    "editSubtitle": "B/L {{blNo}} · {{status}}",
+    "cargoDescriptionRequired": "Cargo description is required",
+    "freightTermsRequired": "Freight terms are required",
+    "manifestCount": "{{count}} Manifest(s)",
+    "cargoDescription": "Cargo Description",
+    "freightTerms": "Freight Terms",
+    "submit": "Submit MCN"
+  },
+  "submitResult": {
+    "title": "B/L Submitted",
+    "defaultMessage": "B/L submitted."
+  },
+  "charges": {
+    "prepaid": "Prepaid",
+    "collect": "Collect",
+    "payAt": "Pay At",
+    "totalsLine": "Totals ({{currency}}): Prepaid {{prepaid}} · Collect {{collect}} · Pay At {{payAt}} · Grand {{grand}}"
+  },
+  "manifest": {
+    "print": "Print Manifest",
+    "type": "Manifest Type",
+    "cargo": "Cargo Manifest",
+    "freight": "Freight Manifest"
+  },
+  "preview": {
+    "editSection": "Edit {{title}}",
+    "shipper": "Shipper",
+    "notAssigned": "Not assigned",
+    "noDataProvided": "No data provided"
+  },
+  "wizard": {
+    "terms": {
+      "body": "By proceeding with B/L correction you agree to the carrier terms and conditions for document amendments.",
+      "modalTitle": "B/L Correction — Terms and Conditions"
+    },
+    "errors": {
+      "loadFailedTitle": "Failed to load B/L",
+      "loadFailedMessage": "Could not load Bill of Lading for edit.",
+      "issuedNotEditable": "This Bill of Lading has been issued and cannot be edited."
+    },
+    "toasts": {
+      "termsAccepted": "Terms accepted — you may continue editing."
+    },
+    "actions": {
+      "backToBl": "Back to B/L",
+      "viewBl": "View B/L",
+      "submitBl": "Submit B/L",
+      "retry": "Retry"
+    },
+    "master": {
+      "documentReferences": "Document References",
+      "blOptions": "Bill of Lading Options",
+      "vessels": "Vessels",
+      "vesselVoyageNumber": "Vessel / Voyage Number",
+      "placeOfReceipt": "Place of Receipt",
+      "portOfLoading": "Port of Loading",
+      "portOfDischarge": "Port of Discharge",
+      "placeOfDelivery": "Place of Delivery",
+      "freightTerms": "Freight Terms",
+      "originalBl": "Original B/L",
+      "seaWaybill": "Sea Waybill",
+      "telexRelease": "Telex Release"
+    },
+    "parties": {
+      "editParty": "Edit Party",
+      "deleteParty": "Delete Party",
+      "noContactDetails": "No additional contact details",
+      "printOnBl": "Print on B/L",
+      "toOrder": "To Order",
+      "notAssignedYet": "Not assigned yet",
+      "assign": "Assign",
+      "searchPlaceholder": "Search by customer name or code",
+      "rolesAssigned": "Party roles assigned"
+    },
+    "routing": {
+      "loadPortPrint": "Load Port (Print)",
+      "dischargePortPrint": "Discharge Port (Print)",
+      "bookingHint": "Booking: {{value}}",
+      "vesselOptionalHint": "Optional schedule reference",
+      "printTextTitle": "Routing — Print Text",
+      "etd": "ETD",
+      "eta": "ETA"
+    },
+    "charges": {
+      "title": "Freight Charges",
+      "currency": "Currency",
+      "addCharge": "Add Charge",
+      "chargeLineTitle": "Charge {{n}}",
+      "removeCharge": "Remove charge",
+      "pceShort": "P/C"
+    },
+    "chargeSummary": {
+      "title": "Charge Summary"
+    },
+    "preview": {
+      "aesUsLoadPort": "Provide AES number or select not applicable for US load port",
+      "completeBeforeSubmit": "Complete preview fields before submit",
+      "notApplicable": "N/A",
+      "nvocc": "NVOCC",
+      "t2lFiling": "T2L filing",
+      "loadPort": "Load port",
+      "dischargePort": "Discharge port",
+      "draftBl": "Draft B/L",
+      "pol": "POL",
+      "pod": "POD",
+      "insuranceRequired": "Required",
+      "chargeFallback": "Charge",
+      "ensNotRequired": "ENS not required",
+      "chargeLinesOnFile": "{{count}} charge line(s) on file",
+      "noFilesUploaded": "No files uploaded",
+      "noReferenceFields": "No reference fields",
+      "customerRemarks": "Customer Remarks",
+      "aesNumber": "AES Number",
+      "aesDisclaimer": "AES Disclaimer",
+      "aesProvided": "Provided",
+      "aesNotApplicable": "Not Applicable",
+      "blTypeUae": "B/L Type (UAE)",
+      "mpciIdUae": "MPCI ID (UAE)",
+      "masterBl": "Master BL",
+      "directBl": "Direct BL",
+      "euCustomsZone": "EU customs zone",
+      "typeOfBl": "Type of B/L",
+      "ensFiling": "ENS filing",
+      "currency": "Currency"
+    },
+    "validation": {
+      "selectRole": "Select at least one role",
+      "companyRequired": "Company is required",
+      "completeRequiredParties": "Please complete required parties",
+      "seawayNoToOrder": "Sea waybill cannot have consignee to order"
+    },
+    "steps": {
+      "cargoProtect": "Cargo Protect",
+      "chargeSummary": "Charge Summary"
+    },
+    "insurance": {
+      "optOutCheckbox": "Opt out of cargo insurance for this B/L",
+      "requireQuestion": "Do you require Cargo Insurance?",
+      "detailsTitle": "Insurance Details",
+      "termsTitle": "Insurance Terms & Conditions",
+      "termsBody": "By requesting cargo insurance, you agree to the carrier's standard insurance terms. Premium will be added to the freight invoice.",
+      "acceptTerms": "I accept the Insurance Terms and Conditions",
+      "skip": "Skip Insurance",
+      "validation": {
+        "currencyRequired": "Currency is required",
+        "cargoValueMin": "Cargo value must be greater than 0",
+        "acceptTerms": "You must accept the insurance terms"
+      }
+    },
+    "cargoProtect": {
+      "productsTitle": "Cargo Protect Products",
+      "productCode": "Product Code",
+      "addRow": "Add Row",
+      "emptyTitle": "No cargo protect lines",
+      "emptyMessage": "Click Add Row to include coverage products.",
+      "lineTitle": "Line {{n}}",
+      "removeRow": "Remove row"
+    },
+    "ens": {
+      "title": "ENS Details",
+      "label": "ENS",
+      "filingType": "Type of ENS Filing",
+      "straightBl": "Straight BL",
+      "singleFiling": "Single Filing",
+      "multipleFiling": "Multiple Filing",
+      "wireTransfer": "Wire Transfer",
+      "notPrepaid": "Not Prepaid",
+      "supplementaryDeclarant": "Supplementary Declarant",
+      "notesTitle": "ENS filing notes",
+      "notesFilingRequirements": "Single Filing requires Buyer and Seller details. Multiple Filing requires Supplementary Declarant details.",
+      "notesBlTypeMapping": "Straight BL uses Single Filing; Master BL uses Multiple Filing.",
+      "notesEori": "Provide accurate EORI and person type where applicable for EU customs processing.",
+      "fields": {
+        "name": "Name",
+        "address": "Address",
+        "city": "City",
+        "country": "Country",
+        "eori": "EORI",
+        "email": "Email"
+      },
+      "validation": {
+        "invalidEmail": "Invalid email"
+      }
+    },
+    "files": {
+      "title": "Upload Supporting Documents",
+      "documentType": "Document Type",
+      "documentTypePlaceholder": "Select document type",
+      "draggerText": "Click or drag file to this area to upload",
+      "draggerHint": "Selected type: {{type}}. Files are attached to this B/L request.",
+      "uploadedList": "Uploaded Documents",
+      "categories": {
+        "vgm": "VGM",
+        "dg": "Dangerous Goods (DG)",
+        "loi": "Letter of Indemnity (LOI)",
+        "other": "Other"
+      },
+      "uploadSuccess": "{{fileName}} uploaded successfully.",
+      "uploadFailed": "{{fileName}} upload failed."
+    }
+  },
+  "import": {
+    "entityLabel": "cargo lines",
+    "submitLabel": "Import {{count}} cargo line(s)",
+    "columns": {
+      "containerNo": "Container No",
+      "containerType": "Container Type",
+      "carrierSeal": "Carrier Seal",
+      "shipperSeal": "Shipper Seal",
+      "marksAndNumbers": "Marks & Numbers",
+      "description": "Commodity Description",
+      "hsCode": "HS Code",
+      "commodityCode": "Commodity Code",
+      "packageCount": "Package Count",
+      "packageType": "Package Type",
+      "grossWeight": "Gross Weight",
+      "volume": "Volume"
+    },
+    "validation": {
+      "containerNoRequired": "Container No is required",
+      "containerNoMax": "Container No must be 11 characters or fewer",
+      "containerTypeRequired": "Container Type is required",
+      "descriptionRequired": "Commodity Description is required",
+      "hsCodeRequired": "HS Code is required",
+      "packageCountMin": "Package Count must be at least 1",
+      "packageTypeRequired": "Package Type is required",
+      "grossWeightRequired": "Gross Weight is required",
+      "volumeNegative": "Volume cannot be negative",
+      "invalidContainerType": "Select a valid container type",
+      "invalidPackageType": "Select a valid package type",
+      "duplicateLine": "Duplicate cargo line for the same container, HS code, description, and package count"
+    },
+    "actions": {
+      "exportTemplate": "Export Template",
+      "importExcel": "Import Excel"
+    },
+    "modalTitle": "Import Cargo — {{suffix}}",
+    "workbenchTitle": "Cargo Spreadsheet Import",
+    "confirm": {
+      "replaceTitle": "Replace existing cargo?",
+      "replaceContent": "Importing Excel will replace the containers and cargo lines currently on this {{documentKind}}. Continue?",
+      "replaceOk": "Replace & Import"
+    },
+    "toasts": {
+      "templateDownloaded": "Template downloaded.",
+      "templateFailed": "Template download failed.",
+      "noValidRows": "No valid cargo rows to import.",
+      "imported": "Imported {{containers}} container(s) ({{lines}} cargo line(s)).",
+      "rowUnmapped": "Row could not be mapped to a container"
+    },
+    "smart": {
+      "title": "Smart Import",
+      "update": "Update",
+      "footerMeta": "{{containers}} container(s) · {{lines}} cargo line(s)",
+      "hint": "Click a cell to edit. Right-click a row for insert, duplicate, clear, select container lines, or delete. Container No, Type, and Commodity stay locked — edit SOC, Actual Container No, and seals to update the container.",
+      "empty": "No cargo lines to edit.",
+      "needContainers": "Add containers before Smart Import.",
+      "updated": "Cargo updated from Smart Import.",
+      "lastLineWarning": "Removing the last line for a container will block Update until that container has at least one line again.",
+      "columns": {
+        "rowNo": "Row No",
+        "containerNo": "Container No",
+        "type": "Type",
+        "soc": "SOC",
+        "actualContainerNo": "Actual Container No",
+        "carrierSeal": "Carrier Seal",
+        "shipperSeal": "Shipper Seal",
+        "commodity": "Commodity",
+        "hsCode": "HS Code",
+        "packageType": "Package Type",
+        "qty": "Qty",
+        "weightKg": "Weight (kg)",
+        "volumeCbm": "Volume (CBM)",
+        "marksNo": "Marks No",
+        "description": "Commodity Description"
+      },
+      "contextMenu": {
+        "insertBefore": "Insert a new row before",
+        "insertAfter": "Insert a new row after",
+        "duplicate": "Duplicate this row",
+        "clearLine": "Clear line fields",
+        "clearLineSelected": "Clear line fields (selected)",
+        "selectContainerLines": "Select all lines for this container",
+        "deleteSelected": "Delete selected rows"
+      },
+      "errors": {
+        "unknownContainer": "Row {{row}}: Unknown container (not on this document)",
+        "containerCountMismatch": "The container count does not match between document ({{expected}}) and Smart Import ({{actual}})."
+      }
+    }
+  }
+}

@@ -3,6 +3,7 @@ import { AppButton, AppModal } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { Space, Typography } from "antd";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import {
@@ -23,6 +24,7 @@ export function CargoSmartImport({
   containers,
   onApplied,
 }: CargoSmartImportProps) {
+  const { t } = useTranslation(["bill-of-lading", "common"]);
   const toast = useToast();
   const [modalOpen, setModalOpen] = useState(false);
   const [rows, setRows] = useState<SmartImportRow[]>([]);
@@ -32,7 +34,7 @@ export function CargoSmartImport({
 
   const handleOpen = () => {
     if (containers.length === 0) {
-      toast.error("Add containers before Smart Import.");
+      toast.error(t("import.smart.needContainers"));
       return;
     }
     setRows(containersToSmartImportRows(containers));
@@ -51,7 +53,7 @@ export function CargoSmartImport({
       return;
     }
     onApplied?.(result.containers);
-    toast.success("Cargo updated from Smart Import.");
+    toast.success(t("import.smart.updated"));
     setModalOpen(false);
     setRows([]);
   };
@@ -63,7 +65,7 @@ export function CargoSmartImport({
         icon={<AppIcon icon={Icons.layoutGrid} size={14} tone="edit" />}
         onClick={() => handleOpen()}
       >
-        Smart Import
+        {t("import.smart.title")}
       </AppButton>
 
       <AppModal
@@ -71,7 +73,7 @@ export function CargoSmartImport({
         onCancel={handleCancel}
         dialogSize="xl"
         destroyOnHidden
-        title="Smart Import"
+        title={t("import.smart.title")}
         className="cargo-smart-import-modal"
         classNames={{
           body: "cargo-smart-import-modal__body custom-scroll",
@@ -82,15 +84,17 @@ export function CargoSmartImport({
               type="secondary"
               className="cargo-smart-import-modal__footer-meta"
             >
-              {containerCount} container{containerCount === 1 ? "" : "s"} ·{" "}
-              {lineCount} cargo line{lineCount === 1 ? "" : "s"}
+              {t("import.smart.footerMeta", {
+                containers: containerCount,
+                lines: lineCount,
+              })}
             </Typography.Text>
             <Space>
               <AppButton danger onClick={handleCancel}>
-                Cancel
+                {t("common:actions.cancel")}
               </AppButton>
               <AppButton type="primary" onClick={() => handleUpdate()}>
-                Update
+                {t("import.smart.update")}
               </AppButton>
             </Space>
           </div>
@@ -99,10 +103,7 @@ export function CargoSmartImport({
         <div className="cargo-smart-import-modal__content">
           <div className="cargo-smart-import-modal__banner">
             <Typography.Text className="cargo-smart-import-modal__hint">
-              Click a cell to edit. Right-click a row for insert, duplicate,
-              clear, select container lines, or delete. Container No, Type, and
-              Commodity stay locked — edit SOC, Actual Container No, and seals
-              to update the container.
+              {t("import.smart.hint")}
             </Typography.Text>
           </div>
           {modalOpen && rows.length > 0 ? (
@@ -110,15 +111,13 @@ export function CargoSmartImport({
               rows={rows}
               onRowsChange={setRows}
               onDeleteWouldDropContainer={() => {
-                toast.warning(
-                  "Removing the last line for a container will block Update until that container has at least one line again.",
-                );
+                toast.warning(t("import.smart.lastLineWarning"));
               }}
             />
           ) : (
             <div className="cargo-smart-import-grid cargo-smart-import-grid--empty">
               <Typography.Text type="secondary">
-                No cargo lines to edit.
+                {t("import.smart.empty")}
               </Typography.Text>
             </div>
           )}

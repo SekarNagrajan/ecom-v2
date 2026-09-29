@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { Table, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import {
@@ -31,6 +32,7 @@ export function ManageTemplateModal({
   open,
   onCancel,
 }: ManageTemplateModalProps) {
+  const { t } = useTranslation(["booking", "common"]);
   const toast = useToast();
   const confirm = useConfirm();
   const navigate = useNavigate();
@@ -47,11 +49,11 @@ export function ManageTemplateModal({
   const deleteMutation = useMutation({
     mutationFn: bookingApi.deleteTemplate,
     onSuccess: () => {
-      toast.success("Template deleted successfully");
+      toast.success(t("toasts.templateDeleted"));
       queryClient.invalidateQueries({ queryKey: ["booking-templates"] });
     },
     onError: () => {
-      toast.error("Failed to delete template");
+      toast.error(t("toasts.templateDeleteFailed"));
     },
   });
 
@@ -68,7 +70,7 @@ export function ManageTemplateModal({
           </Text>
         </div>
       ),
-      okText: "Close",
+      okText: t("common:actions.close"),
     });
   };
 
@@ -76,61 +78,61 @@ export function ManageTemplateModal({
     initializeFromBooking(template.payload);
     onCancel();
     navigate({ to: "/app/booking/new" });
-    toast.success(`Loaded template: ${template.templateName}`);
+    toast.success(t("toasts.templateLoaded", { name: template.templateName }));
   };
 
   const handleDelete = (template: BookingTemplate) => {
     confirm.danger({
-      title: "Delete Template",
-      content: `Are you sure you want to delete "${template.templateName}"? This action cannot be undone.`,
-      okText: "Delete",
-      cancelText: "Cancel",
+      title: t("confirms.deleteTemplateTitle"),
+      content: t("confirms.deleteTemplateContent", { name: template.templateName }),
+      okText: t("common:actions.delete"),
+      cancelText: t("common:actions.cancel"),
       onOk: () => deleteMutation.mutateAsync(template.id),
     });
   };
 
   const columns: ColumnsType<BookingTemplate> = [
     {
-      title: "S.No",
+      title: t("templates.columns.sno"),
       key: "sno",
       width: 72,
       align: "center",
       render: (_: unknown, __: BookingTemplate, index: number) => index + 1,
     },
     {
-      title: "Template Name",
+      title: t("templates.columns.templateName"),
       dataIndex: "templateName",
       ellipsis: true,
       render: (value: string) => <TemplateNameCell name={value} />,
     },
     {
-      title: "Origin",
+      title: t("templates.columns.origin"),
       dataIndex: "origin",
       width: 180,
       ellipsis: true,
       render: (value: string) => <TemplateRouteCell value={value} />,
     },
     {
-      title: "Delivery",
+      title: t("templates.columns.delivery"),
       dataIndex: "delivery",
       width: 180,
       ellipsis: true,
       render: (value: string) => <TemplateRouteCell value={value} />,
     },
     {
-      title: "Action",
+      title: t("templates.columns.action"),
       key: "action",
       width: 132,
       align: "center",
       render: (_: unknown, record: BookingTemplate) => (
         <ListActionsRow>
           <ListActionButton
-            title="Edit"
+            title={t("common:actions.edit")}
             icon={<AppIcon icon={Icons.edit} size={16} tone="edit" />}
             onClick={() => handleEdit(record)}
           />
           <ListActionButton
-            title="Delete"
+            title={t("common:actions.delete")}
             icon={<AppIcon icon={Icons.trash} size={16} tone="delete" />}
             danger
             disabled={deleteMutation.isPending}
@@ -146,8 +148,8 @@ export function ManageTemplateModal({
       open={open}
       onClose={onCancel}
       icon={Icons.settings}
-      title="Manage Booking Templates"
-      subtitle="View, edit, or remove your saved booking templates"
+      title={t("templates.manageTitle")}
+      subtitle={t("templates.manageSubtitle")}
       dialogSize="lg"
     >
       <Table
@@ -160,7 +162,7 @@ export function ManageTemplateModal({
           pageSize: 10,
           showSizeChanger: false,
           showTotal: (total, range) =>
-            `Showing ${range[0]} to ${range[1]} of ${total} entries`,
+            t("templates.showingRange", { from: range[0], to: range[1], total }),
         }}
         bordered={false}
         size="middle"
@@ -170,7 +172,7 @@ export function ManageTemplateModal({
             <ModuleEmptyState
               artSize="sm"
               variant="blank"
-              title="No templates saved yet"
+              title={t("templates.emptyManage")}
               style={{ padding: 12 }}
             />
           ),

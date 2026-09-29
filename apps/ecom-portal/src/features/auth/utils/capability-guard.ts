@@ -1,6 +1,7 @@
-// Modified by Sekar Nagarajan (2026-09-28 16:17)
+// Modified by Sekar Nagarajan (2026-09-29 12:40)
 import { redirect } from "@tanstack/react-router";
 
+import i18n from "../../../i18n/config";
 import { showPreferenceToast } from "../../theme/utils/show-preference-toast";
 
 const PERMISSION_DENIED_NOTIFICATION_KEY = "ecom-permission-denied";
@@ -11,7 +12,7 @@ const PERMISSION_DENIED_NOTIFICATION_KEY = "ecom-permission-denied";
 export function redirectForMissingCapability(message: string): never {
   showPreferenceToast("error", message, {
     key: PERMISSION_DENIED_NOTIFICATION_KEY,
-    title: "Access Denied",
+    title: i18n.t("auth:errors.accessDenied"),
     placement: "topRight",
   });
 

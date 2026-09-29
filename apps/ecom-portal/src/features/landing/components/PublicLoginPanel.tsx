@@ -135,7 +135,6 @@ export function PublicLoginPanel({
 
       <Tooltip title={t("common:actions.close")}>
         <AppButton
-          type="text"
           className="pub-login-panel__close"
           onClick={handleClose}
           aria-label={t("closeLoginPanel")}
@@ -287,9 +286,7 @@ export function PublicLoginPanel({
 
               {showCaptcha && (
                 <div className="pub-login-panel__captcha">
-                  <span className="form-field-label">
-                    {t("securityCheck")}
-                  </span>
+                  <span className="form-field-label">{t("securityCheck")}</span>
                   <div
                     id="login-captcha-container"
                     className="pub-login-panel__captcha-box"

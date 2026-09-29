@@ -1,31 +1,34 @@
-// Modified by Sekar Nagarajan (2026-09-07 17:24)
-import type { SubCustomerAccount, UserProfile } from '@solverminds/auth';
-import { apiClient, extractApiError } from '@solverminds/platform';
+// Modified by Sekar Nagarajan (2026-09-29 12:40)
+import type { SubCustomerAccount, UserProfile } from "@solverminds/auth";
+import { apiClient, extractApiError } from "@solverminds/platform";
 
+import i18n from "../../../i18n/config";
 import type {
   AdminLoginForm,
   AdminLoginSuccessResponse,
   LoginEntryType,
   LoginForm,
   LoginSuccessResponse,
-} from '../types/auth.types';
+} from "../types/auth.types";
 
 async function hashPassword(password: string): Promise<string> {
   const msgBuffer = new TextEncoder().encode(password);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
   const hashArray = new Uint8Array(hashBuffer);
-  let binary = '';
+  let binary = "";
   hashArray.forEach((byte) => (binary += String.fromCharCode(byte)));
   return btoa(binary);
 }
 
 /** POST /api/auth/login — customer login */
-export async function loginUser(credentials: LoginForm): Promise<LoginSuccessResponse> {
+export async function loginUser(
+  credentials: LoginForm,
+): Promise<LoginSuccessResponse> {
   const hashedPassword = await hashPassword(credentials.password);
 
   try {
     const response = await apiClient.post<{ data: LoginSuccessResponse }>(
-      '/api/auth/login',
+      "/api/auth/login",
       {
         userName: credentials.userName,
         password: hashedPassword,
@@ -33,7 +36,9 @@ export async function loginUser(credentials: LoginForm): Promise<LoginSuccessRes
     );
     return response.data.data;
   } catch (error) {
-    throw new Error(extractApiError(error) || 'Invalid Username / Password');
+    throw new Error(
+      extractApiError(error) || i18n.t("auth:errors.invalidUsernamePassword"),
+    );
   }
 }
 
@@ -46,7 +51,7 @@ export async function loginAdmin(
 
   try {
     const response = await apiClient.post<{ data: AdminLoginSuccessResponse }>(
-      '/api/auth/admin-login',
+      "/api/auth/admin-login",
       {
         userId: credentials.userId,
         password: hashedPassword,
@@ -55,7 +60,9 @@ export async function loginAdmin(
     );
     return response.data.data;
   } catch (error) {
-    throw new Error(extractApiError(error) || 'Invalid credentials');
+    throw new Error(
+      extractApiError(error) || i18n.t("auth:errors.invalidCredentials"),
+    );
   }
 }
 
@@ -63,14 +70,14 @@ export async function loginAdmin(
 export async function fetchCurrentUser(token: string): Promise<UserProfile> {
   try {
     const response = await apiClient.get<{ data: { user: UserProfile } }>(
-      '/api/auth/me',
+      "/api/auth/me",
       {
         headers: { Authorization: `Bearer ${token}` },
       },
     );
     return response.data.data.user;
   } catch {
-    throw new Error('Session expired');
+    throw new Error(i18n.t("auth:errors.sessionExpired"));
   }
 }
 
@@ -78,24 +85,26 @@ export async function fetchCurrentUser(token: string): Promise<UserProfile> {
 export async function fetchCustomerList(): Promise<SubCustomerAccount[]> {
   try {
     const response = await apiClient.get<{ data: SubCustomerAccount[] }>(
-      '/api/admin/customers',
+      "/api/admin/customers",
     );
     return response.data.data;
   } catch {
-    throw new Error('Failed to load customer list');
+    throw new Error(i18n.t("auth:errors.loadCustomerList"));
   }
 }
 
 /** POST /api/auth/impersonate — switch to a customer context */
-export async function impersonateCustomer(custCode: string): Promise<UserProfile> {
+export async function impersonateCustomer(
+  custCode: string,
+): Promise<UserProfile> {
   try {
     const response = await apiClient.post<{ data: { user: UserProfile } }>(
-      '/api/auth/impersonate',
+      "/api/auth/impersonate",
       { custCode },
     );
     return response.data.data.user;
   } catch {
-    throw new Error('Failed to switch customer context');
+    throw new Error(i18n.t("auth:errors.switchCustomer"));
   }
 }
 
@@ -103,24 +112,28 @@ export async function impersonateCustomer(custCode: string): Promise<UserProfile
 export async function exitImpersonation(): Promise<UserProfile> {
   try {
     const response = await apiClient.post<{ data: { user: UserProfile } }>(
-      '/api/auth/exit-impersonation',
+      "/api/auth/exit-impersonation",
     );
     return response.data.data.user;
   } catch {
-    throw new Error('Failed to exit impersonation');
+    throw new Error(i18n.t("auth:errors.exitImpersonation"));
   }
 }
 
 /** POST /api/auth/activate — activate user account via token */
-export async function activateUser(activationToken: string): Promise<{ message: string }> {
+export async function activateUser(
+  activationToken: string,
+): Promise<{ message: string }> {
   try {
     const response = await apiClient.post<{ message: string }>(
-      '/api/auth/activate',
+      "/api/auth/activate",
       { token: activationToken },
     );
     return response.data;
   } catch (error) {
-    throw new Error(extractApiError(error) || 'Failed to activate account');
+    throw new Error(
+      extractApiError(error) || i18n.t("auth:errors.activateAccount"),
+    );
   }
 }
 
@@ -131,11 +144,13 @@ export async function requestPasswordReset(data: {
 }): Promise<{ message: string }> {
   try {
     const response = await apiClient.post<{ message: string }>(
-      '/api/auth/forgot-password',
+      "/api/auth/forgot-password",
       data,
     );
     return response.data;
   } catch (error) {
-    throw new Error(extractApiError(error) || 'Failed to request password reset');
+    throw new Error(
+      extractApiError(error) || i18n.t("auth:errors.passwordReset"),
+    );
   }
 }

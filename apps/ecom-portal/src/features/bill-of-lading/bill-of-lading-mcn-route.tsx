@@ -3,7 +3,8 @@ import { AppButton } from "@solverminds/shared-ui";
 import { DataView, DataViewColumn } from "@solverminds/shared-ui/data-view";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { Card, Space, Tag, Typography } from "antd";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons, NavIcons } from "../../components/icons";
 import { buildActionsColumn } from "../../components/shared/build-actions-column";
@@ -22,13 +23,14 @@ import type { MCNListDTO } from "./types/bl.types";
 const { Text } = Typography;
 
 export function BillOfLadingMcnListRoute() {
+  const { t } = useTranslation(["bill-of-lading", "common", "modules"]);
   const navigate = useNavigate();
   const { profileHandlers } = useLocalGridProfiles("bl-mcn");
   const { data: rows = [], isLoading, isError, refetch } = useMCNListQuery();
   const { mutate: printMcn } = useMCNPrintMutation();
   const [manifestMcnId, setManifestMcnId] = useState<string | null>(null);
 
-  const columns: DataViewColumn<MCNListDTO>[] = [
+  const columns: DataViewColumn<MCNListDTO>[] = useMemo(() => [
     buildActionsColumn<MCNListDTO>({
       field: "mcnId",
       width: 120,
@@ -71,31 +73,31 @@ export function BillOfLadingMcnListRoute() {
         );
       },
     }),
-    { field: "mcnId", headerName: "MCN No", width: 140, pinned: "left" },
-    { field: "blNo", headerName: "B/L No", width: 140 },
-    { field: "bookingNo", headerName: "Booking No", width: 140 },
+    { field: "mcnId", headerName: t("columns.mcnNo"), width: 140, pinned: "left" },
+    { field: "blNo", headerName: t("columns.blNo"), width: 140 },
+    { field: "bookingNo", headerName: t("columns.bookingNo"), width: 140 },
     {
       field: "status",
-      headerName: "Status",
+      headerName: t("columns.status"),
       width: 120,
       cellRenderer: (p: { value?: string }) => <Tag>{p.value}</Tag>,
     },
-    { field: "origin", headerName: "Origin", width: 180 },
-    { field: "delivery", headerName: "Delivery", width: 180 },
-  ];
+    { field: "origin", headerName: t("columns.origin"), width: 180 },
+    { field: "delivery", headerName: t("columns.delivery"), width: 180 },
+  ], [navigate, printMcn, t]);
 
   const emptyState = isError ? (
     <ModuleEmptyState
       variant="error"
-      title="Couldn't load manifests"
-      message="The request didn't complete. Check your connection and try again."
+      title={t("empty.mcnLoadErrorTitle")}
+      message={t("empty.mcnLoadErrorMessage")}
       actions={[buildRetryAction(() => void refetch())]}
     />
   ) : (
     <ModuleEmptyState
       variant="blank"
-      title="No manifests yet"
-      message="Manifest cargo notifications will appear here when they are available."
+      title={t("empty.mcnEmptyTitle")}
+      message={t("empty.mcnEmptyMessage")}
     />
   );
 
@@ -107,19 +109,21 @@ export function BillOfLadingMcnListRoute() {
           <div className="bl-page-header">
             <ModuleScreenHeader
               icon={NavIcons.billOfLading}
-              title="Manifest (MCN)"
+              title={t("mcn.title")}
               // recordCount={rows.length}
-              subtitle="Manifest cargo notification — view and print from the side drawer."
+              subtitle={t("mcn.subtitle")}
               marginBottom={0}
               extra={
                 <AppButton onClick={() => navigate({ to: "/app/bl" })}>
-                  Back to B/L
+                  {t("actions.back")}
                 </AppButton>
               }
             />
           </div>
           <div className="bl-toolbar">
-            <Text type="secondary">{rows.length} Manifest(s)</Text>
+            <Text type="secondary">
+              {t("mcn.manifestCount", { count: rows.length })}
+            </Text>
           </div>
           <div className="bl-grid-wrap bl-grid-wrap--no-toolbar responsive-table-wrap">
             {isError && rows.length === 0 && !isLoading ? (

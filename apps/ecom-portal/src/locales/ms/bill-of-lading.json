@@ -1,0 +1,493 @@
+{
+  "subtitle": "Semak status B/L, sahkan draf, dan cetak dokumen pengangkutan.",
+  "columns": {
+    "status": "Status",
+    "blNumber": "Nombor B/L",
+    "blNo": "No. B/L",
+    "mcnNo": "No. MCN",
+    "bookingNo": "No. Tempahan",
+    "siNo": "No. SI",
+    "agencyRef": "Ruj. Agensi",
+    "origin": "Asal",
+    "load": "Muat",
+    "discharge": "Pemunggahan",
+    "delivery": "Penghantaran",
+    "confirmedDate": "Tarikh Disahkan",
+    "createdDate": "Tarikh Dicipta",
+    "route": "Laluan",
+    "code": "Kod",
+    "description": "Penerangan",
+    "pce": "P/C/E",
+    "amount": "Amaun",
+    "payor": "Pembayar"
+  },
+  "actions": {
+    "view": "Lihat",
+    "edit": "Edit",
+    "amendment": "Pindaan",
+    "accept": "Terima",
+    "readyToConfirm": "Sedia Disahkan",
+    "originalPrint": "Cetak Asal",
+    "draftPrint": "Cetak Draf",
+    "batchOriginalPrint": "Cetak Asal Berkelompok",
+    "printSelected": "Cetak Dipilih ({{count}})",
+    "manifest": "Manifest",
+    "chargeSummary": "Ringkasan Caj",
+    "charges": "Caj",
+    "nonNegotiable": "Tidak Boleh Niaga",
+    "cancel": "Batal",
+    "locked": "Dikunci",
+    "more": "Lagi",
+    "moreActions": "Tindakan lain",
+    "back": "Kembali",
+    "close": "Tutup",
+    "decline": "Tolak",
+    "iAgree": "Saya Setuju",
+    "editBillOfLading": "Edit Bil Muatan",
+    "payWithStripeMock": "Bayar dengan Stripe (Mock)",
+    "selectAll": "Pilih Semua",
+    "sendAmendmentMail": "Hantar E-mel Pindaan"
+  },
+  "empty": {
+    "loadErrorTitle": "Tidak dapat memuatkan bil muatan",
+    "loadErrorMessage": "Permintaan tidak selesai. Semak sambungan anda dan cuba lagi.",
+    "noResultsTitle": "Tiada bil muatan lagi",
+    "noResultsMessage": "Bil muatan akan dipaparkan di sini selepas dicipta untuk penghantaran anda.",
+    "noCharges": "Tiada caj untuk B/L ini",
+    "noManifestLinkedTitle": "Tiada manifest dipautkan",
+    "noManifestLinkedMessage": "Tiada MCN dipautkan kepada Bil Muatan ini lagi.",
+    "manifestNotFoundTitle": "Manifest tidak dijumpai",
+    "manifestNotFoundMessage": "Manifest {{mcnId}} tidak dijumpai.",
+    "unableToLoadDetails": "Tidak dapat memuatkan butiran Bil Muatan.",
+    "blNotFound": "B/L tidak dijumpai.",
+    "noRouting": "Tiada butiran laluan",
+    "insuranceNotRequired": "Insurans tidak diperlukan untuk bil muatan ini.",
+    "noDocuments": "Tiada dokumen dimuat naik",
+    "noActivity": "Tiada aktiviti direkodkan",
+    "batchPrintTitle": "Tiada B/L layak untuk cetak berkelompok",
+    "batchPrintMessage": "Tiada B/L disahkan yang layak untuk cetak asal berkelompok pada masa ini.",
+    "mcnLoadErrorTitle": "Tidak dapat memuatkan manifest",
+    "mcnLoadErrorMessage": "Permintaan tidak selesai. Semak sambungan anda dan cuba lagi.",
+    "mcnEmptyTitle": "Tiada manifest lagi",
+    "mcnEmptyMessage": "Notifikasi kargo manifest akan dipaparkan di sini apabila tersedia."
+  },
+  "drawers": {
+    "chargeSummary": "Ringkasan Caj B/L",
+    "batchOriginalPrint": "Cetak Asal Berkelompok",
+    "viewBillOfLading": "Lihat Bil Muatan",
+    "manifest": "Manifest"
+  },
+  "confirms": {
+    "voyageClosedTitle": "Pelayaran Ditutup",
+    "voyageClosedContent": "Pelayaran ini ditutup. Edit B/L tidak dibenarkan.",
+    "printOriginalTitle": "Cetak B/L Asal",
+    "printOriginalContent": "Sahkan cetakan asal Bil Muatan? Tindakan ini mungkin terhad selepas dikeluarkan.",
+    "cancelSubmittedTitle": "Batal B/L Dihantar",
+    "cancelSubmittedContent": "Adakah anda pasti mahu membatalkan B/L yang dihantar ini?",
+    "editTermsTitle": "Edit B/L Disahkan — Terma",
+    "editTermsBody": "Dengan mengedit B/L yang disahkan, anda bersetuju dengan terma dan syarat pindaan pengangkut."
+  },
+  "labels": {
+    "booking": "Tempahan",
+    "bookingNumber": "Nombor tempahan",
+    "mcn": "MCN",
+    "agencyRef": "Ruj. Agensi",
+    "load": "Muat",
+    "discharge": "Pemunggahan",
+    "created": "Dicipta",
+    "siNumber": "Nombor SI",
+    "blType": "Jenis B/L",
+    "releaseType": "Jenis pelepasan",
+    "freightOption": "Pilihan freight",
+    "route": "Laluan",
+    "vesselVoyage": "Kapal / pelayaran",
+    "origin": "Asal",
+    "originPrint": "Asal (Cetak)",
+    "polPrint": "POL (Cetak)",
+    "podPrint": "POD (Cetak)",
+    "delivery": "Penghantaran",
+    "deliveryPrint": "Penghantaran (Cetak)",
+    "scheduleLegs": "Leg jadual",
+    "cargoValue": "Nilai kargo",
+    "policyNo": "No. polisi",
+    "termsAccepted": "Terma diterima",
+    "optOut": "Tarik diri",
+    "filingType": "Jenis pemfailan",
+    "paymentMethod": "Kaedah bayaran",
+    "declarant": "Pengisytiharan",
+    "buyer": "Pembeli",
+    "seller": "Penjual",
+    "file": "Fail",
+    "activity": "Aktiviti",
+    "parties": "Pihak",
+    "charges": "Caj",
+    "insurance": "Insurans",
+    "previewFields": "Pratonton Medan",
+    "cargoContainers": "Kargo & Kontena",
+    "shipper": "PENGIRIM",
+    "consignee": "PENERIMA",
+    "toOrder": "(KE ATAS ARAHAN)",
+    "notifyParty": "PIHAK DIMBERITAHU",
+    "notify2": "BERITAHU 2",
+    "forwarder": "FORWARDER",
+    "original": "Asal",
+    "telex": "Telex",
+    "yes": "Ya",
+    "no": "Tidak",
+    "coverage": "Liputan: {{currency}} {{value}}",
+    "policySuffix": " · Polisi {{policyNo}}",
+    "containerN": "Kontena {{n}}: {{containerNo}} ({{eqpSize}})",
+    "declaredValue": "Nilai Diisytiharkan",
+    "remarks": "Catatan",
+    "vessel": "Kapal",
+    "voyage": "Pelayaran",
+    "containers": "Kontena",
+    "statusPrefix": "Status: {{status}}",
+    "printCount": "Bilangan cetak: {{count}}",
+    "fileCount": "{{count}} fail",
+    "system": "Sistem"
+  },
+  "card": {
+    "booking": "Tempahan",
+    "mcn": "MCN",
+    "agencyRef": "Ruj. Agensi",
+    "load": "Muat",
+    "discharge": "Pemunggahan",
+    "created": "Dicipta"
+  },
+  "activity": {
+    "draftCreated": "Draf B/L Dicipta",
+    "confirmed": "B/L Disahkan",
+    "issued": "B/L Dikeluarkan",
+    "locked": "B/L Dikunci",
+    "printed": "B/L Dicetak",
+    "documentsUploaded": "Dokumen Dimuat Naik"
+  },
+  "status": {
+    "draft": "Draf",
+    "submitted": "Dihantar",
+    "confirmed": "Disahkan",
+    "issued": "Dikeluarkan",
+    "locked": "Dikunci"
+  },
+  "toasts": {
+    "batchPrintDownloaded": "Cetak berkelompok dimuat turun",
+    "acceptedAndConfirmed": "B/L diterima dan disahkan",
+    "submittedCancelled": "B/L dihantar dibatalkan",
+    "submittedSuccessfully": "B/L berjaya dihantar",
+    "issued": "B/L dikeluarkan",
+    "saved": "B/L disimpan",
+    "manifestDownloaded": "Manifest dimuat turun",
+    "selectBlForPayment": "Pilih sekurang-kurangnya satu B/L untuk bayaran",
+    "sameAgencyRequired": "B/L dipilih mesti daripada agensi pengeluar yang sama",
+    "paymentIntentCreated": "Niat bayaran mock dicipta ({{secret}}…)",
+    "amendmentSent": "Notifikasi pindaan dihantar (mock)",
+    "mcnSaved": "MCN disimpan",
+    "mcnSubmitted": "MCN dihantar"
+  },
+  "batchPrint": {
+    "title": "Cetak Asal Berkelompok",
+    "subtitle": "Pilih B/L disahkan yang layak untuk cetak asal, kemudian cetak sekali gus.",
+    "intro": "Pilih B/L disahkan yang layak untuk cetak asal. Draf dikunci atau belum dicetak dikecualikan.",
+    "eligibleCount": "{{count}} layak"
+  },
+  "payment": {
+    "selectedCount": "{{count}} B/L dipilih",
+    "mixedAgencies": "Agensi bercampur — bayaran tidak dibenarkan"
+  },
+  "mcn": {
+    "title": "Manifest (MCN)",
+    "subtitle": "Notifikasi kargo manifest — lihat dan cetak dari laci sisi.",
+    "editTitle": "Edit MCN: {{mcnId}}",
+    "editSubtitle": "B/L {{blNo}} · {{status}}",
+    "cargoDescriptionRequired": "Penerangan kargo diperlukan",
+    "freightTermsRequired": "Terma freight diperlukan",
+    "manifestCount": "{{count}} Manifes",
+    "cargoDescription": "Penerangan Kargo",
+    "freightTerms": "Terma Pengangkutan",
+    "submit": "Hantar MCN"
+  },
+  "submitResult": {
+    "title": "B/L Dihantar",
+    "defaultMessage": "B/L dihantar."
+  },
+  "charges": {
+    "prepaid": "Prabayar",
+    "collect": "Kutip",
+    "payAt": "Bayar Di",
+    "totalsLine": "Jumlah ({{currency}}): Prabayar {{prepaid}} · Kutip {{collect}} · Bayar Di {{payAt}} · Keseluruhan {{grand}}"
+  },
+  "manifest": {
+    "print": "Cetak Manifes",
+    "type": "Jenis Manifes",
+    "cargo": "Manifes Kargo",
+    "freight": "Manifes Pengangkutan"
+  },
+  "preview": {
+    "editSection": "Sunting {{title}}",
+    "shipper": "Penghantar",
+    "notAssigned": "Tidak ditetapkan",
+    "noDataProvided": "Tiada data disediakan"
+  },
+  "wizard": {
+    "terms": {
+      "body": "Dengan meneruskan pembetulan B/L, anda bersetuju dengan terma dan syarat pengangkut untuk pindaan dokumen.",
+      "modalTitle": "Pembetulan B/L — Terma dan Syarat"
+    },
+    "errors": {
+      "loadFailedTitle": "Gagal memuatkan B/L",
+      "loadFailedMessage": "Tidak dapat memuatkan Bil Muatan untuk suntingan.",
+      "issuedNotEditable": "Bil Muatan ini telah dikeluarkan dan tidak boleh disunting."
+    },
+    "toasts": {
+      "termsAccepted": "Terma diterima — anda boleh meneruskan suntingan."
+    },
+    "actions": {
+      "backToBl": "Kembali ke B/L",
+      "viewBl": "Lihat B/L",
+      "submitBl": "Hantar B/L",
+      "retry": "Cuba semula"
+    },
+    "master": {
+      "documentReferences": "Rujukan Dokumen",
+      "blOptions": "Pilihan Bil Muatan",
+      "vessels": "Kapal",
+      "vesselVoyageNumber": "Kapal / Nombor Pelayaran",
+      "placeOfReceipt": "Tempat Penerimaan",
+      "portOfLoading": "Pelabuhan Muat",
+      "portOfDischarge": "Pelabuhan Pelepasan",
+      "placeOfDelivery": "Tempat Penghantaran",
+      "freightTerms": "Terma Pengangkutan",
+      "originalBl": "B/L Asal",
+      "seaWaybill": "Sea Waybill",
+      "telexRelease": "Pelepasan Telex"
+    },
+    "parties": {
+      "editParty": "Sunting Pihak",
+      "deleteParty": "Padam Pihak",
+      "noContactDetails": "Tiada butiran hubungan tambahan",
+      "printOnBl": "Cetak pada B/L",
+      "toOrder": "Ke Atas Arahan",
+      "notAssignedYet": "Belum ditetapkan",
+      "assign": "Tetapkan",
+      "searchPlaceholder": "Cari mengikut nama atau kod pelanggan",
+      "rolesAssigned": "Peranan pihak ditetapkan"
+    },
+    "routing": {
+      "loadPortPrint": "Pelabuhan Muat (Cetak)",
+      "dischargePortPrint": "Pelabuhan Pelepasan (Cetak)",
+      "bookingHint": "Tempahan: {{value}}",
+      "vesselOptionalHint": "Rujukan jadual pilihan",
+      "printTextTitle": "Laluan — Teks Cetak",
+      "etd": "ETD",
+      "eta": "ETA"
+    },
+    "charges": {
+      "title": "Caj Pengangkutan",
+      "currency": "Mata wang",
+      "addCharge": "Tambah Caj",
+      "chargeLineTitle": "Caj {{n}}",
+      "removeCharge": "Buang caj",
+      "pceShort": "P/C"
+    },
+    "chargeSummary": {
+      "title": "Ringkasan Caj"
+    },
+    "preview": {
+      "aesUsLoadPort": "Sediakan nombor AES atau pilih tidak berkenaan untuk pelabuhan muat AS",
+      "completeBeforeSubmit": "Lengkapkan medan pratonton sebelum hantar",
+      "notApplicable": "N/A",
+      "nvocc": "NVOCC",
+      "t2lFiling": "T2L filing",
+      "loadPort": "Pelabuhan muat",
+      "dischargePort": "Pelabuhan pelepasan",
+      "draftBl": "Draf B/L",
+      "pol": "POL",
+      "pod": "POD",
+      "insuranceRequired": "Diperlukan",
+      "chargeFallback": "Caj",
+      "ensNotRequired": "ENS tidak diperlukan",
+      "chargeLinesOnFile": "{{count}} baris caj dalam fail",
+      "noFilesUploaded": "Tiada fail dimuat naik",
+      "noReferenceFields": "Tiada medan rujukan",
+      "customerRemarks": "Catatan Pelanggan",
+      "aesNumber": "Nombor AES",
+      "aesDisclaimer": "Penafian AES",
+      "aesProvided": "Disediakan",
+      "aesNotApplicable": "Tidak Berkenaan",
+      "blTypeUae": "Jenis B/L (UAE)",
+      "mpciIdUae": "MPCI ID (UAE)",
+      "masterBl": "Master BL",
+      "directBl": "Direct BL",
+      "euCustomsZone": "Zon kastam EU",
+      "typeOfBl": "Jenis B/L",
+      "ensFiling": "ENS filing",
+      "currency": "Mata wang"
+    },
+    "validation": {
+      "selectRole": "Pilih sekurang-kurangnya satu peranan",
+      "companyRequired": "Syarikat diperlukan",
+      "completeRequiredParties": "Sila lengkapkan pihak yang diperlukan",
+      "seawayNoToOrder": "Sea Waybill tidak boleh mempunyai penerima ke atas arahan"
+    },
+    "steps": {
+      "cargoProtect": "Perlindungan Kargo",
+      "chargeSummary": "Ringkasan Caj"
+    },
+    "insurance": {
+      "optOutCheckbox": "Tidak mahu insurans kargo untuk B/L ini",
+      "requireQuestion": "Adakah anda memerlukan Insurans Kargo?",
+      "detailsTitle": "Butiran Insurans",
+      "termsTitle": "Terma & Syarat Insurans",
+      "termsBody": "Dengan memohon insurans kargo, anda bersetuju dengan terma insurans standard pengangkut. Premium akan ditambah kepada invois pengangkutan.",
+      "acceptTerms": "Saya menerima Terma dan Syarat Insurans",
+      "skip": "Langkau Insurans",
+      "validation": {
+        "currencyRequired": "Mata wang diperlukan",
+        "cargoValueMin": "Nilai kargo mesti lebih daripada 0",
+        "acceptTerms": "Anda mesti menerima terma insurans"
+      }
+    },
+    "cargoProtect": {
+      "productsTitle": "Produk Perlindungan Kargo",
+      "productCode": "Kod Produk",
+      "addRow": "Tambah Baris",
+      "emptyTitle": "Tiada baris perlindungan kargo",
+      "emptyMessage": "Klik Tambah Baris untuk memasukkan produk perlindungan.",
+      "lineTitle": "Baris {{n}}",
+      "removeRow": "Buang baris"
+    },
+    "ens": {
+      "title": "Butiran ENS",
+      "label": "ENS",
+      "filingType": "Jenis Pemfailan ENS",
+      "straightBl": "Straight BL",
+      "singleFiling": "Single Filing",
+      "multipleFiling": "Multiple Filing",
+      "wireTransfer": "Wire Transfer",
+      "notPrepaid": "Not Prepaid",
+      "supplementaryDeclarant": "Pengisytihar Tambahan",
+      "notesTitle": "Nota pemfailan ENS",
+      "notesFilingRequirements": "Pemfailan Tunggal memerlukan butiran Pembeli dan Penjual. Pemfailan Berganda memerlukan butiran Pengisytihar Tambahan.",
+      "notesBlTypeMapping": "Straight BL menggunakan Pemfailan Tunggal; Master BL menggunakan Pemfailan Berganda.",
+      "notesEori": "Sediakan EORI dan jenis orang yang tepat jika berkenaan untuk pemprosesan kastam EU.",
+      "fields": {
+        "name": "Nama",
+        "address": "Alamat",
+        "city": "Bandar",
+        "country": "Negara",
+        "eori": "EORI",
+        "email": "E-mel"
+      },
+      "validation": {
+        "invalidEmail": "E-mel tidak sah"
+      }
+    },
+    "files": {
+      "title": "Muat Naik Dokumen Sokongan",
+      "documentType": "Jenis Dokumen",
+      "documentTypePlaceholder": "Pilih jenis dokumen",
+      "draggerText": "Klik atau seret fail ke kawasan ini untuk muat naik",
+      "draggerHint": "Jenis dipilih: {{type}}. Fail dilampirkan kepada permintaan B/L ini.",
+      "uploadedList": "Dokumen Dimuat Naik",
+      "categories": {
+        "vgm": "VGM",
+        "dg": "Barangan Berbahaya (DG)",
+        "loi": "Surat Ganti Rugi (LOI)",
+        "other": "Lain-lain"
+      },
+      "uploadSuccess": "{{fileName}} berjaya dimuat naik.",
+      "uploadFailed": "{{fileName}} gagal dimuat naik."
+    }
+  },
+  "import": {
+    "entityLabel": "baris kargo",
+    "submitLabel": "Import {{count}} baris kargo",
+    "columns": {
+      "containerNo": "No. Kontena",
+      "containerType": "Jenis Kontena",
+      "carrierSeal": "Pengedap Pengangkut",
+      "shipperSeal": "Pengedap Pengirim",
+      "marksAndNumbers": "Tanda & Nombor",
+      "description": "Penerangan Komoditi",
+      "hsCode": "Kod HS",
+      "commodityCode": "Kod Komoditi",
+      "packageCount": "Bilangan Pakej",
+      "packageType": "Jenis Pakej",
+      "grossWeight": "Berat Kasar",
+      "volume": "Isipadu"
+    },
+    "validation": {
+      "containerNoRequired": "No. Kontena diperlukan",
+      "containerNoMax": "No. Kontena mestilah 11 aksara atau kurang",
+      "containerTypeRequired": "Jenis Kontena diperlukan",
+      "descriptionRequired": "Penerangan Komoditi diperlukan",
+      "hsCodeRequired": "Kod HS diperlukan",
+      "packageCountMin": "Bilangan Pakej mestilah sekurang-kurangnya 1",
+      "packageTypeRequired": "Jenis Pakej diperlukan",
+      "grossWeightRequired": "Berat Kasar diperlukan",
+      "volumeNegative": "Isipadu tidak boleh negatif",
+      "invalidContainerType": "Pilih jenis kontena yang sah",
+      "invalidPackageType": "Pilih jenis pakej yang sah",
+      "duplicateLine": "Baris kargo pendua untuk kontena, kod HS, penerangan, dan bilangan pakej yang sama"
+    },
+    "actions": {
+      "exportTemplate": "Eksport Templat",
+      "importExcel": "Import Excel"
+    },
+    "modalTitle": "Import Kargo — {{suffix}}",
+    "workbenchTitle": "Import Hamparan Kargo",
+    "confirm": {
+      "replaceTitle": "Ganti kargo sedia ada?",
+      "replaceContent": "Mengimport Excel akan menggantikan kontena dan baris kargo pada {{documentKind}} ini. Teruskan?",
+      "replaceOk": "Ganti & Import"
+    },
+    "toasts": {
+      "templateDownloaded": "Templat dimuat turun.",
+      "templateFailed": "Muat turun templat gagal.",
+      "noValidRows": "Tiada baris kargo yang sah untuk diimport.",
+      "imported": "Diimport {{containers}} kontena ({{lines}} baris kargo).",
+      "rowUnmapped": "Baris tidak dapat dipetakan kepada kontena"
+    },
+    "smart": {
+      "title": "Import Pintar",
+      "update": "Kemas Kini",
+      "footerMeta": "{{containers}} kontena · {{lines}} baris kargo",
+      "hint": "Klik sel untuk mengedit. Klik kanan baris untuk memasukkan, menduplikasi, mengosongkan, memilih baris kontena, atau memadam. No. Kontena, Jenis, dan Komoditi dikunci — edit SOC, No. Kontena Sebenar, dan pengedap untuk mengemas kini kontena.",
+      "empty": "Tiada baris kargo untuk disunting.",
+      "needContainers": "Tambah kontena sebelum Import Pintar.",
+      "updated": "Kargo dikemas kini daripada Import Pintar.",
+      "lastLineWarning": "Membuang baris terakhir untuk kontena akan menyekat Kemas Kini sehingga kontena tersebut mempunyai sekurang-kurangnya satu baris lagi.",
+      "columns": {
+        "rowNo": "No. Baris",
+        "containerNo": "No. Kontena",
+        "type": "Jenis",
+        "soc": "SOC",
+        "actualContainerNo": "No. Kontena Sebenar",
+        "carrierSeal": "Pengedap Pembawa",
+        "shipperSeal": "Pengedap Penghantar",
+        "commodity": "Komoditi",
+        "hsCode": "Kod HS",
+        "packageType": "Jenis Bungkusan",
+        "qty": "Kuantiti",
+        "weightKg": "Berat (kg)",
+        "volumeCbm": "Isi Padu (CBM)",
+        "marksNo": "No. Tanda",
+        "description": "Penerangan Komoditi"
+      },
+      "contextMenu": {
+        "insertBefore": "Masukkan baris baru sebelum",
+        "insertAfter": "Masukkan baris baru selepas",
+        "duplicate": "Duplikasi baris ini",
+        "clearLine": "Kosongkan medan baris",
+        "clearLineSelected": "Kosongkan medan baris (dipilih)",
+        "selectContainerLines": "Pilih semua baris untuk kontena ini",
+        "deleteSelected": "Padam baris dipilih"
+      },
+      "errors": {
+        "unknownContainer": "Baris {{row}}: Kontena tidak diketahui (tiada pada dokumen ini)",
+        "containerCountMismatch": "Bilangan kontena tidak sepadan antara dokumen ({{expected}}) dan Import Pintar ({{actual}})."
+      }
+    }
+  }
+}

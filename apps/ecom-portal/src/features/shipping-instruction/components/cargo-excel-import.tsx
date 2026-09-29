@@ -2,7 +2,8 @@
 import { AppButton, AppModal } from "@solverminds/shared-ui";
 import { useConfirm, useToast } from "@solverminds/shared-ui/hooks";
 import { Space } from "antd";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { BookingImportModuleStyles } from "../../booking-import/components/booking-import-module-styles";
@@ -17,8 +18,6 @@ import { createCargoImportAdapter } from "../import/cargo-import.adapter";
 import type { CargoImportPayload } from "../import/cargo-import.types";
 import { mapCargoImportRows } from "../import/map-cargo-import-rows";
 import type { SIContainer } from "../types/si.types";
-
-const cargoImportAdapter = createCargoImportAdapter();
 
 export type CargoExcelDocumentKind = "SI" | "B/L";
 
@@ -37,18 +36,24 @@ export function CargoExcelImport({
   containerCount = 0,
   onImported,
 }: CargoExcelImportProps) {
+  const { t } = useTranslation(["bill-of-lading", "common"]);
   const toast = useToast();
   const confirm = useConfirm();
   const [exporting, setExporting] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
+  const cargoImportAdapter = useMemo(
+    () => createCargoImportAdapter(t),
+    [t],
+  );
+
   const handleExportTemplate = async () => {
     setExporting(true);
     try {
       await downloadSpreadsheetImportTemplate(cargoImportAdapter);
-      toast.success("Template downloaded.");
+      toast.success(t("import.toasts.templateDownloaded"));
     } catch {
-      toast.error("Template download failed.");
+      toast.error(t("import.toasts.templateFailed"));
     } finally {
       setExporting(false);
     }
@@ -57,10 +62,10 @@ export function CargoExcelImport({
   const handleOpenImport = () => {
     if (containerCount > 0) {
       confirm.danger({
-        title: "Replace existing cargo?",
-        content: `Importing Excel will replace the containers and cargo lines currently on this ${documentKind}. Continue?`,
-        okText: "Replace & Import",
-        cancelText: "Cancel",
+        title: t("import.confirm.replaceTitle"),
+        content: t("import.confirm.replaceContent", { documentKind }),
+        okText: t("import.confirm.replaceOk"),
+        cancelText: t("common:actions.cancel"),
         onOk: () => {
           setModalOpen(true);
         },
@@ -81,7 +86,7 @@ export function CargoExcelImport({
   ): Promise<SpreadsheetImportCommitResult> => {
     const containers = mapCargoImportRows(payloads);
     if (containers.length === 0) {
-      toast.error("No valid cargo rows to import.");
+      toast.error(t("import.toasts.noValidRows"));
       return {
         totalRows: payloads.length,
         successCount: 0,
@@ -89,16 +94,17 @@ export function CargoExcelImport({
         created: [],
         errors: payloads.map((_, index) => ({
           rowNumber: index + 1,
-          message: "Row could not be mapped to a container",
+          message: t("import.toasts.rowUnmapped"),
         })),
       };
     }
 
     onImported?.(containers);
     toast.success(
-      `Imported ${containers.length} container${
-        containers.length === 1 ? "" : "s"
-      } (${payloads.length} cargo line${payloads.length === 1 ? "" : "s"}).`,
+      t("import.toasts.imported", {
+        containers: containers.length,
+        lines: payloads.length,
+      }),
     );
     setModalOpen(false);
 
@@ -125,13 +131,13 @@ export function CargoExcelImport({
           loading={exporting}
           onClick={() => void handleExportTemplate()}
         >
-          Export Template
+          {t("import.actions.exportTemplate")}
         </AppButton>
         <AppButton
           icon={<AppIcon icon={Icons.filePlus} size={14} tone="create" />}
           onClick={() => handleOpenImport()}
         >
-          Import Excel
+          {t("import.actions.importExcel")}
         </AppButton>
       </Space>
 
@@ -141,7 +147,7 @@ export function CargoExcelImport({
         dialogSize="xl"
         destroyOnHidden
         footer={null}
-        title={`Import Cargo — ${titleSuffix}`}
+        title={t("import.modalTitle", { suffix: titleSuffix })}
         className="cargo-excel-import-modal"
         classNames={{
           body: "cargo-excel-import-modal__body custom-scroll",
@@ -154,7 +160,7 @@ export function CargoExcelImport({
             onCancel={() => setModalOpen(false)}
             onValidate={handleValidate}
             onCommit={handleCommit}
-            title="Cargo Spreadsheet Import"
+            title={t("import.workbenchTitle")}
           />
         </div>
       </AppModal>

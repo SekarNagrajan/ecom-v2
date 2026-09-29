@@ -2,9 +2,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { Result, Skeleton, Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../../components/icons";
-import { WIZARD_STEP_TITLES } from "../../../../constants/module-titles";
+import { useWizardStepTitles } from "../../../../i18n/use-module-titles";
 import { bookingApi } from "../../api/booking.api";
 import { bookingKeys } from "../../api/booking.keys";
 import type { BookingActivityEvent } from "../../types/booking.types";
@@ -121,6 +122,8 @@ function ActivitySteps({ events }: { events: BookingActivityEvent[] }) {
 }
 
 export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
+  const { t } = useTranslation(["booking", "common", "modules"]);
+  const WIZARD_STEP_TITLES = useWizardStepTitles();
   const {
     data: booking,
     isLoading,
@@ -152,7 +155,7 @@ export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
   }
 
   if (error || !booking || !booking.masterDetails || !booking.parties) {
-    return <Result status="error" title="Failed to load booking details" />;
+    return <Result status="error" title={t("empty.unableToLoadDetails")} />;
   }
 
   const cargo = booking.cargo;
@@ -165,22 +168,22 @@ export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
   ).filter(([role, card]) => card && !reviewRoleSet.has(role));
 
   const masterRows = [
-    { label: "Origin", value: dash(booking.masterDetails.origin) },
-    { label: "Delivery", value: dash(booking.masterDetails.delivery) },
+    { label: t("columns.origin"), value: dash(booking.masterDetails.origin) },
+    { label: t("columns.delivery"), value: dash(booking.masterDetails.delivery) },
     {
-      label: "Cargo ready date",
+      label: t("labels.cargoReadyDate"),
       value: dash(booking.masterDetails.cargoReadyDate),
     },
     {
-      label: "Haulage origin",
+      label: t("labels.haulageOrigin"),
       value: dash(booking.masterDetails.haulageOriginType),
     },
     {
-      label: "Haulage destination",
+      label: t("labels.haulageDestination"),
       value: dash(booking.masterDetails.haulageDestinationType),
     },
     {
-      label: "Carriage contract",
+      label: t("labels.carriageContract"),
       value: dash(booking.masterDetails.carriageContract),
     },
   ];
@@ -189,11 +192,11 @@ export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
     <div className="booking-review booking-view-sections booking-view-sections--single">
       <BookingModuleStyles />
 
-      <BookingPreviewSection variant="airy" title="Master details">
+      <BookingPreviewSection variant="airy" title={t("sections.masterDetails")}>
         <BookingPreviewFieldGrid items={masterRows} />
       </BookingPreviewSection>
 
-      <BookingPreviewSection variant="airy" title="Customer details">
+      <BookingPreviewSection variant="airy" title={t("sections.customerDetails")}>
         <div className="booking-review__party-grid">
           {REVIEW_PARTY_ROLES.map((role) => {
             const card = partyCards[role];
@@ -217,28 +220,28 @@ export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
         </div>
       </BookingPreviewSection>
 
-      <BookingPreviewSection variant="airy" title="Cargo details">
+      <BookingPreviewSection variant="airy" title={t("sections.cargoDetails")}>
         <PreviewCargoReview containers={cargo?.containers ?? []} />
       </BookingPreviewSection>
 
-      <BookingPreviewSection variant="airy" title="Insurance details">
+      <BookingPreviewSection variant="airy" title={t("sections.insuranceDetails")}>
         {insuranceRequired && booking.insurance ? (
           <BookingPreviewFieldGrid
             items={[
               {
-                label: "Cargo value",
+                label: t("labels.cargoValue"),
                 value: `${dash(booking.insurance.cargoValue)} ${dash(
                   booking.insurance.currency,
                 )}`,
               },
               {
-                label: "Terms accepted",
+                label: t("labels.termsAccepted"),
                 value: booking.insurance.termsAccepted ? "Yes" : "No",
               },
             ]}
           />
         ) : (
-          <BookingPreviewEmpty label="Insurance not required for this booking." />
+          <BookingPreviewEmpty label={t("empty.insuranceNotRequired")} />
         )}
       </BookingPreviewSection>
 
@@ -249,13 +252,13 @@ export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
         >
           <BookingPreviewFieldGrid
             items={[
-              { label: "BL type", value: dash(booking.ens.blType) },
+              { label: t("labels.blType"), value: dash(booking.ens.blType) },
               {
-                label: "Filing type",
+                label: t("labels.filingType"),
                 value: dash(booking.ens.ensFilingType),
               },
               {
-                label: "Declarant name",
+                label: t("labels.declarantName"),
                 value: dash(booking.ens.declarantName),
               },
             ]}
@@ -263,9 +266,9 @@ export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
         </BookingPreviewSection>
       ) : null}
 
-      <BookingPreviewSection variant="airy" title="Documents">
+      <BookingPreviewSection variant="airy" title={t("sections.documents")}>
         {documents.length === 0 ? (
-          <BookingPreviewEmpty label="No documents uploaded" />
+          <BookingPreviewEmpty label={t("empty.noDocuments")} />
         ) : (
           <BookingPreviewFieldGrid
             items={documents.map((doc) => ({
@@ -276,11 +279,11 @@ export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
         )}
       </BookingPreviewSection>
 
-      <BookingPreviewSection variant="airy" title="Activity">
+      <BookingPreviewSection variant="airy" title={t("sections.activity")}>
         {activityLoading ? (
           <Skeleton active paragraph={{ rows: 3 }} />
         ) : activity.length === 0 ? (
-          <BookingPreviewEmpty label="No activity recorded" />
+          <BookingPreviewEmpty label={t("empty.noActivity")} />
         ) : (
           <ActivitySteps events={activity} />
         )}

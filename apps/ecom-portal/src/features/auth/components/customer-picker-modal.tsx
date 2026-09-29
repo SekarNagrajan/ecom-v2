@@ -1,12 +1,13 @@
-// Created by Sekar Nagarajan (2026-08-27 11:40)
-import type { SubCustomerAccount } from '@solverminds/auth';
-import { useAuthStore } from '@solverminds/auth';
-import { AppModal } from '@solverminds/shared-ui';
-import { Input, List, Typography, theme } from 'antd';
-import { useState } from 'react';
+// Modified by Sekar Nagarajan (2026-09-29 12:40)
+import type { SubCustomerAccount } from "@solverminds/auth";
+import { useAuthStore } from "@solverminds/auth";
+import { AppModal } from "@solverminds/shared-ui";
+import { Input, List, Typography, theme } from "antd";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
-import { AppIcon, Icons } from '../../../components/icons';
-import { ModuleEmptyState } from '../../../components/shared/module-empty-state';
+import { AppIcon, Icons } from "../../../components/icons";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 
 const { Text } = Typography;
 
@@ -23,9 +24,10 @@ export function CustomerPickerModal({
   onSelect,
   onCancel,
 }: CustomerPickerModalProps) {
+  const { t } = useTranslation("auth");
   const { token } = theme.useToken();
   const { setImpersonatedCustomer } = useAuthStore();
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   const filteredCustomers = customerList.filter(
     (c) =>
@@ -35,13 +37,13 @@ export function CustomerPickerModal({
 
   const handleSelect = (customer: SubCustomerAccount) => {
     setImpersonatedCustomer(customer);
-    setSearchTerm('');
+    setSearchTerm("");
     onSelect(customer);
   };
 
   return (
     <AppModal
-      title="Select Customer Account"
+      title={t("customerPicker.title")}
       open={open}
       onCancel={onCancel}
       footer={null}
@@ -49,7 +51,7 @@ export function CustomerPickerModal({
     >
       <Input
         prefix={<AppIcon icon={Icons.search} size={16} />}
-        placeholder="Search by customer code or company name"
+        placeholder={t("customerPicker.searchPlaceholder")}
         size="large"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
@@ -59,7 +61,7 @@ export function CustomerPickerModal({
 
       <div
         className="custom-scroll"
-        style={{ maxHeight: 400, overflowY: 'auto' }}
+        style={{ maxHeight: 400, overflowY: "auto" }}
       >
         <List
           dataSource={filteredCustomers}
@@ -68,7 +70,7 @@ export function CustomerPickerModal({
               <ModuleEmptyState
                 artSize="sm"
                 variant="blank"
-                title="No customers found"
+                title={t("customerPicker.empty")}
                 style={{ padding: 12 }}
               />
             ),
@@ -77,7 +79,7 @@ export function CustomerPickerModal({
             <List.Item
               onClick={() => handleSelect(customer)}
               style={{
-                cursor: 'pointer',
+                cursor: "pointer",
                 padding: `${token.paddingSM}px ${token.paddingMD}px`,
                 borderRadius: token.borderRadius,
               }}

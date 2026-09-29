@@ -3,6 +3,7 @@ import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { Radio, Tag, Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import {
   AppIcon,
@@ -74,6 +75,7 @@ export function ManifestDrawer({
   blNo,
   onClose,
 }: ManifestDrawerProps) {
+  const { t } = useTranslation(["bill-of-lading", "common", "modules"]);
   const [manifestType, setManifestType] = useState<"cargo" | "freight">(
     "cargo",
   );
@@ -92,7 +94,10 @@ export function ManifestDrawer({
       title={
         <span className="bl-manifest-drawer-title">
           <AppIcon icon={Icons.clipboardList} size={18} />
-          {formatModuleScreenTitle("Manifest", mcnId ?? blNo ?? undefined)}
+          {formatModuleScreenTitle(
+            t("drawers.manifest"),
+            mcnId ?? blNo ?? undefined,
+          )}
         </span>
       }
       open={open}
@@ -114,7 +119,7 @@ export function ManifestDrawer({
                 })
               }
             >
-              Print Manifest
+              {t("manifest.print")}
             </AppButton>
           ) : null}
         </>
@@ -123,8 +128,8 @@ export function ManifestDrawer({
       {!mcnId ? (
         <ModuleEmptyState
           variant="blank"
-          title="No manifest linked"
-          message="No MCN is linked to this Bill of Lading yet."
+          title={t("empty.noManifestLinkedTitle")}
+          message={t("empty.noManifestLinkedMessage")}
           artSize="sm"
         />
       ) : isLoading ? (
@@ -132,8 +137,8 @@ export function ManifestDrawer({
       ) : !detail ? (
         <ModuleEmptyState
           variant="error"
-          title="Manifest not found"
-          message={`Manifest ${mcnId} was not found.`}
+          title={t("empty.manifestNotFoundTitle")}
+          message={t("empty.manifestNotFoundMessage", { mcnId })}
           artSize="sm"
         />
       ) : status ? (
@@ -142,7 +147,7 @@ export function ManifestDrawer({
             <div className="bl-manifest-route__port bl-manifest-route__port--load">
               <div className="bl-manifest-route__label">
                 <AppIcon icon={Icons.mapPin} size={14} tone="view" />
-                Load Port
+                {t("columns.load")}
               </div>
               <Title
                 level={4}
@@ -156,7 +161,9 @@ export function ManifestDrawer({
             </div>
 
             <div className="bl-manifest-route__connector">
-              <span className="bl-manifest-route__connector-label">Voyage</span>
+              <span className="bl-manifest-route__connector-label">
+                {t("labels.voyage")}
+              </span>
               <div className="bl-manifest-route__line">
                 <span className="bl-manifest-route__dot bl-manifest-route__dot--load" />
                 <span className="bl-manifest-route__track" />
@@ -170,7 +177,7 @@ export function ManifestDrawer({
             <div className="bl-manifest-route__port bl-manifest-route__port--discharge">
               <div className="bl-manifest-route__label">
                 <AppIcon icon={Icons.mapPin} size={14} tone="view" />
-                Discharge Port
+                {t("columns.discharge")}
               </div>
               <Title
                 level={4}
@@ -188,40 +195,46 @@ export function ManifestDrawer({
 
           <div className="bl-manifest-status">
             <AppIcon icon={status.icon} size={16} />
-            <Text strong>Status</Text>
+            <Text strong>{t("columns.status")}</Text>
             <Tag color={status.color}>{detail.status}</Tag>
           </div>
 
           <div className="bl-manifest-type form-step-section">
             <Text strong className="form-field-label">
-              Manifest Type
+              {t("manifest.type")}
             </Text>
             <Radio.Group
               value={manifestType}
               onChange={(e) => setManifestType(e.target.value)}
             >
-              <Radio value="cargo">Cargo Manifest</Radio>
-              <Radio value="freight">Freight Manifest</Radio>
+              <Radio value="cargo">{t("manifest.cargo")}</Radio>
+              <Radio value="freight">{t("manifest.freight")}</Radio>
             </Radio.Group>
           </div>
 
           <div className="bl-manifest-meta">
-            <ManifestMetaItem icon={Icons.barcode} label="MCN No">
+            <ManifestMetaItem icon={Icons.barcode} label={t("columns.mcnNo")}>
               {detail.mcnId}
             </ManifestMetaItem>
-            <ManifestMetaItem icon={NavBillOfLadingIcon} label="B/L No">
+            <ManifestMetaItem
+              icon={NavBillOfLadingIcon}
+              label={t("columns.blNo")}
+            >
               {detail.blNo}
             </ManifestMetaItem>
-            <ManifestMetaItem icon={NavBookingIcon} label="Booking No">
+            <ManifestMetaItem
+              icon={NavBookingIcon}
+              label={t("columns.bookingNo")}
+            >
               {detail.bookingNo}
             </ManifestMetaItem>
-            <ManifestMetaItem icon={Icons.ship} label="Vessel">
+            <ManifestMetaItem icon={Icons.ship} label={t("labels.vessel")}>
               {detail.vessel}
             </ManifestMetaItem>
-            <ManifestMetaItem icon={Icons.compass} label="Voyage">
+            <ManifestMetaItem icon={Icons.compass} label={t("labels.voyage")}>
               {detail.voyage}
             </ManifestMetaItem>
-            <ManifestMetaItem icon={Icons.boxes} label="Containers">
+            <ManifestMetaItem icon={Icons.boxes} label={t("labels.containers")}>
               {detail.containerCount}
             </ManifestMetaItem>
           </div>
@@ -230,7 +243,7 @@ export function ManifestDrawer({
             <div className="bl-manifest-remarks">
               <div className="bl-manifest-remarks__header">
                 <AppIcon icon={Icons.fileText} size={16} tone="view" />
-                <Text strong>Remarks</Text>
+                <Text strong>{t("labels.remarks")}</Text>
               </div>
               <Text type="secondary">{detail.remarks}</Text>
             </div>

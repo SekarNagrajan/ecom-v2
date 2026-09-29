@@ -1,7 +1,8 @@
-// Modified by Sekar Nagarajan (2026-09-11 16:08)
+// Modified by Sekar Nagarajan (2026-09-29 12:40)
 import { useAuthStore, useTenantStore } from "@solverminds/auth";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import {
   resendLoginOtp,
@@ -37,6 +38,7 @@ export function useOtpLoginController({
   onResendLimit,
   onCodeSent,
 }: UseOtpLoginControllerOptions) {
+  const { t } = useTranslation("auth");
   const { login } = useAuthStore();
   const { setTenant } = useTenantStore();
 
@@ -118,35 +120,38 @@ export function useOtpLoginController({
   const verifyMutation = useMutation({
     mutationFn: (otp: string) => verifyLoginOtp(otp),
     onSuccess: (data) => {
-      if (data.status === "VERIFIED") {
-        setInlineError(null);
-        login(data.token, data.user);
-        if (data.user.tenantId) {
-          setTenant(data.user.tenantId);
+      switch (data.status) {
+        case "VERIFIED":
+          setInlineError(null);
+          login(data.token, data.user);
+          if (data.user.tenantId) {
+            setTenant(data.user.tenantId);
+          }
+          onVerifiedSuccess?.();
+          return;
+        case "INVALID":
+          setShake(true);
+          setInlineError(
+            t("otp.incorrectCode", { attemptsLeft: data.attemptsLeft }),
+          );
+          setCode("");
+          window.setTimeout(() => setShake(false), 450);
+          return;
+        case "EXPIRED":
+          setExpired(true);
+          setInlineError(t("otp.codeExpiredMessage"));
+          return;
+        case "LOCKED":
+          onLocked?.();
+          return;
+        default: {
+          const _exhaustive: never = data;
+          return _exhaustive;
         }
-        onVerifiedSuccess?.();
-        return;
-      }
-      if (data.status === "INVALID") {
-        setShake(true);
-        setInlineError(
-          `Incorrect code. ${data.attemptsLeft} attempts left.`,
-        );
-        setCode("");
-        window.setTimeout(() => setShake(false), 450);
-        return;
-      }
-      if (data.status === "EXPIRED") {
-        setExpired(true);
-        setInlineError("This code has expired. Request a new one.");
-        return;
-      }
-      if (data.status === "LOCKED") {
-        onLocked?.();
       }
     },
     onError: (err: Error) => {
-      setInlineError(err.message || "Verification failed. Try again.");
+      setInlineError(err.message || t("otp.verificationFailed"));
     },
   });
 
@@ -167,16 +172,15 @@ export function useOtpLoginController({
       setTimerEpoch((n) => n + 1);
       setCooldownEpoch((n) => n + 1);
       onCodeSent?.(
-        `New code sent · ${data.resendsLeft} resends left.`,
+        t("otp.newCodeSent", { resendsLeft: data.resendsLeft }),
       );
     },
     onError: (err: Error) => {
-      setInlineError(err.message || "Could not resend code.");
+      setInlineError(err.message || t("otp.resendFailed"));
     },
   });
 
-  const codeLength =
-    session?.codeLength ?? OTP_LOGIN_CONFIG.codeLength;
+  const codeLength = session?.codeLength ?? OTP_LOGIN_CONFIG.codeLength;
 
   const canVerify =
     code.replace(/\D/g, "").length === codeLength &&

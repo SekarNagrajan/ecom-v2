@@ -1,9 +1,10 @@
-// Modified by Sekar Nagarajan (2026-09-01 01:02) — status-driven actions + More overflow menu
+// Modified by Sekar Nagarajan (2026-09-29 12:50)
 import { AppButton, AppModal } from "@solverminds/shared-ui";
 import { useConfirm } from "@solverminds/shared-ui/hooks";
 import type { MenuProps } from "antd";
 import { Dropdown, Space } from "antd";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons, NavBillOfLadingIcon } from "../../../components/icons";
 import {
@@ -12,9 +13,6 @@ import {
 } from "../../../components/shared/list-action-button";
 import { checkVoyageClosed } from "../api/bl.api";
 import type { BLListDTO, BLPrintType } from "../types/bl.types";
-
-const BL_EDIT_TERMS =
-  "By editing a confirmed B/L you agree to carrier amendment terms and conditions.";
 
 export interface BillOfLadingRowActionsProps {
   row: BLListDTO;
@@ -45,6 +43,7 @@ export function BillOfLadingRowActions({
   showReadyToConfirm = false,
   enableTermsOnConfirmedEdit = true,
 }: BillOfLadingRowActionsProps) {
+  const { t } = useTranslation(["bill-of-lading", "common", "modules"]);
   const confirm = useConfirm();
   const [termsOpen, setTermsOpen] = useState(false);
   const [pendingEditBlNo, setPendingEditBlNo] = useState<string | null>(null);
@@ -53,7 +52,7 @@ export function BillOfLadingRowActions({
     return (
       <ListActionsRow>
         <ListActionButton
-          title="Locked"
+          title={t("actions.locked")}
           icon={<AppIcon icon={Icons.lock} size={16} tone="muted" />}
           danger
           onClick={(e) => e.stopPropagation()}
@@ -68,8 +67,8 @@ export function BillOfLadingRowActions({
       const { closed } = await checkVoyageClosed(row.blNo);
       if (closed) {
         confirm.warning({
-          title: "Voyage Closed",
-          content: "This voyage is closed. B/L edit is not permitted.",
+          title: t("confirms.voyageClosedTitle"),
+          content: t("confirms.voyageClosedContent"),
         });
         return;
       }
@@ -92,20 +91,18 @@ export function BillOfLadingRowActions({
   const handleOriginalPrint = (e: React.MouseEvent) => {
     e.stopPropagation();
     confirm.info({
-      title: "Print Original B/L",
-      content:
-        "Confirm printing the original Bill of Lading? This action may be restricted after issue.",
+      title: t("confirms.printOriginalTitle"),
+      content: t("confirms.printOriginalContent"),
       onOk: () => onPrint(row.blNo, "original"),
     });
   };
 
   const actions: React.ReactNode[] = [];
 
-  // View — always available
   actions.push(
     <ListActionButton
       key="view"
-      title="View"
+      title={t("actions.view")}
       tone="view"
       icon={<AppIcon icon={Icons.eye} size={16} tone="view" />}
       onClick={(e) => {
@@ -115,23 +112,23 @@ export function BillOfLadingRowActions({
     />,
   );
 
-  // Edit / Amendment — confirmed edits route through the terms modal
   actions.push(
     <ListActionButton
       key="edit"
-      title={row.status === "S" ? "Amendment" : "Edit"}
+      title={row.status === "S" ? t("actions.amendment") : t("actions.edit")}
       tone="edit"
       icon={<AppIcon icon={Icons.edit} size={16} tone="edit" />}
       onClick={requestEdit}
     />,
   );
 
-  // Ready to Confirm — draft only
   if (row.status === "D") {
     actions.push(
       <ListActionButton
         key="confirm"
-        title={showReadyToConfirm ? "Ready to Confirm" : "Accept"}
+        title={
+          showReadyToConfirm ? t("actions.readyToConfirm") : t("actions.accept")
+        }
         tone="track"
         icon={<AppIcon icon={Icons.checkCircle} size={16} tone="track" />}
         onClick={(e) => {
@@ -142,12 +139,11 @@ export function BillOfLadingRowActions({
     );
   }
 
-  // Print — status driven: Confirmed prints Original, everything else Draft
   if (row.status === "C") {
     actions.push(
       <ListActionButton
         key="print"
-        title="Original Print"
+        title={t("actions.originalPrint")}
         tone="print"
         icon={<AppIcon icon={Icons.printer} size={16} tone="print" />}
         onClick={handleOriginalPrint}
@@ -157,7 +153,7 @@ export function BillOfLadingRowActions({
     actions.push(
       <ListActionButton
         key="print"
-        title="Draft Print"
+        title={t("actions.draftPrint")}
         tone="print"
         icon={<AppIcon icon={Icons.fileText} size={16} tone="print" />}
         onClick={(e) => {
@@ -168,12 +164,11 @@ export function BillOfLadingRowActions({
     );
   }
 
-  // Overflow "More" menu — Manifest, Charge Summary, NN print, Cancel
   const moreItems: MenuProps["items"] = [];
   if (row.status !== "S") {
     moreItems.push({
       key: "manifest",
-      label: "Manifest",
+      label: t("actions.manifest"),
       icon: <AppIcon icon={NavBillOfLadingIcon} size={16} tone="navigate" />,
       onClick: ({ domEvent }) => {
         domEvent.stopPropagation();
@@ -184,7 +179,7 @@ export function BillOfLadingRowActions({
   if (showChargeSummary) {
     moreItems.push({
       key: "charges",
-      label: "Charge Summary",
+      label: t("actions.chargeSummary"),
       icon: <AppIcon icon={Icons.list} size={16} tone="navigate" />,
       onClick: ({ domEvent }) => {
         domEvent.stopPropagation();
@@ -195,7 +190,7 @@ export function BillOfLadingRowActions({
   if (showNnPrint && (row.status === "C" || row.status === "I")) {
     moreItems.push({
       key: "nn-print",
-      label: "Non Negotiable",
+      label: t("actions.nonNegotiable"),
       icon: <AppIcon icon={Icons.fileText} size={16} tone="print" />,
       onClick: ({ domEvent }) => {
         domEvent.stopPropagation();
@@ -207,13 +202,13 @@ export function BillOfLadingRowActions({
     moreItems.push({
       key: "cancel",
       danger: true,
-      label: "Cancel",
+      label: t("actions.cancel"),
       icon: <AppIcon icon={Icons.circleX} size={16} tone="reject" />,
       onClick: ({ domEvent }) => {
         domEvent.stopPropagation();
         confirm.danger({
-          title: "Cancel Submitted B/L",
-          content: "Are you sure you want to cancel this submitted B/L?",
+          title: t("confirms.cancelSubmittedTitle"),
+          content: t("confirms.cancelSubmittedContent"),
           onOk: () => onCancel(row.blNo),
         });
       },
@@ -230,29 +225,12 @@ export function BillOfLadingRowActions({
             trigger={["click"]}
             placement="bottomRight"
           >
-            {/* <span onClick={(e) => e.stopPropagation()}>
-              <Tooltip title="More" mouseEnterDelay={0.5}>
-                <AppButton
-                  type="link"
-                  size="small"
-                  className="list-action-button"
-                  aria-label="More actions"
-                  icon={
-                    <AppIcon
-                      icon={Icons.ellipsis}
-                      size={16}
-                      gridAction
-                      tone="navigate"
-                    />
-                  }
-                />
-              </Tooltip>
-            </span> */}
+            {/* More overflow menu trigger intentionally commented out */}
           </Dropdown>
         ) : null}
       </Space>
       <AppModal
-        title="Confirmed B/L Edit — Terms"
+        title={t("confirms.editTermsTitle")}
         open={termsOpen}
         onCancel={() => {
           setTermsOpen(false);
@@ -266,7 +244,7 @@ export function BillOfLadingRowActions({
                 setPendingEditBlNo(null);
               }}
             >
-              Decline
+              {t("actions.decline")}
             </AppButton>
             <AppButton
               type="primary"
@@ -276,9 +254,8 @@ export function BillOfLadingRowActions({
                   const { closed } = await checkVoyageClosed(pendingEditBlNo);
                   if (closed) {
                     confirm.warning({
-                      title: "Voyage Closed",
-                      content:
-                        "This voyage is closed. B/L edit is not permitted.",
+                      title: t("confirms.voyageClosedTitle"),
+                      content: t("confirms.voyageClosedContent"),
                     });
                     return;
                   }
@@ -290,12 +267,12 @@ export function BillOfLadingRowActions({
                 setPendingEditBlNo(null);
               }}
             >
-              I Agree
+              {t("actions.iAgree")}
             </AppButton>
           </>
         }
       >
-        <p>{BL_EDIT_TERMS}</p>
+        <p>{t("confirms.editTermsBody")}</p>
       </AppModal>
     </>
   );

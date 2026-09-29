@@ -7,6 +7,7 @@ import {
 import type { RowDoubleClickedEvent } from "ag-grid-community";
 import { Tag } from "antd";
 import { useCallback, useMemo, type ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 
 import { buildActionsColumn } from "../../../components/shared/build-actions-column";
 import { useModuleCardPagination } from "../../../components/shared/hooks/use-module-card-pagination";
@@ -14,7 +15,7 @@ import type { ModuleListViewMode } from "../../../components/shared/hooks/use-mo
 import { ModuleCardViewPanel } from "../../../components/shared/module-card-view-panel";
 import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
 import type { BLListDTO, BLPrintType } from "../types/bl.types";
-import { getBLListStatusColor } from "../utils/bl-status";
+import { getBLListStatusColor, getBLStatusLabel } from "../utils/bl-status";
 import { BillOfLadingRowActions } from "./BillOfLadingRowActions";
 import { BlListCard } from "./list/bl-list-card";
 
@@ -59,6 +60,7 @@ export function BillOfLadingListGrid({
   enableTermsOnConfirmedEdit = true,
   emptyState,
 }: BillOfLadingListGridProps) {
+  const { t } = useTranslation(["bill-of-lading", "common", "modules"]);
   const { profileHandlers } = useLocalGridProfiles("bill-of-lading");
   const {
     page: cardPage,
@@ -96,55 +98,67 @@ export function BillOfLadingListGrid({
       },
       {
         field: "statusLabel",
-        headerName: "Status",
+        headerName: t("columns.status"),
         width: 160,
         cellRenderer: (params: { data?: BLListDTO }) => {
           if (!params.data) return null;
+          const row = params.data;
           return (
             <Tag
               className="bl-status-tag module-status-tag"
-              color={getBLListStatusColor(params.data)}
+              color={getBLListStatusColor(row)}
             >
-              {params.data.isLocked ? "Locked" : params.data.statusLabel}
+              {row.isLocked
+                ? t("status.locked")
+                : getBLStatusLabel(row.status, t)}
             </Tag>
           );
         },
       },
       {
         field: "blNo",
-        headerName: "B/L Number",
+        headerName: t("columns.blNumber"),
         width: 150,
         pinned: "left",
         colId: "blNo",
         isPrimary: true,
       },
-      { field: "mcnNo", headerName: "MCN No", width: 170 },
-      { field: "bookingNo", headerName: "Booking No", width: 140 },
+      { field: "mcnNo", headerName: t("columns.mcnNo"), width: 170 },
+      { field: "bookingNo", headerName: t("columns.bookingNo"), width: 140 },
     ];
 
     if (!hideAgencyRefColumn) {
       cols.push({
         field: "agencyRefNo",
-        headerName: "Agency Ref",
+        headerName: t("columns.agencyRef"),
         width: 120,
       });
     }
 
     cols.push(
-      { field: "origin", headerName: "Origin", width: 180, isSecondary: true },
-      { field: "loadPort", headerName: "Load", width: 180 },
-      { field: "dischargePort", headerName: "Discharge", width: 180 },
-      { field: "delivery", headerName: "Delivery", width: 180 },
+      {
+        field: "origin",
+        headerName: t("columns.origin"),
+        width: 180,
+        isSecondary: true,
+      },
+      { field: "loadPort", headerName: t("columns.load"), width: 180 },
+      {
+        field: "dischargePort",
+        headerName: t("columns.discharge"),
+        width: 180,
+      },
+      { field: "delivery", headerName: t("columns.delivery"), width: 180 },
       {
         field: "confirmedDate",
-        headerName: "Confirmed Date",
+        headerName: t("columns.confirmedDate"),
         width: 140,
         cellRenderer: (p: { value?: string | null }) =>
           p.value ? <FormattedDate value={p.value} /> : "-",
       },
       {
         field: "createdDate",
-        headerName: "Created Date",
+        headerName: t("columns.createdDate"),
         width: 140,
         cellRenderer: (p: { value?: string | null }) =>
           p.value ? <FormattedDate value={p.value} /> : "-",
@@ -153,6 +167,7 @@ export function BillOfLadingListGrid({
 
     return cols;
   }, [
+    t,
     enableTermsOnConfirmedEdit,
     hideAgencyRefColumn,
     onCancel,

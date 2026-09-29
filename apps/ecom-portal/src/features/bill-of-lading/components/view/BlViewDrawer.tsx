@@ -2,6 +2,7 @@
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { useNavigate } from "@tanstack/react-router";
 import { Flex, Tag, Tooltip, Typography } from "antd";
+import { useTranslation } from "react-i18next";
 
 import {
   AppIcon,
@@ -26,6 +27,7 @@ interface BlViewDrawerProps {
 }
 
 export function BlViewDrawer({ record, onClose }: BlViewDrawerProps) {
+  const { t } = useTranslation(["bill-of-lading", "common", "modules"]);
   const navigate = useNavigate();
   const showEdit = canOpenBlWizard(record);
 
@@ -50,15 +52,19 @@ export function BlViewDrawer({ record, onClose }: BlViewDrawerProps) {
             <AppIcon icon={NavBillOfLadingIcon} size={22} />
             <div className="bl-drawer-title__copy">
               <Title level={4} className="bl-drawer-title__text">
-                {formatModuleScreenTitle("View Bill of Lading", record.blNo)}
+                {formatModuleScreenTitle(
+                  t("drawers.viewBillOfLading"),
+                  record.blNo,
+                )}
               </Title>
               <div className="bl-drawer-title__row">
                 <Text type="secondary" className="bl-drawer-title__meta">
-                  Booking: <strong>{record.bookingNo}</strong>
+                  {t("labels.booking")}: <strong>{record.bookingNo}</strong>
                   {record.agencyRefNo ? (
                     <>
                       {" "}
-                      · Agency: <strong>{record.agencyRefNo}</strong>
+                      · {t("labels.agencyRef")}:{" "}
+                      <strong>{record.agencyRefNo}</strong>
                     </>
                   ) : null}
                 </Text>
@@ -68,11 +74,13 @@ export function BlViewDrawer({ record, onClose }: BlViewDrawerProps) {
                     color={getBLListStatusColor(record)}
                   >
                     {record.isLocked
-                      ? "Locked"
-                      : getBLStatusLabel(record.status)}
+                      ? t("status.locked")
+                      : getBLStatusLabel(record.status, t)}
                   </Tag>
                   {record.mcnNo ? (
-                    <Tag color="default">MCN: {record.mcnNo}</Tag>
+                    <Tag color="default">
+                      {t("labels.mcn")}: {record.mcnNo}
+                    </Tag>
                   ) : null}
                 </div>
               </div>
@@ -87,11 +95,11 @@ export function BlViewDrawer({ record, onClose }: BlViewDrawerProps) {
             wrap
             className="bl-drawer-actions custom-scroll"
           >
-            <Tooltip title="Close">
-              <AppButton onClick={onClose}>Close</AppButton>
+            <Tooltip title={t("actions.close")}>
+              <AppButton onClick={onClose}>{t("actions.close")}</AppButton>
             </Tooltip>
             {showEdit ? (
-              <Tooltip title="Edit Bill of Lading">
+              <Tooltip title={t("actions.editBillOfLading")}>
                 <AppButton
                   type="primary"
                   icon={
@@ -99,7 +107,7 @@ export function BlViewDrawer({ record, onClose }: BlViewDrawerProps) {
                   }
                   onClick={handleEdit}
                 >
-                  Edit
+                  {t("actions.edit")}
                 </AppButton>
               </Tooltip>
             ) : null}
@@ -110,7 +118,7 @@ export function BlViewDrawer({ record, onClose }: BlViewDrawerProps) {
           <div className="bl-view-route-port bl-view-route-port--origin">
             <div className="bl-view-route-port__label">
               <AppIcon icon={Icons.mapPin} size={14} />
-              Origin
+              {t("labels.origin")}
             </div>
             <Title level={4} className="bl-view-route-port__code">
               {record.origin}
@@ -118,7 +126,9 @@ export function BlViewDrawer({ record, onClose }: BlViewDrawerProps) {
           </div>
 
           <div className="bl-view-route-connector">
-            <span className="bl-view-route-connector__label">Port to Port</span>
+            <span className="bl-view-route-connector__label">
+              {t("labels.route")}
+            </span>
             <div className="bl-view-route-connector__line">
               <span className="bl-view-route-connector__track" />
               <AppIcon icon={Icons.arrowRight} size={14} />
@@ -130,7 +140,7 @@ export function BlViewDrawer({ record, onClose }: BlViewDrawerProps) {
           <div className="bl-view-route-port bl-view-route-port--delivery">
             <div className="bl-view-route-port__label">
               <AppIcon icon={Icons.mapPin} size={14} />
-              Delivery
+              {t("labels.delivery")}
             </div>
             <Title level={4} className="bl-view-route-port__code">
               {record.delivery}
@@ -141,13 +151,13 @@ export function BlViewDrawer({ record, onClose }: BlViewDrawerProps) {
         <div className="bl-summary-chips">
           <div className="bl-summary-chip">
             <span>
-              <span className="bl-summary-chip__label">B/L No</span>
+              <span className="bl-summary-chip__label">{t("columns.blNo")}</span>
               <span className="bl-summary-chip__value">{record.blNo}</span>
             </span>
           </div>
           <div className="bl-summary-chip">
             <span>
-              <span className="bl-summary-chip__label">SI No</span>
+              <span className="bl-summary-chip__label">{t("columns.siNo")}</span>
               <span className="bl-summary-chip__value">
                 {record.siNo || "—"}
               </span>
@@ -155,7 +165,7 @@ export function BlViewDrawer({ record, onClose }: BlViewDrawerProps) {
           </div>
           <div className="bl-summary-chip">
             <span>
-              <span className="bl-summary-chip__label">Created</span>
+              <span className="bl-summary-chip__label">{t("labels.created")}</span>
               <span className="bl-summary-chip__value">
                 {record.createdDate || "—"}
               </span>
@@ -163,7 +173,9 @@ export function BlViewDrawer({ record, onClose }: BlViewDrawerProps) {
           </div>
           <div className="bl-summary-chip">
             <span>
-              <span className="bl-summary-chip__label">Confirmed</span>
+              <span className="bl-summary-chip__label">
+                {t("status.confirmed")}
+              </span>
               <span className="bl-summary-chip__value">
                 {record.confirmedDate || "—"}
               </span>

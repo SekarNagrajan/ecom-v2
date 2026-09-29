@@ -3,6 +3,7 @@ import type { DataViewColumn } from "@solverminds/shared-ui/data-view";
 import { ListView } from "@solverminds/shared-ui/data-view/list-view";
 import type {
   CellValueChangedEvent,
+  DefaultMenuItem,
   GetContextMenuItemsParams,
   GetRowIdParams,
   GridOptions,
@@ -10,6 +11,7 @@ import type {
   ValueGetterParams,
 } from "ag-grid-community";
 import { useCallback, useMemo, useRef } from "react";
+import { useTranslation } from "react-i18next";
 
 import { BOOKING_LOOKUPS } from "../../booking/mocks/booking-lookups.mock";
 import { ImportSelectCellEditor } from "../../import-workbench/components/import-select-cell-editor";
@@ -47,6 +49,7 @@ export function CargoSmartImportGrid({
   onRowsChange,
   onDeleteWouldDropContainer,
 }: CargoSmartImportGridProps) {
+  const { t } = useTranslation(["bill-of-lading", "common"]);
   const rowsRef = useRef(rows);
   rowsRef.current = rows;
   const onRowsChangeRef = useRef(onRowsChange);
@@ -58,7 +61,7 @@ export function CargoSmartImportGrid({
     () => [
       {
         colId: "rowNo",
-        headerName: "Row No",
+        headerName: t("import.smart.columns.rowNo"),
         width: 120,
         minWidth: 100,
         maxWidth: 130,
@@ -74,7 +77,7 @@ export function CargoSmartImportGrid({
       },
       {
         field: "oldContainerNo",
-        headerName: "Container No",
+        headerName: t("import.smart.columns.containerNo"),
         width: 140,
         minWidth: 120,
         editable: false,
@@ -85,7 +88,7 @@ export function CargoSmartImportGrid({
       },
       {
         field: "eqpSize",
-        headerName: "Type",
+        headerName: t("import.smart.columns.type"),
         width: 88,
         editable: false,
         pinned: "left",
@@ -95,7 +98,7 @@ export function CargoSmartImportGrid({
       },
       {
         field: "isSoc",
-        headerName: "SOC",
+        headerName: t("import.smart.columns.soc"),
         width: 80,
         editable: true,
         filterType: "boolean",
@@ -106,7 +109,7 @@ export function CargoSmartImportGrid({
       },
       {
         field: "actualContainerNo",
-        headerName: "Actual Container No",
+        headerName: t("import.smart.columns.actualContainerNo"),
         width: 160,
         minWidth: 140,
         editable: true,
@@ -116,21 +119,21 @@ export function CargoSmartImportGrid({
       },
       {
         field: "carrierSeal",
-        headerName: "Carrier Seal",
+        headerName: t("import.smart.columns.carrierSeal"),
         width: 130,
         editable: true,
         cellClass: "cargo-smart-import-cell--editable",
       },
       {
         field: "shipperSeal",
-        headerName: "Shipper Seal",
+        headerName: t("import.smart.columns.shipperSeal"),
         width: 130,
         editable: true,
         cellClass: "cargo-smart-import-cell--editable",
       },
       {
         field: "commodityCode",
-        headerName: "Commodity",
+        headerName: t("import.smart.columns.commodity"),
         width: 140,
         editable: false,
         cellClass: "cargo-smart-import-cell--readonly",
@@ -138,14 +141,14 @@ export function CargoSmartImportGrid({
       },
       {
         field: "hsCode",
-        headerName: "HS Code",
+        headerName: t("import.smart.columns.hsCode"),
         width: 120,
         editable: true,
         cellClass: "cargo-smart-import-cell--editable",
       },
       {
         field: "packageType",
-        headerName: "Package Type",
+        headerName: t("import.smart.columns.packageType"),
         width: 160,
         editable: true,
         cellEditor: ImportSelectCellEditor,
@@ -161,7 +164,7 @@ export function CargoSmartImportGrid({
       },
       {
         field: "packageCount",
-        headerName: "Qty",
+        headerName: t("import.smart.columns.qty"),
         width: 90,
         editable: true,
         filterType: "number",
@@ -170,7 +173,7 @@ export function CargoSmartImportGrid({
       },
       {
         field: "grossWeight",
-        headerName: "Weight (kg)",
+        headerName: t("import.smart.columns.weightKg"),
         width: 120,
         editable: true,
         filterType: "number",
@@ -179,7 +182,7 @@ export function CargoSmartImportGrid({
       },
       {
         field: "volume",
-        headerName: "Volume (CBM)",
+        headerName: t("import.smart.columns.volumeCbm"),
         width: 120,
         editable: true,
         filterType: "number",
@@ -188,25 +191,27 @@ export function CargoSmartImportGrid({
       },
       {
         field: "marksAndNumbers",
-        headerName: "Marks No",
+        headerName: t("import.smart.columns.marksNo"),
         width: 140,
         editable: true,
         cellClass: "cargo-smart-import-cell--editable",
       },
       {
         field: "description",
-        headerName: "Commodity Description",
+        headerName: t("import.smart.columns.description"),
         width: 260,
         minWidth: 200,
         editable: true,
         cellClass: "cargo-smart-import-cell--editable",
       },
     ],
-    [],
+    [t],
   );
 
   const getContextMenuItems = useCallback(
-    (params: GetContextMenuItemsParams<SmartImportRow>) => {
+    (
+      params: GetContextMenuItemsParams<SmartImportRow>,
+    ): (DefaultMenuItem | MenuItemDef<SmartImportRow>)[] => {
       const node = params.node;
       if (!node?.data) {
         return [];
@@ -226,43 +231,43 @@ export function CargoSmartImportGrid({
           ? selectedRows.map((row) => row.rowId)
           : [sourceRow.rowId];
 
-      const insertBefore: MenuItemDef = {
-        name: "Insert a new row before",
+      const insertBefore: MenuItemDef<SmartImportRow> = {
+        name: t("import.smart.contextMenu.insertBefore"),
         action: () => {
           onRowsChangeRef.current(
             insertSmartImportRow(rowsRef.current, sourceIndex, "before"),
           );
         },
       };
-      const insertAfter: MenuItemDef = {
-        name: "Insert a new row after",
+      const insertAfter: MenuItemDef<SmartImportRow> = {
+        name: t("import.smart.contextMenu.insertAfter"),
         action: () => {
           onRowsChangeRef.current(
             insertSmartImportRow(rowsRef.current, sourceIndex, "after"),
           );
         },
       };
-      const duplicateRow: MenuItemDef = {
-        name: "Duplicate this row",
+      const duplicateRow: MenuItemDef<SmartImportRow> = {
+        name: t("import.smart.contextMenu.duplicate"),
         action: () => {
           onRowsChangeRef.current(
             duplicateSmartImportRow(rowsRef.current, sourceIndex),
           );
         },
       };
-      const clearLineFields: MenuItemDef = {
+      const clearLineFields: MenuItemDef<SmartImportRow> = {
         name:
           targetIds.length > 1
-            ? "Clear line fields (selected)"
-            : "Clear line fields",
+            ? t("import.smart.contextMenu.clearLineSelected")
+            : t("import.smart.contextMenu.clearLine"),
         action: () => {
           onRowsChangeRef.current(
             clearSmartImportLineFields(rowsRef.current, targetIds),
           );
         },
       };
-      const selectContainerLines: MenuItemDef = {
-        name: "Select all lines for this container",
+      const selectContainerLines: MenuItemDef<SmartImportRow> = {
+        name: t("import.smart.contextMenu.selectContainerLines"),
         action: () => {
           params.api.deselectAll();
           params.api.forEachNode((rowNode) => {
@@ -272,8 +277,8 @@ export function CargoSmartImportGrid({
           });
         },
       };
-      const deleteSelected: MenuItemDef = {
-        name: "Delete selected rows",
+      const deleteSelected: MenuItemDef<SmartImportRow> = {
+        name: t("import.smart.contextMenu.deleteSelected"),
         action: () => {
           if (targetIds.length === 0) {
             return;
@@ -301,7 +306,7 @@ export function CargoSmartImportGrid({
         "copyWithHeaders",
       ];
     },
-    [],
+    [t],
   );
 
   // autoHeight: size to row content so the modal does not need a flex height

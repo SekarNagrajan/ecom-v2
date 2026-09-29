@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 14:50)
+// Modified by Sekar Nagarajan (2026-09-29 12:35)
 import { FormattedDate } from "@solverminds/shared-ui";
 import {
   DataView,
@@ -8,6 +8,7 @@ import type { RowDoubleClickedEvent } from "ag-grid-community";
 import { Tag } from "antd";
 import { DateTime } from "luxon";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons, NavIcons } from "../../../components/icons";
 import { buildActionsColumn } from "../../../components/shared/build-actions-column";
@@ -47,6 +48,7 @@ const initialFilters: ArrivalNoticeListFilters = {
 };
 
 export function ArrivalNoticeListing() {
+  const { t } = useTranslation(["arrival-notice", "common"]);
   const MODULE_TITLES = useModuleTitles();
   const { profileHandlers } = useLocalGridProfiles("arrival-notice");
   const [filters, setFilters] =
@@ -90,7 +92,7 @@ export function ArrivalNoticeListing() {
           return (
             <ListActionsRow>
               <ListActionButton
-                title="View Details"
+                title={t("actions.viewDetails")}
                 icon={<AppIcon icon={Icons.eye} size={16} tone="view" />}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -98,7 +100,7 @@ export function ArrivalNoticeListing() {
                 }}
               />
               <ListActionButton
-                title="Print Arrival Notice"
+                title={t("actions.printArrivalNotice")}
                 icon={<AppIcon icon={Icons.printer} size={16} tone="print" />}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -111,36 +113,36 @@ export function ArrivalNoticeListing() {
       }),
       colId: "actions",
     },
-    { field: "anNo", headerName: "AN No", width: 130, pinned: "left" },
-    { field: "blNumber", headerName: "B/L Number", width: 140 },
-    { field: "vessel", headerName: "Vessel", width: 140 },
-    { field: "voyage", headerName: "Voyage", width: 100 },
-    { field: "dischargePort", headerName: "Discharge", width: 160 },
-    { field: "terminal", headerName: "Terminal", width: 120 },
+    { field: "anNo", headerName: t("columns.anNo"), width: 130, pinned: "left" },
+    { field: "blNumber", headerName: t("columns.blNumber"), width: 140 },
+    { field: "vessel", headerName: t("columns.vessel"), width: 140 },
+    { field: "voyage", headerName: t("columns.voyage"), width: 100 },
+    { field: "dischargePort", headerName: t("columns.discharge"), width: 160 },
+    { field: "terminal", headerName: t("columns.terminal"), width: 120 },
     {
       field: "etaDate",
-      headerName: "ETA",
+      headerName: t("columns.eta"),
       width: 130,
       cellRenderer: (p: { value?: string }) =>
         p.value ? <FormattedDate value={p.value} /> : "-",
     },
     {
       field: "arrivalDate",
-      headerName: "Arrival",
+      headerName: t("columns.arrival"),
       width: 130,
       cellRenderer: (p: { value?: string }) =>
         p.value ? <FormattedDate value={p.value} /> : "-",
     },
     {
       field: "lastFreeDay",
-      headerName: "Last Free Day",
+      headerName: t("columns.lastFreeDay"),
       width: 130,
       cellRenderer: (p: { value?: string }) =>
         p.value ? <FormattedDate value={p.value} /> : "-",
     },
     {
       field: "chargesDue",
-      headerName: "Charges Due",
+      headerName: t("columns.chargesDue"),
       width: 140,
       cellRenderer: (params: { data?: ArrivalNoticeListDTO }) => {
         if (!params.data) return null;
@@ -149,7 +151,7 @@ export function ArrivalNoticeListing() {
       },
     },
     {
-      headerName: "Print",
+      headerName: t("common:actions.print"),
       field: "printStatus",
       width: 120,
       cellRenderer: (params: { data?: ArrivalNoticeListDTO }) => {
@@ -159,7 +161,7 @@ export function ArrivalNoticeListing() {
             className="arn-status-tag"
             color={getArnPrintStatusColor(params.data.printStatus)}
           >
-            {getArnPrintStatusLabel(params.data.printStatus)}
+            {getArnPrintStatusLabel(params.data.printStatus, t)}
           </Tag>
         );
       },
@@ -170,15 +172,15 @@ export function ArrivalNoticeListing() {
   const emptyState = isError ? (
     <ModuleEmptyState
       variant="error"
-      title="Couldn't load arrival notices"
-      message="The request didn't complete. Check your connection and try again."
+      title={t("empty.loadErrorTitle")}
+      message={t("empty.loadErrorMessage")}
       actions={[buildRetryAction(() => void refetch())]}
     />
   ) : (
     <ModuleEmptyState
       variant="filtered"
-      title="No arrival notices match your search"
-      message="Nothing came back for this date range. Widen the dates or clear the filters to see more results."
+      title={t("empty.noResultsTitle")}
+      message={t("empty.noResultsMessage")}
       actions={[buildClearFiltersAction(handleClearFilters)]}
     />
   );
@@ -189,7 +191,7 @@ export function ArrivalNoticeListing() {
         <ModuleScreenHeader
           icon={NavIcons.arrivalNotice}
           title={MODULE_TITLES.arrivalNotice}
-          subtitle="Filter by date range, review vessel and charges, and print arrival notices."
+          subtitle={t("subtitle")}
           marginBottom={0}
         />
       </div>

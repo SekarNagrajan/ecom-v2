@@ -1,0 +1,493 @@
+{
+  "subtitle": "查看 B/L 状态、核对草稿并打印运输单证。",
+  "columns": {
+    "status": "状态",
+    "blNumber": "B/L 编号",
+    "blNo": "B/L 号",
+    "mcnNo": "MCN 编号",
+    "bookingNo": "订舱号",
+    "siNo": "SI 编号",
+    "agencyRef": "代理参考号",
+    "origin": "起运地",
+    "load": "装货港",
+    "discharge": "卸货港",
+    "delivery": "交货地",
+    "confirmedDate": "确认日期",
+    "createdDate": "创建日期",
+    "route": "航线",
+    "code": "代码",
+    "description": "描述",
+    "pce": "P/C/E",
+    "amount": "金额",
+    "payor": "付款方"
+  },
+  "actions": {
+    "view": "查看",
+    "edit": "编辑",
+    "amendment": "更正",
+    "accept": "接受",
+    "readyToConfirm": "待确认",
+    "originalPrint": "正本打印",
+    "draftPrint": "草稿打印",
+    "batchOriginalPrint": "批量正本打印",
+    "printSelected": "打印所选 ({{count}})",
+    "manifest": "舱单",
+    "chargeSummary": "费用汇总",
+    "charges": "费用",
+    "nonNegotiable": "不可转让",
+    "cancel": "取消",
+    "locked": "已锁定",
+    "more": "更多",
+    "moreActions": "更多操作",
+    "back": "返回",
+    "close": "关闭",
+    "decline": "拒绝",
+    "iAgree": "我同意",
+    "editBillOfLading": "编辑提单",
+    "payWithStripeMock": "使用 Stripe 支付（模拟）",
+    "selectAll": "全选",
+    "sendAmendmentMail": "发送修改通知邮件"
+  },
+  "empty": {
+    "loadErrorTitle": "无法加载提单",
+    "loadErrorMessage": "请求未完成。请检查网络连接后重试。",
+    "noResultsTitle": "暂无提单",
+    "noResultsMessage": "为您的货运创建提单后，将显示在此处。",
+    "noCharges": "此 B/L 暂无费用",
+    "noManifestLinkedTitle": "未关联舱单",
+    "noManifestLinkedMessage": "此提单尚未关联 MCN。",
+    "manifestNotFoundTitle": "未找到舱单",
+    "manifestNotFoundMessage": "未找到舱单 {{mcnId}}。",
+    "unableToLoadDetails": "无法加载提单详情。",
+    "blNotFound": "未找到 B/L。",
+    "noRouting": "无航线详情",
+    "insuranceNotRequired": "此提单无需投保。",
+    "noDocuments": "未上传文件",
+    "noActivity": "暂无活动记录",
+    "batchPrintTitle": "没有符合批量打印条件的 B/L",
+    "batchPrintMessage": "当前没有已确认且符合批量正本打印条件的 B/L。",
+    "mcnLoadErrorTitle": "无法加载舱单",
+    "mcnLoadErrorMessage": "请求未完成。请检查网络连接后重试。",
+    "mcnEmptyTitle": "暂无舱单",
+    "mcnEmptyMessage": "舱单货物通知可用时将显示在此处。"
+  },
+  "drawers": {
+    "chargeSummary": "B/L 费用汇总",
+    "batchOriginalPrint": "批量正本打印",
+    "viewBillOfLading": "查看提单",
+    "manifest": "舱单"
+  },
+  "confirms": {
+    "voyageClosedTitle": "航次已关闭",
+    "voyageClosedContent": "此航次已关闭，不允许编辑 B/L。",
+    "printOriginalTitle": "打印 B/L 正本",
+    "printOriginalContent": "确认打印提单正本？签发后此操作可能受到限制。",
+    "cancelSubmittedTitle": "取消已提交的 B/L",
+    "cancelSubmittedContent": "确定要取消此已提交的 B/L 吗？",
+    "editTermsTitle": "已确认 B/L 编辑 — 条款",
+    "editTermsBody": "编辑已确认的 B/L 即表示您同意承运人的更正条款与条件。"
+  },
+  "labels": {
+    "booking": "订舱",
+    "bookingNumber": "订舱号",
+    "mcn": "MCN",
+    "agencyRef": "代理参考号",
+    "load": "装货港",
+    "discharge": "卸货港",
+    "created": "创建",
+    "siNumber": "SI 编号",
+    "blType": "B/L 类型",
+    "releaseType": "放货方式",
+    "freightOption": "运费选项",
+    "route": "航线",
+    "vesselVoyage": "船舶 / 航次",
+    "origin": "起运地",
+    "originPrint": "起运地（打印）",
+    "polPrint": "POL（打印）",
+    "podPrint": "POD（打印）",
+    "delivery": "交货地",
+    "deliveryPrint": "交货地（打印）",
+    "scheduleLegs": "航段",
+    "cargoValue": "货值",
+    "policyNo": "保单号",
+    "termsAccepted": "已接受条款",
+    "optOut": "选择退出",
+    "filingType": "申报类型",
+    "paymentMethod": "付款方式",
+    "declarant": "申报人",
+    "buyer": "买方",
+    "seller": "卖方",
+    "file": "文件",
+    "activity": "活动",
+    "parties": "相关方",
+    "charges": "费用",
+    "insurance": "保险",
+    "previewFields": "预览字段",
+    "cargoContainers": "货物与集装箱",
+    "shipper": "托运人",
+    "consignee": "收货人",
+    "toOrder": "（凭指示）",
+    "notifyParty": "通知方",
+    "notify2": "第二通知方",
+    "forwarder": "货代",
+    "original": "正本",
+    "telex": "电放",
+    "yes": "是",
+    "no": "否",
+    "coverage": "保额：{{currency}} {{value}}",
+    "policySuffix": " · 保单 {{policyNo}}",
+    "containerN": "集装箱 {{n}}：{{containerNo}}（{{eqpSize}}）",
+    "declaredValue": "申报价值",
+    "remarks": "备注",
+    "vessel": "船名",
+    "voyage": "航次",
+    "containers": "集装箱",
+    "statusPrefix": "状态：{{status}}",
+    "printCount": "打印次数：{{count}}",
+    "fileCount": "{{count}} 个文件",
+    "system": "系统"
+  },
+  "card": {
+    "booking": "订舱",
+    "mcn": "MCN",
+    "agencyRef": "代理参考号",
+    "load": "装货港",
+    "discharge": "卸货港",
+    "created": "创建"
+  },
+  "activity": {
+    "draftCreated": "B/L 草稿已创建",
+    "confirmed": "B/L 已确认",
+    "issued": "B/L 已签发",
+    "locked": "B/L 已锁定",
+    "printed": "B/L 已打印",
+    "documentsUploaded": "文件已上传"
+  },
+  "status": {
+    "draft": "草稿",
+    "submitted": "已提交",
+    "confirmed": "已确认",
+    "issued": "已签发",
+    "locked": "已锁定"
+  },
+  "toasts": {
+    "batchPrintDownloaded": "批量打印已下载",
+    "acceptedAndConfirmed": "B/L 已接受并确认",
+    "submittedCancelled": "已提交的 B/L 已取消",
+    "submittedSuccessfully": "B/L 提交成功",
+    "issued": "B/L 已签发",
+    "saved": "B/L 已保存",
+    "manifestDownloaded": "舱单已下载",
+    "selectBlForPayment": "请至少选择一份 B/L 进行付款",
+    "sameAgencyRequired": "所选 B/L 须属于同一签发代理",
+    "paymentIntentCreated": "模拟付款意向已创建（{{secret}}…）",
+    "amendmentSent": "更正通知已发送（模拟）",
+    "mcnSaved": "MCN 已保存",
+    "mcnSubmitted": "MCN 已提交"
+  },
+  "batchPrint": {
+    "title": "批量正本打印",
+    "subtitle": "选择符合正本打印条件的已确认 B/L，然后批量打印。",
+    "intro": "选择符合正本打印条件的已确认 B/L。已锁定或未打印的草稿将被排除。",
+    "eligibleCount": "{{count}} 份符合"
+  },
+  "payment": {
+    "selectedCount": "已选 {{count}} 份 B/L",
+    "mixedAgencies": "代理不一致 — 无法付款"
+  },
+  "mcn": {
+    "title": "舱单 (MCN)",
+    "subtitle": "舱单货物通知 — 在侧栏抽屉中查看并打印。",
+    "editTitle": "编辑 MCN：{{mcnId}}",
+    "editSubtitle": "B/L {{blNo}} · {{status}}",
+    "cargoDescriptionRequired": "货物描述为必填项",
+    "freightTermsRequired": "运费条款为必填项",
+    "manifestCount": "{{count}} 份舱单",
+    "cargoDescription": "货物描述",
+    "freightTerms": "运费条款",
+    "submit": "提交 MCN"
+  },
+  "submitResult": {
+    "title": "B/L 已提交",
+    "defaultMessage": "B/L 已提交。"
+  },
+  "charges": {
+    "prepaid": "预付",
+    "collect": "到付",
+    "payAt": "到付地支付",
+    "totalsLine": "合计（{{currency}}）：预付 {{prepaid}} · 到付 {{collect}} · 到付地 {{payAt}} · 总计 {{grand}}"
+  },
+  "manifest": {
+    "print": "打印舱单",
+    "type": "舱单类型",
+    "cargo": "货物舱单",
+    "freight": "运费舱单"
+  },
+  "preview": {
+    "editSection": "编辑{{title}}",
+    "shipper": "发货人",
+    "notAssigned": "未指定",
+    "noDataProvided": "暂无数据"
+  },
+  "wizard": {
+    "terms": {
+      "body": "继续 B/L 更正即表示您同意承运人就单证修改所规定的条款与条件。",
+      "modalTitle": "B/L 更正 — 条款与条件"
+    },
+    "errors": {
+      "loadFailedTitle": "无法加载 B/L",
+      "loadFailedMessage": "无法加载供编辑的提单。",
+      "issuedNotEditable": "此提单已签发，无法编辑。"
+    },
+    "toasts": {
+      "termsAccepted": "已接受条款 — 您可以继续编辑。"
+    },
+    "actions": {
+      "backToBl": "返回 B/L",
+      "viewBl": "查看 B/L",
+      "submitBl": "提交 B/L",
+      "retry": "重试"
+    },
+    "master": {
+      "documentReferences": "单证参考",
+      "blOptions": "提单选项",
+      "vessels": "船舶",
+      "vesselVoyageNumber": "船名 / 航次",
+      "placeOfReceipt": "收货地",
+      "portOfLoading": "装货港",
+      "portOfDischarge": "卸货港",
+      "placeOfDelivery": "交货地",
+      "freightTerms": "运费条款",
+      "originalBl": "正本 B/L",
+      "seaWaybill": "Sea Waybill",
+      "telexRelease": "电放"
+    },
+    "parties": {
+      "editParty": "编辑相关方",
+      "deleteParty": "删除相关方",
+      "noContactDetails": "无其他联系方式",
+      "printOnBl": "打印于 B/L",
+      "toOrder": "凭指示",
+      "notAssignedYet": "尚未指定",
+      "assign": "指定",
+      "searchPlaceholder": "按客户名称或代码搜索",
+      "rolesAssigned": "已分配相关方角色"
+    },
+    "routing": {
+      "loadPortPrint": "装货港（打印）",
+      "dischargePortPrint": "卸货港（打印）",
+      "bookingHint": "订舱：{{value}}",
+      "vesselOptionalHint": "可选船期参考",
+      "printTextTitle": "航线 — 打印文本",
+      "etd": "ETD",
+      "eta": "ETA"
+    },
+    "charges": {
+      "title": "运费",
+      "currency": "币种",
+      "addCharge": "添加费用",
+      "chargeLineTitle": "费用 {{n}}",
+      "removeCharge": "移除费用",
+      "pceShort": "P/C"
+    },
+    "chargeSummary": {
+      "title": "费用汇总"
+    },
+    "preview": {
+      "aesUsLoadPort": "请提供 AES 编号，或对美国装货港选择不适用",
+      "completeBeforeSubmit": "提交前请完成预览字段",
+      "notApplicable": "N/A",
+      "nvocc": "NVOCC",
+      "t2lFiling": "T2L filing",
+      "loadPort": "装货港",
+      "dischargePort": "卸货港",
+      "draftBl": "B/L 草稿",
+      "pol": "POL",
+      "pod": "POD",
+      "insuranceRequired": "必填",
+      "chargeFallback": "费用",
+      "ensNotRequired": "无需 ENS",
+      "chargeLinesOnFile": "已有 {{count}} 条费用明细",
+      "noFilesUploaded": "未上传文件",
+      "noReferenceFields": "无参考字段",
+      "customerRemarks": "客户备注",
+      "aesNumber": "AES 编号",
+      "aesDisclaimer": "AES 免责声明",
+      "aesProvided": "已提供",
+      "aesNotApplicable": "不适用",
+      "blTypeUae": "B/L 类型 (UAE)",
+      "mpciIdUae": "MPCI ID (UAE)",
+      "masterBl": "Master BL",
+      "directBl": "Direct BL",
+      "euCustomsZone": "欧盟海关区",
+      "typeOfBl": "B/L 类型",
+      "ensFiling": "ENS filing",
+      "currency": "币种"
+    },
+    "validation": {
+      "selectRole": "请至少选择一个角色",
+      "companyRequired": "公司为必填项",
+      "completeRequiredParties": "请完成必填相关方",
+      "seawayNoToOrder": "Sea Waybill 的收货人不能为凭指示"
+    },
+    "steps": {
+      "cargoProtect": "货物保障",
+      "chargeSummary": "费用汇总"
+    },
+    "insurance": {
+      "optOutCheckbox": "放弃此 B/L 的货物保险",
+      "requireQuestion": "是否需要货物保险？",
+      "detailsTitle": "保险详情",
+      "termsTitle": "保险条款与条件",
+      "termsBody": "申请货物保险即表示您同意承运人的标准保险条款。保费将计入运费发票。",
+      "acceptTerms": "我接受保险条款与条件",
+      "skip": "跳过保险",
+      "validation": {
+        "currencyRequired": "币种为必填项",
+        "cargoValueMin": "货值必须大于 0",
+        "acceptTerms": "必须接受保险条款"
+      }
+    },
+    "cargoProtect": {
+      "productsTitle": "货物保障产品",
+      "productCode": "产品代码",
+      "addRow": "添加行",
+      "emptyTitle": "暂无货物保障明细",
+      "emptyMessage": "点击「添加行」以添加保障产品。",
+      "lineTitle": "第 {{n}} 行",
+      "removeRow": "移除行"
+    },
+    "ens": {
+      "title": "ENS 详情",
+      "label": "ENS",
+      "filingType": "ENS 申报类型",
+      "straightBl": "Straight BL",
+      "singleFiling": "Single Filing",
+      "multipleFiling": "Multiple Filing",
+      "wireTransfer": "Wire Transfer",
+      "notPrepaid": "Not Prepaid",
+      "supplementaryDeclarant": "补充申报人",
+      "notesTitle": "ENS 申报说明",
+      "notesFilingRequirements": "单次申报需提供买方和卖方详情。多次申报需提供补充申报人详情。",
+      "notesBlTypeMapping": "Straight BL 使用单次申报；Master BL 使用多次申报。",
+      "notesEori": "请在适用情况下提供准确的 EORI 和主体类型，以便欧盟海关处理。",
+      "fields": {
+        "name": "姓名",
+        "address": "地址",
+        "city": "城市",
+        "country": "国家",
+        "eori": "EORI",
+        "email": "电子邮箱"
+      },
+      "validation": {
+        "invalidEmail": "电子邮箱格式无效"
+      }
+    },
+    "files": {
+      "title": "上传附件",
+      "documentType": "文件类型",
+      "documentTypePlaceholder": "选择文件类型",
+      "draggerText": "点击或拖动文件到此区域上传",
+      "draggerHint": "已选类型：{{type}}。文件将附加至此 B/L 请求。",
+      "uploadedList": "已上传文件",
+      "categories": {
+        "vgm": "VGM",
+        "dg": "危险品 (DG)",
+        "loi": "赔偿保函 (LOI)",
+        "other": "其他"
+      },
+      "uploadSuccess": "{{fileName}} 上传成功。",
+      "uploadFailed": "{{fileName}} 上传失败。"
+    }
+  },
+  "import": {
+    "entityLabel": "货物明细",
+    "submitLabel": "导入 {{count}} 条货物明细",
+    "columns": {
+      "containerNo": "集装箱号",
+      "containerType": "集装箱类型",
+      "carrierSeal": "承运人铅封",
+      "shipperSeal": "托运人铅封",
+      "marksAndNumbers": "唛头",
+      "description": "商品描述",
+      "hsCode": "HS 编码",
+      "commodityCode": "商品代码",
+      "packageCount": "件数",
+      "packageType": "包装类型",
+      "grossWeight": "毛重",
+      "volume": "体积"
+    },
+    "validation": {
+      "containerNoRequired": "集装箱号为必填项",
+      "containerNoMax": "集装箱号不得超过 11 个字符",
+      "containerTypeRequired": "集装箱类型为必填项",
+      "descriptionRequired": "商品描述为必填项",
+      "hsCodeRequired": "HS 编码为必填项",
+      "packageCountMin": "件数最少为 1",
+      "packageTypeRequired": "包装类型为必填项",
+      "grossWeightRequired": "毛重为必填项",
+      "volumeNegative": "体积不能为负数",
+      "invalidContainerType": "请选择有效的集装箱类型",
+      "invalidPackageType": "请选择有效的包装类型",
+      "duplicateLine": "同一集装箱、HS 编码、描述及件数存在重复货物明细"
+    },
+    "actions": {
+      "exportTemplate": "导出模板",
+      "importExcel": "导入 Excel"
+    },
+    "modalTitle": "导入货物 — {{suffix}}",
+    "workbenchTitle": "货物电子表格导入",
+    "confirm": {
+      "replaceTitle": "替换现有货物？",
+      "replaceContent": "导入 Excel 将替换当前 {{documentKind}} 上的集装箱和货物明细。是否继续？",
+      "replaceOk": "替换并导入"
+    },
+    "toasts": {
+      "templateDownloaded": "模板已下载。",
+      "templateFailed": "模板下载失败。",
+      "noValidRows": "没有可导入的有效货物行。",
+      "imported": "已导入 {{containers}} 个集装箱（{{lines}} 条货物明细）。",
+      "rowUnmapped": "无法将该行映射至集装箱"
+    },
+    "smart": {
+      "title": "智能导入",
+      "update": "更新",
+      "footerMeta": "{{containers}} 个集装箱 · {{lines}} 条货物明细",
+      "hint": "点击单元格编辑。右键行可插入、复制、清除、选择同箱明细或删除。集装箱号、类型和品名已锁定 — 编辑 SOC、实际集装箱号和铅封以更新集装箱。",
+      "empty": "暂无货物明细可编辑。",
+      "needContainers": "请先添加集装箱再使用智能导入。",
+      "updated": "货物已从智能导入更新。",
+      "lastLineWarning": "移除集装箱的最后一条明细后，需至少保留一条明细才能继续更新。",
+      "columns": {
+        "rowNo": "行号",
+        "containerNo": "集装箱号",
+        "type": "类型",
+        "soc": "SOC",
+        "actualContainerNo": "实际集装箱号",
+        "carrierSeal": "承运人铅封",
+        "shipperSeal": "发货人铅封",
+        "commodity": "品名",
+        "hsCode": "HS 编码",
+        "packageType": "包装类型",
+        "qty": "数量",
+        "weightKg": "重量 (kg)",
+        "volumeCbm": "体积 (CBM)",
+        "marksNo": "唛头",
+        "description": "货物描述"
+      },
+      "contextMenu": {
+        "insertBefore": "在此前插入新行",
+        "insertAfter": "在此后插入新行",
+        "duplicate": "复制此行",
+        "clearLine": "清除行字段",
+        "clearLineSelected": "清除行字段（已选）",
+        "selectContainerLines": "选择此集装箱的所有行",
+        "deleteSelected": "删除所选行"
+      },
+      "errors": {
+        "unknownContainer": "第 {{row}} 行：未知集装箱（不在本单据上）",
+        "containerCountMismatch": "单据（{{expected}}）与智能导入（{{actual}}）的集装箱数量不一致。"
+      }
+    }
+  }
+}

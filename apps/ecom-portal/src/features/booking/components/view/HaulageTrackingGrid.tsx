@@ -2,6 +2,8 @@
 import { ListView } from "@solverminds/shared-ui/data-view/list-view";
 import type { DataViewColumn } from "@solverminds/shared-ui/data-view";
 import { Card, Typography } from "antd";
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../../components/icons";
 import { ModuleEmptyState } from "../../../../components/shared/module-empty-state";
@@ -27,29 +29,33 @@ interface HaulageDetails {
   tmsActualDrop: string;
 }
 
-const columns: DataViewColumn<HaulageDetails>[] = [
-  { field: "containerNo", headerName: "Container No", minWidth: 150 },
-  { field: "equipmentType", headerName: "Equipment Type", minWidth: 150 },
-  {
-    field: "customerReference",
-    headerName: "Customer Reference",
-    minWidth: 180,
-  },
-  { field: "pickupLocationCode", headerName: "Pickup Loc Code", minWidth: 150 },
-  { field: "pickupLocationName", headerName: "Pickup Loc Name", minWidth: 200 },
-  { field: "stopSequence", headerName: "Stop Seq", minWidth: 100 },
-  { field: "address", headerName: "Address", minWidth: 250 },
-  {
-    field: "tmsScheduledPickup",
-    headerName: "TMS Sche. Pickup",
-    minWidth: 180,
-  },
-  { field: "tmsActualPickup", headerName: "TMS Act. Pickup", minWidth: 180 },
-  { field: "tmsScheduledDrop", headerName: "TMS Sche. Drop", minWidth: 180 },
-  { field: "tmsActualDrop", headerName: "TMS Act. Drop", minWidth: 180 },
-];
-
 export function HaulageTrackingGrid({ bookingId }: HaulageTrackingGridProps) {
+  const { t } = useTranslation("booking");
+
+  const columns = useMemo<DataViewColumn<HaulageDetails>[]>(
+    () => [
+      { field: "containerNo", headerName: t("haulage.columns.containerNo"), minWidth: 150 },
+      { field: "equipmentType", headerName: t("haulage.columns.equipmentType"), minWidth: 150 },
+      {
+        field: "customerReference",
+        headerName: t("haulage.columns.customerReference"),
+        minWidth: 180,
+      },
+      { field: "pickupLocationCode", headerName: t("haulage.columns.pickupLocCode"), minWidth: 150 },
+      { field: "pickupLocationName", headerName: t("haulage.columns.pickupLocName"), minWidth: 200 },
+      { field: "stopSequence", headerName: t("haulage.columns.stopSeq"), minWidth: 100 },
+      { field: "address", headerName: t("haulage.columns.address"), minWidth: 250 },
+      {
+        field: "tmsScheduledPickup",
+        headerName: t("haulage.columns.tmsSchePickup"),
+        minWidth: 180,
+      },
+      { field: "tmsActualPickup", headerName: t("haulage.columns.tmsActPickup"), minWidth: 180 },
+      { field: "tmsScheduledDrop", headerName: t("haulage.columns.tmsScheDrop"), minWidth: 180 },
+      { field: "tmsActualDrop", headerName: t("haulage.columns.tmsActDrop"), minWidth: 180 },
+    ],
+    [t],
+  );
   // Mock until haulage REST exists — keyed by bookingId for stable remounts
   const mockData: HaulageDetails[] = bookingId
     ? [
@@ -94,7 +100,7 @@ export function HaulageTrackingGrid({ bookingId }: HaulageTrackingGridProps) {
           <span className="booking-section-title">
             <AppIcon icon={Icons.truck} size={16} />
             <Title level={5} className="booking-panel__title">
-              Haulage Tracking Details
+              {t("haulage.title")}
             </Title>
           </span>
         }
@@ -106,8 +112,8 @@ export function HaulageTrackingGrid({ bookingId }: HaulageTrackingGridProps) {
             emptyState={
               <ModuleEmptyState
                 variant="blank"
-                title="No haulage tracking details"
-                message="Pickup and drop-off milestones will appear here when haulage is arranged."
+                title={t("haulage.emptyTitle")}
+                message={t("haulage.emptyMessage")}
               />
             }
             showToolbar={false}
@@ -122,8 +128,7 @@ export function HaulageTrackingGrid({ bookingId }: HaulageTrackingGridProps) {
           />
         </div>
         <div className="booking-disclaimer">
-          * Disclaimer: All haulage times are subject to local traffic and
-          terminal conditions.
+          {t("haulage.disclaimer")}
         </div>
       </Card>
     </div>

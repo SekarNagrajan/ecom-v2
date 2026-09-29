@@ -1,7 +1,8 @@
-// Modified by Sekar Nagarajan (2026-09-07 12:17)
+// Modified by Sekar Nagarajan (2026-09-29 12:35)
 import { AppButton, AppDrawer, FormattedDate } from "@solverminds/shared-ui";
 import { Alert, Table, Tag, Typography } from "antd";
 import type { ReactNode } from "react";
+import { Trans, useTranslation } from "react-i18next";
 
 import {
   AppIcon,
@@ -9,6 +10,7 @@ import {
   NavArrivalNoticeIcon,
 } from "../../../../components/icons";
 import { ModuleEmptyState } from "../../../../components/shared/module-empty-state";
+import { useModuleTitles } from "../../../../i18n/use-module-titles";
 import {
   useArrivalNoticeDetailQuery,
   useArrivalNoticeDownloadMutation,
@@ -45,6 +47,8 @@ function MetaField({
 }
 
 export function AnViewDrawer({ anNo, onClose }: AnViewDrawerProps) {
+  const { t } = useTranslation("arrival-notice");
+  const MODULE_TITLES = useModuleTitles();
   const { data: arnData, isLoading } = useArrivalNoticeDetailQuery(anNo);
   const { mutate: downloadDoc, isPending: isDownloading } =
     useArrivalNoticeDownloadMutation();
@@ -54,7 +58,7 @@ export function AnViewDrawer({ anNo, onClose }: AnViewDrawerProps) {
   const chargeLines = arnData?.chargeLines ?? [];
   const freeTime = arnData?.freeTime;
   const statusLabel = arnData
-    ? getArnPrintStatusLabel(arnData.printStatus)
+    ? getArnPrintStatusLabel(arnData.printStatus, t)
     : "";
   const statusColor = arnData
     ? getArnPrintStatusColor(arnData.printStatus)
@@ -80,20 +84,22 @@ export function AnViewDrawer({ anNo, onClose }: AnViewDrawerProps) {
             <AppIcon icon={NavArrivalNoticeIcon} size={22} />
           </span>
           <div className="arn-drawer-title__copy">
-            <Text className="arn-drawer-title__eyebrow">Arrival Notice</Text>
+            <Text className="arn-drawer-title__eyebrow">
+              {MODULE_TITLES.arrivalNotice}
+            </Text>
             <Title
               level={5}
               className="arn-drawer-title__text"
               copyable={{
                 text: anNo,
-                tooltips: ["Copy AN number", "Copied"],
+                tooltips: [t("actions.copyAnNumber"), t("actions.copied")],
               }}
             >
               {anNo}
             </Title>
             <div className="arn-drawer-title__meta-row">
               <Text type="secondary" className="arn-drawer-title__meta">
-                B/L:{" "}
+                {t("drawer.blPrefix")}{" "}
                 <span className="arn-drawer-title__bl">
                   {arnData?.blNumber || "—"}
                 </span>
@@ -116,7 +122,7 @@ export function AnViewDrawer({ anNo, onClose }: AnViewDrawerProps) {
             disabled={!arnData}
             onClick={handleDownload}
           >
-            Download PDF
+            {t("actions.downloadPdf")}
           </AppButton>
           <AppButton
             type="primary"
@@ -125,7 +131,7 @@ export function AnViewDrawer({ anNo, onClose }: AnViewDrawerProps) {
             disabled={!arnData}
             onClick={handleDownload}
           >
-            Print Arrival Notice
+            {t("actions.printArrivalNotice")}
           </AppButton>
         </div>
       }
@@ -135,14 +141,16 @@ export function AnViewDrawer({ anNo, onClose }: AnViewDrawerProps) {
       ) : (
         <>
           <div className="arn-route-strip">
-            <Text className="arn-route-strip__eyebrow">Vessel to Port</Text>
+            <Text className="arn-route-strip__eyebrow">
+              {t("drawer.routeEyebrow")}
+            </Text>
             <div className="arn-route-strip__body">
               <div className="arn-route-port arn-route-port--vessel">
                 <div className="arn-route-port__label">
                   <span className="arn-route-port__pin arn-route-port__pin--vessel app-icon-inherit">
                     <AppIcon icon={Icons.ship} size={15} />
                   </span>
-                  Vessel
+                  {t("drawer.vessel")}
                 </div>
                 <Title
                   level={3}
@@ -165,7 +173,9 @@ export function AnViewDrawer({ anNo, onClose }: AnViewDrawerProps) {
                   <span className="arn-route-connector__track arn-route-connector__track--discharge" />
                   <span className="arn-route-connector__dot arn-route-connector__dot--discharge" />
                 </div>
-                <span className="arn-route-connector__label">Arriving</span>
+                <span className="arn-route-connector__label">
+                  {t("drawer.arriving")}
+                </span>
               </div>
 
               <div className="arn-route-port arn-route-port--discharge">
@@ -173,7 +183,7 @@ export function AnViewDrawer({ anNo, onClose }: AnViewDrawerProps) {
                   <span className="arn-route-port__pin arn-route-port__pin--discharge app-icon-inherit">
                     <AppIcon icon={Icons.mapPin} size={15} />
                   </span>
-                  Discharge
+                  {t("drawer.discharge")}
                 </div>
                 <Title
                   level={3}
@@ -194,34 +204,36 @@ export function AnViewDrawer({ anNo, onClose }: AnViewDrawerProps) {
             <div className="arn-drawer-section__head">
               <AppIcon icon={Icons.bell} size={16} />
               <Text strong className="arn-drawer-section__title">
-                Arrival Notice Details
+                {t("drawer.sections.details")}
               </Text>
             </div>
             <div className="arn-meta-grid">
-              <MetaField label="AN Number">{arnData.anNo}</MetaField>
-              <MetaField label="B/L Number">
+              <MetaField label={t("drawer.labels.anNumber")}>
+                {arnData.anNo}
+              </MetaField>
+              <MetaField label={t("drawer.labels.blNumber")}>
                 {arnData.blNumber || "—"}
               </MetaField>
-              <MetaField label="ETA">
+              <MetaField label={t("drawer.labels.eta")}>
                 {arnData.etaDate ? (
                   <FormattedDate value={arnData.etaDate} />
                 ) : (
                   "—"
                 )}
               </MetaField>
-              <MetaField label="Arrival Date">
+              <MetaField label={t("drawer.labels.arrivalDate")}>
                 {arnData.arrivalDate ? (
                   <FormattedDate value={arnData.arrivalDate} />
                 ) : (
                   "—"
                 )}
               </MetaField>
-              <MetaField label="Charges Due">
+              <MetaField label={t("drawer.labels.chargesDue")}>
                 {arnData.chargesDue > 0
                   ? formatArnAmount(arnData.chargesDue, arnData.currency)
                   : "—"}
               </MetaField>
-              <MetaField label="Print Status">
+              <MetaField label={t("drawer.labels.printStatus")}>
                 <Tag className="arn-status-tag" color={statusColor}>
                   {statusLabel}
                 </Tag>
@@ -233,20 +245,26 @@ export function AnViewDrawer({ anNo, onClose }: AnViewDrawerProps) {
             <div className="arn-drawer-section__head">
               <AppIcon icon={Icons.ship} size={16} />
               <Text strong className="arn-drawer-section__title">
-                Shipment Details
+                {t("drawer.sections.shipment")}
               </Text>
             </div>
             <div className="arn-meta-grid">
-              <MetaField label="Vessel">{arnData.vessel || "—"}</MetaField>
-              <MetaField label="Voyage">{arnData.voyage || "—"}</MetaField>
-              <MetaField label="Terminal">{arnData.terminal || "—"}</MetaField>
-              <MetaField label="Consignee">
+              <MetaField label={t("drawer.labels.vessel")}>
+                {arnData.vessel || "—"}
+              </MetaField>
+              <MetaField label={t("drawer.labels.voyage")}>
+                {arnData.voyage || "—"}
+              </MetaField>
+              <MetaField label={t("drawer.labels.terminal")}>
+                {arnData.terminal || "—"}
+              </MetaField>
+              <MetaField label={t("drawer.labels.consignee")}>
                 {arnData.consignee || "—"}
               </MetaField>
-              <MetaField label="Notify Party">
+              <MetaField label={t("drawer.labels.notifyParty")}>
                 {arnData.notifyParty || "—"}
               </MetaField>
-              <MetaField label="Manifest / IGM">
+              <MetaField label={t("drawer.labels.manifestIgm")}>
                 {arnData.manifestRef || arnData.igmNo || "—"}
               </MetaField>
             </div>
@@ -257,16 +275,18 @@ export function AnViewDrawer({ anNo, onClose }: AnViewDrawerProps) {
               <div className="arn-drawer-section__head">
                 <AppIcon icon={Icons.clock} size={16} />
                 <Text strong className="arn-drawer-section__title">
-                  Free Time
+                  {t("drawer.sections.freeTime")}
                 </Text>
               </div>
               <div className="arn-meta-grid arn-meta-grid--free-time">
-                <MetaField label="Free Days">{freeTime.days}</MetaField>
-                <MetaField label="Last Free Day">
+                <MetaField label={t("drawer.labels.freeDays")}>
+                  {freeTime.days}
+                </MetaField>
+                <MetaField label={t("drawer.labels.lastFreeDay")}>
                   <FormattedDate value={freeTime.lastFreeDay} />
                 </MetaField>
                 {arnData.demurrageFrom ? (
-                  <MetaField label="Demurrage From">
+                  <MetaField label={t("drawer.labels.demurrageFrom")}>
                     <FormattedDate value={arnData.demurrageFrom} />
                   </MetaField>
                 ) : null}
@@ -279,7 +299,7 @@ export function AnViewDrawer({ anNo, onClose }: AnViewDrawerProps) {
               <div className="arn-drawer-section__head">
                 <AppIcon icon={Icons.fileText} size={16} />
                 <Text strong className="arn-drawer-section__title">
-                  Charges
+                  {t("drawer.sections.charges")}
                 </Text>
               </div>
               <Table<ArrivalNoticeChargeLine>
@@ -290,18 +310,18 @@ export function AnViewDrawer({ anNo, onClose }: AnViewDrawerProps) {
                 dataSource={chargeLines}
                 columns={[
                   {
-                    title: "Code",
+                    title: t("drawer.chargeColumns.code"),
                     dataIndex: "chargeCode",
                     key: "chargeCode",
                     width: 100,
                   },
                   {
-                    title: "Description",
+                    title: t("drawer.chargeColumns.description"),
                     dataIndex: "description",
                     key: "description",
                   },
                   {
-                    title: "Amount",
+                    title: t("drawer.chargeColumns.amount"),
                     key: "amount",
                     width: 140,
                     render: (_value, row) =>
@@ -316,7 +336,7 @@ export function AnViewDrawer({ anNo, onClose }: AnViewDrawerProps) {
             <div className="arn-drawer-section__head">
               <AppIcon icon={Icons.container} size={16} />
               <Text strong className="arn-drawer-section__title">
-                Containers
+                {t("drawer.sections.containers")}
               </Text>
             </div>
             <Table
@@ -327,18 +347,18 @@ export function AnViewDrawer({ anNo, onClose }: AnViewDrawerProps) {
               dataSource={arnData.containers}
               columns={[
                 {
-                  title: "Container No",
+                  title: t("drawer.containerColumns.containerNo"),
                   dataIndex: "containerNo",
                   key: "containerNo",
                 },
                 {
-                  title: "Size/Type",
+                  title: t("drawer.containerColumns.sizeType"),
                   dataIndex: "eqpSize",
                   key: "eqpSize",
                   width: 120,
                 },
                 {
-                  title: "Seal No",
+                  title: t("drawer.containerColumns.sealNo"),
                   dataIndex: "sealNo",
                   key: "sealNo",
                   width: 120,
@@ -349,7 +369,7 @@ export function AnViewDrawer({ anNo, onClose }: AnViewDrawerProps) {
                   <ModuleEmptyState
                     artSize="sm"
                     variant="blank"
-                    title="No containers on this notice"
+                    title={t("empty.noContainers")}
                     style={{ padding: 12 }}
                   />
                 ),
@@ -364,9 +384,13 @@ export function AnViewDrawer({ anNo, onClose }: AnViewDrawerProps) {
               className="arn-drawer-alert"
               icon={<AppIcon icon={Icons.info} size={16} />}
               message={
-                <span>
-                  Free time ends on <FormattedDate value={lastFreeDay} />.
-                </span>
+                <Trans
+                  i18nKey="drawer.alerts.freeTimeEndsOn"
+                  ns="arrival-notice"
+                  components={{
+                    date: <FormattedDate value={lastFreeDay} />,
+                  }}
+                />
               }
             />
           ) : null}

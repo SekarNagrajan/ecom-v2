@@ -1,0 +1,493 @@
+{
+  "subtitle": "Revise el estado del B/L, verifique borradores e imprima documentos de transporte.",
+  "columns": {
+    "status": "Estado",
+    "blNumber": "Número de B/L",
+    "blNo": "N.º de B/L",
+    "mcnNo": "N.º de MCN",
+    "bookingNo": "N.º de reserva",
+    "siNo": "N.º de SI",
+    "agencyRef": "Ref. agencia",
+    "origin": "Origen",
+    "load": "Carga",
+    "discharge": "Descarga",
+    "delivery": "Entrega",
+    "confirmedDate": "Fecha confirmada",
+    "createdDate": "Fecha de creación",
+    "route": "Ruta",
+    "code": "Código",
+    "description": "Descripción",
+    "pce": "P/C/E",
+    "amount": "Importe",
+    "payor": "Pagador"
+  },
+  "actions": {
+    "view": "Ver",
+    "edit": "Editar",
+    "amendment": "Enmienda",
+    "accept": "Aceptar",
+    "readyToConfirm": "Listo para confirmar",
+    "originalPrint": "Impresión original",
+    "draftPrint": "Impresión borrador",
+    "batchOriginalPrint": "Impresión original por lotes",
+    "printSelected": "Imprimir seleccionados ({{count}})",
+    "manifest": "Manifiesto",
+    "chargeSummary": "Resumen de cargos",
+    "charges": "Cargos",
+    "nonNegotiable": "No negociable",
+    "cancel": "Cancelar",
+    "locked": "Bloqueado",
+    "more": "Más",
+    "moreActions": "Más acciones",
+    "back": "Volver",
+    "close": "Cerrar",
+    "decline": "Rechazar",
+    "iAgree": "Acepto",
+    "editBillOfLading": "Editar conocimiento de embarque",
+    "payWithStripeMock": "Pagar con Stripe (simulación)",
+    "selectAll": "Seleccionar todo",
+    "sendAmendmentMail": "Enviar correo de enmienda"
+  },
+  "empty": {
+    "loadErrorTitle": "No se pudieron cargar los conocimientos de embarque",
+    "loadErrorMessage": "La solicitud no se completó. Compruebe su conexión e inténtelo de nuevo.",
+    "noResultsTitle": "Aún no hay conocimientos de embarque",
+    "noResultsMessage": "Los conocimientos de embarque aparecerán aquí cuando se creen para sus envíos.",
+    "noCharges": "No hay cargos disponibles para este B/L",
+    "noManifestLinkedTitle": "Sin manifiesto vinculado",
+    "noManifestLinkedMessage": "Aún no hay MCN vinculado a este conocimiento de embarque.",
+    "manifestNotFoundTitle": "Manifiesto no encontrado",
+    "manifestNotFoundMessage": "No se encontró el manifiesto {{mcnId}}.",
+    "unableToLoadDetails": "No se pudieron cargar los detalles del conocimiento de embarque.",
+    "blNotFound": "B/L no encontrado.",
+    "noRouting": "Sin detalles de ruta",
+    "insuranceNotRequired": "No se requiere seguro para este conocimiento de embarque.",
+    "noDocuments": "No hay documentos cargados",
+    "noActivity": "No hay actividad registrada",
+    "batchPrintTitle": "Ningún B/L apto para impresión por lotes",
+    "batchPrintMessage": "Actualmente no hay B/L confirmados aptos para impresión original por lotes.",
+    "mcnLoadErrorTitle": "No se pudieron cargar los manifiestos",
+    "mcnLoadErrorMessage": "La solicitud no se completó. Compruebe su conexión e inténtelo de nuevo.",
+    "mcnEmptyTitle": "Aún no hay manifiestos",
+    "mcnEmptyMessage": "Las notificaciones de carga del manifiesto aparecerán aquí cuando estén disponibles."
+  },
+  "drawers": {
+    "chargeSummary": "Resumen de cargos del B/L",
+    "batchOriginalPrint": "Impresión original por lotes",
+    "viewBillOfLading": "Ver conocimiento de embarque",
+    "manifest": "Manifiesto"
+  },
+  "confirms": {
+    "voyageClosedTitle": "Viaje cerrado",
+    "voyageClosedContent": "Este viaje está cerrado. No se permite editar el B/L.",
+    "printOriginalTitle": "Imprimir B/L original",
+    "printOriginalContent": "¿Confirma la impresión del conocimiento de embarque original? Esta acción puede restringirse tras la emisión.",
+    "cancelSubmittedTitle": "Cancelar B/L enviado",
+    "cancelSubmittedContent": "¿Está seguro de que desea cancelar este B/L enviado?",
+    "editTermsTitle": "Edición de B/L confirmado — Términos",
+    "editTermsBody": "Al editar un B/L confirmado, acepta los términos y condiciones de enmienda del transportista."
+  },
+  "labels": {
+    "booking": "Reserva",
+    "bookingNumber": "Número de reserva",
+    "mcn": "MCN",
+    "agencyRef": "Ref. agencia",
+    "load": "Carga",
+    "discharge": "Descarga",
+    "created": "Creado",
+    "siNumber": "Número de SI",
+    "blType": "Tipo de B/L",
+    "releaseType": "Tipo de liberación",
+    "freightOption": "Opción de flete",
+    "route": "Ruta",
+    "vesselVoyage": "Buque / viaje",
+    "origin": "Origen",
+    "originPrint": "Origen (impresión)",
+    "polPrint": "POL (impresión)",
+    "podPrint": "POD (impresión)",
+    "delivery": "Entrega",
+    "deliveryPrint": "Entrega (impresión)",
+    "scheduleLegs": "Tramos del itinerario",
+    "cargoValue": "Valor de la carga",
+    "policyNo": "N.º de póliza",
+    "termsAccepted": "Términos aceptados",
+    "optOut": "Exclusión voluntaria",
+    "filingType": "Tipo de declaración",
+    "paymentMethod": "Método de pago",
+    "declarant": "Declarante",
+    "buyer": "Comprador",
+    "seller": "Vendedor",
+    "file": "Archivo",
+    "activity": "Actividad",
+    "parties": "Partes",
+    "charges": "Cargos",
+    "insurance": "Seguro",
+    "previewFields": "Vista previa de campos",
+    "cargoContainers": "Carga y contenedores",
+    "shipper": "EXPEDIDOR",
+    "consignee": "CONSIGNATARIO",
+    "toOrder": "(A LA ORDEN)",
+    "notifyParty": "PARTE NOTIFICADA",
+    "notify2": "NOTIFICAR 2",
+    "forwarder": "TRANSITARIO",
+    "original": "Original",
+    "telex": "Telex",
+    "yes": "Sí",
+    "no": "No",
+    "coverage": "Cobertura: {{currency}} {{value}}",
+    "policySuffix": " · Póliza {{policyNo}}",
+    "containerN": "Contenedor {{n}}: {{containerNo}} ({{eqpSize}})",
+    "declaredValue": "Valor declarado",
+    "remarks": "Observaciones",
+    "vessel": "Buque",
+    "voyage": "Viaje",
+    "containers": "Contenedores",
+    "statusPrefix": "Estado: {{status}}",
+    "printCount": "Impresiones: {{count}}",
+    "fileCount": "{{count}} archivo(s)",
+    "system": "Sistema"
+  },
+  "card": {
+    "booking": "Reserva",
+    "mcn": "MCN",
+    "agencyRef": "Ref. agencia",
+    "load": "Carga",
+    "discharge": "Descarga",
+    "created": "Creado"
+  },
+  "activity": {
+    "draftCreated": "Borrador de B/L creado",
+    "confirmed": "B/L confirmado",
+    "issued": "B/L emitido",
+    "locked": "B/L bloqueado",
+    "printed": "B/L impreso",
+    "documentsUploaded": "Documentos cargados"
+  },
+  "status": {
+    "draft": "Borrador",
+    "submitted": "Enviado",
+    "confirmed": "Confirmado",
+    "issued": "Emitido",
+    "locked": "Bloqueado"
+  },
+  "toasts": {
+    "batchPrintDownloaded": "Impresión por lotes descargada",
+    "acceptedAndConfirmed": "B/L aceptado y confirmado",
+    "submittedCancelled": "B/L enviado cancelado",
+    "submittedSuccessfully": "B/L enviado correctamente",
+    "issued": "B/L emitido",
+    "saved": "B/L guardado",
+    "manifestDownloaded": "Manifiesto descargado",
+    "selectBlForPayment": "Seleccione al menos un B/L para el pago",
+    "sameAgencyRequired": "Los B/L seleccionados deben pertenecer a la misma agencia emisora",
+    "paymentIntentCreated": "Intención de pago simulada creada ({{secret}}…)",
+    "amendmentSent": "Notificación de enmienda enviada (simulación)",
+    "mcnSaved": "MCN guardado",
+    "mcnSubmitted": "MCN enviado"
+  },
+  "batchPrint": {
+    "title": "Impresión original por lotes",
+    "subtitle": "Seleccione B/L confirmados aptos para impresión original e imprímalos en un solo lote.",
+    "intro": "Seleccione B/L confirmados aptos para impresión original. Se excluyen borradores bloqueados o no impresos.",
+    "eligibleCount": "{{count}} aptos"
+  },
+  "payment": {
+    "selectedCount": "{{count}} B/L seleccionado(s)",
+    "mixedAgencies": "Agencias mixtas — pago no permitido"
+  },
+  "mcn": {
+    "title": "Manifiesto (MCN)",
+    "subtitle": "Notificación de carga del manifiesto — ver e imprimir desde el panel lateral.",
+    "editTitle": "Editar MCN: {{mcnId}}",
+    "editSubtitle": "B/L {{blNo}} · {{status}}",
+    "cargoDescriptionRequired": "La descripción de la carga es obligatoria",
+    "freightTermsRequired": "Los términos del flete son obligatorios",
+    "manifestCount": "{{count}} manifiesto(s)",
+    "cargoDescription": "Descripción de la carga",
+    "freightTerms": "Términos de flete",
+    "submit": "Enviar MCN"
+  },
+  "submitResult": {
+    "title": "B/L enviado",
+    "defaultMessage": "B/L enviado."
+  },
+  "charges": {
+    "prepaid": "Prepago",
+    "collect": "Por cobrar",
+    "payAt": "Pagar en",
+    "totalsLine": "Totales ({{currency}}): Prepago {{prepaid}} · Por cobrar {{collect}} · Pagar en {{payAt}} · Total {{grand}}"
+  },
+  "manifest": {
+    "print": "Imprimir manifiesto",
+    "type": "Tipo de manifiesto",
+    "cargo": "Manifiesto de carga",
+    "freight": "Manifiesto de flete"
+  },
+  "preview": {
+    "editSection": "Editar {{title}}",
+    "shipper": "Cargador",
+    "notAssigned": "No asignado",
+    "noDataProvided": "No hay datos"
+  },
+  "wizard": {
+    "terms": {
+      "body": "Al continuar con la corrección del B/L, acepta los términos y condiciones del transportista para enmiendas de documentos.",
+      "modalTitle": "Corrección de B/L — Términos y condiciones"
+    },
+    "errors": {
+      "loadFailedTitle": "Error al cargar el B/L",
+      "loadFailedMessage": "No se pudo cargar el conocimiento de embarque para editar.",
+      "issuedNotEditable": "Este conocimiento de embarque ya fue emitido y no se puede editar."
+    },
+    "toasts": {
+      "termsAccepted": "Términos aceptados — puede continuar editando."
+    },
+    "actions": {
+      "backToBl": "Volver al B/L",
+      "viewBl": "Ver B/L",
+      "submitBl": "Enviar B/L",
+      "retry": "Reintentar"
+    },
+    "master": {
+      "documentReferences": "Referencias documentales",
+      "blOptions": "Opciones del conocimiento de embarque",
+      "vessels": "Buques",
+      "vesselVoyageNumber": "Buque / número de viaje",
+      "placeOfReceipt": "Lugar de recepción",
+      "portOfLoading": "Puerto de carga",
+      "portOfDischarge": "Puerto de descarga",
+      "placeOfDelivery": "Lugar de entrega",
+      "freightTerms": "Términos de flete",
+      "originalBl": "B/L original",
+      "seaWaybill": "Sea Waybill",
+      "telexRelease": "Liberación telex"
+    },
+    "parties": {
+      "editParty": "Editar parte",
+      "deleteParty": "Eliminar parte",
+      "noContactDetails": "Sin datos de contacto adicionales",
+      "printOnBl": "Imprimir en B/L",
+      "toOrder": "A la orden",
+      "notAssignedYet": "Aún no asignado",
+      "assign": "Asignar",
+      "searchPlaceholder": "Buscar por nombre o código de cliente",
+      "rolesAssigned": "Roles de parte asignados"
+    },
+    "routing": {
+      "loadPortPrint": "Puerto de carga (impresión)",
+      "dischargePortPrint": "Puerto de descarga (impresión)",
+      "bookingHint": "Reserva: {{value}}",
+      "vesselOptionalHint": "Referencia de itinerario opcional",
+      "printTextTitle": "Ruta — texto de impresión",
+      "etd": "ETD",
+      "eta": "ETA"
+    },
+    "charges": {
+      "title": "Cargos de flete",
+      "currency": "Moneda",
+      "addCharge": "Añadir cargo",
+      "chargeLineTitle": "Cargo {{n}}",
+      "removeCharge": "Quitar cargo",
+      "pceShort": "P/C"
+    },
+    "chargeSummary": {
+      "title": "Resumen de cargos"
+    },
+    "preview": {
+      "aesUsLoadPort": "Indique el número AES o seleccione no aplicable para puerto de carga en EE. UU.",
+      "completeBeforeSubmit": "Complete los campos de vista previa antes de enviar",
+      "notApplicable": "N/A",
+      "nvocc": "NVOCC",
+      "t2lFiling": "T2L filing",
+      "loadPort": "Puerto de carga",
+      "dischargePort": "Puerto de descarga",
+      "draftBl": "Borrador de B/L",
+      "pol": "POL",
+      "pod": "POD",
+      "insuranceRequired": "Obligatorio",
+      "chargeFallback": "Cargo",
+      "ensNotRequired": "ENS no requerido",
+      "chargeLinesOnFile": "{{count}} línea(s) de cargo registrada(s)",
+      "noFilesUploaded": "No hay archivos cargados",
+      "noReferenceFields": "Sin campos de referencia",
+      "customerRemarks": "Observaciones del cliente",
+      "aesNumber": "Número AES",
+      "aesDisclaimer": "Aviso legal AES",
+      "aesProvided": "Proporcionado",
+      "aesNotApplicable": "No aplicable",
+      "blTypeUae": "Tipo de B/L (UAE)",
+      "mpciIdUae": "MPCI ID (UAE)",
+      "masterBl": "Master BL",
+      "directBl": "Direct BL",
+      "euCustomsZone": "Zona aduanera de la UE",
+      "typeOfBl": "Tipo de B/L",
+      "ensFiling": "ENS filing",
+      "currency": "Moneda"
+    },
+    "validation": {
+      "selectRole": "Seleccione al menos un rol",
+      "companyRequired": "La empresa es obligatoria",
+      "completeRequiredParties": "Complete las partes obligatorias",
+      "seawayNoToOrder": "Un sea waybill no puede tener consignatario a la orden"
+    },
+    "steps": {
+      "cargoProtect": "Protección de carga",
+      "chargeSummary": "Resumen de cargos"
+    },
+    "insurance": {
+      "optOutCheckbox": "No contratar seguro de carga para este B/L",
+      "requireQuestion": "¿Necesita Seguro de Carga?",
+      "detailsTitle": "Detalles del Seguro",
+      "termsTitle": "Términos y Condiciones del Seguro",
+      "termsBody": "Al solicitar seguro de carga, acepta los términos de seguro estándar del transportista. La prima se añadirá a la factura de flete.",
+      "acceptTerms": "Acepto los Términos y Condiciones del Seguro",
+      "skip": "Omitir Seguro",
+      "validation": {
+        "currencyRequired": "La moneda es obligatoria",
+        "cargoValueMin": "El valor de la carga debe ser mayor que 0",
+        "acceptTerms": "Debe aceptar los términos del seguro"
+      }
+    },
+    "cargoProtect": {
+      "productsTitle": "Productos de Protección de Carga",
+      "productCode": "Código de Producto",
+      "addRow": "Añadir Fila",
+      "emptyTitle": "Sin líneas de protección de carga",
+      "emptyMessage": "Haga clic en Añadir Fila para incluir productos de cobertura.",
+      "lineTitle": "Línea {{n}}",
+      "removeRow": "Eliminar fila"
+    },
+    "ens": {
+      "title": "Detalles ENS",
+      "label": "ENS",
+      "filingType": "Tipo de Declaración ENS",
+      "straightBl": "Straight BL",
+      "singleFiling": "Single Filing",
+      "multipleFiling": "Multiple Filing",
+      "wireTransfer": "Wire Transfer",
+      "notPrepaid": "Not Prepaid",
+      "supplementaryDeclarant": "Declarante Complementario",
+      "notesTitle": "Notas de declaración ENS",
+      "notesFilingRequirements": "La declaración única requiere datos del Comprador y del Vendedor. La declaración múltiple requiere datos del Declarante Complementario.",
+      "notesBlTypeMapping": "Straight BL utiliza declaración única; Master BL utiliza declaración múltiple.",
+      "notesEori": "Proporcione un EORI y tipo de persona precisos cuando corresponda para el despacho aduanero de la UE.",
+      "fields": {
+        "name": "Nombre",
+        "address": "Dirección",
+        "city": "Ciudad",
+        "country": "País",
+        "eori": "EORI",
+        "email": "Correo electrónico"
+      },
+      "validation": {
+        "invalidEmail": "Correo electrónico no válido"
+      }
+    },
+    "files": {
+      "title": "Cargar Documentos de Soporte",
+      "documentType": "Tipo de Documento",
+      "documentTypePlaceholder": "Seleccione tipo de documento",
+      "draggerText": "Haga clic o arrastre el archivo a esta área para cargarlo",
+      "draggerHint": "Tipo seleccionado: {{type}}. Los archivos se adjuntan a esta solicitud de B/L.",
+      "uploadedList": "Documentos Cargados",
+      "categories": {
+        "vgm": "VGM",
+        "dg": "Mercancías Peligrosas (DG)",
+        "loi": "Carta de Indemnización (LOI)",
+        "other": "Otro"
+      },
+      "uploadSuccess": "{{fileName}} cargado correctamente.",
+      "uploadFailed": "Error al cargar {{fileName}}."
+    }
+  },
+  "import": {
+    "entityLabel": "líneas de carga",
+    "submitLabel": "Importar {{count}} línea(s) de carga",
+    "columns": {
+      "containerNo": "N.º de Contenedor",
+      "containerType": "Tipo de Contenedor",
+      "carrierSeal": "Precinto del Transportista",
+      "shipperSeal": "Precinto del Cargador",
+      "marksAndNumbers": "Marcas y Números",
+      "description": "Descripción de Mercancía",
+      "hsCode": "Código HS",
+      "commodityCode": "Código de Mercancía",
+      "packageCount": "Cantidad de Bultos",
+      "packageType": "Tipo de Bulto",
+      "grossWeight": "Peso Bruto",
+      "volume": "Volumen"
+    },
+    "validation": {
+      "containerNoRequired": "El N.º de Contenedor es obligatorio",
+      "containerNoMax": "El N.º de Contenedor debe tener 11 caracteres o menos",
+      "containerTypeRequired": "El Tipo de Contenedor es obligatorio",
+      "descriptionRequired": "La Descripción de Mercancía es obligatoria",
+      "hsCodeRequired": "El Código HS es obligatorio",
+      "packageCountMin": "La Cantidad de Bultos debe ser al menos 1",
+      "packageTypeRequired": "El Tipo de Bulto es obligatorio",
+      "grossWeightRequired": "El Peso Bruto es obligatorio",
+      "volumeNegative": "El Volumen no puede ser negativo",
+      "invalidContainerType": "Seleccione un tipo de contenedor válido",
+      "invalidPackageType": "Seleccione un tipo de bulto válido",
+      "duplicateLine": "Línea de carga duplicada para el mismo contenedor, código HS, descripción y cantidad de bultos"
+    },
+    "actions": {
+      "exportTemplate": "Exportar Plantilla",
+      "importExcel": "Importar Excel"
+    },
+    "modalTitle": "Importar Carga — {{suffix}}",
+    "workbenchTitle": "Importación de Hoja de Cálculo de Carga",
+    "confirm": {
+      "replaceTitle": "¿Reemplazar carga existente?",
+      "replaceContent": "La importación de Excel reemplazará los contenedores y líneas de carga de este {{documentKind}}. ¿Continuar?",
+      "replaceOk": "Reemplazar e Importar"
+    },
+    "toasts": {
+      "templateDownloaded": "Plantilla descargada.",
+      "templateFailed": "Error al descargar la plantilla.",
+      "noValidRows": "No hay filas de carga válidas para importar.",
+      "imported": "Importados {{containers}} contenedor(es) ({{lines}} línea(s) de carga).",
+      "rowUnmapped": "La fila no pudo asignarse a un contenedor"
+    },
+    "smart": {
+      "title": "Importación Inteligente",
+      "update": "Actualizar",
+      "footerMeta": "{{containers}} contenedor(es) · {{lines}} línea(s) de carga",
+      "hint": "Haga clic en una celda para editar. Clic derecho en una fila para insertar, duplicar, limpiar, seleccionar líneas del contenedor o eliminar. N.º de Contenedor, Tipo y Mercancía están bloqueados — edite SOC, N.º de Contenedor Real y precintos para actualizar el contenedor.",
+      "empty": "No hay líneas de carga para editar.",
+      "needContainers": "Añada contenedores antes de la Importación Inteligente.",
+      "updated": "Carga actualizada desde Importación Inteligente.",
+      "lastLineWarning": "Eliminar la última línea de un contenedor bloqueará Actualizar hasta que ese contenedor tenga al menos una línea de nuevo.",
+      "columns": {
+        "rowNo": "N.º de Fila",
+        "containerNo": "N.º de Contenedor",
+        "type": "Tipo",
+        "soc": "SOC",
+        "actualContainerNo": "N.º de Contenedor Real",
+        "carrierSeal": "Precinto del Transportista",
+        "shipperSeal": "Precinto del Embarcador",
+        "commodity": "Mercancía",
+        "hsCode": "Código HS",
+        "packageType": "Tipo de Bulto",
+        "qty": "Cantidad",
+        "weightKg": "Peso (kg)",
+        "volumeCbm": "Volumen (CBM)",
+        "marksNo": "Marcas y N.º",
+        "description": "Descripción de la Mercancía"
+      },
+      "contextMenu": {
+        "insertBefore": "Insertar una fila nueva antes",
+        "insertAfter": "Insertar una fila nueva después",
+        "duplicate": "Duplicar esta fila",
+        "clearLine": "Borrar campos de la fila",
+        "clearLineSelected": "Borrar campos de la fila (seleccionadas)",
+        "selectContainerLines": "Seleccionar todas las filas de este contenedor",
+        "deleteSelected": "Eliminar filas seleccionadas"
+      },
+      "errors": {
+        "unknownContainer": "Fila {{row}}: Contenedor desconocido (no está en este documento)",
+        "containerCountMismatch": "El número de contenedores no coincide entre el documento ({{expected}}) y la Importación Inteligente ({{actual}})."
+      }
+    }
+  }
+}

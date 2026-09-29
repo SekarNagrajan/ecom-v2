@@ -1,0 +1,124 @@
+{
+  "subtitle": "Cipta dan urus tempahan, pinda draf, dan jejak status pengesahan.",
+  "columns": {
+    "bookingNo": "No. Tempahan",
+    "onlineRef": "Ruj. Dalam Talian",
+    "agencyRef": "Ruj. Agensi",
+    "status": "Status",
+    "origin": "Asal",
+    "delivery": "Penghantaran",
+    "created": "Dicipta",
+    "confirmed": "Disahkan",
+    "dg": "DG",
+    "teus": "TEUs",
+    "submitted": "Dihantar"
+  },
+  "actions": {
+    "amendment": "Pindaan (Edit)",
+    "duplicate": "Duplikasi Tempahan",
+    "downloadPdf": "Muat Turun PDF",
+    "cancelBooking": "Batal Tempahan",
+    "manageTemplate": "Urus Templat",
+    "editAmendTooltip": "Edit / Pinda Tempahan Ini",
+    "backToBooking": "Kembali ke Tempahan"
+  },
+  "status": {
+    "draft": "Draf",
+    "submitted": "Dihantar",
+    "confirmed": "Disahkan",
+    "awaitingAcceptance": "Menunggu Penerimaan",
+    "inTransit": "Dalam Transit",
+    "completed": "Selesai",
+    "rejected": "Ditolak",
+    "cancelled": "Dibatalkan"
+  },
+  "empty": {
+    "loadErrorTitle": "Tidak dapat memuatkan tempahan",
+    "loadErrorMessage": "Permintaan tidak selesai. Semak sambungan anda dan cuba lagi.",
+    "noResultsTitle": "Tiada tempahan lagi",
+    "noResultsMessage": "Cipta tempahan untuk mula mengurus penghantaran anda.",
+    "unableToLoadDetails": "Gagal memuatkan butiran tempahan",
+    "insuranceNotRequired": "Insurans tidak diperlukan untuk tempahan ini.",
+    "noDocuments": "Tiada dokumen dimuat naik",
+    "noActivity": "Tiada aktiviti direkodkan"
+  },
+  "labels": {
+    "onlineRef": "Ruj. Dalam Talian",
+    "agency": "Agensi",
+    "dangerousGoods": "Barangan Berbahaya",
+    "nonDg": "Bukan DG",
+    "originPol": "Asal (POL)",
+    "deliveryPod": "Penghantaran (POD)",
+    "portToPort": "Pelabuhan ke Pelabuhan",
+    "cargoReadyDate": "Tarikh kargo siap",
+    "haulageOrigin": "Asal pengangkutan",
+    "haulageDestination": "Destinasi pengangkutan",
+    "carriageContract": "Kontrak pengangkutan",
+    "cargoValue": "Nilai kargo",
+    "termsAccepted": "Terma diterima",
+    "blType": "Jenis BL",
+    "filingType": "Jenis pemfailan",
+    "declarantName": "Nama pengisytihar"
+  },
+  "sections": {
+    "masterDetails": "Butiran utama",
+    "customerDetails": "Butiran pelanggan",
+    "cargoDetails": "Butiran kargo",
+    "insuranceDetails": "Butiran insurans",
+    "documents": "Dokumen",
+    "activity": "Aktiviti"
+  },
+  "confirms": {
+    "cancelTitle": "Batal Tempahan",
+    "cancelContent": "Adakah anda pasti mahu membatalkan tempahan ini?",
+    "deleteTemplateTitle": "Padam Templat",
+    "deleteTemplateContent": "Adakah anda pasti mahu memadamkan \"{{name}}\"? Tindakan ini tidak boleh dibatalkan."
+  },
+  "toasts": {
+    "duplicated": "Tempahan {{bookingNo}} diduplikasi",
+    "duplicateFailed": "Gagal menduplikasi tempahan {{bookingNo}}",
+    "pdfDownloaded": "PDF untuk {{bookingNo}} dimuat turun",
+    "pdfDownloadFailed": "Gagal memuat turun PDF untuk {{bookingNo}}",
+    "cancelled": "Tempahan {{bookingNo}} dibatalkan.",
+    "cancelFailed": "Gagal membatalkan tempahan {{bookingNo}}.",
+    "templateDeleted": "Templat berjaya dipadamkan",
+    "templateDeleteFailed": "Gagal memadamkan templat",
+    "templateLoaded": "Templat dimuatkan: {{name}}",
+    "templateApplied": "Templat digunakan: {{name}}"
+  },
+  "templates": {
+    "manageTitle": "Urus Templat Tempahan",
+    "manageSubtitle": "Lihat, edit, atau buang templat tempahan anda yang disimpan",
+    "selectTitle": "Pilih Templat Tempahan",
+    "selectSubtitle": "Pilih templat yang disimpan untuk mengisi borang tempahan anda",
+    "showingRange": "Menunjukkan {{from}} hingga {{to}} daripada {{total}} entri",
+    "emptyManage": "Tiada templat disimpan lagi",
+    "emptySelect": "Tiada templat tersedia",
+    "columns": {
+      "sno": "No.",
+      "templateName": "Nama Templat",
+      "origin": "Asal",
+      "delivery": "Penghantaran",
+      "action": "Tindakan"
+    }
+  },
+  "haulage": {
+    "title": "Butiran Penjejakan Pengangkutan",
+    "disclaimer": "* Penafian: Semua masa pengangkutan tertakluk kepada keadaan trafik tempatan dan terminal.",
+    "emptyTitle": "Tiada butiran penjejakan pengangkutan",
+    "emptyMessage": "Pencapaian pengambilan dan penghantaran akan dipaparkan di sini apabila pengangkutan diaturkan.",
+    "columns": {
+      "containerNo": "No. Kontena",
+      "equipmentType": "Jenis Peralatan",
+      "customerReference": "Rujukan Pelanggan",
+      "pickupLocCode": "Kod Lokasi Ambil",
+      "pickupLocName": "Nama Lokasi Ambil",
+      "stopSeq": "Urutan Henti",
+      "address": "Alamat",
+      "tmsSchePickup": "TMS Jad. Ambil",
+      "tmsActPickup": "TMS Seb. Ambil",
+      "tmsScheDrop": "TMS Jad. Hantar",
+      "tmsActDrop": "TMS Seb. Hantar"
+    }
+  }
+}

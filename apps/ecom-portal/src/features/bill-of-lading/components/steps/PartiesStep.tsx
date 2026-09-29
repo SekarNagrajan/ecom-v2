@@ -3,6 +3,7 @@ import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { Card, Switch, Tooltip, Typography } from "antd";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../../components/icons";
 import type { BookingCustomerOption } from "../../../booking/api/booking.api";
@@ -68,6 +69,7 @@ function BlPartyRoleCard({
   onEdit,
   onDelete,
   onUpdateFlag,
+  t,
 }: {
   role: SiPartyRoleKey;
   card: SiPartyCardData;
@@ -80,6 +82,7 @@ function BlPartyRoleCard({
   onUpdateFlag: (
     patch: Partial<Pick<SiPartyCardData, "printOnBl" | "toOrder">>,
   ) => void;
+  t: (key: string) => string;
 }) {
   const secondary = partySecondaryLines(card);
   const showEdit = !readOnly && canEdit;
@@ -96,24 +99,24 @@ function BlPartyRoleCard({
         <div className="booking-party-card__actions">
           {fromAccount ? <AppIcon icon={Icons.lock} size={16} /> : null}
           {showEdit ? (
-            <Tooltip title="Edit Party">
+            <Tooltip title={t("wizard.parties.editParty")}>
               <AppButton
                 type="link"
                 size="small"
                 className="booking-party-card__edit-btn"
-                aria-label="Edit Party"
+                aria-label={t("wizard.parties.editParty")}
                 onClick={onEdit}
                 icon={<AppIcon icon={Icons.edit} size={16} tone="edit" />}
               />
             </Tooltip>
           ) : null}
           {showDelete ? (
-            <Tooltip title="Delete Party">
+            <Tooltip title={t("wizard.parties.deleteParty")}>
               <AppButton
                 type="link"
                 size="small"
                 className="booking-party-card__delete-btn"
-                aria-label="Delete Party"
+                aria-label={t("wizard.parties.deleteParty")}
                 danger
                 onClick={onDelete}
                 icon={<AppIcon icon={Icons.trash} size={16} tone="delete" />}
@@ -139,12 +142,12 @@ function BlPartyRoleCard({
           ))
         ) : (
           <Text type="secondary" className="booking-party-card__meta">
-            No additional contact details
+            {t("wizard.parties.noContactDetails")}
           </Text>
         )}
         <div className="bl-party-card__flags">
           <label className="bl-party-card__flag">
-            <Text>Print on B/L</Text>
+            <Text>{t("wizard.parties.printOnBl")}</Text>
             <Switch
               size="small"
               checked={card.printOnBl}
@@ -154,7 +157,7 @@ function BlPartyRoleCard({
           </label>
           {role === "consignee" ? (
             <label className="bl-party-card__flag">
-              <Text>To Order</Text>
+              <Text>{t("wizard.parties.toOrder")}</Text>
               <Switch
                 size="small"
                 checked={!!card.toOrder}
@@ -172,9 +175,11 @@ function BlPartyRoleCard({
 function EmptyBlPartySlot({
   role,
   onAssign,
+  t,
 }: {
   role: SiPartyRoleKey;
   onAssign: () => void;
+  t: (key: string) => string;
 }) {
   return (
     <div className="booking-party-card booking-party-card--surface booking-party-card--empty">
@@ -189,13 +194,13 @@ function EmptyBlPartySlot({
         </div>
       </div>
       <div className="booking-party-card__empty-body">
-        <Text type="secondary">Not assigned yet</Text>
+        <Text type="secondary">{t("wizard.parties.notAssignedYet")}</Text>
         <AppButton
           size="small"
           icon={<AppIcon icon={Icons.plus} size={14} tone="create" />}
           onClick={onAssign}
         >
-          Assign
+          {t("wizard.parties.assign")}
         </AppButton>
       </div>
     </div>
@@ -209,6 +214,7 @@ export function PartiesStep({
   onUpdate,
   isSubmitting,
 }: BLWizardStepProps) {
+  const { t } = useTranslation(["bill-of-lading", "common"]);
   const toast = useToast();
   const [cards, setCards] = useState<
     Partial<Record<SiPartyRoleKey, SiPartyCardData>>
@@ -238,7 +244,7 @@ export function PartiesStep({
 
   const handleAssignRoles = (roles: SiPartyRoleKey[]) => {
     if (!selectedCustomer || roles.length === 0) {
-      toast.error("Select at least one role");
+      toast.error(t("wizard.validation.selectRole"));
       return;
     }
     const card: SiPartyCardData = {
@@ -262,7 +268,7 @@ export function PartiesStep({
       return next;
     });
     clearSelectedCustomer();
-    toast.success("Party roles assigned");
+    toast.success(t("wizard.parties.rolesAssigned"));
   };
 
   const handleDeleteCard = (role: SiPartyRoleKey) => {
@@ -280,7 +286,7 @@ export function PartiesStep({
 
   const saveEdit = () => {
     if (!editRole || !editValue.company.trim()) {
-      toast.error("Company is required");
+      toast.error(t("wizard.validation.companyRequired"));
       return;
     }
     setCards((prev) => ({ ...prev, [editRole]: { ...editValue } }));
@@ -303,11 +309,13 @@ export function PartiesStep({
     const parsed = blPartiesStepSchema.safeParse(cardsToSiPartiesForm(cards));
     if (!parsed.success) {
       const first = parsed.error.issues[0];
-      toast.error(first?.message || "Please complete required parties");
+      toast.error(
+        first?.message || t("wizard.validation.completeRequiredParties"),
+      );
       return;
     }
     if (data.blType === "Seaway" && cards.consignee?.toOrder) {
-      toast.error("Sea waybill cannot have consignee to order");
+      toast.error(t("wizard.validation.seawayNoToOrder"));
       return;
     }
     onUpdate({ parties: cardsToBlParties(cards, data.parties) });
@@ -324,7 +332,7 @@ export function PartiesStep({
             <div className="booking-customer-step__search-row">
               <CustomerSearchAutoComplete
                 value={searchQuery}
-                placeholder="Search by customer name or code"
+                placeholder={t("wizard.parties.searchPlaceholder")}
                 onChange={(val) => {
                   setSearchQuery(val);
                   if (!val.trim()) {
@@ -363,11 +371,13 @@ export function PartiesStep({
                         onEdit={() => openEdit(role)}
                         onDelete={() => handleDeleteCard(role)}
                         onUpdateFlag={(patch) => updateCardFlag(role, patch)}
+                        t={t}
                       />
                     ) : (
                       <EmptyBlPartySlot
                         role={role}
                         onAssign={() => openEdit(role)}
+                        t={t}
                       />
                     )}
                   </div>
@@ -381,6 +391,7 @@ export function PartiesStep({
                     onEdit={() => openEdit(role)}
                     onDelete={() => handleDeleteCard(role)}
                     onUpdateFlag={(patch) => updateCardFlag(role, patch)}
+                    t={t}
                   />
                 </div>
               ))}

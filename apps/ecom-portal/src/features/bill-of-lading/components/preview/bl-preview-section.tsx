@@ -1,7 +1,8 @@
-// Modified by Sekar Nagarajan (2026-09-05 01:05)
+// Modified by Sekar Nagarajan (2026-09-29 12:55)
 import { AppButton } from "@solverminds/shared-ui";
 import { Card, Tooltip, Typography } from "antd";
 import type { ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../../components/icons";
 import {
@@ -32,6 +33,9 @@ export function BlPreviewSection({
   className,
   variant = "card",
 }: BlPreviewSectionProps) {
+  const { t } = useTranslation("bill-of-lading");
+  const editLabel = t("preview.editSection", { title });
+
   if (variant === "airy") {
     return (
       <section
@@ -44,13 +48,13 @@ export function BlPreviewSection({
             {title}
           </Title>
           {onEdit ? (
-            <Tooltip title={`Edit ${title}`}>
+            <Tooltip title={editLabel}>
               <AppButton
                 type="text"
                 size="small"
                 className="booking-review__edit"
                 icon={<AppIcon icon={Icons.edit} size={16} />}
-                aria-label={`Edit ${title}`}
+                aria-label={editLabel}
                 onClick={onEdit}
               />
             </Tooltip>
@@ -79,7 +83,7 @@ export function BlPreviewSection({
         onEdit ? (
           <ListActionsRow>
             <ListActionButton
-              title={`Edit ${title}`}
+              title={editLabel}
               icon={<AppIcon icon={Icons.edit} size={16} tone="edit" />}
               tone="edit"
               onClick={onEdit}
@@ -94,9 +98,10 @@ export function BlPreviewSection({
 }
 
 export function BlPreviewEmpty({ label }: { label?: string }) {
+  const { t } = useTranslation("bill-of-lading");
   return (
     <Text type="secondary" className="bl-preview-empty">
-      {label ?? "No data provided"}
+      {label ?? t("preview.noDataProvided")}
     </Text>
   );
 }
@@ -133,6 +138,15 @@ function partyAddress(party: Pick<BLParty, "address" | "city" | "country">): str
   return [party.address, party.city, party.country].filter(Boolean).join(", ");
 }
 
+function partyRoleLabel(
+  roleKey: SiPartyRoleKey,
+  t: (key: string) => string,
+): string {
+  return roleKey === "shipper"
+    ? t("preview.shipper")
+    : SI_PARTY_ROLE_LABEL[roleKey];
+}
+
 /** Airy review party card — role · company · contact stack · address. */
 export function BlPreviewPartyCard({
   roleKey,
@@ -143,9 +157,9 @@ export function BlPreviewPartyCard({
   party: BLParty;
   extra?: ReactNode;
 }) {
+  const { t } = useTranslation("bill-of-lading");
   const address = partyAddress(party);
-  const label =
-    roleKey === "shipper" ? "Shipper" : SI_PARTY_ROLE_LABEL[roleKey];
+  const label = partyRoleLabel(roleKey, t);
 
   return (
     <div className="booking-review__party">
@@ -170,12 +184,12 @@ export function BlPreviewEmptyPartyCard({
 }: {
   roleKey: SiPartyRoleKey;
 }) {
-  const label =
-    roleKey === "shipper" ? "Shipper" : SI_PARTY_ROLE_LABEL[roleKey];
+  const { t } = useTranslation("bill-of-lading");
+  const label = partyRoleLabel(roleKey, t);
   return (
     <div className="booking-review__party booking-review__party--empty">
       <span className="booking-review__party-role">{label}</span>
-      <Text type="secondary">Not assigned</Text>
+      <Text type="secondary">{t("preview.notAssigned")}</Text>
     </div>
   );
 }

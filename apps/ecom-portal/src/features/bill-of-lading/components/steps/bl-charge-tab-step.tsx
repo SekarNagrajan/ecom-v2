@@ -1,6 +1,7 @@
 // Modified by Sekar Nagarajan (2026-08-28 11:34)
 import { Card, Typography } from "antd";
 import type { ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 
 import { ModuleEmptyState } from "../../../../components/shared/module-empty-state";
 import type { BLChargeLine } from "../../types/bl.types";
@@ -44,25 +45,33 @@ function ReadonlyField({
 function ChargeSummaryLine({
   line,
   index,
+  t,
 }: {
   line: BLChargeLine;
   index: number;
+  t: (key: string, options?: Record<string, unknown>) => string;
 }) {
   return (
     <Card
       size="small"
       className="form-step-card bl-charge-tab-line-card"
-      title={`Charge ${index + 1}`}
+      title={t("wizard.charges.chargeLineTitle", { n: index + 1 })}
     >
       <div className="bl-master-detail-grid bl-charge-tab-form-grid">
-        <ReadonlyField label="Code" value={line.chargeCode} emphasis />
-        <ReadonlyField label="Description" value={line.description} />
+        <ReadonlyField label={t("columns.code")} value={line.chargeCode} emphasis />
         <ReadonlyField
-          label="Amount"
+          label={t("columns.description")}
+          value={line.description}
+        />
+        <ReadonlyField
+          label={t("columns.amount")}
           value={`${line.currency} ${line.amount.toFixed(2)}`}
         />
-        <ReadonlyField label="P/C" value={line.prepaidCollect} />
-        <ReadonlyField label="Payor" value={line.payByCustType} />
+        <ReadonlyField
+          label={t("wizard.charges.pceShort")}
+          value={line.prepaidCollect}
+        />
+        <ReadonlyField label={t("columns.payor")} value={line.payByCustType} />
       </div>
     </Card>
   );
@@ -72,10 +81,10 @@ export function BlChargeTabStep({
   data,
   onNext,
   onPrevious,
-  onGoToStep,
   isFirstStep,
   isSubmitting,
 }: BLWizardStepProps) {
+  const { t } = useTranslation(["bill-of-lading", "common"]);
   const charges = data.charges ?? [];
 
   return (
@@ -83,19 +92,24 @@ export function BlChargeTabStep({
       <div className="custom-scroll form-step-scroll bl-charge-tab-step">
         <Card
           className="form-step-card form-step-section bl-charge-tab-card"
-          title="Charge Summary"
+          title={t("wizard.chargeSummary.title")}
         >
           {charges.length === 0 ? (
             <ModuleEmptyState
               artSize="sm"
               variant="blank"
-              title="No charges available for this B/L"
+              title={t("empty.noCharges")}
               style={{ padding: 12 }}
             />
           ) : (
             <div className="bl-charge-tab-lines">
               {charges.map((line, index) => (
-                <ChargeSummaryLine key={line.id} line={line} index={index} />
+                <ChargeSummaryLine
+                  key={line.id}
+                  line={line}
+                  index={index}
+                  t={t}
+                />
               ))}
             </div>
           )}

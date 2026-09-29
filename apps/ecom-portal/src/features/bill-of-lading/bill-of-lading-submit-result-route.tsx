@@ -3,6 +3,7 @@ import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { Card, Result, Space, Typography } from "antd";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons, NavBillOfLadingIcon } from "../../components/icons";
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
@@ -16,6 +17,7 @@ import { BlModuleStyles } from "./components/bl-module-styles";
 const { Text, Paragraph } = Typography;
 
 export function BillOfLadingSubmitResultRoute() {
+  const { t } = useTranslation(["bill-of-lading", "common", "modules"]);
   const MODULE_TITLES = useModuleTitles();
   const navigate = useNavigate();
   const toast = useToast();
@@ -30,7 +32,7 @@ export function BillOfLadingSubmitResultRoute() {
       toast.error(res.error.message);
       return;
     }
-    toast.success("Amendment notification sent (mock)");
+    toast.success(t("toasts.amendmentSent"));
   };
 
   return (
@@ -44,10 +46,10 @@ export function BillOfLadingSubmitResultRoute() {
         />
         <Result
           status={submitResult?.success ? "success" : "warning"}
-          title="B/L Submitted"
+          title={t("submitResult.title")}
           subTitle={
             <Space direction="vertical" className="bl-submit-result">
-              {(submitResult?.messages ?? ["B/L submitted."]).map((msg) => (
+              {(submitResult?.messages ?? [t("submitResult.defaultMessage")]).map((msg) => (
                 <Paragraph key={msg}>{msg}</Paragraph>
               ))}
               {submitResult?.insuranceMessage ? (
@@ -66,17 +68,17 @@ export function BillOfLadingSubmitResultRoute() {
                 type="primary"
                 onClick={() => navigate({ to: `/app/bl/${blNo}` })}
               >
-                View B/L
+                {t("actions.view")}
               </AppButton>
               <AppButton onClick={() => navigate({ to: "/app/bl" })}>
-                Back to List
+                {t("actions.back")}
               </AppButton>
               {detail?.status === "S" ? (
                 <AppButton
                   icon={<AppIcon icon={Icons.mail} size={16} />}
                   onClick={handleAmendmentMail}
                 >
-                  Send Amendment Mail
+                  {t("actions.sendAmendmentMail")}
                 </AppButton>
               ) : null}
             </Space>

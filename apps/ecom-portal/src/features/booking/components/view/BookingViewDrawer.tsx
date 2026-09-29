@@ -2,11 +2,13 @@
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { useNavigate } from "@tanstack/react-router";
 import { Flex, Tag, Tooltip, Typography } from "antd";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons, NavBookingIcon } from "../../../../components/icons";
 import { formatModuleScreenTitle } from "../../../../constants/module-titles";
 import type { BookingListDTO } from "../../types/booking-list.types";
 import { getBookingListStatusColor } from "../../types/booking-list.types";
+import { getBookingStatusLabel } from "../../utils/booking-status";
 import { BookingDetailsViewer } from "./BookingDetailsViewer";
 import { HaulageTrackingGrid } from "./HaulageTrackingGrid";
 
@@ -21,6 +23,7 @@ export function BookingViewDrawer({
   booking,
   onClose,
 }: BookingViewDrawerProps) {
+  const { t } = useTranslation(["booking", "common", "modules"]);
   const navigate = useNavigate();
 
   const handleEdit = () => {
@@ -42,26 +45,26 @@ export function BookingViewDrawer({
           <AppIcon icon={NavBookingIcon} size={22} />
           <div className="booking-drawer-title__copy">
             <Title level={4} className="booking-drawer-title__text">
-              {formatModuleScreenTitle("View Booking", booking.bookingNo)}
+              {formatModuleScreenTitle(t("modules:titles.viewBooking"), booking.bookingNo)}
             </Title>
             <div className="booking-drawer-title__row">
               <Text type="secondary" className="booking-drawer-title__meta">
-                Online Ref: <strong>{booking.onlineRefNo}</strong>
+                {t("labels.onlineRef")}: <strong>{booking.onlineRefNo}</strong>
                 {booking.agencyRefNo ? (
                   <>
                     {" "}
-                    · Agency: <strong>{booking.agencyRefNo}</strong>
+                    · {t("labels.agency")}: <strong>{booking.agencyRefNo}</strong>
                   </>
                 ) : null}
               </Text>
               <div className="booking-drawer-title__tags">
                 <Tag color={getBookingListStatusColor(booking.status)}>
-                  {booking.status}
+                  {getBookingStatusLabel(booking.status, t)}
                 </Tag>
                 {booking.dgStatus === "Y" ? (
-                  <Tag color="error">Dangerous Goods</Tag>
+                  <Tag color="error">{t("labels.dangerousGoods")}</Tag>
                 ) : (
-                  <Tag color="default">Non-DG</Tag>
+                  <Tag color="default">{t("labels.nonDg")}</Tag>
                 )}
               </div>
             </div>
@@ -76,13 +79,13 @@ export function BookingViewDrawer({
           wrap
           className="booking-drawer-actions custom-scroll"
         >
-          <Tooltip title="Edit / Amend This Booking">
+          <Tooltip title={t("actions.editAmendTooltip")}>
             <AppButton
               type="primary"
               icon={<AppIcon icon={Icons.squarePen} size={16} tone="edit" />}
               onClick={handleEdit}
             >
-              Edit
+              {t("common:actions.edit")}
             </AppButton>
           </Tooltip>
         </Flex>
@@ -92,7 +95,7 @@ export function BookingViewDrawer({
         <div className="booking-route-port booking-route-port--origin">
           <div className="booking-route-port__label">
             <AppIcon icon={Icons.mapPin} size={14} />
-            Origin (POL)
+            {t("labels.originPol")}
           </div>
           <Title
             level={4}
@@ -103,7 +106,7 @@ export function BookingViewDrawer({
         </div>
 
         <div className="booking-route-connector">
-          <span className="booking-route-connector__label">Port to Port</span>
+          <span className="booking-route-connector__label">{t("labels.portToPort")}</span>
           <div className="booking-route-connector__line">
             <span className="booking-route-connector__dot booking-route-connector__dot--origin" />
             <span className="booking-route-connector__track" />
@@ -117,7 +120,7 @@ export function BookingViewDrawer({
         <div className="booking-route-port booking-route-port--delivery">
           <div className="booking-route-port__label">
             <AppIcon icon={Icons.mapPin} size={14} />
-            Delivery (POD)
+            {t("labels.deliveryPod")}
           </div>
           <Title
             level={4}
@@ -134,7 +137,7 @@ export function BookingViewDrawer({
             <AppIcon icon={Icons.badgeCheck} size={14} />
           </span>
           <span>
-            <span className="booking-summary-chip__label">Booking No</span>
+            <span className="booking-summary-chip__label">{t("columns.bookingNo")}</span>
             <span className="booking-summary-chip__value">
               {booking.bookingNo}
             </span>
@@ -145,7 +148,7 @@ export function BookingViewDrawer({
             <AppIcon icon={Icons.calendar} size={14} />
           </span>
           <span>
-            <span className="booking-summary-chip__label">Created</span>
+            <span className="booking-summary-chip__label">{t("columns.created")}</span>
             <span className="booking-summary-chip__value">
               {booking.createdDate}
             </span>
@@ -156,7 +159,7 @@ export function BookingViewDrawer({
             <AppIcon icon={Icons.clock} size={14} />
           </span>
           <span>
-            <span className="booking-summary-chip__label">Submitted</span>
+            <span className="booking-summary-chip__label">{t("columns.submitted")}</span>
             <span className="booking-summary-chip__value">
               {booking.submittedDate}
             </span>
@@ -167,7 +170,7 @@ export function BookingViewDrawer({
             <AppIcon icon={Icons.boxes} size={14} />
           </span>
           <span>
-            <span className="booking-summary-chip__label">TEUs</span>
+            <span className="booking-summary-chip__label">{t("columns.teus")}</span>
             <span className="booking-summary-chip__value">
               {booking.teusCount}
             </span>
@@ -179,7 +182,7 @@ export function BookingViewDrawer({
               <AppIcon icon={Icons.checkCircle} size={14} />
             </span>
             <span>
-              <span className="booking-summary-chip__label">Confirmed</span>
+              <span className="booking-summary-chip__label">{t("columns.confirmed")}</span>
               <span className="booking-summary-chip__value">
                 {booking.confirmedDate}
               </span>

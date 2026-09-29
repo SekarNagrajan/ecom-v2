@@ -1,8 +1,9 @@
-// Modified by Sekar Nagarajan (2026-09-11 16:08)
+// Modified by Sekar Nagarajan (2026-09-29 12:40)
 import { AppButton } from "@solverminds/shared-ui";
 import { Flex, Input, Spin, Typography } from "antd";
 import type { OTPRef } from "antd/es/input/OTP";
 import { useEffect, useRef } from "react";
+import { Trans, useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { OTP_LOGIN_CONFIG } from "../config/otp-login-config";
@@ -31,6 +32,7 @@ export function LoginOtpPanelContent({
   onResendLimit,
   onCodeSent,
 }: LoginOtpPanelContentProps) {
+  const { t } = useTranslation("auth");
   const otpRef = useRef<OTPRef>(null);
   const otp = useOtpLoginController({
     session,
@@ -69,20 +71,26 @@ export function LoginOtpPanelContent({
             type="text"
             icon={<AppIcon icon={Icons.arrowLeft} size={16} />}
             onClick={onBack}
-            aria-label="Back to Login"
+            aria-label={t("otp.backToLogin")}
           >
-            Back to Login
+            {t("otp.backToLogin")}
           </AppButton>
         </div>
 
         <div className="pub-login-otp__body custom-scroll">
           <Flex vertical className="pub-login-otp__header">
             <Title level={3} className="pub-login-otp__title">
-              Enter verification code
+              {t("otp.title")}
             </Title>
             <Text className="pub-login-otp__subtitle">
-              We sent a {codeLength}-digit code to{" "}
-              <span className="pub-login-otp__email">{otp.maskedEmail}</span>
+              <Trans
+                i18nKey="otp.subtitle"
+                ns="auth"
+                values={{ codeLength, email: otp.maskedEmail }}
+                components={{
+                  email: <span className="pub-login-otp__email" />,
+                }}
+              />
             </Text>
           </Flex>
 
@@ -97,10 +105,15 @@ export function LoginOtpPanelContent({
             >
               <AppIcon icon={Icons.clock} size={14} />
               {otp.expired ? (
-                <span>Code expired</span>
+                <span>{t("otp.codeExpired")}</span>
               ) : (
                 <span>
-                  Expires in <strong>{otp.timerLabel}</strong>
+                  <Trans
+                    i18nKey="otp.expiresIn"
+                    ns="auth"
+                    values={{ time: otp.timerLabel }}
+                    components={{ time: <strong /> }}
+                  />
                 </span>
               )}
             </span>
@@ -108,7 +121,7 @@ export function LoginOtpPanelContent({
 
           <div className={otpWrapClass}>
             <label className="form-field-label pub-login-otp__field-label">
-              Verification code
+              {t("otp.verificationCode")}
               <Text type="danger"> *</Text>
             </label>
             <div className="pub-login-otp__otp-cells">
@@ -133,7 +146,7 @@ export function LoginOtpPanelContent({
               </Text>
             ) : (
               <Text type="secondary" className="pub-login-otp__hint">
-                Enter the {codeLength}-digit code from your email
+                {t("otp.hint", { codeLength })}
               </Text>
             )}
           </div>
@@ -148,18 +161,20 @@ export function LoginOtpPanelContent({
               onClick={otp.handleVerify}
               icon={otp.isVerifying ? <Spin size="small" /> : undefined}
             >
-              {otp.isVerifying ? "Verifying…" : "Verify and sign in"}
+              {otp.isVerifying
+                ? t("otp.verifying")
+                : t("otp.verifyAndSignIn")}
             </AppButton>
 
             <div className="pub-login-otp__resend">
               <Text type="secondary" className="pub-login-otp__resend-label">
-                Didn&apos;t get the code?
+                {t("otp.didntGetCode")}
               </Text>
               {otp.resendsLeft <= 0 ? (
-                <Text type="secondary">Resend limit reached.</Text>
+                <Text type="secondary">{t("otp.resendLimitReached")}</Text>
               ) : otp.resendCooldownLeft > 0 ? (
                 <Text type="secondary">
-                  Resend in {otp.resendCooldownLeft}s
+                  {t("otp.resendIn", { seconds: otp.resendCooldownLeft })}
                 </Text>
               ) : (
                 <AppButton
@@ -169,7 +184,7 @@ export function LoginOtpPanelContent({
                   loading={otp.isResending}
                   onClick={otp.handleResend}
                 >
-                  Resend code
+                  {t("otp.resendCode")}
                 </AppButton>
               )}
             </div>
@@ -179,16 +194,16 @@ export function LoginOtpPanelContent({
           {otp.showDevCode && otp.devCode ? (
             <div
               className="pub-login-otp__demo"
-              aria-label="Demo simulated email"
+              aria-label={t("otp.demoAriaLabel")}
             >
               <div className="pub-login-otp__demo-top">
                 <span className="pub-login-otp__demo-label">
-                  DEMO — simulated email
+                  {t("otp.demoLabel")}
                 </span>
                 <span className="pub-login-otp__demo-code">{otp.devCode}</span>
               </div>
               <Text className="pub-login-otp__demo-hint">
-                Use this code to verify. Real OTP is never returned by the API.
+                {t("otp.demoHint")}
               </Text>
             </div>
           ) : null}

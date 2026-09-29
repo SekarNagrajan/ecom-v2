@@ -1,0 +1,95 @@
+{
+  "subtitle": "Tapis mengikut julat tarikh, semak kapal dan caj, serta cetak notis ketibaan.",
+  "search": {
+    "fromDate": "Dari Tarikh",
+    "toDate": "Hingga Tarikh",
+    "show": "Papar"
+  },
+  "columns": {
+    "anNo": "No. AN",
+    "blNumber": "Nombor B/L",
+    "vessel": "Kapal",
+    "voyage": "Pelayaran",
+    "discharge": "Pelepasan",
+    "terminal": "Terminal",
+    "eta": "ETA",
+    "arrival": "Ketibaan",
+    "lastFreeDay": "Hari Percuma Terakhir",
+    "chargesDue": "Caj Perlu Dibayar"
+  },
+  "actions": {
+    "viewDetails": "Lihat Butiran",
+    "printArrivalNotice": "Cetak Notis Ketibaan",
+    "downloadPdf": "Muat Turun PDF",
+    "copyAnNumber": "Salin nombor AN",
+    "copied": "Disalin"
+  },
+  "empty": {
+    "loadErrorTitle": "Tidak dapat memuatkan notis ketibaan",
+    "loadErrorMessage": "Permintaan tidak selesai. Semak sambungan anda dan cuba lagi.",
+    "noResultsTitle": "Tiada notis ketibaan yang sepadan dengan carian anda",
+    "noResultsMessage": "Tiada hasil untuk julat tarikh ini. Luaskan tarikh atau kosongkan penapis untuk melihat lebih banyak hasil.",
+    "noContainers": "Tiada kontena pada notis ini"
+  },
+  "errors": {
+    "fetchList": "Gagal mendapatkan notis ketibaan",
+    "fetchDetail": "Gagal mendapatkan butiran notis ketibaan",
+    "download": "Gagal memuat turun dokumen notis ketibaan"
+  },
+  "toasts": {
+    "documentDownloaded": "Dokumen notis ketibaan {{anNo}} telah dimuat turun"
+  },
+  "status": {
+    "printed": "Telah Dicetak",
+    "notPrinted": "Belum Dicetak"
+  },
+  "validation": {
+    "fromDateRequired": "Dari tarikh diperlukan",
+    "toDateRequired": "Hingga tarikh diperlukan",
+    "fromBeforeTo": "Dari tarikh mestilah pada atau sebelum Hingga tarikh"
+  },
+  "drawer": {
+    "blPrefix": "B/L:",
+    "routeEyebrow": "Kapal ke Pelabuhan",
+    "vessel": "Kapal",
+    "arriving": "Sedang tiba",
+    "discharge": "Pelepasan",
+    "sections": {
+      "details": "Butiran Notis Ketibaan",
+      "shipment": "Butiran Penghantaran",
+      "freeTime": "Masa Percuma",
+      "charges": "Caj",
+      "containers": "Kontena"
+    },
+    "labels": {
+      "anNumber": "Nombor AN",
+      "blNumber": "Nombor B/L",
+      "eta": "ETA",
+      "arrivalDate": "Tarikh Ketibaan",
+      "chargesDue": "Caj Perlu Dibayar",
+      "printStatus": "Status Cetakan",
+      "vessel": "Kapal",
+      "voyage": "Pelayaran",
+      "terminal": "Terminal",
+      "consignee": "Penerima",
+      "notifyParty": "Pihak Dimaklumkan",
+      "manifestIgm": "Manifes / IGM",
+      "freeDays": "Hari Percuma",
+      "lastFreeDay": "Hari Percuma Terakhir",
+      "demurrageFrom": "Demuraj Dari"
+    },
+    "chargeColumns": {
+      "code": "Kod",
+      "description": "Penerangan",
+      "amount": "Jumlah"
+    },
+    "containerColumns": {
+      "containerNo": "No. Kontena",
+      "sizeType": "Saiz/Jenis",
+      "sealNo": "No. Meterai"
+    },
+    "alerts": {
+      "freeTimeEndsOn": "Masa percuma berakhir pada <date/>."
+    }
+  }
+}

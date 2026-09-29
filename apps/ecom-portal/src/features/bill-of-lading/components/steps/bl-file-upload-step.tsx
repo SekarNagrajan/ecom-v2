@@ -2,7 +2,8 @@
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { Card, List, Select, Typography, Upload } from "antd";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../../components/icons";
 import type { BLFileUploadItem } from "../../types/bl.types";
@@ -12,16 +13,6 @@ import type { BLWizardStepProps } from "./MasterDetailsStep";
 const { Text } = Typography;
 const { Dragger } = Upload;
 
-const FILE_CATEGORIES: {
-  value: BLFileUploadItem["category"];
-  label: string;
-}[] = [
-  { value: "VGM", label: "VGM" },
-  { value: "DG", label: "Dangerous Goods (DG)" },
-  { value: "LOI", label: "Letter of Indemnity (LOI)" },
-  { value: "OTHER", label: "Other" },
-];
-
 export function BlFileUploadStep({
   data,
   onNext,
@@ -30,13 +21,33 @@ export function BlFileUploadStep({
   isFirstStep,
   isSubmitting,
 }: BLWizardStepProps) {
+  const { t } = useTranslation(["bill-of-lading", "common"]);
   const toast = useToast();
+
+  const FILE_CATEGORIES = useMemo<
+    { value: BLFileUploadItem["category"]; label: string }[]
+  >(
+    () => [
+      { value: "VGM", label: t("wizard.files.categories.vgm") },
+      { value: "DG", label: t("wizard.files.categories.dg") },
+      { value: "LOI", label: t("wizard.files.categories.loi") },
+      { value: "OTHER", label: t("wizard.files.categories.other") },
+    ],
+    [t],
+  );
+
   const [docType, setDocType] =
     useState<BLFileUploadItem["category"]>("OTHER");
   const [files, setFiles] = useState<BLFileUploadItem[]>(
     () => data.files ?? [],
   );
   const [uploading, setUploading] = useState(false);
+
+  const selectedCategoryLabel = useMemo(
+    () =>
+      FILE_CATEGORIES.find((c) => c.value === docType)?.label ?? docType,
+    [FILE_CATEGORIES, docType],
+  );
 
   const handleUpload = (file: File) => {
     setUploading(true);
@@ -48,9 +59,9 @@ export function BlFileUploadStep({
         uploadedAt: new Date().toISOString(),
       };
       setFiles((prev) => [...prev, item]);
-      toast.success(`${file.name} uploaded successfully.`);
+      toast.success(t("wizard.files.uploadSuccess", { fileName: file.name }));
     } catch {
-      toast.error(`${file.name} upload failed.`);
+      toast.error(t("wizard.files.uploadFailed", { fileName: file.name }));
     } finally {
       setUploading(false);
     }
@@ -71,17 +82,19 @@ export function BlFileUploadStep({
       <div className="custom-scroll form-step-scroll">
         <Card
           className="form-step-card form-step-section"
-          title="Upload Supporting Documents"
+          title={t("wizard.files.title")}
         >
           <div className="bl-upload-type-row">
-            <label className="form-field-label">Document Type</label>
+            <label className="form-field-label">
+              {t("wizard.files.documentType")}
+            </label>
             <Select
               size="large"
               className="form-field-full-width"
               value={docType}
               onChange={setDocType}
               options={FILE_CATEGORIES}
-              placeholder="Select document type"
+              placeholder={t("wizard.files.documentTypePlaceholder")}
             />
           </div>
 
@@ -99,17 +112,17 @@ export function BlFileUploadStep({
               <AppIcon icon={Icons.inbox} size={16} />
             </p>
             <p className="ant-upload-text">
-              Click or drag file to this area to upload
+              {t("wizard.files.draggerText")}
             </p>
             <p className="ant-upload-hint">
-              Selected type: {docType}. Files are attached to this B/L request.
+              {t("wizard.files.draggerHint", { type: selectedCategoryLabel })}
             </p>
           </Dragger>
 
           {files.length > 0 ? (
             <List
               className="bl-upload-list"
-              header={<Text strong>Uploaded Documents</Text>}
+              header={<Text strong>{t("wizard.files.uploadedList")}</Text>}
               dataSource={files}
               renderItem={(item: BLFileUploadItem) => (
                 <List.Item
@@ -120,7 +133,7 @@ export function BlFileUploadStep({
                       danger
                       onClick={() => handleRemove(item.id)}
                     >
-                      Remove
+                      {t("common:actions.remove")}
                     </AppButton>,
                   ]}
                 >

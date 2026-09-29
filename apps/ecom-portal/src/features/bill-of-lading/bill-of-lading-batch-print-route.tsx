@@ -2,7 +2,8 @@
 import { AppButton } from "@solverminds/shared-ui";
 import { useNavigate } from "@tanstack/react-router";
 import { Card, Space, Table, Tag, Typography } from "antd";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons, NavIcons } from "../../components/icons";
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
@@ -11,8 +12,7 @@ import { ModuleScreenHeader } from "../../components/shared/module-screen-header
 import { useBLBatchPrintMutation, useBLListQuery } from "./api/bl.queries";
 import { BlModuleStyles } from "./components/bl-module-styles";
 import type { BLListDTO } from "./types/bl.types";
-import { BL_STATUS_LABELS } from "./types/bl.types";
-import { getBLStatusColor } from "./utils/bl-status";
+import { getBLStatusColor, getBLStatusLabel } from "./utils/bl-status";
 
 const { Text } = Typography;
 
@@ -21,11 +21,56 @@ function isBatchEligible(row: BLListDTO) {
 }
 
 export function BillOfLadingBatchPrintRoute() {
+  const { t } = useTranslation(["bill-of-lading", "common", "modules"]);
   const navigate = useNavigate();
   const { data, isLoading } = useBLListQuery({});
   const rows = (data?.rows ?? []).filter(isBatchEligible);
   const [selected, setSelected] = useState<string[]>([]);
   const { mutate: batchPrint, isPending } = useBLBatchPrintMutation();
+
+  const columns = useMemo(
+    () => [
+      {
+        title: t("columns.blNo"),
+        dataIndex: "blNo",
+        key: "blNo",
+        width: 140,
+      },
+      {
+        title: t("columns.bookingNo"),
+        dataIndex: "bookingNo",
+        key: "bookingNo",
+        width: 140,
+      },
+      {
+        title: t("columns.siNo"),
+        dataIndex: "siNo",
+        key: "siNo",
+        width: 140,
+      },
+      {
+        title: t("columns.status"),
+        dataIndex: "status",
+        key: "status",
+        width: 120,
+        render: (status: BLListDTO["status"]) => (
+          <Tag className="bl-status-tag" color={getBLStatusColor(status)}>
+            {getBLStatusLabel(status, t)}
+          </Tag>
+        ),
+      },
+      {
+        title: t("columns.route"),
+        key: "route",
+        render: (_: unknown, row: BLListDTO) => (
+          <Text>
+            {row.origin} → {row.delivery}
+          </Text>
+        ),
+      },
+    ],
+    [t],
+  );
 
   return (
     <FeaturePageShell>
@@ -35,8 +80,8 @@ export function BillOfLadingBatchPrintRoute() {
           <div className="bl-page-header">
             <ModuleScreenHeader
               icon={NavIcons.billOfLading}
-              title="Batch Original Print"
-              subtitle="Select confirmed B/Ls eligible for original print, then print in one batch."
+              title={t("batchPrint.title")}
+              subtitle={t("batchPrint.subtitle")}
               marginBottom={0}
               extra={
                 <AppButton
@@ -46,7 +91,7 @@ export function BillOfLadingBatchPrintRoute() {
                   }
                   onClick={() => navigate({ to: "/app/bl" })}
                 >
-                  Back to B/L
+                  {t("actions.back")}
                 </AppButton>
               }
             />
@@ -54,21 +99,25 @@ export function BillOfLadingBatchPrintRoute() {
 
           <div className="bl-toolbar">
             <Space wrap>
-              <Text type="secondary">{rows.length} eligible B/L(s)</Text>
-              <Tag color="blue">{selected.length} selected</Tag>
+              <Text type="secondary">
+                {t("batchPrint.eligibleCount", { count: rows.length })}
+              </Text>
+              <Tag color="blue">
+                {t("actions.printSelected", { count: selected.length })}
+              </Tag>
             </Space>
             <Space wrap>
               <AppButton
                 onClick={() => setSelected(rows.map((r) => r.blNo))}
                 disabled={rows.length === 0}
               >
-                Select All
+                {t("actions.selectAll")}
               </AppButton>
               <AppButton
                 onClick={() => setSelected([])}
                 disabled={selected.length === 0}
               >
-                Clear
+                {t("common:actions.clear")}
               </AppButton>
               <AppButton
                 type="primary"
@@ -80,7 +129,7 @@ export function BillOfLadingBatchPrintRoute() {
                   setSelected([]);
                 }}
               >
-                Print Selected ({selected.length})
+                {t("actions.printSelected", { count: selected.length })}
               </AppButton>
             </Space>
           </div>
@@ -89,8 +138,8 @@ export function BillOfLadingBatchPrintRoute() {
             {rows.length === 0 && !isLoading ? (
               <ModuleEmptyState
                 variant="blank"
-                title="No B/Ls eligible for batch print"
-                message="No confirmed B/Ls are currently eligible for batch original print."
+                title={t("empty.batchPrintTitle")}
+                message={t("empty.batchPrintMessage")}
                 artSize="md"
               />
             ) : (
@@ -105,49 +154,7 @@ export function BillOfLadingBatchPrintRoute() {
                   selectedRowKeys: selected,
                   onChange: (keys) => setSelected(keys as string[]),
                 }}
-                columns={[
-                  {
-                    title: "B/L No",
-                    dataIndex: "blNo",
-                    key: "blNo",
-                    width: 140,
-                  },
-                  {
-                    title: "Booking No",
-                    dataIndex: "bookingNo",
-                    key: "bookingNo",
-                    width: 140,
-                  },
-                  {
-                    title: "SI No",
-                    dataIndex: "siNo",
-                    key: "siNo",
-                    width: 140,
-                  },
-                  {
-                    title: "Status",
-                    dataIndex: "status",
-                    key: "status",
-                    width: 120,
-                    render: (status: BLListDTO["status"]) => (
-                      <Tag
-                        className="bl-status-tag"
-                        color={getBLStatusColor(status)}
-                      >
-                        {BL_STATUS_LABELS[status]}
-                      </Tag>
-                    ),
-                  },
-                  {
-                    title: "Route",
-                    key: "route",
-                    render: (_, row) => (
-                      <Text>
-                        {row.origin} → {row.delivery}
-                      </Text>
-                    ),
-                  },
-                ]}
+                columns={columns}
               />
             )}
           </div>

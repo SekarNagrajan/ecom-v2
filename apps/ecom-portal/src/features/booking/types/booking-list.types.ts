@@ -41,7 +41,9 @@ export function getBookingListStatusColor(status: BookingListStatus): string {
       return "error";
     case "Rejected":
       return "error";
-    default:
-      return "default";
+    default: {
+      const _exhaustive: never = status;
+      return _exhaustive;
+    }
   }
 }

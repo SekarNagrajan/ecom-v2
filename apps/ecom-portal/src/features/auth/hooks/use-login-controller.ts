@@ -1,9 +1,10 @@
-// Modified by Sekar Nagarajan (2026-09-11 16:08)
+// Modified by Sekar Nagarajan (2026-09-29 12:40)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuthStore, useTenantStore } from "@solverminds/auth";
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { create } from "zustand";
 
 import { loginUser } from "../api/auth.api";
@@ -12,7 +13,7 @@ import {
   resetOtpLoginMockSession,
 } from "../api/otp-login.api";
 import { OTP_LOGIN_CONFIG } from "../config/otp-login-config";
-import { loginSchema, type LoginForm } from "../types/auth.types";
+import { createLoginSchema, type LoginForm } from "../types/auth.types";
 import type { OtpSessionSnapshot } from "./use-otp-login-controller";
 
 // ---------------------------------------------------------------------------
@@ -55,6 +56,7 @@ export function useLoginController({
   onSuccess,
   onOtpRequired,
 }: UseLoginControllerOptions = {}) {
+  const { t } = useTranslation("auth");
   const { login } = useAuthStore();
   const { setTenant } = useTenantStore();
   const { failedAttempts, increment, reset } = useLoginAttemptStore();
@@ -63,11 +65,12 @@ export function useLoginController({
   const [otpSession, setOtpSession] = useState<OtpSessionSnapshot | null>(
     null,
   );
+  const schema = useMemo(() => createLoginSchema(t), [t]);
 
   const otpEnabled = OTP_LOGIN_CONFIG.enableOtpLogin;
 
   const form = useForm<LoginForm>({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(schema),
     defaultValues: { userName: "", password: "" },
   });
 
@@ -94,7 +97,7 @@ export function useLoginController({
 
       if (result.data.status === "INVALID") {
         increment();
-        setServerError("Incorrect email or password.");
+        setServerError(t("errors.incorrectCredentials"));
         setPhase("credentials");
         setOtpSession(null);
         return;
@@ -108,7 +111,7 @@ export function useLoginController({
     },
     onError: (err: Error) => {
       increment();
-      setServerError(err.message ?? "Incorrect email or password.");
+      setServerError(err.message ?? t("errors.incorrectCredentials"));
     },
   });
 

@@ -7,8 +7,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { Input, Radio, Select, Tag, Typography } from "antd";
 import { Controller, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
-import { WIZARD_STEP_TITLES } from "../../../../constants/module-titles";
+import { useWizardStepTitles } from "../../../../i18n/use-module-titles";
 import { BookingModuleStyles } from "../../../booking/components/booking-module-styles";
 import { SiPreviewCargoReview } from "../../../shipping-instruction/components/SiPreviewCargoReview";
 import type { SiPartyRoleKey } from "../../../shipping-instruction/utils/si-party.utils";
@@ -88,6 +89,8 @@ export function PreviewStep({
   onGoToStep,
   isSubmitting,
 }: BLWizardStepProps) {
+  const { t } = useTranslation(["bill-of-lading", "common", "modules"]);
+  const WIZARD_STEP_TITLES = useWizardStepTitles();
   const toast = useToast();
   const { data: config = DEFAULT_BL_WIZARD_CONFIG } = useBLWizardConfig();
   const preview = data.preview ?? {};
@@ -97,10 +100,10 @@ export function PreviewStep({
 
   const releaseLabel =
     data.releaseType === "O"
-      ? "Original"
+      ? t("labels.original")
       : data.releaseType === "T"
-      ? "Telex Release"
-      : dash(data.releaseType);
+        ? t("wizard.master.telexRelease")
+        : dash(data.releaseType);
 
   const {
     control,
@@ -129,44 +132,51 @@ export function PreviewStep({
         !values.siAesNumber &&
         values.aesDisclaimer !== "not_applicable"
       ) {
-        toast.error(
-          "Provide AES number or select not applicable for US load port",
-        );
+        toast.error(t("wizard.preview.aesUsLoadPort"));
         return;
       }
       onUpdate({ preview: { ...preview, ...values } });
       onSubmit();
     },
-    () => toast.error("Complete preview fields before submit"),
+    () => toast.error(t("wizard.preview.completeBeforeSubmit")),
   );
 
+  const yesNo = (value: boolean) => (value ? t("labels.yes") : t("labels.no"));
+
   const masterRows: { label: string; value: string }[] = [
-    { label: "B/L number", value: dash(data.blNo) },
-    { label: "Booking number", value: dash(data.bookingNo) },
+    { label: t("columns.blNumber"), value: dash(data.blNo) },
+    { label: t("labels.bookingNumber"), value: dash(data.bookingNo) },
     {
-      label: "SI number",
-      value: dash(data.siNo) === "—" ? "N/A" : dash(data.siNo),
+      label: t("labels.siNumber"),
+      value:
+        dash(data.siNo) === "—" ? t("wizard.preview.notApplicable") : dash(data.siNo),
     },
-    { label: "Agency ref", value: dash(data.agencyRefNo) },
-    { label: "B/L type", value: dash(data.blType) },
-    { label: "Release type", value: releaseLabel },
-    { label: "Freight option", value: dash(data.freightOption) },
+    { label: t("labels.agencyRef"), value: dash(data.agencyRefNo) },
+    { label: t("labels.blType"), value: dash(data.blType) },
+    { label: t("labels.releaseType"), value: releaseLabel },
+    { label: t("labels.freightOption"), value: dash(data.freightOption) },
   ];
   if (config.enableNvocc) {
-    masterRows.push({ label: "NVOCC", value: data.nvocc ? "Yes" : "No" });
+    masterRows.push({
+      label: t("wizard.preview.nvocc"),
+      value: yesNo(!!data.nvocc),
+    });
   }
   if (config.enableT2LFiling) {
     masterRows.push({
-      label: "T2L filing",
-      value: data.t2lFiling ? "Yes" : "No",
+      label: t("wizard.preview.t2lFiling"),
+      value: yesNo(!!data.t2lFiling),
     });
   }
   if (data.origin || data.loadPort || data.dischargePort || data.delivery) {
     masterRows.push(
-      { label: "Origin", value: dash(data.origin) },
-      { label: "Load port", value: dash(data.loadPort) },
-      { label: "Discharge port", value: dash(data.dischargePort) },
-      { label: "Delivery", value: dash(data.delivery) },
+      { label: t("labels.origin"), value: dash(data.origin) },
+      { label: t("wizard.preview.loadPort"), value: dash(data.loadPort) },
+      {
+        label: t("wizard.preview.dischargePort"),
+        value: dash(data.dischargePort),
+      },
+      { label: t("labels.delivery"), value: dash(data.delivery) },
     );
   }
 
@@ -179,7 +189,9 @@ export function PreviewStep({
   });
 
   const summary = [
-    data.blNo?.trim() || data.bookingNo?.trim() || "Draft B/L",
+    data.blNo?.trim() ||
+      data.bookingNo?.trim() ||
+      t("wizard.preview.draftBl"),
     data.loadPort && data.dischargePort
       ? `${data.loadPort} → ${data.dischargePort}`
       : null,
@@ -217,7 +229,7 @@ export function PreviewStep({
                       extra={
                         role === "consignee" &&
                         data.parties.consignee?.toOrder ? (
-                          <Text type="warning"> (To Order)</Text>
+                          <Text type="warning"> {t("labels.toOrder")}</Text>
                         ) : null
                       }
                     />
@@ -249,27 +261,27 @@ export function PreviewStep({
               <BlPreviewFieldGrid
                 items={[
                   {
-                    label: "Vessel / voyage",
+                    label: t("labels.vesselVoyage"),
                     value: dash(data.routing.vesselVoyage),
                   },
                   {
-                    label: "Origin",
+                    label: t("labels.origin"),
                     value: dash(data.routing.originPrint),
                   },
-                  { label: "POL", value: dash(data.routing.polPrint) },
-                  { label: "POD", value: dash(data.routing.podPrint) },
+                  { label: t("wizard.preview.pol"), value: dash(data.routing.polPrint) },
+                  { label: t("wizard.preview.pod"), value: dash(data.routing.podPrint) },
                   {
-                    label: "Delivery",
+                    label: t("labels.delivery"),
                     value: dash(data.routing.deliveryPrint),
                   },
                   {
-                    label: "Schedule legs",
+                    label: t("labels.scheduleLegs"),
                     value: String(data.routing.scheduleLegs?.length ?? 0),
                   },
                 ]}
               />
             ) : (
-              <BlPreviewEmpty label="No routing details" />
+              <BlPreviewEmpty label={t("empty.noRouting")} />
             )}
           </BlPreviewSection>
         ) : null}
@@ -292,23 +304,23 @@ export function PreviewStep({
               <BlPreviewFieldGrid
                 items={[
                   {
-                    label: "Required",
-                    value: data.insurance.isInsuranceRequired ? "Yes" : "No",
+                    label: t("wizard.preview.insuranceRequired"),
+                    value: yesNo(data.insurance.isInsuranceRequired),
                   },
                   {
-                    label: "Opt out",
-                    value: data.insurance.optOut ? "Yes" : "No",
+                    label: t("labels.optOut"),
+                    value: yesNo(data.insurance.optOut),
                   },
                   {
-                    label: "Currency",
+                    label: t("wizard.preview.currency"),
                     value: dash(data.insurance.currency),
                   },
                   {
-                    label: "Cargo value",
+                    label: t("labels.cargoValue"),
                     value: dash(data.insurance.cargoValue),
                   },
                   {
-                    label: "Policy no",
+                    label: t("labels.policyNo"),
                     value: dash(data.insurance.policyNo),
                   },
                 ]}
@@ -350,7 +362,10 @@ export function PreviewStep({
               <ul className="bl-preview-list">
                 {data.charges.map((line) => (
                   <li key={line.id}>
-                    {line.chargeCode || line.description || "Charge"} —{" "}
+                    {line.chargeCode ||
+                      line.description ||
+                      t("wizard.preview.chargeFallback")}{" "}
+                    —{" "}
                     {dash(line.amount)} {dash(line.currency)}
                   </li>
                 ))}
@@ -370,40 +385,40 @@ export function PreviewStep({
             {data.ens?.euCustomsZone ? (
               <BlPreviewFieldGrid
                 items={[
-                  { label: "EU customs zone", value: "Yes" },
+                  { label: t("wizard.preview.euCustomsZone"), value: t("labels.yes") },
                   {
-                    label: "Type of B/L",
+                    label: t("wizard.preview.typeOfBl"),
                     value: dash(data.ens.blType),
                   },
                   {
-                    label: "ENS filing",
+                    label: t("wizard.preview.ensFiling"),
                     value: dash(data.ens.ensFilingType),
                   },
                   {
-                    label: "Payment method",
+                    label: t("labels.paymentMethod"),
                     value: dash(data.ens.paymentMethod),
                   },
                   ...(data.ens.ensFilingType === "Single Filing"
                     ? [
                         {
-                          label: "Buyer",
+                          label: t("labels.buyer"),
                           value: dash(data.ens.buyerName),
                         },
                         {
-                          label: "Seller",
+                          label: t("labels.seller"),
                           value: dash(data.ens.sellerName),
                         },
                       ]
                     : [
                         {
-                          label: "Declarant",
+                          label: t("labels.declarant"),
                           value: dash(data.ens.declarantName),
                         },
                       ]),
                 ]}
               />
             ) : (
-              <Tag>ENS not required</Tag>
+              <Tag>{t("wizard.preview.ensNotRequired")}</Tag>
             )}
           </BlPreviewSection>
         ) : null}
@@ -416,8 +431,9 @@ export function PreviewStep({
           >
             {data.charges && data.charges.length > 0 ? (
               <Text>
-                {data.charges.length} charge line
-                {data.charges.length === 1 ? "" : "s"} on file
+                {t("wizard.preview.chargeLinesOnFile", {
+                  count: data.charges.length,
+                })}
               </Text>
             ) : (
               <BlPreviewEmpty />
@@ -439,7 +455,7 @@ export function PreviewStep({
               ))}
             </ul>
           ) : (
-            <BlPreviewEmpty label="No files uploaded" />
+            <BlPreviewEmpty label={t("wizard.preview.noFilesUploaded")} />
           )}
         </BlPreviewSection>
 
@@ -456,11 +472,11 @@ export function PreviewStep({
               }))}
             />
           ) : (
-            <BlPreviewEmpty label="No reference fields" />
+            <BlPreviewEmpty label={t("wizard.preview.noReferenceFields")} />
           )}
         </BlPreviewSection>
 
-        <BlPreviewSection variant="airy" title="Preview fields">
+        <BlPreviewSection variant="airy" title={t("labels.previewFields")}>
           <div
             className={getPreviewFieldsGridClass(
               config.enableAesNumber,
@@ -468,7 +484,7 @@ export function PreviewStep({
             )}
           >
             <div className="form-field-cell bl-master-readonly-field">
-              <label className="form-field-label">Declared Value</label>
+              <label className="form-field-label">{t("labels.declaredValue")}</label>
               <Controller
                 control={control}
                 name="declaredValue"
@@ -476,7 +492,9 @@ export function PreviewStep({
               />
             </div>
             <div className="form-field-cell bl-master-readonly-field">
-              <label className="form-field-label">Customer Remarks</label>
+              <label className="form-field-label">
+                {t("wizard.preview.customerRemarks")}
+              </label>
               <Controller
                 control={control}
                 name="siCustRemarks"
@@ -486,7 +504,9 @@ export function PreviewStep({
             {config.enableAesNumber ? (
               <>
                 <div className="form-field-cell bl-master-readonly-field">
-                  <label className="form-field-label">AES Number</label>
+                  <label className="form-field-label">
+                    {t("wizard.preview.aesNumber")}
+                  </label>
                   <Controller
                     control={control}
                     name="siAesNumber"
@@ -494,7 +514,9 @@ export function PreviewStep({
                   />
                 </div>
                 <div className="form-field-cell bl-master-readonly-field">
-                  <label className="form-field-label">AES Disclaimer</label>
+                  <label className="form-field-label">
+                    {t("wizard.preview.aesDisclaimer")}
+                  </label>
                   <Controller
                     control={control}
                     name="aesDisclaimer"
@@ -503,8 +525,12 @@ export function PreviewStep({
                         {...field}
                         className="bl-preview-radio-group"
                       >
-                        <Radio value="provided">Provided</Radio>
-                        <Radio value="not_applicable">Not Applicable</Radio>
+                        <Radio value="provided">
+                          {t("wizard.preview.aesProvided")}
+                        </Radio>
+                        <Radio value="not_applicable">
+                          {t("wizard.preview.aesNotApplicable")}
+                        </Radio>
                       </Radio.Group>
                     )}
                   />
@@ -514,7 +540,9 @@ export function PreviewStep({
             {config.enableUaeBlType ? (
               <>
                 <div className="form-field-cell bl-master-readonly-field">
-                  <label className="form-field-label">B/L Type (UAE)</label>
+                  <label className="form-field-label">
+                    {t("wizard.preview.blTypeUae")}
+                  </label>
                   <Controller
                     control={control}
                     name="blTypeUae"
@@ -525,15 +553,23 @@ export function PreviewStep({
                         size="large"
                         className="form-field-full-width"
                         options={[
-                          { label: "Master BL", value: "Master BL" },
-                          { label: "Direct BL", value: "Direct BL" },
+                          {
+                            label: t("wizard.preview.masterBl"),
+                            value: "Master BL",
+                          },
+                          {
+                            label: t("wizard.preview.directBl"),
+                            value: "Direct BL",
+                          },
                         ]}
                       />
                     )}
                   />
                 </div>
                 <div className="form-field-cell bl-master-readonly-field">
-                  <label className="form-field-label">MPCI ID (UAE)</label>
+                  <label className="form-field-label">
+                    {t("wizard.preview.mpciIdUae")}
+                  </label>
                   <Controller
                     control={control}
                     name="mpciIdUae"
@@ -558,7 +594,7 @@ export function PreviewStep({
         split
         onCancel={onCancel}
         onNext={handleSubmitBl}
-        nextLabel="Submit B/L"
+        nextLabel={t("wizard.actions.submitBl")}
         nextLoading={isSubmitting}
         isSubmitting={isSubmitting}
       />

@@ -12,7 +12,9 @@ import {
     Switch,
     Typography,
 } from "antd";
+import { useMemo } from "react";
 import { Controller, useForm, type Resolver } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import {
@@ -20,21 +22,53 @@ import {
     yesNoSwitchInner,
 } from "../../../../components/shared/yes-no-switch";
 import { RESPONSIVE_COL } from "../../../../constants/responsive-grid";
-import { insuranceSchema } from "../../../booking/types/booking.types";
 import type { BLInsuranceInfo } from "../../types/bl.types";
 import { BlWizardFooter } from "../bl-wizard-footer";
 import type { BLWizardStepProps } from "./MasterDetailsStep";
 
 const { Text } = Typography;
 
-const blInsuranceStepSchema = insuranceSchema.and(
-  z.object({
-    optOut: z.boolean().default(false),
-    policyNo: z.string().optional(),
-  }),
-);
+function createBlInsuranceStepSchema(t: (key: string) => string) {
+  return z
+    .object({
+      isInsuranceRequired: z.boolean().default(false),
+      currency: z.string().optional(),
+      cargoValue: z.number().optional(),
+      termsAccepted: z.boolean().default(false),
+      optOut: z.boolean().default(false),
+      policyNo: z.string().optional(),
+    })
+    .superRefine((data, ctx) => {
+      if (!data.isInsuranceRequired || data.optOut) {
+        return;
+      }
+      if (!data.currency) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: t("wizard.insurance.validation.currencyRequired"),
+          path: ["currency"],
+        });
+      }
+      if (!data.cargoValue || data.cargoValue <= 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: t("wizard.insurance.validation.cargoValueMin"),
+          path: ["cargoValue"],
+        });
+      }
+      if (!data.termsAccepted) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: t("wizard.insurance.validation.acceptTerms"),
+          path: ["termsAccepted"],
+        });
+      }
+    });
+}
 
-type BLInsuranceStepValues = z.infer<typeof blInsuranceStepSchema>;
+type BLInsuranceStepValues = z.infer<
+  ReturnType<typeof createBlInsuranceStepSchema>
+>;
 
 const defaults: BLInsuranceStepValues = {
   isInsuranceRequired: false,
@@ -54,15 +88,17 @@ export function BlInsuranceStep({
   isFirstStep,
   isSubmitting,
 }: BLWizardStepProps) {
+  const { t } = useTranslation(["bill-of-lading", "common"]);
+
+  const schema = useMemo(() => createBlInsuranceStepSchema(t), [t]);
+
   const {
     control,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm<BLInsuranceStepValues>({
-    resolver: zodResolver(
-      blInsuranceStepSchema,
-    ) as Resolver<BLInsuranceStepValues>,
+    resolver: zodResolver(schema) as Resolver<BLInsuranceStepValues>,
     defaultValues: { ...defaults, ...(data.insurance ?? {}) },
   });
 
@@ -101,7 +137,7 @@ export function BlInsuranceStep({
                     checked={value}
                     onChange={(e) => onChange(e.target.checked)}
                   >
-                    Opt out of cargo insurance for this B/L
+                    {t("wizard.insurance.optOutCheckbox")}
                   </Checkbox>
                 )}
               />
@@ -114,9 +150,8 @@ export function BlInsuranceStep({
             <Card size="small" className="form-step-card form-step-section">
               <div className="form-field-cell">
                 <label className="form-field-label">
-                  Do you require Cargo Insurance?
+                  {t("wizard.insurance.requireQuestion")}
                 </label>
-                {/* Modified by Sekar Nagarajan (2026-09-01 16:12) — compact yes/no switch */}
                 <Controller
                   control={control}
                   name="isInsuranceRequired"
@@ -137,13 +172,13 @@ export function BlInsuranceStep({
             {isInsuranceRequired ? (
               <Card
                 size="small"
-                title="Insurance Details"
+                title={t("wizard.insurance.detailsTitle")}
                 className="form-step-card form-step-section"
               >
                 <Row gutter={[24, 24]}>
                   <Col {...RESPONSIVE_COL.formHalf}>
                     <label className="form-field-label">
-                      Currency <Text type="danger">*</Text>
+                      {t("wizard.charges.currency")} <Text type="danger">*</Text>
                     </label>
                     <Controller
                       control={control}
@@ -169,7 +204,7 @@ export function BlInsuranceStep({
                   </Col>
                   <Col {...RESPONSIVE_COL.formHalf}>
                     <label className="form-field-label">
-                      Cargo Value <Text type="danger">*</Text>
+                      {t("labels.cargoValue")} <Text type="danger">*</Text>
                     </label>
                     <Controller
                       control={control}
@@ -191,7 +226,9 @@ export function BlInsuranceStep({
                   </Col>
                   {data.insurance?.policyNo ? (
                     <Col {...RESPONSIVE_COL.formHalf}>
-                      <label className="form-field-label">Policy No.</label>
+                      <label className="form-field-label">
+                        {t("labels.policyNo")}
+                      </label>
                       <div className="form-step-readonly-value">
                         {data.insurance.policyNo}
                       </div>
@@ -202,8 +239,8 @@ export function BlInsuranceStep({
                       className="form-step-section"
                       type="info"
                       showIcon
-                      message="Insurance Terms & Conditions"
-                      description="By requesting cargo insurance, you agree to the carrier's standard insurance terms. Premium will be added to the freight invoice."
+                      message={t("wizard.insurance.termsTitle")}
+                      description={t("wizard.insurance.termsBody")}
                     />
                     <Controller
                       control={control}
@@ -214,7 +251,7 @@ export function BlInsuranceStep({
                           checked={value}
                           onChange={(e) => onChange(e.target.checked)}
                         >
-                          I accept the Insurance Terms and Conditions{" "}
+                          {t("wizard.insurance.acceptTerms")}{" "}
                           <Text type="danger">*</Text>
                         </Checkbox>
                       )}
@@ -245,7 +282,7 @@ export function BlInsuranceStep({
               onClick={handleOptOut}
               disabled={isSubmitting}
             >
-              Skip Insurance
+              {t("wizard.insurance.skip")}
             </AppButton>
           ) : null
         }

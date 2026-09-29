@@ -2,11 +2,12 @@
 import { FormattedDate } from "@solverminds/shared-ui";
 import { Tag } from "antd";
 import type { ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../../components/icons";
 import { ModuleRecordCardShell } from "../../../../components/shared/record-card";
 import type { BLListDTO, BLPrintType } from "../../types/bl.types";
-import { getBLListStatusColor } from "../../utils/bl-status";
+import { getBLListStatusColor, getBLStatusLabel } from "../../utils/bl-status";
 import { BillOfLadingRowActions } from "../BillOfLadingRowActions";
 
 export interface BlListCardProps {
@@ -50,20 +51,23 @@ export function BlListCard({
   enableTermsOnConfirmedEdit = true,
   hideAgencyRef = false,
 }: BlListCardProps) {
+  const { t } = useTranslation(["bill-of-lading", "common", "modules"]);
   const lane = `${row.origin} → ${row.delivery}`;
-  const statusLabel = row.isLocked ? "Locked" : row.statusLabel;
+  const statusLabel = row.isLocked
+    ? t("status.locked")
+    : getBLStatusLabel(row.status, t);
 
   const metaFields: MetaField[] = [
     {
       key: "booking",
-      label: "Booking",
+      label: t("card.booking"),
       value: row.bookingNo || "—",
       valueTitle: row.bookingNo || undefined,
       // icon: <AppIcon icon={NavIcons.booking} size={14} />,
     },
     {
       key: "mcn",
-      label: "MCN",
+      label: t("card.mcn"),
       value: row.mcnNo || "—",
       valueTitle: row.mcnNo || undefined,
       // icon: <AppIcon icon={Icons.clipboardList} size={14} />,
@@ -73,7 +77,7 @@ export function BlListCard({
       : [
           {
             key: "agency",
-            label: "Agency Ref",
+            label: t("card.agencyRef"),
             value: row.agencyRefNo || "—",
             valueTitle: row.agencyRefNo || undefined,
             // icon: <AppIcon icon={Icons.building} size={14} />,
@@ -81,21 +85,21 @@ export function BlListCard({
         ]),
     {
       key: "load",
-      label: "Load",
+      label: t("card.load"),
       value: row.loadPort || "—",
       valueTitle: row.loadPort || undefined,
       // icon: <AppIcon icon={Icons.mapPin} size={14} />,
     },
     {
       key: "discharge",
-      label: "Discharge",
+      label: t("card.discharge"),
       value: row.dischargePort || "—",
       valueTitle: row.dischargePort || undefined,
       // icon: <AppIcon icon={Icons.anchor} size={14} />,
     },
     {
       key: "created",
-      label: "Created",
+      label: t("card.created"),
       value: row.createdDate ? <FormattedDate value={row.createdDate} /> : "—",
       // icon: <AppIcon icon={Icons.calendar} size={14} />,
     },

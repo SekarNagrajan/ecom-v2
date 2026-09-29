@@ -1,6 +1,7 @@
 // Modified by Sekar Nagarajan (2026-09-15 12:05)
 import { Tag } from "antd";
 import type { MouseEvent } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../../components/icons";
 import {
@@ -10,6 +11,7 @@ import {
 import { ModuleRecordCardShell } from "../../../../components/shared/record-card";
 import type { BookingListDTO } from "../../types/booking-list.types";
 import { getBookingListStatusColor } from "../../types/booking-list.types";
+import { getBookingStatusLabel } from "../../utils/booking-status";
 
 export interface BookingListCardProps {
   booking: BookingListDTO;
@@ -37,6 +39,7 @@ export function BookingListCard({
   onDownloadPdf,
   onCancel,
 }: BookingListCardProps) {
+  const { t } = useTranslation(["booking", "common"]);
   const lane = `${booking.origin} → ${booking.delivery}`;
 
   const stop = (fn: () => void) => (event: MouseEvent<HTMLElement>) => {
@@ -47,37 +50,37 @@ export function BookingListCard({
   const metaFields: MetaField[] = [
     {
       key: "onlineRef",
-      label: "Online Ref",
+      label: t("columns.onlineRef"),
       value: booking.onlineRefNo || "—",
       // icon: <AppIcon icon={Icons.fileText} size={14} />,
     },
     {
       key: "agencyRef",
-      label: "Agency Ref",
+      label: t("columns.agencyRef"),
       value: booking.agencyRefNo || "—",
       // icon: <AppIcon icon={Icons.building} size={14} />,
     },
     {
       key: "teus",
-      label: "TEUs",
+      label: t("columns.teus"),
       value: String(booking.teusCount ?? 0),
       // icon: <AppIcon icon={Icons.container} size={14} />,
     },
     {
       key: "dg",
-      label: "DG",
+      label: t("columns.dg"),
       value: booking.dgStatus || "—",
       // icon: <AppIcon icon={Icons.alertTriangle} size={14} />,
     },
     {
       key: "created",
-      label: "Created",
+      label: t("columns.created"),
       value: booking.createdDate || "—",
       // icon: <AppIcon icon={Icons.calendar} size={14} />,
     },
     {
       key: "submitted",
-      label: "Submitted",
+      label: t("columns.submitted"),
       value: booking.submittedDate || "—",
       // icon: <AppIcon icon={Icons.clock} size={14} />,
     },
@@ -103,7 +106,7 @@ export function BookingListCard({
               className="booking-record-card__status module-status-tag"
               color={getBookingListStatusColor(booking.status)}
             >
-              {booking.status}
+              {getBookingStatusLabel(booking.status, t)}
             </Tag>
           </div>
           <div className="booking-record-card__lane" title={lane}>
@@ -140,29 +143,29 @@ export function BookingListCard({
       >
         <ListActionsRow>
           <ListActionButton
-            title="View Booking"
+            title={t("common:actions.view")}
             icon={<AppIcon icon={Icons.eye} size={16} tone="view" />}
             onClick={stop(() => onView(booking))}
           />
           <ListActionButton
-            title="Amendment (Edit)"
+            title={t("actions.amendment")}
             icon={<AppIcon icon={Icons.edit} size={16} tone="edit" />}
             onClick={stop(() => onAmend(booking))}
           />
           <ListActionButton
-            title="Duplicate Booking"
+            title={t("actions.duplicate")}
             icon={<AppIcon icon={Icons.copy} size={16} tone="create" />}
             tone="create"
             onClick={stop(() => void onDuplicate(booking))}
           />
           <ListActionButton
-            title="Download PDF"
+            title={t("actions.downloadPdf")}
             icon={<AppIcon icon={Icons.fileText} size={16} tone="download" />}
             tone="download"
             onClick={stop(() => void onDownloadPdf(booking))}
           />
           <ListActionButton
-            title="Cancel Booking"
+            title={t("actions.cancelBooking")}
             icon={<AppIcon icon={Icons.circleX} size={16} tone="reject" />}
             danger
             onClick={stop(() => onCancel(booking))}

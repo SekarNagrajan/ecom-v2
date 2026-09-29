@@ -1,6 +1,8 @@
 // Modified by Sekar Nagarajan (2026-08-28 11:15)
 import { AppButton } from "@solverminds/shared-ui";
 import { Card, Col, Row, Space, Table, Tag, Typography } from "antd";
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 import { NavBillOfLadingIcon } from "../../../components/icons";
 import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
@@ -11,19 +13,13 @@ import {
 } from "../../../i18n/use-module-titles";
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import { SI_CARGO_LINE_COLUMNS } from "../../shipping-instruction/utils/si-cargo-line-columns";
-import type { BLDTO } from "../types/bl.types";
-import { BL_STATUS_LABELS } from "../types/bl.types";
-import { getBLStatusColor } from "../utils/bl-status";
+import type { BLDTO, BLRowStatus } from "../types/bl.types";
+import { getBLStatusColor, getBLStatusLabel } from "../utils/bl-status";
 import { BlLoadingCenter } from "./bl-loading-center";
 
 const { Title, Text } = Typography;
 
-const TIMELINE_STEPS: Array<{ key: BLDTO["status"]; label: string }> = [
-  { key: "D", label: BL_STATUS_LABELS.D },
-  { key: "S", label: BL_STATUS_LABELS.S },
-  { key: "C", label: BL_STATUS_LABELS.C },
-  { key: "I", label: BL_STATUS_LABELS.I },
-];
+const TIMELINE_STATUS_KEYS: BLRowStatus[] = ["D", "S", "C", "I"];
 
 interface BillOfLadingViewProps {
   detail: BLDTO | undefined;
@@ -48,17 +44,28 @@ export function BillOfLadingView({
   onCharges,
   extra,
 }: BillOfLadingViewProps) {
+  const { t } = useTranslation(["bill-of-lading", "common", "modules"]);
   const MODULE_TITLES = useModuleTitles();
   const WIZARD_STEP_TITLES = useWizardStepTitles();
+
+  const timelineSteps = useMemo(
+    () =>
+      TIMELINE_STATUS_KEYS.map((key) => ({
+        key,
+        label: getBLStatusLabel(key, t),
+      })),
+    [t],
+  );
+
   if (loading) {
     return <BlLoadingCenter fill />;
   }
 
   if (!detail) {
-    return <Text type="danger">B/L not found.</Text>;
+    return <Text type="danger">{t("empty.blNotFound")}</Text>;
   }
 
-  const statusIndex = TIMELINE_STEPS.findIndex((s) => s.key === detail.status);
+  const statusIndex = timelineSteps.findIndex((s) => s.key === detail.status);
 
   return (
     <Space direction="vertical" size="large" className="feature-page-stack">
@@ -73,38 +80,38 @@ export function BillOfLadingView({
           extra={
             <Space wrap>
               {onCharges ? (
-                <AppButton onClick={onCharges}>Charges</AppButton>
+                <AppButton onClick={onCharges}>{t("actions.charges")}</AppButton>
               ) : null}
               {onPrint && detail.status !== "I" ? (
                 <AppButton onClick={() => onPrint("draft")}>
-                  Draft Print
+                  {t("actions.draftPrint")}
                 </AppButton>
               ) : null}
               {onPrint && detail.status === "C" && detail.printCount > 0 ? (
                 <AppButton type="primary" onClick={() => onPrint("original")}>
-                  Original Print
+                  {t("actions.originalPrint")}
                 </AppButton>
               ) : null}
               {onVerify && detail.status === "D" ? (
                 <AppButton type="primary" onClick={onVerify}>
-                  Accept
+                  {t("actions.accept")}
                 </AppButton>
               ) : null}
               {onCancel && detail.status === "S" ? (
                 <AppButton danger onClick={onCancel}>
-                  Cancel
+                  {t("actions.cancel")}
                 </AppButton>
               ) : null}
               {onEdit && detail.status !== "I" ? (
-                <AppButton onClick={onEdit}>Edit</AppButton>
+                <AppButton onClick={onEdit}>{t("actions.edit")}</AppButton>
               ) : null}
               {extra}
-              <AppButton onClick={onBack}>Back</AppButton>
+              <AppButton onClick={onBack}>{t("actions.back")}</AppButton>
             </Space>
           }
         />
         <div className="bl-view-timeline">
-          {TIMELINE_STEPS.map((step, index) => (
+          {timelineSteps.map((step, index) => (
             <span
               key={step.key}
               className={[
@@ -120,7 +127,7 @@ export function BillOfLadingView({
           ))}
         </div>
         <Tag className="bl-status-tag" color={getBLStatusColor(detail.status)}>
-          {BL_STATUS_LABELS[detail.status]}
+          {getBLStatusLabel(detail.status, t)}
         </Tag>
       </Card>
 
@@ -131,29 +138,31 @@ export function BillOfLadingView({
       >
         <Row gutter={[24, 24]}>
           <Col {...RESPONSIVE_COL.formThird}>
-            <Text className="form-field-label">Booking Number</Text>
+            <Text className="form-field-label">{t("labels.bookingNumber")}</Text>
             <Text strong>{detail.bookingNo}</Text>
           </Col>
           <Col {...RESPONSIVE_COL.formThird}>
-            <Text className="form-field-label">SI Number</Text>
+            <Text className="form-field-label">{t("labels.siNumber")}</Text>
             <Text strong>{detail.siNo}</Text>
           </Col>
           <Col {...RESPONSIVE_COL.formThird}>
-            <Text className="form-field-label">B/L Type</Text>
+            <Text className="form-field-label">{t("labels.blType")}</Text>
             <Text strong>{detail.blType}</Text>
           </Col>
           <Col {...RESPONSIVE_COL.formThird}>
-            <Text className="form-field-label">Release Type</Text>
+            <Text className="form-field-label">{t("labels.releaseType")}</Text>
             <Text strong>
-              {detail.releaseType === "O" ? "Original" : "Telex"}
+              {detail.releaseType === "O"
+                ? t("labels.original")
+                : t("labels.telex")}
             </Text>
           </Col>
           <Col {...RESPONSIVE_COL.formThird}>
-            <Text className="form-field-label">Freight Option</Text>
+            <Text className="form-field-label">{t("labels.freightOption")}</Text>
             <Text strong>{detail.freightOption}</Text>
           </Col>
           <Col {...RESPONSIVE_COL.formThird}>
-            <Text className="form-field-label">Route</Text>
+            <Text className="form-field-label">{t("labels.route")}</Text>
             <Text strong>
               {detail.origin} → {detail.delivery}
             </Text>
@@ -169,24 +178,24 @@ export function BillOfLadingView({
         >
           <Row gutter={[24, 24]}>
             <Col {...RESPONSIVE_COL.formQuarter}>
-              <Text className="form-field-label">Origin (Print)</Text>
+              <Text className="form-field-label">{t("labels.originPrint")}</Text>
               <Text strong>{detail.routing.originPrint}</Text>
             </Col>
             <Col {...RESPONSIVE_COL.formQuarter}>
-              <Text className="form-field-label">POL (Print)</Text>
+              <Text className="form-field-label">{t("labels.polPrint")}</Text>
               <Text strong>{detail.routing.polPrint}</Text>
             </Col>
             <Col {...RESPONSIVE_COL.formQuarter}>
-              <Text className="form-field-label">POD (Print)</Text>
+              <Text className="form-field-label">{t("labels.podPrint")}</Text>
               <Text strong>{detail.routing.podPrint}</Text>
             </Col>
             <Col {...RESPONSIVE_COL.formQuarter}>
-              <Text className="form-field-label">Delivery (Print)</Text>
+              <Text className="form-field-label">{t("labels.deliveryPrint")}</Text>
               <Text strong>{detail.routing.deliveryPrint}</Text>
             </Col>
             {detail.routing.vesselVoyage ? (
               <Col {...RESPONSIVE_COL.formHalf}>
-                <Text className="form-field-label">Vessel / Voyage</Text>
+                <Text className="form-field-label">{t("labels.vesselVoyage")}</Text>
                 <Text strong>{detail.routing.vesselVoyage}</Text>
               </Col>
             ) : null}
@@ -196,13 +205,13 @@ export function BillOfLadingView({
 
       <Card
         className="feature-page-card"
-        title={<Title level={5}>Parties</Title>}
+        title={<Title level={5}>{t("labels.parties")}</Title>}
         size="small"
       >
         <Row gutter={[24, 24]}>
           <Col {...RESPONSIVE_COL.third}>
             <div className="bl-party-block">
-              <Text className="form-field-label">SHIPPER</Text>
+              <Text className="form-field-label">{t("labels.shipper")}</Text>
               <Text strong>{detail.parties.shipper.name}</Text>
               <Text>{detail.parties.shipper.address}</Text>
             </div>
@@ -210,9 +219,9 @@ export function BillOfLadingView({
           <Col {...RESPONSIVE_COL.third}>
             <div className="bl-party-block">
               <Text className="form-field-label">
-                CONSIGNEE{" "}
+                {t("labels.consignee")}{" "}
                 {detail.parties.consignee.toOrder ? (
-                  <Text type="warning">(TO ORDER)</Text>
+                  <Text type="warning">{t("labels.toOrder")}</Text>
                 ) : null}
               </Text>
               <Text strong>{detail.parties.consignee.name}</Text>
@@ -221,7 +230,7 @@ export function BillOfLadingView({
           </Col>
           <Col {...RESPONSIVE_COL.third}>
             <div className="bl-party-block">
-              <Text className="form-field-label">NOTIFY PARTY</Text>
+              <Text className="form-field-label">{t("labels.notifyParty")}</Text>
               <Text strong>{detail.parties.notify.name}</Text>
               <Text>{detail.parties.notify.address}</Text>
             </div>
@@ -229,7 +238,7 @@ export function BillOfLadingView({
           {detail.parties.notify2 ? (
             <Col {...RESPONSIVE_COL.third}>
               <div className="bl-party-block">
-                <Text className="form-field-label">NOTIFY 2</Text>
+                <Text className="form-field-label">{t("labels.notify2")}</Text>
                 <Text strong>{detail.parties.notify2.name}</Text>
               </div>
             </Col>
@@ -237,7 +246,7 @@ export function BillOfLadingView({
           {detail.parties.forwarder ? (
             <Col {...RESPONSIVE_COL.third}>
               <div className="bl-party-block">
-                <Text className="form-field-label">FORWARDER</Text>
+                <Text className="form-field-label">{t("labels.forwarder")}</Text>
                 <Text strong>{detail.parties.forwarder.name}</Text>
               </div>
             </Col>
@@ -248,7 +257,7 @@ export function BillOfLadingView({
       {detail.charges && detail.charges.length > 0 ? (
         <Card
           className="feature-page-card"
-          title={<Title level={5}>Charges</Title>}
+          title={<Title level={5}>{t("labels.charges")}</Title>}
           size="small"
         >
           <Table
@@ -257,10 +266,14 @@ export function BillOfLadingView({
             rowKey="id"
             dataSource={detail.charges}
             columns={[
-              { title: "Code", dataIndex: "chargeCode" },
-              { title: "Description", dataIndex: "description" },
-              { title: "P/C/E", dataIndex: "prepaidCollect", width: 90 },
-              { title: "Payor", dataIndex: "payByCustType" },
+              { title: t("columns.code"), dataIndex: "chargeCode" },
+              { title: t("columns.description"), dataIndex: "description" },
+              {
+                title: t("columns.pce"),
+                dataIndex: "prepaidCollect",
+                width: 90,
+              },
+              { title: t("columns.payor"), dataIndex: "payByCustType" },
             ]}
           />
         </Card>
@@ -269,13 +282,18 @@ export function BillOfLadingView({
       {detail.insurance?.isInsuranceRequired ? (
         <Card
           className="feature-page-card"
-          title={<Title level={5}>Insurance</Title>}
+          title={<Title level={5}>{t("labels.insurance")}</Title>}
           size="small"
         >
           <Text>
-            Coverage: {detail.insurance.currency} {detail.insurance.cargoValue}
+            {t("labels.coverage", {
+              currency: detail.insurance.currency,
+              value: detail.insurance.cargoValue,
+            })}
             {detail.insurance.policyNo
-              ? ` · Policy ${detail.insurance.policyNo}`
+              ? t("labels.policySuffix", {
+                  policyNo: detail.insurance.policyNo,
+                })
               : ""}
           </Text>
         </Card>
@@ -284,19 +302,19 @@ export function BillOfLadingView({
       {detail.preview && Object.keys(detail.preview).length > 0 ? (
         <Card
           className="feature-page-card"
-          title={<Title level={5}>Preview Fields</Title>}
+          title={<Title level={5}>{t("labels.previewFields")}</Title>}
           size="small"
         >
           <Row gutter={[24, 24]}>
             {detail.preview.declaredValue ? (
               <Col {...RESPONSIVE_COL.formThird}>
-                <Text className="form-field-label">Declared Value</Text>
+                <Text className="form-field-label">{t("labels.declaredValue")}</Text>
                 <Text strong>{detail.preview.declaredValue}</Text>
               </Col>
             ) : null}
             {detail.preview.siCustRemarks ? (
               <Col {...RESPONSIVE_COL.formHalf}>
-                <Text className="form-field-label">Remarks</Text>
+                <Text className="form-field-label">{t("labels.remarks")}</Text>
                 <Text>{detail.preview.siCustRemarks}</Text>
               </Col>
             ) : null}
@@ -306,14 +324,18 @@ export function BillOfLadingView({
 
       <Card
         className="feature-page-card"
-        title={<Title level={5}>Cargo & Containers</Title>}
+        title={<Title level={5}>{t("labels.cargoContainers")}</Title>}
         size="small"
       >
         {detail.containers.map((c, i) => (
           <div key={c.id} className="bl-container-block">
             <div className="bl-container-block__header">
               <Text strong>
-                Container {i + 1}: {c.containerNo} ({c.eqpSize})
+                {t("labels.containerN", {
+                  n: i + 1,
+                  containerNo: c.containerNo,
+                  eqpSize: c.eqpSize,
+                })}
               </Text>
             </div>
             <div className="responsive-table-wrap custom-scroll">

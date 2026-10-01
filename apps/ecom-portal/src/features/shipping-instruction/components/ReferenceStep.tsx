@@ -1,7 +1,8 @@
-// Created by Sekar Nagarajan (2026-08-31 14:46)
+// Modified by Sekar Nagarajan (2026-09-29 16:55)
 import { AppButton } from "@solverminds/shared-ui";
 import { Card } from "antd";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { ReferenceFieldsPanel } from "../../booking/components/reference-fields-panel";
 import {
@@ -17,6 +18,7 @@ export function ReferenceStep({
   onUpdate,
   isSubmitting,
 }: SIWizardStepProps) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
   const [fields, setFields] = useState<ReferenceField[]>(() =>
     initialReferenceFields(data.referenceFields),
   );
@@ -39,10 +41,10 @@ export function ReferenceStep({
 
       <div className="form-step-footer">
         <AppButton onClick={onPrevious} disabled={isSubmitting}>
-          Previous
+          {t("common:actions.previous")}
         </AppButton>
         <AppButton type="primary" onClick={handleNext} disabled={isSubmitting}>
-          Next
+          {t("common:actions.next")}
         </AppButton>
       </div>
     </div>

@@ -7,6 +7,7 @@ import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { Tag, Tooltip, Typography, theme } from "antd";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
@@ -245,6 +246,7 @@ function mapSiRoutingToScheduleItem(
 }
 
 function RouteStopTimes({ eta, etd }: { eta?: string; etd?: string }) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
   const etaParts = eta ? formatDetailDateTime(eta) : null;
   const etdParts = etd ? formatDetailDateTime(etd) : null;
 
@@ -252,7 +254,7 @@ function RouteStopTimes({ eta, etd }: { eta?: string; etd?: string }) {
     <div className="schedule-route-stop__times">
       {etaParts ? (
         <Text className="schedule-route-stop__time">
-          ETA:{" "}
+          {t("wizard.routing.eta")}:{" "}
           <span className="schedule-route-stop__time-date">
             {etaParts.date}
           </span>
@@ -261,7 +263,7 @@ function RouteStopTimes({ eta, etd }: { eta?: string; etd?: string }) {
       ) : null}
       {etdParts ? (
         <Text className="schedule-route-stop__time">
-          ETD:{" "}
+          {t("wizard.routing.etd")}:{" "}
           <span className="schedule-route-stop__time-date">
             {etdParts.date}
           </span>
@@ -279,6 +281,7 @@ function SiScheduleRouteDetails({
   item: ScheduleItem;
   onViewVessel: (vesselCode: string) => void;
 }) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
   const stops =
     item.legs.length === 0
       ? []
@@ -318,7 +321,7 @@ function SiScheduleRouteDetails({
     <div className="schedule-route-details">
       <div className="schedule-route-details__header">
         <Title level={5} className="schedule-route-details__title">
-          Route
+          {t("wizard.vessel.route")}
         </Title>
       </div>
       <ol className="schedule-route-timeline">
@@ -385,6 +388,7 @@ export function SiVesselScheduleCard({
   dischargePort,
   delivery,
 }: SiVesselScheduleCardProps) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
   const toast = useToast();
   const [expanded, setExpanded] = useState(false);
   const item = mapSiRoutingToScheduleItem(routing, {
@@ -401,7 +405,7 @@ export function SiVesselScheduleCard({
         <ModuleEmptyState
           artSize="sm"
           variant="blank"
-          title="No schedule available for this booking"
+          title={t("empty.noSchedule")}
           style={{ padding: 12 }}
         />
       </>
@@ -409,13 +413,13 @@ export function SiVesselScheduleCard({
   }
 
   const routingLabel = item.isDirect
-    ? "Direct"
-    : `${item.transshipmentCount} ${
-        item.transshipmentCount === 1 ? "Stop" : "Stops"
-      }`;
+    ? t("wizard.vessel.direct")
+    : t("wizard.vessel.stopCount", { count: item.transshipmentCount });
 
   const onViewVessel = (vesselCode: string) => {
-    toast.info(`Vessel: ${item.vesselName} (${vesselCode})`);
+    toast.info(
+      t("toasts.vesselInfo", { name: item.vesselName, code: vesselCode }),
+    );
   };
 
   return (
@@ -445,7 +449,7 @@ export function SiVesselScheduleCard({
                 {item.bound})
               </Tag>
               <Text type="secondary" className="schedule-card__distance">
-                <Tag color="gold">Distance</Tag>{" "}
+                <Tag color="gold">{t("wizard.vessel.distance")}</Tag>{" "}
                 {item.distanceKm.toLocaleString()} km
               </Text>
             </div>
@@ -459,10 +463,12 @@ export function SiVesselScheduleCard({
                   </span>
                 </Text>
                 <div className="schedule-card__etime">
-                  <Tag color="blue">ETD {item.etd}</Tag>
+                  <Tag color="blue">
+                    {t("wizard.routing.etd")} {item.etd}
+                  </Tag>
                 </div>
                 <Text className="schedule-card__terminal">
-                  Terminal: {item.polTerminal}
+                  {t("wizard.vessel.terminal", { name: item.polTerminal })}
                 </Text>
               </div>
 
@@ -471,7 +477,9 @@ export function SiVesselScheduleCard({
                   <span className="schedule-card__connector-dot" />
                   <span className="schedule-card__connector-rail" />
                   <span className="schedule-card__connector-pill">
-                    {item.transitTimeDays} Days
+                    {t("wizard.vessel.transitDays", {
+                      count: item.transitTimeDays,
+                    })}
                   </span>
                   <span className="schedule-card__connector-rail" />
                   <span className="schedule-card__connector-dot" />
@@ -489,10 +497,12 @@ export function SiVesselScheduleCard({
                   </span>
                 </Text>
                 <div className="schedule-card__etime">
-                  <Tag color="green">ETA {item.eta}</Tag>
+                  <Tag color="green">
+                    {t("wizard.routing.eta")} {item.eta}
+                  </Tag>
                 </div>
                 <Text className="schedule-card__terminal">
-                  Terminal: {item.podTerminal}
+                  {t("wizard.vessel.terminal", { name: item.podTerminal })}
                 </Text>
               </div>
             </div>
@@ -524,27 +534,29 @@ export function SiVesselScheduleCard({
         {/* Modified by Sekar Nagarajan (2026-08-31 16:07) — Show Details on footer right */}
         <div className="schedule-card__footer">
           <div className="schedule-card__deadlines">
-            <Tooltip title="Container Gate-In Closing">
+            <Tooltip title={t("wizard.vessel.gateInTooltip")}>
               <div className="schedule-card__deadline">
                 <span className="schedule-card__deadline-icon schedule-card__deadline-icon--gate app-icon-inherit">
                   <AppIcon icon={Icons.container} size={14} />
                 </span>
                 <span>
-                  <span className="schedule-card__deadline-label">Gate-In</span>
+                  <span className="schedule-card__deadline-label">
+                    {t("wizard.vessel.gateIn")}
+                  </span>
                   <span className="schedule-card__deadline-value">
                     {item.deadlines.containerGateIn}
                   </span>
                 </span>
               </div>
             </Tooltip>
-            <Tooltip title="Shipping Instruction Document Closing">
+            <Tooltip title={t("wizard.vessel.siCutoffTooltip")}>
               <div className="schedule-card__deadline">
                 <span className="schedule-card__deadline-icon schedule-card__deadline-icon--si app-icon-inherit">
                   <AppIcon icon={Icons.clipboardList} size={14} />
                 </span>
                 <span>
                   <span className="schedule-card__deadline-label">
-                    SI Cut-Off
+                    {t("wizard.vessel.siCutoff")}
                   </span>
                   <span className="schedule-card__deadline-value">
                     {item.deadlines.siDocClosing}
@@ -552,14 +564,14 @@ export function SiVesselScheduleCard({
                 </span>
               </div>
             </Tooltip>
-            <Tooltip title="Verified Gross Mass (VGM) Closing">
+            <Tooltip title={t("wizard.vessel.vgmCutoffTooltip")}>
               <div className="schedule-card__deadline">
                 <span className="schedule-card__deadline-icon schedule-card__deadline-icon--vgm app-icon-inherit">
                   <AppIcon icon={Icons.shieldCheck} size={14} />
                 </span>
                 <span>
                   <span className="schedule-card__deadline-label">
-                    VGM Cut-Off
+                    {t("wizard.vessel.vgmCutoff")}
                   </span>
                   <span className="schedule-card__deadline-value">
                     {item.deadlines.vgmClosing}
@@ -573,7 +585,7 @@ export function SiVesselScheduleCard({
             icon={<AppIcon icon={Icons.route} size={14} />}
             onClick={() => setExpanded(!expanded)}
           >
-            {expanded ? "Close Details" : "Show Details"}
+            {expanded ? t("actions.closeDetails") : t("actions.showDetails")}
           </AppButton>
         </div>
       </article>

@@ -1,6 +1,7 @@
-// Modified by Sekar Nagarajan (2026-09-15 11:45)
+// Modified by Sekar Nagarajan (2026-09-29 16:45)
 import { useConfirm } from "@solverminds/shared-ui/hooks";
 import type { MouseEvent } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../../components/icons";
 import {
@@ -25,6 +26,7 @@ export function SiListActions({
   onView,
   onCancel,
 }: SiListActionsProps) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
   const confirm = useConfirm();
 
   const stop = (fn: () => void) => (event: MouseEvent<HTMLElement>) => {
@@ -36,7 +38,7 @@ export function SiListActions({
     <ListActionsRow>
       {record.status === "Accepted" ? (
         <ListActionButton
-          title="Locked"
+          title={t("actions.locked")}
           icon={<AppIcon icon={Icons.lock} size={16} tone="muted" />}
           danger
           onClick={stop(() => undefined)}
@@ -45,7 +47,7 @@ export function SiListActions({
 
       {record.status === "Create SI" ? (
         <ListActionButton
-          title="Create SI"
+          title={t("actions.createSi")}
           icon={<AppIcon icon={Icons.plus} size={16} tone="create" />}
           onClick={stop(() => onOpenWizard(record.id))}
         />
@@ -53,7 +55,7 @@ export function SiListActions({
 
       {record.status === "Draft" ? (
         <ListActionButton
-          title="Edit Draft"
+          title={t("actions.editDraft")}
           icon={<AppIcon icon={Icons.edit} size={16} tone="edit" />}
           onClick={stop(() => onOpenWizard(record.id))}
         />
@@ -61,7 +63,7 @@ export function SiListActions({
 
       {["Submitted", "Accepted", "Declined"].includes(record.status) ? (
         <ListActionButton
-          title="View Details"
+          title={t("actions.viewDetails")}
           icon={<AppIcon icon={Icons.eye} size={16} tone="view" />}
           onClick={stop(() => onView(record))}
         />
@@ -69,7 +71,7 @@ export function SiListActions({
 
       {record.status === "Submitted" ? (
         <ListActionButton
-          title="Edit SI"
+          title={t("actions.editSi")}
           icon={<AppIcon icon={Icons.edit} size={16} tone="edit" />}
           onClick={stop(() => onOpenWizard(record.id))}
         />
@@ -77,14 +79,13 @@ export function SiListActions({
 
       {record.status === "Declined" || record.blStatus === "Cancelled" ? (
         <ListActionButton
-          title="Resubmit"
+          title={t("actions.resubmit")}
           icon={<AppIcon icon={Icons.refreshCw} size={16} tone="history" />}
           onClick={stop(() => {
             if (record.status === "Declined") {
               confirm.warning({
-                title: "Carrier Remarks",
-                content:
-                  "Please review and correct the reported discrepancies before resubmitting.",
+                title: t("confirms.carrierRemarksTitle"),
+                content: t("confirms.carrierRemarksContent"),
                 onOk: () => onOpenWizard(record.id),
               });
               return;
@@ -96,7 +97,7 @@ export function SiListActions({
 
       {record.status === "Submitted" ? (
         <ListActionButton
-          title="Cancel SI"
+          title={t("actions.cancelSi")}
           icon={<AppIcon icon={Icons.circleX} size={16} tone="reject" />}
           danger
           onClick={stop(() => onCancel(record))}

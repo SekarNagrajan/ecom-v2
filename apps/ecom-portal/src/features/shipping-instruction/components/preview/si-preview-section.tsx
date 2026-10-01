@@ -1,7 +1,8 @@
-// Modified by Sekar Nagarajan (2026-09-05 01:05)
+// Modified by Sekar Nagarajan (2026-09-29 16:45)
 import { AppButton } from "@solverminds/shared-ui";
 import { Card, Tooltip, Typography } from "antd";
 import type { ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../../components/icons";
 import {
@@ -9,7 +10,10 @@ import {
   ListActionsRow,
 } from "../../../../components/shared/list-action-button";
 import type { SIParty } from "../../types/si.types";
-import { SI_PARTY_ROLE_LABEL, type SiPartyRoleKey } from "../../utils/si-party.utils";
+import {
+  getSiPartyRoleLabel,
+  type SiPartyRoleKey,
+} from "../../utils/si-party.utils";
 
 const { Title, Text } = Typography;
 
@@ -29,6 +33,9 @@ export function SiPreviewSection({
   className,
   variant = "card",
 }: SiPreviewSectionProps) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
+  const editLabel = t("actions.editSection", { title });
+
   if (variant === "airy") {
     return (
       <section
@@ -41,13 +48,13 @@ export function SiPreviewSection({
             {title}
           </Title>
           {onEdit ? (
-            <Tooltip title={`Edit ${title}`}>
+            <Tooltip title={editLabel}>
               <AppButton
                 type="text"
                 size="small"
                 className="booking-review__edit"
                 icon={<AppIcon icon={Icons.edit} size={16} />}
-                aria-label={`Edit ${title}`}
+                aria-label={editLabel}
                 onClick={onEdit}
               />
             </Tooltip>
@@ -76,7 +83,7 @@ export function SiPreviewSection({
         onEdit ? (
           <ListActionsRow>
             <ListActionButton
-              title={`Edit ${title}`}
+              title={editLabel}
               icon={<AppIcon icon={Icons.edit} size={16} tone="edit" />}
               tone="edit"
               onClick={onEdit}
@@ -91,9 +98,10 @@ export function SiPreviewSection({
 }
 
 export function SiPreviewEmpty({ label }: { label?: string }) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
   return (
     <Text type="secondary" className="si-preview-empty">
-      {label ?? "No data provided"}
+      {label ?? t("empty.noDataProvided")}
     </Text>
   );
 }
@@ -140,9 +148,9 @@ export function SiPreviewPartyCard({
   party: SIParty;
   extra?: ReactNode;
 }) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
   const address = partyAddress(party);
-  const label =
-    roleKey === "shipper" ? "Shipper" : SI_PARTY_ROLE_LABEL[roleKey];
+  const label = getSiPartyRoleLabel(roleKey, t);
 
   return (
     <div className="booking-review__party">
@@ -167,12 +175,12 @@ export function SiPreviewEmptyPartyCard({
 }: {
   roleKey: SiPartyRoleKey;
 }) {
-  const label =
-    roleKey === "shipper" ? "Shipper" : SI_PARTY_ROLE_LABEL[roleKey];
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
+  const label = getSiPartyRoleLabel(roleKey, t);
   return (
     <div className="booking-review__party booking-review__party--empty">
       <span className="booking-review__party-role">{label}</span>
-      <Text type="secondary">Not assigned</Text>
+      <Text type="secondary">{t("labels.notAssigned")}</Text>
     </div>
   );
 }

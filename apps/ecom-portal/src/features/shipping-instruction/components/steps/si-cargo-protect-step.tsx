@@ -2,6 +2,7 @@
 import { AppButton } from "@solverminds/shared-ui";
 import { Card, Input, InputNumber, Select, Typography } from "antd";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../../components/icons";
 import {
@@ -26,6 +27,65 @@ function createEmptyLine(): SICargoProtectLine {
   };
 }
 
+function CargoProtectLineFields({
+  line,
+  onUpdate,
+}: {
+  line: SICargoProtectLine;
+  onUpdate: (patch: Partial<SICargoProtectLine>) => void;
+}) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
+
+  return (
+    <div className="si-cargo-protect-form-grid">
+      <div className="form-field-cell">
+        <label className="form-field-label">
+          {t("wizard.cargoProtect.productCode")}
+        </label>
+        <Input
+          size="large"
+          value={line.productCode}
+          onChange={(e) => onUpdate({ productCode: e.target.value })}
+        />
+      </div>
+      <div className="form-field-cell">
+        <label className="form-field-label">
+          {t("columns.description")}
+        </label>
+        <Input
+          size="large"
+          value={line.description}
+          onChange={(e) => onUpdate({ description: e.target.value })}
+        />
+      </div>
+      <div className="form-field-cell">
+        <label className="form-field-label">{t("columns.amount")}</label>
+        <InputNumber
+          size="large"
+          min={0}
+          className="form-field-full-width"
+          value={line.amount}
+          onChange={(value) => onUpdate({ amount: value ?? 0 })}
+        />
+      </div>
+      <div className="form-field-cell">
+        <label className="form-field-label">{t("labels.currency")}</label>
+        <Select
+          size="large"
+          className="form-field-full-width"
+          value={line.currency}
+          onChange={(value) => onUpdate({ currency: value })}
+          options={[
+            { value: "USD", label: "USD" },
+            { value: "EUR", label: "EUR" },
+            { value: "AED", label: "AED" },
+          ]}
+        />
+      </div>
+    </div>
+  );
+}
+
 export function SiCargoProtectStep({
   data,
   onNext,
@@ -34,6 +94,8 @@ export function SiCargoProtectStep({
   isFirstStep,
   isSubmitting,
 }: SIWizardStepProps) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
+
   const [lines, setLines] = useState<SICargoProtectLine[]>(
     () => data.cargoProtect ?? [],
   );
@@ -56,7 +118,7 @@ export function SiCargoProtectStep({
           className="form-step-card form-step-section si-master-step-card"
           title={
             <Title level={5} className="form-step-card-title">
-              Cargo Protect Products
+              {t("wizard.cargoProtect.productsTitle")}
             </Title>
           }
           extra={
@@ -65,7 +127,7 @@ export function SiCargoProtectStep({
               icon={<AppIcon icon={Icons.filePlus} size={14} />}
               onClick={() => setLines((prev) => [...prev, createEmptyLine()])}
             >
-              Add Row
+              {t("wizard.cargoProtect.addRow")}
             </AppButton>
           }
         >
@@ -73,8 +135,8 @@ export function SiCargoProtectStep({
             <ModuleEmptyState
               artSize="sm"
               variant="blank"
-              title="No cargo protect lines"
-              message="Click Add Row to include coverage products."
+              title={t("wizard.cargoProtect.emptyTitle")}
+              message={t("wizard.cargoProtect.emptyMessage")}
               style={{ padding: 12 }}
             />
           ) : (
@@ -84,11 +146,13 @@ export function SiCargoProtectStep({
                   key={line.id}
                   size="small"
                   className="form-step-card form-step-section si-master-step-card"
-                  title={`Line ${index + 1}`}
+                  title={t("wizard.cargoProtect.lineTitle", {
+                    n: index + 1,
+                  })}
                   extra={
                     <ListActionsRow>
                       <ListActionButton
-                        title="Remove row"
+                        title={t("wizard.cargoProtect.removeRow")}
                         icon={
                           <AppIcon icon={Icons.x} size={16} tone="delete" />
                         }
@@ -102,56 +166,10 @@ export function SiCargoProtectStep({
                     </ListActionsRow>
                   }
                 >
-                  <div className="si-cargo-protect-form-grid">
-                    <div className="form-field-cell">
-                      <label className="form-field-label">Product Code</label>
-                      <Input
-                        size="large"
-                        value={line.productCode}
-                        onChange={(e) =>
-                          updateLine(line.id, { productCode: e.target.value })
-                        }
-                      />
-                    </div>
-                    <div className="form-field-cell">
-                      <label className="form-field-label">Description</label>
-                      <Input
-                        size="large"
-                        value={line.description}
-                        onChange={(e) =>
-                          updateLine(line.id, { description: e.target.value })
-                        }
-                      />
-                    </div>
-                    <div className="form-field-cell">
-                      <label className="form-field-label">Amount</label>
-                      <InputNumber
-                        size="large"
-                        min={0}
-                        className="form-field-full-width"
-                        value={line.amount}
-                        onChange={(value) =>
-                          updateLine(line.id, { amount: value ?? 0 })
-                        }
-                      />
-                    </div>
-                    <div className="form-field-cell">
-                      <label className="form-field-label">Currency</label>
-                      <Select
-                        size="large"
-                        className="form-field-full-width"
-                        value={line.currency}
-                        onChange={(value) =>
-                          updateLine(line.id, { currency: value })
-                        }
-                        options={[
-                          { value: "USD", label: "USD" },
-                          { value: "EUR", label: "EUR" },
-                          { value: "AED", label: "AED" },
-                        ]}
-                      />
-                    </div>
-                  </div>
+                  <CargoProtectLineFields
+                    line={line}
+                    onUpdate={(patch) => updateLine(line.id, patch)}
+                  />
                 </Card>
               ))}
             </div>
@@ -164,10 +182,10 @@ export function SiCargoProtectStep({
           onClick={onPrevious}
           disabled={isFirstStep || isSubmitting}
         >
-          Previous
+          {t("common:actions.previous")}
         </AppButton>
         <AppButton type="primary" onClick={handleNext} disabled={isSubmitting}>
-          Next
+          {t("common:actions.next")}
         </AppButton>
       </div>
     </div>

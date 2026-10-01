@@ -1,6 +1,7 @@
-// Modified by Sekar Nagarajan (2026-09-05 01:12)
+// Modified by Sekar Nagarajan (2026-09-29 16:45)
 import { Typography } from "antd";
 import { Fragment, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import type { SICargoLine, SIContainer } from "../types/si.types";
@@ -27,7 +28,10 @@ function teuForContainerType(containerType: string): number {
   return 1;
 }
 
-function specialLabel(container: SIContainer): {
+function specialLabel(
+  container: SIContainer,
+  t: (key: string, options?: Record<string, unknown>) => string,
+): {
   kind: SpecialKind;
   label: string;
 } | null {
@@ -40,7 +44,7 @@ function specialLabel(container: SIContainer): {
     )?.dgClass;
     return {
       kind: "dg",
-      label: dgClass ? `DG · Class ${dgClass}` : "DG",
+      label: dgClass ? t("cargo.dgClass", { class: dgClass }) : t("cargo.dg"),
     };
   }
   if (container.isOog) return { kind: "oog", label: "OOG" };
@@ -50,8 +54,8 @@ function specialLabel(container: SIContainer): {
       kind: "reefer",
       label:
         container.setTemp !== undefined && container.setTemp !== null
-          ? `Reefer ${container.setTemp}°C`
-          : "Reefer",
+          ? t("cargo.reeferTemp", { temp: container.setTemp })
+          : t("cargo.reefer"),
     };
   }
   if (container.reeferMode === "nor") return { kind: "nor", label: "NOR" };
@@ -104,6 +108,7 @@ function toggleRowId(current: Set<string>, id: string): Set<string> {
  * table (collapsed by default); rows expand for read-only details + lines.
  */
 export function SiPreviewCargoReview({ containers }: SiPreviewCargoReviewProps) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
   const [tableOpen, setTableOpen] = useState(false);
   const [openRows, setOpenRows] = useState<Set<string>>(new Set());
 
@@ -129,17 +134,16 @@ export function SiPreviewCargoReview({ containers }: SiPreviewCargoReviewProps) 
   };
 
   if (containers.length === 0) {
-    return <SiPreviewEmpty label="No containers" />;
+    return <SiPreviewEmpty label={t("empty.noContainers")} />;
   }
 
   return (
     <div className="booking-review__cargo">
       <p className="booking-review__cargo-hint">
-        {totals.containers.toLocaleString()}{" "}
-        {totals.containers === 1 ? "container" : "containers"} ·{" "}
-        {lineCount.toLocaleString()} commodity{" "}
-        {lineCount === 1 ? "line" : "lines"} · expand the summary, then click a
-        row to view details and commodities.
+        {t("cargo.hint", {
+          containers: totals.containers.toLocaleString(),
+          lines: lineCount.toLocaleString(),
+        })}
       </p>
 
       <div
@@ -153,7 +157,7 @@ export function SiPreviewCargoReview({ containers }: SiPreviewCargoReviewProps) 
         tabIndex={0}
         aria-expanded={tableOpen}
         aria-controls="si-bl-cargo-container-table"
-        aria-label="Toggle container table"
+        aria-label={t("a11y.toggleContainerTable")}
         onClick={toggleTable}
         onKeyDown={(event) => {
           if (event.key === "Enter" || event.key === " ") {
@@ -166,25 +170,33 @@ export function SiPreviewCargoReview({ containers }: SiPreviewCargoReviewProps) 
           <span className="booking-cargo-stats__value">
             {totals.containers.toLocaleString()}
           </span>
-          <span className="booking-cargo-stats__label">Total containers</span>
+          <span className="booking-cargo-stats__label">
+            {t("cargo.totalContainers")}
+          </span>
         </div>
         <div className="booking-cargo-stats__item">
           <span className="booking-cargo-stats__value">
             {formatWeight(totals.weight)}
           </span>
-          <span className="booking-cargo-stats__label">Total weight</span>
+          <span className="booking-cargo-stats__label">
+            {t("cargo.totalWeight")}
+          </span>
         </div>
         <div className="booking-cargo-stats__item">
           <span className="booking-cargo-stats__value">
             {formatVolume(totals.volume)} CBM
           </span>
-          <span className="booking-cargo-stats__label">Total volume</span>
+          <span className="booking-cargo-stats__label">
+            {t("cargo.totalVolume")}
+          </span>
         </div>
         <div className="booking-cargo-stats__item booking-cargo-stats__item--last">
           <span className="booking-cargo-stats__value">
             {formatTeu(totals.teu)}
           </span>
-          <span className="booking-cargo-stats__label">Total TEU</span>
+          <span className="booking-cargo-stats__label">
+            {t("cargo.totalTeu")}
+          </span>
           <AppIcon
             icon={Icons.chevronRight}
             size={16}
@@ -206,20 +218,20 @@ export function SiPreviewCargoReview({ containers }: SiPreviewCargoReviewProps) 
           <table className="booking-cargo-table">
             <thead>
               <tr>
-                <th>Container numbers</th>
-                <th>Type</th>
-                <th>Tare weight</th>
-                <th>Carrier seal</th>
-                <th>Shipper seal</th>
-                <th>Special</th>
-                <th aria-label="Expand" />
+                <th>{t("cargo.containerNumbers")}</th>
+                <th>{t("cargo.type")}</th>
+                <th>{t("cargo.tareWeight")}</th>
+                <th>{t("cargo.carrierSeal")}</th>
+                <th>{t("cargo.shipperSeal")}</th>
+                <th>{t("cargo.special")}</th>
+                <th aria-label={t("a11y.expand")} />
               </tr>
             </thead>
             <tbody>
               {containers.map((container, containerIndex) => {
                 const rowId = container.id || `container-${containerIndex}`;
                 const rowOpen = openRows.has(rowId);
-                const special = specialLabel(container);
+                const special = specialLabel(container, t);
                 const toggleRow = () => {
                   setOpenRows((current) => toggleRowId(current, rowId));
                 };
@@ -248,7 +260,9 @@ export function SiPreviewCargoReview({ containers }: SiPreviewCargoReviewProps) 
                       <td>
                         <span className="booking-cargo-table__no">
                           {container.containerNo?.trim() ||
-                            `Container ${containerIndex + 1}`}
+                            t("cargo.containerFallback", {
+                              index: containerIndex + 1,
+                            })}
                         </span>
                       </td>
                       <td>{dash(container.eqpSize)}</td>
@@ -312,15 +326,17 @@ function SiPreviewContainerDetailPanel({
   containerIndex: number;
   container: SIContainer;
 }) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
   const detailFields = [
     {
-      label: "Container no.",
+      label: t("cargo.containerNo"),
       value:
-        container.containerNo?.trim() || `Container ${containerIndex + 1}`,
+        container.containerNo?.trim() ||
+        t("cargo.containerFallback", { index: containerIndex + 1 }),
     },
-    { label: "Carrier seal", value: dash(container.carrierSeal) },
-    { label: "Shipper seal", value: dash(container.shipperSeal) },
-    { label: "Tare weight", value: formatTare(container.tareWeight) },
+    { label: t("cargo.carrierSeal"), value: dash(container.carrierSeal) },
+    { label: t("cargo.shipperSeal"), value: dash(container.shipperSeal) },
+    { label: t("cargo.tareWeight"), value: formatTare(container.tareWeight) },
   ];
 
   return (
@@ -340,6 +356,7 @@ function SiPreviewContainerDetailPanel({
 }
 
 function SiPreviewCommodityTable({ cargoLines }: { cargoLines: SICargoLine[] }) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
   const totalWeight = cargoLines.reduce(
     (sum, line) => sum + Number(line?.grossWeight || 0),
     0,
@@ -350,10 +367,12 @@ function SiPreviewCommodityTable({ cargoLines }: { cargoLines: SICargoLine[] }) 
       <div className="booking-cargo-commodity-toolbar">
         <div className="booking-cargo-commodity-toolbar__title">
           <Text strong className="booking-cargo-commodity-toolbar__heading">
-            Commodities ({cargoLines.length})
+            {t("cargo.commodities", { count: cargoLines.length })}
           </Text>
           <span className="booking-cargo-commodity-toolbar__weight">
-            Total weight: {formatWeight(totalWeight)}
+            {t("cargo.totalWeightLabel", {
+              weight: formatWeight(totalWeight),
+            })}
           </span>
         </div>
       </div>
@@ -363,12 +382,12 @@ function SiPreviewCommodityTable({ cargoLines }: { cargoLines: SICargoLine[] }) 
           <thead>
             <tr>
               <th className="booking-cargo-commodity-table__num">#</th>
-              <th>Commodity</th>
-              <th>HS code</th>
-              <th>Package type</th>
-              <th>Packages</th>
-              <th>Weight</th>
-              <th>Volume</th>
+              <th>{t("cargo.commodity")}</th>
+              <th>{t("cargo.hsCode")}</th>
+              <th>{t("cargo.packageType")}</th>
+              <th>{t("cargo.packages")}</th>
+              <th>{t("cargo.weight")}</th>
+              <th>{t("cargo.volume")}</th>
             </tr>
           </thead>
           <tbody>
@@ -383,7 +402,7 @@ function SiPreviewCommodityTable({ cargoLines }: { cargoLines: SICargoLine[] }) 
                   </span>
                   {line?.isDangerousGoods ? (
                     <span className="booking-cargo-special booking-cargo-special--dg">
-                      DG
+                      {t("cargo.dg")}
                     </span>
                   ) : null}
                 </td>

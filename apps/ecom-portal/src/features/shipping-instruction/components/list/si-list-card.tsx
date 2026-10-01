@@ -1,10 +1,11 @@
-// Modified by Sekar Nagarajan (2026-09-15 12:15)
+// Modified by Sekar Nagarajan (2026-09-29 16:45)
 import { Tag } from "antd";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../../components/icons";
 import { ModuleRecordCardShell } from "../../../../components/shared/record-card";
 import type { SIListDTO } from "../../types/si.types";
-import { getSiStatusTagColor } from "../../utils/si-status";
+import { getSiStatusLabel, getSiStatusTagColor } from "../../utils/si-status";
 import { SiListActions } from "./si-list-actions";
 
 export interface SiListCardProps {
@@ -19,7 +20,6 @@ interface MetaField {
   key: string;
   label: string;
   value: string;
-  // icon: ReactNode;
 }
 
 export function SiListCard({
@@ -29,6 +29,7 @@ export function SiListCard({
   onView,
   onCancel,
 }: SiListCardProps) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
   const title = record.siNo || record.bookingNo || record.blNo || record.id;
   const lane = `${record.origin} → ${record.delivery}`;
 
@@ -43,33 +44,28 @@ export function SiListCard({
   const metaFields: MetaField[] = [
     {
       key: "booking",
-      label: "Booking",
+      label: t("labels.booking"),
       value: record.bookingNo || "—",
-      // icon: <AppIcon icon={NavIcons.booking} size={14} />,
     },
     {
       key: "bl",
-      label: "B/L No",
+      label: t("labels.blNo"),
       value: record.blNo || "—",
-      // icon: <AppIcon icon={NavIcons.billOfLading} size={14} />,
     },
     {
       key: "agency",
-      label: "Agency Ref",
+      label: t("labels.agencyRef"),
       value: record.agencyRefNo || "—",
-      // icon: <AppIcon icon={Icons.building} size={14} />,
     },
     {
       key: "created",
-      label: "Created",
+      label: t("labels.created"),
       value: record.createdDate || "—",
-      // icon: <AppIcon icon={Icons.calendar} size={14} />,
     },
     {
       key: "submitted",
-      label: "Submitted",
+      label: t("labels.submitted"),
       value: record.submittedDate || "—",
-      // icon: <AppIcon icon={Icons.clock} size={14} />,
     },
   ];
 
@@ -90,7 +86,7 @@ export function SiListCard({
               className="si-record-card__status module-status-tag"
               color={getSiStatusTagColor(record.status)}
             >
-              {record.status}
+              {getSiStatusLabel(record.status, t)}
             </Tag>
           </div>
           <div className="si-record-card__lane" title={lane}>
@@ -102,7 +98,6 @@ export function SiListCard({
         <div className="si-record-card__meta">
           {metaFields.map((field) => (
             <div key={field.key} className="si-record-card__meta-item">
-              <span className="si-record-card__meta-icon">{field.icon}</span>
               <div className="si-record-card__meta-copy">
                 <span className="si-record-card__meta-label">
                   {field.label}

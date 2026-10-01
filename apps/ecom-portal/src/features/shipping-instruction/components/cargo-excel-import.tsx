@@ -36,7 +36,7 @@ export function CargoExcelImport({
   containerCount = 0,
   onImported,
 }: CargoExcelImportProps) {
-  const { t } = useTranslation(["bill-of-lading", "common"]);
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
   const toast = useToast();
   const confirm = useConfirm();
   const [exporting, setExporting] = useState(false);

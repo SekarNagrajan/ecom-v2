@@ -1,7 +1,8 @@
-// Modified by Sekar Nagarajan (2026-08-28 12:58)
+// Modified by Sekar Nagarajan (2026-09-29 16:55)
 import { AppButton } from "@solverminds/shared-ui";
 import { Card, Typography } from "antd";
 import type { ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 
 import { ModuleEmptyState } from "../../../../components/shared/module-empty-state";
 import type { SIChargeLine, SIWizardStepProps } from "../../types/si.types";
@@ -32,6 +33,24 @@ function ReadonlyField({
   );
 }
 
+function prepaidCollectLabel(
+  value: SIChargeLine["prepaidCollect"],
+  t: (key: string) => string,
+): string {
+  switch (value) {
+    case "PREPAID":
+      return t("labels.prepaid");
+    case "COLLECT":
+      return t("labels.collect");
+    case "PAY_AT":
+      return t("labels.payAt");
+    default: {
+      const _exhaustive: never = value;
+      return _exhaustive;
+    }
+  }
+}
+
 export function SiChargeTabStep({
   data,
   onNext,
@@ -39,6 +58,7 @@ export function SiChargeTabStep({
   isFirstStep,
   isSubmitting,
 }: SIWizardStepProps) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
   const charges: SIChargeLine[] = data.charges ?? [];
 
   return (
@@ -48,7 +68,7 @@ export function SiChargeTabStep({
           className="form-step-card form-step-section si-master-step-card"
           title={
             <Title level={5} className="form-step-card-title">
-              Charge Summary
+              {t("wizard.chargeSummary.title")}
             </Title>
           }
         >
@@ -56,7 +76,7 @@ export function SiChargeTabStep({
             <ModuleEmptyState
               artSize="sm"
               variant="blank"
-              title="No charges available for this SI"
+              title={t("empty.noCharges")}
               style={{ padding: 12 }}
             />
           ) : (
@@ -66,20 +86,29 @@ export function SiChargeTabStep({
                   key={line.id}
                   size="small"
                   className="form-step-card form-step-section si-master-step-card"
-                  title={`Charge ${index + 1}`}
+                  title={t("wizard.charges.chargeLineTitle", { n: index + 1 })}
                 >
                   <div className="si-charge-tab-form-grid">
-                    <ReadonlyField label="Code" value={line.chargeCode} />
                     <ReadonlyField
-                      label="Description"
+                      label={t("columns.code")}
+                      value={line.chargeCode}
+                    />
+                    <ReadonlyField
+                      label={t("columns.description")}
                       value={line.description}
                     />
                     <ReadonlyField
-                      label="Amount"
+                      label={t("columns.amount")}
                       value={`${line.currency} ${line.amount.toFixed(2)}`}
                     />
-                    <ReadonlyField label="P/C" value={line.prepaidCollect} />
-                    <ReadonlyField label="Payor" value={line.payByCustType} />
+                    <ReadonlyField
+                      label={t("wizard.charges.pceShort")}
+                      value={prepaidCollectLabel(line.prepaidCollect, t)}
+                    />
+                    <ReadonlyField
+                      label={t("labels.payor")}
+                      value={line.payByCustType}
+                    />
                   </div>
                 </Card>
               ))}
@@ -93,10 +122,10 @@ export function SiChargeTabStep({
           onClick={onPrevious}
           disabled={isFirstStep || isSubmitting}
         >
-          Previous
+          {t("common:actions.previous")}
         </AppButton>
         <AppButton type="primary" onClick={onNext} disabled={isSubmitting}>
-          Next
+          {t("common:actions.next")}
         </AppButton>
       </div>
     </div>

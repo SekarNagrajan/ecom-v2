@@ -1,8 +1,9 @@
-// Modified by Sekar Nagarajan (2026-08-26 12:38)
+// Modified by Sekar Nagarajan (2026-09-29 16:45)
 import { AppButton } from "@solverminds/shared-ui";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { Card, Result, Space } from "antd";
+import { useTranslation } from "react-i18next";
 
 import {
   AppIcon,
@@ -19,6 +20,7 @@ import { SiModuleStyles } from "./components/si-module-styles";
 import { SiDetailsViewer } from "./components/view/SiDetailsViewer";
 
 export function ShippingInstructionViewRoute() {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
   const MODULE_TITLES = useModuleTitles();
   const navigate = useNavigate();
   const { siId } = useParams({ strict: false });
@@ -46,14 +48,14 @@ export function ShippingInstructionViewRoute() {
         <SiModuleStyles />
         <Result
           status="404"
-          title="Shipping Instruction not found"
+          title={t("empty.notFound")}
           extra={
             <AppButton
               danger
               icon={<AppIcon icon={Icons.arrowLeft} size={16} tone="delete" />}
               onClick={goDashboard}
             >
-              Back to SI
+              {t("actions.backToSi")}
             </AppButton>
           }
         />
@@ -81,7 +83,7 @@ export function ShippingInstructionViewRoute() {
                 }
                 onClick={goDashboard}
               >
-                Back to SI
+                {t("actions.backToSi")}
               </AppButton>
             }
           />
@@ -92,14 +94,16 @@ export function ShippingInstructionViewRoute() {
             <div className="si-route-port si-route-port--origin">
               <div className="si-route-port__label">
                 <AppIcon icon={Icons.mapPin} size={14} />
-                Origin
+                {t("labels.origin")}
               </div>
               <div className="si-route-port__code form-step-readonly-value">
                 {listRow.origin}
               </div>
             </div>
             <div className="si-route-connector">
-              <span className="si-route-connector__label">Port to Port</span>
+              <span className="si-route-connector__label">
+                {t("labels.portToPort")}
+              </span>
               <div className="si-route-connector__line">
                 <span className="si-route-connector__track" />
                 <AppIcon icon={Icons.arrowRight} size={14} />
@@ -109,7 +113,7 @@ export function ShippingInstructionViewRoute() {
             <div className="si-route-port si-route-port--delivery">
               <div className="si-route-port__label">
                 <AppIcon icon={Icons.mapPin} size={14} />
-                Delivery
+                {t("labels.delivery")}
               </div>
               <div className="si-route-port__code form-step-readonly-value">
                 {listRow.delivery}

@@ -49,7 +49,7 @@ export function CargoSmartImportGrid({
   onRowsChange,
   onDeleteWouldDropContainer,
 }: CargoSmartImportGridProps) {
-  const { t } = useTranslation(["bill-of-lading", "common"]);
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
   const rowsRef = useRef(rows);
   rowsRef.current = rows;
   const onRowsChangeRef = useRef(onRowsChange);

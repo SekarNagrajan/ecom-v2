@@ -227,119 +227,147 @@ export const emptySiEnsDeclarant = (): SIEnsDeclarant => ({
   fillingType: "House BL",
 });
 
-const siEnsPartySchema = z.object({
-  customerCode: z.string().optional(),
-  name: z.string().max(150),
-  address: z.string().max(150),
-  address2: z.string().max(150).optional(),
-  city: z.string().max(150),
-  country: z.string().max(50),
-  state: z.string().max(50).optional(),
-  zip: z.string().max(15).optional(),
-  phone: z.string().max(20).optional(),
-  fax: z.string().max(20).optional(),
-  email: z.string().max(75).optional(),
-  eori: z.string().max(17).optional(),
-  personType: z
-    .enum(["", "Legal", "Natural", "Association of persons"])
-    .optional(),
-});
+export function createSiEnsStepSchema(t: (key: string, options?: object) => string) {
+  const optionalEmail = (maxLen: number) =>
+    z
+      .string()
+      .max(maxLen)
+      .optional()
+      .refine(
+        (val) => !val?.trim() || z.string().email().safeParse(val).success,
+        { message: t("wizard.validation.invalidEmail") },
+      );
 
-const siEnsDeclarantSchema = z.object({
-  name: z.string().max(150),
-  address: z.string().max(150),
-  address2: z.string().max(150),
-  city: z.string().max(150),
-  zip: z.string().max(15).optional(),
-  country: z.string().max(50),
-  state: z.string().max(50),
-  telephone: z.string().max(25),
-  eori: z.string().max(20),
-  email: z.string().max(100),
-  fillingType: z.enum(["House BL", "Sub-House BL"]),
-});
-
-export const siEnsStepSchema = z
-  .object({
-    ensRequired: z.boolean(),
-    euCustZone: z.enum(["Y", "N"]),
-    blTypeEns: z.enum(["Straight BL", "Master BL"]),
-    ensFillingType: z.enum(["Single Filing", "Multiple Filing"]),
-    paymentMethod: z.enum(["Wire Transfer", "Not Prepaid"]),
-    declarant: siEnsDeclarantSchema.optional(),
-    buyer: siEnsPartySchema,
-    seller: siEnsPartySchema,
-  })
-  .superRefine((values, ctx) => {
-    if (!values.ensRequired) return;
-
-    if (values.ensFillingType === "Multiple Filing") {
-      const d = values.declarant;
-      const requiredDeclarant: Array<keyof SIEnsDeclarant> = [
-        "name",
-        "address",
-        "address2",
-        "city",
-        "country",
-        "state",
-        "telephone",
-        "eori",
-        "email",
-        "fillingType",
-      ];
-      for (const key of requiredDeclarant) {
-        const value = d?.[key];
-        if (!value || !String(value).trim()) {
-          ctx.addIssue({
-            code: "custom",
-            path: ["declarant", key],
-            message: "Required for Multiple Filing",
-          });
-        }
-      }
-      return;
-    }
-
-    const requireParty = (
-      party: z.infer<typeof siEnsPartySchema>,
-      path: "buyer" | "seller",
-      label: string,
-    ) => {
-      if (!party.name.trim()) {
-        ctx.addIssue({
-          code: "custom",
-          path: [path, "name"],
-          message: `${label} name is required`,
-        });
-      }
-      if (!party.address.trim()) {
-        ctx.addIssue({
-          code: "custom",
-          path: [path, "address"],
-          message: `${label} address is required`,
-        });
-      }
-      if (!party.city.trim()) {
-        ctx.addIssue({
-          code: "custom",
-          path: [path, "city"],
-          message: `${label} city is required`,
-        });
-      }
-      if (!party.country.trim()) {
-        ctx.addIssue({
-          code: "custom",
-          path: [path, "country"],
-          message: `${label} country is required`,
-        });
-      }
-    };
-
-    requireParty(values.buyer, "buyer", "Buyer");
-    requireParty(values.seller, "seller", "Seller");
+  const siEnsPartySchema = z.object({
+    customerCode: z.string().optional(),
+    name: z.string().max(150),
+    address: z.string().max(150),
+    address2: z.string().max(150).optional(),
+    city: z.string().max(150),
+    country: z.string().max(50),
+    state: z.string().max(50).optional(),
+    zip: z.string().max(15).optional(),
+    phone: z.string().max(20).optional(),
+    fax: z.string().max(20).optional(),
+    email: optionalEmail(75),
+    eori: z.string().max(17).optional(),
+    personType: z
+      .enum(["", "Legal", "Natural", "Association of persons"])
+      .optional(),
   });
 
-export type SiEnsStepForm = z.infer<typeof siEnsStepSchema>;
+  const siEnsDeclarantSchema = z.object({
+    name: z.string().max(150),
+    address: z.string().max(150),
+    address2: z.string().max(150),
+    city: z.string().max(150),
+    zip: z.string().max(15).optional(),
+    country: z.string().max(50),
+    state: z.string().max(50),
+    telephone: z.string().max(25),
+    eori: z.string().max(20),
+    email: z
+      .string()
+      .max(100)
+      .refine(
+        (val) => !val.trim() || z.string().email().safeParse(val).success,
+        { message: t("wizard.validation.invalidEmail") },
+      ),
+    fillingType: z.enum(["House BL", "Sub-House BL"]),
+  });
+
+  return z
+    .object({
+      ensRequired: z.boolean(),
+      euCustZone: z.enum(["Y", "N"]),
+      blTypeEns: z.enum(["Straight BL", "Master BL"]),
+      ensFillingType: z.enum(["Single Filing", "Multiple Filing"]),
+      paymentMethod: z.enum(["Wire Transfer", "Not Prepaid"]),
+      declarant: siEnsDeclarantSchema.optional(),
+      buyer: siEnsPartySchema,
+      seller: siEnsPartySchema,
+    })
+    .superRefine((values, ctx) => {
+      if (!values.ensRequired) return;
+
+      if (values.ensFillingType === "Multiple Filing") {
+        const d = values.declarant;
+        const requiredDeclarant: Array<keyof SIEnsDeclarant> = [
+          "name",
+          "address",
+          "address2",
+          "city",
+          "country",
+          "state",
+          "telephone",
+          "eori",
+          "email",
+          "fillingType",
+        ];
+        for (const key of requiredDeclarant) {
+          const value = d?.[key];
+          if (!value || !String(value).trim()) {
+            ctx.addIssue({
+              code: "custom",
+              path: ["declarant", key],
+              message: t("wizard.validation.ensRequiredMultipleFiling"),
+            });
+          }
+        }
+        return;
+      }
+
+      const requireParty = (
+        party: z.infer<typeof siEnsPartySchema>,
+        path: "buyer" | "seller",
+        partyLabel: string,
+      ) => {
+        if (!party.name.trim()) {
+          ctx.addIssue({
+            code: "custom",
+            path: [path, "name"],
+            message: t("wizard.validation.ensPartyNameRequired", {
+              party: partyLabel,
+            }),
+          });
+        }
+        if (!party.address.trim()) {
+          ctx.addIssue({
+            code: "custom",
+            path: [path, "address"],
+            message: t("wizard.validation.ensPartyAddressRequired", {
+              party: partyLabel,
+            }),
+          });
+        }
+        if (!party.city.trim()) {
+          ctx.addIssue({
+            code: "custom",
+            path: [path, "city"],
+            message: t("wizard.validation.ensPartyCityRequired", {
+              party: partyLabel,
+            }),
+          });
+        }
+        if (!party.country.trim()) {
+          ctx.addIssue({
+            code: "custom",
+            path: [path, "country"],
+            message: t("wizard.validation.ensPartyCountryRequired", {
+              party: partyLabel,
+            }),
+          });
+        }
+      };
+
+      requireParty(values.buyer, "buyer", t("labels.buyer"));
+      requireParty(values.seller, "seller", t("labels.seller"));
+    });
+}
+
+export type SiEnsStepForm = z.infer<
+  ReturnType<typeof createSiEnsStepSchema>
+>;
 
 export interface SIFileItem {
   id: string;
@@ -398,65 +426,108 @@ export interface SIDTO {
   preview?: SIPreviewFields;
 }
 
+type SiTranslateFn = (key: string) => string;
+
 /** Step 1 — Master Details (SIBookingDetails.jsp flags) */
-export const siMasterDetailsSchema = z.object({
-  blType: z.enum(["Original", "Seaway"], {
-    message: "B/L Type is required",
-  }),
-  releaseType: z.enum(["O", "T"], {
-    message: "Release Type is required",
-  }),
-  freightOption: z.enum(["PREPAID", "COLLECT"], {
-    message: "Freight Option is required",
-  }),
-  nvocc: z.boolean().optional(),
-  t2lFiling: z.boolean().optional(),
-  ensFilingHint: z.enum(["N", "S", "P"]).optional(),
-  agencyRefNo: z.string().optional(),
-});
-export type SiMasterDetailsForm = z.infer<typeof siMasterDetailsSchema>;
+export function createSiMasterDetailsSchema(t: SiTranslateFn) {
+  return z.object({
+    blType: z.enum(["Original", "Seaway"], {
+      message: t("wizard.validation.blTypeRequired"),
+    }),
+    releaseType: z.enum(["O", "T"], {
+      message: t("wizard.validation.releaseTypeRequired"),
+    }),
+    freightOption: z.enum(["PREPAID", "COLLECT"], {
+      message: t("wizard.validation.freightOptionRequired"),
+    }),
+    nvocc: z.boolean().optional(),
+    t2lFiling: z.boolean().optional(),
+    ensFilingHint: z.enum(["N", "S", "P"]).optional(),
+    agencyRefNo: z.string().optional(),
+  });
+}
+export const siMasterDetailsSchema = createSiMasterDetailsSchema((key) => key);
+export type SiMasterDetailsForm = z.infer<
+  ReturnType<typeof createSiMasterDetailsSchema>
+>;
 
 /** Step 2 — Parties */
-export const siPartiesSchema = z.object({
-  shipperName: z.string().min(1, "Booking Party is required"),
-  shipperAddress: z.string().min(1, "Booking Party address is required"),
-  shipperPrint: z.boolean(),
-  consigneeName: z.string().min(1, "Consignee name is required"),
-  consigneeAddress: z.string().min(1, "Consignee address is required"),
-  consigneePrint: z.boolean(),
-  consigneeToOrder: z.boolean(),
-  notifyName: z.string().min(1, "Notify Party is required"),
-  notifyAddress: z.string().min(1, "Notify Party address is required"),
-  notifyPrint: z.boolean(),
-});
-export type SiPartiesForm = z.infer<typeof siPartiesSchema>;
+export function createSiPartiesSchema(t: SiTranslateFn) {
+  return z.object({
+    shipperName: z.string().min(1, t("wizard.validation.bookingPartyRequired")),
+    shipperAddress: z
+      .string()
+      .min(1, t("wizard.validation.bookingPartyAddressRequired")),
+    shipperPrint: z.boolean(),
+    consigneeName: z
+      .string()
+      .min(1, t("wizard.validation.consigneeNameRequired")),
+    consigneeAddress: z
+      .string()
+      .min(1, t("wizard.validation.consigneeAddressRequired")),
+    consigneePrint: z.boolean(),
+    consigneeToOrder: z.boolean(),
+    notifyName: z.string().min(1, t("wizard.validation.notifyRequired")),
+    notifyAddress: z
+      .string()
+      .min(1, t("wizard.validation.notifyAddressRequired")),
+    notifyPrint: z.boolean(),
+  });
+}
+export const siPartiesSchema = createSiPartiesSchema((key) => key);
+export type SiPartiesForm = z.infer<ReturnType<typeof createSiPartiesSchema>>;
 
-export const siRoutingStepSchema = z.object({
-  originPrint: z.string().min(1, "Origin print text is required"),
-  polPrint: z.string().min(1, "Load port print text is required"),
-  podPrint: z.string().min(1, "Discharge port print text is required"),
-  deliveryPrint: z.string().min(1, "Delivery print text is required"),
-  vesselVoyage: z.string().optional(),
-});
-export type SiRoutingStepValues = z.infer<typeof siRoutingStepSchema>;
+export function createSiRoutingStepSchema(t: SiTranslateFn) {
+  return z.object({
+    originPrint: z
+      .string()
+      .min(1, t("wizard.validation.originPrintRequired")),
+    polPrint: z
+      .string()
+      .min(1, t("wizard.validation.loadPortPrintRequired")),
+    podPrint: z
+      .string()
+      .min(1, t("wizard.validation.dischargePortPrintRequired")),
+    deliveryPrint: z
+      .string()
+      .min(1, t("wizard.validation.deliveryPrintRequired")),
+    vesselVoyage: z.string().optional(),
+  });
+}
+export const siRoutingStepSchema = createSiRoutingStepSchema((key) => key);
+export type SiRoutingStepValues = z.infer<
+  ReturnType<typeof createSiRoutingStepSchema>
+>;
 
-export const siChargeLineSchema = z.object({
-  id: z.string(),
-  chargeCode: z.string().min(1, "Charge code is required"),
-  description: z.string().min(1, "Description is required"),
-  amount: z.number().min(0),
-  currency: z.string().min(1),
-  prepaidCollect: z.enum(["PREPAID", "COLLECT", "PAY_AT"]),
-  payByCustType: z.string().min(1, "Payor is required"),
-  prepaidAmount: z.number().optional(),
-  collectAmount: z.number().optional(),
-  payAtAmount: z.number().optional(),
-});
+export function createSiChargeLineSchema(t: SiTranslateFn) {
+  return z.object({
+    id: z.string(),
+    chargeCode: z.string().min(1, t("wizard.validation.chargeCodeRequired")),
+    description: z
+      .string()
+      .min(1, t("wizard.validation.descriptionRequired")),
+    amount: z.number().min(0),
+    currency: z.string().min(1),
+    prepaidCollect: z.enum(["PREPAID", "COLLECT", "PAY_AT"]),
+    payByCustType: z.string().min(1, t("wizard.validation.payorRequired")),
+    prepaidAmount: z.number().optional(),
+    collectAmount: z.number().optional(),
+    payAtAmount: z.number().optional(),
+  });
+}
+export const siChargeLineSchema = createSiChargeLineSchema((key) => key);
 
-export const siChargesStepSchema = z.object({
-  charges: z.array(siChargeLineSchema).min(1, "At least one charge is required"),
-});
-export type SiChargesStepValues = z.infer<typeof siChargesStepSchema>;
+export function createSiChargesStepSchema(t: SiTranslateFn) {
+  return z.object({
+    charges: z
+      .array(createSiChargeLineSchema(t))
+      .min(1, t("wizard.validation.atLeastOneCharge")),
+  });
+}
+export const siChargesStepSchema = createSiChargesStepSchema((key) => key);
+export type SiChargesStepValues = z.infer<
+  ReturnType<typeof createSiChargesStepSchema>
+>;
 
 export const siPreviewStepSchema = z.object({
   declaredValue: z.string().optional(),
@@ -474,64 +545,76 @@ const newCargoLineId = () =>
     ? crypto.randomUUID()
     : `cargo-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
 
-export const siCargoLineSchema = z.object({
-  id: z.string().min(1),
-  hsCode: z.string().min(1, "Commodity Code is required"),
-  commodityCode: z.string().optional(),
-  packageType: z.string().min(1, "Package Type is required"),
-  packageCount: z.number().min(1, "Quantity is required"),
-  grossWeight: z.number().min(1, "Weight is required"),
-  // Modified by Sekar Nagarajan (2026-08-28 17:03)
-  netWeight: z.number().min(0).optional(),
-  volume: z.number().min(0, "Volume is required"),
-  description: z.string().min(1, "Commodity Description is required"),
-  marksAndNumbers: z.string().optional(),
-  // Modified by Sekar Nagarajan (2026-08-28 12:22)
-  isDangerousGoods: z.boolean().optional().default(false),
-  unNumber: z.string().optional(),
-  dgClass: z.string().optional(),
-  flashPoint: z.string().optional(),
-  marinePollutant: z.boolean().optional().default(false),
-  shippingName: z.string().optional(),
-});
+export function createSiCargoLineSchema(t: SiTranslateFn) {
+  return z.object({
+    id: z.string().min(1),
+    hsCode: z.string().min(1, t("wizard.validation.commodityCodeRequired")),
+    commodityCode: z.string().optional(),
+    packageType: z.string().min(1, t("wizard.validation.packageTypeRequired")),
+    packageCount: z.number().min(1, t("wizard.validation.quantityRequired")),
+    grossWeight: z.number().min(1, t("wizard.validation.weightRequired")),
+    // Modified by Sekar Nagarajan (2026-08-28 17:03)
+    netWeight: z.number().min(0).optional(),
+    volume: z.number().min(0, t("wizard.validation.volumeRequired")),
+    description: z
+      .string()
+      .min(1, t("wizard.validation.commodityDescriptionRequired")),
+    marksAndNumbers: z.string().optional(),
+    // Modified by Sekar Nagarajan (2026-08-28 12:22)
+    isDangerousGoods: z.boolean().optional().default(false),
+    unNumber: z.string().optional(),
+    dgClass: z.string().optional(),
+    flashPoint: z.string().optional(),
+    marinePollutant: z.boolean().optional().default(false),
+    shippingName: z.string().optional(),
+  });
+}
+export const siCargoLineSchema = createSiCargoLineSchema((key) => key);
 
-export const siContainerCargoSchema = z.object({
-  id: z.string(),
-  containerNo: z.string(),
-  eqpSize: z.string(),
-  carrierSeal: z.string().optional(),
-  shipperSeal: z.string().optional(),
-  cargoLines: z
-    .array(siCargoLineSchema)
-    .min(1, "At least one commodity is required"),
-});
+function createSiContainerCargoSchema(t: SiTranslateFn) {
+  return z.object({
+    id: z.string(),
+    containerNo: z.string(),
+    eqpSize: z.string(),
+    carrierSeal: z.string().optional(),
+    shipperSeal: z.string().optional(),
+    cargoLines: z
+      .array(createSiCargoLineSchema(t))
+      .min(1, t("wizard.validation.atLeastOneCommodity")),
+  });
+}
 
-export const siCargoStepSchema = z
-  .object({
-    containers: z.array(siContainerCargoSchema).min(1),
-  })
-  .superRefine((data, ctx) => {
-    data.containers.forEach((container, ci) => {
-      container.cargoLines.forEach((line, mi) => {
-        if (!line.isDangerousGoods) return;
-        if (!line.unNumber || line.unNumber.trim() === "") {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "UN No is required",
-            path: ["containers", ci, "cargoLines", mi, "unNumber"],
-          });
-        }
-        if (!line.dgClass || line.dgClass.trim() === "") {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "DG Class is required",
-            path: ["containers", ci, "cargoLines", mi, "dgClass"],
-          });
-        }
+export function createSiCargoStepSchema(t: SiTranslateFn) {
+  return z
+    .object({
+      containers: z.array(createSiContainerCargoSchema(t)).min(1),
+    })
+    .superRefine((data, ctx) => {
+      data.containers.forEach((container, ci) => {
+        container.cargoLines.forEach((line, mi) => {
+          if (!line.isDangerousGoods) return;
+          if (!line.unNumber || line.unNumber.trim() === "") {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: t("wizard.validation.unNoRequired"),
+              path: ["containers", ci, "cargoLines", mi, "unNumber"],
+            });
+          }
+          if (!line.dgClass || line.dgClass.trim() === "") {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: t("wizard.validation.dgClassRequired"),
+              path: ["containers", ci, "cargoLines", mi, "dgClass"],
+            });
+          }
+        });
       });
     });
-  });
-export type SiCargoStepForm = z.infer<typeof siCargoStepSchema>;
+}
+export const siCargoStepSchema = createSiCargoStepSchema((key) => key);
+export type SiCargoStepForm = z.infer<
+  ReturnType<typeof createSiCargoStepSchema>
+>;
 
 export function createEmptyCargoLine(): SICargoLine {
   return {

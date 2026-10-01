@@ -5,16 +5,18 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
 import { Alert, Card, Segmented, Switch, Typography } from "antd";
-import { Controller, useForm } from "react-hook-form";
+import { useMemo } from "react";
+import { Controller, useForm, type Resolver } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import {
   FORM_YES_NO_SWITCH_CLASS,
   yesNoSwitchInner,
 } from "../../../../components/shared/yes-no-switch";
 import {
+  createSiEnsStepSchema,
   emptySiEnsDeclarant,
   emptySiEnsParty,
-  siEnsStepSchema,
   type SIEnsInfo,
   type SiEnsStepForm,
   type SIWizardStepProps,
@@ -43,6 +45,10 @@ export function SiEnsStep({
   isFirstStep,
   isSubmitting,
 }: SIWizardStepProps) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
+
+  const schema = useMemo(() => createSiEnsStepSchema(t), [t]);
+
   const {
     control,
     handleSubmit,
@@ -50,7 +56,7 @@ export function SiEnsStep({
     setValue,
     formState: { errors },
   } = useForm<SiEnsStepForm>({
-    resolver: zodResolver(siEnsStepSchema),
+    resolver: zodResolver(schema) as Resolver<SiEnsStepForm>,
     defaultValues: defaults(data.ens),
   });
 
@@ -118,14 +124,13 @@ export function SiEnsStep({
           className="form-step-card form-step-section"
           title={
             <Title level={5} className="form-step-card-title">
-              ENS Details
+              {t("wizard.ens.title")}
             </Title>
           }
         >
-          {/* Modified by Sekar Nagarajan (2026-09-01 16:36) — booking ENS layout parity */}
           <div className="form-ens-required-row form-ens-top-row">
             <div className="form-field-cell">
-              <label className="form-field-label">ENS</label>
+              <label className="form-field-label">{t("wizard.ens.label")}</label>
               <Controller
                 control={control}
                 name="ensRequired"
@@ -145,7 +150,9 @@ export function SiEnsStep({
             {ensRequired ? (
               <>
                 <div className="form-field-cell">
-                  <label className="form-field-label">Type of B/L</label>
+                  <label className="form-field-label">
+                    {t("wizard.ens.typeOfBl")}
+                  </label>
                   <Controller
                     control={control}
                     name="blTypeEns"
@@ -164,8 +171,14 @@ export function SiEnsStep({
                           );
                         }}
                         options={[
-                          { label: "Straight BL", value: "Straight BL" },
-                          { label: "Master BL", value: "Master BL" },
+                          {
+                            label: t("wizard.ens.options.straightBl"),
+                            value: "Straight BL",
+                          },
+                          {
+                            label: t("wizard.ens.options.masterBl"),
+                            value: "Master BL",
+                          },
                         ]}
                       />
                     )}
@@ -173,7 +186,9 @@ export function SiEnsStep({
                 </div>
 
                 <div className="form-field-cell">
-                  <label className="form-field-label">Type of ENS Filing</label>
+                  <label className="form-field-label">
+                    {t("wizard.ens.filingType")}
+                  </label>
                   <Controller
                     control={control}
                     name="ensFillingType"
@@ -193,9 +208,12 @@ export function SiEnsStep({
                           );
                         }}
                         options={[
-                          { label: "Single Filing", value: "Single Filing" },
                           {
-                            label: "Multiple Filing",
+                            label: t("wizard.ens.options.singleFiling"),
+                            value: "Single Filing",
+                          },
+                          {
+                            label: t("wizard.ens.options.multipleFiling"),
                             value: "Multiple Filing",
                           },
                         ]}
@@ -205,7 +223,9 @@ export function SiEnsStep({
                 </div>
 
                 <div className="form-field-cell">
-                  <label className="form-field-label">Method of Payment</label>
+                  <label className="form-field-label">
+                    {t("wizard.ens.methodOfPayment")}
+                  </label>
                   <Controller
                     control={control}
                     name="paymentMethod"
@@ -216,8 +236,14 @@ export function SiEnsStep({
                         value={value}
                         onChange={onChange}
                         options={[
-                          { label: "Wire Transfer", value: "Wire Transfer" },
-                          { label: "Not Prepaid", value: "Not Prepaid" },
+                          {
+                            label: t("wizard.ens.options.wireTransfer"),
+                            value: "Wire Transfer",
+                          },
+                          {
+                            label: t("wizard.ens.options.notPrepaid"),
+                            value: "Not Prepaid",
+                          },
                         ]}
                       />
                     )}
@@ -235,7 +261,7 @@ export function SiEnsStep({
                   className="form-ens-subcard"
                   title={
                     <Title level={5} className="form-step-card-title">
-                      Supplementary Declarant
+                      {t("wizard.ens.supplementaryDeclarant")}
                     </Title>
                   }
                 >
@@ -248,7 +274,7 @@ export function SiEnsStep({
                     className="form-ens-subcard"
                     title={
                       <Title level={5} className="form-step-card-title">
-                        Buyer
+                        {t("wizard.ens.buyer")}
                       </Title>
                     }
                   >
@@ -264,7 +290,7 @@ export function SiEnsStep({
                     className="form-ens-subcard"
                     title={
                       <Title level={5} className="form-step-card-title">
-                        Seller
+                        {t("wizard.ens.seller")}
                       </Title>
                     }
                   >
@@ -281,21 +307,12 @@ export function SiEnsStep({
                 type="info"
                 showIcon
                 className="form-ens-notes"
-                message="ENS filing notes"
+                message={t("wizard.ens.notesTitle")}
                 description={
                   <>
-                    <div>
-                      Single Filing requires Buyer and Seller details. Multiple
-                      Filing requires Supplementary Declarant details.
-                    </div>
-                    <div>
-                      Straight BL uses Single Filing; Master BL uses Multiple
-                      Filing.
-                    </div>
-                    <div>
-                      Provide accurate EORI and person type where applicable for
-                      EU customs processing.
-                    </div>
+                    <div>{t("wizard.ens.notesFilingRequirements")}</div>
+                    <div>{t("wizard.ens.notesBlTypeMapping")}</div>
+                    <div>{t("wizard.ens.notesEori")}</div>
                   </>
                 }
               />
@@ -306,10 +323,10 @@ export function SiEnsStep({
 
       <div className="form-step-footer">
         <AppButton onClick={onPrevious} disabled={isFirstStep || isSubmitting}>
-          Previous
+          {t("common:actions.previous")}
         </AppButton>
         <AppButton type="primary" htmlType="submit" disabled={isSubmitting}>
-          Next
+          {t("common:actions.next")}
         </AppButton>
       </div>
     </form>

@@ -1,12 +1,13 @@
-// Modified by Sekar Nagarajan (2026-09-05 01:05)
+// Modified by Sekar Nagarajan (2026-09-29 16:55)
 /**
  * Preview — airy review of wizard inputs with Edit → jump to step.
  */
 import { AppButton } from "@solverminds/shared-ui";
 import { Tag, Typography } from "antd";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
-import { WIZARD_STEP_TITLES } from "../../../constants/module-titles";
+import { useWizardStepTitles } from "../../../i18n/use-module-titles";
 import { BookingModuleStyles } from "../../booking/components/booking-module-styles";
 import type { SIWizardStepId } from "../config/si-wizard-config";
 import { DEFAULT_SI_WIZARD_CONFIG } from "../config/si-wizard-config";
@@ -22,7 +23,7 @@ import {
 } from "./preview/si-preview-section";
 import { SiPreviewCargoReview } from "./SiPreviewCargoReview";
 
-const { Text, Title } = Typography;
+const { Text } = Typography;
 
 const REVIEW_PARTY_ROLES: SiPartyRoleKey[] = [
   "shipper",
@@ -62,6 +63,24 @@ function partyForRole(
   }
 }
 
+function blTypeDisplay(
+  value: string,
+  t: (key: string) => string,
+): string {
+  if (value === "Original") return t("labels.originalBl");
+  if (value === "Seaway") return t("labels.seaWaybill");
+  return dash(value);
+}
+
+function freightDisplay(
+  value: string,
+  t: (key: string) => string,
+): string {
+  if (value === "PREPAID") return t("labels.prepaid");
+  if (value === "COLLECT") return t("labels.collect");
+  return dash(value);
+}
+
 export function PreviewStep({
   data,
   onPrevious,
@@ -70,6 +89,8 @@ export function PreviewStep({
   onGoToStep,
   isSubmitting,
 }: SIWizardStepProps) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
+  const WIZARD_STEP_TITLES = useWizardStepTitles();
   const { data: config = DEFAULT_SI_WIZARD_CONFIG } = useSiWizardConfigQuery();
   const go = (stepId: SIWizardStepId) => {
     onGoToStep?.(stepId);
@@ -77,37 +98,43 @@ export function PreviewStep({
 
   const releaseLabel =
     data.releaseType === "O"
-      ? "Original"
+      ? t("labels.original")
       : data.releaseType === "T"
-      ? "Telex Release"
-      : dash(data.releaseType);
+        ? t("labels.telexRelease")
+        : dash(data.releaseType);
 
   const masterRows: { label: string; value: string }[] = [
-    { label: "Booking number", value: dash(data.bookingNo) },
+    { label: t("labels.bookingNumber"), value: dash(data.bookingNo) },
     {
-      label: "SI number",
-      value: dash(data.siNo) === "—" ? "Draft" : dash(data.siNo),
+      label: t("labels.siNumber"),
+      value: dash(data.siNo) === "—" ? t("labels.draft") : dash(data.siNo),
     },
-    { label: "Agency ref", value: dash(data.agencyRefNo) },
-    { label: "B/L type", value: dash(data.blType) },
-    { label: "Release type", value: releaseLabel },
-    { label: "Freight option", value: dash(data.freightOption) },
+    { label: t("labels.agencyRefFull"), value: dash(data.agencyRefNo) },
+    { label: t("labels.blType"), value: blTypeDisplay(data.blType, t) },
+    { label: t("labels.releaseType"), value: releaseLabel },
+    {
+      label: t("labels.freightOption"),
+      value: freightDisplay(data.freightOption, t),
+    },
   ];
   if (config.enableNvocc) {
-    masterRows.push({ label: "NVOCC", value: data.nvocc ? "Yes" : "No" });
+    masterRows.push({
+      label: t("labels.nvocc"),
+      value: data.nvocc ? t("common:actions.yes") : t("common:actions.no"),
+    });
   }
   if (config.enableT2LFiling) {
     masterRows.push({
-      label: "T2L filing",
-      value: data.t2lFiling ? "Yes" : "No",
+      label: t("labels.t2lFiling"),
+      value: data.t2lFiling ? t("common:actions.yes") : t("common:actions.no"),
     });
   }
   if (data.origin || data.loadPort || data.dischargePort || data.delivery) {
     masterRows.push(
-      { label: "Origin", value: dash(data.origin) },
-      { label: "Load port", value: dash(data.loadPort) },
-      { label: "Discharge port", value: dash(data.dischargePort) },
-      { label: "Delivery", value: dash(data.delivery) },
+      { label: t("labels.origin"), value: dash(data.origin) },
+      { label: t("labels.loadPort"), value: dash(data.loadPort) },
+      { label: t("labels.dischargePort"), value: dash(data.dischargePort) },
+      { label: t("labels.delivery"), value: dash(data.delivery) },
     );
   }
 
@@ -118,16 +145,6 @@ export function PreviewStep({
     const party = partyForRole(data.parties, role);
     return party?.name && !reviewRoleSet.has(role);
   });
-
-  const summary = [
-    data.siNo?.trim() || data.bookingNo?.trim() || "Draft SI",
-    data.loadPort && data.dischargePort
-      ? `${data.loadPort} → ${data.dischargePort}`
-      : null,
-    data.routing?.vesselVoyage,
-  ]
-    .filter(Boolean)
-    .join(" · ");
 
   return (
     <div className="form-step-layout">
@@ -158,7 +175,7 @@ export function PreviewStep({
                       extra={
                         role === "consignee" &&
                         data.parties.consignee?.toOrder ? (
-                          <Text type="warning"> (To Order)</Text>
+                          <Text type="warning"> {t("labels.toOrder")}</Text>
                         ) : null
                       }
                     />
@@ -190,27 +207,27 @@ export function PreviewStep({
               <SiPreviewFieldGrid
                 items={[
                   {
-                    label: "Vessel / voyage",
+                    label: t("labels.vesselVoyage"),
                     value: dash(data.routing.vesselVoyage),
                   },
                   {
-                    label: "Origin",
+                    label: t("labels.origin"),
                     value: dash(data.routing.originPrint),
                   },
-                  { label: "POL", value: dash(data.routing.polPrint) },
-                  { label: "POD", value: dash(data.routing.podPrint) },
+                  { label: t("labels.pol"), value: dash(data.routing.polPrint) },
+                  { label: t("labels.pod"), value: dash(data.routing.podPrint) },
                   {
-                    label: "Delivery",
+                    label: t("labels.delivery"),
                     value: dash(data.routing.deliveryPrint),
                   },
                   {
-                    label: "Schedule legs",
+                    label: t("labels.scheduleLegs"),
                     value: String(data.routing.scheduleLegs?.length ?? 0),
                   },
                 ]}
               />
             ) : (
-              <SiPreviewEmpty label="No routing details" />
+              <SiPreviewEmpty label={t("empty.noRouting")} />
             )}
           </SiPreviewSection>
         ) : null}
@@ -233,23 +250,27 @@ export function PreviewStep({
               <SiPreviewFieldGrid
                 items={[
                   {
-                    label: "Required",
-                    value: data.insurance.isInsuranceRequired ? "Yes" : "No",
+                    label: t("labels.insuranceRequired"),
+                    value: data.insurance.isInsuranceRequired
+                      ? t("common:actions.yes")
+                      : t("common:actions.no"),
                   },
                   {
-                    label: "Opt out",
-                    value: data.insurance.optOut ? "Yes" : "No",
+                    label: t("labels.optOut"),
+                    value: data.insurance.optOut
+                      ? t("common:actions.yes")
+                      : t("common:actions.no"),
                   },
                   {
-                    label: "Currency",
+                    label: t("labels.currency"),
                     value: dash(data.insurance.currency),
                   },
                   {
-                    label: "Cargo value",
+                    label: t("labels.cargoValue"),
                     value: dash(data.insurance.cargoValue),
                   },
                   {
-                    label: "Policy no",
+                    label: t("labels.policyNo"),
                     value: dash(data.insurance.policyNo),
                   },
                 ]}
@@ -291,8 +312,10 @@ export function PreviewStep({
               <ul className="si-preview-list">
                 {data.charges.map((line) => (
                   <li key={line.id}>
-                    {line.chargeCode || line.description || "Charge"} —{" "}
-                    {dash(line.amount)} {dash(line.currency)}
+                    {line.chargeCode ||
+                      line.description ||
+                      t("wizard.preview.chargeFallback")}{" "}
+                    — {dash(line.amount)} {dash(line.currency)}
                   </li>
                 ))}
               </ul>
@@ -311,44 +334,50 @@ export function PreviewStep({
             {data.ens?.ensRequired ? (
               <SiPreviewFieldGrid
                 items={[
-                  { label: "ENS required", value: "Yes" },
                   {
-                    label: "EU customs zone",
-                    value: data.ens.euCustZone === "Y" ? "Yes" : "No",
+                    label: t("labels.ensRequired"),
+                    value: t("common:actions.yes"),
                   },
                   {
-                    label: "Type of B/L",
+                    label: t("labels.euCustomsZone"),
+                    value:
+                      data.ens.euCustZone === "Y"
+                        ? t("common:actions.yes")
+                        : t("common:actions.no"),
+                  },
+                  {
+                    label: t("labels.typeOfBl"),
                     value: dash(data.ens.blTypeEns),
                   },
                   {
-                    label: "ENS filing",
+                    label: t("labels.ensFiling"),
                     value: dash(data.ens.ensFillingType),
                   },
                   {
-                    label: "Payment method",
+                    label: t("labels.paymentMethod"),
                     value: dash(data.ens.paymentMethod),
                   },
                   ...(data.ens.ensFillingType === "Single Filing"
                     ? [
                         {
-                          label: "Buyer",
+                          label: t("labels.buyer"),
                           value: dash(data.ens.buyer?.name),
                         },
                         {
-                          label: "Seller",
+                          label: t("labels.seller"),
                           value: dash(data.ens.seller?.name),
                         },
                       ]
                     : [
                         {
-                          label: "Declarant",
+                          label: t("labels.declarant"),
                           value: dash(data.ens.declarant?.name),
                         },
                       ]),
                 ]}
               />
             ) : (
-              <Tag>ENS not required</Tag>
+              <Tag>{t("wizard.preview.ensNotRequired")}</Tag>
             )}
           </SiPreviewSection>
         ) : null}
@@ -361,8 +390,9 @@ export function PreviewStep({
           >
             {data.charges && data.charges.length > 0 ? (
               <Text>
-                {data.charges.length} charge line
-                {data.charges.length === 1 ? "" : "s"} on file
+                {t("wizard.preview.chargeLinesOnFile", {
+                  count: data.charges.length,
+                })}
               </Text>
             ) : (
               <SiPreviewEmpty />
@@ -385,7 +415,7 @@ export function PreviewStep({
                 ))}
               </ul>
             ) : (
-              <SiPreviewEmpty label="No files uploaded" />
+              <SiPreviewEmpty label={t("empty.noFilesUploaded")} />
             )}
           </SiPreviewSection>
         ) : null}
@@ -403,7 +433,7 @@ export function PreviewStep({
               }))}
             />
           ) : (
-            <SiPreviewEmpty label="No reference fields" />
+            <SiPreviewEmpty label={t("empty.noReferenceFields")} />
           )}
         </SiPreviewSection>
       </div>
@@ -411,10 +441,10 @@ export function PreviewStep({
       <div className="form-step-footer form-step-footer--split">
         <div className="form-step-footer__start custom-scroll">
           <AppButton onClick={onPrevious} disabled={isSubmitting}>
-            Previous
+            {t("common:actions.previous")}
           </AppButton>
           <AppButton onClick={onCancel} disabled={isSubmitting}>
-            Cancel
+            {t("common:actions.cancel")}
           </AppButton>
         </div>
         <AppButton
@@ -423,7 +453,7 @@ export function PreviewStep({
           onClick={onSubmit}
           loading={isSubmitting}
         >
-          Submit SI
+          {t("actions.submitSi")}
         </AppButton>
       </div>
     </div>

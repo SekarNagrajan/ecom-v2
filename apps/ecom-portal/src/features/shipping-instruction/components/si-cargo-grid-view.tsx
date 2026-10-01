@@ -5,6 +5,7 @@ import {
   type Control,
   type UseFormSetValue,
 } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import {
@@ -35,26 +36,40 @@ export interface SiCargoGridViewProps {
 }
 
 /** Same fields as list view — container + commodity editors in a flat table. */
-const GRID_HEADERS = [
-  "Actions",
-  "Container No",
-  "Type",
-  "Carrier Seal",
-  "Shipper Seal",
-  "HS Code",
-  "Package Type",
-  "Quantity",
-  "Weight (kg)",
-  "Commodity Description",
-  "Marks & numbers",
+const GRID_HEADER_KEYS = [
+  "actions",
+  "containerNo",
+  "type",
+  "carrierSeal",
+  "shipperSeal",
+  "hsCode",
+  "packageType",
+  "quantity",
+  "weightKg",
+  "commodityDescription",
+  "marksAndNumbers",
 ] as const;
 
-function gridHeaderClass(
-  header: (typeof GRID_HEADERS)[number],
-): string | undefined {
-  if (header === "Actions") return "si-cargo-grid__th-actions";
-  if (header === "Container No") return "si-cargo-grid__th-container";
-  if (header === "Type") return "si-cargo-grid__th-type";
+type GridHeaderKey = (typeof GRID_HEADER_KEYS)[number];
+
+const GRID_HEADER_I18N: Record<GridHeaderKey, string> = {
+  actions: "cargo.columns.actions",
+  containerNo: "cargo.columns.containerNo",
+  type: "cargo.columns.type",
+  carrierSeal: "cargo.columns.carrierSeal",
+  shipperSeal: "cargo.columns.shipperSeal",
+  hsCode: "cargo.columns.hsCode",
+  packageType: "cargo.columns.packageType",
+  quantity: "cargo.columns.quantity",
+  weightKg: "cargo.columns.weightKg",
+  commodityDescription: "cargo.columns.commodityDescription",
+  marksAndNumbers: "cargo.columns.marksAndNumbers",
+};
+
+function gridHeaderClass(header: GridHeaderKey): string | undefined {
+  if (header === "actions") return "si-cargo-grid__th-actions";
+  if (header === "containerNo") return "si-cargo-grid__th-container";
+  if (header === "type") return "si-cargo-grid__th-type";
   return undefined;
 }
 
@@ -68,12 +83,15 @@ export function SiCargoGridView({
   onDuplicateLine,
   onRemoveLine,
 }: SiCargoGridViewProps) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
+
   if (pageIndexes.length === 0) {
     return (
       <ModuleEmptyState
         artSize="sm"
         variant="filtered"
-        title="No containers match"
+        title={t("wizard.cargo.emptyFiltered.title")}
+        message={t("wizard.cargo.emptyFiltered.message")}
         style={{ padding: 12 }}
       />
     );
@@ -85,9 +103,9 @@ export function SiCargoGridView({
         <table className="si-cargo-grid">
           <thead>
             <tr>
-              {GRID_HEADERS.map((h) => (
-                <th key={h} className={gridHeaderClass(h)}>
-                  {h}
+              {GRID_HEADER_KEYS.map((key) => (
+                <th key={key} className={gridHeaderClass(key)}>
+                  {t(GRID_HEADER_I18N[key])}
                 </th>
               ))}
             </tr>
@@ -110,7 +128,7 @@ export function SiCargoGridView({
                       <ListActionsRow>
                         {first ? (
                           <ListActionButton
-                            title="Add Commodity Line"
+                            title={t("wizard.cargo.actions.addCommodityLine")}
                             icon={
                               <AppIcon
                                 icon={Icons.plus}
@@ -128,7 +146,9 @@ export function SiCargoGridView({
                           />
                         )}
                         <ListActionButton
-                          title="Duplicate Commodity Line"
+                          title={t(
+                            "wizard.cargo.actions.duplicateCommodityLine",
+                          )}
                           icon={
                             <AppIcon icon={Icons.copy} size={16} tone="view" />
                           }
@@ -138,8 +158,8 @@ export function SiCargoGridView({
                         <ListActionButton
                           title={
                             canRemove
-                              ? "Delete Commodity Line"
-                              : "At Least One Commodity Is Required"
+                              ? t("wizard.cargo.actions.deleteCommodityLine")
+                              : t("wizard.cargo.actions.minCommodityTooltip")
                           }
                           icon={
                             <AppIcon
@@ -164,7 +184,7 @@ export function SiCargoGridView({
                               {...field}
                               value={field.value ?? ""}
                               size="large"
-                              placeholder="Container No."
+                              placeholder={t("wizard.cargo.fields.containerNo")}
                               className="si-cargo-grid__field si-cargo-grid__field--container"
                             />
                           )}
@@ -192,7 +212,7 @@ export function SiCargoGridView({
                               {...field}
                               value={field.value ?? ""}
                               size="large"
-                              placeholder="Carrier Seal"
+                              placeholder={t("wizard.cargo.fields.carrierSeal")}
                               className="si-cargo-grid__field si-cargo-grid__field--seal"
                             />
                           )}
@@ -209,7 +229,7 @@ export function SiCargoGridView({
                               {...field}
                               value={field.value ?? ""}
                               size="large"
-                              placeholder="Shipper Seal"
+                              placeholder={t("wizard.cargo.fields.shipperSeal")}
                               className="si-cargo-grid__field si-cargo-grid__field--seal"
                             />
                           )}
@@ -269,7 +289,7 @@ export function SiCargoGridView({
                             optionFilterProp="label"
                             popupMatchSelectWidth={220}
                             className="si-cargo-grid__field si-cargo-grid__field--kind"
-                            placeholder="Package Type"
+                            placeholder={t("wizard.cargo.fields.packageType")}
                           />
                         )}
                       />
@@ -299,8 +319,8 @@ export function SiCargoGridView({
                             min={1}
                             size="large"
                             className="si-cargo-grid__field si-cargo-grid__field--weight"
-                            addonAfter="kg"
-                            placeholder="kg"
+                            addonAfter={t("wizard.cargo.list.kg")}
+                            placeholder={t("wizard.cargo.list.kg")}
                           />
                         )}
                       />
@@ -314,7 +334,9 @@ export function SiCargoGridView({
                             {...field}
                             value={field.value ?? ""}
                             size="large"
-                            placeholder="Commodity Description"
+                            placeholder={t(
+                              "wizard.cargo.fields.commodityDescription",
+                            )}
                             className="si-cargo-grid__field si-cargo-grid__field--desc"
                           />
                         )}
@@ -329,7 +351,9 @@ export function SiCargoGridView({
                             {...field}
                             value={field.value ?? ""}
                             size="large"
-                            placeholder="Marks & numbers"
+                            placeholder={t(
+                              "wizard.cargo.fields.marksAndNumbers",
+                            )}
                             className="si-cargo-grid__field si-cargo-grid__field--marks"
                           />
                         )}

@@ -1,20 +1,24 @@
-// Modified by Sekar Nagarajan (2026-09-05 01:05)
+// Modified by Sekar Nagarajan (2026-09-29 16:55)
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { Card, Switch, Tooltip, Typography } from "antd";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import type { BookingCustomerOption } from "../../booking/api/booking.api";
 import { CustomerSearchAutoComplete } from "../../booking/components/party-edit-drawer";
 import { BookingModuleStyles } from "../../booking/components/booking-module-styles";
-import { siPartiesSchema, type SIWizardStepProps } from "../types/si.types";
+import {
+  createSiPartiesSchema,
+  type SIWizardStepProps,
+} from "../types/si.types";
 import {
   cardsToSiPartiesForm,
   DEFAULT_SI_PARTY_ROLES,
   emptySiPartyCard,
+  getSiPartyRoleLabel,
   initialSiPartyCards,
-  SI_PARTY_ROLE_LABEL,
   type SiPartyCardData,
   type SiPartyRoleKey,
 } from "../utils/si-party.utils";
@@ -72,6 +76,7 @@ function SiPartyRoleCard({
     patch: Partial<Pick<SiPartyCardData, "printOnBl" | "toOrder">>,
   ) => void;
 }) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
   const secondary = partySecondaryLines(card);
   const showEdit = !readOnly && canEdit;
   const showDelete = !readOnly && canDelete;
@@ -81,30 +86,30 @@ function SiPartyRoleCard({
       <div className="booking-party-card__head">
         <div className="booking-party-card__role">
           <Text strong className="booking-party-card__role-label">
-            {SI_PARTY_ROLE_LABEL[role]}
+            {getSiPartyRoleLabel(role, t)}
           </Text>
         </div>
         <div className="booking-party-card__actions">
           {fromAccount ? <AppIcon icon={Icons.lock} size={16} /> : null}
           {showEdit ? (
-            <Tooltip title="Edit Party">
+            <Tooltip title={t("parties.editParty")}>
               <AppButton
                 type="link"
                 size="small"
                 className="booking-party-card__edit-btn"
-                aria-label="Edit Party"
+                aria-label={t("parties.editParty")}
                 onClick={onEdit}
                 icon={<AppIcon icon={Icons.edit} size={16} tone="edit" />}
               />
             </Tooltip>
           ) : null}
           {showDelete ? (
-            <Tooltip title="Delete Party">
+            <Tooltip title={t("parties.deleteParty")}>
               <AppButton
                 type="link"
                 size="small"
                 className="booking-party-card__delete-btn"
-                aria-label="Delete Party"
+                aria-label={t("parties.deleteParty")}
                 danger
                 onClick={onDelete}
                 icon={<AppIcon icon={Icons.trash} size={16} tone="delete" />}
@@ -130,12 +135,12 @@ function SiPartyRoleCard({
           ))
         ) : (
           <Text type="secondary" className="booking-party-card__meta">
-            No additional contact details
+            {t("parties.noContactDetails")}
           </Text>
         )}
         <div className="si-party-card__flags">
           <label className="si-party-card__flag">
-            <Text>Print on B/L</Text>
+            <Text>{t("parties.printOnBl")}</Text>
             <Switch
               size="small"
               checked={card.printOnBl}
@@ -145,7 +150,7 @@ function SiPartyRoleCard({
           </label>
           {role === "consignee" ? (
             <label className="si-party-card__flag">
-              <Text>To Order</Text>
+              <Text>{t("parties.toOrderFlag")}</Text>
               <Switch
                 size="small"
                 checked={!!card.toOrder}
@@ -167,6 +172,7 @@ function EmptySiPartySlot({
   role: SiPartyRoleKey;
   onAssign: () => void;
 }) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
   return (
     <div className="booking-party-card booking-party-card--surface booking-party-card--empty">
       <div className="booking-party-card__head">
@@ -175,18 +181,18 @@ function EmptySiPartySlot({
             <AppIcon icon={SI_PARTY_ROLE_ICON[role]} size={16} />
           </span>
           <Text strong className="booking-party-card__role-label">
-            {SI_PARTY_ROLE_LABEL[role]}
+            {getSiPartyRoleLabel(role, t)}
           </Text>
         </div>
       </div>
       <div className="booking-party-card__empty-body">
-        <Text type="secondary">Not assigned yet</Text>
+        <Text type="secondary">{t("parties.notAssignedYet")}</Text>
         <AppButton
           size="small"
           icon={<AppIcon icon={Icons.plus} size={14} tone="create" />}
           onClick={onAssign}
         >
-          Assign
+          {t("actions.assign")}
         </AppButton>
       </div>
     </div>
@@ -200,7 +206,9 @@ export function PartiesStep({
   onUpdate,
   isSubmitting,
 }: SIWizardStepProps) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
   const toast = useToast();
+  const partiesSchema = useMemo(() => createSiPartiesSchema(t), [t]);
   const [cards, setCards] = useState<
     Partial<Record<SiPartyRoleKey, SiPartyCardData>>
   >(() => initialSiPartyCards(data.parties));
@@ -227,7 +235,7 @@ export function PartiesStep({
 
   const handleAssignRoles = (roles: SiPartyRoleKey[]) => {
     if (!selectedCustomer || roles.length === 0) {
-      toast.error("Select at least one role");
+      toast.error(t("toasts.selectRole"));
       return;
     }
     const card: SiPartyCardData = {
@@ -251,7 +259,7 @@ export function PartiesStep({
       return next;
     });
     clearSelectedCustomer();
-    toast.success("Party roles assigned");
+    toast.success(t("toasts.rolesAssigned"));
   };
 
   const handleDeleteCard = (role: SiPartyRoleKey) => {
@@ -269,7 +277,7 @@ export function PartiesStep({
 
   const saveEdit = () => {
     if (!editRole || !editValue.company.trim()) {
-      toast.error("Company is required");
+      toast.error(t("toasts.companyRequired"));
       return;
     }
     setCards((prev) => ({ ...prev, [editRole]: { ...editValue } }));
@@ -289,10 +297,10 @@ export function PartiesStep({
   };
 
   const handleNext = () => {
-    const parsed = siPartiesSchema.safeParse(cardsToSiPartiesForm(cards));
+    const parsed = partiesSchema.safeParse(cardsToSiPartiesForm(cards));
     if (!parsed.success) {
       const first = parsed.error.issues[0];
-      toast.error(first?.message || "Please complete required parties");
+      toast.error(first?.message || t("toasts.completeRequiredParties"));
       return;
     }
 
@@ -337,7 +345,7 @@ export function PartiesStep({
             <div className="booking-customer-step__search-row">
               <CustomerSearchAutoComplete
                 value={searchQuery}
-                placeholder="Search by customer name or code"
+                placeholder={t("parties.searchPlaceholder")}
                 onChange={(val) => {
                   setSearchQuery(val);
                   if (!val.trim()) {
@@ -404,10 +412,10 @@ export function PartiesStep({
 
       <div className="form-step-footer">
         <AppButton onClick={onPrevious} disabled={isSubmitting}>
-          Previous
+          {t("common:actions.previous")}
         </AppButton>
         <AppButton type="primary" onClick={handleNext} disabled={isSubmitting}>
-          Next
+          {t("common:actions.next")}
         </AppButton>
       </div>
 

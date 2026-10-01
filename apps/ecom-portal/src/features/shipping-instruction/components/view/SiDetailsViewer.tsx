@@ -1,15 +1,18 @@
-// Modified by Sekar Nagarajan (2026-09-08 14:54)
+// Modified by Sekar Nagarajan (2026-09-29 16:45)
 import { ListView } from "@solverminds/shared-ui/data-view/list-view";
-import { Typography } from "antd";
 import type { ColDef } from "ag-grid-community";
+import { Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../../components/icons";
-import { WIZARD_STEP_TITLES } from "../../../../constants/module-titles";
+import { useWizardStepTitles } from "../../../../i18n/use-module-titles";
 import { BookingModuleStyles } from "../../../booking/components/booking-module-styles";
 import { useSiDetailQuery } from "../../api/si.queries";
-import type { SIChargeLine, SIParty, SIDTO } from "../../types/si.types";
+import type { SIChargeLine, SIParty, SIDTO, SIStatus } from "../../types/si.types";
 import type { SiPartyRoleKey } from "../../utils/si-party.utils";
+import { getSiStatusLabel } from "../../utils/si-status";
 import {
   SiPreviewEmpty,
   SiPreviewEmptyPartyCard,
@@ -49,6 +52,11 @@ type ActivityTone =
   | "info"
   | "muted";
 
+type ActivityTranslateFn = (
+  key: string,
+  options?: Record<string, unknown>,
+) => string;
+
 const REVIEW_PARTY_ROLES: SiPartyRoleKey[] = [
   "shipper",
   "consignee",
@@ -87,38 +95,29 @@ function partyForRole(
   }
 }
 
-function getActivityStepVisual(action: string): {
+function getActivityStepVisual(eventId: string): {
   icon: LucideIcon;
   tone: ActivityTone;
 } {
-  const key = action.toLowerCase();
-  if (key.includes("cancel") || key.includes("reject")) {
-    return { icon: Icons.circleX, tone: "error" };
+  switch (eventId) {
+    case "si-created":
+      return { icon: Icons.filePlus, tone: "primary" };
+    case "si-submitted":
+      return { icon: Icons.send, tone: "info" };
+    case "si-bl-linked":
+      return { icon: Icons.checkCircle, tone: "success" };
+    case "si-docs":
+      return { icon: Icons.inbox, tone: "warning" };
+    default:
+      return { icon: Icons.history, tone: "muted" };
   }
-  if (
-    key.includes("confirm") ||
-    key.includes("approv") ||
-    key.includes("linked")
-  ) {
-    return { icon: Icons.checkCircle, tone: "success" };
-  }
-  if (key.includes("submit") || key.includes("sent")) {
-    return { icon: Icons.send, tone: "info" };
-  }
-  if (key.includes("document") || key.includes("upload")) {
-    return { icon: Icons.inbox, tone: "warning" };
-  }
-  if (key.includes("creat") || key.includes("draft")) {
-    return { icon: Icons.filePlus, tone: "primary" };
-  }
-  return { icon: Icons.history, tone: "muted" };
 }
 
 function ActivitySteps({ events }: { events: ActivityEvent[] }) {
   return (
     <ol className="si-activity-steps custom-scroll">
       {events.map((event, index) => {
-        const visual = getActivityStepVisual(event.action);
+        const visual = getActivityStepVisual(event.id);
         const isLast = index === events.length - 1;
         return (
           <li
@@ -158,70 +157,95 @@ function ActivitySteps({ events }: { events: ActivityEvent[] }) {
   );
 }
 
-function buildSiActivityEvents(params: {
-  siNo: string | null;
-  blNo?: string | null;
-  fileCount: number;
-  hints?: SiViewActivityHints;
-}): ActivityEvent[] {
+function buildSiActivityEvents(
+  params: {
+    siNo: string | null;
+    blNo?: string | null;
+    fileCount: number;
+    hints?: SiViewActivityHints;
+  },
+  t: ActivityTranslateFn,
+): ActivityEvent[] {
   const events: ActivityEvent[] = [];
-  const by = "System";
+  const by = t("activity.system");
+  const statusNote =
+    params.hints?.status != null && params.hints.status !== ""
+      ? t("activity.statusNote", {
+          status: getSiStatusLabel(params.hints.status as SIStatus, t),
+        })
+      : undefined;
   events.push({
     id: "si-created",
-    action: "SI Draft Created",
+    action: t("activity.draftCreated"),
     by,
     at: params.hints?.createdDate || "—",
-    note: params.hints?.status ? `Status: ${params.hints.status}` : undefined,
+    note: statusNote,
   });
   if (params.siNo || params.hints?.submittedDate) {
     events.push({
       id: "si-submitted",
-      action: "SI Submitted",
+      action: t("activity.submitted"),
       by,
       at: params.hints?.submittedDate || "—",
-      note: params.siNo ? `SI No: ${params.siNo}` : undefined,
+      note: params.siNo
+        ? t("activity.siNoNote", { siNo: params.siNo })
+        : undefined,
     });
   }
   if (params.blNo) {
     events.push({
       id: "si-bl-linked",
-      action: "B/L Linked",
+      action: t("activity.blLinked"),
       by,
       at: "—",
-      note: `B/L No: ${params.blNo}`,
+      note: t("activity.blNoNote", { blNo: params.blNo }),
     });
   }
   if (params.fileCount > 0) {
     events.push({
       id: "si-docs",
-      action: "Documents Uploaded",
+      action: t("activity.documentsUploaded"),
       by,
       at: "—",
-      note: `${params.fileCount} file(s)`,
+      note: t("activity.filesNote", { count: params.fileCount }),
     });
   }
   return events;
 }
 
-const CHARGE_COL_DEFS: ColDef[] = [
-  { field: "chargeCode", headerName: "Code", minWidth: 100 },
-  { field: "description", headerName: "Description", minWidth: 180, flex: 1 },
-  { field: "prepaidCollect", headerName: "P/C/E", minWidth: 90 },
-  {
-    headerName: "Amount",
-    minWidth: 120,
-    valueGetter: (p) => {
-      const row = p.data as SIChargeLine | undefined;
-      return row ? `${row.amount} ${row.currency}` : "";
-    },
-  },
-];
-
 export function SiDetailsViewer({
   siId,
   activityHints,
 }: SiDetailsViewerProps) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
+  const WIZARD_STEP_TITLES = useWizardStepTitles();
   const { data, isLoading, isError } = useSiDetailQuery(siId);
+
+  const chargeColDefs: ColDef[] = useMemo(
+    () => [
+      { field: "chargeCode", headerName: t("columns.code"), minWidth: 100 },
+      {
+        field: "description",
+        headerName: t("columns.description"),
+        minWidth: 180,
+        flex: 1,
+      },
+      {
+        field: "prepaidCollect",
+        headerName: t("columns.pce"),
+        minWidth: 90,
+      },
+      {
+        headerName: t("columns.amount"),
+        minWidth: 120,
+        valueGetter: (p) => {
+          const row = p.data as SIChargeLine | undefined;
+          return row ? `${row.amount} ${row.currency}` : "";
+        },
+      },
+    ],
+    [t],
+  );
 
   if (isLoading) {
     return (
@@ -234,7 +258,7 @@ export function SiDetailsViewer({
   if (isError || !data) {
     return (
       <div className="si-panel">
-        <Text type="danger">Unable to load Shipping Instruction details.</Text>
+        <Text type="danger">{t("empty.unableToLoadDetails")}</Text>
       </div>
     );
   }
@@ -242,12 +266,15 @@ export function SiDetailsViewer({
   const files = data.files ?? [];
   const charges = data.charges ?? [];
   const insuranceRequired = Boolean(data.insurance?.isInsuranceRequired);
-  const activity = buildSiActivityEvents({
-    siNo: data.siNo,
-    blNo: data.blNo,
-    fileCount: files.length,
-    hints: activityHints,
-  });
+  const activity = buildSiActivityEvents(
+    {
+      siNo: data.siNo,
+      blNo: data.blNo,
+      fileCount: files.length,
+      hints: activityHints,
+    },
+    t,
+  );
 
   const reviewRoleSet = new Set(REVIEW_PARTY_ROLES);
   const extraPartyRoles = (
@@ -258,18 +285,19 @@ export function SiDetailsViewer({
   });
 
   const masterRows = [
-    { label: "Booking number", value: dash(data.bookingNo) },
+    { label: t("labels.bookingNumber"), value: dash(data.bookingNo) },
     {
-      label: "SI number",
-      value: dash(data.siNo) === "—" ? "Draft" : dash(data.siNo),
+      label: t("labels.siNumber"),
+      value: dash(data.siNo) === "—" ? t("labels.draft") : dash(data.siNo),
     },
-    { label: "B/L type", value: dash(data.blType) },
+    { label: t("labels.blType"), value: dash(data.blType) },
     {
-      label: "Release type",
-      value: data.releaseType === "O" ? "Original" : "Telex",
+      label: t("labels.releaseType"),
+      value:
+        data.releaseType === "O" ? t("labels.original") : t("labels.telex"),
     },
-    { label: "Freight option", value: dash(data.freightOption) },
-    { label: "Agency ref", value: dash(data.agencyRefNo) },
+    { label: t("labels.freightOption"), value: dash(data.freightOption) },
+    { label: t("labels.agencyRefFull"), value: dash(data.agencyRefNo) },
   ];
 
   return (
@@ -296,7 +324,7 @@ export function SiDetailsViewer({
                     extra={
                       role === "consignee" &&
                       data.parties.consignee?.toOrder ? (
-                        <Text type="warning"> (To Order)</Text>
+                        <Text type="warning"> {t("labels.toOrder")}</Text>
                       ) : null
                     }
                   />
@@ -323,24 +351,24 @@ export function SiDetailsViewer({
           <SiPreviewFieldGrid
             items={[
               {
-                label: "Vessel / voyage",
+                label: t("labels.vesselVoyage"),
                 value: dash(data.routing.vesselVoyage),
               },
-              { label: "Origin", value: dash(data.routing.originPrint) },
-              { label: "POL", value: dash(data.routing.polPrint) },
-              { label: "POD", value: dash(data.routing.podPrint) },
+              { label: t("labels.origin"), value: dash(data.routing.originPrint) },
+              { label: t("labels.pol"), value: dash(data.routing.polPrint) },
+              { label: t("labels.pod"), value: dash(data.routing.podPrint) },
               {
-                label: "Delivery",
+                label: t("labels.delivery"),
                 value: dash(data.routing.deliveryPrint),
               },
               {
-                label: "Schedule legs",
+                label: t("labels.scheduleLegs"),
                 value: String(data.routing.scheduleLegs?.length ?? 0),
               },
             ]}
           />
         ) : (
-          <SiPreviewEmpty label="No routing details" />
+          <SiPreviewEmpty label={t("empty.noRouting")} />
         )}
       </SiPreviewSection>
 
@@ -349,27 +377,31 @@ export function SiDetailsViewer({
           <SiPreviewFieldGrid
             items={[
               {
-                label: "Cargo value",
+                label: t("labels.cargoValue"),
                 value: `${dash(data.insurance.cargoValue)} ${dash(
                   data.insurance.currency,
                 )}`,
               },
               {
-                label: "Policy no",
+                label: t("labels.policyNo"),
                 value: dash(data.insurance.policyNo),
               },
               {
-                label: "Terms accepted",
-                value: data.insurance.termsAccepted ? "Yes" : "No",
+                label: t("labels.termsAccepted"),
+                value: data.insurance.termsAccepted
+                  ? t("common:actions.yes")
+                  : t("common:actions.no"),
               },
               {
-                label: "Opt out",
-                value: data.insurance.optOut ? "Yes" : "No",
+                label: t("labels.optOut"),
+                value: data.insurance.optOut
+                  ? t("common:actions.yes")
+                  : t("common:actions.no"),
               },
             ]}
           />
         ) : (
-          <SiPreviewEmpty label="Insurance not required for this shipping instruction." />
+          <SiPreviewEmpty label={t("empty.insuranceNotRequired")} />
         )}
       </SiPreviewSection>
 
@@ -384,19 +416,28 @@ export function SiDetailsViewer({
         >
           <SiPreviewFieldGrid
             items={[
-              { label: "EU customs zone", value: dash(data.ens.euCustZone) },
-              { label: "B/L type (ENS)", value: dash(data.ens.blTypeEns) },
-              { label: "Filing type", value: dash(data.ens.ensFillingType) },
               {
-                label: "Payment method",
+                label: t("labels.euCustomsZone"),
+                value: dash(data.ens.euCustZone),
+              },
+              {
+                label: t("labels.blTypeEns"),
+                value: dash(data.ens.blTypeEns),
+              },
+              {
+                label: t("labels.filingType"),
+                value: dash(data.ens.ensFillingType),
+              },
+              {
+                label: t("labels.paymentMethod"),
                 value: dash(data.ens.paymentMethod),
               },
               {
-                label: "Declarant",
+                label: t("labels.declarant"),
                 value: dash(data.ens.declarant?.name),
               },
-              { label: "Buyer", value: dash(data.ens.buyer?.name) },
-              { label: "Seller", value: dash(data.ens.seller?.name) },
+              { label: t("labels.buyer"), value: dash(data.ens.buyer?.name) },
+              { label: t("labels.seller"), value: dash(data.ens.seller?.name) },
             ]}
           />
         </SiPreviewSection>
@@ -404,20 +445,20 @@ export function SiDetailsViewer({
 
       <SiPreviewSection variant="airy" title={WIZARD_STEP_TITLES.fileUpload}>
         {files.length === 0 ? (
-          <SiPreviewEmpty label="No documents uploaded" />
+          <SiPreviewEmpty label={t("empty.noDocuments")} />
         ) : (
           <SiPreviewFieldGrid
             items={files.map((file) => ({
-              label: file.fileType || "File",
+              label: file.fileType || t("labels.file"),
               value: `${file.fileName} (${file.sizeKb} KB)`,
             }))}
           />
         )}
       </SiPreviewSection>
 
-      <SiPreviewSection variant="airy" title="Activity">
+      <SiPreviewSection variant="airy" title={t("labels.activity")}>
         {activity.length === 0 ? (
-          <SiPreviewEmpty label="No activity recorded" />
+          <SiPreviewEmpty label={t("empty.noActivity")} />
         ) : (
           <ActivitySteps events={activity} />
         )}
@@ -428,7 +469,7 @@ export function SiDetailsViewer({
           <div className="si-charges-grid responsive-table-wrap custom-scroll ag-theme-alpine">
             <ListView
               rowData={charges}
-              columnDefs={CHARGE_COL_DEFS}
+              columnDefs={chargeColDefs}
               showToolbar={false}
               sideBar={false}
               pagination

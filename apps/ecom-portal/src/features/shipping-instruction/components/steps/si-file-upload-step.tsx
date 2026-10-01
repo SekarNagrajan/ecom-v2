@@ -2,20 +2,14 @@
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { Card, List, Select, Typography, Upload } from "antd";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../../components/icons";
 import type { SIFileItem, SIWizardStepProps } from "../../types/si.types";
 
 const { Text } = Typography;
 const { Dragger } = Upload;
-
-const FILE_CATEGORIES: { value: string; label: string }[] = [
-  { value: "VGM", label: "VGM" },
-  { value: "DG", label: "Dangerous Goods (DG)" },
-  { value: "LOI", label: "Letter of Indemnity (LOI)" },
-  { value: "OTHER", label: "Other" },
-];
 
 export function SiFileUploadStep({
   data,
@@ -25,10 +19,28 @@ export function SiFileUploadStep({
   isFirstStep,
   isSubmitting,
 }: SIWizardStepProps) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
   const toast = useToast();
+
+  const FILE_CATEGORIES = useMemo<{ value: string; label: string }[]>(
+    () => [
+      { value: "VGM", label: t("wizard.files.categories.vgm") },
+      { value: "DG", label: t("wizard.files.categories.dg") },
+      { value: "LOI", label: t("wizard.files.categories.loi") },
+      { value: "OTHER", label: t("wizard.files.categories.other") },
+    ],
+    [t],
+  );
+
   const [docType, setDocType] = useState<string>("OTHER");
   const [files, setFiles] = useState<SIFileItem[]>(() => data.files ?? []);
   const [uploading, setUploading] = useState(false);
+
+  const selectedCategoryLabel = useMemo(
+    () =>
+      FILE_CATEGORIES.find((c) => c.value === docType)?.label ?? docType,
+    [FILE_CATEGORIES, docType],
+  );
 
   const handleUpload = (file: File) => {
     setUploading(true);
@@ -41,9 +53,9 @@ export function SiFileUploadStep({
         sizeKb: Math.max(1, Math.round(file.size / 1024)),
       };
       setFiles((prev) => [...prev, item]);
-      toast.success(`${file.name} uploaded successfully.`);
+      toast.success(t("wizard.files.uploadSuccess", { fileName: file.name }));
     } catch {
-      toast.error(`${file.name} upload failed.`);
+      toast.error(t("wizard.files.uploadFailed", { fileName: file.name }));
     } finally {
       setUploading(false);
     }
@@ -64,17 +76,19 @@ export function SiFileUploadStep({
       <div className="custom-scroll form-step-scroll">
         <Card
           className="form-step-card form-step-section"
-          title="Upload Supporting Documents"
+          title={t("wizard.files.title")}
         >
           <div className="si-upload-type-row">
-            <label className="form-field-label">Document Type</label>
+            <label className="form-field-label">
+              {t("wizard.files.documentType")}
+            </label>
             <Select
               size="large"
               className="form-field-full-width"
               value={docType}
               onChange={setDocType}
               options={FILE_CATEGORIES}
-              placeholder="Select document type"
+              placeholder={t("wizard.files.documentTypePlaceholder")}
             />
           </div>
 
@@ -91,19 +105,16 @@ export function SiFileUploadStep({
             <p className="ant-upload-drag-icon">
               <AppIcon icon={Icons.inbox} size={16} />
             </p>
-            <p className="ant-upload-text">
-              Click or drag file to this area to upload
-            </p>
+            <p className="ant-upload-text">{t("wizard.files.draggerText")}</p>
             <p className="ant-upload-hint">
-              Selected type: {docType}. Files are attached to this shipping
-              instruction.
+              {t("wizard.files.draggerHint", { type: selectedCategoryLabel })}
             </p>
           </Dragger>
 
           {files.length > 0 ? (
             <List
               className="si-upload-list"
-              header={<Text strong>Uploaded Documents</Text>}
+              header={<Text strong>{t("wizard.files.uploadedList")}</Text>}
               dataSource={files}
               renderItem={(item: SIFileItem) => (
                 <List.Item
@@ -114,7 +125,7 @@ export function SiFileUploadStep({
                       danger
                       onClick={() => handleRemove(item.id)}
                     >
-                      Remove
+                      {t("common:actions.remove")}
                     </AppButton>,
                   ]}
                 >
@@ -134,10 +145,10 @@ export function SiFileUploadStep({
           onClick={onPrevious}
           disabled={isFirstStep || isSubmitting}
         >
-          Previous
+          {t("common:actions.previous")}
         </AppButton>
         <AppButton type="primary" onClick={handleNext} disabled={isSubmitting}>
-          Next
+          {t("common:actions.next")}
         </AppButton>
       </div>
     </div>

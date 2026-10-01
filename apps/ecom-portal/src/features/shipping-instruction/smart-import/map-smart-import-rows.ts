@@ -243,37 +243,66 @@ export function deleteWouldDropContainer(
   return false;
 }
 
-function validateRow(row: SmartImportRow, rowNumber: number): string | null {
+type SmartImportTranslateFn = (
+  key: string,
+  options?: Record<string, unknown>,
+) => string;
+
+function validateRow(
+  row: SmartImportRow,
+  rowNumber: number,
+  t?: SmartImportTranslateFn,
+): string | null {
   const actual = normalizeContainerNo(row.actualContainerNo);
   if (!actual) {
-    return `Row ${rowNumber}: Actual Container No is required`;
+    return t
+      ? t("import.smart.errors.actualContainerNoRequired", { row: rowNumber })
+      : `Row ${rowNumber}: Actual Container No is required`;
   }
   if (actual.length > 11) {
-    return `Row ${rowNumber}: Actual Container No must be 11 characters or fewer`;
+    return t
+      ? t("import.smart.errors.actualContainerNoMax", { row: rowNumber })
+      : `Row ${rowNumber}: Actual Container No must be 11 characters or fewer`;
   }
   if (!/^[A-Z0-9]+$/.test(actual)) {
-    return `Row ${rowNumber}: Actual Container No is allowed only alphanumeric`;
+    return t
+      ? t("import.smart.errors.actualContainerNoAlphanumeric", {
+          row: rowNumber,
+        })
+      : `Row ${rowNumber}: Actual Container No is allowed only alphanumeric`;
   }
   if (!String(row.hsCode ?? "").trim()) {
-    return `Row ${rowNumber}: HS Code is required`;
+    return t
+      ? t("import.smart.errors.hsCodeRequired", { row: rowNumber })
+      : `Row ${rowNumber}: HS Code is required`;
   }
   if (!String(row.description ?? "").trim()) {
-    return `Row ${rowNumber}: Commodity Description is required`;
+    return t
+      ? t("import.smart.errors.descriptionRequired", { row: rowNumber })
+      : `Row ${rowNumber}: Commodity Description is required`;
   }
   if (!String(row.packageType ?? "").trim()) {
-    return `Row ${rowNumber}: Package Type is required`;
+    return t
+      ? t("import.smart.errors.packageTypeRequired", { row: rowNumber })
+      : `Row ${rowNumber}: Package Type is required`;
   }
   const packageCount = stripNonNumeric(row.packageCount);
   if (packageCount < 1) {
-    return `Row ${rowNumber}: Package Count must be at least 1`;
+    return t
+      ? t("import.smart.errors.packageCountMin", { row: rowNumber })
+      : `Row ${rowNumber}: Package Count must be at least 1`;
   }
   const grossWeight = stripNonNumeric(row.grossWeight);
   if (grossWeight < 1) {
-    return `Row ${rowNumber}: Gross Weight is required`;
+    return t
+      ? t("import.smart.errors.grossWeightRequired", { row: rowNumber })
+      : `Row ${rowNumber}: Gross Weight is required`;
   }
   const volume = stripNonNumeric(row.volume);
   if (volume < 0) {
-    return `Row ${rowNumber}: Volume cannot be negative`;
+    return t
+      ? t("import.smart.errors.volumeNegative", { row: rowNumber })
+      : `Row ${rowNumber}: Volume cannot be negative`;
   }
   return null;
 }
@@ -286,6 +315,7 @@ function validateRow(row: SmartImportRow, rowNumber: number): string | null {
 export function smartImportRowsToContainers(
   rows: readonly SmartImportRow[],
   originalContainers: readonly SIContainer[],
+  t?: SmartImportTranslateFn,
 ): SmartImportApplyResult {
   const originalIds = originalContainers.map((c) => c.id);
   const originalById = new Map(originalContainers.map((c) => [c.id, c]));
@@ -299,7 +329,7 @@ export function smartImportRowsToContainers(
       continue;
     }
     const rowNumber = i + 1;
-    const validationError = validateRow(row, rowNumber);
+    const validationError = validateRow(row, rowNumber, t);
     if (validationError) {
       return { ok: false, error: validationError };
     }
@@ -307,7 +337,9 @@ export function smartImportRowsToContainers(
     if (!originalById.has(containerId)) {
       return {
         ok: false,
-        error: `Row ${rowNumber}: Unknown container (not on this SI)`,
+        error: t
+          ? t("import.smart.errors.unknownContainer", { row: rowNumber })
+          : `Row ${rowNumber}: Unknown container (not on this SI)`,
       };
     }
     const existing = byContainer.get(containerId);
@@ -321,10 +353,17 @@ export function smartImportRowsToContainers(
 
   const smartCount = order.length;
   const siCount = originalIds.length;
+  const countMismatch = t
+    ? t("import.smart.errors.containerCountMismatch", {
+        expected: siCount,
+        actual: smartCount,
+      })
+    : `The container count does not match between SI(${siCount}) and Smart Import(${smartCount}).`;
+
   if (smartCount !== siCount) {
     return {
       ok: false,
-      error: `The container count does not match between SI(${siCount}) and Smart Import(${smartCount}).`,
+      error: countMismatch,
     };
   }
 
@@ -332,7 +371,7 @@ export function smartImportRowsToContainers(
     if (!byContainer.has(id)) {
       return {
         ok: false,
-        error: `The container count does not match between SI(${siCount}) and Smart Import(${smartCount}).`,
+        error: countMismatch,
       };
     }
   }
@@ -344,7 +383,7 @@ export function smartImportRowsToContainers(
     if (!original || group.length === 0) {
       return {
         ok: false,
-        error: `The container count does not match between SI(${siCount}) and Smart Import(${smartCount}).`,
+        error: countMismatch,
       };
     }
     const first = group[0];

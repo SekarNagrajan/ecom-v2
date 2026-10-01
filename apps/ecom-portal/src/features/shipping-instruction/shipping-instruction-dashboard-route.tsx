@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-15 11:45)
+// Modified by Sekar Nagarajan (2026-09-29 16:45)
 import {
   DataView,
   type DataViewColumn,
@@ -8,6 +8,7 @@ import { useNavigate } from "@tanstack/react-router";
 import type { RowDoubleClickedEvent } from "ag-grid-community";
 import { Card, Tag } from "antd";
 import { useCallback, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { NavShippingInstructionIcon } from "../../components/icons/nav-svg-icons";
 import { buildActionsColumn } from "../../components/shared/build-actions-column";
@@ -27,12 +28,13 @@ import { SiListActions } from "./components/list/si-list-actions";
 import { SiListCard } from "./components/list/si-list-card";
 import { SiModuleStyles } from "./components/si-module-styles";
 import { SiViewDrawer } from "./components/view/SiViewDrawer";
-import type { SIListDTO } from "./types/si.types";
-import { getSiStatusTagColor } from "./utils/si-status";
+import type { SIListDTO, SIStatus } from "./types/si.types";
+import { getSiStatusLabel, getSiStatusTagColor } from "./utils/si-status";
 
 const VIEW_MODE_KEY = "ecom.si.viewMode";
 
 export function ShippingInstructionDashboardRoute() {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
   const MODULE_TITLES = useModuleTitles();
   const navigate = useNavigate();
   const confirm = useConfirm();
@@ -76,37 +78,39 @@ export function ShippingInstructionDashboardRoute() {
   const handleCancel = useCallback(
     (record: SIListDTO) => {
       confirm.danger({
-        title: "Cancel Shipping Instruction",
-        content: "Are you sure you want to cancel this Shipping Instruction?",
-        okText: "Yes",
-        cancelText: "No",
+        title: t("confirms.cancelTitle"),
+        content: t("confirms.cancelContent"),
+        okText: t("common:actions.yes"),
+        cancelText: t("common:actions.no"),
         onOk: async () => {
           try {
             await cancelMutation.mutateAsync(record.id);
             toast.success(
-              `Shipping Instruction ${record.siNo || record.id} cancelled.`,
+              t("toasts.cancelSuccess", {
+                siNo: record.siNo || record.id,
+              }),
             );
           } catch {
-            toast.error("Failed to cancel Shipping Instruction.");
+            toast.error(t("toasts.cancelFailed"));
           }
         },
       });
     },
-    [cancelMutation, confirm, toast],
+    [cancelMutation, confirm, t, toast],
   );
 
   const emptyState = isError ? (
     <ModuleEmptyState
       variant="error"
-      title="Couldn't load shipping instructions"
-      message="The request didn't complete. Check your connection and try again."
+      title={t("empty.loadErrorTitle")}
+      message={t("empty.loadErrorMessage")}
       actions={[buildRetryAction(() => void refetch())]}
     />
   ) : (
     <ModuleEmptyState
       variant="blank"
-      title="No shipping instructions yet"
-      message="Shipping instructions will appear here when they are created for confirmed bookings."
+      title={t("empty.noResultsTitle")}
+      message={t("empty.noResultsMessage")}
     />
   );
 
@@ -130,26 +134,33 @@ export function ShippingInstructionDashboardRoute() {
       }),
       {
         field: "status",
-        headerName: "Status",
-        cellRenderer: (params: { value?: string }) => (
-          <Tag
-            className="module-status-tag"
-            color={getSiStatusTagColor(params.value ?? "")}
-          >
-            {params.value}
-          </Tag>
-        ),
+        headerName: t("columns.status"),
+        cellRenderer: (params: { value?: string }) => {
+          const status = (params.value ?? "") as SIStatus;
+          return (
+            <Tag
+              className="module-status-tag"
+              color={getSiStatusTagColor(status)}
+            >
+              {params.value ? getSiStatusLabel(status, t) : params.value}
+            </Tag>
+          );
+        },
       },
-      { field: "bookingNo", headerName: "Booking No", isPrimary: true },
-      { field: "blNo", headerName: "B/L No" },
-      { field: "siNo", headerName: "SI No" },
-      { field: "agencyRefNo", headerName: "Agency Ref No" },
-      { field: "origin", headerName: "Origin", isSecondary: true },
-      { field: "delivery", headerName: "Delivery" },
-      { field: "createdDate", headerName: "Created Date" },
-      { field: "submittedDate", headerName: "Submitted Date" },
+      {
+        field: "bookingNo",
+        headerName: t("columns.bookingNo"),
+        isPrimary: true,
+      },
+      { field: "blNo", headerName: t("columns.blNo") },
+      { field: "siNo", headerName: t("columns.siNo") },
+      { field: "agencyRefNo", headerName: t("columns.agencyRefNo") },
+      { field: "origin", headerName: t("columns.origin"), isSecondary: true },
+      { field: "delivery", headerName: t("columns.delivery") },
+      { field: "createdDate", headerName: t("columns.createdDate") },
+      { field: "submittedDate", headerName: t("columns.submittedDate") },
     ],
-    [handleCancel, handleView, openWizard],
+    [handleCancel, handleView, openWizard, t],
   );
 
   const renderCard = useCallback(
@@ -175,7 +186,7 @@ export function ShippingInstructionDashboardRoute() {
               icon={NavShippingInstructionIcon}
               title={MODULE_TITLES.shippingInstructions}
               // recordCount={siList.length}
-              subtitle="Review SI status, open drafts, and submit shipping instructions for confirmed bookings."
+              subtitle={t("subtitle")}
               marginBottom={0}
               viewMode={viewMode}
               onViewModeChange={setViewMode}

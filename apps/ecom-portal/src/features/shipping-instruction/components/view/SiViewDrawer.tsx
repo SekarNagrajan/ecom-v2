@@ -1,7 +1,8 @@
-// Modified by Sekar Nagarajan (2026-09-08 14:58)
+// Modified by Sekar Nagarajan (2026-09-29 16:45)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { useNavigate } from "@tanstack/react-router";
 import { Flex, Tag, Tooltip, Typography } from "antd";
+import { useTranslation } from "react-i18next";
 
 import {
   AppIcon,
@@ -10,7 +11,12 @@ import {
 } from "../../../../components/icons";
 import { formatModuleScreenTitle } from "../../../../constants/module-titles";
 import type { SIListDTO } from "../../types/si.types";
-import { canOpenSiWizard, getSiStatusTagColor } from "../../utils/si-status";
+import {
+  canOpenSiWizard,
+  getSiBlStatusLabel,
+  getSiStatusLabel,
+  getSiStatusTagColor,
+} from "../../utils/si-status";
 import { SiDetailsViewer } from "./SiDetailsViewer";
 
 const { Title, Text } = Typography;
@@ -21,6 +27,7 @@ interface SiViewDrawerProps {
 }
 
 export function SiViewDrawer({ record, onClose }: SiViewDrawerProps) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
   const navigate = useNavigate();
   const showEdit = canOpenSiWizard(record.status);
 
@@ -44,26 +51,31 @@ export function SiViewDrawer({ record, onClose }: SiViewDrawerProps) {
           <div className="si-drawer-title__copy">
             <Title level={4} className="si-drawer-title__text">
               {formatModuleScreenTitle(
-                "View Shipping Instruction",
+                t("drawer.viewTitle"),
                 record.siNo || record.bookingNo,
               )}
             </Title>
             <div className="si-drawer-title__row">
               <Text type="secondary" className="si-drawer-title__meta">
-                Booking: <strong>{record.bookingNo}</strong>
+                {t("labels.booking")}: <strong>{record.bookingNo}</strong>
                 {record.agencyRefNo ? (
                   <>
                     {" "}
-                    · Agency: <strong>{record.agencyRefNo}</strong>
+                    · {t("labels.agencyRef")}:{" "}
+                    <strong>{record.agencyRefNo}</strong>
                   </>
                 ) : null}
               </Text>
               <div className="si-drawer-title__tags">
                 <Tag color={getSiStatusTagColor(record.status)}>
-                  {record.status}
+                  {getSiStatusLabel(record.status, t)}
                 </Tag>
                 {record.blStatus ? (
-                  <Tag color="default">B/L: {record.blStatus}</Tag>
+                  <Tag color="default">
+                    {t("drawer.blStatusTag", {
+                      status: getSiBlStatusLabel(record.blStatus, t),
+                    })}
+                  </Tag>
                 ) : null}
               </div>
             </div>
@@ -78,17 +90,19 @@ export function SiViewDrawer({ record, onClose }: SiViewDrawerProps) {
           wrap
           className="si-drawer-actions custom-scroll"
         >
-          <Tooltip title="Close">
-            <AppButton onClick={onClose}>Close</AppButton>
+          <Tooltip title={t("common:actions.close")}>
+            <AppButton onClick={onClose}>
+              {t("common:actions.close")}
+            </AppButton>
           </Tooltip>
           {showEdit ? (
-            <Tooltip title="Edit Shipping Instruction">
+            <Tooltip title={t("actions.editShippingInstruction")}>
               <AppButton
                 type="primary"
                 icon={<AppIcon icon={Icons.squarePen} size={16} tone="edit" />}
                 onClick={handleEdit}
               >
-                Edit SI
+                {t("actions.editSi")}
               </AppButton>
             </Tooltip>
           ) : null}
@@ -99,7 +113,7 @@ export function SiViewDrawer({ record, onClose }: SiViewDrawerProps) {
         <div className="si-route-port si-route-port--origin">
           <div className="si-route-port__label">
             <AppIcon icon={Icons.mapPin} size={14} />
-            Origin
+            {t("labels.origin")}
           </div>
           <Title level={4} className="si-route-port__code">
             {record.origin}
@@ -107,7 +121,9 @@ export function SiViewDrawer({ record, onClose }: SiViewDrawerProps) {
         </div>
 
         <div className="si-route-connector">
-          <span className="si-route-connector__label">Port to Port</span>
+          <span className="si-route-connector__label">
+            {t("labels.portToPort")}
+          </span>
           <div className="si-route-connector__line">
             <span className="si-route-connector__track" />
             <AppIcon icon={Icons.arrowRight} size={14} />
@@ -119,7 +135,7 @@ export function SiViewDrawer({ record, onClose }: SiViewDrawerProps) {
         <div className="si-route-port si-route-port--delivery">
           <div className="si-route-port__label">
             <AppIcon icon={Icons.mapPin} size={14} />
-            Delivery
+            {t("labels.delivery")}
           </div>
           <Title level={4} className="si-route-port__code">
             {record.delivery}
@@ -130,19 +146,21 @@ export function SiViewDrawer({ record, onClose }: SiViewDrawerProps) {
       <div className="si-summary-chips">
         <div className="si-summary-chip">
           <span>
-            <span className="si-summary-chip__label">SI No</span>
+            <span className="si-summary-chip__label">{t("labels.siNo")}</span>
             <span className="si-summary-chip__value">{record.siNo || "—"}</span>
           </span>
         </div>
         <div className="si-summary-chip">
           <span>
-            <span className="si-summary-chip__label">B/L No</span>
+            <span className="si-summary-chip__label">{t("labels.blNo")}</span>
             <span className="si-summary-chip__value">{record.blNo || "—"}</span>
           </span>
         </div>
         <div className="si-summary-chip">
           <span>
-            <span className="si-summary-chip__label">Created</span>
+            <span className="si-summary-chip__label">
+              {t("labels.created")}
+            </span>
             <span className="si-summary-chip__value">
               {record.createdDate || "—"}
             </span>
@@ -150,7 +168,9 @@ export function SiViewDrawer({ record, onClose }: SiViewDrawerProps) {
         </div>
         <div className="si-summary-chip">
           <span>
-            <span className="si-summary-chip__label">Submitted</span>
+            <span className="si-summary-chip__label">
+              {t("labels.submitted")}
+            </span>
             <span className="si-summary-chip__value">
               {record.submittedDate || "—"}
             </span>

@@ -24,7 +24,7 @@ export function CargoSmartImport({
   containers,
   onApplied,
 }: CargoSmartImportProps) {
-  const { t } = useTranslation(["bill-of-lading", "common"]);
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
   const toast = useToast();
   const [modalOpen, setModalOpen] = useState(false);
   const [rows, setRows] = useState<SmartImportRow[]>([]);
@@ -47,7 +47,7 @@ export function CargoSmartImport({
   };
 
   const handleUpdate = () => {
-    const result = smartImportRowsToContainers(rows, containers);
+    const result = smartImportRowsToContainers(rows, containers, t);
     if (!result.ok) {
       toast.error(result.error);
       return;

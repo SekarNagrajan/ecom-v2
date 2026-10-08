@@ -48,7 +48,7 @@ export function CargoSmartImport({
 
   const handleUpdate = () => {
     const result = smartImportRowsToContainers(rows, containers, t);
-    if (!result.ok) {
+    if (result.ok === false) {
       toast.error(result.error);
       return;
     }

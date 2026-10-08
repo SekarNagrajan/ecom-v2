@@ -227,7 +227,9 @@ export const emptySiEnsDeclarant = (): SIEnsDeclarant => ({
   fillingType: "House BL",
 });
 
-export function createSiEnsStepSchema(t: (key: string, options?: object) => string) {
+export function createSiEnsStepSchema(
+  t: (key: string, options?: Record<string, unknown>) => string,
+) {
   const optionalEmail = (maxLen: number) =>
     z
       .string()

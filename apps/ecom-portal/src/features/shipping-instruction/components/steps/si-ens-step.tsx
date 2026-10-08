@@ -47,7 +47,10 @@ export function SiEnsStep({
 }: SIWizardStepProps) {
   const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
 
-  const schema = useMemo(() => createSiEnsStepSchema(t), [t]);
+  const schema = useMemo(
+    () => createSiEnsStepSchema((key, options) => t(key, options)),
+    [t],
+  );
 
   const {
     control,

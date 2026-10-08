@@ -90,11 +90,11 @@ export function SiViewDrawer({ record, onClose }: SiViewDrawerProps) {
           wrap
           className="si-drawer-actions custom-scroll"
         >
-          <Tooltip title={t("common:actions.close")}>
+          {/* <Tooltip title={t("common:actions.close")}>
             <AppButton onClick={onClose}>
               {t("common:actions.close")}
             </AppButton>
-          </Tooltip>
+          </Tooltip> */}
           {showEdit ? (
             <Tooltip title={t("actions.editShippingInstruction")}>
               <AppButton

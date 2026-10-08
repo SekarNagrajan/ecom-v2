@@ -265,7 +265,9 @@ export function MasterDetailsStep() {
 
     if (!readyDate?.trim()) {
       clearSelectedRoute();
-      toast.success(t("booking:wizard.toasts.rateSelected", { rateNo: rate.rateNo }));
+      toast.success(
+        t("booking:wizard.toasts.rateSelected", { rateNo: rate.rateNo }),
+      );
       toast.info(t("booking:wizard.toasts.setCargoReadyForRoute"));
       return;
     }
@@ -279,7 +281,10 @@ export function MasterDetailsStep() {
         selectedRoute: route,
       });
       toast.success(
-        t("booking:wizard.toasts.rateSelectedWithRoute", { rateNo: rate.rateNo, service: route.serviceName }),
+        t("booking:wizard.toasts.rateSelectedWithRoute", {
+          rateNo: rate.rateNo,
+          service: route.serviceName,
+        }),
       );
       return;
     }
@@ -290,7 +295,9 @@ export function MasterDetailsStep() {
       rateReference: rate.rateNo,
       selectedRoute: null,
     });
-    toast.success(t("booking:wizard.toasts.rateSelected", { rateNo: rate.rateNo }));
+    toast.success(
+      t("booking:wizard.toasts.rateSelected", { rateNo: rate.rateNo }),
+    );
     toast.info(t("booking:wizard.toasts.noDefaultRoute"));
   };
 
@@ -325,7 +332,12 @@ export function MasterDetailsStep() {
     });
     updateMasterDetails(nextData);
     setIsRoutingModalOpen(false);
-    toast.success(t("booking:wizard.toasts.routeSelected", { service: route.serviceName, vessel: route.vesselName }));
+    toast.success(
+      t("booking:wizard.toasts.routeSelected", {
+        service: route.serviceName,
+        vessel: route.vesselName,
+      }),
+    );
   };
 
   const hasValidRoute = routeMatchesPorts(
@@ -447,7 +459,9 @@ export function MasterDetailsStep() {
                   >
                     <Input
                       size="large"
-                      placeholder={t("booking:wizard.master.deliveryPlaceholder")}
+                      placeholder={t(
+                        "booking:wizard.master.deliveryPlaceholder",
+                      )}
                       prefix={<AppIcon icon={Icons.mapPin} size={16} />}
                       allowClear
                     />
@@ -465,7 +479,8 @@ export function MasterDetailsStep() {
             ) : null}
 
             <label className="form-field-label booking-port-row__date-label">
-              {t("booking:wizard.master.cargoReadyDate")} <Text type="danger">*</Text>
+              {t("booking:wizard.master.cargoReadyDate")}{" "}
+              <Text type="danger">*</Text>
             </label>
             <div className="booking-port-row__date-field">
               <Controller
@@ -490,7 +505,9 @@ export function MasterDetailsStep() {
                         ).then((route) => {
                           if (route) {
                             toast.success(
-                              t("booking:wizard.toasts.defaultRouteApplied", { service: route.serviceName }),
+                              t("booking:wizard.toasts.defaultRouteApplied", {
+                                service: route.serviceName,
+                              }),
                             );
                           }
                         });
@@ -561,7 +578,9 @@ export function MasterDetailsStep() {
           {/* Modified by Sekar Nagarajan (2026-08-31 16:58) — gap from port row + five fields on one row from lg+ */}
           <Row gutter={[24, 24]} className="booking-master-options-row">
             <Col xs={24} md={12} lg={{ flex: "1 1 0%" }}>
-              <label className="form-field-label">{t("booking:labels.haulageOrigin")}</label>
+              <label className="form-field-label">
+                {t("booking:labels.haulageOrigin")}
+              </label>
               <Controller
                 control={control}
                 name="haulageOriginType"
@@ -569,8 +588,14 @@ export function MasterDetailsStep() {
                   <Segmented
                     className="form-field-full-width form-segmented"
                     options={[
-                      { label: t("booking:wizard.haulage.carrier"), value: "Carrier" },
-                      { label: t("booking:wizard.haulage.merchant"), value: "Merchant" },
+                      {
+                        label: t("booking:wizard.haulage.carrier"),
+                        value: "Carrier",
+                      },
+                      {
+                        label: t("booking:wizard.haulage.merchant"),
+                        value: "Merchant",
+                      },
                     ]}
                     value={value}
                     onChange={onChange}
@@ -581,7 +606,9 @@ export function MasterDetailsStep() {
             </Col>
 
             <Col xs={24} md={12} lg={{ flex: "1 1 0%" }}>
-              <label className="form-field-label">{t("booking:labels.haulageDestination")}</label>
+              <label className="form-field-label">
+                {t("booking:labels.haulageDestination")}
+              </label>
               <Controller
                 control={control}
                 name="haulageDestinationType"
@@ -589,8 +616,14 @@ export function MasterDetailsStep() {
                   <Segmented
                     className="form-field-full-width form-segmented"
                     options={[
-                      { label: t("booking:wizard.haulage.carrier"), value: "Carrier" },
-                      { label: t("booking:wizard.haulage.merchant"), value: "Merchant" },
+                      {
+                        label: t("booking:wizard.haulage.carrier"),
+                        value: "Carrier",
+                      },
+                      {
+                        label: t("booking:wizard.haulage.merchant"),
+                        value: "Merchant",
+                      },
                     ]}
                     value={value}
                     onChange={onChange}
@@ -601,7 +634,9 @@ export function MasterDetailsStep() {
             </Col>
 
             <Col xs={24} md={12} lg={{ flex: "1 1 0%" }}>
-              <label className="form-field-label">{t("booking:labels.carriageContract")}</label>
+              <label className="form-field-label">
+                {t("booking:labels.carriageContract")}
+              </label>
               <Controller
                 control={control}
                 name="carriageContract"
@@ -609,7 +644,9 @@ export function MasterDetailsStep() {
                   <Select
                     {...field}
                     size="medium"
-                    placeholder={t("booking:wizard.master.carriageContractPlaceholder")}
+                    placeholder={t(
+                      "booking:wizard.master.carriageContractPlaceholder",
+                    )}
                     options={carriageContracts}
                     className="form-field-full-width"
                     allowClear
@@ -621,7 +658,9 @@ export function MasterDetailsStep() {
             </Col>
 
             <Col xs={24} md={12} lg={{ flex: "1 1 0%" }}>
-              <label className="form-field-label">{t("booking:wizard.master.onlineBookingNo")}</label>
+              <label className="form-field-label">
+                {t("booking:wizard.master.onlineBookingNo")}
+              </label>
               <Controller
                 control={control}
                 name="onlineBookingNo"
@@ -647,7 +686,9 @@ export function MasterDetailsStep() {
             </Col> */}
 
             <Col xs={24} md={12} lg={{ flex: "1 1 0%" }}>
-              <label className="form-field-label">{t("booking:wizard.master.preferredAgency")}</label>
+              <label className="form-field-label">
+                {t("booking:wizard.master.preferredAgency")}
+              </label>
               <Controller
                 control={control}
                 name="preferredAgency"
@@ -1075,7 +1116,9 @@ export function MasterDetailsStep() {
           loading={isApplyingDefaultRoute}
           disabled={isApplyingDefaultRoute}
         >
-          {hasValidRoute ? t("common:actions.next") : t("booking:wizard.routing.selectVesselRoute")}
+          {hasValidRoute
+            ? t("common:actions.next")
+            : t("booking:wizard.routing.selectVesselRoute")}
         </AppButton>
       </div>
 

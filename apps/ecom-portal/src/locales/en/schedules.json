@@ -115,6 +115,15 @@
     "days_other": "{{count}} days"
   },
   "calendar": {
+    "weekdays": {
+      "sun": "Sun",
+      "mon": "Mon",
+      "tue": "Tue",
+      "wed": "Wed",
+      "thu": "Thu",
+      "fri": "Fri",
+      "sat": "Sat"
+    },
     "etd": "ETD",
     "eta": "ETA",
     "transit": "Transit",

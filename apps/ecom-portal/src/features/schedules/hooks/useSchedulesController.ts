@@ -7,9 +7,9 @@ import { useEffect, useState } from "react";
 
 import { schedulesApi } from "../api/schedules.api";
 import type {
-  ScheduleItem,
-  ScheduleSearchParams,
-  VesselParticulars,
+    ScheduleItem,
+    ScheduleSearchParams,
+    VesselParticulars,
 } from "../types/schedules.types";
 import { useScheduleViewMode } from "./use-schedule-view-mode";
 
@@ -61,9 +61,8 @@ export function useSchedulesController() {
   const [isLoading, setIsLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
 
-  const [selectedVessel, setSelectedVessel] = useState<VesselParticulars | null>(
-    null,
-  );
+  const [selectedVessel, setSelectedVessel] =
+    useState<VesselParticulars | null>(null);
   const [isVesselModalOpen, setIsVesselModalOpen] = useState(false);
 
   const [ratesSchedule, setRatesSchedule] = useState<ScheduleItem | null>(null);

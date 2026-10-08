@@ -115,6 +115,15 @@
     "days_other": "{{count}} días"
   },
   "calendar": {
+    "weekdays": {
+      "sun": "Dom",
+      "mon": "Lun",
+      "tue": "Mar",
+      "wed": "Mié",
+      "thu": "Jue",
+      "fri": "Vie",
+      "sat": "Sáb"
+    },
     "etd": "ETD",
     "eta": "ETA",
     "transit": "Tránsito",

@@ -115,6 +115,15 @@
     "days_other": "{{count}} hari"
   },
   "calendar": {
+    "weekdays": {
+      "sun": "Ahd",
+      "mon": "Isn",
+      "tue": "Sel",
+      "wed": "Rab",
+      "thu": "Kha",
+      "fri": "Jum",
+      "sat": "Sab"
+    },
     "etd": "ETD",
     "eta": "ETA",
     "transit": "Transit",

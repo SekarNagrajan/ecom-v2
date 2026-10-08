@@ -4,7 +4,10 @@ import { Card, Col, Row, Typography, theme } from "antd";
 import type { LucideIcon } from "lucide-react";
 
 import { AppIcon, Icons, NavBookingIcon } from "../../../components/icons";
+import { useBookingStore } from "../../booking/stores/booking.store";
 import type { DashboardQuickAction } from "../mocks/dashboard.mock";
+
+const NEW_BOOKING_ROUTE = "/app/booking/new";
 
 const { Text, Title } = Typography;
 
@@ -38,7 +41,12 @@ export function DashboardQuickActions({ actions }: DashboardQuickActionsProps) {
             <Card
               hoverable
               className="dashboard-quick-action-card"
-              onClick={() => navigate({ to: action.route })}
+              onClick={() => {
+                if (action.route === NEW_BOOKING_ROUTE) {
+                  useBookingStore.getState().resetWizard();
+                }
+                navigate({ to: action.route });
+              }}
               style={{
                 borderRadius: 12,
                 border: `1px solid ${token.colorBorder}`,

@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 
 import type { BLListDTO } from "../../bill-of-lading/types/bl.types";
 import type { BookingListDTO } from "../../booking/types/booking-list.types";
+import { useBookingStore } from "../../booking/stores/booking.store";
 import {
   dashboardApi,
   type DashboardShipment,
@@ -205,6 +206,8 @@ export function useDashboardController() {
   };
 
   const handleCreateBooking = () => {
+    // Clear any prior wizard / preview payload so Create Booking always opens blank.
+    useBookingStore.getState().resetWizard();
     navigate({ to: "/app/booking/new" as never });
   };
 

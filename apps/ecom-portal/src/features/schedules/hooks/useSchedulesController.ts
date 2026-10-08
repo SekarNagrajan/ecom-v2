@@ -5,6 +5,7 @@ import { useToast } from "@solverminds/shared-ui/hooks";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 
+import { useBookingStore } from "../../booking/stores/booking.store";
 import { schedulesApi } from "../api/schedules.api";
 import type {
     ScheduleItem,
@@ -140,6 +141,8 @@ export function useSchedulesController() {
   };
 
   const handleBookNow = (_schedule: ScheduleItem) => {
+    // Fresh wizard — do not reopen a prior draft / preview payload.
+    useBookingStore.getState().resetWizard();
     navigate({ to: "/app/booking/new" });
   };
 

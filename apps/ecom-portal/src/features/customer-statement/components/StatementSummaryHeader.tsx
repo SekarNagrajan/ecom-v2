@@ -1,5 +1,5 @@
 // Modified by Sekar Nagarajan (2026-08-25 12:45)
-import { AppButton, FormattedDate } from "@solverminds/shared-ui";
+import { AppButton } from "@solverminds/shared-ui";
 import { Space } from "antd";
 import { useTranslation } from "react-i18next";
 
@@ -31,13 +31,13 @@ export function StatementSummaryHeader({
           <span className="stmt-summary-header__account">
             {statement.accountName}
           </span>
-          <span className="stmt-summary-header__period">
+          {/* <span className="stmt-summary-header__period">
             <FormattedDate value={statement.period.from} />
             {" – "}
             <FormattedDate value={statement.period.to} />
             {" · "}
             {statement.currency}
-          </span>
+          </span> */}
         </div>
         <div className="stmt-summary-header__actions">
           <Space wrap>

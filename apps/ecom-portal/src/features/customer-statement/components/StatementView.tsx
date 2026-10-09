@@ -1,11 +1,11 @@
-// Modified by Sekar Nagarajan (2026-08-25 12:55)
+// Modified by Sekar Nagarajan (2026-10-08 15:15)
 import { FormattedDate } from "@solverminds/shared-ui";
 import {
   DataView,
   type DataViewColumn,
 } from "@solverminds/shared-ui/data-view";
 import { Spin } from "antd";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -32,13 +32,26 @@ interface StatementViewProps {
   onRecordCountChange?: (count: number | undefined) => void;
 }
 
-function MoneyCell({ value, currency }: { value?: string; currency: string }) {
-  if (!value || value === "0" || value === "0.00") {
+/** Grid row — normal ledger line or the pinned period-totals footer. */
+type StatementGridRow = StatementLine & { isTotals?: boolean };
+
+const TOTALS_ROW_ID = "stmt-period-totals";
+
+function MoneyCell({
+  value,
+  currency,
+  showZero = false,
+}: {
+  value?: string;
+  currency: string;
+  showZero?: boolean;
+}) {
+  if (!showZero && (!value || value === "0" || value === "0.00")) {
     return <span className="stmt-money-cell">—</span>;
   }
   return (
     <span className="stmt-money-cell">
-      {formatStatementAmount(value, currency)}
+      {formatStatementAmount(value || "0.00", currency)}
     </span>
   );
 }
@@ -90,65 +103,132 @@ export function StatementView({
     />
   );
 
-  const columns: DataViewColumn<StatementLine>[] = [
-    {
-      field: "date",
-      headerName: t("columns.date"),
-      width: 130,
-      cellRenderer: (p: { value?: string }) =>
-        p.value ? <FormattedDate value={p.value} /> : "—",
-    },
-    {
-      field: "docType",
-      headerName: t("columns.type"),
-      width: 130,
-      cellRenderer: (p: { value?: StatementLine["docType"] }) =>
-        p.value ? getStatementDocTypeLabel(p.value, t) : "—",
-    },
-    { field: "docNo", headerName: t("columns.docNo"), width: 140 },
-    {
-      field: "reference",
-      headerName: t("columns.reference"),
-      flex: 1,
-      minWidth: 140,
-    },
-    {
-      field: "debit",
-      headerName: t("columns.debit"),
-      width: 150,
-      cellRenderer: (params: { data?: StatementLine }) =>
-        params.data ? (
-          <MoneyCell
-            value={params.data.debit}
-            currency={params.data.currency}
-          />
-        ) : null,
-    },
-    {
-      field: "credit",
-      headerName: t("columns.credit"),
-      width: 150,
-      cellRenderer: (params: { data?: StatementLine }) =>
-        params.data ? (
-          <MoneyCell
-            value={params.data.credit}
-            currency={params.data.currency}
-          />
-        ) : null,
-    },
-    {
-      field: "runningBalance",
-      headerName: t("columns.balance"),
-      width: 160,
-      cellRenderer: (params: { data?: StatementLine }) =>
-        params.data ? (
-          <MoneyCell
-            value={params.data.runningBalance}
-            currency={params.data.currency}
-          />
-        ) : null,
-    },
-  ];
+  const pinnedBottomRowData = useMemo<StatementGridRow[]>(() => {
+    if (!statement) return [];
+    return [
+      {
+        date: "",
+        docType: "Adjustment",
+        docNo: TOTALS_ROW_ID,
+        reference: t("totals.periodTotals"),
+        debit: statement.totals.totalDebit,
+        credit: statement.totals.totalCredit,
+        runningBalance: statement.totals.net,
+        currency: statement.currency,
+        isTotals: true,
+      },
+    ];
+  }, [statement, t]);
+
+  const columns: DataViewColumn<StatementGridRow>[] = useMemo(
+    () => [
+      {
+        field: "date",
+        headerName: t("columns.date"),
+        width: 130,
+        colSpan: (p: { data?: StatementGridRow }) => (p.data?.isTotals ? 4 : 1),
+        cellRenderer: (p: { value?: string; data?: StatementGridRow }) => {
+          if (p.data?.isTotals) {
+            return (
+              <span className="stmt-totals-label">
+                {t("totals.periodTotals")}
+              </span>
+            );
+          }
+          return p.value ? <FormattedDate value={p.value} /> : "—";
+        },
+      },
+      {
+        field: "docType",
+        headerName: t("columns.type"),
+        width: 130,
+        cellRenderer: (p: {
+          value?: StatementLine["docType"];
+          data?: StatementGridRow;
+        }) => {
+          if (p.data?.isTotals) return null;
+          return p.value ? getStatementDocTypeLabel(p.value, t) : "—";
+        },
+      },
+      {
+        field: "docNo",
+        headerName: t("columns.docNo"),
+        width: 140,
+        cellRenderer: (p: { value?: string; data?: StatementGridRow }) => {
+          if (p.data?.isTotals) return null;
+          return p.value || "—";
+        },
+      },
+      {
+        field: "reference",
+        headerName: t("columns.reference"),
+        flex: 1,
+        minWidth: 140,
+        cellRenderer: (p: { value?: string; data?: StatementGridRow }) => {
+          if (p.data?.isTotals) return null;
+          return p.value || "—";
+        },
+      },
+      {
+        field: "debit",
+        headerName: t("columns.debit"),
+        width: 150,
+        headerTooltip: t("totals.totalDebit"),
+        cellRenderer: (params: { data?: StatementGridRow }) =>
+          params.data ? (
+            <MoneyCell
+              value={params.data.debit}
+              currency={params.data.currency}
+              showZero={params.data.isTotals}
+            />
+          ) : null,
+      },
+      {
+        field: "credit",
+        headerName: t("columns.credit"),
+        width: 150,
+        headerTooltip: t("totals.totalCredit"),
+        cellRenderer: (params: { data?: StatementGridRow }) =>
+          params.data ? (
+            <MoneyCell
+              value={params.data.credit}
+              currency={params.data.currency}
+              showZero={params.data.isTotals}
+            />
+          ) : null,
+      },
+      {
+        field: "runningBalance",
+        headerName: t("columns.balance"),
+        width: 160,
+        headerTooltip: t("totals.net"),
+        cellRenderer: (params: { data?: StatementGridRow }) => {
+          if (!params.data) return null;
+          if (params.data.isTotals) {
+            return (
+              <span className="stmt-totals-net">
+                <span className="stmt-totals-net__label">
+                  {t("totals.net")}
+                </span>
+                <MoneyCell
+                  value={params.data.runningBalance}
+                  currency={params.data.currency}
+                  showZero
+                />
+              </span>
+            );
+          }
+          return (
+            <MoneyCell
+              value={params.data.runningBalance}
+              currency={params.data.currency}
+            />
+          );
+        },
+      },
+    ],
+    [t],
+  );
 
   const exportingPdf =
     exportMutation.isPending && exportMutation.variables?.format === "pdf";
@@ -191,47 +271,16 @@ export function StatementView({
                   pageSizeOptions: [10, 20, 50, 100],
                   defaultColDef: { filter: true },
                   gridOptions: {
-                    getRowId: (params: { data: StatementLine }) =>
-                      `${params.data.docNo}-${params.data.date}`,
+                    pinnedBottomRowData,
+                    getRowId: (params: { data: StatementGridRow }) =>
+                      params.data.isTotals
+                        ? TOTALS_ROW_ID
+                        : `${params.data.docNo}-${params.data.date}`,
+                    getRowClass: (params: { data?: StatementGridRow }) =>
+                      params.data?.isTotals ? "stmt-totals-row" : undefined,
                   },
                 }}
               />
-            </div>
-
-            <div className="stmt-totals-strip">
-              <div className="stmt-totals-strip__item">
-                <span className="stmt-totals-strip__label">
-                  {t("totals.totalDebit")}
-                </span>
-                <span className="stmt-totals-strip__value">
-                  {formatStatementAmount(
-                    statement.totals.totalDebit,
-                    statement.currency,
-                  )}
-                </span>
-              </div>
-              <div className="stmt-totals-strip__item">
-                <span className="stmt-totals-strip__label">
-                  {t("totals.totalCredit")}
-                </span>
-                <span className="stmt-totals-strip__value">
-                  {formatStatementAmount(
-                    statement.totals.totalCredit,
-                    statement.currency,
-                  )}
-                </span>
-              </div>
-              <div className="stmt-totals-strip__item">
-                <span className="stmt-totals-strip__label">
-                  {t("totals.net")}
-                </span>
-                <span className="stmt-totals-strip__value">
-                  {formatStatementAmount(
-                    statement.totals.net,
-                    statement.currency,
-                  )}
-                </span>
-              </div>
             </div>
           </>
         ) : !isLoading ? (

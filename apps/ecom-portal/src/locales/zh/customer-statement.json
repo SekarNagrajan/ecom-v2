@@ -30,7 +30,8 @@
   "totals": {
     "totalDebit": "借方合计",
     "totalCredit": "贷方合计",
-    "net": "净额"
+    "net": "净额",
+    "periodTotals": "期间合计"
   },
   "empty": {
     "loadErrorTitle": "无法加载客户对账单",

@@ -30,7 +30,8 @@
   "totals": {
     "totalDebit": "Total Debit",
     "totalCredit": "Total Credit",
-    "net": "Net"
+    "net": "Net",
+    "periodTotals": "Period totals"
   },
   "empty": {
     "loadErrorTitle": "Couldn't load the customer statement",

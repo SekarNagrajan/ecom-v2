@@ -1,8 +1,8 @@
 // Modified by Sekar Nagarajan (2026-08-25 15:00)
-import { useAntdBreakpoint } from '@solverminds/shared-ui/hooks';
+import { useAntdBreakpoint } from "@solverminds/shared-ui/hooks";
 
 /** Viewport tiers aligned with Ant Design breakpoints + agenct.md. */
-export type ViewportTier = 'mobile' | 'tablet' | 'web' | 'monitor';
+export type ViewportTier = "mobile" | "tablet" | "web" | "monitor";
 
 /**
  * Responsive layout helper for ecom-portal features and shells.
@@ -15,20 +15,20 @@ export function useResponsiveLayout() {
   const bp = useAntdBreakpoint();
 
   const tier: ViewportTier = bp.isMobile
-    ? 'mobile'
+    ? "mobile"
     : bp.isTablet
-      ? 'tablet'
-      : bp.isWideDesktop
-        ? 'monitor'
-        : 'web';
+    ? "tablet"
+    : bp.isWideDesktop
+    ? "monitor"
+    : "web";
 
   return {
     ...bp,
     tier,
-    isMobileTier: tier === 'mobile',
-    isTabletTier: tier === 'tablet',
-    isWebTier: tier === 'web',
-    isMonitorTier: tier === 'monitor',
+    isMobileTier: tier === "mobile",
+    isTabletTier: tier === "tablet",
+    isWebTier: tier === "web",
+    isMonitorTier: tier === "monitor",
     /** Sidebar is overlay drawer on mobile; fixed rail on tablet+. */
     useMobileNav: bp.isMobile,
     /** Hide secondary header controls (tenant switchers, role text). */

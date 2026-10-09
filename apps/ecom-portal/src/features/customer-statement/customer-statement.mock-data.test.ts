@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   getMockStatement,
+  MOCK_SHA_JEA_STATEMENT_CRITERIA,
   MOCK_USD_STATEMENT_FIXTURE_CRITERIA,
   mockStatementAccounts,
 } from '../../mocks/customer-statement.mock-data';
@@ -106,6 +107,28 @@ describe('customer-statement mock ledger', () => {
     expect(statement?.lines).toEqual([]);
     expect(statement?.openingBalance).toBe(statement?.closingBalance);
     expect(statement?.openingBalance).toBe('12860.50');
+  });
+
+  it('returns CNSHA→AEJEA BKG-SHA-061 ledger lines in the demo window', () => {
+    const statement = getMockStatement(MOCK_SHA_JEA_STATEMENT_CRITERIA);
+    expect(statement).not.toBeNull();
+    expect(statement?.openingBalance).toBe('12860.50');
+    expect(statement?.lines.map((l) => l.docNo)).toEqual([
+      'INV-SHA-061',
+      'INV-SHA-061-THC',
+      'RCP-SHA-061',
+      'INV-JEA-061',
+    ]);
+    expect(statement?.lines[0]?.reference).toContain('CNSHA→AEJEA');
+    expect(statement?.lines[0]?.debit).toBe('2400.00');
+    expect(statement?.lines[1]?.debit).toBe('180.00');
+    expect(statement?.lines[2]?.credit).toBe('2580.00');
+    expect(statement?.lines[3]?.debit).toBe('495.00');
+    // Opening 12860.50 + 2400 + 180 − 2580 + 495
+    expect(statement?.closingBalance).toBe('13355.50');
+    expect(statement?.totals.totalDebit).toBe('3075.00');
+    expect(statement?.totals.totalCredit).toBe('2580.00');
+    expect(statement?.totals.net).toBe('495.00');
   });
 
   it('returns null for unknown account', () => {

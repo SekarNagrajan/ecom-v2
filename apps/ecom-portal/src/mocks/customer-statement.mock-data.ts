@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-25 12:45)
+// Modified by Sekar Nagarajan (2026-10-08 15:05)
 import type {
   AccountOption,
   StatementCriteria,
@@ -33,7 +33,8 @@ interface LedgerSeedLine {
 
 /**
  * Fixed ledger fixture. Opening for ACC-USD-001 before 2026-07-26 is 5,000.00.
- * Lines below fall inside a typical today−30 window around 2026-08-25.
+ * Aug-2026 lines cover the Vitest fixture window; Sep–Oct lines follow the
+ * CNSHA→AEJEA demo sailing (SCH-DIR-016 / BKG-SHA-061).
  */
 const ledgerSeed: LedgerSeedLine[] = [
   // Pre-period activity (carry-forward into opening)
@@ -46,7 +47,7 @@ const ledgerSeed: LedgerSeedLine[] = [
     amountCents: 500000,
     currency: 'USD',
   },
-  // In-period USD
+  // In-period USD (fixture window Jul 26 – Aug 25)
   {
     accountId: 'ACC-USD-001',
     date: '2026-08-02',
@@ -99,6 +100,43 @@ const ledgerSeed: LedgerSeedLine[] = [
     docNo: 'INV-9102',
     reference: 'THC charges',
     amountCents: 450000,
+    currency: 'USD',
+  },
+  // CNSHA Shanghai → AEJEA Jebel Ali (SCH-DIR-016 / BKG-SHA-061)
+  {
+    accountId: 'ACC-USD-001',
+    date: '2026-09-12',
+    docType: 'Invoice',
+    docNo: 'INV-SHA-061',
+    reference: 'OFR BKG-SHA-061 CNSHA→AEJEA SOLVERMINDS VOYAGER/061W',
+    amountCents: 240000,
+    currency: 'USD',
+  },
+  {
+    accountId: 'ACC-USD-001',
+    date: '2026-09-12',
+    docType: 'Invoice',
+    docNo: 'INV-SHA-061-THC',
+    reference: 'THC Shanghai BKG-SHA-061',
+    amountCents: 18000,
+    currency: 'USD',
+  },
+  {
+    accountId: 'ACC-USD-001',
+    date: '2026-09-14',
+    docType: 'Receipt',
+    docNo: 'RCP-SHA-061',
+    reference: 'Prepaid ocean+THC BKG-SHA-061',
+    amountCents: -258000,
+    currency: 'USD',
+  },
+  {
+    accountId: 'ACC-USD-001',
+    date: '2026-10-06',
+    docType: 'Invoice',
+    docNo: 'INV-JEA-061',
+    reference: 'DTHC+DO ARN-JEA-061 AEJEA DP World T1',
+    amountCents: 49500,
     currency: 'USD',
   },
   // EUR account
@@ -219,4 +257,12 @@ export const MOCK_USD_STATEMENT_FIXTURE_CRITERIA: StatementCriteria = {
   currency: 'USD',
   fromDate: '2026-07-26',
   toDate: '2026-08-25',
+};
+
+/** CNSHA→AEJEA demo corridor (BKG-SHA-061) — covers booking invoices through arrival. */
+export const MOCK_SHA_JEA_STATEMENT_CRITERIA: StatementCriteria = {
+  accountId: 'ACC-USD-001',
+  currency: 'USD',
+  fromDate: '2026-09-01',
+  toDate: '2026-10-15',
 };

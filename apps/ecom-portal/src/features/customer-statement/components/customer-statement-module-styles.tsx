@@ -1,7 +1,7 @@
-// Modified by Sekar Nagarajan (2026-08-25 13:00)
-import { theme } from 'antd';
+// Modified by Sekar Nagarajan (2026-10-08 15:15)
+import { theme } from "antd";
 
-import { tokenMix } from '../../theme/utils/token-mix';
+import { tokenMix } from "../../theme/utils/token-mix";
 
 export function CustomerStatementModuleStyles() {
   const { token } = theme.useToken();
@@ -136,15 +136,21 @@ export function CustomerStatementModuleStyles() {
       }
       .stmt-summary-card--opening {
         border-left: 4px solid ${token.colorPrimary};
-        background: linear-gradient(180deg, ${primaryTint8} 0%, ${token.colorFillAlter} 100%);
+        background: linear-gradient(180deg, ${primaryTint8} 0%, ${
+      token.colorFillAlter
+    } 100%);
       }
       .stmt-summary-card--closing {
         border-left: 4px solid ${token.colorSuccess};
-        background: linear-gradient(180deg, ${successTint8} 0%, ${token.colorFillAlter} 100%);
+        background: linear-gradient(180deg, ${successTint8} 0%, ${
+      token.colorFillAlter
+    } 100%);
       }
       .stmt-summary-card--net {
         border-left: 4px solid ${token.colorWarning};
-        background: linear-gradient(180deg, ${warningTint8} 0%, ${token.colorFillAlter} 100%);
+        background: linear-gradient(180deg, ${warningTint8} 0%, ${
+      token.colorFillAlter
+    } 100%);
       }
       .stmt-summary-card__label {
         display: block;
@@ -193,38 +199,42 @@ export function CustomerStatementModuleStyles() {
         font-variant-numeric: tabular-nums;
         width: 100%;
       }
-      .stmt-totals-strip {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: ${token.marginMD}px;
-        margin-top: ${token.marginMD}px;
-        padding: ${token.paddingMD}px ${token.paddingLG}px;
-        border-radius: ${token.borderRadiusLG}px;
-        border: 1px solid ${token.colorBorderSecondary};
-        background: ${token.colorFillAlter};
-        flex-shrink: 0;
+      /* Period totals pinned inside the AG Grid (bottom footer row) */
+      .stmt-grid-wrap .ag-floating-bottom {
+        border-top: 2px solid ${token.colorBorder};
+        overflow: hidden !important;
       }
-      .stmt-totals-strip__item {
-        display: flex;
-        flex-direction: row;
-        align-items: baseline;
-        justify-content: space-between;
-        gap: ${token.marginSM}px;
-        min-width: 0;
-      }
-      .stmt-totals-strip__label {
-        flex-shrink: 0;
-        font-size: ${token.fontSizeSM}px;
-        color: ${token.colorTextSecondary};
-        text-align: left;
-      }
-      .stmt-totals-strip__value {
-        flex: 1;
-        min-width: 0;
+      .stmt-grid-wrap .ag-row.stmt-totals-row,
+      .stmt-grid-wrap .ag-floating-bottom .ag-row {
+        background: ${token.colorFillAlter} !important;
         font-weight: ${token.fontWeightStrong};
-        text-align: right;
-        font-variant-numeric: tabular-nums;
-        white-space: nowrap;
+        border: none;
+      }
+      .stmt-grid-wrap .ag-row.stmt-totals-row .ag-cell {
+        display: flex;
+        align-items: center;
+        border-right: none !important;
+      }
+      .stmt-totals-label {
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+        letter-spacing: 0.01em;
+      }
+      .stmt-totals-net {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 2px;
+        width: 100%;
+      }
+      .stmt-totals-net__label {
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorTextSecondary};
+        line-height: 1.2;
+      }
+      .stmt-totals-net .stmt-money-cell {
+        font-weight: ${token.fontWeightStrong};
       }
       .stmt-empty-hint {
         padding: ${token.paddingLG}px;
@@ -249,12 +259,8 @@ export function CustomerStatementModuleStyles() {
           padding-left: ${token.paddingMD}px;
           padding-right: ${token.paddingMD}px;
         }
-        .stmt-summary-cards,
-        .stmt-totals-strip {
+        .stmt-summary-cards {
           grid-template-columns: 1fr;
-        }
-        .stmt-totals-strip__item {
-          width: 100%;
         }
         .stmt-summary-header__actions {
           width: 100%;

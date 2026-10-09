@@ -30,7 +30,8 @@
   "totals": {
     "totalDebit": "Jumlah Debit",
     "totalCredit": "Jumlah Kredit",
-    "net": "Bersih"
+    "net": "Bersih",
+    "periodTotals": "Jumlah tempoh"
   },
   "empty": {
     "loadErrorTitle": "Tidak dapat memuatkan penyata pelanggan",

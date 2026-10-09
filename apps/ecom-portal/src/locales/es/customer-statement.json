@@ -30,7 +30,8 @@
   "totals": {
     "totalDebit": "Total débito",
     "totalCredit": "Total crédito",
-    "net": "Neto"
+    "net": "Neto",
+    "periodTotals": "Totales del período"
   },
   "empty": {
     "loadErrorTitle": "No se pudo cargar el estado de cuenta del cliente",

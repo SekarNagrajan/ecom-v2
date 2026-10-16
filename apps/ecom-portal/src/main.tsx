@@ -1,6 +1,6 @@
 // Modified by Sekar Nagarajan (2026-09-18 12:26)
 import { useAuthStore, useTenantStore } from "@solverminds/auth";
-import { queryClient } from "@solverminds/platform";
+import { env, queryClient } from "@solverminds/platform";
 import { AppConfigProvider } from "@solverminds/shared-ui/providers";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider } from "@tanstack/react-router";
@@ -76,7 +76,7 @@ function wireUnauthorizedListener(): void {
 }
 
 async function bootstrap() {
-  if (import.meta.env.DEV) {
+  if (env.VITE_API_MODE === "mock") {
     const { worker } = await import("./mocks/browser");
     await worker.start({
       onUnhandledRequest: "bypass",

@@ -26,8 +26,9 @@ import { userCreationHandlers } from './user-creation.handlers';
 import { userModulesHandlers } from './user-modules.handlers';
 
 /**
- * MSW browser service worker — active in development only.
- * Import and start this in main.tsx before ReactDOM.createRoot.
+ * MSW browser service worker.
+ * Started from main.tsx before React renders when VITE_API_MODE is mock,
+ * including production demo builds.
  */
 export const worker = setupWorker(
   ...publicTenantHandlers,

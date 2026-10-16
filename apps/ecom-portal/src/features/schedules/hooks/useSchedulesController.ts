@@ -4,13 +4,15 @@
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { useBookingStore } from "../../booking/stores/booking.store";
+import { buildMasterDetailsFromSchedule } from "../../booking/utils/map-schedule-to-master-details";
 import { schedulesApi } from "../api/schedules.api";
 import type {
-    ScheduleItem,
-    ScheduleSearchParams,
-    VesselParticulars,
+  ScheduleItem,
+  ScheduleSearchParams,
+  VesselParticulars,
 } from "../types/schedules.types";
 import { useScheduleViewMode } from "./use-schedule-view-mode";
 
@@ -56,6 +58,7 @@ function readDeepLinkSearchParams(): ScheduleSearchParams | null {
 export function useSchedulesController() {
   const navigate = useNavigate();
   const toast = useToast();
+  const { t } = useTranslation("schedules");
 
   const { viewMode, setViewMode } = useScheduleViewMode();
   const [schedules, setSchedules] = useState<ScheduleItem[]>([]);
@@ -140,9 +143,19 @@ export function useSchedulesController() {
     setCarbonSchedule(null);
   };
 
-  const handleBookNow = (_schedule: ScheduleItem) => {
-    // Fresh wizard — do not reopen a prior draft / preview payload.
-    useBookingStore.getState().resetWizard();
+  const handleBookNow = (schedule: ScheduleItem) => {
+    // Fresh wizard seeded from the chosen sailing (list / rates drawer Book Now).
+    const store = useBookingStore.getState();
+    store.resetWizard();
+    store.updateMasterDetails(buildMasterDetailsFromSchedule(schedule));
+    toast.success(
+      t("bookNowToast", {
+        vessel: schedule.vesselName,
+        voyage: schedule.voyage,
+        pol: schedule.polPortId,
+        pod: schedule.podPortId,
+      }),
+    );
     navigate({ to: "/app/booking/new" });
   };
 

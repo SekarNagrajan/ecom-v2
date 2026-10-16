@@ -235,6 +235,10 @@ export default defineConfig({
         __dirname,
         "../../libs/shared/ui/src/components/data-view/card-view/index.ts",
       ),
+      "@solverminds/shared-ui/data-view/ag-grid-license": path.resolve(
+        __dirname,
+        "../../libs/shared/ui/src/components/data-view/ag-grid-license.ts",
+      ),
       "@solverminds/shared-ui/data-view": path.resolve(
         __dirname,
         "../../libs/shared/ui/src/components/data-view/index.ts",

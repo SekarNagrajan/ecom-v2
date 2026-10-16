@@ -1,6 +1,7 @@
 // Modified by Sekar Nagarajan (2026-09-18 12:26)
 import { useAuthStore, useTenantStore } from "@solverminds/auth";
 import { env, queryClient } from "@solverminds/platform";
+import { initAgGridLicense } from "@solverminds/shared-ui/data-view/ag-grid-license";
 import { AppConfigProvider } from "@solverminds/shared-ui/providers";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider } from "@tanstack/react-router";
@@ -18,6 +19,7 @@ import { installPreloadErrorHandler } from "./utils/preload-error-handler";
 
 import "@solverminds/shared-ui/styles.css";
 
+initAgGridLicense(import.meta.env.VITE_AG_GRID_LICENSE_KEY);
 installPreloadErrorHandler();
 
 /**

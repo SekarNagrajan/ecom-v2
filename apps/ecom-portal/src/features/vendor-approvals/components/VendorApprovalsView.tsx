@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-16 17:42)
+// Modified by Sekar Nagarajan (2026-10-16 23:35)
 import {
   DataView,
   type DataViewColumn,
@@ -18,7 +18,10 @@ import { ModuleEmptyState } from "../../../components/shared/module-empty-state"
 import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
 import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
 import { useModuleTitles } from "../../../i18n/use-module-titles";
-import { MOCK_VENDOR_APPROVALS } from "../mocks/vendor-approvals.mock";
+import {
+  applyApprovalStatus,
+  vendorApprovals,
+} from "../../../mocks/fixture-api/bridges/approvals.bridge";
 import type {
   ApprovalStatus,
   VendorApprovalItem,
@@ -46,14 +49,16 @@ export function VendorApprovalsView() {
   const toast = useToast();
   const confirm = useConfirm();
   const { profileHandlers } = useLocalGridProfiles("vendor-approvals");
-  const [items, setItems] = useState<VendorApprovalItem[]>(() => [
-    ...MOCK_VENDOR_APPROVALS,
-  ]);
+  // Queue derived from the ecombooking / ecomSI / ecom_vgmsolas fixtures (src/mocks/fixtures)
+  const [items, setItems] = useState<VendorApprovalItem[]>(() =>
+    vendorApprovals(),
+  );
 
   const applyStatus = (
     id: string,
     status: Exclude<ApprovalStatus, "PENDING">,
   ) => {
+    applyApprovalStatus(id, status);
     setItems((prev) =>
       prev.map((item) => (item.id === id ? { ...item, status } : item)),
     );

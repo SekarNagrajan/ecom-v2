@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-16 17:13)
+// Modified by Sekar Nagarajan (2026-10-16 23:50)
 import { AppButton } from "@solverminds/shared-ui";
 import { Card, Progress, Segmented, Tooltip, Typography, theme } from "antd";
 import * as echarts from "echarts";
@@ -8,13 +8,9 @@ import { useTranslation } from "react-i18next";
 import { useChartTokens } from "../../theme/utils/use-portal-chart-tokens";
 import type {
   IntelligenceBreakdown,
+  IntelligenceBreakdowns,
   TopConsignee,
-} from "../mocks/dashboard.mock";
-import {
-  MOCK_INTELLIGENCE_BY_ORIGIN,
-  MOCK_INTELLIGENCE_BY_POD,
-  MOCK_INTELLIGENCE_BY_POL,
-} from "../mocks/dashboard.mock";
+} from "../api/dashboard.api";
 import {
   resolveDashboardTone,
   type DashboardTone,
@@ -185,7 +181,13 @@ function BreakdownTable({ data, dimensionLabel }: BreakdownTableProps) {
   );
 }
 
-export function InteractiveShipmentIntelligenceCard() {
+interface InteractiveShipmentIntelligenceCardProps {
+  breakdowns: IntelligenceBreakdowns;
+}
+
+export function InteractiveShipmentIntelligenceCard({
+  breakdowns,
+}: InteractiveShipmentIntelligenceCardProps) {
   const { t } = useTranslation(["dashboard", "common", "modules"]);
   const [activeKey, setActiveKey] = useState<string>("origin");
 
@@ -196,40 +198,40 @@ export function InteractiveShipmentIntelligenceCard() {
           key: "origin",
           label: t("intelligence.dimensions.origin"),
           column: t("intelligence.dimensionColumns.origin"),
-          data: MOCK_INTELLIGENCE_BY_ORIGIN,
+          data: breakdowns.origin,
         },
         {
           key: "pol",
           label: t("intelligence.dimensions.pol"),
           column: t("intelligence.dimensionColumns.pol"),
-          data: MOCK_INTELLIGENCE_BY_POL,
+          data: breakdowns.pol,
         },
         {
           key: "pod",
           label: t("intelligence.dimensions.pod"),
           column: t("intelligence.dimensionColumns.pod"),
-          data: MOCK_INTELLIGENCE_BY_POD,
+          data: breakdowns.pod,
         },
         {
           key: "pickup",
           label: t("intelligence.dimensions.pickup"),
           column: t("intelligence.dimensionColumns.pickup"),
-          data: MOCK_INTELLIGENCE_BY_ORIGIN,
+          data: breakdowns.pickup,
         },
         {
           key: "consignee",
           label: t("intelligence.dimensions.consignee"),
           column: t("intelligence.dimensionColumns.consignee"),
-          data: MOCK_INTELLIGENCE_BY_POL,
+          data: breakdowns.consignee,
         },
         {
           key: "destination",
           label: t("intelligence.dimensions.destination"),
           column: t("intelligence.dimensionColumns.destination"),
-          data: MOCK_INTELLIGENCE_BY_POD,
+          data: breakdowns.destination,
         },
       ] as const,
-    [t],
+    [t, breakdowns],
   );
 
   const current =
@@ -381,15 +383,17 @@ export function TopConsigneesCard({ consignees }: TopConsigneesProps) {
 
 interface ShipmentIntelligenceProps {
   consignees: TopConsignee[];
+  breakdowns: IntelligenceBreakdowns;
 }
 
 export function ShipmentIntelligenceSection({
   consignees,
+  breakdowns,
 }: ShipmentIntelligenceProps) {
   return (
     <div className="dashboard-equal-row dashboard-intelligence-row">
       <div className="dashboard-intelligence-row__primary">
-        <InteractiveShipmentIntelligenceCard />
+        <InteractiveShipmentIntelligenceCard breakdowns={breakdowns} />
       </div>
       <div className="dashboard-intelligence-row__secondary">
         <TopConsigneesCard consignees={consignees} />

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-18 12:17)
+// Modified by Sekar Nagarajan (2026-10-16 23:50)
 /**
  * Enhanced Dashboard — JSP parity with enhancedDashboard.jsp:
  * KPI filter cards → Upcoming Shipment Planning → Ongoing Transactions, plus analytics sections.
@@ -16,16 +16,11 @@ import { BlModuleStyles } from "../../bill-of-lading/components/bl-module-styles
 import { BlViewDrawer } from "../../bill-of-lading/components/view/BlViewDrawer";
 import { BookingModuleStyles } from "../../booking/components/booking-module-styles";
 import { BookingViewDrawer } from "../../booking/components/view/BookingViewDrawer";
+import type {
+  IntelligenceBreakdowns,
+  PlanningKpi,
+} from "../api/dashboard.api";
 import { useDashboardController } from "../hooks/use-dashboard-controller";
-import {
-  MOCK_CALENDAR_WEEKS,
-  MOCK_CONTRACTED_LANES,
-  MOCK_LAST_USED_LANES,
-  MOCK_OPPORTUNITY_LANES,
-  MOCK_PLANNING_KPIS,
-  MOCK_TOP_CONSIGNEES,
-  MOCK_TOP_LANES,
-} from "../mocks/dashboard.mock";
 import { filterDashboardShipments } from "../utils/filter-dashboard-shipments";
 import { DashboardExportButton } from "./dashboard-export-button";
 import { DashboardModuleStyles } from "./dashboard-module-styles";
@@ -37,11 +32,30 @@ import { ShipmentIntelligenceSection } from "./ShipmentIntelligenceSection";
 import { ShipmentPlanningSection } from "./ShipmentPlanningSection";
 import { VolumeAnalyticsSection } from "./VolumeAnalyticsSection";
 
+/** Zero-state props while the summary is loading or unavailable. */
+const EMPTY_PLANNING_KPIS: PlanningKpi = {
+  bookingsNext7Days: 0,
+  feusNext7Days: 0,
+  missingSI: 0,
+  atRisk: 0,
+};
+const EMPTY_BREAKDOWNS: IntelligenceBreakdowns = {
+  origin: [],
+  pol: [],
+  pod: [],
+  pickup: [],
+  consignee: [],
+  destination: [],
+};
+
 export function EnhancedDashboardView() {
   const { t } = useTranslation(["dashboard", "common", "modules"]);
   const controller = useDashboardController();
   const counts = controller.summary?.counts;
   const shipments = controller.summary?.shipments ?? [];
+  const planning = controller.summary?.planning;
+  const lanes = controller.summary?.lanes;
+  const intelligence = controller.summary?.intelligence;
   // Modified by Sekar Nagarajan (2026-09-08 16:10)
   const filteredShipmentCount = filterDashboardShipments(
     shipments,
@@ -106,8 +120,8 @@ export function EnhancedDashboardView() {
 
         <Spin spinning={controller.isLoading}>
           <ShipmentPlanningSection
-            kpis={MOCK_PLANNING_KPIS}
-            calendar={MOCK_CALENDAR_WEEKS}
+            kpis={planning?.kpis ?? EMPTY_PLANNING_KPIS}
+            calendar={planning?.calendar ?? []}
             onDayClick={controller.handlePlanningDayClick}
             onViewAll={controller.handleViewAllPlanning}
           />
@@ -140,21 +154,24 @@ export function EnhancedDashboardView() {
             <Row gutter={[16, 16]} className="dashboard-equal-row">
               <Col xs={24} lg={12}>
                 <TopActiveLanesSection
-                  lanes={MOCK_TOP_LANES}
-                  lastUsed={MOCK_LAST_USED_LANES}
+                  lanes={lanes?.top ?? []}
+                  lastUsed={lanes?.lastUsed ?? []}
                 />
               </Col>
               <Col xs={24} lg={12}>
                 <LaneOpportunitySection
-                  contracted={MOCK_CONTRACTED_LANES}
-                  opportunities={MOCK_OPPORTUNITY_LANES}
+                  contracted={lanes?.contracted ?? []}
+                  opportunities={lanes?.opportunities ?? []}
                 />
               </Col>
             </Row>
           </Spin>
 
           <Spin spinning={controller.isLoading}>
-            <ShipmentIntelligenceSection consignees={MOCK_TOP_CONSIGNEES} />
+            <ShipmentIntelligenceSection
+              consignees={intelligence?.consignees ?? []}
+              breakdowns={intelligence?.breakdowns ?? EMPTY_BREAKDOWNS}
+            />
           </Spin>
         </div>
       </Space>

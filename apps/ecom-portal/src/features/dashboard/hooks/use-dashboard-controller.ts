@@ -1,7 +1,7 @@
-// Modified by Sekar Nagarajan (2026-09-16 17:07)
+// Modified by Sekar Nagarajan (2026-10-16 23:45)
 /**
  * Dashboard controller — enhancedDashboard.jsp parity.
- * Loads summary via dashboardApi (mock until REST facade exists).
+ * Loads summary via dashboardApi (computed from the extracted fixtures until a REST facade exists).
  */
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { useNavigate } from "@tanstack/react-router";
@@ -15,11 +15,11 @@ import {
   dashboardApi,
   type DashboardShipment,
   type DashboardSummaryResponse,
+  type PlanningDaySelection,
   type VolumeAnalyticsResponse,
   type VolumeAnalyticsStage,
   type VolumeTrendPeriod,
 } from "../api/dashboard.api";
-import type { PlanningDaySelection } from "../mocks/dashboard.mock";
 import { getDashboardFilterLabel } from "../utils/filter-dashboard-shipments";
 import { mapDashboardShipmentToBlList } from "../utils/map-dashboard-shipment-to-bl";
 import { mapDashboardShipmentToBookingList } from "../utils/map-dashboard-shipment-to-booking";

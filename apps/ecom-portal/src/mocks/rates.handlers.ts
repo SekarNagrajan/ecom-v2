@@ -1,297 +1,72 @@
-// Modified by Sekar Nagarajan (2026-09-18 12:55)
+// Modified by Sekar Nagarajan (2026-10-17 00:20)
+/**
+ * Rates module handlers, served from the Commercial fixtures through fixture-api/bridges/rates.bridge.ts:
+ * published tariffs and derived contracts from `tariffs`, surcharge codes from `charges`, session-only quotes.
+ */
 import { http, HttpResponse } from 'msw';
-import { ContractDTO, CreateQuoteInput, QuoteDTO, SurchargeDTO, TariffDTO } from '../features/rates/types/rates.types';
 
-export const mockTariffs: TariffDTO[] = [
-  {
-    id: 'trf-101',
-    loadPort: 'USNYC',
-    loadPortName: 'New York, USA',
-    dischPort: 'SGSIN',
-    dischPortName: 'Singapore Port, Singapore',
-    eqpType: "40' High Cube Dry",
-    commodityCode: 'GEN-CGO',
-    commodityName: 'General Freight / Dry Merchandise',
-    currency: 'USD',
-    tariffAmount: 1450.0,
-    localAmount: 1450.0,
-    effectiveFrom: '2026-01-01',
-    effectiveTo: '2026-12-31',
-    soc: 'No',
-    nor: false,
-    transService: 'FE1',
-  },
-  {
-    id: 'trf-102',
-    loadPort: 'DEHAM',
-    loadPortName: 'Hamburg, Germany',
-    dischPort: 'USNYC',
-    dischPortName: 'New York, USA',
-    eqpType: "20' Standard Dry",
-    commodityCode: 'AUTO-PARTS',
-    commodityName: 'Automotive Spare Parts & Machinery',
-    currency: 'EUR',
-    tariffAmount: 1100.0,
-    localAmount: 1199.0,
-    effectiveFrom: '2026-03-01',
-    effectiveTo: '2026-12-31',
-    soc: 'Yes',
-    nor: true,
-    transService: 'TA2',
-  },
-  {
-    id: 'trf-103',
-    loadPort: 'NLRTM',
-    loadPortName: 'Rotterdam, Netherlands',
-    dischPort: 'CNSHA',
-    dischPortName: 'Shanghai, China',
-    eqpType: "40' Reefer Container",
-    commodityCode: 'PERISHABLE',
-    commodityName: 'Chilled Agricultural Produce',
-    currency: 'USD',
-    tariffAmount: 2850.0,
-    localAmount: 2850.0,
-    effectiveFrom: '2026-02-15',
-    effectiveTo: '2026-11-30',
-    soc: 'No',
-    nor: false,
-    transService: 'AE3',
-  },
-  {
-    id: 'trf-104',
-    loadPort: 'INNSA',
-    loadPortName: 'Nhava Sheva, India',
-    dischPort: 'AEDXB',
-    dischPortName: 'Jebel Ali, UAE',
-    eqpType: "20' Standard Dry",
-    commodityCode: 'TEXTILES',
-    commodityName: 'Textiles & Garments',
-    currency: 'USD',
-    tariffAmount: 650.0,
-    localAmount: 650.0,
-    effectiveFrom: '2026-01-01',
-    effectiveTo: '2026-12-31',
-    soc: 'No',
-    nor: false,
-    transService: 'ME1',
-  },
-];
+import type { CreateQuoteInput } from '../features/rates/types/rates.types';
+import {
+  createQuote,
+  fixtureContracts,
+  fixtureSurcharges,
+  fixtureTariffs,
+  listQuotes,
+} from './fixture-api/bridges/rates.bridge';
 
-export const mockSurcharges: SurchargeDTO[] = [
-  {
-    id: 'sur-201',
-    chargeCode: 'BAF',
-    chargeName: 'Bunker Adjustment Factor',
-    origin: 'USNYC',
-    loadRegion: 'US East Coast',
-    dischargeRegion: 'SE Asia Main',
-    delivery: 'SGSIN',
-    eqpType: "40' High Cube Dry",
-    currency: 'USD',
-    amount: 320.0,
-    isNor: false,
-    effectiveFrom: '2026-01-01',
-    effectiveTo: '2026-12-31',
-  },
-  {
-    id: 'sur-202',
-    chargeCode: 'THCO',
-    chargeName: 'Terminal Handling Charge at Origin',
-    origin: 'USNYC',
-    loadRegion: 'US East Coast',
-    dischargeRegion: 'SE Asia Main',
-    delivery: 'SGSIN',
-    eqpType: "40' High Cube Dry",
-    currency: 'USD',
-    amount: 185.0,
-    isNor: false,
-    effectiveFrom: '2026-01-01',
-    effectiveTo: '2026-12-31',
-  },
-  {
-    id: 'sur-203',
-    chargeCode: 'THCD',
-    chargeName: 'Terminal Handling Charge at Destination',
-    origin: 'USNYC',
-    loadRegion: 'US East Coast',
-    dischargeRegion: 'SE Asia Main',
-    delivery: 'SGSIN',
-    eqpType: "40' High Cube Dry",
-    currency: 'USD',
-    amount: 210.0,
-    isNor: false,
-    effectiveFrom: '2026-01-01',
-    effectiveTo: '2026-12-31',
-  },
-  {
-    id: 'sur-204',
-    chargeCode: 'ISPS',
-    chargeName: 'International Vessel Security Charge',
-    origin: 'USNYC',
-    loadRegion: 'US East Coast',
-    dischargeRegion: 'SE Asia Main',
-    delivery: 'SGSIN',
-    eqpType: "40' High Cube Dry",
-    currency: 'USD',
-    amount: 45.0,
-    isNor: false,
-    effectiveFrom: '2026-01-01',
-    effectiveTo: '2026-12-31',
-  },
-];
-
-export const mockContracts: ContractDTO[] = [
-  {
-    id: 'ctr-301',
-    contractNo: 'SC-2026-9901',
-    customerCode: 'CUST-APEX',
-    customerName: 'Apex Global Logistics Pte Ltd',
-    originPort: 'USNYC',
-    originPortName: 'New York, USA',
-    deliveryPort: 'SGSIN',
-    deliveryPortName: 'Singapore Port, Singapore',
-    rateNo: 'RAT-9901-A',
-    eqpType: "40' High Cube Dry",
-    commodity: 'GEN-CGO',
-    commodityName: 'General Merchandise',
-    oceanFreight: 1250.0,
-    currency: 'USD',
-    subjectToChargesAmount: 760.0,
-    soc: 'No',
-    carrTerms: 'CY / CY',
-    effectiveFrom: '2026-01-01',
-    effectiveTo: '2026-12-31',
-    surcharges: mockSurcharges,
-    transService: 'FE1',
-    nor: false,
-  },
-  {
-    id: 'ctr-302',
-    contractNo: 'SC-2026-8820',
-    customerCode: 'CUST-ATLANTIC',
-    customerName: 'Atlantic Freight Forwarders Corp',
-    originPort: 'DEHAM',
-    originPortName: 'Hamburg, Germany',
-    deliveryPort: 'USNYC',
-    deliveryPortName: 'New York, USA',
-    rateNo: 'RAT-8820-B',
-    eqpType: "20' Standard Dry",
-    commodity: 'AUTO-PARTS',
-    commodityName: 'Automotive Parts',
-    oceanFreight: 980.0,
-    currency: 'USD',
-    subjectToChargesAmount: 410.0,
-    soc: 'Yes',
-    carrTerms: 'Door / CY',
-    effectiveFrom: '2026-02-01',
-    effectiveTo: '2026-11-30',
-    surcharges: mockSurcharges.slice(0, 2),
-    transService: 'TA2',
-    nor: true,
-  },
-];
-
-export const mockQuotes: QuoteDTO[] = [
-  {
-    id: 'qte-401',
-    quoteNo: 'QTE-2026-0811',
-    customerName: 'Global Maritime Traders',
-    originPort: 'USNYC',
-    originPortName: 'New York Port',
-    deliveryPort: 'SGSIN',
-    deliveryPortName: 'Singapore Port',
-    eqpType: "40' High Cube Dry",
-    eqpQuantity: 3,
-    commodity: 'General Freight',
-    cargoWeightKg: 18500,
-    quotedAmountUsd: 1350.0,
-    status: 'QUOTED',
-    validFrom: '2026-08-15',
-    validTo: '2026-09-15',
-    createdAt: '2026-08-15 10:30',
-    comments: 'Guaranteed space allocation on weekly vessel loop.',
-  },
-  {
-    id: 'qte-402',
-    quoteNo: 'QTE-2026-0812',
-    customerName: 'Pacific Rim Supply Chain',
-    originPort: 'NLRTM',
-    originPortName: 'Rotterdam Port',
-    deliveryPort: 'CNSHA',
-    deliveryPortName: 'Shanghai Port',
-    eqpType: "20' Standard Dry",
-    eqpQuantity: 5,
-    commodity: 'Machinery Components',
-    cargoWeightKg: 24000,
-    quotedAmountUsd: 1100.0,
-    status: 'ACCEPTED',
-    validFrom: '2026-08-10',
-    validTo: '2026-09-10',
-    createdAt: '2026-08-10 14:15',
-    comments: 'Accepted by customer. Ready for booking conversion.',
-  },
-  {
-    id: 'qte-403',
-    quoteNo: 'QTE-2026-0820',
-    customerName: 'Solaris Energy Systems',
-    originPort: 'INNSA',
-    originPortName: 'Nhava Sheva',
-    deliveryPort: 'AEDXB',
-    deliveryPortName: 'Jebel Ali',
-    eqpType: "40' High Cube Dry",
-    eqpQuantity: 2,
-    commodity: 'Solar Panels',
-    cargoWeightKg: 12000,
-    quotedAmountUsd: 0,
-    status: 'PENDING_REVIEW',
-    validFrom: '2026-08-20',
-    validTo: '2026-09-05',
-    createdAt: '2026-08-20 09:00',
-    comments: 'Pending pricing manager approval for special commodity discount.',
-  },
-];
+/** Query parameter or undefined (blank values count as absent). */
+const param = (url: URL, key: string): string | undefined => url.searchParams.get(key)?.trim() || undefined;
 
 export const ratesHandlers = [
   // Wildcard paths — survive absolute URL / SW edge cases (same pattern as SI/BL)
-  http.get('*/api/v1/rates/tariffs', () => {
-    return HttpResponse.json({ success: true, data: mockTariffs });
+  http.get('*/api/v1/rates/tariffs', ({ request }) => {
+    const url = new URL(request.url);
+    return HttpResponse.json({
+      success: true,
+      data: fixtureTariffs({
+        loadPort: param(url, 'loadPort'),
+        dischPort: param(url, 'dischPort'),
+        eqpType: param(url, 'eqpType'),
+        commodity: param(url, 'commodity'),
+        date: param(url, 'date'),
+      }),
+    });
   }),
 
-  http.get('*/api/v1/rates/surcharges', () => {
-    return HttpResponse.json({ success: true, data: mockSurcharges });
+  http.get('*/api/v1/rates/surcharges', ({ request }) => {
+    const url = new URL(request.url);
+    return HttpResponse.json({
+      success: true,
+      data: fixtureSurcharges({
+        origin: param(url, 'origin'),
+        pol: param(url, 'pol'),
+        pod: param(url, 'pod'),
+        delivery: param(url, 'delivery'),
+        eqpType: param(url, 'eqpType'),
+      }),
+    });
   }),
 
-  http.get('*/api/v1/rates/contracts', () => {
-    return HttpResponse.json({ success: true, data: mockContracts });
+  http.get('*/api/v1/rates/contracts', ({ request }) => {
+    const url = new URL(request.url);
+    return HttpResponse.json({
+      success: true,
+      data: fixtureContracts({
+        contractNo: param(url, 'contractNo'),
+        customerCode: param(url, 'customerCode'),
+        pol: param(url, 'pol'),
+        pod: param(url, 'pod'),
+      }),
+    });
   }),
 
   http.get('*/api/v1/rates/quotes', () => {
-    return HttpResponse.json({ success: true, data: mockQuotes });
+    return HttpResponse.json({ success: true, data: listQuotes() });
   }),
 
   http.post('*/api/v1/rates/quotes', async ({ request }) => {
     const input = (await request.json()) as CreateQuoteInput;
-    const newQuote: QuoteDTO = {
-      id: `qte-${Date.now()}`,
-      quoteNo: `QTE-2026-${Math.floor(1000 + Math.random() * 9000)}`,
-      customerName: 'Current Logged-in Customer',
-      originPort: input.originPort,
-      originPortName: `${input.originPort} Port`,
-      deliveryPort: input.deliveryPort,
-      deliveryPortName: `${input.deliveryPort} Port`,
-      eqpType: input.eqpType,
-      eqpQuantity: input.eqpQuantity,
-      commodity: input.commodity,
-      cargoWeightKg: input.cargoWeightKg,
-      quotedAmountUsd: input.expectedAmountUsd || 1400.0,
-      status: 'PENDING_REVIEW',
-      validFrom: new Date().toISOString().split('T')[0],
-      validTo: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-      createdAt: new Date().toISOString().replace('T', ' ').substring(0, 16),
-      comments: input.comments,
-    };
-    mockQuotes.unshift(newQuote);
-    return HttpResponse.json({ success: true, data: newQuote });
+    return HttpResponse.json({ success: true, data: createQuote(input) });
   }),
 
   // Modified by Sekar Nagarajan (2026-09-11 16:25) — share rate quote via email

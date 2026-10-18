@@ -1,8 +1,8 @@
-// Modified by Sekar Nagarajan (2026-09-11 17:28)
+// Modified by Sekar Nagarajan (2026-10-18 10:40)
 import { AppButton, AppTabs } from "@solverminds/shared-ui";
 import { DatePicker, Form, Select, Tooltip, Typography } from "antd";
 import dayjs from "dayjs";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
@@ -51,6 +51,8 @@ export interface RateSearchParams {
 }
 
 interface RateSearchFilterProps {
+  /** Current criteria (deep links from the landing page land here); the form follows them. */
+  params?: RateSearchParams;
   onSearch: (params: RateSearchParams) => void;
   onReset?: () => void;
   /** Clears results when Tariff / Surcharge / Contract / RFQ tab changes. */
@@ -82,6 +84,7 @@ function usePortSelectOptions(
 }
 
 export function RateSearchFilter({
+  params,
   onSearch,
   onReset,
   onSearchModeChange,
@@ -112,6 +115,7 @@ export function RateSearchFilter({
       { value: "CNSHA", label: t("options.ports.CNSHA") },
       { value: "DEHAM", label: t("options.ports.DEHAM") },
       { value: "INNSA", label: t("options.ports.INNSA") },
+      { value: "AEJEA", label: t("options.ports.AEJEA") },
       { value: "AEDXB", label: t("options.ports.AEDXB") },
     ],
     [t],
@@ -121,7 +125,9 @@ export function RateSearchFilter({
     () => [
       { value: "ALL", label: t("options.equipment.all") },
       { value: "20' Standard Dry", label: t("options.equipment.20dv") },
+      { value: "40' Standard Dry", label: t("options.equipment.40dv") },
       { value: "40' High Cube Dry", label: t("options.equipment.40hc") },
+      { value: "20' Reefer Container", label: t("options.equipment.20rf") },
       { value: "40' Reefer Container", label: t("options.equipment.40rf") },
     ],
     [t],
@@ -138,8 +144,8 @@ export function RateSearchFilter({
     [t],
   );
 
-  const polAC = usePortSelectOptions("USNYC", fallbackPorts);
-  const podAC = usePortSelectOptions("SGSIN", fallbackPorts);
+  const polAC = usePortSelectOptions("INNSA", fallbackPorts);
+  const podAC = usePortSelectOptions("AEJEA", fallbackPorts);
 
   const showCommodity =
     searchMode === "PUBLISHED_TARIFF" ||
@@ -148,6 +154,23 @@ export function RateSearchFilter({
   const showEquipment = searchMode !== "SERVICE_CONTRACTS";
   const showShipmentDate = searchMode !== "SPOT_QUOTES";
   const isRfqMode = searchMode === "SPOT_QUOTES";
+
+  // Keep the form in step with criteria set outside it (landing deep link, reset).
+  useEffect(() => {
+    if (!params) return;
+    form.setFieldsValue({
+      searchMode: params.searchMode,
+      polCode: params.polCode,
+      podCode: params.podCode,
+      eqpType: params.eqpType,
+      commodity: params.commodity,
+      ...(params.fromDate ? { shipmentDate: dayjs(params.fromDate) } : {}),
+    });
+    if (params.polCode) polAC.setQuery(params.polCode);
+    if (params.podCode) podAC.setQuery(params.podCode);
+    // The port-option hooks are stable setters; only the criteria matter here.
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- sync external criteria into the antd form
+  }, [params?.searchMode, params?.polCode, params?.podCode, params?.eqpType, params?.commodity, params?.fromDate]);
 
   const handleSwapPorts = () => {
     const pol = form.getFieldValue("polCode");
@@ -162,8 +185,8 @@ export function RateSearchFilter({
 
   const handleReset = () => {
     form.resetFields();
-    polAC.setQuery("USNYC");
-    podAC.setQuery("SGSIN");
+    polAC.setQuery("INNSA");
+    podAC.setQuery("AEJEA");
     onReset?.();
   };
 
@@ -193,9 +216,9 @@ export function RateSearchFilter({
           requiredMark={false}
           initialValues={{
             searchMode: "PUBLISHED_TARIFF",
-            polCode: "USNYC",
-            podCode: "SGSIN",
-            eqpType: "40' High Cube Dry",
+            polCode: "INNSA",
+            podCode: "AEJEA",
+            eqpType: "20' Standard Dry",
             commodity: "GEN-CGO",
             shipmentDate: dayjs(),
             toDate: dayjs().add(90, "day"),

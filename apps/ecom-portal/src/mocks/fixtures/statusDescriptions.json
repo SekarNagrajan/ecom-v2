@@ -1,0 +1,107 @@
+[
+ {
+  "id": 15,
+  "module": "BOL",
+  "status": "P",
+  "statusdesc": "Ready to print",
+  "showrefno": "N"
+ },
+ {
+  "id": 14,
+  "module": "BOL",
+  "status": "I",
+  "statusdesc": "Released",
+  "showrefno": "N"
+ },
+ {
+  "id": 13,
+  "module": "BOL",
+  "status": "C",
+  "statusdesc": "Confirmed by Carrier",
+  "showrefno": "N"
+ },
+ {
+  "id": 12,
+  "module": "BOL",
+  "status": "A",
+  "statusdesc": "Approved by customer",
+  "showrefno": "N"
+ },
+ {
+  "id": 11,
+  "module": "BOL",
+  "status": "D",
+  "statusdesc": "Verify Copy",
+  "showrefno": "N"
+ },
+ {
+  "id": 10,
+  "module": "BOL",
+  "status": "S",
+  "statusdesc": "Submitted by customer",
+  "showrefno": "N"
+ },
+ {
+  "id": 9,
+  "module": "BOL",
+  "status": "*",
+  "statusdesc": "All",
+  "showrefno": "N"
+ },
+ {
+  "id": 8,
+  "module": "BKG",
+  "status": "X",
+  "statusdesc": "Cancellation Submitted",
+  "showrefno": "Y"
+ },
+ {
+  "id": 7,
+  "module": "BKG",
+  "status": "I",
+  "statusdesc": "Void",
+  "showrefno": "N"
+ },
+ {
+  "id": 6,
+  "module": "BKG",
+  "status": "V",
+  "statusdesc": "Rejected",
+  "showrefno": "N"
+ },
+ {
+  "id": 5,
+  "module": "BKG",
+  "status": "L",
+  "statusdesc": "Cancelled",
+  "showrefno": "Y"
+ },
+ {
+  "id": 4,
+  "module": "BKG",
+  "status": "C",
+  "statusdesc": "Confirmed",
+  "showrefno": "Y"
+ },
+ {
+  "id": 3,
+  "module": "BKG",
+  "status": "P",
+  "statusdesc": "Awaiting Acceptance",
+  "showrefno": "Y"
+ },
+ {
+  "id": 2,
+  "module": "BKG",
+  "status": "S",
+  "statusdesc": "Submitted",
+  "showrefno": "N"
+ },
+ {
+  "id": 1,
+  "module": "BKG",
+  "status": "D",
+  "statusdesc": "Draft",
+  "showrefno": "N"
+ }
+]

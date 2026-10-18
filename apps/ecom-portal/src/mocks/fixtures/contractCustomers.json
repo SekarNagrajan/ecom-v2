@@ -1,0 +1,200 @@
+[
+ {
+  "id": 8107,
+  "corporateNo": "SVMALK190002886",
+  "itemNo": 1,
+  "custCode": "20120004252",
+  "statusFlag": "V",
+  "shipper": "Y",
+  "Consignee": "Y",
+  "notfiy": "Y",
+  "forwarder": "N"
+ },
+ {
+  "id": 8108,
+  "corporateNo": "SVMALK190002886",
+  "itemNo": 1,
+  "custCode": "20170000369",
+  "statusFlag": "V",
+  "shipper": "Y",
+  "Consignee": "Y",
+  "notfiy": "Y",
+  "forwarder": "N"
+ },
+ {
+  "id": 8241,
+  "corporateNo": "SVMMAH200003053",
+  "itemNo": 1,
+  "custCode": "20170000602",
+  "statusFlag": "A",
+  "shipper": "Y",
+  "Consignee": "Y",
+  "notfiy": "Y",
+  "forwarder": "Y"
+ },
+ {
+  "id": 8452,
+  "corporateNo": "SVMALK190002886",
+  "itemNo": 1,
+  "custCode": "20120004252",
+  "statusFlag": "A",
+  "shipper": "Y",
+  "Consignee": "Y",
+  "notfiy": "Y",
+  "forwarder": "N"
+ },
+ {
+  "id": 8453,
+  "corporateNo": "SVMALK190002886",
+  "itemNo": 1,
+  "custCode": "20170000369",
+  "statusFlag": "A",
+  "shipper": "Y",
+  "Consignee": "Y",
+  "notfiy": "Y",
+  "forwarder": "N"
+ },
+ {
+  "id": 8528,
+  "corporateNo": "SVMMAH230003799",
+  "itemNo": 1,
+  "custCode": "20170000602",
+  "statusFlag": "A",
+  "shipper": "Y",
+  "Consignee": "Y",
+  "notfiy": "Y",
+  "forwarder": "Y"
+ },
+ {
+  "id": 8529,
+  "corporateNo": "SVMMAH230003800",
+  "itemNo": 1,
+  "custCode": "20170000602",
+  "statusFlag": "A",
+  "shipper": "Y",
+  "Consignee": "Y",
+  "notfiy": "Y",
+  "forwarder": "Y"
+ },
+ {
+  "id": 8548,
+  "corporateNo": "SVMECO230003848",
+  "itemNo": 1,
+  "custCode": "20110004227",
+  "statusFlag": "A",
+  "shipper": "Y",
+  "Consignee": "Y",
+  "notfiy": "N",
+  "forwarder": "N"
+ },
+ {
+  "id": 8549,
+  "corporateNo": "SVMECO230003848",
+  "itemNo": 1,
+  "custCode": "20120004272",
+  "statusFlag": "A",
+  "shipper": "N",
+  "Consignee": "N",
+  "notfiy": "Y",
+  "forwarder": "N"
+ },
+ {
+  "id": 8586,
+  "corporateNo": "SVMMAH230003914",
+  "itemNo": 1,
+  "custCode": "20170000602",
+  "statusFlag": "A",
+  "shipper": "Y",
+  "Consignee": "Y",
+  "notfiy": "Y",
+  "forwarder": "Y"
+ },
+ {
+  "id": 8712,
+  "corporateNo": "SVMMAH230004315",
+  "itemNo": 1,
+  "custCode": "20170000602",
+  "statusFlag": "A",
+  "shipper": "Y",
+  "Consignee": "Y",
+  "notfiy": "Y",
+  "forwarder": "Y"
+ },
+ {
+  "id": 8788,
+  "corporateNo": "SVMMAH240004489",
+  "itemNo": 1,
+  "custCode": "20170000602",
+  "statusFlag": "A",
+  "shipper": "Y",
+  "Consignee": "Y",
+  "notfiy": "Y",
+  "forwarder": "Y"
+ },
+ {
+  "id": 8969,
+  "corporateNo": "SVMJKT240005026",
+  "itemNo": 1,
+  "custCode": "20110004227",
+  "statusFlag": "D",
+  "shipper": "Y",
+  "Consignee": "Y",
+  "notfiy": "Y",
+  "forwarder": "N"
+ },
+ {
+  "id": 8971,
+  "corporateNo": "SVMJKT240005028",
+  "itemNo": 1,
+  "custCode": "20110004216",
+  "statusFlag": "D",
+  "shipper": "Y",
+  "Consignee": "Y",
+  "notfiy": "Y",
+  "forwarder": "N"
+ },
+ {
+  "id": 8981,
+  "corporateNo": "SVMMCC240005072",
+  "itemNo": 1,
+  "custCode": "062444",
+  "statusFlag": "A",
+  "shipper": "Y",
+  "Consignee": "Y",
+  "notfiy": "N",
+  "forwarder": "N"
+ },
+ {
+  "id": 8982,
+  "corporateNo": "SVMECO240005075",
+  "itemNo": 1,
+  "custCode": "20001374",
+  "statusFlag": "A",
+  "shipper": "Y",
+  "Consignee": "Y",
+  "notfiy": "Y",
+  "forwarder": "N"
+ },
+ {
+  "id": 8983,
+  "corporateNo": "SVMECO240005076",
+  "itemNo": 1,
+  "custCode": "20001374",
+  "statusFlag": "A",
+  "shipper": "Y",
+  "Consignee": "N",
+  "notfiy": "Y",
+  "forwarder": "N"
+ },
+ {
+  "id": 8984,
+  "corporateNo": "SVMECO240005079",
+  "itemNo": 1,
+  "custCode": "20001374",
+  "statusFlag": "A",
+  "shipper": "Y",
+  "Consignee": "Y",
+  "notfiy": "Y",
+  "forwarder": "N"
+ }
+]

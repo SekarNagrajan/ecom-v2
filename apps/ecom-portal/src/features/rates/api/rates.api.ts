@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-18 12:55)
+// Modified by Sekar Nagarajan (2026-10-18 10:30)
 import {
   ContractDTO,
   ContractFilters,
@@ -31,6 +31,7 @@ export const fetchTariffs = async (
   if (filters?.dischPort) params.append("dischPort", filters.dischPort);
   if (filters?.eqpType) params.append("eqpType", filters.eqpType);
   if (filters?.commodity) params.append("commodity", filters.commodity);
+  if (filters?.date) params.append("date", filters.date);
 
   const res = await fetch(`/api/v1/rates/tariffs?${params.toString()}`);
   return readJsonEnvelope(res, "Fetch tariffs");

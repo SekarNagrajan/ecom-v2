@@ -1,0 +1,402 @@
+[
+ {
+  "id": 1080,
+  "loginname": "angelica83@example.com",
+  "activitycode": "SSA",
+  "mail": "Y",
+  "chguser": "angelica83@example.com",
+  "chgedate": "2026-08-11T16:54:06.062Z"
+ },
+ {
+  "id": 1079,
+  "loginname": "angelica83@example.com",
+  "activitycode": "SDA",
+  "mail": "Y",
+  "chguser": "angelica83@example.com",
+  "chgedate": "2026-08-11T16:54:06.059Z"
+ },
+ {
+  "id": 1078,
+  "loginname": "angelica83@example.com",
+  "activitycode": "SAA",
+  "mail": "Y",
+  "chguser": "angelica83@example.com",
+  "chgedate": "2026-08-11T16:54:06.055Z"
+ },
+ {
+  "id": 1077,
+  "loginname": "angelica83@example.com",
+  "activitycode": "DSA",
+  "mail": "Y",
+  "chguser": "angelica83@example.com",
+  "chgedate": "2026-08-11T16:54:06.052Z"
+ },
+ {
+  "id": 1075,
+  "loginname": "angelica83@example.com",
+  "activitycode": "DAA",
+  "mail": "Y",
+  "chguser": "angelica83@example.com",
+  "chgedate": "2026-08-11T16:54:06.049Z"
+ },
+ {
+  "id": 1076,
+  "loginname": "angelica83@example.com",
+  "activitycode": "DDA",
+  "mail": "Y",
+  "chguser": "angelica83@example.com",
+  "chgedate": "2026-08-11T16:54:06.049Z"
+ },
+ {
+  "id": 1074,
+  "loginname": "angelica83@example.com",
+  "activitycode": "BSA",
+  "mail": "Y",
+  "chguser": "angelica83@example.com",
+  "chgedate": "2026-08-11T16:54:06.045Z"
+ },
+ {
+  "id": 1072,
+  "loginname": "angelica83@example.com",
+  "activitycode": "BDA",
+  "mail": "Y",
+  "chguser": "angelica83@example.com",
+  "chgedate": "2026-08-11T16:54:06.042Z"
+ },
+ {
+  "id": 1073,
+  "loginname": "angelica83@example.com",
+  "activitycode": "BMA",
+  "mail": "Y",
+  "chguser": "angelica83@example.com",
+  "chgedate": "2026-08-11T16:54:06.042Z"
+ },
+ {
+  "id": 1071,
+  "loginname": "angelica83@example.com",
+  "activitycode": "BAA",
+  "mail": "Y",
+  "chguser": "angelica83@example.com",
+  "chgedate": "2026-08-11T16:54:06.039Z"
+ },
+ {
+  "id": 80,
+  "loginname": "eliza27@example.com",
+  "activitycode": "SSA",
+  "mail": "Y",
+  "chguser": "eliza27@example.com",
+  "chgedate": "2021-04-06T13:50:57.949Z"
+ },
+ {
+  "id": 79,
+  "loginname": "eliza27@example.com",
+  "activitycode": "SDA",
+  "mail": "Y",
+  "chguser": "eliza27@example.com",
+  "chgedate": "2021-04-06T13:50:57.949Z"
+ },
+ {
+  "id": 78,
+  "loginname": "eliza27@example.com",
+  "activitycode": "SAA",
+  "mail": "Y",
+  "chguser": "eliza27@example.com",
+  "chgedate": "2021-04-06T13:50:57.949Z"
+ },
+ {
+  "id": 77,
+  "loginname": "eliza27@example.com",
+  "activitycode": "DSA",
+  "mail": "Y",
+  "chguser": "eliza27@example.com",
+  "chgedate": "2021-04-06T13:50:57.949Z"
+ },
+ {
+  "id": 76,
+  "loginname": "eliza27@example.com",
+  "activitycode": "DDA",
+  "mail": "Y",
+  "chguser": "eliza27@example.com",
+  "chgedate": "2021-04-06T13:50:57.945Z"
+ },
+ {
+  "id": 75,
+  "loginname": "eliza27@example.com",
+  "activitycode": "DAA",
+  "mail": "Y",
+  "chguser": "eliza27@example.com",
+  "chgedate": "2021-04-06T13:50:57.945Z"
+ },
+ {
+  "id": 74,
+  "loginname": "eliza27@example.com",
+  "activitycode": "BSA",
+  "mail": "Y",
+  "chguser": "eliza27@example.com",
+  "chgedate": "2021-04-06T13:50:57.945Z"
+ },
+ {
+  "id": 73,
+  "loginname": "eliza27@example.com",
+  "activitycode": "BMA",
+  "mail": "Y",
+  "chguser": "eliza27@example.com",
+  "chgedate": "2021-04-06T13:50:57.945Z"
+ },
+ {
+  "id": 72,
+  "loginname": "eliza27@example.com",
+  "activitycode": "BDA",
+  "mail": "Y",
+  "chguser": "eliza27@example.com",
+  "chgedate": "2021-04-06T13:50:57.945Z"
+ },
+ {
+  "id": 71,
+  "loginname": "eliza27@example.com",
+  "activitycode": "BAA",
+  "mail": "Y",
+  "chguser": "eliza27@example.com",
+  "chgedate": "2021-04-06T13:50:57.942Z"
+ },
+ {
+  "id": 70,
+  "loginname": "joesph_wiza-harris@example.com",
+  "activitycode": "SSA",
+  "mail": "Y",
+  "chguser": "joesph_wiza-harris@example.com",
+  "chgedate": "2020-09-11T22:05:35.502Z"
+ },
+ {
+  "id": 69,
+  "loginname": "joesph_wiza-harris@example.com",
+  "activitycode": "SDA",
+  "mail": "Y",
+  "chguser": "joesph_wiza-harris@example.com",
+  "chgedate": "2020-09-11T22:05:35.449Z"
+ },
+ {
+  "id": 68,
+  "loginname": "joesph_wiza-harris@example.com",
+  "activitycode": "SAA",
+  "mail": "Y",
+  "chguser": "joesph_wiza-harris@example.com",
+  "chgedate": "2020-09-11T22:05:35.392Z"
+ },
+ {
+  "id": 67,
+  "loginname": "joesph_wiza-harris@example.com",
+  "activitycode": "DSA",
+  "mail": "Y",
+  "chguser": "joesph_wiza-harris@example.com",
+  "chgedate": "2020-09-11T22:05:35.319Z"
+ },
+ {
+  "id": 66,
+  "loginname": "joesph_wiza-harris@example.com",
+  "activitycode": "DDA",
+  "mail": "Y",
+  "chguser": "joesph_wiza-harris@example.com",
+  "chgedate": "2020-09-11T22:05:35.252Z"
+ },
+ {
+  "id": 65,
+  "loginname": "joesph_wiza-harris@example.com",
+  "activitycode": "DAA",
+  "mail": "Y",
+  "chguser": "joesph_wiza-harris@example.com",
+  "chgedate": "2020-09-11T22:05:35.179Z"
+ },
+ {
+  "id": 64,
+  "loginname": "joesph_wiza-harris@example.com",
+  "activitycode": "BSA",
+  "mail": "Y",
+  "chguser": "joesph_wiza-harris@example.com",
+  "chgedate": "2020-09-11T22:05:35.085Z"
+ },
+ {
+  "id": 63,
+  "loginname": "joesph_wiza-harris@example.com",
+  "activitycode": "BMA",
+  "mail": "Y",
+  "chguser": "joesph_wiza-harris@example.com",
+  "chgedate": "2020-09-11T22:05:34.999Z"
+ },
+ {
+  "id": 62,
+  "loginname": "joesph_wiza-harris@example.com",
+  "activitycode": "BDA",
+  "mail": "Y",
+  "chguser": "joesph_wiza-harris@example.com",
+  "chgedate": "2020-09-11T22:05:34.925Z"
+ },
+ {
+  "id": 61,
+  "loginname": "joesph_wiza-harris@example.com",
+  "activitycode": "BAA",
+  "mail": "Y",
+  "chguser": "joesph_wiza-harris@example.com",
+  "chgedate": "2020-09-11T22:05:34.865Z"
+ },
+ {
+  "id": 60,
+  "loginname": "camron.willms50@example.com",
+  "activitycode": "SSA",
+  "mail": "Y",
+  "chguser": "camron.willms50@example.com",
+  "chgedate": "2020-09-02T14:47:58.569Z"
+ },
+ {
+  "id": 59,
+  "loginname": "camron.willms50@example.com",
+  "activitycode": "SDA",
+  "mail": "Y",
+  "chguser": "camron.willms50@example.com",
+  "chgedate": "2020-09-02T14:47:58.569Z"
+ },
+ {
+  "id": 58,
+  "loginname": "camron.willms50@example.com",
+  "activitycode": "SAA",
+  "mail": "Y",
+  "chguser": "camron.willms50@example.com",
+  "chgedate": "2020-09-02T14:47:58.565Z"
+ },
+ {
+  "id": 57,
+  "loginname": "camron.willms50@example.com",
+  "activitycode": "DSA",
+  "mail": "Y",
+  "chguser": "camron.willms50@example.com",
+  "chgedate": "2020-09-02T14:47:58.565Z"
+ },
+ {
+  "id": 56,
+  "loginname": "camron.willms50@example.com",
+  "activitycode": "DDA",
+  "mail": "Y",
+  "chguser": "camron.willms50@example.com",
+  "chgedate": "2020-09-02T14:47:58.562Z"
+ },
+ {
+  "id": 55,
+  "loginname": "camron.willms50@example.com",
+  "activitycode": "DAA",
+  "mail": "Y",
+  "chguser": "camron.willms50@example.com",
+  "chgedate": "2020-09-02T14:47:58.562Z"
+ },
+ {
+  "id": 54,
+  "loginname": "camron.willms50@example.com",
+  "activitycode": "BSA",
+  "mail": "Y",
+  "chguser": "camron.willms50@example.com",
+  "chgedate": "2020-09-02T14:47:58.562Z"
+ },
+ {
+  "id": 53,
+  "loginname": "camron.willms50@example.com",
+  "activitycode": "BMA",
+  "mail": "Y",
+  "chguser": "camron.willms50@example.com",
+  "chgedate": "2020-09-02T14:47:58.559Z"
+ },
+ {
+  "id": 52,
+  "loginname": "camron.willms50@example.com",
+  "activitycode": "BDA",
+  "mail": "Y",
+  "chguser": "camron.willms50@example.com",
+  "chgedate": "2020-09-02T14:47:58.559Z"
+ },
+ {
+  "id": 51,
+  "loginname": "camron.willms50@example.com",
+  "activitycode": "BAA",
+  "mail": "Y",
+  "chguser": "camron.willms50@example.com",
+  "chgedate": "2020-09-02T14:47:58.555Z"
+ },
+ {
+  "id": 20,
+  "loginname": "irma98@example.com",
+  "activitycode": "SSA",
+  "mail": "Y",
+  "chguser": "irma98@example.com",
+  "chgedate": "2020-01-08T10:25:01.852Z"
+ },
+ {
+  "id": 19,
+  "loginname": "irma98@example.com",
+  "activitycode": "SDA",
+  "mail": "Y",
+  "chguser": "irma98@example.com",
+  "chgedate": "2020-01-08T10:25:01.849Z"
+ },
+ {
+  "id": 18,
+  "loginname": "irma98@example.com",
+  "activitycode": "SAA",
+  "mail": "Y",
+  "chguser": "irma98@example.com",
+  "chgedate": "2020-01-08T10:25:01.849Z"
+ },
+ {
+  "id": 17,
+  "loginname": "irma98@example.com",
+  "activitycode": "DSA",
+  "mail": "Y",
+  "chguser": "irma98@example.com",
+  "chgedate": "2020-01-08T10:25:01.845Z"
+ },
+ {
+  "id": 16,
+  "loginname": "irma98@example.com",
+  "activitycode": "DDA",
+  "mail": "Y",
+  "chguser": "irma98@example.com",
+  "chgedate": "2020-01-08T10:25:01.845Z"
+ },
+ {
+  "id": 15,
+  "loginname": "irma98@example.com",
+  "activitycode": "DAA",
+  "mail": "Y",
+  "chguser": "irma98@example.com",
+  "chgedate": "2020-01-08T10:25:01.842Z"
+ },
+ {
+  "id": 14,
+  "loginname": "irma98@example.com",
+  "activitycode": "BSA",
+  "mail": "Y",
+  "chguser": "irma98@example.com",
+  "chgedate": "2020-01-08T10:25:01.842Z"
+ },
+ {
+  "id": 13,
+  "loginname": "irma98@example.com",
+  "activitycode": "BMA",
+  "mail": "Y",
+  "chguser": "irma98@example.com",
+  "chgedate": "2020-01-08T10:25:01.839Z"
+ },
+ {
+  "id": 12,
+  "loginname": "irma98@example.com",
+  "activitycode": "BDA",
+  "mail": "Y",
+  "chguser": "irma98@example.com",
+  "chgedate": "2020-01-08T10:25:01.839Z"
+ },
+ {
+  "id": 11,
+  "loginname": "irma98@example.com",
+  "activitycode": "BAA",
+  "mail": "Y",
+  "chguser": "irma98@example.com",
+  "chgedate": "2020-01-08T10:25:01.835Z"
+ }
+]

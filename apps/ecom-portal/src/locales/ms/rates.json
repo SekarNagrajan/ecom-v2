@@ -41,7 +41,9 @@
       "all": "Semua Jenis Peralatan",
       "20dv": "20' Standard Dry (20DV)",
       "40hc": "40' High Cube Dry (40HC)",
-      "40rf": "40' Reefer Container (40RF)"
+      "40rf": "40' Reefer Container (40RF)",
+      "40dv": "40' Standard Dry (40DV)",
+      "20rf": "20' Reefer Container (20RF)"
     },
     "commodity": {
       "all": "Semua Komoditi",
@@ -57,14 +59,16 @@
       "CNSHA": "CNSHA - Shanghai, China",
       "DEHAM": "DEHAM - Hamburg, Jerman",
       "INNSA": "INNSA - Nhava Sheva, India",
-      "AEDXB": "AEDXB - Jebel Ali, UAE",
+      "AEDXB": "AEDXB - Dubai, UAE",
       "USNYC_short": "USNYC - New York",
       "DEHAM_short": "DEHAM - Hamburg",
       "NLRTM_short": "NLRTM - Rotterdam",
       "INNSA_short": "INNSA - Nhava Sheva",
       "SGSIN_short": "SGSIN - Singapura",
       "CNSHA_short": "CNSHA - Shanghai",
-      "AEDXB_short": "AEDXB - Jebel Ali"
+      "AEDXB_short": "AEDXB - Dubai",
+      "AEJEA": "AEJEA - Jebel Ali, UAE",
+      "AEJEA_short": "AEJEA - Jebel Ali"
     },
     "rateType": {
       "tariff": "Tarif",

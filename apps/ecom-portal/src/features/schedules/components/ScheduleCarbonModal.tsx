@@ -1,11 +1,11 @@
-// Modified by Sekar Nagarajan (2026-09-17 11:04)
+// Modified by Sekar Nagarajan (2026-10-17 00:42)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { InputNumber, Typography } from "antd";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons, NavIcons } from "../../../components/icons";
-import { calculateCarbonEmissions } from "../mocks/schedules.mock";
+import { calculateCarbonEmissions } from "../api/schedules.api";
 import type {
   CarbonCalculationResult,
   ScheduleItem,

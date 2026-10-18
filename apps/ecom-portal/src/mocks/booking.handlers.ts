@@ -1,86 +1,62 @@
-// Modified by Sekar Nagarajan (2026-09-05 00:25)
+// Modified by Sekar Nagarajan (2026-10-16 23:25)
+/**
+ * MSW handlers for the booking module, served from the SQL-extracted fixtures (src/mocks/fixtures).
+ * Every response is derived through src/mocks/fixture-api/bridges/booking-*.bridge.ts; mutations
+ * write back into the in-memory `db` so the list / detail / activity endpoints stay consistent
+ * for the browser session. Route paths and response envelopes are unchanged.
+ */
 import { delay, http, HttpResponse } from "msw";
 
-import {
-  BOOKING_LOOKUPS,
-  type BookingLookupKind,
-} from "../features/booking/mocks/booking-lookups.mock";
-import { searchBookingCustomers } from "../features/booking/mocks/booking-customers.mock";
-import { buildClientDemoBookingPayload } from "../features/booking/mocks/booking-demo-payload.mock";
-import {
-  searchHsCodes,
-  searchUnNumbers,
-} from "../features/booking/mocks/booking-hs-un.mock";
-import { buildMockBookingRates } from "../features/booking/mocks/booking-rates.mock";
-import { buildMockBookingRoutes } from "../features/booking/mocks/booking-routing.mock";
 import type {
   BulkBookingImportResult,
   BookingImportPayload,
 } from "../features/booking-import/types/booking-import.types";
-import type { BookingListDTO } from "../features/booking/types/booking-list.types";
-import type {
-  BookingActivityEvent,
-  BookingPayload,
-} from "../features/booking/types/booking.types";
+import type { BookingTemplate, BookingPayload } from "../features/booking/types/booking.types";
+import { fixtureBookingActivity } from "./fixture-api/bridges/booking-activity.bridge";
 import {
-  createEmptyCommodity,
-  createEmptyContainer,
-} from "../features/booking/types/booking.types";
+  childrenOf,
+  deleteBooking,
+  demoBookingContext,
+  fixtureBookingPayload,
+  insertBooking,
+  payloadFromRows,
+  replaceBooking,
+  rowsFromPayload,
+} from "./fixture-api/bridges/booking-detail.bridge";
+import { findBookingRow, fixtureBookingList, fixtureBookingTemplateRows } from "./fixture-api/bridges/booking-list.bridge";
+import {
+  fixtureBookingCustomers,
+  fixtureBookingHsCodes,
+  fixtureBookingLookups,
+  fixtureBookingUnNumbers,
+  type BookingLookupKind,
+} from "./fixture-api/bridges/booking-lookups.bridge";
+import { fixtureBookingRates } from "./fixture-api/bridges/booking-rates.bridge";
+import { fixtureBookingRoutes } from "./fixture-api/bridges/booking-routing.bridge";
+import { str } from "./fixture-api/bridges/booking-shared.bridge";
+import { ciRow, db, nextRef, nowIso, type Row } from "./fixture-api/db";
 
-function formatListDate(date = new Date()): string {
-  const day = String(date.getDate()).padStart(2, "0");
-  const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
-  const month = months[date.getMonth()];
-  const year = date.getFullYear();
-  const hours = String(date.getHours()).padStart(2, "0");
-  const minutes = String(date.getMinutes()).padStart(2, "0");
-  return `${day}-${month}-${year} ${hours}:${minutes}`;
-}
+const RESERVED_IDS = new Set(["templates", "list", "submit", "draft", "amend", "import"]);
 
-function createBookingFromPayload(payload: BookingPayload): {
-  listRow: BookingListDTO;
-  bookingReference: string;
-} {
-  const bookingReference = `BKG-${new Date().getFullYear()}-${Math.floor(
-    10000 + Math.random() * 90000,
-  )}`;
-  const id = `bkg-import-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-  const master = payload.masterDetails;
-  const cargo = payload.cargo;
-  const teusCount =
-    cargo?.containers.reduce((sum, container) => sum + (container.quantity || 0), 0) ??
-    1;
-  const now = formatListDate();
+/** Online booking reference for rows the demo creates (same BKON… family as the extracted data). */
+const newOnlineRef = () => nextRef("BKON");
 
-  const listRow: BookingListDTO = {
-    id,
-    bookingNo: bookingReference,
-    onlineRefNo: master?.onlineBookingNo || `BKON${Math.floor(1000 + Math.random() * 9000)}`,
-    agencyRefNo: master?.agencyReference || "",
-    status: "Submitted",
-    origin: master?.origin || "",
-    delivery: master?.delivery || "",
-    createdDate: now,
-    confirmedDate: "",
-    dgStatus: "N",
-    teusCount,
-    submittedDate: now,
-  };
-
-  return { listRow, bookingReference };
+/** Insert (or, when the payload carries a known draft / online ref, update) a booking from a wizard payload. */
+function saveBooking(payload: BookingPayload, status: "D" | "S"): Row {
+  const ctx = demoBookingContext();
+  const existingId = str(payload.draftId) || str(payload.masterDetails?.onlineBookingNo);
+  const existing = existingId ? findBookingRow(existingId) : undefined;
+  const editable = existing && ["D", "T"].includes(str(existing.ebook_status).toUpperCase()) ? existing : undefined;
+  const ebookno = editable ? str(editable.ebookno) : newOnlineRef();
+  const { header, children } = rowsFromPayload(payload, { ebookno, status, existing: editable, ...ctx });
+  if (editable) {
+    header.isAmendment = null;
+    header.templatename = null;
+    replaceBooking(editable, header, children);
+    return editable;
+  }
+  insertBooking(header, children);
+  return db.bookings[0];
 }
 
 function validateImportPayload(
@@ -122,379 +98,15 @@ function validateImportPayload(
   return null;
 }
 
-/** 20 list rows — Cancelled / Completed / Draft / Submitted / In Transit (4 each). */
-let mockBookings: BookingListDTO[] = [
-  // Draft (4)
-  {
-    id: "bkg-1",
-    bookingNo: "AE01444001",
-    onlineRefNo: "BKON7101",
-    agencyRefNo: "AGY-1001",
-    status: "Draft",
-    origin: "AEJEA - JEBEL ALI",
-    delivery: "SGSIN - SINGAPORE",
-    createdDate: "28-Aug-2026 09:10",
-    confirmedDate: "",
-    dgStatus: "Y",
-    teusCount: 10,
-    submittedDate: "",
-  },
-  {
-    id: "bkg-2",
-    bookingNo: "IN01444002",
-    onlineRefNo: "BKON7102",
-    agencyRefNo: "",
-    status: "Draft",
-    origin: "INNSA - NHAVA SHEVA",
-    delivery: "NLRTM - ROTTERDAM",
-    createdDate: "27-Aug-2026 14:22",
-    confirmedDate: "",
-    dgStatus: "N",
-    teusCount: 1,
-    submittedDate: "",
-  },
-  {
-    id: "bkg-3",
-    bookingNo: "CNSHA44003",
-    onlineRefNo: "BKON7103",
-    agencyRefNo: "AGY-1003",
-    status: "Draft",
-    origin: "CNSHA - SHANGHAI",
-    delivery: "USLAX - LOS ANGELES",
-    createdDate: "26-Aug-2026 11:05",
-    confirmedDate: "",
-    dgStatus: "Y",
-    teusCount: 4,
-    submittedDate: "",
-  },
-  {
-    id: "bkg-4",
-    bookingNo: "HKHKG44004",
-    onlineRefNo: "BKON7104",
-    agencyRefNo: "",
-    status: "Draft",
-    origin: "HKHKG - HONG KONG",
-    delivery: "DEHAM - HAMBURG",
-    createdDate: "25-Aug-2026 16:40",
-    confirmedDate: "",
-    dgStatus: "N",
-    teusCount: 3,
-    submittedDate: "",
-  },
-  // Submitted (4)
-  {
-    id: "bkg-5",
-    bookingNo: "AE01444005",
-    onlineRefNo: "BKON7105",
-    agencyRefNo: "AGY-1005",
-    status: "Submitted",
-    origin: "AEJEA - JEBEL ALI",
-    delivery: "GBFEL - FELIXSTOWE",
-    createdDate: "24-Aug-2026 08:15",
-    confirmedDate: "",
-    dgStatus: "N",
-    teusCount: 5,
-    submittedDate: "24-Aug-2026 10:02",
-  },
-  {
-    id: "bkg-6",
-    bookingNo: "SGSIN44006",
-    onlineRefNo: "BKON7106",
-    agencyRefNo: "AGY-1006",
-    status: "Submitted",
-    origin: "SGSIN - SINGAPORE",
-    delivery: "JPTYO - TOKYO",
-    createdDate: "23-Aug-2026 13:30",
-    confirmedDate: "",
-    dgStatus: "N",
-    teusCount: 2,
-    submittedDate: "23-Aug-2026 15:11",
-  },
-  {
-    id: "bkg-7",
-    bookingNo: "USNYC44007",
-    onlineRefNo: "BKON7107",
-    agencyRefNo: "",
-    status: "Submitted",
-    origin: "USNYC - NEW YORK",
-    delivery: "NLRTM - ROTTERDAM",
-    createdDate: "22-Aug-2026 07:45",
-    confirmedDate: "",
-    dgStatus: "Y",
-    teusCount: 6,
-    submittedDate: "22-Aug-2026 09:20",
-  },
-  {
-    id: "bkg-8",
-    bookingNo: "INMAA44008",
-    onlineRefNo: "BKON7108",
-    agencyRefNo: "AGY-1008",
-    status: "Submitted",
-    origin: "INMAA - CHENNAI",
-    delivery: "AEJEA - JEBEL ALI",
-    createdDate: "21-Aug-2026 18:05",
-    confirmedDate: "",
-    dgStatus: "N",
-    teusCount: 1,
-    submittedDate: "21-Aug-2026 19:40",
-  },
-  // In Transit (4)
-  {
-    id: "bkg-9",
-    bookingNo: "AE01444009",
-    onlineRefNo: "BKON7109",
-    agencyRefNo: "AGY-1009",
-    status: "In Transit",
-    origin: "AEJEA - JEBEL ALI",
-    delivery: "SGSIN - SINGAPORE",
-    createdDate: "10-Aug-2026 08:32",
-    confirmedDate: "11-Aug-2026 00:26",
-    dgStatus: "N",
-    teusCount: 5,
-    submittedDate: "10-Aug-2026 08:32",
-  },
-  {
-    id: "bkg-10",
-    bookingNo: "CNSHA44010",
-    onlineRefNo: "BKON7110",
-    agencyRefNo: "AGY-1010",
-    status: "In Transit",
-    origin: "CNSHA - SHANGHAI",
-    delivery: "USLAX - LOS ANGELES",
-    createdDate: "08-Aug-2026 12:00",
-    confirmedDate: "09-Aug-2026 06:15",
-    dgStatus: "N",
-    teusCount: 8,
-    submittedDate: "08-Aug-2026 12:30",
-  },
-  {
-    id: "bkg-11",
-    bookingNo: "INNSA44011",
-    onlineRefNo: "BKON7111",
-    agencyRefNo: "",
-    status: "In Transit",
-    origin: "INNSA - NHAVA SHEVA",
-    delivery: "DEHAM - HAMBURG",
-    createdDate: "05-Aug-2026 09:50",
-    confirmedDate: "06-Aug-2026 11:10",
-    dgStatus: "Y",
-    teusCount: 3,
-    submittedDate: "05-Aug-2026 10:20",
-  },
-  {
-    id: "bkg-12",
-    bookingNo: "HKHKG44012",
-    onlineRefNo: "BKON7112",
-    agencyRefNo: "AGY-1012",
-    status: "In Transit",
-    origin: "HKHKG - HONG KONG",
-    delivery: "NLRTM - ROTTERDAM",
-    createdDate: "03-Aug-2026 15:25",
-    confirmedDate: "04-Aug-2026 08:00",
-    dgStatus: "N",
-    teusCount: 4,
-    submittedDate: "03-Aug-2026 16:01",
-  },
-  // Completed (4)
-  {
-    id: "bkg-13",
-    bookingNo: "AE01444013",
-    onlineRefNo: "BKON7113",
-    agencyRefNo: "AGY-1013",
-    status: "Completed",
-    origin: "AEJEA - JEBEL ALI",
-    delivery: "SGSIN - SINGAPORE",
-    createdDate: "15-Jul-2026 10:00",
-    confirmedDate: "16-Jul-2026 09:00",
-    dgStatus: "N",
-    teusCount: 2,
-    submittedDate: "15-Jul-2026 10:30",
-  },
-  {
-    id: "bkg-14",
-    bookingNo: "USLAX44014",
-    onlineRefNo: "BKON7114",
-    agencyRefNo: "AGY-1014",
-    status: "Completed",
-    origin: "USLAX - LOS ANGELES",
-    delivery: "JPTYO - TOKYO",
-    createdDate: "10-Jul-2026 07:20",
-    confirmedDate: "11-Jul-2026 14:45",
-    dgStatus: "N",
-    teusCount: 7,
-    submittedDate: "10-Jul-2026 08:00",
-  },
-  {
-    id: "bkg-15",
-    bookingNo: "GBFEL44015",
-    onlineRefNo: "BKON7115",
-    agencyRefNo: "",
-    status: "Completed",
-    origin: "GBFEL - FELIXSTOWE",
-    delivery: "INNSA - NHAVA SHEVA",
-    createdDate: "01-Jul-2026 11:40",
-    confirmedDate: "02-Jul-2026 16:20",
-    dgStatus: "Y",
-    teusCount: 2,
-    submittedDate: "01-Jul-2026 12:05",
-  },
-  {
-    id: "bkg-16",
-    bookingNo: "SGSIN44016",
-    onlineRefNo: "BKON7116",
-    agencyRefNo: "AGY-1016",
-    status: "Completed",
-    origin: "SGSIN - SINGAPORE",
-    delivery: "AEJEA - JEBEL ALI",
-    createdDate: "20-Jun-2026 09:15",
-    confirmedDate: "21-Jun-2026 10:00",
-    dgStatus: "N",
-    teusCount: 5,
-    submittedDate: "20-Jun-2026 09:45",
-  },
-  // Cancelled (4)
-  {
-    id: "bkg-17",
-    bookingNo: "AE01444017",
-    onlineRefNo: "BKON7117",
-    agencyRefNo: "AGY-1017",
-    status: "Cancelled",
-    origin: "AEJEA - JEBEL ALI",
-    delivery: "NLRTM - ROTTERDAM",
-    createdDate: "18-Aug-2026 13:00",
-    confirmedDate: "",
-    dgStatus: "N",
-    teusCount: 1,
-    submittedDate: "18-Aug-2026 14:10",
-  },
-  {
-    id: "bkg-18",
-    bookingNo: "CNSHA44018",
-    onlineRefNo: "BKON7118",
-    agencyRefNo: "",
-    status: "Cancelled",
-    origin: "CNSHA - SHANGHAI",
-    delivery: "DEHAM - HAMBURG",
-    createdDate: "12-Aug-2026 10:30",
-    confirmedDate: "13-Aug-2026 08:00",
-    dgStatus: "N",
-    teusCount: 3,
-    submittedDate: "12-Aug-2026 11:00",
-  },
-  {
-    id: "bkg-19",
-    bookingNo: "INNSA44019",
-    onlineRefNo: "BKON7119",
-    agencyRefNo: "AGY-1019",
-    status: "Cancelled",
-    origin: "INNSA - NHAVA SHEVA",
-    delivery: "SGSIN - SINGAPORE",
-    createdDate: "05-Aug-2026 16:50",
-    confirmedDate: "",
-    dgStatus: "Y",
-    teusCount: 2,
-    submittedDate: "05-Aug-2026 17:20",
-  },
-  {
-    id: "bkg-20",
-    bookingNo: "HKHKG44020",
-    onlineRefNo: "BKON7120",
-    agencyRefNo: "AGY-1020",
-    status: "Cancelled",
-    origin: "HKHKG - HONG KONG",
-    delivery: "USNYC - NEW YORK",
-    createdDate: "01-Aug-2026 08:00",
-    confirmedDate: "",
-    dgStatus: "N",
-    teusCount: 4,
-    submittedDate: "01-Aug-2026 09:15",
-  },
-];
-
-function buildSampleCargo(commodityCode: string, containerType: string, quantity: number, weight: number) {
-  const commodity = createEmptyCommodity();
-  commodity.commodity = commodityCode;
-  commodity.hsCode = "4002191000";
-  commodity.description = commodityCode;
-  commodity.packageType = "BAG";
-  commodity.packageQuantity = 1;
-  commodity.weight = weight;
-  commodity.volume = 20;
-  const container = createEmptyContainer();
-  container.containerType = containerType;
-  container.quantity = quantity;
-  container.commodities = [commodity];
-  return { containers: [container] };
+function templateFromRow(b: Row): BookingTemplate {
+  return {
+    id: str(b.ebookno),
+    templateName: str(b.templatename) || str(b.ebookno),
+    origin: str(b.originPortId).toUpperCase(),
+    delivery: str(b.finalPortId).toUpperCase(),
+    payload: payloadFromRows(b, childrenOf(b)),
+  };
 }
-
-let mockTemplates = [
-  {
-    id: "tmpl-1",
-    templateName: "Standard Electronics Export",
-    origin: "AEJEA-JEBEL ALI, UAE",
-    delivery: "SGSIN-SINGAPORE",
-    payload: {
-      masterDetails: {
-        origin: "AEJEA-JEBEL ALI, UAE",
-        delivery: "SGSIN-SINGAPORE",
-        cargoReadyDate: "2026-09-01",
-        haulageOriginType: "Merchant",
-        haulageDestinationType: "Merchant",
-      },
-      parties: {
-        shipperName: "Electronics Trading LLC",
-        consigneeName: "Tech Hub Pte Ltd",
-        agreementParty: "Logistics Partner",
-        siSubmittingParty: "Logistics Partner",
-      },
-      cargo: buildSampleCargo("GEN-CGO", "20DV", 1, 5000),
-      ens: null,
-      insurance: null,
-      documents: [],
-    } satisfies BookingPayload,
-  },
-  {
-    id: "tmpl-2",
-    templateName: "Auto Parts to Europe",
-    origin: "AEJEA-JEBEL ALI, UAE",
-    delivery: "NLRTM-ROTTERDAM",
-    payload: {
-      masterDetails: {
-        origin: "AEJEA-JEBEL ALI, UAE",
-        delivery: "NLRTM-ROTTERDAM",
-        cargoReadyDate: "2026-09-15",
-        haulageOriginType: "Carrier",
-        haulageDestinationType: "Carrier",
-      },
-      parties: {
-        shipperName: "Auto Parts FZE",
-        consigneeName: "Euro Spares B.V.",
-        agreementParty: "Auto Parts FZE",
-        siSubmittingParty: "Auto Parts FZE",
-      },
-      cargo: buildSampleCargo("AUTO-PARTS", "40HC", 2, 12000),
-      ens: {
-        euCustomsZone: true,
-        blType: "Straight BL",
-        ensFilingType: "Single Filing",
-        paymentMethod: "Wire Transfer",
-      },
-      insurance: null,
-      documents: [],
-    } satisfies BookingPayload,
-  },
-  {
-    id: "tmpl-3",
-    templateName: "Client Demo — Full Booking (10×5)",
-    origin: "AEJEA - Jebel Ali, UAE",
-    delivery: "SGSIN - Singapore, Singapore",
-    payload: buildClientDemoBookingPayload(),
-  },
-];
-
-const bookingDetailsById: Record<string, BookingPayload> = {
-  "bkg-1": buildClientDemoBookingPayload(),
-};
 
 export const bookingHandlers = [
   http.get("/api/booking/routing", async ({ request }) => {
@@ -503,7 +115,7 @@ export const bookingHandlers = [
     const origin = url.searchParams.get("origin") || "";
     const delivery = url.searchParams.get("delivery") || "";
     const cargoReadyDate = url.searchParams.get("cargoReadyDate") || "";
-    const data = buildMockBookingRoutes({ origin, delivery, cargoReadyDate });
+    const data = fixtureBookingRoutes({ origin, delivery, cargoReadyDate });
     return HttpResponse.json({ data });
   }),
 
@@ -512,37 +124,34 @@ export const bookingHandlers = [
     const url = new URL(request.url);
     const origin = url.searchParams.get("origin") || "";
     const delivery = url.searchParams.get("delivery") || "";
-    return HttpResponse.json({
-      data: buildMockBookingRates({ origin, delivery }),
-    });
+    return HttpResponse.json({ data: fixtureBookingRates({ origin, delivery }) });
   }),
 
   http.get("/api/booking/customers", async ({ request }) => {
     await delay(250);
     const url = new URL(request.url);
     const q = url.searchParams.get("q") || "";
-    return HttpResponse.json({ data: searchBookingCustomers(q) });
+    return HttpResponse.json({ data: fixtureBookingCustomers(q) });
   }),
 
   http.get("/api/booking/hs-codes", async ({ request }) => {
     await delay(200);
     const url = new URL(request.url);
     const q = url.searchParams.get("q") || "";
-    return HttpResponse.json({ data: searchHsCodes(q) });
+    return HttpResponse.json({ data: fixtureBookingHsCodes(q) });
   }),
 
   http.get("/api/booking/un-numbers", async ({ request }) => {
     await delay(200);
     const url = new URL(request.url);
     const q = url.searchParams.get("q") || "";
-    return HttpResponse.json({ data: searchUnNumbers(q) });
+    return HttpResponse.json({ data: fixtureBookingUnNumbers(q) });
   }),
 
   http.get("/api/booking/lookups/:kind", async ({ params }) => {
     await delay(200);
     const kind = String(params.kind) as BookingLookupKind;
-    const data = BOOKING_LOOKUPS[kind] ?? [];
-    return HttpResponse.json({ data });
+    return HttpResponse.json({ data: fixtureBookingLookups(kind) });
   }),
 
   http.post("/api/booking/contracts/validate", async ({ request }) => {
@@ -604,22 +213,19 @@ export const bookingHandlers = [
   http.post("*/api/booking/draft", async ({ request }) => {
     await delay(500);
     const body = (await request.json()) as BookingPayload;
-    const draftId =
-      body.draftId ||
-      `draft-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-    return HttpResponse.json({ data: { draftId } });
+    const row = saveBooking(body, "D");
+    return HttpResponse.json({ data: { draftId: str(row.ebookno) } });
   }),
 
   http.post("*/api/booking/submit", async ({ request }) => {
     await delay(1500);
     const body = (await request.json()) as BookingPayload;
-    const { listRow, bookingReference } = createBookingFromPayload(body);
-    mockBookings = [listRow, ...mockBookings];
+    const row = saveBooking(body, "S");
     return HttpResponse.json({
       data: {
-        bookingReference,
+        bookingReference: str(row.ebookno),
         status: "CONFIRMED",
-        submittedAt: new Date().toISOString(),
+        submittedAt: str(row.submitted_date) || new Date().toISOString(),
       },
     });
   }),
@@ -653,9 +259,8 @@ export const bookingHandlers = [
         return;
       }
 
-      const { listRow, bookingReference } = createBookingFromPayload(payload);
-      mockBookings = [listRow, ...mockBookings];
-      created.push({ rowNumber, bookingReference });
+      const row = saveBooking({ ...payload, draftId: undefined }, "S");
+      created.push({ rowNumber, bookingReference: str(row.ebookno) });
     });
 
     const result: BulkBookingImportResult = {
@@ -670,13 +275,32 @@ export const bookingHandlers = [
     return HttpResponse.json({ data: result });
   }),
 
-  http.put("*/api/booking/amend", async () => {
+  http.put("*/api/booking/amend", async ({ request }) => {
     await delay(1500);
+    const body = (await request.json()) as BookingPayload;
+    const ref = str(body.masterDetails?.onlineBookingNo) || str(body.draftId);
+    const existing = ref ? findBookingRow(ref) : undefined;
+    if (!existing) {
+      return HttpResponse.json(
+        { error: { code: "NOT_FOUND", message: `Booking ${ref || "(no reference)"} not found` } },
+        { status: 404 },
+      );
+    }
+    const ctx = demoBookingContext();
+    const currentStatus = str(existing.ebook_status).toUpperCase();
+    const { header, children } = rowsFromPayload(body, {
+      ebookno: str(existing.ebookno),
+      status: currentStatus === "D" ? "D" : "S",
+      existing,
+      ...ctx,
+    });
+    // Amending keeps the agency's acceptance status; rowsFromPayload already flags the row as an amendment with a new version.
+    header.ebook_status = currentStatus;
+    header.submitted_date = existing.submitted_date ?? header.submitted_date;
+    replaceBooking(existing, header, children);
     return HttpResponse.json({
       data: {
-        bookingReference: `BKG-AMD-${new Date().getFullYear()}-${Math.floor(
-          10000 + Math.random() * 90000,
-        )}`,
+        bookingReference: str(existing.extBookNo) || str(existing.ebookno),
         status: "CONFIRMED",
         submittedAt: new Date().toISOString(),
       },
@@ -685,51 +309,67 @@ export const bookingHandlers = [
 
   http.get("/api/booking/list", async () => {
     await delay(500);
-    return HttpResponse.json({ data: mockBookings });
+    return HttpResponse.json({ data: fixtureBookingList() ?? [] });
   }),
 
   // Static paths must be registered before `/api/booking/:id` so
   // `/api/booking/templates` is not treated as a booking id.
   http.get("/api/booking/templates", async () => {
     await delay(300);
-    return HttpResponse.json({ data: mockTemplates });
+    return HttpResponse.json({ data: fixtureBookingTemplateRows().map(templateFromRow) });
   }),
 
   http.delete("/api/booking/templates/:id", async ({ params }) => {
     await delay(300);
-    const { id } = params;
-    mockTemplates = mockTemplates.filter((t) => t.id !== id);
+    const row = findBookingRow(String(params.id));
+    if (row && str(row.ebook_status).toUpperCase() === "T") {
+      deleteBooking(str(row.ebookno));
+    }
     return new HttpResponse(null, { status: 200 });
   }),
 
   http.get("/api/booking/:id", async ({ params }) => {
     await delay(400);
     const id = String(params.id);
-    if (
-      id === "templates" ||
-      id === "list" ||
-      id === "submit" ||
-      id === "draft" ||
-      id === "amend" ||
-      id === "import"
-    ) {
+    if (RESERVED_IDS.has(id)) {
       return new HttpResponse(null, { status: 404 });
     }
-    // Modified by Sekar Nagarajan (2026-09-01 12:45) — resolve by list id or bookingNo
-    const listRow = mockBookings.find(
-      (b) => b.id === id || b.bookingNo === id,
-    );
-    const detailKey = listRow?.id ?? id;
-    const detail = bookingDetailsById[detailKey] ?? bookingDetailsById["bkg-1"];
+    const detail = fixtureBookingPayload(id);
+    if (!detail) {
+      return HttpResponse.json(
+        { error: { code: "NOT_FOUND", message: `Booking ${id} not found` } },
+        { status: 404 },
+      );
+    }
     return HttpResponse.json({ data: detail });
   }),
 
-  http.post("/api/booking/:id/cancel", async ({ params }) => {
+  http.post("/api/booking/:id/cancel", async ({ params, request }) => {
     await delay(500);
     const id = String(params.id);
-    const idx = mockBookings.findIndex((b) => b.id === id);
-    if (idx >= 0) {
-      mockBookings[idx] = { ...mockBookings[idx], status: "Cancelled" };
+    const row = findBookingRow(id);
+    if (row) {
+      const body = (await request.json().catch(() => ({}))) as { reason?: string; remarks?: string };
+      const ts = nowIso();
+      const ctx = demoBookingContext();
+      row.ebook_status = "I";
+      row.dateup = ts;
+      row.userup = ctx.userEmail;
+      db.bookingCancel.unshift(
+        ciRow({
+          id: String(db.bookingCancel.length + 1),
+          eBookNo: str(row.ebookno),
+          extBookNo: str(row.extBookNo),
+          reason: str(body.reason) || "Cancelled by user request",
+          remarks: str(body.remarks),
+          declineRemarks: null,
+          status: "S",
+          usercr: ctx.userEmail,
+          datecr: ts,
+          userup: ctx.userEmail,
+          dateup: ts,
+        }),
+      );
     }
     return HttpResponse.json({ data: { id, status: "Cancelled" } });
   }),
@@ -737,52 +377,20 @@ export const bookingHandlers = [
   http.get("/api/booking/:id/activity", async ({ params }) => {
     await delay(300);
     const id = String(params.id);
-    const listRow = mockBookings.find((b) => b.id === id);
-    const events: BookingActivityEvent[] = [
-      {
-        id: `${id}-a1`,
-        action: "Booking Created",
-        by: "System",
-        at: listRow?.createdDate || "10-Aug-2026 08:00",
-      },
-      {
-        id: `${id}-a2`,
-        action: "Submitted",
-        by: "Customer User",
-        at: listRow?.submittedDate || "10-Aug-2026 08:32",
-      },
-    ];
-    if (listRow?.status === "Confirmed") {
-      events.push({
-        id: `${id}-a3`,
-        action: "Confirmed",
-        by: "CRO Agent",
-        at: listRow.confirmedDate || "11-Aug-2026 00:26",
-      });
-    }
-    if (listRow?.status === "Cancelled") {
-      events.push({
-        id: `${id}-a4`,
-        action: "Cancelled",
-        by: "Customer User",
-        at: "12-Aug-2026 09:00",
-        note: "Cancelled by user request",
-      });
-    }
-    return HttpResponse.json({ data: events });
+    return HttpResponse.json({ data: fixtureBookingActivity(id) ?? [] });
   }),
 
   http.get("/api/booking/:id/pdf", async ({ params }) => {
     await delay(400);
     const id = String(params.id);
-    const detail = bookingDetailsById[id] ?? bookingDetailsById["bkg-1"];
+    const detail = fixtureBookingPayload(id);
     const text = [
       "BOOKING SUMMARY (mock PDF)",
       `ID: ${id}`,
-      `Origin: ${detail.masterDetails?.origin ?? ""}`,
-      `Delivery: ${detail.masterDetails?.delivery ?? ""}`,
-      `Shipper: ${detail.parties?.shipperName ?? ""}`,
-      `Consignee: ${detail.parties?.consigneeName ?? ""}`,
+      `Origin: ${detail?.masterDetails?.origin ?? ""}`,
+      `Delivery: ${detail?.masterDetails?.delivery ?? ""}`,
+      `Shipper: ${detail?.parties?.shipperName ?? ""}`,
+      `Consignee: ${detail?.parties?.consigneeName ?? ""}`,
     ].join("\n");
     return new HttpResponse(text, {
       status: 200,

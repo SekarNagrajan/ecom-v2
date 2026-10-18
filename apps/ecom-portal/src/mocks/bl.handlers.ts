@@ -1,54 +1,78 @@
-// Modified by Sekar Nagarajan (2026-08-25 11:50)
+// Modified by Sekar Nagarajan (2026-10-16 23:20)
+/**
+ * B/L and MCN endpoints served from the extracted ecomSI fixtures. Reads are derived by the
+ * bridges (src/mocks/fixture-api/bridges/bl-*.bridge.ts); writes mutate the fixture rows: the first
+ * edit of a plain SI's B/L clones it into an amendment version (editbl ≥ 1) exactly like the legacy
+ * "Edit B/L", later edits update that version.
+ */
 import { delay, http, HttpResponse } from 'msw';
 
-import type { BLDTO, BLListDTO, BLPrintType } from '../features/bill-of-lading/types/bl.types';
-import { BL_STATUS_LABELS } from '../features/bill-of-lading/types/bl.types';
+import { DEFAULT_BL_WIZARD_CONFIG } from '../features/bill-of-lading/config/bl-wizard-config';
+import type { BLDTO, BLPrintType, BLRowStatus, MCNDTO } from '../features/bill-of-lading/types/bl.types';
 import {
-  getMockBLDetail,
-  mockBLChargesSeed,
-  mockBLConfig,
-  mockBLDetailsSeed,
-  mockBLInsuranceSeed,
-  mockBLListSeed,
-  mockMCNDetailsSeed,
-  mockMCNListSeed,
-  REPRINT_BLOCKED_BL_NOS,
-  VOYAGE_CLOSED_BL_NOS,
-} from './bl.mock-data';
+  fixtureBlCharges,
+  fixtureBlDetail,
+  fixtureBlFromSi,
+  fixtureBlInsurance,
+  fixtureMcnDetail,
+  fixtureMcnList,
+  fixtureVoyageClosed,
+  findMcnRow,
+} from './fixture-api/bridges/bl-detail.bridge';
+import { fixtureBlList, mcnIdOf } from './fixture-api/bridges/bl-list.bridge';
+import { findBlRow, isAmendment, str } from './fixture-api/bridges/si-common.bridge';
+import { applySiBody, cloneSiAsAmendment, type WizardBody } from './fixture-api/bridges/si-write.bridge';
+import { nowIso, resetDb, type Row } from './fixture-api/db';
 
-function cloneList(): BLListDTO[] {
-  return mockBLListSeed.map((row) => ({ ...row }));
+const BL_CANCEL_REMARKS = 'Bill of lading amendment cancelled by the customer.';
+
+/** BLRowStatus set by the wizard → ecomSI.status of the amendment version. */
+const RAW_STATUS: Record<BLRowStatus, string> = { D: 'D', S: 'S', C: 'A', I: 'I' };
+
+/** The amendment version a B/L edit must land on; a plain SI is cloned first. */
+function amendmentFor(blNo: string): Row | null {
+  const row = findBlRow(blNo);
+  if (!row) return null;
+  return isAmendment(row) ? row : cloneSiAsAmendment(row);
 }
 
-let mockBLList = cloneList();
-const mockBLDetails: Record<string, BLDTO> = { ...mockBLDetailsSeed };
-
-function syncDetailToList(blNo: string, detail: BLDTO) {
-  mockBLDetails[blNo] = detail;
-  const idx = mockBLList.findIndex((r) => r.blNo === blNo);
-  if (idx === -1) return;
-  mockBLList[idx] = {
-    ...mockBLList[idx],
-    status: detail.status,
-    statusLabel: BL_STATUS_LABELS[detail.status],
-    printStatus: detail.printCount > 0 ? 'Y' : mockBLList[idx].printStatus,
-    confirmedDate: detail.issuedAt ?? mockBLList[idx].confirmedDate,
-  };
+function setStatus(row: Row, status: string, remarks?: string) {
+  row.status = status;
+  if (remarks !== undefined) row.declined_remarks = remarks;
+  row.ChgDate = nowIso();
 }
 
-function paginateList(rows: BLListDTO[], startRow: number, endRow: number) {
-  const slice = rows.slice(startRow, endRow);
-  return { data: slice, meta: { totalCount: rows.length } };
+const notFound = (message: string) => HttpResponse.json({ error: { code: 'NOT_FOUND', message } }, { status: 404 });
+
+function detailOr404(blNo: string) {
+  const detail = fixtureBlDetail(blNo);
+  return detail ? HttpResponse.json({ data: detail }) : notFound(`B/L ${blNo} not found`);
 }
 
-function mockPdf(blNo: string, type: BLPrintType) {
-  const content = `%PDF-1.4 Mock Bill of Lading (${type}) for ${blNo}`;
-  return new HttpResponse(new Blob([content], { type: 'application/pdf' }), {
-    headers: {
-      'Content-Type': 'application/pdf',
-      'Content-Disposition': `attachment; filename="${blNo}-${type}.pdf"`,
-    },
+function paginate<T>(rows: T[], startRow: number, endRow: number) {
+  return { data: rows.slice(startRow, endRow), meta: { totalCount: rows.length } };
+}
+
+function pdf(content: string, fileName: string) {
+  return new HttpResponse(new Blob([`%PDF-1.4 ${content}`], { type: 'application/pdf' }), {
+    headers: { 'Content-Type': 'application/pdf', 'Content-Disposition': `attachment; filename="${fileName}"` },
   });
+}
+
+const csvCell = (v: unknown) => `"${String(v ?? '').replace(/"/g, '""')}"`;
+
+/** One CSV line per cargo line of the B/L — the "Excel" cargo template the import step reads back. */
+function cargoCsv(detail: BLDTO, template: string): string {
+  const header = ['Container No', 'Size/Type', 'Carrier Seal', 'Shipper Seal', 'Marks & Numbers', 'Description', 'HS Code', 'Package Qty', 'Package Type', 'Gross Weight', 'Volume'];
+  if (template !== 'standard') header.push('UN No', 'IMO Class');
+  const lines = detail.containers.flatMap(c =>
+    c.cargoLines.map(l => {
+      const cells = [c.containerNo, c.eqpSize, c.carrierSeal, c.shipperSeal, l.marksAndNumbers, l.description, l.hsCode, l.packageCount, l.packageType, l.grossWeight, l.volume];
+      if (template !== 'standard') cells.push(l.unNumber ?? '', l.dgClass ?? '');
+      return cells.map(csvCell).join(',');
+    }),
+  );
+  return [header.map(csvCell).join(','), ...lines].join('\r\n');
 }
 
 /**
@@ -58,56 +82,37 @@ function mockPdf(blNo: string, type: BLPrintType) {
 export const blHandlers = [
   http.get('*/api/bl/config', async () => {
     await delay(100);
-    return HttpResponse.json({ data: mockBLConfig });
+    return HttpResponse.json({ data: DEFAULT_BL_WIZARD_CONFIG });
   }),
 
   http.get('*/api/bl/list', async ({ request }) => {
     await delay(300);
+    const rows = fixtureBlList() ?? [];
     const url = new URL(request.url);
     const startRow = Number(url.searchParams.get('startRow') ?? 0);
-    const endRow = Number(url.searchParams.get('endRow') ?? mockBLList.length);
-    return HttpResponse.json(paginateList(mockBLList, startRow, endRow));
+    const endRow = Number(url.searchParams.get('endRow') ?? rows.length);
+    return HttpResponse.json(paginate(rows, startRow, endRow));
   }),
 
   http.get('*/api/bl/guards/voyage-closed', async ({ request }) => {
     const url = new URL(request.url);
     const blNo = url.searchParams.get('blNo') ?? '';
-    return HttpResponse.json({ data: { closed: VOYAGE_CLOSED_BL_NOS.has(blNo) } });
+    return HttpResponse.json({ data: { closed: fixtureVoyageClosed(blNo) } });
   }),
 
   http.get('*/api/bl/from-si/:siNo', async ({ params }) => {
     await delay(200);
     const siNo = params.siNo as string;
-    const row = mockBLList.find((r) => r.siNo === siNo);
-    const detail = row
-      ? getMockBLDetail(row.blNo)
-      : getMockBLDetail('BL-998824');
-    if (!detail) {
-      return HttpResponse.json(
-        { error: { code: 'NOT_FOUND', message: 'SI not found' } },
-        { status: 404 }
-      );
-    }
-    return HttpResponse.json({ data: { ...detail, siNo, status: 'D' } });
+    const detail = fixtureBlFromSi(siNo);
+    if (!detail) return notFound('SI not found');
+    return HttpResponse.json({ data: detail });
   }),
 
   http.post('*/api/bl/print/batch', async ({ request }) => {
     await delay(600);
     const body = (await request.json()) as { blNos?: string[] };
-    const blNos = body.blNos ?? [];
-    blNos.forEach((blNo) => {
-      const idx = mockBLList.findIndex((r) => r.blNo === blNo);
-      if (idx !== -1) {
-        mockBLList[idx] = { ...mockBLList[idx], printStatus: 'Y' };
-      }
-    });
-    const content = `%PDF-1.4 Mock Batch B/L Print for ${blNos.join(', ')}`;
-    return new HttpResponse(new Blob([content], { type: 'application/pdf' }), {
-      headers: {
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': 'attachment; filename="bl-batch-print.pdf"',
-      },
-    });
+    const blNos = (body.blNos ?? []).filter(blNo => findBlRow(blNo));
+    return pdf(`Batch B/L print for ${blNos.join(', ')}`, 'bl-batch-print.pdf');
   }),
 
   http.get('*/api/bl/:blNo/print', async ({ params, request }) => {
@@ -115,45 +120,33 @@ export const blHandlers = [
     const blNo = params.blNo as string;
     const url = new URL(request.url);
     const type = (url.searchParams.get('type') ?? 'draft') as BLPrintType;
+    const detail = fixtureBlDetail(blNo);
+    if (!detail) return notFound(`B/L ${blNo} not found`);
 
-    if (type === 'original' && REPRINT_BLOCKED_BL_NOS.has(blNo)) {
+    if (type === 'original' && detail.status === 'I') {
       return HttpResponse.json(
         { error: { code: 'REPRINT_BLOCKED', message: 'Original B/L already issued and cannot be reprinted' } },
-        { status: 403 }
+        { status: 403 },
       );
     }
-
-    const idx = mockBLList.findIndex((r) => r.blNo === blNo);
-    if (idx !== -1 && (type === 'original' || type === 'nn')) {
-      mockBLList[idx] = { ...mockBLList[idx], printStatus: 'Y' };
-      const detail = mockBLDetails[blNo] ?? getMockBLDetail(blNo);
-      if (detail) {
-        detail.printCount += 1;
-        if (type === 'original') detail.status = 'I';
-        syncDetailToList(blNo, detail);
-      }
+    if (type === 'original') {
+      const row = amendmentFor(blNo);
+      if (row) setStatus(row, 'I');
     }
-
-    return mockPdf(blNo, type);
+    return pdf(`Bill of Lading (${type}) for ${blNo}`, `${blNo}-${type}.pdf`);
   }),
 
   http.get('*/api/bl/:blNo/charges', async ({ params }) => {
     await delay(200);
     const blNo = params.blNo as string;
-    const charges = mockBLChargesSeed[blNo] ?? { blNo, lines: [], totals: [] };
-    return HttpResponse.json({ data: charges });
+    return HttpResponse.json({ data: fixtureBlCharges(blNo) ?? { blNo, lines: [], totals: [] } });
   }),
 
   http.get('*/api/bl/:blNo/insurance', async ({ params }) => {
     await delay(150);
     const blNo = params.blNo as string;
-    const insurance = mockBLInsuranceSeed[blNo];
-    if (!insurance) {
-      return HttpResponse.json(
-        { error: { code: 'NOT_FOUND', message: 'No insurance policy' } },
-        { status: 404 },
-      );
-    }
+    const insurance = fixtureBlInsurance(blNo);
+    if (!insurance) return notFound('No insurance policy');
     return HttpResponse.json({ data: insurance });
   }),
 
@@ -163,31 +156,19 @@ export const blHandlers = [
     const blNos = body.blNos ?? [];
     const amountUsd = body.amountUsd ?? 0;
     return HttpResponse.json({
-      data: {
-        clientSecret: `mock_secret_${blNos.join('_')}`,
-        amountUsd,
-        blNos,
-      },
+      data: { clientSecret: `mock_secret_${blNos.join('_')}`, amountUsd, blNos },
     });
   }),
 
   http.post('*/api/bl/:blNo/cargo/import', async ({ params, request }) => {
     await delay(400);
     const blNo = params.blNo as string;
-    const detail = mockBLDetails[blNo] ?? getMockBLDetail(blNo);
-    if (!detail) {
-      return HttpResponse.json(
-        { error: { code: 'NOT_FOUND', message: 'B/L not found' } },
-        { status: 404 },
-      );
-    }
+    const detail = fixtureBlDetail(blNo);
+    if (!detail) return notFound('B/L not found');
     const formData = await request.formData();
     const file = formData.get('file');
     if (!(file instanceof File)) {
-      return HttpResponse.json(
-        { error: { code: 'INVALID_FILE', message: 'No file uploaded' } },
-        { status: 400 },
-      );
+      return HttpResponse.json({ error: { code: 'INVALID_FILE', message: 'No file uploaded' } }, { status: 400 });
     }
     if (!/\.xls(x)?$/i.test(file.name)) {
       return HttpResponse.json(
@@ -203,8 +184,9 @@ export const blHandlers = [
     const blNo = params.blNo as string;
     const url = new URL(request.url);
     const template = url.searchParams.get('template') ?? 'standard';
-    const content = `Mock Excel cargo template (${template}) for ${blNo}`;
-    return new HttpResponse(new Blob([content], { type: 'application/vnd.ms-excel' }), {
+    const detail = fixtureBlDetail(blNo);
+    if (!detail) return notFound(`B/L ${blNo} not found`);
+    return new HttpResponse(new Blob([cargoCsv(detail, template)], { type: 'application/vnd.ms-excel' }), {
       headers: {
         'Content-Type': 'application/vnd.ms-excel',
         'Content-Disposition': `attachment; filename="${blNo}-cargo-${template}.xls"`,
@@ -221,114 +203,75 @@ export const blHandlers = [
   http.post('*/api/bl/:blNo/draft', async ({ params, request }) => {
     await delay(150);
     const blNo = params.blNo as string;
-    const body = (await request.json()) as Partial<BLDTO>;
-    const existing = mockBLDetails[blNo] ?? getMockBLDetail(blNo);
-    if (!existing) {
-      return HttpResponse.json(
-        { error: { code: 'NOT_FOUND', message: 'B/L not found' } },
-        { status: 404 }
-      );
-    }
-    const updated = { ...existing, ...body };
-    syncDetailToList(blNo, updated);
-    return HttpResponse.json({ data: updated });
+    const row = amendmentFor(blNo);
+    if (!row) return notFound('B/L not found');
+    applySiBody(row, (await request.json()) as WizardBody);
+    return detailOr404(blNo);
   }),
 
   http.post('*/api/bl/:blNo/verify', async ({ params }) => {
     await delay(400);
     const blNo = params.blNo as string;
-    const detail = mockBLDetails[blNo] ?? getMockBLDetail(blNo);
-    if (!detail) {
-      return HttpResponse.json({ error: { code: 'NOT_FOUND', message: 'Not found' } }, { status: 404 });
-    }
-    detail.status = 'C';
-    syncDetailToList(blNo, detail);
-    const listIdx = mockBLList.findIndex((r) => r.blNo === blNo);
-    if (listIdx !== -1) {
-      mockBLList[listIdx].confirmedDate = new Date().toISOString();
-    }
-    return HttpResponse.json({ data: detail });
+    const row = amendmentFor(blNo);
+    if (!row) return notFound('Not found');
+    setStatus(row, 'A', 'Accepted'); // Approved by customer → Confirmed
+    return detailOr404(blNo);
   }),
 
   http.post('*/api/bl/:blNo/cancel', async ({ params }) => {
     await delay(300);
     const blNo = params.blNo as string;
-    const detail = mockBLDetails[blNo] ?? getMockBLDetail(blNo);
-    if (!detail) {
-      return HttpResponse.json({ error: { code: 'NOT_FOUND', message: 'Not found' } }, { status: 404 });
-    }
-    detail.status = 'D';
-    syncDetailToList(blNo, detail);
-    return HttpResponse.json({ data: detail });
+    const row = amendmentFor(blNo);
+    if (!row) return notFound('Not found');
+    setStatus(row, 'D', BL_CANCEL_REMARKS); // back to Verify Copy
+    return detailOr404(blNo);
   }),
 
   http.post('*/api/bl/:blNo/submit', async ({ params }) => {
     await delay(400);
     const blNo = params.blNo as string;
-    const detail = mockBLDetails[blNo] ?? getMockBLDetail(blNo);
-    if (!detail) {
-      return HttpResponse.json({ error: { code: 'NOT_FOUND', message: 'Not found' } }, { status: 404 });
-    }
-    detail.status = 'S';
+    const row = amendmentFor(blNo);
+    if (!row) return notFound('Not found');
+    setStatus(row, 'S', '');
+    const detail = fixtureBlDetail(blNo);
+    if (!detail) return notFound('Not found');
     detail.submitResult = {
       success: true,
       messages: ['B/L submitted successfully.'],
-      insuranceMessage: detail.insurance?.isInsuranceRequired
-        ? 'Insurance policy will be issued within 24 hours.'
-        : undefined,
+      insuranceMessage: detail.insurance?.isInsuranceRequired ? 'Insurance policy will be issued within 24 hours.' : undefined,
       fileRestrictionMessage: undefined,
     };
-    syncDetailToList(blNo, detail);
     return HttpResponse.json({ data: detail });
   }),
 
   http.post('*/api/bl/:blNo/issue', async ({ params }) => {
     await delay(400);
     const blNo = params.blNo as string;
-    const detail = mockBLDetails[blNo] ?? getMockBLDetail(blNo);
-    if (!detail) {
-      return HttpResponse.json({ error: { code: 'NOT_FOUND', message: 'Not found' } }, { status: 404 });
-    }
-    detail.status = 'I';
-    detail.issuedAt = new Date().toISOString();
-    detail.printCount += 1;
-    syncDetailToList(blNo, detail);
-    return HttpResponse.json({ data: detail });
+    const row = amendmentFor(blNo);
+    if (!row) return notFound('Not found');
+    setStatus(row, 'I', 'Released');
+    return detailOr404(blNo);
   }),
 
   http.put('*/api/bl/:blNo', async ({ params, request }) => {
     await delay(300);
     const blNo = params.blNo as string;
-    const body = (await request.json()) as BLDTO;
-    const existing = mockBLDetails[blNo] ?? getMockBLDetail(blNo);
-    if (!existing) {
-      return HttpResponse.json(
-        { error: { code: 'NOT_FOUND', message: 'B/L not found' } },
-        { status: 404 }
-      );
-    }
-    const updated = { ...existing, ...body, blNo };
-    syncDetailToList(blNo, updated);
-    return HttpResponse.json({ data: updated });
+    const row = amendmentFor(blNo);
+    if (!row) return notFound('B/L not found');
+    const body = (await request.json()) as Partial<BLDTO>;
+    applySiBody(row, body as WizardBody);
+    if (body.status && RAW_STATUS[body.status]) row.status = RAW_STATUS[body.status];
+    return detailOr404(blNo);
   }),
 
   http.get('*/api/bl/:blNo', async ({ params }) => {
     await delay(200);
-    const blNo = params.blNo as string;
-    const detail = mockBLDetails[blNo] ?? getMockBLDetail(blNo);
-    if (!detail) {
-      return HttpResponse.json(
-        { error: { code: 'NOT_FOUND', message: `B/L ${blNo} not found` } },
-        { status: 404 }
-      );
-    }
-    if (!mockBLDetails[blNo]) mockBLDetails[blNo] = detail;
-    return HttpResponse.json({ data: structuredClone(detail) });
+    return detailOr404(params.blNo as string);
   }),
 
   http.get('*/api/mcn/list', async () => {
     await delay(200);
-    return HttpResponse.json({ data: mockMCNListSeed });
+    return HttpResponse.json({ data: fixtureMcnList() });
   }),
 
   http.get('*/api/mcn/:mcnId/print', async ({ params, request }) => {
@@ -336,52 +279,39 @@ export const blHandlers = [
     const mcnId = params.mcnId as string;
     const url = new URL(request.url);
     const manifestType = url.searchParams.get('manifestType') ?? 'full';
-    const content = `%PDF-1.4 Mock Manifest ${manifestType} for ${mcnId}`;
-    return new HttpResponse(new Blob([content], { type: 'application/pdf' }), {
-      headers: {
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename="${mcnId}-manifest.pdf"`,
-      },
-    });
+    return pdf(`Manifest ${manifestType} for ${mcnId}`, `${mcnId}-manifest.pdf`);
   }),
 
   http.get('*/api/mcn/:mcnId', async ({ params }) => {
     await delay(200);
-    const mcnId = params.mcnId as string;
-    const detail = mockMCNDetailsSeed[mcnId];
-    if (!detail) {
-      return HttpResponse.json({ error: { code: 'NOT_FOUND', message: 'MCN not found' } }, { status: 404 });
-    }
-    return HttpResponse.json({ data: detail });
+    const detail = fixtureMcnDetail(params.mcnId as string);
+    return detail ? HttpResponse.json({ data: detail }) : notFound('MCN not found');
   }),
 
   http.put('*/api/mcn/:mcnId', async ({ params, request }) => {
     await delay(250);
     const mcnId = params.mcnId as string;
-    const body = (await request.json()) as Partial<typeof mockMCNDetailsSeed[string]>;
-    const existing = mockMCNDetailsSeed[mcnId];
-    if (!existing) {
-      return HttpResponse.json({ error: { code: 'NOT_FOUND', message: 'MCN not found' } }, { status: 404 });
-    }
-    mockMCNDetailsSeed[mcnId] = { ...existing, ...body, mcnId };
-    return HttpResponse.json({ data: mockMCNDetailsSeed[mcnId] });
+    const row = findMcnRow(mcnId);
+    if (!row) return notFound('MCN not found');
+    const body = (await request.json()) as Partial<MCNDTO>;
+    if (body.remarks !== undefined) row.custremarks = body.remarks;
+    if (body.status === 'Submitted') row.status = 'S';
+    else if (body.status === 'Draft') row.status = 'D';
+    row.ChgDate = nowIso();
+    return HttpResponse.json({ data: fixtureMcnDetail(mcnIdOf(row)) });
   }),
 
   http.post('*/api/mcn/:mcnId/submit', async ({ params }) => {
     await delay(300);
     const mcnId = params.mcnId as string;
-    const existing = mockMCNDetailsSeed[mcnId];
-    if (!existing) {
-      return HttpResponse.json({ error: { code: 'NOT_FOUND', message: 'MCN not found' } }, { status: 404 });
-    }
-    mockMCNDetailsSeed[mcnId] = { ...existing, status: 'Submitted' };
-    return HttpResponse.json({ data: mockMCNDetailsSeed[mcnId] });
+    const row = findMcnRow(mcnId);
+    if (!row) return notFound('MCN not found');
+    setStatus(row, 'S', '');
+    return HttpResponse.json({ data: fixtureMcnDetail(str(mcnId)) });
   }),
 ];
 
-/** Reset store for tests */
+/** Reset store for tests — restores the pristine fixtures. */
 export function resetBLMockStore() {
-  mockBLList = cloneList();
-  Object.keys(mockBLDetails).forEach((k) => delete mockBLDetails[k]);
-  Object.assign(mockBLDetails, mockBLDetailsSeed);
+  resetDb();
 }

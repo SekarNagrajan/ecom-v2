@@ -1,8 +1,8 @@
-// Created by Sekar Nagarajan (2026-09-08 15:44)
+// Modified by Sekar Nagarajan (2026-10-16 23:45)
 import { http, HttpResponse } from "msw";
 
 import type { DashboardExportRequestBody } from "../features/dashboard/types/dashboard-export.types";
-import { buildMockDashboardReport } from "./dashboard-export.mock";
+import { fixtureDashboardReport } from "./fixture-api/bridges/dashboard.bridge";
 
 function delay(ms = 400) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -21,7 +21,7 @@ export const dashboardExportHandlers = [
       );
     }
 
-    const report = buildMockDashboardReport({
+    const report = fixtureDashboardReport({
       reportTitle: body.reportTitle,
       activeFilter: body.activeFilter ?? "all",
     });

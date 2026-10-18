@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-16 17:13)
+// Modified by Sekar Nagarajan (2026-10-16 23:45)
 import { AppButton } from "@solverminds/shared-ui";
 import { Card, Progress, Tooltip, Typography } from "antd";
 import { useTranslation } from "react-i18next";
@@ -9,7 +9,7 @@ import type {
   LastUsedLane,
   OpportunityLane,
   TopLane,
-} from "../mocks/dashboard.mock";
+} from "../api/dashboard.api";
 
 const { Text } = Typography;
 

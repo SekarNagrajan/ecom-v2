@@ -1,15 +1,15 @@
-// Created by Sekar Nagarajan (2026-09-28 15:22)
+// Modified by Sekar Nagarajan (2026-10-16 23:35)
 import { delay, http, HttpResponse } from "msw";
 
-import { MOCK_HOTLINE_CONTACTS } from "../features/agency-hotline/mocks/hotline.mock";
+import { hotlineContacts } from "./fixture-api/bridges/admin.bridge";
 
 export const hotlineHandlers = [
   /**
    * GET /api/hotline-contacts
-   * Legacy: servlet-context HotlineContacts from ecomhotlinecontacts.
+   * Legacy: servlet-context HotlineContacts from ecomhotlinecontacts (status A), grouped by country.
    */
   http.get("/api/hotline-contacts", async () => {
     await delay(300);
-    return HttpResponse.json(MOCK_HOTLINE_CONTACTS);
+    return HttpResponse.json(hotlineContacts());
   }),
 ];

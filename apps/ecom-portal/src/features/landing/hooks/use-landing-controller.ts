@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-18 10:45)
+// Modified by Sekar Nagarajan (2026-10-18 10:30)
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "@tanstack/react-router";
@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 import { usePostLoginRedirectStore } from "../../auth/stores/use-post-login-redirect-store";
 import { landingTabToAppPath } from "../../auth/utils/public-menu-access";
 import { validateCaptcha } from "../api/landing.api";
-import { useTabConfig } from "../api/landing.queries";
+import { usePortByCode, useTabConfig } from "../api/landing.queries";
 import {
   type LandingTab,
   type RatesSearchForm,
@@ -20,17 +20,22 @@ import {
   createTrackingSearchSchema,
   scheduleSearchSchema,
 } from "../types/landing.types";
+import {
+  DEFAULT_EQUIPMENT_CODE,
+  DEFAULT_LANE,
+  RATES_SHIPMENT_LEAD_DAYS,
+  SCHEDULE_WINDOW_DAYS,
+  buildRatesSearchParams,
+  buildScheduleSearchParams,
+  buildTrackingSearchParams,
+  portLabelOf,
+} from "../utils/landing-search";
 
 interface UseLandingControllerOptions {
   /** Called when an explicit login action is triggered (optional intended path). */
   onLoginRequired: (intendedPath?: string) => void;
 }
 
-/** Landing schedule/rates defaults — CNSHA → AEJEA. */
-const DEFAULT_POL_LABEL = "CNSHA - SHANGHAI HONGQIAO INT APT";
-const DEFAULT_POD_LABEL = "AEJEA - JEBEL ALI, UAE";
-const DEFAULT_POL_CODE = "CNSHA";
-const DEFAULT_POD_CODE = "AEJEA";
 
 export function useLandingController({
   onLoginRequired,
@@ -49,6 +54,12 @@ export function useLandingController({
 
   const trackingSchema = useMemo(() => createTrackingSearchSchema(t), [t]);
   const ratesSchema = useMemo(() => createRatesSearchSchema(t), [t]);
+
+  // Default lane labels come from the ports master ("INNSA - NHAVA SHEVA,MUMBAI"), not from literals.
+  const { data: defaultPol } = usePortByCode(DEFAULT_LANE.pol);
+  const { data: defaultPod } = usePortByCode(DEFAULT_LANE.pod);
+  const defaultPolLabel = defaultPol ? portLabelOf(defaultPol) : DEFAULT_LANE.pol;
+  const defaultPodLabel = defaultPod ? portLabelOf(defaultPod) : DEFAULT_LANE.pod;
 
   const requireLoginForTab = (tab: LandingTab): boolean =>
     tabConfig[tab] === "login-required";
@@ -88,12 +99,14 @@ export function useLandingController({
 
   const scheduleForm = useForm<ScheduleSearchForm>({
     resolver: zodResolver(scheduleSearchSchema),
-    defaultValues: {
-      pol: DEFAULT_POL_LABEL,
-      pod: DEFAULT_POD_LABEL,
+    // `values` re-syncs the lane labels once the ports master answers; fields the user already edited are kept.
+    values: {
+      pol: defaultPolLabel,
+      pod: defaultPodLabel,
       fromDate: dayjs().format("YYYY-MM-DD"),
-      toDate: dayjs().add(14, "day").format("YYYY-MM-DD"),
+      toDate: dayjs().add(SCHEDULE_WINDOW_DAYS, "day").format("YYYY-MM-DD"),
     },
+    resetOptions: { keepDirtyValues: true },
   });
 
   const handleScheduleSubmit = (e?: React.FormEvent) => {
@@ -105,31 +118,16 @@ export function useLandingController({
       onLoginRequired(path);
       return;
     }
-    const values = scheduleForm.getValues();
-    const polCode = values.pol
-      ? values.pol.split(" - ")[0].trim()
-      : DEFAULT_POL_CODE;
-    const podCode = values.pod
-      ? values.pod.split(" - ")[0].trim()
-      : DEFAULT_POD_CODE;
-    const fromDate = values.fromDate || dayjs().format("YYYY-MM-DD");
-    const toDate = values.toDate || dayjs().add(14, "day").format("YYYY-MM-DD");
-
-    const params = new URLSearchParams({
-      pol: polCode,
-      pod: podCode,
-      fromDate,
-      toDate,
-      schetype: "loginschedule",
-    });
+    const params = new URLSearchParams(buildScheduleSearchParams(scheduleForm.getValues()));
     navigateWithSearch("/app/schedules", params);
   };
 
   const trackingForm = useForm<TrackingSearchForm>({
     resolver: zodResolver(trackingSchema),
     defaultValues: {
-      searchType: "CONTAINER",
-      trackingNumber: "SMLU8829102",
+      // Modified by Sekar Nagarajan (2026-10-17 01:50) — a booking that exists in the extracted fixtures
+      searchType: "BOOKING",
+      trackingNumber: "SVMDMU2694105",
       captcha: "",
     },
   });
@@ -155,28 +153,21 @@ export function useLandingController({
         return;
       }
 
-      // Modified by Sekar Nagarajan (2026-09-18 10:45)
-      const trackNo = values.trackingNumber.trim();
-      const searchType = values.searchType;
-      const params = new URLSearchParams({
-        trackingNumber: trackNo,
-        logintracno: trackNo,
-        searchType,
-        tracktype: "logintracking",
-      });
+      const params = new URLSearchParams(buildTrackingSearchParams(values));
       navigateWithSearch("/app/tracking", params);
     })();
   };
 
   const ratesForm = useForm<RatesSearchForm>({
     resolver: zodResolver(ratesSchema),
-    defaultValues: {
-      pol: DEFAULT_POL_LABEL,
-      pod: DEFAULT_POD_LABEL,
-      equipmentType: "20' Dry Standard",
-      shipmentDate: dayjs().add(7, "day").format("YYYY-MM-DD"),
+    values: {
+      pol: defaultPolLabel,
+      pod: defaultPodLabel,
+      equipmentType: DEFAULT_EQUIPMENT_CODE,
+      shipmentDate: dayjs().add(RATES_SHIPMENT_LEAD_DAYS, "day").format("YYYY-MM-DD"),
       captcha: "",
     },
+    resetOptions: { keepDirtyValues: true },
   });
 
   const handleRatesSubmit = (e?: React.FormEvent) => {
@@ -200,26 +191,7 @@ export function useLandingController({
         return;
       }
 
-      const polCode = values.pol
-        ? values.pol.split(" - ")[0].trim()
-        : DEFAULT_POL_CODE;
-      const podCode = values.pod
-        ? values.pod.split(" - ")[0].trim()
-        : DEFAULT_POD_CODE;
-      const eqp = values.equipmentType || "20' Dry Standard";
-      const shipmentDate =
-        values.shipmentDate || dayjs().add(7, "day").format("YYYY-MM-DD");
-
-      const params = new URLSearchParams({
-        pol: polCode,
-        pod: podCode,
-        ratepol: polCode,
-        ratepod: podCode,
-        eqpType: eqp,
-        rateseqp: eqp,
-        shipmentdate: shipmentDate,
-        loginratetype: "loginratetype",
-      });
+      const params = new URLSearchParams(buildRatesSearchParams(values));
       navigateWithSearch("/app/rates", params);
     })();
   };

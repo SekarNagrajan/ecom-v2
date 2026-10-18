@@ -1,0 +1,52 @@
+[
+ {
+  "id": "4",
+  "customerUserId": "5",
+  "notificationId": "8",
+  "isEnabled": true,
+  "createdAt": "2026-10-14T05:32:00.739Z",
+  "createdBy": "customer.notification",
+  "updatedAt": "2026-10-14T05:32:18.249Z",
+  "updatedBy": "customer.notification"
+ },
+ {
+  "id": "3",
+  "customerUserId": "5",
+  "notificationId": "6",
+  "isEnabled": true,
+  "createdAt": "2026-10-14T05:32:00.739Z",
+  "createdBy": "customer.notification",
+  "updatedAt": "2026-10-14T05:32:18.249Z",
+  "updatedBy": "customer.notification"
+ },
+ {
+  "id": "2",
+  "customerUserId": "5",
+  "notificationId": "11",
+  "isEnabled": true,
+  "createdAt": "2026-10-14T05:31:45.319Z",
+  "createdBy": "customer.notification",
+  "updatedAt": "2026-10-14T05:31:54.889Z",
+  "updatedBy": "customer.notification"
+ },
+ {
+  "id": "5",
+  "customerUserId": "5",
+  "notificationId": "1",
+  "isEnabled": false,
+  "createdAt": "2026-10-15T19:55:59.222Z",
+  "createdBy": "customer.notification",
+  "updatedAt": null,
+  "updatedBy": null
+ },
+ {
+  "id": "1",
+  "customerUserId": "1",
+  "notificationId": "1",
+  "isEnabled": false,
+  "createdAt": "2026-10-08T08:21:22.052Z",
+  "createdBy": "customer.notification",
+  "updatedAt": null,
+  "updatedBy": null
+ }
+]

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-17 21:19)
+// Modified by Sekar Nagarajan (2026-10-17 01:50)
 import { AppButton } from "@solverminds/shared-ui";
 import {
   Col,
@@ -37,14 +37,16 @@ const PORT_CODES = [
   "SGSIN",
 ] as const;
 
+// Modified by Sekar Nagarajan (2026-10-17 01:50) — vessel codes present in the extracted sailing schedules
 const VESSEL_CODES = [
-  "AGEX",
-  "SMVY",
-  "GLHZ",
-  "OCPN",
-  "PCMR",
-  "MRST",
-  "ATBR",
+  "KCA",
+  "ACH",
+  "SNA",
+  "HLA",
+  "DAB",
+  "EMLS",
+  "MRK",
+  "RNR",
 ] as const;
 
 export type ScheduleSearchFilterVariant = "page" | "header";

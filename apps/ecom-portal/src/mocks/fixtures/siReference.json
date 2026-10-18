@@ -1,0 +1,248 @@
+[
+ {
+  "id": "99",
+  "esino": "SIREQ3088",
+  "refid": "SOB",
+  "refval": "SOB"
+ },
+ {
+  "id": "98",
+  "esino": "SIREQ3088",
+  "refid": "EOR",
+  "refval": "1232322"
+ },
+ {
+  "id": "97",
+  "esino": "SIREQ3088",
+  "refid": "EBL",
+  "refval": "COMBINED TRANSPORT B/L"
+ },
+ {
+  "id": "96",
+  "esino": "SIREQ3082",
+  "refid": "SOB",
+  "refval": "SOB"
+ },
+ {
+  "id": "95",
+  "esino": "SIREQ3082",
+  "refid": "EOR",
+  "refval": "RR0001"
+ },
+ {
+  "id": "94",
+  "esino": "SIREQ3082",
+  "refid": "ORG",
+  "refval": "T"
+ },
+ {
+  "id": "93",
+  "esino": "SIREQ3082",
+  "refid": "EBL",
+  "refval": "COMBINED TRANSPORT B/L"
+ },
+ {
+  "id": "92",
+  "esino": "SIREQ3082",
+  "refid": "INU",
+  "refval": "INU0001"
+ },
+ {
+  "id": "91",
+  "esino": "SIREQ3082",
+  "refid": "ACI",
+  "refval": "ACI0001"
+ },
+ {
+  "id": "90",
+  "esino": "SIREQ3085",
+  "refid": "SOB",
+  "refval": "SOB"
+ },
+ {
+  "id": "89",
+  "esino": "SIREQ3085",
+  "refid": "EOR",
+  "refval": "RR0001"
+ },
+ {
+  "id": "88",
+  "esino": "SIREQ3085",
+  "refid": "ORG",
+  "refval": "T"
+ },
+ {
+  "id": "87",
+  "esino": "SIREQ3085",
+  "refid": "EBL",
+  "refval": "COMBINED TRANSPORT B/L"
+ },
+ {
+  "id": "86",
+  "esino": "SIREQ3085",
+  "refid": "INU",
+  "refval": "INU0001"
+ },
+ {
+  "id": "85",
+  "esino": "SIREQ3085",
+  "refid": "ACI",
+  "refval": "ACI0001"
+ },
+ {
+  "id": "42",
+  "esino": "SIREQ3081",
+  "refid": "SOB",
+  "refval": "SOB"
+ },
+ {
+  "id": "41",
+  "esino": "SIREQ3081",
+  "refid": "EOR",
+  "refval": "RR0001"
+ },
+ {
+  "id": "40",
+  "esino": "SIREQ3081",
+  "refid": "ORG",
+  "refval": "T"
+ },
+ {
+  "id": "39",
+  "esino": "SIREQ3081",
+  "refid": "EBL",
+  "refval": "COMBINED TRANSPORT B/L"
+ },
+ {
+  "id": "38",
+  "esino": "SIREQ3081",
+  "refid": "INU",
+  "refval": "INU0001"
+ },
+ {
+  "id": "37",
+  "esino": "SIREQ3081",
+  "refid": "ACI",
+  "refval": "ACI0001"
+ },
+ {
+  "id": "30",
+  "esino": "SIREQ3080",
+  "refid": "SOB",
+  "refval": "SOB"
+ },
+ {
+  "id": "29",
+  "esino": "SIREQ3080",
+  "refid": "EOR",
+  "refval": "RR0001"
+ },
+ {
+  "id": "28",
+  "esino": "SIREQ3080",
+  "refid": "ORG",
+  "refval": "T"
+ },
+ {
+  "id": "27",
+  "esino": "SIREQ3080",
+  "refid": "EBL",
+  "refval": "COMBINED TRANSPORT B/L"
+ },
+ {
+  "id": "26",
+  "esino": "SIREQ3080",
+  "refid": "INU",
+  "refval": "INU0001"
+ },
+ {
+  "id": "25",
+  "esino": "SIREQ3080",
+  "refid": "ACI",
+  "refval": "ACI0001"
+ },
+ {
+  "id": "18",
+  "esino": "SIREQ3078",
+  "refid": "SOB",
+  "refval": "SOB"
+ },
+ {
+  "id": "17",
+  "esino": "SIREQ3078",
+  "refid": "EOR",
+  "refval": "RR0001"
+ },
+ {
+  "id": "16",
+  "esino": "SIREQ3078",
+  "refid": "ORG",
+  "refval": "T"
+ },
+ {
+  "id": "15",
+  "esino": "SIREQ3078",
+  "refid": "EBL",
+  "refval": "COMBINED TRANSPORT B/L"
+ },
+ {
+  "id": "14",
+  "esino": "SIREQ3078",
+  "refid": "INU",
+  "refval": "INU0001"
+ },
+ {
+  "id": "13",
+  "esino": "SIREQ3078",
+  "refid": "ACI",
+  "refval": "ACI0001"
+ },
+ {
+  "id": "101",
+  "esino": "SIREQ3094",
+  "refid": "SOB",
+  "refval": "SOB"
+ },
+ {
+  "id": "100",
+  "esino": "SIREQ3094",
+  "refid": "EBL",
+  "refval": "COMBINED TRANSPORT B/L"
+ },
+ {
+  "id": "12",
+  "esino": "SIREQ3079",
+  "refid": "SOB",
+  "refval": "SOB"
+ },
+ {
+  "id": "11",
+  "esino": "SIREQ3079",
+  "refid": "EOR",
+  "refval": "RR0001"
+ },
+ {
+  "id": "10",
+  "esino": "SIREQ3079",
+  "refid": "ORG",
+  "refval": "T"
+ },
+ {
+  "id": "9",
+  "esino": "SIREQ3079",
+  "refid": "EBL",
+  "refval": "COMBINED TRANSPORT B/L"
+ },
+ {
+  "id": "8",
+  "esino": "SIREQ3079",
+  "refid": "INU",
+  "refval": "INU0001"
+ },
+ {
+  "id": "7",
+  "esino": "SIREQ3079",
+  "refid": "ACI",
+  "refval": "ACI0001"
+ }
+]

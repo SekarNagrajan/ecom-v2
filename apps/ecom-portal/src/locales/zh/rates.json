@@ -41,7 +41,9 @@
       "all": "全部箱型",
       "20dv": "20' 标准干箱 (20DV)",
       "40hc": "40' 高箱干箱 (40HC)",
-      "40rf": "40' 冷藏箱 (40RF)"
+      "40rf": "40' 冷藏箱 (40RF)",
+      "40dv": "40' 标准干箱 (40DV)",
+      "20rf": "20' 冷藏箱 (20RF)"
     },
     "commodity": {
       "all": "全部货品",
@@ -57,14 +59,16 @@
       "CNSHA": "CNSHA - 上海，中国",
       "DEHAM": "DEHAM - 汉堡，德国",
       "INNSA": "INNSA - 那瓦西瓦，印度",
-      "AEDXB": "AEDXB - 杰贝阿里，阿联酋",
+      "AEDXB": "AEDXB - 迪拜，阿联酋",
       "USNYC_short": "USNYC - 纽约",
       "DEHAM_short": "DEHAM - 汉堡",
       "NLRTM_short": "NLRTM - 鹿特丹",
       "INNSA_short": "INNSA - 那瓦西瓦",
       "SGSIN_short": "SGSIN - 新加坡",
       "CNSHA_short": "CNSHA - 上海",
-      "AEDXB_short": "AEDXB - 杰贝阿里"
+      "AEDXB_short": "AEDXB - 迪拜",
+      "AEJEA": "AEJEA - 杰贝阿里，阿联酋",
+      "AEJEA_short": "AEJEA - 杰贝阿里"
     },
     "rateType": {
       "tariff": "运价表",

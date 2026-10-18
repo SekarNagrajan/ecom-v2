@@ -1,0 +1,188 @@
+[
+ {
+  "id": "89",
+  "ebookno": "BKON7307",
+  "refid": "UCR",
+  "refval": "UCR-CLAUDE-TEST"
+ },
+ {
+  "id": "87",
+  "ebookno": "BKON7306",
+  "refid": "SHR",
+  "refval": "PO-44871"
+ },
+ {
+  "id": "86",
+  "ebookno": "BKON7306",
+  "refid": "UCR",
+  "refval": "UCR20261234567"
+ },
+ {
+  "id": "80",
+  "ebookno": "BKON7282",
+  "refid": "ERR",
+  "refval": "BKON7282"
+ },
+ {
+  "id": "79",
+  "ebookno": "BKON7282",
+  "refid": "BSR",
+  "refval": "SVMIM ~ SOLVER"
+ },
+ {
+  "id": "68",
+  "ebookno": "BKON7258",
+  "refid": "UCR",
+  "refval": "9872252505"
+ },
+ {
+  "id": "66",
+  "ebookno": "BKON7251",
+  "refid": "SHR",
+  "refval": "PO-44871"
+ },
+ {
+  "id": "65",
+  "ebookno": "BKON7251",
+  "refid": "UCR",
+  "refval": "UCR20261234567"
+ },
+ {
+  "id": "93",
+  "ebookno": "BKON7314",
+  "refid": "SHR",
+  "refval": "PO-44871"
+ },
+ {
+  "id": "92",
+  "ebookno": "BKON7314",
+  "refid": "UCR",
+  "refval": "UCR20261234567"
+ },
+ {
+  "id": "91",
+  "ebookno": "BKON7309",
+  "refid": "SHR",
+  "refval": "PO-44871"
+ },
+ {
+  "id": "90",
+  "ebookno": "BKON7309",
+  "refid": "UCR",
+  "refval": "UCR20261234567"
+ },
+ {
+  "id": "83",
+  "ebookno": "BKON7292",
+  "refid": "EBC",
+  "refval": "BAE03"
+ },
+ {
+  "id": "82",
+  "ebookno": "BKON7283",
+  "refid": "EBC",
+  "refval": "BAE03"
+ },
+ {
+  "id": "81",
+  "ebookno": "BKON7283",
+  "refid": "BSR",
+  "refval": "SVMIM ~ SOLVER"
+ },
+ {
+  "id": "78",
+  "ebookno": "BKON7279",
+  "refid": "EBC",
+  "refval": "BAE03"
+ },
+ {
+  "id": "77",
+  "ebookno": "BKON7279",
+  "refid": "BSR",
+  "refval": "SVMIM ~ SOLVER"
+ },
+ {
+  "id": "76",
+  "ebookno": "BKON7275",
+  "refid": "EOR",
+  "refval": "SB"
+ },
+ {
+  "id": "75",
+  "ebookno": "BKON7275",
+  "refid": "SHR",
+  "refval": "SR2244"
+ },
+ {
+  "id": "74",
+  "ebookno": "BKON7269",
+  "refid": "EBC",
+  "refval": "BAE03"
+ },
+ {
+  "id": "73",
+  "ebookno": "BKON7269",
+  "refid": "BSR",
+  "refval": "SVMIM ~ SOLVER"
+ },
+ {
+  "id": "72",
+  "ebookno": "BKON7267",
+  "refid": "SHR",
+  "refval": "PO-44871"
+ },
+ {
+  "id": "71",
+  "ebookno": "BKON7267",
+  "refid": "UCR",
+  "refval": "UCR20261234567"
+ },
+ {
+  "id": "70",
+  "ebookno": "BKON7260",
+  "refid": "UCR",
+  "refval": "9872252505"
+ },
+ {
+  "id": "69",
+  "ebookno": "BKON7259",
+  "refid": "UCR",
+  "refval": "9872252505"
+ },
+ {
+  "id": "14",
+  "ebookno": "BKON7240",
+  "refid": "ERR",
+  "refval": "BKON6715"
+ },
+ {
+  "id": "13",
+  "ebookno": "BKON7240",
+  "refid": "ERT",
+  "refval": "Normal"
+ },
+ {
+  "id": "12",
+  "ebookno": "BKON7240",
+  "refid": "EOF",
+  "refval": "P~~Prepaid"
+ },
+ {
+  "id": "11",
+  "ebookno": "BKON7240",
+  "refid": "BSR",
+  "refval": "SVMIM ~ SOLVER"
+ },
+ {
+  "id": "2",
+  "ebookno": "BKON7176",
+  "refid": "EOR",
+  "refval": "SB"
+ },
+ {
+  "id": "1",
+  "ebookno": "BKON7176",
+  "refid": "SHR",
+  "refval": "CR2465"
+ }
+]

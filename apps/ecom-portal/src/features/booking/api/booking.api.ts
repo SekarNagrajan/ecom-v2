@@ -1,16 +1,14 @@
-// Modified by Sekar Nagarajan (2026-08-28 00:35)
+// Modified by Sekar Nagarajan (2026-10-16 23:20)
 
 import type {
+  BookingCustomerOption,
+  BookingHsCodeOption,
   BookingLookupKind,
   BookingLookupOption,
-} from '../mocks/booking-lookups.mock';
-import type { BookingCustomerOption } from '../mocks/booking-customers.mock';
-import type { BookingRateOption } from '../mocks/booking-rates.mock';
-import type { BookingRoutingSearchParams } from '../mocks/booking-routing.mock';
-import type {
-  BookingHsCodeOption,
   BookingUnNumberOption,
-} from '../mocks/booking-hs-un.mock';
+} from '../../../mocks/fixture-api/bridges/booking-lookups.bridge';
+import type { BookingRateOption } from '../../../mocks/fixture-api/bridges/booking-rates.bridge';
+import type { BookingRoutingSearchParams } from '../../../mocks/fixture-api/bridges/booking-routing.bridge';
 import type {
   BookingActivityEvent,
   BookingDocument,
@@ -22,10 +20,15 @@ import type {
   SubmitBookingResponse,
 } from '../types/booking.types';
 
-export type { BookingRoutingSearchParams } from '../mocks/booking-routing.mock';
-export type { BookingLookupKind, BookingLookupOption } from '../mocks/booking-lookups.mock';
-export type { BookingCustomerOption } from '../mocks/booking-customers.mock';
-export type { BookingRateOption } from '../mocks/booking-rates.mock';
+export type { BookingRoutingSearchParams } from '../../../mocks/fixture-api/bridges/booking-routing.bridge';
+export type {
+  BookingCustomerOption,
+  BookingHsCodeOption,
+  BookingLookupKind,
+  BookingLookupOption,
+  BookingUnNumberOption,
+} from '../../../mocks/fixture-api/bridges/booking-lookups.bridge';
+export type { BookingRateOption } from '../../../mocks/fixture-api/bridges/booking-rates.bridge';
 
 async function readJson<T>(res: Response): Promise<T> {
   if (!res.ok) {

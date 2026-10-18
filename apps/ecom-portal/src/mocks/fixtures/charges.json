@@ -1,0 +1,3834 @@
+[
+ {
+  "chargecode": "FST",
+  "chargename": "111",
+  "chargetype": "B",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "ADV",
+  "chargename": "Ad Valorem",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SDV",
+  "chargename": "Ad Valorem",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "ADI",
+  "chargename": "ADDITIONAL DO FEE INDIA",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "AWR",
+  "chargename": "ADDITIONAL WAR RISK SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "ADJ",
+  "chargename": "ADJ",
+  "chargetype": "B",
+  "chargemode": "M",
+  "chargegrp": "ROADRECOVERY",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "HJI",
+  "chargename": "ADMIN CHARGES",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "AOP",
+  "chargename": "ADMINISTRATION FEE NOS ORIGIN",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "AUXILLARY CHARGES",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "ADM",
+  "chargename": "ADMINISTRATIVE FEE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "SURCHARGE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "AMS",
+  "chargename": "ADVANCE MANIFEST SURCHARGES",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "ADC",
+  "chargename": "ADVANCEMENT CHARGES New",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CDF",
+  "chargename": "ADVANCEMENT FEE (DETENTION)",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "AFD",
+  "chargename": "AFRICA ADDITIONAL",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "AFC",
+  "chargename": "AGENCY DEST DOC FEE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "SURCHARGE",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "AFP",
+  "chargename": "AGENCY FEE PREPAID",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "OTHERS",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "ARC",
+  "chargename": "AGENCY RECOVERY CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "WWD",
+  "chargename": "AM SAMOA WHARFAGE2",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "TERMINAL HANDLING",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "ANC",
+  "chargename": "ANCILLARY CHARGES NON MANIFESTED",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "ARD",
+  "chargename": "Arrastre Destination",
+  "chargetype": "B",
+  "chargemode": "M",
+  "chargegrp": "AGENCY RECOVERY",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "ASC",
+  "chargename": "ASYNCHRONOUS CHARGES",
+  "chargetype": "B",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "BKC",
+  "chargename": "BANK CHARGES",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "BLF",
+  "chargename": "BILL OF LADING FEE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "AGENCY RECOVERY",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "BOI",
+  "chargename": "BILL OF LADING FEE INDIA",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "TERMINAL HANDLING",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CBA",
+  "chargename": "BL AMENDMENT FEE",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "LBF",
+  "chargename": "BL FEE (LATE)",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IBF",
+  "chargename": "BL RE-ISSUANCE FEE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "BRF",
+  "chargename": "BL RE-ISSUANCE FEE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NA",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "BSF",
+  "chargename": "BL SURRENDER FEE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "BCF",
+  "chargename": "BOOKING CANCELLATION FEE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CBF",
+  "chargename": "BOOKING FEE",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "BFE",
+  "chargename": "BOOKING FEE FOR NINGBO",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IBP",
+  "chargename": "BOUNCED CHEQUE PRESENTED",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "E"
+ },
+ {
+  "chargecode": "BRK",
+  "chargename": "BROKER FEE",
+  "chargetype": "N",
+  "chargemode": "N",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "BSC",
+  "chargename": "bumker surcharge",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "AGENCY RECOVERY",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "BAF",
+  "chargename": "BUNKER ADJUSTMENT FACTOR",
+  "chargetype": "B",
+  "chargemode": "M",
+  "chargegrp": "SURCHARGE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CCN",
+  "chargename": "CANCELLATION CHARGE",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "CRC",
+  "chargename": "CARGO ROLLOVER CHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CC1",
+  "chargename": "CCC",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CAS",
+  "chargename": "Central America Security Surcharge",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "CCE",
+  "chargename": "CERTIFICATE CHARGE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CIF",
+  "chargename": "CERTIFICATE ISSUANCE FEE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CFS",
+  "chargename": "CFS CHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "COD",
+  "chargename": "CHANGE OF DESTINATION ADMIN FEE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IVR",
+  "chargename": "CHANGE OF VESSEL RECOVERY",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CIS",
+  "chargename": "CHASSIS USAGE SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CTD",
+  "chargename": "CHENNAI TRADE RECOVERY DISCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "CTL",
+  "chargename": "CHENNAI TRADE RECOVERY LOAD",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CTR",
+  "chargename": "CHENNAI TRADE RECOVERY SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CAC",
+  "chargename": "CHINA - ADVANCEMENT CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "CWS",
+  "chargename": "CHINA - DOUBLE AMS",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CMS",
+  "chargename": "CHINA - DOUBLE AMS",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CIT",
+  "chargename": "CHINA - INTERNAL TERMINAL TRANSFER",
+  "chargetype": "N",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CMI",
+  "chargename": "CHINA - OTHER NON-MANIFEST CHARGE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CSW",
+  "chargename": "CHINA - SEAWAY BILL FEE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CER",
+  "chargename": "CHINA EXCHANGE RATE DIFFERENCE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "CDO",
+  "chargename": "COD CHARGE",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "COF",
+  "chargename": "COD COST RECOVERY",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CCL",
+  "chargename": "COLOMBO COST RECOVERY LOAD",
+  "chargetype": "B",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CCD",
+  "chargename": "COLOMBO COST RECOVERY-DISCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CBL",
+  "chargename": "COMBINING BL FEE",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "COC",
+  "chargename": "Commission charge",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "ANCILLARY RECOVERY",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CSL",
+  "chargename": "CONGESTION SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CSD",
+  "chargename": "CONGESTION SURCHARGE - DISCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CLV",
+  "chargename": "CONGO LEVY",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "CST",
+  "chargename": "CONSUMPTION TAX",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "ICP",
+  "chargename": "CONT PORT STORAGE RECOVERY",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "CCC",
+  "chargename": "CONTAINER CLEANING CHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "CCG",
+  "chargename": "CONTAINER CONDITION GUARANTEE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CDM",
+  "chargename": "CONTAINER DAMAGE CHARGES",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "OTHERS",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "CDP",
+  "chargename": "CONTAINER DEPOSIT",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "ICD",
+  "chargename": "CONTAINER DETAILS MISSING RECOVERY",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CHC",
+  "chargename": "CONTAINER HANDLING CHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "CIB",
+  "chargename": "Container Imbalance Charge",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CIC",
+  "chargename": "CONTAINER ISOLATION CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IMC",
+  "chargename": "CONTAINER MAINTAINANCE CHARGES",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "DMC",
+  "chargename": "CONTAINER MONITORING CHARGES",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "CPC",
+  "chargename": "CONTAINER PROTECTION CHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "ANCILLARY RECOVERY",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "COR",
+  "chargename": "CONTAINER RECOVERY",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IRA",
+  "chargename": "CONTAINER REPOSITION ADM FEE",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "COS",
+  "chargename": "CONTAINER SALE",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "CSV",
+  "chargename": "CONTAINER SERVICE CHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "CSE",
+  "chargename": "CONTAINER SERVICE CHARGE - EXPORTS",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CSI",
+  "chargename": "CONTAINER SERVICE CHARGE - IMPORTS",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "CSR",
+  "chargename": "CONTAINER SERVICES - LOAD",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CSU",
+  "chargename": "CONTAINER SERVICES CHARGES",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "ISR",
+  "chargename": "CONTAINER SHUT OUT RECOVERY",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CCS",
+  "chargename": "CONTAINER STICKER  PLACING   REMOVAL",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "CRA",
+  "chargename": "Costa Rica Administrative Charge",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CRS",
+  "chargename": "Costa Rica Scanning Fee",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "COM",
+  "chargename": "COV CHARGE",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CBR",
+  "chargename": "CRITICAL BUNKER RECOVERY",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CTA",
+  "chargename": "CROSS TRADE ADMINISTRATION FEE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CAF",
+  "chargename": "CURRENCY ADJUSTMENT FACTOR CHARGE MAPPING SECTOR IN CAF",
+  "chargetype": "B",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CSS",
+  "chargename": "CUSTOM SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CRB",
+  "chargename": "CUSTOMER DISBURSEMENT",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CR1",
+  "chargename": "CUSTOMER DISBURSEMENT ONE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "E"
+ },
+ {
+  "chargecode": "CRO",
+  "chargename": "CUSTOMER DISBURSEMENT ONE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CRT",
+  "chargename": "CUSTOMER DISBURSEMENT TWO",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "E"
+ },
+ {
+  "chargecode": "CR2",
+  "chargename": "CUSTOMER DISBURSEMENT TWO",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CWT",
+  "chargename": "CWT",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IDE",
+  "chargename": "D.O. EXTENSION/CHANGE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "DPP",
+  "chargename": "Damage protection plan",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "ANCILLARY RECOVERY",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "DGS",
+  "chargename": "DANGEROUS GOODS FOR HAULAGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "ROADRECOVERY",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "DDA",
+  "chargename": "DATA AMENDMENT",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IDB",
+  "chargename": "DELAYED BOND CANCELLATION FEE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "DGA",
+  "chargename": "DELIVERY DISCHAR",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "ANCILLARY RECOVERY",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "IDO",
+  "chargename": "DELIVERY ORDER - ADMIN FEE",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "DOF",
+  "chargename": "DELIVERY ORDER FEE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "PDF",
+  "chargename": "DELIVERY ORDER FEE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "AUXILLARY CHARGES",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "DIF",
+  "chargename": "DELIVERY ORDER FEE IN-TRANSIT",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "DOI",
+  "chargename": "DELIVERY ORDER FEE INDIA",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "POI",
+  "chargename": "DELIVERY ORDER FEE INDIA - PREPAID PREMIUM",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "AGENCY RECOVERY",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "DAL",
+  "chargename": "DEMURRAGE ADDITIONAL",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "DEM RECOVERY",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "DDC",
+  "chargename": "DESTINATION DELIVERY CHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "DTA",
+  "chargename": "DET CHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "DDG",
+  "chargename": "detention and storage charge",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "AGENCY RECOVERY",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "DTC",
+  "chargename": "DETENTION CHARGE DEMURRAGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "DEM RECOVERY",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "DCD",
+  "chargename": "DETENTION CHARGE/DEMURRAGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "GYD",
+  "chargename": "dfergh",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "RAILRECOVERY",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "DFS",
+  "chargename": "DFS charge code",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "DGC",
+  "chargename": "DG additional Charges",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "DGQ",
+  "chargename": "DGQ",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "DWD",
+  "chargename": "DILI WITHOLDING TAX",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "TAX",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "DOR",
+  "chargename": "DO REVALIDATION FEE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "DTH",
+  "chargename": "DOCK DESTUFFING THC",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "DOC",
+  "chargename": "DOCUMENTATION FEE",
+  "chargetype": "B",
+  "chargemode": "M",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "DYG",
+  "chargename": "DRAYAGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "ROADRECOVERY",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "DFC",
+  "chargename": "DROP OFF CHARGE",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "DAF",
+  "chargename": "DUBAI ADVANCEMENT FEE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "DBG",
+  "chargename": "DUBAI BANK GUARANTEE CHARGE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "DCS",
+  "chargename": "DUBAI CHANGE OF STATUS",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "DCR",
+  "chargename": "DUBAI COLLECTION REFUND",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "DCF",
+  "chargename": "DUBAI CONTAINER PORT STORAGE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "DEM",
+  "chargename": "DUBAI DEMURRAGE CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "DEF",
+  "chargename": "DUBAI EXPORT DOC FEE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "DIC",
+  "chargename": "DUBAI INSPECTION CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "DLL",
+  "chargename": "DUBAI LIFT ON LIFT OFF CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "DRE",
+  "chargename": "DUBAI ROE ADJUSTMENT",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "DSA",
+  "chargename": "DUBAI SEAL CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "DSC",
+  "chargename": "DUBAI SHIFTING CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "DNC",
+  "chargename": "DUBAI SPLIT NOC CHARGE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "DST",
+  "chargename": "DUBAI STOPPAGE ADVICE CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "E2E",
+  "chargename": "E2E",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "EIC",
+  "chargename": "echarge",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "EBN",
+  "chargename": "EDI  BL SUBMISSION",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "EDO",
+  "chargename": "EDO Charge",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "EE2",
+  "chargename": "EE2",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "EEE",
+  "chargename": "EEEE ()()342411111111111111111",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "CIR",
+  "chargename": "EIR/SEAL FEE",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "ETT",
+  "chargename": "El Salvador Tax",
+  "chargetype": "B",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "EBS",
+  "chargename": "EMERGENCY BUNKER SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "ERS",
+  "chargename": "EMERGENCY RISK SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "ETS",
+  "chargename": "Emission Trading Surcharge",
+  "chargetype": "B",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "ECF",
+  "chargename": "EMISSIONS CONTROL AREA FEE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "EDC",
+  "chargename": "EQUIPMENT DAMAGE CHARGES",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "EHD",
+  "chargename": "EQUIPMENT HANDLING FEE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "TERMINAL HANDLING",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "EHO",
+  "chargename": "EQUIPMENT HANDLING FEE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "TERMINAL HANDLING",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "EIM",
+  "chargename": "EQUIPMENT IMBALANCE SEAL FEE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "EIS",
+  "chargename": "EQUIPMENT IMBALANCE SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "EMF",
+  "chargename": "EQUIPMENT MANAGEMENT FEES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "EMI",
+  "chargename": "EQUIPMENT MANAGEMENT FEES IN-TRANSIT",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "ERC",
+  "chargename": "EQUIPMENT REPOSITIONING CHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "EES",
+  "chargename": "EQUIPMENT SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "AUXILLARY CHARGES",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "EIR",
+  "chargename": "escharge",
+  "chargetype": "B",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "E"
+ },
+ {
+  "chargecode": "ECP",
+  "chargename": "ESL Cargo Protect",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IEO",
+  "chargename": "EXAMINATION ORDER FEE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "EXE",
+  "chargename": "Excess Loading Charges",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "ETR",
+  "chargename": "excise tax recovery",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "EDF",
+  "chargename": "EXPORT DOCUMENT FEE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IFC",
+  "chargename": "FACILITATION CHARGES",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "FDC",
+  "chargename": "FACTORY DESTUFFING CHARGE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "FDI",
+  "chargename": "FEEDER DOCUMENTATION - EXPORT",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "FDO",
+  "chargename": "FEEDER DOCUMENTATION - IMPORT",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "FFS",
+  "chargename": "FFS charge code",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "FMC",
+  "chargename": "FMC CHARGES ",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "FIF",
+  "chargename": "FOREIGN INTERMODAL FUEL",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "FIC",
+  "chargename": "FORWARDER AGENCY COMMISION",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "FAC",
+  "chargename": "FORWARDING AGENCY COMMISSION",
+  "chargetype": "B",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IFD",
+  "chargename": "FRANKING ADMN. CHARGES",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "FCN",
+  "chargename": "FREIGHT CORRECTION BL AMMENDMENT FEE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "FMT",
+  "chargename": "FREIGHT MANIFEST",
+  "chargetype": "B",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "E"
+ },
+ {
+  "chargecode": "FAF",
+  "chargename": "FUEL ADJUSTMENT FACTOR",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "FRC",
+  "chargename": "FUEL RECOVERY CHARGE (ONLY FOR CANADA)  ",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "GOH",
+  "chargename": "GARMENT ON HANGER SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "GTC",
+  "chargename": "GATE CHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "E"
+ },
+ {
+  "chargecode": "GAT",
+  "chargename": "GATE IN OR OUT",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "CGS",
+  "chargename": "GOODS AND  SERVICE TAX",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "RAILRECOVERY",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SGS",
+  "chargename": "GOODS AND  SERVICE TAX",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "RAILRECOVERY",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "UGS",
+  "chargename": "GOODS AND  SERVICE TAX",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "RAILRECOVERY",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IGS",
+  "chargename": "GOODS AND SERVICE TAX",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "RAILRECOVERY",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "GRI",
+  "chargename": "GRI",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "GST",
+  "chargename": "GST INDIA",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CHF",
+  "chargename": "HANDLING CHARGE",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "HDS",
+  "chargename": "HARBOUR DUES",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "HFA",
+  "chargename": "HAULAGE FUEL ADJUSTMENT FACTOR          ",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "ROADRECOVERY",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "HAZ",
+  "chargename": "HAZ Charge ",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "HMS",
+  "chargename": "Hazardous Material Surcharge",
+  "chargetype": "B",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "HFF",
+  "chargename": "HBL FILING FEE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NA",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IHB",
+  "chargename": "HBL FILING FEE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "HLA",
+  "chargename": "HEAVY LIFT ADDITIONAL",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "HCC",
+  "chargename": "HIGH CUBE SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "HSS",
+  "chargename": "HIGH SEA SALE CHARGES",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "CSC",
+  "chargename": "HOLD SHIPMENT CHARGE",
+  "chargetype": "B",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "HGT",
+  "chargename": "HONDURAS  GOVERNMENT TRUCKING",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "HBD",
+  "chargename": "HOUSE BILL DO FEE INDIA",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "ICA",
+  "chargename": "IGM / CUSTOM AMENDMENT FEE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IMS",
+  "chargename": "IGM SUBMISSION",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IRB",
+  "chargename": "IMMEDIATE REBATE",
+  "chargetype": "N",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IML",
+  "chargename": "IMMEDIATE SURCHARGE  LOAD",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IMD",
+  "chargename": "IMMEDIATE SURCHARGE DISCHARGE",
+  "chargetype": "B",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "ISD",
+  "chargename": "IMO CFS STRIPPING CHARGE                ",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IMO",
+  "chargename": "IMO SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "ITH",
+  "chargename": "IMO TERM. HANDLING CHARGE POD           ",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "ITL",
+  "chargename": "IMO TERM. HANDLING CHARGE POL",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "ICS",
+  "chargename": "IMPORT FREE DAYS CHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "DEM RECOVERY",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "HCL",
+  "chargename": "IMPORT FREE DAYS CHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "DEM RECOVERY",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "DPS",
+  "chargename": "IMPORT FREE DAYS CHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "DEM RECOVERY",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "DDF",
+  "chargename": "IMPORT FREE DAYS CHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "DEM RECOVERY",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "AAL",
+  "chargename": "IMPORT FREE DAYS CHARGE",
+  "chargetype": "B",
+  "chargemode": "M",
+  "chargegrp": "DEM RECOVERY",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "PCD",
+  "chargename": "IMPORT FREE DAYS CHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "DEM RECOVERY",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "IMA",
+  "chargename": "IMPORT MANIFEST AMENDMENT",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "ISE",
+  "chargename": "IMPORT SERVICE FEE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "BOC",
+  "chargename": "IMPOSTA DI BOLLO",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "ITC",
+  "chargename": "IN TRANSIT CHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IRD",
+  "chargename": "INDIA  ROUNDING OFF",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IPC",
+  "chargename": "INDIA - CREDIT PROCESSING FEE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IFO",
+  "chargename": "INDIA - FEEDER DOCUMENTATION",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "ICL",
+  "chargename": "INDIA – CONTAINER LATE GATE IN CHARGE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IBC",
+  "chargename": "INDIA BOUNCED CHEQUE CHARGES",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IBR",
+  "chargename": "INDIA BOUNCED CHEQUE REALIZED",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IRC",
+  "chargename": "INDIA CHEQUE REVALIDATION CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IEM",
+  "chargename": "INDIA EQUIPMENT & MAINTAINENCE CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IEC",
+  "chargename": "INDIA EXCESS COLLECTION",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IBS",
+  "chargename": "INDIA EXEMPTION SERVICE TAX  BUSINESS SUPPORT",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IBA",
+  "chargename": "INDIA EXEMPTION SERVICE TAX BUSINESS AUXILIARY",
+  "chargetype": "N",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IFM",
+  "chargename": "INDIA FORWARD PREMIUM",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IFP",
+  "chargename": "INDIA FRANKING PROCESSING FEE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "ILV",
+  "chargename": "INDIA LEVY OF CESS",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "ILL",
+  "chargename": "INDIA LIFT ON LIFT OFF FEES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "INH",
+  "chargename": "INDIA NIL HEDGE",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "ISB",
+  "chargename": "INDIA SEAWAY BILL FEE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "ISX",
+  "chargename": "INDIA SHORT EXCESS COLLECTION",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "ISM",
+  "chargename": "INDIA STAMP DUTY",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "ISF",
+  "chargename": "INDIA SURVEY FEES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "ITR",
+  "chargename": "INDIA THIRD PARTY REPAIRS",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IWC",
+  "chargename": "INDIA WEIGHMENT CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IPS",
+  "chargename": "INDONESIAN PORT SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "ICH",
+  "chargename": "INLAND CONTAINER HANDLING - INDIA",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IFR",
+  "chargename": "Inland Fuel Recovery Surcharge",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IIP",
+  "chargename": "INSURANCE PREMIUM CHARGES",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IRS",
+  "chargename": "INTERMODAL RAIL SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IPT",
+  "chargename": "INTERPORT TRANSPORT",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "ROADRECOVERY",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IVS",
+  "chargename": "ivs",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CED",
+  "chargename": "JAMAICA SUPERANNUATION FUND DISCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CEL",
+  "chargename": "JAMAICA SUPERANNUATION FUND LOAD",
+  "chargetype": "N",
+  "chargemode": "N",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "KAC",
+  "chargename": "KENYA - ADVANCEMENT CHARGES",
+  "chargetype": "N",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "KCS",
+  "chargename": "Kerala Cess",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "TSK",
+  "chargename": "KKR",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "LBD",
+  "chargename": "Labour Destination",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "LFC",
+  "chargename": "LABOUR FEE CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "LID",
+  "chargename": "LAE INFRASTRUCTURE FEE - DESTINATION",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "TERMINAL HANDLING",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "SLA",
+  "chargename": "LASHING CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "DLB",
+  "chargename": "LATE BILL OF LADING FEE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "LFF",
+  "chargename": "LIFT OFF FEE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "LOF",
+  "chargename": "LIFT ON FEE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "LOL",
+  "chargename": "LIFT ON LIFT OFF CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "TLL",
+  "chargename": "LIFT ON LIFT OFF CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "LNC",
+  "chargename": "LINE NUMBER CHARGE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CLL",
+  "chargename": "LO/LO (FOR LADEN)",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CLM",
+  "chargename": "LO/LO (FOR MTY)",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "LOD",
+  "chargename": "LOLO CHARGES AT DISCHARGE PORT",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "LSF",
+  "chargename": "LOW SULFUR FUEL SURCHARGE",
+  "chargetype": "B",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "LSS",
+  "chargename": "LOW SULFUR FUEL SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "LWD",
+  "chargename": "LOW WATER SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "LWL",
+  "chargename": "LOW WATER SURCHARGE - LOAD",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "MAD",
+  "chargename": "MALAYSIA - ADVANCEMENT CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "MCS",
+  "chargename": "MALAYSIA - CONTAINER SEAL",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "MDM",
+  "chargename": "MALAYSIA - DEMURRAGE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "MEF",
+  "chargename": "MALAYSIA - EDI FEE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "MLA",
+  "chargename": "MALAYSIA - LASHING CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "MLL",
+  "chargename": "MALAYSIA - LIFT ON LIFT OFF",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "MLF",
+  "chargename": "MALAYSIA - LOYALTY FEE",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "MMA",
+  "chargename": "MALAYSIA - MANIFEST AMENDMENT",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "MOG",
+  "chargename": "MALAYSIA - OOG CHARGE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "MOT",
+  "chargename": "MALAYSIA - OTHER NON MANIFESTED CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "MRC",
+  "chargename": "MALAYSIA - REPAIR AND CLEANING CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "MSF",
+  "chargename": "MALAYSIA - SURVEY FEES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "MTR",
+  "chargename": "MALAYSIA - TRUCKING CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "MFR",
+  "chargename": "MALAYSIA -AGENCY FREIGHT CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "MPC",
+  "chargename": "Malaysia Port Charges",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "SURCHARGE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "MPS",
+  "chargename": "MALAYSIA PORT STORAGE",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "MWC",
+  "chargename": "MALAYSIA WASHING CHARGE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CAM",
+  "chargename": "MANIFEST AMENDMENT",
+  "chargetype": "B",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "MFB",
+  "chargename": "Manual Booking Fee",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "MSI",
+  "chargename": "Manual SI Fee",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "ISP",
+  "chargename": "MARITIME SECURITY FEE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IMF",
+  "chargename": "MBL FACILITATION FEE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "MIS",
+  "chargename": "MISCELLANOUS EXPORT",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "MND",
+  "chargename": "NAV AIDS SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "AUXILLARY CHARGES",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "NEW",
+  "chargename": "New CHARGE",
+  "chargetype": "B",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "NCS",
+  "chargename": "NHAVA SHEVA CONTINGENCY SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "NOS",
+  "chargename": "NHAVA SHEVA OPERATIONAL SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "NIL",
+  "chargename": "NIL SURCHARGES - NOT TO BE USED",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "OTHERS",
+  "defpaymode": "E"
+ },
+ {
+  "chargecode": "CNM",
+  "chargename": "NOMINATION CHARGE",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "NAM",
+  "chargename": "NORTH AMERICA MULTIPLE STOPS",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "OFR",
+  "chargename": "OCEAN FREIGHT",
+  "chargetype": "B",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "FRT",
+  "chargename": "OCEAN FREIGHT",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "ODF",
+  "chargename": "OFF DOCK",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "ODT",
+  "chargename": "OFF DOCK HANDLING",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "ANCILLARY RECOVERY",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "ONC",
+  "chargename": "ON CARRIAGE TRUCK",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "RAILRECOVERY",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "PNC",
+  "chargename": "ON CARRIAGE TRUCK - PREPAID PREMIUM",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "ROADRECOVERY",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "OTH",
+  "chargename": "ONLINE TERMINAL HANDLING",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "OOG",
+  "chargename": "OOG Additional Charges",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "OCR",
+  "chargename": "OPERATIONAL COST RECOVERY SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "OTHERS",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "EVD",
+  "chargename": "OPERATIONAL EMERGENCY ADJ.FACTOR",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "OSF",
+  "chargename": "OPERATIONS SURCHARGE FEE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "OPS",
+  "chargename": "OPTIONAL CHARGE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "ORC",
+  "chargename": "ORIGIN RECEIVING CHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "OHA",
+  "chargename": "OVER HEIGHT  SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "OWS",
+  "chargename": "OVER WEIGHT FREIGHT SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "OWP",
+  "chargename": "OVER WEIGHT PENALTY CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "OWC",
+  "chargename": "Over Weight Surcharges",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CDC",
+  "chargename": "OVERTIME DETENTION CHARGE",
+  "chargetype": "B",
+  "chargemode": "M",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CSH",
+  "chargename": "OVERTIME STORAGE CHARGE",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "PCS",
+  "chargename": "PANAMA CANAL SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "PSS",
+  "chargename": "PEAK SEASON SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "PPD",
+  "chargename": "PENANG PORT ADDITIONAL   DISCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "RAILRECOVERY",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "PPL",
+  "chargename": "PENANG PORT ADDITIONAL  LOAD",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "PED",
+  "chargename": "Philippines Empty Handling Charge at Destination",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "POS",
+  "chargename": "PIPAVAV OPERATIONAL SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "PRS",
+  "chargename": "PIRACY RISK SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "ISL",
+  "chargename": "PORT CHARGES",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "POR",
+  "chargename": "PORT CHARGES INDIA",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "PGD",
+  "chargename": "PORT CONGESTION IMPORT TS NZAKL - DESTINATION",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "IHK",
+  "chargename": "PORT HANDLING CHARGES - KOLKATA",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "PAD",
+  "chargename": "PORT OF DISCHARGE ADDITIONAL",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "PAL",
+  "chargename": "PORT OF LOADING ADDITIONAL",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CTS",
+  "chargename": "PORT SECURITY CHARGE",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "PSC",
+  "chargename": "PORT STORAGE CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "PSR",
+  "chargename": "PORT STORAGE CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "PTC",
+  "chargename": "PORT TRANSFER CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "WHF",
+  "chargename": "PORT WHARFAGE CHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "PRC",
+  "chargename": "PRE CARRIAGE CHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "PRE",
+  "chargename": "PRECARRIAGE TRUCK",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "ROADRECOVERY",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "RAC",
+  "chargename": "RAC",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "RAD",
+  "chargename": "RAIL ADDITIONAL - DISCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "RAILRECOVERY",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "RAL",
+  "chargename": "RAIL ADDITIONAL - LOAD",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "RAILRECOVERY",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "RFC",
+  "chargename": "RAIL FUEL CHARGE (ONLY FOR CANADA)",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "RAILRECOVERY",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "RRE",
+  "chargename": "RAIL recovery",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "RAILRECOVERY",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "PRD",
+  "chargename": "RAIL RECOVERY CHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "RAILRECOVERY",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "RRD",
+  "chargename": "RAIL RECOVERY CHARGE  - DISCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "RAILRECOVERY",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "RRL",
+  "chargename": "RAIL RECOVERY CHARGE  - LOAD",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "RAILRECOVERY",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "RTS",
+  "chargename": "RAIL TRANSFER CHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "DRC",
+  "chargename": "RE NOMINATION CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CEH",
+  "chargename": "RE-HANDLING FEE",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "RA1",
+  "chargename": "Recovery adjustment 1-2",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "RCS",
+  "chargename": "REEFER CONSUMPTION CHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "REF",
+  "chargename": "Reefer Plugin Charges",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "RCR",
+  "chargename": "REGIONAL COST RECOVERY",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "RPT",
+  "chargename": "RIVER PLATE TOLL",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "RSC",
+  "chargename": "RIYADH SHIFTING CHARGES",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "ROE",
+  "chargename": "Road Recovery",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "ROADRECOVERY",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SST",
+  "chargename": "sales and service tax",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "ABC",
+  "chargename": "Sample Test",
+  "chargetype": "B",
+  "chargemode": "M",
+  "chargegrp": "RAILRECOVERY",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "AAA",
+  "chargename": "Sample Test",
+  "chargetype": "N",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "AAB",
+  "chargename": "Sample Test",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "AAC",
+  "chargename": "Sample Test",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "AAD",
+  "chargename": "Sample Test",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "SAN",
+  "chargename": "SANITARY INSPECTION",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SAT",
+  "chargename": "SAT TEST",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "E"
+ },
+ {
+  "chargecode": "SPA",
+  "chargename": "SAUDI PORT ADDITIONAL",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SPC",
+  "chargename": "SAUDI PORT CONGESTION",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "SLC",
+  "chargename": "Sea Freight Charge",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SCH",
+  "chargename": "SEAL CHARGES",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SLF",
+  "chargename": "SEAL FEE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "AUXILLARY CHARGES",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SES",
+  "chargename": "SEAL SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SEC",
+  "chargename": "SECURITY CHARGES",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SDD",
+  "chargename": "SECURITY DEVIATION AND DISRUPTION SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SCS",
+  "chargename": "SECURITY SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CEE",
+  "chargename": "SECURITY SURCHARGE FOR AMERICA",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SEE",
+  "chargename": "SEE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SER",
+  "chargename": "SERVICE TAX",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "STA",
+  "chargename": "SERVICE TAX  BUSINESS AUXILIARY",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "STS",
+  "chargename": "SERVICE TAX  BUSINESS SUPPORT",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SPD",
+  "chargename": "SHANGHAI PORRT SURCHARGE DISCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SPS",
+  "chargename": "SHANGHAI PORT SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SAD",
+  "chargename": "SINGAPORE - ADVANCEMENT CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SFR",
+  "chargename": "SINGAPORE - AGENCY FREIGHT CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SCP",
+  "chargename": "SINGAPORE - CHANGING PORT MARK",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SDM",
+  "chargename": "SINGAPORE - DEMURRAGE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SLL",
+  "chargename": "SINGAPORE - LIFT ON LIFT OFF CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SMA",
+  "chargename": "SINGAPORE - MANIFEST AMENDMENT",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "STV",
+  "chargename": "SINGAPORE - OVERWEIGHT SURCHARGE, WHARFAGE LOAD & RESTOW",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SRF",
+  "chargename": "SINGAPORE - REEFER CONNECTION/DISCONNECTION",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SRN",
+  "chargename": "SINGAPORE - RENOMINATION CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SRE",
+  "chargename": "SINGAPORE - SHIFTING/LAND & RESHIP",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SSF",
+  "chargename": "SINGAPORE - SURVEY FEES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SAF",
+  "chargename": "SINGAPORE AGENCY & ADMIN FEE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SSJ",
+  "chargename": "SINGAPORE JURONG PORT STEVEDORING CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "STH",
+  "chargename": "SINGAPORE NON MANIFESTED THC",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SSP",
+  "chargename": "SINGAPORE PSA STEVEDORING CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SSS",
+  "chargename": "SINGAPORE SEAL SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SEN",
+  "chargename": "SIPCOT ENTRANCE CHARGE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SCD",
+  "chargename": "SOC DEMURRAGE/DETENTION CHARGE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "EQP",
+  "chargename": "SPECIAL EQUIPMENT  SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "STC",
+  "chargename": "SPECIAL TREATMENT CHARGE                ",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CSF",
+  "chargename": "SPLITING BL FEE",
+  "chargetype": "B",
+  "chargemode": "M",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "IDA",
+  "chargename": "STAMP DUTY ADMIN CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "E"
+ },
+ {
+  "chargecode": "SFE",
+  "chargename": "STANARAD RATE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "LSA",
+  "chargename": "STORAGE CHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "STP",
+  "chargename": "STRIPPING CHARGE",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "STR",
+  "chargename": "STRIPPING CHARGES",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SSC",
+  "chargename": "STUFFING  STRIPPING CHARGES STUFFING  STUFFING  STUFFING",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "STF",
+  "chargename": "STUFFING CHARGES",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SCC",
+  "chargename": "SUEZ CANAL SURCHARGE                    ",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SUM",
+  "chargename": "SUMATRA FEES",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "SUR",
+  "chargename": "SURRENDER FEES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SBF",
+  "chargename": "SWITCH BL FEE",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "TAC",
+  "chargename": "TANZANIA - ADVANCEMENT CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "TDT",
+  "chargename": "TDFT",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CTX",
+  "chargename": "TELEX RELEASE FEE",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "TVC",
+  "chargename": "TEMPERATURE VARIANCE CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "PHD",
+  "chargename": "TERMINAL HANDLING",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "TERMINAL HANDLING",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "THD",
+  "chargename": "TERMINAL HANDLING  DISCHARGE PORT",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "THC",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "THL",
+  "chargename": "TERMINAL HANDLING  LOAD PORT",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "TDC",
+  "chargename": "TERMINAL HANDLING CHARGE - DESTINATION",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "TERMINAL HANDLING",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "TOC",
+  "chargename": "TERMINAL HANDLING CHARGE - ORIGIN",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "TERMINAL HANDLING",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "THC",
+  "chargename": "Terminal handling cost (Discharge)",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "TERMINAL HANDLING",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "THF",
+  "chargename": "TERMINAL HANDLING DIFFERENTIAL",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "TERMINAL HANDLING",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "TRC",
+  "chargename": "TERMINAL RECEIVING CHARGE (USA)",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "TSN",
+  "chargename": "TERMINAL SECURITY CHARGE NEW YORK",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "ROADRECOVERY",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "TSA",
+  "chargename": "TERMINAL SECURITY CHARGES ISPS",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "CHD",
+  "chargename": "TEST",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "GHI",
+  "chargename": "test",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "DEM RECOVERY",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "TES",
+  "chargename": "TEST CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "TERMINAL HANDLING",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "SET",
+  "chargename": "TEST12342342353453453453444444",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "ANCILLARY RECOVERY",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "GRE",
+  "chargename": "TESTING",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "EST",
+  "chargename": "TESTING",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "AGENCY RECOVERY",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "KAF",
+  "chargename": "testing",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "TIC",
+  "chargename": "TICA SURCHARGE",
+  "chargetype": "B",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "TLD",
+  "chargename": "TIMOR LESTE HANDLING FEE IMPORT",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "AUXILLARY CHARGES",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "TLF",
+  "chargename": "TOLL FEE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "TLE",
+  "chargename": "TOLL FEE - NHAVASHEVA EXPORT",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "TLI",
+  "chargename": "TOLL FEE - NHAVASHEVA IMPORT",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "PLI",
+  "chargename": "TOLL FEE - NHAVASHEVA IMPORT- PREPAID PREMIUM",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "PTD",
+  "chargename": "TONNAGE DUES",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "AUXILLARY CHARGES",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "TST",
+  "chargename": "TRANSFER CHARGE",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "TSH",
+  "chargename": "TRANSHIPMENT HANDLING CHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "DTT",
+  "chargename": "TRANSPORTATION",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "TDS",
+  "chargename": "Transshipment Document Stamp",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "TRI",
+  "chargename": "TRIAXLE ADDITIONAL",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "ROADRECOVERY",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "TLU",
+  "chargename": "TRUCK LOADING AND UNLOADING",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "AGENCY RECOVERY",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "TRU",
+  "chargename": "TRUCKING CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "PRM",
+  "chargename": "TURKISH PRIMAGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "IFS",
+  "chargename": "US INLAND FUEL SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "ROADRECOVERY",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "SEU",
+  "chargename": "USA SECURITY SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "USS",
+  "chargename": "USA SECURITY SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "VAL",
+  "chargename": "valuation charge",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "VAT",
+  "chargename": "VALUE ADDED TAX",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "VA1",
+  "chargename": "Value Added Tax",
+  "chargetype": "B",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "VHS",
+  "chargename": "VEHICLE HANDLING SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "VGM",
+  "chargename": "VERIFIED GROSS MANIFEST SURCHARGE CHARGE  MASTER FOR EXPORT",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "E"
+ },
+ {
+  "chargecode": "PPC",
+  "chargename": "VESSEL ANCILLARY CHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "AUXILLARY CHARGES",
+  "defpaymode": "C"
+ },
+ {
+  "chargecode": "VFS",
+  "chargename": "VESSEL BUNKER FUEL SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "VSF",
+  "chargename": "Vsf",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "WRS",
+  "chargename": "WAR RISK SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "WTC",
+  "chargename": "WEIGHMENT CHARGES",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "NOT FOR LINE",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "WFO",
+  "chargename": "wfo",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "WGT",
+  "chargename": "WGT",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "WFD",
+  "chargename": "WHARFAGE  DISCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "WFL",
+  "chargename": "WHARFAGE  LOAD",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "WHO",
+  "chargename": "WHARFAGE ORIGIN",
+  "chargetype": "B",
+  "chargemode": "M",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "WNS",
+  "chargename": "WINTER SURCHARGE                        ",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "WHT",
+  "chargename": "With Hold Tax",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "E"
+ },
+ {
+  "chargecode": "WH1",
+  "chargename": "With Holding Tax1",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "WH2",
+  "chargename": "With Holding Tax2",
+  "chargetype": "B",
+  "chargemode": "N",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "WH3",
+  "chargename": "With Holding Tax3",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "WTH",
+  "chargename": "Witholding Tax",
+  "chargetype": "P",
+  "chargemode": "N",
+  "chargegrp": "FREIGHT",
+  "defpaymode": "P"
+ },
+ {
+  "chargecode": "YAS",
+  "chargename": "YEN ADJUSTMENT SURCHARGE",
+  "chargetype": "P",
+  "chargemode": "M",
+  "chargegrp": "OTHERS",
+  "defpaymode": "P"
+ }
+]

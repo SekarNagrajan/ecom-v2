@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-15 15:05)
+// Modified by Sekar Nagarajan (2026-10-18 11:10)
 // Schedule Feature Controller — results only after Search (or landing deep-link)
 
 import { useToast } from "@solverminds/shared-ui/hooks";
@@ -64,6 +64,10 @@ export function useSchedulesController() {
   const [schedules, setSchedules] = useState<ScheduleItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
+  /** Criteria the page was opened with (landing search / deep link); the filter form mirrors them. */
+  const [initialParams] = useState<ScheduleSearchParams | null>(() =>
+    readDeepLinkSearchParams(),
+  );
 
   const [selectedVessel, setSelectedVessel] =
     useState<VesselParticulars | null>(null);
@@ -93,11 +97,10 @@ export function useSchedulesController() {
   }
 
   useEffect(() => {
-    const deepLink = readDeepLinkSearchParams();
-    if (!deepLink) {
+    if (!initialParams) {
       return;
     }
-    void fetchSchedules(deepLink);
+    void fetchSchedules(initialParams);
     // Deep-link bootstrap only — intentional mount-once sync with URL.
     // eslint-disable-next-line react-hooks/exhaustive-deps -- mount deep-link only
   }, []);
@@ -174,6 +177,7 @@ export function useSchedulesController() {
   };
 
   return {
+    initialParams,
     viewMode,
     setViewMode,
     schedules,

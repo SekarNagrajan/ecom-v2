@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-11 14:30)
+// Modified by Sekar Nagarajan (2026-10-18 10:30)
 import { AppButton } from "@solverminds/shared-ui";
 import {
   AutoComplete,
@@ -17,6 +17,7 @@ import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { useEquipmentTypes, usePortSearch } from "../api/landing.queries";
+import { equipmentLabelOf } from "../utils/landing-search";
 import type { RatesSearchForm } from "../types/landing.types";
 import { ImageCaptcha } from "./ImageCaptcha";
 
@@ -74,7 +75,7 @@ export function RatesSearchTab({
     useEquipmentTypes();
   const eqpOptions = equipmentTypes.map((e) => ({
     value: e.code,
-    label: e.name,
+    label: equipmentLabelOf(e),
   }));
 
   const handleSwap = () => {

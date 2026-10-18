@@ -1,11 +1,12 @@
-// Modified by Sekar Nagarajan (2026-09-15 15:00)
-// Schedules API — mock search over Direct + Transshipment catalogues
+// Modified by Sekar Nagarajan (2026-10-17 00:40)
+// Schedules API — mock search computed from the VSS / Commercial fixtures (schedules.bridge)
 
 import {
-  MOCK_SCHEDULES,
-  MOCK_VESSELS,
-} from "../mocks/schedules.mock";
+  getVesselDetails,
+  searchSchedules,
+} from "../../../mocks/fixture-api/bridges/schedules.bridge";
 import type {
+  CarbonCalculationResult,
   ScheduleItem,
   ScheduleSearchParams,
   ShareScheduleMailInput,
@@ -34,59 +35,10 @@ export const schedulesApi = {
     await new Promise((resolve) => setTimeout(resolve, 300)); // simulated latency
 
     if (!params) {
-      return sortSchedules(MOCK_SCHEDULES);
+      return [];
     }
 
-    let results = [...MOCK_SCHEDULES];
-
-    if (params.searchType === "POINT_TO_POINT") {
-      if (params.polCode) {
-        const pol = params.polCode.toLowerCase();
-        const matched = results.filter(
-          (s) =>
-            s.polPortId.toLowerCase().includes(pol) ||
-            s.polPortName.toLowerCase().includes(pol),
-        );
-        if (matched.length > 0) results = matched;
-      }
-      if (params.podCode) {
-        const pod = params.podCode.toLowerCase();
-        const matched = results.filter(
-          (s) =>
-            s.podPortId.toLowerCase().includes(pod) ||
-            s.podPortName.toLowerCase().includes(pod),
-        );
-        if (matched.length > 0) results = matched;
-      }
-    } else if (params.searchType === "VESSEL_SCHEDULE" && params.vesselCode) {
-      const query = params.vesselCode.toLowerCase();
-      const matched = results.filter(
-        (s) =>
-          s.vesselName.toLowerCase().includes(query) ||
-          s.vesselCode.toLowerCase().includes(query) ||
-          s.legs.some(
-            (leg) =>
-              leg.vesselName.toLowerCase().includes(query) ||
-              leg.vesselCode.toLowerCase().includes(query),
-          ),
-      );
-      if (matched.length > 0) results = matched;
-    } else if (params.searchType === "PORT_SCHEDULE" && params.portCode) {
-      const query = params.portCode.toLowerCase();
-      const matched = results.filter(
-        (s) =>
-          s.polPortId.toLowerCase().includes(query) ||
-          s.podPortId.toLowerCase().includes(query) ||
-          s.legs.some(
-            (leg) =>
-              leg.polPortId.toLowerCase().includes(query) ||
-              leg.podPortId.toLowerCase().includes(query),
-          ),
-      );
-      if (matched.length > 0) results = matched;
-    }
-
-    return sortSchedules(results);
+    return sortSchedules(searchSchedules(params));
   },
 
   /**
@@ -94,7 +46,7 @@ export const schedulesApi = {
    */
   async getVesselDetails(vesselCode: string): Promise<VesselParticulars | null> {
     await new Promise((resolve) => setTimeout(resolve, 200));
-    return MOCK_VESSELS[vesselCode] || MOCK_VESSELS.AGEX;
+    return getVesselDetails(vesselCode);
   },
 
   /** POST /api/v1/schedules/share-mail — share sailing results by email */
@@ -113,3 +65,32 @@ export const schedulesApi = {
     return json.data;
   },
 };
+
+/**
+ * CO2e estimate for the Carbon modal — UI formula over the sailing's great-circle distance
+ * (emission factor and TTW/WTT split are constants, not fixture data).
+ */
+export function calculateCarbonEmissions(
+  routeLabel: string,
+  qty: number,
+  weightTons: number,
+  distanceKm: number,
+): CarbonCalculationResult {
+  const effectiveWeight = weightTons > 0 ? weightTons : qty * 12;
+  const emissionFactorGramsPerTonKm = 8.5;
+  const totalCo2eGrams =
+    effectiveWeight * distanceKm * emissionFactorGramsPerTonKm;
+  const totalCo2eTons = parseFloat((totalCo2eGrams / 1_000_000).toFixed(2));
+  const ttwCo2eTons = parseFloat((totalCo2eTons * 0.82).toFixed(2));
+  const wttCo2eTons = parseFloat((totalCo2eTons * 0.18).toFixed(2));
+
+  return {
+    routeLabel,
+    containerQty: qty,
+    weightTons: effectiveWeight,
+    distanceKm,
+    totalCo2eTons,
+    ttwCo2eTons,
+    wttCo2eTons,
+  };
+}

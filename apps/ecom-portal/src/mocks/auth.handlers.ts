@@ -1,44 +1,37 @@
-// Modified by Sekar Nagarajan (2026-08-25 13:00)
+// Modified by Sekar Nagarajan (2026-10-16 23:35)
 import { delay, http, HttpResponse } from "msw";
+import type { LoginForm, LoginSuccessResponse } from "../features/auth/types/auth.types";
+import { registerMockToken } from "./auth-token-registry";
 import {
-    LoginForm,
-    LoginSuccessResponse,
-} from "../features/auth/types/auth.types";
+  activateUser,
+  buildCustomerProfile,
+  customerToken,
+  DEMO_BASELINE_CAPABILITIES,
+  resetUserPassword,
+  resolveCustomerLogin,
+} from "./fixture-api/bridges/users.bridge";
 
+/**
+ * Customer auth served from the SQL-extracted fixtures:
+ * - `test` / `test` → the first ecomuserdetails row of customer 20001374 (joined to eCom_Reg_Details);
+ *   its capabilities are unioned with DEMO_BASELINE_CAPABILITIES so every demo route stays reachable.
+ * - any other fixture `users.loginname` (or User_Email) with ANY non-empty password → that user, with the
+ *   capabilities its MenuId grants (see REFNO_TO_CAPABILITY in fixture-api/bridges/menus.bridge.ts).
+ * - unknown login → 401 with the same body as before.
+ * NOTE: src/mocks/landing.handlers.ts also registers POST /api/auth/login and is listed before this file
+ * in browser.ts, so in the browser its pattern-matching login currently answers first.
+ */
 export const authHandlers = [
-  // 1. Mock Login API
+  // 1. Login
   http.post("/api/auth/login", async ({ request }) => {
     await delay(800); // Simulate network latency
 
     const body = (await request.json()) as LoginForm;
-
-    // Enforce test credentials: test / test
-    if (body.userName === "test" && body.password === "test") {
-      const successResponse: LoginSuccessResponse = {
-        token: "mock-jwt-token-xyz-123",
-        user: {
-          id: "user_123",
-          name: "Test User",
-          email: "test@example.com",
-          company: "Test Company",
-          role: "CUSTOMER",
-          // Modified by Sekar Nagarajan (2026-08-31 17:03) — include DO so Delivery Order route is reachable
-          capabilities: [
-            "VIEW_DASHBOARD",
-            "CREATE_BOOKING",
-            "BL",
-            "SI",
-            "BKG",
-            "DO",
-            "CRO",
-            "ARN",
-            "STMT",
-            "CO2",
-            "VGM",
-          ],
-        },
-      };
-
+    const resolved = body.password ? resolveCustomerLogin(body.userName) : null;
+    if (resolved && (resolved.demo ? body.password === "test" || body.password.length > 0 : true)) {
+      const user = buildCustomerProfile(resolved.user, resolved.details, resolved.demo ? DEMO_BASELINE_CAPABILITIES : []);
+      const successResponse: LoginSuccessResponse = { token: customerToken(resolved.user), user };
+      registerMockToken(successResponse.token, user);
       return HttpResponse.json({ data: successResponse });
     }
 
@@ -49,13 +42,12 @@ export const authHandlers = [
     );
   }),
 
-  // 2. Mock Activation API
+  // 2. Activation — the token is the registration e-mail / reg_no; a known user is marked valid in-session
   http.post("/api/auth/activate", async ({ request }) => {
     await delay(1500); // Simulate network latency
 
     const body = (await request.json()) as { token: string };
 
-    // Simple validation: Any token that isn't 'invalid' or empty works
     if (!body.token || body.token === "invalid") {
       return HttpResponse.json(
         { message: "Invalid or expired activation link." },
@@ -63,22 +55,19 @@ export const authHandlers = [
       );
     }
 
+    activateUser(body.token);
     return HttpResponse.json({
       message: "Account successfully activated!",
       status: "success",
     });
   }),
 
-  // 3. Mock Forgot Password API
+  // 3. Forgot password — resets the lock counters of a known login; unknown logins get the same answer (no enumeration)
   http.post("/api/auth/forgot-password", async ({ request }) => {
     await delay(1200); // Simulate network latency
 
-    const body = (await request.json()) as {
-      userName: string;
-      captcha: string;
-    };
+    const body = (await request.json()) as { userName: string; captcha: string };
 
-    // Simple validation
     if (!body.userName || !body.captcha) {
       return HttpResponse.json(
         { message: "Username and captcha are required." },
@@ -86,14 +75,9 @@ export const authHandlers = [
       );
     }
 
-    if (body.captcha.toLowerCase() !== "abcd") {
-      // Allow any captcha for test purposes, except if it's strictly empty or invalid in a specific way.
-      // We'll just accept anything for the mock unless we want to enforce 'abcd'. Let's accept anything.
-    }
-
+    resetUserPassword(body.userName);
     return HttpResponse.json({
-      message:
-        "Password reset instructions have been sent to your registered email.",
+      message: "Password reset instructions have been sent to your registered email.",
       status: "success",
     });
   }),

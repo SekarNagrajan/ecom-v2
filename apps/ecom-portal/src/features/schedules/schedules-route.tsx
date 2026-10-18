@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-15 15:05)
+// Modified by Sekar Nagarajan (2026-10-18 11:15)
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { Card, Space, Spin, Typography } from "antd";
@@ -39,6 +39,7 @@ export const SchedulesRoute: React.FC = () => {
     schedules,
     isLoading,
     hasSearched,
+    initialParams,
     handleSearch,
     handleResetSearch,
     handleViewVessel,
@@ -92,6 +93,7 @@ export const SchedulesRoute: React.FC = () => {
         />
 
         <ScheduleSearchHost
+          params={initialParams}
           onSearch={handleSearch}
           onReset={handleResetSearch}
           isLoading={isLoading}

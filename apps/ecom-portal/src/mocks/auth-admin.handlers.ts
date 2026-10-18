@@ -1,98 +1,93 @@
-// Modified by Sekar Nagarajan (2026-08-27 12:20)
+// Modified by Sekar Nagarajan (2026-10-16 23:35)
+import type { UserProfile } from '@solverminds/auth';
 import { http, HttpResponse } from 'msw';
+import type { LoginEntryType } from '../features/auth/types/auth.types';
+import { bearerToken, bearerUser, registerMockToken, resolveMockToken } from './auth-token-registry';
+import { menuCategories } from './fixture-api/bridges/menus.bridge';
 import {
+  adminToken,
+  buildAdminProfile,
   buildImpersonatedUser,
-  MOCK_CUSTOMER_LIST,
-  MOCK_IMPERSONATION_ADMIN,
-  MOCK_MENU_CATEGORIES,
-  MOCK_SYSTEM_ADMIN,
-  MOCK_TOKEN_USER_MAP,
-  MOCK_VENDOR_ADMIN,
-  registerMockToken,
-} from './auth-admin.mock-data';
+  customerAccounts,
+  defaultAdminAccount,
+  findAdminAccount,
+} from './fixture-api/bridges/users.bridge';
+
+/**
+ * Admin / vendor / impersonation auth served from ecom_adminuser_details + EcomAdminUser (any password).
+ * The entry point (cpanel | eadmin | admin) decides the role, as the legacy LoginAction did.
+ */
+
+/** Token → the admin profile before impersonation, so exit-impersonation can restore it. */
+const adminBaseByToken = new Map<string, UserProfile>();
+
+function adminFor(request: Request, entryType: LoginEntryType, userType: 'A' | 'C'): { token: string; user: UserProfile } | null {
+  const token = bearerToken(request);
+  const current = resolveMockToken(token);
+  if (token && current) return { token, user: adminBaseByToken.get(token) ?? current };
+  const account = defaultAdminAccount(userType);
+  if (!account) return null;
+  const fallbackToken = adminToken(entryType, account);
+  const user = buildAdminProfile(account, entryType);
+  registerMockToken(fallbackToken, user);
+  return { token: fallbackToken, user };
+}
 
 export const authAdminHandlers = [
   // POST /api/auth/admin-login
   http.post('/api/auth/admin-login', async ({ request }) => {
-    const body = (await request.json()) as {
-      userId: string;
-      password: string;
-      entryType: string;
-    };
-    const u = body.userId.toLowerCase().trim();
-
-    if (u === 'invalid' || body.password === '') {
-      return HttpResponse.json(
-        { message: 'Invalid credentials' },
-        { status: 401 },
-      );
+    const body = (await request.json()) as { userId: string; password: string; entryType: string };
+    const entryType = body.entryType as LoginEntryType;
+    if (!['cpanel', 'eadmin', 'admin'].includes(entryType)) {
+      return HttpResponse.json({ message: 'Unknown entry type' }, { status: 400 });
     }
 
-    if (body.entryType === 'cpanel') {
-      return HttpResponse.json({ data: MOCK_SYSTEM_ADMIN });
+    const account = body.password ? findAdminAccount(body.userId) : null;
+    if (!account) {
+      return HttpResponse.json({ message: 'Invalid credentials' }, { status: 401 });
     }
 
-    if (body.entryType === 'eadmin') {
-      return HttpResponse.json({ data: MOCK_VENDOR_ADMIN });
-    }
-
-    if (body.entryType === 'admin') {
-      return HttpResponse.json({ data: MOCK_IMPERSONATION_ADMIN });
-    }
-
-    return HttpResponse.json(
-      { message: 'Unknown entry type' },
-      { status: 400 },
-    );
-  }),
-
-  // GET /api/auth/me — session rehydration for admin/vendor/impersonation tokens
-  // Customer tokens (mock-jwt-tenant-*, mock-jwt-superuser-*) are handled by
-  // the landing.handlers.ts /api/auth/me handler if one exists; otherwise
-  // MSW will fall through to the next matching handler.
-  http.get('/api/auth/me', ({ request }) => {
-    const authHeader = request.headers.get('Authorization');
-    const token = authHeader?.replace('Bearer ', '');
-
-    if (!token) {
-      return HttpResponse.json(
-        { message: 'Unauthorized' },
-        { status: 401 },
-      );
-    }
-
-    const user = MOCK_TOKEN_USER_MAP[token];
-    if (user) {
-      return HttpResponse.json({ data: { user } });
-    }
-
-    return HttpResponse.json(
-      { message: 'Invalid or expired token' },
-      { status: 401 },
-    );
-  }),
-
-  // GET /api/admin/customers — customer list for impersonation picker
-  http.get('/api/admin/customers', () => {
-    return HttpResponse.json({ data: MOCK_CUSTOMER_LIST });
-  }),
-
-  // POST /api/auth/impersonate — switch to customer context
-  http.post('/api/auth/impersonate', async ({ request }) => {
-    const body = (await request.json()) as { custCode: string };
-    const user = buildImpersonatedUser(body.custCode);
-    return HttpResponse.json({ data: { user } });
-  }),
-
-  // POST /api/auth/exit-impersonation — return to admin context
-  http.post('/api/auth/exit-impersonation', () => {
+    const token = adminToken(entryType, account);
+    const user = buildAdminProfile(account, entryType);
+    registerMockToken(token, user);
+    adminBaseByToken.set(token, user);
     return HttpResponse.json({
-      data: { user: MOCK_SYSTEM_ADMIN.user },
+      data: entryType === 'admin' ? { token, user, customerList: customerAccounts() } : { token, user },
     });
   }),
 
-  // GET /api/config/menu-access — full menu category map
-  http.get('/api/config/menu-access', () => {
-    return HttpResponse.json({ data: MOCK_MENU_CATEGORIES });
+  // GET /api/auth/me — session rehydration for every mock token (customer, admin, vendor, impersonation)
+  http.get('/api/auth/me', ({ request }) => {
+    if (!bearerToken(request)) {
+      return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    }
+    const user = bearerUser(request);
+    if (user) return HttpResponse.json({ data: { user } });
+    return HttpResponse.json({ message: 'Invalid or expired token' }, { status: 401 });
   }),
+
+  // GET /api/admin/customers — customer list for the impersonation picker ← eCom_Reg_Details / ecomuserdetails codes
+  http.get('/api/admin/customers', () => HttpResponse.json({ data: customerAccounts() })),
+
+  // POST /api/auth/impersonate — switch the admin session to a customer context
+  http.post('/api/auth/impersonate', async ({ request }) => {
+    const body = (await request.json()) as { custCode: string };
+    const admin = adminFor(request, 'admin', 'C');
+    if (!admin) return HttpResponse.json({ message: 'No admin account in fixtures' }, { status: 404 });
+    const user = buildImpersonatedUser(admin.user, body.custCode);
+    adminBaseByToken.set(admin.token, admin.user);
+    registerMockToken(admin.token, user);
+    return HttpResponse.json({ data: { user } });
+  }),
+
+  // POST /api/auth/exit-impersonation — return to the admin context
+  http.post('/api/auth/exit-impersonation', ({ request }) => {
+    const admin = adminFor(request, 'cpanel', 'A');
+    if (!admin) return HttpResponse.json({ message: 'No admin account in fixtures' }, { status: 404 });
+    registerMockToken(admin.token, admin.user);
+    return HttpResponse.json({ data: { user: admin.user } });
+  }),
+
+  // GET /api/config/menu-access — capability → D | P from MenuRegistration.Category
+  http.get('/api/config/menu-access', () => HttpResponse.json({ data: menuCategories() })),
 ];

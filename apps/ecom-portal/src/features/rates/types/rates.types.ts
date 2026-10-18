@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-11 16:25)
+// Modified by Sekar Nagarajan (2026-10-18 10:30)
 
 export interface TariffDTO {
   id: string;
@@ -87,6 +87,8 @@ export interface TariffFilters {
   dischPort?: string;
   eqpType?: string;
   commodity?: string;
+  /** Planned shipment date: only tariffs valid on that day are returned. */
+  date?: string;
 }
 
 export interface SurchargeFilters {

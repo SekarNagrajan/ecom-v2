@@ -1,0 +1,44 @@
+[
+ {
+  "id": 12,
+  "MenuName": "Admin",
+  "link": "http://lrpweb-hkhq16.emiratesline.com/video/264",
+  "logintype": "A",
+  "status": "A"
+ },
+ {
+  "id": 11,
+  "MenuName": "VGM",
+  "link": "http://lrpweb-hkhq16.emiratesline.com/video/263",
+  "logintype": "C",
+  "status": "A"
+ },
+ {
+  "id": 10,
+  "MenuName": "Registration",
+  "link": "http://lrpweb-hkhq16.emiratesline.com/video/256",
+  "logintype": "C",
+  "status": "A"
+ },
+ {
+  "id": 9,
+  "MenuName": "Shipping Instruction",
+  "link": "http://lrpweb-hkhq16.emiratesline.com/video/260",
+  "logintype": "C",
+  "status": "A"
+ },
+ {
+  "id": 8,
+  "MenuName": "Bill of Lading",
+  "link": "http://lrpweb-hkhq16.emiratesline.com/video/262",
+  "logintype": "C",
+  "status": "A"
+ },
+ {
+  "id": 7,
+  "MenuName": "Booking",
+  "link": "http://lrpweb-hkhq16.emiratesline.com/video/261",
+  "logintype": "C",
+  "status": "A"
+ }
+]

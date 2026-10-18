@@ -1,0 +1,2102 @@
+[
+ {
+  "depot": "AEJEADDDP",
+  "description": "JEBEL ALI DEPOT",
+  "portcode": "AEJEA",
+  "portname": "JEBEL ALI",
+  "type": null
+ },
+ {
+  "depot": "AEJEADDPW",
+  "description": "DP WORLD JEBEL ALI",
+  "portcode": "AEJEA",
+  "portname": "JEBEL ALI",
+  "type": null
+ },
+ {
+  "depot": "AEJEADEPO",
+  "description": "JABEL ALI DEPOT",
+  "portcode": "AEJEA",
+  "portname": "JEBEL ALI, UAE",
+  "type": null
+ },
+ {
+  "depot": "AEJEADMEC",
+  "description": "MIDDLE EAST CONTAINER REPAIR CO LLC",
+  "portcode": "AEJEA",
+  "portname": "JEBEL ALI",
+  "type": null
+ },
+ {
+  "depot": "AEJEARH",
+  "description": "AEJEARH",
+  "portcode": "AEJEA",
+  "portname": "JEBEL ALI, UAE",
+  "type": null
+ },
+ {
+  "depot": "QUANT11111",
+  "description": "QUANT11111",
+  "portcode": "AEJEA",
+  "portname": "JEBEL ALI",
+  "type": null
+ },
+ {
+  "depot": "AESHJDDP",
+  "description": "SHARJAH DEPOT",
+  "portcode": "AESHJ",
+  "portname": "SHARJAH",
+  "type": null
+ },
+ {
+  "depot": "AESHJRAH",
+  "description": "SHARJAH RAILHEADS",
+  "portcode": "AESHJ",
+  "portname": "SHARJAH",
+  "type": null
+ },
+ {
+  "depot": "AESHJRLHD",
+  "description": "SHARJAH RAILHEAD",
+  "portcode": "AESHJ",
+  "portname": "SHARJAH",
+  "type": null
+ },
+ {
+  "depot": "AESHJTER01",
+  "description": "AESHJTER01",
+  "portcode": "AESHJ",
+  "portname": "SHARJAH",
+  "type": null
+ },
+ {
+  "depot": "AESHJWAH01",
+  "description": "SHARJAH WAREH",
+  "portcode": "AESHJ",
+  "portname": "SHARJAH",
+  "type": null
+ },
+ {
+  "depot": "AUMELACFS",
+  "description": "ACFS WEBB DOCK",
+  "portcode": "AUMEL",
+  "portname": "MELBOURNE",
+  "type": null
+ },
+ {
+  "depot": "AUMELDACF",
+  "description": "ACFS ERAIL VIC",
+  "portcode": "AUMEL",
+  "portname": "MELBOURNE",
+  "type": null
+ },
+ {
+  "depot": "AUMELDACS",
+  "description": "ALLIED CONT SERVICES",
+  "portcode": "AUMEL",
+  "portname": "MELBOURNE",
+  "type": null
+ },
+ {
+  "depot": "AUMELDDCC",
+  "description": "CC CONTAINERS",
+  "portcode": "AUMEL",
+  "portname": "MELBOURNE",
+  "type": null
+ },
+ {
+  "depot": "AUMELDDCH",
+  "description": "CHALMERS",
+  "portcode": "AUMEL",
+  "portname": "MELBOURNE",
+  "type": null
+ },
+ {
+  "depot": "AUMELDDDP",
+  "description": "DEPOT",
+  "portcode": "AUMEL",
+  "portname": "MELBOURNE",
+  "type": null
+ },
+ {
+  "depot": "AUMELDDIN",
+  "description": "INTERPORT SERVICES",
+  "portcode": "AUMEL",
+  "portname": "MELBOURNE",
+  "type": null
+ },
+ {
+  "depot": "AUMELDDJR",
+  "description": "JAMES ROLFE T'PT'",
+  "portcode": "AUMEL",
+  "portname": "MELBOURNE",
+  "type": null
+ },
+ {
+  "depot": "AUMELDDNR",
+  "description": "PACIFIC NATIONAL MELBOURNE FREIGHT TERMINAL",
+  "portcode": "AUMEL",
+  "portname": "MELBOURNE",
+  "type": null
+ },
+ {
+  "depot": "AUMELDFFD",
+  "description": "FARM FRESH DISTBN.",
+  "portcode": "AUMEL",
+  "portname": "MELBOURNE",
+  "type": null
+ },
+ {
+  "depot": "AUMELDGFC",
+  "description": "GREATING FORTUNE CONTAINER SERVICES (AUSTRALIA) PTY LTD",
+  "portcode": "AUMEL",
+  "portname": "MELBOURNE",
+  "type": null
+ },
+ {
+  "depot": "AUMELDHNZ",
+  "description": "HEINZ",
+  "portcode": "AUMEL",
+  "portname": "MELBOURNE",
+  "type": null
+ },
+ {
+  "depot": "AUMELDMCP",
+  "description": "MELBOURNE CONTAINER PARK",
+  "portcode": "AUMEL",
+  "portname": "MELBOURNE",
+  "type": null
+ },
+ {
+  "depot": "AUMELDMCS",
+  "description": "MARITIME CONTR SERV",
+  "portcode": "AUMEL",
+  "portname": "MELBOURNE",
+  "type": null
+ },
+ {
+  "depot": "AUMELDOCS",
+  "description": "OCEANIA CONTAINER SERVICES",
+  "portcode": "AUMEL",
+  "portname": "MELBOURNE",
+  "type": null
+ },
+ {
+  "depot": "AUMELDPMC",
+  "description": "PORT MELBOURNE CONTAINERS",
+  "portcode": "AUMEL",
+  "portname": "MELBOURNE",
+  "type": null
+ },
+ {
+  "depot": "AUMELDPNO",
+  "description": "P&O TRANSPORT",
+  "portcode": "AUMEL",
+  "portname": "MELBOURNE",
+  "type": null
+ },
+ {
+  "depot": "AUMELDPPA",
+  "description": "ACFS APPLETON DEPOT - DEPOT A",
+  "portcode": "AUMEL",
+  "portname": "MELBOURNE",
+  "type": null
+ },
+ {
+  "depot": "AUMELDPPC",
+  "description": "ACFS E-RAIL MELBOURNE",
+  "portcode": "AUMEL",
+  "portname": "MELBOURNE",
+  "type": null
+ },
+ {
+  "depot": "AUMELDQBE",
+  "description": "QUBE HIRE AND SALES",
+  "portcode": "AUMEL",
+  "portname": "MELBOURNE",
+  "type": null
+ },
+ {
+  "depot": "AUMELDSNR",
+  "description": "SUN RICE",
+  "portcode": "AUMEL",
+  "portname": "MELBOURNE",
+  "type": null
+ },
+ {
+  "depot": "AUMELDVCM",
+  "description": "VICTORIAN CONTAINER MANAGEMENT",
+  "portcode": "AUMEL",
+  "portname": "MELBOURNE",
+  "type": null
+ },
+ {
+  "depot": "CNNSADCIM",
+  "description": "CIMC (NANSHA)",
+  "portcode": "CNNSA",
+  "portname": "NANSHA",
+  "type": null
+ },
+ {
+  "depot": "CNNSADDDP",
+  "description": "NANSHA DEPOT",
+  "portcode": "CNNSA",
+  "portname": "NANSHA",
+  "type": null
+ },
+ {
+  "depot": "CNNSADGF2",
+  "description": "GREATING FORTUNE (GUANGZHOU) CONTAINER SERVICE CO LTD NANSHA DEPOT 2",
+  "portcode": "CNNSA",
+  "portname": "NANSHA",
+  "type": null
+ },
+ {
+  "depot": "CNNSADGFN",
+  "description": "GREATING FORTUNE NANSHA",
+  "portcode": "CNNSA",
+  "portname": "NANSHA",
+  "type": null
+ },
+ {
+  "depot": "CNNSADHY2",
+  "description": "HONG YUN LOGISTICS SERVICE CO.,LTD. NANSHA DEPOT 2",
+  "portcode": "CNNSA",
+  "portname": "NANSHA",
+  "type": null
+ },
+ {
+  "depot": "CNNSADHYL",
+  "description": "HONG YUN LOGISTICS SERVICE CO.,LTD. NANSHA DEPOT",
+  "portcode": "CNNSA",
+  "portname": "NANSHA",
+  "type": null
+ },
+ {
+  "depot": "CNNSADNI2",
+  "description": "NICT PHASE #2 TERMINAL DEPOT",
+  "portcode": "CNNSA",
+  "portname": "NANSHA",
+  "type": null
+ },
+ {
+  "depot": "CNNSADNIC",
+  "description": "NICT PHASE #3 TERMINAL DEPOT",
+  "portcode": "CNNSA",
+  "portname": "NANSHA",
+  "type": null
+ },
+ {
+  "depot": "CNSHADP",
+  "description": "SHANGHAI DEPOT",
+  "portcode": "CNSHA",
+  "portname": "SHANGHAI HONGQIAO INTERNATIONAL APT",
+  "type": null
+ },
+ {
+  "depot": "HKHKGDCSL",
+  "description": "CONTAINER SYSTEM LTD",
+  "portcode": "HKHKG",
+  "portname": "HONG KONG",
+  "type": null
+ },
+ {
+  "depot": "HKHKGDDDP",
+  "description": "HONG KONG DEPOT",
+  "portcode": "HKHKG",
+  "portname": "HONG KONG",
+  "type": null
+ },
+ {
+  "depot": "HKHKGDPCL",
+  "description": "PCL CONTAINER SERVICES LIMITED",
+  "portcode": "HKHKG",
+  "portname": "HONG KONG",
+  "type": null
+ },
+ {
+  "depot": "HKHKGDSPC",
+  "description": "SUN POWER CNTR LOGI *DEPOT RT",
+  "portcode": "HKHKG",
+  "portname": "HONG KONG",
+  "type": null
+ },
+ {
+  "depot": "HKHKGDTEC",
+  "description": "TECO C",
+  "portcode": "HKHKG",
+  "portname": "HONG KONG",
+  "type": null
+ },
+ {
+  "depot": "HKHKGDVKC",
+  "description": "VICTORY KIND CONTAINER SERVICE LIMITED",
+  "portcode": "HKHKG",
+  "portname": "HONG KONG",
+  "type": null
+ },
+ {
+  "depot": "INBLRDDDP",
+  "description": "BANGALORE",
+  "portcode": "INBLR",
+  "portname": "BANGALORE, INDIA",
+  "type": null
+ },
+ {
+  "depot": "INBLRDEPOT",
+  "description": "INBLRDEPOT",
+  "portcode": "INBLR",
+  "portname": "BANGALORE BANGALORE BANGALORE",
+  "type": null
+ },
+ {
+  "depot": "INBLRDICD",
+  "description": "ICD BANGALORE",
+  "portcode": "INBLR",
+  "portname": "BANGALORE, INDIA",
+  "type": null
+ },
+ {
+  "depot": "INMAADAAN",
+  "description": "ACT ANNEX",
+  "portcode": "INMAA",
+  "portname": "CHENNAI (EX MADRAS)",
+  "type": null
+ },
+ {
+  "depot": "INMAADACT",
+  "description": "ARIES CONTAINER TERMINAL (ACT-2)",
+  "portcode": "INMAA",
+  "portname": "CHENNAI",
+  "type": null
+ },
+ {
+  "depot": "INMAADBC2",
+  "description": "BAY CONTAINER TERMINAL (BCT-2)",
+  "portcode": "INMAA",
+  "portname": "CHENNAI (EX MADRAS)",
+  "type": null
+ },
+ {
+  "depot": "INMAADBC3",
+  "description": "BAY CONTAINER TERMINAL (BCT-3)",
+  "portcode": "INMAA",
+  "portname": "CHENNAI (EX MADRAS)",
+  "type": null
+ },
+ {
+  "depot": "INMAADBC6",
+  "description": "BAY CONTAINER TERMINAL (BCT-6)",
+  "portcode": "INMAA",
+  "portname": "CHENNAI (EX MADRAS)",
+  "type": null
+ },
+ {
+  "depot": "INMAADCCT",
+  "description": "CALYX CONTAINER TERMINALS PVT LTD (EMPTY DEPOT)",
+  "portcode": "INMAA",
+  "portname": "CHENNAI (EX MADRAS)",
+  "type": null
+ },
+ {
+  "depot": "INMAADCED",
+  "description": "CONTINENTAL EMPTY DEPOT",
+  "portcode": "INMAA",
+  "portname": "CHENNAI (EX MADRAS)",
+  "type": null
+ },
+ {
+  "depot": "INMAADDDP",
+  "description": "MADRAS DEPOT",
+  "portcode": "INMAA",
+  "portname": "CHENNAI",
+  "type": null
+ },
+ {
+  "depot": "INMAADECC",
+  "description": "ENNORE CARGO CONTAINER TERMINAL PRIVATE LIMITED",
+  "portcode": "INMAA",
+  "portname": "CHENNAI (EX MADRAS)",
+  "type": null
+ },
+ {
+  "depot": "INMAADEPOT",
+  "description": "INMAA DEPOT",
+  "portcode": "INMAA",
+  "portname": "CHENNAI (EX MADRAS)",
+  "type": null
+ },
+ {
+  "depot": "INMAADMCT",
+  "description": "MADRAS CONTAINER TERMINAL (MCT-6)",
+  "portcode": "INMAA",
+  "portname": "CHENNAI (EX MADRAS)",
+  "type": null
+ },
+ {
+  "depot": "INMAADPE2",
+  "description": "POWER ENGINEERING 2",
+  "portcode": "INMAA",
+  "portname": "CHENNAI (EX MADRAS)",
+  "type": null
+ },
+ {
+  "depot": "INMAADSMC",
+  "description": "M/S OM SAI MARINE CONTAINER SERVICES",
+  "portcode": "INMAA",
+  "portname": "CHENNAI (EX MADRAS)",
+  "type": null
+ },
+ {
+  "depot": "DPMN456032",
+  "description": "TESTING PURPOSE",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA,MUMBAI",
+  "type": null
+ },
+ {
+  "depot": "INNSA0003",
+  "description": "NEW RAIL HEADS",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA,MUMBAI",
+  "type": null
+ },
+ {
+  "depot": "INNSA0004",
+  "description": "NEW RAIL HEADS",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA,MUMBAI",
+  "type": null
+ },
+ {
+  "depot": "INNSA1000",
+  "description": "NEW RAIL HEADS",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA,MUMBAI",
+  "type": null
+ },
+ {
+  "depot": "INNSA20000",
+  "description": "TEST DATA",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA,MUMBAI",
+  "type": null
+ },
+ {
+  "depot": "INNSA5000",
+  "description": "NEW RAIL HEADS",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA,MUMBAI",
+  "type": null
+ },
+ {
+  "depot": "INNSADA12",
+  "description": "ALLWIN MARINE",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADAM3",
+  "description": "ALLWIN MARINE SERVICES PVT. LTD. - DEPOT AMS -3",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADAMA",
+  "description": "AMARA DEPOT",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADAMF",
+  "description": "AMFICO YARD",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADARY",
+  "description": "ARYAN DEPOT",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADASI",
+  "description": "ARK SHIPPING INTERNATIONAL PVT LTD",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADBCT",
+  "description": "BCT. C/O KAILASH WAREHOUSE",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADBH1",
+  "description": "BHAVANI DEPOT-1",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADBH2",
+  "description": "BHAVANI DEPOT -2",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADBSP",
+  "description": "BCT SHIRDON - PANVEL",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADBYR",
+  "description": "BALAJI YARD - RAIGAD DEPOT",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADCWC",
+  "description": "CONTINENTAL WAREHOUSING CORPORATION",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADDDP",
+  "description": "NHAVA SHEVA DEPOT",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADEFC",
+  "description": "EFC LOGISTICS INDIA PVT LTD",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADEGC",
+  "description": "EMPEZAR GLOBAL CONTAINER TERMINAL",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADEPO",
+  "description": "INNSADEPO",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADEPY",
+  "description": "EPIC YARD DEPOT",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADHI2",
+  "description": "HARMONY INTERNATIONAL LOGISTICS SOLUTIONS 2",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADHIL",
+  "description": "HARMONY INTERNATIONAL LOGISTICS SOLUTIONS",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADJCS",
+  "description": "JAY CONTAINER TERMINAL",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADJCY",
+  "description": "JAISKHAR CONTAINER YARD. (OBM DEPOT)",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADKIL",
+  "description": "KERRY INDEV LOGISTICS PRIVATE LIMITED",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADKKL",
+  "description": "KK3 LOGISTICS",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADNAK",
+  "description": "NAKSHA YARD",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADNEY",
+  "description": "NAVKAR CFS - EMPTY YARD",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADOBM",
+  "description": "OBM CONTAINER DEPOT",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADPIM",
+  "description": "PAN INDIA MARINE SERVICES PVT LTD",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADSAV",
+  "description": "SAVLA YARD",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADSCC",
+  "description": "SAMVEDA CONTAINER CARE /BCT -2",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADSEC",
+  "description": "SEABIRD EMPTY CONTAINER DEPOT",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADSFL",
+  "description": "SUPER FLY LOGISTICS INDIA PVT LTD",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADSIC",
+  "description": "INNSADSIC – SAMVEDA INDIA CHIRLE DEPOT",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADSQD",
+  "description": "SEAQUBE DEPOT",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADSSD",
+  "description": "SAICON SERVICES DEPOT",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADSY2",
+  "description": "SONALI YARD YARD 2",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADTAR",
+  "description": "ICD TARAPUR",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADUCS",
+  "description": "UNIVERSAL CONTAINER SERVICES",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADUMS",
+  "description": "UNICON MARINE SERVICES LLP",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADVIN",
+  "description": "LD /VINAY YARD",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADVLY",
+  "description": "VAISHNO LOGISTIC YARD CFS",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSADZCT",
+  "description": "ZIYA CONTAINER TERMINAL",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA",
+  "type": null
+ },
+ {
+  "depot": "INNSATM011",
+  "description": "INNSATM011 TEST",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA,MUMBAI",
+  "type": null
+ },
+ {
+  "depot": "INNSAWH",
+  "description": "NAVA WAREHOUSE",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA,MUMBAI",
+  "type": null
+ },
+ {
+  "depot": "TESTING",
+  "description": "GHJL",
+  "portcode": "INNSA",
+  "portname": "",
+  "type": null
+ },
+ {
+  "depot": "TESTWARE",
+  "description": "WAREHOUSE",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA,MUMBAI",
+  "type": null
+ },
+ {
+  "depot": "AURORAINST",
+  "description": "AURORAINST TEST",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA,MUMBAI",
+  "type": null
+ },
+ {
+  "depot": "SAISHINNSA",
+  "description": "SAISHINNSA TEST",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA,MUMBAI",
+  "type": null
+ },
+ {
+  "depot": "KEMBADDDP",
+  "description": "MOMBASA DEPOT",
+  "portcode": "KEMBA",
+  "portname": "MOMBASA",
+  "type": null
+ },
+ {
+  "depot": "MYPKGDAGC",
+  "description": "ASIA GLOBAL CONNECTION SDN BHD (NORTHPORT)",
+  "portcode": "MYPKG",
+  "portname": "PORT KLANG",
+  "type": null
+ },
+ {
+  "depot": "MYPKGDCC2",
+  "description": "CONTAINER CONNECTIONS (M) SDN BHD - CCM2 ODD11",
+  "portcode": "MYPKG",
+  "portname": "PORT KLANG",
+  "type": null
+ },
+ {
+  "depot": "MYPKGDCC3",
+  "description": "CONTAINER CONNECTIONS (M) SDN BHD (WESTPORT) - CCM3",
+  "portcode": "MYPKG",
+  "portname": "PORT KLANG",
+  "type": null
+ },
+ {
+  "depot": "MYPKGDCCM",
+  "description": "CONTAINER CONNECTION (M) SDN BHD",
+  "portcode": "MYPKG",
+  "portname": "PORT KLANG",
+  "type": null
+ },
+ {
+  "depot": "MYPKGDCIM",
+  "description": "CIMC LOGISTICS SERVICES (MALAYSIA) (JUNTAI)",
+  "portcode": "MYPKG",
+  "portname": "PORT KLANG",
+  "type": null
+ },
+ {
+  "depot": "MYPKGDCMA",
+  "description": "CMA CGM (ODD9)",
+  "portcode": "MYPKG",
+  "portname": "PORT KLANG",
+  "type": null
+ },
+ {
+  "depot": "MYPKGDCO2",
+  "description": "SH COGENT LOGISTICS SDN BHD-WESTPORT 2 (KNOW AS PSSB DEPOT)",
+  "portcode": "MYPKG",
+  "portname": "PORT KLANG",
+  "type": null
+ },
+ {
+  "depot": "MYPKGDCOG",
+  "description": "SH COGENT LOGISTICS SDN BHD",
+  "portcode": "MYPKG",
+  "portname": "PORT KLANG",
+  "type": null
+ },
+ {
+  "depot": "MYPKGDCON",
+  "description": "SH COGENT LOGISTICS SDN BHD (NORTHPORT)",
+  "portcode": "MYPKG",
+  "portname": "PORT KLANG",
+  "type": null
+ },
+ {
+  "depot": "MYPKGDDDP",
+  "description": "PORT KELANG",
+  "portcode": "MYPKG",
+  "portname": "PORT KLANG",
+  "type": null
+ },
+ {
+  "depot": "MYPKGDEKY",
+  "description": "NEW ENG KONG CONTAINER LOGISTICS SERVICE",
+  "portcode": "MYPKG",
+  "portname": "PORT KLANG",
+  "type": null
+ },
+ {
+  "depot": "MYPKGDELS",
+  "description": "EXCELLENT LINK (M) SDN BHD",
+  "portcode": "MYPKG",
+  "portname": "PORT KLANG",
+  "type": null
+ },
+ {
+  "depot": "MYPKGDFSS",
+  "description": "FLEXIVAN SERVICES SDN BHD",
+  "portcode": "MYPKG",
+  "portname": "PORT KLANG",
+  "type": null
+ },
+ {
+  "depot": "MYPKGDFVS",
+  "description": "FLEXI-VAN SERVICES",
+  "portcode": "MYPKG",
+  "portname": "PORT KLANG",
+  "type": null
+ },
+ {
+  "depot": "MYPKGDGFL",
+  "description": "GREATING FORTUNE ( MALAYSIA ) LOGISTICS SDN BHD",
+  "portcode": "MYPKG",
+  "portname": "PORT KLANG",
+  "type": null
+ },
+ {
+  "depot": "MYPKGDGFN",
+  "description": "GREATING FORTUNE (MALAYSIA) - NORTHPORT",
+  "portcode": "MYPKG",
+  "portname": "PORT KLANG",
+  "type": null
+ },
+ {
+  "depot": "MYPKGDGPC",
+  "description": "NEK GPC CONTAINER",
+  "portcode": "MYPKG",
+  "portname": "PORT KLANG",
+  "type": null
+ },
+ {
+  "depot": "MYPKGDICS",
+  "description": "ICS DEPOT SERVICES SDN BHD",
+  "portcode": "MYPKG",
+  "portname": "PORT KLANG",
+  "type": null
+ },
+ {
+  "depot": "MYPKGDJMF",
+  "description": "JAMBATAN MERAH FORMOSA DEPOT SDN BHD (WESTPORT)",
+  "portcode": "MYPKG",
+  "portname": "PORT KLANG",
+  "type": null
+ },
+ {
+  "depot": "MYPKGDMAL",
+  "description": "MALCONREP DEPOT (M) SDN BHD",
+  "portcode": "MYPKG",
+  "portname": "PORT KLANG",
+  "type": null
+ },
+ {
+  "depot": "MYPKGDMCR",
+  "description": "MALCONREP DEPOT SDN BHD",
+  "portcode": "MYPKG",
+  "portname": "PORT KLANG",
+  "type": null
+ },
+ {
+  "depot": "MYPKGDMED",
+  "description": "MEDLOG MALAYSIA SDN. BHD.",
+  "portcode": "MYPKG",
+  "portname": "PORT KLANG",
+  "type": null
+ },
+ {
+  "depot": "MYPKGDMMA",
+  "description": "MEDLOG MALAYSIA SDN. BHD.",
+  "portcode": "MYPKG",
+  "portname": "PORT KLANG",
+  "type": null
+ },
+ {
+  "depot": "MYPKGDNEK",
+  "description": "NEK GPC CONTAINER SERVICES (M) SDN BHD",
+  "portcode": "MYPKG",
+  "portname": "PORT KLANG",
+  "type": null
+ },
+ {
+  "depot": "MYPKGDNGD",
+  "description": "NORTHERN GATEWAY DEPOT SDN BHD",
+  "portcode": "MYPKG",
+  "portname": "PORT KLANG",
+  "type": null
+ },
+ {
+  "depot": "MYPKGDNIL",
+  "description": "NEXTVISION INVESTMENTS LIMITED",
+  "portcode": "MYPKG",
+  "portname": "PORT KLANG",
+  "type": null
+ },
+ {
+  "depot": "MYPKGDNWD",
+  "description": "NORTH WEST DEPOH SDN BHD",
+  "portcode": "MYPKG",
+  "portname": "PORT KLANG",
+  "type": null
+ },
+ {
+  "depot": "MYPKGDNWT",
+  "description": "NORTH WEST TERMINAL SDN BHD – ON DOCK DEPOT",
+  "portcode": "MYPKG",
+  "portname": "PORT KLANG",
+  "type": null
+ },
+ {
+  "depot": "MYPKGDSDS",
+  "description": "SMART DEPOT SERVICE (MALAYSIA) SDN",
+  "portcode": "MYPKG",
+  "portname": "PORT KLANG",
+  "type": null
+ },
+ {
+  "depot": "MYPKGDSHC",
+  "description": "SYN HEE CONTAINER SERVICES SDN BHD",
+  "portcode": "MYPKG",
+  "portname": "PORT KLANG",
+  "type": null
+ },
+ {
+  "depot": "MYPKGDYCO",
+  "description": "YCODD DEPOT",
+  "portcode": "MYPKG",
+  "portname": "PORT KLANG",
+  "type": null
+ },
+ {
+  "depot": "NLRTMDCCB",
+  "description": "CETEM CONTAINERS BV",
+  "portcode": "NLRTM",
+  "portname": "ROTTERDAM",
+  "type": null
+ },
+ {
+  "depot": "NLRTMDDDP",
+  "description": "DEPOT ROTTERDAM",
+  "portcode": "NLRTM",
+  "portname": "ROTTERDAM",
+  "type": null
+ },
+ {
+  "depot": "NLRTMDDRD",
+  "description": "DR DEPOTS BV",
+  "portcode": "NLRTM",
+  "portname": "ROTTERDAM",
+  "type": null
+ },
+ {
+  "depot": "NLRTMDKCD",
+  "description": "KRAMER CITY DEPOT",
+  "portcode": "NLRTM",
+  "portname": "ROTTERDAM",
+  "type": null
+ },
+ {
+  "depot": "NLRTMDKDD",
+  "description": "KRAMER DISTRICTPARK DEPOT (KDD)",
+  "portcode": "NLRTM",
+  "portname": "ROTTERDAM",
+  "type": null
+ },
+ {
+  "depot": "NLRTMDOCC",
+  "description": "O.C.C. OVERBEEK",
+  "portcode": "NLRTM",
+  "portname": "ROTTERDAM",
+  "type": null
+ },
+ {
+  "depot": "NLRTMDUWT",
+  "description": "UWT",
+  "portcode": "NLRTM",
+  "portname": "ROTTERDAM",
+  "type": null
+ },
+ {
+  "depot": "NLRTMDVDC",
+  "description": "VAN DOORN CONTAINER REPAIR",
+  "portcode": "NLRTM",
+  "portname": "ROTTERDAM",
+  "type": null
+ },
+ {
+  "depot": "NLRTMRHRO",
+  "description": "RAIL SERVICE CENTRE ROTTERDAM BV",
+  "portcode": "NLRTM",
+  "portname": "ROTTERDAM",
+  "type": null
+ },
+ {
+  "depot": "SGSINDACW",
+  "description": "ASSOCIATED CARRIAGE & WAREHOUSING (S) PTE LTD (ACW)",
+  "portcode": "SGSIN",
+  "portname": "SINGAPORE",
+  "type": null
+ },
+ {
+  "depot": "SGSINDAL1",
+  "description": "ALLIED YARD 1 (ACSMCU)",
+  "portcode": "SGSIN",
+  "portname": "SINGAPORE",
+  "type": null
+ },
+ {
+  "depot": "SGSINDAL2",
+  "description": "ALLIED YARD 2",
+  "portcode": "SGSIN",
+  "portname": "SINGAPORE",
+  "type": null
+ },
+ {
+  "depot": "SGSINDAL3",
+  "description": "ALLIED YARD 3",
+  "portcode": "SGSIN",
+  "portname": "SINGAPORE",
+  "type": null
+ },
+ {
+  "depot": "SGSINDAL5",
+  "description": "ALLIED YARD 5",
+  "portcode": "SGSIN",
+  "portname": "SINGAPORE",
+  "type": null
+ },
+ {
+  "depot": "SGSINDAL8",
+  "description": "ALLIED YARD 8",
+  "portcode": "SGSIN",
+  "portname": "SINGAPORE",
+  "type": null
+ },
+ {
+  "depot": "SGSINDCC1",
+  "description": "CONTAINER CONNECTIONS PTE LTD",
+  "portcode": "SGSIN",
+  "portname": "SINGAPORE",
+  "type": null
+ },
+ {
+  "depot": "SGSINDCC2",
+  "description": "CONTAINER CONNECTIONS PTE LTD",
+  "portcode": "SGSIN",
+  "portname": "SINGAPORE",
+  "type": null
+ },
+ {
+  "depot": "SGSINDCC3",
+  "description": "CONTAINER CONNECTIONS PTE LTD - 16 TUAS",
+  "portcode": "SGSIN",
+  "portname": "SINGAPORE",
+  "type": null
+ },
+ {
+  "depot": "SGSINDCLC",
+  "description": "CHUAN LI CONTAINER PTE LTD",
+  "portcode": "SGSIN",
+  "portname": "SINGAPORE",
+  "type": null
+ },
+ {
+  "depot": "SGSINDCOG",
+  "description": "COGENT 1. LOGISTICS HUB",
+  "portcode": "SGSIN",
+  "portname": "SINGAPORE",
+  "type": null
+ },
+ {
+  "depot": "SGSINDCW1",
+  "description": "CWT INTEGRATED PTE LTD",
+  "portcode": "SGSIN",
+  "portname": "SINGAPORE",
+  "type": null
+ },
+ {
+  "depot": "SGSINDCW2",
+  "description": "CWT INTEGRATED PTE LTD",
+  "portcode": "SGSIN",
+  "portname": "SINGAPORE",
+  "type": null
+ },
+ {
+  "depot": "SGSINDCW3",
+  "description": "CWT INTEGRATED PTE LTD",
+  "portcode": "SGSIN",
+  "portname": "SINGAPORE",
+  "type": null
+ },
+ {
+  "depot": "SGSINDCW4",
+  "description": "CWT INTEGRATED PTE LTD (YARD 4)",
+  "portcode": "SGSIN",
+  "portname": "SINGAPORE",
+  "type": null
+ },
+ {
+  "depot": "SGSINDDDP",
+  "description": "SINGAPORE DEPOT",
+  "portcode": "SGSIN",
+  "portname": "SINGAPORE",
+  "type": null
+ },
+ {
+  "depot": "SGSINDEK1",
+  "description": "ENG KONG CONTAINER AGENCIES PTE LTD.",
+  "portcode": "SGSIN",
+  "portname": "SINGAPORE",
+  "type": null
+ },
+ {
+  "depot": "SGSINDEK2",
+  "description": "ENG KONG CONTAINER AGENCIES PTE LTD",
+  "portcode": "SGSIN",
+  "portname": "SINGAPORE",
+  "type": null
+ },
+ {
+  "depot": "SGSINDEK3",
+  "description": "ENG KONG CONTAINER AGENCIES (PTE) LTD (YARD 3)",
+  "portcode": "SGSIN",
+  "portname": "SINGAPORE",
+  "type": null
+ },
+ {
+  "depot": "SGSINDEKY",
+  "description": "ENG KONG PIONEER",
+  "portcode": "SGSIN",
+  "portname": "SINGAPORE",
+  "type": null
+ },
+ {
+  "depot": "SGSINDHLA",
+  "description": "HLA HOLDINGS PTE LTD",
+  "portcode": "SGSIN",
+  "portname": "SINGAPORE",
+  "type": null
+ },
+ {
+  "depot": "SGSINDMFA",
+  "description": "MASTERFAITH (SG) PTE LTD",
+  "portcode": "SGSIN",
+  "portname": "SINGAPORE",
+  "type": null
+ },
+ {
+  "depot": "SGSINDPDI",
+  "description": "PIONEER DISTRICENTRE PTE LTD",
+  "portcode": "SGSIN",
+  "portname": "SINGAPORE",
+  "type": null
+ },
+ {
+  "depot": "SGSINDPSA",
+  "description": "PSA CORPORATION LTD - ODD",
+  "portcode": "SGSIN",
+  "portname": "SINGAPORE",
+  "type": null
+ },
+ {
+  "depot": "SGSINDPTP",
+  "description": "PACIFIC TRANS PTE. LTD.",
+  "portcode": "SGSIN",
+  "portname": "SINGAPORE",
+  "type": null
+ },
+ {
+  "depot": "SGSINDSGI",
+  "description": "SG INTEGRATED PTE LTD",
+  "portcode": "SGSIN",
+  "portname": "SINGAPORE",
+  "type": null
+ },
+ {
+  "depot": "SGSINDTBC",
+  "description": "TBC TRANSPORTATION & TRADING PTE LTD",
+  "portcode": "SGSIN",
+  "portname": "SINGAPORE",
+  "type": null
+ },
+ {
+  "depot": "SGSINDTCD",
+  "description": "TONG CONTAINER DEPOT (S) PTE LTD",
+  "portcode": "SGSIN",
+  "portname": "SINGAPORE",
+  "type": null
+ },
+ {
+  "depot": "SGSINDWSL",
+  "description": "WING SENG LOGISTICS PTE LTD",
+  "portcode": "SGSIN",
+  "portname": "SINGAPORE",
+  "type": null
+ },
+ {
+  "depot": "USSEADDDP",
+  "description": "SEATTLE DEPOT",
+  "portcode": "USSEA",
+  "portname": "SEATTLE",
+  "type": null
+ },
+ {
+  "depot": "SAKKEER",
+  "description": "depot code",
+  "portcode": "AEAUH",
+  "portname": "ABU DHABI",
+  "type": null
+ },
+ {
+  "depot": "AEAUHDDDP",
+  "description": "ABU DHABI DEPOT",
+  "portcode": "AEAUH",
+  "portname": "ABU DHABI",
+  "type": null
+ },
+ {
+  "depot": "AEDDEPOT",
+  "description": "AEDDEPOT",
+  "portcode": "AEDXB",
+  "portname": "DUBAI",
+  "type": null
+ },
+ {
+  "depot": "AEDXBDC1",
+  "description": "",
+  "portcode": "AEDXB",
+  "portname": "DUBAI",
+  "type": null
+ },
+ {
+  "depot": "AEDXBDDDP",
+  "description": "DEPOT DUBAI",
+  "portcode": "AEDXB",
+  "portname": "DUBAI, UNITED ARAB EMIRATES",
+  "type": null
+ },
+ {
+  "depot": "AEDXBTEST",
+  "description": "",
+  "portcode": "AEDXB",
+  "portname": "DUBAI",
+  "type": null
+ },
+ {
+  "depot": "ARBUEDDDP",
+  "description": "BUENOS AIRES DEPOT",
+  "portcode": "ARBUE",
+  "portname": "BUENOS AIRES",
+  "type": null
+ },
+ {
+  "depot": "ARRGADDDP",
+  "description": "RIO GRANDE DEPOT",
+  "portcode": "ARRGA",
+  "portname": "RIO GRANDE",
+  "type": null
+ },
+ {
+  "depot": "ASPPGDHMS",
+  "description": "HARBOR MARITIME AND STEVEDORING CO.",
+  "portcode": "ASPPG",
+  "portname": "PAGO PAGO",
+  "type": null
+ },
+ {
+  "depot": "ASPPGDPRS",
+  "description": "PETER E REID STEVEDORING INC",
+  "portcode": "ASPPG",
+  "portname": "PAGO PAGO",
+  "type": null
+ },
+ {
+  "depot": "ATENADDDP",
+  "description": "GENERAL DEPOT",
+  "portcode": "ATENA",
+  "portname": "ENNS",
+  "type": null
+ },
+ {
+  "depot": "ATLNZDDDP",
+  "description": "LINZ DEPOT",
+  "portcode": "ATLNZ",
+  "portname": "LINZ",
+  "type": null
+ },
+ {
+  "depot": "ATSZGDDDP",
+  "description": "SALZBURG DEPOT",
+  "portcode": "ATSZG",
+  "portname": "SALZBURG",
+  "type": null
+ },
+ {
+  "depot": "ATVIEDDDP",
+  "description": "VIENNA DEPOT",
+  "portcode": "ATVIE",
+  "portname": "VIENNA",
+  "type": null
+ },
+ {
+  "depot": "AUAD1RHAD",
+  "description": "ADELAIDE RAILHEAD",
+  "portcode": "AUAD1",
+  "portname": "ADELAIDE RAILHEAD",
+  "type": null
+ },
+ {
+  "depot": "AUADLDDAU",
+  "description": "AUSTAINERS",
+  "portcode": "AUADL",
+  "portname": "ADELAIDE",
+  "type": null
+ },
+ {
+  "depot": "AUADLDDDP",
+  "description": "DEPOT ADELAIDE",
+  "portcode": "AUADL",
+  "portname": "ADELAIDE",
+  "type": null
+ },
+ {
+  "depot": "AUADLDDPR",
+  "description": "PACIFIC NATIONAL ADELAIDE FREIGHT TERMINAL",
+  "portcode": "AUADL",
+  "portname": "ADELAIDE",
+  "type": null
+ },
+ {
+  "depot": "AUADLDKIA",
+  "description": "KERRY INTERMODAL",
+  "portcode": "AUADL",
+  "portname": "ADELAIDE",
+  "type": null
+ },
+ {
+  "depot": "AUADLDNRA",
+  "description": "NATIONAL RAIL ADL",
+  "portcode": "AUADL",
+  "portname": "ADELAIDE",
+  "type": null
+ },
+ {
+  "depot": "AUADLDPNA",
+  "description": "PACIFIC NATIONAL",
+  "portcode": "AUADL",
+  "portname": "ADELAIDE",
+  "type": null
+ },
+ {
+  "depot": "AUADLDPOR",
+  "description": "P&O RAIL",
+  "portcode": "AUADL",
+  "portname": "ADELAIDE",
+  "type": null
+ },
+ {
+  "depot": "AUADLDSAC",
+  "description": "SA CONTAINER SALES AND HIRE",
+  "portcode": "AUADL",
+  "portname": "ADELAIDE",
+  "type": null
+ },
+ {
+  "depot": "AUADLDSCT",
+  "description": "SYMONS & CLARK TRANSPORT",
+  "portcode": "AUADL",
+  "portname": "ADELAIDE",
+  "type": null
+ },
+ {
+  "depot": "AUASPDDDP",
+  "description": "ALICE SPRINGS",
+  "portcode": "AUASP",
+  "portname": "ALICE SPRINGS",
+  "type": null
+ },
+ {
+  "depot": "AUBELDDDP",
+  "description": "DEPOT TOLL BELL BAY",
+  "portcode": "AUBEL",
+  "portname": "BELL BAY",
+  "type": null
+ },
+ {
+  "depot": "AUBMEDDDP",
+  "description": "BROOME DEPOT",
+  "portcode": "AUBME",
+  "portname": "BROOME",
+  "type": null
+ },
+ {
+  "depot": "AUBN1RHBR",
+  "description": "BRISBANE RAILHEAD",
+  "portcode": "AUBN1",
+  "portname": "BRISBANE RAILHEAD",
+  "type": null
+ },
+ {
+  "depot": "AUBNEDACD",
+  "description": "AUS. CNTR DEPOT HEM",
+  "portcode": "AUBNE",
+  "portname": "BRISBANE",
+  "type": null
+ },
+ {
+  "depot": "AUBNEDATS",
+  "description": "AUST TERMINAL SERV",
+  "portcode": "AUBNE",
+  "portname": "BRISBANE",
+  "type": null
+ },
+ {
+  "depot": "AUBNEDAUF",
+  "description": "ACFS",
+  "portcode": "AUBNE",
+  "portname": "BRISBANE",
+  "type": null
+ },
+ {
+  "depot": "AUBNEDBCP",
+  "description": "BRISBANE CNTR PARK",
+  "portcode": "AUBNE",
+  "portname": "BRISBANE",
+  "type": null
+ },
+ {
+  "depot": "AUBNEDBMT",
+  "description": "BRISBANE MULTIMODAL TERMINAL",
+  "portcode": "AUBNE",
+  "portname": "BRISBANE",
+  "type": null
+ },
+ {
+  "depot": "AUBNEDCCC",
+  "description": "CC CONTAINERS",
+  "portcode": "AUBNE",
+  "portname": "BRISBANE",
+  "type": null
+ },
+ {
+  "depot": "AUBNEDDCH",
+  "description": "CHALMERS",
+  "portcode": "AUBNE",
+  "portname": "BRISBANE",
+  "type": null
+ },
+ {
+  "depot": "AUBNEDDCL",
+  "description": "CARGOLINK , F.I.",
+  "portcode": "AUBNE",
+  "portname": "BRISBANE",
+  "type": null
+ },
+ {
+  "depot": "AUBNEDDDP",
+  "description": "BRISBANE",
+  "portcode": "AUBNE",
+  "portname": "BRISBANE",
+  "type": null
+ },
+ {
+  "depot": "AUBNEDDNR",
+  "description": "PACIFIC NATIONAL BRISBANE FREIGHT TERMINAL",
+  "portcode": "AUBNE",
+  "portname": "BRISBANE",
+  "type": null
+ },
+ {
+  "depot": "AUBNEDDPL",
+  "description": "DPW BRISBANE CONTAINER PARK",
+  "portcode": "AUBNE",
+  "portname": "BRISBANE",
+  "type": null
+ },
+ {
+  "depot": "AUBNEDFIG",
+  "description": "FISHERMAN ISL GRAIN",
+  "portcode": "AUBNE",
+  "portname": "BRISBANE",
+  "type": null
+ },
+ {
+  "depot": "AUBNEDGCP",
+  "description": "GATEWAY CONTAINER",
+  "portcode": "AUBNE",
+  "portname": "BRISBANE",
+  "type": null
+ },
+ {
+  "depot": "AUBNEDPAL",
+  "description": "PATRICK LOGISTICS",
+  "portcode": "AUBNE",
+  "portname": "BRISBANE",
+  "type": null
+ },
+ {
+  "depot": "AUBNEDPAR",
+  "description": "PATRICKS A/RIDGE",
+  "portcode": "AUBNE",
+  "portname": "BRISBANE",
+  "type": null
+ },
+ {
+  "depot": "AUBNEDPPF",
+  "description": "ACFS EDEPOT BRISBANE",
+  "portcode": "AUBNE",
+  "portname": "BRISBANE",
+  "type": null
+ },
+ {
+  "depot": "AUBNEDPSH",
+  "description": "PATRICKS HAMILTON",
+  "portcode": "AUBNE",
+  "portname": "BRISBANE",
+  "type": null
+ },
+ {
+  "depot": "AUBNEDPTB",
+  "description": "P&O TRANS BRISBANE",
+  "portcode": "AUBNE",
+  "portname": "BRISBANE",
+  "type": null
+ },
+ {
+  "depot": "AUBNEDQPM",
+  "description": "Q-PORT MARINE SERVIC",
+  "portcode": "AUBNE",
+  "portname": "BRISBANE",
+  "type": null
+ },
+ {
+  "depot": "AUBNEDQRT",
+  "description": "QLD. RAIL TOOWOOMBA",
+  "portcode": "AUBNE",
+  "portname": "BRISBANE",
+  "type": null
+ },
+ {
+  "depot": "AUBNEDRWC",
+  "description": "ROYAL WOLF CONT DEPO",
+  "portcode": "AUBNE",
+  "portname": "BRISBANE",
+  "type": null
+ },
+ {
+  "depot": "AUBNEDTYB",
+  "description": "TYNE CONTAINERS QLD",
+  "portcode": "AUBNE",
+  "portname": "BRISBANE",
+  "type": null
+ },
+ {
+  "depot": "AUBWTDCPO",
+  "description": "CAPITAL P&O LOGISTIC",
+  "portcode": "AUBWT",
+  "portname": "BURNIE",
+  "type": null
+ },
+ {
+  "depot": "AUCN1RHCA",
+  "description": "CAIRNS RAILHEAD",
+  "portcode": "AUCN1",
+  "portname": "CAIRNS RAILHEAD",
+  "type": null
+ },
+ {
+  "depot": "AUCNSDDDP",
+  "description": "CAIRNS DEPOT",
+  "portcode": "AUCNS",
+  "portname": "CAIRNS",
+  "type": null
+ },
+ {
+  "depot": "AUDAMDWTD",
+  "description": "WARNERS TRANSPORT & DISTRIBUTION 56",
+  "portcode": "AUDAM",
+  "portname": "DAMPIER",
+  "type": null
+ },
+ {
+  "depot": "AUDPODDTB",
+  "description": "TOLL BOND DPO",
+  "portcode": "AUDPO",
+  "portname": "DEVONPORT",
+  "type": null
+ },
+ {
+  "depot": "AUDRWDACH",
+  "description": "ANL CONT HIRE & SALE",
+  "portcode": "AUDRW",
+  "portname": "DARWIN",
+  "type": null
+ },
+ {
+  "depot": "AUDRWDALT",
+  "description": "ALTUS LOGISTICS PTY LTD",
+  "portcode": "AUDRW",
+  "portname": "DARWIN",
+  "type": null
+ },
+ {
+  "depot": "AUDRWDCOS",
+  "description": "CONTAINER SOLUTIONS",
+  "portcode": "AUDRW",
+  "portname": "DARWIN",
+  "type": null
+ },
+ {
+  "depot": "AUDRWDCSN",
+  "description": "CONT. SERVICES NT",
+  "portcode": "AUDRW",
+  "portname": "DARWIN",
+  "type": null
+ },
+ {
+  "depot": "AUDRWDDCS",
+  "description": "DARWIN CONT. SERVICE",
+  "portcode": "AUDRW",
+  "portname": "ASDSS",
+  "type": null
+ },
+ {
+  "depot": "AUDRWDDDP",
+  "description": "DARWIN DEPOT",
+  "portcode": "AUDRW",
+  "portname": "DARWIN",
+  "type": null
+ },
+ {
+  "depot": "AUDRWDNTC",
+  "description": "CONT. SALES & LEASE",
+  "portcode": "AUDRW",
+  "portname": "DARWIN",
+  "type": null
+ },
+ {
+  "depot": "AUDRWDROY",
+  "description": "ROYAL WOLF TRADING",
+  "portcode": "AUDRW",
+  "portname": "DARWIN",
+  "type": null
+ },
+ {
+  "depot": "AUDRWDSCD",
+  "description": "SHIPPING CONTAINERS DARWIN",
+  "portcode": "AUDRW",
+  "portname": "DARWIN",
+  "type": null
+ },
+ {
+  "depot": "AUDRWDSCF",
+  "description": "SCF BERRIMAH",
+  "portcode": "AUDRW",
+  "portname": "DARWIN",
+  "type": null
+ },
+ {
+  "depot": "AUDRWDSCO",
+  "description": "SIMPLY CONTAINERS",
+  "portcode": "AUDRW",
+  "portname": "DARWIN",
+  "type": null
+ },
+ {
+  "depot": "AUDRWERTMN",
+  "description": "AUDRWERTMN",
+  "portcode": "AUDRW",
+  "portname": "DARWIN",
+  "type": null
+ },
+ {
+  "depot": "AUFR1RHFR",
+  "description": "FREMANTLE RAILHEAD",
+  "portcode": "AUFR1",
+  "portname": "FREMANTLE RAILHEAD",
+  "type": null
+ },
+ {
+  "depot": "AUFREDBAG",
+  "description": "QUBE CENTRAL",
+  "portcode": "AUFRE",
+  "portname": "FREMANTLE",
+  "type": null
+ },
+ {
+  "depot": "AUFREDCSP",
+  "description": "CONTR CGO SPECIALIST",
+  "portcode": "AUFRE",
+  "portname": "FREMANTLE",
+  "type": null
+ },
+ {
+  "depot": "AUFREDDCW",
+  "description": "CARGO WEST",
+  "portcode": "AUFRE",
+  "portname": "FREMANTLE",
+  "type": null
+ },
+ {
+  "depot": "AUFREDDDP",
+  "description": "DEPOT FREMANTLE",
+  "portcode": "AUFRE",
+  "portname": "FREMANTLE",
+  "type": null
+ },
+ {
+  "depot": "AUFREDDSA",
+  "description": "SADLIERS (LCL) FML",
+  "portcode": "AUFRE",
+  "portname": "FREMANTLE",
+  "type": null
+ },
+ {
+  "depot": "AUFREDFLS",
+  "description": "FREMANTLE LINKS SERV",
+  "portcode": "AUFRE",
+  "portname": "FREMANTLE",
+  "type": null
+ },
+ {
+  "depot": "AUFREDICD",
+  "description": "INDEPNT CARGO DEPOT",
+  "portcode": "AUFRE",
+  "portname": "FREMANTLE",
+  "type": null
+ },
+ {
+  "depot": "AUFREDPTF",
+  "description": "P&O TRANS FREMANTLE",
+  "portcode": "AUFRE",
+  "portname": "FREMANTLE",
+  "type": null
+ },
+ {
+  "depot": "AUFREDSAD",
+  "description": "SADLIERS TPT KEWDALE",
+  "portcode": "AUFRE",
+  "portname": "FREMANTLE",
+  "type": null
+ },
+ {
+  "depot": "AUFREDTOR",
+  "description": "TOLLS RAIL",
+  "portcode": "AUFRE",
+  "portname": "FREMANTLE",
+  "type": null
+ },
+ {
+  "depot": "AUGEXDDDP",
+  "description": "GEELONG DEPOT",
+  "portcode": "AUGEX",
+  "portname": "GEELONG",
+  "type": null
+ },
+ {
+  "depot": "AUGEXDPPC",
+  "description": "PPS COODE PARK",
+  "portcode": "AUGEX",
+  "portname": "GEELONG",
+  "type": null
+ },
+ {
+  "depot": "AUGEXDVCM",
+  "description": "VIC CNTR MANAGEMENT",
+  "portcode": "AUGEX",
+  "portname": "GEELONG",
+  "type": null
+ },
+ {
+  "depot": "AUGLTDDDP",
+  "description": "AUGLT ONWHARF DEPOT",
+  "portcode": "AUGLT",
+  "portname": "GLADSTONE",
+  "type": null
+ },
+ {
+  "depot": "AUGLTDLOG",
+  "description": "NSS GLADSTONE STORE",
+  "portcode": "AUGLT",
+  "portname": "GLADSTONE",
+  "type": null
+ },
+ {
+  "depot": "AUGOVDDDP",
+  "description": "GOVE DEPOT",
+  "portcode": "AUGOV",
+  "portname": "GOVE",
+  "type": null
+ },
+ {
+  "depot": "AUHBADDDP",
+  "description": "HOBART DEPOT",
+  "portcode": "AUHBA",
+  "portname": "HOBART",
+  "type": null
+ },
+ {
+  "depot": "AUHBADLOG",
+  "description": "LOGS DEPOT CUBE",
+  "portcode": "AUHBA",
+  "portname": "HOBART",
+  "type": null
+ },
+ {
+  "depot": "AUKWIDDDP",
+  "description": "KWINANA",
+  "portcode": "AUKWI",
+  "portname": "KWINANA",
+  "type": null
+ },
+ {
+  "depot": "AULSTDDDP",
+  "description": "LAUNCESTON DEPOT",
+  "portcode": "AULST",
+  "portname": "LAUNCESTON",
+  "type": null
+ },
+ {
+  "depot": "AULVODDDP",
+  "description": "LAVERTON DEPOT",
+  "portcode": "AULVO",
+  "portname": "LAVERTON",
+  "type": null
+ },
+ {
+  "depot": "AUMKYDDDP",
+  "description": "MACKAY DEPOT",
+  "portcode": "AUMKY",
+  "portname": "MACKAY",
+  "type": null
+ },
+ {
+  "depot": "AUNTLDCAR",
+  "description": "TOLL RES. CARRINGTON",
+  "portcode": "AUNTL",
+  "portname": "NEWCASTLE",
+  "type": null
+ },
+ {
+  "depot": "AUNTLDCFL",
+  "description": "CRAWFORDS FREIGHTLIN",
+  "portcode": "AUNTL",
+  "portname": "NEWCASTLE",
+  "type": null
+ },
+ {
+  "depot": "AUNTLDDDP",
+  "description": "NEWCASTLE DEPOT",
+  "portcode": "AUNTL",
+  "portname": "NEWCASTLE",
+  "type": null
+ },
+ {
+  "depot": "AUNTLDISD",
+  "description": "INFRABUILD STEEL",
+  "portcode": "AUNTL",
+  "portname": "NEWCASTLE",
+  "type": null
+ },
+ {
+  "depot": "AUNTLDKOO",
+  "description": "TOLL RES. KOORAGANG",
+  "portcode": "AUNTL",
+  "portname": "NEWCASTLE",
+  "type": null
+ },
+ {
+  "depot": "AUNTLDMCB",
+  "description": "MCS COOKS RIVER",
+  "portcode": "AUNTL",
+  "portname": "NEWCASTLE",
+  "type": null
+ },
+ {
+  "depot": "AUNTLDMYS",
+  "description": "MAYFIELD SWIRE STACK",
+  "portcode": "AUNTL",
+  "portname": "NEWCASTLE",
+  "type": null
+ },
+ {
+  "depot": "AUNTLDNCS",
+  "description": "NEWCASTLE CONTAINER",
+  "portcode": "AUNTL",
+  "portname": "NEWCASTLE",
+  "type": null
+ },
+ {
+  "depot": "AUNTLDPCS",
+  "description": "PORT CONTAINER SERV",
+  "portcode": "AUNTL",
+  "portname": "NEWCASTLE",
+  "type": null
+ },
+ {
+  "depot": "AUNTLDRWC",
+  "description": "MCGRATH REGIONAL LOGISTICS GROUP PTY LTD",
+  "portcode": "AUNTL",
+  "portname": "NEWCASTLE",
+  "type": null
+ },
+ {
+  "depot": "AUNTLDTOM",
+  "description": "TOLL RES. TOMAGO",
+  "portcode": "AUNTL",
+  "portname": "NEWCASTLE",
+  "type": null
+ },
+ {
+  "depot": "AUNTLISDP",
+  "description": "INFRABUILD STEEL (USE AUNTLDISD)",
+  "portcode": "AUNTL",
+  "portname": "NEWCASTLE",
+  "type": null
+ },
+ {
+  "depot": "AUPHEDQBE",
+  "description": "QUBE WEDGEFIELD",
+  "portcode": "AUPHE",
+  "portname": "PORT HEDLAND",
+  "type": null
+ },
+ {
+  "depot": "AUPKLDACF",
+  "description": "ACFS E-DEPOT",
+  "portcode": "AUPKL",
+  "portname": "PORT KEMBLA",
+  "type": null
+ },
+ {
+  "depot": "AUPKLDMCB",
+  "description": "MCS BANKSMEADOW",
+  "portcode": "AUPKL",
+  "portname": "PORT KEMBLA",
+  "type": null
+ },
+ {
+  "depot": "AUPTJDDDP",
+  "description": "PORTLAND DEPOT",
+  "portcode": "AUPTJ",
+  "portname": "PORTLAND",
+  "type": null
+ },
+ {
+  "depot": "AUPTLDDDP",
+  "description": "PORT ALMA DEPOT",
+  "portcode": "AUPTL",
+  "portname": "PORT ALMA",
+  "type": null
+ },
+ {
+  "depot": "AUROKDDDP",
+  "description": "ROCKHAMPTON DEPOT",
+  "portcode": "AUROK",
+  "portname": "ROCKHAMPTON",
+  "type": null
+ },
+ {
+  "depot": "AUSYDACFE",
+  "description": "ACFS E-LINK",
+  "portcode": "AUSYD",
+  "portname": "SYDNEY",
+  "type": null
+ },
+ {
+  "depot": "AUSYDDACF",
+  "description": "ACFS E DEPOT PORT BOTANY",
+  "portcode": "AUSYD",
+  "portname": "SYDNEY",
+  "type": null
+ },
+ {
+  "depot": "AUSYDDDDP",
+  "description": "DEPOT SYDNEY",
+  "portcode": "AUSYD",
+  "portname": "SYDNEY",
+  "type": null
+ },
+ {
+  "depot": "AUSYDDDEA",
+  "description": "E.A. ROCKE",
+  "portcode": "AUSYD",
+  "portname": "SYDNEY",
+  "type": null
+ }
+]

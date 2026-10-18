@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-16 16:32)
+// Modified by Sekar Nagarajan (2026-10-18 10:30)
 import type { EquipmentType, PortOption, TabConfig } from '../types/landing.types';
 
 // ---------------------------------------------------------------------------
@@ -15,6 +15,14 @@ export async function searchPorts(query: string): Promise<PortOption[]> {
 
   const json = (await res.json()) as { data: PortOption[] };
   return json.data;
+}
+
+/** One port resolved by its UN/LOCODE (the typeahead search also returns name matches). */
+export async function fetchPortByCode(code: string): Promise<PortOption | null> {
+  const wanted = code.trim().toUpperCase();
+  if (wanted.length < 2) return null;
+  const ports = await searchPorts(wanted);
+  return ports.find((p) => p.portCode.trim().toUpperCase() === wanted) ?? null;
 }
 
 /** Equipment type list — parity with JSP `SESSION_HASH_EQUIPMENT_TYPE`. */

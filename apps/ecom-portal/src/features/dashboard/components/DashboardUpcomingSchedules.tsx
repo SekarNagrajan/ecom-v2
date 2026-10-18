@@ -1,11 +1,11 @@
-// Modified by Sekar Nagarajan (2026-08-24 16:05)
+// Modified by Sekar Nagarajan (2026-10-16 23:45)
 import { AppButton } from "@solverminds/shared-ui";
 import { useNavigate } from "@tanstack/react-router";
 import { Flex, List, Typography, theme } from "antd";
 import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
-import type { UpcomingScheduleItem } from "../mocks/dashboard.mock";
+import type { UpcomingScheduleItem } from "../api/dashboard.api";
 
 const { Text, Title } = Typography;
 

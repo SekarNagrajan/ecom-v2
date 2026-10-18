@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-11 00:18)
+// Modified by Sekar Nagarajan (2026-10-16 23:20)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
@@ -25,7 +25,7 @@ import { usePortSearch } from "../../landing/api/landing.queries";
 import { bookingApi, type BookingRateOption } from "../api/booking.api";
 import { bookingKeys } from "../api/booking.keys";
 import { useBookingLookups } from "../api/booking.queries";
-import { extractPortCode } from "../mocks/booking-routing.mock";
+import { extractPortCode } from "../../../mocks/fixture-api/bridges/booking-shared.bridge";
 import { useBookingStore } from "../stores/booking.store";
 import {
   masterDetailsSchema,

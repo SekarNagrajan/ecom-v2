@@ -1,13 +1,13 @@
-// Modified by Sekar Nagarajan (2026-08-28 12:09)
+// Modified by Sekar Nagarajan (2026-10-16 23:20)
 import { AutoComplete, Input } from "antd";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { bookingApi } from "../api/booking.api";
-import type {
-  BookingHsCodeOption,
-  BookingUnNumberOption,
-} from "../mocks/booking-hs-un.mock";
+import {
+  bookingApi,
+  type BookingHsCodeOption,
+  type BookingUnNumberOption,
+} from "../api/booking.api";
 
 function formatCommodityDisplay(code?: string, name?: string): string {
   const trimmedCode = (code ?? "").trim();

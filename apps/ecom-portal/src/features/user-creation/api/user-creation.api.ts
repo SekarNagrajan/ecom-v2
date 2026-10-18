@@ -1,11 +1,5 @@
-// Modified by Sekar Nagarajan (2026-08-26 15:06)
+// Modified by Sekar Nagarajan (2026-10-16 23:35)
 import type { ApiResponse } from "../../../types/api.types";
-import {
-  createMockSubUser,
-  getMockUserLimit,
-  mockSubUsers,
-  toggleMockSubUserStatus,
-} from "../mocks/usc.mock";
 import type {
   CreateSubUserPayload,
   SubUser,
@@ -61,55 +55,31 @@ async function readApiJson<T>(
   }
 }
 
-/** User Creation API — REST with DEV mock fallback (agenct parity). */
+function networkError(error: unknown): { error: { code: string; message: string } } {
+  const message = error instanceof Error ? error.message : "Network error";
+  return { error: { code: "NETWORK_ERROR", message } };
+}
+
+/** User Creation API — REST; in mock mode the routes are served by src/mocks/user-creation.handlers.ts. */
 export const userCreationApi = {
   async fetchSubUsers(): Promise<ApiResponse<SubUser[]>> {
     try {
       const res = await fetch("/api/v1/user-creation/sub-users");
-      const parsed = await readApiJson<SubUser[]>(
-        res,
-        "Failed to fetch sub-users",
-      );
-      if (!parsed.error) return parsed;
-      if (import.meta.env.DEV) {
-        return {
-          data: mockSubUsers.map((row) => ({
-            ...row,
-            allowedModules: [...row.allowedModules],
-          })),
-        };
-      }
-      return parsed;
+      return await readApiJson<SubUser[]>(res, "Failed to fetch sub-users");
     } catch (error: unknown) {
-      if (import.meta.env.DEV) {
-        return {
-          data: mockSubUsers.map((row) => ({
-            ...row,
-            allowedModules: [...row.allowedModules],
-          })),
-        };
-      }
-      const message =
-        error instanceof Error ? error.message : "Network error";
-      return { error: { code: "NETWORK_ERROR", message } };
+      return networkError(error);
     }
   },
 
   async fetchUserLimit(): Promise<ApiResponse<UserLimitResponse>> {
     try {
       const res = await fetch("/api/v1/user-creation/limit");
-      const parsed = await readApiJson<UserLimitResponse>(
+      return await readApiJson<UserLimitResponse>(
         res,
         "Failed to fetch user limits",
       );
-      if (!parsed.error) return parsed;
-      if (import.meta.env.DEV) return { data: getMockUserLimit() };
-      return parsed;
     } catch (error: unknown) {
-      if (import.meta.env.DEV) return { data: getMockUserLimit() };
-      const message =
-        error instanceof Error ? error.message : "Network error";
-      return { error: { code: "NETWORK_ERROR", message } };
+      return networkError(error);
     }
   },
 
@@ -122,34 +92,12 @@ export const userCreationApi = {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      const parsed = await readApiJson<SubUser>(
+      return await readApiJson<SubUser>(
         res,
         "Failed to create sub-user profile",
       );
-      if (!parsed.error) return parsed;
-      if (import.meta.env.DEV) {
-        const result = createMockSubUser(payload);
-        if (!result.ok) {
-          return {
-            error: { code: "LIMIT_REACHED", message: result.message },
-          };
-        }
-        return { data: result.subUser };
-      }
-      return parsed;
     } catch (error: unknown) {
-      if (import.meta.env.DEV) {
-        const result = createMockSubUser(payload);
-        if (!result.ok) {
-          return {
-            error: { code: "LIMIT_REACHED", message: result.message },
-          };
-        }
-        return { data: result.subUser };
-      }
-      const message =
-        error instanceof Error ? error.message : "Network error";
-      return { error: { code: "NETWORK_ERROR", message } };
+      return networkError(error);
     }
   },
 
@@ -163,34 +111,9 @@ export const userCreationApi = {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ active }),
       });
-      const parsed = await readApiJson<SubUser>(
-        res,
-        "Failed to update user status",
-      );
-      if (!parsed.error) return parsed;
-      if (import.meta.env.DEV) {
-        const updated = toggleMockSubUserStatus(id, active);
-        if (!updated) {
-          return {
-            error: { code: "NOT_FOUND", message: "Sub-user not found" },
-          };
-        }
-        return { data: updated };
-      }
-      return parsed;
+      return await readApiJson<SubUser>(res, "Failed to update user status");
     } catch (error: unknown) {
-      if (import.meta.env.DEV) {
-        const updated = toggleMockSubUserStatus(id, active);
-        if (!updated) {
-          return {
-            error: { code: "NOT_FOUND", message: "Sub-user not found" },
-          };
-        }
-        return { data: updated };
-      }
-      const message =
-        error instanceof Error ? error.message : "Network error";
-      return { error: { code: "NETWORK_ERROR", message } };
+      return networkError(error);
     }
   },
 };

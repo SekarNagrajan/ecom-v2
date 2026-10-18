@@ -1,0 +1,16 @@
+[
+ {
+  "id": "1",
+  "initiatorId": "ECOM-REG",
+  "reference": "REG706",
+  "toList": "leonie82@example.com",
+  "mailSubject": "ESEA registration verification",
+  "mailJson": null,
+  "status": "S",
+  "attempts": 2,
+  "lastError": null,
+  "createdAt": "2026-10-13T04:28:44.349Z",
+  "lastAttemptAt": "2026-10-13T04:35:37.279Z",
+  "updatedAt": "2026-10-13T04:35:40.252Z"
+ }
+]

@@ -1,211 +1,119 @@
-// Modified by Sekar Nagarajan (2026-09-08 11:01)
+// Modified by Sekar Nagarajan (2026-10-17 02:20)
+/**
+ * User-module routes (profile, password, quotes, alerts, payment history) served from the
+ * SQL-extracted fixtures via src/mocks/fixture-api/bridges/{user,payments}.bridge.ts.
+ * Mutations update the in-memory fixture rows, so edits persist for the browser session.
+ */
 import { http, HttpResponse } from 'msw';
 import type {
-  AlertHistoryLog,
   AlertPreference,
   CustomerProfile,
   QuoteItem,
 } from '../features/user-modules/types/user-modules.types';
+import { nextRef, nowIso } from './fixture-api/db';
+import { filterPaymentsByDateRange, fixturePaymentHistory } from './fixture-api/bridges/payments.bridge';
 import {
-  filterPaymentsByDateRange,
-  MOCK_PAYMENT_HISTORY,
-} from './payment-history.mock-data';
+  applyAlertPreferences,
+  applyProfilePatch,
+  currentCustomerCode,
+  currentFixtureUser,
+  customerParty,
+  fixtureAlertLogs,
+  fixtureAlertPreferences,
+  mapProfile,
+} from './fixture-api/bridges/user.bridge';
+import { formatYmd } from './fixture-api/bridges/minute-format';
+import { createQuote, listQuotes, surchargeAmount } from './fixture-api/bridges/rates.bridge';
+import type { QuoteDTO } from '../features/rates/types/rates.types';
 
-let mockProfile: CustomerProfile = {
-  loginName: 'APEX_GLOBAL_USER',
-  customerCode: 'CUST-001',
-  companyName: 'Apex Logistics Global',
-  firstName: 'Sekar',
-  lastName: 'Nagarajan',
-  email: 'sekar.n@apexlogistics.com',
-  phoneCode: '+1',
-  phoneNo: '555-0199',
-  mobileCode: '+1',
-  mobileNo: '555-0122',
-  taxId: 'US-TAX-884190',
-  country: 'United States',
-  city: 'New York',
-  address: '100 Wall Street, Suite 1400, NY 10005',
-  defLanguage: 'en',
-  prefTimeZone: 'UTC-5 (EST)',
+// Quotes: one store with the rates module (fixture-api/bridges/rates.bridge.ts) — enquiries derived from the
+// customer's route-search log plus the requests raised in this session.
+const toQuoteItem = (q: QuoteDTO): QuoteItem => {
+  const thc = q.status === 'PENDING_REVIEW' ? 0 : surchargeAmount('THD', q.eqpType);
+  return {
+    id: q.id,
+    quoteNo: q.quoteNo,
+    polCode: q.originPort,
+    polName: q.originPortName,
+    podCode: q.deliveryPort,
+    podName: q.deliveryPortName,
+    equipmentType: q.eqpType,
+    commodity: q.commodity,
+    validFrom: q.validFrom,
+    validTo: q.validTo,
+    oceanFreightUSD: q.quotedAmountUsd,
+    thcUSD: thc,
+    totalAmountUSD: q.quotedAmountUsd ? q.quotedAmountUsd + thc : 0,
+    status: q.status === 'DRAFT' ? 'PENDING_REVIEW' : q.status,
+    createdAt: q.createdAt.slice(0, 10),
+  };
 };
 
-let mockQuotes: QuoteItem[] = [
-  {
-    id: 'q-101',
-    quoteNo: 'QT-2026-8801',
-    polCode: 'USNYC',
-    polName: 'Port of New York (USNYC)',
-    podCode: 'SGSIN',
-    podName: 'Port of Singapore (SGSIN)',
-    equipmentType: '40ft High Cube Container (40HC)',
-    commodity: 'General Cargo & Electronics',
-    validFrom: '2026-08-01',
-    validTo: '2026-09-15',
-    oceanFreightUSD: 1850.0,
-    thcUSD: 320.0,
-    totalAmountUSD: 2170.0,
-    status: 'QUOTED',
-    createdAt: '2026-08-10',
-  },
-  {
-    id: 'q-102',
-    quoteNo: 'QT-2026-8802',
-    polCode: 'NLRTM',
-    polName: 'Port of Rotterdam (NLRTM)',
-    podCode: 'CNSHA',
-    podName: 'Shanghai Port (CNSHA)',
-    equipmentType: '20ft Standard Container (20GP)',
-    commodity: 'Industrial Machinery',
-    validFrom: '2026-08-05',
-    validTo: '2026-09-30',
-    oceanFreightUSD: 1420.0,
-    thcUSD: 280.0,
-    totalAmountUSD: 1700.0,
-    status: 'ACCEPTED',
-    createdAt: '2026-08-12',
-  },
-  {
-    id: 'q-103',
-    quoteNo: 'QT-2026-8803',
-    polCode: 'DEHAM',
-    polName: 'Hamburg Port (DEHAM)',
-    podCode: 'USNYC',
-    podName: 'Port of New York (USNYC)',
-    equipmentType: '40ft Reefer Container (40RF)',
-    commodity: 'Chilled Produce & Pharmaceuticals',
-    validFrom: '2026-07-01',
-    validTo: '2026-08-01',
-    oceanFreightUSD: 2600.0,
-    thcUSD: 450.0,
-    totalAmountUSD: 3050.0,
-    status: 'EXPIRED',
-    createdAt: '2026-07-05',
-  },
-];
-
-let mockAlertPreferences: AlertPreference = {
-  bookingUpdates: true,
-  siConfirmation: true,
-  blRelease: true,
-  scheduleDelays: true,
-  paymentInvoices: true,
-  channelEmail: true,
-  channelSms: false,
-  channelPortal: true,
-};
-
-const mockAlertLogs: AlertHistoryLog[] = [
-  {
-    id: 'alt-1',
-    category: 'BOOKING',
-    title: 'Booking Confirmed',
-    message: 'Booking BKG-2026-0991 has been confirmed by carrier Apex Global Line.',
-    timestamp: '2026-08-21 09:30',
-    isRead: false,
-    referenceNo: 'BKG-2026-0991',
-  },
-  {
-    id: 'alt-2',
-    category: 'SI',
-    title: 'Shipping Instructions Accepted',
-    message: 'SI-2026-8812 verified successfully. Draft Bill of Lading generated.',
-    timestamp: '2026-08-21 10:15',
-    isRead: true,
-    referenceNo: 'SI-2026-8812',
-  },
-  {
-    id: 'alt-3',
-    category: 'PAYMENT',
-    title: 'Payment Invoice Generated',
-    message: 'Invoice INV-2026-4410 issued for container shipment BKG-2026-0988 ($2,170.00 USD).',
-    timestamp: '2026-08-20 16:45',
-    isRead: true,
-    referenceNo: 'INV-2026-4410',
-  },
-];
+const noUser = () =>
+  HttpResponse.json({ error: { code: 'NOT_FOUND', message: 'No fixture user for the demo customer' } }, { status: 404 });
 
 export const userModulesHandlers = [
-  // 1. Profile
+  // 1. Profile — users (eCom_Reg_Details) + userDetails (ecomuserdetails)
+  //    (address falls back to the customer's own party row on its bookings when eCom_Reg_Details left it blank)
   http.get('/api/v1/user/profile', () => {
-    return HttpResponse.json(mockProfile);
+    const cur = currentFixtureUser();
+    return cur ? HttpResponse.json(mapProfile(cur.user, cur.details, customerParty(currentCustomerCode()))) : noUser();
   }),
   http.put('/api/v1/user/profile', async ({ request }) => {
+    const cur = currentFixtureUser();
+    if (!cur) return noUser();
     const body = (await request.json()) as Partial<CustomerProfile>;
-    mockProfile = { ...mockProfile, ...body };
-    return HttpResponse.json(mockProfile);
+    return HttpResponse.json(applyProfilePatch(cur, body, customerParty(currentCustomerCode())));
   }),
 
-  // 2. Change Password
+  // 2. Change Password — stamps ecomuserdetails.lastpwdup
   http.post('/api/v1/user/change-password', async ({ request }) => {
     const body = (await request.json()) as { oldPassword?: string; newPassword?: string };
     if (!body.oldPassword) {
-      return HttpResponse.json(
-        { success: false, message: 'Current password is required' },
-        { status: 400 }
-      );
+      return HttpResponse.json({ success: false, message: 'Current password is required' }, { status: 400 });
     }
-    return HttpResponse.json({
-      success: true,
-      message: 'Password updated successfully',
-    });
+    const cur = currentFixtureUser();
+    if (cur?.details) cur.details.lastpwdup = nowIso();
+    return HttpResponse.json({ success: true, message: 'Password updated successfully' });
   }),
 
-  // 3. Quotes
-  http.get('/api/v1/user/quotes', () => {
-    return HttpResponse.json(mockQuotes);
-  }),
+  // 3. Quotes — shared with the rates module
+  http.get('/api/v1/user/quotes', () => HttpResponse.json(listQuotes().map(toQuoteItem))),
   http.post('/api/v1/user/quotes', async ({ request }) => {
     const body = (await request.json()) as {
       polPort?: string;
       podPort?: string;
       equipmentType?: string;
       commodity?: string;
+      targetDate?: string;
     };
-    const newQuote: QuoteItem = {
-      id: `q-${Date.now()}`,
-      quoteNo: `QT-2026-${Math.floor(1000 + Math.random() * 9000)}`,
-      polCode: body.polPort?.slice(0, 5) || 'USNYC',
-      polName: body.polPort || 'Port of New York (USNYC)',
-      podCode: body.podPort?.slice(0, 5) || 'SGSIN',
-      podName: body.podPort || 'Port of Singapore (SGSIN)',
-      equipmentType: body.equipmentType || '40ft High Cube Container (40HC)',
-      commodity: body.commodity || 'General Cargo',
-      validFrom: new Date().toISOString().split('T')[0],
-      validTo: '2026-10-31',
-      oceanFreightUSD: 1950.0,
-      thcUSD: 300.0,
-      totalAmountUSD: 2250.0,
-      status: 'QUOTED',
-      createdAt: new Date().toISOString().split('T')[0],
-    };
-    mockQuotes.unshift(newQuote);
-    return HttpResponse.json(newQuote);
+    const code = (port?: string) => String(port ?? '').replace(/^.*\(([A-Z0-9]{5})\).*$/, '$1').slice(0, 5).toUpperCase();
+    const quote = createQuote({
+      originPort: code(body.polPort),
+      deliveryPort: code(body.podPort),
+      eqpType: body.equipmentType ?? '',
+      eqpQuantity: 1,
+      commodity: body.commodity ?? '',
+      cargoWeightKg: 0,
+      comments: body.targetDate ? `Target shipment date ${body.targetDate}` : undefined,
+    });
+    // A new request has no price until the agency quotes it.
+    return HttpResponse.json(toQuoteItem({ ...quote, quotedAmountUsd: 0, validTo: body.targetDate || quote.validTo }));
   }),
 
-  // 4. Alerts
-  http.get('/api/v1/user/alerts/preferences', () => {
-    return HttpResponse.json(mockAlertPreferences);
-  }),
+  // 4. Alerts — mailAlerts + activities (fallback notificationSettings / customerNotifications); logs from EcommuserlogDetails
+  http.get('/api/v1/user/alerts/preferences', () => HttpResponse.json(fixtureAlertPreferences())),
   http.put('/api/v1/user/alerts/preferences', async ({ request }) => {
     const body = (await request.json()) as AlertPreference;
-    mockAlertPreferences = { ...body };
-    return HttpResponse.json(mockAlertPreferences);
+    return HttpResponse.json(applyAlertPreferences(body));
   }),
-  http.get('/api/v1/user/alerts/logs', () => {
-    return HttpResponse.json(mockAlertLogs);
-  }),
+  http.get('/api/v1/user/alerts/logs', () => HttpResponse.json(fixtureAlertLogs())),
 
-  // 5. Payments — optional ?fromDate=&toDate= (YYYY-MM-DD, inclusive)
+  // 5. Payments — payments + paymentReferences; optional ?fromDate=&toDate= (YYYY-MM-DD, inclusive)
   http.get('*/api/v1/user/payments', ({ request }) => {
     const url = new URL(request.url);
     const fromDate = url.searchParams.get('fromDate') || undefined;
     const toDate = url.searchParams.get('toDate') || undefined;
-    const rows = filterPaymentsByDateRange(
-      MOCK_PAYMENT_HISTORY,
-      fromDate,
-      toDate,
-    );
-    return HttpResponse.json(rows);
+    return HttpResponse.json(filterPaymentsByDateRange(fixturePaymentHistory(currentCustomerCode()), fromDate, toDate));
   }),
 ];

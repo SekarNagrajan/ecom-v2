@@ -1,6 +1,7 @@
-// Modified by Sekar Nagarajan (2026-09-17 21:14)
+// Modified by Sekar Nagarajan (2026-10-18 11:15)
 import { AppButton, AppModal } from "@solverminds/shared-ui";
 import { Form, Tooltip } from "antd";
+import dayjs from "dayjs";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
@@ -15,6 +16,8 @@ import type { ScheduleSearchParams } from "../types/schedules.types";
 import { ScheduleSearchFilter } from "./ScheduleSearchFilter";
 
 export interface ScheduleSearchHostProps {
+  /** Criteria the page was opened with (landing search / deep link); the form shows them. */
+  params?: ScheduleSearchParams | null;
   onSearch: (params: ScheduleSearchParams) => void;
   onReset?: () => void;
   isLoading?: boolean;
@@ -26,12 +29,28 @@ export interface ScheduleSearchHostProps {
  * under the header with no empty white gap.
  */
 export function ScheduleSearchHost({
+  params,
   onSearch,
   onReset,
   isLoading,
 }: ScheduleSearchHostProps) {
   const { t } = useTranslation(["schedules", "common", "modules"]);
   const [form] = Form.useForm();
+
+  // Deep link / landing search: the form must show the lane, vessel or port and dates that were searched.
+  useEffect(() => {
+    if (!params) return;
+    form.setFieldsValue({
+      searchType: params.searchType,
+      polCode: params.polCode,
+      podCode: params.podCode,
+      vesselCode: params.vesselCode,
+      portCode: params.portCode,
+      ...(params.fromDate
+        ? { dateRange: [dayjs(params.fromDate), dayjs(params.toDate ?? params.fromDate)] }
+        : {}),
+    });
+  }, [params, form]);
   const pinSentinelRef = useRef<HTMLDivElement>(null);
   const [slotEl, setSlotEl] = useState<HTMLElement | null>(null);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);

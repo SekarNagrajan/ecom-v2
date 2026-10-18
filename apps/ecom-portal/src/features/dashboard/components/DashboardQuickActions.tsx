@@ -1,11 +1,11 @@
-// Modified by Sekar Nagarajan (2026-08-24 16:05)
+// Modified by Sekar Nagarajan (2026-10-16 23:45)
 import { useNavigate } from "@tanstack/react-router";
 import { Card, Col, Row, Typography, theme } from "antd";
 import type { LucideIcon } from "lucide-react";
 
 import { AppIcon, Icons, NavBookingIcon } from "../../../components/icons";
 import { useBookingStore } from "../../booking/stores/booking.store";
-import type { DashboardQuickAction } from "../mocks/dashboard.mock";
+import type { DashboardQuickAction } from "../api/dashboard.api";
 
 const NEW_BOOKING_ROUTE = "/app/booking/new";
 

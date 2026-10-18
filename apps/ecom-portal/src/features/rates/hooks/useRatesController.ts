@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-18 00:15)
+// Modified by Sekar Nagarajan (2026-10-18 10:30)
 // Controller hook for Rates — mode-aware cards + surcharge rollup (JSP parity)
 
 import { useToast } from "@solverminds/shared-ui/hooks";
@@ -23,12 +23,14 @@ import type {
   ContractDTO,
   CreateQuoteInput,
 } from "../types/rates.types";
+import { normalizeRateEquipment, portCodeFromLabel } from "../utils/rate-equipment";
 
+// Modified by Sekar Nagarajan (2026-10-17 02:30) — default to the lane the extracted tariffs and bookings cover
 const DEFAULT_SEARCH_PARAMS: RateSearchParams = {
   searchMode: "PUBLISHED_TARIFF",
-  polCode: "USNYC",
-  podCode: "SGSIN",
-  eqpType: "40' High Cube Dry",
+  polCode: "INNSA",
+  podCode: "AEJEA",
+  eqpType: "20' Standard Dry",
   commodity: "GEN-CGO",
 };
 
@@ -75,13 +77,17 @@ export function useRatesController() {
     const pol = urlParams.get("pol") || urlParams.get("ratepol");
     const pod = urlParams.get("pod") || urlParams.get("ratepod");
     const eqp = urlParams.get("eqpType") || urlParams.get("rateseqp");
+    const shipmentDate = urlParams.get("shipmentdate") || urlParams.get("date");
 
     if (pol || pod || eqp) {
+      // Landing / deep links send port codes and the equipment master code (20DC, 40HC…);
+      // the filter works in its own vocabulary ("20' Standard Dry").
       setSearchParams((prev) => ({
         ...prev,
-        polCode: pol || prev.polCode,
-        podCode: pod || prev.podCode,
-        eqpType: eqp || prev.eqpType,
+        polCode: pol ? portCodeFromLabel(pol, prev.polCode ?? "") : prev.polCode,
+        podCode: pod ? portCodeFromLabel(pod, prev.podCode ?? "") : prev.podCode,
+        eqpType: eqp ? normalizeRateEquipment(eqp) : prev.eqpType,
+        fromDate: shipmentDate || prev.fromDate,
       }));
       setHasSearched(true);
     }
@@ -114,6 +120,7 @@ export function useRatesController() {
       dischPort: searchParams.podCode,
       eqpType: eqpFilter,
       commodity: commodityFilter,
+      date: searchParams.fromDate,
     },
     { enabled: fetchTariffs },
   );

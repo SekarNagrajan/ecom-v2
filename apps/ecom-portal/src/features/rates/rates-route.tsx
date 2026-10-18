@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-15 15:30)
+// Modified by Sekar Nagarajan (2026-10-18 10:40)
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { Card, Space, Spin, Typography } from "antd";
@@ -34,6 +34,7 @@ export function RatesRoute() {
     resultsTitle,
     cardRates,
     hasSearched,
+    searchParams,
     isLoading,
     handleSearch,
     handleReset,
@@ -85,6 +86,7 @@ export function RatesRoute() {
         />
 
         <RateSearchFilter
+          params={searchParams}
           onSearch={handleSearch}
           onReset={handleReset}
           onSearchModeChange={handleSearchModeChange}

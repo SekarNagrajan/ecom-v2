@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-24 16:05)
+// Modified by Sekar Nagarajan (2026-10-16 23:45)
 import { AppButton } from "@solverminds/shared-ui";
 import { useNavigate } from "@tanstack/react-router";
 import { Flex, Table, Tag, Typography, theme } from "antd";
@@ -6,7 +6,7 @@ import type { ColumnsType } from "antd/es/table";
 import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
-import type { RecentBookingRow } from "../mocks/dashboard.mock";
+import type { RecentBookingRow } from "../api/dashboard.api";
 
 const { Text, Title } = Typography;
 

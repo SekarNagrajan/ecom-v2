@@ -1,0 +1,40 @@
+[
+ {
+  "id": 2,
+  "MenuId": "CCF",
+  "MenuName": "Configuration",
+  "RefNo": "CCF",
+  "ClassValue": "fa fa-tasks",
+  "AttrValue": "href=\"AdminAccess.do?type=GlobalConfig\"",
+  "LabelValue": "ecom.cpanel.configuration",
+  "MenuType": "M",
+  "ParentMenu": "ROOT",
+  "ScreenType": "C",
+  "MenuOrder": 20,
+  "Category": "D",
+  "CreateDate": "2019-10-02T14:00:09.395Z",
+  "CreateUser": "admin",
+  "Updatedate": null,
+  "UpdateUser": null,
+  "status": "A"
+ },
+ {
+  "id": 1,
+  "MenuId": "CMC",
+  "MenuName": "Module Creation",
+  "RefNo": "CMC",
+  "ClassValue": "fa fa-tasks",
+  "AttrValue": "href=\"AdminAccess.do?type=registermenu\"",
+  "LabelValue": "ecom.cpanel.modulecreation",
+  "MenuType": "M",
+  "ParentMenu": "ROOT",
+  "ScreenType": "C",
+  "MenuOrder": 10,
+  "Category": "D",
+  "CreateDate": "2019-10-02T14:00:09.365Z",
+  "CreateUser": "admin",
+  "Updatedate": null,
+  "UpdateUser": null,
+  "status": "A"
+ }
+]

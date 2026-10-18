@@ -1,48 +1,15 @@
-// Modified by Sekar Nagarajan (2026-09-17 21:00)
+// Modified by Sekar Nagarajan (2026-10-17 00:20)
 import { PRECONFIGURED_TENANTS } from "@solverminds/auth";
 import { http, HttpResponse } from "msw";
 import type { LoginSuccessResponse } from "../features/auth/types/auth.types";
-import type {
-  EquipmentType,
-  PortOption,
-  TabConfig,
-} from "../features/landing/types/landing.types";
-import { registerMockToken } from "./auth-admin.mock-data";
+import type { TabConfig } from "../features/landing/types/landing.types";
+import { registerMockToken } from "./auth-token-registry";
+import { fixtureEquipmentTypes, fixturePorts } from "./fixture-api/bridges/lookups.bridge";
 
 // ---------------------------------------------------------------------------
-// Mock data — landing Origin / Delivery typeahead (schedule + rates)
+// Origin / Delivery typeahead and equipment types come from the extracted masters
+// (ports / equipments fixtures) via fixture-api/bridges/lookups.bridge.ts.
 // ---------------------------------------------------------------------------
-const MOCK_PORTS: PortOption[] = [
-  { portCode: "AEDXB", portName: "DUBAI", label: "AEDXB - DUBAI" },
-  {
-    portCode: "AEJEA",
-    portName: "JEBEL ALI, UAE",
-    label: "AEJEA - JEBEL ALI, UAE",
-  },
-  {
-    portCode: "CNSHA",
-    portName: "SHANGHAI HONGQIAO INT APT",
-    label: "CNSHA - SHANGHAI HONGQIAO INT APT",
-  },
-  { portCode: "INMUN", portName: "MUNDRA", label: "INMUN - MUNDRA" },
-  {
-    portCode: "INNSA",
-    portName: "NHAVA SHEVA,MUMBAI",
-    label: "INNSA - NHAVA SHEVA,MUMBAI",
-  },
-  { portCode: "SGSIN", portName: "SINGAPORE", label: "SGSIN - SINGAPORE" },
-];
-
-const MOCK_EQUIPMENT_TYPES: EquipmentType[] = [
-  { code: "20GP", name: "20' General Purpose" },
-  { code: "40GP", name: "40' General Purpose" },
-  { code: "40HC", name: "40' High Cube" },
-  { code: "20RF", name: "20' Reefer" },
-  { code: "40RF", name: "40' Reefer" },
-  { code: "20OT", name: "20' Open Top" },
-  { code: "40OT", name: "40' Open Top" },
-];
-
 const MOCK_TAB_CONFIG: TabConfig = {
   schedules: "public",
   tracking: "public",
@@ -440,21 +407,16 @@ registerMockToken(MOCK_SUPERUSER_USER.token, MOCK_SUPERUSER_USER.user);
 // MSW Handlers
 // ---------------------------------------------------------------------------
 export const landingHandlers = [
-  // Port search
+  // Port search — ports master (portcode / portname), label "CODE - NAME"
   http.get("/api/ports/search", ({ request }) => {
     const url = new URL(request.url);
-    const q = (url.searchParams.get("q") ?? "").toLowerCase();
-    const results = MOCK_PORTS.filter(
-      (p) =>
-        p.portCode.toLowerCase().includes(q) ||
-        p.portName.toLowerCase().includes(q),
-    );
-    return HttpResponse.json({ data: results });
+    const q = url.searchParams.get("q") ?? "";
+    return HttpResponse.json({ data: fixturePorts(q) });
   }),
 
-  // Equipment types
+  // Equipment types — equipments master (status A), label from equipdesc
   http.get("/api/equipment-types", () => {
-    return HttpResponse.json({ data: MOCK_EQUIPMENT_TYPES });
+    return HttpResponse.json({ data: fixtureEquipmentTypes() });
   }),
 
   // Tab config (menu access) — handled by auth-admin.handlers.ts
@@ -564,7 +526,8 @@ export const landingHandlers = [
       return HttpResponse.json({ data: MOCK_TENANT_USERS.TENANT_10 });
     }
 
-    // Default to Tenant 01 (SVM Shipping Lines)
-    return HttpResponse.json({ data: MOCK_TENANT_USERS.TENANT_01 });
+    // Modified by Sekar Nagarajan (2026-10-17 00:05) — anything else (test/test, any fixture
+    // login name) falls through to auth.handlers.ts, which resolves users from the SQL fixtures.
+    return undefined;
   }),
 ];

@@ -41,7 +41,9 @@
       "all": "Todos los tipos de equipo",
       "20dv": "20' Standard Dry (20DV)",
       "40hc": "40' High Cube Dry (40HC)",
-      "40rf": "40' Reefer Container (40RF)"
+      "40rf": "40' Reefer Container (40RF)",
+      "40dv": "40' Standard Dry (40DV)",
+      "20rf": "20' Reefer Container (20RF)"
     },
     "commodity": {
       "all": "Todas las mercancías",
@@ -57,14 +59,16 @@
       "CNSHA": "CNSHA - Shanghái, China",
       "DEHAM": "DEHAM - Hamburgo, Alemania",
       "INNSA": "INNSA - Nhava Sheva, India",
-      "AEDXB": "AEDXB - Jebel Ali, EAU",
+      "AEDXB": "AEDXB - Dubái, EAU",
       "USNYC_short": "USNYC - Nueva York",
       "DEHAM_short": "DEHAM - Hamburgo",
       "NLRTM_short": "NLRTM - Róterdam",
       "INNSA_short": "INNSA - Nhava Sheva",
       "SGSIN_short": "SGSIN - Singapur",
       "CNSHA_short": "CNSHA - Shanghái",
-      "AEDXB_short": "AEDXB - Jebel Ali"
+      "AEDXB_short": "AEDXB - Dubái",
+      "AEJEA": "AEJEA - Jebel Ali, EAU",
+      "AEJEA_short": "AEJEA - Jebel Ali"
     },
     "rateType": {
       "tariff": "Tarifa",

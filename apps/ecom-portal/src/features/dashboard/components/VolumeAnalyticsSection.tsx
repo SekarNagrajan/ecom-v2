@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-17 22:28)
+// Modified by Sekar Nagarajan (2026-10-16 23:45)
 import { Card, Segmented, Select, Tooltip, Typography } from "antd";
 import * as echarts from "echarts";
 import { useLayoutEffect, useMemo, useRef } from "react";
@@ -11,11 +11,11 @@ import type {
   VolumeKpi,
   VolumeTrendPeriod,
   VolumeTrendPoint,
-} from "../mocks/dashboard.mock";
+} from "../api/dashboard.api";
 import {
   VOLUME_ANALYTICS_STAGE_OPTIONS,
   VOLUME_TREND_PERIOD_OPTIONS,
-} from "../mocks/dashboard.mock";
+} from "../api/dashboard.api";
 
 const { Text, Title } = Typography;
 

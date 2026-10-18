@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-18 12:01)
+// Modified by Sekar Nagarajan (2026-10-16 23:45)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { Tag, Typography } from "antd";
 import { useTranslation } from "react-i18next";
@@ -12,7 +12,7 @@ import {
 import type {
   PlanningBookingDTO,
   PlanningDaySelection,
-} from "../mocks/dashboard.mock";
+} from "../api/dashboard.api";
 
 const { Text, Title } = Typography;
 

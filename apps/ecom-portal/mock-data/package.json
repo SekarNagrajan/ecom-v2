@@ -1,0 +1,22 @@
+{
+  "name": "ecom-v2-mock-data",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Extracts sampled, anonymised records from the e-commerce SQL Server databases into JSON fixtures for the React V2 UI",
+  "scripts": {
+    "extract": "node extract.js",
+    "extract:dry": "DRY_RUN=true node extract.js",
+    "inspect": "node inspect.js",
+    "inspect:columns": "node inspect.js --columns",
+    "dump": "node dump-all.js",
+    "dump:dry": "DRY_RUN=true node dump-all.js",
+    "extract:masters": "node extract.js --config ./extract.masters.config.js",
+    "extract:masters:dry": "DRY_RUN=true node extract.js --config ./extract.masters.config.js"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^9.0.0",
+    "dotenv": "^16.4.5",
+    "mssql": "^11.0.1"
+  }
+}

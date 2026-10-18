@@ -1,0 +1,224 @@
+[
+ {
+  "id": 6637,
+  "pathname": "Enable_NewEcom",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 6632,
+  "pathname": "Enable_Multi_Account_Access",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 6631,
+  "pathname": "SCHD_NEXT_DEP_MINS",
+  "pathvalue": "30",
+  "status": "C"
+ },
+ {
+  "id": 6630,
+  "pathname": "Enable_Block_Google_Translate",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 6629,
+  "pathname": "Enable_UCR_ReferenceNo",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 6628,
+  "pathname": "Enable_User_OTP",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 6626,
+  "pathname": "Enable_Enhanced_Dashboard",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 6625,
+  "pathname": "Enable_Enhanced_Dashboard",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 6624,
+  "pathname": "SI_NVOCC_Eligible_Country",
+  "pathvalue": "US,AE",
+  "status": "C"
+ },
+ {
+  "id": 6623,
+  "pathname": "Enable_NVOCC_In_SI",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 6622,
+  "pathname": "Hide_AP_CUST_BKG_Master",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 6620,
+  "pathname": "PaymentStatusUpdateJob",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 6618,
+  "pathname": "Payment_TransID_Source",
+  "pathvalue": "PAYMENT_REF",
+  "status": "C"
+ },
+ {
+  "id": 6617,
+  "pathname": "SERVICE_LOGIN_NAME",
+  "pathvalue": "E-Services Login",
+  "status": "C"
+ },
+ {
+  "id": 6615,
+  "pathname": "Enable_Google_Address_Search",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 6613,
+  "pathname": "Enable_MCN_Based_Tracking",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 6610,
+  "pathname": "Schedule_Date_Range_Days",
+  "pathvalue": "60",
+  "status": "C"
+ },
+ {
+  "id": 6609,
+  "pathname": "Auto_Cancel_Booking_hours",
+  "pathvalue": "60",
+  "status": "C"
+ },
+ {
+  "id": 6606,
+  "pathname": "Enable_Reg_Auto_Process",
+  "pathvalue": "N",
+  "status": "C"
+ },
+ {
+  "id": 6605,
+  "pathname": "Disable_ConfirmBKG_Validation",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 6604,
+  "pathname": "ENABLE_COUNTRY_CODE",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 6603,
+  "pathname": "Ngenius_Webhook_Header_Value",
+  "pathvalue": "f7d9c3e1-8a2b-4f5d-b7e9-3c1a6f8d2e4b",
+  "status": "C"
+ },
+ {
+  "id": 6602,
+  "pathname": "Ngenius_Webhook_Header_Key",
+  "pathvalue": "X-NGENIUS-SECRET",
+  "status": "C"
+ },
+ {
+  "id": 6601,
+  "pathname": "Save_Template_Message",
+  "pathvalue": "Your booking request has been provisionally accepted. Please submit / upload the required documents within 48 hours for system verification. Once verified, kindly resubmit your booking request to obtain a booking reference number for future correspondence. Failure to submit the required documents within the specified timeframe may result in cancellation of the booking request.",
+  "status": "C"
+ },
+ {
+  "id": 6599,
+  "pathname": "Ngenius_Payment_Currency",
+  "pathvalue": "USD",
+  "status": "C"
+ },
+ {
+  "id": 6598,
+  "pathname": "Ngenius_Outlet_Id",
+  "pathvalue": "97ffc4b3-99ba-4836-b811-ec3dfbdc32ea",
+  "status": "C"
+ },
+ {
+  "id": 6596,
+  "pathname": "Enable_Ngenius_Payment",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 6595,
+  "pathname": "CommodityDescInOnlyENG_Regex",
+  "pathvalue": "/[^a-zA-Z0-9\\s!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~]/",
+  "status": "C"
+ },
+ {
+  "id": 6594,
+  "pathname": "CommodityDescInOnlyENG_Disclaimer",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 6593,
+  "pathname": "BKG_Cancel_Reason_List",
+  "pathvalue": "Product not ready,Purchase order cancelled,Lack of equipment-space,Other",
+  "status": "C"
+ },
+ {
+  "id": 6592,
+  "pathname": "Enable_TermsCondition_Accept",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 6591,
+  "pathname": "Enable_Cancel_Option_Confirmed_BKG",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 6590,
+  "pathname": "ECOM_CARBON_LOG_ROLLING_PERIOD",
+  "pathvalue": "",
+  "status": "C"
+ },
+ {
+  "id": 6588,
+  "pathname": "GOOGLE_CAPTCHA_SITE_KEY",
+  "pathvalue": "6LePZ_MsAAAAALbHDivO2e6VJtfcvS2g_F-PARF3",
+  "status": "C"
+ },
+ {
+  "id": 6587,
+  "pathname": "ENABLE_CONTACTUS_CAPTCHA_DEFAULT",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 6586,
+  "pathname": "ENABLE_GOOGLE_CAPTCHA",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 6585,
+  "pathname": "ENABLE_SCHEDULE_CARD_CARBON",
+  "pathvalue": "Y",
+  "status": "C"
+ }
+]

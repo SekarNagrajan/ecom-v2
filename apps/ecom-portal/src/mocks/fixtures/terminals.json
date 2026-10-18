@@ -1,0 +1,3170 @@
+[
+ {
+  "terminalcode": "V",
+  "terminalname": "A",
+  "portcode": "11013",
+  "type": "T"
+ },
+ {
+  "terminalcode": "V2",
+  "terminalname": "A",
+  "portcode": "11013",
+  "type": "T"
+ },
+ {
+  "terminalcode": "REN077",
+  "terminalname": "REN077",
+  "portcode": "11013",
+  "type": "T"
+ },
+ {
+  "terminalcode": "TEST080823",
+  "terminalname": "TEST CHENNAI",
+  "portcode": "11013",
+  "type": "T"
+ },
+ {
+  "terminalcode": "1",
+  "terminalname": "1",
+  "portcode": "12344",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AB005TER0",
+  "terminalname": "AB005TER01",
+  "portcode": "12344",
+  "type": "T"
+ },
+ {
+  "terminalcode": "1234567890",
+  "terminalname": "QWERTY",
+  "portcode": "12344",
+  "type": "T"
+ },
+ {
+  "terminalcode": "161102",
+  "terminalname": "QWERTY",
+  "portcode": "12344",
+  "type": "T"
+ },
+ {
+  "terminalcode": "ABC123",
+  "terminalname": "QWERTY",
+  "portcode": "12344",
+  "type": "T"
+ },
+ {
+  "terminalcode": "12345",
+  "terminalname": "QWERTY",
+  "portcode": "23436",
+  "type": "T"
+ },
+ {
+  "terminalcode": "4EETETER01",
+  "terminalname": "4EETETER01",
+  "portcode": "4EETE",
+  "type": "T"
+ },
+ {
+  "terminalcode": "BOSS",
+  "terminalname": "BK DUBAI",
+  "portcode": "54367",
+  "type": "T"
+ },
+ {
+  "terminalcode": "A0001TER01",
+  "terminalname": "A0001TER01",
+  "portcode": "A0001",
+  "type": "T"
+ },
+ {
+  "terminalcode": "ffs",
+  "terminalname": "fsf",
+  "portcode": "A0001",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AB001TER01",
+  "terminalname": "AB001TER01",
+  "portcode": "AB001",
+  "type": "T"
+ },
+ {
+  "terminalcode": "12345123",
+  "terminalname": "AEESAD",
+  "portcode": "AB001",
+  "type": "T"
+ },
+ {
+  "terminalcode": "TEST101",
+  "terminalname": "HUTCHISON AJMAN INTERNATIONAL TERMINALS",
+  "portcode": "AB001",
+  "type": "T"
+ },
+ {
+  "terminalcode": "TEST111",
+  "terminalname": "HUTCHISON AJMAN INTERNATIONAL TERMINALS",
+  "portcode": "AB001",
+  "type": "T"
+ },
+ {
+  "terminalcode": "TEST1110",
+  "terminalname": "HUTCHISON AJMAN INTERNATIONAL TERMINALS",
+  "portcode": "AB001",
+  "type": "T"
+ },
+ {
+  "terminalcode": "TEST1121",
+  "terminalname": "HUTCHISON AJMAN INTERNATIONAL TERMINALS",
+  "portcode": "AB001",
+  "type": "T"
+ },
+ {
+  "terminalcode": "TEST162",
+  "terminalname": "HUTCHISON AJMAN INTERNATIONAL TERMINALS",
+  "portcode": "AB001",
+  "type": "T"
+ },
+ {
+  "terminalcode": "inmaater4",
+  "terminalname": "inmaater4",
+  "portcode": "AB001",
+  "type": "T"
+ },
+ {
+  "terminalcode": "SAF",
+  "terminalname": "SAFAS",
+  "portcode": "AB001",
+  "type": "T"
+ },
+ {
+  "terminalcode": "TermCode1",
+  "terminalname": "Term name 1",
+  "portcode": "AB001",
+  "type": "T"
+ },
+ {
+  "terminalcode": "PHBCD12002",
+  "terminalname": "Bacolod, Negros A00",
+  "portcode": "AB002",
+  "type": "T"
+ },
+ {
+  "terminalcode": "JHFDJSD",
+  "terminalname": "chennai",
+  "portcode": "AB002",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INMAA4345",
+  "terminalname": "INMAA",
+  "portcode": "AB002",
+  "type": "T"
+ },
+ {
+  "terminalcode": "Term1",
+  "terminalname": "Term2",
+  "portcode": "AB002",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AB003TER01",
+  "terminalname": "AB003TER01",
+  "portcode": "AB003",
+  "type": "T"
+ },
+ {
+  "terminalcode": "ASDF",
+  "terminalname": "?????????????",
+  "portcode": "AB004",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AB004TER01",
+  "terminalname": "AB004TER01",
+  "portcode": "AB004",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INMAA",
+  "terminalname": "Chennai Terminal ",
+  "portcode": "AB004",
+  "type": "T"
+ },
+ {
+  "terminalcode": "DSV",
+  "terminalname": "J",
+  "portcode": "AB004",
+  "type": "T"
+ },
+ {
+  "terminalcode": "J6",
+  "terminalname": "J2",
+  "portcode": "AB004",
+  "type": "T"
+ },
+ {
+  "terminalcode": "J5",
+  "terminalname": "J5",
+  "portcode": "AB004",
+  "type": "T"
+ },
+ {
+  "terminalcode": "J7",
+  "terminalname": "J7",
+  "portcode": "AB004",
+  "type": "T"
+ },
+ {
+  "terminalcode": "J8",
+  "terminalname": "J8",
+  "portcode": "AB004",
+  "type": "T"
+ },
+ {
+  "terminalcode": "J2",
+  "terminalname": "JAY",
+  "portcode": "AB004",
+  "type": "T"
+ },
+ {
+  "terminalcode": "J1",
+  "terminalname": "JAY @233YAA3#@#",
+  "portcode": "AB004",
+  "type": "T"
+ },
+ {
+  "terminalcode": "J",
+  "terminalname": "JAYJAYA",
+  "portcode": "AB004",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AB006TER01",
+  "terminalname": "AB006TER01",
+  "portcode": "AB006",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AB007TER01",
+  "terminalname": "AB007TER01",
+  "portcode": "AB007",
+  "type": "T"
+ },
+ {
+  "terminalcode": "PMPMPMPMPM",
+  "terminalname": "ENNORE",
+  "portcode": "AB007",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEFJRFJROO",
+  "terminalname": "FUJAIRAH TERMINAL1",
+  "portcode": "AB007",
+  "type": "T"
+ },
+ {
+  "terminalcode": "TEST11",
+  "terminalname": "HUTCHISON AJMAN INTERNATIONAL TERMINALS",
+  "portcode": "AB007",
+  "type": "T"
+ },
+ {
+  "terminalcode": "XSDFC",
+  "terminalname": "HUTCHISON AJMAN INTERNATIONAL TERMINALS",
+  "portcode": "AB007",
+  "type": "T"
+ },
+ {
+  "terminalcode": "SCWDV",
+  "terminalname": "SAFQFQFQ",
+  "portcode": "AB007",
+  "type": "T"
+ },
+ {
+  "terminalcode": "CHENNAI",
+  "terminalname": "SOLVERMINDS",
+  "portcode": "AB007",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AB008TER01",
+  "terminalname": "AB008TER01",
+  "portcode": "AB008",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AB009TER01",
+  "terminalname": "AB009TER01",
+  "portcode": "AB009",
+  "type": "T"
+ },
+ {
+  "terminalcode": "BJFK9654",
+  "terminalname": "MADRAS PORT",
+  "portcode": "AB009",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INMAACCT01",
+  "terminalname": "CHENNAI CONTAINER TERMINAL",
+  "portcode": "ABC01",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INMAACIT01",
+  "terminalname": "CHENNAI INTERNATIONAL TERMINAL",
+  "portcode": "ABC01",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEAJMHAJT2",
+  "terminalname": "HUTCHISON AJMAN INTERNATIONAL TERMINALS",
+  "portcode": "ABC01",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INMAAKCT01",
+  "terminalname": "KATTUPALLI INTERNATIONAL CONTAINER TERMINAL",
+  "portcode": "ABC01",
+  "type": "T"
+ },
+ {
+  "terminalcode": "ABCD1",
+  "terminalname": "ABCD1",
+  "portcode": "ABCD1",
+  "type": "T"
+ },
+ {
+  "terminalcode": "ABCD2",
+  "terminalname": "ABCD2",
+  "portcode": "ABCD1",
+  "type": "T"
+ },
+ {
+  "terminalcode": "ABCDD",
+  "terminalname": "ZZZZZ",
+  "portcode": "ABCD1",
+  "type": "T"
+ },
+ {
+  "terminalcode": "dfgfd",
+  "terminalname": "??????//??????",
+  "portcode": "ADGJL",
+  "type": "T"
+ },
+ {
+  "terminalcode": "ADGJLTER01",
+  "terminalname": "ADGJLTER01",
+  "portcode": "ADGJL",
+  "type": "T"
+ },
+ {
+  "terminalcode": "Inmaa#%^&%",
+  "terminalname": "Inmaa",
+  "portcode": "ADGJL",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEAJMTER01",
+  "terminalname": "AEAJMTER01",
+  "portcode": "AEAJM",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEAJMAJM00",
+  "terminalname": "DO NOT USE -Ajman Terminal",
+  "portcode": "AEAJM",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEAJMHAJT0",
+  "terminalname": "HUTCHISON AJMAN INTERNATIONAL TERMINALS",
+  "portcode": "AEAJM",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEAUHDDDP",
+  "terminalname": "ABU DHABI DEPOT",
+  "portcode": "AEAUH",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AEAUHTER01",
+  "terminalname": "AEAUHTER01",
+  "portcode": "AEAUH",
+  "type": "T"
+ },
+ {
+  "terminalcode": "SAKKEER",
+  "terminalname": "depot code",
+  "portcode": "AEAUH",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AEAUHMNZ00",
+  "terminalname": "Do not use",
+  "portcode": "AEAUH",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEAUHKLF00",
+  "terminalname": "KHALIFA TERMINAL",
+  "portcode": "AEAUH",
+  "type": "T"
+ },
+ {
+  "terminalcode": "TermCode",
+  "terminalname": "TerminalName",
+  "portcode": "AEAUH",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEDRATER01",
+  "terminalname": "AEDRATER01",
+  "portcode": "AEDRA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "term2",
+  "terminalname": "term1",
+  "portcode": "AEDRA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEDXBDC1",
+  "terminalname": "",
+  "portcode": "AEDXB",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AEDXBTEST",
+  "terminalname": "",
+  "portcode": "AEDXB",
+  "type": "D"
+ },
+ {
+  "terminalcode": "inmaa0022",
+  "terminalname": "???? ?? ??????? ? ???? ?????",
+  "portcode": "AEDXB",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEDDEPOT",
+  "terminalname": "AEDDEPOT",
+  "portcode": "AEDXB",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AEDXBDXB00",
+  "terminalname": "AEDXB",
+  "portcode": "AEDXB",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEDXBTER01",
+  "terminalname": "AEDXBTER01",
+  "portcode": "AEDXB",
+  "type": "T"
+ },
+ {
+  "terminalcode": "TQC",
+  "terminalname": "AUTOMATION",
+  "portcode": "AEDXB",
+  "type": "T"
+ },
+ {
+  "terminalcode": "TQC1",
+  "terminalname": "AUTOMATION1",
+  "portcode": "AEDXB",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEDXBDDDP",
+  "terminalname": "DEPOT DUBAI",
+  "portcode": "AEDXB",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AEDXBDPA00",
+  "terminalname": "DPA DUBAI",
+  "portcode": "AEDXB",
+  "type": "T"
+ },
+ {
+  "terminalcode": "DPWDCT01",
+  "terminalname": "DUBAI-TERMINAL",
+  "portcode": "AEDXB",
+  "type": "T"
+ },
+ {
+  "terminalcode": "KHGF",
+  "terminalname": "UAE",
+  "portcode": "AEDXB",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEFJRTER01",
+  "terminalname": "AEFJRTER01",
+  "portcode": "AEFJR",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEFJRFJR00",
+  "terminalname": "FUJAIRAH TERMINAL",
+  "portcode": "AEFJR",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AB005TER01",
+  "terminalname": "AB005TER01",
+  "portcode": "AEJEA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEJEACCV1",
+  "terminalname": "AEJEA Terminals",
+  "portcode": "AEJEA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEJEADPA00",
+  "terminalname": "AEJEADPA00",
+  "portcode": "AEJEA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEJEARH",
+  "terminalname": "AEJEARH",
+  "portcode": "AEJEA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AEJEATER01",
+  "terminalname": "AEJEATER01",
+  "portcode": "AEJEA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEJEATER09",
+  "terminalname": "AEJEATER09",
+  "portcode": "AEJEA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "VAS WER",
+  "terminalname": "ASDGA",
+  "portcode": "AEJEA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEJEADPP",
+  "terminalname": "ASM TERMINAL",
+  "portcode": "AEJEA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEJEADDPW",
+  "terminalname": "DP WORLD JEBEL ALI",
+  "portcode": "AEJEA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AEJEADPWT3",
+  "terminalname": "DPWORLD - TERMINAL 3",
+  "portcode": "AEJEA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEJEADPA01",
+  "terminalname": "DUBAI PORT AUTHORITY TML 2........................",
+  "portcode": "AEJEA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEJEADPA03",
+  "terminalname": "DUBAI PORT AUTHORITY TML 3",
+  "portcode": "AEJEA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEJEATDPWC",
+  "terminalname": "Dubai port terminal",
+  "portcode": "AEJEA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEJEACCTCC",
+  "terminalname": "Dubai Terminal",
+  "portcode": "AEJEA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEJEADEPO",
+  "terminalname": "JABEL ALI DEPOT",
+  "portcode": "AEJEA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AEJEATER02",
+  "terminalname": "JEBEL ALI CONTAINER TERMINAL",
+  "portcode": "AEJEA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEJEATER03",
+  "terminalname": "JEBEL ALI CONTAINER TERMINAL",
+  "portcode": "AEJEA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEJEATER04",
+  "terminalname": "JEBEL ALI CONTAINER TERMINAL",
+  "portcode": "AEJEA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEJEATER05",
+  "terminalname": "JEBEL ALI CONTAINER TERMINAL",
+  "portcode": "AEJEA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEJEA05",
+  "terminalname": "JEBEL ALI CONTAINER TERMINAL  3 (T3) - QUAY 10",
+  "portcode": "AEJEA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEJEA02",
+  "terminalname": "JEBEL ALI CONTAINER TERMINAL 1 (T1) - QUAY 4",
+  "portcode": "AEJEA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEJEA03",
+  "terminalname": "JEBEL ALI CONTAINER TERMINAL 1 (T1) - QUAY 5",
+  "portcode": "AEJEA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEJEA04",
+  "terminalname": "JEBEL ALI CONTAINER TERMINAL 2 (T2) - QUAY 1",
+  "portcode": "AEJEA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEJEA01",
+  "terminalname": "JEBEL ALI CONTAINERTERMINAL 1 (T1) - QUAY 123 ADKN",
+  "portcode": "AEJEA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEJEADDDP",
+  "terminalname": "JEBEL ALI DEPOT",
+  "portcode": "AEJEA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AEJEADMEC",
+  "terminalname": "MIDDLE EAST CONTAINER REPAIR CO LLC",
+  "portcode": "AEJEA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AEJEA06",
+  "terminalname": "NOT IN USE",
+  "portcode": "AEJEA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "QUANT11111",
+  "terminalname": "QUANT11111",
+  "portcode": "AEJEA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "DEPOTTEST",
+  "terminalname": "TEST",
+  "portcode": "AEJEA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AOLADTER05",
+  "terminalname": "TEST TERMINAL",
+  "portcode": "AEJEA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEJEATER33",
+  "terminalname": "TEST111",
+  "portcode": "AEJEA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "HAIERTREST",
+  "terminalname": "TESTING",
+  "portcode": "AEJEA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "TESTCASE",
+  "terminalname": "TESTING",
+  "portcode": "AEJEA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "VINOTEST",
+  "terminalname": "VINOTEST",
+  "portcode": "AEJEA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEJFZTER01",
+  "terminalname": "AEJFZTER01",
+  "portcode": "AEJFZ",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEKHLTER01",
+  "terminalname": "AEKHLTER01",
+  "portcode": "AEKHL",
+  "type": "T"
+ },
+ {
+  "terminalcode": "RYTUU",
+  "terminalname": "TESTING AUG14",
+  "portcode": "AEKHL",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEKLFTER01",
+  "terminalname": "AEKLFTER01",
+  "portcode": "AEKLF",
+  "type": "T"
+ },
+ {
+  "terminalcode": "dsfv",
+  "terminalname": "dfxb",
+  "portcode": "AEKLF",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEKLFGCL00",
+  "terminalname": "GULFTAINER  CO LTD",
+  "portcode": "AEKLF",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEKLFKCT00",
+  "terminalname": "KHORFAKKAN CONTAINER TERMINAL",
+  "portcode": "AEKLF",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEPRADPA00",
+  "terminalname": "PORT RASHID, DUBAI",
+  "portcode": "AEPRA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEQIWABR00",
+  "terminalname": "AHMED BIN RASHID PORT",
+  "portcode": "AEQIW",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AEQUSTER01",
+  "terminalname": "AEQUSTER01",
+  "portcode": "AEQUS",
+  "type": "T"
+ },
+ {
+  "terminalcode": "dasfaf",
+  "terminalname": "afaf",
+  "portcode": "AEQUS",
+  "type": "T"
+ },
+ {
+  "terminalcode": "TERMPORT03",
+  "terminalname": "CHENNAI",
+  "portcode": "AESAR",
+  "type": "T"
+ },
+ {
+  "terminalcode": "1012",
+  "terminalname": "CHENNAI1",
+  "portcode": "AESAR",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AESHJSHJ00",
+  "terminalname": "SHARJAH TERMINALLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL",
+  "portcode": "AESAR",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AESCTICD00",
+  "terminalname": "Sharjah ICD Terminal",
+  "portcode": "AESCT",
+  "type": "T"
+ },
+ {
+  "terminalcode": "inmaagva",
+  "terminalname": "?????? ???? ??? ??? ???? ??????",
+  "portcode": "AESHJ",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AESHJTER01",
+  "terminalname": "AESHJTER01",
+  "portcode": "AESHJ",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AESHJTGTLC",
+  "terminalname": "AESHJTGTLCT NAME",
+  "portcode": "AESHJ",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AESHJTER01",
+  "terminalname": "JEBEL ALI CONTAINERTERMINAL 1 (T1) - QUAY 123",
+  "portcode": "AESHJ",
+  "type": "T"
+ },
+ {
+  "terminalcode": "SHCT",
+  "terminalname": "SHARJAH CONTAINER TERMINAL",
+  "portcode": "AESHJ",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AESHJDDP",
+  "terminalname": "SHARJAH DEPOT",
+  "portcode": "AESHJ",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AESHJRLHD",
+  "terminalname": "SHARJAH RAILHEAD",
+  "portcode": "AESHJ",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AESHJRAH",
+  "terminalname": "SHARJAH RAILHEADS",
+  "portcode": "AESHJ",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AESHJWAH01",
+  "terminalname": "SHARJAH WAREH",
+  "portcode": "AESHJ",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AESHJTER02",
+  "terminalname": "TEST TERMINAL NAME",
+  "portcode": "AESHJ",
+  "type": "T"
+ },
+ {
+  "terminalcode": "TER1",
+  "terminalname": "TERMIN1",
+  "portcode": "AGEN6",
+  "type": "T"
+ },
+ {
+  "terminalcode": "TER2",
+  "terminalname": "TERM2",
+  "portcode": "AGEN7",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AKGLKTER01",
+  "terminalname": "AKGLKTER01",
+  "portcode": "AKGLK",
+  "type": "T"
+ },
+ {
+  "terminalcode": "ALDRZTER01",
+  "terminalname": "ALDRZTER01",
+  "portcode": "ALDRZ",
+  "type": "T"
+ },
+ {
+  "terminalcode": "inmaa001",
+  "terminalname": "inmaa001",
+  "portcode": "ALDRZ",
+  "type": "T"
+ },
+ {
+  "terminalcode": "ANWILWIL00",
+  "terminalname": "Willemstad (Curacao) Terminal",
+  "portcode": "ANWIL",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AOLADTER01",
+  "terminalname": "AOLADTER01",
+  "portcode": "AOLAD",
+  "type": "T"
+ },
+ {
+  "terminalcode": "ARBUETER01",
+  "terminalname": "ARBUETER01",
+  "portcode": "ARBUE",
+  "type": "T"
+ },
+ {
+  "terminalcode": "ARBUEBACT0",
+  "terminalname": "BUENOS AIRES CONTAINER TERMINAL 5",
+  "portcode": "ARBUE",
+  "type": "T"
+ },
+ {
+  "terminalcode": "ARBUEDDDP",
+  "terminalname": "BUENOS AIRES DEPOT",
+  "portcode": "ARBUE",
+  "type": "D"
+ },
+ {
+  "terminalcode": "ARCOOTER01",
+  "terminalname": "ARCOOTER01",
+  "portcode": "ARCOO",
+  "type": "T"
+ },
+ {
+  "terminalcode": "ARGENTER01",
+  "terminalname": "ARGENTER01",
+  "portcode": "ARGEN",
+  "type": "T"
+ },
+ {
+  "terminalcode": "3222222222",
+  "terminalname": "sg",
+  "portcode": "ARGEN",
+  "type": "T"
+ },
+ {
+  "terminalcode": "ARRGATER01",
+  "terminalname": "ARRGATER01",
+  "portcode": "ARRGA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "ARRGADDDP",
+  "terminalname": "RIO GRANDE DEPOT",
+  "portcode": "ARRGA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "ARROSROS00",
+  "terminalname": "Rosario Terminal",
+  "portcode": "ARROS",
+  "type": "T"
+ },
+ {
+  "terminalcode": "ARZAEZAE00",
+  "terminalname": "ZARATE TERMINAL",
+  "portcode": "ARZAE",
+  "type": "T"
+ },
+ {
+  "terminalcode": "V3",
+  "terminalname": "A",
+  "portcode": "ASDER",
+  "type": "T"
+ },
+ {
+  "terminalcode": "EWQZWDEQXE",
+  "terminalname": "ADSASDASXDASDSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS",
+  "portcode": "ASDER",
+  "type": "T"
+ },
+ {
+  "terminalcode": "ASDSS",
+  "terminalname": "ASDSS",
+  "portcode": "ASDER",
+  "type": "T"
+ },
+ {
+  "terminalcode": "ASDFTER01",
+  "terminalname": "ASDFTER01",
+  "portcode": "ASDF",
+  "type": "T"
+ },
+ {
+  "terminalcode": "ASFDATER01",
+  "terminalname": "ASFDATER01",
+  "portcode": "ASFDA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "ASPPGTER01",
+  "terminalname": "ASPPGTER01",
+  "portcode": "ASPPG",
+  "type": "T"
+ },
+ {
+  "terminalcode": "ASPPGDHMS",
+  "terminalname": "HARBOR MARITIME AND STEVEDORING CO.",
+  "portcode": "ASPPG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "ASPPGPGO",
+  "terminalname": "PAGO PAGO PORT TERMINAL",
+  "portcode": "ASPPG",
+  "type": "T"
+ },
+ {
+  "terminalcode": "ASPPG100",
+  "terminalname": "PAGO PAGO TERMINAL",
+  "portcode": "ASPPG",
+  "type": "T"
+ },
+ {
+  "terminalcode": "ASPPGDPRS",
+  "terminalname": "PETER E REID STEVEDORING INC",
+  "portcode": "ASPPG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "ASPPG-PAGO",
+  "terminalname": "Test Terminal",
+  "portcode": "ASPPG",
+  "type": "T"
+ },
+ {
+  "terminalcode": "ATENADDDP",
+  "terminalname": "GENERAL DEPOT",
+  "portcode": "ATENA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "ATLNZDDDP",
+  "terminalname": "LINZ DEPOT",
+  "portcode": "ATLNZ",
+  "type": "D"
+ },
+ {
+  "terminalcode": "ATSZGDDDP",
+  "terminalname": "SALZBURG DEPOT",
+  "portcode": "ATSZG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "ATVIETER01",
+  "terminalname": "ATVIETER01",
+  "portcode": "ATVIE",
+  "type": "T"
+ },
+ {
+  "terminalcode": "ATVIEDDDP",
+  "terminalname": "VIENNA DEPOT",
+  "portcode": "ATVIE",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AUAD1RHAD",
+  "terminalname": "ADELAIDE RAILHEAD",
+  "portcode": "AUAD1",
+  "type": "D"
+ },
+ {
+  "terminalcode": "a",
+  "terminalname": "A",
+  "portcode": "AUADL",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AB004TERM1",
+  "terminalname": "AB004TERM1",
+  "portcode": "AUADL",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AUADLMFACT",
+  "terminalname": "AUADLMFAC terminal",
+  "portcode": "AUADL",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AUADLTER01",
+  "terminalname": "AUADLTER01",
+  "portcode": "AUADL",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AUADLDDAU",
+  "terminalname": "AUSTAINERS",
+  "portcode": "AUADL",
+  "type": "D"
+ },
+ {
+  "terminalcode": "CNSHATER01",
+  "terminalname": "CNSHATER01",
+  "portcode": "AUADL",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AUADLDDDP",
+  "terminalname": "DEPOT ADELAIDE",
+  "portcode": "AUADL",
+  "type": "D"
+ },
+ {
+  "terminalcode": "dg",
+  "terminalname": "dvgds",
+  "portcode": "AUADL",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AUADLDKIA",
+  "terminalname": "KERRY INTERMODAL",
+  "portcode": "AUADL",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AUADLDNRA",
+  "terminalname": "NATIONAL RAIL ADL",
+  "portcode": "AUADL",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AUADLDPOR",
+  "terminalname": "P&O RAIL",
+  "portcode": "AUADL",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AUADLDPNA",
+  "terminalname": "PACIFIC NATIONAL",
+  "portcode": "AUADL",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AUADLDDPR",
+  "terminalname": "PACIFIC NATIONAL ADELAIDE FREIGHT TERMINAL",
+  "portcode": "AUADL",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AUADLDSAC",
+  "terminalname": "SA CONTAINER SALES AND HIRE",
+  "portcode": "AUADL",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AUADLDSCT",
+  "terminalname": "SYMONS & CLARK TRANSPORT",
+  "portcode": "AUADL",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AUASPDDDP",
+  "terminalname": "ALICE SPRINGS",
+  "portcode": "AUASP",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AUBELDDDP",
+  "terminalname": "DEPOT TOLL BELL BAY",
+  "portcode": "AUBEL",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AUBGTTER01",
+  "terminalname": "AUBGTTER01",
+  "portcode": "AUBGT",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AUBMEDDDP",
+  "terminalname": "BROOME DEPOT",
+  "portcode": "AUBME",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AUBN1RHBR",
+  "terminalname": "BRISBANE RAILHEAD",
+  "portcode": "AUBN1",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AUBNEDACD",
+  "terminalname": "AUS. CNTR DEPOT HEM",
+  "portcode": "AUBNE",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AUMELDPPA",
+  "terminalname": "ACFS APPLETON DEPOT - DEPOT A",
+  "portcode": "AUMEL",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AUMELDPPC",
+  "terminalname": "ACFS E-RAIL MELBOURNE",
+  "portcode": "AUMEL",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AUMELDACF",
+  "terminalname": "ACFS ERAIL VIC",
+  "portcode": "AUMEL",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AUMELACFS",
+  "terminalname": "ACFS WEBB DOCK",
+  "portcode": "AUMEL",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AUMELDACS",
+  "terminalname": "ALLIED CONT SERVICES",
+  "portcode": "AUMEL",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AUMELTER01",
+  "terminalname": "AUMELTER01",
+  "portcode": "AUMEL",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AUMELDDCC",
+  "terminalname": "CC CONTAINERS",
+  "portcode": "AUMEL",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AUMELDDCH",
+  "terminalname": "CHALMERS",
+  "portcode": "AUMEL",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AUMELDDDP",
+  "terminalname": "DEPOT",
+  "portcode": "AUMEL",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AUMELDFFD",
+  "terminalname": "FARM FRESH DISTBN.",
+  "portcode": "AUMEL",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AUMELDGFC",
+  "terminalname": "GREATING FORTUNE CONTAINER SERVICES (AUSTRALIA) PTY LTD",
+  "portcode": "AUMEL",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AUMELDHNZ",
+  "terminalname": "HEINZ",
+  "portcode": "AUMEL",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AUMELDDIN",
+  "terminalname": "INTERPORT SERVICES",
+  "portcode": "AUMEL",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AUMELDDJR",
+  "terminalname": "JAMES ROLFE T'PT'",
+  "portcode": "AUMEL",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AUMELDMCS",
+  "terminalname": "MARITIME CONTR SERV",
+  "portcode": "AUMEL",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AUMELDMCP",
+  "terminalname": "MELBOURNE CONTAINER PARK",
+  "portcode": "AUMEL",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AUMELDOCS",
+  "terminalname": "OCEANIA CONTAINER SERVICES",
+  "portcode": "AUMEL",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AUMELDPNO",
+  "terminalname": "P&O TRANSPORT",
+  "portcode": "AUMEL",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AUMELDDNR",
+  "terminalname": "PACIFIC NATIONAL MELBOURNE FREIGHT TERMINAL",
+  "portcode": "AUMEL",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AUMELDPMC",
+  "terminalname": "PORT MELBOURNE CONTAINERS",
+  "portcode": "AUMEL",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AUMELDQBE",
+  "terminalname": "QUBE HIRE AND SALES",
+  "portcode": "AUMEL",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AUMELDSNR",
+  "terminalname": "SUN RICE",
+  "portcode": "AUMEL",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AUM0101",
+  "terminalname": "TEST AUM0101",
+  "portcode": "AUMEL",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AUMELTER02",
+  "terminalname": "TEST TERMINAL NAME",
+  "portcode": "AUMEL",
+  "type": "T"
+ },
+ {
+  "terminalcode": "AUMELDVCM",
+  "terminalname": "VICTORIAN CONTAINER MANAGEMENT",
+  "portcode": "AUMEL",
+  "type": "D"
+ },
+ {
+  "terminalcode": "CNNSADCIM",
+  "terminalname": "CIMC (NANSHA)",
+  "portcode": "CNNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "CNNSADCIM",
+  "terminalname": "CNNSADCIM",
+  "portcode": "CNNSA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "CNNSATER02",
+  "terminalname": "CNNSATER01",
+  "portcode": "CNNSA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "CNNSADGF2",
+  "terminalname": "GREATING FORTUNE (GUANGZHOU) CONTAINER SERVICE CO LTD NANSHA DEPOT 2",
+  "portcode": "CNNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "CNNSADGFN",
+  "terminalname": "GREATING FORTUNE NANSHA",
+  "portcode": "CNNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "CNNSAGOT00",
+  "terminalname": "Guangzhou  Oceangate Container Terminal Co LTD",
+  "portcode": "CNNSA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "CNNSADHYL",
+  "terminalname": "HONG YUN LOGISTICS SERVICE CO.,LTD. NANSHA DEPOT",
+  "portcode": "CNNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "CNNSADHY2",
+  "terminalname": "HONG YUN LOGISTICS SERVICE CO.,LTD. NANSHA DEPOT 2",
+  "portcode": "CNNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "CNNSADDDP",
+  "terminalname": "NANSHA DEPOT",
+  "portcode": "CNNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "CNNSANSA00",
+  "terminalname": "Nansha terminal",
+  "portcode": "CNNSA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "CNNSANIC",
+  "terminalname": "NANWEI / DONG FA",
+  "portcode": "CNNSA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "CNNSANCT00",
+  "terminalname": "New Container Terminal - Nansha",
+  "portcode": "CNNSA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "CNNSADNI2",
+  "terminalname": "NICT PHASE #2 TERMINAL DEPOT",
+  "portcode": "CNNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "CNNSADNIC",
+  "terminalname": "NICT PHASE #3 TERMINAL DEPOT",
+  "portcode": "CNNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "CNM",
+  "terminalname": "CHINA REFORCMENT",
+  "portcode": "CNSHA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "CNSHATERM",
+  "terminalname": "CNSHATERM",
+  "portcode": "CNSHA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "SGHY1",
+  "terminalname": "CNSHATML01",
+  "portcode": "CNSHA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "CNSHA05",
+  "terminalname": "SHAGNHAI SHENGDONG INTERNATIONAL CONTIANER TERMINA",
+  "portcode": "CNSHA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "CNSHADP",
+  "terminalname": "SHANGHAI DEPOT",
+  "portcode": "CNSHA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "CNSHA03",
+  "terminalname": "SHANGHAI EAST INTERNATIONAL CONTAINER TERMINAL CO.",
+  "portcode": "CNSHA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "CNSHA06",
+  "terminalname": "SHANGHAI GUANGDONG INTERNATIONAL CONTAINER TERMINA",
+  "portcode": "CNSHA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "CNSHASGICT",
+  "terminalname": "Shanghai Guangdong International Terminal",
+  "portcode": "CNSHA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "CNSIT",
+  "terminalname": "SHANGHAI INTERNATIONAL TERMINAL",
+  "portcode": "CNSHA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "CNSHAWGQ05",
+  "terminalname": "SHANGHAI MINGDONG CONTAINER TERMAINALS LTD",
+  "portcode": "CNSHA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "CNSHA04",
+  "terminalname": "SHANGHAI MINGDONG INTERNATIONAL CONTAINER TERMINAL",
+  "portcode": "CNSHA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "CNSHA01",
+  "terminalname": "SHANGHAI PUDONG INTERNATIONAL CONTAINER TERMINAL C",
+  "portcode": "CNSHA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "CNSHASSICT",
+  "terminalname": "SHANGHAI SHENDONG INTERNATIONAL CONTAINER TERMINAL",
+  "portcode": "CNSHA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "CNSHATNM",
+  "terminalname": "SHANGHAI TERMINAL",
+  "portcode": "CNSHA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "CNSHA02",
+  "terminalname": "SHANGHAI ZHENDONG INTERNATIONAL CONTIANER TERMINAL",
+  "portcode": "CNSHA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "CNSHAWGQT5",
+  "terminalname": "WAIGAOQIAO CONTAINER TERMINALS -5",
+  "portcode": "CNSHA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "CNSHAWGQ01",
+  "terminalname": "WGQ PHASE I",
+  "portcode": "CNSHA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "CNSHAWGQ02",
+  "terminalname": "WGQ PHASE II",
+  "portcode": "CNSHA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "CNSHAWGQ04",
+  "terminalname": "WGQ PHASE IV",
+  "portcode": "CNSHA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "CNSHAYSH00",
+  "terminalname": "YANGSHAN TERMINAL",
+  "portcode": "CNSHA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "EGALYALY00",
+  "terminalname": "Alexandria Terminal",
+  "portcode": "EGALY",
+  "type": "T"
+ },
+ {
+  "terminalcode": "EGALYTER01",
+  "terminalname": "EGALYTER01",
+  "portcode": "EGALY",
+  "type": "T"
+ },
+ {
+  "terminalcode": "HKHKGACT00",
+  "terminalname": "ACT",
+  "portcode": "HKHKG",
+  "type": "T"
+ },
+ {
+  "terminalcode": "HKHKGCMC00",
+  "terminalname": "China Merchants Container Services Ltd",
+  "portcode": "HKHKG",
+  "type": "T"
+ },
+ {
+  "terminalcode": "HKHKGDCSL",
+  "terminalname": "CONTAINER SYSTEM LTD",
+  "portcode": "HKHKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "HKHKGCOS00",
+  "terminalname": "COSCO HIT",
+  "portcode": "HKHKG",
+  "type": "T"
+ },
+ {
+  "terminalcode": "HKHKGDPW00",
+  "terminalname": "DP WORLD HONG KONG",
+  "portcode": "HKHKG",
+  "type": "T"
+ },
+ {
+  "terminalcode": "HKHKGFLT00",
+  "terminalname": "FLOATA CONSORTIUM",
+  "portcode": "HKHKG",
+  "type": "T"
+ },
+ {
+  "terminalcode": "HKHKGHIT00",
+  "terminalname": "HIT",
+  "portcode": "HKHKG",
+  "type": "T"
+ },
+ {
+  "terminalcode": "HIT",
+  "terminalname": "HIT (HONGKONG INTERNATIONAL TERMINALS )",
+  "portcode": "HKHKG",
+  "type": "T"
+ },
+ {
+  "terminalcode": "HKGHIT01",
+  "terminalname": "HKGHIT01",
+  "portcode": "HKHKG",
+  "type": "T"
+ },
+ {
+  "terminalcode": "HKHKGTER01",
+  "terminalname": "HKHKGTER01",
+  "portcode": "HKHKG",
+  "type": "T"
+ },
+ {
+  "terminalcode": "HKGMO",
+  "terminalname": "HKHKGTML01",
+  "portcode": "HKHKG",
+  "type": "T"
+ },
+ {
+  "terminalcode": "HKHKGDDDP",
+  "terminalname": "HONG KONG DEPOT",
+  "portcode": "HKHKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "HKHKGHKG00",
+  "terminalname": "HONG KONG PORT",
+  "portcode": "HKHKG",
+  "type": "T"
+ },
+ {
+  "terminalcode": "HKHKGMTL00",
+  "terminalname": "MODERN TERMINALS LTD",
+  "portcode": "HKHKG",
+  "type": "T"
+ },
+ {
+  "terminalcode": "HKHKGDPCL",
+  "terminalname": "PCL CONTAINER SERVICES LIMITED",
+  "portcode": "HKHKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "HKHKGRTT00",
+  "terminalname": "RIVER TRADE TERMINALS",
+  "portcode": "HKHKG",
+  "type": "T"
+ },
+ {
+  "terminalcode": "HKHKGDSPC",
+  "terminalname": "SUN POWER CNTR LOGI *DEPOT RT",
+  "portcode": "HKHKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "HKHKGDTEC",
+  "terminalname": "TECO C",
+  "portcode": "HKHKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "HKHKGDVKC",
+  "terminalname": "VICTORY KIND CONTAINER SERVICE LIMITED",
+  "portcode": "HKHKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "HKHKGYFT00",
+  "terminalname": "YUEN FAT TERMINAL",
+  "portcode": "HKHKG",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INBLRDDDP",
+  "terminalname": "BANGALORE",
+  "portcode": "INBLR",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INBLRDICD",
+  "terminalname": "ICD BANGALORE",
+  "portcode": "INBLR",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INBLRDEPOT",
+  "terminalname": "INBLRDEPOT",
+  "portcode": "INBLR",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INBLRTER01",
+  "terminalname": "INBLRTER01",
+  "portcode": "INBLR",
+  "type": "T"
+ },
+ {
+  "terminalcode": "6787BVJVDF",
+  "terminalname": "$#$%^&*(",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "ABCDEFFFF",
+  "terminalname": "ABCDTER01",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INMAADAAN",
+  "terminalname": "ACT ANNEX",
+  "portcode": "INMAA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INMAADACT",
+  "terminalname": "ARIES CONTAINER TERMINAL (ACT-2)",
+  "portcode": "INMAA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INMAADBC2",
+  "terminalname": "BAY CONTAINER TERMINAL (BCT-2)",
+  "portcode": "INMAA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INMAADBC3",
+  "terminalname": "BAY CONTAINER TERMINAL (BCT-3)",
+  "portcode": "INMAA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INMAADBC6",
+  "terminalname": "BAY CONTAINER TERMINAL (BCT-6)",
+  "portcode": "INMAA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INMAADCCT",
+  "terminalname": "CALYX CONTAINER TERMINALS PVT LTD (EMPTY DEPOT)",
+  "portcode": "INMAA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "CHECK",
+  "terminalname": "CHECK",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "1055",
+  "terminalname": "CHENNAI",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INMAATERM1",
+  "terminalname": "CHENNAI",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "YAMMA",
+  "terminalname": "CHENNAI",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INMAATERE3",
+  "terminalname": "CHENNAI CONTAINER",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INMAACCT00",
+  "terminalname": "CHENNAI CONTAINER TERMINAL",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INMAATERM",
+  "terminalname": "CHENNAI CONTAINER TERMINAL",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INMAACIT00",
+  "terminalname": "CHENNAI INTERNATIONAL TERMINAL",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "inmaact008",
+  "terminalname": "chennai port",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INMAATCCTC",
+  "terminalname": "CHENNAI TERMINAL",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "1026",
+  "terminalname": "CHENNAI_SAN",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "CITPL",
+  "terminalname": "CITPL",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "CNNSATER",
+  "terminalname": "CNNSATER01",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INMAADCED",
+  "terminalname": "CONTINENTAL EMPTY DEPOT",
+  "portcode": "INMAA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INMAADECC",
+  "terminalname": "ENNORE CARGO CONTAINER TERMINAL PRIVATE LIMITED",
+  "portcode": "INMAA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "TEST161",
+  "terminalname": "HUTCHISON AJMAN INTERNATIONAL TERMINALS",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "inmaascter",
+  "terminalname": "inmaa",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "inmaater03",
+  "terminalname": "inmaa",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INMAATERM6",
+  "terminalname": "inmaa",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INMAADEPOT",
+  "terminalname": "INMAA DEPOT",
+  "portcode": "INMAA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INMAACTER3",
+  "terminalname": "inmaa terminal 003",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "inmaact011",
+  "terminalname": "inmaact001",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "inmaactc02",
+  "terminalname": "inmaactc",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "inmaacter",
+  "terminalname": "inmaacter",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "inmaagva2",
+  "terminalname": "inmaagva",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INMAATER01",
+  "terminalname": "INMAATER01",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "inmaater07",
+  "terminalname": "inmaater07",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INMAATER12",
+  "terminalname": "INMAATER12",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INMAATER6",
+  "terminalname": "INMAATER6",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INMAATERM7",
+  "terminalname": "INMAATERM7",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INMAAKCT00",
+  "terminalname": "KATTUPALLI INTERNATIONAL CONTAINER TERMINAL",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INMAADSMC",
+  "terminalname": "M/S OM SAI MARINE CONTAINER SERVICES",
+  "portcode": "INMAA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INMAADMCT",
+  "terminalname": "MADRAS CONTAINER TERMINAL (MCT-6)",
+  "portcode": "INMAA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INMAADDDP",
+  "terminalname": "MADRAS DEPOT",
+  "portcode": "INMAA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INMAAACT01",
+  "terminalname": "MADRAS TERMINAL 001",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "N",
+  "terminalname": "net/main",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INMAADPE2",
+  "terminalname": "POWER ENGINEERING 2",
+  "portcode": "INMAA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "SSSY",
+  "terminalname": "SJSSY",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "SSY123",
+  "terminalname": "SJSSY",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "inmaact001",
+  "terminalname": "svm 01",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "IMAATTTTTT",
+  "terminalname": "test termina",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "JJN",
+  "terminalname": "TESTING",
+  "portcode": "INMAA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INNSADA12",
+  "terminalname": "ALLWIN MARINE",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADAM3",
+  "terminalname": "ALLWIN MARINE SERVICES PVT. LTD. - DEPOT AMS -3",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADAMA",
+  "terminalname": "AMARA DEPOT",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADAMF",
+  "terminalname": "AMFICO YARD",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADASI",
+  "terminalname": "ARK SHIPPING INTERNATIONAL PVT LTD",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADARY",
+  "terminalname": "ARYAN DEPOT",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "AURORAINST",
+  "terminalname": "AURORAINST TEST",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADBYR",
+  "terminalname": "BALAJI YARD - RAIGAD DEPOT",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADBSP",
+  "terminalname": "BCT SHIRDON - PANVEL",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADBCT",
+  "terminalname": "BCT. C/O KAILASH WAREHOUSE",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSABMCT0",
+  "terminalname": "BHARAT MUMBAI CONTAINER TERMINAL TERMINAL AVCBDSVM",
+  "portcode": "INNSA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INNSABMCT1",
+  "terminalname": "BHARAT MUMBAI CONTAINER TERMINAL1",
+  "portcode": "INNSA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INNSADBH2",
+  "terminalname": "BHAVANI DEPOT -2",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADBH1",
+  "terminalname": "BHAVANI DEPOT-1",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADCWC",
+  "terminalname": "CONTINENTAL WAREHOUSING CORPORATION",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADEFC",
+  "terminalname": "EFC LOGISTICS INDIA PVT LTD",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADEGC",
+  "terminalname": "EMPEZAR GLOBAL CONTAINER TERMINAL",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADEPY",
+  "terminalname": "EPIC YARD DEPOT",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSAGTI00",
+  "terminalname": "GATEWAY TERMINALS INDIA",
+  "portcode": "INNSA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INNSAGTI01",
+  "terminalname": "GATEWAY TERMINALS INDIA",
+  "portcode": "INNSA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "TESTING",
+  "terminalname": "GHJL",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADHIL",
+  "terminalname": "HARMONY INTERNATIONAL LOGISTICS SOLUTIONS",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADHI2",
+  "terminalname": "HARMONY INTERNATIONAL LOGISTICS SOLUTIONS 2",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADTAR",
+  "terminalname": "ICD TARAPUR",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADEPO",
+  "terminalname": "INNSADEPO",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADSIC",
+  "terminalname": "INNSADSIC – SAMVEDA INDIA CHIRLE DEPOT",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSAFTPL0",
+  "terminalname": "INNSAFTPL0",
+  "portcode": "INNSA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INNSANSI00",
+  "terminalname": "INNSANSI00 TERMINAL",
+  "portcode": "INNSA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INNSATER01",
+  "terminalname": "INNSATER01",
+  "portcode": "INNSA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INNSATM011",
+  "terminalname": "INNSATM011 TEST",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADJCY",
+  "terminalname": "JAISKHAR CONTAINER YARD. (OBM DEPOT)",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSAJNP00",
+  "terminalname": "JAWAHARAL NEHRU PORT TERMINAL",
+  "portcode": "INNSA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INNSAJNP01",
+  "terminalname": "JAWAHARAL NEHRU PORT TERMINAL",
+  "portcode": "INNSA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INNSADJCS",
+  "terminalname": "JAY CONTAINER TERMINAL",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADKIL",
+  "terminalname": "KERRY INDEV LOGISTICS PRIVATE LIMITED",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADKKL",
+  "terminalname": "KK3 LOGISTICS",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADVIN",
+  "terminalname": "LD /VINAY YARD",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADNAK",
+  "terminalname": "NAKSHA YARD",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSAWH",
+  "terminalname": "NAVA WAREHOUSE",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSAGT191",
+  "terminalname": "NAVASHEVAN TERMINAL",
+  "portcode": "INNSA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INNSADNEY",
+  "terminalname": "NAVKAR CFS - EMPTY YARD",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSA0003",
+  "terminalname": "NEW RAIL HEADS",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSA0004",
+  "terminalname": "NEW RAIL HEADS",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSA1000",
+  "terminalname": "NEW RAIL HEADS",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSA5000",
+  "terminalname": "NEW RAIL HEADS",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADDDP",
+  "terminalname": "NHAVA SHEVA DEPOT",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSANSG00",
+  "terminalname": "NHAVA SHEVA INDIA GATEWAY TERMINAL",
+  "portcode": "INNSA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INNSANSG01",
+  "terminalname": "NHAVA SHEVA INDIA GATEWAY TERMINAL",
+  "portcode": "INNSA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INNSANSI01",
+  "terminalname": "NHAVA SHEVA INTERNATIONAL CONTAINER TERMINAL",
+  "portcode": "INNSA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INNSATER02",
+  "terminalname": "NHAVA SHEVA TERMINAL",
+  "portcode": "INNSA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INNSADOBM",
+  "terminalname": "OBM CONTAINER DEPOT",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADPIM",
+  "terminalname": "PAN INDIA MARINE SERVICES PVT LTD",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "RE001",
+  "terminalname": "RENE",
+  "portcode": "INNSA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INNSADSSD",
+  "terminalname": "SAICON SERVICES DEPOT",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "SAISHINNSA",
+  "terminalname": "SAISHINNSA TEST",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADSCC",
+  "terminalname": "SAMVEDA CONTAINER CARE /BCT -2",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADSAV",
+  "terminalname": "SAVLA YARD",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADSEC",
+  "terminalname": "SEABIRD EMPTY CONTAINER DEPOT",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADSQD",
+  "terminalname": "SEAQUBE DEPOT",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADSY2",
+  "terminalname": "SONALI YARD YARD 2",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADSFL",
+  "terminalname": "SUPER FLY LOGISTICS INDIA PVT LTD",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSA20000",
+  "terminalname": "TEST DATA",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "DPMN456032",
+  "terminalname": "TESTING PURPOSE",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADUMS",
+  "terminalname": "UNICON MARINE SERVICES LLP",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADUCS",
+  "terminalname": "UNIVERSAL CONTAINER SERVICES",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADVLY",
+  "terminalname": "VAISHNO LOGISTIC YARD CFS",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "TESTWARE",
+  "terminalname": "WAREHOUSE",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INNSADZCT",
+  "terminalname": "ZIYA CONTAINER TERMINAL",
+  "portcode": "INNSA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "KEMBAMCT00",
+  "terminalname": "DO NOT USE CONTACT LRPSUPPORT",
+  "portcode": "KEMBA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "KEMBATER01",
+  "terminalname": "KEMBATER01",
+  "portcode": "KEMBA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "KEMBADDDP",
+  "terminalname": "MOMBASA DEPOT",
+  "portcode": "KEMBA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "KEMBAMBA00",
+  "terminalname": "PORT OF MOMBASA",
+  "portcode": "KEMBA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "MYPKGDAGC",
+  "terminalname": "ASIA GLOBAL CONNECTION SDN BHD (NORTHPORT)",
+  "portcode": "MYPKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "MYPKGDCIM",
+  "terminalname": "CIMC LOGISTICS SERVICES (MALAYSIA) (JUNTAI)",
+  "portcode": "MYPKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "MYPKGDCMA",
+  "terminalname": "CMA CGM (ODD9)",
+  "portcode": "MYPKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "MYPKGDCCM",
+  "terminalname": "CONTAINER CONNECTION (M) SDN BHD",
+  "portcode": "MYPKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "MYPKGDCC3",
+  "terminalname": "CONTAINER CONNECTIONS (M) SDN BHD (WESTPORT) - CCM3",
+  "portcode": "MYPKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "MYPKGDCC2",
+  "terminalname": "CONTAINER CONNECTIONS (M) SDN BHD - CCM2 ODD11",
+  "portcode": "MYPKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "MYPKGDELS",
+  "terminalname": "EXCELLENT LINK (M) SDN BHD",
+  "portcode": "MYPKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "MYPKGDFVS",
+  "terminalname": "FLEXI-VAN SERVICES",
+  "portcode": "MYPKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "MYPKGDFSS",
+  "terminalname": "FLEXIVAN SERVICES SDN BHD",
+  "portcode": "MYPKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "MYPKGDGFL",
+  "terminalname": "GREATING FORTUNE ( MALAYSIA ) LOGISTICS SDN BHD",
+  "portcode": "MYPKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "MYPKGDGFN",
+  "terminalname": "GREATING FORTUNE (MALAYSIA) - NORTHPORT",
+  "portcode": "MYPKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "MYPKGDICS",
+  "terminalname": "ICS DEPOT SERVICES SDN BHD",
+  "portcode": "MYPKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "MYPKGDJMF",
+  "terminalname": "JAMBATAN MERAH FORMOSA DEPOT SDN BHD (WESTPORT)",
+  "portcode": "MYPKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "MYPKGKCT",
+  "terminalname": "KCT",
+  "portcode": "MYPKG",
+  "type": "T"
+ },
+ {
+  "terminalcode": "MYPKGDMAL",
+  "terminalname": "MALCONREP DEPOT (M) SDN BHD",
+  "portcode": "MYPKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "MYPKGDMCR",
+  "terminalname": "MALCONREP DEPOT SDN BHD",
+  "portcode": "MYPKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "MYPKGDMED",
+  "terminalname": "MEDLOG MALAYSIA SDN. BHD.",
+  "portcode": "MYPKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "MYPKGDMMA",
+  "terminalname": "MEDLOG MALAYSIA SDN. BHD.",
+  "portcode": "MYPKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "MYPKGTER01",
+  "terminalname": "MYPKGTER01",
+  "portcode": "MYPKG",
+  "type": "T"
+ },
+ {
+  "terminalcode": "MYPKGDGPC",
+  "terminalname": "NEK GPC CONTAINER",
+  "portcode": "MYPKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "MYPKGDNEK",
+  "terminalname": "NEK GPC CONTAINER SERVICES (M) SDN BHD",
+  "portcode": "MYPKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "MYPKGDEKY",
+  "terminalname": "NEW ENG KONG CONTAINER LOGISTICS SERVICE",
+  "portcode": "MYPKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "MYPKGDNIL",
+  "terminalname": "NEXTVISION INVESTMENTS LIMITED",
+  "portcode": "MYPKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "MYPKG02",
+  "terminalname": "NORTH PORT -CT2",
+  "portcode": "MYPKG",
+  "type": "T"
+ },
+ {
+  "terminalcode": "MYPKG01",
+  "terminalname": "NORTH PORT-CT1",
+  "portcode": "MYPKG",
+  "type": "T"
+ },
+ {
+  "terminalcode": "MYPKGDNWD",
+  "terminalname": "NORTH WEST DEPOH SDN BHD",
+  "portcode": "MYPKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "MYPKGDNWT",
+  "terminalname": "NORTH WEST TERMINAL SDN BHD – ON DOCK DEPOT",
+  "portcode": "MYPKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "MYPKGDNGD",
+  "terminalname": "NORTHERN GATEWAY DEPOT SDN BHD",
+  "portcode": "MYPKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "MYPKGNTP00",
+  "terminalname": "NORTHPORT",
+  "portcode": "MYPKG",
+  "type": "T"
+ },
+ {
+  "terminalcode": "MYPKGNMB",
+  "terminalname": "NORTHPORT MALAYSIA BERHAD",
+  "portcode": "MYPKG",
+  "type": "T"
+ },
+ {
+  "terminalcode": "MYPKGDDDP",
+  "terminalname": "PORT KELANG",
+  "portcode": "MYPKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "MYPKGCWT00",
+  "terminalname": "Port Kelang Terminal",
+  "portcode": "MYPKG",
+  "type": "T"
+ },
+ {
+  "terminalcode": "MYPKGDCOG",
+  "terminalname": "SH COGENT LOGISTICS SDN BHD",
+  "portcode": "MYPKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "MYPKGDCON",
+  "terminalname": "SH COGENT LOGISTICS SDN BHD (NORTHPORT)",
+  "portcode": "MYPKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "MYPKGDCO2",
+  "terminalname": "SH COGENT LOGISTICS SDN BHD-WESTPORT 2 (KNOW AS PSSB DEPOT)",
+  "portcode": "MYPKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "MYPKGDSDS",
+  "terminalname": "SMART DEPOT SERVICE (MALAYSIA) SDN",
+  "portcode": "MYPKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "MYPKGDSHC",
+  "terminalname": "SYN HEE CONTAINER SERVICES SDN BHD",
+  "portcode": "MYPKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "MYPKGWTP00",
+  "terminalname": "WEST PORT",
+  "portcode": "MYPKG",
+  "type": "T"
+ },
+ {
+  "terminalcode": "MYPKGDYCO",
+  "terminalname": "YCODD DEPOT",
+  "portcode": "MYPKG",
+  "type": "D"
+ },
+ {
+  "terminalcode": "NLRTMDCCB",
+  "terminalname": "CETEM CONTAINERS BV",
+  "portcode": "NLRTM",
+  "type": "D"
+ },
+ {
+  "terminalcode": "NLRTMDDDP",
+  "terminalname": "DEPOT ROTTERDAM",
+  "portcode": "NLRTM",
+  "type": "D"
+ },
+ {
+  "terminalcode": "NLRTMDDRD",
+  "terminalname": "DR DEPOTS BV",
+  "portcode": "NLRTM",
+  "type": "D"
+ },
+ {
+  "terminalcode": "NLRTMHOME",
+  "terminalname": "ECT City Terminal",
+  "portcode": "NLRTM",
+  "type": "T"
+ },
+ {
+  "terminalcode": "NLRTMDKCD",
+  "terminalname": "KRAMER CITY DEPOT",
+  "portcode": "NLRTM",
+  "type": "D"
+ },
+ {
+  "terminalcode": "NLRTMDKDD",
+  "terminalname": "KRAMER DISTRICTPARK DEPOT (KDD)",
+  "portcode": "NLRTM",
+  "type": "D"
+ },
+ {
+  "terminalcode": "nlrtmhjui",
+  "terminalname": "nlrtm test",
+  "portcode": "NLRTM",
+  "type": "T"
+ },
+ {
+  "terminalcode": "NLRTMQWERR",
+  "terminalname": "NLRTMQWERR",
+  "portcode": "NLRTM",
+  "type": "T"
+ },
+ {
+  "terminalcode": "NLRTM00001",
+  "terminalname": "NLRTMTER01",
+  "portcode": "NLRTM",
+  "type": "T"
+ },
+ {
+  "terminalcode": "NLRTMTER01",
+  "terminalname": "NLRTMTER01",
+  "portcode": "NLRTM",
+  "type": "T"
+ },
+ {
+  "terminalcode": "ROT01",
+  "terminalname": "NLRTMTML01",
+  "portcode": "NLRTM",
+  "type": "T"
+ },
+ {
+  "terminalcode": "NLRTMTUNIP",
+  "terminalname": "NLRTMTUNIP",
+  "portcode": "NLRTM",
+  "type": "T"
+ },
+ {
+  "terminalcode": "NLRTMDOCC",
+  "terminalname": "O.C.C. OVERBEEK",
+  "portcode": "NLRTM",
+  "type": "D"
+ },
+ {
+  "terminalcode": "NLRTMRHRO",
+  "terminalname": "RAIL SERVICE CENTRE ROTTERDAM BV",
+  "portcode": "NLRTM",
+  "type": "D"
+ },
+ {
+  "terminalcode": "NLRTMTERM1",
+  "terminalname": "ROTTERDAM TERMINAL",
+  "portcode": "NLRTM",
+  "type": "T"
+ },
+ {
+  "terminalcode": "NLRTMDUWT",
+  "terminalname": "UWT",
+  "portcode": "NLRTM",
+  "type": "D"
+ },
+ {
+  "terminalcode": "NLRTMDVDC",
+  "terminalname": "VAN DOORN CONTAINER REPAIR",
+  "portcode": "NLRTM",
+  "type": "D"
+ },
+ {
+  "terminalcode": "SGSINDAL1",
+  "terminalname": "ALLIED YARD 1 (ACSMCU)",
+  "portcode": "SGSIN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "SGSINDAL2",
+  "terminalname": "ALLIED YARD 2",
+  "portcode": "SGSIN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "SGSINDAL3",
+  "terminalname": "ALLIED YARD 3",
+  "portcode": "SGSIN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "SGSINDAL8",
+  "terminalname": "ALLIED YARD 8",
+  "portcode": "SGSIN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "SGSINDAL5",
+  "terminalname": "ALLIED YARD 5",
+  "portcode": "SGSIN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "SGSINDACW",
+  "terminalname": "ASSOCIATED CARRIAGE & WAREHOUSING (S) PTE LTD (ACW)",
+  "portcode": "SGSIN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "ATURTER",
+  "terminalname": "ATUR TER IN SINGAPORE",
+  "portcode": "SGSIN",
+  "type": "T"
+ },
+ {
+  "terminalcode": "SGSIN01",
+  "terminalname": "BRANI TERMINAL",
+  "portcode": "SGSIN",
+  "type": "T"
+ },
+ {
+  "terminalcode": "SGSINDCLC",
+  "terminalname": "CHUAN LI CONTAINER PTE LTD",
+  "portcode": "SGSIN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "SGSINDCOG",
+  "terminalname": "COGENT 1. LOGISTICS HUB",
+  "portcode": "SGSIN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "SGSINDCC1",
+  "terminalname": "CONTAINER CONNECTIONS PTE LTD",
+  "portcode": "SGSIN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "SGSINDCC2",
+  "terminalname": "CONTAINER CONNECTIONS PTE LTD",
+  "portcode": "SGSIN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "SGSINDCC3",
+  "terminalname": "CONTAINER CONNECTIONS PTE LTD - 16 TUAS",
+  "portcode": "SGSIN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "SGSINDCW1",
+  "terminalname": "CWT INTEGRATED PTE LTD",
+  "portcode": "SGSIN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "SGSINDCW2",
+  "terminalname": "CWT INTEGRATED PTE LTD",
+  "portcode": "SGSIN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "SGSINDCW3",
+  "terminalname": "CWT INTEGRATED PTE LTD",
+  "portcode": "SGSIN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "SGSINDCW4",
+  "terminalname": "CWT INTEGRATED PTE LTD (YARD 4)",
+  "portcode": "SGSIN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "SGSINKPL00",
+  "terminalname": "Do Not Use --KEPPEL CONTAINER TERMINAL",
+  "portcode": "SGSIN",
+  "type": "T"
+ },
+ {
+  "terminalcode": "SGSINDEK3",
+  "terminalname": "ENG KONG CONTAINER AGENCIES (PTE) LTD (YARD 3)",
+  "portcode": "SGSIN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "SGSINDEK2",
+  "terminalname": "ENG KONG CONTAINER AGENCIES PTE LTD",
+  "portcode": "SGSIN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "SGSINDEK1",
+  "terminalname": "ENG KONG CONTAINER AGENCIES PTE LTD.",
+  "portcode": "SGSIN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "SGSINDEKY",
+  "terminalname": "ENG KONG PIONEER",
+  "portcode": "SGSIN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "SGSINDHLA",
+  "terminalname": "HLA HOLDINGS PTE LTD",
+  "portcode": "SGSIN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "HSLTESTTER",
+  "terminalname": "HSL TEST TERMINAL",
+  "portcode": "SGSIN",
+  "type": "T"
+ },
+ {
+  "terminalcode": "SGSINJRP00",
+  "terminalname": "JURONG PORT PTE LTD",
+  "portcode": "SGSIN",
+  "type": "T"
+ },
+ {
+  "terminalcode": "SGSIN02",
+  "terminalname": "KEPPEL TERMINAL",
+  "portcode": "SGSIN",
+  "type": "T"
+ },
+ {
+  "terminalcode": "KTSP",
+  "terminalname": "KTSP00001",
+  "portcode": "SGSIN",
+  "type": "T"
+ },
+ {
+  "terminalcode": "MALKTER",
+  "terminalname": "MALDIV TER",
+  "portcode": "SGSIN",
+  "type": "T"
+ },
+ {
+  "terminalcode": "SGSINDMFA",
+  "terminalname": "MASTERFAITH (SG) PTE LTD",
+  "portcode": "SGSIN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "MOON2678",
+  "terminalname": "MOONLIGHT",
+  "portcode": "SGSIN",
+  "type": "T"
+ },
+ {
+  "terminalcode": "SGSINDPTP",
+  "terminalname": "PACIFIC TRANS PTE. LTD.",
+  "portcode": "SGSIN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "SGSIN04",
+  "terminalname": "PASIR PANJANG TERMINAL 1",
+  "portcode": "SGSIN",
+  "type": "T"
+ },
+ {
+  "terminalcode": "SGSIN05",
+  "terminalname": "PASIR PANJANG TERMINAL 2",
+  "portcode": "SGSIN",
+  "type": "T"
+ },
+ {
+  "terminalcode": "SGSIN06",
+  "terminalname": "PASIR PANJANG TERMINAL 3",
+  "portcode": "SGSIN",
+  "type": "T"
+ },
+ {
+  "terminalcode": "SGSIN07",
+  "terminalname": "PASIR PANJANG TERMINAL 5",
+  "portcode": "SGSIN",
+  "type": "T"
+ },
+ {
+  "terminalcode": "SGSINDPDI",
+  "terminalname": "PIONEER DISTRICENTRE PTE LTD",
+  "portcode": "SGSIN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "SGSINPSA",
+  "terminalname": "PSA",
+  "portcode": "SGSIN",
+  "type": "T"
+ },
+ {
+  "terminalcode": "PSA",
+  "terminalname": "PSA (PORT OF SINGAPORE AUTHORITY)",
+  "portcode": "SGSIN",
+  "type": "T"
+ },
+ {
+  "terminalcode": "SGSINDPSA",
+  "terminalname": "PSA CORPORATION LTD - ODD",
+  "portcode": "SGSIN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "SGSINPSA00",
+  "terminalname": "PSA1",
+  "portcode": "SGSIN",
+  "type": "T"
+ },
+ {
+  "terminalcode": "SGSINDSGI",
+  "terminalname": "SG INTEGRATED PTE LTD",
+  "portcode": "SGSIN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "ABCDEFG005",
+  "terminalname": "SGSGS",
+  "portcode": "SGSIN",
+  "type": "T"
+ },
+ {
+  "terminalcode": "ABCDEFG006",
+  "terminalname": "SGSGS",
+  "portcode": "SGSIN",
+  "type": "T"
+ },
+ {
+  "terminalcode": "ABCDEFG007",
+  "terminalname": "SGSGS",
+  "portcode": "SGSIN",
+  "type": "T"
+ },
+ {
+  "terminalcode": "ABCDEFG008",
+  "terminalname": "SGSGS",
+  "portcode": "SGSIN",
+  "type": "T"
+ },
+ {
+  "terminalcode": "SGSINTER01",
+  "terminalname": "SGSINTER01",
+  "portcode": "SGSIN",
+  "type": "T"
+ },
+ {
+  "terminalcode": "SGSINTERM2",
+  "terminalname": "SGSINTERMINAL2",
+  "portcode": "SGSIN",
+  "type": "T"
+ },
+ {
+  "terminalcode": "108",
+  "terminalname": "SINGAPORE",
+  "portcode": "SGSIN",
+  "type": "T"
+ },
+ {
+  "terminalcode": "SGSINTSGSC",
+  "terminalname": "SINGAPORE CANT",
+  "portcode": "SGSIN",
+  "type": "T"
+ },
+ {
+  "terminalcode": "SGSINDDDP",
+  "terminalname": "SINGAPORE DEPOT",
+  "portcode": "SGSIN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "2610",
+  "terminalname": "SINGAPORE1",
+  "portcode": "SGSIN",
+  "type": "T"
+ },
+ {
+  "terminalcode": "JHGDI",
+  "terminalname": "SINGAPORE2",
+  "portcode": "SGSIN",
+  "type": "T"
+ },
+ {
+  "terminalcode": "SINPSA01",
+  "terminalname": "SINPSA01",
+  "portcode": "SGSIN",
+  "type": "T"
+ },
+ {
+  "terminalcode": "SGSINDTBC",
+  "terminalname": "TBC TRANSPORTATION & TRADING PTE LTD",
+  "portcode": "SGSIN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "SGSIN",
+  "terminalname": "TERMINAL NAME",
+  "portcode": "SGSIN",
+  "type": "T"
+ },
+ {
+  "terminalcode": "SGSINTER02",
+  "terminalname": "TEST TERMINAL",
+  "portcode": "SGSIN",
+  "type": "T"
+ },
+ {
+  "terminalcode": "SGSINDTCD",
+  "terminalname": "TONG CONTAINER DEPOT (S) PTE LTD",
+  "portcode": "SGSIN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "SGSINDWSL",
+  "terminalname": "WING SENG LOGISTICS PTE LTD",
+  "portcode": "SGSIN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "USILGTER03",
+  "terminalname": "TER 3 TERMINAL",
+  "portcode": "USILG",
+  "type": "T"
+ },
+ {
+  "terminalcode": "USILGTER01",
+  "terminalname": "WilmingtonTerminal",
+  "portcode": "USILG",
+  "type": "T"
+ },
+ {
+  "terminalcode": "USSEA",
+  "terminalname": "SEATLET ERMINAL",
+  "portcode": "USSEA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "USSEADDDP",
+  "terminalname": "SEATTLE DEPOT",
+  "portcode": "USSEA",
+  "type": "D"
+ },
+ {
+  "terminalcode": "USSEA001",
+  "terminalname": "SEATTLE TERMINAL",
+  "portcode": "USSEA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "USSEATER01",
+  "terminalname": "USSEATER01",
+  "portcode": "USSEA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "USVSH001",
+  "terminalname": "VASHON TERMINAL",
+  "portcode": "USSEA",
+  "type": "T"
+ }
+]

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-17 22:18)
+// Modified by Sekar Nagarajan (2026-10-16 23:45)
 import { AppButton } from "@solverminds/shared-ui";
 import { Card, Tooltip, Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
@@ -13,7 +13,7 @@ import type {
   CalendarWeekday,
   PlanningDaySelection,
   PlanningKpi,
-} from "../mocks/dashboard.mock";
+} from "../api/dashboard.api";
 
 const { Text } = Typography;
 

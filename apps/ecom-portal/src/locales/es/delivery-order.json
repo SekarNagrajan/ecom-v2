@@ -53,7 +53,11 @@
     "delivery": "Entrega",
     "sections": {
       "details": "Detalles de la orden de entrega",
-      "shipment": "Detalles del envío"
+      "shipment": "Detalles del envío",
+      "validity": "Vigencia",
+      "parties": "Partes y cargos",
+      "containers": "Contenedores",
+      "printHistory": "Historial de impresión"
     },
     "labels": {
       "doNumber": "Número DO",
@@ -65,10 +69,36 @@
       "vessel": "Buque",
       "voyage": "Viaje",
       "bound": "Rumbo",
-      "arrivalDate": "Fecha de llegada"
+      "arrivalDate": "Fecha de llegada",
+      "consignee": "Consignatario",
+      "freeDays": "Tiempo libre",
+      "balanceDue": "Saldo pendiente",
+      "invoices": "Facturas",
+      "printedBy": "Impreso por"
     },
     "alerts": {
-      "validUntil": "Esta orden de entrega es válida hasta el <date/>."
-    }
+      "expiring": "Válida {{count}} día(s) más — retire la carga antes del <date/>.",
+      "expired": "Esta orden de entrega venció el <date/>. Contacte a la agencia para revalidarla."
+    },
+    "timeline": {
+      "issued": "DO emitida",
+      "arrived": "Carga llegada",
+      "validUntil": "Válida hasta"
+    },
+    "validity": {
+      "daysLeft": "Quedan {{count}} día(s)",
+      "expiresToday": "Vence hoy",
+      "expired": "Vencida",
+      "unknown": "Sin fecha de vigencia"
+    },
+    "values": {
+      "days": "{{count}} día(s)",
+      "settled": "Saldado"
+    },
+    "empty": {
+      "containers": "Aún no hay contenedores vinculados a esta orden de entrega.",
+      "history": "Aún no impresa."
+    },
+    "notPrintable": "El B/L aún no está liberado, por lo que esta orden de entrega no puede imprimirse en línea."
   }
 }

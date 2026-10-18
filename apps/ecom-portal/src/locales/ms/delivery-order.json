@@ -53,7 +53,11 @@
     "delivery": "Penghantaran",
     "sections": {
       "details": "Butiran Pesanan Penghantaran",
-      "shipment": "Butiran Penghantaran"
+      "shipment": "Butiran Penghantaran",
+      "validity": "Tempoh sah",
+      "parties": "Pihak & caj",
+      "containers": "Kontena",
+      "printHistory": "Sejarah cetakan"
     },
     "labels": {
       "doNumber": "Nombor DO",
@@ -65,10 +69,36 @@
       "vessel": "Kapal",
       "voyage": "Pelayaran",
       "bound": "Haluan",
-      "arrivalDate": "Tarikh Ketibaan"
+      "arrivalDate": "Tarikh Ketibaan",
+      "consignee": "Penerima",
+      "freeDays": "Masa percuma",
+      "balanceDue": "Baki perlu dibayar",
+      "invoices": "Invois",
+      "printedBy": "Dicetak oleh"
     },
     "alerts": {
-      "validUntil": "Pesanan penghantaran ini sah sehingga <date/>."
-    }
+      "expiring": "Sah {{count}} hari lagi — ambil kargo sebelum <date/>.",
+      "expired": "Pesanan penghantaran ini tamat tempoh pada <date/>. Hubungi agensi untuk mengesahkannya semula."
+    },
+    "timeline": {
+      "issued": "DO dikeluarkan",
+      "arrived": "Kargo tiba",
+      "validUntil": "Sah sehingga"
+    },
+    "validity": {
+      "daysLeft": "{{count}} hari lagi",
+      "expiresToday": "Tamat hari ini",
+      "expired": "Tamat tempoh",
+      "unknown": "Tiada tarikh sah"
+    },
+    "values": {
+      "days": "{{count}} hari",
+      "settled": "Selesai"
+    },
+    "empty": {
+      "containers": "Belum ada nombor kontena dipautkan kepada pesanan penghantaran ini.",
+      "history": "Belum dicetak."
+    },
+    "notPrintable": "B/L belum dilepaskan, jadi pesanan penghantaran ini belum boleh dicetak dalam talian."
   }
 }

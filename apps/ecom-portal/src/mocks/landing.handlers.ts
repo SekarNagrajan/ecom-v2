@@ -443,7 +443,9 @@ export const landingHandlers = [
 
   // Login — mock success/failure
   http.post("/api/auth/login", async ({ request }) => {
-    const body = (await request.json()) as {
+    // Read a clone: when no tenant pattern matches we fall through to auth.handlers.ts, which must
+    // still be able to read the body (a consumed body would make the next handler fail with 500).
+    const body = (await request.clone().json()) as {
       userName: string;
       password: string;
     };

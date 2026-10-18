@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-10-17 00:31)
+// Modified by Sekar Nagarajan (2026-10-19 00:10)
 /**
  * Delivery Order (import) rows derived from the invoicing fixtures:
  *   invoices (IMPORTINVOICE, status CONFIRM)        → one DO candidate per B/L (invrefno)
@@ -136,7 +136,19 @@ export function mapDeliveryOrder(facts: DeliveryOrderFacts): DOSummaryRow {
   const arrdate = toIsoOrNull(bl?.podAt) ?? toIsoOrNull(primary.shipmentDate) ?? toIsoOrNull(notice?.CrDate) ?? delorddate;
   const validityBase = +new Date(arrdate) > +new Date(delorddate) ? arrdate : delorddate;
   const terminalCode = str(bl?.podTerminal) || str(notice?.terminalcode);
+  const consignee = childRows('lrpBlCust', 'bl_no', blNo).find(c => eq(c.custTypeId, 'CN'));
+  const printHistory = [...facts.versions]
+    .sort((a, b) => num(b.versionNo) - num(a.versionNo) || +new Date(str(b.datecr)) - +new Date(str(a.datecr)))
+    .filter((v, i, all) => all.findIndex(x => num(x.versionNo) === num(v.versionNo)) === i)
+    .map(v => ({ version: num(v.versionNo), printedAt: toIsoOrNull(v.datecr) ?? '', printedBy: str(v.usercr) }));
   return {
+    consignee: str(consignee?.name) || str(primary.custname),
+    containers: deliveryOrderContainers(facts),
+    freeDays: facts.freeDays,
+    invoiceNos: facts.invoices.map(inv => str(inv.invno)).filter(Boolean),
+    balanceDue: facts.balance,
+    currency: str(primary.invcurrency) || 'USD',
+    printHistory,
     delordno: facts.delOrdNo,
     delorddate,
     blnumber: blNo,

@@ -53,7 +53,11 @@
     "delivery": "交货地",
     "sections": {
       "details": "交货单详情",
-      "shipment": "货物详情"
+      "shipment": "货物详情",
+      "validity": "有效期",
+      "parties": "相关方与费用",
+      "containers": "集装箱",
+      "printHistory": "打印记录"
     },
     "labels": {
       "doNumber": "DO 编号",
@@ -65,10 +69,36 @@
       "vessel": "船名",
       "voyage": "航次",
       "bound": "航向",
-      "arrivalDate": "到港日期"
+      "arrivalDate": "到港日期",
+      "consignee": "收货人",
+      "freeDays": "免费期",
+      "balanceDue": "待付余额",
+      "invoices": "发票",
+      "printedBy": "打印人"
     },
     "alerts": {
-      "validUntil": "此交货单有效期至 <date/>。"
-    }
+      "expiring": "还有 {{count}} 天有效 — 请在 <date/> 前提货。",
+      "expired": "此提货单已于 <date/> 过期，请联系代理重新确认。"
+    },
+    "timeline": {
+      "issued": "提货单签发",
+      "arrived": "货物到港",
+      "validUntil": "有效期至"
+    },
+    "validity": {
+      "daysLeft": "剩余 {{count}} 天",
+      "expiresToday": "今日到期",
+      "expired": "已过期",
+      "unknown": "无有效期"
+    },
+    "values": {
+      "days": "{{count}} 天",
+      "settled": "已结清"
+    },
+    "empty": {
+      "containers": "此提货单暂未关联集装箱号。",
+      "history": "尚未打印。"
+    },
+    "notPrintable": "提单尚未放行，此提货单暂不能在线打印。"
   }
 }

@@ -53,7 +53,11 @@
     "delivery": "Delivery",
     "sections": {
       "details": "Delivery Order Details",
-      "shipment": "Shipment Details"
+      "shipment": "Shipment Details",
+      "validity": "Validity",
+      "parties": "Parties & charges",
+      "containers": "Containers",
+      "printHistory": "Print history"
     },
     "labels": {
       "doNumber": "DO Number",
@@ -65,10 +69,36 @@
       "vessel": "Vessel",
       "voyage": "Voyage",
       "bound": "Bound",
-      "arrivalDate": "Arrival Date"
+      "arrivalDate": "Arrival Date",
+      "consignee": "Consignee",
+      "freeDays": "Free time",
+      "balanceDue": "Balance due",
+      "invoices": "Invoices",
+      "printedBy": "Printed by"
     },
     "alerts": {
-      "validUntil": "This delivery order is valid until <date/>."
-    }
+      "expiring": "Valid for {{count}} more day(s) — collect the cargo before <date/>.",
+      "expired": "This delivery order expired on <date/>. Contact the agency to revalidate it."
+    },
+    "timeline": {
+      "issued": "DO issued",
+      "arrived": "Cargo arrived",
+      "validUntil": "Valid until"
+    },
+    "validity": {
+      "daysLeft": "{{count}} day(s) left",
+      "expiresToday": "Expires today",
+      "expired": "Expired",
+      "unknown": "No validity date"
+    },
+    "values": {
+      "days": "{{count}} day(s)",
+      "settled": "Settled"
+    },
+    "empty": {
+      "containers": "No container numbers are linked to this delivery order yet.",
+      "history": "Not printed yet."
+    },
+    "notPrintable": "The B/L is not released yet, so this delivery order cannot be printed online."
   }
 }

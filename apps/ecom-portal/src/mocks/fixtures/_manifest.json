@@ -1,35 +1,35 @@
 {
-  "extractedAt": "2026-10-16T19:33:03.615Z",
+  "extractedAt": "2026-10-18T15:02:21.505Z",
   "database": "Ecomm_JSF",
   "top": 50,
   "childCap": 400,
   "anonymized": true,
-  "dateShiftMs": 80104472,
+  "dateShiftMs": 243895915,
   "datasets": {
     "bookings": {
       "table": "ecombooking",
-      "rows": 50,
-      "strategy": "top 50 by dateup desc"
+      "rows": 80,
+      "strategy": "top 50 by dateup desc + rows linked to sampled parents"
     },
     "bookingCust": {
       "table": "ecombooking_cust",
-      "rows": 203,
-      "strategy": "rows of sampled ecombooking (153) + top 50 recent"
+      "rows": 304,
+      "strategy": "rows of sampled ecombooking (254) + top 50 recent"
     },
     "bookingCargo": {
       "table": "ecombooking_cargo",
-      "rows": 90,
-      "strategy": "rows of sampled ecombooking (63) + top 50 recent"
+      "rows": 126,
+      "strategy": "rows of sampled ecombooking (98) + top 50 recent"
     },
     "bookingCommodity": {
       "table": "ecombooking_commodity",
-      "rows": 90,
-      "strategy": "rows of sampled ecombooking (64) + top 50 recent"
+      "rows": 127,
+      "strategy": "rows of sampled ecombooking (99) + top 50 recent"
     },
     "bookingDg": {
       "table": "ecombooking_dg",
-      "rows": 50,
-      "strategy": "rows of sampled ecombooking (0) + top 50 recent"
+      "rows": 51,
+      "strategy": "rows of sampled ecombooking (1) + top 50 recent"
     },
     "bookingOog": {
       "table": "ecombooking_oog",
@@ -38,13 +38,13 @@
     },
     "bookingRefer": {
       "table": "ecombooking_refer",
-      "rows": 50,
-      "strategy": "rows of sampled ecombooking (24) + top 50 recent"
+      "rows": 51,
+      "strategy": "rows of sampled ecombooking (36) + top 50 recent"
     },
     "bookingLeg": {
       "table": "ecombooking_leg",
-      "rows": 80,
-      "strategy": "rows of sampled ecombooking (49) + top 50 recent"
+      "rows": 116,
+      "strategy": "rows of sampled ecombooking (82) + top 50 recent"
     },
     "bookingHaulage": {
       "table": "ecombooking_haulage",
@@ -53,8 +53,8 @@
     },
     "bookingConf": {
       "table": "ecombooking_conf",
-      "rows": 84,
-      "strategy": "rows of sampled ecombooking (34) + top 50 recent"
+      "rows": 103,
+      "strategy": "rows of sampled ecombooking (53) + top 50 recent"
     },
     "bookingFiles": {
       "table": "ecombooking_files",
@@ -64,7 +64,7 @@
     "bookingIcs": {
       "table": "ecombooking_ics_new",
       "rows": 50,
-      "strategy": "rows of sampled ecombooking (1) + top 50 recent"
+      "strategy": "rows of sampled ecombooking (3) + top 50 recent"
     },
     "bookingCancel": {
       "table": "ecombooking_cancel",
@@ -73,13 +73,13 @@
     },
     "bookingReference": {
       "table": "ecombooking_reference",
-      "rows": 31,
+      "rows": 37,
       "strategy": "rows of sampled ecombooking (8) + top 50 recent"
     },
     "bookingSummary": {
       "table": "ecombookingsummarygeneration",
-      "rows": 50,
-      "strategy": "rows of sampled ecombooking (0) + top 50 recent"
+      "rows": 400,
+      "strategy": "rows of sampled ecombooking (400) + top 50 recent"
     },
     "insurance": {
       "table": "ecom_insurance",
@@ -94,12 +94,12 @@
     "vgm": {
       "table": "ecom_vgmsolas",
       "rows": 50,
-      "strategy": "rows of sampled ecombooking (10) + top 50 recent"
+      "strategy": "rows of sampled ecombooking (22) + top 50 recent"
     },
     "siRequestMaster": {
       "table": "ecomSIRequestMaster",
-      "rows": 54,
-      "strategy": "rows of sampled ecombooking (9) + top 50 recent"
+      "rows": 64,
+      "strategy": "rows of sampled ecombooking (29) + top 50 recent"
     },
     "siLocks": {
       "table": "ECOMSILOCK",
@@ -113,28 +113,28 @@
     },
     "shippingInstructions": {
       "table": "ecomSI",
-      "rows": 56,
+      "rows": 86,
       "strategy": "top 50 by ChgDate desc + rows linked to sampled parents"
     },
     "siCust": {
       "table": "ecomSI_cust",
-      "rows": 180,
-      "strategy": "rows of sampled ecomSI (159) + top 50 recent"
+      "rows": 270,
+      "strategy": "rows of sampled ecomSI (252) + top 50 recent"
     },
     "siCargo": {
       "table": "ecomSI_cargo",
-      "rows": 102,
-      "strategy": "rows of sampled ecomSI (75) + top 50 recent"
+      "rows": 156,
+      "strategy": "rows of sampled ecomSI (136) + top 50 recent"
     },
     "siCommodity": {
       "table": "ecomSI_commodity",
-      "rows": 117,
-      "strategy": "rows of sampled ecomSI (88) + top 50 recent"
+      "rows": 171,
+      "strategy": "rows of sampled ecomSI (149) + top 50 recent"
     },
     "siDg": {
       "table": "ecomSI_dg",
       "rows": 50,
-      "strategy": "rows of sampled ecomSI (0) + top 50 recent"
+      "strategy": "rows of sampled ecomSI (1) + top 50 recent"
     },
     "siOog": {
       "table": "ecomSI_oog",
@@ -143,13 +143,13 @@
     },
     "siReefer": {
       "table": "ecomSI_reefer",
-      "rows": 50,
-      "strategy": "rows of sampled ecomSI (8) + top 50 recent"
+      "rows": 68,
+      "strategy": "rows of sampled ecomSI (31) + top 50 recent"
     },
     "siCharges": {
       "table": "ecomsi_charges",
-      "rows": 291,
-      "strategy": "rows of sampled ecomSI (273) + top 50 recent"
+      "rows": 324,
+      "strategy": "rows of sampled ecomSI (306) + top 50 recent"
     },
     "siFiles": {
       "table": "ecomSI_files",
@@ -183,13 +183,13 @@
     },
     "users": {
       "table": "eCom_Reg_Details",
-      "rows": 83,
+      "rows": 112,
       "strategy": "top 50 by Registered_Date desc + rows linked to sampled parents"
     },
     "userDetails": {
       "table": "ecomuserdetails",
-      "rows": 62,
-      "strategy": "rows of sampled eCom_Reg_Details (37) + top 50 recent"
+      "rows": 74,
+      "strategy": "rows of sampled eCom_Reg_Details (56) + top 50 recent"
     },
     "mailAlerts": {
       "table": "ecom_mailalert",
@@ -483,7 +483,7 @@
     },
     "commodities": {
       "db": "MASTERDB",
-      "rows": 227,
+      "rows": 232,
       "source": "commodity"
     },
     "packages": {
@@ -498,7 +498,7 @@
     },
     "terminals": {
       "db": "MASTERDB",
-      "rows": 528,
+      "rows": 530,
       "source": "TerminalandDepot"
     },
     "transportServices": {
@@ -533,17 +533,17 @@
     },
     "customerMaster": {
       "db": "MASTERDB",
-      "rows": 48,
+      "rows": 54,
       "source": "CustomerMaster"
     },
     "vessels": {
       "db": "VSSDB",
-      "rows": 325,
+      "rows": 326,
       "source": "Vesselmaster"
     },
     "services": {
       "db": "VSSDB",
-      "rows": 175,
+      "rows": 183,
       "source": "service"
     },
     "schedules": {
@@ -553,42 +553,42 @@
     },
     "portCalls": {
       "db": "VSSDB",
-      "rows": 73,
+      "rows": 128,
       "source": "arrival_master"
     },
     "lrpBookings": {
       "db": "LRPV1DS",
-      "rows": 89,
+      "rows": 110,
       "source": "booking"
     },
     "lrpBookingLegs": {
       "db": "LRPV1DS",
-      "rows": 97,
+      "rows": 117,
       "source": "booking_leg"
     },
     "lrpBookingCargo": {
       "db": "LRPV1DS",
-      "rows": 136,
+      "rows": 171,
       "source": "booking_cargo"
     },
     "lrpBookingCust": {
       "db": "LRPV1DS",
-      "rows": 389,
+      "rows": 471,
       "source": "booking_cust"
     },
     "lrpBl": {
       "db": "LRPV1DS",
-      "rows": 57,
+      "rows": 68,
       "source": "bl"
     },
     "lrpBlCargo": {
       "db": "LRPV1DS",
-      "rows": 51,
+      "rows": 74,
       "source": "bl_cargo"
     },
     "lrpBlCust": {
       "db": "LRPV1DS",
-      "rows": 229,
+      "rows": 281,
       "source": "bl_cust"
     },
     "telexReleases": {
@@ -598,7 +598,7 @@
     },
     "containerMoves": {
       "db": "LRPV1DS",
-      "rows": 68,
+      "rows": 88,
       "source": "operationDetail"
     },
     "routes": {
@@ -610,6 +610,36 @@
       "db": "COMDB",
       "rows": 500,
       "source": "bookingrates_tariff"
+    },
+    "contracts": {
+      "db": "COMDB",
+      "rows": 60,
+      "source": "corporateMaster"
+    },
+    "contractLines": {
+      "db": "COMDB",
+      "rows": 99,
+      "source": "corporateDetailN"
+    },
+    "contractSurcharges": {
+      "db": "COMDB",
+      "rows": 211,
+      "source": "CorporateSurcharge"
+    },
+    "contractRouting": {
+      "db": "COMDB",
+      "rows": 99,
+      "source": "Corporaterouting"
+    },
+    "contractCustomers": {
+      "db": "COMDB",
+      "rows": 18,
+      "source": "CorporateCustomer"
+    },
+    "contractCommodities": {
+      "db": "COMDB",
+      "rows": 135,
+      "source": "CorporateCommodity"
     },
     "lclTariffs": {
       "db": "COMDB",
@@ -623,12 +653,12 @@
     },
     "invoiceBls": {
       "db": "ACCDB",
-      "rows": 64,
+      "rows": 76,
       "source": "invoicedbls"
     },
     "invoiceCharges": {
       "db": "ACCDB",
-      "rows": 937,
+      "rows": 930,
       "source": "invoicedetail"
     },
     "receipts": {
@@ -638,7 +668,7 @@
     },
     "receiptAllocations": {
       "db": "ACCDB",
-      "rows": 463,
+      "rows": 469,
       "source": "receiptdetail"
     },
     "arrivalNotices": {
@@ -650,36 +680,6 @@
       "db": "IMPDB",
       "rows": 100,
       "source": "deliveryorderversion"
-    },
-    "contracts": {
-      "db": "COMDB",
-      "rows": 60,
-      "source": "corporateMaster"
-    },
-    "contractLines": {
-      "db": "COMDB",
-      "rows": 98,
-      "source": "corporateDetailN"
-    },
-    "contractSurcharges": {
-      "db": "COMDB",
-      "rows": 211,
-      "source": "CorporateSurcharge"
-    },
-    "contractRouting": {
-      "db": "COMDB",
-      "rows": 98,
-      "source": "Corporaterouting"
-    },
-    "contractCustomers": {
-      "db": "COMDB",
-      "rows": 18,
-      "source": "CorporateCustomer"
-    },
-    "contractCommodities": {
-      "db": "COMDB",
-      "rows": 134,
-      "source": "CorporateCommodity"
     }
   },
   "sampling": {

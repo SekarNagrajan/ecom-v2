@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-10-17 00:20)
+// Modified by Sekar Nagarajan (2026-10-18 20:30)
 /**
  * Dashboard figures computed from the extracted fixtures (ecombooking + children, ecomSI,
  * ecom_vgmsolas, Ecom_OnlinePayment(_Reference), Ecom_Notice, EcomCustomerAdvisory,
@@ -70,6 +70,12 @@ export interface DashboardTables {
   vgm: Row[];
   payments: Row[];
   paymentReferences: Row[];
+  /** LRP documentation (Documentation DB) and accounting (Accounts DB) facts — optional, default empty. */
+  lrpBookings?: Row[];
+  lrpBookingLegs?: Row[];
+  lrpBl?: Row[];
+  invoices?: Row[];
+  invoiceBls?: Row[];
   notices: Row[];
   advisories: Row[];
   notificationMaster: Row[];
@@ -83,6 +89,7 @@ export function emptyTables(): DashboardTables {
   return {
     bookings: [], bookingCargo: [], bookingLeg: [], bookingCommodity: [], bookingCust: [],
     shippingInstructions: [], vgm: [], payments: [], paymentReferences: [],
+    lrpBookings: [], lrpBookingLegs: [], lrpBl: [], invoices: [], invoiceBls: [],
     notices: [], advisories: [], notificationMaster: [], cutoffConfig: [], routeSearchLog: [], ports: [],
   };
 }
@@ -99,6 +106,11 @@ export function dashboardTables(): DashboardTables {
     vgm: db.vgm,
     payments: db.payments,
     paymentReferences: db.paymentReferences,
+    lrpBookings: db.lrpBookings,
+    lrpBookingLegs: db.lrpBookingLegs,
+    lrpBl: db.lrpBl,
+    invoices: db.invoices,
+    invoiceBls: db.invoiceBls,
     notices: db.notices,
     advisories: db.advisories,
     notificationMaster: db.notificationMaster,
@@ -268,6 +280,68 @@ function pendingPaymentIndex(tables: DashboardTables): Map<string, PendingPaymen
   return out;
 }
 
+/** Open (confirmed, unpaid) invoice balances in USD by B/L / booking reference — Accounts.invoicemaster + invoicedbls. */
+function openInvoiceIndex(tables: DashboardTables): Map<string, PendingPayment[]> {
+  const out = new Map<string, PendingPayment[]>();
+  const blsByInvoice = new Map<string, string[]>();
+  for (const r of tables.invoiceBls ?? []) {
+    const k = key(r.InvoiceNumber);
+    if (!k) continue;
+    const list = blsByInvoice.get(k) ?? [];
+    list.push(str(r.BLNumber));
+    blsByInvoice.set(k, list);
+  }
+  for (const inv of tables.invoices ?? []) {
+    const balance = num(inv.amtbalance);
+    if (up(inv.status) !== 'CONFIRM' || !(balance > 0)) continue;
+    const roe = num(inv.invroe);
+    const usd = up(inv.invcurrency) === 'USD' || !(roe > 0) ? balance : balance / roe;
+    const refs = new Set([str(inv.invrefno), ...(blsByInvoice.get(key(inv.invno)) ?? [])].filter(Boolean));
+    for (const ref of refs) {
+      const list = out.get(key(ref)) ?? [];
+      list.push({ amount: Math.round(usd * 100) / 100, refNo: str(inv.invno), agency: str(inv.agencycode) });
+      out.set(key(ref), list);
+    }
+  }
+  return out;
+}
+
+/** LRP sailing facts for a booking: first ETD / last ETA of booking_leg, else booking polAt / podAt. */
+function lrpSailing(tables: DashboardTables, bookNo: string): { etd: Date | null; eta: Date | null } {
+  if (!bookNo) return { etd: null, eta: null };
+  const legs = (tables.lrpBookingLegs ?? []).filter(l => key(l.book_no) === key(bookNo)).sort((a, b) => num(a.leg_no) - num(b.leg_no));
+  if (legs.length) {
+    const etds = legs.map(l => asDate(l.etdDate)).filter((d): d is Date => Boolean(d));
+    const etas = legs.map(l => asDate(l.etaDate)).filter((d): d is Date => Boolean(d));
+    return { etd: etds.length ? new Date(Math.min(...etds.map(Number))) : null, eta: etas.length ? new Date(Math.max(...etas.map(Number))) : null };
+  }
+  const header = (tables.lrpBookings ?? []).find(b => key(b.book_no) === key(bookNo));
+  return { etd: header ? asDate(header.polAt) : null, eta: header ? asDate(header.podAt) : null };
+}
+
+/** Shipped-on-board date of the booking's B/L (Documentation.bl.OnboardDate), when a B/L exists. */
+function onBoardDate(tables: DashboardTables, bookNo: string, blNo: string): Date | null {
+  const bl = (tables.lrpBl ?? []).find(r => (blNo && key(r.bl_no) === key(blNo)) || (bookNo && key(r.book_no) === key(bookNo)));
+  return bl ? asDate(bl.OnboardDate) : null;
+}
+
+/** Days after arrival without any release evidence after which a shipment is assumed delivered. */
+export const DELIVERY_GRACE_DAYS = 30;
+
+/**
+ * Has the cargo been released to the consignee? Evidence (enhancedDashboard.jsp "delivered" parity):
+ * original B/Ls printed / B/L released (Documentation.bl), a telex release, or a delivery order on an
+ * invoice of the B/L (Accounts.invoicemaster.deliveryorderno via invoicedbls).
+ */
+function isReleased(tables: DashboardTables, bookNo: string, blNo: string): boolean {
+  const bl = (tables.lrpBl ?? []).find(r => (blNo && key(r.bl_no) === key(blNo)) || (bookNo && key(r.book_no) === key(bookNo)));
+  if (bl && (num(bl.printedOriginals) > 0 || asDate(bl.PrintedDate) || up(bl.isvoyageclosed) === 'Y' || ['I', 'C'].includes(up(bl.status)))) return true;
+  const refs = new Set([blNo, str(bl?.bl_no)].filter(Boolean).map(key));
+  if (!refs.size) return false;
+  const invoiceNos = new Set((tables.invoiceBls ?? []).filter(r => refs.has(key(r.BLNumber))).map(r => key(r.InvoiceNumber)));
+  return (tables.invoices ?? []).some(i => (invoiceNos.has(key(i.invno)) || refs.has(key(i.invrefno))) && str(i.deliveryorderno));
+}
+
 /** Commodity lines with the TEUs of the container line they belong to (1 TEU when the line is unknown). */
 function commodityTeus(commodities: Row[], cargo: Row[]): { name: string; teus: number }[] {
   const cargoByCon = new Map(cargo.map(c => [key(c.conid), c]));
@@ -285,6 +359,7 @@ export function buildFacts(tables: DashboardTables, now: Date): BookingFact[] {
   const siBy = liveSiIndex(tables.shippingInstructions);
   const vgmBy = groupBy(tables.vgm.filter(v => ['A', 'C'].includes(up(v.status))), 'book_no');
   const paymentsBy = pendingPaymentIndex(tables);
+  const invoicesBy = openInvoiceIndex(tables);
 
   return tables.bookings
     .filter(b => up(b.ebook_status) !== 'T')
@@ -297,13 +372,24 @@ export function buildFacts(tables: DashboardTables, now: Date): BookingFact[] {
       const cargo = cargoBy.get(key(ebookno)) ?? [];
       const legs = (legBy.get(key(ebookno)) ?? []).slice().sort((a, c) => num(a.leg_no) - num(c.leg_no));
       const leg = legs[0] ?? null;
-      const etd = leg ? asDate(leg.etdDate) : null;
-      const eta = leg ? asDate(leg.etaDate) : null;
-      const lifecycle: Lifecycle | null = !etd ? null : now < etd ? 'origin' : eta && now >= eta ? 'delivered' : 'inTransit';
       const si = (bookNo ? siBy.get(key(bookNo)) : undefined) ?? siBy.get(key(ebookno)) ?? null;
       const blNo = str(si?.blno);
       const blIssued = Boolean(blNo) && ['A', 'C'].includes(up(si?.status));
-      const payments = [bookNo, ebookno, blNo].filter(Boolean).flatMap(ref => paymentsBy.get(key(ref)) ?? []);
+      // Sailing dates: e-commerce legs, else the LRP legs / booking header; "shipped on board" from the B/L.
+      const lrp = lrpSailing(tables, bookNo);
+      const etd = (leg ? asDate(leg.etdDate) : null) ?? lrp.etd;
+      const eta = (leg ? asDate(leg.etaDate) : null) ?? lrp.eta;
+      const onBoard = onBoardDate(tables, bookNo, blNo);
+      const sailed = (onBoard && onBoard <= now) || (etd ? etd <= now : false);
+      const arrived = eta ? eta <= now : false;
+      // Delivered = arrived and released (B/L printed / released, telex, delivery order), or arrived long ago;
+      // arrived but not yet released still counts as in transit (cargo at the discharge port).
+      const delivered = arrived && (isReleased(tables, bookNo, blNo) || (+now - +eta!) / DAY_MS > DELIVERY_GRACE_DAYS);
+      const lifecycle: Lifecycle | null = !etd && !onBoard ? null : delivered ? 'delivered' : sailed ? 'inTransit' : 'origin';
+      // Money due on the shipment: pending online payments plus open invoice balances (by booking / B/L number).
+      const payments = [bookNo, ebookno, blNo].filter(Boolean)
+        .flatMap(ref => [...(paymentsBy.get(key(ref)) ?? []), ...(invoicesBy.get(key(ref)) ?? [])])
+        .filter((p, i, all) => all.findIndex(q => q.refNo === p.refNo && q.amount === p.amount) === i);
       const containers = cargo.reduce((s, c) => s + containersOf(c), 0);
       const vgmOk = bookNo ? (vgmBy.get(key(bookNo)) ?? []).length : 0;
       const created = asDate(b.datecr) ?? now;

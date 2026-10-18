@@ -4631,6 +4631,72 @@
   "custcode": "20170000602"
  },
  {
+  "ReceiptNo": "ESADREC25000386",
+  "ReceiptDNo": 13314,
+  "InvNo": "GDXBINV12315",
+  "ReceiptAmt": 11625,
+  "AmtBalance": 0,
+  "receiptinvamt": 11625,
+  "rectamtinusd": 3163.2499999999986,
+  "rectbalamtinusd": 0,
+  "custcode": "20110004208"
+ },
+ {
+  "ReceiptNo": "ESADREC25000386",
+  "ReceiptDNo": 13315,
+  "InvNo": "DXBINVAT560",
+  "ReceiptAmt": 4.38,
+  "AmtBalance": 0,
+  "receiptinvamt": 4.38,
+  "rectamtinusd": 1.19,
+  "rectbalamtinusd": 0,
+  "custcode": "20110004208"
+ },
+ {
+  "ReceiptNo": "ESADREC25000386",
+  "ReceiptDNo": 13316,
+  "InvNo": "GDXBINV12743",
+  "ReceiptAmt": 54022.49,
+  "AmtBalance": 0,
+  "receiptinvamt": 54022.49,
+  "rectamtinusd": 14700.000000000002,
+  "rectbalamtinusd": 0,
+  "custcode": "20110004208"
+ },
+ {
+  "ReceiptNo": "ESADREC25000386",
+  "ReceiptDNo": 13317,
+  "InvNo": "GDXBINV12364",
+  "ReceiptAmt": 5193.75,
+  "AmtBalance": 0,
+  "receiptinvamt": 5193.75,
+  "rectamtinusd": 1413.2499999999998,
+  "rectbalamtinusd": 0,
+  "custcode": "20110004208"
+ },
+ {
+  "ReceiptNo": "ESADREC25000386",
+  "ReceiptDNo": 13318,
+  "InvNo": "GDXBINV12761",
+  "ReceiptAmt": 11625,
+  "AmtBalance": 0,
+  "receiptinvamt": 11625,
+  "rectamtinusd": 3163.27,
+  "rectbalamtinusd": 0,
+  "custcode": "20110004208"
+ },
+ {
+  "ReceiptNo": "ESADREC25000386",
+  "ReceiptDNo": 13319,
+  "InvNo": "DEMOSADISSINV5066",
+  "ReceiptAmt": 320,
+  "AmtBalance": 0,
+  "receiptinvamt": 320,
+  "rectamtinusd": 87.13,
+  "rectbalamtinusd": 0,
+  "custcode": "20110004208"
+ },
+ {
   "ReceiptNo": "ESADREC25000399",
   "ReceiptDNo": 13384,
   "InvNo": "DXBINVLT1076",

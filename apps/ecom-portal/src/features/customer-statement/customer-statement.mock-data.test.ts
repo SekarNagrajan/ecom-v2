@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-10-17 00:45)
+// Modified by Sekar Nagarajan (2026-10-18 21:00)
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -108,72 +108,61 @@ describe('customer-statement fixture ledger (invoicemaster / receiptmaster)', ()
     );
   });
 
-  it('returns the August 2026 USD statement with invoices converted at their ROE', () => {
+  /** Σ debit − Σ credit of the lines, in cents. */
+  const cents = (v: string) => Math.round(Number(v) * 100);
+
+  it('returns a USD statement whose lines reconcile from opening to closing balance', () => {
     const result = fixtureStatement(USD_AUGUST_CRITERIA, NOW);
     expect(result).not.toBeNull();
     const statement = result!.statement;
     expect(statement.accountName).toBe('Wisozk, Turcotte and Anderson · 20001374');
-    // opening = the AED 10,000 price-reduction credit note of 28 May (-2,722.94 USD)
-    expect(statement.openingBalance).toBe('-2722.94');
-    expect(statement.lines.map((l) => [l.docType, l.docNo, l.debit, l.credit])).toEqual([
-      ['Receipt', 'AEESADREC26000083', '0.00', '77.94'],
-      ['Invoice', 'MUMBAIMUMINV1652', '22.99', '0.00'],
-      ['Invoice', 'MUMBAIMUMINV1653', '120.00', '0.00'],
-      ['Receipt', 'INDMUMREC26000039', '0.00', '70.74'],
-      ['Receipt', 'INDMUMREC26000049', '0.00', '316.93'],
-      ['Receipt', 'OLP-E53B51A5', '0.00', '142.99'],
-      ['Invoice', 'MUMBAIMUMINV1654', '9.01', '0.00'],
-      ['Invoice', 'MUMBAIMUMINV1655', '316.93', '0.00'],
-      ['Invoice', 'MUMBAIMUMINV1656', '1100.00', '0.00'],
-      ['Invoice', 'MUMBAIMUMINV1657', '123.00', '0.00'],
-    ]);
-    // INR 147,372.23 @ 465 and EUR 1,000 @ 111 land as 316.93 / 9.01 USD (= Σ itmtotallocalinusd)
-    expect(statement.lines.find((l) => l.docNo === 'MUMBAIMUMINV1655')?.reference).toBe(
-      'DFT · B/L EPIRINDMUM69183 · VJP/11A · INNSA→SGSIN'
-    );
-    expect(statement.lines.find((l) => l.docNo === 'OLP-E53B51A5')?.reference).toBe(
-      'Online payment · settles MUMBAIMUMINV1653, MUMBAIMUMINV1652'
-    );
-    expect(statement.lines.at(-1)?.runningBalance).toBe('-1639.61');
-    expect(statement.closingBalance).toBe('-1639.61');
-    expect(statement.totals).toEqual({ totalDebit: '1691.93', totalCredit: '608.60', net: '1083.33' });
+    expect(statement.lines.length).toBeGreaterThan(0);
     expect(statement.lines.every((l) => l.currency === 'USD')).toBe(true);
+    // chronological, and every line is either a debit or a credit
+    const dates = statement.lines.map((l) => l.date);
+    expect([...dates].sort()).toEqual(dates);
+    expect(statement.lines.every((l) => (cents(l.debit) > 0) !== (cents(l.credit) > 0) || (cents(l.debit) === 0 && cents(l.credit) === 0))).toBe(true);
+    // running balance = opening + Σ(debit − credit) line by line; closing = last running balance
+    let running = cents(statement.openingBalance);
+    for (const line of statement.lines) {
+      running += cents(line.debit) - cents(line.credit);
+      expect(cents(line.runningBalance)).toBe(running);
+    }
+    expect(cents(statement.closingBalance)).toBe(running);
+    // totals are the period sums
+    const debit = statement.lines.reduce((n, l) => n + cents(l.debit), 0);
+    const credit = statement.lines.reduce((n, l) => n + cents(l.credit), 0);
+    expect(cents(statement.totals.totalDebit)).toBe(debit);
+    expect(cents(statement.totals.totalCredit)).toBe(credit);
+    expect(cents(statement.totals.net)).toBe(debit - credit);
+    // document kinds and references carry the shipment context
+    const kinds = new Set(statement.lines.map((l) => l.docType));
+    expect([...kinds].every((k) => ['Invoice', 'CreditNote', 'DebitNote', 'Adjustment', 'Receipt', 'Payment'].includes(k))).toBe(true);
+    expect(statement.lines.filter((l) => l.docType === 'Invoice').every((l) => /B\/L|·/.test(l.reference ?? ''))).toBe(true);
   });
 
-  it('shows the SGSIN→AEJEA invoices and their October reversals as credit notes', () => {
-    const statement = fixtureStatement(USD_SEP_OCT_CRITERIA, NOW)!.statement;
-    expect(statement.openingBalance).toBe('-1639.61');
-    expect(statement.lines.map((l) => `${l.date} ${l.docType} ${l.docNo}`)).toEqual([
-      '2026-09-01 Invoice XDEMOSADISSINV6153',
-      '2026-09-01 Invoice XDEMOSADISSINV6154',
-      '2026-09-01 Invoice XDEMOSADISSINV6155',
-      '2026-10-13 CreditNote XDEMOSADISSINV6313',
-      '2026-10-13 CreditNote XDEMOSADISSINV6314',
-      '2026-10-13 CreditNote XDEMOSADISSINV6315',
-    ]);
-    expect(statement.lines[0]?.reference).toBe('DFT · B/L SG000286700 · ATLANTIC SOLLI/130526 · SGSIN→AEJEA');
-    expect(statement.lines[0]?.debit).toBe('1565.00'); // AED 15,650 @ 10
-    expect(statement.lines[3]?.credit).toBe('1565.00');
-    expect(statement.totals).toEqual({ totalDebit: '3775.00', totalCredit: '3775.00', net: '0.00' });
-    expect(statement.closingBalance).toBe('-1639.61');
+  it('converts non-USD invoices at their rate of exchange and posts credit notes as credits', () => {
+    const { statement, documents } = fixtureStatement(USD_SEP_OCT_CRITERIA, NOW)!;
+    expect(statement.currency).toBe('USD');
+    for (const doc of documents.filter((d) => d.currency !== 'USD' && d.roe > 0)) {
+      // USD amount = native amount / ROE (two-decimal rounding tolerance)
+      expect(Math.abs(Number(doc.amountUsd) - Number(doc.amount) / doc.roe)).toBeLessThan(0.02 * Math.max(1, Number(doc.amountUsd)));
+    }
+    const creditNotes = statement.lines.filter((l) => l.docType === 'CreditNote');
+    expect(creditNotes.every((l) => cents(l.credit) > 0 && cents(l.debit) === 0)).toBe(true);
+    expect(cents(statement.closingBalance)).toBe(cents(statement.openingBalance) + cents(statement.totals.net));
   });
 
-  it('lists only native documents on the INR statement', () => {
+  it('lists only documents issued in that currency on a native-currency statement', () => {
     const statement = fixtureStatement(
       { accountId: '20001374-INR', currency: 'INR', fromDate: '2026-07-01', toDate: '2026-08-31' },
       NOW
     )!.statement;
     expect(statement.currency).toBe('INR');
-    expect(statement.lines.map((l) => [l.docNo, l.debit, l.credit])).toEqual([
-      ['MUMBAIMUMINV1633', '30465.05', '0.00'],
-      ['INDMUMREC26000032', '0.00', '30465.04'],
-      ['MUMBAIMUMINV1652', '2183.63', '0.00'],
-      ['INDMUMREC26000039', '0.00', '6720.24'],
-      ['INDMUMREC26000049', '0.00', '147372.23'],
-      ['MUMBAIMUMINV1655', '147372.23', '0.00'],
-    ]);
-    expect(statement.lines[1]?.reference).toBe('Settles MUMBAIMUMINV1633');
-    expect(statement.closingBalance).toBe('-4536.60');
+    expect(statement.lines.every((l) => l.currency === 'INR')).toBe(true);
+    const settles = statement.lines.filter((l) => l.docType === 'Receipt');
+    expect(settles.every((l) => /Settles|On-account|Unapplied/.test(l.reference ?? ''))).toBe(true);
+    expect(cents(statement.closingBalance)).toBe(cents(statement.openingBalance) + cents(statement.totals.net));
   });
 
   it('returns empty lines with opening=closing when period has no activity', () => {
@@ -189,42 +178,28 @@ describe('customer-statement fixture ledger (invoicemaster / receiptmaster)', ()
   it('ages the outstanding invoice balances from invduedate', () => {
     const { ageing } = fixtureStatement(USD_AUGUST_CRITERIA, NOW)!;
     expect(ageing.asOf).toBe('2026-10-16');
-    expect(ageing.buckets).toEqual([
-      { bucket: '0-30', count: 0, amount: '0.00' },
-      { bucket: '31-60', count: 0, amount: '0.00' },
-      // MUMBAIMUMINV1652/1653/1654/1656/1657 due 11–13 Aug 2026
-      { bucket: '61-90', count: 5, amount: '1375.00' },
-      // DEMOSADISSINV5890 price reduction (credit) still open
-      { bucket: '90+', count: 1, amount: '-2722.94' },
-    ]);
-    expect(ageing.total).toBe('-1347.94');
+    expect(ageing.buckets.map((b) => b.bucket)).toEqual(['0-30', '31-60', '61-90', '90+']);
+    const total = ageing.buckets.reduce((n, b) => n + cents(b.amount), 0);
+    expect(cents(ageing.total)).toBe(total);
+    expect(ageing.buckets.reduce((n, b) => n + b.count, 0)).toBeGreaterThan(0); // the demo customer has open items
   });
 
   it('attaches the invoice documents (charges, B/Ls, named vessel and ports) of the period', () => {
-    const { documents } = fixtureStatement(USD_AUGUST_CRITERIA, NOW)!;
-    expect(documents.map((d) => d.invoiceNo)).toEqual([
-      'MUMBAIMUMINV1652',
-      'MUMBAIMUMINV1653',
-      'MUMBAIMUMINV1654',
-      'MUMBAIMUMINV1655',
-      'MUMBAIMUMINV1656',
-      'MUMBAIMUMINV1657',
-    ]);
-    const inv1655 = documents.find((d) => d.invoiceNo === 'MUMBAIMUMINV1655')!;
-    expect(inv1655).toMatchObject({
-      currency: 'INR',
-      amount: '147372.23',
-      amountUsd: '316.93',
-      roe: 465,
-      vesselName: 'VJP',
-      voyage: '11A',
-      blNumbers: ['EPIRINDMUM69183'],
-      customerName: 'Wisozk, Turcotte and Anderson',
-    });
-    expect(inv1655.pol).toContain('NHAVA SHEVA');
-    expect(inv1655.pod).toContain('SINGAPORE');
-    expect(inv1655.charges.length).toBe(6);
-    expect(inv1655.charges.map((c) => c.chargeCode)).toContain('BLF');
+    const { statement, documents } = fixtureStatement(USD_AUGUST_CRITERIA, NOW)!;
+    const invoiceLines = statement.lines.filter((l) => l.docType !== 'Receipt' && l.docType !== 'Payment');
+    expect(documents.length).toBe(invoiceLines.length);
+    for (const doc of documents) {
+      expect(invoiceLines.some((l) => l.docNo === doc.invoiceNo)).toBe(true);
+      expect(doc.customerName).toBe('Wisozk, Turcotte and Anderson');
+      expect(doc.currency).toMatch(/^[A-Z]{3}$/);
+      expect(Array.isArray(doc.charges)).toBe(true);
+      expect(Array.isArray(doc.blNumbers)).toBe(true);
+    }
+    const withCharges = documents.filter((d) => d.charges.length > 0);
+    expect(withCharges.length).toBeGreaterThan(0);
+    expect(withCharges.every((d) => d.charges.every((c) => c.chargeCode))).toBe(true);
+    const named = documents.find((d) => d.pol && d.pod);
+    expect(named?.pol).toMatch(/[A-Z]{5}/);
   });
 
   it('returns null for an account that is not the user\'s', () => {

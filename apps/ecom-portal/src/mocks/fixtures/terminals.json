@@ -2778,6 +2778,18 @@
   "type": "D"
  },
  {
+  "terminalcode": "QADOHDHT00",
+  "terminalname": "Doha Terminal",
+  "portcode": "QADOH",
+  "type": "T"
+ },
+ {
+  "terminalcode": "QADOHTER01",
+  "terminalname": "QADOHTER01",
+  "portcode": "QADOH",
+  "type": "T"
+ },
+ {
   "terminalcode": "SGSINDAL1",
   "terminalname": "ALLIED YARD 1 (ACSMCU)",
   "portcode": "SGSIN",

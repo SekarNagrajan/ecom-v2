@@ -14,13 +14,6 @@
   "statusFlag": "A"
  },
  {
-  "id": 28942,
-  "corporateNo": "SVMMAH230003799",
-  "itemNo": 1,
-  "commodityCode": "02",
-  "statusFlag": "A"
- },
- {
   "id": 28943,
   "corporateNo": "SVMMAH230003800",
   "itemNo": 1,
@@ -424,6 +417,20 @@
   "corporateNo": "SVMMAH240004489",
   "itemNo": 1,
   "commodityCode": "46",
+  "statusFlag": "A"
+ },
+ {
+  "id": 32688,
+  "corporateNo": "SVMPOO240004517",
+  "itemNo": 1,
+  "commodityCode": "0711",
+  "statusFlag": "A"
+ },
+ {
+  "id": 32689,
+  "corporateNo": "SVMPOO240004517",
+  "itemNo": 1,
+  "commodityCode": "59",
   "statusFlag": "A"
  },
  {

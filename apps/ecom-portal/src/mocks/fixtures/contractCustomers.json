@@ -55,17 +55,6 @@
   "forwarder": "N"
  },
  {
-  "id": 8528,
-  "corporateNo": "SVMMAH230003799",
-  "itemNo": 1,
-  "custCode": "20170000602",
-  "statusFlag": "A",
-  "shipper": "Y",
-  "Consignee": "Y",
-  "notfiy": "Y",
-  "forwarder": "Y"
- },
- {
   "id": 8529,
   "corporateNo": "SVMMAH230003800",
   "itemNo": 1,
@@ -130,6 +119,17 @@
   "Consignee": "Y",
   "notfiy": "Y",
   "forwarder": "Y"
+ },
+ {
+  "id": 8792,
+  "corporateNo": "SVMPOO240004517",
+  "itemNo": 1,
+  "custCode": "20140004459",
+  "statusFlag": "A",
+  "shipper": "Y",
+  "Consignee": "Y",
+  "notfiy": "Y",
+  "forwarder": "N"
  },
  {
   "id": 8969,

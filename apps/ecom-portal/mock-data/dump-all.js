@@ -80,6 +80,32 @@ const NAMES = {
  */
 const FAMILIES = [
   { parent: 'ecombooking', key: 'ebookno', altKey: 'extBookNo', order: 'dateup desc',
+    // Besides the newest bookings, keep the shipments the dashboard lifecycle and payment KPIs need:
+    // confirmed bookings that sailed recently (in transit / delivered) and the bookings behind pending
+    // online payments and their B/Ls, so "payment pending" / "in transit" are not empty for the sample.
+    alsoWhere: () => `(
+         (ebook_status in ('A','C') and extBookNo is not null and ebook_status <> 'T'
+            and dateup between dateadd(day,-150,getdate()) and dateadd(day,-5,getdate())
+            and ebookno in (select top 30 ebookno from ecombooking(nolock)
+                             where ebook_status in ('A','C') and extBookNo is not null
+                               and dateup between dateadd(day,-150,getdate()) and dateadd(day,-5,getdate())
+                             order by dateup desc))
+      or extBookNo in (select refNo from Ecom_OnlinePayment_Reference(nolock) where refType = 'BKG')
+      or extBookNo in (select bookno from ecomSI(nolock) where blno in (select refNo from Ecom_OnlinePayment_Reference(nolock) where refType = 'BL'))
+      or ebookno in (select refNo from Ecom_OnlinePayment_Reference(nolock) where refType = 'BKG')
+    )`,
+    // Bookings behind the customers' open invoices (Accounts is on the same server; skipped when unreachable).
+    alsoWhereAny: [
+      // Bookings whose sea legs are under way right now (dashboard "in transit"), confirmed ones first.
+      () => `ebook_status in ('A','C') and extBookNo is not null and ebookno in (
+               select top 25 l.ebookno from ecombooking_leg l(nolock)
+                where l.etdDate <= getdate() and l.etaDate > getdate() order by l.etdDate desc)`,
+      () => `extBookNo in (
+        select s.bookno from ecomSI s(nolock)
+         where s.blno in (select i.invrefno from [Accounts].dbo.invoicemaster i(nolock)
+                           where i.status = 'CONFIRM' and i.amtbalance > 0
+                             and i.custcode in (select distinct cust_code from ecombooking(nolock)
+                                                 where ebookno in (select top 50 ebookno from ecombooking(nolock) order by dateup desc))))`],
     children: [
       ['ecombooking_cust', 'ebookno'], ['ecombooking_cargo', 'ebookno'], ['ecombooking_commodity', 'ebookno'],
       ['ecombooking_dg', 'ebookno'], ['ecombooking_oog', 'ebookno'], ['ecombooking_refer', 'ebookno'],
@@ -241,9 +267,14 @@ for (const fam of FAMILIES) {
   const parent = realName(fam.parent);
   if (!parent) { console.log(`  skip  ${fam.parent.padEnd(32)} table not found`); continue; }
   let rows = await q(`select top ${TOP} ${selectList(parent)} from [${parent}] ${orderClause(parent, fam.order)}`);
-  if (fam.alsoWhere) {
-    const where = fam.alsoWhere(ctx);
-    if (where) rows = union(parent, rows, await q(`select top ${CHILD_CAP} ${selectList(parent)} from [${parent}] where ${where} ${orderClause(parent, fam.order)}`));
+  for (const clause of [fam.alsoWhere, ...(fam.alsoWhereAny ?? [])].filter(Boolean)) {
+    const where = clause(ctx);
+    if (!where) continue;
+    try {
+      rows = union(parent, rows, await q(`select top ${CHILD_CAP} ${selectList(parent)} from [${parent}] where ${where} ${orderClause(parent, fam.order)}`));
+    } catch (err) {
+      console.log(`  warn  ${parent.padEnd(32)} extra clause skipped: ${String(err.message).split('\n')[0].slice(0, 90)}`);
+    }
   }
   results.set(parent, rows); strategy.set(parent, `top ${TOP} by ${fam.order}${fam.alsoWhere ? ' + rows linked to sampled parents' : ''}`); handled.add(parent.toLowerCase());
   console.log(`  ok    ${parent.padEnd(32)} ${String(rows.length).padStart(5)} rows   (parent)`);

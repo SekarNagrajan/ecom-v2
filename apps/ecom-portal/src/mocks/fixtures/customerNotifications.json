@@ -4,9 +4,9 @@
   "customerUserId": "5",
   "notificationId": "8",
   "isEnabled": true,
-  "createdAt": "2026-10-14T05:32:00.739Z",
+  "createdAt": "2026-10-16T03:01:52.182Z",
   "createdBy": "customer.notification",
-  "updatedAt": "2026-10-14T05:32:18.249Z",
+  "updatedAt": "2026-10-16T03:02:09.692Z",
   "updatedBy": "customer.notification"
  },
  {
@@ -14,9 +14,9 @@
   "customerUserId": "5",
   "notificationId": "6",
   "isEnabled": true,
-  "createdAt": "2026-10-14T05:32:00.739Z",
+  "createdAt": "2026-10-16T03:01:52.182Z",
   "createdBy": "customer.notification",
-  "updatedAt": "2026-10-14T05:32:18.249Z",
+  "updatedAt": "2026-10-16T03:02:09.692Z",
   "updatedBy": "customer.notification"
  },
  {
@@ -24,9 +24,9 @@
   "customerUserId": "5",
   "notificationId": "11",
   "isEnabled": true,
-  "createdAt": "2026-10-14T05:31:45.319Z",
+  "createdAt": "2026-10-16T03:01:36.762Z",
   "createdBy": "customer.notification",
-  "updatedAt": "2026-10-14T05:31:54.889Z",
+  "updatedAt": "2026-10-16T03:01:46.332Z",
   "updatedBy": "customer.notification"
  },
  {
@@ -34,7 +34,7 @@
   "customerUserId": "5",
   "notificationId": "1",
   "isEnabled": false,
-  "createdAt": "2026-10-15T19:55:59.222Z",
+  "createdAt": "2026-10-17T17:25:50.665Z",
   "createdBy": "customer.notification",
   "updatedAt": null,
   "updatedBy": null
@@ -44,7 +44,7 @@
   "customerUserId": "1",
   "notificationId": "1",
   "isEnabled": false,
-  "createdAt": "2026-10-08T08:21:22.052Z",
+  "createdAt": "2026-10-10T05:51:13.495Z",
   "createdBy": "customer.notification",
   "updatedAt": null,
   "updatedBy": null

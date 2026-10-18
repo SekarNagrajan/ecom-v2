@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-10-17 00:20)
+// Modified by Sekar Nagarajan (2026-10-18 21:35)
 import { describe, expect, it } from 'vitest';
 
 import { db } from '../db';
@@ -75,6 +75,8 @@ function sampleTables(): DashboardTables {
     { eSINo: 'SIREQ7', bookno: 'OTHER1', blno: 'BL7', status: 'A', editbl: 0, pol: 'CNSHA', pod: 'SGSIN', ChgDate: iso(9, 1) },
     { eSINo: 'SIREQ8', bookno: 'OTHER2', blno: 'BL8', status: 'A', editbl: 0, pol: 'CNSHA', pod: 'SGSIN', ChgDate: iso(9, 2) },
   ];
+  // SVM6 arrived and its original B/Ls were printed → delivered (release evidence; enhancedDashboard parity)
+  t.lrpBl = [{ bl_no: 'BL6', book_no: 'SVM6', status: 'I', printedOriginals: 3, PrintedDate: iso(10, 3), OnboardDate: iso(9, 25) }];
   t.vgm = [
     { book_no: 'SVM1', eqpid: 'TEMU0000001', status: 'A' },
     { book_no: 'SVM1', eqpid: 'TEMU0000002', status: 'C' },

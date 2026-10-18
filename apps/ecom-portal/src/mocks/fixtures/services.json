@@ -35,6 +35,13 @@
   "status": "Active"
  },
  {
+  "servicecode": "NAU2",
+  "servicename": "AGENCY EOSP_BOSP_TESTING",
+  "servicetype": "M",
+  "frequency": 6,
+  "status": "Active"
+ },
+ {
   "servicecode": "ALP",
   "servicename": "ALPHA",
   "servicetype": "F",
@@ -47,6 +54,13 @@
   "servicetype": "F",
   "frequency": 12,
   "status": "Active"
+ },
+ {
+  "servicecode": "EAGI",
+  "servicename": "ASEAN GULF INDIA",
+  "servicetype": "M",
+  "frequency": 8,
+  "status": "InActive"
  },
  {
   "servicecode": "AEX",
@@ -196,14 +210,14 @@
   "status": "Active"
  },
  {
-  "servicecode": "CIVS",
+  "servicecode": "CIMS",
   "servicename": "CHINA INDIA VIETNAM SERVICE",
   "servicetype": "M",
   "frequency": 7,
   "status": "Active"
  },
  {
-  "servicecode": "CIMS",
+  "servicecode": "CIVS",
   "servicename": "CHINA INDIA VIETNAM SERVICE",
   "servicetype": "M",
   "frequency": 7,
@@ -233,13 +247,6 @@
  {
   "servicecode": "CIMV",
   "servicename": "CHINAS INDIA VIETNAM SERVICESS",
-  "servicetype": "M",
-  "frequency": 7,
-  "status": "Active"
- },
- {
-  "servicecode": "CA30",
-  "servicename": "CHINNA TO AUSTRALIYA",
   "servicetype": "M",
   "frequency": 7,
   "status": "Active"
@@ -336,16 +343,16 @@
   "status": "Active"
  },
  {
-  "servicecode": "EFPC",
+  "servicecode": "EFWC",
   "servicename": "EVERGREEN",
-  "servicetype": "F",
+  "servicetype": "M",
   "frequency": 2,
   "status": "Active"
  },
  {
-  "servicecode": "EFWC",
+  "servicecode": "EFPC",
   "servicename": "EVERGREEN",
-  "servicetype": "M",
+  "servicetype": "F",
   "frequency": 2,
   "status": "Active"
  },
@@ -382,6 +389,13 @@
   "servicename": "EVERGREEN",
   "servicetype": "M",
   "frequency": 2,
+  "status": "Active"
+ },
+ {
+  "servicecode": "GIX",
+  "servicename": "EVERGREEN",
+  "servicetype": "M",
+  "frequency": 7,
   "status": "Active"
  },
  {
@@ -434,6 +448,20 @@
   "status": "Active"
  },
  {
+  "servicecode": "FAM2",
+  "servicename": "FAR EAST MIDLLE EAST",
+  "servicetype": "F",
+  "frequency": 2,
+  "status": "Active"
+ },
+ {
+  "servicecode": "FDA",
+  "servicename": "FDANAME",
+  "servicetype": "F",
+  "frequency": 324,
+  "status": "Active"
+ },
+ {
   "servicecode": "FDR",
   "servicename": "FDR SERVICE",
   "servicetype": "F",
@@ -455,8 +483,8 @@
   "status": "Active"
  },
  {
-  "servicecode": "FSES",
-  "servicename": "FEEDER SERVICE SOUTH EAST ASIA",
+  "servicecode": "FCES",
+  "servicename": "FEEDER SERVICE FESEA",
   "servicetype": "F",
   "frequency": 7,
   "status": "Active"
@@ -609,6 +637,13 @@
   "status": "Active"
  },
  {
+  "servicecode": "EITX",
+  "servicename": "INDONESIA THAILAND EXPRESS",
+  "servicetype": "M",
+  "frequency": 7,
+  "status": "Active"
+ },
+ {
   "servicecode": "ANZX",
   "servicename": "INTTRA TESTING PURPOSE",
   "servicetype": "F",
@@ -627,6 +662,13 @@
   "servicename": "JEBEL ALI BRIDGE SERVICE",
   "servicetype": "M",
   "frequency": 7,
+  "status": "Active"
+ },
+ {
+  "servicecode": "KILL",
+  "servicename": "KILL2",
+  "servicetype": "F",
+  "frequency": 2,
   "status": "Active"
  },
  {
@@ -924,6 +966,13 @@
   "status": "Active"
  },
  {
+  "servicecode": "ESTT",
+  "servicename": "TEST",
+  "servicetype": "M",
+  "frequency": 12,
+  "status": "Active"
+ },
+ {
   "servicecode": "KAAA",
   "servicename": "TEST",
   "servicetype": "M",
@@ -932,13 +981,6 @@
  },
  {
   "servicecode": "KAHH",
-  "servicename": "TEST",
-  "servicetype": "M",
-  "frequency": 12,
-  "status": "Active"
- },
- {
-  "servicecode": "ESTT",
   "servicename": "TEST",
   "servicetype": "M",
   "frequency": 12,
@@ -1008,17 +1050,31 @@
   "status": "Active"
  },
  {
-  "servicecode": "TSH1",
+  "servicecode": "PO12",
   "servicename": "TESTING SERVICE",
   "servicetype": "M",
   "frequency": 7,
   "status": "Active"
  },
  {
-  "servicecode": "ROW3",
+  "servicecode": "POS6",
+  "servicename": "TESTING SERVICE",
+  "servicetype": "M",
+  "frequency": 7,
+  "status": "Active"
+ },
+ {
+  "servicecode": "EOD2",
   "servicename": "TESTING SERVICE",
   "servicetype": "F",
-  "frequency": 5,
+  "frequency": 2,
+  "status": "Active"
+ },
+ {
+  "servicecode": "SBY",
+  "servicename": "TESTING SERVICE",
+  "servicetype": "M",
+  "frequency": 7,
   "status": "Active"
  },
  {
@@ -1033,13 +1089,6 @@
   "servicename": "TESTING SERVICE",
   "servicetype": "M",
   "frequency": 6,
-  "status": "Active"
- },
- {
-  "servicecode": "SBY",
-  "servicename": "TESTING SERVICE",
-  "servicetype": "M",
-  "frequency": 7,
   "status": "Active"
  },
  {
@@ -1064,59 +1113,17 @@
   "status": "Active"
  },
  {
-  "servicecode": "PO12",
+  "servicecode": "TSH1",
   "servicename": "TESTING SERVICE",
   "servicetype": "M",
   "frequency": 7,
   "status": "Active"
  },
  {
-  "servicecode": "POS6",
-  "servicename": "TESTING SERVICE",
-  "servicetype": "M",
-  "frequency": 7,
-  "status": "Active"
- },
- {
-  "servicecode": "EOD2",
+  "servicecode": "ROW3",
   "servicename": "TESTING SERVICE",
   "servicetype": "F",
-  "frequency": 2,
-  "status": "Active"
- },
- {
-  "servicecode": "CB05",
-  "servicename": "TESTING SERVICES",
-  "servicetype": "M",
-  "frequency": 7,
-  "status": "Active"
- },
- {
-  "servicecode": "CB01",
-  "servicename": "TESTING SERVICES",
-  "servicetype": "M",
-  "frequency": 7,
-  "status": "Active"
- },
- {
-  "servicecode": "CB02",
-  "servicename": "TESTING SERVICES",
-  "servicetype": "M",
-  "frequency": 7,
-  "status": "Active"
- },
- {
-  "servicecode": "238A",
-  "servicename": "TESTING SERVICES",
-  "servicetype": "M",
-  "frequency": 33,
-  "status": "InActive"
- },
- {
-  "servicecode": "Y001",
-  "servicename": "TESTING SERVICES",
-  "servicetype": "M",
-  "frequency": 7,
+  "frequency": 5,
   "status": "Active"
  },
  {
@@ -1148,6 +1155,48 @@
   "status": "Active"
  },
  {
+  "servicecode": "238A",
+  "servicename": "TESTING SERVICES",
+  "servicetype": "M",
+  "frequency": 33,
+  "status": "InActive"
+ },
+ {
+  "servicecode": "CB05",
+  "servicename": "TESTING SERVICES",
+  "servicetype": "M",
+  "frequency": 7,
+  "status": "Active"
+ },
+ {
+  "servicecode": "CB01",
+  "servicename": "TESTING SERVICES",
+  "servicetype": "M",
+  "frequency": 7,
+  "status": "Active"
+ },
+ {
+  "servicecode": "CB02",
+  "servicename": "TESTING SERVICES",
+  "servicetype": "M",
+  "frequency": 7,
+  "status": "Active"
+ },
+ {
+  "servicecode": "AE11",
+  "servicename": "TESTING SERVICES",
+  "servicetype": "M",
+  "frequency": 7,
+  "status": "Active"
+ },
+ {
+  "servicecode": "Y001",
+  "servicename": "TESTING SERVICES",
+  "servicetype": "M",
+  "frequency": 7,
+  "status": "Active"
+ },
+ {
   "servicecode": "V1S2",
   "servicename": "TESTING VSS CASES",
   "servicetype": "M",
@@ -1166,6 +1215,13 @@
   "servicename": "TIGER EXPRESS",
   "servicetype": "M",
   "frequency": 14,
+  "status": "Active"
+ },
+ {
+  "servicecode": "TOM",
+  "servicename": "TOMSERV",
+  "servicetype": "F",
+  "frequency": 12,
   "status": "Active"
  },
  {

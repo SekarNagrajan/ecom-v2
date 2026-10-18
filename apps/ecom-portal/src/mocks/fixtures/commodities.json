@@ -1100,8 +1100,23 @@
   "comdtytype": "23"
  },
  {
+  "comdtycode": "14",
+  "comdtyname": "Fruits",
+  "comdtytype": "23"
+ },
+ {
+  "comdtycode": "23",
+  "comdtyname": "Furniture",
+  "comdtytype": "23"
+ },
+ {
   "comdtycode": "24",
   "comdtyname": "Gas NOS",
+  "comdtytype": "23"
+ },
+ {
+  "comdtycode": "1",
+  "comdtyname": "Guts, bladders and stomachs of animals (other than fish), whole and pieces thereof, fresh, chilled, frozen, salted, in brine, dried or smoked.",
   "comdtytype": "23"
  },
  {
@@ -1120,8 +1135,18 @@
   "comdtytype": "23"
  },
  {
+  "comdtycode": "30",
+  "comdtyname": "Machinery & Machinery Parts",
+  "comdtytype": "23"
+ },
+ {
   "comdtycode": "35",
   "comdtyname": "Metals - Steel or Iron",
+  "comdtytype": "23"
+ },
+ {
+  "comdtycode": "54",
+  "comdtyname": "Refrigerated Cargo (Frozen) - Foodstuffs",
   "comdtytype": "23"
  },
  {

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-15 17:20)
+// Modified by Sekar Nagarajan (2026-10-19 19:50)
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { Alert, theme } from "antd";
 import { useState } from "react";
@@ -21,6 +21,7 @@ import { ImportReviewGridSection } from "./import-review-grid-section";
 import { ImportReviewMetrics } from "./import-review-metrics";
 import { ImportReviewToolbar } from "./import-review-toolbar";
 import { ImportWorkbenchHeader } from "./import-workbench-header";
+import { tokenMix } from "../../theme/utils/token-mix";
 
 const ACCEPTED_SPREADSHEET_FILES = ".xlsx";
 const MAX_SPREADSHEET_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10 MB
@@ -105,7 +106,7 @@ export function SpreadsheetImportWorkbench<TValues extends object, TPayload>({
     {
       errorBackground: token.colorErrorBg,
       errorBorder: token.colorErrorBorder,
-      fixedBackground: token.colorSuccessBg,
+      fixedBackground: tokenMix(token.colorSuccess, 8),
       fixedBorder: token.colorSuccessBorder,
     },
     {

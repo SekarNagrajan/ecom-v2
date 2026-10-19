@@ -205,7 +205,15 @@
   "contractSurcharge": {
     "title": "Recargos incluidos para el contrato {{contractNo}}",
     "customer": "Cliente: {{name}} ({{code}})",
-    "route": "Ruta: {{originName}} ({{origin}}) → {{deliveryName}} ({{delivery}})"
+    "route": "Ruta: {{originName}} ({{origin}}) → {{deliveryName}} ({{delivery}})",
+    "linesTitle": "Líneas de recargo",
+    "lineCount": "{{count}} línea(s)",
+    "total": "Total de recargos",
+    "noSurcharges": "Este contrato no incluye recargos.",
+    "columns": {
+      "equipment": "Equipo",
+      "validity": "Vigencia"
+    }
   },
   "quoteRequest": {
     "title": "Solicitud de cotización",

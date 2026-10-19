@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-15 15:30)
+// Modified by Sekar Nagarajan (2026-10-19 14:45)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -860,6 +860,284 @@ export function RatesModuleStyles() {
         }
         .rates-filter-select.ant-select {
           width: 100%;
+        }
+      }
+
+      /* Modified by Sekar Nagarajan (2026-10-19 14:45) — contract surcharge drawer */
+      .rates-drawer-title {
+        display: flex;
+        align-items: flex-start;
+        gap: ${token.marginSM}px;
+        min-width: 0;
+      }
+      .rates-drawer-title__copy {
+        min-width: 0;
+        flex: 1;
+      }
+      .rates-drawer-title__text.ant-typography {
+        margin: 0 !important;
+        line-height: 1.25 !important;
+      }
+      .rates-drawer-title__meta {
+        display: block;
+        margin-top: ${token.marginXXS}px;
+        font-size: ${token.fontSizeSM}px;
+      }
+      .rates-surcharge-drawer {
+        gap: ${token.marginLG}px;
+      }
+      .rates-surcharge-summary {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginMD}px;
+        padding: ${token.paddingLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG + 2}px;
+        background: linear-gradient(
+          180deg,
+          ${tokenMix(token.colorPrimary, 8)} 0%,
+          ${token.colorBgContainer} 100%
+        );
+      }
+      .rates-surcharge-route {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginMD}px;
+        width: 100%;
+      }
+      .rates-surcharge-route__stop {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: ${token.marginXXS}px;
+        flex: 1 1 0;
+        min-width: 0;
+      }
+      .rates-surcharge-route__stop--dest {
+        align-items: flex-end;
+        text-align: right;
+      }
+      .rates-surcharge-route__eyebrow {
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: ${token.colorTextTertiary};
+        line-height: 1.2;
+      }
+      .rates-surcharge-route__code {
+        font-size: ${token.fontSizeHeading4}px;
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+        line-height: 1.2;
+        word-break: break-word;
+      }
+      .rates-surcharge-route__name {
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+        line-height: 1.4;
+        word-break: break-word;
+      }
+      .rates-surcharge-route__connector {
+        display: flex;
+        align-items: center;
+        flex: 1 1 auto;
+        min-width: 96px;
+        gap: ${token.marginXS}px;
+      }
+      .rates-surcharge-route__track {
+        flex: 1 1 auto;
+        height: 0;
+        border-top: ${token.lineWidthBold}px dashed ${tokenMix(token.colorPrimary, 40)};
+      }
+      .rates-surcharge-route__ship {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: ${token.controlHeightSM}px;
+        height: ${token.controlHeightSM}px;
+        border-radius: 50%;
+        border: ${token.lineWidth}px solid ${token.colorPrimaryBorder};
+        background: ${token.colorBgContainer};
+        color: ${token.colorPrimary};
+      }
+      .rates-surcharge-facts {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: ${token.marginSM}px ${token.marginMD}px;
+        margin: 0;
+        padding-top: ${token.paddingMD}px;
+        border-top: 1px solid ${token.colorBorderSecondary};
+      }
+      .rates-surcharge-fact {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+        min-width: 0;
+      }
+      .rates-surcharge-fact__label {
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+        line-height: 1.3;
+      }
+      .rates-surcharge-fact__value {
+        margin: 0;
+        font-size: ${token.fontSize}px;
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+        line-height: 1.4;
+        word-break: break-word;
+      }
+      .rates-surcharge-tiles {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: ${token.marginSM}px;
+      }
+      .rates-surcharge-tile {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+        min-width: 0;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorBgContainer};
+      }
+      .rates-surcharge-tile--freight {
+        border-color: ${tokenMix(token.colorSuccess, 35)};
+        background: ${tokenMix(token.colorSuccess, 8)};
+      }
+      .rates-surcharge-tile--charges {
+        border-color: ${tokenMix(token.colorError, 30)};
+        background: ${tokenMix(token.colorError, 6)};
+      }
+      .rates-surcharge-tile__label {
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+        line-height: 1.3;
+      }
+      .rates-surcharge-tile__amount {
+        font-size: ${token.fontSizeLG}px;
+        font-weight: ${token.fontWeightStrong};
+        line-height: 1.3;
+        font-variant-numeric: tabular-nums;
+      }
+      .rates-surcharge-amount {
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+      .rates-surcharge-amount__currency {
+        margin-right: ${token.marginXXS}px;
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        opacity: 0.85;
+      }
+      .rates-surcharge-section {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginSM}px;
+      }
+      .rates-surcharge-section__head {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginSM}px;
+      }
+      .rates-surcharge-section__title.ant-typography {
+        margin: 0 !important;
+        color: ${token.colorPrimary} !important;
+      }
+      .rates-surcharge-section__count.ant-tag {
+        margin-inline-end: 0;
+        border-radius: ${token.borderRadiusLG * 2}px;
+        color: ${token.colorTextSecondary};
+        background: ${token.colorFillAlter};
+        border-color: ${token.colorBorderSecondary};
+      }
+      .rates-surcharge-table-wrap {
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG}px;
+        overflow: hidden;
+      }
+      .rates-surcharge-table .ant-table-thead > tr > th {
+        background: ${token.colorFillAlter};
+        color: ${token.colorTextSecondary};
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+      }
+      .rates-surcharge-table .ant-table-tbody > tr > td {
+        vertical-align: middle;
+      }
+      .rates-surcharge-table .ant-table-summary > tr > td {
+        background: ${token.colorFillAlter};
+        border-top: ${token.lineWidthBold}px solid ${token.colorBorderSecondary};
+      }
+      .rates-surcharge-line {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: ${token.marginXS}px;
+        min-width: 0;
+      }
+      .rates-surcharge-line__code.ant-tag {
+        margin-inline-end: 0;
+        font-weight: ${token.fontWeightStrong};
+        font-variant-numeric: tabular-nums;
+      }
+      .rates-surcharge-line__name {
+        color: ${token.colorText};
+        word-break: break-word;
+      }
+      .rates-surcharge-eqp {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: ${token.marginXXS}px;
+      }
+      .rates-surcharge-nor.ant-tag {
+        margin-inline-end: 0;
+        font-size: ${token.fontSizeSM - 1}px;
+        line-height: 1.4;
+      }
+      .rates-surcharge-validity {
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+        white-space: nowrap;
+      }
+      .rates-surcharge-empty {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        border: 1px dashed ${token.colorBorderSecondary};
+      }
+      @media (max-width: 767px) {
+        .rates-surcharge-summary {
+          padding: ${token.paddingMD}px;
+        }
+        .rates-surcharge-route {
+          flex-direction: column;
+          align-items: stretch;
+          gap: ${token.marginSM}px;
+        }
+        .rates-surcharge-route__stop--dest {
+          align-items: flex-start;
+          text-align: left;
+        }
+        .rates-surcharge-route__connector {
+          min-width: 0;
+          width: 100%;
+        }
+        .rates-surcharge-facts {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+      @media (max-width: 575px) {
+        .rates-surcharge-facts,
+        .rates-surcharge-tiles {
+          grid-template-columns: minmax(0, 1fr);
         }
       }
     `}</style>

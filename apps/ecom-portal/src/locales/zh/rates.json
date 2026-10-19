@@ -205,7 +205,15 @@
   "contractSurcharge": {
     "title": "合同 {{contractNo}} 包含的附加费",
     "customer": "客户：{{name}}（{{code}}）",
-    "route": "航线：{{originName}}（{{origin}}）→ {{deliveryName}}（{{delivery}}）"
+    "route": "航线：{{originName}}（{{origin}}）→ {{deliveryName}}（{{delivery}}）",
+    "linesTitle": "附加费明细",
+    "lineCount": "{{count}} 项",
+    "total": "附加费合计",
+    "noSurcharges": "该合同不包含附加费。",
+    "columns": {
+      "equipment": "箱型",
+      "validity": "有效期"
+    }
   },
   "quoteRequest": {
     "title": "询价申请",

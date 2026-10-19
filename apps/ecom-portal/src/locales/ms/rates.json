@@ -205,7 +205,15 @@
   "contractSurcharge": {
     "title": "Surcaj Termasuk untuk Kontrak {{contractNo}}",
     "customer": "Pelanggan: {{name}} ({{code}})",
-    "route": "Laluan: {{originName}} ({{origin}}) → {{deliveryName}} ({{delivery}})"
+    "route": "Laluan: {{originName}} ({{origin}}) → {{deliveryName}} ({{delivery}})",
+    "linesTitle": "Baris Surcaj",
+    "lineCount": "{{count}} baris",
+    "total": "Jumlah surcaj",
+    "noSurcharges": "Tiada surcaj disertakan dalam kontrak ini.",
+    "columns": {
+      "equipment": "Peralatan",
+      "validity": "Tempoh Sah"
+    }
   },
   "quoteRequest": {
     "title": "Permintaan Sebut Harga",

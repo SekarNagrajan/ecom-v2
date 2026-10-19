@@ -217,7 +217,15 @@
   "contractSurcharge": {
     "title": "Included Surcharges for Contract {{contractNo}}",
     "customer": "Customer: {{name}} ({{code}})",
-    "route": "Route: {{originName}} ({{origin}}) → {{deliveryName}} ({{delivery}})"
+    "route": "Route: {{originName}} ({{origin}}) → {{deliveryName}} ({{delivery}})",
+    "linesTitle": "Surcharge Lines",
+    "lineCount": "{{count}} line(s)",
+    "total": "Total surcharges",
+    "noSurcharges": "No surcharges are included in this contract.",
+    "columns": {
+      "equipment": "Equipment",
+      "validity": "Validity"
+    }
   },
   "quoteRequest": {
     "title": "Request for Quote",

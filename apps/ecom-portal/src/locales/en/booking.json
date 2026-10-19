@@ -58,7 +58,8 @@
     "termsAccepted": "Terms accepted",
     "blType": "BL type",
     "filingType": "Filing type",
-    "declarantName": "Declarant name"
+    "declarantName": "Declarant name",
+    "statusProgress": "Booking status progress"
   },
   "sections": {
     "masterDetails": "Master details",

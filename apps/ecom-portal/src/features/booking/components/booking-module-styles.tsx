@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-11 11:59)
+// Modified by Sekar Nagarajan (2026-10-19 19:20)
 import { theme } from "antd";
 
 import { BE_COLOR_MAP } from "../../theme/utils/config-mapper";
@@ -62,10 +62,23 @@ export function BookingModuleStyles() {
         margin: 0;
       }
 
+      /* Modified by Sekar Nagarajan (2026-10-19 19:20) — booking view drawer title, hero, lifecycle, route, facts */
       .booking-drawer-title {
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         gap: ${token.marginSM}px;
+        min-width: 0;
+      }
+      .booking-drawer-title__icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: ${token.controlHeight}px;
+        height: ${token.controlHeight}px;
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${primaryTint8};
+        border: 1px solid ${token.colorPrimaryBorder};
       }
       .booking-drawer-title__copy {
         min-width: 0;
@@ -80,37 +93,19 @@ export function BookingModuleStyles() {
         display: block;
         margin: 0;
       }
-      .booking-drawer-title__row {
+      .booking-drawer-title__meta--row {
         display: flex;
         flex-wrap: wrap;
-        align-items: center;
-        gap: ${token.marginXS}px ${token.marginMD}px;
+        gap: ${token.marginXXS}px ${token.marginSM}px;
         margin-top: ${token.marginXXS}px;
+        line-height: 1.4;
       }
-      .booking-drawer-title__tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: ${token.marginXXS}px;
-        margin: 0;
+      .booking-drawer-title__meta-item {
+        white-space: nowrap;
       }
-      /* Modified by Sekar Nagarajan (2026-08-31 14:57) — light status badge backgrounds */
-      .booking-drawer-title__tags .ant-tag-success,
-      .booking-drawer-title__tags .ant-tag-filled.ant-tag-success {
-        color: ${token.colorSuccessText || token.colorSuccess};
-        background: ${successTint8};
-        border-color: ${successTint28};
-      }
-      .booking-drawer-title__tags .ant-tag-processing,
-      .booking-drawer-title__tags .ant-tag-filled.ant-tag-processing {
-        color: ${token.colorPrimary};
-        background: ${primaryTint8};
-        border-color: ${primaryTint28};
-      }
-      .booking-drawer-title__tags .ant-tag-error,
-      .booking-drawer-title__tags .ant-tag-filled.ant-tag-error {
-        color: ${token.colorErrorText || token.colorError};
-        background: ${errorTint8};
-        border-color: ${errorTint28};
+      .booking-drawer-title__meta-item + .booking-drawer-title__meta-item {
+        padding-left: ${token.paddingSM}px;
+        border-left: 1px solid ${token.colorBorderSecondary};
       }
       .booking-drawer-actions {
         display: flex;
@@ -133,151 +128,242 @@ export function BookingModuleStyles() {
         gap: ${token.marginLG}px;
       }
 
-      .booking-route-strip {
-        display: flex;
-        align-items: stretch;
-        gap: ${token.marginMD}px;
-        width: 100%;
-      }
-      .booking-route-port {
-        flex: 1;
-        min-width: 0;
-        padding: ${token.paddingMD}px;
-        border-radius: ${token.borderRadiusLG}px;
-        background: ${token.colorFillAlter};
-        border: 1px solid ${token.colorBorderSecondary};
-      }
-      .booking-route-port--origin {
-        border-left: 4px solid ${token.colorPrimary};
-        background: linear-gradient(180deg, ${primaryTint8} 0%, ${
-      token.colorFillAlter
-    } 100%);
-      }
-      .booking-route-port--delivery {
-        border-left: 4px solid ${token.colorSuccess};
-        background: linear-gradient(180deg, ${successTint8} 0%, ${
-      token.colorFillAlter
-    } 100%);
-      }
-      .booking-route-port__label {
-        display: flex;
-        align-items: center;
-        gap: ${token.marginXXS}px;
-        font-size: ${token.fontSizeSM}px;
-        font-weight: ${token.fontWeightStrong};
-        color: ${token.colorTextSecondary};
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-        margin-bottom: ${token.marginXXS}px;
-      }
-      .booking-route-port__code {
-        margin: 0 !important;
-        font-size: ${token.fontSizeHeading4}px !important;
-        line-height: 1.15 !important;
-        font-weight: ${token.fontWeightStrong} !important;
-      }
-      .booking-route-port__code--origin {
-        color: ${token.colorPrimary} !important;
-      }
-      .booking-route-port__code--delivery {
-        color: ${token.colorSuccess} !important;
-      }
-      .booking-route-connector {
-        flex: 0 0 auto;
-        min-width: 96px;
+      .booking-view-hero {
         display: flex;
         flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: ${token.marginXXS}px;
-        text-align: center;
-        padding: ${token.paddingXS}px 0;
+        gap: ${token.marginMD}px;
+        width: 100%;
+        padding: ${token.paddingLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG + 2}px;
+        background: linear-gradient(
+          180deg,
+          ${primaryTint8} 0%,
+          ${token.colorBgContainer} 100%
+        );
       }
-      .booking-route-connector__label {
+      .booking-view-hero__status {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: ${token.marginSM}px ${token.marginXL}px;
+      }
+      .booking-view-hero__tags {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: ${token.marginXXS}px;
+      }
+      .booking-view-hero__tag.ant-tag {
+        margin-inline-end: 0;
+        border-radius: ${token.borderRadiusSM}px;
+      }
+      .booking-view-hero__tag.ant-tag-success,
+      .booking-view-hero__tag.ant-tag-filled.ant-tag-success {
+        color: ${token.colorSuccessText || token.colorSuccess};
+        background: ${successTint8};
+        border-color: ${successTint28};
+      }
+      .booking-view-hero__tag.ant-tag-processing,
+      .booking-view-hero__tag.ant-tag-filled.ant-tag-processing {
+        color: ${token.colorPrimary};
+        background: ${primaryTint8};
+        border-color: ${primaryTint28};
+      }
+      .booking-view-hero__tag.ant-tag-error,
+      .booking-view-hero__tag.ant-tag-filled.ant-tag-error {
+        color: ${token.colorErrorText || token.colorError};
+        background: ${errorTint8};
+        border-color: ${errorTint28};
+      }
+      .booking-status-stepper {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        flex: 1 1 auto;
+        min-width: 0;
+        max-width: 640px;
+      }
+      .booking-status-stepper__step {
+        display: flex;
+        align-items: center;
+        flex: 1 1 0;
+        min-width: 0;
+        gap: ${token.marginXS}px;
+        color: ${token.colorTextTertiary};
         font-size: ${token.fontSizeSM}px;
         font-weight: ${token.fontWeightStrong};
-        color: ${token.colorTextSecondary};
-        text-transform: uppercase;
-        letter-spacing: 0.03em;
       }
-      .booking-route-connector__line {
-        display: flex;
-        align-items: center;
-        width: 100%;
-        max-width: 120px;
-        color: ${token.colorPrimary};
+      .booking-status-stepper__step:last-child {
+        flex: 0 0 auto;
       }
-      .booking-route-connector__dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        flex-shrink: 0;
+      .booking-status-stepper__step:not(:last-child)::after {
+        content: "";
+        flex: 1 1 auto;
+        min-width: ${token.marginSM}px;
+        height: ${token.lineWidthBold}px;
+        margin: 0 ${token.marginXS}px;
+        border-radius: ${token.lineWidthBold}px;
+        background: ${token.colorBorderSecondary};
       }
-      .booking-route-connector__dot--origin {
-        background: ${token.colorPrimary};
-      }
-      .booking-route-connector__dot--delivery {
-        background: ${token.colorSuccess};
-      }
-      .booking-route-connector__track {
-        flex: 1;
-        height: 2px;
-        margin: 0 ${token.marginXXS}px;
-        background: linear-gradient(90deg, ${token.colorPrimary} 0%, ${
-      token.colorSuccess
-    } 100%);
-      }
-
-      .booking-summary-chips {
-        display: flex;
-        flex-wrap: wrap;
-        gap: ${token.marginSM}px;
-      }
-      .booking-summary-chip {
-        display: inline-flex;
-        align-items: center;
-        gap: ${token.marginXS}px;
-        padding: ${token.paddingXXS}px ${token.paddingSM}px;
-        border-radius: ${token.borderRadius}px;
-        border: 1px solid ${token.colorBorderSecondary};
-        background: ${token.colorBgContainer};
-        font-size: ${token.fontSizeSM}px;
-      }
-      .booking-summary-chip__icon {
-        width: 28px;
-        height: 28px;
-        border-radius: ${token.borderRadiusSM}px;
+      .booking-status-stepper__dot {
         display: inline-flex;
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
+        width: ${token.controlHeightSM - 2}px;
+        height: ${token.controlHeightSM - 2}px;
+        border-radius: 50%;
+        border: ${token.lineWidth}px solid ${token.colorBorder};
+        background: ${token.colorBgContainer};
+        color: ${token.colorTextTertiary};
+        font-size: ${token.fontSizeSM - 1}px;
+        line-height: 1;
       }
-      .booking-summary-chip__icon--ref {
-        background: ${token.colorPrimaryBg};
+      .booking-status-stepper__label {
+        white-space: nowrap;
+      }
+      .booking-status-stepper__step.is-done {
+        color: ${token.colorSuccess};
+      }
+      .booking-status-stepper__step.is-done .booking-status-stepper__dot {
+        background: ${token.colorSuccess};
+        border-color: ${token.colorSuccess};
+        color: ${token.colorTextLightSolid};
+      }
+      .booking-status-stepper__step.is-done::after {
+        background: ${tokenMix(token.colorSuccess, 45)};
+      }
+      .booking-status-stepper__step.is-current {
         color: ${token.colorPrimary};
       }
-      .booking-summary-chip__icon--date {
-        background: ${token.colorInfoBg};
-        color: ${token.colorInfo};
+      .booking-status-stepper__step.is-current .booking-status-stepper__dot {
+        background: ${token.colorPrimary};
+        border-color: ${token.colorPrimary};
+        color: ${token.colorTextLightSolid};
+        box-shadow: 0 0 0 ${token.lineWidthBold * 2}px ${primaryTint14};
       }
-      .booking-summary-chip__icon--teu {
-        background: ${token.colorWarningBg};
-        color: ${token.colorWarning};
-      }
-      .booking-summary-chip__icon--dg {
-        background: ${token.colorErrorBg};
+      .booking-status-stepper__step.is-error {
         color: ${token.colorError};
       }
-      .booking-summary-chip__label {
-        display: block;
-        color: ${token.colorTextSecondary};
+      .booking-status-stepper__step.is-error .booking-status-stepper__dot {
+        background: ${token.colorError};
+        border-color: ${token.colorError};
+        color: ${token.colorTextLightSolid};
+      }
+      .booking-view-route {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginMD}px;
+        width: 100%;
+        padding-top: ${token.paddingMD}px;
+        border-top: 1px solid ${token.colorBorderSecondary};
+      }
+      .booking-view-route__stop {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: ${token.marginXXS}px;
+        flex: 1 1 0;
+        min-width: 0;
+      }
+      .booking-view-route__stop--dest {
+        align-items: flex-end;
+        text-align: right;
+      }
+      .booking-view-route__eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: ${token.colorPrimary};
         line-height: 1.2;
       }
-      .booking-summary-chip__value {
-        display: block;
+      .booking-view-route__stop--dest .booking-view-route__eyebrow {
+        color: ${token.colorSuccess};
+      }
+      .booking-view-route__code {
+        font-size: ${token.fontSizeHeading4}px;
         font-weight: ${token.fontWeightStrong};
         color: ${token.colorText};
         line-height: 1.2;
+        word-break: break-word;
+      }
+      .booking-view-route__name {
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+        line-height: 1.4;
+        word-break: break-word;
+      }
+      .booking-view-route__connector {
+        position: relative;
+        display: flex;
+        align-items: center;
+        flex: 1 1 auto;
+        min-width: 120px;
+        gap: ${token.marginXS}px;
+        padding-bottom: ${token.paddingMD}px;
+      }
+      .booking-view-route__track {
+        flex: 1 1 auto;
+        height: 0;
+        border-top: ${token.lineWidthBold}px dashed ${tokenMix(token.colorPrimary, 40)};
+      }
+      .booking-view-route__ship {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: ${token.controlHeightSM}px;
+        height: ${token.controlHeightSM}px;
+        border-radius: 50%;
+        border: ${token.lineWidth}px solid ${token.colorPrimaryBorder};
+        background: ${token.colorBgContainer};
+        color: ${token.colorPrimary};
+      }
+      .booking-view-route__label {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        text-align: center;
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextTertiary};
+        white-space: nowrap;
+        line-height: 1.2;
+      }
+      .booking-view-facts {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: ${token.marginSM}px ${token.marginMD}px;
+        margin: 0;
+        padding-top: ${token.paddingMD}px;
+        border-top: 1px solid ${token.colorBorderSecondary};
+      }
+      .booking-view-fact {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+        min-width: 0;
+      }
+      .booking-view-fact__label {
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+        line-height: 1.3;
+      }
+      .booking-view-fact__value {
+        margin: 0;
+        font-size: ${token.fontSize}px;
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+        line-height: 1.4;
+        word-break: break-word;
       }
 
       .booking-panel.ant-card {
@@ -1430,18 +1516,42 @@ export function BookingModuleStyles() {
         .booking-panel > .ant-card-body {
           padding: ${token.paddingMD}px !important;
         }
-        .booking-route-strip {
-          flex-direction: column;
+        .booking-view-hero {
+          padding: ${token.paddingMD}px;
         }
-        .booking-route-connector {
-          min-width: 0;
-          width: 100%;
-          flex-direction: row;
-          justify-content: center;
+        .booking-view-hero__status {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .booking-status-stepper {
+          max-width: none;
+          flex-wrap: wrap;
+          gap: ${token.marginXS}px;
+        }
+        .booking-status-stepper__step {
+          flex: 1 1 45%;
+        }
+        .booking-status-stepper__step:not(:last-child)::after {
+          display: none;
+        }
+        .booking-status-stepper__label {
+          white-space: normal;
+        }
+        .booking-view-route {
+          flex-direction: column;
+          align-items: stretch;
           gap: ${token.marginSM}px;
         }
-        .booking-route-connector__line {
-          max-width: 80px;
+        .booking-view-route__stop--dest {
+          align-items: flex-start;
+          text-align: left;
+        }
+        .booking-view-route__connector {
+          min-width: 0;
+          width: 100%;
+        }
+        .booking-view-facts {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
         }
         .booking-meta-grid,
         .booking-meta-grid--3 {

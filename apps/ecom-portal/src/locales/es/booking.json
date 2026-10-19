@@ -58,7 +58,8 @@
     "termsAccepted": "Términos aceptados",
     "blType": "Tipo de BL",
     "filingType": "Tipo de declaración",
-    "declarantName": "Nombre del declarante"
+    "declarantName": "Nombre del declarante",
+    "statusProgress": "Progreso del estado de la reserva"
   },
   "sections": {
     "masterDetails": "Datos principales",

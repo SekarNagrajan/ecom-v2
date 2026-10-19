@@ -58,7 +58,8 @@
     "termsAccepted": "Terma diterima",
     "blType": "Jenis BL",
     "filingType": "Jenis pemfailan",
-    "declarantName": "Nama pengisytihar"
+    "declarantName": "Nama pengisytihar",
+    "statusProgress": "Kemajuan status tempahan"
   },
   "sections": {
     "masterDetails": "Butiran utama",

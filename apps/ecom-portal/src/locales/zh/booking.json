@@ -58,7 +58,8 @@
     "termsAccepted": "已接受条款",
     "blType": "BL 类型",
     "filingType": "申报类型",
-    "declarantName": "申报人姓名"
+    "declarantName": "申报人姓名",
+    "statusProgress": "订舱状态进度"
   },
   "sections": {
     "masterDetails": "主要信息",

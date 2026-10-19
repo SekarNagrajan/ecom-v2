@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-10-19 14:33)
+// Modified by Sekar Nagarajan (2026-10-19 19:05)
 import { ListView } from "@solverminds/shared-ui/data-view/list-view";
 import type { ColDef } from "ag-grid-community";
 import { Typography } from "antd";
@@ -43,6 +43,8 @@ export interface BlViewActivityHints {
 interface BlDetailsViewerProps {
   blNo: string;
   activityHints?: BlViewActivityHints;
+  /** Hide the Routing section when the host already shows the route (drawer hero). */
+  showRouting?: boolean;
 }
 
 interface ActivityEvent {
@@ -80,6 +82,18 @@ const EXTRA_PARTY_ROLES: SiPartyRoleKey[] = [
 function dash(value?: string | number | null): string {
   if (value === undefined || value === null || value === "") return "—";
   return String(value);
+}
+
+/** Date-only text for ISO / "YYYY-MM-DD HH:mm" strings; falls back to the raw value. */
+function formatDate(value?: string | null): string {
+  if (!value) return "—";
+  const date = new Date(value.replace(" ", "T"));
+  if (Number.isNaN(date.getTime())) return value;
+  return date.toLocaleDateString(undefined, {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
 }
 
 function partyForRole(
@@ -308,6 +322,7 @@ function buildBlActivityEvents(
 export function BlDetailsViewer({
   blNo,
   activityHints,
+  showRouting = true,
 }: BlDetailsViewerProps) {
   const { t } = useTranslation(["bill-of-lading", "common", "modules"]);
   const WIZARD_STEP_TITLES = useWizardStepTitles();
@@ -396,7 +411,7 @@ export function BlDetailsViewer({
         data.releaseType === "O" ? t("labels.original") : t("labels.telex"),
     },
     { label: t("labels.freightOption"), value: dash(data.freightOption) },
-    { label: t("labels.issuedOn"), value: dash(data.issuedAt) },
+    { label: t("labels.issuedOn"), value: formatDate(data.issuedAt) },
   ];
 
   return (
@@ -410,13 +425,15 @@ export function BlDetailsViewer({
         <BlPreviewFieldGrid items={masterRows} />
       </BlPreviewSection>
 
-      <BlPreviewSection variant="airy" title={WIZARD_STEP_TITLES.routing}>
-        {data.routing ? (
-          <BlRouteBand routing={data.routing} />
-        ) : (
-          <BlPreviewEmpty label={t("empty.noRouting")} />
-        )}
-      </BlPreviewSection>
+      {showRouting ? (
+        <BlPreviewSection variant="airy" title={WIZARD_STEP_TITLES.routing}>
+          {data.routing ? (
+            <BlRouteBand routing={data.routing} />
+          ) : (
+            <BlPreviewEmpty label={t("empty.noRouting")} />
+          )}
+        </BlPreviewSection>
+      ) : null}
 
       <BlPreviewSection variant="airy" title={WIZARD_STEP_TITLES.parties}>
         <div className="booking-review__party-grid">

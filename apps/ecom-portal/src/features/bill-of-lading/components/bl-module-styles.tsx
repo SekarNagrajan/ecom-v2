@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-10-19 14:33)
+// Modified by Sekar Nagarajan (2026-10-19 19:05)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -320,11 +320,23 @@ export function BlModuleStyles() {
         max-height: calc(100vh - 105px);
         padding: ${token.paddingLG}px;
       }
-      /* Modified by Sekar Nagarajan (2026-09-08 15:03) — title meta+tags one row; footer bar */
+      /* Modified by Sekar Nagarajan (2026-10-19 18:40) — BL view drawer title, hero, route, facts */
       .bl-drawer-title {
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         gap: ${token.marginSM}px;
+        min-width: 0;
+      }
+      .bl-drawer-title__icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: ${token.controlHeight}px;
+        height: ${token.controlHeight}px;
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${primaryTint8};
+        border: 1px solid ${token.colorPrimaryBorder};
       }
       .bl-drawer-title__copy {
         min-width: 0;
@@ -335,29 +347,23 @@ export function BlModuleStyles() {
         line-height: 1.25 !important;
       }
       .bl-drawer-title__meta {
-        font-size: ${token.fontSizeSM}px;
-        display: block;
-        margin: 0;
-      }
-      .bl-drawer-title__row {
         display: flex;
         flex-wrap: wrap;
-        align-items: center;
-        gap: ${token.marginXS}px ${token.marginMD}px;
+        gap: ${token.marginXXS}px ${token.marginSM}px;
         margin-top: ${token.marginXXS}px;
+        font-size: ${token.fontSizeSM}px;
+        line-height: 1.4;
       }
-      .bl-drawer-title__tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: ${token.marginXXS}px;
-        margin: 0;
+      .bl-drawer-title__meta-item {
+        white-space: nowrap;
+      }
+      .bl-drawer-title__meta-item + .bl-drawer-title__meta-item {
+        padding-left: ${token.paddingSM}px;
+        border-left: 1px solid ${token.colorBorderSecondary};
       }
       .bl-drawer-footer-bar.ant-drawer-footer {
         padding: ${token.paddingSM}px ${token.paddingLG}px;
       }
-      /* Modified by Sekar Nagarajan (2026-08-31 17:25) — light Confirmed / success badge */
-      .bl-drawer-title__tags .ant-tag-success,
-      .bl-drawer-title__tags .ant-tag-filled.ant-tag-success,
       .bl-status-tag.ant-tag-success,
       .bl-status-tag.ant-tag-filled.ant-tag-success {
         color: ${token.colorSuccessText || token.colorSuccess};
@@ -366,32 +372,158 @@ export function BlModuleStyles() {
       }
       .bl-drawer-actions {
         display: flex;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         gap: ${token.marginXS}px;
         align-items: center;
+        justify-content: flex-end;
+        width: 100%;
+        overflow-x: auto;
       }
-      .bl-summary-chips {
+      .bl-view-hero {
         display: flex;
-        flex-wrap: wrap;
-        gap: ${token.marginSM}px;
+        flex-direction: column;
+        gap: ${token.marginMD}px;
+        width: 100%;
+        padding: ${token.paddingLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG + 2}px;
+        background: linear-gradient(
+          180deg,
+          ${primaryTint8} 0%,
+          ${token.colorBgContainer} 100%
+        );
       }
-      .bl-summary-chip {
+      .bl-view-hero__status {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: ${token.marginSM}px ${token.marginXL}px;
+      }
+      .bl-view-hero__tags {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: ${token.marginXXS}px;
+      }
+      .bl-view-hero__tags .bl-status-tag.ant-tag {
+        margin-inline-end: 0;
+      }
+      .bl-view-route {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginMD}px;
+        width: 100%;
+        padding-top: ${token.paddingMD}px;
+        border-top: 1px solid ${token.colorBorderSecondary};
+      }
+      .bl-view-route__stop {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: ${token.marginXXS}px;
+        flex: 1 1 0;
+        min-width: 0;
+      }
+      .bl-view-route__stop--dest {
+        align-items: flex-end;
+        text-align: right;
+      }
+      .bl-view-route__eyebrow {
         display: inline-flex;
         align-items: center;
-        gap: ${token.marginXS}px;
-        padding: ${token.paddingXS}px ${token.paddingSM}px;
-        border-radius: ${token.borderRadiusLG}px;
-        background: ${token.colorFillAlter};
-        border: 1px solid ${token.colorBorderSecondary};
+        gap: ${token.marginXXS}px;
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: ${token.colorPrimary};
+        line-height: 1.2;
       }
-      .bl-summary-chip__label {
-        display: block;
+      .bl-view-route__stop--dest .bl-view-route__eyebrow {
+        color: ${token.colorSuccess};
+      }
+      .bl-view-route__code {
+        font-size: ${token.fontSizeHeading4}px;
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+        line-height: 1.2;
+        word-break: break-word;
+      }
+      .bl-view-route__name {
         font-size: ${token.fontSizeSM}px;
         color: ${token.colorTextSecondary};
+        line-height: 1.4;
+        word-break: break-word;
       }
-      .bl-summary-chip__value {
-        display: block;
+      .bl-view-route__connector {
+        position: relative;
+        display: flex;
+        align-items: center;
+        flex: 1 1 auto;
+        min-width: 120px;
+        gap: ${token.marginXS}px;
+        padding-bottom: ${token.paddingMD}px;
+      }
+      .bl-view-route__track {
+        flex: 1 1 auto;
+        height: 0;
+        border-top: ${token.lineWidthBold}px dashed ${tokenMix(token.colorPrimary, 40)};
+      }
+      .bl-view-route__ship {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: ${token.controlHeightSM}px;
+        height: ${token.controlHeightSM}px;
+        border-radius: 50%;
+        border: ${token.lineWidth}px solid ${token.colorPrimaryBorder};
+        background: ${token.colorBgContainer};
+        color: ${token.colorPrimary};
+      }
+      .bl-view-route__label {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        text-align: center;
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextTertiary};
+        white-space: nowrap;
+        line-height: 1.2;
+      }
+      .bl-view-facts {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: ${token.marginSM}px ${token.marginMD}px;
+        margin: 0;
+        padding-top: ${token.paddingMD}px;
+        border-top: 1px solid ${token.colorBorderSecondary};
+      }
+      .bl-view-fact {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+        min-width: 0;
+      }
+      .bl-view-fact__label {
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+        line-height: 1.3;
+      }
+      .bl-view-fact__value {
+        margin: 0;
+        font-size: ${token.fontSize}px;
         font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+        line-height: 1.4;
+        word-break: break-word;
+      }
+      @media (max-width: 1199px) {
+        .bl-view-facts {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
       }
       .bl-section-title {
         margin: 0 !important;
@@ -854,6 +986,29 @@ export function BlModuleStyles() {
         }
         .bl-drawer-body.custom-scroll {
           padding: ${token.paddingMD}px;
+        }
+        .bl-view-hero {
+          padding: ${token.paddingMD}px;
+        }
+        .bl-view-hero__status {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .bl-view-route {
+          flex-direction: column;
+          align-items: stretch;
+          gap: ${token.marginSM}px;
+        }
+        .bl-view-route__stop--dest {
+          align-items: flex-start;
+          text-align: left;
+        }
+        .bl-view-route__connector {
+          min-width: 0;
+          width: 100%;
+        }
+        .bl-view-facts {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
         }
         .bl-view-row--2 {
           grid-template-columns: 1fr;

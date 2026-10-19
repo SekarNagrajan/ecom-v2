@@ -1,8 +1,10 @@
-// Modified by Sekar Nagarajan (2026-09-18 12:55)
+// Modified by Sekar Nagarajan (2026-10-19)
 import react from "@vitejs/plugin-react";
 import fs from "fs";
 import path from "path";
 import { defineConfig, type Plugin } from "vite";
+
+import { ecomAiN8nProxyPlugin } from "./vite-ai-n8n-proxy";
 
 /** Resolve a package that may only exist under pnpm's virtual store. */
 function resolveWorkspacePackage(packageName: string): string | undefined {
@@ -421,7 +423,7 @@ function bookingMockApiPlugin(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [react(), bookingMockApiPlugin()],
+  plugins: [react(), bookingMockApiPlugin(), ecomAiN8nProxyPlugin()],
   resolve: {
     alias: {
       ...(tiptapCorePath ? { "@tiptap/core": tiptapCorePath } : {}),

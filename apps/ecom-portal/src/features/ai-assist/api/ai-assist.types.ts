@@ -52,8 +52,15 @@ export interface AiRewriteRequest {
   action: AiRewriteAction;
 }
 
+/** Mail_Tone_Rewrite (`POST …/v2/mail/rewrite`) success envelope. */
 export interface AiRewriteResponse {
   ok: boolean;
   rewritten_html?: string;
+  action?: string;
+  action_group?: string;
+  subject?: string;
+  summary?: string;
   message?: string;
+  /** Present when Vite proxy returned the local fallback (upstream down). */
+  stub?: boolean;
 }

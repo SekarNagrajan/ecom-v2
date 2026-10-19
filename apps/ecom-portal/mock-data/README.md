@@ -162,3 +162,53 @@ Tweak `SAMPLE_*` in `.env`, or hand-edit the JSON. Fixtures are plain, readable 
 
 Verify in the browser (mock mode) with `/api/_mock/status` (row counts per table) and
 `/api/auth/demo-users` (login names that exist in the fixtures).
+
+## AI text assist (grammar / voice / rewrite)
+
+The portal UI (`src/features/ai-assist/`) always calls **same-origin** `/api/ai/*`.
+CRM API is not used; e-com owns the path to n8n (same webhook mapping as CRM’s `AiService`).
+
+| Mode | Who serves `/api/ai/{grammar,transcribe,rewrite}` |
+| --- | --- |
+| Mock (default) | MSW **passthrough** → Vite `vite-ai-n8n-proxy.ts` → live n8n (other APIs stay mocked) |
+| Mock + `VITE_AI_USE_MSW_STUB=true` | Offline MSW stubs (no n8n) |
+| Real / when the request reaches Vite | Same Vite proxy → n8n webhooks below |
+
+### Live n8n workflows (project on n8n.sedge.ai)
+
+| E-com path | n8n workflow | Webhook path |
+| --- | --- | --- |
+| `POST /api/ai/grammar` | **Groq Grammar Check** | `{N8N_BASE_URL}/grammar` |
+| `POST /api/ai/transcribe` | **Groq Audio Transcription** | `{N8N_BASE_URL}/transcribe` |
+| `POST /api/ai/rewrite` | **Mail_Tone_Rewrite** | `{N8N_BASE_URL}/v2/mail/rewrite` |
+
+### Env (Vite Node process — not `VITE_*`)
+
+Set in `apps/ecom-portal/.env.local` or the shell when starting Vite:
+
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `N8N_BASE_URL` or `ECOM_N8N_BASE_URL` | `https://n8n.sedge.ai/webhook` | n8n webhook base (no trailing slash) |
+| `ECOM_AI_REWRITE_STUB` | on (unless `false`) | If Mail_Tone_Rewrite fails (404/5xx/network), return a local `{ ok, rewritten_html }` stub |
+
+Upstream contracts (passthrough JSON):
+
+- Grammar: `{ "grammartext" }` → `{ "data": { "correctedText" } }`
+- Transcribe: multipart `file` → `{ "data": { "text" } }`
+- Rewrite: `{ "content_html", "action" }` → `{ "ok": true, "rewritten_html", "action", "action_group", "summary", … }`
+
+### Production
+
+Vite’s proxy is **dev/preview only**. For a static deploy, reverse-proxy the three browser paths to n8n:
+
+```nginx
+location = /api/ai/grammar    { proxy_pass https://n8n.sedge.ai/webhook/grammar; }
+location = /api/ai/transcribe { proxy_pass https://n8n.sedge.ai/webhook/transcribe; }
+location = /api/ai/rewrite    { proxy_pass https://n8n.sedge.ai/webhook/v2/mail/rewrite; }
+```
+
+### Smoke (browser)
+
+1. Contact Us / quote remarks — Improve Grammar + mic (mock or real).
+2. Share Rate / Schedule / Tracking mail — rich editor: grammar, mic, Rewrite dropdown.
+3. Empty field — warning toasts; dictation cancel should abort the in-flight request.

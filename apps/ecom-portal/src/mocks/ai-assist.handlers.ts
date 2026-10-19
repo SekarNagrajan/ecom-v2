@@ -1,5 +1,12 @@
-// Modified by Sekar Nagarajan (2026-09-11 18:25)
-import { delay, http, HttpResponse } from "msw";
+// Modified by Sekar Nagarajan (2026-10-19)
+import { bypass, delay, http, HttpResponse } from "msw";
+
+/**
+ * Live AI (default): pass `/api/ai/*` through MSW so Vite's `ecomAiN8nProxyPlugin`
+ * can forward to n8n (grammar / transcribe / v2/mail/rewrite).
+ *
+ * Offline stubs: set `VITE_AI_USE_MSW_STUB=true` before starting Vite.
+ */
 
 function lightlyImprove(text: string): string {
   const trimmed = text.trim();
@@ -20,10 +27,11 @@ function stripHtml(html: string): string {
   return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
 }
 
-/**
- * MSW mocks for AI text assist — local demo without n8n/backend.
- */
-export const aiAssistHandlers = [
+const useMswStub =
+  String(import.meta.env.VITE_AI_USE_MSW_STUB ?? "").toLowerCase() === "true";
+
+/** Offline demo handlers (only when VITE_AI_USE_MSW_STUB=true). */
+export const aiAssistStubHandlers = [
   http.post("/api/ai/grammar", async ({ request }) => {
     await delay(450);
     const body = (await request.json()) as { grammartext?: string };
@@ -63,3 +71,14 @@ export const aiAssistHandlers = [
     });
   }),
 ];
+
+/** Passthrough so Vite → n8n handles AI while the rest of the portal stays on MSW. */
+export const aiAssistPassthroughHandlers = [
+  http.post("/api/ai/grammar", ({ request }) => fetch(bypass(request))),
+  http.post("/api/ai/transcribe", ({ request }) => fetch(bypass(request))),
+  http.post("/api/ai/rewrite", ({ request }) => fetch(bypass(request))),
+];
+
+export const aiAssistHandlers = useMswStub
+  ? aiAssistStubHandlers
+  : aiAssistPassthroughHandlers;

@@ -1,4 +1,9 @@
-// Modified by Sekar Nagarajan (2026-09-29 12:30)
+// Modified by Sekar Nagarajan (2026-10-19)
+/**
+ * Browser always calls same-origin `/api/ai/*`.
+ * - mock: MSW (`ai-assist.handlers.ts`)
+ * - real / SW bypass: Vite `ecomAiN8nProxyPlugin` → n8n webhooks
+ */
 import i18n from "../../../i18n/config";
 import type {
   AiGrammarRequest,
@@ -12,18 +17,59 @@ const AI_GRAMMAR_PATH = "/api/ai/grammar";
 const AI_TRANSCRIBE_PATH = "/api/ai/transcribe";
 const AI_REWRITE_PATH = "/api/ai/rewrite";
 
-async function readJson<T>(response: Response): Promise<T> {
-  if (!response.ok) {
-    let message = `Request failed (${response.status})`;
-    try {
-      const body = (await response.json()) as { message?: string };
-      if (body.message) message = body.message;
-    } catch {
-      /* ignore */
+function messageFromErrorBody(body: unknown, status: number): string {
+  if (body && typeof body === "object") {
+    const record = body as Record<string, unknown>;
+    if (typeof record.message === "string" && record.message.trim()) {
+      return record.message;
     }
-    throw new Error(message);
+    const nested = record.error;
+    if (typeof nested === "string" && nested.trim()) {
+      return nested.trim();
+    }
+    if (nested && typeof nested === "object") {
+      const err = nested as Record<string, unknown>;
+      if (typeof err.message === "string" && err.message.trim()) {
+        return err.message;
+      }
+      if (typeof err.code === "string" && err.code.trim()) {
+        return err.code;
+      }
+    }
+    if (typeof record.title === "string" && record.title.trim()) {
+      return record.title;
+    }
   }
-  return response.json() as Promise<T>;
+  if (typeof body === "string" && body.trim()) {
+    return body.trim().slice(0, 240);
+  }
+  return `Request failed (${status})`;
+}
+
+async function readJson<T>(response: Response): Promise<T> {
+  const raw = await response.text();
+  let parsed: unknown = undefined;
+  if (raw) {
+    try {
+      parsed = JSON.parse(raw) as unknown;
+    } catch {
+      parsed = raw;
+    }
+  }
+
+  if (!response.ok) {
+    throw new Error(messageFromErrorBody(parsed, response.status));
+  }
+
+  if (parsed === undefined || typeof parsed === "string") {
+    throw new Error(
+      typeof parsed === "string" && parsed.trim()
+        ? "AI service returned a non-JSON response"
+        : "AI service returned an empty response",
+    );
+  }
+
+  return parsed as T;
 }
 
 export async function checkAiGrammar(
@@ -31,7 +77,7 @@ export async function checkAiGrammar(
 ): Promise<AiGrammarResponse> {
   const response = await fetch(AI_GRAMMAR_PATH, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
     body: JSON.stringify(payload),
   });
   return readJson<AiGrammarResponse>(response);
@@ -46,6 +92,7 @@ export async function transcribeAiAudio(
 
   const response = await fetch(AI_TRANSCRIBE_PATH, {
     method: "POST",
+    headers: { Accept: "application/json" },
     body: formData,
     signal,
   });
@@ -57,7 +104,7 @@ export async function rewriteAiContent(
 ): Promise<AiRewriteResponse> {
   const response = await fetch(AI_REWRITE_PATH, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
     body: JSON.stringify(payload),
   });
   return readJson<AiRewriteResponse>(response);

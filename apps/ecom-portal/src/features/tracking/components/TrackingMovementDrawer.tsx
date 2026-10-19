@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-17 23:52)
+// Modified by Sekar Nagarajan (2026-10-19 10:50)
 import { AppDrawer } from "@solverminds/shared-ui";
 import { Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
@@ -47,13 +47,14 @@ const MONTH_INDEX: Record<string, number> = {
   Dec: 11,
 };
 
-/** Parse "06-Aug-2026 03:00" (JSP display) for newest-first sort. */
+/** Parse "06-Aug-2026 03:00" (JSP display); strips optional "Est. " prefix. */
 function parseEventDate(value: string): number {
+  const cleaned = value.trim().replace(/^Est\.\s*/i, "");
   const match = /^(\d{2})-([A-Za-z]{3})-(\d{4})\s+(\d{2}):(\d{2})/.exec(
-    value.trim(),
+    cleaned,
   );
   if (!match) {
-    const fallback = Date.parse(value.replace(" ", "T"));
+    const fallback = Date.parse(cleaned.replace(" ", "T"));
     return Number.isNaN(fallback) ? 0 : fallback;
   }
   const [, dd, mon, yyyy, hh, mm] = match;
@@ -61,12 +62,30 @@ function parseEventDate(value: string): number {
   return Date.UTC(Number(yyyy), month, Number(dd), Number(hh), Number(mm));
 }
 
-function sortMovementsNewestFirst(
+/**
+ * Timeline order: achieved events first (newest → oldest) so the table's
+ * `latestActivity` is the first row, then estimated future events.
+ */
+function sortMovementsForTimeline(
   movements: ContainerMovementEvent[],
+  latestActivity: string,
+  activityDate: string,
 ): ContainerMovementEvent[] {
-  return [...movements].sort(
-    (a, b) => parseEventDate(b.eventDate) - parseEventDate(a.eventDate),
+  const sorted = [...movements].sort((a, b) => {
+    if (a.isActual !== b.isActual) return a.isActual ? -1 : 1;
+    return parseEventDate(b.eventDate) - parseEventDate(a.eventDate);
+  });
+
+  // Pin the exact latestActivity row first when date/name match is available.
+  const pinIndex = sorted.findIndex(
+    (event) =>
+      event.isActual &&
+      event.eventName === latestActivity &&
+      (!activityDate || event.eventDate === activityDate),
   );
+  if (pinIndex <= 0) return sorted;
+  const [pinned] = sorted.splice(pinIndex, 1);
+  return [pinned, ...sorted];
 }
 
 /** JSP-style vessel line: FIRX / NEAPOLI / 02602 / W */
@@ -173,7 +192,11 @@ export function TrackingMovementDrawer({
 }: TrackingMovementDrawerProps) {
   if (!container) return null;
 
-  const movements = sortMovementsNewestFirst(container.movements);
+  const movements = sortMovementsForTimeline(
+    container.movements,
+    container.latestActivity,
+    container.activityDate,
+  );
 
   return (
     <AppDrawer

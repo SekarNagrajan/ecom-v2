@@ -36,3 +36,4 @@ coverage
 
 # Antigravity temporary brain / scratch files
 .gemini
+.env*

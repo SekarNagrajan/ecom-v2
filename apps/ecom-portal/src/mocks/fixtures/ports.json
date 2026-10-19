@@ -13833,6 +13833,15 @@
   "porttype": "I"
  },
  {
+  "portcode": "SDERT",
+  "portname": "TESTING",
+  "countrycode": "AL",
+  "statecode": "",
+  "latitude": 12,
+  "longitude": 34,
+  "porttype": "P"
+ },
+ {
   "portcode": "AUBWY",
   "portname": "TESTING",
   "countrycode": "DZ",

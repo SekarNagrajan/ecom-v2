@@ -22,6 +22,7 @@ import type {
   CombinedRateItem,
   ContractDTO,
   CreateQuoteInput,
+  QuoteDTO,
 } from "../types/rates.types";
 import { normalizeRateEquipment, portCodeFromLabel } from "../utils/rate-equipment";
 
@@ -406,6 +407,18 @@ export function useRatesController() {
     });
   };
 
+  /** After RFQ create: jump to Spot Quotes for that lane so the new quote appears at the top. */
+  const handleQuoteCreated = (quote: QuoteDTO) => {
+    setSearchParams({
+      searchMode: "SPOT_QUOTES",
+      polCode: quote.originPort,
+      podCode: quote.deliveryPort,
+      eqpType: quote.eqpType || searchParams.eqpType,
+      commodity: quote.commodity || searchParams.commodity,
+    });
+    setHasSearched(true);
+  };
+
   return {
     viewMode,
     setViewMode,
@@ -433,6 +446,7 @@ export function useRatesController() {
     isQuoteDrawerOpen,
     quoteDefaults,
     handleCloseQuoteDrawer: () => setIsQuoteDrawerOpen(false),
+    handleQuoteCreated,
     isShareMailOpen,
     shareMailRates,
     handleCloseShareMail,

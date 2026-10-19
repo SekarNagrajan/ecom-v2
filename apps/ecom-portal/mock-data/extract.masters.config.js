@@ -17,6 +17,31 @@ export const dateAnchor = { dataset: 'bookings', column: 'dateup' };
 
 const PARTY = { name: 'company', address1: 'address', address2: 'address2', city: 'city', zipCode: 'zip', telephone: 'phone', fax: 'phone', email: 'email', contact: 'fullName' };
 
+/**
+ * Rates module showcase lanes — top Commercial.bookingrates_tariff port pairs on LRP V2 Testing.
+ * Extract prioritises these so Tariff / Surcharge / Contract / RFQ tabs all have demo data.
+ */
+export const RATES_SHOWCASE_LANES = [
+  ['INNSA', 'AEJEA'],
+  ['INNSA', 'SADMM'],
+  ['INNSA', 'SGSIN'],
+  ['INMUN', 'SGSIN'],
+  ['INMAA', 'SGSIN'],
+  ['INMAA', 'SADMM'],
+  ['USILG', 'GTPBR'],
+  ['SGSIN', 'MYPKG'],
+  ['INMUN', 'AEJEA'],
+  ['AEJEA', 'INNSA'],
+];
+export const RATES_SHOWCASE_PORTS = [...new Set(RATES_SHOWCASE_LANES.flat())];
+
+/** SQL OR-clause matching the showcase POL/POD pairs (case-insensitive). */
+function showcaseLanePredicate(loadCol = 'loadport', discCol = 'dischport') {
+  return RATES_SHOWCASE_LANES
+    .map(([pol, pod]) => `(upper(rtrim(${loadCol}))='${pol}' and upper(rtrim(${discCol}))='${pod}')`)
+    .join(' or ');
+}
+
 /** Quoted IN-list from several (dataset, column) pairs of the dumped fixtures; missing datasets are ignored. */
 function listOf(ctx, pairs, extra = []) {
   const vals = new Set(extra);
@@ -30,7 +55,7 @@ const bookNos = ctx => listOf(ctx, [['bookings', 'extBookNo'], ['shippingInstruc
 const blNos = ctx => listOf(ctx, [['shippingInstructions', 'blno'], ['vgm', 'bl_no']]);
 const ports = ctx => listOf(ctx, [['bookings', 'originPortId'], ['bookings', 'finalPortId'], ['bookings', 'loadPortId'], ['bookings', 'dischargePortId'],
   ['bookingLeg', 'loadPortId'], ['bookingLeg', 'dischargePortId'], ['shippingInstructions', 'pol'], ['shippingInstructions', 'pod'],
-  ['shippingInstructions', 'pla'], ['shippingInstructions', 'pld'], ['cutoffConfig', 'port']]);
+  ['shippingInstructions', 'pla'], ['shippingInstructions', 'pld'], ['cutoffConfig', 'port']], RATES_SHOWCASE_PORTS);
 const vessels = ctx => listOf(ctx, [['bookingLeg', 'vesselCode'], ['shippingInstructions', 'Vessel']]);
 const services = ctx => listOf(ctx, [['bookingLeg', 'serviceCode']]);
 const commodities = ctx => listOf(ctx, [['bookingCommodity', 'commodity'], ['siCommodity', 'commodity']]);
@@ -94,10 +119,12 @@ export const datasets = [
                   where servicecode in ${services(ctx)} or servicecode in (select distinct service from allschedules_ecom where depdate between dateadd(day,-30,getdate()) and dateadd(day,90,getdate()))
                   order by servicename` },
   { name: 'schedules', db: 'VSSDB',
-    sql: `select top 1500 header, vessel, voyage, service, bound, port, terminal, callorder, arrdate, depdate, type, groupcallid, status
+    // Prefer Rates/Booking showcase ports so Master Details routing finds sailings for those lanes.
+    sql: `select top 2500 header, vessel, voyage, service, bound, port, terminal, callorder, arrdate, depdate, type, groupcallid, status
             from allschedules_ecom
-           where depdate between dateadd(day,-30,getdate()) and dateadd(day,90,getdate())
-           order by depdate, groupcallid, callorder` },
+           where depdate between dateadd(day,-45,getdate()) and dateadd(day,120,getdate())
+           order by case when upper(rtrim(port)) in ('INNSA','AEJEA','SADMM','SGSIN','INMUN','INMAA','USILG','GTPBR','MYPKG','AEDXB') then 0 else 1 end,
+                    depdate, groupcallid, callorder` },
   { name: 'portCalls', db: 'VSSDB',
     sql: ctx => `select top 300 groupcallid, servicecode, vessel_code as vesselcode, voyage, portcode, callorder, eosp, pob, firstlineashore, allfastfwe, startcargoops, etd, PULLOUTFROMBERTH as pulloutfromberth
                    from arrival_master(nolock) where rtrim(vessel_code) in ${vessels(ctx)} order by etd desc` },
@@ -139,21 +166,31 @@ export const datasets = [
   // ROUTING & TARIFFS (Commercial)
   // ────────────────────────────────────────────────────────────────────────────
   { name: 'routes', db: 'COMDB',
-    sql: ctx => `select top 500 id, routeid, origin, orgMode, BLPOL, BLPOLTer, mode, BLPOLSvc, OpsPol1, OpsPol1Ter, opsMode1, OpsPOLSVC1, OpsPol2, OpsPol2Ter, opsMode2, OpsPOLSVC2, BlPod, BlPodTer, delivery, DelMode, DefRoute, MainSvc, Status, TransitTime, transit_int, fromdate, todate, priority1, advRoute
+    sql: ctx => `select top 500 id, routeid, origin, orgMode, BLPOL, BLPOLTer, mode, BLPOLSvc, OpsPol1, OpsPol1Ter, opsMode1, OpsPOLSVC1, OpsPol2, OpsPol2Ter, opsMode2, OpsPOLSVC2, BlPod, BlPodTer, delivery, DelMode, DefRoute, MainSvc, Status, TransitTime, fromdate, todate, priority1, advRoute
                    from Routedetail(nolock) where Status='A' and (origin in ${ports(ctx)} or delivery in ${ports(ctx)} or BLPOL in ${ports(ctx)} or BlPod in ${ports(ctx)})
-                   order by DefRoute desc, origin, delivery` },
+                   order by case when (${showcaseLanePredicate('origin', 'delivery')} or ${showcaseLanePredicate('BLPOL', 'BlPod')}) then 0 else 1 end, DefRoute desc, origin, delivery` },
   { name: 'tariffs', db: 'COMDB',
-    sql: ctx => `select top 500 rateno, loadport, dischport, pol, pod, CustCode as custcode, eqptype, currency, localamount, validfrom, validto, quotestatus, status, ratetype, itemno, tos, soc, dgflag, oogflag, nor, service, allin
-                   from bookingrates_tariff where validto >= dateadd(day,-90,getdate()) and (loadport in ${ports(ctx)} or dischport in ${ports(ctx)} or CustCode in ${customers(ctx)})
-                   order by validto desc, rateno, itemno` },
+    // Prioritise the 10 Rates showcase port pairs so every Rates tab has searchable Commercial data.
+    sql: ctx => `select top 800 rateno, loadport, dischport, pol, pod, CustCode as custcode, eqptype, currency, localamount, validfrom, validto, quotestatus, status, ratetype, itemno, tos, soc, dgflag, oogflag, nor, service, allin
+                   from bookingrates_tariff
+                  where validto >= dateadd(day,-180,getdate())
+                    and isnull(status,'A') <> 'D'
+                    and (
+                      ${showcaseLanePredicate('loadport', 'dischport')}
+                      or upper(rtrim(loadport)) in ${ports(ctx)}
+                      or upper(rtrim(dischport)) in ${ports(ctx)}
+                      or CustCode in ${customers(ctx)}
+                    )
+                  order by case when ${showcaseLanePredicate('loadport', 'dischport')} then 0 else 1 end, validto desc, rateno, itemno` },
   // Service contracts (corporate rates): the demo customers' contracts plus recent contracts on the sampled lanes,
   // then every child table by corporate number (lines with real amounts, surcharges, routing, parties, commodities).
   { name: 'contracts', db: 'COMDB',
-    sql: ctx => `select top 60 CorporateNo, CustCode, Teus20, Teus40, TotalTeus, Period, Tos, ValidFrom, ValidTo, status, serviceFlag, Identifier, agencyCode, region, customerType, shipper, Consignee, notfiy, forwarder, localAgencyCode
+    sql: ctx => `select top 80 CorporateNo, CustCode, Teus20, Teus40, TotalTeus, Period, Tos, ValidFrom, ValidTo, status, serviceFlag, Identifier, agencyCode, region, customerType, shipper, Consignee, notfiy, forwarder, localAgencyCode
                    from corporateMaster(nolock)
                   where CustCode in ${customers(ctx)}
                      or CorporateNo in (select distinct corporateNo from corporateDetailN(nolock)
-                                         where pol in ${ports(ctx)} and pod in ${ports(ctx)} and validTo >= dateadd(day,-90,getdate()) and isnull(statusFlag,'A') <> 'D')
+                                         where (${showcaseLanePredicate('pol', 'pod')} or (pol in ${ports(ctx)} and pod in ${ports(ctx)}))
+                                           and validTo >= dateadd(day,-180,getdate()) and isnull(statusFlag,'A') <> 'D')
                   order by case when CustCode in ${customers(ctx)} then 0 else 1 end, ValidTo desc` },
   { name: 'contractLines', db: 'COMDB',
     sql: ctx => `select top 800 Id, corporateNo, itemNo, custCode, pol, pod, eqpType, locAmt, locCurrency, type, det, adv, validFrom, validTo, servicecode, Tservice, TOS, DgFlag, Soc, Nor, Allin, BaseAmt, UsdBaseAmt, Roe, localofrAmt, TransitTime, routType, conStatus, statusFlag, remarks, weight, Flexi, MTY, totalvolume, period

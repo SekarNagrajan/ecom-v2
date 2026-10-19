@@ -364,13 +364,6 @@
   "status": "Active"
  },
  {
-  "servicecode": "FCHD",
-  "servicename": "EVERGREEN",
-  "servicetype": "F",
-  "frequency": 2,
-  "status": "Active"
- },
- {
   "servicecode": "ESBC",
   "servicename": "EVERGREEN",
   "servicetype": "M",
@@ -396,6 +389,13 @@
   "servicename": "EVERGREEN",
   "servicetype": "M",
   "frequency": 7,
+  "status": "Active"
+ },
+ {
+  "servicecode": "FCHD",
+  "servicename": "EVERGREEN",
+  "servicetype": "F",
+  "frequency": 2,
   "status": "Active"
  },
  {
@@ -1201,13 +1201,6 @@
   "servicename": "TESTING VSS CASES",
   "servicetype": "M",
   "frequency": 7,
-  "status": "Active"
- },
- {
-  "servicecode": "TSC",
-  "servicename": "THAILAND STRAITS CHENNAI",
-  "servicetype": "F",
-  "frequency": 2,
   "status": "Active"
  },
  {

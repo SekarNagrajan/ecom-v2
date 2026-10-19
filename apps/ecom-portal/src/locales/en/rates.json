@@ -53,22 +53,34 @@
       "textiles": "TEXTILES - Textiles & Garments"
     },
     "ports": {
-      "USNYC": "USNYC - New York, USA",
+      "INNSA": "INNSA - Nhava Sheva, India",
+      "AEJEA": "AEJEA - Jebel Ali, UAE",
+      "SADMM": "SADMM - Dammam, Saudi Arabia",
       "SGSIN": "SGSIN - Singapore, Singapore",
+      "INMUN": "INMUN - Mundra, India",
+      "INMAA": "INMAA - Chennai, India",
+      "USILG": "USILG - Wilmington, USA",
+      "GTPBR": "GTPBR - Puerto Barrios, Guatemala",
+      "MYPKG": "MYPKG - Port Klang, Malaysia",
+      "AEDXB": "AEDXB - Dubai, UAE",
+      "USNYC": "USNYC - New York, USA",
       "NLRTM": "NLRTM - Rotterdam, Netherlands",
       "CNSHA": "CNSHA - Shanghai, China",
       "DEHAM": "DEHAM - Hamburg, Germany",
-      "INNSA": "INNSA - Nhava Sheva, India",
-      "AEDXB": "AEDXB - Dubai, UAE",
+      "INNSA_short": "INNSA - Nhava Sheva",
+      "AEJEA_short": "AEJEA - Jebel Ali",
+      "SADMM_short": "SADMM - Dammam",
+      "SGSIN_short": "SGSIN - Singapore",
+      "INMUN_short": "INMUN - Mundra",
+      "INMAA_short": "INMAA - Chennai",
+      "AEDXB_short": "AEDXB - Dubai",
       "USNYC_short": "USNYC - New York",
       "DEHAM_short": "DEHAM - Hamburg",
       "NLRTM_short": "NLRTM - Rotterdam",
-      "INNSA_short": "INNSA - Nhava Sheva",
-      "SGSIN_short": "SGSIN - Singapore",
-      "CNSHA_short": "CNSHA - Shanghai",
-      "AEDXB_short": "AEDXB - Dubai",
-      "AEJEA": "AEJEA - Jebel Ali, UAE",
-      "AEJEA_short": "AEJEA - Jebel Ali"
+      "CNSHA_short": "CNSHA - Shanghai"
+    },
+    "showcaseLanes": {
+      "hint": "Demo lanes with Commercial tariffs: INNSA→AEJEA, INNSA→SADMM, INNSA→SGSIN, INMUN→SGSIN, INMAA→SGSIN, INMAA→SADMM, USILG→GTPBR, SGSIN→MYPKG, INMUN→AEJEA, AEJEA→INNSA"
     },
     "rateType": {
       "tariff": "Tariff",

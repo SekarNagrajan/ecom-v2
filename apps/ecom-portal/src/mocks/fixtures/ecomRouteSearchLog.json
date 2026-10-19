@@ -4,349 +4,699 @@
   "custcode": "20001374",
   "originport": "INNSA",
   "destport": "AEJEA",
-  "crDate": "2026-10-17T13:06:51.255Z"
+  "crDate": "2026-10-18T04:17:01.805Z"
  },
  {
   "id": "917",
   "custcode": "20001374",
   "originport": "INNSA",
   "destport": "AEJEA",
-  "crDate": "2026-10-17T08:05:47.852Z"
+  "crDate": "2026-10-17T23:15:58.402Z"
  },
  {
   "id": "916",
   "custcode": "20001374",
   "originport": "INNSA",
   "destport": "AEJEA",
-  "crDate": "2026-10-17T08:01:29.435Z"
+  "crDate": "2026-10-17T23:11:39.985Z"
  },
  {
   "id": "915",
   "custcode": "20001374",
   "originport": "INBLR",
   "destport": "AESHJ",
-  "crDate": "2026-10-17T08:01:16.748Z"
+  "crDate": "2026-10-17T23:11:27.298Z"
  },
  {
   "id": "914",
   "custcode": "20001374",
   "originport": "INBLR",
   "destport": "AEJEA",
-  "crDate": "2026-10-17T08:01:06.785Z"
+  "crDate": "2026-10-17T23:11:17.335Z"
  },
  {
   "id": "913",
   "custcode": "20001374",
   "originport": "INBLR",
   "destport": "AEJEA",
-  "crDate": "2026-10-17T07:59:01.708Z"
+  "crDate": "2026-10-17T23:09:12.258Z"
  },
  {
   "id": "912",
   "custcode": "20001374",
   "originport": "INBLR",
   "destport": "AESHJ",
-  "crDate": "2026-10-17T07:58:53.922Z"
+  "crDate": "2026-10-17T23:09:04.472Z"
  },
  {
   "id": "911",
   "custcode": "20001374",
   "originport": "INBLR",
   "destport": "AEJEA",
-  "crDate": "2026-10-17T07:58:48.948Z"
+  "crDate": "2026-10-17T23:08:59.498Z"
  },
  {
   "id": "910",
   "custcode": "20001374",
   "originport": "INBLR",
   "destport": "AEJEA",
-  "crDate": "2026-10-17T07:58:46.375Z"
+  "crDate": "2026-10-17T23:08:56.925Z"
  },
  {
   "id": "909",
   "custcode": "20001374",
   "originport": "MYPKG",
   "destport": "AEJEA",
-  "crDate": "2026-10-17T07:57:59.585Z"
+  "crDate": "2026-10-17T23:08:10.135Z"
  },
  {
   "id": "908",
   "custcode": "20001374",
   "originport": "AEJEA",
   "destport": "MYPKG",
-  "crDate": "2026-10-17T07:57:44.442Z"
+  "crDate": "2026-10-17T23:07:54.992Z"
  },
  {
   "id": "907",
   "custcode": "20001374",
   "originport": "AEJEA",
   "destport": "MYPKG",
-  "crDate": "2026-10-17T07:52:50.708Z"
+  "crDate": "2026-10-17T23:03:01.258Z"
  },
  {
   "id": "906",
   "custcode": "20001374",
   "originport": "SGSIN",
   "destport": "MYPKG",
-  "crDate": "2026-10-17T07:52:37.188Z"
+  "crDate": "2026-10-17T23:02:47.738Z"
  },
  {
   "id": "905",
   "custcode": "20001374",
   "originport": "INNSA",
   "destport": "MYPKG",
-  "crDate": "2026-10-17T07:52:28.508Z"
+  "crDate": "2026-10-17T23:02:39.058Z"
  },
  {
   "id": "904",
   "custcode": "20001374",
   "originport": "CNNSA",
   "destport": "INNSA",
-  "crDate": "2026-10-17T07:52:18.592Z"
+  "crDate": "2026-10-17T23:02:29.142Z"
  },
  {
   "id": "903",
   "custcode": "20001374",
   "originport": "INNSA",
   "destport": "CNNSA",
-  "crDate": "2026-10-17T07:52:15.635Z"
+  "crDate": "2026-10-17T23:02:26.185Z"
  },
  {
   "id": "902",
   "custcode": "20001374",
   "originport": "INNSA",
   "destport": "CNSHA",
-  "crDate": "2026-10-17T07:52:08.962Z"
+  "crDate": "2026-10-17T23:02:19.512Z"
  },
  {
   "id": "901",
   "custcode": "20001374",
   "originport": "INNSA",
   "destport": "SGSIN",
-  "crDate": "2026-10-17T07:51:49.435Z"
+  "crDate": "2026-10-17T23:01:59.985Z"
  },
  {
   "id": "900",
   "custcode": "20001374",
   "originport": "INNSA",
   "destport": "MYPKG",
-  "crDate": "2026-10-17T07:51:37.198Z"
+  "crDate": "2026-10-17T23:01:47.748Z"
  },
  {
   "id": "899",
   "custcode": "20001374",
   "originport": "MYPKG",
   "destport": "INNSA",
-  "crDate": "2026-10-17T07:51:34.302Z"
+  "crDate": "2026-10-17T23:01:44.852Z"
  },
  {
   "id": "898",
   "custcode": "20001374",
   "originport": "MYPKG",
   "destport": "SGSIN",
-  "crDate": "2026-10-17T07:49:51.945Z"
+  "crDate": "2026-10-17T23:00:02.495Z"
  },
  {
   "id": "897",
   "custcode": "20001374",
   "originport": "AEJEA",
   "destport": "SGSIN",
-  "crDate": "2026-10-17T07:49:34.138Z"
+  "crDate": "2026-10-17T22:59:44.688Z"
  },
  {
   "id": "896",
   "custcode": "20001374",
   "originport": "AEJEA",
   "destport": "INNSA",
-  "crDate": "2026-10-17T07:49:23.815Z"
+  "crDate": "2026-10-17T22:59:34.365Z"
  },
  {
   "id": "895",
   "custcode": "20001374",
   "originport": "INNSA",
   "destport": "AEJEA",
-  "crDate": "2026-10-17T07:49:12.072Z"
+  "crDate": "2026-10-17T22:59:22.622Z"
  },
  {
   "id": "894",
   "custcode": "20001374",
   "originport": "INNSA",
   "destport": "AEJEA",
-  "crDate": "2026-10-16T10:15:00.002Z"
+  "crDate": "2026-10-17T01:25:10.552Z"
  },
  {
   "id": "893",
   "custcode": null,
   "originport": "INNSA",
   "destport": "AEJEA",
-  "crDate": "2026-10-16T07:58:58.748Z"
+  "crDate": "2026-10-16T23:09:09.298Z"
  },
  {
   "id": "892",
   "custcode": null,
   "originport": "INNSA",
   "destport": "AEJEA",
-  "crDate": "2026-10-15T06:09:48.985Z"
+  "crDate": "2026-10-15T21:19:59.535Z"
  },
  {
   "id": "891",
   "custcode": null,
   "originport": "INNSA",
   "destport": "AEJEA",
-  "crDate": "2026-10-02T10:13:45.842Z"
+  "crDate": "2026-10-03T01:23:56.392Z"
  },
  {
   "id": "890",
   "custcode": null,
   "originport": "INNSA",
   "destport": "AEJEA",
-  "crDate": "2026-10-01T13:03:08.615Z"
+  "crDate": "2026-10-02T04:13:19.165Z"
  },
  {
   "id": "889",
   "custcode": "2024000011",
   "originport": "INNSA",
   "destport": "AEJEA",
-  "crDate": "2026-09-27T12:47:20.315Z"
+  "crDate": "2026-09-28T03:57:30.865Z"
  },
  {
   "id": "888",
   "custcode": "2024000011",
   "originport": "INNSA",
   "destport": "MYPKG",
-  "crDate": "2026-09-27T12:47:11.808Z"
+  "crDate": "2026-09-28T03:57:22.358Z"
  },
  {
   "id": "887",
   "custcode": "2024000011",
   "originport": "INNSA",
   "destport": "SGSIN",
-  "crDate": "2026-09-27T12:47:04.695Z"
+  "crDate": "2026-09-28T03:57:15.245Z"
  },
  {
   "id": "886",
   "custcode": "20001374",
   "originport": "INNSA",
   "destport": "AEJEA",
-  "crDate": "2026-09-27T12:46:45.655Z"
+  "crDate": "2026-09-28T03:56:56.205Z"
  },
  {
   "id": "885",
   "custcode": "2024000011",
   "originport": "INNSA",
   "destport": "AEJEA",
-  "crDate": "2026-09-27T12:46:27.262Z"
+  "crDate": "2026-09-28T03:56:37.812Z"
  },
  {
   "id": "884",
   "custcode": "20001374",
   "originport": "INNSA",
   "destport": "AEJEA",
-  "crDate": "2026-09-25T13:46:31.932Z"
+  "crDate": "2026-09-26T04:56:42.482Z"
  },
  {
   "id": "883",
   "custcode": null,
   "originport": "INNSA",
   "destport": "AEJEA",
-  "crDate": "2026-09-25T12:52:17.742Z"
+  "crDate": "2026-09-26T04:02:28.292Z"
  },
  {
   "id": "882",
   "custcode": "20001374",
   "originport": "INNSA",
   "destport": "AEJEA",
-  "crDate": "2026-09-25T12:49:51.395Z"
+  "crDate": "2026-09-26T04:00:01.945Z"
  },
  {
   "id": "881",
   "custcode": "20001374",
   "originport": "INNSA",
   "destport": "AEJEA",
-  "crDate": "2026-09-25T11:13:20.745Z"
+  "crDate": "2026-09-26T02:23:31.295Z"
  },
  {
   "id": "880",
   "custcode": "20001374",
   "originport": "INNSA",
   "destport": "AEJEA",
-  "crDate": "2026-09-25T10:40:44.022Z"
+  "crDate": "2026-09-26T01:50:54.572Z"
  },
  {
   "id": "879",
   "custcode": null,
   "originport": "INNSA",
   "destport": "AEJEA",
-  "crDate": "2026-09-25T07:21:56.505Z"
+  "crDate": "2026-09-25T22:32:07.055Z"
  },
  {
   "id": "878",
   "custcode": null,
   "originport": "INNSA",
   "destport": "AEJEA",
-  "crDate": "2026-09-25T07:21:28.042Z"
+  "crDate": "2026-09-25T22:31:38.592Z"
  },
  {
   "id": "877",
   "custcode": "2021000074",
   "originport": "CNSHA",
   "destport": "AEJEA",
-  "crDate": "2026-09-20T16:32:02.325Z"
+  "crDate": "2026-09-21T07:42:12.875Z"
  },
  {
   "id": "876",
   "custcode": null,
   "originport": "INNSA",
   "destport": "AEJEA",
-  "crDate": "2026-09-20T13:34:34.245Z"
+  "crDate": "2026-09-21T04:44:44.795Z"
  },
  {
   "id": "875",
   "custcode": null,
   "originport": "INNSA",
   "destport": "AEJEA",
-  "crDate": "2026-09-20T13:34:10.872Z"
+  "crDate": "2026-09-21T04:44:21.422Z"
  },
  {
   "id": "874",
   "custcode": null,
   "originport": "INNSA",
   "destport": "AEJEA",
-  "crDate": "2026-09-20T10:01:02.725Z"
+  "crDate": "2026-09-21T01:11:13.275Z"
  },
  {
   "id": "873",
   "custcode": null,
   "originport": "INNSA",
   "destport": "AEJEA",
-  "crDate": "2026-09-20T07:57:32.938Z"
+  "crDate": "2026-09-20T23:07:43.488Z"
  },
  {
   "id": "872",
   "custcode": "20001374",
   "originport": "INBLR",
   "destport": "AESHJ",
-  "crDate": "2026-09-20T07:35:38.958Z"
+  "crDate": "2026-09-20T22:45:49.508Z"
  },
  {
   "id": "871",
   "custcode": null,
   "originport": "INNSA",
   "destport": "AEJEA",
-  "crDate": "2026-09-20T07:15:10.402Z"
+  "crDate": "2026-09-20T22:25:20.952Z"
  },
  {
   "id": "870",
   "custcode": null,
   "originport": "INNSA",
   "destport": "AEJEA",
-  "crDate": "2026-09-20T07:13:55.692Z"
+  "crDate": "2026-09-20T22:24:06.242Z"
  },
  {
   "id": "869",
   "custcode": null,
   "originport": "INNSA",
   "destport": "AEJEA",
-  "crDate": "2026-09-20T07:02:42.302Z"
+  "crDate": "2026-09-20T22:12:52.852Z"
+ },
+ {
+  "id": "868",
+  "custcode": null,
+  "originport": "INNSA",
+  "destport": "AEJEA",
+  "crDate": "2026-09-20T22:12:30.302Z"
+ },
+ {
+  "id": "867",
+  "custcode": null,
+  "originport": "INNSA",
+  "destport": "AEJEA",
+  "crDate": "2026-09-20T22:09:58.795Z"
+ },
+ {
+  "id": "866",
+  "custcode": null,
+  "originport": "INNSA",
+  "destport": "AEJEA",
+  "crDate": "2026-09-20T22:09:10.162Z"
+ },
+ {
+  "id": "865",
+  "custcode": null,
+  "originport": "INNSA",
+  "destport": "AEJEA",
+  "crDate": "2026-09-20T22:07:35.095Z"
+ },
+ {
+  "id": "864",
+  "custcode": null,
+  "originport": "INNSA",
+  "destport": "AEJEA",
+  "crDate": "2026-09-20T21:28:20.722Z"
+ },
+ {
+  "id": "863",
+  "custcode": null,
+  "originport": "INNSA",
+  "destport": "AEJEA",
+  "crDate": "2026-09-20T19:54:04.088Z"
+ },
+ {
+  "id": "862",
+  "custcode": null,
+  "originport": "INNSA",
+  "destport": "AEJEA",
+  "crDate": "2026-09-20T19:48:22.125Z"
+ },
+ {
+  "id": "861",
+  "custcode": null,
+  "originport": "INNSA",
+  "destport": "AEJEA",
+  "crDate": "2026-09-20T19:18:54.102Z"
+ },
+ {
+  "id": "860",
+  "custcode": "20130004343",
+  "originport": "INNSA",
+  "destport": "AEJEA",
+  "crDate": "2026-09-20T19:18:32.688Z"
+ },
+ {
+  "id": "859",
+  "custcode": null,
+  "originport": "INNSA",
+  "destport": "AEJEA",
+  "crDate": "2026-09-20T18:35:53.095Z"
+ },
+ {
+  "id": "858",
+  "custcode": null,
+  "originport": "INNSA",
+  "destport": "AEJEA",
+  "crDate": "2026-09-20T07:11:25.968Z"
+ },
+ {
+  "id": "857",
+  "custcode": null,
+  "originport": "INNSA",
+  "destport": "AEJEA",
+  "crDate": "2026-09-20T05:08:52.025Z"
+ },
+ {
+  "id": "856",
+  "custcode": null,
+  "originport": "INNSA",
+  "destport": "AEJEA",
+  "crDate": "2026-09-20T01:46:44.428Z"
+ },
+ {
+  "id": "855",
+  "custcode": null,
+  "originport": "CNSHA",
+  "destport": "AEJEA",
+  "crDate": "2026-09-20T01:27:23.615Z"
+ },
+ {
+  "id": "854",
+  "custcode": null,
+  "originport": "CNSHA",
+  "destport": "INNSA",
+  "crDate": "2026-09-20T01:27:17.142Z"
+ },
+ {
+  "id": "853",
+  "custcode": null,
+  "originport": "CNSHA",
+  "destport": "INNSA",
+  "crDate": "2026-09-20T01:27:14.755Z"
+ },
+ {
+  "id": "852",
+  "custcode": null,
+  "originport": "INNSA",
+  "destport": "AEJEA",
+  "crDate": "2026-09-20T00:10:02.805Z"
+ },
+ {
+  "id": "851",
+  "custcode": "2021000074",
+  "originport": "INBLR",
+  "destport": "AESHJ",
+  "crDate": "2026-09-19T21:32:22.728Z"
+ },
+ {
+  "id": "850",
+  "custcode": "20001374",
+  "originport": "INBLR",
+  "destport": "AESHJ",
+  "crDate": "2026-09-19T07:52:26.305Z"
+ },
+ {
+  "id": "849",
+  "custcode": "20001374",
+  "originport": "INBLR",
+  "destport": "AESHJ",
+  "crDate": "2026-09-19T07:50:19.145Z"
+ },
+ {
+  "id": "848",
+  "custcode": "20001374",
+  "originport": "INBLR",
+  "destport": "AESHJ",
+  "crDate": "2026-09-19T07:49:44.908Z"
+ },
+ {
+  "id": "847",
+  "custcode": "20001374",
+  "originport": "INBLR",
+  "destport": "AESHJ",
+  "crDate": "2026-09-19T07:44:24.688Z"
+ },
+ {
+  "id": "846",
+  "custcode": "20001374",
+  "originport": "INBLR",
+  "destport": "AESHJ",
+  "crDate": "2026-09-19T07:42:31.695Z"
+ },
+ {
+  "id": "845",
+  "custcode": "20001374",
+  "originport": "INBLR",
+  "destport": "AESHJ",
+  "crDate": "2026-09-19T07:41:32.015Z"
+ },
+ {
+  "id": "844",
+  "custcode": "20001374",
+  "originport": "INBLR",
+  "destport": "AESHJ",
+  "crDate": "2026-09-19T07:39:27.118Z"
+ },
+ {
+  "id": "843",
+  "custcode": "20001374",
+  "originport": "INBLR",
+  "destport": "AESHJ",
+  "crDate": "2026-09-19T07:38:16.475Z"
+ },
+ {
+  "id": "842",
+  "custcode": "20001374",
+  "originport": "INBLR",
+  "destport": "AESHJ",
+  "crDate": "2026-09-19T07:36:55.322Z"
+ },
+ {
+  "id": "841",
+  "custcode": "20001374",
+  "originport": "INBLR",
+  "destport": "AESHJ",
+  "crDate": "2026-09-19T07:35:34.562Z"
+ },
+ {
+  "id": "840",
+  "custcode": "20001374",
+  "originport": "INBLR",
+  "destport": "AESHJ",
+  "crDate": "2026-09-19T07:35:32.548Z"
+ },
+ {
+  "id": "839",
+  "custcode": "20001374",
+  "originport": "INBLR",
+  "destport": "AESHJ",
+  "crDate": "2026-09-19T07:34:53.448Z"
+ },
+ {
+  "id": "838",
+  "custcode": "20001374",
+  "originport": "INBLR",
+  "destport": "AESHJ",
+  "crDate": "2026-09-19T07:34:52.012Z"
+ },
+ {
+  "id": "837",
+  "custcode": "20001374",
+  "originport": "INBLR",
+  "destport": "AESHJ",
+  "crDate": "2026-09-19T07:30:11.185Z"
+ },
+ {
+  "id": "836",
+  "custcode": "20001374",
+  "originport": "INBLR",
+  "destport": "AESHJ",
+  "crDate": "2026-09-19T07:24:04.092Z"
+ },
+ {
+  "id": "835",
+  "custcode": "20001374",
+  "originport": "INBLR",
+  "destport": "AESHJ",
+  "crDate": "2026-09-19T07:23:09.778Z"
+ },
+ {
+  "id": "834",
+  "custcode": "20001374",
+  "originport": "INBLR",
+  "destport": "AESHJ",
+  "crDate": "2026-09-19T07:21:43.578Z"
+ },
+ {
+  "id": "833",
+  "custcode": "20001374",
+  "originport": "INBLR",
+  "destport": "AESHJ",
+  "crDate": "2026-09-19T07:21:14.722Z"
+ },
+ {
+  "id": "832",
+  "custcode": "20001374",
+  "originport": "INBLR",
+  "destport": "AESHJ",
+  "crDate": "2026-09-19T07:21:12.602Z"
+ },
+ {
+  "id": "831",
+  "custcode": "20001374",
+  "originport": "INBLR",
+  "destport": "AESHJ",
+  "crDate": "2026-09-19T07:20:12.065Z"
+ },
+ {
+  "id": "830",
+  "custcode": "20001374",
+  "originport": "INBLR",
+  "destport": "AESHJ",
+  "crDate": "2026-09-19T07:20:10.865Z"
+ },
+ {
+  "id": "829",
+  "custcode": "20001374",
+  "originport": "INBLR",
+  "destport": "AESHJ",
+  "crDate": "2026-09-19T07:20:08.652Z"
+ },
+ {
+  "id": "828",
+  "custcode": "20001374",
+  "originport": "INBLR",
+  "destport": "AESHJ",
+  "crDate": "2026-09-19T07:19:43.805Z"
+ },
+ {
+  "id": "827",
+  "custcode": "20001374",
+  "originport": "INBLR",
+  "destport": "AESHJ",
+  "crDate": "2026-09-19T07:19:42.722Z"
+ },
+ {
+  "id": "826",
+  "custcode": "20001374",
+  "originport": "INBLR",
+  "destport": "AESHJ",
+  "crDate": "2026-09-19T07:19:39.652Z"
+ },
+ {
+  "id": "825",
+  "custcode": "20001374",
+  "originport": "INBLR",
+  "destport": "AESHJ",
+  "crDate": "2026-09-19T07:19:38.738Z"
+ },
+ {
+  "id": "824",
+  "custcode": "20001374",
+  "originport": "INBLR",
+  "destport": "AESHJ",
+  "crDate": "2026-09-19T07:19:37.465Z"
+ },
+ {
+  "id": "823",
+  "custcode": "20001374",
+  "originport": "INBLR",
+  "destport": "AESHJ",
+  "crDate": "2026-09-19T07:19:35.998Z"
+ },
+ {
+  "id": "822",
+  "custcode": "20001374",
+  "originport": "INBLR",
+  "destport": "AESHJ",
+  "crDate": "2026-09-19T07:19:33.095Z"
+ },
+ {
+  "id": "821",
+  "custcode": "20001374",
+  "originport": "INBLR",
+  "destport": "AESHJ",
+  "crDate": "2026-09-19T07:17:56.202Z"
+ },
+ {
+  "id": "820",
+  "custcode": "20001374",
+  "originport": "INBLR",
+  "destport": "AESHJ",
+  "crDate": "2026-09-19T07:11:26.928Z"
+ },
+ {
+  "id": "819",
+  "custcode": "20001374",
+  "originport": "INBLR",
+  "destport": "AESHJ",
+  "crDate": "2026-09-19T07:09:15.375Z"
  }
 ]

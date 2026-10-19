@@ -17,6 +17,7 @@ import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 
+import { schedulesApi } from "../api/schedules.api";
 import type {
   ScheduleSearchParams,
   ScheduleSearchType,
@@ -35,18 +36,6 @@ const PORT_CODES = [
   "INMUN",
   "INNSA",
   "SGSIN",
-] as const;
-
-// Modified by Sekar Nagarajan (2026-10-17 01:50) — vessel codes present in the extracted sailing schedules
-const VESSEL_CODES = [
-  "KCA",
-  "ACH",
-  "SNA",
-  "HLA",
-  "DAB",
-  "EMLS",
-  "MRK",
-  "RNR",
 ] as const;
 
 export type ScheduleSearchFilterVariant = "page" | "header";
@@ -159,14 +148,8 @@ export function ScheduleSearchFilter({
     [t],
   );
 
-  const popularVessels = useMemo(
-    () =>
-      VESSEL_CODES.map((value) => ({
-        value,
-        label: t(`options.vessels.${value}`),
-      })),
-    [t],
-  );
+  // Labels come from the vessel master (CODE - NAME), not i18n keys — fixture codes change per extract.
+  const popularVessels = useMemo(() => schedulesApi.listVesselOptions(), []);
   const controlSize = isHeader ? "middle" : "large";
   const gutter = isHeader ? HEADER_ROW_GUTTER : SEARCH_ROW_GUTTER;
 
@@ -459,6 +442,7 @@ export function ScheduleSearchFilter({
                   <Select
                     size={controlSize}
                     showSearch
+                    optionFilterProp="label"
                     placeholder={t("search.vesselPlaceholder")}
                     options={popularVessels}
                     aria-label={t("search.vesselAria")}

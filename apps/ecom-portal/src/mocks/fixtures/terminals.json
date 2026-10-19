@@ -1554,6 +1554,126 @@
   "type": "T"
  },
  {
+  "terminalcode": "CTA",
+  "terminalname": "C.T. ALTENWERDER (CTA)",
+  "portcode": "DEHAM",
+  "type": "T"
+ },
+ {
+  "terminalcode": "CTB",
+  "terminalname": "C.T. BURCHARDKAI (CTB / BUKAI)",
+  "portcode": "DEHAM",
+  "type": "T"
+ },
+ {
+  "terminalcode": "CTT",
+  "terminalname": "C.T. TOLLERORT",
+  "portcode": "DEHAM",
+  "type": "T"
+ },
+ {
+  "terminalcode": "DEHAMDCMR",
+  "terminalname": "CMRA DEPOT",
+  "portcode": "DEHAM",
+  "type": "D"
+ },
+ {
+  "terminalcode": "DEHAMTER01",
+  "terminalname": "DEHAMTER01",
+  "portcode": "DEHAM",
+  "type": "T"
+ },
+ {
+  "terminalcode": "HAMEK",
+  "terminalname": "DEHAMTML01",
+  "portcode": "DEHAM",
+  "type": "T"
+ },
+ {
+  "terminalcode": "EGH",
+  "terminalname": "EUROGATE CONTAINER TERMINAL",
+  "portcode": "DEHAM",
+  "type": "T"
+ },
+ {
+  "terminalcode": "dehamhaju",
+  "terminalname": "hamburg",
+  "portcode": "DEHAM",
+  "type": "T"
+ },
+ {
+  "terminalcode": "DEHAMDDDP",
+  "terminalname": "HAMBURG DEPOT",
+  "portcode": "DEHAM",
+  "type": "D"
+ },
+ {
+  "terminalcode": "DEHAMDHCC",
+  "terminalname": "HCCR HAMBURG CONTAINER-UND-CHASSIS",
+  "portcode": "DEHAM",
+  "type": "D"
+ },
+ {
+  "terminalcode": "DEHAMDHCS",
+  "terminalname": "HCS HAMBURGER CONTAINER SERVICES GMBH",
+  "portcode": "DEHAM",
+  "type": "D"
+ },
+ {
+  "terminalcode": "DEHAMDRGC",
+  "terminalname": "REMAIN GMBH CONTAINER - DEPOT & REPAIR",
+  "portcode": "DEHAM",
+  "type": "D"
+ },
+ {
+  "terminalcode": "qwqwqw",
+  "terminalname": "-----@@@@@",
+  "portcode": "DKAAR",
+  "type": "D"
+ },
+ {
+  "terminalcode": "DKAARDAPM",
+  "terminalname": "APM TERMINALS",
+  "portcode": "DKAAR",
+  "type": "D"
+ },
+ {
+  "terminalcode": "DKAARDCCA",
+  "terminalname": "CONTAINERCARE AARHUS",
+  "portcode": "DKAAR",
+  "type": "D"
+ },
+ {
+  "terminalcode": "DKAARDDDP",
+  "terminalname": "DEPOT AARHUS",
+  "portcode": "DKAAR",
+  "type": "D"
+ },
+ {
+  "terminalcode": "SOLVERSVM",
+  "terminalname": "depot code",
+  "portcode": "DKAAR",
+  "type": "D"
+ },
+ {
+  "terminalcode": "DKAARDPTA",
+  "terminalname": "DKAARPT AARHUS",
+  "portcode": "DKAAR",
+  "type": "D"
+ },
+ {
+  "terminalcode": "DKAARTER01",
+  "terminalname": "DKAARTER01",
+  "portcode": "DKAAR",
+  "type": "T"
+ },
+ {
+  "terminalcode": "THAMMAMPAT",
+  "terminalname": "THAM Depot",
+  "portcode": "DKAAR",
+  "type": "D"
+ },
+ {
   "terminalcode": "EGALYALY00",
   "terminalname": "Alexandria Terminal",
   "portcode": "EGALY",
@@ -1563,6 +1683,18 @@
   "terminalcode": "EGALYTER01",
   "terminalname": "EGALYTER01",
   "portcode": "EGALY",
+  "type": "T"
+ },
+ {
+  "terminalcode": "GTPBRRTM",
+  "terminalname": "BARRIOS TERMINAL",
+  "portcode": "GTPBR",
+  "type": "T"
+ },
+ {
+  "terminalcode": "GTPBRTER01",
+  "terminalname": "GTPBRTER01",
+  "portcode": "GTPBR",
   "type": "T"
  },
  {
@@ -1686,6 +1818,30 @@
   "type": "T"
  },
  {
+  "terminalcode": "INAMDDDDP",
+  "terminalname": "AMADABAD",
+  "portcode": "INAMD",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INAMDRAH",
+  "terminalname": "AMADABAD RAIL HEADS",
+  "portcode": "INAMD",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INAMDIWAHH",
+  "terminalname": "IN - WareHouse",
+  "portcode": "INAMD",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INAMDTER01",
+  "terminalname": "INAMDTER01",
+  "portcode": "INAMD",
+  "type": "T"
+ },
+ {
   "terminalcode": "INBLRDDDP",
   "terminalname": "BANGALORE",
   "portcode": "INBLR",
@@ -1707,6 +1863,18 @@
   "terminalcode": "INBLRTER01",
   "terminalname": "INBLRTER01",
   "portcode": "INBLR",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INHZAAHCT0",
+  "terminalname": "ADANI HAZIRA CONTAINER TERMINAL",
+  "portcode": "INHZA",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INHZATER01",
+  "terminalname": "INHZATER01",
+  "portcode": "INHZA",
   "type": "T"
  },
  {
@@ -2008,6 +2176,78 @@
   "terminalname": "TESTING",
   "portcode": "INMAA",
   "type": "T"
+ },
+ {
+  "terminalcode": "INMUNBCT00",
+  "terminalname": "ADANI",
+  "portcode": "INMUN",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INMUNACT00",
+  "terminalname": "ADANI CONTAINER TERMINAL",
+  "portcode": "INMUN",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INMUNDBCT",
+  "terminalname": "BAY CONTAINER TERMINAL PVT LTD",
+  "portcode": "INMUN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INMUNDAEP",
+  "terminalname": "BAY CONTAINER TERMINAL PVT LTD C/O ALLCRAGO EMPTY PARK",
+  "portcode": "INMUN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INMUNDCSI",
+  "terminalname": "CONTAINER SOLUTIONS INDIA PRIVATE LIMITED",
+  "portcode": "INMUN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INMUNDKMS",
+  "terminalname": "KISHAN MARINE SERVICES LLP",
+  "portcode": "INMUN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INMUNDKMP",
+  "terminalname": "KMS MONDIALLE PRIVATE LIMITED",
+  "portcode": "INMUN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INMUNMCT00",
+  "terminalname": "MUNDRA INTERNATIONAL CONTAINER TERMINAL",
+  "portcode": "INMUN",
+  "type": "T"
+ },
+ {
+  "terminalcode": "INMUN0003",
+  "terminalname": "NEW WAREHOUSE",
+  "portcode": "INMUN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INMUNDSCO",
+  "terminalname": "SAURASHTRA FREIGHT PVT LTD",
+  "portcode": "INMUN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INMUNDSMS",
+  "terminalname": "SEABIRD MARINE SERVICES PVT LTD",
+  "portcode": "INMUN",
+  "type": "D"
+ },
+ {
+  "terminalcode": "INMUNTPDP",
+  "terminalname": "THIRD-PARTY DEPOTS FOR ON-HIRING CONTAINERS",
+  "portcode": "INMUN",
+  "type": "D"
  },
  {
   "terminalcode": "INNSADA12",
@@ -2790,6 +3030,18 @@
   "type": "T"
  },
  {
+  "terminalcode": "SADMMDCT00",
+  "terminalname": "DAMMAM CONTAINER TERMINAL",
+  "portcode": "SADMM",
+  "type": "T"
+ },
+ {
+  "terminalcode": "SADMMTER01",
+  "terminalname": "SADMMTER01",
+  "portcode": "SADMM",
+  "type": "T"
+ },
+ {
   "terminalcode": "SGSINDAL1",
   "terminalname": "ALLIED YARD 1 (ACSMCU)",
   "portcode": "SGSIN",
@@ -3147,6 +3399,12 @@
   "terminalcode": "USILGTER01",
   "terminalname": "WilmingtonTerminal",
   "portcode": "USILG",
+  "type": "T"
+ },
+ {
+  "terminalcode": "USNTDTER01",
+  "terminalname": "HeunemeTerminal",
+  "portcode": "USNTD",
   "type": "T"
  },
  {

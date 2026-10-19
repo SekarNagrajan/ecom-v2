@@ -9,6 +9,7 @@ import {
   cutoffFor,
   getVesselDetails,
   haversineKm,
+  listVesselSelectOptions,
   markDefaultRoute,
   previousWorkingDay,
   searchSchedules,
@@ -188,6 +189,16 @@ describe('searchSchedules VESSEL_SCHEDULE / PORT_SCHEDULE', () => {
     const items = run({ searchType: 'PORT_SCHEDULE', portCode: 'AEJEA' });
     expect(items.map(i => `${i.vesselCode}:${i.polPortId}>${i.podPortId}`)).toEqual(['ACH:INNSA>AEJEA', 'SNA:AEJEA>IQUQR', 'KCA:SGSIN>AEJEA']);
     expect(run({ searchType: 'PORT_SCHEDULE', portCode: 'AEJEA', fromDate: '2026-10-20', toDate: '2026-10-20', dateType: 'ARRIVAL' }).map(i => i.vesselCode)).toEqual(['SNA']);
+  });
+});
+
+describe('listVesselSelectOptions', () => {
+  it('labels vessels with master names, not i18n key paths', () => {
+    const opts = listVesselSelectOptions(10);
+    expect(opts.length).toBeGreaterThan(0);
+    expect(opts.every(o => o.value && o.label && !o.label.startsWith('options.vessels.'))).toBe(true);
+    const kca = opts.find(o => o.value === 'KCA');
+    if (kca) expect(kca.label).toMatch(/KCA\s*-\s*.+/);
   });
 });
 

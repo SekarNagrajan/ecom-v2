@@ -3,6 +3,7 @@
 
 import {
   getVesselDetails,
+  listVesselSelectOptions,
   searchSchedules,
 } from "../../../mocks/fixture-api/bridges/schedules.bridge";
 import type {
@@ -39,6 +40,11 @@ export const schedulesApi = {
     }
 
     return sortSchedules(searchSchedules(params));
+  },
+
+  /** Codes + labels for the By Vessel search dropdown (from schedule fixtures + vessel master). */
+  listVesselOptions(): { value: string; label: string }[] {
+    return listVesselSelectOptions();
   },
 
   /**

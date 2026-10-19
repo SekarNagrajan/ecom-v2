@@ -675,6 +675,42 @@
   "eqpTypeId": "RE20"
  },
  {
+  "id": 2824,
+  "esino": "SIREQ3058",
+  "chargeid": "SEE",
+  "payagencyid": "AEJEA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "LP"
+ },
+ {
+  "id": 2823,
+  "esino": "SIREQ3058",
+  "chargeid": "OWS",
+  "payagencyid": "AEJEA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 2822,
+  "esino": "SIREQ3058",
+  "chargeid": "THL",
+  "payagencyid": "AEJEA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 2821,
+  "esino": "SIREQ3058",
+  "chargeid": "OFR",
+  "payagencyid": "AEJEA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
   "id": 2807,
   "esino": "SIREQ3051",
   "chargeid": "GRI",
@@ -2754,6 +2790,564 @@
   "eqpTypeId": "DV20"
  },
  {
+  "id": 1890,
+  "esino": "SIREQ2986",
+  "chargeid": "OFR",
+  "payagencyid": "INNSA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1889,
+  "esino": "SIREQ2986",
+  "chargeid": "ODT",
+  "payagencyid": "NLRTM",
+  "custtypeid": "CN",
+  "prepaidcollect": "C",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1835,
+  "esino": "SIREQ2878",
+  "chargeid": "CBR",
+  "payagencyid": "INNSA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1834,
+  "esino": "SIREQ2878",
+  "chargeid": "CCC",
+  "payagencyid": "INNSA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1833,
+  "esino": "SIREQ2878",
+  "chargeid": "IVS",
+  "payagencyid": "INNSA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1832,
+  "esino": "SIREQ2878",
+  "chargeid": "DOC",
+  "payagencyid": "INNSA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "TEUS"
+ },
+ {
+  "id": 1831,
+  "esino": "SIREQ2878",
+  "chargeid": "OWS",
+  "payagencyid": "INNSA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1830,
+  "esino": "SIREQ2878",
+  "chargeid": "ARC",
+  "payagencyid": "AEJEA",
+  "custtypeid": "CN",
+  "prepaidcollect": "C",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1829,
+  "esino": "SIREQ2878",
+  "chargeid": "CAF",
+  "payagencyid": "INNSA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1828,
+  "esino": "SIREQ2878",
+  "chargeid": "LOD",
+  "payagencyid": "AEJEA",
+  "custtypeid": "CN",
+  "prepaidcollect": "C",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1827,
+  "esino": "SIREQ2878",
+  "chargeid": "EIS",
+  "payagencyid": "INNSA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "TEUS"
+ },
+ {
+  "id": 1826,
+  "esino": "SIREQ2878",
+  "chargeid": "OFR",
+  "payagencyid": "INNSA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1825,
+  "esino": "SIREQ2878",
+  "chargeid": "KAF",
+  "payagencyid": "INNSA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1824,
+  "esino": "SIREQ2878",
+  "chargeid": "PRM",
+  "payagencyid": "INNSA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "TEUS"
+ },
+ {
+  "id": 1823,
+  "esino": "SIREQ2878",
+  "chargeid": "GRI",
+  "payagencyid": "INNSA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1772,
+  "esino": "SIREQ2868",
+  "chargeid": "ADI",
+  "payagencyid": "USNTD",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "LP"
+ },
+ {
+  "id": 1771,
+  "esino": "SIREQ2868",
+  "chargeid": "OTH",
+  "payagencyid": "USNTD",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1770,
+  "esino": "SIREQ2868",
+  "chargeid": "CAF",
+  "payagencyid": "USNTD",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1769,
+  "esino": "SIREQ2868",
+  "chargeid": "ICA",
+  "payagencyid": "USNTD",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1768,
+  "esino": "SIREQ2868",
+  "chargeid": "OFR",
+  "payagencyid": "USNTD",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1767,
+  "esino": "SIREQ2868",
+  "chargeid": "BAF",
+  "payagencyid": "USNTD",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1766,
+  "esino": "SIREQ2868",
+  "chargeid": "CCC",
+  "payagencyid": "USNTD",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1765,
+  "esino": "SIREQ2868",
+  "chargeid": "THL",
+  "payagencyid": "USNTD",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1756,
+  "esino": "SIREQ2866",
+  "chargeid": "ADI",
+  "payagencyid": "USNTD",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "LP"
+ },
+ {
+  "id": 1755,
+  "esino": "SIREQ2866",
+  "chargeid": "CAF",
+  "payagencyid": "USNTD",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1754,
+  "esino": "SIREQ2866",
+  "chargeid": "OFR",
+  "payagencyid": "USNTD",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1753,
+  "esino": "SIREQ2866",
+  "chargeid": "CCC",
+  "payagencyid": "USNTD",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1752,
+  "esino": "SIREQ2866",
+  "chargeid": "BAF",
+  "payagencyid": "USNTD",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1746,
+  "esino": "SIREQ2864",
+  "chargeid": "ADI",
+  "payagencyid": "USNTD",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "LP"
+ },
+ {
+  "id": 1745,
+  "esino": "SIREQ2864",
+  "chargeid": "CAF",
+  "payagencyid": "USNTD",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1744,
+  "esino": "SIREQ2864",
+  "chargeid": "OFR",
+  "payagencyid": "USNTD",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1743,
+  "esino": "SIREQ2864",
+  "chargeid": "CCC",
+  "payagencyid": "USNTD",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1742,
+  "esino": "SIREQ2864",
+  "chargeid": "BAF",
+  "payagencyid": "USNTD",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1736,
+  "esino": "SIREQ2863",
+  "chargeid": "ADI",
+  "payagencyid": "USNTD",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "LP"
+ },
+ {
+  "id": 1735,
+  "esino": "SIREQ2863",
+  "chargeid": "CAF",
+  "payagencyid": "USNTD",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1734,
+  "esino": "SIREQ2863",
+  "chargeid": "OFR",
+  "payagencyid": "USNTD",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1733,
+  "esino": "SIREQ2863",
+  "chargeid": "CCC",
+  "payagencyid": "USNTD",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1732,
+  "esino": "SIREQ2863",
+  "chargeid": "BAF",
+  "payagencyid": "USNTD",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1709,
+  "esino": "SIREQ2852",
+  "chargeid": "OFR",
+  "payagencyid": "INNSA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "DV20"
+ },
+ {
+  "id": 1708,
+  "esino": "SIREQ2852",
+  "chargeid": "EIS",
+  "payagencyid": "SGSIN",
+  "custtypeid": "CN",
+  "prepaidcollect": "C",
+  "eqpTypeId": "DV20"
+ },
+ {
+  "id": 1707,
+  "esino": "SIREQ2852",
+  "chargeid": "CAF",
+  "payagencyid": "INNSA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "DV20"
+ },
+ {
+  "id": 1687,
+  "esino": "SIREQ2847",
+  "chargeid": "CAS",
+  "payagencyid": "AEJEA",
+  "custtypeid": "CN",
+  "prepaidcollect": "C",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1686,
+  "esino": "SIREQ2847",
+  "chargeid": "IVS",
+  "payagencyid": "INNSA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1685,
+  "esino": "SIREQ2847",
+  "chargeid": "GRI",
+  "payagencyid": "INNSA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1684,
+  "esino": "SIREQ2847",
+  "chargeid": "DGQ",
+  "payagencyid": "INNSA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1683,
+  "esino": "SIREQ2847",
+  "chargeid": "ADI",
+  "payagencyid": "INNSA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "LP"
+ },
+ {
+  "id": 1682,
+  "esino": "SIREQ2847",
+  "chargeid": "OFR",
+  "payagencyid": "INNSA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1681,
+  "esino": "SIREQ2847",
+  "chargeid": "LOD",
+  "payagencyid": "AEJEA",
+  "custtypeid": "CN",
+  "prepaidcollect": "C",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1680,
+  "esino": "SIREQ2847",
+  "chargeid": "OWS",
+  "payagencyid": "INNSA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1679,
+  "esino": "SIREQ2847",
+  "chargeid": "PRM",
+  "payagencyid": "INNSA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "TEUS"
+ },
+ {
+  "id": 1678,
+  "esino": "SIREQ2847",
+  "chargeid": "CBR",
+  "payagencyid": "INNSA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1677,
+  "esino": "SIREQ2847",
+  "chargeid": "EIS",
+  "payagencyid": "INNSA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "TEUS"
+ },
+ {
+  "id": 1676,
+  "esino": "SIREQ2847",
+  "chargeid": "CCC",
+  "payagencyid": "INNSA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1675,
+  "esino": "SIREQ2847",
+  "chargeid": "PAL",
+  "payagencyid": "INNSA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1674,
+  "esino": "SIREQ2847",
+  "chargeid": "CAS",
+  "payagencyid": "AEJEA",
+  "custtypeid": "CN",
+  "prepaidcollect": "C",
+  "eqpTypeId": "LP"
+ },
+ {
+  "id": 1673,
+  "esino": "SIREQ2847",
+  "chargeid": "CAF",
+  "payagencyid": "INNSA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1637,
+  "esino": "SIREQ2840",
+  "chargeid": "CAS",
+  "payagencyid": "INNSA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "LP"
+ },
+ {
+  "id": 1636,
+  "esino": "SIREQ2840",
+  "chargeid": "OFR",
+  "payagencyid": "INNSA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1629,
+  "esino": "SIREQ2839",
+  "chargeid": "CAS",
+  "payagencyid": "INDEL",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "LP"
+ },
+ {
+  "id": 1628,
+  "esino": "SIREQ2839",
+  "chargeid": "OFR",
+  "payagencyid": "INDEL",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
+  "id": 1625,
+  "esino": "SIREQ2838",
+  "chargeid": "CAS",
+  "payagencyid": "INNSA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "LP"
+ },
+ {
+  "id": 1624,
+  "esino": "SIREQ2838",
+  "chargeid": "OFR",
+  "payagencyid": "INNSA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
+ },
+ {
   "id": 2888,
   "esino": "SIREQ3077",
   "chargeid": "BSC",
@@ -2914,5 +3508,32 @@
   "custtypeid": "AP",
   "prepaidcollect": "P",
   "eqpTypeId": "DV20"
+ },
+ {
+  "id": 2870,
+  "esino": "SIREQ3076",
+  "chargeid": "ARC",
+  "payagencyid": "AEJEA",
+  "custtypeid": "CN",
+  "prepaidcollect": "C",
+  "eqpTypeId": "DV20"
+ },
+ {
+  "id": 2869,
+  "esino": "SIREQ3076",
+  "chargeid": "CBR",
+  "payagencyid": "INNSA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "DV20"
+ },
+ {
+  "id": 2825,
+  "esino": "SIREQ3062",
+  "chargeid": "OFR",
+  "payagencyid": "INMAA",
+  "custtypeid": "AP",
+  "prepaidcollect": "P",
+  "eqpTypeId": "20DC"
  }
 ]

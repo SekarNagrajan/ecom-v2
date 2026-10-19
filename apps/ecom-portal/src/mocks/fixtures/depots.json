@@ -294,6 +294,90 @@
   "type": null
  },
  {
+  "depot": "DEHAMDCMR",
+  "description": "CMRA DEPOT",
+  "portcode": "DEHAM",
+  "portname": "HAMBURG",
+  "type": null
+ },
+ {
+  "depot": "DEHAMDDDP",
+  "description": "HAMBURG DEPOT",
+  "portcode": "DEHAM",
+  "portname": "HAMBURG",
+  "type": null
+ },
+ {
+  "depot": "DEHAMDHCC",
+  "description": "HCCR HAMBURG CONTAINER-UND-CHASSIS",
+  "portcode": "DEHAM",
+  "portname": "HAMBURG",
+  "type": null
+ },
+ {
+  "depot": "DEHAMDHCS",
+  "description": "HCS HAMBURGER CONTAINER SERVICES GMBH",
+  "portcode": "DEHAM",
+  "portname": "HAMBURG",
+  "type": null
+ },
+ {
+  "depot": "DEHAMDRGC",
+  "description": "REMAIN GMBH CONTAINER - DEPOT & REPAIR",
+  "portcode": "DEHAM",
+  "portname": "HAMBURG",
+  "type": null
+ },
+ {
+  "depot": "DKAARDAPM",
+  "description": "APM TERMINALS",
+  "portcode": "DKAAR",
+  "portname": "AARHUS",
+  "type": null
+ },
+ {
+  "depot": "DKAARDCCA",
+  "description": "CONTAINERCARE AARHUS",
+  "portcode": "DKAAR",
+  "portname": "AARHUS",
+  "type": null
+ },
+ {
+  "depot": "DKAARDDDP",
+  "description": "DEPOT AARHUS",
+  "portcode": "DKAAR",
+  "portname": "AARHUS",
+  "type": null
+ },
+ {
+  "depot": "DKAARDPTA",
+  "description": "DKAARPT AARHUS",
+  "portcode": "DKAAR",
+  "portname": "AARHUS",
+  "type": null
+ },
+ {
+  "depot": "qwqwqw",
+  "description": "-----@@@@@",
+  "portcode": "DKAAR",
+  "portname": "AARHUS",
+  "type": null
+ },
+ {
+  "depot": "SOLVERSVM",
+  "description": "depot code",
+  "portcode": "DKAAR",
+  "portname": "",
+  "type": null
+ },
+ {
+  "depot": "THAMMAMPAT",
+  "description": "THAM Depot",
+  "portcode": "DKAAR",
+  "portname": "AARHUS",
+  "type": null
+ },
+ {
   "depot": "HKHKGDCSL",
   "description": "CONTAINER SYSTEM LTD",
   "portcode": "HKHKG",
@@ -333,6 +417,27 @@
   "description": "VICTORY KIND CONTAINER SERVICE LIMITED",
   "portcode": "HKHKG",
   "portname": "HONG KONG",
+  "type": null
+ },
+ {
+  "depot": "INAMDDDDP",
+  "description": "AMADABAD",
+  "portcode": "INAMD",
+  "portname": "AHMEDABAD, INDIA",
+  "type": null
+ },
+ {
+  "depot": "INAMDIWAHH",
+  "description": "IN - WareHouse",
+  "portcode": "INAMD",
+  "portname": "AHMEDABAD",
+  "type": null
+ },
+ {
+  "depot": "INAMDRAH",
+  "description": "AMADABAD RAIL HEADS",
+  "portcode": "INAMD",
+  "portname": "AHMEDABAD",
   "type": null
  },
  {
@@ -448,10 +553,66 @@
   "type": null
  },
  {
-  "depot": "DPMN456032",
-  "description": "TESTING PURPOSE",
-  "portcode": "INNSA",
-  "portname": "NHAVA SHEVA,MUMBAI",
+  "depot": "INMUN0003",
+  "description": "NEW WAREHOUSE",
+  "portcode": "INMUN",
+  "portname": "MUNDRA",
+  "type": null
+ },
+ {
+  "depot": "INMUNDAEP",
+  "description": "BAY CONTAINER TERMINAL PVT LTD C/O ALLCRAGO EMPTY PARK",
+  "portcode": "INMUN",
+  "portname": "MUNDRA",
+  "type": null
+ },
+ {
+  "depot": "INMUNDBCT",
+  "description": "BAY CONTAINER TERMINAL PVT LTD",
+  "portcode": "INMUN",
+  "portname": "MUNDRA",
+  "type": null
+ },
+ {
+  "depot": "INMUNDCSI",
+  "description": "CONTAINER SOLUTIONS INDIA PRIVATE LIMITED",
+  "portcode": "INMUN",
+  "portname": "MUNDRA",
+  "type": null
+ },
+ {
+  "depot": "INMUNDKMP",
+  "description": "KMS MONDIALLE PRIVATE LIMITED",
+  "portcode": "INMUN",
+  "portname": "MUNDRA",
+  "type": null
+ },
+ {
+  "depot": "INMUNDKMS",
+  "description": "KISHAN MARINE SERVICES LLP",
+  "portcode": "INMUN",
+  "portname": "MUNDRA",
+  "type": null
+ },
+ {
+  "depot": "INMUNDSCO",
+  "description": "SAURASHTRA FREIGHT PVT LTD",
+  "portcode": "INMUN",
+  "portname": "MUNDRA",
+  "type": null
+ },
+ {
+  "depot": "INMUNDSMS",
+  "description": "SEABIRD MARINE SERVICES PVT LTD",
+  "portcode": "INMUN",
+  "portname": "MUNDRA",
+  "type": null
+ },
+ {
+  "depot": "INMUNTPDP",
+  "description": "THIRD-PARTY DEPOTS FOR ON-HIRING CONTAINERS",
+  "portcode": "INMUN",
+  "portname": "MUNDRA",
   "type": null
  },
  {
@@ -791,15 +952,8 @@
   "type": null
  },
  {
-  "depot": "TESTING",
-  "description": "GHJL",
-  "portcode": "INNSA",
-  "portname": "",
-  "type": null
- },
- {
-  "depot": "TESTWARE",
-  "description": "WAREHOUSE",
+  "depot": "DPMN456032",
+  "description": "TESTING PURPOSE",
   "portcode": "INNSA",
   "portname": "NHAVA SHEVA,MUMBAI",
   "type": null
@@ -814,6 +968,20 @@
  {
   "depot": "SAISHINNSA",
   "description": "SAISHINNSA TEST",
+  "portcode": "INNSA",
+  "portname": "NHAVA SHEVA,MUMBAI",
+  "type": null
+ },
+ {
+  "depot": "TESTING",
+  "description": "GHJL",
+  "portcode": "INNSA",
+  "portname": "",
+  "type": null
+ },
+ {
+  "depot": "TESTWARE",
+  "description": "WAREHOUSE",
   "portcode": "INNSA",
   "portname": "NHAVA SHEVA,MUMBAI",
   "type": null
@@ -1929,174 +2097,6 @@
   "description": "LAUNCESTON DEPOT",
   "portcode": "AULST",
   "portname": "LAUNCESTON",
-  "type": null
- },
- {
-  "depot": "AULVODDDP",
-  "description": "LAVERTON DEPOT",
-  "portcode": "AULVO",
-  "portname": "LAVERTON",
-  "type": null
- },
- {
-  "depot": "AUMKYDDDP",
-  "description": "MACKAY DEPOT",
-  "portcode": "AUMKY",
-  "portname": "MACKAY",
-  "type": null
- },
- {
-  "depot": "AUNTLDCAR",
-  "description": "TOLL RES. CARRINGTON",
-  "portcode": "AUNTL",
-  "portname": "NEWCASTLE",
-  "type": null
- },
- {
-  "depot": "AUNTLDCFL",
-  "description": "CRAWFORDS FREIGHTLIN",
-  "portcode": "AUNTL",
-  "portname": "NEWCASTLE",
-  "type": null
- },
- {
-  "depot": "AUNTLDDDP",
-  "description": "NEWCASTLE DEPOT",
-  "portcode": "AUNTL",
-  "portname": "NEWCASTLE",
-  "type": null
- },
- {
-  "depot": "AUNTLDISD",
-  "description": "INFRABUILD STEEL",
-  "portcode": "AUNTL",
-  "portname": "NEWCASTLE",
-  "type": null
- },
- {
-  "depot": "AUNTLDKOO",
-  "description": "TOLL RES. KOORAGANG",
-  "portcode": "AUNTL",
-  "portname": "NEWCASTLE",
-  "type": null
- },
- {
-  "depot": "AUNTLDMCB",
-  "description": "MCS COOKS RIVER",
-  "portcode": "AUNTL",
-  "portname": "NEWCASTLE",
-  "type": null
- },
- {
-  "depot": "AUNTLDMYS",
-  "description": "MAYFIELD SWIRE STACK",
-  "portcode": "AUNTL",
-  "portname": "NEWCASTLE",
-  "type": null
- },
- {
-  "depot": "AUNTLDNCS",
-  "description": "NEWCASTLE CONTAINER",
-  "portcode": "AUNTL",
-  "portname": "NEWCASTLE",
-  "type": null
- },
- {
-  "depot": "AUNTLDPCS",
-  "description": "PORT CONTAINER SERV",
-  "portcode": "AUNTL",
-  "portname": "NEWCASTLE",
-  "type": null
- },
- {
-  "depot": "AUNTLDRWC",
-  "description": "MCGRATH REGIONAL LOGISTICS GROUP PTY LTD",
-  "portcode": "AUNTL",
-  "portname": "NEWCASTLE",
-  "type": null
- },
- {
-  "depot": "AUNTLDTOM",
-  "description": "TOLL RES. TOMAGO",
-  "portcode": "AUNTL",
-  "portname": "NEWCASTLE",
-  "type": null
- },
- {
-  "depot": "AUNTLISDP",
-  "description": "INFRABUILD STEEL (USE AUNTLDISD)",
-  "portcode": "AUNTL",
-  "portname": "NEWCASTLE",
-  "type": null
- },
- {
-  "depot": "AUPHEDQBE",
-  "description": "QUBE WEDGEFIELD",
-  "portcode": "AUPHE",
-  "portname": "PORT HEDLAND",
-  "type": null
- },
- {
-  "depot": "AUPKLDACF",
-  "description": "ACFS E-DEPOT",
-  "portcode": "AUPKL",
-  "portname": "PORT KEMBLA",
-  "type": null
- },
- {
-  "depot": "AUPKLDMCB",
-  "description": "MCS BANKSMEADOW",
-  "portcode": "AUPKL",
-  "portname": "PORT KEMBLA",
-  "type": null
- },
- {
-  "depot": "AUPTJDDDP",
-  "description": "PORTLAND DEPOT",
-  "portcode": "AUPTJ",
-  "portname": "PORTLAND",
-  "type": null
- },
- {
-  "depot": "AUPTLDDDP",
-  "description": "PORT ALMA DEPOT",
-  "portcode": "AUPTL",
-  "portname": "PORT ALMA",
-  "type": null
- },
- {
-  "depot": "AUROKDDDP",
-  "description": "ROCKHAMPTON DEPOT",
-  "portcode": "AUROK",
-  "portname": "ROCKHAMPTON",
-  "type": null
- },
- {
-  "depot": "AUSYDACFE",
-  "description": "ACFS E-LINK",
-  "portcode": "AUSYD",
-  "portname": "SYDNEY",
-  "type": null
- },
- {
-  "depot": "AUSYDDACF",
-  "description": "ACFS E DEPOT PORT BOTANY",
-  "portcode": "AUSYD",
-  "portname": "SYDNEY",
-  "type": null
- },
- {
-  "depot": "AUSYDDDDP",
-  "description": "DEPOT SYDNEY",
-  "portcode": "AUSYD",
-  "portname": "SYDNEY",
-  "type": null
- },
- {
-  "depot": "AUSYDDDEA",
-  "description": "E.A. ROCKE",
-  "portcode": "AUSYD",
-  "portname": "SYDNEY",
   "type": null
  }
 ]

@@ -950,6 +950,11 @@
   "comdtytype": "23"
  },
  {
+  "comdtycode": "0711",
+  "comdtyname": "Apple & Grapes $ amlmonds",
+  "comdtytype": "23"
+ },
+ {
   "comdtycode": "08081000",
   "comdtyname": "Apples",
   "comdtytype": "23"
@@ -1080,6 +1085,21 @@
   "comdtytype": "23"
  },
  {
+  "comdtycode": "0804",
+  "comdtyname": "Dates, figs, pineapples, avocados, guavas, mangoes and mangosteens, fresh or dried:",
+  "comdtytype": "23"
+ },
+ {
+  "comdtycode": "0804",
+  "comdtyname": "Dates, figs, pineapples, avocados, guavas, mangoes and mangosteens; fresh or dried",
+  "comdtytype": "13"
+ },
+ {
+  "comdtycode": "0804",
+  "comdtyname": "Dates, figs, pineapples, avocados, guavas, mangoes and mangosteens; fresh or dried",
+  "comdtytype": "COMM"
+ },
+ {
   "comdtycode": "19",
   "comdtyname": "Electronics, Computer Parts (TV or DVD or Audio etc)",
   "comdtytype": "23"
@@ -1120,6 +1140,11 @@
   "comdtytype": "23"
  },
  {
+  "comdtycode": "27",
+  "comdtyname": "Household Goods  or  Personal Effects",
+  "comdtytype": "23"
+ },
+ {
   "comdtycode": "00001",
   "comdtyname": "liquid's",
   "comdtytype": "1"
@@ -1142,6 +1167,11 @@
  {
   "comdtycode": "35",
   "comdtyname": "Metals - Steel or Iron",
+  "comdtytype": "23"
+ },
+ {
+  "comdtycode": "44",
+  "comdtyname": "Paper, Paper Products - Finished or Printed (Magazines, Books, Newsprint etc.)",
   "comdtytype": "23"
  },
  {

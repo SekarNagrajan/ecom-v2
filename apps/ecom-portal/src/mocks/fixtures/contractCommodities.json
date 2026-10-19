@@ -1,5 +1,12 @@
 [
  {
+  "id": 28792,
+  "corporateNo": "SVMCHA230003736",
+  "itemNo": 1,
+  "commodityCode": "11",
+  "statusFlag": "A"
+ },
+ {
   "id": 28939,
   "corporateNo": "SVMAGB230003788",
   "itemNo": 1,
@@ -11,6 +18,13 @@
   "corporateNo": "SVMMAN230003790",
   "itemNo": 1,
   "commodityCode": "04",
+  "statusFlag": "A"
+ },
+ {
+  "id": 28942,
+  "corporateNo": "SVMMAH230003799",
+  "itemNo": 1,
+  "commodityCode": "02",
   "statusFlag": "A"
  },
  {
@@ -168,6 +182,20 @@
   "statusFlag": "A"
  },
  {
+  "id": 29522,
+  "corporateNo": "SVMRRL230004117",
+  "itemNo": 1,
+  "commodityCode": "02",
+  "statusFlag": "A"
+ },
+ {
+  "id": 29523,
+  "corporateNo": "SVMRRL230004118",
+  "itemNo": 1,
+  "commodityCode": "07",
+  "statusFlag": "A"
+ },
+ {
   "id": 29570,
   "corporateNo": "SVMMAN230004190",
   "itemNo": 1,
@@ -259,6 +287,55 @@
   "statusFlag": "A"
  },
  {
+  "id": 35556,
+  "corporateNo": "SVMMAHA180002763",
+  "itemNo": 3904,
+  "commodityCode": "01",
+  "statusFlag": "A"
+ },
+ {
+  "id": 35557,
+  "corporateNo": "SVMMAHA180002763",
+  "itemNo": 3904,
+  "commodityCode": "02",
+  "statusFlag": "A"
+ },
+ {
+  "id": 35558,
+  "corporateNo": "SVMMAHA180002763",
+  "itemNo": 3904,
+  "commodityCode": "0711",
+  "statusFlag": "A"
+ },
+ {
+  "id": 35559,
+  "corporateNo": "SVMMAHA180002763",
+  "itemNo": 3904,
+  "commodityCode": "0802",
+  "statusFlag": "A"
+ },
+ {
+  "id": 35560,
+  "corporateNo": "SVMMAHA180002763",
+  "itemNo": 3904,
+  "commodityCode": "0808",
+  "statusFlag": "A"
+ },
+ {
+  "id": 35561,
+  "corporateNo": "SVMMAHA180002763",
+  "itemNo": 3904,
+  "commodityCode": "121212",
+  "statusFlag": "A"
+ },
+ {
+  "id": 35562,
+  "corporateNo": "SVMMAHA180002763",
+  "itemNo": 3904,
+  "commodityCode": "131313",
+  "statusFlag": "A"
+ },
+ {
   "id": 35720,
   "corporateNo": "SVMMAN250005444",
   "itemNo": 1,
@@ -270,6 +347,167 @@
   "corporateNo": "SVMMAN230004006",
   "itemNo": 1,
   "commodityCode": "92",
+  "statusFlag": "A"
+ },
+ {
+  "id": 36307,
+  "corporateNo": "SVMPOO260005530",
+  "itemNo": 1,
+  "commodityCode": "0711",
+  "statusFlag": "A"
+ },
+ {
+  "id": 36309,
+  "corporateNo": "SVMECO260005532",
+  "itemNo": 1,
+  "commodityCode": "01",
+  "statusFlag": "A"
+ },
+ {
+  "id": 36310,
+  "corporateNo": "SVMECO260005532",
+  "itemNo": 1,
+  "commodityCode": "1",
+  "statusFlag": "A"
+ },
+ {
+  "id": 36311,
+  "corporateNo": "SVMECO260005533",
+  "itemNo": 1,
+  "commodityCode": "01",
+  "statusFlag": "A"
+ },
+ {
+  "id": 36313,
+  "corporateNo": "SVMECO260005535",
+  "itemNo": 1,
+  "commodityCode": "02",
+  "statusFlag": "V"
+ },
+ {
+  "id": 36314,
+  "corporateNo": "SVMECO260005535",
+  "itemNo": 1,
+  "commodityCode": "02",
+  "statusFlag": "A"
+ },
+ {
+  "id": 36315,
+  "corporateNo": "SVMPOO260005536",
+  "itemNo": 1,
+  "commodityCode": "0711",
+  "statusFlag": "A"
+ },
+ {
+  "id": 36316,
+  "corporateNo": "SVMECO260005537",
+  "itemNo": 1,
+  "commodityCode": "02",
+  "statusFlag": "V"
+ },
+ {
+  "id": 36317,
+  "corporateNo": "SVMECO260005537",
+  "itemNo": 1,
+  "commodityCode": "02",
+  "statusFlag": "A"
+ },
+ {
+  "id": 36318,
+  "corporateNo": "SVMECO260005538",
+  "itemNo": 1,
+  "commodityCode": "02",
+  "statusFlag": "V"
+ },
+ {
+  "id": 36319,
+  "corporateNo": "SVMECO260005538",
+  "itemNo": 1,
+  "commodityCode": "02",
+  "statusFlag": "A"
+ },
+ {
+  "id": 36321,
+  "corporateNo": "SVMECO260005540",
+  "itemNo": 1,
+  "commodityCode": "02",
+  "statusFlag": "V"
+ },
+ {
+  "id": 36322,
+  "corporateNo": "SVMECO260005540",
+  "itemNo": 1,
+  "commodityCode": "02",
+  "statusFlag": "A"
+ },
+ {
+  "id": 36323,
+  "corporateNo": "SVMPGL260005541",
+  "itemNo": 1,
+  "commodityCode": "27",
+  "statusFlag": "V"
+ },
+ {
+  "id": 36324,
+  "corporateNo": "SVMPGL260005541",
+  "itemNo": 1,
+  "commodityCode": "27",
+  "statusFlag": "A"
+ },
+ {
+  "id": 37331,
+  "corporateNo": "SVMECO260005550",
+  "itemNo": 1,
+  "commodityCode": "02",
+  "statusFlag": "V"
+ },
+ {
+  "id": 37332,
+  "corporateNo": "SVMECO260005550",
+  "itemNo": 1,
+  "commodityCode": "02",
+  "statusFlag": "A"
+ },
+ {
+  "id": 37338,
+  "corporateNo": "SVMECO260005553",
+  "itemNo": 1,
+  "commodityCode": "02",
+  "statusFlag": "V"
+ },
+ {
+  "id": 37339,
+  "corporateNo": "SVMECO260005553",
+  "itemNo": 1,
+  "commodityCode": "02",
+  "statusFlag": "A"
+ },
+ {
+  "id": 37341,
+  "corporateNo": "SVMECO260005555",
+  "itemNo": 1,
+  "commodityCode": "02",
+  "statusFlag": "V"
+ },
+ {
+  "id": 37342,
+  "corporateNo": "SVMECO260005555",
+  "itemNo": 1,
+  "commodityCode": "02",
+  "statusFlag": "A"
+ },
+ {
+  "id": 37343,
+  "corporateNo": "SVMECO260005556",
+  "itemNo": 1,
+  "commodityCode": "02",
+  "statusFlag": "V"
+ },
+ {
+  "id": 37344,
+  "corporateNo": "SVMECO260005556",
+  "itemNo": 1,
+  "commodityCode": "02",
   "statusFlag": "A"
  },
  {
@@ -560,6 +798,13 @@
   "statusFlag": "A"
  },
  {
+  "id": 32749,
+  "corporateNo": "SVMMAN240004558",
+  "itemNo": 1,
+  "commodityCode": "0808",
+  "statusFlag": "A"
+ },
+ {
   "id": 32802,
   "corporateNo": "SVMMAN230003569",
   "itemNo": 1,
@@ -774,6 +1019,13 @@
   "corporateNo": "SVMECO240005079",
   "itemNo": 1,
   "commodityCode": "0802",
+  "statusFlag": "A"
+ },
+ {
+  "id": 34296,
+  "corporateNo": "SVMKAV240005086",
+  "itemNo": 1,
+  "commodityCode": "01",
   "statusFlag": "A"
  },
  {

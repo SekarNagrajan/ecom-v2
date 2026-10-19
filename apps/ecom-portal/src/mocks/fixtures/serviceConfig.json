@@ -6,7 +6,7 @@
   "cutoffvoyage": "4",
   "bound": "S",
   "svctype": "F",
-  "cutoffdate": "2018-03-23T11:16:55.915Z"
+  "cutoffdate": "2018-03-24T02:27:06.465Z"
  },
  {
   "id": 5,
@@ -15,7 +15,7 @@
   "cutoffvoyage": "456",
   "bound": "E",
   "svctype": "F",
-  "cutoffdate": "2018-04-01T23:54:55.915Z"
+  "cutoffdate": "2018-04-02T15:05:06.465Z"
  },
  {
   "id": 4,
@@ -24,7 +24,7 @@
   "cutoffvoyage": "456",
   "bound": "E",
   "svctype": "F",
-  "cutoffdate": "2017-11-11T23:09:55.915Z"
+  "cutoffdate": "2017-11-12T14:20:06.465Z"
  },
  {
   "id": 3,
@@ -33,7 +33,7 @@
   "cutoffvoyage": "342",
   "bound": "E",
   "svctype": "F",
-  "cutoffdate": "2018-04-01T23:54:55.915Z"
+  "cutoffdate": "2018-04-02T15:05:06.465Z"
  },
  {
   "id": 2,
@@ -42,7 +42,7 @@
   "cutoffvoyage": "454",
   "bound": "W",
   "svctype": "M",
-  "cutoffdate": "2017-11-09T23:09:55.915Z"
+  "cutoffdate": "2017-11-10T14:20:06.465Z"
  },
  {
   "id": 1,
@@ -51,6 +51,6 @@
   "cutoffvoyage": "346",
   "bound": "E",
   "svctype": "M",
-  "cutoffdate": "2017-11-02T23:54:55.915Z"
+  "cutoffdate": "2017-11-03T15:05:06.465Z"
  }
 ]

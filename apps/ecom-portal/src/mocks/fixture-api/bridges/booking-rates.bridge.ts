@@ -2,17 +2,16 @@
 /**
  * Available rates for the Master step rate picker.
  *
- * ecombooking only carries `rateno` / `salesagreedrate`, which are blank in the sample. The table is therefore
- * derived from the sampled bookings: one row per (lane, equipment type) actually booked, with the agreement
- * party as the customer. Amounts use the booking's salesagreedrate when populated, else the published tariff of
- * the lane from the Commercial `tariffs` fixture (rates.bridge), else a deterministic placeholder.
+ * Primary: one row per (lane, equipment) from sampled bookings (salesagreedrate / rateno when set).
+ * Fallback / fill: published Commercial `tariffs` for the same POL→POD so any showcase lane with a
+ * tariff shows rates even when the e-commerce sample never booked that pair.
  */
 import { db, type Row } from '../db';
 import { groupBy } from './booking-list.bridge';
 import { splitEquipmentCode } from './booking-lookups.bridge';
 import { extractPortCode, num, str } from './booking-shared.bridge';
 import { customerName } from './masters.bridge';
-import { bestTariffRow } from './rates.bridge';
+import { bestTariffRow, compareTariffRows, tariffPod, tariffPol } from './rates.bridge';
 
 export interface BookingRateOption {
   rateNo: string;
@@ -95,6 +94,60 @@ export function selectRates(all: LaneRate[], params: { origin: string; delivery:
   return all.filter(r => r.lane === lane).map(r => r.rate);
 }
 
+/**
+ * Published tariff lines for every (POL, POD, equipment) in the Commercial extract — one row per
+ * equipment type on the lane (cheapest / currently valid first via compareTariffRows).
+ */
+export function ratesFromTariffs(tariffs: Row[], now = Date.now()): LaneRate[] {
+  const sorted = [...tariffs].sort(compareTariffRows(now));
+  const seen = new Set<string>();
+  const out: LaneRate[] = [];
+  for (const t of sorted) {
+    const pol = tariffPol(t);
+    const pod = tariffPod(t);
+    const eqpType = str(t.eqptype).toUpperCase();
+    if (!pol || !pod || !eqpType) continue;
+    const status = str(t.status).toUpperCase();
+    if (status && status !== 'A') continue;
+    const laneKey = `${pol}>${pod}|${eqpType}`;
+    if (seen.has(laneKey)) continue;
+    seen.add(laneKey);
+    out.push({
+      lane: `${pol}>${pod}`,
+      rate: {
+        rateNo: str(t.rateno) || `RT-${pol}${pod}-${eqpType}`,
+        itemNo: String(out.length + 1),
+        amdNo: '0',
+        rateType: TARIFF_RATE_TYPE,
+        eqpType,
+        amount: num(t.localamount) ?? placeholderAmount(eqpType),
+        currency: str(t.currency) || RATE_CURRENCY,
+        customer: customerName(str(t.custcode)) || 'Published tariff',
+        customerCode: str(t.custcode),
+      },
+    });
+  }
+  return out;
+}
+
+/**
+ * Booking-derived rates for the lane first; Commercial tariffs fill any equipment types (or the whole
+ * lane) so Master Details shows rates for every tariff port pair from the testing DB.
+ */
 export function fixtureBookingRates(params: { origin: string; delivery: string }): BookingRateOption[] {
-  return selectRates(ratesFromRows(db.bookings, db.bookingCargo, db.bookingCust, db.tariffs), params);
+  const fromBookings = selectRates(
+    ratesFromRows(db.bookings, db.bookingCargo, db.bookingCust, db.tariffs),
+    params,
+  );
+  const fromTariffs = selectRates(ratesFromTariffs(db.tariffs), params);
+  if (!fromTariffs.length) return fromBookings;
+  if (!fromBookings.length) return fromTariffs;
+  const seen = new Set(fromBookings.map(r => r.eqpType.toUpperCase()));
+  const merged = [...fromBookings];
+  for (const r of fromTariffs) {
+    if (seen.has(r.eqpType.toUpperCase())) continue;
+    seen.add(r.eqpType.toUpperCase());
+    merged.push(r);
+  }
+  return merged;
 }

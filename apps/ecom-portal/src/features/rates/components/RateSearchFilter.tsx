@@ -107,17 +107,26 @@ export function RateSearchFilter({
     [t],
   );
 
+  // Commercial showcase ports (10 tariff lanes on LRP V2 Testing) — labels from i18n when present.
   const fallbackPorts = useMemo(
-    () => [
-      { value: "USNYC", label: t("options.ports.USNYC") },
-      { value: "SGSIN", label: t("options.ports.SGSIN") },
-      { value: "NLRTM", label: t("options.ports.NLRTM") },
-      { value: "CNSHA", label: t("options.ports.CNSHA") },
-      { value: "DEHAM", label: t("options.ports.DEHAM") },
-      { value: "INNSA", label: t("options.ports.INNSA") },
-      { value: "AEJEA", label: t("options.ports.AEJEA") },
-      { value: "AEDXB", label: t("options.ports.AEDXB") },
-    ],
+    () =>
+      [
+        "INNSA",
+        "AEJEA",
+        "SADMM",
+        "SGSIN",
+        "INMUN",
+        "INMAA",
+        "USILG",
+        "GTPBR",
+        "MYPKG",
+        "AEDXB",
+      ].map((value) => ({
+        value,
+        label: t(`options.ports.${value}`, {
+          defaultValue: value,
+        }),
+      })),
     [t],
   );
 

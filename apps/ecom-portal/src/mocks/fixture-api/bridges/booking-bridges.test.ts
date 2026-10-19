@@ -26,8 +26,14 @@ import {
   unNumberOptionsFromRows,
   type LookupSources,
 } from './booking-lookups.bridge';
-import { placeholderAmount, ratesFromRows, selectRates } from './booking-rates.bridge';
-import { buildRoute, routesFromLegs, selectRoutes } from './booking-routing.bridge';
+import {
+  fixtureBookingRates,
+  placeholderAmount,
+  ratesFromRows,
+  ratesFromTariffs,
+  selectRates,
+} from './booking-rates.bridge';
+import { buildRoute, fixtureBookingRoutes, routesFromLegs, selectRoutes } from './booking-routing.bridge';
 import { daysBetween, extractPortCode, mostCommon, toDateOnly, toDateTimeMinute } from './booking-shared.bridge';
 
 // ---------------------------------------------------------------------------------------------
@@ -235,6 +241,18 @@ describe('booking rates bridge', () => {
     expect(placeholderAmount('40DV')).toBe(1800);
     expect(placeholderAmount('RE20')).toBe(1500);
   });
+
+  it('builds rates from Commercial tariffs for lanes without bookings', () => {
+    const tariffRows = [
+      { rateno: 'T1', loadport: 'INMUN', dischport: 'SGSIN', eqptype: '20DC', localamount: 750, currency: 'USD', status: 'A', validfrom: '2026-01-01', validto: '2027-12-31', itemno: 1 },
+      { rateno: 'T1', loadport: 'INMUN', dischport: 'SGSIN', eqptype: '40HC', localamount: 1200, currency: 'USD', status: 'A', validfrom: '2026-01-01', validto: '2027-12-31', itemno: 2 },
+    ];
+    const rates = ratesFromTariffs(tariffRows);
+    expect(selectRates(rates, { origin: 'INMUN', delivery: 'SGSIN' })).toHaveLength(2);
+    expect(selectRates(rates, { origin: 'INNSA', delivery: 'AEJEA' })).toHaveLength(0);
+    expect(rates[0].rate.rateType).toBe('TAR');
+    expect(rates[0].rate.amount).toBe(750);
+  });
 });
 
 describe('booking detail bridge', () => {
@@ -374,5 +392,45 @@ describe('booking activity bridge', () => {
     expect(activityFromRows({ ...header, ebook_status: 'D' }, []).map(e => e.action)).toEqual(['Booking Created']);
     expect(activityFromRows({ ...header, ebook_status: 'V', declined_remarks: 'No space' }, []).at(-1)).toMatchObject({ action: 'Rejected', note: 'No space' });
     expect(activityFromRows({ ...header, ebook_status: 'I' }, []).at(-1)!.action).toBe('Cancelled');
+  });
+});
+
+/** Live LRP V2 Commercial + VSS fixtures — Master Details rates/schedules for showcase lanes. */
+describe('booking master details — live fixtures (rates + schedules)', () => {
+  const lanesWithSchedule = [
+    ['INNSA', 'AEJEA'],
+    ['INNSA', 'SGSIN'],
+    ['INMUN', 'SGSIN'],
+    ['INMAA', 'SGSIN'],
+    ['SGSIN', 'MYPKG'],
+    ['INMUN', 'AEJEA'],
+    ['AEJEA', 'INNSA'],
+  ] as const;
+  const tariffOnlyLanes = [
+    ['INNSA', 'SADMM'],
+    ['INMAA', 'SADMM'],
+    ['USILG', 'GTPBR'],
+  ] as const;
+
+  it('returns Commercial rates for every showcase tariff lane', () => {
+    for (const [origin, delivery] of [...lanesWithSchedule, ...tariffOnlyLanes]) {
+      const rates = fixtureBookingRates({ origin, delivery });
+      expect(rates.length, `${origin}>${delivery} rates`).toBeGreaterThan(0);
+      expect(rates.every(r => r.amount > 0 && r.eqpType && r.rateNo)).toBe(true);
+    }
+  });
+
+  it('returns VSS sailings as booking routes when the lane has schedules', () => {
+    for (const [origin, delivery] of lanesWithSchedule) {
+      const routes = fixtureBookingRoutes({
+        origin,
+        delivery,
+        cargoReadyDate: '2026-10-01',
+      });
+      expect(routes.length, `${origin}>${delivery} routes`).toBeGreaterThan(0);
+      expect(routes[0].polPortId).toBe(origin);
+      expect(routes[0].podPortId).toBe(delivery);
+      expect(routes[0].isDefaultRoute).toBe(true);
+    }
   });
 });

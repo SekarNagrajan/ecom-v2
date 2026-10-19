@@ -50,6 +50,7 @@ export function RatesRoute() {
     isQuoteDrawerOpen,
     quoteDefaults,
     handleCloseQuoteDrawer,
+    handleQuoteCreated,
     isShareMailOpen,
     shareMailRates,
     handleCloseShareMail,
@@ -156,6 +157,7 @@ export function RatesRoute() {
           open={isQuoteDrawerOpen}
           onClose={handleCloseQuoteDrawer}
           initialValues={quoteDefaults}
+          onCreated={handleQuoteCreated}
         />
 
         <ShareRateMailDrawer

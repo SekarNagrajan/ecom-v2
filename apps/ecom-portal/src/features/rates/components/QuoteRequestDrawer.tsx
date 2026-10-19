@@ -13,7 +13,7 @@ import { z } from "zod";
 
 import { useAiTextAssist } from "../../ai-assist";
 import { useCreateQuoteMutation } from "../api/rates.queries";
-import type { CreateQuoteInput } from "../types/rates.types";
+import type { CreateQuoteInput, QuoteDTO } from "../types/rates.types";
 
 const { Text } = Typography;
 
@@ -37,9 +37,9 @@ function createQuoteSchema(t: TFunction<"rates">) {
 }
 
 const DEFAULT_QUOTE_VALUES: CreateQuoteInput = {
-  originPort: "USNYC",
-  deliveryPort: "SGSIN",
-  eqpType: "40' High Cube Dry",
+  originPort: "INNSA",
+  deliveryPort: "AEJEA",
+  eqpType: "20' Standard Dry",
   eqpQuantity: 1,
   commodity: "General Merchandise",
   cargoWeightKg: 15000,
@@ -49,12 +49,15 @@ interface QuoteRequestDrawerProps {
   open: boolean;
   onClose: () => void;
   initialValues?: Partial<CreateQuoteInput>;
+  /** After a successful create — parent switches to Spot Quotes so the new row is visible. */
+  onCreated?: (quote: QuoteDTO) => void;
 }
 
 export function QuoteRequestDrawer({
   open,
   onClose,
   initialValues,
+  onCreated,
 }: QuoteRequestDrawerProps) {
   const { t } = useTranslation(["rates", "common", "modules"]);
   const toast = useToast();
@@ -102,6 +105,7 @@ export function QuoteRequestDrawer({
         );
         reset();
         onClose();
+        onCreated?.(newQuote);
       },
       onError: () => {
         toast.error(t("quoteRequest.toasts.error"));

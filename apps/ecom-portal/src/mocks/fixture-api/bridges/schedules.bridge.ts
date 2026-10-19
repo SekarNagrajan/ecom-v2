@@ -667,6 +667,28 @@ export function vesselPortCalls(code: string, t: ScheduleTables, now: Date): Ves
   return rows.sort((a, b) => a.at - b.at).map(r => r.call);
 }
 
+/**
+ * Vessel select options for the Schedules "By Vessel" tab.
+ * Built from codes that appear in sailing schedules, labelled with the vessel master name
+ * (`CODE - NAME`). Falls back to the bare code when the master has no row.
+ */
+export function listVesselSelectOptions(limit = 40): { value: string; label: string }[] {
+  const counts = new Map<string, number>();
+  for (const row of db.schedules ?? []) {
+    const code = up(row.vessel);
+    if (!code) continue;
+    counts.set(code, (counts.get(code) ?? 0) + 1);
+  }
+  return [...counts.entries()]
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .slice(0, limit)
+    .map(([code]) => {
+      const name = vesselName(code);
+      const label = name && name !== code ? `${code} - ${name}` : code;
+      return { value: code, label };
+    });
+}
+
 /** Vessel particulars from the vessel master plus the port-call sequence; null when the code is unknown everywhere. */
 export function getVesselDetails(vesselCode: string, options: ScheduleOptions = {}): VesselParticulars | null {
   const code = up(vesselCode);

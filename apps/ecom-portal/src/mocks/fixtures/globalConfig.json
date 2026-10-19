@@ -220,5 +220,245 @@
   "pathname": "ENABLE_SCHEDULE_CARD_CARBON",
   "pathvalue": "Y",
   "status": "C"
+ },
+ {
+  "id": 6584,
+  "pathname": "COMPANY_NAME_SIMILARITY_THRESHOLD",
+  "pathvalue": "0.7",
+  "status": "C"
+ },
+ {
+  "id": 6583,
+  "pathname": "CITY_NAME_SIMILARITY_THRESHOLD",
+  "pathvalue": "0.9",
+  "status": "C"
+ },
+ {
+  "id": 6581,
+  "pathname": "PAYMENT_hISTORY_DATE_INTERVAL",
+  "pathvalue": "31",
+  "status": "C"
+ },
+ {
+  "id": 6580,
+  "pathname": "Enable_Multiple_Haulage_Routing",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 6579,
+  "pathname": "ENABLE_SCHEDULE_DISCLAIMER",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 6574,
+  "pathname": "Enable_Live_Tracking",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 6573,
+  "pathname": "PAYMENT_hISTORY_COMP_CODE",
+  "pathvalue": "GWFEU",
+  "status": "C"
+ },
+ {
+  "id": 6572,
+  "pathname": "OprFromFeederScheduleForDummyVsl",
+  "pathvalue": "N",
+  "status": "C"
+ },
+ {
+  "id": 5573,
+  "pathname": "INCOMPLETED_REG_MENU_LIST",
+  "pathvalue": "BKG,SCH,TRK",
+  "status": "C"
+ },
+ {
+  "id": 5572,
+  "pathname": "ALLOW_INCOMPLETED_REG_TO_LOGIN",
+  "pathvalue": "N",
+  "status": "C"
+ },
+ {
+  "id": 5571,
+  "pathname": "CLEAR_TEMPERATURE_WHILE_COPY",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 5570,
+  "pathname": "TARIFFSUMMARY_CHECK_ROUTING",
+  "pathvalue": "N",
+  "status": "C"
+ },
+ {
+  "id": 5569,
+  "pathname": "AUTOJOB_SCHEDULE_SEARCH_TOP_LIMIT",
+  "pathvalue": "100",
+  "status": "C"
+ },
+ {
+  "id": 5568,
+  "pathname": "Enable_Stripe_Payment",
+  "pathvalue": "N",
+  "status": "C"
+ },
+ {
+  "id": 5567,
+  "pathname": "Stripe_Payment_Currency",
+  "pathvalue": "USD",
+  "status": "C"
+ },
+ {
+  "id": 5566,
+  "pathname": "Stripe_WebhookKey",
+  "pathvalue": "whsec_6sCXW9hZmNGfxKkidO3sPsZG6KK57uS1",
+  "status": "C"
+ },
+ {
+  "id": 5564,
+  "pathname": "Stripe_PublicKey",
+  "pathvalue": "pk_test_51TBxM03rKyeimnSotm804No1RcGw5bE2GeseFtVMr2IlzNaSHka3fLpLhlVPi4WeIeME66rxaorCWoNDaJJ6Jraz00UoiwnRxA",
+  "status": "C"
+ },
+ {
+  "id": 5563,
+  "pathname": "USE_CUSTOMETSTATEMENT_SP",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 5561,
+  "pathname": "EITHER_COMP_MOB_OR_PHONE_MANDATORY",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 5560,
+  "pathname": "ENABLE_COMP_MOBILE",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 5559,
+  "pathname": "LANDING_PAGE_NEW_BOOKING",
+  "pathvalue": "N",
+  "status": "C"
+ },
+ {
+  "id": 5558,
+  "pathname": "Enable_Multiple_DG_Details",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 5557,
+  "pathname": "CENTRALIZE_COPYRIGHTS",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 5556,
+  "pathname": "SHOW_DATA_WITH_NO_MOVEMENTENTRY",
+  "pathvalue": "N",
+  "status": "C"
+ },
+ {
+  "id": 5555,
+  "pathname": "REMOVE_COPYRIGHTS_LINK",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 5554,
+  "pathname": "COOKIE_MSG",
+  "pathvalue": "We use cookies to enhance your browsing experience. By continuing to use our website without changing your settings, you consent to our cookies policy.",
+  "status": "C"
+ },
+ {
+  "id": 5553,
+  "pathname": "SHOW_TRANSPORT_PLAN_AS_ETA_DATE",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 5552,
+  "pathname": "Disable_Common_Validation",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 5551,
+  "pathname": "ADD_TEMP_AND_HAULAGE_HOURS",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 5550,
+  "pathname": "Enable_Sout_With_Detail",
+  "pathvalue": "N",
+  "status": "C"
+ },
+ {
+  "id": 5549,
+  "pathname": "Fetch_Schedule_From_API",
+  "pathvalue": "N",
+  "status": "C"
+ },
+ {
+  "id": 5548,
+  "pathname": "ENABLE_SOUT_SCHEDULE_AUTOJOB",
+  "pathvalue": "N",
+  "status": "C"
+ },
+ {
+  "id": 5547,
+  "pathname": "SCHEDULE_TRANS_LAYOVER_PORT_BASED",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 5546,
+  "pathname": "CLEAR_MPCI_FOR_DIRECTBL",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 5545,
+  "pathname": "ENABLE_BOOKING_AP_CUST_ONLY",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 5544,
+  "pathname": "Enable_Sout_Log",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 5543,
+  "pathname": "Enable_PlatformAnalytics",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 5541,
+  "pathname": "Enable_TaxId",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 5540,
+  "pathname": "ENABLE_HSCODE_LENGTH_VALIDATION",
+  "pathvalue": "Y",
+  "status": "C"
+ },
+ {
+  "id": 5537,
+  "pathname": "HIDE_MASKPORT_CONTAINER",
+  "pathvalue": "N",
+  "status": "C"
  }
 ]

@@ -1,16 +1,18 @@
 // Modified by Sekar Nagarajan (2026-10-17 00:20)
 /**
- * Sailings for the Select Vessel/Route popup, built from ecombooking_leg (grouped by ebookno, ordered by
- * leg_no) with cut-offs from ecombooking_conf. One leg → Direct; legs with truck/rail → Multimodal;
- * otherwise Transshipment. Identical itineraries used by several bookings collapse into one route.
+ * Sailings for the Select Vessel/Route popup:
+ *  1. ecombooking_leg itineraries (when the sample booked that lane)
+ *  2. VSS allschedules_ecom via searchSchedules (Commercial / Rates showcase port pairs)
  *
- * Vessel, service and port names are resolved through the vessels / services / ports masters (code when unknown).
+ * Vessel, service and port names resolve through the vessels / services / ports masters.
  */
 import type { BookingRouteLeg, SelectedRoute } from '../../../features/booking/types/booking.types';
+import { mapScheduleToSelectedRoute } from '../../../features/booking/utils/map-schedule-to-master-details';
 import { db, type Row } from '../db';
 import { groupBy } from './booking-list.bridge';
 import { daysBetween, extractPortCode, str, toDateTimeMinute } from './booking-shared.bridge';
 import { portName, serviceName, vesselName } from './masters.bridge';
+import { searchSchedules } from './schedules.bridge';
 
 export interface BookingRoutingSearchParams {
   origin: string;
@@ -122,7 +124,7 @@ export function routesFromLegs(legs: Row[], cutoffs: Row[]): SelectedRoute[] {
 
 /**
  * Routes for a POL/POD search. Exact lane first; when the sample has none, routes touching either port;
- * when still none, every sampled route (the demo data only covers a handful of lanes — see the report).
+ * when still none, every sampled route (legacy demo fallback).
  * Sailings departing on/after the cargo-ready date are preferred; the earliest is flagged as default.
  */
 export function selectRoutes(all: SelectedRoute[], params: BookingRoutingSearchParams): SelectedRoute[] {
@@ -137,6 +139,36 @@ export function selectRoutes(all: SelectedRoute[], params: BookingRoutingSearchP
   return chosen.map((r, i) => ({ ...r, isDefaultRoute: i === 0 }));
 }
 
+/** VSS point-to-point sailings for the lane, mapped into SelectedRoute (same shape as booking legs). */
+export function routesFromSchedules(params: BookingRoutingSearchParams): SelectedRoute[] {
+  const pol = extractPortCode(params.origin);
+  const pod = extractPortCode(params.delivery);
+  if (!pol || !pod) return [];
+  const ready = params.cargoReadyDate?.trim();
+  const items = searchSchedules({
+    searchType: 'POINT_TO_POINT',
+    polCode: pol,
+    podCode: pod,
+    fromDate: ready || undefined,
+  });
+  return items.map(mapScheduleToSelectedRoute);
+}
+
+/**
+ * Prefer exact booking-leg itineraries for the lane; otherwise VSS schedules for that POL→POD.
+ * Avoids showing unrelated sample routes when Commercial has a tariff but no ecom booking on the lane.
+ */
 export function fixtureBookingRoutes(params: BookingRoutingSearchParams): SelectedRoute[] {
-  return selectRoutes(routesFromLegs(db.bookingLeg, db.bookingConf), params);
+  const pol = extractPortCode(params.origin);
+  const pod = extractPortCode(params.delivery);
+  const fromLegs = selectRoutes(routesFromLegs(db.bookingLeg, db.bookingConf), params);
+  const exactLegs = fromLegs.filter(r => r.polPortId === pol && r.podPortId === pod);
+  if (exactLegs.length) return exactLegs;
+
+  const fromSchedules = routesFromSchedules(params);
+  if (fromSchedules.length) {
+    return fromSchedules.map((r, i) => ({ ...r, isDefaultRoute: i === 0 }));
+  }
+
+  return fromLegs;
 }

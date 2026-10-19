@@ -6,7 +6,7 @@
   "description": "When on, a registration must carry a reCAPTCHA response token and it is verified with Google before anything is stored. While off the token is neither required nor checked.",
   "isEnabled": false,
   "status": "A",
-  "createdAt": "2026-10-09T08:28:57.112Z",
+  "createdAt": "2026-10-09T23:39:07.662Z",
   "createdBy": "SYSTEM",
   "updatedAt": null,
   "updatedBy": null
@@ -18,7 +18,7 @@
   "description": "When on, the Shipping Instructions overview lists only confirmed bookings. When off, it lists accepted and confirmed bookings.",
   "isEnabled": false,
   "status": "A",
-  "createdAt": "2026-10-08T16:56:24.518Z",
+  "createdAt": "2026-10-09T08:06:35.068Z",
   "createdBy": "SYSTEM",
   "updatedAt": null,
   "updatedBy": null
@@ -30,7 +30,7 @@
   "description": "When on, the booking list does not offer the CANCEL action on a booking the agency has accepted but not yet confirmed. Note this one reads the opposite way round to the others: on means the action is hidden.",
   "isEnabled": true,
   "status": "A",
-  "createdAt": "2026-10-08T16:56:24.515Z",
+  "createdAt": "2026-10-09T08:06:35.065Z",
   "createdBy": "SYSTEM",
   "updatedAt": null,
   "updatedBy": null
@@ -42,7 +42,7 @@
   "description": "When on, a confirmed booking can be cancelled: the booking list offers the CANCEL action on it, and a booking whose cancellation request is still with the agency reads as Cancellation Submitted. Requires the ecom_statusdescription row for status X - see the script header.",
   "isEnabled": false,
   "status": "A",
-  "createdAt": "2026-10-08T16:56:24.512Z",
+  "createdAt": "2026-10-09T08:06:35.062Z",
   "createdBy": "SYSTEM",
   "updatedAt": null,
   "updatedBy": null
@@ -54,7 +54,7 @@
   "description": "When on, a confirmed booking can be amended: the booking list offers the AMEND action on it, and hides the confirmed row while an amendment is in flight so the submitted row is the only one shown.",
   "isEnabled": true,
   "status": "A",
-  "createdAt": "2026-10-08T16:56:24.508Z",
+  "createdAt": "2026-10-09T08:06:35.058Z",
   "createdBy": "SYSTEM",
   "updatedAt": null,
   "updatedBy": null
@@ -66,7 +66,7 @@
   "description": "When on, every carrier booking the agency rejected reads as Cancelled on the booking list. When off, only those raised online do; a rejected carrier booking with no online reference is left off the list entirely.",
   "isEnabled": false,
   "status": "A",
-  "createdAt": "2026-10-08T16:56:24.505Z",
+  "createdAt": "2026-10-09T08:06:35.055Z",
   "createdBy": "SYSTEM",
   "updatedAt": null,
   "updatedBy": null
@@ -78,7 +78,7 @@
   "description": "When on, a booking at one of the configured ports asks the customer which agency owns it, and that choice overrides the agency derived from the port. When off, no port offers a choice.",
   "isEnabled": true,
   "status": "A",
-  "createdAt": "2026-10-08T16:56:24.505Z",
+  "createdAt": "2026-10-09T08:06:35.055Z",
   "createdBy": "SYSTEM",
   "updatedAt": null,
   "updatedBy": null
@@ -90,7 +90,7 @@
   "description": "When on, the booking flow offers cargo protect where the voyage allows it. When off, no voyage offers it and the Cargo Protect step shows nothing.",
   "isEnabled": true,
   "status": "A",
-  "createdAt": "2026-10-08T16:56:24.505Z",
+  "createdAt": "2026-10-09T08:06:35.055Z",
   "createdBy": "SYSTEM",
   "updatedAt": null,
   "updatedBy": null
@@ -102,7 +102,7 @@
   "description": "When on, the controlling agency for a port is resolved per sail date through the ecommerce integration API instead of being taken from the agency master.",
   "isEnabled": true,
   "status": "A",
-  "createdAt": "2026-10-08T16:56:24.502Z",
+  "createdAt": "2026-10-09T08:06:35.052Z",
   "createdBy": "SYSTEM",
   "updatedAt": null,
   "updatedBy": null
@@ -114,7 +114,7 @@
   "description": "On: only vesseltype MAINLINE is returned. Off: every vessel type.",
   "isEnabled": false,
   "status": "A",
-  "createdAt": "2026-10-08T16:56:24.498Z",
+  "createdAt": "2026-10-09T08:06:35.048Z",
   "createdBy": "SYSTEM",
   "updatedAt": null,
   "updatedBy": null
@@ -126,7 +126,7 @@
   "description": "When enabled, restricts the result to sea ports by adding the porttype = 'P' filter. Independent of the routing setting.",
   "isEnabled": false,
   "status": "A",
-  "createdAt": "2026-10-08T16:56:24.495Z",
+  "createdAt": "2026-10-09T08:06:35.045Z",
   "createdBy": "SYSTEM",
   "updatedAt": null,
   "updatedBy": null
@@ -138,7 +138,7 @@
   "description": "When enabled, ports come from routings active today (routedetail joined to ports); when disabled, from the plain ports master.",
   "isEnabled": true,
   "status": "A",
-  "createdAt": "2026-10-08T16:56:24.495Z",
+  "createdAt": "2026-10-09T08:06:35.045Z",
   "createdBy": "SYSTEM",
   "updatedAt": null,
   "updatedBy": null

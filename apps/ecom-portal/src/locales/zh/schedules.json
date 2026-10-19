@@ -57,13 +57,14 @@
       "SGSIN": "SGSIN - 新加坡"
     },
     "vessels": {
-      "AGEX": "AGEX - Antigravity Express",
-      "SMVY": "SMVY - Solverminds Voyager",
-      "GLHZ": "GLHZ - Global Horizon",
-      "OCPN": "OCPN - Ocean Pioneer",
-      "PCMR": "PCMR - Pacific Merchant",
-      "MRST": "MRST - Merchant Star",
-      "ATBR": "ATBR - Atlantic Bridge"
+      "KCA": "KCA - KMTC CHENNAI",
+      "ACH": "ACH - APL CHARLESTON",
+      "SNA": "SNA - ESL SANA",
+      "HLA": "HLA - VESSEL KABIR",
+      "DAB": "DAB - ESL DACHAN BAY",
+      "EMLS": "EMLS - EVERGREEN VESSELS",
+      "MRK": "MRK - MAERSK KARACHI",
+      "RNR": "RNR - EVER GREEN"
     }
   },
   "viewModes": {

@@ -2,7 +2,7 @@
  {
   "cid": "20981",
   "ebookno": "BKON4575",
-  "bkgCutoff": "2024-07-25T05:44:55.915Z",
+  "bkgCutoff": "2024-07-25T20:55:06.465Z",
   "docCutoff": null,
   "vgmCutoff": null,
   "bbroroCutoff": null,
@@ -12,7 +12,7 @@
  {
   "cid": "20983",
   "ebookno": "BKON4577",
-  "bkgCutoff": "2024-07-25T05:44:55.915Z",
+  "bkgCutoff": "2024-07-25T20:55:06.465Z",
   "docCutoff": null,
   "vgmCutoff": null,
   "bbroroCutoff": null,
@@ -22,1011 +22,1691 @@
  {
   "cid": "21136",
   "ebookno": "BKON6981",
-  "bkgCutoff": "2026-07-23T05:44:55.915Z",
-  "docCutoff": "2026-07-30T06:44:55.915Z",
-  "vgmCutoff": "2026-07-30T09:44:55.915Z",
+  "bkgCutoff": "2026-07-23T20:55:06.465Z",
+  "docCutoff": "2026-07-30T21:55:06.465Z",
+  "vgmCutoff": "2026-07-31T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-07-30T06:04:55.915Z"
+  "portentryCutoff": "2026-07-30T21:15:06.465Z"
  },
  {
   "cid": "21139",
   "ebookno": "BKON6985",
-  "bkgCutoff": "2026-07-30T05:44:55.915Z",
-  "docCutoff": "2026-08-06T06:44:55.915Z",
-  "vgmCutoff": "2026-08-06T09:44:55.915Z",
+  "bkgCutoff": "2026-07-30T20:55:06.465Z",
+  "docCutoff": "2026-08-06T21:55:06.465Z",
+  "vgmCutoff": "2026-08-07T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-08-06T06:04:55.915Z"
+  "portentryCutoff": "2026-08-06T21:15:06.465Z"
  },
  {
   "cid": "21177",
   "ebookno": "BKON7036",
-  "bkgCutoff": "2026-07-30T05:44:55.915Z",
-  "docCutoff": "2026-08-06T06:44:55.915Z",
-  "vgmCutoff": "2026-08-06T09:44:55.915Z",
+  "bkgCutoff": "2026-07-30T20:55:06.465Z",
+  "docCutoff": "2026-08-06T21:55:06.465Z",
+  "vgmCutoff": "2026-08-07T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-08-06T06:04:55.915Z"
+  "portentryCutoff": "2026-08-06T21:15:06.465Z"
+ },
+ {
+  "cid": "21197",
+  "ebookno": "BKON7128",
+  "bkgCutoff": "2026-09-17T20:55:06.465Z",
+  "docCutoff": "2026-09-24T21:55:06.465Z",
+  "vgmCutoff": "2026-09-25T00:55:06.465Z",
+  "bbroroCutoff": null,
+  "hazCutoff": null,
+  "portentryCutoff": "2026-09-24T21:15:06.465Z"
+ },
+ {
+  "cid": "21198",
+  "ebookno": "BKON7129",
+  "bkgCutoff": "2026-09-17T20:55:06.465Z",
+  "docCutoff": "2026-09-24T21:55:06.465Z",
+  "vgmCutoff": "2026-09-25T00:55:06.465Z",
+  "bbroroCutoff": null,
+  "hazCutoff": null,
+  "portentryCutoff": "2026-09-24T21:15:06.465Z"
+ },
+ {
+  "cid": "21199",
+  "ebookno": "BKON7130",
+  "bkgCutoff": "2026-09-17T20:55:06.465Z",
+  "docCutoff": "2026-09-24T21:55:06.465Z",
+  "vgmCutoff": "2026-09-25T00:55:06.465Z",
+  "bbroroCutoff": null,
+  "hazCutoff": null,
+  "portentryCutoff": "2026-09-24T21:15:06.465Z"
+ },
+ {
+  "cid": "21200",
+  "ebookno": "BKON7131",
+  "bkgCutoff": "2026-09-17T20:55:06.465Z",
+  "docCutoff": "2026-09-24T21:55:06.465Z",
+  "vgmCutoff": "2026-09-25T00:55:06.465Z",
+  "bbroroCutoff": null,
+  "hazCutoff": null,
+  "portentryCutoff": "2026-09-24T21:15:06.465Z"
+ },
+ {
+  "cid": "21201",
+  "ebookno": "BKON7132",
+  "bkgCutoff": "2026-09-17T20:55:06.465Z",
+  "docCutoff": "2026-09-24T21:55:06.465Z",
+  "vgmCutoff": "2026-09-25T00:55:06.465Z",
+  "bbroroCutoff": null,
+  "hazCutoff": null,
+  "portentryCutoff": "2026-09-24T21:15:06.465Z"
+ },
+ {
+  "cid": "21202",
+  "ebookno": "BKON7133",
+  "bkgCutoff": "2026-09-17T20:55:06.465Z",
+  "docCutoff": "2026-09-24T21:55:06.465Z",
+  "vgmCutoff": "2026-09-25T00:55:06.465Z",
+  "bbroroCutoff": null,
+  "hazCutoff": null,
+  "portentryCutoff": "2026-09-24T21:15:06.465Z"
+ },
+ {
+  "cid": "21203",
+  "ebookno": "BKON7134",
+  "bkgCutoff": "2026-09-17T20:55:06.465Z",
+  "docCutoff": "2026-09-24T21:55:06.465Z",
+  "vgmCutoff": "2026-09-25T00:55:06.465Z",
+  "bbroroCutoff": null,
+  "hazCutoff": null,
+  "portentryCutoff": "2026-09-24T21:15:06.465Z"
+ },
+ {
+  "cid": "21205",
+  "ebookno": "BKON7135",
+  "bkgCutoff": "2026-09-17T20:55:06.465Z",
+  "docCutoff": "2026-09-24T21:55:06.465Z",
+  "vgmCutoff": "2026-09-25T00:55:06.465Z",
+  "bbroroCutoff": null,
+  "hazCutoff": null,
+  "portentryCutoff": "2026-09-24T21:15:06.465Z"
+ },
+ {
+  "cid": "21206",
+  "ebookno": "BKON7136",
+  "bkgCutoff": "2026-09-17T20:55:06.465Z",
+  "docCutoff": "2026-09-24T21:55:06.465Z",
+  "vgmCutoff": "2026-09-25T00:55:06.465Z",
+  "bbroroCutoff": null,
+  "hazCutoff": null,
+  "portentryCutoff": "2026-09-24T21:15:06.465Z"
+ },
+ {
+  "cid": "21207",
+  "ebookno": "BKON7137",
+  "bkgCutoff": "2026-09-17T20:55:06.465Z",
+  "docCutoff": "2026-09-24T21:55:06.465Z",
+  "vgmCutoff": "2026-09-25T00:55:06.465Z",
+  "bbroroCutoff": null,
+  "hazCutoff": null,
+  "portentryCutoff": "2026-09-24T21:15:06.465Z"
+ },
+ {
+  "cid": "21208",
+  "ebookno": "BKON7145",
+  "bkgCutoff": "2026-09-17T20:55:06.465Z",
+  "docCutoff": "2026-09-24T21:55:06.465Z",
+  "vgmCutoff": "2026-09-25T00:55:06.465Z",
+  "bbroroCutoff": null,
+  "hazCutoff": null,
+  "portentryCutoff": "2026-09-24T21:15:06.465Z"
+ },
+ {
+  "cid": "21209",
+  "ebookno": "BKON7146",
+  "bkgCutoff": "2026-09-17T20:55:06.465Z",
+  "docCutoff": "2026-09-24T21:55:06.465Z",
+  "vgmCutoff": "2026-09-25T00:55:06.465Z",
+  "bbroroCutoff": null,
+  "hazCutoff": null,
+  "portentryCutoff": "2026-09-24T21:15:06.465Z"
+ },
+ {
+  "cid": "21210",
+  "ebookno": "BKON7147",
+  "bkgCutoff": "2026-09-17T20:55:06.465Z",
+  "docCutoff": "2026-09-24T21:55:06.465Z",
+  "vgmCutoff": "2026-09-25T00:55:06.465Z",
+  "bbroroCutoff": null,
+  "hazCutoff": null,
+  "portentryCutoff": "2026-09-24T21:15:06.465Z"
+ },
+ {
+  "cid": "21211",
+  "ebookno": "BKON7149",
+  "bkgCutoff": "2026-09-17T20:55:06.465Z",
+  "docCutoff": "2026-09-24T21:55:06.465Z",
+  "vgmCutoff": "2026-09-25T00:55:06.465Z",
+  "bbroroCutoff": null,
+  "hazCutoff": null,
+  "portentryCutoff": "2026-09-24T21:15:06.465Z"
  },
  {
   "cid": "21212",
   "ebookno": "BKON7150",
-  "bkgCutoff": "2026-09-17T05:44:55.915Z",
-  "docCutoff": "2026-09-24T06:44:55.915Z",
-  "vgmCutoff": "2026-09-24T09:44:55.915Z",
+  "bkgCutoff": "2026-09-17T20:55:06.465Z",
+  "docCutoff": "2026-09-24T21:55:06.465Z",
+  "vgmCutoff": "2026-09-25T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-09-24T06:04:55.915Z"
+  "portentryCutoff": "2026-09-24T21:15:06.465Z"
  },
  {
   "cid": "21213",
   "ebookno": "BKON7152",
-  "bkgCutoff": "2026-09-17T05:44:55.915Z",
-  "docCutoff": "2026-09-24T06:44:55.915Z",
-  "vgmCutoff": "2026-09-24T09:44:55.915Z",
+  "bkgCutoff": "2026-09-17T20:55:06.465Z",
+  "docCutoff": "2026-09-24T21:55:06.465Z",
+  "vgmCutoff": "2026-09-25T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-09-24T06:04:55.915Z"
+  "portentryCutoff": "2026-09-24T21:15:06.465Z"
+ },
+ {
+  "cid": "21214",
+  "ebookno": "BKON7153",
+  "bkgCutoff": "2026-09-24T20:55:06.465Z",
+  "docCutoff": "2026-10-01T21:55:06.465Z",
+  "vgmCutoff": "2026-10-02T00:55:06.465Z",
+  "bbroroCutoff": null,
+  "hazCutoff": null,
+  "portentryCutoff": "2026-10-01T21:15:06.465Z"
  },
  {
   "cid": "21215",
   "ebookno": "BKON7154",
-  "bkgCutoff": "2026-09-24T05:44:55.915Z",
-  "docCutoff": "2026-10-01T06:44:55.915Z",
-  "vgmCutoff": "2026-10-01T09:44:55.915Z",
+  "bkgCutoff": "2026-09-24T20:55:06.465Z",
+  "docCutoff": "2026-10-01T21:55:06.465Z",
+  "vgmCutoff": "2026-10-02T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-10-01T06:04:55.915Z"
+  "portentryCutoff": "2026-10-01T21:15:06.465Z"
+ },
+ {
+  "cid": "21216",
+  "ebookno": "BKON7155",
+  "bkgCutoff": "2026-10-15T20:55:06.465Z",
+  "docCutoff": "2026-10-22T21:55:06.465Z",
+  "vgmCutoff": "2026-10-23T00:55:06.465Z",
+  "bbroroCutoff": null,
+  "hazCutoff": null,
+  "portentryCutoff": "2026-10-22T21:15:06.465Z"
  },
  {
   "cid": "21217",
   "ebookno": "BKON7156",
-  "bkgCutoff": "2026-09-24T05:44:55.915Z",
-  "docCutoff": "2026-10-01T06:44:55.915Z",
-  "vgmCutoff": "2026-10-01T09:44:55.915Z",
+  "bkgCutoff": "2026-09-24T20:55:06.465Z",
+  "docCutoff": "2026-10-01T21:55:06.465Z",
+  "vgmCutoff": "2026-10-02T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-10-01T06:04:55.915Z"
+  "portentryCutoff": "2026-10-01T21:15:06.465Z"
  },
  {
   "cid": "21218",
   "ebookno": "BKON7157",
-  "bkgCutoff": "2026-09-24T05:44:55.915Z",
-  "docCutoff": "2026-10-01T06:44:55.915Z",
-  "vgmCutoff": "2026-10-01T09:44:55.915Z",
+  "bkgCutoff": "2026-09-24T20:55:06.465Z",
+  "docCutoff": "2026-10-01T21:55:06.465Z",
+  "vgmCutoff": "2026-10-02T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-10-01T06:04:55.915Z"
+  "portentryCutoff": "2026-10-01T21:15:06.465Z"
+ },
+ {
+  "cid": "21219",
+  "ebookno": "BKON7158",
+  "bkgCutoff": "2026-09-24T20:55:06.465Z",
+  "docCutoff": "2026-10-01T21:55:06.465Z",
+  "vgmCutoff": "2026-10-02T00:55:06.465Z",
+  "bbroroCutoff": null,
+  "hazCutoff": null,
+  "portentryCutoff": "2026-10-01T21:15:06.465Z"
+ },
+ {
+  "cid": "21220",
+  "ebookno": "BKON7159",
+  "bkgCutoff": "2026-10-15T20:55:06.465Z",
+  "docCutoff": "2026-10-22T21:55:06.465Z",
+  "vgmCutoff": "2026-10-23T00:55:06.465Z",
+  "bbroroCutoff": null,
+  "hazCutoff": null,
+  "portentryCutoff": "2026-10-22T21:15:06.465Z"
  },
  {
   "cid": "21221",
   "ebookno": "BKON7160",
-  "bkgCutoff": "2026-10-15T05:44:55.915Z",
-  "docCutoff": "2026-10-22T06:44:55.915Z",
-  "vgmCutoff": "2026-10-22T09:44:55.915Z",
+  "bkgCutoff": "2026-10-15T20:55:06.465Z",
+  "docCutoff": "2026-10-22T21:55:06.465Z",
+  "vgmCutoff": "2026-10-23T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-10-22T06:04:55.915Z"
+  "portentryCutoff": "2026-10-22T21:15:06.465Z"
  },
  {
   "cid": "21222",
   "ebookno": "BKON7161",
-  "bkgCutoff": "2026-10-15T05:44:55.915Z",
-  "docCutoff": "2026-10-22T06:44:55.915Z",
-  "vgmCutoff": "2026-10-22T09:44:55.915Z",
+  "bkgCutoff": "2026-10-15T20:55:06.465Z",
+  "docCutoff": "2026-10-22T21:55:06.465Z",
+  "vgmCutoff": "2026-10-23T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-10-22T06:04:55.915Z"
+  "portentryCutoff": "2026-10-22T21:15:06.465Z"
  },
  {
   "cid": "21223",
   "ebookno": "BKON7162",
-  "bkgCutoff": "2026-10-15T05:44:55.915Z",
-  "docCutoff": "2026-10-22T06:44:55.915Z",
-  "vgmCutoff": "2026-10-22T09:44:55.915Z",
+  "bkgCutoff": "2026-10-15T20:55:06.465Z",
+  "docCutoff": "2026-10-22T21:55:06.465Z",
+  "vgmCutoff": "2026-10-23T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-10-22T06:04:55.915Z"
+  "portentryCutoff": "2026-10-22T21:15:06.465Z"
  },
  {
   "cid": "21224",
   "ebookno": "BKON7163",
-  "bkgCutoff": "2026-10-15T05:44:55.915Z",
-  "docCutoff": "2026-10-22T06:44:55.915Z",
-  "vgmCutoff": "2026-10-22T09:44:55.915Z",
+  "bkgCutoff": "2026-10-15T20:55:06.465Z",
+  "docCutoff": "2026-10-22T21:55:06.465Z",
+  "vgmCutoff": "2026-10-23T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-10-22T06:04:55.915Z"
+  "portentryCutoff": "2026-10-22T21:15:06.465Z"
  },
  {
   "cid": "21225",
   "ebookno": "BKON7164",
-  "bkgCutoff": "2026-11-19T05:44:55.915Z",
-  "docCutoff": "2026-11-26T06:44:55.915Z",
-  "vgmCutoff": "2026-11-26T09:44:55.915Z",
+  "bkgCutoff": "2026-11-19T20:55:06.465Z",
+  "docCutoff": "2026-11-26T21:55:06.465Z",
+  "vgmCutoff": "2026-11-27T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-11-26T06:04:55.915Z"
+  "portentryCutoff": "2026-11-26T21:15:06.465Z"
  },
  {
   "cid": "21227",
   "ebookno": "BKON7165",
-  "bkgCutoff": "2026-10-15T05:44:55.915Z",
-  "docCutoff": "2026-10-22T06:44:55.915Z",
-  "vgmCutoff": "2026-10-22T09:44:55.915Z",
+  "bkgCutoff": "2026-10-15T20:55:06.465Z",
+  "docCutoff": "2026-10-22T21:55:06.465Z",
+  "vgmCutoff": "2026-10-23T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-10-22T06:04:55.915Z"
+  "portentryCutoff": "2026-10-22T21:15:06.465Z"
  },
  {
   "cid": "21228",
   "ebookno": "BKON7166",
-  "bkgCutoff": "2026-10-15T05:44:55.915Z",
-  "docCutoff": "2026-10-22T06:44:55.915Z",
-  "vgmCutoff": "2026-10-22T09:44:55.915Z",
+  "bkgCutoff": "2026-10-15T20:55:06.465Z",
+  "docCutoff": "2026-10-22T21:55:06.465Z",
+  "vgmCutoff": "2026-10-23T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-10-22T06:04:55.915Z"
+  "portentryCutoff": "2026-10-22T21:15:06.465Z"
  },
  {
   "cid": "21229",
   "ebookno": "BKON7167",
-  "bkgCutoff": "2026-10-15T05:44:55.915Z",
-  "docCutoff": "2026-10-22T06:44:55.915Z",
-  "vgmCutoff": "2026-10-22T09:44:55.915Z",
+  "bkgCutoff": "2026-10-15T20:55:06.465Z",
+  "docCutoff": "2026-10-22T21:55:06.465Z",
+  "vgmCutoff": "2026-10-23T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-10-22T06:04:55.915Z"
+  "portentryCutoff": "2026-10-22T21:15:06.465Z"
  },
  {
   "cid": "21230",
   "ebookno": "BKON7168",
-  "bkgCutoff": "2026-11-19T05:44:55.915Z",
-  "docCutoff": "2026-11-26T06:44:55.915Z",
-  "vgmCutoff": "2026-11-26T09:44:55.915Z",
+  "bkgCutoff": "2026-11-19T20:55:06.465Z",
+  "docCutoff": "2026-11-26T21:55:06.465Z",
+  "vgmCutoff": "2026-11-27T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-11-26T06:04:55.915Z"
+  "portentryCutoff": "2026-11-26T21:15:06.465Z"
  },
  {
   "cid": "21231",
   "ebookno": "BKON7169",
-  "bkgCutoff": "2026-11-19T05:44:55.915Z",
-  "docCutoff": "2026-11-26T06:44:55.915Z",
-  "vgmCutoff": "2026-11-26T09:44:55.915Z",
+  "bkgCutoff": "2026-11-19T20:55:06.465Z",
+  "docCutoff": "2026-11-26T21:55:06.465Z",
+  "vgmCutoff": "2026-11-27T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-11-26T06:04:55.915Z"
+  "portentryCutoff": "2026-11-26T21:15:06.465Z"
  },
  {
   "cid": "21232",
   "ebookno": "BKON7170",
-  "bkgCutoff": "2026-11-19T05:44:55.915Z",
-  "docCutoff": "2026-11-26T06:44:55.915Z",
-  "vgmCutoff": "2026-11-26T09:44:55.915Z",
+  "bkgCutoff": "2026-11-19T20:55:06.465Z",
+  "docCutoff": "2026-11-26T21:55:06.465Z",
+  "vgmCutoff": "2026-11-27T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-11-26T06:04:55.915Z"
+  "portentryCutoff": "2026-11-26T21:15:06.465Z"
  },
  {
   "cid": "21233",
   "ebookno": "BKON7171",
-  "bkgCutoff": "2026-10-15T05:44:55.915Z",
-  "docCutoff": "2026-10-22T06:44:55.915Z",
-  "vgmCutoff": "2026-10-22T09:44:55.915Z",
+  "bkgCutoff": "2026-10-15T20:55:06.465Z",
+  "docCutoff": "2026-10-22T21:55:06.465Z",
+  "vgmCutoff": "2026-10-23T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-10-22T06:04:55.915Z"
+  "portentryCutoff": "2026-10-22T21:15:06.465Z"
  },
  {
   "cid": "21234",
   "ebookno": "BKON7172",
-  "bkgCutoff": "2026-11-19T05:44:55.915Z",
-  "docCutoff": "2026-11-26T06:44:55.915Z",
-  "vgmCutoff": "2026-11-26T09:44:55.915Z",
+  "bkgCutoff": "2026-11-19T20:55:06.465Z",
+  "docCutoff": "2026-11-26T21:55:06.465Z",
+  "vgmCutoff": "2026-11-27T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-11-26T06:04:55.915Z"
+  "portentryCutoff": "2026-11-26T21:15:06.465Z"
  },
  {
   "cid": "21236",
   "ebookno": "BKON7173",
-  "bkgCutoff": "2026-10-15T05:44:55.915Z",
-  "docCutoff": "2026-10-22T06:44:55.915Z",
-  "vgmCutoff": "2026-10-22T09:44:55.915Z",
+  "bkgCutoff": "2026-10-15T20:55:06.465Z",
+  "docCutoff": "2026-10-22T21:55:06.465Z",
+  "vgmCutoff": "2026-10-23T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-10-22T06:04:55.915Z"
+  "portentryCutoff": "2026-10-22T21:15:06.465Z"
  },
  {
   "cid": "21237",
   "ebookno": "BKON7174",
-  "bkgCutoff": "2026-10-15T05:44:55.915Z",
-  "docCutoff": "2026-10-22T06:44:55.915Z",
-  "vgmCutoff": "2026-10-22T09:44:55.915Z",
+  "bkgCutoff": "2026-10-15T20:55:06.465Z",
+  "docCutoff": "2026-10-22T21:55:06.465Z",
+  "vgmCutoff": "2026-10-23T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-10-22T06:04:55.915Z"
+  "portentryCutoff": "2026-10-22T21:15:06.465Z"
  },
  {
   "cid": "21239",
   "ebookno": "BKON7175",
-  "bkgCutoff": "2026-10-15T05:44:55.915Z",
-  "docCutoff": "2026-10-22T06:44:55.915Z",
-  "vgmCutoff": "2026-10-22T09:44:55.915Z",
+  "bkgCutoff": "2026-10-15T20:55:06.465Z",
+  "docCutoff": "2026-10-22T21:55:06.465Z",
+  "vgmCutoff": "2026-10-23T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-10-22T06:04:55.915Z"
+  "portentryCutoff": "2026-10-22T21:15:06.465Z"
  },
  {
   "cid": "21240",
   "ebookno": "BKON7236",
-  "bkgCutoff": "2026-10-15T05:44:55.915Z",
-  "docCutoff": "2026-10-22T06:44:55.915Z",
-  "vgmCutoff": "2026-10-22T09:44:55.915Z",
+  "bkgCutoff": "2026-10-15T20:55:06.465Z",
+  "docCutoff": "2026-10-22T21:55:06.465Z",
+  "vgmCutoff": "2026-10-23T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-10-22T06:04:55.915Z"
+  "portentryCutoff": "2026-10-22T21:15:06.465Z"
  },
  {
   "cid": "21241",
   "ebookno": "BKON7237",
-  "bkgCutoff": "2026-11-19T05:44:55.915Z",
-  "docCutoff": "2026-11-26T06:44:55.915Z",
-  "vgmCutoff": "2026-11-26T09:44:55.915Z",
+  "bkgCutoff": "2026-11-19T20:55:06.465Z",
+  "docCutoff": "2026-11-26T21:55:06.465Z",
+  "vgmCutoff": "2026-11-27T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-11-26T06:04:55.915Z"
+  "portentryCutoff": "2026-11-26T21:15:06.465Z"
  },
  {
   "cid": "21242",
   "ebookno": "BKON7238",
-  "bkgCutoff": "2026-10-15T05:44:55.915Z",
-  "docCutoff": "2026-10-22T06:44:55.915Z",
-  "vgmCutoff": "2026-10-22T09:44:55.915Z",
+  "bkgCutoff": "2026-10-15T20:55:06.465Z",
+  "docCutoff": "2026-10-22T21:55:06.465Z",
+  "vgmCutoff": "2026-10-23T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-10-22T06:04:55.915Z"
+  "portentryCutoff": "2026-10-22T21:15:06.465Z"
  },
  {
   "cid": "21243",
   "ebookno": "BKON7239",
-  "bkgCutoff": "2026-10-15T05:44:55.915Z",
-  "docCutoff": "2026-10-22T06:44:55.915Z",
-  "vgmCutoff": "2026-10-22T09:44:55.915Z",
+  "bkgCutoff": "2026-10-15T20:55:06.465Z",
+  "docCutoff": "2026-10-22T21:55:06.465Z",
+  "vgmCutoff": "2026-10-23T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-10-22T06:04:55.915Z"
+  "portentryCutoff": "2026-10-22T21:15:06.465Z"
  },
  {
   "cid": "21244",
   "ebookno": "BKON7242",
-  "bkgCutoff": "2026-11-19T05:44:55.915Z",
-  "docCutoff": "2026-11-26T06:44:55.915Z",
-  "vgmCutoff": "2026-11-26T09:44:55.915Z",
+  "bkgCutoff": "2026-11-19T20:55:06.465Z",
+  "docCutoff": "2026-11-26T21:55:06.465Z",
+  "vgmCutoff": "2026-11-27T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-11-26T06:04:55.915Z"
+  "portentryCutoff": "2026-11-26T21:15:06.465Z"
  },
  {
   "cid": "21245",
   "ebookno": "BKON7244",
-  "bkgCutoff": "2026-10-15T05:44:55.915Z",
-  "docCutoff": "2026-10-22T06:44:55.915Z",
-  "vgmCutoff": "2026-10-22T09:44:55.915Z",
+  "bkgCutoff": "2026-10-15T20:55:06.465Z",
+  "docCutoff": "2026-10-22T21:55:06.465Z",
+  "vgmCutoff": "2026-10-23T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-10-22T06:04:55.915Z"
+  "portentryCutoff": "2026-10-22T21:15:06.465Z"
  },
  {
   "cid": "21248",
   "ebookno": "BKON7246",
-  "bkgCutoff": "2026-10-15T05:44:55.915Z",
-  "docCutoff": "2026-10-22T06:44:55.915Z",
-  "vgmCutoff": "2026-10-22T09:44:55.915Z",
+  "bkgCutoff": "2026-10-15T20:55:06.465Z",
+  "docCutoff": "2026-10-22T21:55:06.465Z",
+  "vgmCutoff": "2026-10-23T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-10-22T06:04:55.915Z"
+  "portentryCutoff": "2026-10-22T21:15:06.465Z"
  },
  {
   "cid": "21249",
   "ebookno": "BKON7247",
-  "bkgCutoff": "2026-10-15T05:44:55.915Z",
-  "docCutoff": "2026-10-22T06:44:55.915Z",
-  "vgmCutoff": "2026-10-22T09:44:55.915Z",
+  "bkgCutoff": "2026-10-15T20:55:06.465Z",
+  "docCutoff": "2026-10-22T21:55:06.465Z",
+  "vgmCutoff": "2026-10-23T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-10-22T06:04:55.915Z"
+  "portentryCutoff": "2026-10-22T21:15:06.465Z"
  },
  {
   "cid": "21250",
   "ebookno": "BKON7248",
-  "bkgCutoff": "2026-10-15T05:44:55.915Z",
-  "docCutoff": "2026-10-22T06:44:55.915Z",
-  "vgmCutoff": "2026-10-22T09:44:55.915Z",
+  "bkgCutoff": "2026-10-15T20:55:06.465Z",
+  "docCutoff": "2026-10-22T21:55:06.465Z",
+  "vgmCutoff": "2026-10-23T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-10-22T06:04:55.915Z"
+  "portentryCutoff": "2026-10-22T21:15:06.465Z"
  },
  {
   "cid": "21251",
   "ebookno": "BKON7252",
-  "bkgCutoff": "2026-10-15T05:44:55.915Z",
-  "docCutoff": "2026-10-22T06:44:55.915Z",
-  "vgmCutoff": "2026-10-22T09:44:55.915Z",
+  "bkgCutoff": "2026-10-15T20:55:06.465Z",
+  "docCutoff": "2026-10-22T21:55:06.465Z",
+  "vgmCutoff": "2026-10-23T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-10-22T06:04:55.915Z"
+  "portentryCutoff": "2026-10-22T21:15:06.465Z"
  },
  {
   "cid": "21252",
   "ebookno": "BKON7256",
-  "bkgCutoff": "2026-11-19T05:44:55.915Z",
-  "docCutoff": "2026-11-26T06:44:55.915Z",
-  "vgmCutoff": "2026-11-26T09:44:55.915Z",
+  "bkgCutoff": "2026-11-19T20:55:06.465Z",
+  "docCutoff": "2026-11-26T21:55:06.465Z",
+  "vgmCutoff": "2026-11-27T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-11-26T06:04:55.915Z"
+  "portentryCutoff": "2026-11-26T21:15:06.465Z"
  },
  {
   "cid": "21253",
   "ebookno": "BKON7245",
-  "bkgCutoff": "2026-10-15T05:44:55.915Z",
-  "docCutoff": "2026-10-22T06:44:55.915Z",
-  "vgmCutoff": "2026-10-22T09:44:55.915Z",
+  "bkgCutoff": "2026-10-15T20:55:06.465Z",
+  "docCutoff": "2026-10-22T21:55:06.465Z",
+  "vgmCutoff": "2026-10-23T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-10-22T06:04:55.915Z"
+  "portentryCutoff": "2026-10-22T21:15:06.465Z"
  },
  {
   "cid": "21254",
   "ebookno": "BKON7257",
-  "bkgCutoff": "2026-11-19T05:44:55.915Z",
-  "docCutoff": "2026-11-26T06:44:55.915Z",
-  "vgmCutoff": "2026-11-26T09:44:55.915Z",
+  "bkgCutoff": "2026-11-19T20:55:06.465Z",
+  "docCutoff": "2026-11-26T21:55:06.465Z",
+  "vgmCutoff": "2026-11-27T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-11-26T06:04:55.915Z"
+  "portentryCutoff": "2026-11-26T21:15:06.465Z"
  },
  {
   "cid": "21255",
   "ebookno": "BKON7261",
-  "bkgCutoff": "2026-10-15T05:44:55.915Z",
-  "docCutoff": "2026-10-22T06:44:55.915Z",
-  "vgmCutoff": "2026-10-22T09:44:55.915Z",
+  "bkgCutoff": "2026-10-15T20:55:06.465Z",
+  "docCutoff": "2026-10-22T21:55:06.465Z",
+  "vgmCutoff": "2026-10-23T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-10-22T06:04:55.915Z"
+  "portentryCutoff": "2026-10-22T21:15:06.465Z"
  },
  {
   "cid": "21256",
   "ebookno": "BKON7262",
-  "bkgCutoff": "2026-11-19T05:44:55.915Z",
-  "docCutoff": "2026-11-26T06:44:55.915Z",
-  "vgmCutoff": "2026-11-26T09:44:55.915Z",
+  "bkgCutoff": "2026-11-19T20:55:06.465Z",
+  "docCutoff": "2026-11-26T21:55:06.465Z",
+  "vgmCutoff": "2026-11-27T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-11-26T06:04:55.915Z"
+  "portentryCutoff": "2026-11-26T21:15:06.465Z"
  },
  {
   "cid": "21257",
   "ebookno": "BKON7264",
-  "bkgCutoff": "2026-11-19T05:44:55.915Z",
-  "docCutoff": "2026-11-26T06:44:55.915Z",
-  "vgmCutoff": "2026-11-26T09:44:55.915Z",
+  "bkgCutoff": "2026-11-19T20:55:06.465Z",
+  "docCutoff": "2026-11-26T21:55:06.465Z",
+  "vgmCutoff": "2026-11-27T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-11-26T06:04:55.915Z"
+  "portentryCutoff": "2026-11-26T21:15:06.465Z"
  },
  {
   "cid": "21258",
   "ebookno": "BKON7266",
-  "bkgCutoff": "2026-11-19T05:44:55.915Z",
-  "docCutoff": "2026-11-26T06:44:55.915Z",
-  "vgmCutoff": "2026-11-26T09:44:55.915Z",
+  "bkgCutoff": "2026-11-19T20:55:06.465Z",
+  "docCutoff": "2026-11-26T21:55:06.465Z",
+  "vgmCutoff": "2026-11-27T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-11-26T06:04:55.915Z"
+  "portentryCutoff": "2026-11-26T21:15:06.465Z"
  },
  {
   "cid": "21259",
   "ebookno": "BKON7268",
-  "bkgCutoff": "2026-10-15T05:44:55.915Z",
-  "docCutoff": "2026-10-22T06:44:55.915Z",
-  "vgmCutoff": "2026-10-22T09:44:55.915Z",
+  "bkgCutoff": "2026-10-15T20:55:06.465Z",
+  "docCutoff": "2026-10-22T21:55:06.465Z",
+  "vgmCutoff": "2026-10-23T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-10-22T06:04:55.915Z"
+  "portentryCutoff": "2026-10-22T21:15:06.465Z"
  },
  {
   "cid": "21260",
   "ebookno": "BKON7271",
-  "bkgCutoff": "2026-10-15T05:44:55.915Z",
-  "docCutoff": "2026-10-22T06:44:55.915Z",
-  "vgmCutoff": "2026-10-22T09:44:55.915Z",
+  "bkgCutoff": "2026-10-15T20:55:06.465Z",
+  "docCutoff": "2026-10-22T21:55:06.465Z",
+  "vgmCutoff": "2026-10-23T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-10-22T06:04:55.915Z"
+  "portentryCutoff": "2026-10-22T21:15:06.465Z"
  },
  {
   "cid": "21261",
   "ebookno": "BKON7272",
-  "bkgCutoff": "2026-10-15T05:44:55.915Z",
-  "docCutoff": "2026-10-22T06:44:55.915Z",
-  "vgmCutoff": "2026-10-22T09:44:55.915Z",
+  "bkgCutoff": "2026-10-15T20:55:06.465Z",
+  "docCutoff": "2026-10-22T21:55:06.465Z",
+  "vgmCutoff": "2026-10-23T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-10-22T06:04:55.915Z"
+  "portentryCutoff": "2026-10-22T21:15:06.465Z"
  },
  {
   "cid": "21262",
   "ebookno": "BKON7290",
-  "bkgCutoff": "2026-10-15T05:44:55.915Z",
-  "docCutoff": "2026-10-22T06:44:55.915Z",
-  "vgmCutoff": "2026-10-22T09:44:55.915Z",
+  "bkgCutoff": "2026-10-15T20:55:06.465Z",
+  "docCutoff": "2026-10-22T21:55:06.465Z",
+  "vgmCutoff": "2026-10-23T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-10-22T06:04:55.915Z"
+  "portentryCutoff": "2026-10-22T21:15:06.465Z"
  },
  {
   "cid": "21263",
   "ebookno": "BKON7291",
-  "bkgCutoff": "2026-10-15T05:44:55.915Z",
-  "docCutoff": "2026-10-22T06:44:55.915Z",
-  "vgmCutoff": "2026-10-22T09:44:55.915Z",
+  "bkgCutoff": "2026-10-15T20:55:06.465Z",
+  "docCutoff": "2026-10-22T21:55:06.465Z",
+  "vgmCutoff": "2026-10-23T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-10-22T06:04:55.915Z"
+  "portentryCutoff": "2026-10-22T21:15:06.465Z"
  },
  {
   "cid": "21264",
   "ebookno": "BKON7296",
-  "bkgCutoff": "2026-10-22T05:44:55.915Z",
-  "docCutoff": "2026-10-29T06:44:55.915Z",
-  "vgmCutoff": "2026-10-29T09:44:55.915Z",
+  "bkgCutoff": "2026-10-22T20:55:06.465Z",
+  "docCutoff": "2026-10-29T21:55:06.465Z",
+  "vgmCutoff": "2026-10-30T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-10-29T06:04:55.915Z"
+  "portentryCutoff": "2026-10-29T21:15:06.465Z"
  },
  {
   "cid": "21265",
   "ebookno": "BKON7298",
-  "bkgCutoff": "2026-10-15T05:44:55.915Z",
-  "docCutoff": "2026-10-22T06:44:55.915Z",
-  "vgmCutoff": "2026-10-22T09:44:55.915Z",
+  "bkgCutoff": "2026-10-15T20:55:06.465Z",
+  "docCutoff": "2026-10-22T21:55:06.465Z",
+  "vgmCutoff": "2026-10-23T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-10-22T06:04:55.915Z"
+  "portentryCutoff": "2026-10-22T21:15:06.465Z"
  },
  {
   "cid": "21266",
   "ebookno": "BKON7310",
-  "bkgCutoff": "2026-10-22T05:44:55.915Z",
-  "docCutoff": "2026-10-29T06:44:55.915Z",
-  "vgmCutoff": "2026-10-29T09:44:55.915Z",
+  "bkgCutoff": "2026-10-22T20:55:06.465Z",
+  "docCutoff": "2026-10-29T21:55:06.465Z",
+  "vgmCutoff": "2026-10-30T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-10-29T06:04:55.915Z"
+  "portentryCutoff": "2026-10-29T21:15:06.465Z"
  },
  {
   "cid": "21267",
   "ebookno": "BKON7311",
-  "bkgCutoff": "2026-10-22T05:44:55.915Z",
-  "docCutoff": "2026-10-29T06:44:55.915Z",
-  "vgmCutoff": "2026-10-29T09:44:55.915Z",
+  "bkgCutoff": "2026-10-22T20:55:06.465Z",
+  "docCutoff": "2026-10-29T21:55:06.465Z",
+  "vgmCutoff": "2026-10-30T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-10-29T06:04:55.915Z"
+  "portentryCutoff": "2026-10-29T21:15:06.465Z"
  },
  {
   "cid": "21268",
   "ebookno": "BKON7312",
-  "bkgCutoff": "2026-10-22T05:44:55.915Z",
-  "docCutoff": "2026-10-29T06:44:55.915Z",
-  "vgmCutoff": "2026-10-29T09:44:55.915Z",
+  "bkgCutoff": "2026-10-22T20:55:06.465Z",
+  "docCutoff": "2026-10-29T21:55:06.465Z",
+  "vgmCutoff": "2026-10-30T00:55:06.465Z",
   "bbroroCutoff": null,
   "hazCutoff": null,
-  "portentryCutoff": "2026-10-29T06:04:55.915Z"
+  "portentryCutoff": "2026-10-29T21:15:06.465Z"
  },
  {
   "cid": "5",
   "ebookno": "BKON2205",
-  "bkgCutoff": "2019-07-13T00:44:55.915Z",
-  "docCutoff": "2019-07-20T02:59:55.915Z",
-  "vgmCutoff": "2019-07-18T20:44:55.915Z",
-  "bbroroCutoff": "2019-07-14T00:44:55.915Z",
-  "hazCutoff": "2019-07-18T07:44:55.915Z",
-  "portentryCutoff": "2019-07-14T13:34:55.915Z"
+  "bkgCutoff": "2019-07-13T15:55:06.465Z",
+  "docCutoff": "2019-07-20T18:10:06.465Z",
+  "vgmCutoff": "2019-07-19T11:55:06.465Z",
+  "bbroroCutoff": "2019-07-14T15:55:06.465Z",
+  "hazCutoff": "2019-07-18T22:55:06.465Z",
+  "portentryCutoff": "2019-07-15T04:45:06.465Z"
  },
  {
   "cid": "6",
   "ebookno": "BKON2204",
-  "bkgCutoff": "2019-07-13T00:44:55.915Z",
-  "docCutoff": "2019-07-20T02:59:55.915Z",
-  "vgmCutoff": "2019-07-18T20:44:55.915Z",
-  "bbroroCutoff": "2019-07-14T00:44:55.915Z",
-  "hazCutoff": "2019-07-14T00:44:55.915Z",
-  "portentryCutoff": "2019-07-14T13:34:55.915Z"
+  "bkgCutoff": "2019-07-13T15:55:06.465Z",
+  "docCutoff": "2019-07-20T18:10:06.465Z",
+  "vgmCutoff": "2019-07-19T11:55:06.465Z",
+  "bbroroCutoff": "2019-07-14T15:55:06.465Z",
+  "hazCutoff": "2019-07-14T15:55:06.465Z",
+  "portentryCutoff": "2019-07-15T04:45:06.465Z"
  },
  {
   "cid": "9",
   "ebookno": "BKON2207",
-  "bkgCutoff": "2019-07-13T00:44:55.915Z",
-  "docCutoff": "2019-07-20T02:59:55.915Z",
-  "vgmCutoff": "2019-07-18T20:44:55.915Z",
-  "bbroroCutoff": "2019-07-14T00:44:55.915Z",
-  "hazCutoff": "2019-07-14T00:44:55.915Z",
-  "portentryCutoff": "2019-07-14T13:34:55.915Z"
+  "bkgCutoff": "2019-07-13T15:55:06.465Z",
+  "docCutoff": "2019-07-20T18:10:06.465Z",
+  "vgmCutoff": "2019-07-19T11:55:06.465Z",
+  "bbroroCutoff": "2019-07-14T15:55:06.465Z",
+  "hazCutoff": "2019-07-14T15:55:06.465Z",
+  "portentryCutoff": "2019-07-15T04:45:06.465Z"
  },
  {
   "cid": "10",
   "ebookno": "BKON2208",
-  "bkgCutoff": "2019-07-13T00:44:55.915Z",
-  "docCutoff": "2019-07-13T02:59:55.915Z",
-  "vgmCutoff": "2019-07-11T20:44:55.915Z",
-  "bbroroCutoff": "2019-07-07T00:44:55.915Z",
-  "hazCutoff": "2019-07-11T07:44:55.915Z",
-  "portentryCutoff": "2019-07-07T13:34:55.915Z"
+  "bkgCutoff": "2019-07-13T15:55:06.465Z",
+  "docCutoff": "2019-07-13T18:10:06.465Z",
+  "vgmCutoff": "2019-07-12T11:55:06.465Z",
+  "bbroroCutoff": "2019-07-07T15:55:06.465Z",
+  "hazCutoff": "2019-07-11T22:55:06.465Z",
+  "portentryCutoff": "2019-07-08T04:45:06.465Z"
  },
  {
   "cid": "13",
   "ebookno": "BKON2209",
-  "bkgCutoff": "2019-07-13T00:44:55.915Z",
-  "docCutoff": "2019-07-13T02:59:55.915Z",
-  "vgmCutoff": "2019-07-11T20:44:55.915Z",
-  "bbroroCutoff": "2019-07-07T00:44:55.915Z",
-  "hazCutoff": "2019-07-07T00:44:55.915Z",
-  "portentryCutoff": "2019-07-07T13:34:55.915Z"
+  "bkgCutoff": "2019-07-13T15:55:06.465Z",
+  "docCutoff": "2019-07-13T18:10:06.465Z",
+  "vgmCutoff": "2019-07-12T11:55:06.465Z",
+  "bbroroCutoff": "2019-07-07T15:55:06.465Z",
+  "hazCutoff": "2019-07-07T15:55:06.465Z",
+  "portentryCutoff": "2019-07-08T04:45:06.465Z"
  },
  {
   "cid": "14",
   "ebookno": "BKON2210",
-  "bkgCutoff": "2019-07-13T00:44:55.915Z",
-  "docCutoff": "2019-07-13T02:59:55.915Z",
-  "vgmCutoff": "2019-07-11T20:44:55.915Z",
-  "bbroroCutoff": "2019-07-07T00:44:55.915Z",
-  "hazCutoff": "2019-07-11T07:44:55.915Z",
-  "portentryCutoff": "2019-07-07T13:34:55.915Z"
+  "bkgCutoff": "2019-07-13T15:55:06.465Z",
+  "docCutoff": "2019-07-13T18:10:06.465Z",
+  "vgmCutoff": "2019-07-12T11:55:06.465Z",
+  "bbroroCutoff": "2019-07-07T15:55:06.465Z",
+  "hazCutoff": "2019-07-11T22:55:06.465Z",
+  "portentryCutoff": "2019-07-08T04:45:06.465Z"
  },
  {
   "cid": "16",
   "ebookno": "BKON2211",
-  "bkgCutoff": "2019-07-13T00:44:55.915Z",
-  "docCutoff": "2019-07-13T02:59:55.915Z",
-  "vgmCutoff": "2019-07-11T20:44:55.915Z",
-  "bbroroCutoff": "2019-07-07T00:44:55.915Z",
-  "hazCutoff": "2019-07-11T07:44:55.915Z",
-  "portentryCutoff": "2019-07-07T13:34:55.915Z"
+  "bkgCutoff": "2019-07-13T15:55:06.465Z",
+  "docCutoff": "2019-07-13T18:10:06.465Z",
+  "vgmCutoff": "2019-07-12T11:55:06.465Z",
+  "bbroroCutoff": "2019-07-07T15:55:06.465Z",
+  "hazCutoff": "2019-07-11T22:55:06.465Z",
+  "portentryCutoff": "2019-07-08T04:45:06.465Z"
  },
  {
   "cid": "17",
   "ebookno": "BKON2212",
-  "bkgCutoff": "2019-07-13T00:44:55.915Z",
-  "docCutoff": "2019-07-13T02:59:55.915Z",
-  "vgmCutoff": "2019-07-11T20:44:55.915Z",
-  "bbroroCutoff": "2019-07-07T00:44:55.915Z",
-  "hazCutoff": "2019-07-11T07:44:55.915Z",
-  "portentryCutoff": "2019-07-07T13:34:55.915Z"
+  "bkgCutoff": "2019-07-13T15:55:06.465Z",
+  "docCutoff": "2019-07-13T18:10:06.465Z",
+  "vgmCutoff": "2019-07-12T11:55:06.465Z",
+  "bbroroCutoff": "2019-07-07T15:55:06.465Z",
+  "hazCutoff": "2019-07-11T22:55:06.465Z",
+  "portentryCutoff": "2019-07-08T04:45:06.465Z"
  },
  {
   "cid": "18",
   "ebookno": "BKON2213",
-  "bkgCutoff": "2019-07-13T00:44:55.915Z",
-  "docCutoff": "2019-07-13T02:59:55.915Z",
-  "vgmCutoff": "2019-07-11T20:44:55.915Z",
-  "bbroroCutoff": "2019-07-07T00:44:55.915Z",
-  "hazCutoff": "2019-07-11T07:44:55.915Z",
-  "portentryCutoff": "2019-07-07T13:34:55.915Z"
+  "bkgCutoff": "2019-07-13T15:55:06.465Z",
+  "docCutoff": "2019-07-13T18:10:06.465Z",
+  "vgmCutoff": "2019-07-12T11:55:06.465Z",
+  "bbroroCutoff": "2019-07-07T15:55:06.465Z",
+  "hazCutoff": "2019-07-11T22:55:06.465Z",
+  "portentryCutoff": "2019-07-08T04:45:06.465Z"
  },
  {
   "cid": "20",
   "ebookno": "BKON2215",
-  "bkgCutoff": "2019-07-13T00:44:55.915Z",
-  "docCutoff": "2019-07-13T02:59:55.915Z",
-  "vgmCutoff": "2019-07-11T20:44:55.915Z",
-  "bbroroCutoff": "2019-07-07T00:44:55.915Z",
-  "hazCutoff": "2019-07-11T07:44:55.915Z",
-  "portentryCutoff": "2019-07-07T13:34:55.915Z"
+  "bkgCutoff": "2019-07-13T15:55:06.465Z",
+  "docCutoff": "2019-07-13T18:10:06.465Z",
+  "vgmCutoff": "2019-07-12T11:55:06.465Z",
+  "bbroroCutoff": "2019-07-07T15:55:06.465Z",
+  "hazCutoff": "2019-07-11T22:55:06.465Z",
+  "portentryCutoff": "2019-07-08T04:45:06.465Z"
  },
  {
   "cid": "21",
   "ebookno": "BKON2216",
-  "bkgCutoff": "2019-07-13T00:44:55.915Z",
-  "docCutoff": "2019-07-13T02:59:55.915Z",
-  "vgmCutoff": "2019-07-11T20:44:55.915Z",
-  "bbroroCutoff": "2019-07-07T00:44:55.915Z",
-  "hazCutoff": "2019-07-11T07:44:55.915Z",
-  "portentryCutoff": "2019-07-07T13:34:55.915Z"
+  "bkgCutoff": "2019-07-13T15:55:06.465Z",
+  "docCutoff": "2019-07-13T18:10:06.465Z",
+  "vgmCutoff": "2019-07-12T11:55:06.465Z",
+  "bbroroCutoff": "2019-07-07T15:55:06.465Z",
+  "hazCutoff": "2019-07-11T22:55:06.465Z",
+  "portentryCutoff": "2019-07-08T04:45:06.465Z"
  },
  {
   "cid": "22",
   "ebookno": "BKON2218",
-  "bkgCutoff": "2019-07-13T00:44:55.915Z",
-  "docCutoff": "2019-07-13T02:59:55.915Z",
-  "vgmCutoff": "2019-07-11T20:44:55.915Z",
-  "bbroroCutoff": "2019-07-07T00:44:55.915Z",
-  "hazCutoff": "2019-07-11T07:44:55.915Z",
-  "portentryCutoff": "2019-07-07T13:34:55.915Z"
+  "bkgCutoff": "2019-07-13T15:55:06.465Z",
+  "docCutoff": "2019-07-13T18:10:06.465Z",
+  "vgmCutoff": "2019-07-12T11:55:06.465Z",
+  "bbroroCutoff": "2019-07-07T15:55:06.465Z",
+  "hazCutoff": "2019-07-11T22:55:06.465Z",
+  "portentryCutoff": "2019-07-08T04:45:06.465Z"
  },
  {
   "cid": "23",
   "ebookno": "BKON2219",
-  "bkgCutoff": "2019-07-13T00:44:55.915Z",
-  "docCutoff": "2019-07-13T02:59:55.915Z",
-  "vgmCutoff": "2019-07-11T20:44:55.915Z",
-  "bbroroCutoff": "2019-07-07T00:44:55.915Z",
-  "hazCutoff": "2019-07-11T07:44:55.915Z",
-  "portentryCutoff": "2019-07-07T13:34:55.915Z"
+  "bkgCutoff": "2019-07-13T15:55:06.465Z",
+  "docCutoff": "2019-07-13T18:10:06.465Z",
+  "vgmCutoff": "2019-07-12T11:55:06.465Z",
+  "bbroroCutoff": "2019-07-07T15:55:06.465Z",
+  "hazCutoff": "2019-07-11T22:55:06.465Z",
+  "portentryCutoff": "2019-07-08T04:45:06.465Z"
  },
  {
   "cid": "25",
   "ebookno": "BKON2220",
-  "bkgCutoff": "2019-07-20T00:44:55.915Z",
-  "docCutoff": "2019-07-20T02:59:55.915Z",
-  "vgmCutoff": "2019-07-18T20:44:55.915Z",
-  "bbroroCutoff": "2019-07-14T00:44:55.915Z",
-  "hazCutoff": "2019-07-18T07:44:55.915Z",
-  "portentryCutoff": "2019-07-14T13:34:55.915Z"
+  "bkgCutoff": "2019-07-20T15:55:06.465Z",
+  "docCutoff": "2019-07-20T18:10:06.465Z",
+  "vgmCutoff": "2019-07-19T11:55:06.465Z",
+  "bbroroCutoff": "2019-07-14T15:55:06.465Z",
+  "hazCutoff": "2019-07-18T22:55:06.465Z",
+  "portentryCutoff": "2019-07-15T04:45:06.465Z"
  },
  {
   "cid": "27",
   "ebookno": "BKON2221",
-  "bkgCutoff": "2019-07-20T00:44:55.915Z",
-  "docCutoff": "2019-07-20T02:59:55.915Z",
-  "vgmCutoff": "2019-07-18T20:44:55.915Z",
-  "bbroroCutoff": "2019-07-14T00:44:55.915Z",
-  "hazCutoff": "2019-07-18T07:44:55.915Z",
-  "portentryCutoff": "2019-07-14T13:34:55.915Z"
+  "bkgCutoff": "2019-07-20T15:55:06.465Z",
+  "docCutoff": "2019-07-20T18:10:06.465Z",
+  "vgmCutoff": "2019-07-19T11:55:06.465Z",
+  "bbroroCutoff": "2019-07-14T15:55:06.465Z",
+  "hazCutoff": "2019-07-18T22:55:06.465Z",
+  "portentryCutoff": "2019-07-15T04:45:06.465Z"
  },
  {
   "cid": "28",
   "ebookno": "BKON2222",
-  "bkgCutoff": "2019-07-27T00:44:55.915Z",
-  "docCutoff": "2019-07-27T02:59:55.915Z",
-  "vgmCutoff": "2019-07-25T20:44:55.915Z",
-  "bbroroCutoff": "2019-07-21T00:44:55.915Z",
-  "hazCutoff": "2019-07-25T07:44:55.915Z",
-  "portentryCutoff": "2019-07-21T13:34:55.915Z"
+  "bkgCutoff": "2019-07-27T15:55:06.465Z",
+  "docCutoff": "2019-07-27T18:10:06.465Z",
+  "vgmCutoff": "2019-07-26T11:55:06.465Z",
+  "bbroroCutoff": "2019-07-21T15:55:06.465Z",
+  "hazCutoff": "2019-07-25T22:55:06.465Z",
+  "portentryCutoff": "2019-07-22T04:45:06.465Z"
  },
  {
   "cid": "29",
   "ebookno": "BKON2223",
-  "bkgCutoff": "2019-07-27T00:44:55.915Z",
-  "docCutoff": "2019-07-27T02:59:55.915Z",
-  "vgmCutoff": "2019-07-25T20:44:55.915Z",
-  "bbroroCutoff": "2019-07-21T00:44:55.915Z",
-  "hazCutoff": "2019-07-25T07:44:55.915Z",
-  "portentryCutoff": "2019-07-21T13:34:55.915Z"
+  "bkgCutoff": "2019-07-27T15:55:06.465Z",
+  "docCutoff": "2019-07-27T18:10:06.465Z",
+  "vgmCutoff": "2019-07-26T11:55:06.465Z",
+  "bbroroCutoff": "2019-07-21T15:55:06.465Z",
+  "hazCutoff": "2019-07-25T22:55:06.465Z",
+  "portentryCutoff": "2019-07-22T04:45:06.465Z"
  },
  {
   "cid": "30",
   "ebookno": "BKON2226",
-  "bkgCutoff": "2019-08-10T00:44:55.915Z",
-  "docCutoff": "2019-08-10T02:59:55.915Z",
-  "vgmCutoff": "2019-08-08T20:44:55.915Z",
-  "bbroroCutoff": "2019-08-04T00:44:55.915Z",
-  "hazCutoff": "2019-08-08T07:44:55.915Z",
-  "portentryCutoff": "2019-08-04T13:34:55.915Z"
+  "bkgCutoff": "2019-08-10T15:55:06.465Z",
+  "docCutoff": "2019-08-10T18:10:06.465Z",
+  "vgmCutoff": "2019-08-09T11:55:06.465Z",
+  "bbroroCutoff": "2019-08-04T15:55:06.465Z",
+  "hazCutoff": "2019-08-08T22:55:06.465Z",
+  "portentryCutoff": "2019-08-05T04:45:06.465Z"
  },
  {
   "cid": "31",
   "ebookno": "BKON2227",
-  "bkgCutoff": "2019-08-10T00:44:55.915Z",
-  "docCutoff": "2019-08-10T02:59:55.915Z",
-  "vgmCutoff": "2019-08-08T20:44:55.915Z",
-  "bbroroCutoff": "2019-08-04T00:44:55.915Z",
-  "hazCutoff": "2019-08-08T07:44:55.915Z",
-  "portentryCutoff": "2019-08-04T13:34:55.915Z"
+  "bkgCutoff": "2019-08-10T15:55:06.465Z",
+  "docCutoff": "2019-08-10T18:10:06.465Z",
+  "vgmCutoff": "2019-08-09T11:55:06.465Z",
+  "bbroroCutoff": "2019-08-04T15:55:06.465Z",
+  "hazCutoff": "2019-08-08T22:55:06.465Z",
+  "portentryCutoff": "2019-08-05T04:45:06.465Z"
  },
  {
   "cid": "32",
   "ebookno": "BKON2228",
-  "bkgCutoff": "2019-08-24T00:44:55.915Z",
-  "docCutoff": "2019-08-24T02:59:55.915Z",
-  "vgmCutoff": "2019-08-22T20:44:55.915Z",
-  "bbroroCutoff": "2019-08-18T00:44:55.915Z",
-  "hazCutoff": "2019-08-22T07:44:55.915Z",
-  "portentryCutoff": "2019-08-18T13:34:55.915Z"
+  "bkgCutoff": "2019-08-24T15:55:06.465Z",
+  "docCutoff": "2019-08-24T18:10:06.465Z",
+  "vgmCutoff": "2019-08-23T11:55:06.465Z",
+  "bbroroCutoff": "2019-08-18T15:55:06.465Z",
+  "hazCutoff": "2019-08-22T22:55:06.465Z",
+  "portentryCutoff": "2019-08-19T04:45:06.465Z"
  },
  {
   "cid": "34",
   "ebookno": "BKON2246",
-  "bkgCutoff": "2019-08-17T00:44:55.915Z",
-  "docCutoff": "2019-08-17T02:59:55.915Z",
-  "vgmCutoff": "2019-08-15T20:44:55.915Z",
-  "bbroroCutoff": "2019-08-11T00:44:55.915Z",
-  "hazCutoff": "2019-08-15T07:44:55.915Z",
-  "portentryCutoff": "2019-08-11T13:34:55.915Z"
+  "bkgCutoff": "2019-08-17T15:55:06.465Z",
+  "docCutoff": "2019-08-17T18:10:06.465Z",
+  "vgmCutoff": "2019-08-16T11:55:06.465Z",
+  "bbroroCutoff": "2019-08-11T15:55:06.465Z",
+  "hazCutoff": "2019-08-15T22:55:06.465Z",
+  "portentryCutoff": "2019-08-12T04:45:06.465Z"
  },
  {
   "cid": "35",
   "ebookno": "BKON2248",
-  "bkgCutoff": "2019-08-17T00:44:55.915Z",
-  "docCutoff": "2019-08-17T02:59:55.915Z",
-  "vgmCutoff": "2019-08-15T20:44:55.915Z",
-  "bbroroCutoff": "2019-08-11T00:44:55.915Z",
-  "hazCutoff": "2019-08-15T07:44:55.915Z",
-  "portentryCutoff": "2019-08-11T13:34:55.915Z"
+  "bkgCutoff": "2019-08-17T15:55:06.465Z",
+  "docCutoff": "2019-08-17T18:10:06.465Z",
+  "vgmCutoff": "2019-08-16T11:55:06.465Z",
+  "bbroroCutoff": "2019-08-11T15:55:06.465Z",
+  "hazCutoff": "2019-08-15T22:55:06.465Z",
+  "portentryCutoff": "2019-08-12T04:45:06.465Z"
  },
  {
   "cid": "38",
   "ebookno": "BKON2253",
-  "bkgCutoff": "2019-08-17T00:44:55.915Z",
-  "docCutoff": "2019-08-17T02:59:55.915Z",
-  "vgmCutoff": "2019-08-15T20:44:55.915Z",
-  "bbroroCutoff": "2019-08-11T00:44:55.915Z",
-  "hazCutoff": "2019-08-15T07:44:55.915Z",
-  "portentryCutoff": "2019-08-11T13:34:55.915Z"
+  "bkgCutoff": "2019-08-17T15:55:06.465Z",
+  "docCutoff": "2019-08-17T18:10:06.465Z",
+  "vgmCutoff": "2019-08-16T11:55:06.465Z",
+  "bbroroCutoff": "2019-08-11T15:55:06.465Z",
+  "hazCutoff": "2019-08-15T22:55:06.465Z",
+  "portentryCutoff": "2019-08-12T04:45:06.465Z"
  },
  {
   "cid": "39",
   "ebookno": "BKON2254",
-  "bkgCutoff": "2019-08-24T00:44:55.915Z",
-  "docCutoff": "2019-08-24T02:59:55.915Z",
-  "vgmCutoff": "2019-08-22T20:44:55.915Z",
-  "bbroroCutoff": "2019-08-18T00:44:55.915Z",
-  "hazCutoff": "2019-08-22T07:44:55.915Z",
-  "portentryCutoff": "2019-08-18T13:34:55.915Z"
+  "bkgCutoff": "2019-08-24T15:55:06.465Z",
+  "docCutoff": "2019-08-24T18:10:06.465Z",
+  "vgmCutoff": "2019-08-23T11:55:06.465Z",
+  "bbroroCutoff": "2019-08-18T15:55:06.465Z",
+  "hazCutoff": "2019-08-22T22:55:06.465Z",
+  "portentryCutoff": "2019-08-19T04:45:06.465Z"
  },
  {
   "cid": "42",
   "ebookno": "BKON2256",
-  "bkgCutoff": "2019-08-24T00:44:55.915Z",
-  "docCutoff": "2019-08-24T02:59:55.915Z",
-  "vgmCutoff": "2019-08-22T20:44:55.915Z",
-  "bbroroCutoff": "2019-08-18T00:44:55.915Z",
-  "hazCutoff": "2019-08-22T07:44:55.915Z",
-  "portentryCutoff": "2019-08-18T13:34:55.915Z"
+  "bkgCutoff": "2019-08-24T15:55:06.465Z",
+  "docCutoff": "2019-08-24T18:10:06.465Z",
+  "vgmCutoff": "2019-08-23T11:55:06.465Z",
+  "bbroroCutoff": "2019-08-18T15:55:06.465Z",
+  "hazCutoff": "2019-08-22T22:55:06.465Z",
+  "portentryCutoff": "2019-08-19T04:45:06.465Z"
  },
  {
   "cid": "44",
   "ebookno": "BKON2272",
-  "bkgCutoff": "2019-09-07T00:44:55.915Z",
-  "docCutoff": "2019-09-07T02:59:55.915Z",
-  "vgmCutoff": "2019-09-05T20:44:55.915Z",
-  "bbroroCutoff": "2019-09-01T00:44:55.915Z",
-  "hazCutoff": "2019-09-05T07:44:55.915Z",
-  "portentryCutoff": "2019-09-01T13:34:55.915Z"
+  "bkgCutoff": "2019-09-07T15:55:06.465Z",
+  "docCutoff": "2019-09-07T18:10:06.465Z",
+  "vgmCutoff": "2019-09-06T11:55:06.465Z",
+  "bbroroCutoff": "2019-09-01T15:55:06.465Z",
+  "hazCutoff": "2019-09-05T22:55:06.465Z",
+  "portentryCutoff": "2019-09-02T04:45:06.465Z"
  },
  {
   "cid": "45",
   "ebookno": "BKON2273",
-  "bkgCutoff": "2019-09-28T00:44:55.915Z",
-  "docCutoff": "2019-09-28T02:59:55.915Z",
-  "vgmCutoff": "2019-09-26T20:44:55.915Z",
-  "bbroroCutoff": "2019-09-22T00:44:55.915Z",
-  "hazCutoff": "2019-09-26T07:44:55.915Z",
-  "portentryCutoff": "2019-09-22T13:34:55.915Z"
+  "bkgCutoff": "2019-09-28T15:55:06.465Z",
+  "docCutoff": "2019-09-28T18:10:06.465Z",
+  "vgmCutoff": "2019-09-27T11:55:06.465Z",
+  "bbroroCutoff": "2019-09-22T15:55:06.465Z",
+  "hazCutoff": "2019-09-26T22:55:06.465Z",
+  "portentryCutoff": "2019-09-23T04:45:06.465Z"
  },
  {
   "cid": "46",
   "ebookno": "BKON2274",
-  "bkgCutoff": "2019-09-14T00:44:55.915Z",
-  "docCutoff": "2019-09-14T02:59:55.915Z",
-  "vgmCutoff": "2019-09-12T20:44:55.915Z",
-  "bbroroCutoff": "2019-09-08T00:44:55.915Z",
-  "hazCutoff": "2019-09-12T07:44:55.915Z",
-  "portentryCutoff": "2019-09-08T13:34:55.915Z"
+  "bkgCutoff": "2019-09-14T15:55:06.465Z",
+  "docCutoff": "2019-09-14T18:10:06.465Z",
+  "vgmCutoff": "2019-09-13T11:55:06.465Z",
+  "bbroroCutoff": "2019-09-08T15:55:06.465Z",
+  "hazCutoff": "2019-09-12T22:55:06.465Z",
+  "portentryCutoff": "2019-09-09T04:45:06.465Z"
  },
  {
   "cid": "48",
   "ebookno": "BKON2284",
-  "bkgCutoff": "2019-10-05T00:44:55.915Z",
-  "docCutoff": "2019-10-05T02:59:55.915Z",
-  "vgmCutoff": "2019-10-03T20:44:55.915Z",
-  "bbroroCutoff": "2019-09-29T00:44:55.915Z",
-  "hazCutoff": "2019-10-03T07:44:55.915Z",
-  "portentryCutoff": "2019-09-29T13:34:55.915Z"
+  "bkgCutoff": "2019-10-05T15:55:06.465Z",
+  "docCutoff": "2019-10-05T18:10:06.465Z",
+  "vgmCutoff": "2019-10-04T11:55:06.465Z",
+  "bbroroCutoff": "2019-09-29T15:55:06.465Z",
+  "hazCutoff": "2019-10-03T22:55:06.465Z",
+  "portentryCutoff": "2019-09-30T04:45:06.465Z"
  },
  {
   "cid": "52",
   "ebookno": "BKON2288",
-  "bkgCutoff": "2019-10-12T00:44:55.915Z",
-  "docCutoff": "2019-10-12T02:59:55.915Z",
-  "vgmCutoff": "2019-10-10T20:44:55.915Z",
-  "bbroroCutoff": "2019-10-06T00:44:55.915Z",
-  "hazCutoff": "2019-10-10T07:44:55.915Z",
-  "portentryCutoff": "2019-10-06T13:34:55.915Z"
+  "bkgCutoff": "2019-10-12T15:55:06.465Z",
+  "docCutoff": "2019-10-12T18:10:06.465Z",
+  "vgmCutoff": "2019-10-11T11:55:06.465Z",
+  "bbroroCutoff": "2019-10-06T15:55:06.465Z",
+  "hazCutoff": "2019-10-10T22:55:06.465Z",
+  "portentryCutoff": "2019-10-07T04:45:06.465Z"
  },
  {
   "cid": "62",
   "ebookno": "BKON2290",
-  "bkgCutoff": "2019-10-19T00:44:55.915Z",
-  "docCutoff": "2019-10-19T02:59:55.915Z",
-  "vgmCutoff": "2019-10-17T20:44:55.915Z",
-  "bbroroCutoff": "2019-10-13T00:44:55.915Z",
-  "hazCutoff": "2019-10-17T07:44:55.915Z",
-  "portentryCutoff": "2019-10-13T13:34:55.915Z"
+  "bkgCutoff": "2019-10-19T15:55:06.465Z",
+  "docCutoff": "2019-10-19T18:10:06.465Z",
+  "vgmCutoff": "2019-10-18T11:55:06.465Z",
+  "bbroroCutoff": "2019-10-13T15:55:06.465Z",
+  "hazCutoff": "2019-10-17T22:55:06.465Z",
+  "portentryCutoff": "2019-10-14T04:45:06.465Z"
  },
  {
   "cid": "63",
   "ebookno": "BKON2294",
-  "bkgCutoff": "2019-10-12T00:44:55.915Z",
-  "docCutoff": "2019-10-12T02:59:55.915Z",
-  "vgmCutoff": "2019-10-10T20:44:55.915Z",
-  "bbroroCutoff": "2019-10-06T00:44:55.915Z",
-  "hazCutoff": "2019-10-10T07:44:55.915Z",
-  "portentryCutoff": "2019-10-06T13:34:55.915Z"
+  "bkgCutoff": "2019-10-12T15:55:06.465Z",
+  "docCutoff": "2019-10-12T18:10:06.465Z",
+  "vgmCutoff": "2019-10-11T11:55:06.465Z",
+  "bbroroCutoff": "2019-10-06T15:55:06.465Z",
+  "hazCutoff": "2019-10-10T22:55:06.465Z",
+  "portentryCutoff": "2019-10-07T04:45:06.465Z"
  },
  {
   "cid": "64",
   "ebookno": "BKON2297",
-  "bkgCutoff": "2019-10-19T00:44:55.915Z",
-  "docCutoff": "2019-10-19T02:59:55.915Z",
-  "vgmCutoff": "2019-10-17T20:44:55.915Z",
-  "bbroroCutoff": "2019-10-13T00:44:55.915Z",
-  "hazCutoff": "2019-10-17T07:44:55.915Z",
-  "portentryCutoff": "2019-10-13T13:34:55.915Z"
+  "bkgCutoff": "2019-10-19T15:55:06.465Z",
+  "docCutoff": "2019-10-19T18:10:06.465Z",
+  "vgmCutoff": "2019-10-18T11:55:06.465Z",
+  "bbroroCutoff": "2019-10-13T15:55:06.465Z",
+  "hazCutoff": "2019-10-17T22:55:06.465Z",
+  "portentryCutoff": "2019-10-14T04:45:06.465Z"
  },
  {
   "cid": "65",
   "ebookno": "BKON2298",
-  "bkgCutoff": "2019-10-12T00:44:55.915Z",
-  "docCutoff": "2019-10-12T02:59:55.915Z",
-  "vgmCutoff": "2019-10-10T20:44:55.915Z",
-  "bbroroCutoff": "2019-10-06T00:44:55.915Z",
-  "hazCutoff": "2019-10-10T07:44:55.915Z",
-  "portentryCutoff": "2019-10-06T13:34:55.915Z"
+  "bkgCutoff": "2019-10-12T15:55:06.465Z",
+  "docCutoff": "2019-10-12T18:10:06.465Z",
+  "vgmCutoff": "2019-10-11T11:55:06.465Z",
+  "bbroroCutoff": "2019-10-06T15:55:06.465Z",
+  "hazCutoff": "2019-10-10T22:55:06.465Z",
+  "portentryCutoff": "2019-10-07T04:45:06.465Z"
  },
  {
   "cid": "66",
   "ebookno": "BKON2304",
-  "bkgCutoff": "2019-10-19T00:44:55.915Z",
-  "docCutoff": "2019-10-19T02:59:55.915Z",
-  "vgmCutoff": "2019-10-17T20:44:55.915Z",
-  "bbroroCutoff": "2019-10-13T00:44:55.915Z",
-  "hazCutoff": "2019-10-17T07:44:55.915Z",
-  "portentryCutoff": "2019-10-13T13:34:55.915Z"
+  "bkgCutoff": "2019-10-19T15:55:06.465Z",
+  "docCutoff": "2019-10-19T18:10:06.465Z",
+  "vgmCutoff": "2019-10-18T11:55:06.465Z",
+  "bbroroCutoff": "2019-10-13T15:55:06.465Z",
+  "hazCutoff": "2019-10-17T22:55:06.465Z",
+  "portentryCutoff": "2019-10-14T04:45:06.465Z"
  },
  {
   "cid": "69",
   "ebookno": "BKON2313",
-  "bkgCutoff": "2019-11-02T00:44:55.915Z",
-  "docCutoff": "2019-11-02T02:59:55.915Z",
-  "vgmCutoff": "2019-10-31T20:44:55.915Z",
-  "bbroroCutoff": "2019-10-27T00:44:55.915Z",
-  "hazCutoff": "2019-10-31T07:44:55.915Z",
-  "portentryCutoff": "2019-10-27T13:34:55.915Z"
+  "bkgCutoff": "2019-11-02T15:55:06.465Z",
+  "docCutoff": "2019-11-02T18:10:06.465Z",
+  "vgmCutoff": "2019-11-01T11:55:06.465Z",
+  "bbroroCutoff": "2019-10-27T15:55:06.465Z",
+  "hazCutoff": "2019-10-31T22:55:06.465Z",
+  "portentryCutoff": "2019-10-28T04:45:06.465Z"
  },
  {
   "cid": "70",
   "ebookno": "BKON2314",
-  "bkgCutoff": "2019-11-02T00:44:55.915Z",
-  "docCutoff": "2019-11-02T02:59:55.915Z",
-  "vgmCutoff": "2019-10-31T20:44:55.915Z",
-  "bbroroCutoff": "2019-10-27T00:44:55.915Z",
-  "hazCutoff": "2019-10-31T07:44:55.915Z",
-  "portentryCutoff": "2019-10-27T13:34:55.915Z"
+  "bkgCutoff": "2019-11-02T15:55:06.465Z",
+  "docCutoff": "2019-11-02T18:10:06.465Z",
+  "vgmCutoff": "2019-11-01T11:55:06.465Z",
+  "bbroroCutoff": "2019-10-27T15:55:06.465Z",
+  "hazCutoff": "2019-10-31T22:55:06.465Z",
+  "portentryCutoff": "2019-10-28T04:45:06.465Z"
  },
  {
   "cid": "71",
   "ebookno": "BKON2308",
-  "bkgCutoff": "2019-11-09T00:44:55.915Z",
-  "docCutoff": "2019-11-09T02:59:55.915Z",
-  "vgmCutoff": "2019-11-14T20:44:55.915Z",
-  "bbroroCutoff": "2019-11-10T00:44:55.915Z",
-  "hazCutoff": "2019-11-14T07:44:55.915Z",
-  "portentryCutoff": "2019-11-10T13:34:55.915Z"
+  "bkgCutoff": "2019-11-09T15:55:06.465Z",
+  "docCutoff": "2019-11-09T18:10:06.465Z",
+  "vgmCutoff": "2019-11-15T11:55:06.465Z",
+  "bbroroCutoff": "2019-11-10T15:55:06.465Z",
+  "hazCutoff": "2019-11-14T22:55:06.465Z",
+  "portentryCutoff": "2019-11-11T04:45:06.465Z"
  },
  {
   "cid": "75",
   "ebookno": "BKON2316",
-  "bkgCutoff": "2019-11-09T00:44:55.915Z",
-  "docCutoff": "2019-11-09T02:59:55.915Z",
-  "vgmCutoff": "2019-11-07T20:44:55.915Z",
-  "bbroroCutoff": "2019-11-10T00:44:55.915Z",
-  "hazCutoff": "2019-11-07T07:44:55.915Z",
-  "portentryCutoff": "2019-11-10T13:34:55.915Z"
+  "bkgCutoff": "2019-11-09T15:55:06.465Z",
+  "docCutoff": "2019-11-09T18:10:06.465Z",
+  "vgmCutoff": "2019-11-08T11:55:06.465Z",
+  "bbroroCutoff": "2019-11-10T15:55:06.465Z",
+  "hazCutoff": "2019-11-07T22:55:06.465Z",
+  "portentryCutoff": "2019-11-11T04:45:06.465Z"
  },
  {
   "cid": "76",
   "ebookno": "BKON2317",
-  "bkgCutoff": "2019-11-09T00:44:55.915Z",
-  "docCutoff": "2019-11-09T02:59:55.915Z",
-  "vgmCutoff": "2019-11-07T20:44:55.915Z",
-  "bbroroCutoff": "2019-11-10T00:44:55.915Z",
-  "hazCutoff": "2019-11-07T07:44:55.915Z",
-  "portentryCutoff": "2019-11-10T13:34:55.915Z"
+  "bkgCutoff": "2019-11-09T15:55:06.465Z",
+  "docCutoff": "2019-11-09T18:10:06.465Z",
+  "vgmCutoff": "2019-11-08T11:55:06.465Z",
+  "bbroroCutoff": "2019-11-10T15:55:06.465Z",
+  "hazCutoff": "2019-11-07T22:55:06.465Z",
+  "portentryCutoff": "2019-11-11T04:45:06.465Z"
  },
  {
   "cid": "77",
   "ebookno": "BKON2318",
-  "bkgCutoff": "2019-11-02T00:44:55.915Z",
-  "docCutoff": "2019-11-02T02:59:55.915Z",
-  "vgmCutoff": "2019-10-31T20:44:55.915Z",
-  "bbroroCutoff": "2019-10-27T00:44:55.915Z",
-  "hazCutoff": "2019-10-31T07:44:55.915Z",
-  "portentryCutoff": "2019-10-27T13:34:55.915Z"
+  "bkgCutoff": "2019-11-02T15:55:06.465Z",
+  "docCutoff": "2019-11-02T18:10:06.465Z",
+  "vgmCutoff": "2019-11-01T11:55:06.465Z",
+  "bbroroCutoff": "2019-10-27T15:55:06.465Z",
+  "hazCutoff": "2019-10-31T22:55:06.465Z",
+  "portentryCutoff": "2019-10-28T04:45:06.465Z"
  },
  {
   "cid": "79",
   "ebookno": "BKON2320",
-  "bkgCutoff": "2019-11-02T00:44:55.915Z",
-  "docCutoff": "2019-11-02T02:59:55.915Z",
-  "vgmCutoff": "2019-10-31T20:44:55.915Z",
-  "bbroroCutoff": "2019-10-27T00:44:55.915Z",
-  "hazCutoff": "2019-10-31T07:44:55.915Z",
-  "portentryCutoff": "2019-10-27T13:34:55.915Z"
+  "bkgCutoff": "2019-11-02T15:55:06.465Z",
+  "docCutoff": "2019-11-02T18:10:06.465Z",
+  "vgmCutoff": "2019-11-01T11:55:06.465Z",
+  "bbroroCutoff": "2019-10-27T15:55:06.465Z",
+  "hazCutoff": "2019-10-31T22:55:06.465Z",
+  "portentryCutoff": "2019-10-28T04:45:06.465Z"
  },
  {
   "cid": "80",
   "ebookno": "BKON2321",
-  "bkgCutoff": "2019-11-09T00:44:55.915Z",
-  "docCutoff": "2019-11-09T02:59:55.915Z",
-  "vgmCutoff": "2019-11-07T20:44:55.915Z",
-  "bbroroCutoff": "2019-11-10T00:44:55.915Z",
-  "hazCutoff": "2019-11-07T07:44:55.915Z",
-  "portentryCutoff": "2019-11-10T13:34:55.915Z"
+  "bkgCutoff": "2019-11-09T15:55:06.465Z",
+  "docCutoff": "2019-11-09T18:10:06.465Z",
+  "vgmCutoff": "2019-11-08T11:55:06.465Z",
+  "bbroroCutoff": "2019-11-10T15:55:06.465Z",
+  "hazCutoff": "2019-11-07T22:55:06.465Z",
+  "portentryCutoff": "2019-11-11T04:45:06.465Z"
  },
  {
   "cid": "81",
   "ebookno": "BKON2322",
-  "bkgCutoff": "2019-11-09T00:44:55.915Z",
-  "docCutoff": "2019-11-09T02:59:55.915Z",
-  "vgmCutoff": "2019-11-07T20:44:55.915Z",
-  "bbroroCutoff": "2019-11-10T00:44:55.915Z",
-  "hazCutoff": "2019-11-07T07:44:55.915Z",
-  "portentryCutoff": "2019-11-10T13:34:55.915Z"
+  "bkgCutoff": "2019-11-09T15:55:06.465Z",
+  "docCutoff": "2019-11-09T18:10:06.465Z",
+  "vgmCutoff": "2019-11-08T11:55:06.465Z",
+  "bbroroCutoff": "2019-11-10T15:55:06.465Z",
+  "hazCutoff": "2019-11-07T22:55:06.465Z",
+  "portentryCutoff": "2019-11-11T04:45:06.465Z"
  },
  {
   "cid": "84",
   "ebookno": "BKON2324",
-  "bkgCutoff": "2019-11-09T00:44:55.915Z",
-  "docCutoff": "2019-11-09T02:59:55.915Z",
-  "vgmCutoff": "2019-11-14T20:44:55.915Z",
-  "bbroroCutoff": "2019-11-10T00:44:55.915Z",
-  "hazCutoff": "2019-11-14T07:44:55.915Z",
-  "portentryCutoff": "2019-11-10T13:34:55.915Z"
+  "bkgCutoff": "2019-11-09T15:55:06.465Z",
+  "docCutoff": "2019-11-09T18:10:06.465Z",
+  "vgmCutoff": "2019-11-15T11:55:06.465Z",
+  "bbroroCutoff": "2019-11-10T15:55:06.465Z",
+  "hazCutoff": "2019-11-14T22:55:06.465Z",
+  "portentryCutoff": "2019-11-11T04:45:06.465Z"
  },
  {
   "cid": "85",
   "ebookno": "BKON2323",
-  "bkgCutoff": "2019-11-09T00:44:55.915Z",
-  "docCutoff": "2019-11-09T02:59:55.915Z",
-  "vgmCutoff": "2019-11-14T20:44:55.915Z",
-  "bbroroCutoff": "2019-11-10T00:44:55.915Z",
-  "hazCutoff": "2019-11-14T07:44:55.915Z",
-  "portentryCutoff": "2019-11-10T13:34:55.915Z"
+  "bkgCutoff": "2019-11-09T15:55:06.465Z",
+  "docCutoff": "2019-11-09T18:10:06.465Z",
+  "vgmCutoff": "2019-11-15T11:55:06.465Z",
+  "bbroroCutoff": "2019-11-10T15:55:06.465Z",
+  "hazCutoff": "2019-11-14T22:55:06.465Z",
+  "portentryCutoff": "2019-11-11T04:45:06.465Z"
  },
  {
   "cid": "87",
   "ebookno": "BKON2325",
-  "bkgCutoff": "2019-11-09T00:44:55.915Z",
-  "docCutoff": "2019-11-09T02:59:55.915Z",
-  "vgmCutoff": "2019-11-07T20:44:55.915Z",
-  "bbroroCutoff": "2019-11-10T00:44:55.915Z",
-  "hazCutoff": "2019-11-07T07:44:55.915Z",
-  "portentryCutoff": "2019-11-10T13:34:55.915Z"
+  "bkgCutoff": "2019-11-09T15:55:06.465Z",
+  "docCutoff": "2019-11-09T18:10:06.465Z",
+  "vgmCutoff": "2019-11-08T11:55:06.465Z",
+  "bbroroCutoff": "2019-11-10T15:55:06.465Z",
+  "hazCutoff": "2019-11-07T22:55:06.465Z",
+  "portentryCutoff": "2019-11-11T04:45:06.465Z"
  },
  {
   "cid": "88",
   "ebookno": "BKON2326",
-  "bkgCutoff": "2019-11-09T00:44:55.915Z",
-  "docCutoff": "2019-11-09T02:59:55.915Z",
-  "vgmCutoff": "2019-11-07T20:44:55.915Z",
-  "bbroroCutoff": "2019-11-10T00:44:55.915Z",
-  "hazCutoff": "2019-11-07T07:44:55.915Z",
-  "portentryCutoff": "2019-11-10T13:34:55.915Z"
+  "bkgCutoff": "2019-11-09T15:55:06.465Z",
+  "docCutoff": "2019-11-09T18:10:06.465Z",
+  "vgmCutoff": "2019-11-08T11:55:06.465Z",
+  "bbroroCutoff": "2019-11-10T15:55:06.465Z",
+  "hazCutoff": "2019-11-07T22:55:06.465Z",
+  "portentryCutoff": "2019-11-11T04:45:06.465Z"
  },
  {
   "cid": "90",
   "ebookno": "BKON2327",
-  "bkgCutoff": "2019-11-09T00:44:55.915Z",
-  "docCutoff": "2019-11-09T02:59:55.915Z",
-  "vgmCutoff": "2019-11-07T20:44:55.915Z",
-  "bbroroCutoff": "2019-11-10T00:44:55.915Z",
-  "hazCutoff": "2019-11-07T07:44:55.915Z",
-  "portentryCutoff": "2019-11-10T13:34:55.915Z"
+  "bkgCutoff": "2019-11-09T15:55:06.465Z",
+  "docCutoff": "2019-11-09T18:10:06.465Z",
+  "vgmCutoff": "2019-11-08T11:55:06.465Z",
+  "bbroroCutoff": "2019-11-10T15:55:06.465Z",
+  "hazCutoff": "2019-11-07T22:55:06.465Z",
+  "portentryCutoff": "2019-11-11T04:45:06.465Z"
  },
  {
   "cid": "94",
   "ebookno": "BKON2330",
-  "bkgCutoff": "2019-11-09T00:44:55.915Z",
-  "docCutoff": "2019-11-09T02:59:55.915Z",
-  "vgmCutoff": "2019-11-07T20:44:55.915Z",
-  "bbroroCutoff": "2019-11-10T00:44:55.915Z",
-  "hazCutoff": "2019-11-07T07:44:55.915Z",
-  "portentryCutoff": "2019-11-10T13:34:55.915Z"
+  "bkgCutoff": "2019-11-09T15:55:06.465Z",
+  "docCutoff": "2019-11-09T18:10:06.465Z",
+  "vgmCutoff": "2019-11-08T11:55:06.465Z",
+  "bbroroCutoff": "2019-11-10T15:55:06.465Z",
+  "hazCutoff": "2019-11-07T22:55:06.465Z",
+  "portentryCutoff": "2019-11-11T04:45:06.465Z"
+ },
+ {
+  "cid": "96",
+  "ebookno": "BKON2331",
+  "bkgCutoff": "2019-11-09T15:55:06.465Z",
+  "docCutoff": "2019-11-09T18:10:06.465Z",
+  "vgmCutoff": "2019-11-08T11:55:06.465Z",
+  "bbroroCutoff": "2019-11-10T15:55:06.465Z",
+  "hazCutoff": "2019-11-07T22:55:06.465Z",
+  "portentryCutoff": "2019-11-11T04:45:06.465Z"
+ },
+ {
+  "cid": "97",
+  "ebookno": "BKON2332",
+  "bkgCutoff": "2019-11-09T15:55:06.465Z",
+  "docCutoff": "2019-11-09T18:10:06.465Z",
+  "vgmCutoff": "2019-11-08T11:55:06.465Z",
+  "bbroroCutoff": "2019-11-10T15:55:06.465Z",
+  "hazCutoff": "2019-11-07T22:55:06.465Z",
+  "portentryCutoff": "2019-11-11T04:45:06.465Z"
+ },
+ {
+  "cid": "98",
+  "ebookno": "BKON2333",
+  "bkgCutoff": "2019-11-09T15:55:06.465Z",
+  "docCutoff": "2019-11-09T18:10:06.465Z",
+  "vgmCutoff": "2019-11-08T11:55:06.465Z",
+  "bbroroCutoff": "2019-11-10T15:55:06.465Z",
+  "hazCutoff": "2019-11-07T22:55:06.465Z",
+  "portentryCutoff": "2019-11-11T04:45:06.465Z"
+ },
+ {
+  "cid": "99",
+  "ebookno": "BKON2334",
+  "bkgCutoff": "2019-11-09T15:55:06.465Z",
+  "docCutoff": "2019-11-09T18:10:06.465Z",
+  "vgmCutoff": "2019-11-08T11:55:06.465Z",
+  "bbroroCutoff": "2019-11-10T15:55:06.465Z",
+  "hazCutoff": "2019-11-07T22:55:06.465Z",
+  "portentryCutoff": "2019-11-11T04:45:06.465Z"
+ },
+ {
+  "cid": "100",
+  "ebookno": "BKON2329",
+  "bkgCutoff": "2019-11-09T15:55:06.465Z",
+  "docCutoff": "2019-11-09T18:10:06.465Z",
+  "vgmCutoff": "2019-11-08T11:55:06.465Z",
+  "bbroroCutoff": "2019-11-10T15:55:06.465Z",
+  "hazCutoff": "2019-11-07T22:55:06.465Z",
+  "portentryCutoff": "2019-11-11T04:45:06.465Z"
+ },
+ {
+  "cid": "102",
+  "ebookno": "BKON2335",
+  "bkgCutoff": "2019-11-09T15:55:06.465Z",
+  "docCutoff": "2019-11-09T18:10:06.465Z",
+  "vgmCutoff": "2019-11-15T11:55:06.465Z",
+  "bbroroCutoff": "2019-11-10T15:55:06.465Z",
+  "hazCutoff": "2019-11-14T22:55:06.465Z",
+  "portentryCutoff": "2019-11-11T04:45:06.465Z"
+ },
+ {
+  "cid": "103",
+  "ebookno": "BKON2336",
+  "bkgCutoff": "2019-11-23T15:55:06.465Z",
+  "docCutoff": "2019-11-23T18:10:06.465Z",
+  "vgmCutoff": "2019-11-22T11:55:06.465Z",
+  "bbroroCutoff": "2019-11-24T15:55:06.465Z",
+  "hazCutoff": "2019-11-21T22:55:06.465Z",
+  "portentryCutoff": "2019-11-25T04:45:06.465Z"
+ },
+ {
+  "cid": "104",
+  "ebookno": "BKON2337",
+  "bkgCutoff": "2019-11-16T15:55:06.465Z",
+  "docCutoff": "2019-11-16T18:10:06.465Z",
+  "vgmCutoff": "2019-11-15T11:55:06.465Z",
+  "bbroroCutoff": "2019-11-10T15:55:06.465Z",
+  "hazCutoff": "2019-11-14T22:55:06.465Z",
+  "portentryCutoff": "2019-11-11T04:45:06.465Z"
+ },
+ {
+  "cid": "106",
+  "ebookno": "BKON2381",
+  "bkgCutoff": "2019-12-07T15:55:06.465Z",
+  "docCutoff": "2019-12-07T18:10:06.465Z",
+  "vgmCutoff": "2019-12-06T11:55:06.465Z",
+  "bbroroCutoff": "2019-12-08T15:55:06.465Z",
+  "hazCutoff": "2019-12-05T22:55:06.465Z",
+  "portentryCutoff": "2019-12-09T04:45:06.465Z"
+ },
+ {
+  "cid": "107",
+  "ebookno": "BKON2382",
+  "bkgCutoff": "2019-12-07T15:55:06.465Z",
+  "docCutoff": "2019-12-07T18:10:06.465Z",
+  "vgmCutoff": "2019-12-06T11:55:06.465Z",
+  "bbroroCutoff": "2019-12-08T15:55:06.465Z",
+  "hazCutoff": "2019-12-05T22:55:06.465Z",
+  "portentryCutoff": "2019-12-09T04:45:06.465Z"
+ },
+ {
+  "cid": "108",
+  "ebookno": "BKON2383",
+  "bkgCutoff": "2019-12-07T15:55:06.465Z",
+  "docCutoff": "2019-12-07T18:10:06.465Z",
+  "vgmCutoff": "2019-12-06T11:55:06.465Z",
+  "bbroroCutoff": "2019-12-08T15:55:06.465Z",
+  "hazCutoff": "2019-12-05T22:55:06.465Z",
+  "portentryCutoff": "2019-12-09T04:45:06.465Z"
+ },
+ {
+  "cid": "109",
+  "ebookno": "BKON2384",
+  "bkgCutoff": "2019-12-07T15:55:06.465Z",
+  "docCutoff": "2019-12-07T18:10:06.465Z",
+  "vgmCutoff": "2019-12-06T11:55:06.465Z",
+  "bbroroCutoff": "2019-12-08T15:55:06.465Z",
+  "hazCutoff": "2019-12-05T22:55:06.465Z",
+  "portentryCutoff": "2019-12-09T04:45:06.465Z"
+ },
+ {
+  "cid": "114",
+  "ebookno": "BKON2388",
+  "bkgCutoff": "2019-12-07T15:55:06.465Z",
+  "docCutoff": "2019-12-07T18:10:06.465Z",
+  "vgmCutoff": "2019-12-06T11:55:06.465Z",
+  "bbroroCutoff": "2019-12-08T15:55:06.465Z",
+  "hazCutoff": "2019-12-05T22:55:06.465Z",
+  "portentryCutoff": "2019-12-09T04:45:06.465Z"
+ },
+ {
+  "cid": "117",
+  "ebookno": "BKON2389",
+  "bkgCutoff": "2020-01-04T15:55:06.465Z",
+  "docCutoff": "2020-01-04T18:10:06.465Z",
+  "vgmCutoff": "2020-01-03T11:55:06.465Z",
+  "bbroroCutoff": "2020-01-05T15:55:06.465Z",
+  "hazCutoff": "2020-01-02T22:55:06.465Z",
+  "portentryCutoff": "2020-01-06T04:45:06.465Z"
+ },
+ {
+  "cid": "118",
+  "ebookno": "BKON2390",
+  "bkgCutoff": "2020-01-04T15:55:06.465Z",
+  "docCutoff": "2020-01-04T18:10:06.465Z",
+  "vgmCutoff": "2020-01-03T11:55:06.465Z",
+  "bbroroCutoff": "2020-01-05T15:55:06.465Z",
+  "hazCutoff": "2020-01-02T22:55:06.465Z",
+  "portentryCutoff": "2020-01-06T04:45:06.465Z"
+ },
+ {
+  "cid": "119",
+  "ebookno": "BKON2391",
+  "bkgCutoff": "2020-01-04T15:55:06.465Z",
+  "docCutoff": "2020-01-04T18:10:06.465Z",
+  "vgmCutoff": "2020-01-03T11:55:06.465Z",
+  "bbroroCutoff": "2020-01-05T15:55:06.465Z",
+  "hazCutoff": "2020-01-02T22:55:06.465Z",
+  "portentryCutoff": "2020-01-06T04:45:06.465Z"
+ },
+ {
+  "cid": "121",
+  "ebookno": "BKON2393",
+  "bkgCutoff": "2020-01-04T15:55:06.465Z",
+  "docCutoff": "2020-01-04T18:10:06.465Z",
+  "vgmCutoff": "2020-01-03T11:55:06.465Z",
+  "bbroroCutoff": "2020-01-05T15:55:06.465Z",
+  "hazCutoff": "2020-01-02T22:55:06.465Z",
+  "portentryCutoff": "2020-01-06T04:45:06.465Z"
+ },
+ {
+  "cid": "122",
+  "ebookno": "BKON2392",
+  "bkgCutoff": "2019-12-21T15:55:06.465Z",
+  "docCutoff": "2019-12-21T18:10:06.465Z",
+  "vgmCutoff": "2019-12-20T11:55:06.465Z",
+  "bbroroCutoff": "2019-12-22T15:55:06.465Z",
+  "hazCutoff": "2019-12-19T22:55:06.465Z",
+  "portentryCutoff": "2019-12-23T04:45:06.465Z"
+ },
+ {
+  "cid": "126",
+  "ebookno": "BKON2395",
+  "bkgCutoff": "2019-12-21T15:55:06.465Z",
+  "docCutoff": "2019-12-21T18:10:06.465Z",
+  "vgmCutoff": "2019-12-20T11:55:06.465Z",
+  "bbroroCutoff": "2019-12-22T15:55:06.465Z",
+  "hazCutoff": "2019-12-19T22:55:06.465Z",
+  "portentryCutoff": "2019-12-23T04:45:06.465Z"
+ },
+ {
+  "cid": "127",
+  "ebookno": "BKON2396",
+  "bkgCutoff": "2020-01-04T15:55:06.465Z",
+  "docCutoff": "2020-01-04T18:10:06.465Z",
+  "vgmCutoff": "2020-01-03T11:55:06.465Z",
+  "bbroroCutoff": "2020-01-05T15:55:06.465Z",
+  "hazCutoff": "2020-01-02T22:55:06.465Z",
+  "portentryCutoff": "2020-01-06T04:45:06.465Z"
+ },
+ {
+  "cid": "128",
+  "ebookno": "BKON2397",
+  "bkgCutoff": "2020-01-04T15:55:06.465Z",
+  "docCutoff": "2020-01-04T18:10:06.465Z",
+  "vgmCutoff": "2020-01-03T11:55:06.465Z",
+  "bbroroCutoff": "2020-01-05T15:55:06.465Z",
+  "hazCutoff": "2020-01-02T22:55:06.465Z",
+  "portentryCutoff": "2020-01-06T04:45:06.465Z"
+ },
+ {
+  "cid": "129",
+  "ebookno": "BKON2398",
+  "bkgCutoff": "2020-01-04T15:55:06.465Z",
+  "docCutoff": "2020-01-04T18:10:06.465Z",
+  "vgmCutoff": "2020-01-03T11:55:06.465Z",
+  "bbroroCutoff": "2020-01-05T15:55:06.465Z",
+  "hazCutoff": "2020-01-02T22:55:06.465Z",
+  "portentryCutoff": "2020-01-06T04:45:06.465Z"
+ },
+ {
+  "cid": "130",
+  "ebookno": "BKON2399",
+  "bkgCutoff": "2020-01-04T15:55:06.465Z",
+  "docCutoff": "2020-01-04T18:10:06.465Z",
+  "vgmCutoff": "2020-01-03T11:55:06.465Z",
+  "bbroroCutoff": "2020-01-05T15:55:06.465Z",
+  "hazCutoff": "2020-01-02T22:55:06.465Z",
+  "portentryCutoff": "2020-01-06T04:45:06.465Z"
+ },
+ {
+  "cid": "131",
+  "ebookno": "BKON2400",
+  "bkgCutoff": "2020-01-04T15:55:06.465Z",
+  "docCutoff": "2020-01-04T18:10:06.465Z",
+  "vgmCutoff": "2020-01-03T11:55:06.465Z",
+  "bbroroCutoff": "2020-01-05T15:55:06.465Z",
+  "hazCutoff": "2020-01-02T22:55:06.465Z",
+  "portentryCutoff": "2020-01-06T04:45:06.465Z"
+ },
+ {
+  "cid": "132",
+  "ebookno": "BKON2401",
+  "bkgCutoff": "2020-01-04T15:55:06.465Z",
+  "docCutoff": "2020-01-04T18:10:06.465Z",
+  "vgmCutoff": "2020-01-03T11:55:06.465Z",
+  "bbroroCutoff": "2020-01-05T15:55:06.465Z",
+  "hazCutoff": "2020-01-02T22:55:06.465Z",
+  "portentryCutoff": "2020-01-06T04:45:06.465Z"
+ },
+ {
+  "cid": "133",
+  "ebookno": "BKON2402",
+  "bkgCutoff": "2020-01-04T15:55:06.465Z",
+  "docCutoff": "2020-01-04T18:10:06.465Z",
+  "vgmCutoff": "2020-01-03T11:55:06.465Z",
+  "bbroroCutoff": "2020-01-05T15:55:06.465Z",
+  "hazCutoff": "2020-01-02T22:55:06.465Z",
+  "portentryCutoff": "2020-01-06T04:45:06.465Z"
+ },
+ {
+  "cid": "134",
+  "ebookno": "BKON2403",
+  "bkgCutoff": "2020-01-04T15:55:06.465Z",
+  "docCutoff": "2020-01-04T18:10:06.465Z",
+  "vgmCutoff": "2020-01-03T11:55:06.465Z",
+  "bbroroCutoff": "2020-01-05T15:55:06.465Z",
+  "hazCutoff": "2020-01-02T22:55:06.465Z",
+  "portentryCutoff": "2020-01-06T04:45:06.465Z"
+ },
+ {
+  "cid": "135",
+  "ebookno": "BKON2404",
+  "bkgCutoff": "2020-01-04T15:55:06.465Z",
+  "docCutoff": "2020-01-04T18:10:06.465Z",
+  "vgmCutoff": "2020-01-03T11:55:06.465Z",
+  "bbroroCutoff": "2020-01-05T15:55:06.465Z",
+  "hazCutoff": "2020-01-02T22:55:06.465Z",
+  "portentryCutoff": "2020-01-06T04:45:06.465Z"
+ },
+ {
+  "cid": "136",
+  "ebookno": "BKON2405",
+  "bkgCutoff": "2019-12-21T15:55:06.465Z",
+  "docCutoff": "2019-12-21T18:10:06.465Z",
+  "vgmCutoff": "2019-12-20T11:55:06.465Z",
+  "bbroroCutoff": "2019-12-22T15:55:06.465Z",
+  "hazCutoff": "2019-12-19T22:55:06.465Z",
+  "portentryCutoff": "2019-12-23T04:45:06.465Z"
+ },
+ {
+  "cid": "137",
+  "ebookno": "BKON2406",
+  "bkgCutoff": "2020-01-04T15:55:06.465Z",
+  "docCutoff": "2020-01-04T18:10:06.465Z",
+  "vgmCutoff": "2020-01-03T11:55:06.465Z",
+  "bbroroCutoff": "2020-01-05T15:55:06.465Z",
+  "hazCutoff": "2020-01-02T22:55:06.465Z",
+  "portentryCutoff": "2020-01-06T04:45:06.465Z"
+ },
+ {
+  "cid": "138",
+  "ebookno": "BKON2407",
+  "bkgCutoff": "2020-01-04T15:55:06.465Z",
+  "docCutoff": "2020-01-04T18:10:06.465Z",
+  "vgmCutoff": "2020-01-03T11:55:06.465Z",
+  "bbroroCutoff": "2020-01-05T15:55:06.465Z",
+  "hazCutoff": "2020-01-02T22:55:06.465Z",
+  "portentryCutoff": "2020-01-06T04:45:06.465Z"
+ },
+ {
+  "cid": "139",
+  "ebookno": "BKON2408",
+  "bkgCutoff": "2020-01-04T15:55:06.465Z",
+  "docCutoff": "2020-01-04T18:10:06.465Z",
+  "vgmCutoff": "2020-01-03T11:55:06.465Z",
+  "bbroroCutoff": "2020-01-05T15:55:06.465Z",
+  "hazCutoff": "2020-01-02T22:55:06.465Z",
+  "portentryCutoff": "2020-01-06T04:45:06.465Z"
+ },
+ {
+  "cid": "140",
+  "ebookno": "BKON2412",
+  "bkgCutoff": "2019-12-27T02:55:06.465Z",
+  "docCutoff": "2019-12-27T19:55:06.465Z",
+  "vgmCutoff": "2019-12-28T22:00:06.465Z",
+  "bbroroCutoff": "2019-12-26T16:05:06.465Z",
+  "hazCutoff": "2019-12-21T12:15:06.465Z",
+  "portentryCutoff": "2019-12-27T02:55:06.465Z"
+ },
+ {
+  "cid": "142",
+  "ebookno": "BKON2413",
+  "bkgCutoff": "2019-12-27T02:55:06.465Z",
+  "docCutoff": "2019-12-27T19:55:06.465Z",
+  "vgmCutoff": "2019-12-28T22:00:06.465Z",
+  "bbroroCutoff": "2019-12-26T16:05:06.465Z",
+  "hazCutoff": "2019-12-21T12:15:06.465Z",
+  "portentryCutoff": "2019-12-27T02:55:06.465Z"
+ },
+ {
+  "cid": "143",
+  "ebookno": "BKON2414",
+  "bkgCutoff": "2019-12-21T15:55:06.465Z",
+  "docCutoff": "2019-12-21T18:10:06.465Z",
+  "vgmCutoff": "2019-12-20T11:55:06.465Z",
+  "bbroroCutoff": "2019-12-22T15:55:06.465Z",
+  "hazCutoff": "2019-12-19T22:55:06.465Z",
+  "portentryCutoff": "2019-12-23T04:45:06.465Z"
+ },
+ {
+  "cid": "145",
+  "ebookno": "BKON2419",
+  "bkgCutoff": "2019-12-21T15:55:06.465Z",
+  "docCutoff": "2019-12-21T18:10:06.465Z",
+  "vgmCutoff": "2019-12-20T11:55:06.465Z",
+  "bbroroCutoff": "2019-12-22T15:55:06.465Z",
+  "hazCutoff": "2019-12-19T22:55:06.465Z",
+  "portentryCutoff": "2019-12-23T04:45:06.465Z"
+ },
+ {
+  "cid": "147",
+  "ebookno": "BKON2421",
+  "bkgCutoff": "2020-01-04T15:55:06.465Z",
+  "docCutoff": "2020-01-04T18:10:06.465Z",
+  "vgmCutoff": "2020-01-03T11:55:06.465Z",
+  "bbroroCutoff": "2020-01-05T15:55:06.465Z",
+  "hazCutoff": "2020-01-02T22:55:06.465Z",
+  "portentryCutoff": "2020-01-06T04:45:06.465Z"
+ },
+ {
+  "cid": "150",
+  "ebookno": "BKON2422",
+  "bkgCutoff": "2020-01-04T15:55:06.465Z",
+  "docCutoff": "2020-01-04T18:10:06.465Z",
+  "vgmCutoff": "2020-01-03T11:55:06.465Z",
+  "bbroroCutoff": "2020-01-05T15:55:06.465Z",
+  "hazCutoff": "2020-01-02T22:55:06.465Z",
+  "portentryCutoff": "2020-01-06T04:45:06.465Z"
+ },
+ {
+  "cid": "157",
+  "ebookno": "BKON2425",
+  "bkgCutoff": "2020-01-04T15:55:06.465Z",
+  "docCutoff": "2020-01-04T18:10:06.465Z",
+  "vgmCutoff": "2020-01-03T11:55:06.465Z",
+  "bbroroCutoff": "2020-01-05T15:55:06.465Z",
+  "hazCutoff": "2020-01-02T22:55:06.465Z",
+  "portentryCutoff": "2020-01-06T04:45:06.465Z"
+ },
+ {
+  "cid": "158",
+  "ebookno": "BKON2423",
+  "bkgCutoff": "2020-01-04T15:55:06.465Z",
+  "docCutoff": "2020-01-04T18:10:06.465Z",
+  "vgmCutoff": "2020-01-03T11:55:06.465Z",
+  "bbroroCutoff": "2020-01-05T15:55:06.465Z",
+  "hazCutoff": "2020-01-02T22:55:06.465Z",
+  "portentryCutoff": "2020-01-06T04:45:06.465Z"
+ },
+ {
+  "cid": "159",
+  "ebookno": "BKON2424",
+  "bkgCutoff": "2020-01-04T15:55:06.465Z",
+  "docCutoff": "2020-01-04T18:10:06.465Z",
+  "vgmCutoff": "2020-01-03T11:55:06.465Z",
+  "bbroroCutoff": "2020-01-05T15:55:06.465Z",
+  "hazCutoff": "2020-01-02T22:55:06.465Z",
+  "portentryCutoff": "2020-01-06T04:45:06.465Z"
+ },
+ {
+  "cid": "161",
+  "ebookno": "BKON2417",
+  "bkgCutoff": "2020-01-04T15:55:06.465Z",
+  "docCutoff": "2020-01-04T18:10:06.465Z",
+  "vgmCutoff": "2020-01-03T11:55:06.465Z",
+  "bbroroCutoff": "2020-01-05T15:55:06.465Z",
+  "hazCutoff": "2020-01-02T22:55:06.465Z",
+  "portentryCutoff": "2020-01-06T04:45:06.465Z"
+ },
+ {
+  "cid": "162",
+  "ebookno": "BKON2427",
+  "bkgCutoff": "2020-01-04T15:55:06.465Z",
+  "docCutoff": "2020-01-04T18:10:06.465Z",
+  "vgmCutoff": "2020-01-03T11:55:06.465Z",
+  "bbroroCutoff": "2020-01-05T15:55:06.465Z",
+  "hazCutoff": "2020-01-02T22:55:06.465Z",
+  "portentryCutoff": "2020-01-06T04:45:06.465Z"
+ },
+ {
+  "cid": "164",
+  "ebookno": "BKON2426",
+  "bkgCutoff": "2020-02-01T15:55:06.465Z",
+  "docCutoff": "2020-02-01T18:10:06.465Z",
+  "vgmCutoff": "2020-01-31T11:55:06.465Z",
+  "bbroroCutoff": "2020-02-02T15:55:06.465Z",
+  "hazCutoff": "2020-02-06T22:55:06.465Z",
+  "portentryCutoff": "2020-02-03T04:45:06.465Z"
+ },
+ {
+  "cid": "165",
+  "ebookno": "BKON2432",
+  "bkgCutoff": "2020-01-18T15:55:06.465Z",
+  "docCutoff": "2020-01-18T18:10:06.465Z",
+  "vgmCutoff": "2020-01-17T11:55:06.465Z",
+  "bbroroCutoff": "2020-01-19T15:55:06.465Z",
+  "hazCutoff": "2020-01-23T22:55:06.465Z",
+  "portentryCutoff": "2020-01-20T04:45:06.465Z"
+ },
+ {
+  "cid": "166",
+  "ebookno": "BKON2435",
+  "bkgCutoff": "2020-02-01T15:55:06.465Z",
+  "docCutoff": "2020-02-01T18:10:06.465Z",
+  "vgmCutoff": "2020-01-31T11:55:06.465Z",
+  "bbroroCutoff": "2020-02-02T15:55:06.465Z",
+  "hazCutoff": "2020-02-06T22:55:06.465Z",
+  "portentryCutoff": "2020-02-03T04:45:06.465Z"
+ },
+ {
+  "cid": "167",
+  "ebookno": "BKON2436",
+  "bkgCutoff": "2020-02-01T15:55:06.465Z",
+  "docCutoff": "2020-02-01T18:10:06.465Z",
+  "vgmCutoff": "2020-01-31T11:55:06.465Z",
+  "bbroroCutoff": "2020-02-02T15:55:06.465Z",
+  "hazCutoff": "2020-02-06T22:55:06.465Z",
+  "portentryCutoff": "2020-02-03T04:45:06.465Z"
+ },
+ {
+  "cid": "171",
+  "ebookno": "BKON2437",
+  "bkgCutoff": "2020-01-18T15:55:06.465Z",
+  "docCutoff": "2020-01-18T18:10:06.465Z",
+  "vgmCutoff": "2020-01-17T11:55:06.465Z",
+  "bbroroCutoff": "2020-01-19T15:55:06.465Z",
+  "hazCutoff": "2020-01-23T22:55:06.465Z",
+  "portentryCutoff": "2020-01-20T04:45:06.465Z"
+ },
+ {
+  "cid": "174",
+  "ebookno": "BKON2439",
+  "bkgCutoff": "2020-02-01T15:55:06.465Z",
+  "docCutoff": "2020-02-01T18:10:06.465Z",
+  "vgmCutoff": "2020-01-31T11:55:06.465Z",
+  "bbroroCutoff": "2020-02-02T15:55:06.465Z",
+  "hazCutoff": "2020-02-06T22:55:06.465Z",
+  "portentryCutoff": "2020-02-03T04:45:06.465Z"
+ },
+ {
+  "cid": "175",
+  "ebookno": "BKON2438",
+  "bkgCutoff": "2020-02-15T15:55:06.465Z",
+  "docCutoff": "2020-02-15T18:10:06.465Z",
+  "vgmCutoff": "2020-02-14T11:55:06.465Z",
+  "bbroroCutoff": "2020-02-16T15:55:06.465Z",
+  "hazCutoff": "2020-02-20T22:55:06.465Z",
+  "portentryCutoff": "2020-02-17T04:45:06.465Z"
  }
 ]

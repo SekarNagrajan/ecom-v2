@@ -194,7 +194,7 @@ export function PlanningDayBookingsDrawer({
     <AppDrawer
       open
       onClose={onClose}
-      dialogSize="sm"
+      dialogSize="lg"
       classNames={{
         header: "dashboard-planning-day-drawer__header-wrap",
         body: "dashboard-planning-day-drawer custom-scroll",

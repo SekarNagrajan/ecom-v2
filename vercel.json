@@ -6,6 +6,18 @@
   "outputDirectory": "apps/ecom-portal/dist",
   "rewrites": [
     {
+      "source": "/api/ai/grammar",
+      "destination": "https://n8n.sedge.ai/webhook/grammar"
+    },
+    {
+      "source": "/api/ai/transcribe",
+      "destination": "https://n8n.sedge.ai/webhook/transcribe"
+    },
+    {
+      "source": "/api/ai/rewrite",
+      "destination": "https://n8n.sedge.ai/webhook/v2/mail/rewrite"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

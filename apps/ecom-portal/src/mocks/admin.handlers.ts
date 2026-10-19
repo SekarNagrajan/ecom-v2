@@ -48,6 +48,10 @@ import {
 } from './fixture-api/bridges/menus.bridge';
 import { moduleMappingCustomers, resetUserPassword } from './fixture-api/bridges/users.bridge';
 import { db, eq } from './fixture-api/db';
+import {
+  ensureUserDbReady,
+  persistUserDb,
+} from './fixture-api/user-persistence';
 
 /**
  * System-admin modules served from the SQL-extracted fixtures (src/mocks/fixtures) through the bridges in
@@ -111,10 +115,12 @@ export const adminHandlers = [
 
   // 4. Admin Password Reset → ecomuserdetails (lastpwdup / lock counters)
   http.post('/api/v1/admin/password-reset', async ({ request }) => {
+    await ensureUserDbReady();
     const body = (await request.json()) as { username: string };
     if (!resetUserPassword(body.username)) {
       return HttpResponse.json({ success: false, message: `No user found for ${body.username}.` }, { status: 404 });
     }
+    persistUserDb();
     return HttpResponse.json({ success: true, message: `Password for ${body.username} reset successfully. Temporary OTP dispatched to user email.` });
   }),
 

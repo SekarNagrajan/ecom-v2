@@ -10,6 +10,10 @@ import {
   resetUserPassword,
   resolveCustomerLogin,
 } from "./fixture-api/bridges/users.bridge";
+import {
+  ensureUserDbReady,
+  persistUserDb,
+} from "./fixture-api/user-persistence";
 
 /**
  * Customer auth served from the SQL-extracted fixtures:
@@ -45,6 +49,7 @@ export const authHandlers = [
   // 2. Activation — the token is the registration e-mail / reg_no; a known user is marked valid in-session
   http.post("/api/auth/activate", async ({ request }) => {
     await delay(1500); // Simulate network latency
+    await ensureUserDbReady();
 
     const body = (await request.json()) as { token: string };
 
@@ -56,6 +61,7 @@ export const authHandlers = [
     }
 
     activateUser(body.token);
+    persistUserDb();
     return HttpResponse.json({
       message: "Account successfully activated!",
       status: "success",
@@ -65,6 +71,7 @@ export const authHandlers = [
   // 3. Forgot password — resets the lock counters of a known login; unknown logins get the same answer (no enumeration)
   http.post("/api/auth/forgot-password", async ({ request }) => {
     await delay(1200); // Simulate network latency
+    await ensureUserDbReady();
 
     const body = (await request.json()) as { userName: string; captcha: string };
 
@@ -76,6 +83,7 @@ export const authHandlers = [
     }
 
     resetUserPassword(body.userName);
+    persistUserDb();
     return HttpResponse.json({
       message: "Password reset instructions have been sent to your registered email.",
       status: "success",

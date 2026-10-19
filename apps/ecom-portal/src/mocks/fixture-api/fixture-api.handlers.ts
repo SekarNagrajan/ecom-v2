@@ -4,6 +4,9 @@ import {
   clearBookingDbOverlay,
   resetBookingDbReadyGate,
 } from './booking-persistence';
+import { resetProfilePhoto } from '../profile-photo.store';
+import { resetQuotes } from './bridges/rates.bridge';
+import { resetAlertOverrides } from './bridges/user.bridge';
 import { db, resetDb } from './db';
 import { authHandlers } from './handlers/auth';
 import { bookingHandlers } from './handlers/bookings';
@@ -15,6 +18,10 @@ import {
   resetSiDbReadyGate,
 } from './si-persistence';
 import {
+  clearUserDbOverlay,
+  resetUserDbReadyGate,
+} from './user-persistence';
+import {
   clearVgmDbOverlay,
   resetVgmDbReadyGate,
 } from './vgm-persistence';
@@ -24,12 +31,17 @@ const mockControlHandlers = [
   /** Restore pristine fixtures between demo sessions: fetch('/api/_mock/reset', { method: 'POST' }) */
   http.post(`${API}/_mock/reset`, async () => {
     resetDb();
+    resetQuotes();
+    resetAlertOverrides();
+    resetProfilePhoto();
     resetBookingDbReadyGate();
     resetSiDbReadyGate();
     resetVgmDbReadyGate();
+    resetUserDbReadyGate();
     await clearBookingDbOverlay();
     await clearSiDbOverlay();
     await clearVgmDbOverlay();
+    await clearUserDbOverlay();
     return ok({ reset: true });
   }),
   /** Row counts per table — useful to confirm the fixtures loaded. */

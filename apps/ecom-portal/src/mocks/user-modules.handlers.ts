@@ -2,7 +2,7 @@
 /**
  * User-module routes (profile, password, quotes, alerts, payment history) served from the
  * SQL-extracted fixtures via src/mocks/fixture-api/bridges/{user,payments}.bridge.ts.
- * Mutations update the in-memory fixture rows, so edits persist for the browser session.
+ * Mutations update fixture rows + session sidecars and persist via user-persistence.
  */
 import { http, HttpResponse } from 'msw';
 import type {
@@ -10,7 +10,7 @@ import type {
   CustomerProfile,
   QuoteItem,
 } from '../features/user-modules/types/user-modules.types';
-import { nextRef, nowIso } from './fixture-api/db';
+import { nowIso } from './fixture-api/db';
 import { filterPaymentsByDateRange, fixturePaymentHistory } from './fixture-api/bridges/payments.bridge';
 import {
   applyAlertPreferences,
@@ -22,8 +22,11 @@ import {
   fixtureAlertPreferences,
   mapProfile,
 } from './fixture-api/bridges/user.bridge';
-import { formatYmd } from './fixture-api/bridges/minute-format';
 import { createQuote, listQuotes, surchargeAmount } from './fixture-api/bridges/rates.bridge';
+import {
+  ensureUserDbReady,
+  persistUserDb,
+} from './fixture-api/user-persistence';
 import type { QuoteDTO } from '../features/rates/types/rates.types';
 
 // Quotes: one store with the rates module (fixture-api/bridges/rates.bridge.ts) — enquiries derived from the
@@ -55,31 +58,41 @@ const noUser = () =>
 export const userModulesHandlers = [
   // 1. Profile — users (eCom_Reg_Details) + userDetails (ecomuserdetails)
   //    (address falls back to the customer's own party row on its bookings when eCom_Reg_Details left it blank)
-  http.get('/api/v1/user/profile', () => {
+  http.get('/api/v1/user/profile', async () => {
+    await ensureUserDbReady();
     const cur = currentFixtureUser();
     return cur ? HttpResponse.json(mapProfile(cur.user, cur.details, customerParty(currentCustomerCode()))) : noUser();
   }),
   http.put('/api/v1/user/profile', async ({ request }) => {
+    await ensureUserDbReady();
     const cur = currentFixtureUser();
     if (!cur) return noUser();
     const body = (await request.json()) as Partial<CustomerProfile>;
-    return HttpResponse.json(applyProfilePatch(cur, body, customerParty(currentCustomerCode())));
+    const profile = applyProfilePatch(cur, body, customerParty(currentCustomerCode()));
+    persistUserDb();
+    return HttpResponse.json(profile);
   }),
 
   // 2. Change Password — stamps ecomuserdetails.lastpwdup
   http.post('/api/v1/user/change-password', async ({ request }) => {
+    await ensureUserDbReady();
     const body = (await request.json()) as { oldPassword?: string; newPassword?: string };
     if (!body.oldPassword) {
       return HttpResponse.json({ success: false, message: 'Current password is required' }, { status: 400 });
     }
     const cur = currentFixtureUser();
     if (cur?.details) cur.details.lastpwdup = nowIso();
+    persistUserDb();
     return HttpResponse.json({ success: true, message: 'Password updated successfully' });
   }),
 
   // 3. Quotes — shared with the rates module
-  http.get('/api/v1/user/quotes', () => HttpResponse.json(listQuotes().map(toQuoteItem))),
+  http.get('/api/v1/user/quotes', async () => {
+    await ensureUserDbReady();
+    return HttpResponse.json(listQuotes().map(toQuoteItem));
+  }),
   http.post('/api/v1/user/quotes', async ({ request }) => {
+    await ensureUserDbReady();
     const body = (await request.json()) as {
       polPort?: string;
       podPort?: string;
@@ -97,17 +110,27 @@ export const userModulesHandlers = [
       cargoWeightKg: 0,
       comments: body.targetDate ? `Target shipment date ${body.targetDate}` : undefined,
     });
+    persistUserDb();
     // A new request has no price until the agency quotes it.
     return HttpResponse.json(toQuoteItem({ ...quote, quotedAmountUsd: 0, validTo: body.targetDate || quote.validTo }));
   }),
 
   // 4. Alerts — mailAlerts + activities (fallback notificationSettings / customerNotifications); logs from EcommuserlogDetails
-  http.get('/api/v1/user/alerts/preferences', () => HttpResponse.json(fixtureAlertPreferences())),
-  http.put('/api/v1/user/alerts/preferences', async ({ request }) => {
-    const body = (await request.json()) as AlertPreference;
-    return HttpResponse.json(applyAlertPreferences(body));
+  http.get('/api/v1/user/alerts/preferences', async () => {
+    await ensureUserDbReady();
+    return HttpResponse.json(fixtureAlertPreferences());
   }),
-  http.get('/api/v1/user/alerts/logs', () => HttpResponse.json(fixtureAlertLogs())),
+  http.put('/api/v1/user/alerts/preferences', async ({ request }) => {
+    await ensureUserDbReady();
+    const body = (await request.json()) as AlertPreference;
+    const prefs = applyAlertPreferences(body);
+    persistUserDb();
+    return HttpResponse.json(prefs);
+  }),
+  http.get('/api/v1/user/alerts/logs', async () => {
+    await ensureUserDbReady();
+    return HttpResponse.json(fixtureAlertLogs());
+  }),
 
   // 5. Payments — payments + paymentReferences; optional ?fromDate=&toDate= (YYYY-MM-DD, inclusive)
   http.get('*/api/v1/user/payments', ({ request }) => {

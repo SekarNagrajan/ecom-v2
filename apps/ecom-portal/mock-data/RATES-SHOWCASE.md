@@ -42,9 +42,9 @@ Lanes with tariffs **and** sailings in VSS show both. Lanes with tariffs only (e
 ## Create quote (drawer)
 
 1. Open **Request for Quote** → fill drawer → submit.  
-2. Quote is stored in the mock **session** (`sessionQuotes` in `rates.bridge.ts`).  
+2. Quote is stored in the mock **session** (`sessionQuotes` in `rates.bridge.ts`) and persisted under `mock-data/runtime/user/session.json` via `PUT /api/_mock/user-db` (same sidecar as My Account quote requests).  
 3. UI switches to **Spot Quotes** for that POL/POD so the new row appears at the top.  
-4. Session quotes reset on full page reload / `/api/_mock/reset` (fixtures are re-seeded).
+4. Session quotes survive refresh while the user overlay is present; clear with `DELETE /api/_mock/user-db` or `POST /api/_mock/reset` (fixtures re-seeded, overlay removed).
 
 ## Re-extract
 

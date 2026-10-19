@@ -7,6 +7,10 @@ import {
   emailAvailable,
   registerUser,
 } from './fixture-api/bridges/users.bridge';
+import {
+  ensureUserDbReady,
+  persistUserDb,
+} from './fixture-api/user-persistence';
 
 /**
  * Registration served from eCom_Reg_Details (db.users): e-mail / customer-code checks look the fixture
@@ -16,6 +20,7 @@ export const registrationHandlers = [
   http.post('/api/registration', async ({ request }) => {
     // Artificial delay to simulate network latency
     await delay(1500);
+    await ensureUserDbReady();
 
     try {
       const formData = await request.formData();
@@ -32,6 +37,7 @@ export const registrationHandlers = [
       }
 
       const user = registerUser(fields);
+      persistUserDb();
       return HttpResponse.json({
         success: true,
         message: 'Registration successful',

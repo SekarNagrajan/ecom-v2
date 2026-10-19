@@ -1,11 +1,18 @@
 // Created by Sekar Nagarajan (2026-09-08 15:20)
 import { http, HttpResponse } from "msw";
 
-const OWN_PHOTO_URL = "/api/v1/user/profile/photo";
+import {
+  clearProfilePhoto,
+  getProfilePhotoBytes,
+  getProfilePhotoContentType,
+  setProfilePhoto,
+} from "./profile-photo.store";
+import {
+  ensureUserDbReady,
+  persistUserDb,
+} from "./fixture-api/user-persistence";
 
-/** Session-lifetime store — survives remounts for the mock session. */
-let mockPhotoBytes: ArrayBuffer | null = null;
-let mockPhotoContentType = "image/jpeg";
+const OWN_PHOTO_URL = "/api/v1/user/profile/photo";
 
 function delay(ms = 250) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -14,21 +21,24 @@ function delay(ms = 250) {
 export const profilePhotoHandlers = [
   http.get(OWN_PHOTO_URL, async () => {
     await delay();
+    await ensureUserDbReady();
 
-    if (!mockPhotoBytes) {
+    const bytes = getProfilePhotoBytes();
+    if (!bytes) {
       return new HttpResponse(null, { status: 404 });
     }
 
-    return new HttpResponse(mockPhotoBytes, {
+    return new HttpResponse(bytes, {
       status: 200,
       headers: {
-        "Content-Type": mockPhotoContentType,
+        "Content-Type": getProfilePhotoContentType(),
       },
     });
   }),
 
   http.post(OWN_PHOTO_URL, async ({ request }) => {
     await delay(350); // ~350ms upload latency
+    await ensureUserDbReady();
 
     const formData = await request.formData();
     const entry = formData.get("file");
@@ -45,17 +55,18 @@ export const profilePhotoHandlers = [
     }
 
     const file = entry as Blob;
-    mockPhotoBytes = await file.arrayBuffer();
-    mockPhotoContentType = file.type || "image/jpeg";
+    setProfilePhoto(await file.arrayBuffer(), file.type || "image/jpeg");
+    persistUserDb();
 
     return new HttpResponse(null, { status: 204 });
   }),
 
   http.delete(OWN_PHOTO_URL, async () => {
     await delay(180); // ~180ms delete latency
+    await ensureUserDbReady();
 
-    mockPhotoBytes = null;
-    mockPhotoContentType = "image/jpeg";
+    clearProfilePhoto();
+    persistUserDb();
 
     return new HttpResponse(null, { status: 204 });
   }),

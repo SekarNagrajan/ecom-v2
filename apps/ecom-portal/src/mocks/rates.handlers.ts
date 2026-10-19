@@ -13,6 +13,10 @@ import {
   fixtureTariffs,
   listQuotes,
 } from './fixture-api/bridges/rates.bridge';
+import {
+  ensureUserDbReady,
+  persistUserDb,
+} from './fixture-api/user-persistence';
 
 /** Query parameter or undefined (blank values count as absent). */
 const param = (url: URL, key: string): string | undefined => url.searchParams.get(key)?.trim() || undefined;
@@ -60,13 +64,17 @@ export const ratesHandlers = [
     });
   }),
 
-  http.get('*/api/v1/rates/quotes', () => {
+  http.get('*/api/v1/rates/quotes', async () => {
+    await ensureUserDbReady();
     return HttpResponse.json({ success: true, data: listQuotes() });
   }),
 
   http.post('*/api/v1/rates/quotes', async ({ request }) => {
+    await ensureUserDbReady();
     const input = (await request.json()) as CreateQuoteInput;
-    return HttpResponse.json({ success: true, data: createQuote(input) });
+    const quote = createQuote(input);
+    persistUserDb();
+    return HttpResponse.json({ success: true, data: quote });
   }),
 
   // Modified by Sekar Nagarajan (2026-09-11 16:25) — share rate quote via email

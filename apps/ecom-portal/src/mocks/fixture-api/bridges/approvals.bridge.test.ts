@@ -1,7 +1,10 @@
 // Modified by Sekar Nagarajan (2026-10-17 00:20)
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 
-import type { Row } from '../db';
+import { snapshotBookingDb } from '../booking-persistence';
+import { eq, resetDb, type Row } from '../db';
+import { snapshotSiDb } from '../si-persistence';
+import { snapshotVgmDb } from '../vgm-persistence';
 import { applyApprovalStatus, vendorApprovals } from './approvals.bridge';
 
 const bookings: Row[] = [
@@ -48,4 +51,33 @@ describe('vendor approvals queue', () => {
     expect(applyApprovalStatus('VGM:404', 'APPROVED', { vgm: v })).toBe(false);
     expect(applyApprovalStatus('X:1', 'APPROVED')).toBe(false);
   });
+
+  it('live approve updates domain overlay snapshots', () => {
+    const pendingBkg = vendorApprovals().find(i => i.type === 'BOOKING' && i.status === 'PENDING');
+    expect(pendingBkg).toBeTruthy();
+    expect(applyApprovalStatus(pendingBkg!.id, 'APPROVED')).toBe(true);
+    const ebookno = pendingBkg!.id.slice('BKG:'.length);
+    const bkgRow = snapshotBookingDb().tables!.bookings.find(b => eq(b.ebookno, ebookno));
+    expect(bkgRow?.ebook_status).toBe('A');
+
+    const pendingSi = vendorApprovals().find(i => i.type === 'SI' && i.status === 'PENDING');
+    if (pendingSi) {
+      expect(applyApprovalStatus(pendingSi.id, 'REJECTED')).toBe(true);
+      const eSINo = pendingSi.id.slice('SI:'.length);
+      const siRow = snapshotSiDb().tables!.shippingInstructions.find(s => eq(s.eSINo, eSINo));
+      expect(siRow?.status).toBe('V');
+    }
+
+    const pendingVgm = vendorApprovals().find(i => i.type === 'VGM' && i.status === 'PENDING');
+    if (pendingVgm) {
+      expect(applyApprovalStatus(pendingVgm.id, 'APPROVED')).toBe(true);
+      const vgmId = pendingVgm.id.slice('VGM:'.length);
+      const vgmRow = snapshotVgmDb().tables!.vgm.find(v => eq(v.id, vgmId));
+      expect(vgmRow?.status).toBe('C');
+    }
+  });
+});
+
+afterEach(() => {
+  resetDb();
 });

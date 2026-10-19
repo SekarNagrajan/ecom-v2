@@ -71,11 +71,12 @@ When the portal runs in mock mode (`VITE_API_MODE=mock`), demo mutations are wri
 
 | Domain | Path | API | Mutations covered |
 | --- | --- | --- | --- |
-| Booking | `runtime/` (flat `bookings.json`, …) | `GET\|PUT\|DELETE /api/_mock/booking-db` | submit / draft / amend / import / cancel / template delete |
-| Shipping instruction **+ B/L + MCN** (one shared overlay) | `runtime/si/` | `GET\|PUT\|DELETE /api/_mock/si-db` | See case list below |
-| VGM | `runtime/vgm/` | `GET\|PUT\|DELETE /api/_mock/vgm-db` | submit declaration (versioned `vgm` rows) |
+| Booking | `runtime/` (flat `bookings.json`, …) | `GET\|PUT\|DELETE /api/_mock/booking-db` | submit / draft / amend / import / cancel / template delete; **vendor approve/reject** (`ebook_status`) |
+| Shipping instruction **+ B/L + MCN** (one shared overlay) | `runtime/si/` | `GET\|PUT\|DELETE /api/_mock/si-db` | See case list below; **vendor approve/reject** (`status`) |
+| VGM | `runtime/vgm/` | `GET\|PUT\|DELETE /api/_mock/vgm-db` | submit declaration (versioned `vgm` rows); **vendor approve/reject** (`status`) |
+| User (My Account + account lifecycle) | `runtime/user/` | `GET\|PUT\|DELETE /api/_mock/user-db` | profile / password / alerts; **sub-users**; **registration** + `ECOMRegHistory`; **activate** / forgot-password; session sidecar for quotes, alert overrides, **profile photo** |
 
-There is **no** separate `runtime/bl/`. B/L amendments and MCN rows are SI-family rows (`editbl` / `blversion` on `shippingInstructions` + children). The first B/L edit of a plain SI clones an amendment version; later edits update that clone.
+There is **no** separate `runtime/bl/`. B/L amendments and MCN rows are SI-family rows (`editbl` / `blversion` on `shippingInstructions` + children). The first B/L edit of a plain SI clones an amendment version; later edits update that clone. Vendor approvals call the matching domain persist after status writes (no separate vendor overlay).
 
 | Module | Mutations persisted in `runtime/si/` |
 | --- | --- |
@@ -84,6 +85,8 @@ There is **no** separate `runtime/bl/`. B/L amendments and MCN rows are SI-famil
 | MCN | update (remarks, freightTerms, cargoDescription, status) / submit |
 
 VGM submit supersedes prior active rows (`A`/`C` → `I`) per `(book_no, eqpid)` and inserts a new `A` row with `Version_no + 1`. Only the `vgm` table is snapshotted (booking/SI joins stay live from seed or their own overlays).
+
+User overlay tables: `users`, `userDetails`, `mailAlerts`, `customerNotifications`, `customerUsers`, `ECOMRegHistory`. Non-table session state lives in `session.json` (`alertOverrides`, `quotes`, `profilePhoto`) because quote requests, channel/schedule alert flags, and the demo profile photo are not fixture tables. `nextRef` counters (`REG`, `QTE`, …) are stored in `_meta.json` with the overlay.
 
 - Seed data stays in `../src/mocks/fixtures/` (from `npm run dump`).
 - `npm run dump` / `extract:masters` **do not** touch `runtime/`.

@@ -77,14 +77,29 @@ const SI_RUNTIME_TABLES = [
 /** VGM declaration rows under mock-data/runtime/vgm/. */
 const VGM_RUNTIME_TABLES = ["vgm"] as const;
 
+/** User profile / alerts / account-lifecycle tables under mock-data/runtime/user/. */
+const USER_RUNTIME_TABLES = [
+  "users",
+  "userDetails",
+  "mailAlerts",
+  "customerNotifications",
+  "customerUsers",
+  "ECOMRegHistory",
+] as const;
+
+/** Non-table session state (alert overrides + quotes) as session.json. */
+const USER_RUNTIME_SIDECARS = ["session"] as const;
+
 const BOOKING_RUNTIME_DIR = path.resolve(__dirname, "mock-data/runtime");
 const SI_RUNTIME_DIR = path.resolve(__dirname, "mock-data/runtime/si");
 const VGM_RUNTIME_DIR = path.resolve(__dirname, "mock-data/runtime/vgm");
+const USER_RUNTIME_DIR = path.resolve(__dirname, "mock-data/runtime/user");
 
 type RuntimeOverlayPayload = {
   version: number;
   counters: Record<string, number>;
   tables: Record<string, unknown[]>;
+  sidecars?: Record<string, unknown>;
 };
 
 function readRequestBody(req: import("http").IncomingMessage): Promise<string> {
@@ -101,6 +116,7 @@ function readRequestBody(req: import("http").IncomingMessage): Promise<string> {
 function readRuntimeOverlay(
   dir: string,
   tableNames: readonly string[],
+  sidecarNames: readonly string[] = [],
 ): RuntimeOverlayPayload | null {
   const metaPath = path.join(dir, "_meta.json");
   if (!fs.existsSync(metaPath)) return null;
@@ -119,10 +135,17 @@ function readRuntimeOverlay(
       const rows = JSON.parse(fs.readFileSync(file, "utf8"));
       tables[name] = Array.isArray(rows) ? rows : [];
     }
+    const sidecars: Record<string, unknown> = {};
+    for (const name of sidecarNames) {
+      const file = path.join(dir, `${name}.json`);
+      if (!fs.existsSync(file)) continue;
+      sidecars[name] = JSON.parse(fs.readFileSync(file, "utf8"));
+    }
     return {
       version: meta.version ?? 1,
       counters: meta.counters ?? {},
       tables,
+      ...(Object.keys(sidecars).length ? { sidecars } : {}),
     };
   } catch {
     return null;
@@ -136,7 +159,9 @@ function writeRuntimeOverlay(
     version?: number;
     counters?: Record<string, number>;
     tables?: Record<string, unknown[]>;
+    sidecars?: Record<string, unknown>;
   },
+  sidecarNames: readonly string[] = [],
 ) {
   fs.mkdirSync(dir, { recursive: true });
   const counters = payload.counters ?? {};
@@ -152,12 +177,28 @@ function writeRuntimeOverlay(
       JSON.stringify(rows, null, 1),
     );
   }
+  const sidecars = payload.sidecars ?? {};
+  for (const name of sidecarNames) {
+    if (!Object.prototype.hasOwnProperty.call(sidecars, name)) continue;
+    fs.writeFileSync(
+      path.join(dir, `${name}.json`),
+      JSON.stringify(sidecars[name], null, 2),
+    );
+  }
 }
 
 /** Delete only known overlay files (never wipe sibling dirs like runtime/si/). */
-function clearRuntimeOverlay(dir: string, tableNames: readonly string[]) {
+function clearRuntimeOverlay(
+  dir: string,
+  tableNames: readonly string[],
+  sidecarNames: readonly string[] = [],
+) {
   if (!fs.existsSync(dir)) return;
-  const known = new Set([...tableNames.map((n) => `${n}.json`), "_meta.json"]);
+  const known = new Set([
+    ...tableNames.map((n) => `${n}.json`),
+    ...sidecarNames.map((n) => `${n}.json`),
+    "_meta.json",
+  ]);
   for (const entry of fs.readdirSync(dir)) {
     if (!known.has(entry)) continue;
     const full = path.join(dir, entry);
@@ -171,6 +212,7 @@ function handleRuntimeDbRoute(
   opts: {
     dir: string;
     tables: readonly string[];
+    sidecars?: readonly string[];
     json: (
       res: import("http").ServerResponse,
       body: unknown,
@@ -178,8 +220,9 @@ function handleRuntimeDbRoute(
     ) => void;
   },
 ): boolean {
+  const sidecarNames = opts.sidecars ?? [];
   if (req.method === "GET") {
-    const overlay = readRuntimeOverlay(opts.dir, opts.tables);
+    const overlay = readRuntimeOverlay(opts.dir, opts.tables, sidecarNames);
     opts.json(res, {
       data: overlay ?? { version: 1, counters: {}, tables: null },
     });
@@ -192,8 +235,9 @@ function handleRuntimeDbRoute(
           version?: number;
           counters?: Record<string, number>;
           tables?: Record<string, unknown[]>;
+          sidecars?: Record<string, unknown>;
         };
-        writeRuntimeOverlay(opts.dir, opts.tables, body);
+        writeRuntimeOverlay(opts.dir, opts.tables, body, sidecarNames);
         opts.json(res, { data: { ok: true } });
       } catch (err) {
         opts.json(
@@ -211,7 +255,7 @@ function handleRuntimeDbRoute(
     return true;
   }
   if (req.method === "DELETE") {
-    clearRuntimeOverlay(opts.dir, opts.tables);
+    clearRuntimeOverlay(opts.dir, opts.tables, sidecarNames);
     opts.json(res, { data: { ok: true } });
     return true;
   }
@@ -224,7 +268,7 @@ function handleRuntimeDbRoute(
  * clear, or SW not claimed). MSW still owns these routes when active; this
  * only runs if the request reaches Vite.
  *
- * Also hosts GET|PUT|DELETE /api/_mock/booking-db and /api/_mock/si-db so the
+ * Also hosts GET|PUT|DELETE /api/_mock/{booking,si,vgm,user}-db so the
  * fixture layer can persist under mock-data/runtime/ (use msw `bypass` from handlers).
  */
 function bookingMockApiPlugin(): Plugin {
@@ -280,6 +324,19 @@ function bookingMockApiPlugin(): Plugin {
           }
         }
 
+        if (url === "/api/_mock/user-db") {
+          if (
+            handleRuntimeDbRoute(req, res, {
+              dir: USER_RUNTIME_DIR,
+              tables: USER_RUNTIME_TABLES,
+              sidecars: USER_RUNTIME_SIDECARS,
+              json,
+            })
+          ) {
+            return;
+          }
+        }
+
         // Modified by Sekar Nagarajan (2026-09-08 10:50) — public tenant bootstrap fallback
         if (req.method === "GET" && url === "/api/public/tenant") {
           return json(res, {
@@ -316,54 +373,8 @@ function bookingMockApiPlugin(): Plugin {
             },
           });
         }
-        // Modified by Sekar Nagarajan (2026-09-18 12:55) — rates quotes fallback when MSW misses
-        if (req.method === "GET" && url === "/api/v1/rates/quotes") {
-          return json(res, { success: true, data: [] });
-        }
-        if (req.method === "POST" && url === "/api/v1/rates/quotes") {
-          let body = "";
-          req.on("data", (chunk) => {
-            body += chunk;
-          });
-          req.on("end", () => {
-            let input: Record<string, unknown> = {};
-            try {
-              input = JSON.parse(body || "{}") as Record<string, unknown>;
-            } catch {
-              /* ignore */
-            }
-            const originPort = String(input.originPort ?? "CNSHA");
-            const deliveryPort = String(input.deliveryPort ?? "AEJEA");
-            json(res, {
-              success: true,
-              data: {
-                id: `qte-${Date.now()}`,
-                quoteNo: `QTE-2026-${Math.floor(1000 + Math.random() * 9000)}`,
-                customerName: "Current Logged-in Customer",
-                originPort,
-                originPortName: `${originPort} Port`,
-                deliveryPort,
-                deliveryPortName: `${deliveryPort} Port`,
-                eqpType: input.eqpType ?? "20' Dry Standard",
-                eqpQuantity: input.eqpQuantity ?? 1,
-                commodity: input.commodity ?? "General Cargo",
-                cargoWeightKg: input.cargoWeightKg ?? 0,
-                quotedAmountUsd: input.expectedAmountUsd ?? 1400,
-                status: "PENDING_REVIEW",
-                validFrom: new Date().toISOString().split("T")[0],
-                validTo: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000)
-                  .toISOString()
-                  .split("T")[0],
-                createdAt: new Date()
-                  .toISOString()
-                  .replace("T", " ")
-                  .substring(0, 16),
-                comments: input.comments,
-              },
-            });
-          });
-          return;
-        }
+        // Rates quotes are owned by MSW + user overlay (session.quotes). No Vite
+        // invent-a-quote fallback — a missed intercept must not create non-persisted rows.
         if (req.method === "POST" && url === "/api/booking/submit") {
           return json(res, {
             data: {

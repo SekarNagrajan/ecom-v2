@@ -184,6 +184,25 @@ export interface AlertSources {
  */
 const sessionAlertOverrides: Partial<AlertPreference> = {};
 
+/** Snapshot of session-only alert flags (for runtime overlay). */
+export function getAlertOverrides(): Partial<AlertPreference> {
+  return { ...sessionAlertOverrides };
+}
+
+/** Replace session alert overrides (rehydrate / tests). Clears then assigns. */
+export function replaceAlertOverrides(next: Partial<AlertPreference> | null | undefined) {
+  for (const k of Object.keys(sessionAlertOverrides) as (keyof AlertPreference)[]) {
+    delete sessionAlertOverrides[k];
+  }
+  if (!next) return;
+  Object.assign(sessionAlertOverrides, next);
+}
+
+/** Clear session alert overrides (demo reset). */
+export function resetAlertOverrides() {
+  replaceAlertOverrides(null);
+}
+
 const activityModule = (activities: Row[], code: unknown) =>
   String(activities.find(a => eq(String(a.activitycode ?? '').trim(), String(code ?? '').trim()))?.module ?? '').toUpperCase();
 

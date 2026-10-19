@@ -12,6 +12,10 @@ import {
   subUsersOf,
   userLimit,
 } from "./fixture-api/bridges/users.bridge";
+import {
+  ensureUserDbReady,
+  persistUserDb,
+} from "./fixture-api/user-persistence";
 
 /** Customer scope: the signed-in user's active account, else the sampled demo customer. */
 function customerCodeFor(request: Request) {
@@ -21,15 +25,18 @@ function customerCodeFor(request: Request) {
 
 export const userCreationHandlers = [
   // Sub-users ← ecomuserdetails (userRole N) + EcomCustomerUser of the customer, joined to eCom_Reg_Details
-  http.get("/api/v1/user-creation/sub-users", ({ request }) => {
+  http.get("/api/v1/user-creation/sub-users", async ({ request }) => {
+    await ensureUserDbReady();
     return HttpResponse.json({ data: subUsersOf(customerCodeFor(request)) });
   }),
 
-  http.get("/api/v1/user-creation/limit", ({ request }) => {
+  http.get("/api/v1/user-creation/limit", async ({ request }) => {
+    await ensureUserDbReady();
     return HttpResponse.json({ data: userLimit(customerCodeFor(request)) });
   }),
 
   http.post("/api/v1/user-creation/sub-users", async ({ request }) => {
+    await ensureUserDbReady();
     const custCode = customerCodeFor(request);
     const body = (await request.json()) as CreateSubUserPayload;
     if (userLimit(custCode).limitReached) {
@@ -45,10 +52,13 @@ export const userCreationHandlers = [
       );
     }
     const parent = findUser(bearerUser(request)?.email ?? "") ?? firstUserOfCustomer(custCode)?.user;
-    return HttpResponse.json({ data: createSubUser(custCode, body, parent) });
+    const created = createSubUser(custCode, body, parent);
+    persistUserDb();
+    return HttpResponse.json({ data: created });
   }),
 
   http.patch("/api/v1/user-creation/sub-users/:id/status", async ({ params, request }) => {
+    await ensureUserDbReady();
     const body = (await request.json()) as { active: boolean };
     const updated = setSubUserActive(String(params.id), body.active);
     if (!updated) {
@@ -57,6 +67,7 @@ export const userCreationHandlers = [
         { status: 404 },
       );
     }
+    persistUserDb();
     return HttpResponse.json({ data: updated });
   }),
 ];

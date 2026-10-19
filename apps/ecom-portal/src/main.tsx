@@ -84,7 +84,7 @@ async function bootstrap() {
       onUnhandledRequest: "bypass",
       serviceWorker: { url: "/mockServiceWorker.js" },
     });
-    // Restore booking / SI+BL / VGM mutations written to mock-data/runtime/ (survives refresh).
+    // Restore booking / SI+BL / VGM / user mutations written to mock-data/runtime/ (survives refresh).
     const { rehydrateBookingDb } = await import(
       "./mocks/fixture-api/booking-persistence"
     );
@@ -94,9 +94,13 @@ async function bootstrap() {
     const { rehydrateVgmDb } = await import(
       "./mocks/fixture-api/vgm-persistence"
     );
+    const { rehydrateUserDb } = await import(
+      "./mocks/fixture-api/user-persistence"
+    );
     await rehydrateBookingDb();
     await rehydrateSiDb();
     await rehydrateVgmDb();
+    await rehydrateUserDb();
   }
 
   wireUnauthorizedListener();

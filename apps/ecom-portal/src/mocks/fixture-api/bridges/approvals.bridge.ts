@@ -5,7 +5,10 @@
  * isValid P, ECOMRegHistory) cannot be represented here without changing the DTO.
  */
 import type { ApprovalStatus, VendorApprovalItem } from '../../../features/vendor-approvals/types/vendor-approvals.types';
+import { persistBookingDb } from '../booking-persistence';
 import { db, eq, type Row } from '../db';
+import { persistSiDb } from '../si-persistence';
+import { persistVgmDb } from '../vgm-persistence';
 import { formatListDate } from './format';
 import { portLabel } from './masters.bridge';
 import { companyNameFor } from './users.bridge';
@@ -96,27 +99,37 @@ export function vendorApprovals(src: Sources = {}): VendorApprovalItem[] {
   return items.sort((a, b) => rawDate(b) - rawDate(a));
 }
 
-/** Approve / reject in-session: writes the matching legacy status code back onto the fixture row. */
+/**
+ * Approve / reject: writes the matching legacy status code back onto the fixture row.
+ * When mutating the live `db` (no `src` override for that domain), persists via the
+ * Booking / SI / VGM runtime overlays so the decision survives refresh.
+ */
 export function applyApprovalStatus(id: string, status: Exclude<ApprovalStatus, 'PENDING'>, src: Sources = {}): boolean {
   const [prefix, ...rest] = id.split(':');
   const key = rest.join(':');
   const approved = status === 'APPROVED';
   if (prefix === ID_PREFIX.BOOKING) {
+    const live = !src.bookings;
     const row = (src.bookings ?? db.bookings).find(b => eq(b.ebookno, key));
     if (!row) return false;
     row.ebook_status = approved ? 'A' : 'V';
+    if (live) persistBookingDb();
     return true;
   }
   if (prefix === ID_PREFIX.SI) {
+    const live = !src.si;
     const row = (src.si ?? db.shippingInstructions).find(s => eq(s.eSINo, key));
     if (!row) return false;
     row.status = approved ? 'A' : 'V';
+    if (live) persistSiDb();
     return true;
   }
   if (prefix === ID_PREFIX.VGM) {
+    const live = !src.vgm;
     const row = (src.vgm ?? db.vgm).find(v => eq(v.id, key));
     if (!row) return false;
     row.status = approved ? 'C' : 'I';
+    if (live) persistVgmDb();
     return true;
   }
   return false;

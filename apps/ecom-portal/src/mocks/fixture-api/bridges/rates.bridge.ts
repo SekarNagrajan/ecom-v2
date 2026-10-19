@@ -764,7 +764,18 @@ export function fixtureQuotes(now = new Date()): QuoteDTO[] {
 /** Session requests first, then the fixture-derived enquiries. */
 export const listQuotes = (): QuoteDTO[] => [...sessionQuotes, ...fixtureQuotes()];
 
+/** Snapshot of session-created quotes (for runtime overlay). */
+export const getSessionQuotes = (): QuoteDTO[] =>
+  JSON.parse(JSON.stringify(sessionQuotes)) as QuoteDTO[];
+
 export const resetQuotes = () => { sessionQuotes.length = 0; };
+
+/** Replace session quotes (rehydrate / tests). Clears then pushes. */
+export function replaceSessionQuotes(next: QuoteDTO[] | null | undefined) {
+  sessionQuotes.length = 0;
+  if (!next?.length) return;
+  sessionQuotes.push(...(JSON.parse(JSON.stringify(next)) as QuoteDTO[]));
+}
 
 /** Builds the PENDING_REVIEW quote: amount = the customer's expectation, else the lane's best USD tariff. */
 export function buildQuote(input: CreateQuoteInput, tariffs: Row[], customer: string, now = new Date()): QuoteDTO {

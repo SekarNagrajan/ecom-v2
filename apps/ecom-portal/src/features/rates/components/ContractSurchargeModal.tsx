@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-10-19 14:45)
+// Modified by Sekar Nagarajan (2026-10-19 16:55)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { Table, Tag, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
@@ -100,7 +100,7 @@ export function ContractSurchargeModal({
       align: "right",
       width: 150,
       render: (_value, record) => (
-        <Text strong className="text-amount-error rates-amount rates-surcharge-amount">
+        <Text strong className="rates-amount rates-surcharge-amount rates-surcharge-amount--primary">
           <span className="rates-surcharge-amount__currency">{record.currency}</span>
           {formatAmount(record.amount)}
         </Text>
@@ -217,7 +217,7 @@ export function ContractSurchargeModal({
               <span className="rates-surcharge-tile__label">
                 {t("contract.columns.subjectToCharges")}
               </span>
-              <span className="rates-surcharge-tile__amount text-amount-error">
+              <span className="rates-surcharge-tile__amount text-amount-warning">
                 <span className="rates-surcharge-amount__currency">{contract.currency}</span>
                 {formatAmount(contract.subjectToChargesAmount)}
               </span>
@@ -266,7 +266,7 @@ export function ContractSurchargeModal({
                           </Text>
                         </Table.Summary.Cell>
                         <Table.Summary.Cell index={3} align="right">
-                          <Text strong className="text-amount-error rates-amount rates-surcharge-amount">
+                          <Text strong className="rates-amount rates-surcharge-amount rates-surcharge-amount--primary">
                             <span className="rates-surcharge-amount__currency">
                               {row.currency}
                             </span>

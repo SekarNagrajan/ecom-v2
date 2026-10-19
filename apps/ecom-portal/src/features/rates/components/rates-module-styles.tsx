@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-10-19 14:45)
+// Modified by Sekar Nagarajan (2026-10-19 16:55)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -1009,8 +1009,8 @@ export function RatesModuleStyles() {
         background: ${tokenMix(token.colorSuccess, 8)};
       }
       .rates-surcharge-tile--charges {
-        border-color: ${tokenMix(token.colorError, 30)};
-        background: ${tokenMix(token.colorError, 6)};
+        border-color: ${tokenMix(token.colorWarning, 40)};
+        background: ${tokenMix(token.colorWarning, 10)};
       }
       .rates-surcharge-tile__label {
         font-size: ${token.fontSizeSM}px;
@@ -1026,6 +1026,9 @@ export function RatesModuleStyles() {
       .rates-surcharge-amount {
         font-variant-numeric: tabular-nums;
         white-space: nowrap;
+      }
+      .rates-surcharge-amount--primary.ant-typography {
+        color: ${token.colorPrimary};
       }
       .rates-surcharge-amount__currency {
         margin-right: ${token.marginXXS}px;

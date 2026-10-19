@@ -74,8 +74,12 @@ const SI_RUNTIME_TABLES = [
   "siLocks",
 ] as const;
 
+/** VGM declaration rows under mock-data/runtime/vgm/. */
+const VGM_RUNTIME_TABLES = ["vgm"] as const;
+
 const BOOKING_RUNTIME_DIR = path.resolve(__dirname, "mock-data/runtime");
 const SI_RUNTIME_DIR = path.resolve(__dirname, "mock-data/runtime/si");
+const VGM_RUNTIME_DIR = path.resolve(__dirname, "mock-data/runtime/vgm");
 
 type RuntimeOverlayPayload = {
   version: number;
@@ -257,6 +261,18 @@ function bookingMockApiPlugin(): Plugin {
             handleRuntimeDbRoute(req, res, {
               dir: SI_RUNTIME_DIR,
               tables: SI_RUNTIME_TABLES,
+              json,
+            })
+          ) {
+            return;
+          }
+        }
+
+        if (url === "/api/_mock/vgm-db") {
+          if (
+            handleRuntimeDbRoute(req, res, {
+              dir: VGM_RUNTIME_DIR,
+              tables: VGM_RUNTIME_TABLES,
               json,
             })
           ) {

@@ -14,6 +14,10 @@ import {
   clearSiDbOverlay,
   resetSiDbReadyGate,
 } from './si-persistence';
+import {
+  clearVgmDbOverlay,
+  resetVgmDbReadyGate,
+} from './vgm-persistence';
 import { API, ok } from './utils';
 
 const mockControlHandlers = [
@@ -22,8 +26,10 @@ const mockControlHandlers = [
     resetDb();
     resetBookingDbReadyGate();
     resetSiDbReadyGate();
+    resetVgmDbReadyGate();
     await clearBookingDbOverlay();
     await clearSiDbOverlay();
+    await clearVgmDbOverlay();
     return ok({ reset: true });
   }),
   /** Row counts per table — useful to confirm the fixtures loaded. */

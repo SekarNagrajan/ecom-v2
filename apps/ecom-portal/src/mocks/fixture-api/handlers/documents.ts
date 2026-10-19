@@ -4,6 +4,7 @@ import { db, eq, nextRef, nowIso, type Row } from '../db';
 import { API, latency, ok, notFound, badRequest, paginate, matches, inDateRange, byDateDesc, VGM_STATUS, SI_STATUS, BOOKING_STATUS, label } from '../utils';
 import { latestBlVersions } from '../bridges/bl-list.bridge';
 import { ensureSiDbReady, persistSiDb } from '../si-persistence';
+import { ensureVgmDbReady, persistVgmDb } from '../vgm-persistence';
 import { hydrateSi } from './shipping-instructions';
 
 // ─── Bills of lading ─────────────────────────────────────────────────────────
@@ -78,6 +79,7 @@ export const vgmHandlers = [
   /** GET /api/vgm?bookNo=  or ?blNo= */
   http.get(`${API}/vgm`, async ({ request }) => {
     await latency();
+    await ensureVgmDbReady();
     const sp = new URL(request.url).searchParams;
     const bookNo = sp.get('bookNo');
     const blNo = sp.get('blNo');
@@ -101,6 +103,7 @@ export const vgmHandlers = [
   /** POST /api/vgm  body: { book_no, bl_no?, containers: [{ eqpid, eqptype, vgm_weight, vgm_unit, vgm_obtained_method, ... }], declarant: {...} } */
   http.post(`${API}/vgm`, async ({ request }) => {
     await latency();
+    await ensureVgmDbReady();
     const body = (await request.json()) as Row;
     if (!body.book_no || !Array.isArray(body.containers) || !body.containers.length) return badRequest('book_no and containers[] are required');
     const ts = nowIso();
@@ -116,6 +119,7 @@ export const vgmHandlers = [
       db.vgm.unshift(row);
       return { ...row, statusDesc: label(VGM_STATUS, row.status) };
     });
+    persistVgmDb();
     return ok(created, 201);
   }),
 ];

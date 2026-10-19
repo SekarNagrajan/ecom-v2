@@ -73,6 +73,7 @@ When the portal runs in mock mode (`VITE_API_MODE=mock`), demo mutations are wri
 | --- | --- | --- | --- |
 | Booking | `runtime/` (flat `bookings.json`, …) | `GET\|PUT\|DELETE /api/_mock/booking-db` | submit / draft / amend / import / cancel / template delete |
 | Shipping instruction **+ B/L + MCN** (one shared overlay) | `runtime/si/` | `GET\|PUT\|DELETE /api/_mock/si-db` | See case list below |
+| VGM | `runtime/vgm/` | `GET\|PUT\|DELETE /api/_mock/vgm-db` | submit declaration (versioned `vgm` rows) |
 
 There is **no** separate `runtime/bl/`. B/L amendments and MCN rows are SI-family rows (`editbl` / `blversion` on `shippingInstructions` + children). The first B/L edit of a plain SI clones an amendment version; later edits update that clone.
 
@@ -82,10 +83,12 @@ There is **no** separate `runtime/bl/`. B/L amendments and MCN rows are SI-famil
 | B/L | draft / update / submit / verify / cancel / issue; **print original** (sets status `I` and persists); fixture `bills-of-lading/:blno/amend` + `/accept` |
 | MCN | update (remarks, freightTerms, cargoDescription, status) / submit |
 
+VGM submit supersedes prior active rows (`A`/`C` → `I`) per `(book_no, eqpid)` and inserts a new `A` row with `Version_no + 1`. Only the `vgm` table is snapshotted (booking/SI joins stay live from seed or their own overlays).
+
 - Seed data stays in `../src/mocks/fixtures/` (from `npm run dump`).
 - `npm run dump` / `extract:masters` **do not** touch `runtime/`.
 - To restore dump-only seed: delete the overlay JSON (keep `.gitkeep`), or call the matching `DELETE /api/_mock/*-db`, or `POST /api/_mock/reset`, then reload.
-- `runtime/*` is gitignored so personal demo data is not committed.
+- `runtime/**` is gitignored so personal demo data is not committed.
 
 
 ## Curated multi-database extraction (`npm run extract`)

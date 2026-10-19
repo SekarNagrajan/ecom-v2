@@ -435,8 +435,13 @@ export function DashboardModuleStyles() {
       .dashboard-ongoing-search {
         width: min(240px, 100%);
       }
+      /* Fixed DataView height (see style on DashboardOngoingTable) keeps
+         page changes from resizing the AG Grid viewport. */
       .dashboard-ongoing-grid {
-        min-height: 320px;
+        min-height: 420px;
+      }
+      .dashboard-ongoing-grid .ag-root-wrapper {
+        min-height: 0;
       }
       .dashboard-link-btn.ant-btn {
         padding: 0;

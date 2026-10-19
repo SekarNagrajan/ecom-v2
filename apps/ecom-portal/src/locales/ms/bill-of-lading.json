@@ -145,6 +145,11 @@
     "statusPrefix": "Status: {{status}}",
     "printCount": "Bilangan cetak: {{count}}",
     "fileCount": "{{count}} fail",
+    "statusProgress": "Kemajuan status B/L",
+    "issuedOn": "Dikeluarkan pada",
+    "packingList": "Senarai Pembungkusan",
+    "invoiceUpload": "Muat Naik Invois",
+    "acidValue": "ACID",
     "system": "Sistem"
   },
   "card": {

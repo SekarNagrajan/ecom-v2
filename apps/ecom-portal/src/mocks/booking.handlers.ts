@@ -34,6 +34,10 @@ import {
 import { fixtureBookingRates } from "./fixture-api/bridges/booking-rates.bridge";
 import { fixtureBookingRoutes } from "./fixture-api/bridges/booking-routing.bridge";
 import { str } from "./fixture-api/bridges/booking-shared.bridge";
+import {
+  ensureBookingDbReady,
+  persistBookingDb,
+} from "./fixture-api/booking-persistence";
 import { ciRow, db, nextRef, nowIso, type Row } from "./fixture-api/db";
 
 const RESERVED_IDS = new Set(["templates", "list", "submit", "draft", "amend", "import"]);
@@ -44,11 +48,25 @@ const newOnlineRef = () => nextRef("BKON");
 /** Insert (or, when the payload carries a known draft / online ref, update) a booking from a wizard payload. */
 function saveBooking(payload: BookingPayload, status: "D" | "S"): Row {
   const ctx = demoBookingContext();
-  const existingId = str(payload.draftId) || str(payload.masterDetails?.onlineBookingNo);
+  // Duplicate wizard: always insert a new row even when content matches the source booking.
+  const forceNew = Boolean(payload.forceCreateNew || payload.duplicatedFromId);
+  const existingId = forceNew
+    ? ""
+    : str(payload.draftId) || str(payload.masterDetails?.onlineBookingNo);
   const existing = existingId ? findBookingRow(existingId) : undefined;
-  const editable = existing && ["D", "T"].includes(str(existing.ebook_status).toUpperCase()) ? existing : undefined;
+  const editable =
+    !forceNew &&
+    existing &&
+    ["D", "T"].includes(str(existing.ebook_status).toUpperCase())
+      ? existing
+      : undefined;
   const ebookno = editable ? str(editable.ebookno) : newOnlineRef();
-  const { header, children } = rowsFromPayload(payload, { ebookno, status, existing: editable, ...ctx });
+  const { header, children } = rowsFromPayload(payload, {
+    ebookno,
+    status,
+    existing: editable,
+    ...ctx,
+  });
   if (editable) {
     header.isAmendment = null;
     header.templatename = null;
@@ -212,15 +230,19 @@ export const bookingHandlers = [
   // Static mutations before `/api/booking/:id*` so they never collide.
   http.post("*/api/booking/draft", async ({ request }) => {
     await delay(500);
+    await ensureBookingDbReady();
     const body = (await request.json()) as BookingPayload;
     const row = saveBooking(body, "D");
+    persistBookingDb();
     return HttpResponse.json({ data: { draftId: str(row.ebookno) } });
   }),
 
   http.post("*/api/booking/submit", async ({ request }) => {
     await delay(1500);
+    await ensureBookingDbReady();
     const body = (await request.json()) as BookingPayload;
     const row = saveBooking(body, "S");
+    persistBookingDb();
     return HttpResponse.json({
       data: {
         bookingReference: str(row.ebookno),
@@ -232,6 +254,7 @@ export const bookingHandlers = [
 
   http.post("*/api/booking/import", async ({ request }) => {
     await delay(800);
+    await ensureBookingDbReady();
     const body = (await request.json()) as {
       dryRun?: boolean;
       bookings?: BookingImportPayload[];
@@ -263,6 +286,10 @@ export const bookingHandlers = [
       created.push({ rowNumber, bookingReference: str(row.ebookno) });
     });
 
+    if (!dryRun && created.length > 0) {
+      persistBookingDb();
+    }
+
     const result: BulkBookingImportResult = {
       totalRows: bookings.length,
       successCount: created.length,
@@ -277,6 +304,7 @@ export const bookingHandlers = [
 
   http.put("*/api/booking/amend", async ({ request }) => {
     await delay(1500);
+    await ensureBookingDbReady();
     const body = (await request.json()) as BookingPayload;
     const ref = str(body.masterDetails?.onlineBookingNo) || str(body.draftId);
     const existing = ref ? findBookingRow(ref) : undefined;
@@ -298,6 +326,7 @@ export const bookingHandlers = [
     header.ebook_status = currentStatus;
     header.submitted_date = existing.submitted_date ?? header.submitted_date;
     replaceBooking(existing, header, children);
+    persistBookingDb();
     return HttpResponse.json({
       data: {
         bookingReference: str(existing.extBookNo) || str(existing.ebookno),
@@ -307,29 +336,34 @@ export const bookingHandlers = [
     });
   }),
 
-  http.get("/api/booking/list", async () => {
+  http.get("*/api/booking/list", async () => {
     await delay(500);
+    await ensureBookingDbReady();
     return HttpResponse.json({ data: fixtureBookingList() ?? [] });
   }),
 
   // Static paths must be registered before `/api/booking/:id` so
   // `/api/booking/templates` is not treated as a booking id.
-  http.get("/api/booking/templates", async () => {
+  http.get("*/api/booking/templates", async () => {
     await delay(300);
+    await ensureBookingDbReady();
     return HttpResponse.json({ data: fixtureBookingTemplateRows().map(templateFromRow) });
   }),
 
-  http.delete("/api/booking/templates/:id", async ({ params }) => {
+  http.delete("*/api/booking/templates/:id", async ({ params }) => {
     await delay(300);
+    await ensureBookingDbReady();
     const row = findBookingRow(String(params.id));
     if (row && str(row.ebook_status).toUpperCase() === "T") {
       deleteBooking(str(row.ebookno));
+      persistBookingDb();
     }
     return new HttpResponse(null, { status: 200 });
   }),
 
-  http.get("/api/booking/:id", async ({ params }) => {
+  http.get("*/api/booking/:id", async ({ params }) => {
     await delay(400);
+    await ensureBookingDbReady();
     const id = String(params.id);
     if (RESERVED_IDS.has(id)) {
       return new HttpResponse(null, { status: 404 });
@@ -344,8 +378,9 @@ export const bookingHandlers = [
     return HttpResponse.json({ data: detail });
   }),
 
-  http.post("/api/booking/:id/cancel", async ({ params, request }) => {
+  http.post("*/api/booking/:id/cancel", async ({ params, request }) => {
     await delay(500);
+    await ensureBookingDbReady();
     const id = String(params.id);
     const row = findBookingRow(id);
     if (row) {
@@ -370,18 +405,21 @@ export const bookingHandlers = [
           dateup: ts,
         }),
       );
+      persistBookingDb();
     }
     return HttpResponse.json({ data: { id, status: "Cancelled" } });
   }),
 
-  http.get("/api/booking/:id/activity", async ({ params }) => {
+  http.get("*/api/booking/:id/activity", async ({ params }) => {
     await delay(300);
+    await ensureBookingDbReady();
     const id = String(params.id);
     return HttpResponse.json({ data: fixtureBookingActivity(id) ?? [] });
   }),
 
-  http.get("/api/booking/:id/pdf", async ({ params }) => {
+  http.get("*/api/booking/:id/pdf", async ({ params }) => {
     await delay(400);
+    await ensureBookingDbReady();
     const id = String(params.id);
     const detail = fixtureBookingPayload(id);
     const text = [

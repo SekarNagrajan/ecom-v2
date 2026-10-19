@@ -2,6 +2,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton, AppTextarea } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
+import { useQueryClient } from "@tanstack/react-query";
 import { Card, Col, Input, Row, Typography } from "antd";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { useMemo } from "react";
@@ -14,6 +15,7 @@ import { useAiTextAssist } from "../ai-assist";
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import { RESPONSIVE_COL } from "../../constants/responsive-grid";
+import { blKeys } from "./api/bl.keys";
 import {
   useMCNDetailQuery,
   useMCNPrintMutation,
@@ -40,6 +42,7 @@ export function BillOfLadingMcnEditRoute() {
   const { t } = useTranslation(["bill-of-lading", "common", "modules"]);
   const navigate = useNavigate();
   const toast = useToast();
+  const queryClient = useQueryClient();
   const { textareaAssistProps } = useAiTextAssist();
   const { mcnId } = useParams({ strict: false }) as { mcnId: string };
   const { data: detail, isLoading } = useMCNDetailQuery(mcnId);
@@ -60,12 +63,18 @@ export function BillOfLadingMcnEditRoute() {
     },
   });
 
+  const invalidateMcnQueries = () => {
+    queryClient.invalidateQueries({ queryKey: blKeys.mcn.detail(mcnId) });
+    queryClient.invalidateQueries({ queryKey: blKeys.mcn.lists() });
+  };
+
   const onSave = async (values: McnEditValues) => {
     const res = await updateMCN(mcnId, values);
     if (res.error) {
       toast.error(res.error.message);
       return;
     }
+    invalidateMcnQueries();
     toast.success(t("toasts.mcnSaved"));
   };
 
@@ -80,6 +89,7 @@ export function BillOfLadingMcnEditRoute() {
       toast.error(submitRes.error.message);
       return;
     }
+    invalidateMcnQueries();
     toast.success(t("toasts.mcnSubmitted"));
     navigate({ to: "/app/bl/mcn" });
   };

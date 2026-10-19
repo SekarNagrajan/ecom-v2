@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-08 15:03)
+// Modified by Sekar Nagarajan (2026-10-19 14:33)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { useNavigate } from "@tanstack/react-router";
 import { Flex, Tag, Tooltip, Typography } from "antd";
@@ -95,9 +95,9 @@ export function BlViewDrawer({ record, onClose }: BlViewDrawerProps) {
             wrap
             className="bl-drawer-actions custom-scroll"
           >
-            <Tooltip title={t("actions.close")}>
+            {/* <Tooltip title={t("actions.close")}>
               <AppButton onClick={onClose}>{t("actions.close")}</AppButton>
-            </Tooltip>
+            </Tooltip> */}
             {showEdit ? (
               <Tooltip title={t("actions.editBillOfLading")}>
                 <AppButton
@@ -114,40 +114,6 @@ export function BlViewDrawer({ record, onClose }: BlViewDrawerProps) {
           </Flex>
         }
       >
-        <div className="bl-view-route-strip">
-          <div className="bl-view-route-port bl-view-route-port--origin">
-            <div className="bl-view-route-port__label">
-              <AppIcon icon={Icons.mapPin} size={14} />
-              {t("labels.origin")}
-            </div>
-            <Title level={4} className="bl-view-route-port__code">
-              {record.origin}
-            </Title>
-          </div>
-
-          <div className="bl-view-route-connector">
-            <span className="bl-view-route-connector__label">
-              {t("labels.route")}
-            </span>
-            <div className="bl-view-route-connector__line">
-              <span className="bl-view-route-connector__track" />
-              <AppIcon icon={Icons.arrowRight} size={14} />
-              <span className="bl-view-route-connector__track" />
-            </div>
-            <AppIcon icon={Icons.ship} size={16} />
-          </div>
-
-          <div className="bl-view-route-port bl-view-route-port--delivery">
-            <div className="bl-view-route-port__label">
-              <AppIcon icon={Icons.mapPin} size={14} />
-              {t("labels.delivery")}
-            </div>
-            <Title level={4} className="bl-view-route-port__code">
-              {record.delivery}
-            </Title>
-          </div>
-        </div>
-
         <div className="bl-summary-chips">
           <div className="bl-summary-chip">
             <span>

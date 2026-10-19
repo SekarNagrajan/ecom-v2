@@ -5,8 +5,9 @@
  * Every fixture in ../fixtures/*.json becomes a table keyed by file name (bookings, siCargo, users, …).
  * The fixtures are written by apps/ecom-portal/mock-data (`npm run dump`): the top rows of every table
  * of the e-commerce database, anonymised. Handlers read and mutate these arrays, so the demo is
- * stateful for the browser session (create a booking → it shows up in the list). resetDb() restores
- * the pristine fixtures.
+ * stateful (create a booking → it shows up in the list). Booking mutations are also mirrored to
+ * mock-data/runtime/ via booking-persistence so they survive refresh. resetDb() restores the
+ * pristine fixtures; rehydrateBookingDb() re-applies the runtime overlay on mock boot.
  *
  * Column names are exactly what SQL Server returned (`agencyRefNo`, `Datecr`, `eSINo`, …). Rows are
  * wrapped so property access is CASE-INSENSITIVE: `row.AgencyRefNo`, `row.agencyrefno` and
@@ -127,6 +128,22 @@ export const loadedTables = () => Object.keys(db).filter(k => db[k].length > 0).
 
 /** Generates demo reference numbers such as EBK260001, ESI260002, VGM260003. */
 const counters: Record<string, number> = {};
+
+/** Snapshot of nextRef counters (for mock-data/runtime persistence). */
+export function getRefCounters(): Record<string, number> {
+  return { ...counters };
+}
+
+/** Restore nextRef counters after rehydrate (max with existing so ids never go backwards). */
+export function setRefCounters(next: Record<string, number> | undefined | null) {
+  if (!next) return;
+  for (const [prefix, value] of Object.entries(next)) {
+    const n = Number(value);
+    if (!Number.isFinite(n) || n < 0) continue;
+    counters[prefix] = Math.max(counters[prefix] ?? 0, Math.floor(n));
+  }
+}
+
 export function nextRef(prefix: string) {
   counters[prefix] = (counters[prefix] ?? 0) + 1;
   const yy = String(new Date().getFullYear()).slice(-2);

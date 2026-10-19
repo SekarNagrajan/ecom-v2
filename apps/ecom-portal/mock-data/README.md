@@ -65,6 +65,28 @@ build), `SHIFT_DATES_TO_NOW=false` to keep original dates, `OUT_DIR`.
 
 The committed fixtures were produced from the LRP V2 Testing server on 2026-10-16/17 (`npm run dump` + `npm run extract:masters`).
 
+### Runtime overlay (`mock-data/runtime/`)
+
+When the portal runs in mock mode (`VITE_API_MODE=mock`), demo mutations are written under `runtime/` (schema-shaped JSON + `_meta.json` counters) via Vite middleware, then rehydrated on boot after `resetDb()`:
+
+| Domain | Path | API | Mutations covered |
+| --- | --- | --- | --- |
+| Booking | `runtime/` (flat `bookings.json`, …) | `GET\|PUT\|DELETE /api/_mock/booking-db` | submit / draft / amend / import / cancel / template delete |
+| Shipping instruction **+ B/L + MCN** (one shared overlay) | `runtime/si/` | `GET\|PUT\|DELETE /api/_mock/si-db` | See case list below |
+
+There is **no** separate `runtime/bl/`. B/L amendments and MCN rows are SI-family rows (`editbl` / `blversion` on `shippingInstructions` + children). The first B/L edit of a plain SI clones an amendment version; later edits update that clone.
+
+| Module | Mutations persisted in `runtime/si/` |
+| --- | --- |
+| SI | submit / cancel (and draft body writes) |
+| B/L | draft / update / submit / verify / cancel / issue; **print original** (sets status `I` and persists); fixture `bills-of-lading/:blno/amend` + `/accept` |
+| MCN | update (remarks, freightTerms, cargoDescription, status) / submit |
+
+- Seed data stays in `../src/mocks/fixtures/` (from `npm run dump`).
+- `npm run dump` / `extract:masters` **do not** touch `runtime/`.
+- To restore dump-only seed: delete the overlay JSON (keep `.gitkeep`), or call the matching `DELETE /api/_mock/*-db`, or `POST /api/_mock/reset`, then reload.
+- `runtime/*` is gitignored so personal demo data is not committed.
+
 
 ## Curated multi-database extraction (`npm run extract`)
 

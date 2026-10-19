@@ -205,7 +205,7 @@ describe('write-back into the fixture tables', () => {
     expect(fixtureBlDetail(si.blno)?.status).toBe('C');
   });
 
-  it('writes header, parties, containers and charges back and reads them again', () => {
+  it('writes header, parties, containers, charges and files back and reads them again', () => {
     const si = db.shippingInstructions.find(r => Number(r.editbl) === 0)!;
     const detail = fixtureBlDetail(si.blno) ?? fixtureBlFromSi(si.eSINo)!;
     applySiBody(si, {
@@ -216,6 +216,10 @@ describe('write-back into the fixture tables', () => {
       parties: { ...detail.parties, shipper: { ...detail.parties.shipper, name: 'New Shipper' } },
       containers: [{ ...detail.containers[0], containerNo: 'TEST0000001', cargoLines: [{ ...detail.containers[0].cargoLines[0], description: 'Edited goods', isDangerousGoods: true, unNumber: '9999', dgClass: '8' }] }],
       charges: [{ id: 'c1', chargeCode: 'THC', description: 'x', amount: 0, currency: 'USD', prepaidCollect: 'PAY_AT', payByCustType: 'Consignee' }],
+      files: [
+        { id: 'f1', category: 'VGM', fileName: 'vgm-upload.pdf', uploadedAt: '2026-10-19T10:00:00.000Z' },
+        { id: 'f2', category: 'LOI', fileName: 'loi-upload.pdf', uploadedAt: '2026-10-19T10:01:00.000Z' },
+      ],
     });
     const again = buildSiDetail(siContext(si));
     expect(again.blType).toBe('Seaway');
@@ -227,6 +231,19 @@ describe('write-back into the fixture tables', () => {
     expect(again.containers[0].containerNo).toBe('TEST0000001');
     expect(again.containers[0].cargoLines[0]).toMatchObject({ description: 'Edited goods', isDangerousGoods: true, unNumber: '9999', dgClass: '8' });
     expect(again.charges?.[0]).toMatchObject({ chargeCode: 'THC', prepaidCollect: 'PAY_AT', payByCustType: 'Consignee' });
+    expect(again.files).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ fileName: 'vgm-upload.pdf', fileType: 'VGM' }),
+        expect.objectContaining({ fileName: 'loi-upload.pdf', fileType: 'LOL' }),
+      ]),
+    );
+    const blAgain = fixtureBlDetail(si.blno) ?? fixtureBlFromSi(si.eSINo)!;
+    expect(blAgain.files).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ fileName: 'vgm-upload.pdf', category: 'VGM' }),
+        expect.objectContaining({ fileName: 'loi-upload.pdf', category: 'LOI' }),
+      ]),
+    );
   });
 
   it('drops parties without a name and creates an SI from a booking', () => {

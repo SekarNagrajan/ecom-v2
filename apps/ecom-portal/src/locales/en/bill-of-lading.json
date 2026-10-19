@@ -145,6 +145,11 @@
     "statusPrefix": "Status: {{status}}",
     "printCount": "Print count: {{count}}",
     "fileCount": "{{count}} file(s)",
+    "statusProgress": "B/L status progress",
+    "issuedOn": "Issued on",
+    "packingList": "Packing List",
+    "invoiceUpload": "Invoice Upload",
+    "acidValue": "ACID",
     "system": "System"
   },
   "card": {

@@ -42,6 +42,12 @@ export function SiFileUploadStep({
     [FILE_CATEGORIES, docType],
   );
 
+  const syncFiles = (next: SIFileItem[]) => {
+    setFiles(next);
+    // Keep wizard draft in sync so step jumps / submit still persist uploads.
+    onUpdate({ files: next });
+  };
+
   const handleUpload = (file: File) => {
     setUploading(true);
     try {
@@ -52,7 +58,7 @@ export function SiFileUploadStep({
         uploadedAt: new Date().toISOString(),
         sizeKb: Math.max(1, Math.round(file.size / 1024)),
       };
-      setFiles((prev) => [...prev, item]);
+      syncFiles([...files, item]);
       toast.success(t("wizard.files.uploadSuccess", { fileName: file.name }));
     } catch {
       toast.error(t("wizard.files.uploadFailed", { fileName: file.name }));
@@ -63,7 +69,7 @@ export function SiFileUploadStep({
   };
 
   const handleRemove = (id: string) => {
-    setFiles((prev) => prev.filter((f) => f.id !== id));
+    syncFiles(files.filter((f) => f.id !== id));
   };
 
   const handleNext = () => {

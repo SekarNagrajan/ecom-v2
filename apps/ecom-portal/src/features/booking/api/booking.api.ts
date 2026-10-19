@@ -153,20 +153,25 @@ export const bookingApi = {
   },
 
   cancelBooking: async (id: string): Promise<void> => {
-    const res = await fetch(`/api/booking/${id}/cancel`, { method: 'POST' });
+    const res = await fetch(`/api/booking/${encodeURIComponent(id)}/cancel`, {
+      method: 'POST',
+    });
     if (!res.ok) throw new Error('Failed to cancel booking');
   },
 
   getBookingById: async (id: string): Promise<BookingPayload> => {
-    const res = await fetch(`/api/booking/${id}`);
+    const res = await fetch(`/api/booking/${encodeURIComponent(id)}`);
     const json = await readJson<{ data: BookingPayload }>(res);
+    if (!json?.data) {
+      throw new Error(`Booking ${id} not found`);
+    }
     return json.data;
   },
 
   getBookingActivity: async (id: string): Promise<BookingActivityEvent[]> => {
-    const res = await fetch(`/api/booking/${id}/activity`);
+    const res = await fetch(`/api/booking/${encodeURIComponent(id)}/activity`);
     const json = await readJson<{ data: BookingActivityEvent[] }>(res);
-    return json.data;
+    return json.data ?? [];
   },
 
   saveDraft: async (
@@ -182,7 +187,7 @@ export const bookingApi = {
   },
 
   downloadBookingPdf: async (id: string): Promise<Blob> => {
-    const res = await fetch(`/api/booking/${id}/pdf`);
+    const res = await fetch(`/api/booking/${encodeURIComponent(id)}/pdf`);
     if (!res.ok) throw new Error('Failed to download PDF');
     return res.blob();
   },

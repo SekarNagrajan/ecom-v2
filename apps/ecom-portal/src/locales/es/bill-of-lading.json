@@ -145,6 +145,11 @@
     "statusPrefix": "Estado: {{status}}",
     "printCount": "Impresiones: {{count}}",
     "fileCount": "{{count}} archivo(s)",
+    "statusProgress": "Progreso del estado del B/L",
+    "issuedOn": "Emitido el",
+    "packingList": "Lista de empaque",
+    "invoiceUpload": "Carga de factura",
+    "acidValue": "ACID",
     "system": "Sistema"
   },
   "card": {

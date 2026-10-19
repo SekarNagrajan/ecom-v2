@@ -304,10 +304,19 @@ export async function sendBLAmendmentMail(
   }
 }
 
-export async function submitBL(blNo: string): Promise<ApiResponse<BLDTO>> {
+export async function submitBL(
+  blNo: string,
+  payload?: Partial<BLDTO>,
+): Promise<ApiResponse<BLDTO>> {
   try {
     const res = await fetch(`/api/bl/${encodeURIComponent(blNo)}/submit`, {
       method: "POST",
+      ...(payload
+        ? {
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          }
+        : {}),
     });
     return readApiJson<BLDTO>(res, "Failed to submit B/L");
   } catch (error: unknown) {

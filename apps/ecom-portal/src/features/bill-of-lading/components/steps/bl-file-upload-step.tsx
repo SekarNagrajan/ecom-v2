@@ -49,6 +49,12 @@ export function BlFileUploadStep({
     [FILE_CATEGORIES, docType],
   );
 
+  const syncFiles = (next: BLFileUploadItem[]) => {
+    setFiles(next);
+    // Keep wizard draft in sync so step jumps / submit still persist uploads.
+    onUpdate({ files: next });
+  };
+
   const handleUpload = (file: File) => {
     setUploading(true);
     try {
@@ -58,7 +64,7 @@ export function BlFileUploadStep({
         fileName: file.name,
         uploadedAt: new Date().toISOString(),
       };
-      setFiles((prev) => [...prev, item]);
+      syncFiles([...files, item]);
       toast.success(t("wizard.files.uploadSuccess", { fileName: file.name }));
     } catch {
       toast.error(t("wizard.files.uploadFailed", { fileName: file.name }));
@@ -69,7 +75,7 @@ export function BlFileUploadStep({
   };
 
   const handleRemove = (id: string) => {
-    setFiles((prev) => prev.filter((f) => f.id !== id));
+    syncFiles(files.filter((f) => f.id !== id));
   };
 
   const handleNext = () => {

@@ -406,7 +406,7 @@ export function createEmptyCommodity(): CommodityItem {
     commodity: "",
     hsCode: "",
     classCode: "",
-    weight: 1,
+    weight: 10000,
     volume: 0,
     packageType: "",
     packageQuantity: 1,
@@ -646,6 +646,13 @@ export interface BookingPayload {
   referenceFields?: ReferenceField[];
   /** Soft draft id when saved via Save Draft. */
   draftId?: string;
+  /**
+   * When set (duplicate flow), submit/draft always creates a new booking even if
+   * the wizard content is identical to the source booking.
+   */
+  forceCreateNew?: boolean;
+  /** Online/agency ref of the booking this wizard payload was duplicated from. */
+  duplicatedFromId?: string;
 }
 
 export interface BookingActivityEvent {

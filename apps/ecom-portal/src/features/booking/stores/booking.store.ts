@@ -31,6 +31,8 @@ interface BookingState {
   clearEns: () => void;
   clearInsurance: () => void;
   initializeFromBooking: (payload: BookingPayload) => void;
+  /** Prefill wizard from an existing booking as a new (duplicate) submission. */
+  initializeAsDuplicate: (payload: BookingPayload, sourceId: string) => void;
 }
 
 const BOOKING_WIZARD_LAST_STEP = 7; // Preview (References is step 6)
@@ -86,6 +88,30 @@ export const useBookingStore = create<BookingState>((set) => ({
           : defaultCargoData(),
         documents: payload.documents ?? [],
         referenceFields: payload.referenceFields ?? [],
+        forceCreateNew: undefined,
+        duplicatedFromId: undefined,
+      },
+    }),
+  initializeAsDuplicate: (payload, sourceId) =>
+    set({
+      currentStep: 0,
+      payload: {
+        ...payload,
+        draftId: undefined,
+        forceCreateNew: true,
+        duplicatedFromId: sourceId,
+        cargo: payload.cargo
+          ? migrateLegacyCargo(payload.cargo)
+          : defaultCargoData(),
+        documents: payload.documents ?? [],
+        referenceFields: payload.referenceFields ?? [],
+        masterDetails: payload.masterDetails
+          ? {
+              ...payload.masterDetails,
+              onlineBookingNo: undefined,
+              agencyReference: undefined,
+            }
+          : null,
       },
     }),
 }));

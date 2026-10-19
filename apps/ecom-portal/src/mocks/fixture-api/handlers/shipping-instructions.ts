@@ -1,6 +1,7 @@
 // Created by Sekar Nagarajan (2026-10-16 22:31)
 import { http } from 'msw';
 import { db, eq, childRows, nextRef, nowIso, type Row } from '../db';
+import { persistSiDb } from '../si-persistence';
 import { API, latency, ok, notFound, badRequest, paginate, matches, inDateRange, byDateDesc, SI_STATUS, label } from '../utils';
 
 const CHILD_TABLES = ['siCust', 'siCargo', 'siCommodity', 'siDg', 'siOog', 'siReefer', 'siCharges', 'siFiles', 'siIcs'] as const;
@@ -138,6 +139,7 @@ export const shippingInstructionHandlers = [
     writeChildren(si.eSINo, body);
     const req = db.siRequestMaster.find(r => eq(r.bookno, si.bookno));
     if (req) req.createdSI = Number(req.createdSI ?? 0) + 1;
+    persistSiDb();
     return ok(hydrateSi(si), 201);
   }),
 
@@ -150,6 +152,7 @@ export const shippingInstructionHandlers = [
     if (body.saveType === 'submit') si.status = 'S';
     removeChildren(si.eSINo);
     writeChildren(si.eSINo, body);
+    persistSiDb();
     return ok(hydrateSi(si));
   }),
 
@@ -160,6 +163,7 @@ export const shippingInstructionHandlers = [
     if (!['D', 'S'].includes(si.status)) return badRequest(`SI in status '${si.status}' cannot be cancelled`);
     si.status = 'I';
     si.ChgDate = nowIso();
+    persistSiDb();
     return ok(summary(si));
   }),
 ];

@@ -89,16 +89,38 @@ export function BookingDashboardRoute() {
 
   const handleDuplicate = useCallback(
     async (booking: BookingListDTO) => {
+      const label = booking.bookingNo || booking.onlineRefNo || booking.id;
       try {
-        const payload = await bookingApi.getBookingById(booking.id);
-        useBookingStore.getState().initializeFromBooking(payload);
-        toast.success(t("toasts.duplicated", { bookingNo: booking.bookingNo }));
-        navigate({ to: "/app/booking/new" });
+        // Prefer online ref; fall back to agency booking no (same as findBookingRow).
+        const lookupIds = [booking.id, booking.onlineRefNo, booking.bookingNo].filter(
+          (v, i, arr) => Boolean(v) && arr.indexOf(v) === i,
+        );
+        let payload = null as Awaited<
+          ReturnType<typeof bookingApi.getBookingById>
+        > | null;
+        let lastError: unknown;
+        for (const id of lookupIds) {
+          try {
+            payload = await bookingApi.getBookingById(id);
+            break;
+          } catch (err) {
+            lastError = err;
+          }
+        }
+        if (!payload) {
+          throw lastError ?? new Error("Booking not found");
+        }
+        // Mark as duplicate: submit always creates a new list row (even if fields are unchanged).
+        useBookingStore
+          .getState()
+          .initializeAsDuplicate(payload, booking.id || booking.onlineRefNo);
+        toast.success(t("toasts.duplicated", { bookingNo: label }));
+        await navigate({ to: "/app/booking/new" });
       } catch {
-        toast.error(t("toasts.duplicateFailed", { bookingNo: booking.bookingNo }));
+        toast.error(t("toasts.duplicateFailed", { bookingNo: label }));
       }
     },
-    [navigate, toast],
+    [navigate, t, toast],
   );
 
   const handleDownloadPdf = useCallback(

@@ -3,6 +3,7 @@ import { useToast } from '@solverminds/shared-ui/hooks';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
+import { siKeys } from '../../shipping-instruction/api/si.keys';
 import {
   batchPrintBL,
   cancelBL,
@@ -228,6 +229,10 @@ export function useBLSaveDraftMutation() {
         return;
       }
       queryClient.setQueryData(blKeys.detail(blNo), res.data);
+      // First-edit clone must appear on the B/L (and SI) grids without a full reload.
+      queryClient.invalidateQueries({ queryKey: blKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: blKeys.mcn.lists() });
+      queryClient.invalidateQueries({ queryKey: siKeys.lists() });
     },
     onError: (error: Error) => toast.error(error.message),
   });

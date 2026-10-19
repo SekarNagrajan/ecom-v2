@@ -145,6 +145,11 @@
     "statusPrefix": "状态：{{status}}",
     "printCount": "打印次数：{{count}}",
     "fileCount": "{{count}} 个文件",
+    "statusProgress": "提单状态进度",
+    "issuedOn": "签发日期",
+    "packingList": "装箱单",
+    "invoiceUpload": "发票上传",
+    "acidValue": "ACID",
     "system": "系统"
   },
   "card": {

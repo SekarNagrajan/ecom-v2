@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-08 15:03)
+// Modified by Sekar Nagarajan (2026-10-19 14:33)
 import { ListView } from "@solverminds/shared-ui/data-view/list-view";
 import type { ColDef } from "ag-grid-community";
 import { Typography } from "antd";
@@ -14,7 +14,9 @@ import type { SiPartyRoleKey } from "../../../shipping-instruction/utils/si-part
 import { useBLDetailQuery } from "../../api/bl.queries";
 import type {
   BLChargeLine,
+  BLFileUploadItem,
   BLParty,
+  BLPreviewFields,
   BLRowStatus,
   BLDTO,
 } from "../../types/bl.types";
@@ -27,6 +29,7 @@ import {
   BlPreviewPartyCard,
   BlPreviewSection,
 } from "../preview/bl-preview-section";
+import { BlRouteBand } from "./BlRouteBand";
 
 const { Text } = Typography;
 
@@ -58,11 +61,20 @@ type ActivityTone =
   | "info"
   | "muted";
 
+type TranslateFn = (key: string, options?: Record<string, unknown>) => string;
+
 const REVIEW_PARTY_ROLES: SiPartyRoleKey[] = [
   "shipper",
   "consignee",
   "notify",
   "forwarder",
+];
+
+const EXTRA_PARTY_ROLES: SiPartyRoleKey[] = [
+  "agreementParty",
+  "notify2",
+  "notify3",
+  "warehouse",
 ];
 
 function dash(value?: string | number | null): string {
@@ -163,10 +175,59 @@ function ActivitySteps({ events }: { events: ActivityEvent[] }) {
   );
 }
 
-type ActivityTranslateFn = (
-  key: string,
-  options?: Record<string, unknown>,
-) => string;
+function DocumentChips({ files }: { files: BLFileUploadItem[] }) {
+  const { t } = useTranslation("bill-of-lading");
+  return (
+    <div className="bl-doc-grid">
+      {files.map((file) => (
+        <div key={file.id} className="booking-review__doc-chip">
+          <span className="booking-review__doc-chip-name">
+            <AppIcon icon={Icons.fileText} size={16} />
+            <Text strong ellipsis className="bl-doc-chip__file" title={file.fileName}>
+              {file.fileName}
+            </Text>
+          </span>
+          <Text type="secondary" className="bl-doc-chip__meta">
+            {t(`wizard.files.categories.${file.category.toLowerCase()}`, {
+              defaultValue: file.category,
+            })}
+            {" · "}
+            {dash(file.uploadedAt)}
+          </Text>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function buildPreviewRows(
+  preview: BLPreviewFields | undefined,
+  t: TranslateFn,
+): { label: string; value: string }[] {
+  if (!preview) return [];
+  const rows: { label: string; value: string }[] = [];
+  const push = (label: string, value?: string | null) => {
+    if (value === undefined || value === null || value === "") return;
+    rows.push({ label, value });
+  };
+  push(t("labels.declaredValue"), preview.declaredValue);
+  push(t("wizard.preview.customerRemarks"), preview.siCustRemarks);
+  push(t("wizard.preview.aesNumber"), preview.siAesNumber);
+  if (preview.aesDisclaimer) {
+    push(
+      t("wizard.preview.aesDisclaimer"),
+      preview.aesDisclaimer === "provided"
+        ? t("wizard.preview.aesProvided")
+        : t("wizard.preview.aesNotApplicable"),
+    );
+  }
+  push(t("labels.packingList"), preview.packingList);
+  push(t("labels.invoiceUpload"), preview.invoiceUpload);
+  push(t("wizard.preview.blTypeUae"), preview.blTypeUae);
+  push(t("wizard.preview.mpciIdUae"), preview.mpciIdUae);
+  push(t("labels.acidValue"), preview.acidValue);
+  return rows;
+}
 
 function buildBlActivityEvents(
   params: {
@@ -176,7 +237,7 @@ function buildBlActivityEvents(
     fileCount: number;
     hints?: BlViewActivityHints;
   },
-  t: ActivityTranslateFn,
+  t: TranslateFn,
 ): ActivityEvent[] {
   const events: ActivityEvent[] = [];
   const by = t("labels.system");
@@ -239,6 +300,11 @@ function buildBlActivityEvents(
   return events;
 }
 
+/**
+ * Read-only B/L details body shared by the full-page view and the list
+ * drawer. Sections: master → routing band → parties → cargo → preview
+ * fields → charges → insurance → documents | activity → ENS.
+ */
 export function BlDetailsViewer({
   blNo,
   activityHints,
@@ -266,8 +332,14 @@ export function BlDetailsViewer({
         minWidth: 90,
       },
       {
+        field: "payByCustType",
+        headerName: t("columns.payor"),
+        minWidth: 110,
+      },
+      {
         headerName: t("columns.amount"),
         minWidth: 120,
+        type: "rightAligned",
         valueGetter: (p) => {
           const row = p.data as BLChargeLine | undefined;
           return row ? `${row.amount} ${row.currency}` : "";
@@ -306,18 +378,17 @@ export function BlDetailsViewer({
     },
     t,
   );
+  const previewRows = buildPreviewRows(data.preview, t);
 
-  const reviewRoleSet = new Set(REVIEW_PARTY_ROLES);
-  const extraPartyRoles = (
-    ["agreementParty", "notify2", "notify3", "warehouse"] as SiPartyRoleKey[]
-  ).filter((role) => {
-    const party = partyForRole(data.parties, role);
-    return party?.name && !reviewRoleSet.has(role);
-  });
+  const extraPartyRoles = EXTRA_PARTY_ROLES.filter((role) =>
+    Boolean(partyForRole(data.parties, role)?.name),
+  );
 
   const masterRows = [
     { label: t("labels.bookingNumber"), value: dash(data.bookingNo) },
     { label: t("labels.siNumber"), value: dash(data.siNo) },
+    { label: t("labels.agencyRef"), value: dash(data.agencyRefNo) },
+    { label: t("labels.mcn"), value: dash(data.mcnNo) },
     { label: t("labels.blType"), value: dash(data.blType) },
     {
       label: t("labels.releaseType"),
@@ -325,10 +396,7 @@ export function BlDetailsViewer({
         data.releaseType === "O" ? t("labels.original") : t("labels.telex"),
     },
     { label: t("labels.freightOption"), value: dash(data.freightOption) },
-    {
-      label: t("labels.route"),
-      value: `${dash(data.origin)} → ${dash(data.delivery)}`,
-    },
+    { label: t("labels.issuedOn"), value: dash(data.issuedAt) },
   ];
 
   return (
@@ -340,6 +408,14 @@ export function BlDetailsViewer({
         title={WIZARD_STEP_TITLES.masterDetails}
       >
         <BlPreviewFieldGrid items={masterRows} />
+      </BlPreviewSection>
+
+      <BlPreviewSection variant="airy" title={WIZARD_STEP_TITLES.routing}>
+        {data.routing ? (
+          <BlRouteBand routing={data.routing} />
+        ) : (
+          <BlPreviewEmpty label={t("empty.noRouting")} />
+        )}
       </BlPreviewSection>
 
       <BlPreviewSection variant="airy" title={WIZARD_STEP_TITLES.parties}>
@@ -377,31 +453,32 @@ export function BlDetailsViewer({
         </div>
       </BlPreviewSection>
 
-      <BlPreviewSection variant="airy" title={WIZARD_STEP_TITLES.routing}>
-        {data.routing ? (
-          <BlPreviewFieldGrid
-            items={[
-              {
-                label: t("labels.vesselVoyage"),
-                value: dash(data.routing.vesselVoyage),
-              },
-              { label: t("labels.originPrint"), value: dash(data.routing.originPrint) },
-              { label: t("labels.polPrint"), value: dash(data.routing.polPrint) },
-              { label: t("labels.podPrint"), value: dash(data.routing.podPrint) },
-              {
-                label: t("labels.deliveryPrint"),
-                value: dash(data.routing.deliveryPrint),
-              },
-              {
-                label: t("labels.scheduleLegs"),
-                value: String(data.routing.scheduleLegs?.length ?? 0),
-              },
-            ]}
-          />
-        ) : (
-          <BlPreviewEmpty label={t("empty.noRouting")} />
-        )}
+      <BlPreviewSection variant="airy" title={WIZARD_STEP_TITLES.cargoDetails}>
+        <SiPreviewCargoReview containers={data.containers} />
       </BlPreviewSection>
+
+      {previewRows.length > 0 ? (
+        <BlPreviewSection variant="airy" title={t("labels.previewFields")}>
+          <BlPreviewFieldGrid items={previewRows} />
+        </BlPreviewSection>
+      ) : null}
+
+      {charges.length > 0 ? (
+        <BlPreviewSection variant="airy" title={WIZARD_STEP_TITLES.charges}>
+          <div className="bl-charges-grid responsive-table-wrap custom-scroll ag-theme-alpine">
+            <ListView
+              rowData={charges}
+              columnDefs={chargeColDefs}
+              showToolbar={false}
+              sideBar={false}
+              pagination
+              paginationPageSize={10}
+              pageSizeOptions={[10, 20, 50]}
+              gridOptions={{ animateRows: true }}
+            />
+          </div>
+        </BlPreviewSection>
+      ) : null}
 
       <BlPreviewSection variant="airy" title={WIZARD_STEP_TITLES.insurance}>
         {insuranceRequired && data.insurance ? (
@@ -434,9 +511,23 @@ export function BlDetailsViewer({
         )}
       </BlPreviewSection>
 
-      <BlPreviewSection variant="airy" title={WIZARD_STEP_TITLES.cargoDetails}>
-        <SiPreviewCargoReview containers={data.containers} />
-      </BlPreviewSection>
+      <div className="bl-view-row bl-view-row--2 bl-view-row--sections">
+        <BlPreviewSection variant="airy" title={WIZARD_STEP_TITLES.fileUpload}>
+          {files.length === 0 ? (
+            <BlPreviewEmpty label={t("empty.noDocuments")} />
+          ) : (
+            <DocumentChips files={files} />
+          )}
+        </BlPreviewSection>
+
+        <BlPreviewSection variant="airy" title={t("labels.activity")}>
+          {activity.length === 0 ? (
+            <BlPreviewEmpty label={t("empty.noActivity")} />
+          ) : (
+            <ActivitySteps events={activity} />
+          )}
+        </BlPreviewSection>
+      </div>
 
       {data.ens?.euCustomsZone ? (
         <BlPreviewSection variant="airy" title={WIZARD_STEP_TITLES.ensDetails}>
@@ -459,44 +550,6 @@ export function BlDetailsViewer({
               { label: t("labels.seller"), value: dash(data.ens.sellerName) },
             ]}
           />
-        </BlPreviewSection>
-      ) : null}
-
-      <BlPreviewSection variant="airy" title={WIZARD_STEP_TITLES.fileUpload}>
-        {files.length === 0 ? (
-          <BlPreviewEmpty label={t("empty.noDocuments")} />
-        ) : (
-          <BlPreviewFieldGrid
-            items={files.map((file) => ({
-              label: file.category || t("labels.file"),
-              value: `${file.fileName} · ${file.uploadedAt}`,
-            }))}
-          />
-        )}
-      </BlPreviewSection>
-
-      <BlPreviewSection variant="airy" title={t("labels.activity")}>
-        {activity.length === 0 ? (
-          <BlPreviewEmpty label={t("empty.noActivity")} />
-        ) : (
-          <ActivitySteps events={activity} />
-        )}
-      </BlPreviewSection>
-
-      {charges.length > 0 ? (
-        <BlPreviewSection variant="airy" title={WIZARD_STEP_TITLES.charges}>
-          <div className="bl-charges-grid responsive-table-wrap custom-scroll ag-theme-alpine">
-            <ListView
-              rowData={charges}
-              columnDefs={chargeColDefs}
-              showToolbar={false}
-              sideBar={false}
-              pagination
-              paginationPageSize={10}
-              pageSizeOptions={[10, 20, 50]}
-              gridOptions={{ animateRows: true }}
-            />
-          </div>
         </BlPreviewSection>
       ) : null}
     </div>

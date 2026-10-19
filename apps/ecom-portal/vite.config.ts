@@ -35,11 +35,193 @@ function resolveWorkspacePackage(packageName: string): string | undefined {
 
 const tiptapCorePath = resolveWorkspacePackage("@tiptap/core");
 
+/** Booking tables persisted by the mock layer under mock-data/runtime/. */
+const BOOKING_RUNTIME_TABLES = [
+  "bookings",
+  "bookingCust",
+  "bookingCargo",
+  "bookingCommodity",
+  "bookingDg",
+  "bookingOog",
+  "bookingRefer",
+  "bookingLeg",
+  "bookingHaulage",
+  "bookingConf",
+  "bookingFiles",
+  "bookingIcs",
+  "insurance",
+  "bookingReference",
+  "bookingCancel",
+  "bookingSummary",
+] as const;
+
+/** SI (+ shared B/L amendment) tables under mock-data/runtime/si/. */
+const SI_RUNTIME_TABLES = [
+  "shippingInstructions",
+  "siCust",
+  "siCargo",
+  "siCommodity",
+  "siDg",
+  "siOog",
+  "siReefer",
+  "siCharges",
+  "siPayers",
+  "siFiles",
+  "siIcs",
+  "siReference",
+  "siRequestMaster",
+  "siSummary",
+  "siLocks",
+] as const;
+
+const BOOKING_RUNTIME_DIR = path.resolve(__dirname, "mock-data/runtime");
+const SI_RUNTIME_DIR = path.resolve(__dirname, "mock-data/runtime/si");
+
+type RuntimeOverlayPayload = {
+  version: number;
+  counters: Record<string, number>;
+  tables: Record<string, unknown[]>;
+};
+
+function readRequestBody(req: import("http").IncomingMessage): Promise<string> {
+  return new Promise((resolve, reject) => {
+    let body = "";
+    req.on("data", (chunk) => {
+      body += chunk;
+    });
+    req.on("end", () => resolve(body));
+    req.on("error", reject);
+  });
+}
+
+function readRuntimeOverlay(
+  dir: string,
+  tableNames: readonly string[],
+): RuntimeOverlayPayload | null {
+  const metaPath = path.join(dir, "_meta.json");
+  if (!fs.existsSync(metaPath)) return null;
+  try {
+    const meta = JSON.parse(fs.readFileSync(metaPath, "utf8")) as {
+      version?: number;
+      counters?: Record<string, number>;
+    };
+    const tables: Record<string, unknown[]> = {};
+    for (const name of tableNames) {
+      const file = path.join(dir, `${name}.json`);
+      if (!fs.existsSync(file)) {
+        tables[name] = [];
+        continue;
+      }
+      const rows = JSON.parse(fs.readFileSync(file, "utf8"));
+      tables[name] = Array.isArray(rows) ? rows : [];
+    }
+    return {
+      version: meta.version ?? 1,
+      counters: meta.counters ?? {},
+      tables,
+    };
+  } catch {
+    return null;
+  }
+}
+
+function writeRuntimeOverlay(
+  dir: string,
+  tableNames: readonly string[],
+  payload: {
+    version?: number;
+    counters?: Record<string, number>;
+    tables?: Record<string, unknown[]>;
+  },
+) {
+  fs.mkdirSync(dir, { recursive: true });
+  const counters = payload.counters ?? {};
+  const tables = payload.tables ?? {};
+  fs.writeFileSync(
+    path.join(dir, "_meta.json"),
+    JSON.stringify({ version: payload.version ?? 1, counters }, null, 2),
+  );
+  for (const name of tableNames) {
+    const rows = Array.isArray(tables[name]) ? tables[name] : [];
+    fs.writeFileSync(
+      path.join(dir, `${name}.json`),
+      JSON.stringify(rows, null, 1),
+    );
+  }
+}
+
+/** Delete only known overlay files (never wipe sibling dirs like runtime/si/). */
+function clearRuntimeOverlay(dir: string, tableNames: readonly string[]) {
+  if (!fs.existsSync(dir)) return;
+  const known = new Set([...tableNames.map((n) => `${n}.json`), "_meta.json"]);
+  for (const entry of fs.readdirSync(dir)) {
+    if (!known.has(entry)) continue;
+    const full = path.join(dir, entry);
+    if (fs.statSync(full).isFile()) fs.unlinkSync(full);
+  }
+}
+
+function handleRuntimeDbRoute(
+  req: import("http").IncomingMessage,
+  res: import("http").ServerResponse,
+  opts: {
+    dir: string;
+    tables: readonly string[];
+    json: (
+      res: import("http").ServerResponse,
+      body: unknown,
+      status?: number,
+    ) => void;
+  },
+): boolean {
+  if (req.method === "GET") {
+    const overlay = readRuntimeOverlay(opts.dir, opts.tables);
+    opts.json(res, {
+      data: overlay ?? { version: 1, counters: {}, tables: null },
+    });
+    return true;
+  }
+  if (req.method === "PUT") {
+    void readRequestBody(req).then((raw) => {
+      try {
+        const body = JSON.parse(raw || "{}") as {
+          version?: number;
+          counters?: Record<string, number>;
+          tables?: Record<string, unknown[]>;
+        };
+        writeRuntimeOverlay(opts.dir, opts.tables, body);
+        opts.json(res, { data: { ok: true } });
+      } catch (err) {
+        opts.json(
+          res,
+          {
+            error: {
+              message:
+                err instanceof Error ? err.message : "Invalid payload",
+            },
+          },
+          400,
+        );
+      }
+    });
+    return true;
+  }
+  if (req.method === "DELETE") {
+    clearRuntimeOverlay(opts.dir, opts.tables);
+    opts.json(res, { data: { ok: true } });
+    return true;
+  }
+  return false;
+}
+
 /**
  * Dev-only fallback for booking / rates / public tenant when the MSW
  * service worker does not intercept (e.g. after a long HMR session, cookie
  * clear, or SW not claimed). MSW still owns these routes when active; this
  * only runs if the request reaches Vite.
+ *
+ * Also hosts GET|PUT|DELETE /api/_mock/booking-db and /api/_mock/si-db so the
+ * fixture layer can persist under mock-data/runtime/ (use msw `bypass` from handlers).
  */
 function bookingMockApiPlugin(): Plugin {
   const json = (
@@ -57,6 +239,31 @@ function bookingMockApiPlugin(): Plugin {
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
         const url = req.url?.split("?")[0] ?? "";
+
+        if (url === "/api/_mock/booking-db") {
+          if (
+            handleRuntimeDbRoute(req, res, {
+              dir: BOOKING_RUNTIME_DIR,
+              tables: BOOKING_RUNTIME_TABLES,
+              json,
+            })
+          ) {
+            return;
+          }
+        }
+
+        if (url === "/api/_mock/si-db") {
+          if (
+            handleRuntimeDbRoute(req, res, {
+              dir: SI_RUNTIME_DIR,
+              tables: SI_RUNTIME_TABLES,
+              json,
+            })
+          ) {
+            return;
+          }
+        }
+
         // Modified by Sekar Nagarajan (2026-09-08 10:50) — public tenant bootstrap fallback
         if (req.method === "GET" && url === "/api/public/tenant") {
           return json(res, {

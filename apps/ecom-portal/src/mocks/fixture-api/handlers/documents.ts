@@ -3,6 +3,7 @@ import { http } from 'msw';
 import { db, eq, nextRef, nowIso, type Row } from '../db';
 import { API, latency, ok, notFound, badRequest, paginate, matches, inDateRange, byDateDesc, VGM_STATUS, SI_STATUS, BOOKING_STATUS, label } from '../utils';
 import { latestBlVersions } from '../bridges/bl-list.bridge';
+import { ensureSiDbReady, persistSiDb } from '../si-persistence';
 import { hydrateSi } from './shipping-instructions';
 
 // ─── Bills of lading ─────────────────────────────────────────────────────────
@@ -46,6 +47,7 @@ export const billOfLadingHandlers = [
   /** Submit a B/L amendment: clones the latest version with blversion+1 and editbl=1. */
   http.post(`${API}/bills-of-lading/:blno/amend`, async ({ params, request }) => {
     await latency();
+    await ensureSiDbReady();
     const latest = db.shippingInstructions.filter(si => eq(si.blno, params.blno)).sort((a, b) => Number(b.blversion) - Number(a.blversion))[0];
     if (!latest) return notFound(`B/L ${params.blno} not found`);
     const body = (await request.json().catch(() => ({}))) as Row;
@@ -55,15 +57,18 @@ export const billOfLadingHandlers = [
     for (const t of ['siCust', 'siCargo', 'siCommodity', 'siDg', 'siOog', 'siReefer', 'siCharges', 'siFiles', 'siIcs'] as const) {
       db[t].push(...db[t].filter(r => eq(r.eSINo, latest.eSINo)).map(r => ({ ...r, eSINo: draft.eSINo })));
     }
+    persistSiDb();
     return ok(hydrateSi(draft), 201);
   }),
 
   http.post(`${API}/bills-of-lading/:blno/accept`, async ({ params }) => {
     await latency();
+    await ensureSiDbReady();
     const latest = db.shippingInstructions.filter(si => eq(si.blno, params.blno)).sort((a, b) => Number(b.blversion) - Number(a.blversion))[0];
     if (!latest) return notFound(`B/L ${params.blno} not found`);
     latest.status = 'A';
     latest.ChgDate = nowIso();
+    persistSiDb();
     return ok({ blno: params.blno, status: 'A', acceptedAt: latest.ChgDate });
   }),
 ];

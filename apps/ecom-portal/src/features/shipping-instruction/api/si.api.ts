@@ -89,10 +89,15 @@ export const siApi = {
     }
   },
 
-  async submit(id: string): Promise<ApiResponse<{ siNo: string }>> {
+  async submit(
+    id: string,
+    payload?: Partial<SIDTO>,
+  ): Promise<ApiResponse<{ siNo: string }>> {
     try {
       const res = await fetch(`/api/si/${encodeURIComponent(id)}/submit`, {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload ?? {}),
       });
       return readApiJson<{ siNo: string }>(res, "Failed to submit SI");
     } catch (error: unknown) {

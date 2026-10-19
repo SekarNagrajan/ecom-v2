@@ -1,3 +1,8 @@
 node_modules
 .env
 package-lock.json
+
+# Demo mutations from the portal (booking submit/draft/amend). Seed fixtures stay in ../src/mocks/fixtures/.
+# `npm run dump` does not touch this folder. Delete runtime/*.json (keep .gitkeep) to restore dump-only seed.
+runtime/*
+!runtime/.gitkeep

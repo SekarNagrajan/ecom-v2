@@ -2,6 +2,7 @@
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { useNavigate } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
 import { Card, Space, Steps, Typography, theme } from "antd";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -12,6 +13,7 @@ import {
   useWizardStepTitles,
 } from "../../i18n/use-module-titles";
 import { bookingApi } from "./api/booking.api";
+import { bookingKeys } from "./api/booking.keys";
 import { BookingModuleStyles } from "./components/booking-module-styles";
 import { CargoStep } from "./components/CargoStep";
 import { CustomerDetailsStep } from "./components/CustomerDetailsStep";
@@ -35,6 +37,7 @@ export function BookingWizardRoute() {
   const { token } = theme.useToken();
   const toast = useToast();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const payload = useBookingStore((s) => s.payload);
   const [savingDraft, setSavingDraft] = useState(false);
   const {
@@ -50,6 +53,25 @@ export function BookingWizardRoute() {
     setSavingDraft(true);
     try {
       const { draftId } = await bookingApi.saveDraft(payload);
+      // After first draft of a duplicate, bind to the new ebookno so further saves update it.
+      useBookingStore.setState((state) => ({
+        payload: {
+          ...state.payload,
+          draftId,
+          forceCreateNew: false,
+          duplicatedFromId: undefined,
+          masterDetails: state.payload.masterDetails
+            ? {
+                ...state.payload.masterDetails,
+                onlineBookingNo: draftId,
+              }
+            : state.payload.masterDetails,
+        },
+      }));
+      void queryClient.invalidateQueries({
+        queryKey: bookingKeys.list(),
+        refetchType: "all",
+      });
       toast.success(t("booking:wizard.toasts.draftSaved", { draftId }));
     } catch {
       toast.error(t("booking:wizard.toasts.draftSaveFailed"));
@@ -225,7 +247,13 @@ export function BookingWizardRoute() {
               >
                 <AppButton
                   type="primary"
-                  onClick={() => navigate({ to: "/app/booking" })}
+                  onClick={() => {
+                    void queryClient.invalidateQueries({
+                      queryKey: bookingKeys.list(),
+                      refetchType: "all",
+                    });
+                    void navigate({ to: "/app/booking" });
+                  }}
                 >
                   {t("booking:wizard.actions.goToDashboard")}
                 </AppButton>

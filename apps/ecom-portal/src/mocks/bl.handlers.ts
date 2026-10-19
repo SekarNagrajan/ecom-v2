@@ -22,7 +22,8 @@ import {
 import { fixtureBlList, mcnIdOf } from './fixture-api/bridges/bl-list.bridge';
 import { findBlRow, isAmendment, str } from './fixture-api/bridges/si-common.bridge';
 import { applySiBody, cloneSiAsAmendment, type WizardBody } from './fixture-api/bridges/si-write.bridge';
-import { nowIso, resetDb, type Row } from './fixture-api/db';
+import { db, eq, nowIso, resetDb, type Row } from './fixture-api/db';
+import { ensureSiDbReady, persistSiDb } from './fixture-api/si-persistence';
 
 const BL_CANCEL_REMARKS = 'Bill of lading amendment cancelled by the customer.';
 
@@ -39,6 +40,35 @@ function amendmentFor(blNo: string): Row | null {
 function setStatus(row: Row, status: string, remarks?: string) {
   row.status = status;
   if (remarks !== undefined) row.declined_remarks = remarks;
+  row.ChgDate = nowIso();
+}
+
+/** Apply MCN edit fields onto the amendment row + children the detail bridge reads. */
+function applyMcnBody(row: Row, body: Partial<MCNDTO>) {
+  if (body.remarks !== undefined) row.custremarks = body.remarks;
+
+  if (body.freightTerms !== undefined) {
+    const terms = String(body.freightTerms).toUpperCase();
+    const collect = terms.includes('COLLECT');
+    row.Freight = collect ? 'C' : 'P';
+    const eSINo = str(row.eSINo);
+    for (const charge of db.siCharges.filter((c) => eq(c.esino, eSINo) && eq(c.chargeid, 'OFR'))) {
+      charge.prepaidcollect = collect ? 'C' : 'P';
+    }
+  }
+
+  if (body.cargoDescription !== undefined) {
+    const eSINo = str(row.eSINo);
+    const commodities = db.siCommodity.filter((c) => eq(c.eSINo, eSINo));
+    if (commodities.length) {
+      commodities[0].marksDesc = body.cargoDescription;
+      for (let i = 1; i < commodities.length; i++) commodities[i].marksDesc = '';
+    }
+  }
+
+  if (body.status === 'Submitted') row.status = 'S';
+  else if (body.status === 'Draft') row.status = 'D';
+
   row.ChgDate = nowIso();
 }
 
@@ -87,6 +117,7 @@ export const blHandlers = [
 
   http.get('*/api/bl/list', async ({ request }) => {
     await delay(300);
+    await ensureSiDbReady();
     const rows = fixtureBlList() ?? [];
     const url = new URL(request.url);
     const startRow = Number(url.searchParams.get('startRow') ?? 0);
@@ -102,6 +133,7 @@ export const blHandlers = [
 
   http.get('*/api/bl/from-si/:siNo', async ({ params }) => {
     await delay(200);
+    await ensureSiDbReady();
     const siNo = params.siNo as string;
     const detail = fixtureBlFromSi(siNo);
     if (!detail) return notFound('SI not found');
@@ -117,6 +149,7 @@ export const blHandlers = [
 
   http.get('*/api/bl/:blNo/print', async ({ params, request }) => {
     await delay(500);
+    await ensureSiDbReady();
     const blNo = params.blNo as string;
     const url = new URL(request.url);
     const type = (url.searchParams.get('type') ?? 'draft') as BLPrintType;
@@ -131,7 +164,10 @@ export const blHandlers = [
     }
     if (type === 'original') {
       const row = amendmentFor(blNo);
-      if (row) setStatus(row, 'I');
+      if (row) {
+        setStatus(row, 'I');
+        persistSiDb();
+      }
     }
     return pdf(`Bill of Lading (${type}) for ${blNo}`, `${blNo}-${type}.pdf`);
   }),
@@ -202,37 +238,55 @@ export const blHandlers = [
 
   http.post('*/api/bl/:blNo/draft', async ({ params, request }) => {
     await delay(150);
+    await ensureSiDbReady();
     const blNo = params.blNo as string;
     const row = amendmentFor(blNo);
     if (!row) return notFound('B/L not found');
     applySiBody(row, (await request.json()) as WizardBody);
+    persistSiDb();
     return detailOr404(blNo);
   }),
 
   http.post('*/api/bl/:blNo/verify', async ({ params }) => {
     await delay(400);
+    await ensureSiDbReady();
     const blNo = params.blNo as string;
     const row = amendmentFor(blNo);
     if (!row) return notFound('Not found');
     setStatus(row, 'A', 'Accepted'); // Approved by customer → Confirmed
+    persistSiDb();
     return detailOr404(blNo);
   }),
 
   http.post('*/api/bl/:blNo/cancel', async ({ params }) => {
     await delay(300);
+    await ensureSiDbReady();
     const blNo = params.blNo as string;
     const row = amendmentFor(blNo);
     if (!row) return notFound('Not found');
     setStatus(row, 'D', BL_CANCEL_REMARKS); // back to Verify Copy
+    persistSiDb();
     return detailOr404(blNo);
   }),
 
-  http.post('*/api/bl/:blNo/submit', async ({ params }) => {
+  http.post('*/api/bl/:blNo/submit', async ({ params, request }) => {
     await delay(400);
+    await ensureSiDbReady();
     const blNo = params.blNo as string;
     const row = amendmentFor(blNo);
     if (!row) return notFound('Not found');
+    // Optional body: apply draft fields before status flip (parity with SI submit).
+    const contentType = request.headers.get('content-type') ?? '';
+    if (contentType.includes('application/json')) {
+      try {
+        const body = (await request.json()) as WizardBody | null;
+        if (body && typeof body === 'object') applySiBody(row, body);
+      } catch {
+        // empty / non-JSON body is fine — wizard often PUTs then POSTs without a body
+      }
+    }
     setStatus(row, 'S', '');
+    persistSiDb();
     const detail = fixtureBlDetail(blNo);
     if (!detail) return notFound('Not found');
     detail.submitResult = {
@@ -246,36 +300,43 @@ export const blHandlers = [
 
   http.post('*/api/bl/:blNo/issue', async ({ params }) => {
     await delay(400);
+    await ensureSiDbReady();
     const blNo = params.blNo as string;
     const row = amendmentFor(blNo);
     if (!row) return notFound('Not found');
     setStatus(row, 'I', 'Released');
+    persistSiDb();
     return detailOr404(blNo);
   }),
 
   http.put('*/api/bl/:blNo', async ({ params, request }) => {
     await delay(300);
+    await ensureSiDbReady();
     const blNo = params.blNo as string;
     const row = amendmentFor(blNo);
     if (!row) return notFound('B/L not found');
     const body = (await request.json()) as Partial<BLDTO>;
     applySiBody(row, body as WizardBody);
     if (body.status && RAW_STATUS[body.status]) row.status = RAW_STATUS[body.status];
+    persistSiDb();
     return detailOr404(blNo);
   }),
 
   http.get('*/api/bl/:blNo', async ({ params }) => {
     await delay(200);
+    await ensureSiDbReady();
     return detailOr404(params.blNo as string);
   }),
 
   http.get('*/api/mcn/list', async () => {
     await delay(200);
+    await ensureSiDbReady();
     return HttpResponse.json({ data: fixtureMcnList() });
   }),
 
   http.get('*/api/mcn/:mcnId/print', async ({ params, request }) => {
     await delay(400);
+    await ensureSiDbReady();
     const mcnId = params.mcnId as string;
     const url = new URL(request.url);
     const manifestType = url.searchParams.get('manifestType') ?? 'full';
@@ -284,29 +345,30 @@ export const blHandlers = [
 
   http.get('*/api/mcn/:mcnId', async ({ params }) => {
     await delay(200);
+    await ensureSiDbReady();
     const detail = fixtureMcnDetail(params.mcnId as string);
     return detail ? HttpResponse.json({ data: detail }) : notFound('MCN not found');
   }),
 
   http.put('*/api/mcn/:mcnId', async ({ params, request }) => {
     await delay(250);
+    await ensureSiDbReady();
     const mcnId = params.mcnId as string;
     const row = findMcnRow(mcnId);
     if (!row) return notFound('MCN not found');
-    const body = (await request.json()) as Partial<MCNDTO>;
-    if (body.remarks !== undefined) row.custremarks = body.remarks;
-    if (body.status === 'Submitted') row.status = 'S';
-    else if (body.status === 'Draft') row.status = 'D';
-    row.ChgDate = nowIso();
+    applyMcnBody(row, (await request.json()) as Partial<MCNDTO>);
+    persistSiDb();
     return HttpResponse.json({ data: fixtureMcnDetail(mcnIdOf(row)) });
   }),
 
   http.post('*/api/mcn/:mcnId/submit', async ({ params }) => {
     await delay(300);
+    await ensureSiDbReady();
     const mcnId = params.mcnId as string;
     const row = findMcnRow(mcnId);
     if (!row) return notFound('MCN not found');
     setStatus(row, 'S', '');
+    persistSiDb();
     return HttpResponse.json({ data: fixtureMcnDetail(str(mcnId)) });
   }),
 ];

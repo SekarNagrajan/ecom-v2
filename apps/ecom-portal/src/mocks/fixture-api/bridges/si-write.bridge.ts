@@ -6,8 +6,19 @@
  * amendment version (editbl ≥ 1, blversion + 1) the way the legacy "Edit B/L" action does, and
  * creates an SI from a confirmed booking ("Create SI").
  */
-import type { BLPreviewFields } from '../../../features/bill-of-lading/types/bl.types';
-import type { SIChargeLine, SIContainer, SIParty, SIPreviewFields } from '../../../features/shipping-instruction/types/si.types';
+import type { EnsData } from '../../../features/booking/types/booking.types';
+import type {
+  BLFileUploadItem,
+  BLPreviewFields,
+} from '../../../features/bill-of-lading/types/bl.types';
+import type {
+  SIChargeLine,
+  SIContainer,
+  SIEnsInfo,
+  SIFileItem,
+  SIParty,
+  SIPreviewFields,
+} from '../../../features/shipping-instruction/types/si.types';
 import { ciRow, db, eq, nextRef, nowIso, type Row } from '../db';
 import { bookingLegs, mainLeg, num, partyTypeCode, str } from './si-common.bridge';
 import { PREPAID_COLLECT_CODE } from './si-detail.bridge';
@@ -40,6 +51,11 @@ function replaceChildren(table: SiChildTable, eSINo: string, rows: Row[]) {
 type PartyLike = Partial<SIParty> & { toOrder?: boolean; zipCode?: string };
 const isParty = (v: unknown): v is PartyLike => typeof v === 'object' && v !== null && typeof (v as PartyLike).name === 'string';
 
+/** File payload from SI (fileType) or B/L (category) wizard drafts. */
+export type WizardFile = Partial<SIFileItem & BLFileUploadItem> & {
+  fileName: string;
+};
+
 /** The sections of an SI or B/L wizard payload (Partial<SIDTO> and Partial<BLDTO> both fit). */
 export interface WizardBody {
   blType?: 'Original' | 'Seaway';
@@ -50,10 +66,18 @@ export interface WizardBody {
   ensFiling?: string;
   ensFilingHint?: string;
   preview?: Partial<SIPreviewFields & BLPreviewFields>;
-  routing?: { originPrint: string; polPrint: string; podPrint: string; deliveryPrint: string };
+  routing?: {
+    originPrint: string;
+    polPrint: string;
+    podPrint: string;
+    deliveryPrint: string;
+    vesselVoyage?: string;
+  };
   parties?: Record<string, unknown>;
   containers?: SIContainer[];
   charges?: SIChargeLine[];
+  files?: WizardFile[];
+  ens?: EnsData | SIEnsInfo | null;
 }
 
 const PARTY_TYPES: Record<string, string> = {
@@ -215,6 +239,88 @@ export function writeSiCharges(eSINo: string, charges: SIChargeLine[]) {
   );
 }
 
+/** BL upload category → ecomSI_files.FileCatgeory (LOI stored as LOL). */
+export function fileCategoryCode(category: unknown): string {
+  const c = str(category).toUpperCase();
+  if (c === 'VGM' || c === 'DG') return c;
+  if (c === 'LOI' || c === 'LOL') return 'LOL';
+  if (c === 'OTHER' || c === 'OT' || c === 'MSD') return c === 'MSD' ? 'MSD' : 'OT';
+  return c || 'OT';
+}
+
+/** Replace ecomSI_files rows for an SI / B/L amendment from the wizard file list. */
+export function writeSiFiles(eSINo: string, files: WizardFile[]) {
+  replaceChildren(
+    'siFiles',
+    eSINo,
+    files
+      .filter((f) => str(f.fileName))
+      .map((f) => ({
+        id: nextId(),
+        eSINo,
+        FileCatgeory: fileCategoryCode(f.category ?? f.fileType),
+        FileName: str(f.fileName),
+      })),
+  );
+}
+
+function isSiEnsInfo(ens: EnsData | SIEnsInfo): ens is SIEnsInfo {
+  return 'euCustZone' in ens || 'blTypeEns' in ens || 'declarant' in ens;
+}
+
+/** Replace ecomSI_ics_new from B/L EnsData or SI SIEnsInfo. */
+export function writeSiEns(eSINo: string, ens: EnsData | SIEnsInfo | null) {
+  if (ens === null) {
+    replaceChildren('siIcs', eSINo, []);
+    return;
+  }
+
+  let row: Row;
+  if (isSiEnsInfo(ens)) {
+    const d = ens.declarant;
+    row = {
+      id: nextId(),
+      eSINo,
+      eucustom: ens.euCustZone === 'Y' ? 'Y' : 'N',
+      bill_type: ens.blTypeEns ?? '',
+      ens_type: ens.ensFillingType ?? '',
+      payment_mode: ens.paymentMethod ?? '',
+      cust_name: d?.name ?? '',
+      address: d?.address ?? '',
+      address1: d?.address2 ?? '',
+      city: d?.city ?? '',
+      zipcode: d?.zip ?? '',
+      country: d?.country ?? '',
+      state: d?.state ?? '',
+      telephone: d?.telephone ?? '',
+      enseori: d?.eori ?? '',
+      email: d?.email ?? '',
+      filing_type: d?.fillingType ?? '',
+    };
+  } else {
+    row = {
+      id: nextId(),
+      eSINo,
+      eucustom: ens.euCustomsZone ? 'Y' : 'N',
+      bill_type: ens.blType ?? '',
+      ens_type: ens.ensFilingType ?? '',
+      payment_mode: ens.paymentMethod ?? '',
+      cust_name: ens.declarantName ?? '',
+      address: ens.declarantAddress ?? '',
+      address1: '',
+      city: ens.declarantCity ?? '',
+      zipcode: '',
+      country: ens.declarantCountry ?? '',
+      state: '',
+      telephone: '',
+      enseori: ens.declarantEori ?? '',
+      email: ens.declarantEmail ?? '',
+      filing_type: '',
+    };
+  }
+  replaceChildren('siIcs', eSINo, [row]);
+}
+
 /** Header columns an SI / B/L wizard payload maps onto ecomSI. */
 export function applySiHeader(si: Row, body: WizardBody) {
   if (body.blType) si.blType = body.blType === 'Seaway' ? 'SEA WAYBILL' : 'COMBINED TRANSPORT B/L';
@@ -243,6 +349,12 @@ export function applySiHeader(si: Row, body: WizardBody) {
     si.polHeaderName = body.routing.polPrint;
     si.podHeaderName = body.routing.podPrint;
     si.pldHeaderName = body.routing.deliveryPrint;
+    if (body.routing.vesselVoyage !== undefined) {
+      const vv = str(body.routing.vesselVoyage);
+      const [vessel, ...voyageParts] = vv.split('/').map((s) => s.trim());
+      if (vessel) si.Vessel = vessel;
+      if (voyageParts.length) si.Voyage = voyageParts.join(' / ');
+    }
   }
   si.ChgDate = nowIso();
 }
@@ -254,6 +366,8 @@ export function applySiBody(si: Row, body: WizardBody) {
   if (body.parties) writeSiParties(eSINo, body.parties);
   if (body.containers) writeSiContainers(eSINo, body.containers);
   if (body.charges) writeSiCharges(eSINo, body.charges);
+  if (body.files) writeSiFiles(eSINo, body.files);
+  if (body.ens !== undefined) writeSiEns(eSINo, body.ens);
 }
 
 /**

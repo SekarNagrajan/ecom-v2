@@ -2,6 +2,7 @@
   "subtitle": "按航线、船舶或港口搜索船期——比较运输时间、截止时间并直接订舱。",
   "exportingToast": "正在导出船期结果……",
   "bookNowToast": "已为 {{vessel}} / {{voyage}}（{{pol}} → {{pod}}）开始订舱",
+  "bookingNotAllowedToast": "此航次已关闭订舱——截止时间已过或船舶已开航。",
   "searchEmptyTitle": "搜索船期",
   "searchEmptyMessage": "选择您的搜索条件并点击“搜索船期”以查看可用的航班。",
   "availableSailings": "可用航班",
@@ -49,12 +50,14 @@
   },
   "options": {
     "ports": {
-      "AEDXB": "AEDXB - 迪拜",
-      "AEJEA": "AEJEA - 杰贝阿里",
-      "CNSHA": "CNSHA - 上海",
-      "INMUN": "INMUN - 蒙德拉",
       "INNSA": "INNSA - 那瓦西瓦",
-      "SGSIN": "SGSIN - 新加坡"
+      "AEJEA": "AEJEA - 杰贝阿里",
+      "INMUN": "INMUN - 蒙德拉",
+      "SGSIN": "SGSIN - 新加坡",
+      "INMAA": "INMAA - 钦奈",
+      "MYPKG": "MYPKG - 巴生港",
+      "AEDXB": "AEDXB - 迪拜",
+      "SADMM": "SADMM - 达曼"
     },
     "vessels": {
       "KCA": "KCA - KMTC CHENNAI",

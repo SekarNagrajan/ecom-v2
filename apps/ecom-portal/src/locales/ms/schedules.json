@@ -2,6 +2,7 @@
   "subtitle": "Cari pelayaran mengikut laluan, kapal, atau pelabuhan — bandingkan masa transit, tarikh akhir, dan tempah terus.",
   "exportingToast": "Mengeksport hasil jadual…",
   "bookNowToast": "Tempahan dimulakan untuk {{vessel}} / {{voyage}} ({{pol}} → {{pod}})",
+  "bookingNotAllowedToast": "Tempahan ditutup untuk pelayaran ini — tarikh akhir telah berlalu atau kapal sudah berlepas.",
   "searchEmptyTitle": "Cari pelayaran",
   "searchEmptyMessage": "Pilih kriteria carian anda dan klik Cari Jadual untuk melihat pelepasan yang tersedia.",
   "availableSailings": "Pelayaran Tersedia",
@@ -49,12 +50,14 @@
   },
   "options": {
     "ports": {
-      "AEDXB": "AEDXB - Dubai",
-      "AEJEA": "AEJEA - Jebel Ali",
-      "CNSHA": "CNSHA - Shanghai",
-      "INMUN": "INMUN - Mundra",
       "INNSA": "INNSA - Nhava Sheva",
-      "SGSIN": "SGSIN - Singapura"
+      "AEJEA": "AEJEA - Jebel Ali",
+      "INMUN": "INMUN - Mundra",
+      "SGSIN": "SGSIN - Singapura",
+      "INMAA": "INMAA - Chennai",
+      "MYPKG": "MYPKG - Port Klang",
+      "AEDXB": "AEDXB - Dubai",
+      "SADMM": "SADMM - Dammam"
     },
     "vessels": {
       "KCA": "KCA - KMTC CHENNAI",

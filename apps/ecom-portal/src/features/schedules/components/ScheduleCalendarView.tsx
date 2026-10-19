@@ -95,6 +95,7 @@ function ScheduleCalendarActions({
         title={t("actions.getAQuote")}
         icon={<AppIcon icon={Icons.fileText} size={16} tone="navigate" />}
         tone="navigate"
+        disabled={!schedule.bookingAllowed}
         onClick={(e) => {
           e.stopPropagation();
           onViewRates(schedule);

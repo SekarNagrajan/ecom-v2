@@ -15,6 +15,21 @@ export const DEFAULT_EQUIPMENT_CODE = "20DC";
 export const SCHEDULE_WINDOW_DAYS = 14;
 export const RATES_SHIPMENT_LEAD_DAYS = 7;
 
+/**
+ * Shared origin/delivery suggestions for landing Schedule tab + Schedules module.
+ * Same lane family as DEFAULT_LANE and the VSS/Commercial showcase ports (not a separate CNSHA list).
+ */
+export const SCHEDULE_PORT_CODES = [
+  "INNSA",
+  "AEJEA",
+  "INMUN",
+  "SGSIN",
+  "INMAA",
+  "MYPKG",
+  "AEDXB",
+  "SADMM",
+] as const;
+
 /** "INNSA - NHAVA SHEVA,MUMBAI" → "INNSA"; a bare code passes through; blank → fallback. */
 export function portCodeOf(value: string | null | undefined, fallback: string): string {
   const code = String(value ?? "").split(" - ")[0].trim().toUpperCase();

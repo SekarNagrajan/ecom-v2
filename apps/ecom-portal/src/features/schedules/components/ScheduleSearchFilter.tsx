@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-10-17 01:50)
+// Modified by Sekar Nagarajan (2026-10-19 12:15)
 import { AppButton } from "@solverminds/shared-ui";
 import {
   Col,
@@ -12,11 +12,15 @@ import {
 } from "antd";
 import type { FormInstance } from "antd/es/form";
 import dayjs from "dayjs";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
-
+import { usePortSearch } from "../../landing/api/landing.queries";
+import {
+  DEFAULT_LANE,
+  SCHEDULE_PORT_CODES,
+} from "../../landing/utils/landing-search";
 import { schedulesApi } from "../api/schedules.api";
 import type {
   ScheduleSearchParams,
@@ -29,14 +33,31 @@ const { Text } = Typography;
 const SEARCH_ROW_GUTTER: [number, number] = [12, 8];
 const HEADER_ROW_GUTTER: [number, number] = [8, 4];
 
-const PORT_CODES = [
-  "AEDXB",
-  "AEJEA",
-  "CNSHA",
-  "INMUN",
-  "INNSA",
-  "SGSIN",
-] as const;
+/** Same port source as landing Schedule tab: masters typeahead + shared showcase fallbacks. */
+function useSchedulePortOptions(initialQuery = "") {
+  const { t } = useTranslation("schedules");
+  const [query, setQuery] = useState(initialQuery);
+  const { data: ports = [], isFetching } = usePortSearch(query);
+
+  const fallbackPorts = useMemo(
+    () =>
+      SCHEDULE_PORT_CODES.map((value) => ({
+        value,
+        label: t(`options.ports.${value}`, { defaultValue: value }),
+      })),
+    [t],
+  );
+
+  const options = useMemo(() => {
+    if (ports.length === 0) return fallbackPorts;
+    return ports.map((p) => ({
+      value: p.portCode,
+      label: `${p.portCode} - ${p.portName}`,
+    }));
+  }, [ports, fallbackPorts]);
+
+  return { setQuery, options, isFetching };
+}
 
 export type ScheduleSearchFilterVariant = "page" | "header";
 
@@ -139,14 +160,10 @@ export function ScheduleSearchFilter({
   const form = formProp ?? internalForm;
   const isHeader = variant === "header";
 
-  const popularPorts = useMemo(
-    () =>
-      PORT_CODES.map((value) => ({
-        value,
-        label: t(`options.ports.${value}`),
-      })),
-    [t],
-  );
+  // Same port catalogue as landing Schedule tab (masters search + SCHEDULE_PORT_CODES fallback).
+  const polPorts = useSchedulePortOptions(DEFAULT_LANE.pol);
+  const podPorts = useSchedulePortOptions(DEFAULT_LANE.pod);
+  const callPorts = useSchedulePortOptions(DEFAULT_LANE.pol);
 
   // Labels come from the vessel master (CODE - NAME), not i18n keys — fixture codes change per extract.
   const popularVessels = useMemo(() => schedulesApi.listVesselOptions(), []);
@@ -203,8 +220,8 @@ export function ScheduleSearchFilter({
           requiredMark={false}
           initialValues={{
             searchType: "POINT_TO_POINT",
-            polCode: "CNSHA",
-            podCode: "AEJEA",
+            polCode: DEFAULT_LANE.pol,
+            podCode: DEFAULT_LANE.pod,
             dateRange: [dayjs(), dayjs().add(30, "day")],
           }}
           onFinish={handleFinish}
@@ -289,15 +306,13 @@ export function ScheduleSearchFilter({
                         ? t("search.originShort")
                         : t("search.originPlaceholder")
                     }
-                    options={popularPorts}
+                    options={polPorts.options}
                     optionLabelProp="label"
                     popupMatchSelectWidth={360}
                     aria-label={t("search.originPortAria")}
-                    filterOption={(input, option) =>
-                      (option?.label ?? "")
-                        .toLowerCase()
-                        .includes(input.toLowerCase())
-                    }
+                    loading={polPorts.isFetching}
+                    onSearch={polPorts.setQuery}
+                    filterOption={false}
                   />
                 </Form.Item>
               </Col>
@@ -358,15 +373,13 @@ export function ScheduleSearchFilter({
                         ? t("search.deliveryShort")
                         : t("search.deliveryPlaceholder")
                     }
-                    options={popularPorts}
+                    options={podPorts.options}
                     optionLabelProp="label"
                     popupMatchSelectWidth={360}
                     aria-label={t("search.deliveryPortAria")}
-                    filterOption={(input, option) =>
-                      (option?.label ?? "")
-                        .toLowerCase()
-                        .includes(input.toLowerCase())
-                    }
+                    loading={podPorts.isFetching}
+                    onSearch={podPorts.setQuery}
+                    filterOption={false}
                   />
                 </Form.Item>
               </Col>
@@ -509,8 +522,11 @@ export function ScheduleSearchFilter({
                     size={controlSize}
                     showSearch
                     placeholder={t("search.portOfCallPlaceholder")}
-                    options={popularPorts}
+                    options={callPorts.options}
                     aria-label={t("search.portOfCallAria")}
+                    loading={callPorts.isFetching}
+                    onSearch={callPorts.setQuery}
+                    filterOption={false}
                   />
                 </Form.Item>
               </Col>

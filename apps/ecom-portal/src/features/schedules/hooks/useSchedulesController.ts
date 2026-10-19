@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-10-18 11:10)
+// Modified by Sekar Nagarajan (2026-10-19 12:10)
 // Schedule Feature Controller — results only after Search (or landing deep-link)
 
 import { useToast } from "@solverminds/shared-ui/hooks";
@@ -147,6 +147,11 @@ export function useSchedulesController() {
   };
 
   const handleBookNow = (schedule: ScheduleItem) => {
+    // Same gate as card / rates-drawer Book Now (cut-off or sailed → blocked).
+    if (!schedule.bookingAllowed) {
+      toast.warning(t("bookingNotAllowedToast"));
+      return;
+    }
     // Fresh wizard seeded from the chosen sailing (list / rates drawer Book Now).
     const store = useBookingStore.getState();
     store.resetWizard();

@@ -2,6 +2,7 @@
   "subtitle": "Busque salidas por ruta, buque o puerto — compare tiempos de tránsito, cierres y reserve directamente.",
   "exportingToast": "Exportando resultados de itinerarios…",
   "bookNowToast": "Reserva iniciada para {{vessel}} / {{voyage}} ({{pol}} → {{pod}})",
+  "bookingNotAllowedToast": "La reserva está cerrada para este itinerario: el cierre ha pasado o el buque ya zarpó.",
   "searchEmptyTitle": "Buscar salidas",
   "searchEmptyMessage": "Elija sus criterios de búsqueda y haga clic en Buscar Itinerarios para ver las salidas disponibles.",
   "availableSailings": "Salidas Disponibles",
@@ -49,12 +50,14 @@
   },
   "options": {
     "ports": {
-      "AEDXB": "AEDXB - Dubái",
-      "AEJEA": "AEJEA - Jebel Ali",
-      "CNSHA": "CNSHA - Shanghái",
-      "INMUN": "INMUN - Mundra",
       "INNSA": "INNSA - Nhava Sheva",
-      "SGSIN": "SGSIN - Singapur"
+      "AEJEA": "AEJEA - Jebel Ali",
+      "INMUN": "INMUN - Mundra",
+      "SGSIN": "SGSIN - Singapur",
+      "INMAA": "INMAA - Chennai",
+      "MYPKG": "MYPKG - Port Klang",
+      "AEDXB": "AEDXB - Dubái",
+      "SADMM": "SADMM - Dammam"
     },
     "vessels": {
       "KCA": "KCA - KMTC CHENNAI",

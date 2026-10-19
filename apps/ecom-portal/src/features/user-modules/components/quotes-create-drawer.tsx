@@ -134,7 +134,7 @@ export function QuotesCreateDrawer({ open, onClose }: QuotesCreateDrawerProps) {
           </AppButton>
           <AppButton
             type="primary"
-            icon={<AppIcon icon={Icons.save} size={16} />}
+           
             loading={isSubmitting}
             onClick={handleSave}
           >

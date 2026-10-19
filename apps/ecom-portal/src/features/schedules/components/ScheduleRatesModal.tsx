@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-25 18:40)
+// Modified by Sekar Nagarajan (2026-10-19 12:10)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import {
   Card,
@@ -140,7 +140,9 @@ export function ScheduleRatesModal({
           </AppButton>
           <AppButton
             type="primary"
+            disabled={!schedule.bookingAllowed}
             onClick={() => {
+              if (!schedule.bookingAllowed) return;
               onClose();
               onProceedBooking(schedule);
             }}

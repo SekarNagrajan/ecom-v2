@@ -1,11 +1,10 @@
-// Modified by Sekar Nagarajan (2026-09-07 12:17)
+// Modified by Sekar Nagarajan (2026-10-19 18:20)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
 
 export function ArrivalNoticeModuleStyles() {
   const { token } = theme.useToken();
-  const infoTint8 = tokenMix(token.colorInfo, 8);
 
   return (
     <style>{`
@@ -171,18 +170,32 @@ export function ArrivalNoticeModuleStyles() {
       .arn-data-view .data-view-toolbar {
         display: none !important;
       }
+      /* Modified by Sekar Nagarajan (2026-10-19 18:20) — view drawer: hero, timeline, stacked cards (DO parity) */
       .arn-status-tag.ant-tag {
         margin: 0;
         border-radius: ${token.borderRadiusSM}px;
-        background: ${tokenMix(token.colorSuccess, 8)};
+      }
+      .arn-status-tag.ant-tag-success {
         color: ${token.colorSuccess};
+        background: ${tokenMix(token.colorSuccess, 8)};
+        border-color: ${tokenMix(token.colorSuccess, 28)};
+      }
+      .arn-status-tag.ant-tag-warning {
+        color: ${token.colorWarning};
+        background: ${tokenMix(token.colorWarning, 10)};
+        border-color: ${tokenMix(token.colorWarning, 35)};
+      }
+      .arn-status-tag.ant-tag-error {
+        color: ${token.colorError};
+        background: ${tokenMix(token.colorError, 8)};
+        border-color: ${tokenMix(token.colorError, 30)};
       }
 
-      /* —— AN view drawer (parity with DO airy redesign) —— */
       .arn-drawer-title {
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         gap: ${token.marginMD}px;
+        min-width: 0;
       }
       .arn-drawer-title__icon {
         width: ${token.controlHeightLG}px;
@@ -193,13 +206,14 @@ export function ArrivalNoticeModuleStyles() {
         justify-content: center;
         flex-shrink: 0;
         background: ${token.colorPrimaryBg};
+        border: 1px solid ${token.colorPrimaryBorder};
         color: ${token.colorPrimary};
       }
       .arn-drawer-title__copy {
         min-width: 0;
         display: flex;
         flex-direction: column;
-        gap: ${token.marginXXS}px;
+        gap: ${token.marginXXS / 2}px;
       }
       .arn-drawer-title__eyebrow {
         display: block;
@@ -207,7 +221,7 @@ export function ArrivalNoticeModuleStyles() {
         font-weight: ${token.fontWeightStrong};
         letter-spacing: 0.06em;
         text-transform: uppercase;
-        color: ${token.colorTextSecondary};
+        color: ${token.colorTextTertiary};
         line-height: 1.2;
       }
       .arn-drawer-title__text {
@@ -258,40 +272,33 @@ export function ArrivalNoticeModuleStyles() {
         align-items: center;
         justify-content: flex-end;
       }
-      .arn-route-strip {
+
+      .arn-hero {
         display: flex;
         flex-direction: column;
-        gap: ${token.marginSM}px;
-        width: 100%;
+        gap: ${token.marginMD}px;
         padding: ${token.paddingLG}px;
         border-radius: ${token.borderRadiusLG + 2}px;
-        background: ${token.colorBgContainer};
         border: 1px solid ${token.colorBorderSecondary};
-        border-left: 4px solid ${token.colorPrimary};
-        border-right: 4px solid ${token.colorSuccess};
-        box-shadow: ${token.boxShadowTertiary};
+        background: linear-gradient(
+          180deg,
+          ${tokenMix(token.colorPrimary, 8)} 0%,
+          ${token.colorBgContainer} 100%
+        );
       }
-      .arn-route-strip__eyebrow {
-        display: block;
-        font-size: ${token.fontSizeSM}px;
-        font-weight: ${token.fontWeightStrong};
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: ${token.colorTextTertiary};
-        line-height: 1.2;
-      }
-      .arn-route-strip__body {
+      .arn-hero__route {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        grid-template-columns: minmax(0, 1fr) minmax(96px, 0.8fr) minmax(0, 1fr);
+        gap: ${token.marginMD}px;
         align-items: center;
-        column-gap: ${token.marginLG}px;
-        width: 100%;
+        min-width: 0;
       }
       .arn-route-port {
-        min-width: 0;
         display: flex;
         flex-direction: column;
+        align-items: flex-start;
         gap: ${token.marginXXS}px;
+        min-width: 0;
       }
       .arn-route-port--discharge {
         align-items: flex-end;
@@ -300,81 +307,42 @@ export function ArrivalNoticeModuleStyles() {
       .arn-route-port__label {
         display: inline-flex;
         align-items: center;
-        gap: ${token.marginXS}px;
+        gap: ${token.marginXXS}px;
         font-size: ${token.fontSizeSM}px;
         font-weight: ${token.fontWeightStrong};
-        color: ${token.colorTextTertiary};
+        letter-spacing: 0.04em;
         text-transform: uppercase;
-        letter-spacing: 0.06em;
+        color: ${token.colorPrimary};
         line-height: 1.2;
       }
-      .arn-route-port__pin {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-      }
-      .arn-route-port__pin--vessel {
-        color: ${token.colorPrimary};
-      }
-      .arn-route-port__pin--discharge {
+      .arn-route-port--discharge .arn-route-port__label {
         color: ${token.colorSuccess};
       }
       .arn-route-port__code {
-        margin: 0 !important;
-        font-size: ${token.fontSizeHeading3}px !important;
-        line-height: 1.1 !important;
-        font-weight: ${token.fontWeightStrong} !important;
-        letter-spacing: 0.01em;
+        font-size: ${token.fontSizeHeading3}px;
+        font-weight: ${token.fontWeightStrong};
+        letter-spacing: 0.02em;
+        color: ${token.colorText};
+        line-height: 1.1;
         word-break: break-word;
       }
-      .arn-route-port__code--vessel {
-        color: ${token.colorPrimary} !important;
-      }
-      .arn-route-port__code--discharge {
-        color: ${token.colorSuccess} !important;
-      }
       .arn-route-port__name {
-        display: block;
-        margin: 0;
-        font-size: ${token.fontSize}px;
-        line-height: 1.35;
-        color: ${token.colorText};
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+        line-height: 1.4;
+        word-break: break-word;
       }
       .arn-route-connector {
-        flex: 0 0 auto;
-        width: 176px;
-        max-width: 100%;
         display: flex;
-        flex-direction: column;
         align-items: center;
-        justify-content: center;
         gap: ${token.marginXS}px;
-        text-align: center;
-        padding: ${token.paddingXXS}px 0;
-      }
-      .arn-route-connector__label {
-        font-size: ${token.fontSizeSM}px;
-        font-weight: ${token.fontWeightStrong};
-        letter-spacing: 0.01em;
-        padding: 2px ${token.paddingSM}px;
-        border-radius: ${token.borderRadiusLG * 2}px;
-        background: ${token.colorFillTertiary};
-        color: ${token.colorTextSecondary};
-        white-space: nowrap;
-        line-height: 1.5;
-      }
-      .arn-route-connector__line {
-        display: flex;
-        align-items: center;
-        width: 100%;
-        color: ${token.colorPrimary};
+        min-width: 0;
       }
       .arn-route-connector__dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
         flex-shrink: 0;
+        width: ${token.marginXS + 2}px;
+        height: ${token.marginXS + 2}px;
+        border-radius: 50%;
       }
       .arn-route-connector__dot--vessel {
         background: ${token.colorPrimary};
@@ -383,27 +351,116 @@ export function ArrivalNoticeModuleStyles() {
         background: ${token.colorSuccess};
       }
       .arn-route-connector__track {
-        flex: 1;
-        height: 2px;
+        flex: 1 1 0;
         min-width: ${token.marginSM}px;
-      }
-      .arn-route-connector__track--vessel {
-        background: ${token.colorPrimary};
-        margin-right: ${token.marginXXS}px;
-      }
-      .arn-route-connector__track--discharge {
-        background: ${token.colorSuccess};
-        margin-left: ${token.marginXXS}px;
+        height: 0;
+        border-top: ${token.lineWidthBold}px dashed ${tokenMix(token.colorPrimary, 40)};
       }
       .arn-route-connector__ship {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        color: ${token.colorPrimary};
         flex-shrink: 0;
-        line-height: 0;
+        width: ${token.controlHeightSM}px;
+        height: ${token.controlHeightSM}px;
+        border-radius: 50%;
+        border: ${token.lineWidth}px solid ${token.colorPrimaryBorder};
+        background: ${token.colorBgContainer};
+        color: ${token.colorPrimary};
+      }
+
+      .arn-hero__timeline {
+        list-style: none;
+        margin: 0;
+        padding: ${token.paddingMD}px 0 0;
+        display: flex;
+        align-items: center;
+        border-top: 1px solid ${token.colorBorderSecondary};
+      }
+      .arn-timeline__step {
+        display: flex;
+        align-items: center;
+        flex: 1 1 0;
+        min-width: 0;
+        gap: ${token.marginXS}px;
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextTertiary};
+      }
+      .arn-timeline__step:last-child {
+        flex: 0 0 auto;
+      }
+      .arn-timeline__step:not(:last-child)::after {
+        content: "";
+        flex: 1 1 auto;
+        min-width: ${token.marginSM}px;
+        height: ${token.lineWidthBold}px;
+        margin: 0 ${token.marginXS}px;
+        border-radius: ${token.lineWidthBold}px;
+        background: ${token.colorBorderSecondary};
+      }
+      .arn-timeline__step.is-done::after {
+        background: ${tokenMix(token.colorSuccess, 45)};
+      }
+      .arn-timeline__dot {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: ${token.controlHeightSM - 2}px;
+        height: ${token.controlHeightSM - 2}px;
+        border-radius: 50%;
+        border: ${token.lineWidth}px solid ${token.colorBorder};
+        background: ${token.colorBgContainer};
+        color: ${token.colorTextTertiary};
+        font-size: ${token.fontSizeSM - 1}px;
+        font-weight: ${token.fontWeightStrong};
+        line-height: 1;
+      }
+      .arn-timeline__step.is-done .arn-timeline__dot {
+        background: ${token.colorSuccess};
+        border-color: ${token.colorSuccess};
+        color: ${token.colorTextLightSolid};
+      }
+      .arn-timeline__step.is-current .arn-timeline__dot {
+        background: ${token.colorPrimary};
+        border-color: ${token.colorPrimary};
+        color: ${token.colorTextLightSolid};
+        box-shadow: 0 0 0 ${token.lineWidthBold * 2}px ${tokenMix(token.colorPrimary, 14)};
+      }
+      .arn-timeline__copy {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        line-height: 1.3;
+      }
+      .arn-timeline__name {
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+        white-space: nowrap;
+      }
+      .arn-timeline__step.is-upcoming .arn-timeline__name {
+        color: ${token.colorTextSecondary};
+      }
+      .arn-timeline__date {
+        color: ${token.colorTextSecondary};
+        white-space: nowrap;
+      }
+
+      .arn-drawer-alert.ant-alert {
+        border-radius: ${token.borderRadiusLG}px;
+      }
+      .arn-drawer-alert .ant-alert-message {
+        color: ${token.colorText};
+      }
+
+      .arn-section-stack {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginMD}px;
+        width: 100%;
       }
       .arn-drawer-section {
+        min-width: 0;
         padding: ${token.paddingMD}px ${token.paddingLG}px;
         border-radius: ${token.borderRadiusLG}px;
         background: ${token.colorBgContainer};
@@ -421,13 +478,19 @@ export function ArrivalNoticeModuleStyles() {
         color: ${token.colorPrimary} !important;
         font-size: ${token.fontSizeLG}px !important;
       }
+      .arn-drawer-section__count.ant-tag {
+        margin-inline-start: auto;
+        margin-inline-end: 0;
+        border-radius: ${token.borderRadiusLG * 2}px;
+        color: ${token.colorTextSecondary};
+        background: ${token.colorFillAlter};
+        border-color: ${token.colorBorderSecondary};
+        font-variant-numeric: tabular-nums;
+      }
       .arn-meta-grid {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: ${token.marginMD}px ${token.marginLG}px;
-      }
-      .arn-meta-grid--free-time {
         grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: ${token.marginMD}px ${token.marginLG}px;
       }
       .arn-meta-item {
         display: flex;
@@ -444,17 +507,54 @@ export function ArrivalNoticeModuleStyles() {
         color: ${token.colorText};
         word-break: break-word;
       }
-      .arn-drawer-alert.ant-alert {
+      .arn-table-wrap {
+        border: 1px solid ${token.colorBorderSecondary};
         border-radius: ${token.borderRadiusLG}px;
-        border-color: ${tokenMix(token.colorInfo, 28)};
-        background: ${infoTint8};
+        overflow: hidden;
       }
-      .arn-drawer-alert .ant-alert-message {
-        color: ${token.colorText};
-      }
-      .arn-containers-table,
-      .arn-charges-table {
+      .arn-table {
         width: 100%;
+      }
+      .arn-table .ant-table-thead > tr > th {
+        background: ${token.colorFillAlter};
+        color: ${token.colorTextSecondary};
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+      }
+      .arn-table .ant-table-tbody > tr > td {
+        vertical-align: middle;
+      }
+      .arn-table .ant-table-summary > tr > td {
+        background: ${token.colorFillAlter};
+        border-top: ${token.lineWidthBold}px solid ${token.colorBorderSecondary};
+      }
+      .arn-table .ant-table-placeholder .ant-table-cell {
+        padding: ${token.paddingSM}px;
+      }
+      .arn-container-no {
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorPrimary};
+        letter-spacing: 0.02em;
+        font-variant-numeric: tabular-nums;
+      }
+      .arn-amount {
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+      .arn-amount--due {
+        color: ${token.colorWarning};
+      }
+      .arn-charge-code.ant-tag {
+        margin-inline-end: 0;
+        font-weight: ${token.fontWeightStrong};
+      }
+
+      @media (max-width: 991px) {
+        .arn-meta-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
       }
 
       @media (max-width: 767px) {
@@ -484,26 +584,34 @@ export function ArrivalNoticeModuleStyles() {
         .arn-grid-wrap {
           padding: 0 ${token.paddingMD}px ${token.paddingMD}px;
         }
-        .arn-route-strip__body {
-          grid-template-columns: 1fr;
-          row-gap: ${token.marginMD}px;
+        .arn-hero {
+          padding: ${token.paddingMD}px;
+          gap: ${token.marginMD}px;
+        }
+        .arn-hero__route {
+          grid-template-columns: minmax(0, 1fr);
         }
         .arn-route-port--discharge {
           align-items: flex-start;
           text-align: left;
         }
-        .arn-route-connector {
-          width: 100%;
-          flex-direction: row;
-          justify-content: center;
-          gap: ${token.marginSM}px;
+        .arn-hero__timeline {
+          flex-direction: column;
+          align-items: stretch;
+          gap: ${token.marginXS}px;
         }
-        .arn-route-connector__line {
-          max-width: 180px;
+        .arn-timeline__step:not(:last-child)::after {
+          display: none;
         }
-        .arn-meta-grid,
-        .arn-meta-grid--free-time {
-          grid-template-columns: 1fr;
+        .arn-timeline__name,
+        .arn-timeline__date {
+          white-space: normal;
+        }
+        .arn-meta-grid {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .arn-drawer-section {
+          padding: ${token.paddingMD}px;
         }
         .arn-drawer-body.custom-scroll {
           padding: ${token.paddingMD}px;

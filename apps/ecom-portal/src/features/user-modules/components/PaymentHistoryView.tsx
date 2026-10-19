@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-08 11:08)
+// Modified by Sekar Nagarajan (2026-10-19)
 import {
   DataView,
   type DataViewColumn,
@@ -7,7 +7,7 @@ import { useToast } from "@solverminds/shared-ui/hooks";
 import { DatePicker, Space, Tag, Typography } from "antd";
 import type { Dayjs } from "dayjs";
 import dayjs from "dayjs";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 import {
   AppIcon,
@@ -25,6 +25,7 @@ import {
 } from "../../../components/shared/module-empty-state";
 import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
 import { useModuleTitles } from "../../../i18n/use-module-titles";
+import { userModulesApi } from "../api/user-modules.api";
 import { usePaymentHistoryQuery } from "../api/user-modules.queries";
 import type { PaymentHistoryRecord } from "../types/user-modules.types";
 import { UmPanelHeader } from "./um-panel-header";
@@ -98,9 +99,38 @@ export function PaymentHistoryView() {
     refetch,
   } = usePaymentHistoryQuery(query);
 
-  const handleDownloadReceipt = (rec: PaymentHistoryRecord) => {
-    toast.info(`Downloading PDF receipt for ${rec.paymentRefNo}...`);
-  };
+  const handleDownloadReceipt = useCallback(
+    async (rec: PaymentHistoryRecord) => {
+      if (rec.status !== "SUCCESSFUL") {
+        toast.warning("Receipts are only available for successful payments.");
+        return;
+      }
+      const loadingKey = `payment-receipt-${rec.paymentRefNo}`;
+      toast.info(`Downloading PDF receipt for ${rec.paymentRefNo}…`, {
+        key: loadingKey,
+        duration: 0,
+      });
+      try {
+        const blob = await userModulesApi.downloadPaymentReceipt(
+          rec.paymentRefNo,
+        );
+        const url = URL.createObjectURL(blob);
+        const anchor = document.createElement("a");
+        anchor.href = url;
+        anchor.download = `PaymentReceipt_${rec.paymentRefNo}.pdf`;
+        anchor.click();
+        URL.revokeObjectURL(url);
+        toast.success(`Receipt downloaded for ${rec.paymentRefNo}`, {
+          key: loadingKey,
+        });
+      } catch {
+        toast.error(`Failed to download receipt for ${rec.paymentRefNo}`, {
+          key: loadingKey,
+        });
+      }
+    },
+    [toast],
+  );
 
   const handleRangeChange = (values: DateRangeValue) => {
     setDateRange(values);

@@ -78,7 +78,8 @@
       "contType": "Jenis Kontena",
       "emptyReleaseDepot": "Depot Pelepasan Kosong",
       "qtyBooked": "Kuantiti Ditempah",
-      "qtyReleased": "Kuantiti Dilepaskan"
+      "qtyReleased": "Kuantiti Dilepaskan",
+      "printCount": "Bilangan Cetakan"
     },
     "containerColumns": {
       "containerNo": "No. Kontena",
@@ -86,7 +87,14 @@
       "sealNo": "No. Meterai"
     },
     "alerts": {
-      "validUntil": "Pesanan pelepasan ini sah sehingga <date/>."
+      "validUntil": "Pesanan pelepasan ini sah sehingga <date/>.",
+      "blocked": "Pelepasan disekat"
+    },
+    "timeline": {
+      "issued": "CRO dikeluarkan",
+      "polArrival": "Tiba di pelabuhan muat",
+      "polDeparture": "Bertolak dari pelabuhan muat",
+      "validUntil": "Sah sehingga"
     }
   }
 }

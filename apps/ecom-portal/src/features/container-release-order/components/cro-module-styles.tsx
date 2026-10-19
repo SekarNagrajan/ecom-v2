@@ -1,11 +1,10 @@
-// Modified by Sekar Nagarajan (2026-09-07 12:28)
+// Modified by Sekar Nagarajan (2026-10-19 18:20)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
 
 export function CroModuleStyles() {
   const { token } = theme.useToken();
-  const infoTint8 = tokenMix(token.colorInfo, 8);
 
   return (
     <style>{`
@@ -171,18 +170,32 @@ export function CroModuleStyles() {
       .cro-data-view .data-view-toolbar {
         display: none !important;
       }
+      /* Modified by Sekar Nagarajan (2026-10-19 18:20) — view drawer: hero, timeline, stacked cards (DO parity) */
       .cro-status-tag.ant-tag {
         margin: 0;
         border-radius: ${token.borderRadiusSM}px;
-        background: ${tokenMix(token.colorSuccess, 8)};
+      }
+      .cro-status-tag.ant-tag-success {
         color: ${token.colorSuccess};
+        background: ${tokenMix(token.colorSuccess, 8)};
+        border-color: ${tokenMix(token.colorSuccess, 28)};
+      }
+      .cro-status-tag.ant-tag-warning {
+        color: ${token.colorWarning};
+        background: ${tokenMix(token.colorWarning, 10)};
+        border-color: ${tokenMix(token.colorWarning, 35)};
+      }
+      .cro-status-tag.ant-tag-error {
+        color: ${token.colorError};
+        background: ${tokenMix(token.colorError, 8)};
+        border-color: ${tokenMix(token.colorError, 30)};
       }
 
-      /* —— CRO view drawer (parity with DO/AN airy redesign) —— */
       .cro-drawer-title {
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         gap: ${token.marginMD}px;
+        min-width: 0;
       }
       .cro-drawer-title__icon {
         width: ${token.controlHeightLG}px;
@@ -193,13 +206,14 @@ export function CroModuleStyles() {
         justify-content: center;
         flex-shrink: 0;
         background: ${token.colorPrimaryBg};
+        border: 1px solid ${token.colorPrimaryBorder};
         color: ${token.colorPrimary};
       }
       .cro-drawer-title__copy {
         min-width: 0;
         display: flex;
         flex-direction: column;
-        gap: ${token.marginXXS}px;
+        gap: ${token.marginXXS / 2}px;
       }
       .cro-drawer-title__eyebrow {
         display: block;
@@ -207,7 +221,7 @@ export function CroModuleStyles() {
         font-weight: ${token.fontWeightStrong};
         letter-spacing: 0.06em;
         text-transform: uppercase;
-        color: ${token.colorTextSecondary};
+        color: ${token.colorTextTertiary};
         line-height: 1.2;
       }
       .cro-drawer-title__text {
@@ -258,40 +272,33 @@ export function CroModuleStyles() {
         align-items: center;
         justify-content: flex-end;
       }
-      .cro-route-strip {
+
+      .cro-hero {
         display: flex;
         flex-direction: column;
-        gap: ${token.marginSM}px;
-        width: 100%;
+        gap: ${token.marginMD}px;
         padding: ${token.paddingLG}px;
         border-radius: ${token.borderRadiusLG + 2}px;
-        background: ${token.colorBgContainer};
         border: 1px solid ${token.colorBorderSecondary};
-        border-left: 4px solid ${token.colorPrimary};
-        border-right: 4px solid ${token.colorSuccess};
-        box-shadow: ${token.boxShadowTertiary};
+        background: linear-gradient(
+          180deg,
+          ${tokenMix(token.colorPrimary, 8)} 0%,
+          ${token.colorBgContainer} 100%
+        );
       }
-      .cro-route-strip__eyebrow {
-        display: block;
-        font-size: ${token.fontSizeSM}px;
-        font-weight: ${token.fontWeightStrong};
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: ${token.colorTextTertiary};
-        line-height: 1.2;
-      }
-      .cro-route-strip__body {
+      .cro-hero__route {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        grid-template-columns: minmax(0, 1fr) minmax(96px, 0.8fr) minmax(0, 1fr);
+        gap: ${token.marginMD}px;
         align-items: center;
-        column-gap: ${token.marginLG}px;
-        width: 100%;
+        min-width: 0;
       }
       .cro-route-port {
-        min-width: 0;
         display: flex;
         flex-direction: column;
+        align-items: flex-start;
         gap: ${token.marginXXS}px;
+        min-width: 0;
       }
       .cro-route-port--delivery {
         align-items: flex-end;
@@ -300,81 +307,42 @@ export function CroModuleStyles() {
       .cro-route-port__label {
         display: inline-flex;
         align-items: center;
-        gap: ${token.marginXS}px;
+        gap: ${token.marginXXS}px;
         font-size: ${token.fontSizeSM}px;
         font-weight: ${token.fontWeightStrong};
-        color: ${token.colorTextTertiary};
+        letter-spacing: 0.04em;
         text-transform: uppercase;
-        letter-spacing: 0.06em;
+        color: ${token.colorPrimary};
         line-height: 1.2;
       }
-      .cro-route-port__pin {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-      }
-      .cro-route-port__pin--origin {
-        color: ${token.colorPrimary};
-      }
-      .cro-route-port__pin--delivery {
+      .cro-route-port--delivery .cro-route-port__label {
         color: ${token.colorSuccess};
       }
       .cro-route-port__code {
-        margin: 0 !important;
-        font-size: ${token.fontSizeHeading3}px !important;
-        line-height: 1.1 !important;
-        font-weight: ${token.fontWeightStrong} !important;
-        letter-spacing: 0.01em;
+        font-size: ${token.fontSizeHeading3}px;
+        font-weight: ${token.fontWeightStrong};
+        letter-spacing: 0.02em;
+        color: ${token.colorText};
+        line-height: 1.1;
         word-break: break-word;
       }
-      .cro-route-port__code--origin {
-        color: ${token.colorPrimary} !important;
-      }
-      .cro-route-port__code--delivery {
-        color: ${token.colorSuccess} !important;
-      }
       .cro-route-port__name {
-        display: block;
-        margin: 0;
-        font-size: ${token.fontSize}px;
-        line-height: 1.35;
-        color: ${token.colorText};
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+        line-height: 1.4;
+        word-break: break-word;
       }
       .cro-route-connector {
-        flex: 0 0 auto;
-        width: 176px;
-        max-width: 100%;
         display: flex;
-        flex-direction: column;
         align-items: center;
-        justify-content: center;
         gap: ${token.marginXS}px;
-        text-align: center;
-        padding: ${token.paddingXXS}px 0;
-      }
-      .cro-route-connector__label {
-        font-size: ${token.fontSizeSM}px;
-        font-weight: ${token.fontWeightStrong};
-        letter-spacing: 0.01em;
-        padding: 2px ${token.paddingSM}px;
-        border-radius: ${token.borderRadiusLG * 2}px;
-        background: ${token.colorFillTertiary};
-        color: ${token.colorTextSecondary};
-        white-space: nowrap;
-        line-height: 1.5;
-      }
-      .cro-route-connector__line {
-        display: flex;
-        align-items: center;
-        width: 100%;
-        color: ${token.colorPrimary};
+        min-width: 0;
       }
       .cro-route-connector__dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
         flex-shrink: 0;
+        width: ${token.marginXS + 2}px;
+        height: ${token.marginXS + 2}px;
+        border-radius: 50%;
       }
       .cro-route-connector__dot--origin {
         background: ${token.colorPrimary};
@@ -383,27 +351,116 @@ export function CroModuleStyles() {
         background: ${token.colorSuccess};
       }
       .cro-route-connector__track {
-        flex: 1;
-        height: 2px;
+        flex: 1 1 0;
         min-width: ${token.marginSM}px;
-      }
-      .cro-route-connector__track--origin {
-        background: ${token.colorPrimary};
-        margin-right: ${token.marginXXS}px;
-      }
-      .cro-route-connector__track--delivery {
-        background: ${token.colorSuccess};
-        margin-left: ${token.marginXXS}px;
+        height: 0;
+        border-top: ${token.lineWidthBold}px dashed ${tokenMix(token.colorPrimary, 40)};
       }
       .cro-route-connector__ship {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        color: ${token.colorPrimary};
         flex-shrink: 0;
-        line-height: 0;
+        width: ${token.controlHeightSM}px;
+        height: ${token.controlHeightSM}px;
+        border-radius: 50%;
+        border: ${token.lineWidth}px solid ${token.colorPrimaryBorder};
+        background: ${token.colorBgContainer};
+        color: ${token.colorPrimary};
+      }
+
+      .cro-hero__timeline {
+        list-style: none;
+        margin: 0;
+        padding: ${token.paddingMD}px 0 0;
+        display: flex;
+        align-items: center;
+        border-top: 1px solid ${token.colorBorderSecondary};
+      }
+      .cro-timeline__step {
+        display: flex;
+        align-items: center;
+        flex: 1 1 0;
+        min-width: 0;
+        gap: ${token.marginXS}px;
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextTertiary};
+      }
+      .cro-timeline__step:last-child {
+        flex: 0 0 auto;
+      }
+      .cro-timeline__step:not(:last-child)::after {
+        content: "";
+        flex: 1 1 auto;
+        min-width: ${token.marginSM}px;
+        height: ${token.lineWidthBold}px;
+        margin: 0 ${token.marginXS}px;
+        border-radius: ${token.lineWidthBold}px;
+        background: ${token.colorBorderSecondary};
+      }
+      .cro-timeline__step.is-done::after {
+        background: ${tokenMix(token.colorSuccess, 45)};
+      }
+      .cro-timeline__dot {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: ${token.controlHeightSM - 2}px;
+        height: ${token.controlHeightSM - 2}px;
+        border-radius: 50%;
+        border: ${token.lineWidth}px solid ${token.colorBorder};
+        background: ${token.colorBgContainer};
+        color: ${token.colorTextTertiary};
+        font-size: ${token.fontSizeSM - 1}px;
+        font-weight: ${token.fontWeightStrong};
+        line-height: 1;
+      }
+      .cro-timeline__step.is-done .cro-timeline__dot {
+        background: ${token.colorSuccess};
+        border-color: ${token.colorSuccess};
+        color: ${token.colorTextLightSolid};
+      }
+      .cro-timeline__step.is-current .cro-timeline__dot {
+        background: ${token.colorPrimary};
+        border-color: ${token.colorPrimary};
+        color: ${token.colorTextLightSolid};
+        box-shadow: 0 0 0 ${token.lineWidthBold * 2}px ${tokenMix(token.colorPrimary, 14)};
+      }
+      .cro-timeline__copy {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        line-height: 1.3;
+      }
+      .cro-timeline__name {
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+        white-space: nowrap;
+      }
+      .cro-timeline__step.is-upcoming .cro-timeline__name {
+        color: ${token.colorTextSecondary};
+      }
+      .cro-timeline__date {
+        color: ${token.colorTextSecondary};
+        white-space: nowrap;
+      }
+
+      .cro-drawer-alert.ant-alert {
+        border-radius: ${token.borderRadiusLG}px;
+      }
+      .cro-drawer-alert .ant-alert-message {
+        color: ${token.colorText};
+      }
+
+      .cro-section-stack {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginMD}px;
+        width: 100%;
       }
       .cro-drawer-section {
+        min-width: 0;
         padding: ${token.paddingMD}px ${token.paddingLG}px;
         border-radius: ${token.borderRadiusLG}px;
         background: ${token.colorBgContainer};
@@ -421,9 +478,18 @@ export function CroModuleStyles() {
         color: ${token.colorPrimary} !important;
         font-size: ${token.fontSizeLG}px !important;
       }
+      .cro-drawer-section__count.ant-tag {
+        margin-inline-start: auto;
+        margin-inline-end: 0;
+        border-radius: ${token.borderRadiusLG * 2}px;
+        color: ${token.colorTextSecondary};
+        background: ${token.colorFillAlter};
+        border-color: ${token.colorBorderSecondary};
+        font-variant-numeric: tabular-nums;
+      }
       .cro-meta-grid {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: ${token.marginMD}px ${token.marginLG}px;
       }
       .cro-meta-item {
@@ -441,16 +507,71 @@ export function CroModuleStyles() {
         color: ${token.colorText};
         word-break: break-word;
       }
-      .cro-drawer-alert.ant-alert {
+      .cro-table-wrap {
+        border: 1px solid ${token.colorBorderSecondary};
         border-radius: ${token.borderRadiusLG}px;
-        border-color: ${tokenMix(token.colorInfo, 28)};
-        background: ${infoTint8};
+        overflow: hidden;
       }
-      .cro-drawer-alert .ant-alert-message {
+      .cro-table {
+        width: 100%;
+      }
+      .cro-table .ant-table-thead > tr > th {
+        background: ${token.colorFillAlter};
+        color: ${token.colorTextSecondary};
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+      }
+      .cro-table .ant-table-tbody > tr > td {
+        vertical-align: middle;
+      }
+      .cro-table .ant-table-summary > tr > td {
+        background: ${token.colorFillAlter};
+        border-top: ${token.lineWidthBold}px solid ${token.colorBorderSecondary};
+      }
+      .cro-table .ant-table-placeholder .ant-table-cell {
+        padding: ${token.paddingSM}px;
+      }
+      .cro-container-no {
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorPrimary};
+        letter-spacing: 0.02em;
+        font-variant-numeric: tabular-nums;
+      }
+      .cro-drawer-alert__list {
+        margin: ${token.marginXXS}px 0 0;
+        padding-inline-start: ${token.paddingLG}px;
         color: ${token.colorText};
       }
-      .cro-containers-table {
-        width: 100%;
+      .cro-meta-item__inline {
+        display: inline-flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: ${token.marginXS}px;
+      }
+      .cro-meta-item__hint {
+        font-size: ${token.fontSizeSM}px;
+      }
+      .cro-qty {
+        display: inline-flex;
+        align-items: baseline;
+        gap: ${token.marginXXS}px;
+        font-variant-numeric: tabular-nums;
+      }
+      .cro-qty__released {
+        color: ${token.colorSuccess};
+      }
+      .cro-qty__of {
+        color: ${token.colorTextSecondary};
+        font-weight: normal;
+        font-size: ${token.fontSizeSM}px;
+      }
+
+      @media (max-width: 991px) {
+        .cro-meta-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
       }
 
       @media (max-width: 767px) {
@@ -480,25 +601,34 @@ export function CroModuleStyles() {
         .cro-grid-wrap {
           padding: 0 ${token.paddingMD}px ${token.paddingMD}px;
         }
-        .cro-route-strip__body {
-          grid-template-columns: 1fr;
-          row-gap: ${token.marginMD}px;
+        .cro-hero {
+          padding: ${token.paddingMD}px;
+          gap: ${token.marginMD}px;
+        }
+        .cro-hero__route {
+          grid-template-columns: minmax(0, 1fr);
         }
         .cro-route-port--delivery {
           align-items: flex-start;
           text-align: left;
         }
-        .cro-route-connector {
-          width: 100%;
-          flex-direction: row;
-          justify-content: center;
-          gap: ${token.marginSM}px;
+        .cro-hero__timeline {
+          flex-direction: column;
+          align-items: stretch;
+          gap: ${token.marginXS}px;
         }
-        .cro-route-connector__line {
-          max-width: 180px;
+        .cro-timeline__step:not(:last-child)::after {
+          display: none;
+        }
+        .cro-timeline__name,
+        .cro-timeline__date {
+          white-space: normal;
         }
         .cro-meta-grid {
-          grid-template-columns: 1fr;
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .cro-drawer-section {
+          padding: ${token.paddingMD}px;
         }
         .cro-drawer-body.custom-scroll {
           padding: ${token.paddingMD}px;

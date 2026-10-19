@@ -3,7 +3,15 @@ import { describe, expect, it } from 'vitest';
 
 import { ciRow } from '../db';
 import { formatYmdHm } from './minute-format';
-import { filterPaymentsByDateRange, fixturePaymentHistory, mapPayment, PAYMENT_STATUS, paymentGateway } from './payments.bridge';
+import {
+  buildPaymentReceiptPdf,
+  filterPaymentsByDateRange,
+  findSuccessfulPaymentReceipt,
+  fixturePaymentHistory,
+  mapPayment,
+  PAYMENT_STATUS,
+  paymentGateway,
+} from './payments.bridge';
 
 const payment = ciRow({
   id: '139', requestId: 'E53B51A5-5093-4104-A021-73967994CB30', customerCode: '20001374', loginName: 'baylee.howe87@example.com',
@@ -42,8 +50,29 @@ describe('payments bridge', () => {
       paymentDate: formatYmdHm('2026-08-13T13:53:34.022Z'),
       status: 'SUCCESSFUL',
       payerName: 'Schultz - Romaguera',
-      receiptUrl: '#',
+      receiptUrl:
+        '/api/v1/user/payments/E53B51A5-5093-4104-A021-73967994CB30/receipt',
     });
+  });
+
+  it('builds a mock PDF receipt and resolves successful payments by ref or id', () => {
+    const rec = mapPayment(payment, refs, 'Schultz - Romaguera');
+    const pdf = buildPaymentReceiptPdf(rec);
+    expect(pdf.startsWith('%PDF-1.4 Mock Payment Receipt')).toBe(true);
+    expect(pdf).toContain(rec.paymentRefNo);
+    expect(pdf).toContain('USD 142.99');
+
+    const rows = fixturePaymentHistory('20001374');
+    const successful = rows.find((r) => r.status === 'SUCCESSFUL');
+    expect(successful).toBeTruthy();
+    if (!successful) return;
+    expect(
+      findSuccessfulPaymentReceipt('20001374', successful.paymentRefNo)?.id,
+    ).toBe(successful.id);
+    expect(findSuccessfulPaymentReceipt('20001374', successful.id)?.paymentRefNo).toBe(
+      successful.paymentRefNo,
+    );
+    expect(findSuccessfulPaymentReceipt('20001374', 'missing')).toBeUndefined();
   });
 
   it('omits the receipt for unpaid sessions and uses a dash for missing references', () => {

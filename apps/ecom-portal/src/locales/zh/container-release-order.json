@@ -78,7 +78,8 @@
       "contType": "箱型",
       "emptyReleaseDepot": "空箱放行堆场",
       "qtyBooked": "订舱数量",
-      "qtyReleased": "已放行数量"
+      "qtyReleased": "已放行数量",
+      "printCount": "打印次数"
     },
     "containerColumns": {
       "containerNo": "箱号",
@@ -86,7 +87,14 @@
       "sealNo": "铅封号"
     },
     "alerts": {
-      "validUntil": "此放行单有效期至 <date/>。"
+      "validUntil": "此放行单有效期至 <date/>。",
+      "blocked": "放箱已被阻止"
+    },
+    "timeline": {
+      "issued": "放箱单签发",
+      "polArrival": "抵达装货港",
+      "polDeparture": "离开装货港",
+      "validUntil": "有效期至"
     }
   }
 }

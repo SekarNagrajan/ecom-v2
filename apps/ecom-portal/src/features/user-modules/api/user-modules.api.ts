@@ -94,4 +94,12 @@ export const userModulesApi = {
     if (!res.ok) throw new Error('Failed to fetch payment history');
     return res.json();
   },
+
+  async downloadPaymentReceipt(paymentKey: string): Promise<Blob> {
+    const res = await fetch(
+      `/api/v1/user/payments/${encodeURIComponent(paymentKey)}/receipt`,
+    );
+    if (!res.ok) throw new Error('Failed to download payment receipt');
+    return res.blob();
+  },
 };

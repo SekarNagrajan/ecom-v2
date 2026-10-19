@@ -78,7 +78,8 @@
       "contType": "Tipo cont.",
       "emptyReleaseDepot": "Depósito de liberación vacío",
       "qtyBooked": "Cant. reservada",
-      "qtyReleased": "Cant. liberada"
+      "qtyReleased": "Cant. liberada",
+      "printCount": "Número de impresiones"
     },
     "containerColumns": {
       "containerNo": "N.º de contenedor",
@@ -86,7 +87,14 @@
       "sealNo": "N.º de precinto"
     },
     "alerts": {
-      "validUntil": "Esta orden de liberación es válida hasta el <date/>."
+      "validUntil": "Esta orden de liberación es válida hasta el <date/>.",
+      "blocked": "La liberación está bloqueada"
+    },
+    "timeline": {
+      "issued": "CRO emitida",
+      "polArrival": "Llegada al puerto de carga",
+      "polDeparture": "Salida del puerto de carga",
+      "validUntil": "Válida hasta"
     }
   }
 }

@@ -11,7 +11,12 @@ import type {
   QuoteItem,
 } from '../features/user-modules/types/user-modules.types';
 import { nowIso } from './fixture-api/db';
-import { filterPaymentsByDateRange, fixturePaymentHistory } from './fixture-api/bridges/payments.bridge';
+import {
+  buildPaymentReceiptPdf,
+  filterPaymentsByDateRange,
+  findSuccessfulPaymentReceipt,
+  fixturePaymentHistory,
+} from './fixture-api/bridges/payments.bridge';
 import {
   applyAlertPreferences,
   applyProfilePatch,
@@ -132,7 +137,27 @@ export const userModulesHandlers = [
     return HttpResponse.json(fixtureAlertLogs());
   }),
 
-  // 5. Payments — payments + paymentReferences; optional ?fromDate=&toDate= (YYYY-MM-DD, inclusive)
+  // 5. Payments — receipt PDF first (more specific than the list route)
+  http.get('*/api/v1/user/payments/:paymentKey/receipt', ({ params }) => {
+    const paymentKey = String(params.paymentKey ?? '');
+    const record = findSuccessfulPaymentReceipt(currentCustomerCode(), paymentKey);
+    if (!record) {
+      return HttpResponse.json(
+        { message: 'Payment receipt not found' },
+        { status: 404 },
+      );
+    }
+    const filename = `PaymentReceipt_${record.paymentRefNo}.pdf`;
+    const content = buildPaymentReceiptPdf(record);
+    return new HttpResponse(new Blob([content], { type: 'application/pdf' }), {
+      headers: {
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `attachment; filename="${filename}"`,
+      },
+    });
+  }),
+
+  // Payments list — payments + paymentReferences; optional ?fromDate=&toDate= (YYYY-MM-DD, inclusive)
   http.get('*/api/v1/user/payments', ({ request }) => {
     const url = new URL(request.url);
     const fromDate = url.searchParams.get('fromDate') || undefined;

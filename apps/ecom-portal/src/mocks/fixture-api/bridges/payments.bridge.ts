@@ -46,8 +46,39 @@ export function mapPayment(row: Row, refs: Row[], payerName: string): PaymentHis
     status,
     payerName,
   };
-  if (status === 'SUCCESSFUL') record.receiptUrl = '#';
+  if (status === 'SUCCESSFUL') {
+    record.receiptUrl = `/api/v1/user/payments/${encodeURIComponent(record.paymentRefNo)}/receipt`;
+  }
   return record;
+}
+
+/** Mock PDF body for a successful payment receipt download. */
+export function buildPaymentReceiptPdf(record: PaymentHistoryRecord): string {
+  return [
+    '%PDF-1.4 Mock Payment Receipt',
+    `Payment Ref: ${record.paymentRefNo}`,
+    `Payer: ${record.payerName}`,
+    `Invoice / Booking: ${record.invoiceNo}`,
+    `B/L: ${record.blNumber}`,
+    `Gateway: ${record.gateway}`,
+    `Amount: ${record.currency} ${record.amount.toFixed(2)}`,
+    `Paid On: ${record.paymentDate}`,
+    `Status: ${record.status}`,
+  ].join('\n');
+}
+
+/** Resolve a successful payment receipt by requestId (paymentRefNo) or row id. */
+export function findSuccessfulPaymentReceipt(
+  customerCode: string,
+  paymentKey: string,
+): PaymentHistoryRecord | undefined {
+  const key = String(paymentKey ?? '').trim();
+  if (!key) return undefined;
+  return fixturePaymentHistory(customerCode).find(
+    (row) =>
+      row.status === 'SUCCESSFUL' &&
+      (row.paymentRefNo === key || row.id === key),
+  );
 }
 
 /** Inclusive calendar-date filter on `paymentDate` (`YYYY-MM-DD…`). */

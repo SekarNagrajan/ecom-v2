@@ -78,7 +78,8 @@
       "contType": "Cont Type",
       "emptyReleaseDepot": "Empty Release Depot",
       "qtyBooked": "Qty Booked",
-      "qtyReleased": "Qty Released"
+      "qtyReleased": "Qty Released",
+      "printCount": "Print Count"
     },
     "containerColumns": {
       "containerNo": "Container No",
@@ -86,7 +87,14 @@
       "sealNo": "Seal No"
     },
     "alerts": {
-      "validUntil": "This release order is valid until <date/>."
+      "validUntil": "This release order is valid until <date/>.",
+      "blocked": "Release is blocked"
+    },
+    "timeline": {
+      "issued": "CRO issued",
+      "polArrival": "Arrives at load port",
+      "polDeparture": "Departs load port",
+      "validUntil": "Valid until"
     }
   }
 }

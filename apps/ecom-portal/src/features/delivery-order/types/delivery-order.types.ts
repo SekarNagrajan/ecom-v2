@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 14:42)
+// Modified by Sekar Nagarajan (2026-10-19 17:45)
 import type { TFunction } from "i18next";
 import { z } from "zod";
 
@@ -17,7 +17,22 @@ export interface DOSummaryRow {
   arrdate: string;
   dovaliditydate: string;
   printstatus: DOPrintStatus;
+  /** "1" once the B/L is released (online print allowed); "0" blocks online print. */
   ecomprintstatus: string;
+  /** Optional detail enrichment (view drawer) — absent on legacy summary rows. */
+  consignee?: string;
+  containers?: string[];
+  freeDays?: number;
+  invoiceNos?: string[];
+  balanceDue?: number;
+  currency?: string;
+  printHistory?: DOPrintHistoryEntry[];
+}
+
+export interface DOPrintHistoryEntry {
+  version: number;
+  printedAt: string;
+  printedBy: string;
 }
 
 export interface DOListFilters {

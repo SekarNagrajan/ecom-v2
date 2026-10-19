@@ -1,6 +1,9 @@
 {
   "subtitle": "Search sailings by route, vessel, or port — compare transit times, cut-offs, and book directly.",
   "exportingToast": "Exporting schedule results…",
+  "exportSuccessToast": "Downloaded {{count}} sailing(s) as CSV.",
+  "exportFailedToast": "Could not export schedule results. Please try again.",
+  "exportEmptyToast": "Search for sailings first, then export the results.",
   "bookNowToast": "Booking started for {{vessel}} / {{voyage}} ({{pol}} → {{pod}})",
   "bookingNotAllowedToast": "Booking is closed for this sailing — the cut-off has passed or the vessel has already sailed.",
   "searchEmptyTitle": "Search for sailings",

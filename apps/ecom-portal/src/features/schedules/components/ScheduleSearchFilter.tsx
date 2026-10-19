@@ -16,9 +16,13 @@ import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
-import { usePortSearch } from "../../landing/api/landing.queries";
+import {
+  usePortByCode,
+  usePortSearch,
+} from "../../landing/api/landing.queries";
 import {
   DEFAULT_LANE,
+  portLabelOf,
   SCHEDULE_PORT_CODES,
 } from "../../landing/utils/landing-search";
 import { schedulesApi } from "../api/schedules.api";
@@ -33,11 +37,19 @@ const { Text } = Typography;
 const SEARCH_ROW_GUTTER: [number, number] = [12, 8];
 const HEADER_ROW_GUTTER: [number, number] = [8, 4];
 
-/** Same port source as landing Schedule tab: masters typeahead + shared showcase fallbacks. */
-function useSchedulePortOptions(initialQuery = "") {
+type PortSelectOption = { value: string; label: string };
+
+/**
+ * Same port source as landing Schedule tab: masters typeahead + showcase fallbacks.
+ * Always keeps a labeled option for `selectedCode` so the sticky header remount
+ * (and deep links) show "CODE - NAME" instead of the bare code.
+ */
+function useSchedulePortOptions(selectedCode?: string) {
   const { t } = useTranslation("schedules");
-  const [query, setQuery] = useState(initialQuery);
+  const [query, setQuery] = useState("");
   const { data: ports = [], isFetching } = usePortSearch(query);
+  const selected = String(selectedCode ?? "").trim().toUpperCase();
+  const { data: selectedPort } = usePortByCode(selected);
 
   const fallbackPorts = useMemo(
     () =>
@@ -49,12 +61,25 @@ function useSchedulePortOptions(initialQuery = "") {
   );
 
   const options = useMemo(() => {
-    if (ports.length === 0) return fallbackPorts;
-    return ports.map((p) => ({
-      value: p.portCode,
-      label: `${p.portCode} - ${p.portName}`,
-    }));
-  }, [ports, fallbackPorts]);
+    const fromSearch: PortSelectOption[] =
+      ports.length === 0
+        ? fallbackPorts
+        : ports.map((p) => ({
+            value: p.portCode,
+            label: portLabelOf(p),
+          }));
+
+    if (!selected) return fromSearch;
+    if (fromSearch.some((o) => o.value.toUpperCase() === selected)) {
+      return fromSearch;
+    }
+
+    const label = selectedPort
+      ? portLabelOf(selectedPort)
+      : t(`options.ports.${selected}`, { defaultValue: selected });
+
+    return [{ value: selected, label }, ...fromSearch];
+  }, [ports, fallbackPorts, selected, selectedPort, t]);
 
   return { setQuery, options, isFetching };
 }
@@ -160,18 +185,22 @@ export function ScheduleSearchFilter({
   const form = formProp ?? internalForm;
   const isHeader = variant === "header";
 
+  const searchType: ScheduleSearchType =
+    Form.useWatch("searchType", form) || "POINT_TO_POINT";
+  const polCode = Form.useWatch("polCode", form) as string | undefined;
+  const podCode = Form.useWatch("podCode", form) as string | undefined;
+  const portCode = Form.useWatch("portCode", form) as string | undefined;
+
   // Same port catalogue as landing Schedule tab (masters search + SCHEDULE_PORT_CODES fallback).
-  const polPorts = useSchedulePortOptions(DEFAULT_LANE.pol);
-  const podPorts = useSchedulePortOptions(DEFAULT_LANE.pod);
-  const callPorts = useSchedulePortOptions(DEFAULT_LANE.pol);
+  // Pass selected codes so header remount / deep link still resolve "CODE - NAME" labels.
+  const polPorts = useSchedulePortOptions(polCode);
+  const podPorts = useSchedulePortOptions(podCode);
+  const callPorts = useSchedulePortOptions(portCode);
 
   // Labels come from the vessel master (CODE - NAME), not i18n keys — fixture codes change per extract.
   const popularVessels = useMemo(() => schedulesApi.listVesselOptions(), []);
   const controlSize = isHeader ? "middle" : "large";
   const gutter = isHeader ? HEADER_ROW_GUTTER : SEARCH_ROW_GUTTER;
-
-  const searchType: ScheduleSearchType =
-    Form.useWatch("searchType", form) || "POINT_TO_POINT";
 
   const handleSwapPorts = () => {
     const pol = form.getFieldValue("polCode");

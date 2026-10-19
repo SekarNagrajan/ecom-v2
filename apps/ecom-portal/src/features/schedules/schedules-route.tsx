@@ -1,6 +1,5 @@
 // Modified by Sekar Nagarajan (2026-10-18 11:15)
 import { AppButton } from "@solverminds/shared-ui";
-import { useToast } from "@solverminds/shared-ui/hooks";
 import { Card, Space, Spin, Typography } from "antd";
 import React from "react";
 import { useTranslation } from "react-i18next";
@@ -30,7 +29,6 @@ import { useSchedulesController } from "./hooks/useSchedulesController";
 const { Text } = Typography;
 
 export const SchedulesRoute: React.FC = () => {
-  const toast = useToast();
   const { t } = useTranslation(["schedules", "common", "modules"]);
   const moduleTitles = useModuleTitles();
   const {
@@ -58,13 +56,14 @@ export const SchedulesRoute: React.FC = () => {
     handleShareResultsViaMail,
     isShareMailOpen,
     handleCloseShareMail,
+    handleExport,
   } = useSchedulesController();
 
   return (
     <FeaturePageShell>
       <ScheduleModuleStyles />
 
-      <Card className="feature-page-card" bordered={false}>
+      <Card className="feature-page-card" variant="borderless">
         <ModuleScreenHeader
           icon={NavSchedulesIcon}
           title={moduleTitles.schedules}
@@ -76,7 +75,7 @@ export const SchedulesRoute: React.FC = () => {
                 icon={
                   <AppIcon icon={Icons.download} size={16} tone="download" />
                 }
-                onClick={() => toast.success(t("exportingToast"))}
+                onClick={handleExport}
                 disabled={!hasSearched || schedules.length === 0}
               >
                 {t("common:actions.export")}

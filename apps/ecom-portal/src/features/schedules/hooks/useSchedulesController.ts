@@ -14,6 +14,7 @@ import type {
   ScheduleSearchParams,
   VesselParticulars,
 } from "../types/schedules.types";
+import { downloadSchedulesCsv } from "../utils/schedule-export";
 import { useScheduleViewMode } from "./use-schedule-view-mode";
 
 function readDeepLinkSearchParams(): ScheduleSearchParams | null {
@@ -181,6 +182,19 @@ export function useSchedulesController() {
     setIsShareMailOpen(false);
   };
 
+  const handleExport = () => {
+    if (!hasSearched || schedules.length === 0) {
+      toast.warning(t("exportEmptyToast"));
+      return;
+    }
+    try {
+      downloadSchedulesCsv(schedules);
+      toast.success(t("exportSuccessToast", { count: schedules.length }));
+    } catch {
+      toast.error(t("exportFailedToast"));
+    }
+  };
+
   return {
     initialParams,
     viewMode,
@@ -206,5 +220,6 @@ export function useSchedulesController() {
     handleShareResultsViaMail,
     isShareMailOpen,
     handleCloseShareMail,
+    handleExport,
   };
 }

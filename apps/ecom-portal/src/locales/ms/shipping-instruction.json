@@ -60,7 +60,8 @@
     "viewTitle": "Lihat Arahan Penghantaran",
     "bookingMeta": "Tempahan: {{bookingNo}}",
     "agencyMeta": "Agensi: {{agencyRef}}",
-    "blStatusTag": "B/L: {{status}}"
+    "blStatusTag": "B/L: {{status}}",
+    "statusProgress": "Kemajuan status SI"
   },
   "labels": {
     "booking": "Tempahan",

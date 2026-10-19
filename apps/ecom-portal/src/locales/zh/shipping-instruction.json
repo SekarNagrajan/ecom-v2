@@ -60,7 +60,8 @@
     "viewTitle": "查看装运指示",
     "bookingMeta": "订舱：{{bookingNo}}",
     "agencyMeta": "代理：{{agencyRef}}",
-    "blStatusTag": "提单：{{status}}"
+    "blStatusTag": "提单：{{status}}",
+    "statusProgress": "托运单状态进度"
   },
   "labels": {
     "booking": "订舱",

@@ -60,7 +60,8 @@
     "viewTitle": "View Shipping Instruction",
     "bookingMeta": "Booking: {{bookingNo}}",
     "agencyMeta": "Agency: {{agencyRef}}",
-    "blStatusTag": "B/L: {{status}}"
+    "blStatusTag": "B/L: {{status}}",
+    "statusProgress": "SI status progress"
   },
   "labels": {
     "booking": "Booking",

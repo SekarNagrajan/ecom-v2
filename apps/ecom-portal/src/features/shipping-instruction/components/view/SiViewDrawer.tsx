@@ -1,7 +1,7 @@
-// Modified by Sekar Nagarajan (2026-09-29 16:45)
+// Modified by Sekar Nagarajan (2026-10-19 17:00)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { useNavigate } from "@tanstack/react-router";
-import { Flex, Tag, Tooltip, Typography } from "antd";
+import { Tag, Tooltip, Typography } from "antd";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -10,7 +10,7 @@ import {
   NavShippingInstructionIcon,
 } from "../../../../components/icons";
 import { formatModuleScreenTitle } from "../../../../constants/module-titles";
-import type { SIListDTO } from "../../types/si.types";
+import type { SIListDTO, SIStatus } from "../../types/si.types";
 import {
   canOpenSiWizard,
   getSiBlStatusLabel,
@@ -26,15 +26,80 @@ interface SiViewDrawerProps {
   onClose: () => void;
 }
 
+interface LifecycleStep {
+  key: SIStatus;
+  label: string;
+  state: "done" | "current" | "upcoming" | "error";
+}
+
+function dash(value?: string | null): string {
+  return value && value.trim() !== "" ? value : "—";
+}
+
+/**
+ * Draft → Submitted → Accepted lifecycle. Declined replaces the last step
+ * as an error marker; Locked means the SI completed and is frozen.
+ */
+function buildLifecycle(
+  status: SIStatus,
+  t: (key: string) => string,
+): LifecycleStep[] {
+  const base: { key: SIStatus; label: string }[] = [
+    { key: "Draft", label: t("status.draft") },
+    { key: "Submitted", label: t("status.submitted") },
+    { key: "Accepted", label: t("status.accepted") },
+  ];
+
+  let currentIndex: number;
+  switch (status) {
+    case "Draft":
+      currentIndex = 0;
+      break;
+    case "Submitted":
+      currentIndex = 1;
+      break;
+    case "Accepted":
+    case "Declined":
+      currentIndex = 2;
+      break;
+    case "Locked":
+      currentIndex = 3;
+      break;
+    default:
+      currentIndex = -1;
+  }
+
+  return base.map((step, index) => {
+    if (status === "Declined" && index === 2) {
+      return { key: "Declined", label: t("status.declined"), state: "error" };
+    }
+    if (index < currentIndex) return { ...step, state: "done" };
+    if (index === currentIndex) return { ...step, state: "current" };
+    return { ...step, state: "upcoming" };
+  });
+}
+
 export function SiViewDrawer({ record, onClose }: SiViewDrawerProps) {
   const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
   const navigate = useNavigate();
   const showEdit = canOpenSiWizard(record.status);
+  const lifecycle = buildLifecycle(record.status, t);
 
   const handleEdit = () => {
     onClose();
     navigate({ to: `/app/shipping-instruction/wizard/${record.id}` });
   };
+
+  const facts = [
+    { key: "siNo", label: t("labels.siNo"), value: dash(record.siNo) },
+    { key: "blNo", label: t("labels.blNo"), value: dash(record.blNo) },
+    { key: "created", label: t("labels.created"), value: dash(record.createdDate) },
+    {
+      key: "submitted",
+      label: t("labels.submitted"),
+      value: dash(record.submittedDate),
+    },
+  ];
 
   return (
     <AppDrawer
@@ -47,7 +112,9 @@ export function SiViewDrawer({ record, onClose }: SiViewDrawerProps) {
       }}
       title={
         <div className="si-drawer-title">
-          <AppIcon icon={NavShippingInstructionIcon} size={22} />
+          <span className="si-drawer-title__icon">
+            <AppIcon icon={NavShippingInstructionIcon} size={20} />
+          </span>
           <div className="si-drawer-title__copy">
             <Title level={4} className="si-drawer-title__text">
               {formatModuleScreenTitle(
@@ -55,47 +122,22 @@ export function SiViewDrawer({ record, onClose }: SiViewDrawerProps) {
                 record.siNo || record.bookingNo,
               )}
             </Title>
-            <div className="si-drawer-title__row">
-              <Text type="secondary" className="si-drawer-title__meta">
+            <Text type="secondary" className="si-drawer-title__meta">
+              <span className="si-drawer-title__meta-item">
                 {t("labels.booking")}: <strong>{record.bookingNo}</strong>
-                {record.agencyRefNo ? (
-                  <>
-                    {" "}
-                    · {t("labels.agencyRef")}:{" "}
-                    <strong>{record.agencyRefNo}</strong>
-                  </>
-                ) : null}
-              </Text>
-              <div className="si-drawer-title__tags">
-                <Tag color={getSiStatusTagColor(record.status)}>
-                  {getSiStatusLabel(record.status, t)}
-                </Tag>
-                {record.blStatus ? (
-                  <Tag color="default">
-                    {t("drawer.blStatusTag", {
-                      status: getSiBlStatusLabel(record.blStatus, t),
-                    })}
-                  </Tag>
-                ) : null}
-              </div>
-            </div>
+              </span>
+              {record.agencyRefNo ? (
+                <span className="si-drawer-title__meta-item">
+                  {t("labels.agencyRef")}: <strong>{record.agencyRefNo}</strong>
+                </span>
+              ) : null}
+            </Text>
           </div>
         </div>
       }
       footer={
-        <Flex
-          justify="flex-end"
-          align="center"
-          gap="small"
-          wrap
-          className="si-drawer-actions custom-scroll"
-        >
-          {/* <Tooltip title={t("common:actions.close")}>
-            <AppButton onClick={onClose}>
-              {t("common:actions.close")}
-            </AppButton>
-          </Tooltip> */}
-          {showEdit ? (
+        showEdit ? (
+          <div className="si-drawer-actions custom-scroll">
             <Tooltip title={t("actions.editShippingInstruction")}>
               <AppButton
                 type="primary"
@@ -105,78 +147,87 @@ export function SiViewDrawer({ record, onClose }: SiViewDrawerProps) {
                 {t("actions.editSi")}
               </AppButton>
             </Tooltip>
-          ) : null}
-        </Flex>
+          </div>
+        ) : undefined
       }
     >
-      <div className="si-route-strip">
-        <div className="si-route-port si-route-port--origin">
-          <div className="si-route-port__label">
-            <AppIcon icon={Icons.mapPin} size={14} />
-            {t("labels.origin")}
+      <section className="si-view-hero" aria-label={t("drawer.viewTitle")}>
+        {/* Status + lifecycle */}
+        <div className="si-view-hero__status">
+          <div className="si-view-hero__tags">
+            <Tag
+              className="si-view-hero__tag"
+              color={getSiStatusTagColor(record.status)}
+            >
+              {getSiStatusLabel(record.status, t)}
+            </Tag>
+            {record.blStatus ? (
+              <Tag className="si-view-hero__tag" color="default">
+                {t("drawer.blStatusTag", {
+                  status: getSiBlStatusLabel(record.blStatus, t),
+                })}
+              </Tag>
+            ) : null}
           </div>
-          <Title level={4} className="si-route-port__code">
-            {record.origin}
-          </Title>
+
+          <ol className="si-status-stepper" aria-label={t("drawer.statusProgress")}>
+            {lifecycle.map((step, index) => (
+              <li
+                key={step.key}
+                className={`si-status-stepper__step is-${step.state}`}
+                aria-current={step.state === "current" ? "step" : undefined}
+              >
+                <span className="si-status-stepper__dot app-icon-inherit">
+                  {step.state === "done" ? (
+                    <AppIcon icon={Icons.check} size={12} />
+                  ) : step.state === "error" ? (
+                    <AppIcon icon={Icons.x} size={12} />
+                  ) : (
+                    <span>{index + 1}</span>
+                  )}
+                </span>
+                <span className="si-status-stepper__label">{step.label}</span>
+              </li>
+            ))}
+          </ol>
         </div>
 
-        <div className="si-route-connector">
-          <span className="si-route-connector__label">
-            {t("labels.portToPort")}
-          </span>
-          <div className="si-route-connector__line">
-            <span className="si-route-connector__track" />
-            <AppIcon icon={Icons.arrowRight} size={14} />
-            <span className="si-route-connector__track" />
+        {/* Route */}
+        <div className="si-view-route">
+          <div className="si-view-route__stop">
+            <span className="si-view-route__eyebrow app-icon-inherit">
+              <AppIcon icon={Icons.mapPin} size={12} />
+              {t("labels.origin")}
+            </span>
+            <span className="si-view-route__code">{dash(record.origin)}</span>
           </div>
-          <AppIcon icon={Icons.ship} size={16} />
+          <div className="si-view-route__connector" aria-hidden>
+            <span className="si-view-route__track" />
+            <span className="si-view-route__ship app-icon-inherit">
+              <AppIcon icon={Icons.ship} size={14} />
+            </span>
+            <span className="si-view-route__track" />
+            <span className="si-view-route__label">{t("labels.portToPort")}</span>
+          </div>
+          <div className="si-view-route__stop si-view-route__stop--dest">
+            <span className="si-view-route__eyebrow app-icon-inherit">
+              <AppIcon icon={Icons.mapPin} size={12} />
+              {t("labels.delivery")}
+            </span>
+            <span className="si-view-route__code">{dash(record.delivery)}</span>
+          </div>
         </div>
 
-        <div className="si-route-port si-route-port--delivery">
-          <div className="si-route-port__label">
-            <AppIcon icon={Icons.mapPin} size={14} />
-            {t("labels.delivery")}
-          </div>
-          <Title level={4} className="si-route-port__code">
-            {record.delivery}
-          </Title>
-        </div>
-      </div>
-
-      <div className="si-summary-chips">
-        <div className="si-summary-chip">
-          <span>
-            <span className="si-summary-chip__label">{t("labels.siNo")}</span>
-            <span className="si-summary-chip__value">{record.siNo || "—"}</span>
-          </span>
-        </div>
-        <div className="si-summary-chip">
-          <span>
-            <span className="si-summary-chip__label">{t("labels.blNo")}</span>
-            <span className="si-summary-chip__value">{record.blNo || "—"}</span>
-          </span>
-        </div>
-        <div className="si-summary-chip">
-          <span>
-            <span className="si-summary-chip__label">
-              {t("labels.created")}
-            </span>
-            <span className="si-summary-chip__value">
-              {record.createdDate || "—"}
-            </span>
-          </span>
-        </div>
-        <div className="si-summary-chip">
-          <span>
-            <span className="si-summary-chip__label">
-              {t("labels.submitted")}
-            </span>
-            <span className="si-summary-chip__value">
-              {record.submittedDate || "—"}
-            </span>
-          </span>
-        </div>
-      </div>
+        {/* Key references */}
+        <dl className="si-view-facts">
+          {facts.map((fact) => (
+            <div key={fact.key} className="si-view-fact">
+              <dt className="si-view-fact__label">{fact.label}</dt>
+              <dd className="si-view-fact__value">{fact.value}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
 
       <SiDetailsViewer
         siId={record.id}

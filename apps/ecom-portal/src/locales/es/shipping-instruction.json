@@ -60,7 +60,8 @@
     "viewTitle": "Ver instrucción de embarque",
     "bookingMeta": "Reserva: {{bookingNo}}",
     "agencyMeta": "Agencia: {{agencyRef}}",
-    "blStatusTag": "B/L: {{status}}"
+    "blStatusTag": "B/L: {{status}}",
+    "statusProgress": "Progreso del estado de la SI"
   },
   "labels": {
     "booking": "Reserva",

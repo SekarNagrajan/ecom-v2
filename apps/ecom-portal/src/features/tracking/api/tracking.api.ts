@@ -4,6 +4,8 @@
 
 import type { ApiResponse } from "../../../types/api.types";
 import type {
+  ShareTrackingMailInput,
+  ShareTrackingMailResponse,
   TrackingSearchParams,
   TrackingSearchResult,
 } from "../types/tracking.types";
@@ -53,5 +55,21 @@ export const trackingApi = {
     );
     if (body.error) throw new Error(body.error.message);
     return body.data ?? null;
+  },
+
+  /** POST /api/v1/tracking/share-mail — share tracking status by email */
+  async shareTrackingByMail(
+    input: ShareTrackingMailInput,
+  ): Promise<ShareTrackingMailResponse> {
+    const res = await fetch("/api/v1/tracking/share-mail", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(input),
+    });
+    if (!res.ok) {
+      throw new Error("Failed to share tracking status by email");
+    }
+    const json = (await res.json()) as { data: ShareTrackingMailResponse };
+    return json.data;
   },
 };

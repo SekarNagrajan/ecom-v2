@@ -146,3 +146,33 @@ export interface TrackingSearchResult {
   routeMap?: TrackingRouteMap;
   liveAis?: TrackingLiveAisPosition;
 }
+
+/** Compact payload attached to share-mail requests. */
+export interface ShareTrackingMailSummary {
+  searchKey: string;
+  bookingNo: string;
+  blNo: string;
+  vesselName: string;
+  voyage: string;
+  bound: string;
+  polPortCode: string;
+  podPortCode: string;
+  etd: string;
+  eta: string;
+  containerCount: number;
+  containerNos: string[];
+}
+
+export interface ShareTrackingMailInput {
+  to: string;
+  cc?: string;
+  subject: string;
+  message: string;
+  tracking: ShareTrackingMailSummary;
+}
+
+export interface ShareTrackingMailResponse {
+  success: boolean;
+  messageId: string;
+  recipientCount: number;
+}

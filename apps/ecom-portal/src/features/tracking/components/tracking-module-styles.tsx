@@ -1728,6 +1728,70 @@ export function TrackingModuleStyles() {
           white-space: normal;
         }
       }
+
+      .tracking-drawer-body.custom-scroll {
+        overflow-y: auto;
+        max-height: calc(100vh - 105px);
+        padding: ${token.paddingLG}px ${token.paddingLG + 4}px;
+      }
+      .tracking-share-mail-form {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginMD}px;
+      }
+      .tracking-share-mail-summary {
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorFillAlter};
+        padding: ${token.paddingMD}px;
+      }
+      .tracking-share-mail-summary__title {
+        display: block;
+        margin-bottom: ${token.marginXS}px;
+      }
+      .tracking-share-mail-summary__list {
+        margin: 0;
+        padding-left: ${token.paddingLG}px;
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+      }
+      .tracking-share-mail-editor {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXS}px;
+      }
+      .tracking-share-mail-editor .ant-form-item {
+        margin-bottom: 0;
+      }
+      .tracking-share-mail-editor .ProseMirror {
+        min-height: ${token.controlHeightLG * 6}px;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+      }
+      .tracking-share-mail-editor .ProseMirror > * + * {
+        margin-top: ${token.marginXS}px;
+      }
+      .tracking-share-mail-editor .ProseMirror p,
+      .tracking-share-mail-editor .ProseMirror ul,
+      .tracking-share-mail-editor .ProseMirror ol {
+        margin: 0;
+      }
+      .tracking-share-mail-editor .ProseMirror ul,
+      .tracking-share-mail-editor .ProseMirror ol {
+        padding-left: ${token.paddingLG}px;
+      }
+      .tracking-share-mail-footer {
+        padding: ${token.paddingMD}px ${token.paddingLG}px !important;
+        border-top: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorBgContainer};
+      }
+      .tracking-share-mail-actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: ${token.marginSM}px;
+        width: 100%;
+      }
     `}</style>
   );
 }

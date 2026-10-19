@@ -1,6 +1,5 @@
 // Modified by Sekar Nagarajan (2026-09-18 10:40)
 import { AppButton } from "@solverminds/shared-ui";
-import { useToast } from "@solverminds/shared-ui/hooks";
 import { Card, Space } from "antd";
 import { useTranslation } from "react-i18next";
 
@@ -10,6 +9,7 @@ import { FeaturePageShell } from "../../components/shared/feature-page-shell";
 import { ModuleEmptyState } from "../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import { useModuleTitles } from "../../i18n/use-module-titles";
+import { ShareTrackingMailDrawer } from "./components/ShareTrackingMailDrawer";
 import { TrackingModuleStyles } from "./components/tracking-module-styles";
 import { TrackingContainersTable } from "./components/TrackingContainersTable";
 import { TrackingLiveMapDrawer } from "./components/TrackingLiveMapDrawer";
@@ -19,7 +19,6 @@ import { TrackingSearchFilter } from "./components/TrackingSearchFilter";
 import { useTrackingController } from "./hooks/useTrackingController";
 
 export function TrackingRoute() {
-  const toast = useToast();
   const { t } = useTranslation(["tracking", "common"]);
   const moduleTitles = useModuleTitles();
   const {
@@ -37,12 +36,18 @@ export function TrackingRoute() {
     handleCloseMovements,
     handleOpenLiveMap,
     handleCloseLiveMap,
+    handleExportExcel,
+    handleShareViaMail,
+    isShareMailOpen,
+    handleCloseShareMail,
   } = useTrackingController();
+
+  const hasResult = Boolean(trackingResult);
 
   return (
     <FeaturePageShell>
       <TrackingModuleStyles />
-      <Card className="feature-page-card" bordered={false}>
+      <Card className="feature-page-card" variant="borderless">
         <ModuleScreenHeader
           icon={NavTrackingIcon}
           title={moduleTitles.tracking}
@@ -53,13 +58,15 @@ export function TrackingRoute() {
                 icon={
                   <AppIcon icon={Icons.download} size={16} tone="download" />
                 }
-                onClick={() => toast.success(t("exportingToast"))}
+                onClick={handleExportExcel}
+                disabled={!hasResult}
               >
                 {t("common:actions.exportExcel")}
               </AppButton>
               <AppButton
                 icon={<AppIcon icon={Icons.mail} size={16} tone="navigate" />}
-                onClick={() => toast.info(t("shareToast"))}
+                onClick={handleShareViaMail}
+                disabled={!hasResult}
               >
                 {t("common:actions.shareViaMail")}
               </AppButton>
@@ -112,6 +119,14 @@ export function TrackingRoute() {
           open={isLiveMapOpen}
           onClose={handleCloseLiveMap}
         />
+
+        {trackingResult ? (
+          <ShareTrackingMailDrawer
+            open={isShareMailOpen}
+            onClose={handleCloseShareMail}
+            result={trackingResult}
+          />
+        ) : null}
       </Card>
     </FeaturePageShell>
   );

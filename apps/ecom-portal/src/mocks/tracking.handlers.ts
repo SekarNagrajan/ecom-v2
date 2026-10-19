@@ -12,7 +12,7 @@
  *
  * Registered in browser.ts before the generic fixture routes.
  */
-import { http } from 'msw';
+import { http, HttpResponse } from 'msw';
 import type { TrackingSearchType } from '../features/tracking/types/tracking.types';
 import { fixtureTrackingResult, trackingSampleReferences } from './fixture-api/bridges/tracking.bridge';
 import { latency, notFound, ok } from './fixture-api/utils';
@@ -34,4 +34,39 @@ export const trackingHandlers = [
   }),
 
   http.get('/api/tracking/samples', () => ok(trackingSampleReferences())),
+
+  http.post('/api/v1/tracking/share-mail', async ({ request }) => {
+    const input = (await request.json()) as {
+      to: string;
+      cc?: string;
+      subject: string;
+      message: string;
+      tracking?: unknown;
+    };
+    if (
+      !input?.to?.trim() ||
+      !input?.subject?.trim() ||
+      !input?.message?.trim()
+    ) {
+      return HttpResponse.json(
+        {
+          success: false,
+          message: 'Recipient, subject, and message are required.',
+        },
+        { status: 400 },
+      );
+    }
+    await latency();
+    const recipients = [input.to, ...(input.cc ? input.cc.split(/[;,]/) : [])]
+      .map((v) => v.trim())
+      .filter(Boolean);
+    return HttpResponse.json({
+      success: true,
+      data: {
+        success: true,
+        messageId: `trk-mail-${Date.now()}`,
+        recipientCount: recipients.length,
+      },
+    });
+  }),
 ];

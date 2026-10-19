@@ -1,11 +1,11 @@
-// Created by Sekar Nagarajan (2026-09-28 14:57) — GWFC-8388 external GWF legal URLs
+// Modified by Sekar Nagarajan (2026-10-19) — Solverminds corporate legal URLs
 export const LEGAL_LINKS = {
   websiteTermsOfUse: {
     label: "Website Terms of Use",
-    href: "https://greatwhitefleet.com/terms-and-conditions",
+    href: "https://www.solverminds.com/terms",
   },
   privacyPolicy: {
     label: "Privacy Policy",
-    href: "https://greatwhitefleet.com/privacy-policy",
+    href: "https://www.solverminds.com/privacy",
   },
 } as const;

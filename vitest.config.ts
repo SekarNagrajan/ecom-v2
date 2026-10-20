@@ -37,6 +37,7 @@ export default defineConfig({
     environment: "node",
     css: false,
     include: ["apps/**/*.{test,spec}.?(c|m)[jt]s?(x)", "libs/**/*.{test,spec}.?(c|m)[jt]s?(x)"],
-    exclude: ["**/node_modules/**", "**/dist/**"],
+    // Playwright specs under e2e/ are run by Playwright, never by Vitest.
+    exclude: ["**/node_modules/**", "**/dist/**", "**/e2e/**"],
   },
 });

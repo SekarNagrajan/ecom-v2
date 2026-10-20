@@ -107,6 +107,23 @@ Retrieval behind the `search_portal_guide` tool is **hybrid**: BM25
 via reciprocal rank fusion (`app/knowledge/retriever.py`). If the vector
 store is missing the service degrades to BM25 only.
 
+### What gets indexed
+
+Two kinds of generated document per module, plus the hand-written `howto.md`:
+
+- **`mock-data.md`** — field/record digests of the fixture tables.
+- **`portal-reference.md`** — the *prose* the fixtures hide, extracted by
+  `app/knowledge/prose.py`: portal behaviour descriptions
+  (`configuration.json`, `settings.json`), the **status-code decoder**
+  (`statusDescriptions.json` — without it every stored status letter is
+  opaque), the notification catalogue, the 24 workflow emails
+  ("what happens when X"), and the Terms & Conditions policy
+  (`EcomContent.json`, HTML-stripped and chunked).
+
+Junk rows are denylisted (`JUNK_FIXTURES`): a Java stack trace in
+`advisories`, SQL error text in `insertmisexpreport_dup`, and `notices`
+rows that are PDF pointers with no retrievable text.
+
 Pipeline (rerun after any knowledge or mock change):
 
 ```bash
@@ -191,3 +208,29 @@ and check the provider's own rate-limit page — free quotas change often.
 **Privacy:** some free tiers log or train on prompts. Portal tool results
 can contain customer data, so review the provider's data policy before
 pointing a non-local provider at real tenants.
+
+## Server-side actions
+
+`app/actions/` runs catalog tools inside the service against
+`app/repositories/`, instead of asking the browser to run them. Enable with
+`SERVER_ACTIONS_ENABLED=true`; any tool without a handler keeps using the
+browser protocol, so tools move one at a time.
+
+Every handler returns an `ActionResult` with exactly one of six outcomes —
+`success`, `not_found`, `not_allowed`, `missing_info`, `wrong_state`,
+`error` — and the user-facing wording comes from
+`app/responses/messages.py`, never from the model.
+
+**The two booking namespaces.** Portal booking numbers (`BKON…`) and carrier
+booking numbers (`SVMDMU…`) do not join in this data: `bookings.extBookNo`
+is 100% null, and shipping instructions match the carrier number 97% of the
+time and the portal number 0%. Confirmed as real, not a sampling artefact.
+So asking for the SI of a *portal* booking returns `wrong_state` with an
+explanation, never an empty list that would read as "you have none".
+`app/repositories/links.py` owns that rule.
+
+```bash
+uv run pytest                      # 157 tests
+uv run python evals/run.py         # tool-selection accuracy
+uv run python evals/run.py --scenarios   # outcome accuracy
+```

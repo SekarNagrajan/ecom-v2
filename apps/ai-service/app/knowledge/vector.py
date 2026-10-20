@@ -60,6 +60,26 @@ class VectorIndex:
             )
         return len(chunks)
 
+    def purge_missing(self, live_ids: set[str]) -> int:
+        """Delete indexed chunks whose source section no longer exists.
+
+        `build()` upserts, so a removed heading or a dropped fixture would
+        otherwise remain retrievable indefinitely. Returns how many went.
+        """
+        if self._collection is None:
+            return 0
+        try:
+            existing = set(self._collection.get(include=[])["ids"])
+        except Exception as exc:  # pragma: no cover - environment dependent
+            logger.warning("vector purge failed to list ids: %s", exc)
+            return 0
+        stale = sorted(existing - live_ids)
+        if not stale:
+            return 0
+        self._collection.delete(ids=stale)
+        logger.info("purged %d stale chunk(s) from the vector index", len(stale))
+        return len(stale)
+
     def search(
         self, query: str, module: str | None = None, k: int = 6
     ) -> list[dict[str, Any]]:
@@ -84,6 +104,7 @@ class VectorIndex:
                 {
                     "id": cid,
                     "module": (meta or {}).get("module", ""),
+                    "source": (meta or {}).get("source", ""),
                     "text": (doc or "")[:1500],
                 }
             )

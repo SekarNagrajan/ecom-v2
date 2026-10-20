@@ -1,0 +1,58 @@
+# Shipping instructions, B/L and VGM — including the chain that cannot exist.
+action_group: documents
+cases:
+  - id: si_wrong_state_portal_booking
+    action: list_shipping_instructions
+    args: {booking_id: "BKON1"}
+    capabilities: [SI, BKG]
+    expect_outcome: wrong_state
+    expect_message_contains: "carrier booking number"
+    expect_no_data: true
+
+  - id: si_success_via_carrier_booking
+    action: list_shipping_instructions
+    args: {booking_id: "SVMD1"}
+    capabilities: [SI, BKG]
+    expect_outcome: success
+
+  - id: si_list_all_success
+    action: list_shipping_instructions
+    args: {}
+    capabilities: [SI]
+    expect_outcome: success
+
+  - id: si_not_allowed
+    action: list_shipping_instructions
+    args: {}
+    capabilities: []
+    expect_outcome: not_allowed
+
+  - id: si_booking_not_found
+    action: list_shipping_instructions
+    args: {booking_id: "NOSUCH"}
+    capabilities: [SI, BKG]
+    expect_outcome: not_found
+
+  - id: bl_list_success
+    action: list_bills_of_lading
+    args: {}
+    capabilities: [BL]
+    expect_outcome: success
+
+  - id: bl_not_allowed
+    action: list_bills_of_lading
+    args: {}
+    capabilities: []
+    expect_outcome: not_allowed
+
+  - id: vgm_wrong_state_portal_booking
+    action: list_vgm
+    args: {booking_id: "BKON1"}
+    capabilities: [VGM, BKG]
+    expect_outcome: wrong_state
+
+  - id: vgm_list_success
+    action: list_vgm
+    args: {}
+    capabilities: [VGM]
+    expect_outcome: success

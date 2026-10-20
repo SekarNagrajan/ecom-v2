@@ -1,0 +1,54 @@
+# Booking lookups, including the two-namespace gap.
+action_group: bookings
+cases:
+  - id: booking_success_portal
+    action: get_booking
+    args: {booking_id: "BKON1"}
+    capabilities: [BKG]
+    expect_outcome: success
+    expect_data_contains: {namespace: "portal booking request"}
+
+  - id: booking_success_carrier
+    action: get_booking
+    args: {booking_id: "SVMD1"}
+    capabilities: [BKG]
+    expect_outcome: success
+    expect_data_contains: {namespace: "carrier booking"}
+
+  - id: booking_not_found
+    action: get_booking
+    args: {booking_id: "NOSUCH"}
+    capabilities: [BKG]
+    expect_outcome: not_found
+
+  - id: booking_not_allowed_capability
+    action: get_booking
+    args: {booking_id: "BKON1"}
+    capabilities: []
+    expect_outcome: not_allowed
+
+  - id: booking_not_allowed_other_customer
+    action: get_booking
+    args: {booking_id: "OTHER"}
+    capabilities: [BKG]
+    expect_outcome: not_allowed
+    expect_message_contains: "another customer"
+
+  - id: booking_missing_info
+    action: get_booking
+    args: {}
+    capabilities: [BKG]
+    expect_outcome: missing_info
+    expect_slots: ["booking number"]
+
+  - id: booking_list_success
+    action: list_bookings
+    args: {}
+    capabilities: [BKG]
+    expect_outcome: success
+
+  - id: booking_list_denied
+    action: list_bookings
+    args: {}
+    capabilities: []
+    expect_outcome: not_allowed

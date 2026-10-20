@@ -108,6 +108,81 @@ def _score(expected: list[str], actual: list[str], match: str) -> bool:
     return all(t in actual for t in expected)
 
 
+def run_scenarios() -> int:
+    """Score the action scenarios: outcome correctness, offline.
+
+    Tool-selection accuracy says the model picked the right action; this
+    says the action then returned the right OUTCOME — the thing the user
+    actually experiences when something is missing, denied or impossible.
+    """
+    import json
+    import tempfile
+
+    import yaml
+
+    from app.actions.context import ActionContext, customer_for
+    from app.actions.registry import run_action
+    from app.models.chat import UserContext
+    from app.repositories.base import FixtureRepository
+
+    scenario_dir = Path(__file__).resolve().parents[1] / "tests" / "scenarios"
+    cases: list[tuple[str, dict]] = []
+    for path in sorted(scenario_dir.glob("*.yaml")):
+        doc = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+        for case in doc.get("cases", []):
+            cases.append((f"{path.stem}:{case['id']}", case))
+    if not cases:
+        print("no scenarios found")
+        return 1
+
+    tables = {
+        "bookings": [
+            {"ebookno": "BKON1", "cust_code": "C1", "ebook_status": "A"},
+            {"ebookno": "OTHER", "cust_code": "C2"},
+        ],
+        "lrpBookings": [{"book_no": "SVMD1", "status": "A"}],
+        "shippingInstructions": [
+            {"eSINo": "SIREQ1", "bookno": "SVMD1", "custcode": "C1"}
+        ],
+        "lrpBl": [{"bl_no": "BL1", "book_no": "SVMD1"}],
+        "vgm": [{"id": 1, "book_no": "SVMD1", "eqpid": "AASU1"}],
+        "invoices": [{"invno": "INV1", "custcode": "C1", "invamount": 100}],
+        "arrivalNotices": [{"arrivalnoticeno": "AN1"}],
+        "deliveryOrderVersions": [{"delordno": "DO1"}],
+    }
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        for name, rows in tables.items():
+            (root / f"{name}.json").write_text(json.dumps(rows), encoding="utf-8")
+        repo = FixtureRepository(root)
+
+        passed = 0
+        by_outcome: dict[str, list[int]] = {}
+        for name, case in cases:
+            user = UserContext(
+                user_id="u1",
+                tenant_code=case.get("tenant", "C1"),
+                capabilities=list(case.get("capabilities", [])),
+                authenticated=True,
+            )
+            ctx = ActionContext(repo=repo, user=user, customer=customer_for(user))
+            result = run_action(ctx, case["action"], case.get("args") or {})
+            expected = case["expect_outcome"]
+            ok = result.outcome.value == expected
+            passed += ok
+            tally = by_outcome.setdefault(expected, [0, 0])
+            tally[0] += ok
+            tally[1] += 1
+            flag = "PASS" if ok else "FAIL"
+            print(f"{flag}  {name:42} {expected:12} -> {result.outcome.value}")
+
+    total = len(cases)
+    print(f"\noutcome_accuracy={passed / total * 100:.2f}%  ({passed}/{total})")
+    for outcome, (ok, n) in sorted(by_outcome.items()):
+        print(f"  {outcome:12} {ok}/{n}")
+    return 0 if passed == total else 1
+
+
 def main() -> int:
     if yaml is None:
         print("PyYAML required: uv sync", file=sys.stderr)
@@ -164,4 +239,8 @@ def main() -> int:
 
 
 if __name__ == "__main__":
+    import sys as _sys
+
+    if "--scenarios" in _sys.argv:
+        raise SystemExit(run_scenarios())
     raise SystemExit(main())

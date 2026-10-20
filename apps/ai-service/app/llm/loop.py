@@ -1,4 +1,4 @@
-# Modified by Sekar Nagarajan (2026-10-20 18:45)
+# Modified by Sekar Nagarajan (2026-10-21 00:55)
 """Streaming chat + tool loop (Claude 5.5 append-only, parked results)."""
 
 from __future__ import annotations
@@ -44,6 +44,8 @@ from app.tools.catalog import (
     to_anthropic_tools,
     validate_tool_arguments,
 )
+from app.actions.context import ActionContext, customer_for
+from app.actions.registry import has_handler, run_action
 from app.tools.routes import capability_for_route, route_ok
 from app.tools.server_tools import run_server_tool
 
@@ -341,6 +343,15 @@ async def run_chat_loop(
 
     runner = _stream_runner
 
+    # Server-side action context (None when the feature is off or the
+    # repository was never attached, e.g. in lifespan-less tests).
+    repository = getattr(app_state, "repository", None)
+    action_ctx: ActionContext | None = None
+    if settings.server_actions_enabled and repository is not None:
+        action_ctx = ActionContext(
+            repo=repository, user=user, customer=customer_for(user)
+        )
+
     while True:
         if conversation.tool_rounds >= settings.max_tool_rounds:
             yield sse(
@@ -575,6 +586,20 @@ async def run_chat_loop(
                         "type": "tool_result",
                         "tool_use_id": call_id,
                         "content": json.dumps({"ok": True, "shown_to_user": True}),
+                    }
+                )
+            elif action_ctx is not None and has_handler(name):
+                # Runs in-process against the repository; the browser never
+                # sees this tool. Every path returns a structured outcome.
+                result = run_action(action_ctx, name, arguments)
+                immediate.append(
+                    {
+                        "type": "tool_result",
+                        "tool_use_id": call_id,
+                        "content": _truncate_json(
+                            result.for_model(), settings.tool_result_max_bytes
+                        ),
+                        **({} if result.ok else {"is_error": False}),
                     }
                 )
             else:

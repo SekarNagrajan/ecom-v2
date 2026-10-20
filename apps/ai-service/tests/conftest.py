@@ -1,7 +1,9 @@
-# Modified by Sekar Nagarajan (2026-10-20 14:47)
+# Modified by Sekar Nagarajan (2026-10-21 02:05)
 from __future__ import annotations
 
 from pathlib import Path
+
+import logging
 
 import httpx
 import pytest
@@ -11,6 +13,9 @@ from httpx import ASGITransport, AsyncClient
 
 from app.config import Settings, get_settings
 from app.knowledge.index import GuideIndex
+from app.knowledge.retriever import HybridRetriever
+from app.knowledge.vector import VectorIndex
+from app.repositories.base import FixtureRepository
 from app.llm.client import reset_anthropic
 from app.llm.guard import set_guard_override
 from app.llm.loop import set_stream_runner
@@ -44,6 +49,24 @@ async def redis():
     await r.aclose()
 
 
+FIXTURES_ROOT = (
+    Path(__file__).resolve().parents[2] / "ecom-portal/src/mocks/fixtures"
+)
+VECTOR_DB = Path(__file__).resolve().parents[1] / "var" / "vector-db"
+
+
+def _test_vector_index() -> VectorIndex | None:
+    """The persisted index when it has been built, else BM25-only.
+
+    CI without a built index still runs; a developer with one gets the real
+    fusion path under test.
+    """
+    if not VECTOR_DB.exists():
+        return None
+    index = VectorIndex(VECTOR_DB)
+    return index if index.ready else None
+
+
 @pytest_asyncio.fixture
 async def app(settings: Settings, redis):
     set_guard_override("allow")
@@ -55,8 +78,14 @@ async def app(settings: Settings, redis):
     application.state.settings = settings
     application.state.redis = redis
     application.state.http = httpx.AsyncClient(timeout=10.0)
-    application.state.guide = GuideIndex(KNOWLEDGE)
-    application.state.log = None
+    # D2: the production path is the HybridRetriever, so tests must drive
+    # it (vector layer included when the store exists) rather than a bare
+    # BM25 index that never exercises fusion.
+    application.state.guide = HybridRetriever(
+        GuideIndex(KNOWLEDGE), _test_vector_index()
+    )
+    application.state.repository = FixtureRepository(FIXTURES_ROOT)
+    application.state.log = logging.getLogger("test")
     yield application
     await application.state.http.aclose()
     set_guard_override(None)

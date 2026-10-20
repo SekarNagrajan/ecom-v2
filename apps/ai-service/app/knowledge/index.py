@@ -1,4 +1,4 @@
-# Modified by Sekar Nagarajan (2026-10-20 14:47)
+# Modified by Sekar Nagarajan (2026-10-21 01:50)
 """In-process BM25 index over knowledge/**/*.md."""
 
 from __future__ import annotations
@@ -86,6 +86,9 @@ class GuideIndex:
             {
                 "id": c["id"],
                 "module": c["module"],
+                # D7: the originating file, so an answer can say where a
+                # passage came from instead of asserting it unsourced.
+                "source": c.get("source", ""),
                 "text": c["text"][:1500],
             }
             for c in hits[:k]

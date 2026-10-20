@@ -1,0 +1,38 @@
+# Invoices / customer statement.
+action_group: account
+cases:
+  - id: statement_success
+    action: get_customer_statement
+    args: {invoice_no: "INV1"}
+    capabilities: [PAY]
+    expect_outcome: success
+
+  - id: statement_not_found
+    action: get_customer_statement
+    args: {invoice_no: "NOPE"}
+    capabilities: [PAY]
+    expect_outcome: not_found
+
+  - id: statement_missing_info
+    action: get_customer_statement
+    args: {}
+    capabilities: [PAY]
+    expect_outcome: missing_info
+
+  - id: statement_not_allowed
+    action: get_customer_statement
+    args: {invoice_no: "INV1"}
+    capabilities: []
+    expect_outcome: not_allowed
+
+  - id: arrival_notices_success
+    action: list_arrival_notices
+    args: {}
+    capabilities: [ARN]
+    expect_outcome: success
+
+  - id: delivery_orders_success
+    action: list_delivery_orders
+    args: {}
+    capabilities: [DO]
+    expect_outcome: success

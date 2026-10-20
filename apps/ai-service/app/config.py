@@ -1,4 +1,4 @@
-# Modified by Sekar Nagarajan (2026-10-20 20:50)
+# Modified by Sekar Nagarajan (2026-10-21 00:50)
 """Application settings (pydantic-settings v2)."""
 
 from __future__ import annotations
@@ -47,6 +47,13 @@ class Settings(BaseSettings):
 
     backend_base_url: str = "http://localhost:8080"
     # Optional controlled SQL Analysis service (Phase 4). Empty = unavailable.
+    # Where server-side actions read portal records from.
+    data_source: Literal["mock", "api"] = "mock"
+    #: Portal fixture dumps, relative to the service root when not absolute.
+    fixtures_path: str = "../ecom-portal/src/mocks/fixtures"
+    #: Run catalog tools server-side when a handler exists (else browser).
+    server_actions_enabled: bool = False
+
     rag_vector_enabled: bool = True
     vector_db_path: str = "var/vector-db"
 

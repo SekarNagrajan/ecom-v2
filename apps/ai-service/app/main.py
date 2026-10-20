@@ -1,4 +1,4 @@
-# Modified by Sekar Nagarajan (2026-10-20 18:10)
+# Modified by Sekar Nagarajan (2026-10-21 00:50)
 """FastAPI entrypoint with Redis + Anthropic lifespan."""
 
 from __future__ import annotations
@@ -17,6 +17,7 @@ from app.api import chat, conversations, feedback, health
 from app.config import Settings, get_settings
 from app.knowledge.index import GuideIndex
 from app.knowledge.retriever import HybridRetriever
+from app.repositories.base import build_repository
 from app.knowledge.vector import VectorIndex
 from app.llm.client import get_anthropic, reset_anthropic
 
@@ -59,15 +60,26 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             candidate = VectorIndex(db_path)
             vector = candidate if candidate.ready else None
         app.state.guide = HybridRetriever(bm25, vector)
+
+        fixtures_root = Path(app_settings.fixtures_path)
+        if not fixtures_root.is_absolute():
+            fixtures_root = (KNOWLEDGE_ROOT.parent / fixtures_root).resolve()
+        app.state.repository = build_repository(
+            app_settings.data_source,
+            fixtures_root=fixtures_root,
+            api_base_url=app_settings.backend_base_url,
+        )
         logger.info(
             "ai-service started version=%s env=%s auth_mode=%s model=%s "
-            "guide_chunks=%s vector=%s",
+            "guide_chunks=%s vector=%s data_source=%s actions=%s",
             __version__,
             app_settings.env,
             app_settings.auth_mode,
             app_settings.llm_chat_model,
             len(app.state.guide.chunks),
             "on" if app.state.guide.vector_ready else "off",
+            app_settings.data_source,
+            "server" if app_settings.server_actions_enabled else "browser",
         )
         try:
             yield

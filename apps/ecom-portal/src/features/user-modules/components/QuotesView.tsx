@@ -1,12 +1,13 @@
-// Modified by Sekar Nagarajan (2026-08-26 16:15)
+// Modified by Sekar Nagarajan (2026-10-20)
 import { AppButton } from "@solverminds/shared-ui";
 import {
   DataView,
   type DataViewColumn,
 } from "@solverminds/shared-ui/data-view";
+import { useToast } from "@solverminds/shared-ui/hooks";
 import { useNavigate } from "@tanstack/react-router";
 import { Space, Tag } from "antd";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 import {
   AppIcon,
@@ -25,6 +26,10 @@ import {
 } from "../../../components/shared/module-empty-state";
 import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
 import { useModuleTitles } from "../../../i18n/use-module-titles";
+import { bookingApi } from "../../booking/api/booking.api";
+import { useBookingStore } from "../../booking/stores/booking.store";
+import { buildMasterDetailsFromQuote } from "../../booking/utils/map-quote-to-master-details";
+import { pickDefaultBookingRoute } from "../../booking/utils/pick-default-booking-route";
 import { useQuotesQuery } from "../api/user-modules.queries";
 import type { QuoteItem } from "../types/user-modules.types";
 import { QuotesCreateDrawer } from "./quotes-create-drawer";
@@ -50,6 +55,7 @@ function formatUsd(amount: number) {
 export function QuotesView() {
   const MODULE_TITLES = useModuleTitles();
   const navigate = useNavigate();
+  const toast = useToast();
   const { profileHandlers } = useLocalGridProfiles("quotes");
   const {
     data: quotes = [],
@@ -60,9 +66,46 @@ export function QuotesView() {
   } = useQuotesQuery();
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [selectedQuote, setSelectedQuote] = useState<QuoteItem | null>(null);
+  const [isBookingQuote, setIsBookingQuote] = useState(false);
 
-  const activeCount = quotes.filter((q) => q.status === "QUOTED").length;
-  const acceptedCount = quotes.filter((q) => q.status === "ACCEPTED").length;
+  const handleBookQuote = useCallback(
+    async (quote: QuoteItem) => {
+      if (isBookingQuote) return;
+      setIsBookingQuote(true);
+      const store = useBookingStore.getState();
+      store.resetWizard();
+
+      const master = buildMasterDetailsFromQuote(quote);
+      try {
+        // Same lane + default-route pick as Master Details "select rate".
+        const routes = await bookingApi.searchRouting({
+          origin: master.origin,
+          delivery: master.delivery,
+          cargoReadyDate: master.cargoReadyDate,
+        });
+        const selectedRoute = pickDefaultBookingRoute(routes);
+        store.updateMasterDetails({ ...master, selectedRoute });
+        if (selectedRoute) {
+          toast.success(
+            `Quote ${quote.quoteNo} loaded with sailing ${selectedRoute.vesselName} / ${selectedRoute.voyage}.`,
+          );
+        } else {
+          toast.success(
+            `Quote ${quote.quoteNo} loaded. Choose a vessel/route on Master Details.`,
+          );
+        }
+      } catch {
+        store.updateMasterDetails(master);
+        toast.warning(
+          `Quote ${quote.quoteNo} loaded, but sailings could not be fetched. Pick a route on Master Details.`,
+        );
+      } finally {
+        setIsBookingQuote(false);
+      }
+      await navigate({ to: "/app/booking/new" });
+    },
+    [isBookingQuote, navigate, toast],
+  );
 
   const columnDefs: DataViewColumn<QuoteItem>[] = [
     buildActionsColumn<QuoteItem>({
@@ -84,10 +127,11 @@ export function QuotesView() {
             {rec.status === "QUOTED" ? (
               <ListActionButton
                 title="Book This Quote"
+                disabled={isBookingQuote}
                 icon={<AppIcon icon={NavBookingIcon} size={16} tone="create" />}
                 onClick={(event) => {
                   event.stopPropagation();
-                  navigate({ to: "/app/booking/new" });
+                  void handleBookQuote(rec);
                 }}
               />
             ) : null}

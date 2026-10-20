@@ -1,11 +1,5 @@
-// Modified by Sekar Nagarajan (2026-08-26 14:50)
+// Modified by Sekar Nagarajan (2026-10-17 00:34)
 import type { ApiResponse } from "../../../types/api.types";
-import {
-  filterArnByArrivalDate,
-  getMockArrivalNoticeDetail,
-  markArnPrinted,
-  mockArrivalNotices,
-} from "../mocks/arn.mock";
 import type {
   ArrivalNoticeDTO,
   ArrivalNoticeListDTO,
@@ -50,35 +44,7 @@ async function readApiJson<T>(
   }
 }
 
-async function mockListFallback(
-  filters: ArrivalNoticeListFilters,
-): Promise<ApiResponse<ArrivalNoticeListDTO[]> | null> {
-  if (!import.meta.env.DEV) return null;
-  return {
-    data: filterArnByArrivalDate(
-      mockArrivalNotices,
-      filters.fromDate,
-      filters.toDate,
-    ).map((row) => ({ ...row })),
-  };
-}
-
-async function mockDetailFallback(
-  anNo: string,
-): Promise<ApiResponse<ArrivalNoticeDTO> | null> {
-  if (!import.meta.env.DEV) return null;
-  const detail = getMockArrivalNoticeDetail(anNo);
-  if (!detail) return null;
-  const listRow = mockArrivalNotices.find((r) => r.anNo === anNo);
-  return {
-    data: {
-      ...detail,
-      printStatus: listRow?.printStatus ?? detail.printStatus,
-    },
-  };
-}
-
-/** Arrival Notice API — REST with DEV mock fallback (agenct parity). */
+/** Arrival Notice API — REST; mock mode is served by MSW (src/mocks/arrival-notice.handlers.ts). */
 export const arnApi = {
   async fetchList(
     filters: ArrivalNoticeListFilters = {},
@@ -91,18 +57,11 @@ export const arnApi = {
       const res = await fetch(
         `/api/ecom/imp/arrival-notices?${params.toString()}`,
       );
-      const parsed = await readApiJson<ArrivalNoticeListDTO[]>(
+      return await readApiJson<ArrivalNoticeListDTO[]>(
         res,
         "Failed to fetch arrival notices",
       );
-      if (!parsed.error) return parsed;
-
-      const fallback = await mockListFallback(filters);
-      if (fallback) return fallback;
-      return parsed;
     } catch (error: unknown) {
-      const fallback = await mockListFallback(filters);
-      if (fallback) return fallback;
       const message =
         error instanceof Error ? error.message : "Network error";
       return { error: { code: "NETWORK_ERROR", message } };
@@ -114,18 +73,11 @@ export const arnApi = {
       const res = await fetch(
         `/api/ecom/imp/arrival-notices/${encodeURIComponent(anNo)}`,
       );
-      const parsed = await readApiJson<ArrivalNoticeDTO>(
+      return await readApiJson<ArrivalNoticeDTO>(
         res,
         "Failed to fetch arrival notice detail",
       );
-      if (!parsed.error) return parsed;
-
-      const fallback = await mockDetailFallback(anNo);
-      if (fallback) return fallback;
-      return parsed;
     } catch (error: unknown) {
-      const fallback = await mockDetailFallback(anNo);
-      if (fallback) return fallback;
       const message =
         error instanceof Error ? error.message : "Network error";
       return { error: { code: "NETWORK_ERROR", message } };
@@ -154,13 +106,6 @@ export const arnApi = {
       }
       return { data: await res.blob() };
     } catch (error: unknown) {
-      if (import.meta.env.DEV) {
-        markArnPrinted(anNo);
-        const content = `%PDF-1.4 Mock Arrival Notice Document for ${anNo}`;
-        return {
-          data: new Blob([content], { type: "application/pdf" }),
-        };
-      }
       const message =
         error instanceof Error ? error.message : "Network error";
       return { error: { message } };

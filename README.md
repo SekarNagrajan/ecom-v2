@@ -59,6 +59,7 @@ ecom-v2/
 | **Understand `ecom-portal` architecture (state, routing, auth, API, forms)** | [`apps/ecom-portal/README.md`](apps/ecom-portal/README.md) |
 | **Add a new feature (folder layout, query keys, controller hooks)** | [`apps/ecom-portal/ECOM-PORTAL-FEATURE-BLUEPRINT.md`](apps/ecom-portal/ECOM-PORTAL-FEATURE-BLUEPRINT.md) |
 | **Wire a feature's API (mock + real, types, query options)** | [`apps/ecom-portal/feature-api-guide.md`](apps/ecom-portal/feature-api-guide.md) |
+| **Refresh demo data from the SQL Server databases (anonymised fixtures)** | [`apps/ecom-portal/mock-data/README.md`](apps/ecom-portal/mock-data/README.md) |
 | **Use `shared-ui` components / sub-path imports** | [`libs/shared/ui/README.md`](libs/shared/ui/README.md) |
 | **Build list/grid views with AG-Grid (`DataView`)** | [`libs/shared/ui/src/components/data-view/README.md`](libs/shared/ui/src/components/data-view/README.md) |
 | **Enterprise UI rules, Spin overlays, Labels & AG Grid Actions position** | [`.cursor/rules/agenct.md`](.cursor/rules/agenct.md) |

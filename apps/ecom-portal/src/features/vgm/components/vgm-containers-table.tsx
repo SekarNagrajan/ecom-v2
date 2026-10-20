@@ -4,6 +4,7 @@ import { Card, Table, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import type { Control, FieldArrayWithId } from "react-hook-form";
 
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import type { VgmFormValues } from "../types/vgm.types";
 import { VGM_FIELD_ITEM_PROPS } from "../utils/vgm-form-labels";
 
@@ -81,6 +82,16 @@ export function VgmContainersTable({
           scroll={{ y: 300, x: "max-content" }}
           rowKey="id"
           size="small"
+          locale={{
+            emptyText: (
+              <ModuleEmptyState
+                artSize="sm"
+                variant="blank"
+                title="No containers added"
+                style={{ padding: 12 }}
+              />
+            ),
+          }}
         />
       </div>
     </Card>

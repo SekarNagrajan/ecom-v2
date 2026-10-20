@@ -1,28 +1,16 @@
-// Modified by Sekar Nagarajan (2026-08-31 15:05)
+// Modified by Sekar Nagarajan (2026-10-16 23:50)
 import { AppButton } from "@solverminds/shared-ui";
-import {
-  Card,
-  Col,
-  Progress,
-  Row,
-  Tabs,
-  theme,
-  Tooltip,
-  Typography,
-} from "antd";
+import { Card, Progress, Segmented, Tooltip, Typography, theme } from "antd";
 import * as echarts from "echarts";
-import { useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { useChartTokens } from "../../theme/utils/use-portal-chart-tokens";
 import type {
   IntelligenceBreakdown,
+  IntelligenceBreakdowns,
   TopConsignee,
-} from "../mocks/dashboard.mock";
-import {
-  MOCK_INTELLIGENCE_BY_ORIGIN,
-  MOCK_INTELLIGENCE_BY_POD,
-  MOCK_INTELLIGENCE_BY_POL,
-} from "../mocks/dashboard.mock";
+} from "../api/dashboard.api";
 import {
   resolveDashboardTone,
   type DashboardTone,
@@ -36,6 +24,7 @@ interface DonutChartProps {
 }
 
 function DonutChart({ data, totalFeus }: DonutChartProps) {
+  const { t } = useTranslation(["dashboard", "common", "modules"]);
   const chartTokens = useChartTokens();
   const { token } = theme.useToken();
   const ref = useRef<HTMLDivElement>(null);
@@ -47,7 +36,18 @@ function DonutChart({ data, totalFeus }: DonutChartProps) {
       backgroundColor: "transparent",
       tooltip: {
         trigger: "item",
-        formatter: "{b}: {c} FEUs ({d}%)",
+        formatter: (params: unknown) => {
+          const p = params as {
+            name?: string;
+            value?: number;
+            percent?: number;
+          };
+          return t("intelligence.tooltipFeus", {
+            name: p.name ?? "",
+            value: p.value ?? "",
+            percent: p.percent ?? "",
+          });
+        },
         backgroundColor: chartTokens.colorBgElevated,
         borderColor: chartTokens.colorBorderSecondary,
         textStyle: { color: chartTokens.colorText },
@@ -61,7 +61,7 @@ function DonutChart({ data, totalFeus }: DonutChartProps) {
             text: totalFeus.toLocaleString(),
             textAlign: "center",
             fill: chartTokens.colorText,
-            fontSize: 20,
+            fontSize: token.fontSizeHeading4,
             fontWeight: "bold",
           },
         },
@@ -70,18 +70,18 @@ function DonutChart({ data, totalFeus }: DonutChartProps) {
           left: "center",
           top: "52%",
           style: {
-            text: "FEUs",
+            text: "TEUs",
             textAlign: "center",
             fill: chartTokens.colorTextSecondary,
-            fontSize: 11,
+            fontSize: token.fontSizeSM,
           },
         },
       ],
       series: [
         {
           type: "pie",
-          radius: ["50%", "76%"],
-          center: ["50%", "47%"],
+          radius: ["52%", "78%"],
+          center: ["50%", "48%"],
           avoidLabelOverlap: false,
           label: { show: false },
           emphasis: { scale: true, scaleSize: 4 },
@@ -101,28 +101,36 @@ function DonutChart({ data, totalFeus }: DonutChartProps) {
       observer.disconnect();
       chart.dispose();
     };
-  }, [data, totalFeus, chartTokens, token]);
+  }, [data, totalFeus, chartTokens, token, t]);
 
   return <div ref={ref} className="dashboard-donut" />;
 }
 
 interface BreakdownTableProps {
   data: IntelligenceBreakdown[];
+  dimensionLabel: string;
 }
 
-function BreakdownTable({ data }: BreakdownTableProps) {
+function BreakdownTable({ data, dimensionLabel }: BreakdownTableProps) {
+  const { t } = useTranslation(["dashboard", "common", "modules"]);
   const { token } = theme.useToken();
   const max = data[0]?.feus ?? 1;
 
   return (
-    <div className="dashboard-table-wrap custom-scroll">
-      <table className="dashboard-table">
+    <div className="dashboard-table-wrap custom-scroll dashboard-intelligence-table">
+      <table className="dashboard-table dashboard-table--intelligence">
+        <colgroup>
+          <col className="dashboard-col-name" />
+          <col className="dashboard-col-numeric" />
+          <col className="dashboard-col-numeric" />
+          <col className="dashboard-col-bar" />
+        </colgroup>
         <thead>
           <tr>
-            <th>Origin</th>
-            <th className="is-right">FEUs</th>
-            <th className="is-right">% Total</th>
-            <th />
+            <th>{dimensionLabel}</th>
+            <th className="is-right">{t("intelligence.columns.teus")}</th>
+            <th className="is-right">{t("intelligence.columns.share")}</th>
+            <th>{t("intelligence.columns.volume")}</th>
           </tr>
         </thead>
         <tbody>
@@ -132,28 +140,37 @@ function BreakdownTable({ data }: BreakdownTableProps) {
               row.tone as DashboardTone,
             );
             return (
-              <tr key={idx} className={idx % 2 === 1 ? "is-alt" : undefined}>
+              <tr
+                key={row.name}
+                className={idx % 2 === 1 ? "is-alt" : undefined}
+              >
                 <td>
                   <span className="dashboard-name-cell">
                     <span
                       className={`dashboard-dot dashboard-dot--${row.tone}`}
                     />
-                    <Text ellipsis>{row.name}</Text>
+                    <Tooltip title={row.name}>
+                      <Text ellipsis className="dashboard-name-cell__text">
+                        {row.name}
+                      </Text>
+                    </Tooltip>
                   </span>
                 </td>
                 <td className="is-right">
                   <Text strong>{row.feus.toLocaleString()}</Text>
                 </td>
                 <td className="is-right">
-                  <Text type="secondary">{row.pctOfTotal}%</Text>
+                  <Text type="secondary">{row.pctOfTotal.toFixed(1)}%</Text>
                 </td>
                 <td>
-                  <Progress
-                    percent={Math.round((row.feus / max) * 100)}
-                    showInfo={false}
-                    size="small"
-                    strokeColor={stroke}
-                  />
+                  <div className="dashboard-volume-bar">
+                    <Progress
+                      percent={Math.round((row.feus / max) * 100)}
+                      showInfo={false}
+                      size="small"
+                      strokeColor={stroke}
+                    />
+                  </div>
                 </td>
               </tr>
             );
@@ -164,55 +181,112 @@ function BreakdownTable({ data }: BreakdownTableProps) {
   );
 }
 
-const INTELLIGENCE_TABS = [
-  { key: "origin", label: "By Origin", data: MOCK_INTELLIGENCE_BY_ORIGIN },
-  { key: "pol", label: "By POL", data: MOCK_INTELLIGENCE_BY_POL },
-  { key: "pod", label: "By POD", data: MOCK_INTELLIGENCE_BY_POD },
-  { key: "pickup", label: "By Pickup", data: MOCK_INTELLIGENCE_BY_ORIGIN },
-  { key: "consignee", label: "By Consignee", data: MOCK_INTELLIGENCE_BY_POL },
-  {
-    key: "destination",
-    label: "By Destination",
-    data: MOCK_INTELLIGENCE_BY_POD,
-  },
-];
+interface InteractiveShipmentIntelligenceCardProps {
+  breakdowns: IntelligenceBreakdowns;
+}
 
-export function InteractiveShipmentIntelligenceCard() {
-  const [activeTab, setActiveTab] = useState("origin");
-  const currentTab = INTELLIGENCE_TABS.find((t) => t.key === activeTab)!;
-  const totalFeus = currentTab.data.reduce((s, d) => s + d.feus, 0);
+export function InteractiveShipmentIntelligenceCard({
+  breakdowns,
+}: InteractiveShipmentIntelligenceCardProps) {
+  const { t } = useTranslation(["dashboard", "common", "modules"]);
+  const [activeKey, setActiveKey] = useState<string>("origin");
+
+  const dimensions = useMemo(
+    () =>
+      [
+        {
+          key: "origin",
+          label: t("intelligence.dimensions.origin"),
+          column: t("intelligence.dimensionColumns.origin"),
+          data: breakdowns.origin,
+        },
+        {
+          key: "pol",
+          label: t("intelligence.dimensions.pol"),
+          column: t("intelligence.dimensionColumns.pol"),
+          data: breakdowns.pol,
+        },
+        {
+          key: "pod",
+          label: t("intelligence.dimensions.pod"),
+          column: t("intelligence.dimensionColumns.pod"),
+          data: breakdowns.pod,
+        },
+        {
+          key: "pickup",
+          label: t("intelligence.dimensions.pickup"),
+          column: t("intelligence.dimensionColumns.pickup"),
+          data: breakdowns.pickup,
+        },
+        {
+          key: "consignee",
+          label: t("intelligence.dimensions.consignee"),
+          column: t("intelligence.dimensionColumns.consignee"),
+          data: breakdowns.consignee,
+        },
+        {
+          key: "destination",
+          label: t("intelligence.dimensions.destination"),
+          column: t("intelligence.dimensionColumns.destination"),
+          data: breakdowns.destination,
+        },
+      ] as const,
+    [t, breakdowns],
+  );
+
+  const current =
+    dimensions.find((d) => d.key === activeKey) ?? dimensions[0];
+  const totalFeus = current.data.reduce((sum, row) => sum + row.feus, 0);
 
   return (
     <Card
       className="dashboard-panel"
       title={
         <Text strong className="dashboard-panel__title">
-          Interactive Shipment Intelligence
+          {t("intelligence.title")}
         </Text>
       }
       extra={
-        <Tooltip title="Open Intelligence Report">
+        <Tooltip title={t("intelligence.viewReportTooltip")}>
           <AppButton type="link" size="small">
-            View Report
+            {t("actions.viewReport")}
           </AppButton>
         </Tooltip>
       }
     >
-      <Tabs
-        className="dashboard-intelligence-tabs"
-        size="small"
-        activeKey={activeTab}
-        onChange={setActiveTab}
-        items={INTELLIGENCE_TABS.map((t) => ({ key: t.key, label: t.label }))}
-      />
-      <Row gutter={[12, 12]} className="dashboard-intelligence-body">
-        <Col xs={24} sm={9}>
-          <DonutChart data={currentTab.data} totalFeus={totalFeus} />
-        </Col>
-        <Col xs={24} sm={15}>
-          <BreakdownTable data={currentTab.data} />
-        </Col>
-      </Row>
+      <div className="dashboard-panel-stack">
+        <div className="dashboard-intelligence-toolbar">
+          <Segmented
+            size="middle"
+            className="dashboard-intelligence-segmented"
+            value={activeKey}
+            onChange={(value) => setActiveKey(String(value))}
+            options={dimensions.map((d) => ({
+              value: d.key,
+              label: d.label,
+            }))}
+          />
+          <div className="dashboard-intelligence-summary">
+            <Text type="secondary">{t("intelligence.total")}</Text>
+            <Text strong>
+              {t("intelligence.totalTeus", {
+                count: totalFeus.toLocaleString(),
+              })}
+            </Text>
+            <Text type="secondary">·</Text>
+            <Text type="secondary">
+              {t("intelligence.segments", { count: current.data.length })}
+            </Text>
+          </div>
+        </div>
+
+        <div className="dashboard-intelligence-layout">
+          <div className="dashboard-intelligence-chart">
+            <DonutChart data={current.data} totalFeus={totalFeus} />
+          </div>
+          <BreakdownTable data={current.data} dimensionLabel={current.column} />
+        </div>
+      </div>
     </Card>
   );
 }
@@ -222,6 +296,7 @@ interface TopConsigneesProps {
 }
 
 export function TopConsigneesCard({ consignees }: TopConsigneesProps) {
+  const { t } = useTranslation(["dashboard", "common", "modules"]);
   const { token } = theme.useToken();
   const max = consignees[0]?.feus ?? 1;
 
@@ -230,25 +305,33 @@ export function TopConsigneesCard({ consignees }: TopConsigneesProps) {
       className="dashboard-panel"
       title={
         <Text strong className="dashboard-panel__title">
-          Top Consignees (By FEUs)
+          {t("intelligence.topConsignees")}
         </Text>
       }
       extra={
-        <Tooltip title="View All Consignees">
+        <Tooltip title={t("intelligence.viewAllConsigneesTooltip")}>
           <AppButton type="link" size="small">
-            View All
+            {t("actions.viewAll")}
           </AppButton>
         </Tooltip>
       }
     >
-      <div className="dashboard-table-wrap custom-scroll">
-        <table className="dashboard-table">
+      <div className="dashboard-table-wrap custom-scroll dashboard-panel-stack__grow">
+        <table className="dashboard-table dashboard-table--consignees">
+          <colgroup>
+            <col className="dashboard-col-rank" />
+            <col className="dashboard-col-name" />
+            <col className="dashboard-col-numeric" />
+            <col className="dashboard-col-numeric" />
+            <col className="dashboard-col-bar" />
+          </colgroup>
           <thead>
             <tr>
-              <th>Company Name</th>
-              <th className="is-right">FEUs</th>
-              <th className="is-right">% Total</th>
-              <th>Volume Share</th>
+              <th className="is-center">{t("intelligence.columns.rank")}</th>
+              <th>{t("intelligence.columns.company")}</th>
+              <th className="is-right">{t("intelligence.columns.teus")}</th>
+              <th className="is-right">{t("intelligence.columns.share")}</th>
+              <th>{t("intelligence.columns.volume")}</th>
             </tr>
           </thead>
           <tbody>
@@ -258,23 +341,35 @@ export function TopConsigneesCard({ consignees }: TopConsigneesProps) {
                 c.tone as DashboardTone,
               );
               return (
-                <tr key={idx} className={idx % 2 === 1 ? "is-alt" : undefined}>
+                <tr
+                  key={c.name}
+                  className={idx % 2 === 1 ? "is-alt" : undefined}
+                >
+                  <td className="is-center">
+                    <span className="dashboard-rank-badge">{idx + 1}</span>
+                  </td>
                   <td>
-                    <Text>{c.name}</Text>
+                    <Tooltip title={c.name}>
+                      <Text ellipsis className="dashboard-name-cell__text">
+                        {c.name}
+                      </Text>
+                    </Tooltip>
                   </td>
                   <td className="is-right">
                     <Text strong>{c.feus.toLocaleString()}</Text>
                   </td>
                   <td className="is-right">
-                    <Text type="secondary">{c.pctOfTotal}%</Text>
+                    <Text type="secondary">{c.pctOfTotal.toFixed(1)}%</Text>
                   </td>
                   <td>
-                    <Progress
-                      percent={Math.round((c.feus / max) * 100)}
-                      showInfo={false}
-                      size="small"
-                      strokeColor={stroke}
-                    />
+                    <div className="dashboard-volume-bar">
+                      <Progress
+                        percent={Math.round((c.feus / max) * 100)}
+                        showInfo={false}
+                        size="small"
+                        strokeColor={stroke}
+                      />
+                    </div>
                   </td>
                 </tr>
               );
@@ -288,19 +383,21 @@ export function TopConsigneesCard({ consignees }: TopConsigneesProps) {
 
 interface ShipmentIntelligenceProps {
   consignees: TopConsignee[];
+  breakdowns: IntelligenceBreakdowns;
 }
 
 export function ShipmentIntelligenceSection({
   consignees,
+  breakdowns,
 }: ShipmentIntelligenceProps) {
   return (
-    <Row gutter={[16, 16]} className="dashboard-equal-row">
-      <Col xs={24} lg={14}>
-        <InteractiveShipmentIntelligenceCard />
-      </Col>
-      <Col xs={24} lg={10}>
+    <div className="dashboard-equal-row dashboard-intelligence-row">
+      <div className="dashboard-intelligence-row__primary">
+        <InteractiveShipmentIntelligenceCard breakdowns={breakdowns} />
+      </div>
+      <div className="dashboard-intelligence-row__secondary">
         <TopConsigneesCard consignees={consignees} />
-      </Col>
-    </Row>
+      </div>
+    </div>
   );
 }

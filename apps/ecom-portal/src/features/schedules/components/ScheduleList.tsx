@@ -1,98 +1,317 @@
-// Modified by Sekar Nagarajan (2026-08-25 18:40)
-import { AppButton } from "@solverminds/shared-ui";
-import { Space, Tag, Tooltip } from "antd";
-// @ts-ignore
-import { DataView } from "@solverminds/shared-ui/data-view";
-import type { ColDef } from "ag-grid-community";
+// Modified by Sekar Nagarajan (2026-09-15 13:15)
+import {
+  DataView,
+  type DataViewColumn,
+} from "@solverminds/shared-ui/data-view";
+import type { RowDoubleClickedEvent } from "ag-grid-community";
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { buildActionsColumn } from "../../../components/shared/build-actions-column";
+import {
+  ListActionButton,
+  ListActionsRow,
+} from "../../../components/shared/list-action-button";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
+import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
 import type { ScheduleItem } from "../types/schedules.types";
+import {
+  formatCutoffValue,
+  ScheduleListRoutingCell,
+  ScheduleListTransCell,
+} from "./list/schedule-list-cells";
 
 interface ScheduleListProps {
   schedules: ScheduleItem[];
   isLoading: boolean;
-  onViewDetails: (schedule: ScheduleItem) => void;
+  onBookNow: (schedule: ScheduleItem) => void;
+  onViewVessel: (vesselCode: string) => void;
+  onViewRates: (schedule: ScheduleItem) => void;
+  onOpenCarbonModal: (schedule: ScheduleItem) => void;
 }
 
 export function ScheduleList({
   schedules,
   isLoading,
-  onViewDetails,
+  onBookNow,
+  onViewVessel,
+  onViewRates,
+  onOpenCarbonModal,
 }: ScheduleListProps) {
-  const columnDefs: ColDef<ScheduleItem>[] = [
-    {
-      headerName: "Actions",
-      field: "id",
-      sortable: false,
-      width: 100,
-      pinned: "left",
-      cellRenderer: (params: { data?: ScheduleItem }) => {
-        const record = params.data;
-        if (!record) return null;
-        return (
-          <Tooltip title="View Voyage Details & Carbon Footprint">
-            <AppButton
-              type="text"
-              size="small"
-              icon={
-                <AppIcon icon={Icons.eye} size={16} gridAction tone="view" />
-              }
-              onClick={() => onViewDetails(record)}
-            />
-          </Tooltip>
-        );
+  const { t } = useTranslation(["schedules", "common", "modules"]);
+  const { profileHandlers } = useLocalGridProfiles("schedules");
+  const columnDefs = useMemo<DataViewColumn<ScheduleItem>[]>(
+    () => [
+      buildActionsColumn<ScheduleItem>({
+        field: "id",
+        width: 100,
+        cellRenderer: (params: { data?: ScheduleItem }) => {
+          const record = params.data;
+          if (!record) return null;
+          return (
+            <ListActionsRow>
+              <ListActionButton
+                title={t("actions.bookNow")}
+                icon={<AppIcon icon={Icons.plus} size={16} tone="create" />}
+                tone="create"
+                disabled={!record.bookingAllowed}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onBookNow(record);
+                }}
+              />
+              <ListActionButton
+                title={t("actions.getAQuote")}
+                icon={
+                  <AppIcon icon={Icons.fileText} size={16} tone="navigate" />
+                }
+                tone="navigate"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onViewRates(record);
+                }}
+              />
+              {/* <ListActionButton
+                title="CO₂ Estimate"
+                icon={
+                  <AppIcon icon={Icons.calculator} size={16} tone="track" />
+                }
+                tone="track"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onOpenCarbonModal(record);
+                }}
+              />
+              <ListActionButton
+                title="Vessel Details"
+                icon={<AppIcon icon={NavVesselIcon} size={16} tone="view" />}
+                tone="view"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onViewVessel(record.vesselCode);
+                }}
+              /> */}
+            </ListActionsRow>
+          );
+        },
+      }),
+      {
+        headerName: t("list.columns.vessel"),
+        field: "vesselName",
+        flex: 1.1,
+        minWidth: 150,
+        isPrimary: true,
       },
-    },
-    {
-      headerName: "Vessel / Voyage",
-      field: "vesselName",
-      cellRenderer: (params: { data?: ScheduleItem }) => {
-        const record = params.data;
-        if (!record) return null;
-        return (
-          <div>
-            <div className="schedule-list-cell__title">{record.vesselName}</div>
-            <div className="schedule-list-cell__sub">
-              Voyage: {record.voyage} · Service:{" "}
-              <Tag color="blue">{record.serviceCode}</Tag>
-            </div>
-          </div>
-        );
+      {
+        headerName: t("list.columns.voyage"),
+        field: "voyage",
+        width: 110,
+        minWidth: 100,
+        valueGetter: (params: { data?: ScheduleItem }) => {
+          const record = params.data;
+          if (!record) return "";
+          return record.bound
+            ? `${record.voyage} ${record.bound}`
+            : record.voyage;
+        },
       },
-    },
-    {
-      headerName: "Route",
-      field: "polPortId",
-      cellRenderer: (params: { data?: ScheduleItem }) => {
-        const record = params.data;
-        if (!record) return null;
-        return (
-          <div>
-            <div className="schedule-list-cell__title">
-              {record.polPortId} → {record.podPortId}
+      {
+        headerName: t("list.columns.service"),
+        field: "serviceCode",
+        flex: 1,
+        minWidth: 130,
+        cellRenderer: (params: { data?: ScheduleItem }) => {
+          const record = params.data;
+          if (!record) return null;
+          return (
+            <div>
+              {/* <Tag className="module-status-tag" color="blue"> */}
+              {record.serviceCode}
+              {/* </Tag> */}
+              <div className="schedule-list-cell__sub">
+                {record.serviceName}
+              </div>
             </div>
-            <div className="schedule-list-cell__sub">
-              Terminal: {record.polTerminal}
-            </div>
-          </div>
-        );
+          );
+        },
       },
-    },
-    { headerName: "ETD", field: "etd" },
-    { headerName: "ETA", field: "eta" },
-    {
-      headerName: "Transit",
-      field: "transitTimeDays",
-      valueFormatter: (params: { value?: number }) =>
-        params.value ? `${params.value} days` : "",
-    },
-  ];
+      {
+        headerName: t("list.columns.origin"),
+        field: "polPortName",
+        flex: 1.1,
+        minWidth: 140,
+        isSecondary: true,
+      },
+      {
+        headerName: t("list.columns.pol"),
+        field: "polPortId",
+        width: 100,
+        minWidth: 90,
+      },
+      {
+        headerName: t("list.columns.trans1"),
+        colId: "trans1",
+        width: 130,
+        minWidth: 120,
+        sortable: false,
+        filter: false,
+        cellRenderer: (params: { data?: ScheduleItem }) => {
+          const record = params.data;
+          if (!record) return null;
+          return <ScheduleListTransCell record={record} index={0} />;
+        },
+      },
+      {
+        headerName: t("list.columns.trans2"),
+        colId: "trans2",
+        width: 130,
+        minWidth: 120,
+        sortable: false,
+        filter: false,
+        cellRenderer: (params: { data?: ScheduleItem }) => {
+          const record = params.data;
+          if (!record) return null;
+          return <ScheduleListTransCell record={record} index={1} />;
+        },
+      },
+      {
+        headerName: t("list.columns.pod"),
+        field: "podPortId",
+        width: 100,
+        minWidth: 90,
+      },
+      {
+        headerName: t("list.columns.delivery"),
+        field: "podPortName",
+        flex: 1.1,
+        minWidth: 140,
+      },
+      {
+        // Geo path is Origin / POL / Trans / POD / Delivery; this column is flags only.
+        headerName: t("list.columns.type"),
+        field: "isDirect",
+        width: 180,
+        minWidth: 130,
+        cellRenderer: (params: { data?: ScheduleItem }) => {
+          const record = params.data;
+          if (!record) return null;
+          return <ScheduleListRoutingCell record={record} t={t} />;
+        },
+      },
+      {
+        headerName: t("list.columns.etd"),
+        field: "etd",
+        width: 140,
+        minWidth: 130,
+      },
+      {
+        headerName: t("list.columns.eta"),
+        field: "eta",
+        width: 140,
+        minWidth: 130,
+      },
+      {
+        headerName: t("list.columns.transit"),
+        field: "transitTimeDays",
+        width: 100,
+        minWidth: 90,
+        valueFormatter: (params: { value?: number }) =>
+          params.value != null
+            ? t("card.days", { count: params.value })
+            : "",
+      },
+      {
+        headerName: t("list.columns.gateIn"),
+        colId: "gateIn",
+        width: 140,
+        minWidth: 130,
+        valueGetter: (params: { data?: ScheduleItem }) =>
+          formatCutoffValue(params.data?.deadlines?.containerGateIn),
+      },
+      {
+        headerName: t("list.columns.si"),
+        colId: "siCutoff",
+        width: 140,
+        minWidth: 130,
+        valueGetter: (params: { data?: ScheduleItem }) =>
+          formatCutoffValue(params.data?.deadlines?.siDocClosing),
+      },
+      // {
+      //   headerName: "Distance",
+      //   field: "distanceKm",
+      //   width: 110,
+      //   minWidth: 100,
+      //   valueFormatter: (params: { value?: number }) =>
+      //     params.value != null
+      //       ? `${params.value.toLocaleString("en-US")} km`
+      //       : "",
+      // },
+    ],
+    [t, onBookNow, onViewVessel, onViewRates, onOpenCarbonModal],
+  );
+
+  const emptyState = (
+    <ModuleEmptyState
+      variant="filtered"
+      title={t("empty.listTitle")}
+      message={t("empty.listMessage")}
+      artSize="md"
+    />
+  );
+
+  const hasRecommendedRoute = schedules.some((item) => item.isDefaultRoute);
 
   return (
-    <DataView
-      columnDefs={columnDefs}
-      rowData={schedules || []}
-      loading={isLoading}
-    />
+    <div className="schedule-grid-wrap schedule-grid-wrap--no-toolbar">
+      <div className="schedule-list-grid responsive-table-wrap custom-scroll ag-theme-alpine">
+        <DataView
+          key="list"
+          columnDefs={columnDefs}
+          rowData={schedules}
+          loading={isLoading}
+          emptyState={emptyState}
+          defaultViewMode="list"
+          allowedViewModes={["list"]}
+          renderToolbar={() => null}
+          className="schedule-data-view"
+          listOptions={{
+            ...profileHandlers,
+            showToolbar: { showTotalCount: true, fullScreen: true },
+            sideBar: true,
+            pagination: true,
+            paginationPageSize: 20,
+            pageSizeOptions: [10, 20, 50, 100],
+            defaultColDef: { filter: true },
+            gridOptions: {
+              getRowId: (params) => params.data.id,
+              getRowClass: (params) =>
+                params.data?.isDefaultRoute
+                  ? "schedule-list-row--recommended"
+                  : undefined,
+              onRowDoubleClicked: (
+                event: RowDoubleClickedEvent<ScheduleItem>,
+              ) => {
+                if (event.data?.bookingAllowed) {
+                  onBookNow(event.data);
+                }
+              },
+            },
+          }}
+        />
+      </div>
+      {hasRecommendedRoute ? (
+        <div
+          className="schedule-list-legend"
+          role="note"
+          aria-label={t("a11y.recommendedLegend")}
+        >
+          <span className="schedule-list-legend__swatch" aria-hidden />
+          <span className="schedule-list-legend__text">
+            {t("list.recommendedLegend")}
+          </span>
+        </div>
+      ) : null}
+    </div>
   );
 }

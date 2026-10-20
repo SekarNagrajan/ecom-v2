@@ -1,0 +1,52 @@
+{
+  "tooltips": {
+    "grammarImprove": "Improve grammar",
+    "dictation": "Dictate with AI",
+    "dictationRecording": "Stop recording",
+    "dictationTranscribing": "Transcribing…",
+    "toneRewrite": "Rewrite with AI"
+  },
+  "toasts": {
+    "grammarEmptyInput": "Add text before improving grammar.",
+    "grammarEmptyResponse": "Grammar service returned an empty response. No changes applied.",
+    "grammarFormattingLoss": "Note: Text formatting (bold, links, lists) will be simplified after grammar correction.",
+    "rewriteEmptyInput": "Add message content before rewriting.",
+    "rewriteEmptyResponse": "Rewrite returned an empty response. No changes applied.",
+    "permissionDenied": "Microphone access is blocked. Enable it in your browser to dictate.",
+    "unsupported": "Voice dictation is not supported in this browser.",
+    "noMicrophone": "No microphone detected. Connect one and try again.",
+    "recordingFailed": "Recording failed. Please try again.",
+    "maxLengthExceeded": "Transcript truncated by {{truncatedChars}} characters to fit the field."
+  },
+  "tones": {
+    "engaging": "Engaging",
+    "persuasive": "Persuasive",
+    "anticipatory": "Anticipatory",
+    "assertive": "Assertive",
+    "compassionate": "Compassionate",
+    "confident": "Confident",
+    "constructive": "Constructive",
+    "cooperative": "Cooperative",
+    "diplomatic": "Diplomatic",
+    "empathetic": "Empathetic",
+    "friendly": "Friendly",
+    "inspirational": "Inspirational",
+    "exciting": "Exciting",
+    "casual": "Casual"
+  },
+  "rewriteActions": {
+    "improve": "Improve writing",
+    "more_descriptive": "More descriptive",
+    "more_detailed": "More detailed",
+    "simplify": "Simplify",
+    "informative": "Informative",
+    "paraphrase": "Paraphrase",
+    "fix_mistakes": "Fix spelling & grammar",
+    "fluent": "Make it fluent",
+    "objective": "Make it objective",
+    "professional": "Professional"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again."
+  }
+}

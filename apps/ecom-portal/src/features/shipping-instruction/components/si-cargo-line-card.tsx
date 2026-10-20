@@ -1,12 +1,15 @@
-// Modified by Sekar Nagarajan (2026-09-01 16:46)
-import { Input, InputNumber, Select, Typography } from "antd";
+// Modified by Sekar Nagarajan (2026-09-11 18:25)
+import { AppTextarea } from "@solverminds/shared-ui";
+import { InputNumber, Select, Typography } from "antd";
 import {
   Controller,
   type Control,
   type UseFormSetValue,
 } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { useAiTextAssist } from "../../ai-assist";
 import {
   ListActionButton,
   ListActionsRow,
@@ -17,7 +20,6 @@ import { cargoFieldError } from "../../booking/utils/cargo-field-error";
 import type { SiCargoStepForm } from "../types/si.types";
 
 const { Text } = Typography;
-const { TextArea } = Input;
 
 interface LookupOpt {
   value: string;
@@ -50,25 +52,28 @@ export function SiCargoLineCard({
   onRemove,
   canRemove,
 }: SiCargoLineCardProps) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
+  const { textareaAssistProps } = useAiTextAssist();
+
   const path = (field: string) => `containers.${ci}.cargoLines.${mi}.${field}`;
 
   return (
     <div className="si-cargo-sitem">
       <div className="si-cargo-sitem__head">
         <Text type="secondary" className="form-field-label">
-          Line {mi + 1}
+          {t("wizard.cargo.fields.lineTitle", { n: mi + 1 })}
         </Text>
         <ListActionsRow>
           <ListActionButton
-            title="Copy Line"
+            title={t("wizard.cargo.actions.copyLine")}
             icon={<AppIcon icon={Icons.copy} size={16} tone="view" />}
             onClick={onCopy}
           />
           <ListActionButton
             title={
               canRemove
-                ? "Delete Line"
-                : "At Least One Commodity Is Required"
+                ? t("wizard.cargo.actions.deleteLine")
+                : t("wizard.cargo.actions.minCommodityTooltip")
             }
             icon={<AppIcon icon={Icons.trash} size={16} tone="delete" />}
             tone="delete"
@@ -81,7 +86,7 @@ export function SiCargoLineCard({
       <div className="si-cargo-sitem__grid">
         <div className="form-field-cell si-cargo-sitem__hs">
           <label className="form-field-label">
-            HS code <Text type="danger">*</Text>
+            {t("wizard.cargo.fields.hsCode")} <Text type="danger">*</Text>
           </label>
           <Controller
             control={control}
@@ -128,7 +133,8 @@ export function SiCargoLineCard({
 
         <div className="form-field-cell">
           <label className="form-field-label">
-            Package Type <Text type="danger">*</Text>
+            {t("wizard.cargo.fields.packageType")}{" "}
+            <Text type="danger">*</Text>
           </label>
           <Controller
             control={control}
@@ -138,7 +144,7 @@ export function SiCargoLineCard({
                 {...field}
                 size="large"
                 options={packageTypes}
-                placeholder="Package Type"
+                placeholder={t("wizard.cargo.fields.packageType")}
                 className="form-field-full-width"
                 showSearch
                 optionFilterProp="label"
@@ -159,7 +165,7 @@ export function SiCargoLineCard({
 
         <div className="form-field-cell si-cargo-sitem__narrow">
           <label className="form-field-label">
-            Quantity <Text type="danger">*</Text>
+            {t("wizard.cargo.fields.quantity")} <Text type="danger">*</Text>
           </label>
           <Controller
             control={control}
@@ -181,7 +187,7 @@ export function SiCargoLineCard({
 
         <div className="form-field-cell si-cargo-sitem__narrow">
           <label className="form-field-label">
-            Weight (kg) <Text type="danger">*</Text>
+            {t("wizard.cargo.fields.weightKg")} <Text type="danger">*</Text>
           </label>
           <Controller
             control={control}
@@ -192,7 +198,7 @@ export function SiCargoLineCard({
                 min={1}
                 size="large"
                 className="form-field-full-width"
-                addonAfter="kg"
+                addonAfter={t("wizard.cargo.list.kg")}
                 status={
                   cargoFieldError(errors, path("grossWeight"))
                     ? "error"
@@ -210,24 +216,26 @@ export function SiCargoLineCard({
 
         <div className="form-field-cell si-cargo-sitem__half">
           <label className="form-field-label">
-            Commodity Description <Text type="danger">*</Text>
+            {t("wizard.cargo.fields.commodityDescription")}{" "}
+            <Text type="danger">*</Text>
           </label>
           <Controller
             control={control}
             name={`containers.${ci}.cargoLines.${mi}.description`}
             render={({ field }) => (
-              <TextArea
+              <AppTextarea
                 {...field}
                 value={field.value ?? ""}
                 size="large"
                 rows={3}
-                placeholder="Commodity Description"
+                placeholder={t("wizard.cargo.fields.commodityDescription")}
                 className="form-field-full-width"
                 status={
                   cargoFieldError(errors, path("description"))
                     ? "error"
                     : undefined
                 }
+                {...textareaAssistProps}
               />
             )}
           />
@@ -239,18 +247,21 @@ export function SiCargoLineCard({
         </div>
 
         <div className="form-field-cell si-cargo-sitem__half">
-          <label className="form-field-label">Marks & numbers</label>
+          <label className="form-field-label">
+            {t("wizard.cargo.fields.marksAndNumbers")}
+          </label>
           <Controller
             control={control}
             name={`containers.${ci}.cargoLines.${mi}.marksAndNumbers`}
             render={({ field }) => (
-              <TextArea
+              <AppTextarea
                 {...field}
                 value={field.value ?? ""}
                 size="large"
                 rows={3}
-                placeholder="Marks & numbers"
+                placeholder={t("wizard.cargo.fields.marksAndNumbers")}
                 className="form-field-full-width"
+                {...textareaAssistProps}
               />
             )}
           />

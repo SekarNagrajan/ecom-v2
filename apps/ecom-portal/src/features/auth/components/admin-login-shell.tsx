@@ -1,11 +1,11 @@
-// Created by Sekar Nagarajan (2026-08-27 12:23)
+// Modified by Sekar Nagarajan (2026-09-29 12:40)
 import { AppButton } from "@solverminds/shared-ui";
-import { useNavigate } from "@tanstack/react-router";
 import { Alert, Card, Input, Spin, Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import type { Control, FieldErrors } from "react-hook-form";
 import { Controller } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import type { AdminLoginForm, LoginEntryType } from "../types/auth.types";
@@ -49,7 +49,7 @@ export function AdminLoginShell({
   hint,
   footer,
 }: AdminLoginShellProps) {
-  const navigate = useNavigate();
+  const { t } = useTranslation("auth");
   const userIdFieldId = `${entryType}-userid`;
   const passwordFieldId = `${entryType}-password`;
 
@@ -76,7 +76,7 @@ export function AdminLoginShell({
           <Alert
             type="error"
             showIcon
-            message="Login Failed"
+            message={t("loginFailed")}
             description={serverError}
             closable
             className="admin-login-page__alert"
@@ -90,7 +90,7 @@ export function AdminLoginShell({
         >
           <div className="admin-login-page__field">
             <label htmlFor={userIdFieldId} className="form-field-label">
-              User ID <Text type="danger">*</Text>
+              {t("adminLogin.userId")} <Text type="danger">*</Text>
             </label>
             <Controller
               control={control}
@@ -118,7 +118,7 @@ export function AdminLoginShell({
 
           <div className="admin-login-page__field">
             <label htmlFor={passwordFieldId} className="form-field-label">
-              Password <Text type="danger">*</Text>
+              {t("password")} <Text type="danger">*</Text>
             </label>
             <Controller
               control={control}
@@ -128,7 +128,7 @@ export function AdminLoginShell({
                   {...field}
                   id={passwordFieldId}
                   prefix={<AppIcon icon={Icons.lock} size={16} />}
-                  placeholder="Enter your password"
+                  placeholder={t("passwordPlaceholder")}
                   size="large"
                   maxLength={20}
                   autoComplete="current-password"
@@ -165,7 +165,7 @@ export function AdminLoginShell({
                 )
               }
             >
-              {isSubmitting ? "Signing in…" : submitLabel}
+              {isSubmitting ? t("adminLogin.signingIn") : submitLabel}
             </AppButton>
           </div>
         </form>
@@ -173,16 +173,6 @@ export function AdminLoginShell({
         {hint ? <p className="admin-login-page__hint">{hint}</p> : null}
 
         {footer}
-
-        {/* <div className="admin-login-page__home">
-          <AppButton
-            type="link"
-            icon={<AppIcon icon={Icons.home} size={14} />}
-            onClick={() => navigate({ to: '/' })}
-          >
-            Back to Home
-          </AppButton>
-        </div> */}
       </Card>
     </div>
   );

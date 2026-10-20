@@ -1,34 +1,45 @@
-// Modified by Sekar Nagarajan (2026-08-28 15:09)
+// Modified by Sekar Nagarajan (2026-09-11 18:25)
 // QuoteRequestDrawer — ApplicationResource_en.properties Request for Quote fields
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AppButton, AppDrawer } from "@solverminds/shared-ui";
+import { AppButton, AppDrawer, AppTextarea } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
-import { Form, Input, InputNumber, Select, Space, Typography } from "antd";
-import { useEffect } from "react";
+import { Form, Input, InputNumber, Select, Typography } from "antd";
+import type { TFunction } from "i18next";
+import { useEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
+import { useAiTextAssist } from "../../ai-assist";
 import { useCreateQuoteMutation } from "../api/rates.queries";
-import type { CreateQuoteInput } from "../types/rates.types";
+import type { CreateQuoteInput, QuoteDTO } from "../types/rates.types";
 
 const { Text } = Typography;
 
-const quoteSchema = z.object({
-  originPort: z.string().min(1, "Port of Load is required"),
-  deliveryPort: z.string().min(1, "Port of Discharge is required"),
-  eqpType: z.string().min(1, "Cargo Type is required"),
-  eqpQuantity: z.number().min(1, "Cargo Quantity must be at least 1"),
-  commodity: z.string().min(1, "Commodity is required"),
-  cargoWeightKg: z.number().min(100, "Cargo Weight is required"),
-  expectedAmountUsd: z.number().optional(),
-  comments: z.string().optional(),
-});
+function createQuoteSchema(t: TFunction<"rates">) {
+  return z.object({
+    originPort: z.string().min(1, t("quoteRequest.validation.portOfLoadRequired")),
+    deliveryPort: z
+      .string()
+      .min(1, t("quoteRequest.validation.portOfDischargeRequired")),
+    eqpType: z.string().min(1, t("quoteRequest.validation.cargoTypeRequired")),
+    eqpQuantity: z
+      .number()
+      .min(1, t("quoteRequest.validation.cargoQuantityMin")),
+    commodity: z.string().min(1, t("quoteRequest.validation.commodityRequired")),
+    cargoWeightKg: z
+      .number()
+      .min(100, t("quoteRequest.validation.cargoWeightRequired")),
+    expectedAmountUsd: z.number().optional(),
+    comments: z.string().optional(),
+  });
+}
 
 const DEFAULT_QUOTE_VALUES: CreateQuoteInput = {
-  originPort: "USNYC",
-  deliveryPort: "SGSIN",
-  eqpType: "40' High Cube Dry",
+  originPort: "INNSA",
+  deliveryPort: "AEJEA",
+  eqpType: "20' Standard Dry",
   eqpQuantity: 1,
   commodity: "General Merchandise",
   cargoWeightKg: 15000,
@@ -38,15 +49,22 @@ interface QuoteRequestDrawerProps {
   open: boolean;
   onClose: () => void;
   initialValues?: Partial<CreateQuoteInput>;
+  /** After a successful create — parent switches to Spot Quotes so the new row is visible. */
+  onCreated?: (quote: QuoteDTO) => void;
 }
 
 export function QuoteRequestDrawer({
   open,
   onClose,
   initialValues,
+  onCreated,
 }: QuoteRequestDrawerProps) {
+  const { t } = useTranslation(["rates", "common", "modules"]);
   const toast = useToast();
+  const { textareaAssistProps } = useAiTextAssist();
   const createMutation = useCreateQuoteMutation();
+  const isSubmitting = createMutation.isPending;
+  const quoteSchema = useMemo(() => createQuoteSchema(t), [t]);
 
   const {
     control,
@@ -64,7 +82,8 @@ export function QuoteRequestDrawer({
     reset({
       ...DEFAULT_QUOTE_VALUES,
       ...initialValues,
-      eqpQuantity: initialValues?.eqpQuantity ?? DEFAULT_QUOTE_VALUES.eqpQuantity,
+      eqpQuantity:
+        initialValues?.eqpQuantity ?? DEFAULT_QUOTE_VALUES.eqpQuantity,
       cargoWeightKg:
         initialValues?.cargoWeightKg ?? DEFAULT_QUOTE_VALUES.cargoWeightKg,
       commodity:
@@ -82,42 +101,51 @@ export function QuoteRequestDrawer({
     createMutation.mutate(data, {
       onSuccess: (newQuote) => {
         toast.success(
-          `Request for Quote ${newQuote.quoteNo} submitted successfully!`,
+          t("quoteRequest.toasts.success", { quoteNo: newQuote.quoteNo }),
         );
         reset();
         onClose();
+        onCreated?.(newQuote);
       },
       onError: () => {
-        toast.error("Failed to submit Request for Quote. Please try again.");
+        toast.error(t("quoteRequest.toasts.error"));
       },
     });
   };
 
   return (
     <AppDrawer
-      title="Request for Quote"
+      title={t("quoteRequest.title")}
       open={open}
       onClose={onClose}
       width={520}
-      classNames={{ body: "rates-drawer-body custom-scroll" }}
-      extra={
-        <Space size={8}>
-          <AppButton onClick={onClose}>Cancel</AppButton>
+      maskClosable={!isSubmitting}
+      keyboard={!isSubmitting}
+      classNames={{
+        body: "rates-drawer-body custom-scroll",
+        footer: "rates-drawer-footer",
+      }}
+      footer={
+        <div className="rates-drawer-actions custom-scroll">
+          <AppButton danger onClick={onClose} disabled={isSubmitting}>
+            {t("common:actions.cancel")}
+          </AppButton>
           <AppButton
             type="primary"
-            loading={createMutation.isPending}
+            loading={isSubmitting}
             onClick={handleSubmit(onSubmit)}
           >
-            Submit Request for Quote
+            {t("actions.submitRequestForQuote")}
           </AppButton>
-        </Space>
+        </div>
       }
     >
       <Form layout="vertical" requiredMark={false}>
         <Form.Item
           label={
             <span className="form-field-label">
-              Port of Load (POL) <Text type="danger">*</Text>
+              {t("quoteRequest.fields.portOfLoad")}{" "}
+              <Text type="danger">*</Text>
             </span>
           }
           validateStatus={errors.originPort ? "error" : ""}
@@ -138,9 +166,9 @@ export function QuoteRequestDrawer({
                 size="large"
                 showSearch
                 options={[
-                  { value: "USNYC", label: "USNYC - New York, USA" },
-                  { value: "DEHAM", label: "DEHAM - Hamburg, Germany" },
-                  { value: "INNSA", label: "INNSA - Nhava Sheva, India" },
+                  { value: "USNYC", label: t("options.ports.USNYC") },
+                  { value: "DEHAM", label: t("options.ports.DEHAM") },
+                  { value: "INNSA", label: t("options.ports.INNSA") },
                 ]}
               />
             )}
@@ -150,7 +178,8 @@ export function QuoteRequestDrawer({
         <Form.Item
           label={
             <span className="form-field-label">
-              Port of Discharge (POD) <Text type="danger">*</Text>
+              {t("quoteRequest.fields.portOfDischarge")}{" "}
+              <Text type="danger">*</Text>
             </span>
           }
           validateStatus={errors.deliveryPort ? "error" : ""}
@@ -171,9 +200,9 @@ export function QuoteRequestDrawer({
                 size="large"
                 showSearch
                 options={[
-                  { value: "SGSIN", label: "SGSIN - Singapore, Singapore" },
-                  { value: "CNSHA", label: "CNSHA - Shanghai, China" },
-                  { value: "AEDXB", label: "AEDXB - Jebel Ali, UAE" },
+                  { value: "SGSIN", label: t("options.ports.SGSIN") },
+                  { value: "CNSHA", label: t("options.ports.CNSHA") },
+                  { value: "AEDXB", label: t("options.ports.AEDXB") },
                 ]}
               />
             )}
@@ -183,7 +212,8 @@ export function QuoteRequestDrawer({
         <Form.Item
           label={
             <span className="form-field-label">
-              Cargo Type <Text type="danger">*</Text>
+              {t("quoteRequest.fields.cargoType")}{" "}
+              <Text type="danger">*</Text>
             </span>
           }
           validateStatus={errors.eqpType ? "error" : ""}
@@ -205,15 +235,15 @@ export function QuoteRequestDrawer({
                 options={[
                   {
                     value: "20' Standard Dry",
-                    label: "20' Standard Dry (20DV)",
+                    label: t("options.equipment.20dv"),
                   },
                   {
                     value: "40' High Cube Dry",
-                    label: "40' High Cube Dry (40HC)",
+                    label: t("options.equipment.40hc"),
                   },
                   {
                     value: "40' Reefer Container",
-                    label: "40' Reefer Container (40RF)",
+                    label: t("options.equipment.40rf"),
                   },
                 ]}
               />
@@ -221,118 +251,139 @@ export function QuoteRequestDrawer({
           />
         </Form.Item>
 
-        <Form.Item
-          label={
-            <span className="form-field-label">
-              Cargo Quantity <Text type="danger">*</Text>
-            </span>
-          }
-          validateStatus={errors.eqpQuantity ? "error" : ""}
-          help={
-            errors.eqpQuantity ? (
-              <Text type="danger" className="form-field-error">
-                {errors.eqpQuantity.message}
-              </Text>
-            ) : undefined
-          }
-        >
-          <Controller
-            name="eqpQuantity"
-            control={control}
-            render={({ field }) => (
-              <InputNumber {...field} min={1} size="large" className="rates-input-full" />
-            )}
-          />
-        </Form.Item>
+        <div className="rates-drawer-form-row">
+          <Form.Item
+            label={
+              <span className="form-field-label">
+                {t("quoteRequest.fields.cargoQuantity")}{" "}
+                <Text type="danger">*</Text>
+              </span>
+            }
+            validateStatus={errors.eqpQuantity ? "error" : ""}
+            help={
+              errors.eqpQuantity ? (
+                <Text type="danger" className="form-field-error">
+                  {errors.eqpQuantity.message}
+                </Text>
+              ) : undefined
+            }
+          >
+            <Controller
+              name="eqpQuantity"
+              control={control}
+              render={({ field }) => (
+                <InputNumber
+                  {...field}
+                  min={1}
+                  size="large"
+                  className="rates-input-full"
+                />
+              )}
+            />
+          </Form.Item>
+
+          <Form.Item
+            label={
+              <span className="form-field-label">
+                {t("quoteRequest.fields.commodity")}{" "}
+                <Text type="danger">*</Text>
+              </span>
+            }
+            validateStatus={errors.commodity ? "error" : ""}
+            help={
+              errors.commodity ? (
+                <Text type="danger" className="form-field-error">
+                  {errors.commodity.message}
+                </Text>
+              ) : undefined
+            }
+          >
+            <Controller
+              name="commodity"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  size="large"
+                  placeholder={t("quoteRequest.placeholders.commodity")}
+                />
+              )}
+            />
+          </Form.Item>
+        </div>
+
+        <div className="rates-drawer-form-row">
+          <Form.Item
+            label={
+              <span className="form-field-label">
+                {t("quoteRequest.fields.cargoWeight")}{" "}
+                <Text type="danger">*</Text>
+              </span>
+            }
+            validateStatus={errors.cargoWeightKg ? "error" : ""}
+            help={
+              errors.cargoWeightKg ? (
+                <Text type="danger" className="form-field-error">
+                  {errors.cargoWeightKg.message}
+                </Text>
+              ) : undefined
+            }
+          >
+            <Controller
+              name="cargoWeightKg"
+              control={control}
+              render={({ field }) => (
+                <InputNumber
+                  {...field}
+                  min={100}
+                  size="large"
+                  className="rates-input-full"
+                  addonAfter="kg"
+                />
+              )}
+            />
+          </Form.Item>
+
+          <Form.Item
+            label={
+              <span className="form-field-label">
+                {t("quoteRequest.fields.expectedRate")}
+              </span>
+            }
+          >
+            <Controller
+              name="expectedAmountUsd"
+              control={control}
+              render={({ field }) => (
+                <InputNumber
+                  {...field}
+                  min={0}
+                  size="large"
+                  className="rates-input-full"
+                  prefix="$"
+                  addonAfter="USD"
+                />
+              )}
+            />
+          </Form.Item>
+        </div>
 
         <Form.Item
           label={
             <span className="form-field-label">
-              Commodity <Text type="danger">*</Text>
+              {t("quoteRequest.fields.comments")}
             </span>
           }
-          validateStatus={errors.commodity ? "error" : ""}
-          help={
-            errors.commodity ? (
-              <Text type="danger" className="form-field-error">
-                {errors.commodity.message}
-              </Text>
-            ) : undefined
-          }
         >
-          <Controller
-            name="commodity"
-            control={control}
-            render={({ field }) => (
-              <Input
-                {...field}
-                size="large"
-                placeholder="e.g. General Cargo / Machinery"
-              />
-            )}
-          />
-        </Form.Item>
-
-        <Form.Item
-          label={
-            <span className="form-field-label">
-              Cargo Weight (kg) <Text type="danger">*</Text>
-            </span>
-          }
-          validateStatus={errors.cargoWeightKg ? "error" : ""}
-          help={
-            errors.cargoWeightKg ? (
-              <Text type="danger" className="form-field-error">
-                {errors.cargoWeightKg.message}
-              </Text>
-            ) : undefined
-          }
-        >
-          <Controller
-            name="cargoWeightKg"
-            control={control}
-            render={({ field }) => (
-              <InputNumber
-                {...field}
-                min={100}
-                size="large"
-                className="rates-input-full"
-                addonAfter="kg"
-              />
-            )}
-          />
-        </Form.Item>
-
-        <Form.Item
-          label={
-            <span className="form-field-label">Expected Target Rate (USD)</span>
-          }
-        >
-          <Controller
-            name="expectedAmountUsd"
-            control={control}
-            render={({ field }) => (
-              <InputNumber
-                {...field}
-                min={0}
-                size="large"
-                className="rates-input-full"
-                prefix="$"
-                addonAfter="USD"
-              />
-            )}
-          />
-        </Form.Item>
-
-        <Form.Item label={<span className="form-field-label">Comments</span>}>
           <Controller
             name="comments"
             control={control}
             render={({ field }) => (
-              <Input.TextArea
+              <AppTextarea
                 {...field}
                 rows={3}
-                placeholder="Special stowage or temperature requirements..."
+                placeholder={t("quoteRequest.placeholders.comments")}
+                {...textareaAssistProps}
               />
             )}
           />

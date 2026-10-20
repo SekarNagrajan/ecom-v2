@@ -5,6 +5,7 @@ import type { ColumnsType } from "antd/es/table";
 import { useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import type { FieldConfig } from "../types/admin.types";
 import { AdminPanelShell } from "./AdminPanelShell";
 
@@ -185,6 +186,16 @@ export function FieldConfigView({ fields, onSave }: FieldConfigViewProps) {
             pagination={false}
             scroll={{ x: true }}
             size="middle"
+            locale={{
+              emptyText: (
+                <ModuleEmptyState
+                  artSize="sm"
+                  variant="blank"
+                  title="No field configurations available"
+                  style={{ padding: 12 }}
+                />
+              ),
+            }}
           />
         </div>
 

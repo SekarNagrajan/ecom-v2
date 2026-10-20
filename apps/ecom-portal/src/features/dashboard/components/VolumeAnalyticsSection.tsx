@@ -1,16 +1,33 @@
-// Modified by Sekar Nagarajan (2026-09-02 12:08)
-import { Card, Select, Tooltip, Typography } from "antd";
+// Modified by Sekar Nagarajan (2026-10-16 23:45)
+import { Card, Segmented, Select, Tooltip, Typography } from "antd";
 import * as echarts from "echarts";
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useMemo, useRef } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { useChartTokens } from "../../theme/utils/use-portal-chart-tokens";
-import type { VolumeKpi, VolumeTrendPoint } from "../mocks/dashboard.mock";
+import type {
+  VolumeAnalyticsStage,
+  VolumeKpi,
+  VolumeTrendPeriod,
+  VolumeTrendPoint,
+} from "../api/dashboard.api";
+import {
+  VOLUME_ANALYTICS_STAGE_OPTIONS,
+  VOLUME_TREND_PERIOD_OPTIONS,
+} from "../api/dashboard.api";
 
 const { Text, Title } = Typography;
 
 /** Sidebar margin transition is 0.25s — remeasure after it settles. */
 const SIDEBAR_LAYOUT_SETTLE_MS = 280;
+
+const VOLUME_KPI_LABEL_KEYS: Record<string, string> = {
+  "This Week": "volume.kpiLabels.thisWeek",
+  "This Month": "volume.kpiLabels.thisMonth",
+  "This Quarter": "volume.kpiLabels.thisQuarter",
+  "This Year": "volume.kpiLabels.thisYear",
+};
 
 interface SparklineProps {
   data: number[];
@@ -71,8 +88,8 @@ function Sparkline({ data, color }: SparklineProps) {
 
 interface VolumeTrendChartProps {
   data: VolumeTrendPoint[];
-  period: string;
-  onPeriodChange: (v: string) => void;
+  period: VolumeTrendPeriod;
+  onPeriodChange: (v: VolumeTrendPeriod) => void;
 }
 
 function VolumeTrendChart({
@@ -80,10 +97,20 @@ function VolumeTrendChart({
   period,
   onPeriodChange,
 }: VolumeTrendChartProps) {
+  const { t } = useTranslation(["dashboard", "common", "modules"]);
   const chartTokens = useChartTokens();
   const containerRef = useRef<HTMLDivElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<echarts.ECharts | null>(null);
+
+  const periodOptions = useMemo(
+    () =>
+      VOLUME_TREND_PERIOD_OPTIONS.map((option) => ({
+        value: option.value,
+        label: t(`volume.periods.${option.value}`),
+      })),
+    [t],
+  );
 
   // Init once; keep instance alive across sidebar toggles / parent re-renders.
   useLayoutEffect(() => {
@@ -176,7 +203,14 @@ function VolumeTrendChart({
             type: "line",
             lineStyle: { color: chartTokens.colorPrimary, type: "dashed" },
           },
-          formatter: "{b}: <b>{c} FEUs</b>",
+          formatter: (params: unknown) => {
+            const point = Array.isArray(params) ? params[0] : params;
+            const p = point as { axisValue?: string; value?: number };
+            return t("volume.tooltipTeus", {
+              label: p.axisValue ?? "",
+              value: p.value ?? "",
+            });
+          },
         },
         grid: { top: 12, right: 12, bottom: 8, left: 8, containLabel: true },
         xAxis: {
@@ -234,14 +268,21 @@ function VolumeTrendChart({
       { notMerge: true },
     );
     chart.resize();
-  }, [data, chartTokens]);
+  }, [data, chartTokens, t]);
+
+  const periodHint =
+    period === "Weekly"
+      ? t("volume.periodHintWeekly")
+      : period === "Quarterly"
+        ? t("volume.periodHintQuarterly")
+        : t("volume.periodHintMonthly");
 
   return (
     <div ref={wrapRef} className="dashboard-trend-wrap">
       <div className="dashboard-trend-head">
         <Text strong className="dashboard-metric-tile__label">
-          Volume Trend (FEUs){" "}
-          <Tooltip title="Monthly FEU Volume Over The Selected Period">
+          {t("volume.trendTitle")}{" "}
+          <Tooltip title={periodHint}>
             <AppIcon icon={Icons.info} size={12} />
           </Tooltip>
         </Text>
@@ -250,11 +291,7 @@ function VolumeTrendChart({
           value={period}
           onChange={onPeriodChange}
           className="dashboard-select-sm"
-          options={[
-            { value: "Monthly", label: "Monthly" },
-            { value: "Weekly", label: "Weekly" },
-            { value: "Quarterly", label: "Quarterly" },
-          ]}
+          options={periodOptions}
         />
       </div>
       <div ref={containerRef} className="dashboard-trend-chart" />
@@ -265,25 +302,84 @@ function VolumeTrendChart({
 interface VolumeAnalyticsProps {
   kpis: VolumeKpi[];
   trend: VolumeTrendPoint[];
-  trendPeriod: string;
-  onTrendPeriodChange: (v: string) => void;
+  trendPeriod: VolumeTrendPeriod;
+  volumeStage: VolumeAnalyticsStage;
+  onTrendPeriodChange: (v: VolumeTrendPeriod) => void;
+  onVolumeStageChange: (v: VolumeAnalyticsStage) => void;
+}
+
+function getVolumeStageLabel(
+  stage: VolumeAnalyticsStage,
+  t: (key: string) => string,
+): string {
+  switch (stage) {
+    case "all":
+      return t("volume.stages.all");
+    case "booking":
+      return t("volume.stages.booking");
+    case "si":
+      return t("volume.stages.si");
+    case "bl":
+      return t("volume.stages.bl");
+    case "inTransit":
+      return t("kpi.inTransit");
+    default: {
+      const _exhaustive: never = stage;
+      return _exhaustive;
+    }
+  }
+}
+
+function getVolumeKpiLabel(
+  label: string,
+  t: (key: string) => string,
+): string {
+  const key = VOLUME_KPI_LABEL_KEYS[label];
+  return key ? t(key) : label;
 }
 
 export function VolumeAnalyticsSection({
   kpis,
   trend,
   trendPeriod,
+  volumeStage,
   onTrendPeriodChange,
+  onVolumeStageChange,
 }: VolumeAnalyticsProps) {
+  const { t } = useTranslation(["dashboard", "common", "modules"]);
   const chartTokens = useChartTokens();
+  const stageLabel = getVolumeStageLabel(volumeStage, t);
+
+  const stageOptions = useMemo(
+    () =>
+      VOLUME_ANALYTICS_STAGE_OPTIONS.map((option) => ({
+        value: option.value,
+        label: getVolumeStageLabel(option.value, t),
+      })),
+    [t],
+  );
 
   return (
     <Card
       className="dashboard-panel dashboard-volume-panel"
       title={
         <Text strong className="dashboard-panel__title">
-          Shipment Volume Analytics (FEUs){" "}
+          {t("volume.title")}{" "}
+          <Text type="secondary" className="dashboard-volume-stage-label">
+            · {stageLabel}
+          </Text>
         </Text>
+      }
+      extra={
+        <Segmented
+          size="middle"
+          className="dashboard-volume-stage-segmented"
+          value={volumeStage}
+          onChange={(value) =>
+            onVolumeStageChange(value as VolumeAnalyticsStage)
+          }
+          options={stageOptions}
+        />
       }
     >
       <div className="dashboard-volume-analytics-grid">
@@ -294,7 +390,7 @@ export function VolumeAnalyticsSection({
               <div key={kpi.label} className="dashboard-metric-tile">
                 <div>
                   <Text className="dashboard-metric-tile__label">
-                    {kpi.label}
+                    {getVolumeKpiLabel(kpi.label, t)}
                   </Text>
                   <Text className="dashboard-metric-tile__period">
                     ({kpi.period})
@@ -330,7 +426,9 @@ export function VolumeAnalyticsSection({
                       type="secondary"
                       className="dashboard-metric-tile__period"
                     >
-                      vs prev ({kpi.changePrev.toLocaleString()})
+                      {t("volume.vsPrev", {
+                        value: kpi.changePrev.toLocaleString(),
+                      })}
                     </Text>
                   </div>
                 </div>

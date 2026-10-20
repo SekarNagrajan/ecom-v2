@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 16:20)
+// Modified by Sekar Nagarajan (2026-09-08 15:20)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -42,6 +42,8 @@ export function UserModulesModuleStyles() {
         gap: ${token.marginLG}px;
         width: 100%;
         min-width: 0;
+        flex: 1;
+        min-height: 0;
       }
       .um-page-layout > .module-screen-header {
         margin-bottom: 0;
@@ -80,7 +82,7 @@ export function UserModulesModuleStyles() {
         width: ${token.controlHeightLG}px;
         height: ${token.controlHeightLG}px;
         border-radius: ${token.borderRadiusLG}px;
-        background: ${primaryTint8};
+        // background: ${primaryTint8};
         color: ${token.colorPrimary};
       }
       .um-panel-header--compact .um-panel-header__icon {
@@ -93,6 +95,11 @@ export function UserModulesModuleStyles() {
         align-items: flex-start;
         gap: ${token.marginXXS}px;
         min-width: 0;
+      }
+      .um-panel-header__title-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
       }
       .um-panel-header__title {
         margin: 0 !important;
@@ -184,11 +191,33 @@ export function UserModulesModuleStyles() {
         width: 100%;
         min-width: 0;
         min-height: 0;
-        overflow-x: auto;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
       }
+      /* Flex-fill grid + ListView pagination (CRM parity) */
       .um-grid-wrap .um-data-view {
-        min-height: 320px;
         width: 100%;
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+      }
+      .um-payments-grid .um-data-view,
+      .um-quotes-grid .um-data-view {
+        min-height: calc(100vh - 360px);
+      }
+      .um-payments-grid .ag-theme-alpine,
+      .um-payments-grid .ag-root-wrapper,
+      .um-quotes-grid .ag-theme-alpine,
+      .um-quotes-grid .ag-root-wrapper {
+        height: 100% !important;
+        min-height: 360px;
+      }
+      .um-payments-grid .um-data-view .ag-paging-panel {
+        border-top: 1px solid ${token.colorBorderSecondary};
+        padding-block: ${token.paddingXXS}px;
       }
       /* Hide empty DataView toolbar Card (search / view-mode / Filters) */
       .um-quotes-grid > .ant-flex > .ant-card:first-child,
@@ -208,11 +237,14 @@ export function UserModulesModuleStyles() {
       }
       .um-quote-desc.ant-descriptions .ant-descriptions-item-label {
         font-weight: ${token.fontWeightStrong};
+        font-color: ${token.colorText};
         width: 180px;
         background: ${token.colorFillAlter};
+        color: ${token.colorText};
       }
       .um-quote-desc.ant-descriptions .ant-descriptions-item-content {
         background: ${token.colorBgContainer};
+        color: ${token.colorText};
       }
 
       .um-verified-tag.ant-tag {
@@ -263,6 +295,40 @@ export function UserModulesModuleStyles() {
         gap: ${token.marginMD}px;
         width: 100%;
         min-width: 0;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-08 15:20) — profile photo entry card */
+      .um-profile-photo-card {
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorBgContainer};
+        padding: ${token.paddingMD}px;
+        width: 100%;
+      }
+      .um-profile-photo-trigger {
+        border: none;
+        background: none;
+        padding: 0;
+        cursor: pointer;
+        position: relative;
+        border-radius: 50%;
+        flex-shrink: 0;
+        line-height: 0;
+      }
+      .um-profile-photo-overlay {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.45);
+        color: ${token.colorWhite};
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.15s ease-in-out;
+        pointer-events: none;
+      }
+      .um-profile-photo-overlay--visible {
+        opacity: 1;
       }
       .um-form-section > .ant-row {
         width: 100%;
@@ -356,14 +422,16 @@ export function UserModulesModuleStyles() {
         font-size: ${token.fontSizeSM}px;
       }
 
+      /* Modified by Sekar Nagarajan (2026-09-08 10:54) — full-width single-row alert sections */
       .um-alerts-layout {
-        width: 100%;
-      }
-      .um-alerts-layout > .ant-col {
-        min-width: 0;
         display: flex;
         flex-direction: column;
         gap: ${token.marginMD}px;
+        width: 100%;
+      }
+      .um-alerts-row {
+        width: 100%;
+        min-width: 0;
       }
       .um-alerts-card.ant-card {
         border-radius: ${token.borderRadiusLG}px;
@@ -378,59 +446,93 @@ export function UserModulesModuleStyles() {
       .um-alerts-card > .ant-card-body {
         padding: ${token.paddingMD}px !important;
       }
-      .um-alerts-card .ant-list-item {
-        padding-inline: 0;
-        align-items: flex-start;
+      .um-alerts-empty {
+        padding: ${token.paddingSM}px;
       }
-      .um-alerts-card .ant-list-item-meta {
-        align-items: flex-start;
-      }
-      .um-alerts-card .ant-list-item-meta-title {
-        margin-bottom: ${token.marginXXS}px !important;
-      }
-      .um-alerts-card .ant-list-item-action,
-      .um-alerts-card .ant-list-item > .ant-list-item-extra {
-        margin-inline-start: ${token.marginMD}px;
-        align-self: center;
-      }
-      .um-channel-list {
-        width: 100%;
-      }
-      .um-channel-divider.ant-divider {
-        margin: ${token.marginSM}px 0;
-      }
-      .um-channel-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        gap: ${token.marginMD}px;
-        width: 100%;
-      }
-      .um-channel-row > .ant-space {
-        align-items: flex-start;
-        min-width: 0;
-        flex: 1;
-      }
-      .um-channel-row .ant-switch {
-        flex-shrink: 0;
-        margin-top: ${token.marginXXS}px;
-      }
-      .um-channel-row__meta {
+      .um-alerts-sub-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
         display: flex;
         flex-direction: column;
+        gap: ${token.marginXS}px;
+      }
+      .um-alerts-sub-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: ${token.marginMD}px;
+        width: 100%;
         min-width: 0;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorFillAlter};
+      }
+      .um-alerts-sub-row__copy {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
         gap: ${token.marginXXS}px;
       }
-      .um-channel-row__hint {
-        display: block;
+      .um-alerts-sub-row__title {
+        line-height: 1.3;
+      }
+      .um-alerts-sub-row__hint {
         font-size: ${token.fontSizeSM}px;
-        color: ${token.colorTextSecondary};
-        margin: 0;
+        line-height: 1.35;
+      }
+      .um-alerts-sub-row .ant-switch {
+        flex-shrink: 0;
+      }
+      .um-channel-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: ${token.marginSM}px;
+        width: 100%;
+      }
+      .um-channel-tile {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+        min-width: 0;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorFillAlter};
+      }
+      .um-channel-tile__top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: ${token.marginSM}px;
+        margin-bottom: ${token.marginXXS}px;
+      }
+      .um-channel-tile__icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: ${token.borderRadiusSM}px;
+        background: ${primaryTint8};
+        color: ${token.colorPrimary};
+        flex-shrink: 0;
+      }
+      .um-channel-tile__title {
+        line-height: 1.3;
+      }
+      .um-channel-tile__hint {
+        font-size: ${token.fontSizeSM}px;
+        line-height: 1.35;
       }
       .um-alerts-log.custom-scroll {
-        max-height: 420px;
+        max-height: 320px;
         overflow-y: auto;
         padding-right: ${token.paddingXXS}px;
+      }
+      .um-alerts-log__item.ant-list-item {
+        padding-inline: 0;
       }
       .um-alerts-log__title {
         display: flex;
@@ -438,6 +540,11 @@ export function UserModulesModuleStyles() {
         align-items: center;
         gap: ${token.marginXS}px;
         flex-wrap: wrap;
+      }
+      .um-alerts-log__desc {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
       }
       .um-alerts-log__message {
         display: block;
@@ -448,7 +555,6 @@ export function UserModulesModuleStyles() {
       .um-alerts-log__meta {
         display: block;
         font-size: ${token.fontSizeSM}px;
-        margin-top: ${token.marginXXS}px;
       }
 
       .um-range-picker.ant-picker {
@@ -547,12 +653,8 @@ export function UserModulesModuleStyles() {
         .um-form-section {
           gap: ${token.marginSM}px;
         }
-        .um-channel-row {
-          align-items: flex-start;
-          gap: ${token.marginSM}px;
-        }
-        .um-alerts-layout > .ant-col {
-          gap: ${token.marginSM}px;
+        .um-channel-grid {
+          grid-template-columns: 1fr;
         }
         .um-alerts-card > .ant-card-body {
           padding: ${token.paddingSM}px !important;

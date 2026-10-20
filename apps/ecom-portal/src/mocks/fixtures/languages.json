@@ -1,0 +1,32 @@
+[
+ {
+  "ID": 13,
+  "langcode": "ZH",
+  "langname": "Chinese",
+  "langorder": 5
+ },
+ {
+  "ID": 12,
+  "langcode": "ES",
+  "langname": "Spanish",
+  "langorder": 4
+ },
+ {
+  "ID": 11,
+  "langcode": "MA",
+  "langname": "Malay",
+  "langorder": 3
+ },
+ {
+  "ID": 10,
+  "langcode": "CH",
+  "langname": "中文",
+  "langorder": 2
+ },
+ {
+  "ID": 1,
+  "langcode": "EN",
+  "langname": "English",
+  "langorder": 1
+ }
+]

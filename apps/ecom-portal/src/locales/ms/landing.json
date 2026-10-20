@@ -1,0 +1,64 @@
+{
+  "tabs": {
+    "schedule": "Jadual"
+  },
+  "schedule": {
+    "origin": "Asal",
+    "delivery": "Penghantaran",
+    "fromDate": "Dari tarikh",
+    "toDate": "Hingga tarikh",
+    "originPlaceholder": "Singapura",
+    "deliveryPlaceholder": "Rotterdam",
+    "datePlaceholder": "MM/DD/YYYY",
+    "searchSailings": "Cari pelayaran",
+    "swapAria": "Tukar asal dan penghantaran"
+  },
+  "tracking": {
+    "containerNo": "No. Kontena",
+    "bookingNo": "No. Tempahan",
+    "billOfLading": "Bill of Lading (BL)",
+    "securityVerification": "Pengesahan Keselamatan",
+    "trackShipment": "Jejak penghantaran",
+    "fieldLabel": {
+      "CONTAINER": "Masukkan nombor kontena",
+      "BOOKING": "Masukkan nombor tempahan",
+      "BL": "Masukkan nombor bill of lading (BL)"
+    },
+    "fieldPlaceholder": {
+      "CONTAINER": "cth. SMLU8829102",
+      "BOOKING": "cth. BKG-2026-9901",
+      "BL": "cth. BL-SHA-88401"
+    }
+  },
+  "rates": {
+    "origin": "Asal",
+    "delivery": "Penghantaran",
+    "equipment": "Peralatan",
+    "date": "Tarikh",
+    "securityVerification": "Pengesahan Keselamatan",
+    "originPlaceholder": "Singapura",
+    "deliveryPlaceholder": "Rotterdam",
+    "selectType": "Pilih Jenis",
+    "datePlaceholder": "MM/DD/YYYY",
+    "getRates": "Dapatkan Kadar",
+    "swapAria": "Tukar asal dan penghantaran"
+  },
+  "captcha": {
+    "alt": "CAPTCHA",
+    "reloadAria": "Muat semula captcha",
+    "enterAria": "Masukkan kod captcha",
+    "placeholder": "Masukkan kod"
+  },
+  "validation": {
+    "captchaRequired": "Sila masukkan kod captcha",
+    "trackingNumberMin": "Sila masukkan nombor Kontena, Tempahan atau Bill of Lading (BL) yang sah"
+  },
+  "errors": {
+    "captchaIncorrect": "Captcha dimasukkan secara tidak betul"
+  },
+  "a11y": {
+    "resetScheduleSearch": "Set semula carian jadual",
+    "resetTrackingSearch": "Set semula carian penjejakan",
+    "resetRatesSearch": "Set semula carian kadar"
+  }
+}

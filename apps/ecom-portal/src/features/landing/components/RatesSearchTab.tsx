@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-25 15:45)
+// Modified by Sekar Nagarajan (2026-10-18 10:30)
 import { AppButton } from "@solverminds/shared-ui";
 import {
   AutoComplete,
@@ -13,15 +13,18 @@ import {
 import dayjs from "dayjs";
 import { useState } from "react";
 import { Controller, type UseFormReturn } from "react-hook-form";
-import { AppIcon, Icons } from "../../../components/icons";
+import { useTranslation } from "react-i18next";
 
+import { AppIcon, Icons } from "../../../components/icons";
 import { useEquipmentTypes, usePortSearch } from "../api/landing.queries";
+import { equipmentLabelOf } from "../utils/landing-search";
 import type { RatesSearchForm } from "../types/landing.types";
 import { ImageCaptcha } from "./ImageCaptcha";
 
 interface RatesSearchTabProps {
   form: UseFormReturn<RatesSearchForm>;
   onSubmit: React.FormEventHandler<HTMLFormElement>;
+  isSearching?: boolean;
 }
 
 function usePortAutocomplete(initialQuery = "") {
@@ -50,7 +53,12 @@ function usePortAutocomplete(initialQuery = "") {
   return { query, setQuery, options, isFetching };
 }
 
-export function RatesSearchTab({ form, onSubmit }: RatesSearchTabProps) {
+export function RatesSearchTab({
+  form,
+  onSubmit,
+  isSearching = false,
+}: RatesSearchTabProps) {
+  const { t } = useTranslation(["landing", "common", "modules"]);
   const { token } = theme.useToken();
   const {
     control,
@@ -67,7 +75,7 @@ export function RatesSearchTab({ form, onSubmit }: RatesSearchTabProps) {
     useEquipmentTypes();
   const eqpOptions = equipmentTypes.map((e) => ({
     value: e.code,
-    label: e.name,
+    label: equipmentLabelOf(e),
   }));
 
   const handleSwap = () => {
@@ -98,6 +106,7 @@ export function RatesSearchTab({ form, onSubmit }: RatesSearchTabProps) {
     display: "inline-block",
   };
   const asteriskStyle = { color: token.colorError };
+  const datePlaceholder = t("rates.datePlaceholder");
 
   return (
     <form id="rates-search-form" onSubmit={onSubmit} style={{ width: "100%" }}>
@@ -116,7 +125,7 @@ export function RatesSearchTab({ form, onSubmit }: RatesSearchTabProps) {
           }}
         >
           <label style={labelStyle}>
-            Origin <span style={asteriskStyle}>*</span>
+            {t("rates.origin")} <span style={asteriskStyle}>*</span>
           </label>
           <Controller
             control={control}
@@ -133,7 +142,7 @@ export function RatesSearchTab({ form, onSubmit }: RatesSearchTabProps) {
                 style={{ width: "100%" }}
               >
                 <Input
-                  placeholder="Singapore"
+                  placeholder={t("rates.originPlaceholder")}
                   style={inputStyle}
                   prefix={
                     <AppIcon
@@ -162,6 +171,8 @@ export function RatesSearchTab({ form, onSubmit }: RatesSearchTabProps) {
             icon={<AppIcon icon={Icons.arrowLeftRight} size={16} />}
             onClick={handleSwap}
             shape="circle"
+            aria-label={t("rates.swapAria")}
+            title={t("rates.swapAria")}
             style={{
               width: 36,
               height: 36,
@@ -180,7 +191,7 @@ export function RatesSearchTab({ form, onSubmit }: RatesSearchTabProps) {
           }}
         >
           <label style={labelStyle}>
-            Delivery <span style={asteriskStyle}>*</span>
+            {t("rates.delivery")} <span style={asteriskStyle}>*</span>
           </label>
           <Controller
             control={control}
@@ -197,7 +208,7 @@ export function RatesSearchTab({ form, onSubmit }: RatesSearchTabProps) {
                 style={{ width: "100%" }}
               >
                 <Input
-                  placeholder="Rotterdam"
+                  placeholder={t("rates.deliveryPlaceholder")}
                   style={inputStyle}
                   prefix={
                     <AppIcon
@@ -235,7 +246,7 @@ export function RatesSearchTab({ form, onSubmit }: RatesSearchTabProps) {
           }}
         >
           <label style={labelStyle}>
-            Equipment <span style={asteriskStyle}>*</span>
+            {t("rates.equipment")} <span style={asteriskStyle}>*</span>
           </label>
           {eqpLoading ? (
             <Skeleton.Input active style={{ width: "100%", height: 52 }} />
@@ -246,7 +257,7 @@ export function RatesSearchTab({ form, onSubmit }: RatesSearchTabProps) {
               render={({ field }) => (
                 <Select
                   {...field}
-                  placeholder="Select Type"
+                  placeholder={t("rates.selectType")}
                   options={eqpOptions}
                   style={{ width: "100%", ...inputStyle }}
                   status={errors.equipmentType ? "error" : undefined}
@@ -272,7 +283,7 @@ export function RatesSearchTab({ form, onSubmit }: RatesSearchTabProps) {
           }}
         >
           <label style={labelStyle}>
-            Date <span style={asteriskStyle}>*</span>
+            {t("rates.date")} <span style={asteriskStyle}>*</span>
           </label>
           <Controller
             control={control}
@@ -280,7 +291,7 @@ export function RatesSearchTab({ form, onSubmit }: RatesSearchTabProps) {
             render={({ field }) => (
               <DatePicker
                 format="MM/DD/YYYY"
-                placeholder="MM/DD/YYYY"
+                placeholder={datePlaceholder}
                 style={{ width: "100%", ...inputStyle }}
                 value={field.value ? dayjs(field.value) : null}
                 onChange={(date) =>
@@ -302,7 +313,7 @@ export function RatesSearchTab({ form, onSubmit }: RatesSearchTabProps) {
 
       <div style={{ marginBottom: 24 }}>
         <div style={{ margin: 0, display: "flex", flexDirection: "column" }}>
-          <label style={labelStyle}>Security Verification</label>
+          <label style={labelStyle}>{t("rates.securityVerification")}</label>
           <ImageCaptcha
             control={control}
             name="captcha"
@@ -317,21 +328,29 @@ export function RatesSearchTab({ form, onSubmit }: RatesSearchTabProps) {
           type="primary"
           size="large"
           htmlType="submit"
+          loading={isSearching}
+          disabled={isSearching}
           onClick={(e) =>
             onSubmit(e as unknown as React.FormEvent<HTMLFormElement>)
           }
-          icon={<AppIcon icon={Icons.search} size={16} />}
+          icon={
+            isSearching ? undefined : (
+              <AppIcon icon={Icons.search} size={16} />
+            )
+          }
         >
-          Get Rates
+          {t("rates.getRates")}
         </AppButton>
         <AppButton
+          danger
           size="large"
           htmlType="button"
-          icon={<AppIcon icon={Icons.refreshCw} size={16} />}
+          disabled={isSearching}
+          icon={<AppIcon icon={Icons.refreshCw} size={16} tone="delete" />}
           onClick={handleReset}
-          aria-label="Reset rates search"
+          aria-label={t("a11y.resetRatesSearch")}
         >
-          Reset
+          {t("common:actions.reset")}
         </AppButton>
       </Flex>
     </form>

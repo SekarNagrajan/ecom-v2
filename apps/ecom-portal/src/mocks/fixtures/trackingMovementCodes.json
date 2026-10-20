@@ -1,0 +1,62 @@
+[
+ {
+  "id": 12,
+  "ecomcode": "SST  ",
+  "activitycode": "SFM  "
+ },
+ {
+  "id": 11,
+  "ecomcode": "STR  ",
+  "activitycode": "RPM  "
+ },
+ {
+  "id": 10,
+  "ecomcode": "STC  ",
+  "activitycode": "DCF  "
+ },
+ {
+  "id": 9,
+  "ecomcode": "RFC  ",
+  "activitycode": "GIM  "
+ },
+ {
+  "id": 8,
+  "ecomcode": "RSG  ",
+  "activitycode": "GIM  "
+ },
+ {
+  "id": 7,
+  "ecomcode": "RST  ",
+  "activitycode": "UFF  "
+ },
+ {
+  "id": 6,
+  "ecomcode": "DIF  ",
+  "activitycode": "DIF  "
+ },
+ {
+  "id": 5,
+  "ecomcode": "DIT  ",
+  "activitycode": "LTF  "
+ },
+ {
+  "id": 4,
+  "ecomcode": "LOT  ",
+  "activitycode": "DTE  "
+ },
+ {
+  "id": 3,
+  "ecomcode": "LOF  ",
+  "activitycode": "LDF  "
+ },
+ {
+  "id": 2,
+  "ecomcode": "RFS  ",
+  "activitycode": "OBF  "
+ },
+ {
+  "id": 1,
+  "ecomcode": "STS  ",
+  "activitycode": "DSM  "
+ }
+]

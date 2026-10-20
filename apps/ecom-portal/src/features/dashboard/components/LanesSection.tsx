@@ -1,6 +1,7 @@
-// Modified by Sekar Nagarajan (2026-08-31 15:05)
+// Modified by Sekar Nagarajan (2026-10-16 23:45)
 import { AppButton } from "@solverminds/shared-ui";
-import { Card, Progress, Tag, Tooltip, Typography } from "antd";
+import { Card, Progress, Tooltip, Typography } from "antd";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import type {
@@ -8,9 +9,47 @@ import type {
   LastUsedLane,
   OpportunityLane,
   TopLane,
-} from "../mocks/dashboard.mock";
+} from "../api/dashboard.api";
 
 const { Text } = Typography;
+
+function LaneRoute({
+  pol,
+  pod,
+  tone = "default",
+}: {
+  pol: string;
+  pod: string;
+  tone?: "default" | "emphasis" | "muted";
+}) {
+  return (
+    <span className={`dashboard-lane-route dashboard-lane-route--${tone}`}>
+      <span className="dashboard-port-chip dashboard-port-chip--pol">
+        {pol}
+      </span>
+      <AppIcon icon={Icons.arrowRight} size={12} />
+      <span className="dashboard-port-chip dashboard-port-chip--pod">
+        {pod}
+      </span>
+    </span>
+  );
+}
+
+function getLaneSuggestionLabel(
+  suggestion: OpportunityLane["suggestion"],
+  t: (key: string) => string,
+): string {
+  switch (suggestion) {
+    case "High Potential":
+      return t("lanes.suggestions.highPotential");
+    case "Medium Potential":
+      return t("lanes.suggestions.mediumPotential");
+    default: {
+      const _exhaustive: never = suggestion;
+      return _exhaustive;
+    }
+  }
+}
 
 interface TopLanesProps {
   lanes: TopLane[];
@@ -18,6 +57,7 @@ interface TopLanesProps {
 }
 
 export function TopActiveLanesSection({ lanes, lastUsed }: TopLanesProps) {
+  const { t } = useTranslation(["dashboard", "common", "modules"]);
   const maxFeus = lanes[0]?.feus ?? 1;
 
   return (
@@ -25,83 +65,98 @@ export function TopActiveLanesSection({ lanes, lastUsed }: TopLanesProps) {
       className="dashboard-panel"
       title={
         <Text strong className="dashboard-panel__title">
-          Top Active Lanes (by FEUs)
+          {t("lanes.topActive")}
         </Text>
       }
       extra={
-        <Tooltip title="View All Lanes">
+        <Tooltip title={t("lanes.viewAllByFeu")}>
           <AppButton type="link" size="small">
-            View All
+            {t("actions.viewAll")}
           </AppButton>
         </Tooltip>
       }
     >
-      <div className="dashboard-table-wrap custom-scroll">
-        <table className="dashboard-table">
-          <thead>
-            <tr>
-              <th className="is-center">Rank</th>
-              <th>Lane (POL → POD)</th>
-              <th>FEUs</th>
-              <th>% of Total</th>
-              <th>Volume</th>
-            </tr>
-          </thead>
-          <tbody>
-            {lanes.map((lane) => (
-              <tr
-                key={lane.rank}
-                className={lane.rank % 2 === 0 ? "is-alt" : undefined}
-              >
-                <td className="is-center dashboard-table__rank">{lane.rank}</td>
-                <td>
-                  <span className="dashboard-lane-chip-row">
-                    <Tag color="blue">{lane.pol}</Tag>
-                    <AppIcon icon={Icons.arrowRight} size={9} />
-                    <Tag color="geekblue">{lane.pod}</Tag>
-                  </span>
-                </td>
-                <td>
-                  <Text strong>{lane.feus.toLocaleString()}</Text>
-                </td>
-                <td>
-                  <Text type="secondary">{lane.pctOfTotal}%</Text>
-                </td>
-                <td>
-                  <Progress
-                    percent={Math.round((lane.feus / maxFeus) * 100)}
-                    showInfo={false}
-                    size="small"
-                  />
-                </td>
+      <div className="dashboard-panel-stack">
+        <div className="dashboard-table-wrap custom-scroll dashboard-panel-stack__grow">
+          <table className="dashboard-table dashboard-table--lanes">
+            <colgroup>
+              <col className="dashboard-col-rank" />
+              <col className="dashboard-col-lane" />
+              <col className="dashboard-col-numeric" />
+              <col className="dashboard-col-numeric" />
+              <col className="dashboard-col-bar" />
+            </colgroup>
+            <thead>
+              <tr>
+                <th className="is-center">#</th>
+                <th>{t("lanes.lanePolPod")}</th>
+                <th className="is-right">{t("lanes.feus")}</th>
+                <th className="is-right">{t("lanes.share")}</th>
+                <th>{t("lanes.volume")}</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <div className="dashboard-last-used">
-        <div className="dashboard-last-used__head">
-          <Text className="dashboard-subsection-label">Last Used Lanes</Text>
-          <Tooltip title="View All Last Used Lanes">
-            <AppButton type="link" size="small">
-              View All
-            </AppButton>
-          </Tooltip>
+            </thead>
+            <tbody>
+              {lanes.map((lane) => (
+                <tr
+                  key={lane.rank}
+                  className={lane.rank % 2 === 0 ? "is-alt" : undefined}
+                >
+                  <td className="is-center">
+                    <span className="dashboard-rank-badge">{lane.rank}</span>
+                  </td>
+                  <td>
+                    <LaneRoute pol={lane.pol} pod={lane.pod} tone="emphasis" />
+                  </td>
+                  <td className="is-right">
+                    <Text strong>{lane.feus.toLocaleString()}</Text>
+                  </td>
+                  <td className="is-right">
+                    <Text type="secondary">{lane.pctOfTotal.toFixed(1)}%</Text>
+                  </td>
+                  <td>
+                    <div className="dashboard-volume-bar">
+                      <Progress
+                        percent={Math.round((lane.feus / maxFeus) * 100)}
+                        showInfo={false}
+                        size="small"
+                      />
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-        <div className="dashboard-last-used__grid">
-          {lastUsed.map((lane, idx) => (
-            <div key={idx} className="dashboard-last-used__card">
-              <span className="dashboard-lane-chip-row">
-                <Text strong>{lane.pol}</Text>
-                <AppIcon icon={Icons.arrowRight} size={8} />
-                <Text strong>{lane.pod}</Text>
-              </span>
-              <Text type="secondary" className="dashboard-metric-tile__period">
-                {lane.date}
+
+        <div className="dashboard-last-used">
+          <div className="dashboard-last-used__head">
+            <div>
+              <Text className="dashboard-subsection-label">
+                {t("lanes.recentlyUsed")}
+              </Text>
+              <Text type="secondary" className="dashboard-subsection-hint">
+                {t("lanes.recentlyUsedHint")}
               </Text>
             </div>
-          ))}
+            <Tooltip title={t("lanes.viewAllRecentlyUsed")}>
+              <AppButton type="link" size="small">
+                {t("actions.viewAll")}
+              </AppButton>
+            </Tooltip>
+          </div>
+          <div className="dashboard-last-used__grid">
+            {lastUsed.map((lane) => (
+              <div
+                key={`${lane.pol}-${lane.pod}-${lane.date}`}
+                className="dashboard-last-used__card"
+              >
+                <LaneRoute pol={lane.pol} pod={lane.pod} />
+                <Text type="secondary" className="dashboard-last-used__meta">
+                  {lane.date}
+                </Text>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </Card>
@@ -117,61 +172,80 @@ export function LaneOpportunitySection({
   contracted,
   opportunities,
 }: LaneOpportunityProps) {
+  const { t } = useTranslation(["dashboard", "common", "modules"]);
+
   return (
     <Card
       className="dashboard-panel"
       title={
         <Text strong className="dashboard-panel__title">
-          Lane Opportunity Visibility
+          {t("lanes.opportunities")}
         </Text>
       }
       extra={
-        <Tooltip title="View All Opportunities">
+        <Tooltip title={t("lanes.viewAllOpportunities")}>
           <AppButton type="link" size="small">
-            View All
+            {t("actions.viewAll")}
           </AppButton>
         </Tooltip>
       }
     >
       <div className="dashboard-split-stack">
         <div className="dashboard-split-stack__block">
-          <Text className="dashboard-subsection-label">
-            Contracted Lanes with Limited / No Activity (Last 90 Days)
-          </Text>
-          {contracted.map((lane, idx) => (
-            <div key={idx} className="dashboard-list-row">
-              <span className="dashboard-lane-chip-row">
-                <Tag>{lane.pol}</Tag>
-                <AppIcon icon={Icons.arrowRight} size={9} />
-                <Tag>{lane.pod}</Tag>
-              </span>
-              <Tag color="error">No Activity</Tag>
-            </div>
-          ))}
+          <div className="dashboard-subsection-head">
+            <Text className="dashboard-subsection-label">
+              {t("lanes.quietContracted")}
+            </Text>
+            <Text type="secondary" className="dashboard-subsection-hint">
+              {t("lanes.quietHint")}
+            </Text>
+          </div>
+          <div className="dashboard-opportunity-list custom-scroll">
+            {contracted.map((lane) => (
+              <div
+                key={`${lane.pol}-${lane.pod}`}
+                className="dashboard-list-row"
+              >
+                <LaneRoute pol={lane.pol} pod={lane.pod} tone="muted" />
+                <span className="dashboard-status-pill dashboard-status-pill--idle">
+                  {t("lanes.noActivity")}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="dashboard-split-stack__block">
-          <Text className="dashboard-subsection-label">
-            Potential New Opportunities (Based on History)
-          </Text>
-          {opportunities.map((lane, idx) => (
-            <div key={idx} className="dashboard-list-row">
-              <span className="dashboard-lane-chip-row">
-                <Tag color="blue">{lane.pol}</Tag>
-                <AppIcon icon={Icons.arrowRight} size={9} />
-                <Tag color="blue">{lane.pod}</Tag>
-              </span>
-              <Tag
-                color={
-                  lane.suggestion === "High Potential"
-                    ? "warning"
-                    : "processing"
-                }
-              >
-                {lane.suggestion}
-              </Tag>
-            </div>
-          ))}
+          <div className="dashboard-subsection-head">
+            <Text className="dashboard-subsection-label">
+              {t("lanes.suggestedNew")}
+            </Text>
+            <Text type="secondary" className="dashboard-subsection-hint">
+              {t("lanes.suggestedHint")}
+            </Text>
+          </div>
+          <div className="dashboard-opportunity-list custom-scroll">
+            {opportunities.map((lane) => {
+              const isHigh = lane.suggestion === "High Potential";
+              return (
+                <div
+                  key={`${lane.pol}-${lane.pod}-${lane.suggestion}`}
+                  className="dashboard-list-row"
+                >
+                  <LaneRoute pol={lane.pol} pod={lane.pod} tone="emphasis" />
+                  <span
+                    className={
+                      isHigh
+                        ? "dashboard-status-pill dashboard-status-pill--high"
+                        : "dashboard-status-pill dashboard-status-pill--watch"
+                    }
+                  >
+                    {getLaneSuggestionLabel(lane.suggestion, t)}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </Card>

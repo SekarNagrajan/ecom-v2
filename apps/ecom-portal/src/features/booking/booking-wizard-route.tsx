@@ -1,16 +1,19 @@
-// Modified by Sekar Nagarajan (2026-08-31 14:46)
+// Modified by Sekar Nagarajan (2026-09-10 23:31)
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { useNavigate } from "@tanstack/react-router";
-import { Card, Result, Space, Steps, Typography, theme } from "antd";
+import { useQueryClient } from "@tanstack/react-query";
+import { Card, Space, Steps, Typography, theme } from "antd";
 import { useState } from "react";
-import { AppIcon, Icons } from "../../components/icons";
+import { useTranslation } from "react-i18next";
+import { AppIcon, Icons, NavBookingIcon } from "../../components/icons";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import {
-  MODULE_TITLES,
-  WIZARD_STEP_TITLES,
-} from "../../constants/module-titles";
+  useModuleTitles,
+  useWizardStepTitles,
+} from "../../i18n/use-module-titles";
 import { bookingApi } from "./api/booking.api";
+import { bookingKeys } from "./api/booking.keys";
 import { BookingModuleStyles } from "./components/booking-module-styles";
 import { CargoStep } from "./components/CargoStep";
 import { CustomerDetailsStep } from "./components/CustomerDetailsStep";
@@ -23,14 +26,18 @@ import { ReferenceInformationStep } from "./components/ReferenceInformationStep"
 import { useBookingWizard } from "./hooks/use-booking-wizard";
 import { useBookingStore } from "./stores/booking.store";
 
-const { Text } = Typography;
+const { Text, Title } = Typography;
 
 const PIPELINE_ICON_SIZE = 25;
 
 export function BookingWizardRoute() {
+  const { t } = useTranslation(["booking", "common", "modules"]);
+  const MODULE_TITLES = useModuleTitles();
+  const WIZARD_STEP_TITLES = useWizardStepTitles();
   const { token } = theme.useToken();
   const toast = useToast();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const payload = useBookingStore((s) => s.payload);
   const [savingDraft, setSavingDraft] = useState(false);
   const {
@@ -46,9 +53,28 @@ export function BookingWizardRoute() {
     setSavingDraft(true);
     try {
       const { draftId } = await bookingApi.saveDraft(payload);
-      toast.success(`Draft saved (${draftId})`);
+      // After first draft of a duplicate, bind to the new ebookno so further saves update it.
+      useBookingStore.setState((state) => ({
+        payload: {
+          ...state.payload,
+          draftId,
+          forceCreateNew: false,
+          duplicatedFromId: undefined,
+          masterDetails: state.payload.masterDetails
+            ? {
+                ...state.payload.masterDetails,
+                onlineBookingNo: draftId,
+              }
+            : state.payload.masterDetails,
+        },
+      }));
+      void queryClient.invalidateQueries({
+        queryKey: bookingKeys.list(),
+        refetchType: "all",
+      });
+      toast.success(t("booking:wizard.toasts.draftSaved", { draftId }));
     } catch {
-      toast.error("Failed to save draft");
+      toast.error(t("booking:wizard.toasts.draftSaveFailed"));
     } finally {
       setSavingDraft(false);
     }
@@ -141,7 +167,7 @@ export function BookingWizardRoute() {
       <BookingModuleStyles />
       <div className="wizard-page-header">
         <ModuleScreenHeader
-          icon={Icons.bookOpen}
+          icon={NavBookingIcon}
           title={MODULE_TITLES.newBooking}
           marginBottom={0}
           extra={
@@ -153,7 +179,7 @@ export function BookingWizardRoute() {
                   disabled={isSubmitting}
                   onClick={() => void handleSaveDraft()}
                 >
-                  Save Draft
+                  {t("booking:wizard.actions.saveDraft")}
                 </AppButton>
               ) : null}
 
@@ -165,7 +191,7 @@ export function BookingWizardRoute() {
                   }
                   onClick={() => navigate({ to: "/app/booking" })}
                 >
-                  Back to Booking
+                  {t("booking:actions.backToBooking")}
                 </AppButton>
               }
             </Space>
@@ -175,46 +201,68 @@ export function BookingWizardRoute() {
 
       {confirmation ? (
         <div className="wizard-confirmation">
-          <Result
-            status="success"
-            icon={<AppIcon icon={Icons.checkCircle} size={60} tone="approve" />}
-            title="Booking Submitted Successfully"
-            subTitle={
-              <div>
-                Your booking request has been forwarded to the carrier.
-                <div
-                  style={{
-                    marginTop: token.marginSM,
-                    fontSize: token.fontSizeLG,
+          <Card variant="outlined" className="booking-confirmation-card">
+            <div className="booking-confirmation-card__body">
+              <div
+                className="booking-confirmation-card__icon"
+                aria-hidden
+              >
+                <AppIcon
+                  icon={Icons.checkCircle}
+                  size={36}
+                  tone="approve"
+                />
+              </div>
+              <Title
+                level={3}
+                className="booking-confirmation-card__title"
+              >
+                {t("booking:wizard.confirm.submittedTitle")}
+              </Title>
+              <Text
+                type="secondary"
+                className="booking-confirmation-card__message"
+              >
+                {t("booking:wizard.confirm.submittedMessage")}
+              </Text>
+              <div className="booking-confirmation-card__ref">
+                <Text
+                  type="secondary"
+                  className="booking-confirmation-card__ref-label"
+                >
+                  {t("booking:wizard.confirm.bookingReference")}
+                </Text>
+                <Text
+                  copyable
+                  strong
+                  className="booking-confirmation-card__ref-value"
+                >
+                  {confirmation.bookingReference}
+                </Text>
+              </div>
+              <Space
+                wrap
+                size="middle"
+                className="booking-confirmation-card__actions"
+              >
+                <AppButton
+                  type="primary"
+                  onClick={() => {
+                    void queryClient.invalidateQueries({
+                      queryKey: bookingKeys.list(),
+                      refetchType: "all",
+                    });
+                    void navigate({ to: "/app/booking" });
                   }}
                 >
-                  Booking Reference:{" "}
-                  <Text
-                    copyable
-                    strong
-                    style={{
-                      fontSize: token.fontSizeHeading5,
-                      color: token.colorPrimary,
-                    }}
-                  >
-                    {confirmation.bookingReference}
-                  </Text>
-                </div>
-              </div>
-            }
-            extra={[
-              <AppButton
-                type="primary"
-                key="dashboard"
-                onClick={() => navigate({ to: "/app/booking" })}
-              >
-                Go to Dashboard
-              </AppButton>,
-              <AppButton key="new" onClick={handleStartOver}>
-                Create Another Booking
-              </AppButton>,
-            ]}
-          />
+                  {t("booking:wizard.actions.goToDashboard")}
+                </AppButton>
+                <AppButton onClick={handleStartOver}>
+                  {t("booking:wizard.actions.createAnother")}
+                </AppButton>
+              </Space>
+            </div>
+          </Card>
         </div>
       ) : (
         <div className="wizard-page-body">

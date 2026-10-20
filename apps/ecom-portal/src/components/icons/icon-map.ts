@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-02 14:39)
+// Modified by Sekar Nagarajan (2026-09-17 21:29)
 // Lucide icon registry — central map for ecom-portal navigation and actions
 import {
   AlertCircle,
@@ -12,12 +12,14 @@ import {
   ArrowUp,
   BadgeCheck,
   Banknote,
+  BarChart3,
   Bell,
   BookOpen,
   Boxes,
   Building2,
   Calculator,
   Calendar,
+  Camera,
   Check,
   CheckCircle,
   CheckSquare,
@@ -32,6 +34,7 @@ import {
   Compass,
   Contact,
   Container,
+  Cookie,
   Copy,
   CreditCard,
   Crown,
@@ -50,6 +53,7 @@ import {
   Flag,
   FormInput,
   GripVertical,
+  Handshake,
   Headphones,
   History,
   Home,
@@ -97,6 +101,7 @@ import {
   ShoppingCart,
   Smartphone,
   SquarePen,
+  Star,
   StopCircle,
   Sun,
   Tag,
@@ -115,6 +120,7 @@ import {
 import {
   NavArrivalNoticeIcon,
   NavBillOfLadingIcon,
+  NavBookingDocIcon,
   NavBookingIcon,
   NavCarbonCalculatorIcon,
   NavContainerReleaseIcon,
@@ -123,9 +129,11 @@ import {
   NavDeliveryOrderIcon,
   NavPaymentHistoryIcon,
   NavRatesIcon,
+  NavRoutePinsIcon,
   NavSchedulesIcon,
   NavShippingInstructionIcon,
   NavTrackingIcon,
+  NavVesselIcon,
   NavVgmIcon,
 } from "./nav-svg-icons";
 import { ShieldUser } from "./shield-user-icon";
@@ -137,6 +145,9 @@ export const NavIcons = {
   rates: NavRatesIcon,
   tariff: Tag,
   booking: NavBookingIcon,
+  bookingDoc: NavBookingDocIcon,
+  vessel: NavVesselIcon,
+  routePins: NavRoutePinsIcon,
   shippingInstruction: NavShippingInstructionIcon,
   vgm: NavVgmIcon,
   billOfLading: NavBillOfLadingIcon,
@@ -153,6 +164,7 @@ export const NavIcons = {
   contactUs: Headphones,
   route: Route,
   ellipsisVertical: EllipsisVertical,
+  camera: Camera,
 } as const;
 
 export const Icons = {
@@ -171,6 +183,7 @@ export const Icons = {
   arrowUp: ArrowUp,
   badgeCheck: BadgeCheck,
   banknote: Banknote,
+  barChart: BarChart3,
   barcode: Container,
   container: Container,
   bell: Bell,
@@ -191,6 +204,7 @@ export const Icons = {
   cloud: Cloud,
   compass: Compass,
   contact: Contact,
+  cookie: Cookie,
   creditCard: CreditCard,
   crown: Crown,
   dollarSign: DollarSign,
@@ -253,6 +267,7 @@ export const Icons = {
   shoppingCart: ShoppingCart,
   smartphone: Smartphone,
   squarePen: SquarePen,
+  star: Star,
   stopCircle: StopCircle,
   sun: Sun,
   tag: Tag,
@@ -267,5 +282,7 @@ export const Icons = {
   userPlus: UserPlus,
   users: Users,
   building: Building2,
+  handshake: Handshake,
   zap: Zap,
+  camera: Camera,
 } as const;

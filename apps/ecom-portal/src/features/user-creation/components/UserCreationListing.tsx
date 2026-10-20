@@ -1,6 +1,9 @@
 // Created by Sekar Nagarajan (2026-08-26 15:06)
 import { AppButton } from "@solverminds/shared-ui";
-import { DataView, type DataViewColumn } from "@solverminds/shared-ui/data-view";
+import {
+  DataView,
+  type DataViewColumn,
+} from "@solverminds/shared-ui/data-view";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import {
   Alert,
@@ -17,8 +20,14 @@ import { useState } from "react";
 
 import { AppIcon, Icons, NavIcons } from "../../../components/icons";
 import { buildActionsColumn } from "../../../components/shared/build-actions-column";
+import {
+  ModuleEmptyState,
+  buildClearFiltersAction,
+  buildRetryAction,
+} from "../../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
-import { MODULE_TITLES } from "../../../constants/module-titles";
+import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
+import { useModuleTitles } from "../../../i18n/use-module-titles";
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import {
   useSubUsersQuery,
@@ -27,16 +36,15 @@ import {
 } from "../api/user-creation.queries";
 import type { SubUser } from "../types/user-creation.types";
 import { EMPTY_USER_LIMIT } from "../types/user-creation.types";
-import {
-  filterSubUsers,
-  getSubUserFullName,
-} from "../utils/usc.utils";
+import { filterSubUsers, getSubUserFullName } from "../utils/usc.utils";
+import { UscCreateDrawer } from "./upsert/UscCreateDrawer";
 import { UscLoadingCenter } from "./usc-loading-center";
 import { UscSearchPanel } from "./usc-search-panel";
-import { UscCreateDrawer } from "./upsert/UscCreateDrawer";
 
 export function UserCreationListing() {
+  const MODULE_TITLES = useModuleTitles();
   const toast = useToast();
+  const { profileHandlers } = useLocalGridProfiles("user-creation");
   const [searchTerm, setSearchTerm] = useState("");
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
@@ -44,6 +52,8 @@ export function UserCreationListing() {
     data: subUsers = [],
     isLoading,
     isFetching,
+    isError,
+    refetch,
   } = useSubUsersQuery();
   const { data: limitInfo = EMPTY_USER_LIMIT } = useUserLimitQuery();
   const { mutate: toggleStatus } = useToggleSubUserStatusMutation();
@@ -155,6 +165,29 @@ export function UserCreationListing() {
   ];
 
   const showLoading = isLoading && subUsers.length === 0;
+  const emptyState = isError ? (
+    <ModuleEmptyState
+      variant="error"
+      title="Couldn't load sub-users"
+      message="The request didn't complete. Check your connection and try again."
+      actions={[buildRetryAction(() => void refetch())]}
+    />
+  ) : (
+    <ModuleEmptyState
+      variant={searchTerm ? "filtered" : "blank"}
+      title={searchTerm ? "No sub-users match your search" : "No sub-users yet"}
+      message={
+        searchTerm
+          ? "Try another name or clear the search to see all sub-users."
+          : "Create a sub-user to grant an employee or delegate access."
+      }
+      actions={
+        searchTerm
+          ? [buildClearFiltersAction(() => setSearchTerm(""), "Clear search")]
+          : undefined
+      }
+    />
+  );
 
   return (
     <div className="usc-page-layout">
@@ -162,6 +195,7 @@ export function UserCreationListing() {
         <ModuleScreenHeader
           icon={NavIcons.userCreation}
           title={MODULE_TITLES.userCreation}
+          // recordCount={filteredUsers.length}
           subtitle="Create and manage sub-user credentials for company employees, agents, and delegates."
           marginBottom={0}
           extra={
@@ -175,9 +209,7 @@ export function UserCreationListing() {
               <AppButton
                 type="primary"
                 size="large"
-                icon={
-                  <AppIcon icon={Icons.userPlus} size={16} tone="create" />
-                }
+                icon={<AppIcon icon={Icons.userPlus} size={16} tone="create" />}
                 disabled={limitInfo.limitReached}
                 onClick={() => setIsDrawerOpen(true)}
               >
@@ -235,21 +267,29 @@ export function UserCreationListing() {
 
       {showLoading ? (
         <UscLoadingCenter fill />
+      ) : isError && subUsers.length === 0 ? (
+        emptyState
       ) : (
         <div className="usc-grid-wrap responsive-table-wrap custom-scroll">
           <DataView
             columnDefs={columns}
             rowData={filteredUsers}
             loading={isFetching}
+            emptyState={emptyState}
             allowedViewModes={["list"]}
             defaultViewMode="list"
             renderToolbar={() => null}
             className="usc-data-view"
             listOptions={{
-              showToolbar: false,
+              ...profileHandlers,
+              showToolbar: { showTotalCount: true, fullScreen: true },
+              sideBar: true,
+              pagination: true,
+              paginationPageSize: 20,
+              pageSizeOptions: [10, 20, 50, 100],
+              defaultColDef: { filter: true },
               gridOptions: {
                 getRowId: (params: { data: SubUser }) => params.data.id,
-                overlayNoRowsTemplate: "No sub-users found.",
               },
             }}
           />

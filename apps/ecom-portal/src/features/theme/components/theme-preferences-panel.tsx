@@ -1,232 +1,622 @@
-// Modified by Sekar Nagarajan (2026-08-24 16:05)
-import type { LucideIcon } from 'lucide-react';
-import { AppIcon, Icons } from '../../../components/icons';
-import { AppButton, AppSelect } from '@solverminds/shared-ui';
-import { Alert, Card, Col, Flex, Row, Space, Typography, theme } from 'antd';
+// Modified by Sekar Nagarajan (2026-09-28 16:17)
+import { AppButton } from "@solverminds/shared-ui";
+import type {
+  ContrastMode,
+  LetterSpacingLevel,
+  ThemeMode,
+} from "@solverminds/shared-ui/providers";
+import { Alert, Modal, Select, Slider, Space, Switch, Typography } from "antd";
+import { useRef } from "react";
 
-import { FormSection } from '../../../components/form-section/form-section';
+import { AppIcon, Icons } from "../../../components/icons";
 import {
   BASE_FONT_SIZE_OPTIONS,
   COLOR_OPTIONS,
-  DENSITY_LEVEL_OPTIONS,
+  CONTRAST_MODE_OPTIONS,
   FONT_FAMILY_OPTIONS,
-  INTER_FONT_STACK,
-} from '../constants';
-import { type useThemePreferencesController } from '../hooks/use-theme-preferences-controller';
+  LETTER_SPACING_EM,
+  LETTER_SPACING_OPTIONS,
+  NOTIFICATION_BEHAVIOR_OPTIONS,
+  PAGE_ZOOM_MAX,
+  PAGE_ZOOM_MIN,
+  PAGE_ZOOM_STEP,
+  READING_MASK_FOCUS_HEIGHT_MAX,
+  READING_MASK_FOCUS_HEIGHT_MIN,
+  READING_MASK_FOCUS_WIDTH_MAX,
+  READING_MASK_FOCUS_WIDTH_MIN,
+  READING_MASK_OPACITY_MAX,
+  READING_MASK_OPACITY_MIN,
+  READING_MASK_SIZE_OPTIONS,
+  THEME_MODE_OPTIONS,
+  TOAST_TIMEOUT_SELECT_OPTIONS,
+} from "../constants";
+import { type useThemePreferencesController } from "../hooks/use-theme-preferences-controller";
+import {
+  AccentSwatch,
+  PreferenceCategoryLabel,
+  PreferenceFieldHeader,
+  PreferenceSectionCard,
+  PreferenceSectionRow,
+  SelectableTile,
+  ThemeModePreview,
+} from "./accessibility-preference-primitives";
+import { AccessibilityPreferencesStyles } from "./accessibility-preferences-styles";
 
 const { Text } = Typography;
 
-function getDensityIcon(value: string): LucideIcon {
-  if (value === 'compact') return Icons.rows;
-  if (value === 'comfortable') return Icons.expand;
-  return Icons.layoutList;
-}
-
-function PreferenceField({
-  label,
-  children,
-}: {
-  children: React.ReactNode;
-  label: string;
-}) {
-  const { token } = theme.useToken();
-
-  return (
-    <Flex vertical gap={token.marginXS} style={{ minWidth: 0 }}>
-      <Text strong style={{ fontSize: token.fontSizeSM, color: token.colorTextSecondary }}>
-        {label}
-      </Text>
-      {children}
-    </Flex>
-  );
-}
+const MODE_LABELS: Record<ThemeMode, string> = {
+  light: "Light Mode",
+  dark: "Dark Mode",
+  auto: "Auto",
+};
 
 export function ThemePreferencesPanel({
   controller,
 }: {
   controller: ReturnType<typeof useThemePreferencesController>;
 }) {
-  const { token } = theme.useToken();
   const { currentConfig, saveError } = controller;
+  const panelRef = useRef<HTMLDivElement>(null);
 
   if (!currentConfig) {
     return null;
   }
 
+  const { readingMask, notifications } = currentConfig;
+  const successInfo = notifications.success;
+  const warningError = notifications.warning;
+
+  const confirmResetAll = () => {
+    const moduleRoot =
+      panelRef.current?.closest<HTMLElement>(".ant-drawer-content") ??
+      panelRef.current ??
+      document.body;
+
+    Modal.confirm({
+      title: "Reset Accessibility Settings?",
+      content:
+        "This restores reading mask, toast timing, contrast, spacing, and zoom to application defaults. Theme colors and locale are not changed.",
+      okText: "Reset",
+      cancelText: "Cancel",
+      centered: true,
+      getContainer: () => moduleRoot,
+      className: "a11y-prefs-confirm-modal",
+      onOk: () => {
+        controller.resetAccessibilityPreferences();
+      },
+    });
+  };
+
   return (
-    <Flex vertical gap={token.marginSM}>
-      {saveError ? (
-        <Alert
-          type="error"
-          showIcon
-          title="Changes not saved"
-          description={
-            <Space wrap size={token.marginSM}>
-              <Text>{saveError}</Text>
-              <AppButton
-                size="small"
-                onClick={() => void controller.flushPendingChanges()}
-              >
-                Retry
-              </AppButton>
-              <AppButton
-                size="small"
-                onClick={controller.discardChanges}
-                type="default"
-              >
-                Revert
-              </AppButton>
-            </Space>
-          }
-        />
-      ) : null}
+    <>
+      <AccessibilityPreferencesStyles />
+      <div className="a11y-prefs" ref={panelRef}>
+        {saveError ? (
+          <Alert
+            type="error"
+            showIcon
+            title="Changes not saved"
+            description={
+              <Space wrap>
+                <Text>{saveError}</Text>
+                <AppButton
+                  size="small"
+                  onClick={() => void controller.flushPendingChanges()}
+                >
+                  Retry
+                </AppButton>
+                <AppButton
+                  size="small"
+                  onClick={controller.discardChanges}
+                  type="default"
+                >
+                  Revert
+                </AppButton>
+              </Space>
+            }
+          />
+        ) : null}
 
-      <FormSection title="Appearance">
-        <Row gutter={[token.marginLG, token.marginMD]}>
-          {/* Density Picker */}
-          <Col xs={24}>
-            <PreferenceField label="Density">
-              <Row gutter={[token.marginXS, token.marginXS]}>
-                {DENSITY_LEVEL_OPTIONS.map((option) => {
-                  const isSelected = currentConfig.density === option.value;
-                  const labelDisplay = option.label === 'Normal' ? 'Standard' : option.label;
-                  const densityIcon = getDensityIcon(option.value);
+        <PreferenceCategoryLabel>Vision &amp; Reading</PreferenceCategoryLabel>
 
-                  return (
-                    <Col xs={8} key={option.value}>
-                      <Card
-                        hoverable
-                        size="small"
-                        onClick={() =>
-                          controller.updatePreference(
-                            'density',
-                            option.value as typeof currentConfig.density
-                          )
-                        }
-                        style={{
-                          textAlign: 'center',
-                          cursor: 'pointer',
-                          borderColor: isSelected ? token.colorPrimary : token.colorBorderSecondary,
-                          backgroundColor: isSelected ? `${token.colorPrimary}0a` : token.colorBgContainer,
-                          boxShadow: isSelected ? `0 0 0 1px ${token.colorPrimary}` : 'none',
-                          transition: 'all 0.2s ease',
-                          padding: `${token.paddingXS}px 0`,
-                        }}
-                        bodyStyle={{ padding: `${token.paddingXS}px` }}
-                      >
-                        <Flex vertical align="center" gap={token.marginXXS}>
-                          <AppIcon
-                            icon={densityIcon}
-                            size={18}
-                            style={{
-                              color: isSelected ? token.colorPrimary : token.colorTextSecondary,
-                            }}
-                          />
-                          <Text
-                            style={{
-                              fontSize: token.fontSizeSM,
-                              fontWeight: isSelected ? 600 : 400,
-                              color: isSelected ? token.colorPrimary : token.colorText,
-                            }}
-                          >
-                            {labelDisplay}
-                          </Text>
-                        </Flex>
-                      </Card>
-                    </Col>
-                  );
-                })}
-              </Row>
-            </PreferenceField>
-          </Col>
-
-          {/* Font Selector */}
-          <Col xs={24} md={12}>
-            <PreferenceField label="Font Family">
-              <AppSelect
-                options={FONT_FAMILY_OPTIONS.map((opt) => ({
-                  ...opt,
-                  label: <span style={{ fontFamily: opt.value }}>{opt.label}</span>,
-                }))}
-                value={currentConfig.fontFamily}
-                onChange={(value) => {
-                  controller.updatePreference(
-                    'fontFamily',
-                    value as typeof currentConfig.fontFamily
-                  );
-                  if (value === INTER_FONT_STACK) {
-                    controller.updatePreference('baseFontSize', 28);
+        <PreferenceSectionCard>
+          <PreferenceSectionRow>
+            <PreferenceFieldHeader
+              title="Font"
+              description="Select your preferred font for the application."
+            />
+            <div className="a11y-tile-row">
+              {FONT_FAMILY_OPTIONS.map((option) => (
+                <SelectableTile
+                  key={option.value}
+                  className="a11y-tile--font"
+                  ariaLabel={option.label}
+                  selected={currentConfig.fontFamily === option.value}
+                  onClick={() =>
+                    controller.updatePreference("fontFamily", option.value)
                   }
-                }}
-              />
-            </PreferenceField>
-          </Col>
+                  style={{ fontFamily: option.value }}
+                >
+                  {option.label}
+                </SelectableTile>
+              ))}
+            </div>
+          </PreferenceSectionRow>
 
-          {/* Base Font Size */}
-          <Col xs={24} md={12}>
-            <PreferenceField label="Base Font Size">
-              <AppSelect
-                options={BASE_FONT_SIZE_OPTIONS.map((opt) => ({
-                  label: opt.label,
-                  value: opt.value,
-                }))}
-                value={currentConfig.baseFontSize}
+          <PreferenceSectionRow>
+            <PreferenceFieldHeader
+              title="Text Size"
+              description="Adjust text size for better readability and comfortable viewing."
+            />
+            <div className="a11y-tile-row">
+              {BASE_FONT_SIZE_OPTIONS.map((option) => {
+                const scale = option.value / 14;
+                return (
+                  <SelectableTile
+                    key={option.value}
+                    className="a11y-tile--size"
+                    ariaLabel={`Text size ${option.label}`}
+                    selected={currentConfig.baseFontSize === option.value}
+                    onClick={() =>
+                      controller.updatePreference("baseFontSize", option.value)
+                    }
+                    style={{ fontSize: `${Math.max(11, 12 * scale)}px` }}
+                  >
+                    Aa
+                  </SelectableTile>
+                );
+              })}
+            </div>
+          </PreferenceSectionRow>
+
+          <PreferenceSectionRow>
+            <PreferenceFieldHeader
+              title="Text Spacing"
+              description="Customize the text spacing for improved readability and visual clarity."
+            />
+            <div className="a11y-tile-row">
+              {LETTER_SPACING_OPTIONS.map((option) => (
+                <SelectableTile
+                  key={option.value}
+                  className="a11y-tile--spacing"
+                  ariaLabel={`Text spacing level ${option.value}`}
+                  selected={currentConfig.letterSpacing === option.value}
+                  onClick={() =>
+                    controller.updatePreference(
+                      "letterSpacing",
+                      option.value as LetterSpacingLevel,
+                    )
+                  }
+                  style={{
+                    letterSpacing: `${LETTER_SPACING_EM[option.value]}em`,
+                  }}
+                >
+                  ABCD
+                </SelectableTile>
+              ))}
+            </div>
+          </PreferenceSectionRow>
+        </PreferenceSectionCard>
+
+        <PreferenceSectionCard>
+          <PreferenceSectionRow>
+            <PreferenceFieldHeader
+              title="User Interface Mode"
+              description="Choose from a preferred light or dark mode, or let the system decide based on time."
+            />
+            <div className="a11y-mode-row">
+              {THEME_MODE_OPTIONS.map((option) => {
+                const selected = currentConfig.themeMode === option.value;
+                return (
+                  <button
+                    key={option.value}
+                    type="button"
+                    className={[
+                      "a11y-mode-card",
+                      selected ? "a11y-mode-card--selected" : "",
+                    ]
+                      .filter(Boolean)
+                      .join(" ")}
+                    aria-pressed={selected}
+                    aria-label={MODE_LABELS[option.value]}
+                    onClick={() =>
+                      controller.updatePreference("themeMode", option.value)
+                    }
+                  >
+                    <ThemeModePreview mode={option.value} />
+                    <span className="a11y-mode-card__label">
+                      {MODE_LABELS[option.value]}
+                    </span>
+                    {selected ? (
+                      <span className="a11y-tile__check" aria-hidden>
+                        <AppIcon icon={Icons.check} size={11} />
+                      </span>
+                    ) : null}
+                  </button>
+                );
+              })}
+            </div>
+          </PreferenceSectionRow>
+
+          <PreferenceSectionRow>
+            <PreferenceFieldHeader
+              title="Accent Color"
+              description="Select a desired accent color to use in the application."
+            />
+            <div className="a11y-swatch-row">
+              {COLOR_OPTIONS.map((option) => (
+                <AccentSwatch
+                  key={option.value}
+                  color={option.value}
+                  label={option.label}
+                  selected={currentConfig.primaryColor === option.value}
+                  onClick={() =>
+                    controller.updatePreference("primaryColor", option.value)
+                  }
+                />
+              ))}
+            </div>
+          </PreferenceSectionRow>
+        </PreferenceSectionCard>
+
+        <PreferenceSectionCard>
+          <PreferenceSectionRow>
+            <PreferenceFieldHeader
+              title="Contrast Level"
+              description="Enhance the contrast for clearer text and more defined elements."
+              action={
+                <Switch
+                  checked={currentConfig.contrastEnabled}
+                  onChange={(checked) =>
+                    controller.updatePreference("contrastEnabled", checked)
+                  }
+                  aria-label="Enable contrast level"
+                />
+              }
+            />
+            {currentConfig.contrastEnabled ? (
+              <div className="a11y-tile-row">
+                {CONTRAST_MODE_OPTIONS.map((option) => (
+                  <SelectableTile
+                    key={option.value}
+                    className="a11y-tile--contrast"
+                    ariaLabel={option.label}
+                    selected={currentConfig.contrastMode === option.value}
+                    onClick={() =>
+                      controller.updatePreference(
+                        "contrastMode",
+                        option.value as ContrastMode,
+                      )
+                    }
+                  >
+                    {option.label}
+                  </SelectableTile>
+                ))}
+              </div>
+            ) : null}
+          </PreferenceSectionRow>
+        </PreferenceSectionCard>
+
+        <PreferenceSectionCard>
+          <PreferenceSectionRow>
+            <PreferenceFieldHeader
+              title="Page Zoom"
+              description="Adjust the size of page elements for your viewing comfort."
+            />
+            <div className="a11y-zoom">
+              <Text className="a11y-zoom__label">
+                Zoom Level · {currentConfig.pageZoom}%
+              </Text>
+              <Slider
+                className="a11y-zoom__slider"
+                min={PAGE_ZOOM_MIN}
+                max={PAGE_ZOOM_MAX}
+                step={PAGE_ZOOM_STEP}
+                value={currentConfig.pageZoom}
                 onChange={(value) =>
-                  controller.updatePreference('baseFontSize', value as number)
+                  controller.updatePreference(
+                    "pageZoom",
+                    Array.isArray(value) ? value[0] : value,
+                  )
                 }
+                tooltip={{ formatter: (v) => `${v}%` }}
               />
-            </PreferenceField>
-          </Col>
+            </div>
+          </PreferenceSectionRow>
+        </PreferenceSectionCard>
 
-          {/* Primary Color Swatches */}
-          <Col xs={24}>
-            <PreferenceField label="Primary Color">
-              <Flex gap={token.marginXS} wrap="wrap" align="center" style={{ paddingTop: token.marginXXS }}>
-                {COLOR_OPTIONS.map((option) => {
-                  const isSelected = currentConfig.primaryColor === option.value;
-
-                  return (
-                    <button
+        <PreferenceSectionCard>
+          <PreferenceSectionRow>
+            <PreferenceFieldHeader
+              title="Reading Mask"
+              description="Highlight a specific area of the screen based on the movement of your pointer."
+              titleExtra={
+                <button
+                  type="button"
+                  className="a11y-reset-link"
+                  onClick={() => controller.resetReadingMask()}
+                >
+                  Reset
+                </button>
+              }
+              action={
+                <Switch
+                  checked={readingMask.enabled}
+                  onChange={(checked) =>
+                    controller.updateReadingMask({ enabled: checked })
+                  }
+                  aria-label="Enable reading mask"
+                />
+              }
+            />
+            {readingMask.enabled ? (
+              <>
+                <div
+                  className="a11y-tile-row"
+                  role="group"
+                  aria-label="Reading mask size"
+                >
+                  {READING_MASK_SIZE_OPTIONS.map((option) => (
+                    <SelectableTile
                       key={option.value}
-                      type="button"
-                      className="app-icon-inherit primary-surface"
-                      aria-label={option.label}
-                      title={option.label}
+                      className="a11y-tile--mask-size"
+                      ariaLabel={option.label}
+                      selected={readingMask.size === option.value}
                       onClick={() =>
-                        controller.updatePreference(
-                          'primaryColor',
-                          option.value
-                        )
+                        controller.updateReadingMask({ size: option.value })
                       }
-                      style={{
-                        width: 32,
-                        height: 32,
-                        borderRadius: '50%',
-                        border: isSelected
-                          ? `2px solid ${token.colorTextHeading}`
-                          : `2px solid transparent`,
-                        backgroundColor: option.value,
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        cursor: 'pointer',
-                        color: '#ffffff',
-                        boxShadow: isSelected
-                          ? `0 0 0 2px ${option.value}40, inset 0 0 0 1.5px #ffffff`
-                          : '0 2px 4px rgba(0,0,0,0.1)',
-                        transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                        transform: isSelected ? 'scale(1.1)' : 'scale(1)',
-                      }}
                     >
-                      {isSelected ? <AppIcon icon={Icons.check} size={13} /> : null}
-                    </button>
-                  );
-                })}
-              </Flex>
-            </PreferenceField>
-          </Col>
-        </Row>
-      </FormSection>
-    </Flex>
+                      {option.label}
+                    </SelectableTile>
+                  ))}
+                </div>
+                {readingMask.size === "custom" ? (
+                  <div className="a11y-slider-stack">
+                    <div className="a11y-slider-field">
+                      <Text
+                        id="reading-mask-height-label"
+                        className="a11y-slider-field__label"
+                      >
+                        Focus Height
+                      </Text>
+                      <Slider
+                        aria-labelledby="reading-mask-height-label"
+                        min={READING_MASK_FOCUS_HEIGHT_MIN}
+                        max={READING_MASK_FOCUS_HEIGHT_MAX}
+                        step={10}
+                        value={readingMask.focusHeight}
+                        onChange={(value) =>
+                          controller.updateReadingMask({
+                            focusHeight: Array.isArray(value)
+                              ? value[0]
+                              : value,
+                          })
+                        }
+                        tooltip={{ formatter: (v) => `${v}px` }}
+                      />
+                    </div>
+                    <div className="a11y-slider-field">
+                      <Text
+                        id="reading-mask-width-label"
+                        className="a11y-slider-field__label"
+                      >
+                        Focus Width
+                      </Text>
+                      <Slider
+                        aria-labelledby="reading-mask-width-label"
+                        min={READING_MASK_FOCUS_WIDTH_MIN}
+                        max={READING_MASK_FOCUS_WIDTH_MAX}
+                        step={20}
+                        value={readingMask.focusWidth}
+                        onChange={(value) =>
+                          controller.updateReadingMask({
+                            focusWidth: Array.isArray(value) ? value[0] : value,
+                          })
+                        }
+                        tooltip={{ formatter: (v) => `${v}px` }}
+                      />
+                    </div>
+                    <div className="a11y-slider-field">
+                      <Text
+                        id="reading-mask-opacity-label"
+                        className="a11y-slider-field__label"
+                      >
+                        Mask Opacity
+                      </Text>
+                      <Slider
+                        aria-labelledby="reading-mask-opacity-label"
+                        min={READING_MASK_OPACITY_MIN}
+                        max={READING_MASK_OPACITY_MAX}
+                        step={0.05}
+                        value={readingMask.opacity}
+                        onChange={(value) =>
+                          controller.updateReadingMask({
+                            opacity: Array.isArray(value) ? value[0] : value,
+                          })
+                        }
+                        tooltip={{
+                          formatter: (v) => `${Math.round((v ?? 0) * 100)}%`,
+                        }}
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="a11y-slider-stack">
+                    <div className="a11y-slider-field">
+                      <Text
+                        id="reading-mask-opacity-preset-label"
+                        className="a11y-slider-field__label"
+                      >
+                        Mask Opacity
+                      </Text>
+                      <Slider
+                        aria-labelledby="reading-mask-opacity-preset-label"
+                        min={READING_MASK_OPACITY_MIN}
+                        max={READING_MASK_OPACITY_MAX}
+                        step={0.05}
+                        value={readingMask.opacity}
+                        onChange={(value) =>
+                          controller.updateReadingMask({
+                            opacity: Array.isArray(value) ? value[0] : value,
+                          })
+                        }
+                        tooltip={{
+                          formatter: (v) => `${Math.round((v ?? 0) * 100)}%`,
+                        }}
+                      />
+                    </div>
+                  </div>
+                )}
+              </>
+            ) : null}
+          </PreferenceSectionRow>
+        </PreferenceSectionCard>
+
+        <PreferenceCategoryLabel>Notifications</PreferenceCategoryLabel>
+
+        <PreferenceSectionCard>
+          <PreferenceSectionRow>
+            <PreferenceFieldHeader
+              title="Toast Notification Timing Control"
+              description="Customize the duration of toast notifications to ensure sufficient comprehension time. Opt for Manual Close if notifications must stay until you dismiss them."
+              action={
+                <Switch
+                  checked={notifications.customTimingEnabled}
+                  onChange={(checked) =>
+                    controller.updateNotifications({
+                      customTimingEnabled: checked,
+                    })
+                  }
+                  aria-label="Enable toast notification timing control"
+                />
+              }
+            />
+            {notifications.customTimingEnabled ? (
+              <div className="a11y-toast-prefs">
+                <Text className="a11y-toast-prefs__heading">
+                  Set your timing preferences
+                </Text>
+                <div className="a11y-toast-prefs__grid">
+                  <div className="a11y-toast-prefs__controls">
+                    <div className="a11y-toast-prefs__field">
+                      <Text
+                        id="toast-success-behavior-label"
+                        className="a11y-toast-prefs__label"
+                      >
+                        Success and info notifications behavior
+                      </Text>
+                      <Select
+                        aria-labelledby="toast-success-behavior-label"
+                        value={successInfo.behavior}
+                        options={[...NOTIFICATION_BEHAVIOR_OPTIONS]}
+                        onChange={(value) =>
+                          controller.updateNotificationGroup("successInfo", {
+                            behavior: value,
+                          })
+                        }
+                      />
+                    </div>
+                    {successInfo.behavior === "auto" ? (
+                      <div className="a11y-toast-prefs__field">
+                        <Text
+                          id="toast-success-timeout-label"
+                          className="a11y-toast-prefs__label"
+                        >
+                          Automatic timeout duration
+                        </Text>
+                        <Select
+                          aria-labelledby="toast-success-timeout-label"
+                          value={successInfo.timeout}
+                          options={[...TOAST_TIMEOUT_SELECT_OPTIONS]}
+                          onChange={(value) =>
+                            controller.updateNotificationGroup("successInfo", {
+                              timeout: value,
+                            })
+                          }
+                        />
+                      </div>
+                    ) : null}
+                    <div className="a11y-toast-prefs__field">
+                      <Text
+                        id="toast-warning-behavior-label"
+                        className="a11y-toast-prefs__label"
+                      >
+                        Warning and error notifications behavior
+                      </Text>
+                      <Select
+                        aria-labelledby="toast-warning-behavior-label"
+                        value={warningError.behavior}
+                        options={[...NOTIFICATION_BEHAVIOR_OPTIONS]}
+                        onChange={(value) =>
+                          controller.updateNotificationGroup("warningError", {
+                            behavior: value,
+                          })
+                        }
+                      />
+                    </div>
+                    {warningError.behavior === "auto" ? (
+                      <div className="a11y-toast-prefs__field">
+                        <Text
+                          id="toast-warning-timeout-label"
+                          className="a11y-toast-prefs__label"
+                        >
+                          Automatic timeout duration
+                        </Text>
+                        <Select
+                          aria-labelledby="toast-warning-timeout-label"
+                          value={warningError.timeout}
+                          options={[...TOAST_TIMEOUT_SELECT_OPTIONS]}
+                          onChange={(value) =>
+                            controller.updateNotificationGroup("warningError", {
+                              timeout: value,
+                            })
+                          }
+                        />
+                      </div>
+                    ) : null}
+                  </div>
+                  <div className="a11y-toast-prefs__previews" aria-hidden>
+                    <div className="a11y-toast-preview">
+                      <div className="a11y-toast-preview__chrome" />
+                      <div className="a11y-toast-preview__body">
+                        <span className="a11y-toast-preview__toast a11y-toast-preview__toast--success" />
+                      </div>
+                    </div>
+                    <div className="a11y-toast-preview">
+                      <div className="a11y-toast-preview__chrome" />
+                      <div className="a11y-toast-preview__body">
+                        <span className="a11y-toast-preview__toast a11y-toast-preview__toast--warning" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : null}
+          </PreferenceSectionRow>
+        </PreferenceSectionCard>
+
+        <PreferenceCategoryLabel>Reset</PreferenceCategoryLabel>
+
+        <PreferenceSectionCard>
+          <PreferenceSectionRow>
+            <div className="a11y-reset-card">
+              <div className="a11y-reset-card__copy">
+                <Text className="a11y-field-header__title">
+                  Reset Accessibility Settings
+                </Text>
+                <Text className="a11y-field-header__description">
+                  Restore reading mask, toast timing, contrast, spacing, and
+                  zoom to application defaults. Branding and locale are not
+                  affected.
+                </Text>
+              </div>
+              <AppButton type="primary" onClick={confirmResetAll}>
+                Reset
+              </AppButton>
+            </div>
+          </PreferenceSectionRow>
+        </PreferenceSectionCard>
+      </div>
+    </>
   );
 }

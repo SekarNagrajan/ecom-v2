@@ -1,9 +1,32 @@
-// Schedules API Service layer with async delay simulation
-// Prepared for backend Struts/EJB REST API integration
-// Modified by sekar nagarajan (2026-08-21)
+// Modified by Sekar Nagarajan (2026-10-17 00:40)
+// Schedules API — mock search computed from the VSS / Commercial fixtures (schedules.bridge)
 
-import { MOCK_SCHEDULES, MOCK_VESSELS } from '../mocks/schedules.mock';
-import type { ScheduleItem, ScheduleSearchParams, VesselParticulars } from '../types/schedules.types';
+import {
+  getVesselDetails,
+  listVesselSelectOptions,
+  searchSchedules,
+} from "../../../mocks/fixture-api/bridges/schedules.bridge";
+import type {
+  CarbonCalculationResult,
+  ScheduleItem,
+  ScheduleSearchParams,
+  ShareScheduleMailInput,
+  ShareScheduleMailResponse,
+  VesselParticulars,
+} from "../types/schedules.types";
+
+function sortSchedules(items: ScheduleItem[]): ScheduleItem[] {
+  // Recommended / direct first so both card cases stay visible when mixed.
+  return [...items].sort((a, b) => {
+    if (a.isDefaultRoute !== b.isDefaultRoute) {
+      return a.isDefaultRoute ? -1 : 1;
+    }
+    if (a.isDirect !== b.isDirect) {
+      return a.isDirect ? -1 : 1;
+    }
+    return a.etd.localeCompare(b.etd);
+  });
+}
 
 export const schedulesApi = {
   /**
@@ -12,48 +35,16 @@ export const schedulesApi = {
   async searchSchedules(params?: ScheduleSearchParams): Promise<ScheduleItem[]> {
     await new Promise((resolve) => setTimeout(resolve, 300)); // simulated latency
 
-    if (!params) return MOCK_SCHEDULES;
-
-    let results = [...MOCK_SCHEDULES];
-
-    if (params.searchType === 'POINT_TO_POINT') {
-      if (params.polCode) {
-        const pol = params.polCode.toLowerCase();
-        const matched = results.filter(
-          (s) =>
-            s.polPortId.toLowerCase().includes(pol) ||
-            s.polPortName.toLowerCase().includes(pol)
-        );
-        if (matched.length > 0) results = matched;
-      }
-      if (params.podCode) {
-        const pod = params.podCode.toLowerCase();
-        const matched = results.filter(
-          (s) =>
-            s.podPortId.toLowerCase().includes(pod) ||
-            s.podPortName.toLowerCase().includes(pod)
-        );
-        if (matched.length > 0) results = matched;
-      }
-    } else if (params.searchType === 'VESSEL_SCHEDULE' && params.vesselCode) {
-      const query = params.vesselCode.toLowerCase();
-      const matched = results.filter(
-        (s) =>
-          s.vesselName.toLowerCase().includes(query) ||
-          s.vesselCode.toLowerCase().includes(query)
-      );
-      if (matched.length > 0) results = matched;
-    } else if (params.searchType === 'PORT_SCHEDULE' && params.portCode) {
-      const query = params.portCode.toLowerCase();
-      const matched = results.filter(
-        (s) =>
-          s.polPortId.toLowerCase().includes(query) ||
-          s.podPortId.toLowerCase().includes(query)
-      );
-      if (matched.length > 0) results = matched;
+    if (!params) {
+      return [];
     }
 
-    return results;
+    return sortSchedules(searchSchedules(params));
+  },
+
+  /** Codes + labels for the By Vessel search dropdown (from schedule fixtures + vessel master). */
+  listVesselOptions(): { value: string; label: string }[] {
+    return listVesselSelectOptions();
   },
 
   /**
@@ -61,6 +52,51 @@ export const schedulesApi = {
    */
   async getVesselDetails(vesselCode: string): Promise<VesselParticulars | null> {
     await new Promise((resolve) => setTimeout(resolve, 200));
-    return MOCK_VESSELS[vesselCode] || MOCK_VESSELS['AGEX'];
+    return getVesselDetails(vesselCode);
+  },
+
+  /** POST /api/v1/schedules/share-mail — share sailing results by email */
+  async shareSchedulesByMail(
+    input: ShareScheduleMailInput,
+  ): Promise<ShareScheduleMailResponse> {
+    const res = await fetch("/api/v1/schedules/share-mail", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(input),
+    });
+    if (!res.ok) {
+      throw new Error("Failed to share sailing schedules by email");
+    }
+    const json = await res.json();
+    return json.data;
   },
 };
+
+/**
+ * CO2e estimate for the Carbon modal — UI formula over the sailing's great-circle distance
+ * (emission factor and TTW/WTT split are constants, not fixture data).
+ */
+export function calculateCarbonEmissions(
+  routeLabel: string,
+  qty: number,
+  weightTons: number,
+  distanceKm: number,
+): CarbonCalculationResult {
+  const effectiveWeight = weightTons > 0 ? weightTons : qty * 12;
+  const emissionFactorGramsPerTonKm = 8.5;
+  const totalCo2eGrams =
+    effectiveWeight * distanceKm * emissionFactorGramsPerTonKm;
+  const totalCo2eTons = parseFloat((totalCo2eGrams / 1_000_000).toFixed(2));
+  const ttwCo2eTons = parseFloat((totalCo2eTons * 0.82).toFixed(2));
+  const wttCo2eTons = parseFloat((totalCo2eTons * 0.18).toFixed(2));
+
+  return {
+    routeLabel,
+    containerQty: qty,
+    weightTons: effectiveWeight,
+    distanceKm,
+    totalCo2eTons,
+    ttwCo2eTons,
+    wttCo2eTons,
+  };
+}

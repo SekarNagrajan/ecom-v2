@@ -1,6 +1,7 @@
-// Modified by Sekar Nagarajan (2026-09-01 16:42)
+// Modified by Sekar Nagarajan (2026-09-28 15:28)
 import { theme } from "antd";
 
+import { BE_COLOR_MAP } from "../../features/theme/utils/config-mapper";
 import { tokenMix } from "../../features/theme/utils/token-mix";
 
 /** App-wide CSS classes backed by Ant Design theme tokens. Prefer className over inline style. */
@@ -9,9 +10,6 @@ export function GlobalThemeStyles() {
 
   const primaryTint8 = tokenMix(token.colorPrimary, 8);
   const primaryTint12 = tokenMix(token.colorPrimary, 12);
-  const lightSolid18 = tokenMix(token.colorTextLightSolid, 18);
-  const lightSolid15 = tokenMix(token.colorTextLightSolid, 15);
-  const lightSolid85 = tokenMix(token.colorTextLightSolid, 85);
   // Mild status-tag surfaces derived from semantic text colors (not mid-tone *Bg)
   const successTint8 = tokenMix(token.colorSuccess, 8);
   const successTint28 = tokenMix(token.colorSuccess, 28);
@@ -23,8 +21,78 @@ export function GlobalThemeStyles() {
   const infoTint8 = tokenMix(token.colorInfo, 8);
   const infoTint28 = tokenMix(token.colorInfo, 28);
 
+  const charcoalBlue = BE_COLOR_MAP.CHARCOAL_BLUE;
+  const verdigris = BE_COLOR_MAP.VERDIGRIS;
+  const tuscanSun = BE_COLOR_MAP.TUSCAN_SUN;
+  const sandyBrown = BE_COLOR_MAP.SANDY_BROWN;
+  const burntPeach = BE_COLOR_MAP.BURNT_PEACH;
+
   return (
     <style>{`
+      /* Warm earth palette — style-action bg / color utilities */
+      :root {
+        --charcoal-blue: ${charcoalBlue};
+        --verdigris: ${verdigris};
+        --tuscan-sun: ${tuscanSun};
+        --sandy-brown: ${sandyBrown};
+        --burnt-peach: ${burntPeach};
+      }
+      .style-action--charcoal-blue {
+        color: ${charcoalBlue};
+        background: ${tokenMix(charcoalBlue, 12)};
+        border-color: ${tokenMix(charcoalBlue, 28)};
+      }
+      .style-action--charcoal-blue:hover,
+      .style-action--charcoal-blue:focus-visible {
+        color: ${token.colorTextLightSolid};
+        background: ${charcoalBlue};
+        border-color: ${charcoalBlue};
+      }
+      .style-action--verdigris {
+        color: ${verdigris};
+        background: ${tokenMix(verdigris, 12)};
+        border-color: ${tokenMix(verdigris, 28)};
+      }
+      .style-action--verdigris:hover,
+      .style-action--verdigris:focus-visible {
+        color: ${token.colorTextLightSolid};
+        background: ${verdigris};
+        border-color: ${verdigris};
+      }
+      .style-action--tuscan-sun {
+        color: ${tuscanSun};
+        background: ${tokenMix(tuscanSun, 12)};
+        border-color: ${tokenMix(tuscanSun, 28)};
+      }
+      .style-action--tuscan-sun:hover,
+      .style-action--tuscan-sun:focus-visible {
+        color: ${charcoalBlue};
+        background: ${tuscanSun};
+        border-color: ${tuscanSun};
+      }
+      .style-action--sandy-brown {
+        color: ${sandyBrown};
+        background: ${tokenMix(sandyBrown, 12)};
+        border-color: ${tokenMix(sandyBrown, 28)};
+      }
+      .style-action--sandy-brown:hover,
+      .style-action--sandy-brown:focus-visible {
+        color: ${token.colorTextLightSolid};
+        background: ${sandyBrown};
+        border-color: ${sandyBrown};
+      }
+      .style-action--burnt-peach {
+        color: ${burntPeach};
+        background: ${tokenMix(burntPeach, 12)};
+        border-color: ${tokenMix(burntPeach, 28)};
+      }
+      .style-action--burnt-peach:hover,
+      .style-action--burnt-peach:focus-visible {
+        color: ${token.colorTextLightSolid};
+        background: ${burntPeach};
+        border-color: ${burntPeach};
+      }
+
       /* Project-wide custom scrollbar (agenct.md UI #1) */
       .custom-scroll {
         scrollbar-width: thin;
@@ -273,6 +341,23 @@ export function GlobalThemeStyles() {
         column-gap: ${token.marginLG}px;
         row-gap: ${token.marginMD}px;
       }
+      /* Modified by Sekar Nagarajan (2026-09-03 14:52) — ENS switch in card header; options row without switch column */
+      .form-ens-card-extra {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginSM}px;
+        flex-shrink: 0;
+      }
+      .form-ens-card-extra-label {
+        margin-bottom: 0;
+        white-space: nowrap;
+      }
+      .form-ens-card--switch-only > .ant-card-body {
+        display: none;
+      }
+      .form-ens-top-row--options {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
       .form-ens-top-row .form-field-cell {
         min-width: 0;
         padding: ${token.paddingXS}px 0;
@@ -344,12 +429,14 @@ export function GlobalThemeStyles() {
       }
       @media (max-width: 1199px) {
         .form-ens-top-row,
+        .form-ens-top-row--options,
         .form-ens-party-grid {
           grid-template-columns: repeat(2, minmax(0, 1fr));
         }
       }
       @media (max-width: 767px) {
         .form-ens-top-row,
+        .form-ens-top-row--options,
         .form-ens-party-grid {
           grid-template-columns: minmax(0, 1fr);
         }
@@ -405,8 +492,10 @@ export function GlobalThemeStyles() {
         display: none !important;
       }
 
-      /* Modified by Sekar Nagarajan (2026-08-31 13:00) — mild tint bg from text color (colorSuccessText / seed) */
-      .ag-cell .ant-tag {
+      /* Modified by Sekar Nagarajan (2026-08-31 13:00) — mild tint bg from text color (colorSuccessText / seed)
+         Also applied to .module-status-tag so card-view status chips match AG Grid. */
+      .ag-cell .ant-tag,
+      .module-status-tag.ant-tag {
         font-weight: ${token.fontWeightStrong};
         border-width: 1px;
         border-style: solid;
@@ -414,7 +503,11 @@ export function GlobalThemeStyles() {
       .ag-cell .ant-tag-success,
       .ag-cell .ant-tag-filled.ant-tag-success,
       .ag-cell .ant-tag-green,
-      .ag-cell .ant-tag-filled.ant-tag-green {
+      .ag-cell .ant-tag-filled.ant-tag-green,
+      .module-status-tag.ant-tag-success,
+      .module-status-tag.ant-tag-filled.ant-tag-success,
+      .module-status-tag.ant-tag-green,
+      .module-status-tag.ant-tag-filled.ant-tag-green {
         color: ${token.colorSuccessText};
         background: ${successTint8};
         border-color: ${successTint28};
@@ -422,94 +515,70 @@ export function GlobalThemeStyles() {
       .ag-cell .ant-tag-processing,
       .ag-cell .ant-tag-filled.ant-tag-processing,
       .ag-cell .ant-tag-blue,
-      .ag-cell .ant-tag-filled.ant-tag-blue {
+      .ag-cell .ant-tag-filled.ant-tag-blue,
+      .module-status-tag.ant-tag-processing,
+      .module-status-tag.ant-tag-filled.ant-tag-processing,
+      .module-status-tag.ant-tag-blue,
+      .module-status-tag.ant-tag-filled.ant-tag-blue {
         color: ${token.colorPrimary};
         background: ${primaryTint8};
         border-color: ${primaryTint28};
       }
       .ag-cell .ant-tag-error,
-      .ag-cell .ant-tag-filled.ant-tag-error {
+      .ag-cell .ant-tag-filled.ant-tag-error,
+      .module-status-tag.ant-tag-error,
+      .module-status-tag.ant-tag-filled.ant-tag-error {
         color: ${token.colorErrorText};
         background: ${errorTint8};
         border-color: ${errorTint28};
       }
       .ag-cell .ant-tag-warning,
-      .ag-cell .ant-tag-filled.ant-tag-warning {
+      .ag-cell .ant-tag-filled.ant-tag-warning,
+      .module-status-tag.ant-tag-warning,
+      .module-status-tag.ant-tag-filled.ant-tag-warning,
+      .module-status-tag.ant-tag-gold,
+      .module-status-tag.ant-tag-filled.ant-tag-gold {
         color: ${token.colorWarningText};
         background: ${warningTint8};
         border-color: ${warningTint28};
       }
       .ag-cell .ant-tag-default,
-      .ag-cell .ant-tag-filled.ant-tag-default {
+      .ag-cell .ant-tag-filled.ant-tag-default,
+      .module-status-tag.ant-tag-default,
+      .module-status-tag.ant-tag-filled.ant-tag-default {
         color: ${token.colorTextSecondary};
         background: ${token.colorFillAlter};
         border-color: ${token.colorBorderSecondary};
       }
       .ag-cell .ant-tag-cyan,
-      .ag-cell .ant-tag-filled.ant-tag-cyan {
+      .ag-cell .ant-tag-filled.ant-tag-cyan,
+      .module-status-tag.ant-tag-cyan,
+      .module-status-tag.ant-tag-filled.ant-tag-cyan {
         color: ${token.colorInfoText};
         background: ${infoTint8};
         border-color: ${infoTint28};
       }
 
       .booking-template-modal__modal-body {
-        padding: 0 !important;
+        padding: ${token.paddingMD}px ${token.paddingLG}px !important;
       }
-      .booking-template-modal__header {
+      .booking-template-modal__title-block {
         display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: ${token.paddingMD}px ${token.paddingLG}px;
-        background: ${token.colorPrimary};
-        color: ${token.colorTextLightSolid};
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+        min-width: 0;
+        padding-inline-end: ${token.paddingMD}px;
       }
-      .booking-template-modal__header-main {
-        display: flex;
-        align-items: center;
-        gap: ${token.marginSM}px;
-      }
-      .booking-template-modal__header-icon {
-        width: ${token.controlHeightLG}px;
-        height: ${token.controlHeightLG}px;
-        border-radius: ${token.borderRadiusLG}px;
-        background: ${lightSolid18};
-        color: ${token.colorTextLightSolid};
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-      }
-      .booking-template-modal__header-title {
-        color: ${token.colorTextLightSolid};
-        font-size: ${token.fontSizeLG}px;
-        font-weight: ${token.fontWeightStrong};
+      .booking-template-modal__title-sub {
         display: block;
-        line-height: ${token.lineHeight};
-      }
-      .booking-template-modal__header-subtitle {
-        color: ${lightSolid85};
         font-size: ${token.fontSizeSM}px;
-        display: block;
+        font-weight: normal;
         line-height: ${token.lineHeight};
-      }
-      .booking-template-modal__close {
-        border: none;
-        background: ${lightSolid15};
-        color: ${token.colorTextLightSolid};
-        width: ${token.controlHeight}px;
-        height: ${token.controlHeight}px;
-        border-radius: ${token.borderRadiusLG}px;
-        cursor: pointer;
-        font-size: ${token.fontSizeHeading5}px;
-        line-height: 1;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
       }
       .booking-template-modal__body {
-        padding: ${token.paddingMD + 4}px ${token.paddingLG}px ${
-      token.paddingLG
-    }px;
+        padding: 0;
+        max-height: min(70vh, 720px);
+        overflow: auto;
       }
       .booking-template-modal__table {
         border: 1px solid ${token.colorBorderSecondary};
@@ -609,6 +678,20 @@ export function GlobalThemeStyles() {
         min-height: 0;
         padding: ${token.paddingSM}px;
       }
+      /* Sticky 404 — no scrollbars inside the content pane */
+      .app-content-main:has(.ecom-not-found) {
+        overflow: hidden;
+        padding: 0;
+      }
+      .app-content-inner:has(.ecom-not-found) {
+        min-height: 0;
+        flex: 1;
+        overflow: hidden;
+      }
+      .ecom-not-found {
+        width: 100%;
+        max-width: 100%;
+      }
       .app-content-inner {
         min-height: 100%;
         display: flex;
@@ -634,6 +717,23 @@ export function GlobalThemeStyles() {
         margin: 0 !important;
         font-weight: ${token.fontWeightStrong} !important;
       }
+      .module-screen-header__record-count.ant-badge {
+        display: inline-flex;
+        align-items: center;
+        line-height: 1;
+      }
+      .module-screen-header__record-count.ant-badge .ant-badge-count {
+        background: ${token.colorPrimaryBg};
+        color: ${token.colorText};
+        box-shadow: none;
+        font-weight: ${token.fontWeightStrong};
+        min-width: ${token.fontSizeLG + 8}px;
+        height: ${token.fontSizeLG + 8}px;
+        line-height: ${token.fontSizeLG + 8}px;
+        border-radius: ${token.borderRadiusSM}px;
+        font-size: ${token.fontSizeSM}px;
+        padding: 0 ${token.paddingXXS + 2}px;
+      }
       .module-screen-header__subtitle {
         display: block;
         margin-top: ${token.marginXXS}px;
@@ -642,6 +742,107 @@ export function GlobalThemeStyles() {
       }
       .module-screen-header__extra {
         flex-shrink: 0;
+      }
+      .module-screen-header__actions {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: ${token.marginSM}px;
+        justify-content: flex-end;
+      }
+      /* List/card toggle — inactive icons primary; active white on primary bg */
+      .module-view-mode-tabs.ant-segmented {
+        align-items: center;
+        background: ${token.colorBgContainer};
+        border: 1px solid ${token.colorBorder};
+        border-radius: ${token.borderRadius}px;
+        display: inline-flex;
+        height: ${token.controlHeight}px;
+        min-height: ${token.controlHeight}px;
+        padding: ${token.paddingXXS}px;
+      }
+      .module-view-mode-tabs.ant-segmented .ant-segmented-group {
+        align-items: center;
+        display: flex;
+        gap: 0;
+        height: 100%;
+      }
+      .module-view-mode-tabs.ant-segmented .ant-segmented-item {
+        align-items: center;
+        color: ${token.colorPrimary};
+        display: inline-flex;
+        height: ${token.controlHeight - token.paddingXXS * 2}px;
+        justify-content: center;
+        min-height: ${token.controlHeight - token.paddingXXS * 2}px;
+        min-width: ${token.controlHeight - token.paddingXXS * 2}px;
+        width: ${token.controlHeight - token.paddingXXS * 2}px;
+      }
+      .module-view-mode-tabs.ant-segmented
+        .ant-segmented-item:not(.ant-segmented-item-selected)
+        .app-icon {
+        color: ${token.colorPrimary} !important;
+      }
+      .module-view-mode-tabs.ant-segmented
+        .ant-segmented-item:hover:not(.ant-segmented-item-selected):not(
+          .ant-segmented-item-disabled
+        ) {
+        color: ${token.colorPrimary};
+      }
+      .module-view-mode-tabs.ant-segmented .ant-segmented-thumb {
+        background: ${token.colorPrimary} !important;
+      }
+      .module-view-mode-tabs.ant-segmented .ant-segmented-item-selected {
+        background: ${token.colorPrimary} !important;
+        color: ${token.colorTextLightSolid} !important;
+      }
+      .module-view-mode-tabs.ant-segmented
+        .ant-segmented-item-selected
+        .app-icon {
+        color: ${token.colorTextLightSolid} !important;
+      }
+      .module-view-mode-tabs.ant-segmented .ant-segmented-item-label {
+        align-items: center;
+        display: inline-flex;
+        height: 100%;
+        justify-content: center;
+        line-height: 1;
+        min-height: 100%;
+        padding: 0;
+        width: 100%;
+      }
+      .module-view-mode-tabs__icon {
+        align-items: center;
+        display: inline-flex;
+        height: 16px;
+        justify-content: center;
+        line-height: 1;
+        width: 16px;
+      }
+      .module-view-mode-tabs__icon .anticon,
+      .module-view-mode-tabs__icon .app-icon {
+        display: inline-flex;
+        font-size: 16px;
+        line-height: 1;
+      }
+      /* Outlined host for card-view only — cards sit inside this frame */
+      .module-card-view-panel {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        height: 100%;
+        min-height: 0;
+        width: 100%;
+      }
+      .module-card-view-panel--active {
+        background: ${token.colorFillAlter};
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG}px;
+        overflow: hidden;
+      }
+      .module-card-view-panel--active > * {
+        flex: 1;
+        min-height: 0;
+        height: 100%;
       }
       .wizard-page-card {
         border-radius: ${token.borderRadiusLG}px;
@@ -978,6 +1179,7 @@ export function GlobalThemeStyles() {
       .app-header-brand-detail {
         display: flex;
         flex-direction: column;
+        min-width: 0;
       }
       .app-header-actions {
         display: flex;
@@ -985,10 +1187,25 @@ export function GlobalThemeStyles() {
         gap: ${token.marginXS}px;
         flex-wrap: wrap;
         justify-content: flex-end;
+        flex: 0 1 auto;
+        min-width: 0;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-17 21:10) — Schedules pinned search fills middle strip */
+      .app-header-schedules-search-slot {
+        display: flex;
+        align-items: center;
+        flex: 1 1 auto;
+        min-width: 0;
+        max-width: none;
+        overflow: hidden;
+      }
+      .app-header-schedules-search-slot:empty {
+        display: none;
       }
       .app-header-brand-home {
         display: inline-flex;
         align-items: center;
+        flex-shrink: 0;
         margin: 0;
         padding: ${token.paddingXXS}px ${token.paddingXS}px;
         border: 0;
@@ -996,6 +1213,7 @@ export function GlobalThemeStyles() {
         background: transparent;
         cursor: pointer;
         text-align: left;
+        white-space: nowrap;
         transition: background-color 0.2s ease;
       }
       .app-header-brand-home:hover,
@@ -1224,12 +1442,35 @@ export function GlobalThemeStyles() {
         background: ${token.colorBgContainer};
         padding: 0 ${token.paddingMD}px;
         height: 64px;
+        line-height: 1.2;
         display: flex;
         align-items: center;
         justify-content: space-between;
         border-bottom: 1px solid ${token.colorBorderSecondary};
         z-index: 90;
         gap: ${token.marginSM}px;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-17 21:10) — fixed height, no padding gap when search pins */
+      .app-layout-header:has(.app-header-schedules-search-slot:not(:empty)) {
+        height: 64px;
+        min-height: 64px;
+        padding-block: 0;
+        overflow: hidden;
+      }
+      .app-layout-header:has(.app-header-schedules-search-slot:not(:empty)) .app-layout-header__left {
+        flex: 0 0 auto;
+        min-width: auto;
+      }
+      .app-layout-header:has(.app-header-schedules-search-slot:not(:empty)) .app-header-actions {
+        flex: 0 0 auto;
+        flex-wrap: nowrap;
+        min-width: 0;
+        justify-content: flex-end;
+      }
+      .app-layout-header:has(.app-header-schedules-search-slot:not(:empty)) .app-header-action,
+      .app-layout-header:has(.app-header-schedules-search-slot:not(:empty)) .app-header-action.ant-btn,
+      .app-layout-header:has(.app-header-schedules-search-slot:not(:empty)) .sm-app-button.app-header-action {
+        flex-shrink: 0;
       }
       .app-layout-header__left {
         display: flex;
@@ -1242,11 +1483,12 @@ export function GlobalThemeStyles() {
         display: flex;
         align-items: center;
         gap: ${token.marginXS}px;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
       }
       .app-layout-header__tenant-name {
         font-size: ${token.fontSizeLG}px;
         color: ${token.colorText};
+        white-space: nowrap;
       }
       .app-layout-header__welcome {
         font-size: ${token.fontSizeSM}px;
@@ -1294,7 +1536,8 @@ export function GlobalThemeStyles() {
         font-size: ${token.fontSizeSM}px;
       }
 
-      /* Public (pre-login) header */
+      /* Public (pre-login) header — height matches authenticated .app-layout-header */
+      /* Modified by Sekar Nagarajan (2026-09-17 20:50) */
       .pub-layout-header.ant-layout-header {
         position: sticky;
         top: 0;
@@ -1304,8 +1547,8 @@ export function GlobalThemeStyles() {
         justify-content: space-between;
         gap: ${token.marginSM}px;
         padding-inline: ${token.paddingLG}px;
-        height: 48px;
-        line-height: 48px;
+        height: 54px;
+        line-height: 54px;
         background: ${token.colorBgContainer};
         border-bottom: 1px solid ${token.colorBorderSecondary};
       }
@@ -1323,7 +1566,7 @@ export function GlobalThemeStyles() {
         min-width: 0;
       }
       .pub-layout-header__logo {
-        max-height: 32px;
+        max-height: 40px;
         object-fit: contain;
       }
       .pub-layout-header__brand {
@@ -1513,6 +1756,8 @@ export function GlobalThemeStyles() {
         background-repeat: no-repeat;
         opacity: 1;
         z-index: 0;
+        transform: scale(1.05);
+        transform-origin: center center;
       }
       /* Dark mode — navy logistics hero */
       html.dark .pub-layout-bg {
@@ -1613,12 +1858,13 @@ export function GlobalThemeStyles() {
       }
       .pub-landing__cards {
         display: flex;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         gap: ${token.marginMD}px;
+        overflow-x: auto;
       }
       .pub-landing__card.ant-card {
-        flex: 1 1 140px;
-        min-width: 140px;
+        flex: 1 1 0;
+        min-width: 0;
         border-radius: ${token.borderRadiusLG}px;
         cursor: pointer;
         border: 1px solid ${token.colorPrimary};
@@ -1627,10 +1873,13 @@ export function GlobalThemeStyles() {
         border-color: ${token.colorPrimary};
       }
       .pub-landing__card .ant-card-body {
-        padding: ${token.paddingMD}px;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
         display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
         align-items: center;
         gap: ${token.marginSM}px;
+        white-space: nowrap;
       }
       .pub-landing__card-icon {
         background: ${token.colorPrimaryBg};
@@ -1638,10 +1887,12 @@ export function GlobalThemeStyles() {
         padding: ${token.paddingXS}px;
         border-radius: ${token.borderRadius}px;
         display: inline-flex;
+        flex-shrink: 0;
       }
       .pub-landing__card-label {
-        font-size: ${token.fontSizeSM}px;
+        font-size: ${token.fontSizeLG}px;
         line-height: 1.2;
+        white-space: nowrap;
       }
       .pub-landing__panel {
         width: 100%;
@@ -1657,6 +1908,21 @@ export function GlobalThemeStyles() {
         width: 100%;
         overflow: hidden;
         border: 1px solid ${token.colorBorderSecondary};
+        position: relative;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-11 14:35) — search action spinner overlay */
+      .pub-landing__search-card--loading {
+        pointer-events: none;
+      }
+      .pub-landing__search-loading.module-loading-center {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 160px;
+        background: ${tokenMix(token.colorBgContainer, 72)};
       }
       .pub-landing__search-tabs {
         padding: ${token.paddingMD}px ${token.paddingLG * 2}px 0;
@@ -1749,22 +2015,68 @@ export function GlobalThemeStyles() {
         min-width: 0;
       }
       .app-footer__inner {
-        display: flex;
-        justify-content: space-between;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
         align-items: center;
         gap: ${token.marginSM}px;
-        flex-wrap: wrap;
         width: 100%;
+      }
+      .app-footer__start {
+        justify-self: start;
+        min-width: 0;
       }
       .app-footer__text {
         font-size: ${token.fontSizeSM}px;
         color: ${token.colorTextSecondary};
         white-space: normal;
       }
+      .app-footer__copyright {
+        justify-self: center;
+        text-align: center;
+        min-width: 0;
+      }
+      .app-footer__end {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: ${token.marginXS}px;
+        justify-self: end;
+        min-width: 0;
+      }
+      .app-footer__links {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        gap: ${token.marginXXS}px ${token.marginXS}px;
+        min-width: 0;
+      }
+      .app-footer__link {
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+        text-decoration: none;
+        white-space: nowrap;
+      }
+      .app-footer__link:hover {
+        color: ${token.colorPrimary};
+        text-decoration: underline;
+      }
+      .app-footer__link:focus-visible {
+        outline: 2px solid ${token.colorPrimary};
+        outline-offset: 2px;
+        border-radius: ${token.borderRadiusSM}px;
+      }
+      .app-footer__link-sep {
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextQuaternary};
+        user-select: none;
+      }
 
       /* mobile < 768 */
       @media (max-width: 767px) {
         .pub-layout-header.ant-layout-header {
+          height: 56px;
+          line-height: 56px;
           padding-inline: ${token.paddingSM}px;
         }
         .pub-header-action__label {
@@ -1779,6 +2091,9 @@ export function GlobalThemeStyles() {
         }
         .pub-header-lang-trigger__code {
           display: inline;
+        }
+        .app-header-action__label {
+          display: none;
         }
         .pub-layout-page--outlet {
           padding: ${token.paddingSM}px;
@@ -1795,8 +2110,24 @@ export function GlobalThemeStyles() {
           padding-right: 0;
         }
         .app-footer__inner {
+          display: flex;
           flex-direction: column;
           text-align: center;
+          justify-content: center;
+          align-items: center;
+        }
+        .app-footer__start,
+        .app-footer__copyright,
+        .app-footer__end,
+        .app-footer__links {
+          justify-self: unset;
+        }
+        .app-footer__end {
+          width: 100%;
+          justify-content: center;
+          flex-wrap: wrap;
+        }
+        .app-footer__links {
           justify-content: center;
         }
         .module-screen-header {
@@ -1842,11 +2173,8 @@ export function GlobalThemeStyles() {
           flex-wrap: wrap;
           gap: ${token.marginXS}px;
         }
-        .booking-template-modal__header {
-          padding: ${token.paddingSM}px ${token.paddingMD}px;
-        }
         .booking-template-modal__body {
-          padding: ${token.paddingMD}px;
+          max-height: min(65vh, 640px);
         }
         .feature-toolbar {
           flex-direction: column;

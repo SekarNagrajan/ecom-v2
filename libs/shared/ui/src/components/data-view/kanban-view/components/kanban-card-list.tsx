@@ -3,7 +3,7 @@ import {
   defaultRangeExtractor,
   type Range,
 } from '@tanstack/react-virtual';
-import { theme, Empty } from 'antd';
+import { theme } from 'antd';
 import {
   useEffect,
   useRef,
@@ -13,6 +13,7 @@ import {
   type RefCallback,
 } from 'react';
 
+import { AppEmptyState } from '../../../ui/empty-state';
 import type { DataViewItem } from '../../data-view-item';
 import type { DataViewColumn } from '../../types';
 import type { CardLayoutConfig, RenderCardParams } from '../types';
@@ -177,10 +178,11 @@ export function CardList<TData extends DataViewItem>({
           position: 'relative',
         }}
       >
-        <Empty
-          image={Empty.PRESENTED_IMAGE_SIMPLE}
-          description="No items in this lane"
-          style={{ margin: 0 }}
+        <AppEmptyState
+          variant="blank"
+          artSize="sm"
+          title="No items in this lane"
+          style={{ margin: 0, padding: token.paddingSM }}
         />
       </div>
     );

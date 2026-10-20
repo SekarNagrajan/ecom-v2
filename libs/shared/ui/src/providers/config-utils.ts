@@ -1,3 +1,8 @@
+import {
+  mergeNotificationPreferences,
+  mergeReadingMaskPreferences,
+} from './accessibility-utils';
+import { ACCESSIBILITY_DEFAULTS } from './defaults';
 import { type AppCustomConfig } from './types';
 
 /**
@@ -7,6 +12,7 @@ import { type AppCustomConfig } from './types';
  * 1. Starts with an empty object (or the first provided config).
  * 2. Iterates through the arguments in order.
  * 3. Overrides properties ONLY if the new value is not null/undefined.
+ * 4. Deep-merges nested accessibility objects (readingMask, notifications).
  *
  * Usage:
  * const finalConfig = resolveAppConfig(defaultConfig, tenantConfig, userConfig);
@@ -27,11 +33,29 @@ export const mergeAppConfig = (
 
       // 4. Strict check: Only override if value is defined and not null
       // This allows partial updates (e.g. User only changes 'themeMode', rest stays Tenant)
-      if (value !== undefined && value !== null) {
-        // Typescript casting is safe here because we iterate known keys
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (result[key] as any) = value;
+      if (value === undefined || value === null) {
+        return;
       }
+
+      if (key === 'readingMask') {
+        result.readingMask = mergeReadingMaskPreferences(
+          result.readingMask ?? ACCESSIBILITY_DEFAULTS.readingMask,
+          value as AppCustomConfig['readingMask'],
+        );
+        return;
+      }
+
+      if (key === 'notifications') {
+        result.notifications = mergeNotificationPreferences(
+          result.notifications ?? ACCESSIBILITY_DEFAULTS.notifications,
+          value as AppCustomConfig['notifications'],
+        );
+        return;
+      }
+
+      // Typescript casting is safe here because we iterate known keys
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (result[key] as any) = value;
     });
   });
 

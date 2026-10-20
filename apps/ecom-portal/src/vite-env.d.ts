@@ -3,6 +3,7 @@
 
 interface ImportMetaEnv {
   readonly VITE_AIS_PROXY_URL?: string;
+  readonly VITE_AG_GRID_LICENSE_KEY?: string;
 }
 
 interface ImportMeta {

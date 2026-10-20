@@ -1,16 +1,14 @@
-// Modified by Sekar Nagarajan (2026-08-28 00:35)
+// Modified by Sekar Nagarajan (2026-10-20)
 
 import type {
+  BookingCustomerOption,
+  BookingHsCodeOption,
   BookingLookupKind,
   BookingLookupOption,
-} from '../mocks/booking-lookups.mock';
-import type { BookingCustomerOption } from '../mocks/booking-customers.mock';
-import type { BookingRateOption } from '../mocks/booking-rates.mock';
-import type { BookingRoutingSearchParams } from '../mocks/booking-routing.mock';
-import type {
-  BookingHsCodeOption,
   BookingUnNumberOption,
-} from '../mocks/booking-hs-un.mock';
+} from '../../../mocks/fixture-api/bridges/booking-lookups.bridge';
+import type { BookingRateOption } from '../../../mocks/fixture-api/bridges/booking-rates.bridge';
+import type { BookingRoutingSearchParams } from '../../../mocks/fixture-api/bridges/booking-routing.bridge';
 import type {
   BookingActivityEvent,
   BookingDocument,
@@ -22,14 +20,25 @@ import type {
   SubmitBookingResponse,
 } from '../types/booking.types';
 
-export type { BookingRoutingSearchParams } from '../mocks/booking-routing.mock';
-export type { BookingLookupKind, BookingLookupOption } from '../mocks/booking-lookups.mock';
-export type { BookingCustomerOption } from '../mocks/booking-customers.mock';
-export type { BookingRateOption } from '../mocks/booking-rates.mock';
+export type { BookingRoutingSearchParams } from '../../../mocks/fixture-api/bridges/booking-routing.bridge';
+export type {
+  BookingCustomerOption,
+  BookingHsCodeOption,
+  BookingLookupKind,
+  BookingLookupOption,
+  BookingUnNumberOption,
+} from '../../../mocks/fixture-api/bridges/booking-lookups.bridge';
+export type { BookingRateOption } from '../../../mocks/fixture-api/bridges/booking-rates.bridge';
 
 async function readJson<T>(res: Response): Promise<T> {
   if (!res.ok) {
     throw new Error(`Request failed (${res.status})`);
+  }
+  const contentType = res.headers.get("content-type") ?? "";
+  if (!contentType.includes("application/json")) {
+    throw new Error(
+      `Request failed: expected JSON but got ${contentType || "unknown content-type"}`,
+    );
   }
   return (await res.json()) as T;
 }
@@ -150,20 +159,25 @@ export const bookingApi = {
   },
 
   cancelBooking: async (id: string): Promise<void> => {
-    const res = await fetch(`/api/booking/${id}/cancel`, { method: 'POST' });
+    const res = await fetch(`/api/booking/${encodeURIComponent(id)}/cancel`, {
+      method: 'POST',
+    });
     if (!res.ok) throw new Error('Failed to cancel booking');
   },
 
   getBookingById: async (id: string): Promise<BookingPayload> => {
-    const res = await fetch(`/api/booking/${id}`);
+    const res = await fetch(`/api/booking/${encodeURIComponent(id)}`);
     const json = await readJson<{ data: BookingPayload }>(res);
+    if (!json?.data) {
+      throw new Error(`Booking ${id} not found`);
+    }
     return json.data;
   },
 
   getBookingActivity: async (id: string): Promise<BookingActivityEvent[]> => {
-    const res = await fetch(`/api/booking/${id}/activity`);
+    const res = await fetch(`/api/booking/${encodeURIComponent(id)}/activity`);
     const json = await readJson<{ data: BookingActivityEvent[] }>(res);
-    return json.data;
+    return json.data ?? [];
   },
 
   saveDraft: async (
@@ -179,7 +193,7 @@ export const bookingApi = {
   },
 
   downloadBookingPdf: async (id: string): Promise<Blob> => {
-    const res = await fetch(`/api/booking/${id}/pdf`);
+    const res = await fetch(`/api/booking/${encodeURIComponent(id)}/pdf`);
     if (!res.ok) throw new Error('Failed to download PDF');
     return res.blob();
   },

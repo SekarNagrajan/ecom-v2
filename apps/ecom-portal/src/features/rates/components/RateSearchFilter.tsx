@@ -1,16 +1,9 @@
-// Modified by Sekar Nagarajan (2026-09-02 15:00)
+// Modified by Sekar Nagarajan (2026-10-18 10:40)
 import { AppButton, AppTabs } from "@solverminds/shared-ui";
-import {
-  Col,
-  DatePicker,
-  Form,
-  Row,
-  Select,
-  Tooltip,
-  Typography,
-} from "antd";
+import { DatePicker, Form, Select, Tooltip, Typography } from "antd";
 import dayjs from "dayjs";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { usePortSearch } from "../../landing/api/landing.queries";
@@ -23,20 +16,15 @@ export type RateSearchMode =
   | "SERVICE_CONTRACTS"
   | "SPOT_QUOTES";
 
-const RATE_SEARCH_MODE_TABS: { key: RateSearchMode; label: string }[] = [
-  { key: "PUBLISHED_TARIFF", label: "Tariff" },
-  { key: "SURCHARGES", label: "Surcharge" },
-  { key: "SERVICE_CONTRACTS", label: "Service Contract" },
-  { key: "SPOT_QUOTES", label: "Request for Quote" },
-];
-
 /** Form.Item adapter: AppTabs uses activeKey, Ant Form passes value. */
 function RateSearchModeTabs({
   value,
   onChange,
+  items,
 }: {
   value?: RateSearchMode;
   onChange?: (mode: RateSearchMode) => void;
+  items: { key: RateSearchMode; label: string }[];
 }) {
   return (
     <AppTabs
@@ -44,41 +32,13 @@ function RateSearchModeTabs({
       size="large"
       activeKey={value ?? "PUBLISHED_TARIFF"}
       onChange={(key) => onChange?.(key as RateSearchMode)}
-      items={RATE_SEARCH_MODE_TABS.map((tab) => ({
+      items={items.map((tab) => ({
         key: tab.key,
         label: tab.label,
       }))}
     />
   );
 }
-
-const FALLBACK_PORTS = [
-  { value: "USNYC", label: "USNYC - New York, USA" },
-  { value: "SGSIN", label: "SGSIN - Singapore, Singapore" },
-  { value: "NLRTM", label: "NLRTM - Rotterdam, Netherlands" },
-  { value: "CNSHA", label: "CNSHA - Shanghai, China" },
-  { value: "DEHAM", label: "DEHAM - Hamburg, Germany" },
-  { value: "INNSA", label: "INNSA - Nhava Sheva, India" },
-  { value: "AEDXB", label: "AEDXB - Jebel Ali, UAE" },
-];
-
-const EQUIPMENT_TYPES = [
-  { value: "ALL", label: "All Equipment Types" },
-  { value: "20' Standard Dry", label: "20' Standard Dry (20DV)" },
-  { value: "40' High Cube Dry", label: "40' High Cube Dry (40HC)" },
-  { value: "40' Reefer Container", label: "40' Reefer Container (40RF)" },
-];
-
-const COMMODITIES = [
-  { value: "ALL", label: "All Commodities" },
-  { value: "GEN-CGO", label: "GEN-CGO - General Freight / Merchandise" },
-  {
-    value: "AUTO-PARTS",
-    label: "AUTO-PARTS - Automotive Spare Parts & Machinery",
-  },
-  { value: "PERISHABLE", label: "PERISHABLE - Chilled Agricultural Produce" },
-  { value: "TEXTILES", label: "TEXTILES - Textiles & Garments" },
-];
 
 export interface RateSearchParams {
   searchMode: RateSearchMode;
@@ -91,7 +51,12 @@ export interface RateSearchParams {
 }
 
 interface RateSearchFilterProps {
+  /** Current criteria (deep links from the landing page land here); the form follows them. */
+  params?: RateSearchParams;
   onSearch: (params: RateSearchParams) => void;
+  onReset?: () => void;
+  /** Clears results when Tariff / Surcharge / Contract / RFQ tab changes. */
+  onSearchModeChange?: (mode: RateSearchMode) => void;
   isLoading?: boolean;
   onRequestQuote?: () => void;
 }
@@ -100,32 +65,96 @@ function SearchActionsLabel() {
   return <span className="rates-search-actions-label">&nbsp;</span>;
 }
 
-function usePortSelectOptions(initialQuery = "") {
+function usePortSelectOptions(
+  initialQuery = "",
+  fallbackPorts: { value: string; label: string }[],
+) {
   const [query, setQuery] = useState(initialQuery);
   const { data: ports = [], isFetching } = usePortSearch(query);
 
   const options = useMemo(() => {
-    if (ports.length === 0) return FALLBACK_PORTS;
+    if (ports.length === 0) return fallbackPorts;
     return ports.map((p) => ({
       value: p.portCode,
       label: `${p.portCode} - ${p.portName}`,
     }));
-  }, [ports]);
+  }, [ports, fallbackPorts]);
 
   return { query, setQuery, options, isFetching };
 }
 
 export function RateSearchFilter({
+  params,
   onSearch,
+  onReset,
+  onSearchModeChange,
   isLoading,
   onRequestQuote,
 }: RateSearchFilterProps) {
+  const { t } = useTranslation(["rates", "common", "modules"]);
   const [form] = Form.useForm();
   const searchMode: RateSearchMode =
     Form.useWatch("searchMode", form) || "PUBLISHED_TARIFF";
 
-  const polAC = usePortSelectOptions("USNYC");
-  const podAC = usePortSelectOptions("SGSIN");
+  const rateSearchModeTabs = useMemo(
+    () =>
+      [
+        { key: "PUBLISHED_TARIFF" as const, label: t("modes.tariff") },
+        { key: "SURCHARGES" as const, label: t("modes.surcharge") },
+        { key: "SERVICE_CONTRACTS" as const, label: t("modes.serviceContract") },
+        { key: "SPOT_QUOTES" as const, label: t("modes.requestForQuote") },
+      ] satisfies { key: RateSearchMode; label: string }[],
+    [t],
+  );
+
+  // Commercial showcase ports (10 tariff lanes on LRP V2 Testing) — labels from i18n when present.
+  const fallbackPorts = useMemo(
+    () =>
+      [
+        "INNSA",
+        "AEJEA",
+        "SADMM",
+        "SGSIN",
+        "INMUN",
+        "INMAA",
+        "USILG",
+        "GTPBR",
+        "MYPKG",
+        "AEDXB",
+      ].map((value) => ({
+        value,
+        label: t(`options.ports.${value}`, {
+          defaultValue: value,
+        }),
+      })),
+    [t],
+  );
+
+  const equipmentTypes = useMemo(
+    () => [
+      { value: "ALL", label: t("options.equipment.all") },
+      { value: "20' Standard Dry", label: t("options.equipment.20dv") },
+      { value: "40' Standard Dry", label: t("options.equipment.40dv") },
+      { value: "40' High Cube Dry", label: t("options.equipment.40hc") },
+      { value: "20' Reefer Container", label: t("options.equipment.20rf") },
+      { value: "40' Reefer Container", label: t("options.equipment.40rf") },
+    ],
+    [t],
+  );
+
+  const commodities = useMemo(
+    () => [
+      { value: "ALL", label: t("options.commodity.all") },
+      { value: "GEN-CGO", label: t("options.commodity.genCgo") },
+      { value: "AUTO-PARTS", label: t("options.commodity.autoParts") },
+      { value: "PERISHABLE", label: t("options.commodity.perishable") },
+      { value: "TEXTILES", label: t("options.commodity.textiles") },
+    ],
+    [t],
+  );
+
+  const polAC = usePortSelectOptions("INNSA", fallbackPorts);
+  const podAC = usePortSelectOptions("AEJEA", fallbackPorts);
 
   const showCommodity =
     searchMode === "PUBLISHED_TARIFF" ||
@@ -134,6 +163,23 @@ export function RateSearchFilter({
   const showEquipment = searchMode !== "SERVICE_CONTRACTS";
   const showShipmentDate = searchMode !== "SPOT_QUOTES";
   const isRfqMode = searchMode === "SPOT_QUOTES";
+
+  // Keep the form in step with criteria set outside it (landing deep link, reset).
+  useEffect(() => {
+    if (!params) return;
+    form.setFieldsValue({
+      searchMode: params.searchMode,
+      polCode: params.polCode,
+      podCode: params.podCode,
+      eqpType: params.eqpType,
+      commodity: params.commodity,
+      ...(params.fromDate ? { shipmentDate: dayjs(params.fromDate) } : {}),
+    });
+    if (params.polCode) polAC.setQuery(params.polCode);
+    if (params.podCode) podAC.setQuery(params.podCode);
+    // The port-option hooks are stable setters; only the criteria matter here.
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- sync external criteria into the antd form
+  }, [params?.searchMode, params?.polCode, params?.podCode, params?.eqpType, params?.commodity, params?.fromDate]);
 
   const handleSwapPorts = () => {
     const pol = form.getFieldValue("polCode");
@@ -148,29 +194,13 @@ export function RateSearchFilter({
 
   const handleReset = () => {
     form.resetFields();
-    polAC.setQuery("USNYC");
-    podAC.setQuery("SGSIN");
+    polAC.setQuery("INNSA");
+    podAC.setQuery("AEJEA");
+    onReset?.();
   };
 
   const handleFinish = (values: Record<string, unknown>) => {
     const mode = values.searchMode as RateSearchMode;
-    if (mode === "SPOT_QUOTES" && onRequestQuote) {
-      onSearch({
-        searchMode: mode,
-        polCode: values.polCode as string,
-        podCode: values.podCode as string,
-        eqpType: values.eqpType as string,
-        commodity: values.commodity as string,
-        fromDate: values.shipmentDate
-          ? (values.shipmentDate as dayjs.Dayjs).format("YYYY-MM-DD")
-          : undefined,
-        toDate: values.toDate
-          ? (values.toDate as dayjs.Dayjs).format("YYYY-MM-DD")
-          : undefined,
-      });
-      return;
-    }
-
     onSearch({
       searchMode: mode,
       polCode: values.polCode as string,
@@ -195,123 +225,139 @@ export function RateSearchFilter({
           requiredMark={false}
           initialValues={{
             searchMode: "PUBLISHED_TARIFF",
-            polCode: "USNYC",
-            podCode: "SGSIN",
-            eqpType: "40' High Cube Dry",
+            polCode: "INNSA",
+            podCode: "AEJEA",
+            eqpType: "20' Standard Dry",
             commodity: "GEN-CGO",
             shipmentDate: dayjs(),
             toDate: dayjs().add(90, "day"),
+          }}
+          onValuesChange={(changed) => {
+            if (changed.searchMode && typeof changed.searchMode === "string") {
+              onSearchModeChange?.(changed.searchMode as RateSearchMode);
+            }
           }}
           onFinish={handleFinish}
         >
           <div className="rates-search-mode-wrap custom-scroll">
             <Form.Item name="searchMode" className="rates-search-mode-field">
-              <RateSearchModeTabs />
+              <RateSearchModeTabs items={rateSearchModeTabs} />
             </Form.Item>
           </div>
 
-          <Row gutter={[16, 8]} align="bottom">
-            <Col xs={24} md={11} lg={showEquipment ? 7 : 8}>
+          <div className="rates-search-fields-row">
+            <div className="rates-search-field rates-search-field--port">
               <Form.Item
                 name="polCode"
                 label={
                   <span className="form-field-label rates-port-label">
-                    Origin Port (POL) <Text type="danger">*</Text>
+                    {t("search.originPort")} <Text type="danger">*</Text>
                   </span>
                 }
-                rules={[{ required: true, message: "Select origin port" }]}
+                rules={[{ required: true, message: t("search.selectOrigin") }]}
               >
                 <Select
                   size="large"
                   showSearch
-                  placeholder="Where are you shipping from?"
+                  placeholder={t("search.originPlaceholder")}
                   filterOption={false}
                   onSearch={polAC.setQuery}
                   options={polAC.options}
                   loading={polAC.isFetching}
                   notFoundContent={
-                    polAC.isFetching ? "Searching ports…" : "No ports found"
+                    polAC.isFetching
+                      ? t("search.searchingPorts")
+                      : t("search.noPortsFound")
                   }
                 />
               </Form.Item>
-            </Col>
+            </div>
 
-            <Col xs={24} md={2} lg={1} className="rates-port-swap-col">
-              <div className="rates-port-swap">
-                <Tooltip title="Swap Origin and Delivery">
-                  <AppButton
-                    type="default"
-                    size="large"
-                    shape="circle"
-                    icon={<AppIcon icon={Icons.arrowLeftRight} size={16} />}
-                    onClick={handleSwapPorts}
-                    aria-label="Swap origin and delivery ports"
-                  />
-                </Tooltip>
-              </div>
-            </Col>
+            <div className="rates-search-field rates-search-field--swap">
+              <Form.Item
+                label={<SearchActionsLabel />}
+                className="rates-search-swap-field"
+              >
+                <div className="rates-port-swap">
+                  <Tooltip title={t("search.swapTooltip")}>
+                    <AppButton
+                      type="default"
+                      size="large"
+                      shape="circle"
+                      icon={<AppIcon icon={Icons.arrowLeftRight} size={16} />}
+                      onClick={handleSwapPorts}
+                      aria-label={t("search.swapAria")}
+                    />
+                  </Tooltip>
+                </div>
+              </Form.Item>
+            </div>
 
-            <Col xs={24} md={11} lg={showEquipment ? 7 : 8}>
+            <div className="rates-search-field rates-search-field--port">
               <Form.Item
                 name="podCode"
                 label={
                   <span className="form-field-label rates-port-label">
-                    Delivery Port (POD) <Text type="danger">*</Text>
+                    {t("search.deliveryPort")} <Text type="danger">*</Text>
                   </span>
                 }
-                rules={[{ required: true, message: "Select delivery port" }]}
+                rules={[{ required: true, message: t("search.selectDelivery") }]}
               >
                 <Select
                   size="large"
                   showSearch
-                  placeholder="Where is cargo going?"
+                  placeholder={t("search.deliveryPlaceholder")}
                   filterOption={false}
                   onSearch={podAC.setQuery}
                   options={podAC.options}
                   loading={podAC.isFetching}
                   notFoundContent={
-                    podAC.isFetching ? "Searching ports…" : "No ports found"
+                    podAC.isFetching
+                      ? t("search.searchingPorts")
+                      : t("search.noPortsFound")
                   }
                 />
               </Form.Item>
-            </Col>
+            </div>
 
             {showEquipment ? (
-              <Col xs={24} md={12} lg={9}>
+              <div className="rates-search-field rates-search-field--eqp">
                 <Form.Item
                   name="eqpType"
                   label={
                     <span className="form-field-label rates-port-label">
-                      Equipment Type
+                      {t("search.equipmentType")}
                     </span>
                   }
                 >
-                  <Select size="large" options={EQUIPMENT_TYPES} />
+                  <Select size="large" options={equipmentTypes} />
                 </Form.Item>
-              </Col>
+              </div>
             ) : null}
-          </Row>
 
-          <Row gutter={[16, 8]} align="bottom">
             {showCommodity ? (
-              <Col xs={24} md={8} lg={isRfqMode ? 8 : 6}>
+              <div className="rates-search-field rates-search-field--commodity">
                 <Form.Item
                   name="commodity"
-                  label={<span className="form-field-label">Commodity</span>}
+                  label={
+                    <span className="form-field-label">
+                      {t("search.commodity")}
+                    </span>
+                  }
                 >
-                  <Select size="large" options={COMMODITIES} />
+                  <Select size="large" options={commodities} />
                 </Form.Item>
-              </Col>
+              </div>
             ) : null}
 
             {showShipmentDate ? (
               <>
-                <Col xs={24} md={8} lg={showCommodity ? 5 : 7}>
+                <div className="rates-search-field rates-search-field--date">
                   <Form.Item
                     name="shipmentDate"
                     label={
                       <span className="form-field-label rates-port-label">
-                        Shipment Date
+                        {t("search.shipmentDate")}
                       </span>
                     }
                   >
@@ -321,13 +367,13 @@ export function RateSearchFilter({
                       format="YYYY-MM-DD"
                     />
                   </Form.Item>
-                </Col>
-                <Col xs={24} md={8} lg={showCommodity ? 5 : 7}>
+                </div>
+                <div className="rates-search-field rates-search-field--date">
                   <Form.Item
                     name="toDate"
                     label={
                       <span className="form-field-label rates-port-label">
-                        Valid Through
+                        {t("search.validThrough")}
                       </span>
                     }
                   >
@@ -337,15 +383,11 @@ export function RateSearchFilter({
                       format="YYYY-MM-DD"
                     />
                   </Form.Item>
-                </Col>
+                </div>
               </>
             ) : null}
 
-            <Col
-              xs={24}
-              md={showShipmentDate ? 24 : 16}
-              lg={isRfqMode ? 16 : showCommodity ? 8 : 10}
-            >
+            <div className="rates-search-field rates-search-field--actions">
               <Form.Item
                 label={<SearchActionsLabel />}
                 className="rates-search-actions-field"
@@ -371,7 +413,7 @@ export function RateSearchFilter({
                           });
                       }}
                     >
-                      Request for Quote
+                      {t("actions.requestForQuote")}
                     </AppButton>
                   ) : (
                     <AppButton
@@ -381,7 +423,7 @@ export function RateSearchFilter({
                       loading={isLoading}
                       htmlType="submit"
                     >
-                      Search Rates
+                      {t("common:actions.search")}
                     </AppButton>
                   )}
                   {!isRfqMode ? (
@@ -397,7 +439,7 @@ export function RateSearchFilter({
                       }
                       onClick={handleReset}
                     >
-                      Reset
+                      {t("common:actions.reset")}
                     </AppButton>
                   ) : (
                     <>
@@ -407,7 +449,7 @@ export function RateSearchFilter({
                         loading={isLoading}
                         htmlType="submit"
                       >
-                        View Quotes
+                        {t("actions.viewQuotes")}
                       </AppButton>
                       <AppButton
                         size="large"
@@ -421,14 +463,14 @@ export function RateSearchFilter({
                         }
                         onClick={handleReset}
                       >
-                        Reset
+                        {t("common:actions.reset")}
                       </AppButton>
                     </>
                   )}
                 </div>
               </Form.Item>
-            </Col>
-          </Row>
+            </div>
+          </div>
         </Form>
       </div>
     </div>

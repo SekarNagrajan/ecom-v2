@@ -1,0 +1,64 @@
+{
+  "tabs": {
+    "schedule": "Schedule"
+  },
+  "schedule": {
+    "origin": "Origin",
+    "delivery": "Delivery",
+    "fromDate": "From date",
+    "toDate": "To date",
+    "originPlaceholder": "Singapore",
+    "deliveryPlaceholder": "Rotterdam",
+    "datePlaceholder": "MM/DD/YYYY",
+    "searchSailings": "Search sailings",
+    "swapAria": "Swap origin and delivery"
+  },
+  "tracking": {
+    "containerNo": "Container No",
+    "bookingNo": "Booking No",
+    "billOfLading": "Bill of Lading (BL)",
+    "securityVerification": "Security Verification",
+    "trackShipment": "Track shipment",
+    "fieldLabel": {
+      "CONTAINER": "Enter the container number",
+      "BOOKING": "Enter the booking number",
+      "BL": "Enter the bill of lading (BL) number"
+    },
+    "fieldPlaceholder": {
+      "CONTAINER": "e.g. SMLU8829102",
+      "BOOKING": "e.g. BKG-2026-9901",
+      "BL": "e.g. BL-SHA-88401"
+    }
+  },
+  "rates": {
+    "origin": "Origin",
+    "delivery": "Delivery",
+    "equipment": "Equipment",
+    "date": "Date",
+    "securityVerification": "Security Verification",
+    "originPlaceholder": "Singapore",
+    "deliveryPlaceholder": "Rotterdam",
+    "selectType": "Select Type",
+    "datePlaceholder": "MM/DD/YYYY",
+    "getRates": "Get Rates",
+    "swapAria": "Swap origin and delivery"
+  },
+  "captcha": {
+    "alt": "CAPTCHA",
+    "reloadAria": "Reload captcha",
+    "enterAria": "Enter captcha code",
+    "placeholder": "Enter code"
+  },
+  "validation": {
+    "captchaRequired": "Please Enter The Captcha Code",
+    "trackingNumberMin": "Please enter a valid Container, Booking, or Bill of Lading (BL) number"
+  },
+  "errors": {
+    "captchaIncorrect": "Captcha Entered Incorrectly"
+  },
+  "a11y": {
+    "resetScheduleSearch": "Reset schedule search",
+    "resetTrackingSearch": "Reset tracking search",
+    "resetRatesSearch": "Reset rates search"
+  }
+}

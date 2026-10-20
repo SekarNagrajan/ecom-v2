@@ -1,0 +1,135 @@
+{
+  "header": {
+    "createAccount": "Create an Account",
+    "complete": "Registration Complete",
+    "subtitleRegister": "Register for the SVM E-Com Portal to manage your bookings and shipments.",
+    "subtitleSuccess": "Your registration has been successfully submitted."
+  },
+  "steps": {
+    "companyInfo": "Company Info",
+    "userInfo": "User Info",
+    "kycUpload": "KYC Upload",
+    "terms": "Terms & Conditions"
+  },
+  "actions": {
+    "submitRegistration": "Submit Registration"
+  },
+  "company": {
+    "companyName": "Company Name",
+    "country": "Country",
+    "controllingAgency": "Controlling Agency",
+    "city": "City",
+    "postalCode": "Postal Code",
+    "address1": "Address 1",
+    "address2": "Address 2",
+    "website": "Website",
+    "recentBl": "Recent BL/Booking number",
+    "companyPhone": "Company Phone",
+    "phonePlaceholder": "Phone",
+    "phoneCodePlaceholder": "+1",
+    "customerCode": "Customer Code",
+    "customerCodePlaceholder": "Enter Customer Code",
+    "existingCustomer": "Existing Customer",
+    "newCustomer": "New Customer"
+  },
+  "user": {
+    "title": "Title",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email Id",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "timezone": "Timezone",
+    "defaultView": "Default View",
+    "preferredView": "Preferred View"
+  },
+  "options": {
+    "countries": {
+      "US": "United States",
+      "GB": "United Kingdom",
+      "CA": "Canada",
+      "IN": "India",
+      "AU": "Australia",
+      "SG": "Singapore"
+    },
+    "agencies": {
+      "AGENCY_US": "US Agency",
+      "AGENCY_GB": "UK Agency",
+      "AGENCY_SG": "Singapore Agency"
+    },
+    "titles": {
+      "Mr": "Mr.",
+      "Mrs": "Mrs.",
+      "Ms": "Ms.",
+      "Dr": "Dr."
+    },
+    "timezones": {
+      "GMT": "GMT - Greenwich Mean Time",
+      "UTC": "UTC - Universal Time Coordinated",
+      "EST": "EST - Eastern Standard Time",
+      "PST": "PST - Pacific Standard Time",
+      "IST": "IST - Indian Standard Time"
+    },
+    "defaultView": {
+      "STANDARD": "Standard",
+      "COMPACT": "Compact",
+      "DETAILED": "Detailed"
+    },
+    "preferredView": {
+      "HOME": "Home Page",
+      "DASHBOARD": "Dashboard",
+      "TRACKING": "Tracking"
+    }
+  },
+  "kyc": {
+    "title": "KYC Document Upload",
+    "description": "Please upload your company registration certificate, trade license, or other KYC documents as required by the controlling agency.",
+    "dragText": "Click or drag file to this area to upload",
+    "dragHint": "Support for a single PDF, DOCX, JPG, or PNG upload. Maximum size 10MB."
+  },
+  "terms": {
+    "heading": "Terms and Conditions",
+    "paragraphs": {
+      "acceptance": "1. Acceptance of Terms: By registering for an account on the E-Com Portal, you agree to abide by the <termsLink>Website Terms of Use</termsLink>.",
+      "privacy": "2. Privacy Policy: We are committed to protecting your privacy. Your personal and company information will be handled in accordance with our <privacyLink>Privacy Policy</privacyLink> and applicable data protection laws.",
+      "security": "3. Account Security: You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account.",
+      "accurate": "4. Accurate Information: You agree to provide accurate, current, and complete information during the registration process and to update such information to keep it accurate, current, and complete."
+    },
+    "agree": "I agree to the <termsLink>Website Terms of Use</termsLink>"
+  },
+  "validation": {
+    "companyNameRequired": "Company Name is required",
+    "countryRequired": "Country is required",
+    "locationRequired": "Location is required",
+    "address1Required": "Address Line 1 is required",
+    "cityRequired": "City is required",
+    "emailRequired": "Email is required",
+    "emailInvalid": "Invalid email address",
+    "passwordMin": "Password must be at least 8 characters",
+    "confirmPasswordRequired": "Please confirm your password",
+    "passwordsMismatch": "Passwords don't match",
+    "firstNameRequired": "First Name is required",
+    "lastNameRequired": "Last Name is required",
+    "titleRequired": "Title is required",
+    "timezoneRequired": "Timezone is required",
+    "agreeToTerms": "You must agree to the terms and conditions",
+    "customerCodeRequired": "Customer Code is required",
+    "companyPhoneOrMobileRequired": "Either Company Phone or Company Mobile is required",
+    "invalidCustomerCode": "Invalid Customer Code",
+    "errorValidatingCode": "Error validating code",
+    "emailAlreadyRegistered": "This email is already registered.",
+    "emailVerifyFailed": "Failed to verify email."
+  },
+  "toasts": {
+    "customerCodeVerified": "Customer code verified. Auto-filling details.",
+    "fileTooLarge": "File must be smaller than 10MB!",
+    "fileTypeInvalid": "You can only upload PDF, JPG, PNG or DOC/DOCX files!",
+    "registrationSuccess": "Registration successful! Please check your email for activation.",
+    "submitFailed": "Failed to submit registration. Please try again.",
+    "completeRequiredFields": "Please complete all required fields correctly."
+  },
+  "success": {
+    "title": "Successfully Submitted Registration!",
+    "subTitle": "Your registration request has been forwarded to the selected controlling agency. You will receive an email confirmation shortly."
+  }
+}

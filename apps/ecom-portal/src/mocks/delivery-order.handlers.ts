@@ -1,15 +1,26 @@
-// Modified by Sekar Nagarajan (2026-08-26 14:26)
+// Modified by Sekar Nagarajan (2026-10-17 00:33)
+/**
+ * Delivery Order MSW handlers, served from the SQL-extracted fixtures through
+ * fixture-api/bridges/delivery-order.bridge.ts (invoices / invoiceBls / invoiceCharges / lrpBl /
+ * lrpBlCargo / deliveryOrderVersions). Downloading the document marks the DO printed in-session.
+ */
 import { http, HttpResponse } from "msw";
 
 import {
-  markDoPrinted,
-  mockDeliveryOrders,
-} from "../features/delivery-order/mocks/do.mock";
+  deliveryOrderDocument,
+  deliveryOrderList,
+  filterDeliveryOrders,
+  markDeliveryOrderPrinted,
+} from "./fixture-api/bridges/delivery-order.bridge";
+import { currentLogin } from "./fixture-api/bridges/user.bridge";
 
 export const deliveryOrderHandlers = [
-  http.get("/api/ecom/imp/delivery-orders", async () => {
+  http.get("/api/ecom/imp/delivery-orders", async ({ request }) => {
+    const url = new URL(request.url);
+    const fromDate = url.searchParams.get("fromDate");
+    const toDate = url.searchParams.get("toDate");
     return HttpResponse.json({
-      data: mockDeliveryOrders.map((row) => ({ ...row })),
+      data: filterDeliveryOrders(deliveryOrderList(), fromDate, toDate),
     });
   }),
 
@@ -17,10 +28,11 @@ export const deliveryOrderHandlers = [
     "/api/ecom/imp/delivery-orders/:delOrdNo/document",
     async ({ params }) => {
       const delOrdNo = String(params.delOrdNo);
-      markDoPrinted(delOrdNo);
+      markDeliveryOrderPrinted(delOrdNo, currentLogin() || "ecom");
 
-      const content = `%PDF-1.4 Mock Delivery Order Document for ${delOrdNo}`;
-      const blob = new Blob([content], { type: "application/pdf" });
+      const blob = new Blob([deliveryOrderDocument(delOrdNo)], {
+        type: "application/pdf",
+      });
 
       return new HttpResponse(blob, {
         headers: {
@@ -31,3 +43,8 @@ export const deliveryOrderHandlers = [
     },
   ),
 ];
+
+/** Snapshot of the derived list (tests). */
+export function getDeliveryOrderListSnapshot() {
+  return deliveryOrderList();
+}

@@ -3,11 +3,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton, FormDatePicker } from "@solverminds/shared-ui";
 import { Typography } from "antd";
 import { DateTime } from "luxon";
+import { useMemo } from "react";
 import { useForm, type Resolver } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import type { CroSearchValues } from "../types/cro.types";
-import { croSearchSchema } from "../types/cro.types";
+import { createCroSearchSchema } from "../types/cro.types";
 
 const { Text } = Typography;
 
@@ -30,9 +32,11 @@ function CroFieldLabel({ children }: { children: React.ReactNode }) {
 }
 
 export function CroSearchPanel({ isSearching, onSearch }: CroSearchPanelProps) {
+  const { t } = useTranslation("container-release-order");
+  const schema = useMemo(() => createCroSearchSchema(t), [t]);
   const { control, handleSubmit } = useForm<CroSearchValues>({
     // preprocess widens input type; assert for RHF
-    resolver: zodResolver(croSearchSchema) as Resolver<CroSearchValues>,
+    resolver: zodResolver(schema) as Resolver<CroSearchValues>,
     defaultValues,
     mode: "onSubmit",
   });
@@ -47,7 +51,7 @@ export function CroSearchPanel({ isSearching, onSearch }: CroSearchPanelProps) {
         >
           <div className="cro-search-form-row">
             <div className="cro-search-field">
-              <CroFieldLabel>From Date</CroFieldLabel>
+              <CroFieldLabel>{t("search.fromDate")}</CroFieldLabel>
               <div className="cro-search-field__control">
                 <FormDatePicker
                   control={control}
@@ -64,7 +68,7 @@ export function CroSearchPanel({ isSearching, onSearch }: CroSearchPanelProps) {
             </div>
 
             <div className="cro-search-field">
-              <CroFieldLabel>To Date</CroFieldLabel>
+              <CroFieldLabel>{t("search.toDate")}</CroFieldLabel>
               <div className="cro-search-field__control">
                 <FormDatePicker
                   control={control}
@@ -91,7 +95,7 @@ export function CroSearchPanel({ isSearching, onSearch }: CroSearchPanelProps) {
                 icon={<AppIcon icon={Icons.search} size={16} />}
                 loading={isSearching}
               >
-                Show
+                {t("search.show")}
               </AppButton>
             </div>
           </div>

@@ -3,7 +3,6 @@ import type { GlobalToken } from "antd/es/theme/interface";
 import type { ReactNode } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
-import { WIZARD_STEP_TITLES } from "../../../constants/module-titles";
 import { BlLoadingCenter } from "../components/bl-loading-center";
 import { BlCargoProtectStep } from "../components/steps/bl-cargo-protect-step";
 import { BlChargeTabStep } from "../components/steps/bl-charge-tab-step";
@@ -66,27 +65,13 @@ const STEP_ICONS: Record<BLWizardStepId, ReactNode> = {
   preview: <AppIcon icon={Icons.eye} size={PIPELINE_ICON_SIZE} />,
 };
 
-const STEP_TITLES: Record<BLWizardStepId, string> = {
-  master: WIZARD_STEP_TITLES.masterDetails,
-  parties: WIZARD_STEP_TITLES.parties,
-  routing: WIZARD_STEP_TITLES.routing,
-  cargo: WIZARD_STEP_TITLES.cargoDetails,
-  insurance: WIZARD_STEP_TITLES.insurance,
-  cargoProtect: "Cargo Protect",
-  charges: WIZARD_STEP_TITLES.charges,
-  ens: WIZARD_STEP_TITLES.ensDetails,
-  chargeTab: "Charge Summary",
-  files: WIZARD_STEP_TITLES.fileUpload,
-  references: WIZARD_STEP_TITLES.references,
-  preview: WIZARD_STEP_TITLES.preview,
-};
-
 export function buildBlWizardSteps(
   config: BLWizardConfig,
+  titles: Record<BLWizardStepId, string>,
 ): BLWizardStepDefinition[] {
   return buildBlWizardStepIds(config).map((id) => ({
     id,
-    title: STEP_TITLES[id],
+    title: titles[id],
     icon: STEP_ICONS[id],
     Component: STEP_COMPONENTS[id],
   }));

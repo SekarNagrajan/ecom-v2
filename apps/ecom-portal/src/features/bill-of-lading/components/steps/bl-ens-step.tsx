@@ -1,17 +1,51 @@
 // Modified by Sekar Nagarajan (2026-09-01 16:36)
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Alert, Card, Input, Segmented, Space, Switch, Typography } from "antd";
+import { Alert, Card, Input, Segmented, Switch, Typography } from "antd";
+import { useMemo } from "react";
 import { Controller, useForm, type Resolver } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { z } from "zod";
 
 import {
   FORM_YES_NO_SWITCH_CLASS,
   yesNoSwitchInner,
 } from "../../../../components/shared/yes-no-switch";
-import { ensSchema, type EnsData } from "../../../booking/types/booking.types";
+import type { EnsData } from "../../../booking/types/booking.types";
 import { BlWizardFooter } from "../bl-wizard-footer";
 import type { BLWizardStepProps } from "./MasterDetailsStep";
 
 const { Text, Title } = Typography;
+
+function createBlEnsSchema(t: (key: string) => string) {
+  return z.object({
+    euCustomsZone: z.boolean().default(false),
+    blType: z.enum(["Straight BL", "Master BL"]).default("Straight BL"),
+    ensFilingType: z
+      .enum(["Single Filing", "Multiple Filing"])
+      .default("Single Filing"),
+    paymentMethod: z
+      .enum(["Wire Transfer", "Not Prepaid"])
+      .default("Wire Transfer"),
+    declarantName: z.string().default(""),
+    declarantAddress: z.string().default(""),
+    declarantCity: z.string().default(""),
+    declarantCountry: z.string().default(""),
+    declarantEori: z.string().default(""),
+    declarantEmail: z
+      .string()
+      .email(t("wizard.ens.validation.invalidEmail"))
+      .or(z.literal(""))
+      .default(""),
+    buyerName: z.string().default(""),
+    buyerAddress: z.string().default(""),
+    buyerCity: z.string().default(""),
+    buyerCountry: z.string().default(""),
+    sellerName: z.string().default(""),
+    sellerAddress: z.string().default(""),
+    sellerCity: z.string().default(""),
+    sellerCountry: z.string().default(""),
+  });
+}
 
 const defaults: EnsData = {
   euCustomsZone: false,
@@ -43,6 +77,10 @@ export function BlEnsStep({
   isFirstStep,
   isSubmitting,
 }: BLWizardStepProps) {
+  const { t } = useTranslation(["bill-of-lading", "common"]);
+
+  const ensSchemaLocal = useMemo(() => createBlEnsSchema(t), [t]);
+
   const {
     control,
     handleSubmit,
@@ -50,7 +88,7 @@ export function BlEnsStep({
     setValue,
     formState: { errors },
   } = useForm<EnsData>({
-    resolver: zodResolver(ensSchema) as Resolver<EnsData>,
+    resolver: zodResolver(ensSchemaLocal) as Resolver<EnsData>,
     defaultValues: { ...defaults, ...(data.ens ?? {}) },
   });
 
@@ -103,14 +141,15 @@ export function BlEnsStep({
           className="form-step-card form-step-section"
           title={
             <Title level={5} className="form-step-card-title">
-              ENS Details
+              {t("wizard.ens.title")}
             </Title>
           }
         >
-          {/* Modified by Sekar Nagarajan (2026-09-01 16:36) — booking ENS layout parity */}
           <div className="form-ens-required-row form-ens-top-row">
             <div className="form-field-cell">
-              <label className="form-field-label">ENS</label>
+              <label className="form-field-label">
+                {t("wizard.ens.label")}
+              </label>
               <Controller
                 control={control}
                 name="euCustomsZone"
@@ -130,7 +169,9 @@ export function BlEnsStep({
             {ensRequired ? (
               <>
                 <div className="form-field-cell">
-                  <label className="form-field-label">Type of B/L</label>
+                  <label className="form-field-label">
+                    {t("wizard.preview.typeOfBl")}
+                  </label>
                   <Controller
                     control={control}
                     name="blType"
@@ -149,8 +190,14 @@ export function BlEnsStep({
                           );
                         }}
                         options={[
-                          { label: "Straight BL", value: "Straight BL" },
-                          { label: "Master BL", value: "Master BL" },
+                          {
+                            label: t("wizard.ens.straightBl"),
+                            value: "Straight BL",
+                          },
+                          {
+                            label: t("wizard.preview.masterBl"),
+                            value: "Master BL",
+                          },
                         ]}
                       />
                     )}
@@ -158,7 +205,9 @@ export function BlEnsStep({
                 </div>
 
                 <div className="form-field-cell">
-                  <label className="form-field-label">Type of ENS Filing</label>
+                  <label className="form-field-label">
+                    {t("wizard.ens.filingType")}
+                  </label>
                   <Controller
                     control={control}
                     name="ensFilingType"
@@ -177,9 +226,12 @@ export function BlEnsStep({
                           );
                         }}
                         options={[
-                          { label: "Single Filing", value: "Single Filing" },
                           {
-                            label: "Multiple Filing",
+                            label: t("wizard.ens.singleFiling"),
+                            value: "Single Filing",
+                          },
+                          {
+                            label: t("wizard.ens.multipleFiling"),
                             value: "Multiple Filing",
                           },
                         ]}
@@ -189,7 +241,9 @@ export function BlEnsStep({
                 </div>
 
                 <div className="form-field-cell">
-                  <label className="form-field-label">Method of Payment</label>
+                  <label className="form-field-label">
+                    {t("labels.paymentMethod")}
+                  </label>
                   <Controller
                     control={control}
                     name="paymentMethod"
@@ -200,8 +254,14 @@ export function BlEnsStep({
                         value={value}
                         onChange={onChange}
                         options={[
-                          { label: "Wire Transfer", value: "Wire Transfer" },
-                          { label: "Not Prepaid", value: "Not Prepaid" },
+                          {
+                            label: t("wizard.ens.wireTransfer"),
+                            value: "Wire Transfer",
+                          },
+                          {
+                            label: t("wizard.ens.notPrepaid"),
+                            value: "Not Prepaid",
+                          },
                         ]}
                       />
                     )}
@@ -219,13 +279,15 @@ export function BlEnsStep({
                   className="form-ens-subcard"
                   title={
                     <Title level={5} className="form-step-card-title">
-                      Supplementary Declarant
+                      {t("wizard.ens.supplementaryDeclarant")}
                     </Title>
                   }
                 >
                   <div className="form-ens-party-grid">
                     <div className="form-field-cell">
-                      <label className="form-field-label">Name</label>
+                      <label className="form-field-label">
+                        {t("wizard.ens.fields.name")}
+                      </label>
                       <Controller
                         control={control}
                         name="declarantName"
@@ -235,7 +297,9 @@ export function BlEnsStep({
                       />
                     </div>
                     <div className="form-field-cell">
-                      <label className="form-field-label">Address</label>
+                      <label className="form-field-label">
+                        {t("wizard.ens.fields.address")}
+                      </label>
                       <Controller
                         control={control}
                         name="declarantAddress"
@@ -245,7 +309,9 @@ export function BlEnsStep({
                       />
                     </div>
                     <div className="form-field-cell">
-                      <label className="form-field-label">City</label>
+                      <label className="form-field-label">
+                        {t("wizard.ens.fields.city")}
+                      </label>
                       <Controller
                         control={control}
                         name="declarantCity"
@@ -255,7 +321,9 @@ export function BlEnsStep({
                       />
                     </div>
                     <div className="form-field-cell">
-                      <label className="form-field-label">Country</label>
+                      <label className="form-field-label">
+                        {t("wizard.ens.fields.country")}
+                      </label>
                       <Controller
                         control={control}
                         name="declarantCountry"
@@ -265,7 +333,9 @@ export function BlEnsStep({
                       />
                     </div>
                     <div className="form-field-cell">
-                      <label className="form-field-label">EORI</label>
+                      <label className="form-field-label">
+                        {t("wizard.ens.fields.eori")}
+                      </label>
                       <Controller
                         control={control}
                         name="declarantEori"
@@ -275,7 +345,9 @@ export function BlEnsStep({
                       />
                     </div>
                     <div className="form-field-cell">
-                      <label className="form-field-label">Email</label>
+                      <label className="form-field-label">
+                        {t("wizard.ens.fields.email")}
+                      </label>
                       <Controller
                         control={control}
                         name="declarantEmail"
@@ -298,13 +370,15 @@ export function BlEnsStep({
                     className="form-ens-subcard"
                     title={
                       <Title level={5} className="form-step-card-title">
-                        Buyer
+                        {t("labels.buyer")}
                       </Title>
                     }
                   >
                     <div className="form-ens-party-grid">
                       <div className="form-field-cell">
-                        <label className="form-field-label">Name</label>
+                        <label className="form-field-label">
+                          {t("wizard.ens.fields.name")}
+                        </label>
                         <Controller
                           control={control}
                           name="buyerName"
@@ -314,7 +388,9 @@ export function BlEnsStep({
                         />
                       </div>
                       <div className="form-field-cell">
-                        <label className="form-field-label">Address</label>
+                        <label className="form-field-label">
+                          {t("wizard.ens.fields.address")}
+                        </label>
                         <Controller
                           control={control}
                           name="buyerAddress"
@@ -324,7 +400,9 @@ export function BlEnsStep({
                         />
                       </div>
                       <div className="form-field-cell">
-                        <label className="form-field-label">City</label>
+                        <label className="form-field-label">
+                          {t("wizard.ens.fields.city")}
+                        </label>
                         <Controller
                           control={control}
                           name="buyerCity"
@@ -334,7 +412,9 @@ export function BlEnsStep({
                         />
                       </div>
                       <div className="form-field-cell">
-                        <label className="form-field-label">Country</label>
+                        <label className="form-field-label">
+                          {t("wizard.ens.fields.country")}
+                        </label>
                         <Controller
                           control={control}
                           name="buyerCountry"
@@ -351,13 +431,15 @@ export function BlEnsStep({
                     className="form-ens-subcard"
                     title={
                       <Title level={5} className="form-step-card-title">
-                        Seller
+                        {t("labels.seller")}
                       </Title>
                     }
                   >
                     <div className="form-ens-party-grid">
                       <div className="form-field-cell">
-                        <label className="form-field-label">Name</label>
+                        <label className="form-field-label">
+                          {t("wizard.ens.fields.name")}
+                        </label>
                         <Controller
                           control={control}
                           name="sellerName"
@@ -367,7 +449,9 @@ export function BlEnsStep({
                         />
                       </div>
                       <div className="form-field-cell">
-                        <label className="form-field-label">Address</label>
+                        <label className="form-field-label">
+                          {t("wizard.ens.fields.address")}
+                        </label>
                         <Controller
                           control={control}
                           name="sellerAddress"
@@ -377,7 +461,9 @@ export function BlEnsStep({
                         />
                       </div>
                       <div className="form-field-cell">
-                        <label className="form-field-label">City</label>
+                        <label className="form-field-label">
+                          {t("wizard.ens.fields.city")}
+                        </label>
                         <Controller
                           control={control}
                           name="sellerCity"
@@ -387,7 +473,9 @@ export function BlEnsStep({
                         />
                       </div>
                       <div className="form-field-cell">
-                        <label className="form-field-label">Country</label>
+                        <label className="form-field-label">
+                          {t("wizard.ens.fields.country")}
+                        </label>
                         <Controller
                           control={control}
                           name="sellerCountry"
@@ -405,21 +493,12 @@ export function BlEnsStep({
                 type="info"
                 showIcon
                 className="form-ens-notes"
-                message="ENS filing notes"
+                message={t("wizard.ens.notesTitle")}
                 description={
                   <>
-                    <div>
-                      Single Filing requires Buyer and Seller details. Multiple
-                      Filing requires Supplementary Declarant details.
-                    </div>
-                    <div>
-                      Straight BL uses Single Filing; Master BL uses Multiple
-                      Filing.
-                    </div>
-                    <div>
-                      Provide accurate EORI and person type where applicable for
-                      EU customs processing.
-                    </div>
+                    <div>{t("wizard.ens.notesFilingRequirements")}</div>
+                    <div>{t("wizard.ens.notesBlTypeMapping")}</div>
+                    <div>{t("wizard.ens.notesEori")}</div>
                   </>
                 }
               />

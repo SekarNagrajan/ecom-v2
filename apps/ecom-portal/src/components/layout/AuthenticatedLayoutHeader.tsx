@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-27 12:34)
+// Modified by Sekar Nagarajan (2026-09-17 11:56)
 
 import {
   PRECONFIGURED_TENANTS,
@@ -23,15 +23,22 @@ import {
   theme,
 } from "antd";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { CustomerPickerModal } from "../../features/auth/components/customer-picker-modal";
 import { useImpersonationController } from "../../features/auth/hooks/use-impersonation-controller";
 import { ContactUsDrawer } from "../../features/contact-us/components/ContactUsDrawer";
+import { useProfilePhoto } from "../../features/profile-photo/providers/profile-photo-provider";
+import {
+  SCHEDULES_HEADER_SEARCH_SLOT_ID,
+  useSchedulesHeaderSearchStore,
+} from "../../features/schedules/stores/schedules-header-search.store";
 import { useThemePreferences } from "../../features/theme/providers/theme-preferences-provider";
 import { ChangePasswordView } from "../../features/user-modules/components/ChangePasswordView";
 import { MyAlertsView } from "../../features/user-modules/components/MyAlertsView";
 import { ProfileView } from "../../features/user-modules/components/ProfileView";
 import { AppIcon, Icons } from "../icons";
 import { AccountPreferencesDrawer } from "./account-preferences-drawer";
+import { HeaderLanguageSelect } from "./header-language-select";
 
 const { Header } = Layout;
 const { Text } = Typography;
@@ -54,10 +61,12 @@ export function AuthenticatedLayoutHeader({
   isGuest = false,
   onLoginClick,
 }: AuthenticatedLayoutHeaderProps) {
+  const { t } = useTranslation("common");
   const { token: themeToken } = theme.useToken();
   const navigate = useNavigate();
   const toast = useToast();
   const confirm = useConfirm();
+  const { photoUrl } = useProfilePhoto();
   const user = useAuthStore((state) => state.user);
   const { isImpersonating: isImpersonatingFn } = usePermission();
   const setActiveSubCustomer = useAuthStore(
@@ -93,12 +102,11 @@ export function AuthenticatedLayoutHeader({
 
   const handleLogoutConfirm = () => {
     confirm.danger({
-      title: "Confirm Portal Logout",
+      title: t("account.confirmLogoutTitle"),
 
-      content:
-        "Are you sure you want to terminate your current portal session and log out?",
-      okText: "Confirm Logout",
-      cancelText: "Cancel",
+      content: t("account.confirmLogoutContent"),
+      okText: t("account.confirmLogoutOk"),
+      cancelText: t("actions.cancel"),
       onOk: () => {
         onLogout();
       },
@@ -107,6 +115,9 @@ export function AuthenticatedLayoutHeader({
 
   const [preferencesOpen, setPreferencesOpen] = useState(false);
   const preferencesController = useThemePreferences();
+  const schedulesSearchActive = useSchedulesHeaderSearchStore(
+    (state) => state.active,
+  );
 
   // Cpanel system admin — customer-scope only (not dual tenant + customer pickers)
   const isCpanelAdmin = user?.adminUserType === "A" && user?.loginType === "V";
@@ -117,83 +128,92 @@ export function AuthenticatedLayoutHeader({
       <Header className="app-layout-header">
         <div className="app-layout-header__left">
           {showMobileMenu ? (
-            <Tooltip title="Open Navigation Menu">
+            <Tooltip title={t("nav.openNavigationMenu")}>
               <AppButton
                 type="text"
                 icon={<AppIcon icon={Icons.menu} size={18} />}
                 onClick={onMobileMenuOpen}
-                aria-label="Open navigation menu"
+                aria-label={t("nav.openNavigationMenu")}
               />
             </Tooltip>
           ) : null}
-          <Tooltip title="Go To Home">
+          <Tooltip title={t("header.goToHome")}>
             <button
               type="button"
               className="app-header-brand-home"
               onClick={goHome}
-              aria-label="Go to home"
+              aria-label={t("header.goToHome")}
             >
               <div className="app-header-brand-detail">
                 <div className="app-layout-header__brand-row">
                   <Text strong className="app-layout-header__tenant-name">
-                    E-Com Portal
+                    {t("appName")}
                   </Text>
                 </div>
-                <Text type="secondary" className="app-layout-header__welcome">
+                {/* <Text type="secondary" className="app-layout-header__welcome">
                   Browse schedules, tracking, and rates — sign in for more
                   modules
-                </Text>
+                </Text> */}
               </div>
             </button>
           </Tooltip>
         </div>
 
+        {/* Modified by Sekar Nagarajan (2026-09-17 21:10) — middle slot avoids flex gaps */}
+        {schedulesSearchActive ? (
+          <div
+            id={SCHEDULES_HEADER_SEARCH_SLOT_ID}
+            className="app-header-schedules-search-slot"
+          />
+        ) : null}
+
         <div className="app-header-actions">
-          <Tooltip title="Go To Home">
+          <Tooltip title={t("header.goToHome")}>
             <AppButton
               type="text"
               className="app-header-action"
               icon={<AppIcon icon={Icons.home} size={16} />}
               onClick={goHome}
-              aria-label="Home"
+              aria-label={t("header.home")}
             >
-              Home
+              {t("header.home")}
             </AppButton>
           </Tooltip>
-          <Tooltip title="Contact Us">
+          <Tooltip title={t("header.contactUs")}>
             <AppButton
               type="text"
               className="app-header-action"
               icon={<AppIcon icon={Icons.headphones} size={16} />}
               onClick={() => navigate({ to: "/contact-us" })}
-              aria-label="Contact Us"
+              aria-label={t("header.contactUs")}
             >
-              Contact Us
+              {t("header.contactUs")}
             </AppButton>
           </Tooltip>
-          <Tooltip title="Register">
+          <Tooltip title={t("header.register")}>
             <AppButton
               type="text"
               className="app-header-action"
               icon={<AppIcon icon={Icons.userPlus} size={16} />}
               onClick={() => navigate({ to: "/register" })}
-              aria-label="Register"
+              aria-label={t("header.register")}
             >
-              Register
+              {t("header.register")}
             </AppButton>
           </Tooltip>
           {/* <HeaderThemeToggle /> */}
-          <Tooltip title="Login">
+          <Tooltip title={t("header.login")}>
             <AppButton
               type="primary"
               className="app-header-action app-header-action--primary"
               icon={<AppIcon icon={Icons.logIn} size={16} />}
               onClick={onLoginClick}
-              aria-label="Login"
+              aria-label={t("header.login")}
             >
-              Login
+              {t("header.login")}
             </AppButton>
           </Tooltip>
+          <HeaderLanguageSelect buttonClassName="app-header-action" />
         </div>
       </Header>
     );
@@ -233,14 +253,14 @@ export function AuthenticatedLayoutHeader({
 
   const userNameDisplay = user?.name || user?.email || "";
   const userRoleDisplay = user?.isImpersonating
-    ? "Admin Impersonation"
+    ? t("account.roles.adminImpersonation")
     : user?.role === "ADMIN" && user?.adminUserType === "A"
-    ? "System Administrator"
+    ? t("account.roles.systemAdministrator")
     : user?.role === "VENDOR"
-    ? "Agency Administrator"
+    ? t("account.roles.agencyAdministrator")
     : user?.isSessionAdmin
-    ? "Superuser (Customer Admin)"
-    : "Customer Account";
+    ? t("account.roles.superuser")
+    : t("account.roles.customerAccount");
   const initials = userNameDisplay
     ? userNameDisplay
         .split(" ")
@@ -259,44 +279,44 @@ export function AuthenticatedLayoutHeader({
   const profileMenuItems: MenuProps["items"] = [
     {
       key: "profile",
-      label: "Profile",
+      label: t("account.profile"),
       icon: <AppIcon icon={Icons.user} size={16} />,
     },
     {
       key: "appearance",
-      label: "Appearance & Theme Settings",
+      label: t("account.accessibilityControls"),
       icon: <AppIcon icon={Icons.palette} size={16} />,
     },
     {
       key: "change-password",
-      label: "Change Password",
+      label: t("account.changePassword"),
       icon: <AppIcon icon={Icons.key} size={16} />,
     },
     {
       key: "contact-us",
-      label: "Contact Us",
+      label: t("account.contactUs"),
       icon: <AppIcon icon={Icons.headphones} size={16} />,
     },
     {
       key: "quote",
-      label: "Quote (Rate Request)",
+      label: t("account.quote"),
       icon: <AppIcon icon={Icons.dollarSign} size={16} />,
     },
     {
       key: "my-alert",
-      label: "My Alert",
+      label: t("account.myAlert"),
       icon: <AppIcon icon={Icons.bell} size={16} />,
     },
-    {
-      key: "payment-history",
-      label: "Payment History",
-      icon: <AppIcon icon={Icons.landmark} size={16} />,
-    },
+    // {
+    //   key: "payment-history",
+    //   label: "Payment History",
+    //   icon: <AppIcon icon={Icons.landmark} size={16} />,
+    // },
     ...(user?.isSessionAdmin || user?.role === "ADMIN"
       ? [
           {
             key: "user-creation",
-            label: "Sub-User Creation",
+            label: t("account.subUserCreation"),
             icon: <AppIcon icon={Icons.userPlus} size={16} />,
           },
         ]
@@ -322,8 +342,10 @@ export function AuthenticatedLayoutHeader({
               style={{ color: themeToken.colorWarning }}
             />
             <Text strong>
-              Acting as: {user.impersonatedCustomer.compName} (
-              {user.impersonatedCustomer.custCode})
+              {t("header.actingAs", {
+                name: user.impersonatedCustomer.compName,
+                code: user.impersonatedCustomer.custCode,
+              })}
             </Text>
           </Space>
           <Space size="small">
@@ -332,7 +354,7 @@ export function AuthenticatedLayoutHeader({
               onClick={() => impersonation.setShowPicker(true)}
               icon={<AppIcon icon={Icons.users} size={14} />}
             >
-              Switch Customer
+              {t("header.switchCustomer")}
             </AppButton>
             <AppButton
               size="small"
@@ -341,7 +363,7 @@ export function AuthenticatedLayoutHeader({
               onClick={impersonation.handleExitImpersonation}
               icon={<AppIcon icon={Icons.logOut} size={14} />}
             >
-              Exit Impersonation
+              {t("header.exitImpersonation")}
             </AppButton>
           </Space>
         </Flex>
@@ -350,12 +372,12 @@ export function AuthenticatedLayoutHeader({
       <Header className="app-layout-header">
         <div className="app-layout-header__left">
           {showMobileMenu ? (
-            <Tooltip title="Open Navigation Menu">
+            <Tooltip title={t("nav.openNavigationMenu")}>
               <AppButton
                 type="text"
                 icon={<AppIcon icon={Icons.menu} size={18} />}
                 onClick={onMobileMenuOpen}
-                aria-label="Open navigation menu"
+                aria-label={t("nav.openNavigationMenu")}
               />
             </Tooltip>
           ) : null}
@@ -364,16 +386,14 @@ export function AuthenticatedLayoutHeader({
               <Text strong className="app-layout-header__tenant-name">
                 {activeTenant.name}
               </Text>
-              <Tag color="blue" className="app-header-tag">
-                {activeTenant.customerCode}
-              </Tag>
+
               {user?.isSessionAdmin && !user?.isImpersonating ? (
                 <Tag
                   icon={<AppIcon icon={Icons.crown} size={16} />}
                   color="gold"
                   className="app-header-tag"
                 >
-                  SUPERUSER ACTIVE
+                  {t("header.superuserActive")}
                 </Tag>
               ) : null}
               {user?.isImpersonating ? (
@@ -382,15 +402,23 @@ export function AuthenticatedLayoutHeader({
                   color="orange"
                   className="app-header-tag"
                 >
-                  IMPERSONATING
+                  {t("header.impersonating")}
                 </Tag>
               ) : null}
             </div>
-            <Text type="secondary" className="app-layout-header__welcome">
+            {/* <Text type="secondary" className="app-layout-header__welcome">
               Welcome to E-COM PORTAL
-            </Text>
+            </Text> */}
           </div>
         </div>
+
+        {/* Modified by Sekar Nagarajan (2026-09-17 21:10) — middle slot avoids flex gaps */}
+        {schedulesSearchActive ? (
+          <div
+            id={SCHEDULES_HEADER_SEARCH_SLOT_ID}
+            className="app-header-schedules-search-slot"
+          />
+        ) : null}
 
         <div className="app-header-actions">
           {/* Customer scope: superuser / cpanel default-customer list / sub-accounts */}
@@ -413,9 +441,9 @@ export function AuthenticatedLayoutHeader({
                     (a) => a.custCode === val,
                   );
                   toast.success(
-                    `Switched Customer Scope to ${
-                      match ? match.compName : val
-                    }`,
+                    t("header.switchedCustomerScope", {
+                      name: match ? match.compName : val,
+                    }),
                   );
                 }}
                 className="app-header-select"
@@ -436,7 +464,9 @@ export function AuthenticatedLayoutHeader({
                 onChange={(val) => {
                   setTenant(val);
                   toast.info(
-                    `Switched active tenant to ${PRECONFIGURED_TENANTS[val]?.name}`,
+                    t("header.switchedTenant", {
+                      name: PRECONFIGURED_TENANTS[val]?.name,
+                    }),
                   );
                 }}
                 className="app-header-select"
@@ -450,8 +480,14 @@ export function AuthenticatedLayoutHeader({
 
           {/* <HeaderThemeToggle /> */}
 
+          <HeaderLanguageSelect buttonClassName="app-header-action" />
+
           <Tooltip
-            title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+            title={
+              isFullscreen
+                ? t("header.exitFullscreen")
+                : t("header.enterFullscreen")
+            }
           >
             <AppButton
               type="text"
@@ -464,7 +500,11 @@ export function AuthenticatedLayoutHeader({
                 )
               }
               onClick={toggleFullscreen}
-              aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+              aria-label={
+                isFullscreen
+                  ? t("header.exitFullscreen")
+                  : t("header.enterFullscreen")
+              }
             />
           </Tooltip>
 
@@ -477,10 +517,14 @@ export function AuthenticatedLayoutHeader({
               <button
                 type="button"
                 className="app-header-user-trigger"
-                aria-label="Open account menu"
+                aria-label={t("header.openAccountMenu")}
               >
-                <Avatar className="app-header-avatar" size="default">
-                  {initials}
+                <Avatar
+                  className="app-header-avatar"
+                  size="default"
+                  src={photoUrl ?? undefined}
+                >
+                  {photoUrl ? null : initials}
                 </Avatar>
                 <div className="app-header-user-meta">
                   <Text strong className="app-header-user-name">
@@ -493,14 +537,14 @@ export function AuthenticatedLayoutHeader({
               </button>
             </Dropdown>
 
-            <Tooltip title="Log Out">
+            <Tooltip title={t("header.logout")}>
               <AppButton
                 type="text"
                 shape="circle"
                 className="app-header-logout"
                 icon={<AppIcon icon={Icons.logOut} size={20} tone="reject" />}
                 onClick={handleLogoutConfirm}
-                aria-label="Log out"
+                aria-label={t("header.logout")}
               />
             </Tooltip>
           </div>

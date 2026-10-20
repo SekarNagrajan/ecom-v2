@@ -1,0 +1,62 @@
+{
+  "subtitle": "Isikan satu tempahan setiap baris, kemudian semak dan hantar.",
+  "entityLabel": "tempahan",
+  "toasts": {
+    "importSuccess_one": "Telah mengimport {{count}} tempahan.",
+    "importSuccess_other": "Telah mengimport {{count}} tempahan.",
+    "importPartial": "Telah mengimport {{successCount}} daripada {{totalRows}} tempahan. Baiki baris yang tinggal dan hantar semula."
+  },
+  "columns": {
+    "origin": "Asal",
+    "delivery": "Penghantaran",
+    "cargoReadyDate": "Tarikh Kargo Siap",
+    "shipperName": "Nama Penghantar",
+    "agreementParty": "Pihak Perjanjian",
+    "siSubmittingParty": "Pihak Penyerah SI",
+    "containerType": "Jenis Kontena",
+    "quantity": "Kuantiti",
+    "hsCode": "Kod HS",
+    "weight": "Berat",
+    "haulageOriginType": "Jenis Haulage Asal",
+    "haulageDestinationType": "Jenis Haulage Destinasi",
+    "carriageContract": "Kontrak Pengangkutan",
+    "agencyReference": "Rujukan Agensi",
+    "customerReference": "Rujukan Pelanggan",
+    "onlineBookingNo": "No. Tempahan Dalam Talian",
+    "shipperContact": "Orang Hubungan Penghantar",
+    "shipperEmail": "E-mel Penghantar",
+    "consigneeName": "Nama Penerima",
+    "consigneeContact": "Orang Hubungan Penerima",
+    "consigneeEmail": "E-mel Penerima",
+    "notifyPartyName": "Nama Pihak Pemberitahuan",
+    "notifyPartyContact": "Orang Hubungan Pihak Pemberitahuan",
+    "notifyPartyEmail": "E-mel Pihak Pemberitahuan",
+    "commodityDescription": "Penerangan Komoditi"
+  },
+  "options": {
+    "haulage": {
+      "merchant": "Pedagang",
+      "carrier": "Pengangkut"
+    }
+  },
+  "validation": {
+    "originRequired": "Asal diperlukan",
+    "deliveryRequired": "Penghantaran diperlukan",
+    "cargoReadyDateRequired": "Tarikh Kargo Siap diperlukan",
+    "shipperNameRequired": "Pihak Tempahan diperlukan",
+    "agreementPartyRequired": "Pihak Perjanjian diperlukan",
+    "siSubmittingPartyRequired": "Pihak Penyerah SI diperlukan",
+    "containerTypeRequired": "Jenis Kontena diperlukan",
+    "hsCodeRequired": "Kod HS diperlukan",
+    "weightRequired": "Berat diperlukan",
+    "invalidEmail": "E-mel tidak sah",
+    "invalidContainerType": "Pilih jenis kontena yang sah"
+  },
+  "errors": {
+    "duplicateRow": "Pendua baris lain dengan asal, penghantaran, tarikh kargo siap, dan penghantar yang sama"
+  },
+  "actions": {
+    "submit_one": "Hantar {{count}} Tempahan",
+    "submit_other": "Hantar {{count}} Tempahan"
+  }
+}

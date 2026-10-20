@@ -32,6 +32,7 @@ export * from './form-fields/inline-phone-edit';
 export * from './ui/autocomplete';
 export * from './ui/combobox';
 export * from './ui/button';
+export * from './ui/empty-state';
 export * from './ui/date-picker';
 export * from './ui/date-range-picker';
 export * from './ui/tabs';

@@ -1,0 +1,36 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "vite",
+  "installCommand": "pnpm install",
+  "buildCommand": "pnpm build",
+  "outputDirectory": "apps/ecom-portal/dist",
+  "rewrites": [
+    {
+      "source": "/api/ai/grammar",
+      "destination": "https://n8n.sedge.ai/webhook/grammar"
+    },
+    {
+      "source": "/api/ai/transcribe",
+      "destination": "https://n8n.sedge.ai/webhook/transcribe"
+    },
+    {
+      "source": "/api/ai/rewrite",
+      "destination": "https://n8n.sedge.ai/webhook/v2/mail/rewrite"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/mockServiceWorker.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    }
+  ]
+}

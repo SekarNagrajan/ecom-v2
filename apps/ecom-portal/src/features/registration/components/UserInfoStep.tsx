@@ -2,6 +2,7 @@
 import { Col, Flex, Input, Row, Select, Typography } from "antd";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import { checkEmail } from "../api/registration.api";
@@ -25,6 +26,7 @@ function FieldLabel({
 }
 
 export function UserInfoStep() {
+  const { t } = useTranslation(["registration", "common"]);
   const {
     control,
     setError,
@@ -32,6 +34,33 @@ export function UserInfoStep() {
     formState: { errors },
   } = useFormContext<RegistrationFormData>();
   const [isCheckingEmail, setIsCheckingEmail] = useState(false);
+
+  const titleOptions = [
+    { value: "Mr.", label: t("options.titles.Mr") },
+    { value: "Mrs.", label: t("options.titles.Mrs") },
+    { value: "Ms.", label: t("options.titles.Ms") },
+    { value: "Dr.", label: t("options.titles.Dr") },
+  ];
+
+  const timezoneOptions = [
+    { value: "GMT", label: t("options.timezones.GMT") },
+    { value: "UTC", label: t("options.timezones.UTC") },
+    { value: "EST", label: t("options.timezones.EST") },
+    { value: "PST", label: t("options.timezones.PST") },
+    { value: "IST", label: t("options.timezones.IST") },
+  ];
+
+  const defaultViewOptions = [
+    { value: "STANDARD", label: t("options.defaultView.STANDARD") },
+    { value: "COMPACT", label: t("options.defaultView.COMPACT") },
+    { value: "DETAILED", label: t("options.defaultView.DETAILED") },
+  ];
+
+  const preferredViewOptions = [
+    { value: "HOME", label: t("options.preferredView.HOME") },
+    { value: "DASHBOARD", label: t("options.preferredView.DASHBOARD") },
+    { value: "TRACKING", label: t("options.preferredView.TRACKING") },
+  ];
 
   const handleEmailBlur = async (email: string) => {
     if (!email || errors.email) return;
@@ -41,7 +70,7 @@ export function UserInfoStep() {
       if (!data.available) {
         setError("email", {
           type: "manual",
-          message: "This email is already registered.",
+          message: t("validation.emailAlreadyRegistered"),
         });
       } else {
         clearErrors("email");
@@ -49,7 +78,7 @@ export function UserInfoStep() {
     } catch {
       setError("email", {
         type: "manual",
-        message: "Failed to verify email.",
+        message: t("validation.emailVerifyFailed"),
       });
     } finally {
       setIsCheckingEmail(false);
@@ -61,7 +90,7 @@ export function UserInfoStep() {
       <Row gutter={[16, 16]}>
         <Col {...RESPONSIVE_COL.formThird}>
           <Flex vertical gap={8}>
-            <FieldLabel required>Title</FieldLabel>
+            <FieldLabel required>{t("user.title")}</FieldLabel>
             <Controller
               name="title"
               control={control}
@@ -71,15 +100,10 @@ export function UserInfoStep() {
                     {...field}
                     value={field.value || undefined}
                     size="large"
-                    placeholder="Title"
+                    placeholder={t("user.title")}
                     status={errors.title ? "error" : undefined}
                     className="reg-field-full"
-                    options={[
-                      { value: "Mr.", label: "Mr." },
-                      { value: "Mrs.", label: "Mrs." },
-                      { value: "Ms.", label: "Ms." },
-                      { value: "Dr.", label: "Dr." },
-                    ]}
+                    options={titleOptions}
                   />
                   {errors.title ? (
                     <Text type="danger" className="form-field-error">
@@ -94,7 +118,7 @@ export function UserInfoStep() {
 
         <Col {...RESPONSIVE_COL.formThird}>
           <Flex vertical gap={8}>
-            <FieldLabel required>First Name</FieldLabel>
+            <FieldLabel required>{t("user.firstName")}</FieldLabel>
             <Controller
               name="firstName"
               control={control}
@@ -103,7 +127,7 @@ export function UserInfoStep() {
                   <Input
                     {...field}
                     size="large"
-                    placeholder="First Name"
+                    placeholder={t("user.firstName")}
                     status={errors.firstName ? "error" : undefined}
                   />
                   {errors.firstName ? (
@@ -119,7 +143,7 @@ export function UserInfoStep() {
 
         <Col {...RESPONSIVE_COL.formThird}>
           <Flex vertical gap={8}>
-            <FieldLabel required>Last Name</FieldLabel>
+            <FieldLabel required>{t("user.lastName")}</FieldLabel>
             <Controller
               name="lastName"
               control={control}
@@ -128,7 +152,7 @@ export function UserInfoStep() {
                   <Input
                     {...field}
                     size="large"
-                    placeholder="Last Name"
+                    placeholder={t("user.lastName")}
                     status={errors.lastName ? "error" : undefined}
                   />
                   {errors.lastName ? (
@@ -144,7 +168,7 @@ export function UserInfoStep() {
 
         <Col {...RESPONSIVE_COL.formThird}>
           <Flex vertical gap={8}>
-            <FieldLabel required>Email Id</FieldLabel>
+            <FieldLabel required>{t("user.email")}</FieldLabel>
             <Controller
               name="email"
               control={control}
@@ -154,7 +178,7 @@ export function UserInfoStep() {
                     {...field}
                     type="email"
                     size="large"
-                    placeholder="Email Id"
+                    placeholder={t("user.email")}
                     status={errors.email ? "error" : undefined}
                     onBlur={(e) => {
                       field.onBlur();
@@ -175,7 +199,7 @@ export function UserInfoStep() {
 
         <Col {...RESPONSIVE_COL.formThird}>
           <Flex vertical gap={8}>
-            <FieldLabel required>Password</FieldLabel>
+            <FieldLabel required>{t("user.password")}</FieldLabel>
             <Controller
               name="password"
               control={control}
@@ -184,7 +208,7 @@ export function UserInfoStep() {
                   <Input.Password
                     {...field}
                     size="large"
-                    placeholder="Password"
+                    placeholder={t("user.password")}
                     status={errors.password ? "error" : undefined}
                   />
                   {errors.password ? (
@@ -200,7 +224,7 @@ export function UserInfoStep() {
 
         <Col {...RESPONSIVE_COL.formThird}>
           <Flex vertical gap={8}>
-            <FieldLabel required>Confirm Password</FieldLabel>
+            <FieldLabel required>{t("user.confirmPassword")}</FieldLabel>
             <Controller
               name="confirmPassword"
               control={control}
@@ -209,7 +233,7 @@ export function UserInfoStep() {
                   <Input.Password
                     {...field}
                     size="large"
-                    placeholder="Confirm Password"
+                    placeholder={t("user.confirmPassword")}
                     status={errors.confirmPassword ? "error" : undefined}
                   />
                   {errors.confirmPassword ? (
@@ -225,7 +249,7 @@ export function UserInfoStep() {
 
         <Col {...RESPONSIVE_COL.formThird}>
           <Flex vertical gap={8}>
-            <FieldLabel required>Timezone</FieldLabel>
+            <FieldLabel required>{t("user.timezone")}</FieldLabel>
             <Controller
               name="timezone"
               control={control}
@@ -235,19 +259,10 @@ export function UserInfoStep() {
                     {...field}
                     value={field.value || undefined}
                     size="large"
-                    placeholder="Timezone"
+                    placeholder={t("user.timezone")}
                     status={errors.timezone ? "error" : undefined}
                     className="reg-field-full"
-                    options={[
-                      { value: "GMT", label: "GMT - Greenwich Mean Time" },
-                      {
-                        value: "UTC",
-                        label: "UTC - Universal Time Coordinated",
-                      },
-                      { value: "EST", label: "EST - Eastern Standard Time" },
-                      { value: "PST", label: "PST - Pacific Standard Time" },
-                      { value: "IST", label: "IST - Indian Standard Time" },
-                    ]}
+                    options={timezoneOptions}
                   />
                   {errors.timezone ? (
                     <Text type="danger" className="form-field-error">
@@ -262,7 +277,7 @@ export function UserInfoStep() {
 
         <Col {...RESPONSIVE_COL.formThird}>
           <Flex vertical gap={8}>
-            <FieldLabel>Default View</FieldLabel>
+            <FieldLabel>{t("user.defaultView")}</FieldLabel>
             <Controller
               name="defaultView"
               control={control}
@@ -271,13 +286,9 @@ export function UserInfoStep() {
                   {...field}
                   value={field.value || undefined}
                   size="large"
-                  placeholder="Default View"
+                  placeholder={t("user.defaultView")}
                   className="reg-field-full"
-                  options={[
-                    { value: "STANDARD", label: "Standard" },
-                    { value: "COMPACT", label: "Compact" },
-                    { value: "DETAILED", label: "Detailed" },
-                  ]}
+                  options={defaultViewOptions}
                 />
               )}
             />
@@ -286,7 +297,7 @@ export function UserInfoStep() {
 
         <Col {...RESPONSIVE_COL.formThird}>
           <Flex vertical gap={8}>
-            <FieldLabel>Preferred View</FieldLabel>
+            <FieldLabel>{t("user.preferredView")}</FieldLabel>
             <Controller
               name="preferredView"
               control={control}
@@ -295,13 +306,9 @@ export function UserInfoStep() {
                   {...field}
                   value={field.value || undefined}
                   size="large"
-                  placeholder="Preferred View"
+                  placeholder={t("user.preferredView")}
                   className="reg-field-full"
-                  options={[
-                    { value: "HOME", label: "Home Page" },
-                    { value: "DASHBOARD", label: "Dashboard" },
-                    { value: "TRACKING", label: "Tracking" },
-                  ]}
+                  options={preferredViewOptions}
                 />
               )}
             />

@@ -1,8 +1,7 @@
-// Modified by Sekar Nagarajan (2026-08-31 15:42)
+// Modified by Sekar Nagarajan (2026-09-29 16:55)
 import type { ReactNode } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
-import { WIZARD_STEP_TITLES } from "../../../constants/module-titles";
 import { CargoStep } from "../components/CargoStep";
 import { ChargesStep } from "../components/ChargesStep";
 import { MasterDetailsStep } from "../components/MasterDetailsStep";
@@ -64,27 +63,13 @@ const STEP_ICONS: Record<SIWizardStepId, ReactNode> = {
   preview: <AppIcon icon={Icons.eye} size={PIPELINE_ICON_SIZE} />,
 };
 
-const STEP_TITLES: Record<SIWizardStepId, string> = {
-  master: WIZARD_STEP_TITLES.masterDetails,
-  parties: WIZARD_STEP_TITLES.parties,
-  routing: WIZARD_STEP_TITLES.routing,
-  cargo: WIZARD_STEP_TITLES.cargoDetails,
-  insurance: WIZARD_STEP_TITLES.insurance,
-  cargoProtect: WIZARD_STEP_TITLES.cargoProtect,
-  charges: WIZARD_STEP_TITLES.charges,
-  ens: WIZARD_STEP_TITLES.ensDetails,
-  chargeTab: WIZARD_STEP_TITLES.chargeSummary,
-  files: WIZARD_STEP_TITLES.fileUpload,
-  references: WIZARD_STEP_TITLES.references,
-  preview: WIZARD_STEP_TITLES.preview,
-};
-
 export function buildSiWizardSteps(
   config: SIWizardConfig,
+  titles: Record<SIWizardStepId, string>,
 ): SIWizardStepDefinition[] {
   return buildSiWizardStepIds(config).map((id) => ({
     id,
-    title: STEP_TITLES[id],
+    title: titles[id],
     icon: STEP_ICONS[id],
     Component: STEP_COMPONENTS[id],
   }));

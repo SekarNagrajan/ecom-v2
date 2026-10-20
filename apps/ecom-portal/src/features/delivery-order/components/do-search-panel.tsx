@@ -3,11 +3,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton, FormDatePicker } from "@solverminds/shared-ui";
 import { Typography } from "antd";
 import { DateTime } from "luxon";
+import { useMemo } from "react";
 import { useForm, type Resolver } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import type { DOSearchValues } from "../types/delivery-order.types";
-import { doSearchSchema } from "../types/delivery-order.types";
+import { createDoSearchSchema } from "../types/delivery-order.types";
 
 const { Text } = Typography;
 
@@ -30,9 +32,11 @@ function DoFieldLabel({ children }: { children: React.ReactNode }) {
 }
 
 export function DoSearchPanel({ isSearching, onSearch }: DoSearchPanelProps) {
+  const { t } = useTranslation("delivery-order");
+  const schema = useMemo(() => createDoSearchSchema(t), [t]);
   const { control, handleSubmit } = useForm<DOSearchValues>({
     // preprocess widens input type; assert for RHF
-    resolver: zodResolver(doSearchSchema) as Resolver<DOSearchValues>,
+    resolver: zodResolver(schema) as Resolver<DOSearchValues>,
     defaultValues,
     mode: "onSubmit",
   });
@@ -47,7 +51,7 @@ export function DoSearchPanel({ isSearching, onSearch }: DoSearchPanelProps) {
         >
           <div className="do-search-form-row">
             <div className="do-search-field">
-              <DoFieldLabel>From Date</DoFieldLabel>
+              <DoFieldLabel>{t("search.fromDate")}</DoFieldLabel>
               <div className="do-search-field__control">
                 <FormDatePicker
                   control={control}
@@ -64,7 +68,7 @@ export function DoSearchPanel({ isSearching, onSearch }: DoSearchPanelProps) {
             </div>
 
             <div className="do-search-field">
-              <DoFieldLabel>To Date</DoFieldLabel>
+              <DoFieldLabel>{t("search.toDate")}</DoFieldLabel>
               <div className="do-search-field__control">
                 <FormDatePicker
                   control={control}
@@ -91,7 +95,7 @@ export function DoSearchPanel({ isSearching, onSearch }: DoSearchPanelProps) {
                 icon={<AppIcon icon={Icons.search} size={16} />}
                 loading={isSearching}
               >
-                Show
+                {t("search.show")}
               </AppButton>
             </div>
           </div>

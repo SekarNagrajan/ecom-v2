@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-02 11:45)
+// Modified by Sekar Nagarajan (2026-09-02 16:43)
 import { AppButton } from "@solverminds/shared-ui";
 import { Tag, Typography } from "antd";
 import {
@@ -8,12 +8,14 @@ import {
   type UseFormSetValue,
   type UseFormWatch,
 } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import {
   ListActionButton,
   ListActionsRow,
 } from "../../../components/shared/list-action-button";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import {
   createEmptyCommodity,
   type CargoData,
@@ -74,19 +76,17 @@ export function BookingCargoListView({
   onDuplicate,
   onDelete,
 }: BookingCargoListViewProps) {
+  const { t } = useTranslation(["booking", "common"]);
+
   if (pageIndexes.length === 0) {
     return (
-      <div className="si-cargo-empty">
-        <div className="si-cargo-empty__icon">
-          <AppIcon icon={Icons.inbox} size={22} />
-        </div>
-        <Text strong>No containers match</Text>
-        <div>
-          <Text type="secondary">
-            Adjust the search or the &quot;Incomplete only&quot; filter.
-          </Text>
-        </div>
-      </div>
+      <ModuleEmptyState
+        artSize="sm"
+        variant="filtered"
+        title={t("wizard.cargo.noContainersMatch")}
+        message={t("wizard.cargo.noContainersMatchHint")}
+        style={{ padding: 12 }}
+      />
     );
   }
 
@@ -108,6 +108,8 @@ export function BookingCargoListView({
         );
         const hasNumber = Boolean(container?.containerNo?.trim());
         const lineCount = container?.commodities?.length ?? 0;
+        const typeLabel = container?.containerType || "—";
+        const qty = container?.quantity ?? 1;
 
         return (
           <div key={fieldId} className="si-cargo-sicard">
@@ -117,12 +119,12 @@ export function BookingCargoListView({
               tabIndex={0}
               aria-expanded={open}
               onClick={() =>
-                setExpandedId(open ? null : (container?.id ?? fieldId))
+                setExpandedId(open ? null : container?.id ?? fieldId)
               }
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
-                  setExpandedId(open ? null : (container?.id ?? fieldId));
+                  setExpandedId(open ? null : container?.id ?? fieldId);
                 }
               }}
             >
@@ -136,68 +138,59 @@ export function BookingCargoListView({
                   .filter(Boolean)
                   .join(" ")}
               />
+
               <div className="si-cargo-ct-identity">
-                <Text
-                  strong={hasNumber}
-                  className={[
-                    "si-cargo-ct-no",
-                    hasNumber ? undefined : "si-cargo-ct-no--empty",
-                  ]
-                    .filter(Boolean)
-                    .join(" ")}
-                >
-                  {hasNumber
-                    ? container?.containerNo
-                    : `Container ${ci + 1}`}
+                <div className="si-cargo-ct-identity__main">
+                  <Text
+                    strong
+                    className={[
+                      "si-cargo-ct-no",
+                      hasNumber ? undefined : "si-cargo-ct-no--empty",
+                    ]
+                      .filter(Boolean)
+                      .join(" ")}
+                  >
+                    {hasNumber ? container?.containerNo : t("wizard.cargo.containerLabel", { n: ci + 1 })}
+                  </Text>
+                  <span className="si-cargo-type-badge si-cargo-type-badge--primary">
+                    {typeLabel} x {qty}
+                  </span>
+                  <span className="si-cargo-ct-status__tags">
+                    {container?.isSoc ? <Tag>SOC</Tag> : null}
+                    {container?.isOog ? <Tag color="purple">OOG</Tag> : null}
+                    {isReeferContainerType(container?.containerType) &&
+                    container?.reeferMode === "operating" ? (
+                      <Tag color="blue">Reefer</Tag>
+                    ) : null}
+                  </span>
+                </div>
+              </div>
+
+              <div className="si-cargo-ct-summary">
+                <Text type="secondary" className="si-cargo-ct-summary__text">
+                  {t("wizard.cargo.commodityCount", { count: lineCount })}
+                  <span className="si-cargo-ct-summary__dot">·</span>
+                  {t("wizard.cargo.packageCount", { count: sums.packages })}
+                  <span className="si-cargo-ct-summary__dot">·</span>
+                  {sums.weight.toLocaleString()} kg
+                  <span className="si-cargo-ct-summary__dot">·</span>
+                  {sums.volume.toFixed(1)} CBM
                 </Text>
-                <span className="si-cargo-ct-status__tags">
-                  {container?.isSoc ? <Tag>SOC</Tag> : null}
-                  {container?.isOog ? <Tag color="orange">OOG</Tag> : null}
-                  {isReeferContainerType(container?.containerType) &&
-                  container?.reeferMode === "operating" ? (
-                    <Tag color="blue">Reefer</Tag>
-                  ) : null}
-                </span>
               </div>
-              <span className="si-cargo-type-badge">
-                {container?.containerType || "—"}
-              </span>
-              <Text type="secondary" className="si-cargo-ct-seal">
-                ×{container?.quantity ?? 1}
-              </Text>
-              <div className="si-cargo-ct-meta si-cargo-ct-meta--commod">
-                <Text className="si-cargo-ct-meta__value">{lineCount}</Text>
-                <span className="si-cargo-ct-meta__label">Commodities</span>
-              </div>
-              <div className="si-cargo-ct-meta si-cargo-ct-meta--pkgs">
-                <Text className="si-cargo-ct-meta__value">
-                  {sums.packages.toLocaleString()}
-                </Text>
-                <span className="si-cargo-ct-meta__label">Packages</span>
-              </div>
-              <div className="si-cargo-ct-meta si-cargo-ct-meta--end si-cargo-ct-meta--kg">
-                <Text className="si-cargo-ct-meta__value">
-                  {sums.weight.toLocaleString()}
-                </Text>
-                <span className="si-cargo-ct-meta__label">kg</span>
-              </div>
-              <div className="si-cargo-ct-meta si-cargo-ct-meta--end si-cargo-ct-meta--cbm">
-                <Text className="si-cargo-ct-meta__value">
-                  {sums.volume.toFixed(1)}
-                </Text>
-                <span className="si-cargo-ct-meta__label">CBM</span>
-              </div>
+
               <span className="si-cargo-ct-status">
                 {issues === 0 ? (
                   <span className="si-cargo-vchip si-cargo-vchip--ok">
-                    Complete
+                    {t("wizard.cargo.complete")}
                   </span>
                 ) : (
                   <span className="si-cargo-vchip si-cargo-vchip--warn">
-                    {issues} to fix
+                    <AppIcon icon={Icons.alertTriangle} size={12} tone="edit" />
+                    {t("wizard.cargo.issuesBadge", { count: issues })}
                   </span>
                 )}
               </span>
+
               <span
                 className="si-cargo-ct-actions"
                 onClick={(e) => e.stopPropagation()}
@@ -205,12 +198,12 @@ export function BookingCargoListView({
               >
                 <ListActionsRow>
                   <ListActionButton
-                    title="Duplicate Container"
+                    title={t("wizard.cargo.duplicateContainer")}
                     icon={<AppIcon icon={Icons.copy} size={16} tone="view" />}
                     onClick={() => onDuplicate(ci)}
                   />
                   <ListActionButton
-                    title="Delete Container"
+                    title={t("wizard.cargo.deleteContainer")}
                     icon={
                       <AppIcon icon={Icons.trash} size={16} tone="delete" />
                     }
@@ -273,6 +266,7 @@ function ContainerEditorPanel({
   toastError,
   toastSuccess,
 }: ContainerEditorPanelProps) {
+  const { t } = useTranslation(["booking", "common"]);
   const { fields, append, remove, insert } = useFieldArray({
     control,
     name: `containers.${ci}.commodities`,
@@ -291,13 +285,15 @@ function ContainerEditorPanel({
       />
 
       <div className="booking-cargo-commodity-toolbar">
-        <Text strong>Commodities</Text>
+        <Text strong>{t("wizard.cargo.commoditiesTitle")}</Text>
         <AppButton
+          type="primary"
           size="medium"
-          icon={<AppIcon icon={Icons.plus} size={16} />}
+          className="booking-cargo-commodity-toolbar__add"
+          icon={<AppIcon icon={Icons.plus} size={16} tone="create" />}
           onClick={() => append(createEmptyCommodity())}
         >
-          Add Commodity
+          {t("wizard.cargo.addCommodity")}
         </AppButton>
       </div>
 
@@ -321,11 +317,11 @@ function ContainerEditorPanel({
               id: createEmptyCommodity().id,
             };
             insert(mi + 1, copy);
-            toastSuccess("Commodity copied");
+            toastSuccess(t("wizard.cargo.commodityCopied"));
           }}
           onRemove={() => {
             if (fields.length <= 1) {
-              toastError("At least one commodity is required");
+              toastError(t("wizard.cargo.atLeastOneCommodity"));
               return;
             }
             remove(mi);

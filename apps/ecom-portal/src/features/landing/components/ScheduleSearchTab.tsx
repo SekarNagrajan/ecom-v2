@@ -1,46 +1,75 @@
-// Modified by Sekar Nagarajan (2026-08-25 15:49)
+// Modified by Sekar Nagarajan (2026-09-11 14:30)
 import { AppButton } from "@solverminds/shared-ui";
 import { AutoComplete, Button, DatePicker, Flex, Input, theme } from "antd";
 import dayjs from "dayjs";
 import { useState } from "react";
 import { Controller, type UseFormReturn } from "react-hook-form";
-import { AppIcon, Icons } from "../../../components/icons";
+import { useTranslation } from "react-i18next";
 
+import { AppIcon, Icons } from "../../../components/icons";
 import { usePortSearch } from "../api/landing.queries";
 import type { ScheduleSearchForm } from "../types/landing.types";
+import { SCHEDULE_PORT_CODES } from "../utils/landing-search";
 
 interface ScheduleSearchTabProps {
   form: UseFormReturn<ScheduleSearchForm>;
   onSubmit: React.FormEventHandler<HTMLFormElement>;
+  isSearching?: boolean;
+}
+
+function portOptionLabel(
+  portCode: string,
+  portName: string,
+  token: ReturnType<typeof theme.useToken>["token"],
+) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+      <span
+        style={{
+          color: token.colorText,
+          fontWeight: 600,
+          padding: "2px 8px",
+          borderRadius: 4,
+          fontSize: 12,
+        }}
+      >
+        {portCode}
+      </span>
+      <span>{portName}</span>
+    </div>
+  );
 }
 
 function usePortAutocomplete(initialQuery = "") {
   const [query, setQuery] = useState(initialQuery);
   const { data: ports = [], isFetching } = usePortSearch(query);
   const { token } = theme.useToken();
-  const options = ports.map((p) => ({
+  const { t } = useTranslation(["landing", "schedules"]);
+
+  // Shared with Schedules module — show showcase ports until the user types a search.
+  const popularOptions = SCHEDULE_PORT_CODES.map((code) => {
+    const label = t(`schedules:options.ports.${code}`, { defaultValue: code });
+    const name = label.includes(" - ") ? label.split(" - ").slice(1).join(" - ") : code;
+    return {
+      value: `${code} - ${name}`,
+      label: portOptionLabel(code, name, token),
+    };
+  });
+
+  const searchOptions = ports.map((p) => ({
     value: `${p.portCode} - ${p.portName}`,
-    label: (
-      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-        <span
-          style={{
-            color: token.colorText,
-            fontWeight: 600,
-            padding: "2px 8px",
-            borderRadius: 4,
-            fontSize: 12,
-          }}
-        >
-          {p.portCode}
-        </span>
-        <span>{p.portName}</span>
-      </div>
-    ),
+    label: portOptionLabel(p.portCode, p.portName, token),
   }));
+
+  const options = query.trim().length >= 2 ? searchOptions : popularOptions;
   return { query, setQuery, options, isFetching };
 }
-
-export function ScheduleSearchTab({ form, onSubmit }: ScheduleSearchTabProps) {
+export function ScheduleSearchTab({
+  form,
+  onSubmit,
+  isSearching = false,
+}: ScheduleSearchTabProps) {
+  const { t } = useTranslation(["landing", "common", "modules"]);
   const { token } = theme.useToken();
   const {
     control,
@@ -81,6 +110,7 @@ export function ScheduleSearchTab({ form, onSubmit }: ScheduleSearchTabProps) {
     display: "inline-block",
   };
   const asteriskStyle = { color: token.colorError };
+  const datePlaceholder = t("schedule.datePlaceholder");
 
   return (
     <form
@@ -103,7 +133,7 @@ export function ScheduleSearchTab({ form, onSubmit }: ScheduleSearchTabProps) {
           }}
         >
           <label style={labelStyle}>
-            Origin <span style={asteriskStyle}>*</span>
+            {t("schedule.origin")} <span style={asteriskStyle}>*</span>
           </label>
           <Controller
             control={control}
@@ -120,7 +150,7 @@ export function ScheduleSearchTab({ form, onSubmit }: ScheduleSearchTabProps) {
                 style={{ width: "100%" }}
               >
                 <Input
-                  placeholder="Singapore"
+                  placeholder={t("schedule.originPlaceholder")}
                   style={inputStyle}
                   prefix={
                     <AppIcon
@@ -149,6 +179,8 @@ export function ScheduleSearchTab({ form, onSubmit }: ScheduleSearchTabProps) {
             icon={<AppIcon icon={Icons.arrowLeftRight} size={16} />}
             onClick={handleSwap}
             shape="circle"
+            aria-label={t("schedule.swapAria")}
+            title={t("schedule.swapAria")}
             style={{
               width: 36,
               height: 36,
@@ -167,7 +199,7 @@ export function ScheduleSearchTab({ form, onSubmit }: ScheduleSearchTabProps) {
           }}
         >
           <label style={labelStyle}>
-            Delivery <span style={asteriskStyle}>*</span>
+            {t("schedule.delivery")} <span style={asteriskStyle}>*</span>
           </label>
           <Controller
             control={control}
@@ -184,7 +216,7 @@ export function ScheduleSearchTab({ form, onSubmit }: ScheduleSearchTabProps) {
                 style={{ width: "100%" }}
               >
                 <Input
-                  placeholder="Rotterdam"
+                  placeholder={t("schedule.deliveryPlaceholder")}
                   style={inputStyle}
                   prefix={
                     <AppIcon
@@ -222,7 +254,7 @@ export function ScheduleSearchTab({ form, onSubmit }: ScheduleSearchTabProps) {
           }}
         >
           <label style={labelStyle}>
-            From date <span style={asteriskStyle}>*</span>
+            {t("schedule.fromDate")} <span style={asteriskStyle}>*</span>
           </label>
           <Controller
             control={control}
@@ -230,7 +262,7 @@ export function ScheduleSearchTab({ form, onSubmit }: ScheduleSearchTabProps) {
             render={({ field }) => (
               <DatePicker
                 format="MM/DD/YYYY"
-                placeholder="MM/DD/YYYY"
+                placeholder={datePlaceholder}
                 style={{ width: "100%", ...inputStyle }}
                 value={field.value ? dayjs(field.value) : null}
                 onChange={(date) =>
@@ -258,7 +290,7 @@ export function ScheduleSearchTab({ form, onSubmit }: ScheduleSearchTabProps) {
           }}
         >
           <label style={labelStyle}>
-            To date <span style={asteriskStyle}>*</span>
+            {t("schedule.toDate")} <span style={asteriskStyle}>*</span>
           </label>
           <Controller
             control={control}
@@ -266,7 +298,7 @@ export function ScheduleSearchTab({ form, onSubmit }: ScheduleSearchTabProps) {
             render={({ field }) => (
               <DatePicker
                 format="MM/DD/YYYY"
-                placeholder="MM/DD/YYYY"
+                placeholder={datePlaceholder}
                 style={{ width: "100%", ...inputStyle }}
                 value={field.value ? dayjs(field.value) : null}
                 onChange={(date) =>
@@ -291,21 +323,29 @@ export function ScheduleSearchTab({ form, onSubmit }: ScheduleSearchTabProps) {
           type="primary"
           size="large"
           htmlType="submit"
+          loading={isSearching}
+          disabled={isSearching}
           onClick={(e) =>
             onSubmit(e as unknown as React.FormEvent<HTMLFormElement>)
           }
-          icon={<AppIcon icon={Icons.search} size={16} />}
+          icon={
+            isSearching ? undefined : (
+              <AppIcon icon={Icons.search} size={16} />
+            )
+          }
         >
-          Search sailings
+          {t("schedule.searchSailings")}
         </AppButton>
         <AppButton
+          danger
           size="large"
           htmlType="button"
-          icon={<AppIcon icon={Icons.refreshCw} size={16} />}
+          disabled={isSearching}
+          icon={<AppIcon icon={Icons.refreshCw} size={16} tone="delete" />}
           onClick={handleReset}
-          aria-label="Reset schedule search"
+          aria-label={t("a11y.resetScheduleSearch")}
         >
-          Reset
+          {t("common:actions.reset")}
         </AppButton>
       </Flex>
     </form>

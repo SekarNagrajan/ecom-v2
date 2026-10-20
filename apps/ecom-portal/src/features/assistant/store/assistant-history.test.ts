@@ -12,6 +12,7 @@ function msg(role: ChatMessage["role"], text: string): ChatMessage {
     createdAt: Date.now(),
     status: "complete",
     citations: [],
+    blocks: text ? [{ type: "text", id: `${role}_${text}_b`, text }] : [],
     cards: [],
     tools: [],
   };

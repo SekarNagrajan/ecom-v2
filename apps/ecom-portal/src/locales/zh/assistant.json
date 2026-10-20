@@ -101,6 +101,9 @@
   },
   "lookingUp": "正在查询…",
   "lookingUpDone": "查询完成",
+  "toolGroup": {
+    "summary": "已检查 {{tools}}"
+  },
   "openBooking": "在订舱中打开",
   "openScreen": "打开页面",
   "dismiss": "忽略",
@@ -251,13 +254,28 @@
     "records": {
       "title": "Records",
       "empty": "No records returned.",
+      "count": "显示 {{returned}} / 共 {{total}}",
       "list_bookings": "Bookings",
       "get_booking": "Booking",
       "list_shipping_instructions": "Shipping Instructions",
       "list_bills_of_lading": "Bills Of Lading",
       "list_vgm": "VGM",
-      "list_cro": "CRO"
+      "list_cro": "CRO",
+      "list_delivery_orders": "交货单",
+      "list_arrival_notices": "到货通知"
+    },
+    "booking": {
+      "route": "路线",
+      "cargoReady": "货物准备日期",
+      "open": "在订舱中打开"
     }
+  },
+  "toolErrors": {
+    "forbidden": "您没有访问权限。",
+    "notFound": "未找到匹配的记录。",
+    "cancelled": "该请求已取消。",
+    "timeout": "查询超时，请重试。",
+    "generic": "无法完成该查询。"
   },
   "suggestions": {
     "booking": [

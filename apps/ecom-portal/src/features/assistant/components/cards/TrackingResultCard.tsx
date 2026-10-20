@@ -5,6 +5,7 @@ import { Descriptions, Tag, Typography } from "antd";
 import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../../components/icons";
+import { getStatusDisplay } from "../../utils/status-labels";
 
 interface TrackingData {
   found?: boolean;
@@ -46,6 +47,9 @@ export function TrackingResultCard({ data }: { data: unknown }) {
 
   const first = d.containers?.[0];
   const trackingNumber = first?.containerNo ?? d.searchKey ?? d.search_value;
+  const status = first?.status
+    ? getStatusDisplay("track_shipment", first.status)
+    : null;
 
   return (
     <div className="assistant-card">
@@ -53,7 +57,7 @@ export function TrackingResultCard({ data }: { data: unknown }) {
         <Typography.Title level={5} className="assistant-card__title">
           {t("cards.tracking.title")}
         </Typography.Title>
-        {first?.status ? <Tag color="processing">{first.status}</Tag> : null}
+        {status?.label ? <Tag color={status.color}>{status.label}</Tag> : null}
       </div>
       <Descriptions
         size="small"

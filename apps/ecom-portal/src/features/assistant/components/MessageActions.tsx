@@ -16,16 +16,11 @@ export function MessageActions({
   message: ChatMessage;
   onRegenerate?: () => void;
 }) {
-  const { t, i18n } = useTranslation("assistant");
+  const { t } = useTranslation("assistant");
   const toast = useToast();
   const conversationId = useAssistantStore((s) => s.conversationId);
   const patchMessage = useAssistantStore((s) => s.patchMessage);
   const feedbackMutation = useAssistantFeedbackMutation();
-
-  const time = new Intl.DateTimeFormat(i18n.language, {
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(message.createdAt);
 
   async function copy() {
     try {
@@ -44,7 +39,6 @@ export function MessageActions({
 
   return (
     <div className="assistant-actions">
-      <span className="assistant-actions__time">{time}</span>
       <Tooltip title={t("actions.copy")}>
         <AppButton
           type="text"

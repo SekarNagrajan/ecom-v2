@@ -31,7 +31,9 @@ export function MessageList({ controller: c }: { controller: Controller }) {
     if (atBottom) {
       endRef.current?.scrollIntoView({ block: "end" });
     }
-  }, [c.messages.length, last?.text.length, atBottom]);
+    // `last?.status` re-runs the scroll when streaming ends and the tool rows
+    // collapse, so the final layout still lands at the bottom.
+  }, [c.messages.length, last?.text.length, last?.status, atBottom]);
 
   if (!c.messages.length) {
     return <AssistantWelcome onPick={c.send} />;
@@ -46,9 +48,7 @@ export function MessageList({ controller: c }: { controller: Controller }) {
       (m) =>
         m.role === "assistant" &&
         m.status === "streaming" &&
-        !m.text &&
-        m.tools.length === 0 &&
-        m.cards.length === 0,
+        m.blocks.length === 0,
     );
 
   function handleScroll() {
@@ -72,6 +72,7 @@ export function MessageList({ controller: c }: { controller: Controller }) {
         className="assistant-messages custom-scroll"
         role="log"
         aria-live="polite"
+        aria-busy={c.streaming}
         aria-label={t("a11y.conversation")}
       >
         {c.messages.map((m) => (

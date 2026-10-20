@@ -4,10 +4,47 @@ import { createJSONStorage, persist } from "zustand/middleware";
 
 import type { AssistantMode } from "../modes/assistant-modes";
 import type {
+  AssistantCard,
   ChatMessage,
   CitationChip,
+  MessageBlock,
   ToolRunState,
 } from "../types/assistant.types";
+
+let blockSeq = 0;
+/** Monotonic id for a render block (stable React keys within a session). */
+function blockId(): string {
+  blockSeq += 1;
+  return `blk_${Date.now().toString(36)}_${blockSeq.toString(36)}`;
+}
+
+/** Full message text, derived from text blocks joined by blank lines. */
+export function joinText(blocks: MessageBlock[]): string {
+  return blocks
+    .filter((b): b is Extract<MessageBlock, { type: "text" }> => b.type === "text")
+    .map((b) => b.text)
+    .join("\n\n")
+    .trim();
+}
+
+/**
+ * Render blocks for a message. Non-empty `blocks` win; otherwise the legacy
+ * fields are rebuilt in their historical order (tools -> text -> cards) so
+ * pre-blocks messages (older session history) render identically to before.
+ */
+export function ensureBlocks(m: ChatMessage): MessageBlock[] {
+  if (Array.isArray(m.blocks) && m.blocks.length > 0) return m.blocks;
+  const rebuilt: MessageBlock[] = [];
+  for (const tool of m.tools ?? []) {
+    rebuilt.push({ type: "tool", id: blockId(), callId: tool.callId });
+  }
+  if (m.text) rebuilt.push({ type: "text", id: blockId(), text: m.text });
+  for (const card of m.cards ?? []) {
+    rebuilt.push({ type: "card", id: blockId(), card });
+  }
+  if (rebuilt.length > 0) return rebuilt;
+  return Array.isArray(m.blocks) ? m.blocks : [];
+}
 
 /** A finished chat kept in-memory for this session (Rovo-style history). */
 export interface ArchivedConversation {
@@ -146,6 +183,7 @@ interface AssistantState {
   ) => void;
   updateMessage: (id: string, patch: Partial<ChatMessage>) => void;
   appendToken: (messageId: string, delta: string) => void;
+  appendCard: (messageId: string, card: AssistantCard) => void;
   appendCitation: (messageId: string, citation: CitationChip) => void;
   setToolRun: (messageId: string, run: ToolRunState) => void;
   patchToolRun: (
@@ -342,8 +380,34 @@ export const useAssistantStore = create<AssistantState>()(
     })),
   appendToken: (messageId, delta) =>
     set((state) => ({
+      messages: state.messages.map((m) => {
+        if (m.id !== messageId) return m;
+        const blocks = [...m.blocks];
+        const last = blocks[blocks.length - 1];
+        if (last && last.type === "text") {
+          blocks[blocks.length - 1] = { ...last, text: last.text + delta };
+        } else {
+          // First delta of a new text block: a tool round may have emitted a
+          // leading newline/space that would otherwise glue onto the block.
+          blocks.push({
+            type: "text",
+            id: blockId(),
+            text: delta.replace(/^\s+/, ""),
+          });
+        }
+        return { ...m, blocks, text: joinText(blocks) };
+      }),
+    })),
+  appendCard: (messageId, card) =>
+    set((state) => ({
       messages: state.messages.map((m) =>
-        m.id === messageId ? { ...m, text: m.text + delta } : m,
+        m.id === messageId
+          ? {
+              ...m,
+              cards: [...m.cards, card],
+              blocks: [...m.blocks, { type: "card", id: blockId(), card }],
+            }
+          : m,
       ),
     })),
   appendCitation: (messageId, citation) =>
@@ -361,16 +425,15 @@ export const useAssistantStore = create<AssistantState>()(
     })),
   setToolRun: (messageId, run) =>
     set((state) => ({
-      messages: state.messages.map((m) =>
-        m.id === messageId
-          ? {
-              ...m,
-              tools: m.tools.some((t) => t.callId === run.callId)
-                ? m.tools
-                : [...m.tools, run],
-            }
-          : m,
-      ),
+      messages: state.messages.map((m) => {
+        if (m.id !== messageId) return m;
+        if (m.tools.some((t) => t.callId === run.callId)) return m;
+        return {
+          ...m,
+          tools: [...m.tools, run],
+          blocks: [...m.blocks, { type: "tool", id: blockId(), callId: run.callId }],
+        };
+      }),
     })),
   patchToolRun: (messageId, callId, status) =>
     set((state) => ({
@@ -395,7 +458,23 @@ export const useAssistantStore = create<AssistantState>()(
       // Only the archive is persisted; the live thread, streaming flags and
       // open/view state always start clean.
       partialize: (state) => ({ archive: state.archive }),
-      version: 1,
+      // v2 introduced ChatMessage.blocks. Older persisted messages have no
+      // blocks, so rebuild them in the historical tools -> text -> cards order
+      // on load; everything else is carried through untouched.
+      version: 2,
+      migrate: (persisted, _version) => {
+        const state = persisted as { archive?: ArchivedConversation[] } | undefined;
+        if (!state?.archive) return persisted as AssistantState;
+        return {
+          ...state,
+          archive: state.archive.map((conv) => ({
+            ...conv,
+            messages: (conv.messages ?? []).map((m) =>
+              Array.isArray(m.blocks) ? m : { ...m, blocks: ensureBlocks(m) },
+            ),
+          })),
+        } as AssistantState;
+      },
     },
   ),
 );

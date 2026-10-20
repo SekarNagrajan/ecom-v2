@@ -101,6 +101,9 @@
   },
   "lookingUp": "Consultando…",
   "lookingUpDone": "Consulta completa",
+  "toolGroup": {
+    "summary": "Se verificó {{tools}}"
+  },
   "openBooking": "Abrir En Reserva",
   "openScreen": "Abrir Pantalla",
   "dismiss": "Descartar",
@@ -251,13 +254,28 @@
     "records": {
       "title": "Records",
       "empty": "No records returned.",
+      "count": "Mostrando {{returned}} de {{total}}",
       "list_bookings": "Bookings",
       "get_booking": "Booking",
       "list_shipping_instructions": "Shipping Instructions",
       "list_bills_of_lading": "Bills Of Lading",
       "list_vgm": "VGM",
-      "list_cro": "CRO"
+      "list_cro": "CRO",
+      "list_delivery_orders": "Órdenes de Entrega",
+      "list_arrival_notices": "Avisos de Llegada"
+    },
+    "booking": {
+      "route": "Ruta",
+      "cargoReady": "Fecha de Carga Lista",
+      "open": "Abrir En Reserva"
     }
+  },
+  "toolErrors": {
+    "forbidden": "No tienes acceso a eso.",
+    "notFound": "No se encontró ningún registro.",
+    "cancelled": "La solicitud fue cancelada.",
+    "timeout": "La búsqueda tardó demasiado. Inténtalo de nuevo.",
+    "generic": "No se pudo completar la búsqueda."
   },
   "suggestions": {
     "booking": [

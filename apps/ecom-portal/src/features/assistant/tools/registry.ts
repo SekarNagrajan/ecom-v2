@@ -35,6 +35,36 @@ function unwrapData<T>(res: { data?: T; error?: { message?: string } }): T {
   return res.data;
 }
 
+/**
+ * Shared row cap for every record list tool AND the card that renders it, so
+ * "Showing N of TOTAL" can never disagree with what was actually returned.
+ */
+export const RECORD_ROW_LIMIT = 10;
+
+interface RecordListResult<R> {
+  items: R[];
+  /** Total matching rows before the row cap. */
+  total: number;
+  /** Rows actually returned (<= RECORD_ROW_LIMIT). */
+  returned: number;
+  /** True when more rows matched than were returned. */
+  truncated: boolean;
+  /** Index signature so the result satisfies a tool handler's Record return. */
+  [key: string]: unknown;
+}
+
+/** Cap a row set at RECORD_ROW_LIMIT and report honest counts. */
+function recordList<T, R>(rows: T[], map: (row: T) => R): RecordListResult<R> {
+  const total = rows.length;
+  const limited = truncateRows(rows, RECORD_ROW_LIMIT);
+  return {
+    items: limited.map(map),
+    total,
+    returned: limited.length,
+    truncated: total > limited.length,
+  };
+}
+
 const trackShipment: ToolDef<{
   search_type: string;
   search_value: string;
@@ -124,7 +154,7 @@ const listBookings: ToolDef<{
 }> = {
   name: "list_bookings",
   capability: "BKG",
-  maxRows: 10,
+  maxRows: RECORD_ROW_LIMIT,
   schema: pageSchema,
   async run(args) {
     const res = await fetch("/api/booking/list");
@@ -134,11 +164,18 @@ const listBookings: ToolDef<{
       const needle = args.status.toLowerCase();
       rows = rows.filter((r) => r.status.toLowerCase().includes(needle));
     }
+    const total = rows.length;
     const page = args.page ?? 1;
-    const pageSize = args.page_size ?? 10;
+    const pageSize = args.page_size ?? RECORD_ROW_LIMIT;
     const start = (page - 1) * pageSize;
-    const slice = truncateRows(rows.slice(start, start + pageSize), listBookings.maxRows);
+    const slice = truncateRows(
+      rows.slice(start, start + pageSize),
+      RECORD_ROW_LIMIT,
+    );
     return {
+      total,
+      returned: slice.length,
+      truncated: total > slice.length,
       items: slice.map((r) => ({
         id: r.id,
         status: r.status,
@@ -161,6 +198,7 @@ const getBooking: ToolDef<{ booking_id: string }> = {
     return {
       booking_id: args.booking_id,
       draftId: booking.draftId ?? null,
+      status: (booking as { status?: string }).status ?? null,
       masterDetails: booking.masterDetails
         ? {
             origin: booking.masterDetails.origin,
@@ -175,37 +213,33 @@ const getBooking: ToolDef<{ booking_id: string }> = {
 const listShippingInstructions: ToolDef<{ status?: string; page?: number }> = {
   name: "list_shipping_instructions",
   capability: "SI",
-  maxRows: 10,
+  maxRows: RECORD_ROW_LIMIT,
   schema: pageSchema,
   async run() {
     const data = unwrapData(await siApi.fetchList());
-    return {
-      items: truncateRows(data, 10).map((row) => ({
-        id: row.id,
-        status: row.status,
-        bookingNo: row.bookingNo,
-        siNo: row.siNo,
-      })),
-    };
+    return recordList(data, (row) => ({
+      id: row.id,
+      status: row.status,
+      bookingNo: row.bookingNo,
+      siNo: row.siNo,
+    }));
   },
 };
 
 const listBillsOfLading: ToolDef<{ status?: string; page?: number }> = {
   name: "list_bills_of_lading",
   capability: "BL",
-  maxRows: 10,
+  maxRows: RECORD_ROW_LIMIT,
   schema: pageSchema,
   async run() {
     const data = unwrapData(await fetchBLList());
-    return {
-      items: truncateRows(data, 10).map((row) => ({
-        blNo: row.blNo,
-        status: row.status,
-        bookingNo: row.bookingNo,
-        origin: row.origin,
-        delivery: row.delivery,
-      })),
-    };
+    return recordList(data, (row) => ({
+      blNo: row.blNo,
+      status: row.status,
+      bookingNo: row.bookingNo,
+      origin: row.origin,
+      delivery: row.delivery,
+    }));
   },
 };
 
@@ -221,72 +255,70 @@ const listVgm: ToolDef<{ status?: string; page?: number; reference?: string; typ
     if (!args.reference) {
       return {
         items: [],
+        total: 0,
+        returned: 0,
+        truncated: false,
         note: "VGM lookup requires a booking or BL reference (type + reference).",
       };
     }
     const type: "bookno" | "blno" = args.type === "blno" ? "blno" : "bookno";
     const res = await vgmApi.searchReference(type, args.reference);
     const data = unwrapData(res);
-    return {
-      items: [
+    return recordList(
+      [
         {
           bookingNo: (data as { bookingNo?: string }).bookingNo,
           blNo: (data as { blNo?: string }).blNo,
           status: (data as { status?: string }).status,
         },
       ],
-    };
+      (row) => row,
+    );
   },
 };
 
 const listCro: ToolDef<{ status?: string; page?: number }> = {
   name: "list_cro",
   capability: "CRO",
-  maxRows: 10,
+  maxRows: RECORD_ROW_LIMIT,
   schema: pageSchema,
   async run() {
     const data = unwrapData(await croApi.fetchList());
-    return {
-      items: truncateRows(data, 10).map((row) => ({
-        id: (row as { id?: string }).id,
-        status: (row as { status?: string }).status,
-        croNo: (row as { croNo?: string }).croNo,
-      })),
-    };
+    return recordList(data, (row) => ({
+      id: (row as { id?: string }).id,
+      status: (row as { status?: string }).status,
+      croNo: (row as { croNo?: string }).croNo,
+    }));
   },
 };
 
 const listDeliveryOrders: ToolDef<{ status?: string; page?: number }> = {
   name: "list_delivery_orders",
   capability: "DO",
-  maxRows: 10,
+  maxRows: RECORD_ROW_LIMIT,
   schema: pageSchema,
   async run() {
     const data = unwrapData(await doApi.fetchList());
-    return {
-      items: truncateRows(data, 10).map((row) => ({
-        id: (row as { id?: string }).id,
-        status: (row as { status?: string }).status,
-        doNo: (row as { doNo?: string }).doNo,
-      })),
-    };
+    return recordList(data, (row) => ({
+      id: (row as { id?: string }).id,
+      status: (row as { status?: string }).status,
+      doNo: (row as { doNo?: string }).doNo,
+    }));
   },
 };
 
 const listArrivalNotices: ToolDef<{ status?: string; page?: number }> = {
   name: "list_arrival_notices",
   capability: "ARN",
-  maxRows: 10,
+  maxRows: RECORD_ROW_LIMIT,
   schema: pageSchema,
   async run() {
     const data = unwrapData(await arnApi.fetchList());
-    return {
-      items: truncateRows(data, 10).map((row) => ({
-        id: (row as { id?: string }).id,
-        status: (row as { status?: string }).status,
-        arnNo: (row as { arnNo?: string }).arnNo,
-      })),
-    };
+    return recordList(data, (row) => ({
+      id: (row as { id?: string }).id,
+      status: (row as { status?: string }).status,
+      arnNo: (row as { arnNo?: string }).arnNo,
+    }));
   },
 };
 

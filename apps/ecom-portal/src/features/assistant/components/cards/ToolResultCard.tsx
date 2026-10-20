@@ -6,6 +6,8 @@ import { useTranslation } from "react-i18next";
 
 import type { AssistantCard } from "../../types/assistant.types";
 import { isWhitelistedAppRoute } from "../../utils/citation-routes";
+import { toolErrorMessageKey } from "../../utils/tool-errors";
+import { BookingDetailCard } from "./BookingDetailCard";
 import { RecordStatusCard } from "./RecordStatusCard";
 import { ScheduleResultCard } from "./ScheduleResultCard";
 import { TrackingResultCard } from "./TrackingResultCard";
@@ -30,11 +32,12 @@ const TOOL_SCREEN: Record<string, string> = {
 
 const RECORD_TOOLS = new Set([
   "list_bookings",
-  "get_booking",
   "list_shipping_instructions",
   "list_bills_of_lading",
   "list_vgm",
   "list_cro",
+  "list_delivery_orders",
+  "list_arrival_notices",
 ]);
 
 export function ToolResultCard({ card }: { card: AssistantCard }) {
@@ -42,11 +45,30 @@ export function ToolResultCard({ card }: { card: AssistantCard }) {
   const navigate = useNavigate();
   const data = card.data;
 
+  // A failed tool shows a translated reason, never the raw error string.
+  if (card.ok === false) {
+    return (
+      <div className="assistant-card assistant-card--error">
+        <div className="assistant-card__head">
+          <Typography.Title level={5} className="assistant-card__title">
+            {t(`tools.${card.name}.failed`, { defaultValue: t("errors.TOOL_FAILED") })}
+          </Typography.Title>
+        </div>
+        <div className="assistant-card__body">
+          {t(toolErrorMessageKey(card.error))}
+        </div>
+      </div>
+    );
+  }
+
   if (card.name === "track_shipment") {
     return <TrackingResultCard data={data} />;
   }
   if (card.name === "search_schedules") {
     return <ScheduleResultCard data={data} />;
+  }
+  if (card.name === "get_booking") {
+    return <BookingDetailCard data={data} />;
   }
   if (RECORD_TOOLS.has(card.name)) {
     return <RecordStatusCard tool={card.name} data={data} />;

@@ -101,6 +101,9 @@
   },
   "lookingUp": "Sedang mencari…",
   "lookingUpDone": "Carian selesai",
+  "toolGroup": {
+    "summary": "Disemak {{tools}}"
+  },
   "openBooking": "Buka Dalam Tempahan",
   "openScreen": "Buka Skrin",
   "dismiss": "Buang",
@@ -251,13 +254,28 @@
     "records": {
       "title": "Records",
       "empty": "No records returned.",
+      "count": "Memaparkan {{returned}} daripada {{total}}",
       "list_bookings": "Bookings",
       "get_booking": "Booking",
       "list_shipping_instructions": "Shipping Instructions",
       "list_bills_of_lading": "Bills Of Lading",
       "list_vgm": "VGM",
-      "list_cro": "CRO"
+      "list_cro": "CRO",
+      "list_delivery_orders": "Perintah Penghantaran",
+      "list_arrival_notices": "Notis Ketibaan"
+    },
+    "booking": {
+      "route": "Laluan",
+      "cargoReady": "Tarikh Kargo Sedia",
+      "open": "Buka Dalam Tempahan"
     }
+  },
+  "toolErrors": {
+    "forbidden": "Anda tiada akses untuk itu.",
+    "notFound": "Tiada rekod yang sepadan ditemui.",
+    "cancelled": "Permintaan itu dibatalkan.",
+    "timeout": "Carian mengambil masa terlalu lama. Sila cuba lagi.",
+    "generic": "Carian tidak dapat diselesaikan."
   },
   "suggestions": {
     "booking": [

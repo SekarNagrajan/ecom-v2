@@ -192,10 +192,43 @@ export function AssistantModuleStyles() {
       .assistant-row {
         display: flex;
         gap: ${token.marginXS}px;
-        align-items: flex-end;
+        align-items: flex-start;
         max-width: 100%;
       }
-      .assistant-row--user { justify-content: flex-end; }
+      .assistant-row--user { justify-content: flex-end; align-items: flex-end; }
+      /* Assistant content is a borderless, full-width column beside the avatar.
+         Only cards and tool rows keep their own borders. */
+      .assistant-content {
+        flex: 1;
+        min-width: 0;
+        max-width: none;
+        display: flex;
+        flex-direction: column;
+        color: ${token.colorText};
+        font-size: ${token.fontSize}px;
+        line-height: ${token.lineHeight};
+        letter-spacing: var(--app-letter-spacing, 0em);
+        overflow-wrap: break-word;
+      }
+      .assistant-block + .assistant-block { margin-top: ${token.marginSM}px; }
+      /* Blocks own their spacing — neutralise the inner components' margins. */
+      .assistant-block > .assistant-md > :first-child { margin-top: 0; }
+      .assistant-block > .assistant-md > :last-child { margin-bottom: 0; }
+      .assistant-block > .assistant-card { margin-top: 0; width: 100%; }
+      .assistant-block > .assistant-tool-row { margin-bottom: 0; }
+      .assistant-content--error {
+        border: 1px solid ${token.colorErrorBorder};
+        background: ${token.colorErrorBg};
+        border-radius: ${token.borderRadiusLG}px;
+        padding: ${token.paddingSM}px ${token.padding}px;
+      }
+      /* One meta line (time + actions) under the content, matching the user side. */
+      .assistant-meta {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        margin-top: ${token.marginXS}px;
+      }
       .assistant-avatar {
         flex: none;
         width: ${token.controlHeightSM}px;
@@ -232,7 +265,7 @@ export function AssistantModuleStyles() {
         font-size: ${token.fontSize}px;
         line-height: ${token.lineHeight};
         letter-spacing: var(--app-letter-spacing, 0em);
-        overflow-wrap: anywhere;
+        overflow-wrap: break-word;
       }
       .assistant-bubble--user {
         background: ${token.colorPrimary};
@@ -271,10 +304,39 @@ export function AssistantModuleStyles() {
       .assistant-md > :first-child { margin-top: 0; }
       .assistant-md > :last-child { margin-bottom: 0; }
       .assistant-md p { margin: 0 0 ${token.marginXS}px; }
+      /* Headings scaled for a narrow chat panel — never larger than fontSizeLG. */
+      .assistant-md h1,
+      .assistant-md h2,
+      .assistant-md h3,
+      .assistant-md h4 {
+        margin: ${token.marginSM}px 0 ${token.marginXS}px;
+        font-weight: ${token.fontWeightStrong};
+        line-height: 1.4;
+      }
+      .assistant-md h1 { font-size: ${token.fontSizeLG}px; }
+      .assistant-md h2 { font-size: ${token.fontSizeLG}px; }
+      .assistant-md h3 { font-size: ${token.fontSize}px; }
+      .assistant-md h4 { font-size: ${token.fontSize}px; color: ${token.colorTextSecondary}; }
       .assistant-md ul,
       .assistant-md ol {
         margin: 0 0 ${token.marginXS}px;
         padding-left: ${token.paddingLG}px;
+      }
+      /* Nested lists tighten up and keep ordered numbering aligned. */
+      .assistant-md li { margin: 0 0 ${token.marginXXS}px; }
+      .assistant-md li > ul,
+      .assistant-md li > ol { margin: ${token.marginXXS}px 0 0; }
+      .assistant-md ol { list-style-position: outside; }
+      .assistant-md blockquote {
+        margin: 0 0 ${token.marginXS}px;
+        padding: ${token.paddingXXS}px ${token.paddingSM}px;
+        border-left: 3px solid ${token.colorBorder};
+        color: ${token.colorTextSecondary};
+      }
+      .assistant-md hr {
+        margin: ${token.marginSM}px 0;
+        border: none;
+        border-top: 1px solid ${token.colorBorderSecondary};
       }
       .assistant-md a { color: ${token.colorLink}; }
       .assistant-md a:hover { color: ${token.colorLinkHover}; }
@@ -284,17 +346,34 @@ export function AssistantModuleStyles() {
         background: ${token.colorFillTertiary};
         font-family: ${token.fontFamilyCode};
         font-size: ${token.fontSizeSM}px;
+        /* Keep identifiers (e.g. BKON260016) intact rather than breaking mid-word. */
+        overflow-wrap: normal;
+        word-break: keep-all;
       }
       .assistant-md pre {
+        margin: 0 0 ${token.marginXS}px;
         padding: ${token.paddingSM}px;
         border-radius: ${token.borderRadius}px;
         background: ${token.colorFillTertiary};
         overflow-x: auto;
       }
-      .assistant-md table {
-        width: 100%;
-        border-collapse: collapse;
+      .assistant-md pre code {
+        padding: 0;
+        background: transparent;
+        white-space: pre;
+        word-break: normal;
+      }
+      /* Wide tables scroll horizontally inside the message. */
+      .assistant-md__table-wrap {
         margin: ${token.marginXS}px 0;
+        overflow-x: auto;
+        max-width: 100%;
+      }
+      .assistant-md__table-wrap table {
+        width: max-content;
+        min-width: 100%;
+        border-collapse: collapse;
+        margin: 0;
         font-size: ${token.fontSizeSM}px;
       }
       .assistant-md th,
@@ -302,7 +381,12 @@ export function AssistantModuleStyles() {
         border: 1px solid ${token.colorBorderSecondary};
         padding: ${token.paddingXXS}px ${token.paddingXS}px;
         text-align: left;
+        /* IDs and codes stay on one line; the last column may wrap. */
+        overflow-wrap: normal;
+        white-space: nowrap;
       }
+      .assistant-md th:last-child,
+      .assistant-md td:last-child { white-space: normal; }
       .assistant-md th {
         background: ${token.colorFillQuaternary};
         font-weight: ${token.fontWeightStrong};
@@ -312,16 +396,10 @@ export function AssistantModuleStyles() {
       .assistant-actions {
         display: flex;
         gap: ${token.marginXXS}px;
-        margin-top: ${token.marginXXS}px;
+        align-items: center;
         opacity: 0.85;
       }
-      .assistant-actions { align-items: center; }
       .assistant-actions .ant-btn { color: ${token.colorTextSecondary}; }
-      .assistant-actions__time {
-        color: ${token.colorTextQuaternary};
-        font-size: ${token.fontSizeSM - 1}px;
-        margin-right: ${token.marginXXS}px;
-      }
       .assistant-actions .assistant-actions__on .app-icon {
         color: ${token.colorPrimary};
       }
@@ -384,6 +462,43 @@ export function AssistantModuleStyles() {
         background: ${token.colorPrimary};
         animation: assistant-indeterminate 1.1s ease-in-out infinite;
       }
+      .assistant-tool-group {
+        margin-bottom: ${token.marginXS}px;
+      }
+      .assistant-tool-group__toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXS}px;
+        max-width: 100%;
+        padding: ${token.paddingXXS}px ${token.paddingSM}px;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px solid ${token.colorSuccessBorder};
+        background: ${token.colorSuccessBg};
+        color: ${token.colorSuccessText};
+        font-size: ${token.fontSizeSM}px;
+        line-height: 1.3;
+        cursor: pointer;
+      }
+      .assistant-tool-group__toggle:hover {
+        border-color: ${token.colorSuccess};
+      }
+      .assistant-tool-group__toggle:focus-visible {
+        outline: 2px solid ${token.colorPrimary};
+        outline-offset: 1px;
+      }
+      .assistant-tool-group__summary {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .assistant-tool-group__list {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+        margin-top: ${token.marginXS}px;
+      }
       .assistant-citations {
         display: flex;
         flex-wrap: wrap;
@@ -406,6 +521,10 @@ export function AssistantModuleStyles() {
       .assistant-citation:hover {
         border-color: ${token.colorPrimary};
         background: ${primaryTint8};
+      }
+      .assistant-citation:focus-visible {
+        outline: 2px solid ${token.colorPrimary};
+        outline-offset: 1px;
       }
 
       /* ---------- Result cards ---------- */
@@ -443,9 +562,29 @@ export function AssistantModuleStyles() {
         gap: ${token.marginXS}px;
         margin-top: ${token.marginSM}px;
       }
+      /* Long Malay/Spanish labels wrap instead of overflowing the card. */
+      .assistant-card__footer .ant-btn,
+      .assistant-card__actions .ant-btn {
+        max-width: 100%;
+        height: auto;
+        min-height: ${token.controlHeightSM}px;
+        white-space: normal;
+        text-align: center;
+      }
+      .assistant-card__footer .ant-btn > span,
+      .assistant-card__actions .ant-btn > span {
+        overflow-wrap: break-word;
+      }
       .assistant-card--prefill {
         border-color: ${primaryTint22};
         background: ${primaryTint8};
+      }
+      .assistant-card--error {
+        border-color: ${token.colorWarningBorder};
+        background: ${token.colorWarningBg};
+      }
+      .assistant-card--error .assistant-card__title.ant-typography {
+        color: ${token.colorWarningText};
       }
       .assistant-card .ant-descriptions-item-label {
         color: ${token.colorTextSecondary};
@@ -884,8 +1023,9 @@ export function AssistantModuleStyles() {
       }
 
       /* ---------- Accessibility: contrast ---------- */
-      html[data-contrast="high"] .assistant-bubble--assistant,
+      html[data-contrast="high"] .assistant-bubble--user,
       html[data-contrast="high"] .assistant-card,
+      html[data-contrast="high"] .assistant-tool-row,
       html[data-contrast="high"] .assistant-window,
       html[data-contrast="high"] .assistant-composer {
         border-color: ${token.colorText};
@@ -893,8 +1033,15 @@ export function AssistantModuleStyles() {
       html[data-contrast="high"] .assistant-composer:focus-within {
         border-color: ${token.colorPrimary};
       }
-      html[data-contrast="high"] .assistant-citation {
-        border-color: ${token.colorPrimary};
+      html[data-contrast="high"] .assistant-citation,
+      html[data-contrast="high"] .assistant-tool-group__toggle {
+        border-color: ${token.colorText};
+      }
+      /* Keep an obvious keyboard focus ring on every interactive surface. */
+      .assistant-card .ant-btn:focus-visible,
+      .assistant-content a:focus-visible {
+        outline: 2px solid ${token.colorPrimary};
+        outline-offset: 1px;
       }
 
       @keyframes assistant-window-in {

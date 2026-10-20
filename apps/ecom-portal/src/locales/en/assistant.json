@@ -101,6 +101,9 @@
   },
   "lookingUp": "Looking up…",
   "lookingUpDone": "Lookup complete",
+  "toolGroup": {
+    "summary": "Checked {{tools}}"
+  },
   "openBooking": "Open In Booking",
   "openScreen": "Open Screen",
   "dismiss": "Dismiss",
@@ -251,13 +254,28 @@
     "records": {
       "title": "Records",
       "empty": "No records returned.",
+      "count": "Showing {{returned}} of {{total}}",
       "list_bookings": "Bookings",
       "get_booking": "Booking",
       "list_shipping_instructions": "Shipping Instructions",
       "list_bills_of_lading": "Bills Of Lading",
       "list_vgm": "VGM",
-      "list_cro": "CRO"
+      "list_cro": "CRO",
+      "list_delivery_orders": "Delivery Orders",
+      "list_arrival_notices": "Arrival Notices"
+    },
+    "booking": {
+      "route": "Route",
+      "cargoReady": "Cargo Ready Date",
+      "open": "Open In Booking"
     }
+  },
+  "toolErrors": {
+    "forbidden": "You don't have access to that.",
+    "notFound": "No matching record was found.",
+    "cancelled": "That request was cancelled.",
+    "timeout": "That lookup took too long. Please try again.",
+    "generic": "That lookup couldn't be completed."
   },
   "suggestions": {
     "booking": [

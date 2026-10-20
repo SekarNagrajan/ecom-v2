@@ -32,6 +32,7 @@ function newAssistantMessage(id: string): ChatMessage {
     createdAt: Date.now(),
     status: "streaming",
     citations: [],
+    blocks: [],
     cards: [],
     tools: [],
   };
@@ -162,10 +163,7 @@ export function useAssistantController() {
         });
         break;
       case "ui_action":
-        s.patchMessage(assistantMessageId, (m) => ({
-          ...m,
-          cards: [...m.cards, uiActionToCard(event)],
-        }));
+        s.appendCard(assistantMessageId, uiActionToCard(event));
         break;
       case "error":
         if (event.code === "RATE_LIMITED") {
@@ -211,17 +209,18 @@ export function useAssistantController() {
         name,
         arguments: call?.arguments ?? {},
         data: result.content,
+        ok: result.ok,
+        error: result.ok ? undefined : (result.error ?? undefined),
         summary: result.ok
           ? summarizeToolContent(name, result.content)
-          : (result.error ?? undefined),
+          : undefined,
         route: undefined,
       };
     });
 
-    useAssistantStore.getState().patchMessage(assistantMessageId, (m) => ({
-      ...m,
-      cards: [...m.cards, ...cards],
-    }));
+    for (const card of cards) {
+      useAssistantStore.getState().appendCard(assistantMessageId, card);
+    }
 
     for (const result of results) {
       useAssistantStore.getState().patchToolRun(
@@ -283,6 +282,7 @@ export function useAssistantController() {
       createdAt: Date.now(),
       status: "complete",
       citations: [],
+      blocks: [{ type: "text", id: newId("blk"), text: trimmed }],
       cards: [],
       tools: [],
     };

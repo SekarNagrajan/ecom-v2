@@ -26,9 +26,36 @@ class ModeConfig:
     tool_allowlist: frozenset[str] | None
 
 
-_ASSISTANT_SYSTEM = load("assistant")
+# Tools whose result is rendered as a rich card on the client, so the model
+# should summarise rather than re-list the rows. Kept in ONE place; the client
+# side of the contract lives in
+# apps/ecom-portal/src/features/assistant/components/cards/ToolResultCard.tsx.
+CARD_BACKED_TOOLS: frozenset[str] = frozenset(
+    {
+        "track_shipment",
+        "search_schedules",
+        "get_booking",
+        "list_bookings",
+        "list_shipping_instructions",
+        "list_bills_of_lading",
+        "list_vgm",
+        "list_cro",
+        "list_delivery_orders",
+        "list_arrival_notices",
+    }
+)
 
-_AUTOMATION_SYSTEM = load("automation")
+_CARD_SUMMARY_RULE = (
+    "\n- These tools show their result to the user as a card: "
+    + ", ".join(sorted(CARD_BACKED_TOOLS))
+    + ". When you call one of them, do not repeat the returned rows as a table or "
+    "bullet list; reply with a 1–2 sentence summary (the count, the headline result, "
+    "or the next step) and let the card present the detail."
+)
+
+_ASSISTANT_SYSTEM = load("assistant") + _CARD_SUMMARY_RULE
+
+_AUTOMATION_SYSTEM = load("automation") + _CARD_SUMMARY_RULE
 
 _SQL_SYSTEM = load("sql")
 

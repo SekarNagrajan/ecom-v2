@@ -5,6 +5,8 @@ import { Tag, Typography } from "antd";
 import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../../components/icons";
+import { RECORD_ROW_LIMIT } from "../../tools/registry";
+import { getStatusDisplay, type StatusModule } from "../../utils/status-labels";
 
 interface RecordRow {
   id?: string;
@@ -12,6 +14,9 @@ interface RecordRow {
   bookingNo?: string;
   blNo?: string;
   siNo?: string;
+  croNo?: string;
+  doNo?: string;
+  arnNo?: string;
   status?: string;
   pol?: string;
   pod?: string;
@@ -24,6 +29,9 @@ interface RecordRow {
 
 interface RecordData {
   items?: RecordRow[];
+  total?: number;
+  returned?: number;
+  truncated?: boolean;
 }
 
 const TOOL_LIST_ROUTE: Record<string, string> = {
@@ -33,11 +41,21 @@ const TOOL_LIST_ROUTE: Record<string, string> = {
   list_bills_of_lading: "/app/bl",
   list_vgm: "/app/vgm",
   list_cro: "/app/cro",
+  list_delivery_orders: "/app/delivery-order",
+  list_arrival_notices: "/app/arrival-notice",
 };
 
 function rowLabel(row: RecordRow): string {
   return (
-    row.number ?? row.bookingNo ?? row.blNo ?? row.siNo ?? row.id ?? "—"
+    row.number ??
+    row.bookingNo ??
+    row.blNo ??
+    row.siNo ??
+    row.croNo ??
+    row.doNo ??
+    row.arnNo ??
+    row.id ??
+    "—"
   );
 }
 
@@ -53,24 +71,6 @@ function rowRoute(row: RecordRow): string {
   );
 }
 
-function statusColor(
-  status: string | undefined,
-): "success" | "processing" | "warning" | "error" | "default" {
-  if (!status) return "default";
-  const s = status.toLowerCase();
-  if (s.includes("accept") || s.includes("confirm") || s.includes("complete")) {
-    return "success";
-  }
-  if (s.includes("pending") || s.includes("draft") || s.includes("open")) {
-    return "processing";
-  }
-  if (s.includes("reject") || s.includes("cancel") || s.includes("error")) {
-    return "error";
-  }
-  if (s.includes("await") || s.includes("hold")) return "warning";
-  return "default";
-}
-
 export function RecordStatusCard({
   tool,
   data,
@@ -81,7 +81,9 @@ export function RecordStatusCard({
   const { t } = useTranslation("assistant");
   const navigate = useNavigate();
   const d = (data ?? {}) as RecordData;
-  const items = (d.items ?? []).slice(0, 5);
+  const items = (d.items ?? []).slice(0, RECORD_ROW_LIMIT);
+  const returned = d.returned ?? items.length;
+  const total = d.total ?? returned;
   const listRoute = TOOL_LIST_ROUTE[tool] ?? "/app/dashboard";
 
   return (
@@ -92,19 +94,26 @@ export function RecordStatusCard({
             defaultValue: t("cards.records.title"),
           })}
         </Typography.Title>
-        <Tag>{items.length}</Tag>
+        {returned > 0 ? (
+          <Tag>{t("cards.records.count", { returned, total })}</Tag>
+        ) : null}
       </div>
-      {items.map((row, index) => (
-        <div key={row.id ?? index} className="assistant-card__sailing-row">
-          <div>
-            <strong>{rowLabel(row)}</strong>{" "}
-            {row.status ? (
-              <Tag color={statusColor(row.status)}>{row.status}</Tag>
-            ) : null}
+      {items.map((row, index) => {
+        const status = row.status
+          ? getStatusDisplay(tool as StatusModule, row.status)
+          : null;
+        return (
+          <div key={row.id ?? index} className="assistant-card__sailing-row">
+            <div>
+              <strong>{rowLabel(row)}</strong>{" "}
+              {status?.label ? (
+                <Tag color={status.color}>{status.label}</Tag>
+              ) : null}
+            </div>
+            <div className="assistant-card__meta">{rowRoute(row)}</div>
           </div>
-          <div className="assistant-card__meta">{rowRoute(row)}</div>
-        </div>
-      ))}
+        );
+      })}
       {!items.length ? (
         <div className="assistant-card__body">{t("cards.records.empty")}</div>
       ) : null}

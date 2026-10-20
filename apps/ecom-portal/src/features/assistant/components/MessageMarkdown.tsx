@@ -14,6 +14,12 @@ const markdownComponents: Components = {
       </a>
     ),
   img: () => null,
+  // Wide tables scroll inside the message instead of stretching the panel.
+  table: ({ children }) => (
+    <div className="assistant-md__table-wrap">
+      <table>{children}</table>
+    </div>
+  ),
 };
 
 export function MessageMarkdown({ text }: { text: string }) {

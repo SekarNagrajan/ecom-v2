@@ -33,3 +33,24 @@ def test_two_markers_in_one_delta():
         ("cite", "/app/a", "A"),
         ("cite", "/app/b", "B"),
     ]
+
+
+def test_whitespace_before_marker_dropped_when_followed_by_punctuation():
+    cs = CitationStream()
+    delta = "See the booking [[cite:/app/booking|Booking]]."
+    parts = list(cs.feed(delta)) + list(cs.flush())
+    text = "".join(p[1] for p in parts if p[0] == "text")
+    # The space before the citation is dropped so the chip hugs the word and
+    # the period follows immediately: "See the booking" + chip + ".".
+    assert text == "See the booking."
+    cites = [p for p in parts if p[0] == "cite"]
+    assert cites == [("cite", "/app/booking", "Booking")]
+
+
+def test_whitespace_kept_when_marker_followed_by_space():
+    cs = CitationStream()
+    delta = "See the booking [[cite:/app/booking|Booking]] now"
+    parts = list(cs.feed(delta)) + list(cs.flush())
+    text = "".join(p[1] for p in parts if p[0] == "text")
+    # Non-punctuation after the marker: spacing is untouched.
+    assert text == "See the booking  now"

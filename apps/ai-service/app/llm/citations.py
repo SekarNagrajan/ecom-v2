@@ -8,6 +8,12 @@ from collections.abc import Iterator
 
 CITE = re.compile(r"\[\[cite:(/[^|\]]{1,200})\|([^\]]{1,80})\]\]")
 
+# Punctuation that should sit flush after a citation chip. When a marker is
+# immediately followed by one of these, the whitespace before the marker is
+# dropped so the chip hugs the preceding word (e.g. "departed [[cite]]." →
+# "departed" + chip + ".").
+_PUNCT_AFTER = frozenset(".,;:!?)]}")
+
 
 class CitationStream:
     """Feed text deltas; yields ('text', str) or ('cite', route, title)."""
@@ -20,8 +26,15 @@ class CitationStream:
         while True:
             m = CITE.search(self.buf)
             if m:
-                if m.start():
-                    yield ("text", self.buf[: m.start()])
+                before = self.buf[: m.start()]
+                # Drop the space before the marker when punctuation follows it,
+                # so the citation chip hugs the word and the punctuation stays
+                # attached. Only possible once the following char has arrived.
+                after = self.buf[m.end()] if m.end() < len(self.buf) else ""
+                if after and after in _PUNCT_AFTER:
+                    before = before.rstrip()
+                if before:
+                    yield ("text", before)
                 yield ("cite", m.group(1), m.group(2))
                 self.buf = self.buf[m.end() :]
                 continue

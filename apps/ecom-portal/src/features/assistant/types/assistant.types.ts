@@ -127,6 +127,10 @@ export interface AssistantCard {
   summary?: string;
   route?: string;
   data?: unknown;
+  /** Tool-result cards: whether the tool call succeeded. */
+  ok?: boolean;
+  /** Tool-result cards: raw error code/string when `ok` is false. */
+  error?: string;
 }
 
 export type ToolRunState = {
@@ -135,15 +139,30 @@ export type ToolRunState = {
   status: "running" | "done" | "failed";
 };
 
+/**
+ * Client-only ordered block model (not a wire type). Text, tool rows and
+ * cards are appended in the order their events arrive so the bubble renders
+ * them in that order instead of a fixed tools -> text -> cards layout.
+ */
+export type MessageBlock =
+  | { type: "text"; id: string; text: string }
+  | { type: "tool"; id: string; callId: string }
+  | { type: "card"; id: string; card: AssistantCard };
+
 export interface ChatMessage {
   id: string;
   role: MessageRole;
+  /** Derived from the text blocks (joinText) — kept for copy/history/tests. */
   text: string;
   /** Epoch ms when the message was created client-side (bubble timestamp). */
   createdAt: number;
   status: MessageStatus;
   citations: CitationChip[];
+  /** Ordered render blocks — the source of truth for layout. */
+  blocks: MessageBlock[];
+  /** @deprecated use `blocks` (kept populated for backward compatibility). */
   cards: AssistantCard[];
+  /** Tool run states, referenced by `tool` blocks via callId. */
   tools: ToolRunState[];
   error?: { code: string; message: string; retryable: boolean };
   feedback?: "up" | "down";

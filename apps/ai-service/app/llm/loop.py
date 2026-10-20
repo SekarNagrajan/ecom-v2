@@ -532,6 +532,7 @@ async def run_chat_loop(
                     arguments,
                     app_state or type("S", (), {})(),
                     authorization=authorization,
+                    mode=str(conversation.mode),
                 )
                 immediate.append(
                     {

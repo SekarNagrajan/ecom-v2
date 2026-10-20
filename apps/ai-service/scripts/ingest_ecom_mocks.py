@@ -168,8 +168,24 @@ def _sample(records: list) -> str:
     return out[:MAX_SAMPLE_CHARS]
 
 
-def fixture_section(path: Path) -> tuple[str, str] | None:
-    """Return (module, markdown section) for one fixture JSON file."""
+#: Appended to every fixture digest so a retrieved chunk can never be read
+#: as a specific customer's record.
+_FIXTURE_DISCLAIMER = (
+    "Reference only — never use as a customer's data. These are field names "
+    "and counts from the demo dataset, not records belonging to any user."
+)
+
+
+def fixture_section(
+    path: Path, *, include_samples: bool = False
+) -> tuple[str, str] | None:
+    """Return (module, markdown section) for one fixture JSON file.
+
+    By default this is a *schema* digest: fixture name, record count and
+    field names. Sample records are written only when `include_samples` is
+    set, which the ingester routes to `knowledge/sql/fixtures.md` so they
+    are reachable from SQL mode alone.
+    """
     stem = path.stem
     if fixture_category(stem) != "CATALOG":
         # Transactional rows are served by app/repositories (exact id only);
@@ -200,10 +216,12 @@ def fixture_section(path: Path) -> tuple[str, str] | None:
         "",
         f"E-com v2 portal fixture `{path.name}` — {len(records)} record(s) "
         f"serving the {module} module in mock mode.",
+        "",
+        _FIXTURE_DISCLAIMER,
     ]
     if fields:
         lines += ["", "Fields: " + ", ".join(fields)]
-    if records:
+    if include_samples and records:
         lines += ["", "Sample records:", "```json", _sample(records), "```"]
     return module, "\n".join(lines) + "\n"
 
@@ -222,6 +240,9 @@ def handler_section(path: Path) -> tuple[str, str] | None:
         return None
     lines = [
         f"## {module} API endpoints: {stem} ({path.name})",
+        # Routes the portal serves — reference material, not customer data,
+        # so assistant and docs modes may retrieve it.
+        "<!-- kind: reference -->",
         "",
         f"Mock-mode API endpoints the portal serves for the {module} module:",
         "",
@@ -230,13 +251,20 @@ def handler_section(path: Path) -> tuple[str, str] | None:
     return module, "\n".join(lines) + "\n"
 
 
-def ingest(src_root: Path, out_root: Path) -> dict[str, int]:
+def ingest(
+    src_root: Path, out_root: Path, *, include_samples: bool = False
+) -> dict[str, int]:
     docs: dict[str, list[str]] = {}
+    sample_sections: list[str] = []
 
     for fx in sorted((src_root / "fixtures").glob("*.json")):
         got = fixture_section(fx)
         if got:
             docs.setdefault(got[0], []).append(got[1])
+        if include_samples:
+            sampled = fixture_section(fx, include_samples=True)
+            if sampled:
+                sample_sections.append(sampled[1])
 
     for hd in sorted(src_root.glob("*.handlers.ts")):
         got = handler_section(hd)
@@ -257,6 +285,20 @@ def ingest(src_root: Path, out_root: Path) -> dict[str, int]:
             header + "\n".join(sections), encoding="utf-8"
         )
         counts[module] = len(sections)
+
+    if include_samples and sample_sections:
+        # SQL mode only: sample rows live in one file so retrieval for the
+        # other modes can exclude them by kind.
+        sql_dir = out_root / "sql"
+        sql_dir.mkdir(parents=True, exist_ok=True)
+        (sql_dir / "fixtures.md").write_text(
+            "# sql — fixture sample records\n\n"
+            "Sample rows from the demo dataset, for SQL analysis only. "
+            "Never present these as a user's own records.\n\n"
+            + "\n".join(sample_sections),
+            encoding="utf-8",
+        )
+        counts["sql (samples)"] = len(sample_sections)
 
     # Prose knowledge: behaviour descriptions, status decoders, workflow
     # emails and the T&C policy — higher retrieval value than the digests.
@@ -280,11 +322,17 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--src", required=True, help="ecom-portal src/mocks directory")
     parser.add_argument("--out", default=str(KNOWLEDGE_ROOT))
+    parser.add_argument(
+        "--include-samples", action="store_true",
+        help="also write sample records to knowledge/sql/fixtures.md (SQL mode only)",
+    )
     args = parser.parse_args()
     src = Path(args.src).resolve()
     if not (src / "fixtures").is_dir():
         raise SystemExit(f"no fixtures/ under: {src}")
-    counts = ingest(src, Path(args.out).resolve())
+    counts = ingest(
+        src, Path(args.out).resolve(), include_samples=args.include_samples
+    )
     total = sum(counts.values())
     print(f"ingested {total} sections across {len(counts)} modules:")
     for module, n in sorted(counts.items()):

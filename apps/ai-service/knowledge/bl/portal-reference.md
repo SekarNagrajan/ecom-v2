@@ -27,6 +27,7 @@ Notify when a bill of lading is sent to the agency.
 Notification key `BILL_OF_LADING_SUBMISSION`, category `BILL_OF_LADING`, enabled by default: on.
 
 ## Bill Of Lading status codes — what each status means
+<!-- kind: status -->
 
 Meaning of every stored status code on a bill of lading. Use these exact words when explaining the state of a record; never guess a meaning for a status code.
 

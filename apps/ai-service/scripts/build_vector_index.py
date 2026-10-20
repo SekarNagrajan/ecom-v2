@@ -13,6 +13,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import shutil
 import sys
 from datetime import UTC, datetime
 from pathlib import Path
@@ -20,6 +21,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from app.config import get_settings  # noqa: E402
 from app.knowledge.index import GuideIndex  # noqa: E402
 from app.knowledge.vector import VectorIndex  # noqa: E402
 
@@ -47,15 +49,27 @@ def main() -> None:
         "--force", action="store_true",
         help="rebuild even when the corpus fingerprint is unchanged",
     )
+    parser.add_argument(
+        "--dry-run", action="store_true",
+        help="report what would change without writing",
+    )
+    parser.add_argument(
+        "--reset", action="store_true",
+        help="delete the store first and rebuild from scratch",
+    )
     args = parser.parse_args()
 
     guide = GuideIndex(Path(args.knowledge))
     if not guide.chunks:
         raise SystemExit("no knowledge chunks found — nothing to index")
 
+    if args.reset and Path(args.db).exists():
+        shutil.rmtree(args.db)
+        print(f"reset: removed {args.db}")
+
     fingerprint = corpus_fingerprint(guide.chunks)
     manifest_path = Path(args.db).parent / "ingest-manifest.json"
-    if not args.force and manifest_path.is_file():
+    if not (args.force or args.reset or args.dry_run) and manifest_path.is_file():
         try:
             previous = json.loads(manifest_path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
@@ -67,20 +81,32 @@ def main() -> None:
             )
             return
 
-    index = VectorIndex(Path(args.db), create=True)
+    settings = get_settings()
+    index = VectorIndex(
+        Path(args.db), create=True, embedding_model=settings.embedding_model
+    )
     if not index.ready:
         raise SystemExit("chromadb unavailable — cannot build the vector index")
-    n = index.build(guide.chunks)
-    # Upsert alone never removes chunks that no longer exist in the corpus,
-    # so deleted knowledge stays searchable forever. Purge the difference.
-    removed = index.purge_missing({c["id"] for c in guide.chunks})
+    if index.rebuilt_for_model_change:
+        print(f"embedding model changed -> full rebuild ({settings.embedding_model})")
+
+    stats = index.build(guide.chunks, dry_run=args.dry_run)
+    if args.dry_run:
+        print(
+            f"dry-run: would upsert {stats['upserted']}, "
+            f"delete {stats['deleted']}, leave {stats['unchanged']} unchanged "
+            f"(corpus {stats['total']})"
+        )
+        return
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     manifest_path.write_text(
         json.dumps(
             {
                 "fingerprint": fingerprint,
-                "chunks": n,
-                "purged": removed,
+                "chunks": stats["total"],
+                "upserted": stats["upserted"],
+                "deleted": stats["deleted"],
+                "embedding_model": settings.embedding_model,
                 "built_at": datetime.now(tz=UTC).isoformat(),
             },
             indent=1,
@@ -88,8 +114,9 @@ def main() -> None:
         encoding="utf-8",
     )
     print(
-        f"indexed {n} chunks → {args.db} "
-        f"(purged {removed} stale, collection count: {index.count()})"
+        f"upserted {stats['upserted']}, deleted {stats['deleted']}, "
+        f"unchanged {stats['unchanged']} (corpus {stats['total']}) "
+        f"→ {args.db} (collection count: {index.count()})"
     )
 
 

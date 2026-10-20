@@ -207,14 +207,69 @@ def test_real_fixtures_load_every_entity():
         assert repo.list(entity, customer=None, limit=1).total > 0, entity
 
 
+def test_portal_booking_follows_ext_book_no_to_its_documents(tmp_path: Path):
+    """An accepted booking reaches its SI through extBookNo."""
+    (tmp_path / "bookings.json").write_text(json.dumps([
+        {"ebookno": "BKON1", "cust_code": "C1", "ebook_status": "A",
+         "extBookNo": "SVMD1"},
+    ]))
+    (tmp_path / "lrpBookings.json").write_text(json.dumps([{"book_no": "SVMD1"}]))
+    (tmp_path / "shippingInstructions.json").write_text(json.dumps([
+        {"eSINo": "SIREQ1", "bookno": "SVMD1", "custcode": "C1"},
+    ]))
+    repo = FixtureRepository(tmp_path)
+    match = resolve_booking(repo, "BKON1", customer=None)
+    assert match.carrier_reference == "SVMD1"
+    page = documents_for_booking(repo, match, "shipping_instruction", customer=None)
+    assert not isinstance(page, ChainUnavailable)
+    assert page.total == 1
+
+
+def test_portal_booking_without_ext_book_no_explains_why(tmp_path: Path):
+    """No carrier number yet is a business state, not a broken join."""
+    (tmp_path / "bookings.json").write_text(json.dumps([
+        {"ebookno": "BKON2", "cust_code": "C1", "ebook_status": "S",
+         "extBookNo": None},
+    ]))
+    repo = FixtureRepository(tmp_path)
+    match = resolve_booking(repo, "BKON2", customer=None)
+    assert match.carrier_reference is None
+    result = documents_for_booking(repo, match, "shipping_instruction", customer=None)
+    assert isinstance(result, ChainUnavailable)
+    assert "does not have a carrier booking number yet" in result.reason
+    assert "BKON2" in result.reason
+
+
 @needs_fixtures
-def test_real_portal_booking_still_has_no_document_chain():
-    """Guards the finding: if production ever populates extBookNo, this fails."""
+def test_ext_book_no_tracks_acceptance_across_the_whole_corpus():
+    """Scans EVERY row, not row 1.
+
+    The earlier version of this test took `limit=1` and asserted the chain
+    was unavailable; it passed only because the first booking happens to be
+    unaccepted. This asserts the real invariant instead.
+    """
     repo = FixtureRepository(FIXTURES)
-    booking = repo.list("portal_booking", customer=None, limit=1).rows[0]
-    match = resolve_booking(repo, booking.id_of("ebookno"), customer=None)
-    assert match.namespace is Namespace.PORTAL
-    assert isinstance(
-        documents_for_booking(repo, match, "shipping_instruction", customer=None),
-        ChainUnavailable,
-    )
+    rows = repo.list("portal_booking", customer=None, limit=100).rows
+    rows += repo.list("portal_booking", customer=None, offset=100, limit=100).rows
+
+    bridged = [r for r in rows if r.id_of("extBookNo")]
+    assert bridged, "extBookNo is populated in this dataset"
+
+    # Every accepted booking has a carrier number; no draft/void/rejected does.
+    for row in rows:
+        status = row.id_of("ebook_status")
+        has_bridge = bool(row.id_of("extBookNo"))
+        if status == "A":
+            assert has_bridge, f"accepted {row.id_of('ebookno')} lacks extBookNo"
+        elif status in {"D", "I", "T", "V"}:
+            assert not has_bridge, f"{status} booking unexpectedly bridged"
+
+
+@needs_fixtures
+def test_a_real_accepted_booking_reaches_a_real_shipping_instruction():
+    repo = FixtureRepository(FIXTURES)
+    match = resolve_booking(repo, "BKON7312", customer=None)
+    assert match.carrier_reference == "SVMDMU2694105"
+    page = documents_for_booking(repo, match, "shipping_instruction", customer=None)
+    assert not isinstance(page, ChainUnavailable)
+    assert page.total >= 1

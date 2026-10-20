@@ -56,6 +56,9 @@ class Settings(BaseSettings):
 
     rag_vector_enabled: bool = True
     vector_db_path: str = "var/vector-db"
+    #: Label for the embedding model in use. Changing it forces a full
+    #: index rebuild, since vectors from two models are not comparable.
+    embedding_model: str = "all-MiniLM-L6-v2"
 
     sql_service_url: str = ""
     sql_service_token: str = ""

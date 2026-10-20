@@ -1,4 +1,4 @@
-# Created by Sekar Nagarajan (2026-10-20 22:10)
+# Modified by Sekar Nagarajan (2026-10-21 11:15)
 """Extract the genuine prose knowledge hiding inside the portal fixtures.
 
 The fixture set has no FAQ or policy file, but six datasets carry real
@@ -178,6 +178,7 @@ def status_sections(path: Path) -> list[tuple[str, str]]:
         # sentence gives both BM25 and the embedder real text to match.
         lines = [
             f"## {label.title()} status codes — what each status means",
+            "<!-- kind: status -->",
             "",
             f"Meaning of every stored status code on a {label}. Use these "
             "exact words when explaining the state of a record; never guess "
@@ -245,7 +246,7 @@ def policy_sections(path: Path) -> list[tuple[str, str]]:
                 if total > 1
                 else f"## {title}"
             )
-            out.append(("portal", f"{head}\n\n{chunk}\n"))
+            out.append(("portal", f"{head}\n<!-- kind: policy -->\n\n{chunk}\n"))
     return out
 
 

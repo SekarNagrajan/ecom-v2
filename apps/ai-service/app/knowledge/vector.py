@@ -1,4 +1,4 @@
-# Created by Sekar Nagarajan (2026-10-20 17:20)
+# Modified by Sekar Nagarajan (2026-10-21 10:15)
 """Persistent vector index (ChromaDB) over the knowledge chunks.
 
 Embeddings are Chroma's default local ONNX MiniLM model — no external API.
@@ -17,10 +17,24 @@ logger = logging.getLogger(__name__)
 
 COLLECTION = "portal-knowledge"
 
+#: Chroma's bundled default. Recorded in collection metadata so a change of
+#: embedding model forces a full rebuild instead of mixing vector spaces.
+DEFAULT_EMBEDDING_MODEL = "all-MiniLM-L6-v2"
+
 
 class VectorIndex:
-    def __init__(self, path: Path, *, create: bool = False) -> None:
+    def __init__(
+        self,
+        path: Path,
+        *,
+        create: bool = False,
+        embedding_model: str = DEFAULT_EMBEDDING_MODEL,
+    ) -> None:
         self._collection = None
+        self._client = None
+        self.path = path
+        self.embedding_model = embedding_model
+        self.rebuilt_for_model_change = False
         try:
             import chromadb  # noqa: PLC0415 — optional heavy dep
 
@@ -28,11 +42,30 @@ class VectorIndex:
                 logger.info("vector store missing at %s — BM25 only", path)
                 return
             client = chromadb.PersistentClient(path=str(path))
-            self._collection = (
-                client.get_or_create_collection(COLLECTION)
-                if create
-                else client.get_collection(COLLECTION)
+            self._client = client
+            if not create:
+                self._collection = client.get_collection(COLLECTION)
+                return
+
+            metadata = {"embedding_model": embedding_model}
+            collection = client.get_or_create_collection(
+                COLLECTION, metadata=metadata
             )
+            recorded = (collection.metadata or {}).get("embedding_model")
+            if recorded is not None and recorded != embedding_model:
+                # Vectors from two models are not comparable; mixing them
+                # silently degrades every search. Start clean instead.
+                logger.warning(
+                    "embedding model changed (%s -> %s) — rebuilding collection",
+                    recorded,
+                    embedding_model,
+                )
+                client.delete_collection(COLLECTION)
+                collection = client.get_or_create_collection(
+                    COLLECTION, metadata=metadata
+                )
+                self.rebuilt_for_model_change = True
+            self._collection = collection
         except Exception as exc:  # pragma: no cover — environment dependent
             logger.warning("vector index unavailable (%s) — BM25 only", exc)
             self._collection = None
@@ -44,21 +77,76 @@ class VectorIndex:
     def count(self) -> int:
         return self._collection.count() if self._collection is not None else 0
 
-    def build(self, chunks: list[dict], batch: int = 64) -> int:
-        """Upsert GuideIndex-shaped chunks ({id, module, source, text})."""
+    def existing_hashes(self) -> dict[str, str]:
+        """`{chunk id: stored content hash}` for everything already indexed."""
         if self._collection is None:
-            return 0
-        for i in range(0, len(chunks), batch):
-            part = chunks[i : i + batch]
+            return {}
+        try:
+            got = self._collection.get(include=["metadatas"])
+        except Exception as exc:  # pragma: no cover - environment dependent
+            logger.warning("could not read existing chunks: %s", exc)
+            return {}
+        ids = got.get("ids") or []
+        metas = got.get("metadatas") or []
+        return {
+            cid: (meta or {}).get("hash", "")
+            for cid, meta in zip(ids, metas, strict=False)
+        }
+
+    def build(
+        self, chunks: list[dict], batch: int = 64, *, dry_run: bool = False
+    ) -> dict[str, int]:
+        """Sync the index to `chunks`, writing only what actually changed.
+
+        Returns `{upserted, deleted, unchanged, total}`. Running it again on
+        an unchanged corpus writes nothing — the "nth time" requirement.
+        """
+        if self._collection is None:
+            return {"upserted": 0, "deleted": 0, "unchanged": 0, "total": 0}
+
+        existing = self.existing_hashes()
+        live_ids = {c["id"] for c in chunks}
+        changed = [
+            c for c in chunks
+            if existing.get(c["id"]) != c.get("hash", "")
+        ]
+        stale = sorted(set(existing) - live_ids)
+        unchanged = len(chunks) - len(changed)
+
+        if dry_run:
+            return {
+                "upserted": len(changed),
+                "deleted": len(stale),
+                "unchanged": unchanged,
+                "total": len(chunks),
+            }
+
+        for i in range(0, len(changed), batch):
+            part = changed[i : i + batch]
             self._collection.upsert(
                 ids=[c["id"] for c in part],
                 documents=[c["text"][:3000] for c in part],
                 metadatas=[
-                    {"module": c["module"], "source": c.get("source", "")}
+                    {
+                        "module": c["module"],
+                        "source": c.get("source", ""),
+                        "heading": c.get("heading", ""),
+                        "kind": c.get("kind", ""),
+                        "hash": c.get("hash", ""),
+                    }
                     for c in part
                 ],
             )
-        return len(chunks)
+        if stale:
+            self._collection.delete(ids=stale)
+            logger.info("deleted %d stale chunk(s)", len(stale))
+
+        return {
+            "upserted": len(changed),
+            "deleted": len(stale),
+            "unchanged": unchanged,
+            "total": len(chunks),
+        }
 
     def purge_missing(self, live_ids: set[str]) -> int:
         """Delete indexed chunks whose source section no longer exists.
@@ -105,6 +193,8 @@ class VectorIndex:
                     "id": cid,
                     "module": (meta or {}).get("module", ""),
                     "source": (meta or {}).get("source", ""),
+                    "heading": (meta or {}).get("heading", ""),
+                    "kind": (meta or {}).get("kind", ""),
                     "text": (doc or "")[:1500],
                 }
             )

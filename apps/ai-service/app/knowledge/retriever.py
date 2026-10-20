@@ -1,4 +1,4 @@
-# Created by Sekar Nagarajan (2026-10-20 17:20)
+# Modified by Sekar Nagarajan (2026-10-21 11:25)
 """Hybrid RAG retriever: BM25 (GuideIndex) + vector (VectorIndex), fused
 with reciprocal rank fusion. Drop-in for GuideIndex where `.search()` and
 `.chunks` are consumed (server_tools, startup logging)."""
@@ -35,12 +35,29 @@ class HybridRetriever:
         return bool(self._vector is not None and getattr(self._vector, "ready", False))
 
     def search(
-        self, query: str, module: str | None = None, k: int = 6
+        self,
+        query: str,
+        module: str | None = None,
+        k: int = 6,
+        *,
+        exclude_kinds: frozenset[str] | set[str] | None = None,
     ) -> list[dict[str, Any]]:
-        lexical = self._bm25.search(query, module, k=k * 2) if self._bm25 else []
+        lexical = (
+            self._bm25.search(query, module, k=k * 2, exclude_kinds=exclude_kinds)
+            if self._bm25
+            else []
+        )
         semantic = (
             self._vector.search(query, module, k=k * 2) if self.vector_ready else []
         )
+        if exclude_kinds:
+            # The vector store filters by module server-side but not by kind,
+            # so drop excluded kinds here using the lexical index's metadata.
+            kinds = {c["id"]: c.get("kind", "") for c in self.chunks}
+            semantic = [
+                h for h in semantic
+                if kinds.get(h["id"], "") not in set(exclude_kinds)
+            ]
         if not semantic:
             return lexical[:k]
         if not lexical:

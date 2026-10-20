@@ -1,20 +1,24 @@
-# Created by Sekar Nagarajan (2026-10-20 23:45)
+# Modified by Sekar Nagarajan (2026-10-21 10:30)
 """Resolving references across the two booking-number namespaces.
 
-The portal and the carrier back-office use different booking numbers and,
-in this data, they DO NOT JOIN:
+The portal and the carrier back-office use different booking numbers:
 
     bookings.ebookno      "BKON7313"        portal request + booking* children
     lrpBookings.book_no   "SVMDMU2694105"   SI, VGM, B/L, container moves
 
-Measured on the committed fixtures: ``shippingInstructions.bookno`` matches
-``lrpBookings.book_no`` for 97% of rows and ``bookings.ebookno`` for 0%.
-``bookings.extBookNo`` — the column intended to bridge them — is 100% null.
-Confirmed with the product owner as real, not a sampling artefact.
+``shippingInstructions.bookno`` matches ``lrpBookings.book_no`` for 97% of
+rows and ``bookings.ebookno`` for 0% -- documents hang off the CARRIER
+number. The bridge is ``bookings.extBookNo``, populated for 81 of 116
+fixture bookings (70%), and it tracks acceptance exactly:
 
-So a reference is resolved by trying both namespaces, and asking for the
-documents of a *portal* booking returns an explicit, explainable
-"chain unavailable" rather than a misleading empty list.
+    ebook_status A (accepted)  -> 77/77 have extBookNo
+    ebook_status S (submitted) ->  4/21
+    ebook_status D, I, T, V    ->  0/18
+
+A booking receives a carrier booking number when it is accepted. So a
+portal reference is followed through ``extBookNo`` when present; when it is
+absent the honest answer is not "the data does not link" but the real
+reason -- the booking has no carrier booking number yet.
 """
 
 from __future__ import annotations
@@ -41,6 +45,13 @@ class BookingMatch:
     def is_carrier(self) -> bool:
         return self.namespace is Namespace.CARRIER
 
+    @property
+    def carrier_reference(self) -> str | None:
+        """Carrier booking number, following `extBookNo` for portal rows."""
+        if self.namespace is Namespace.CARRIER:
+            return self.record_id
+        return self.row.id_of("extBookNo")
+
 
 @dataclass(frozen=True)
 class ChainUnavailable:
@@ -57,12 +68,12 @@ DOCUMENT_ENTITIES: dict[str, str] = {
     "vgm": "book_no",
 }
 
-_PORTAL_TO_CARRIER_EXPLANATION = (
-    "That is a portal booking request number. Shipping instructions, VGM "
-    "declarations and bills of lading are filed against the carrier booking "
-    "number, and this environment's data does not carry the link between the "
-    "two. Search with the carrier booking number, the B/L number or the SI "
-    "number instead."
+#: Shown when a portal booking has no carrier booking number yet. This is a
+#: real business state (the booking is not accepted), not a data gap.
+_NO_CARRIER_BOOKING_YET = (
+    "Booking {reference} does not have a carrier booking number yet, so no "
+    "shipping instructions, VGM declarations or bills of lading have been "
+    "filed against it. Those are created once the booking is accepted."
 )
 
 
@@ -97,17 +108,24 @@ def documents_for_booking(
     if fk is None:
         raise ValueError(f"{entity!r} is not filed against a booking number")
 
+    carrier_ref = match.record_id
     if match.namespace is Namespace.PORTAL:
-        return ChainUnavailable(
-            reference=match.record_id,
-            namespace=match.namespace,
-            reason=_PORTAL_TO_CARRIER_EXPLANATION,
-        )
+        # Follow the bridge. Present for ~70% of bookings; absent exactly
+        # when the carrier has not accepted the booking yet.
+        carrier_ref = match.row.id_of("extBookNo")
+        if not carrier_ref:
+            return ChainUnavailable(
+                reference=match.record_id,
+                namespace=match.namespace,
+                reason=_NO_CARRIER_BOOKING_YET.format(
+                    reference=match.record_id
+                ),
+            )
 
     return repo.list(
         entity,
         customer=customer,
-        filters={fk: match.record_id},
+        filters={fk: carrier_ref},
         limit=limit,
     )
 

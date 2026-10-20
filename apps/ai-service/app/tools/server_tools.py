@@ -1,4 +1,4 @@
-# Modified by Sekar Nagarajan (2026-10-20 16:50)
+# Modified by Sekar Nagarajan (2026-10-21 11:25)
 """Server-side tool implementations (run inside ai-service)."""
 
 from __future__ import annotations
@@ -63,12 +63,24 @@ def _describe_schema(entity: str | None) -> dict[str, Any]:
     }
 
 
+#: Fixture digests describe the demo dataset's shape. Only SQL mode, whose
+#: job is querying that dataset, may retrieve them — everywhere else they
+#: risk being read as a specific customer's record.
+_KINDS_BY_MODE: dict[str, frozenset[str]] = {
+    "assistant": frozenset({"fixture"}),
+    "automation": frozenset({"fixture"}),
+    "docs": frozenset({"fixture"}),
+    "sql": frozenset(),
+}
+
+
 async def run_server_tool(
     name: str,
     args: dict[str, Any],
     app_state: Any,
     *,
     authorization: str | None = None,
+    mode: str = "assistant",
 ) -> dict[str, Any]:
     if name == "search_portal_guide":
         guide = getattr(app_state, "guide", None)
@@ -78,7 +90,8 @@ async def run_server_tool(
         module_s = _normalize_module(
             str(args["module"]) if args.get("module") is not None else None
         )
-        hits = guide.search(query, module_s, k=6)
+        excluded = _KINDS_BY_MODE.get(mode, frozenset({"fixture"}))
+        hits = guide.search(query, module_s, k=6, exclude_kinds=excluded)
         return {
             "results": hits,
             "verified": True,

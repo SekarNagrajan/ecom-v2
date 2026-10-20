@@ -47,13 +47,18 @@ def test_ingest_writes_module_docs(tmp_path: Path):
     counts = ingest(src, out)
     assert counts == {"_shared": 1, "tracking": 1}
     doc = (out / "_shared" / "mock-data.md").read_text()
-    assert "## _shared fixture: ports" in doc and "SGSIN" in doc
+    # Phase 2: digests carry the field glossary and the disclaimer, never
+    # sample row values (those go to knowledge/sql/fixtures.md on request).
+    assert "## _shared fixture: ports" in doc
+    assert "Fields: portcode, portname" in doc
+    assert "never use as a customer's data" in doc
+    assert "SGSIN" not in doc
     tdoc = (out / "tracking" / "mock-data.md").read_text()
     assert "GET /api/tracking/search" in tdoc
 
     # GuideIndex chunks the generated docs per section, tagged by module
     guide = GuideIndex(out)
-    hits = guide.search("SINGAPORE port code", module="_shared")
+    hits = guide.search("ports portcode portname fixture", module="_shared")
     assert hits and hits[0]["module"] == "_shared"
 
 

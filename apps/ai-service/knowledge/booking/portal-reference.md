@@ -27,6 +27,7 @@ Notify when a booking request is submitted.
 Notification key `BOOKING_REQUEST_SUBMISSION`, category `BOOKING`, enabled by default: on.
 
 ## Booking status codes — what each status means
+<!-- kind: status -->
 
 Meaning of every stored status code on a booking. Use these exact words when explaining the state of a record; never guess a meaning for a status code.
 

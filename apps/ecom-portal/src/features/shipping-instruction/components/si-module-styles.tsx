@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-10-19 17:00)
+// Modified by Sekar Nagarajan (2026-10-20)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -1809,6 +1809,11 @@ export function SiModuleStyles() {
       .si-view-hero__tag.ant-tag {
         margin-inline-end: 0;
         border-radius: ${token.borderRadiusSM}px;
+      }
+      /* Accepted status — soft emerald wash (theme success #047857 @ 8%) */
+      .si-view-hero__tag.ant-tag-success {
+        background: ${successTint8};
+        border-color: ${successTint8};
       }
       .si-status-stepper {
         list-style: none;

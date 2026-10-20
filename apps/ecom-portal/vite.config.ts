@@ -1,10 +1,59 @@
-// Modified by Sekar Nagarajan (2026-10-19)
+// Modified by Sekar Nagarajan (2026-10-20)
 import react from "@vitejs/plugin-react";
 import fs from "fs";
 import path from "path";
 import { defineConfig, type Plugin } from "vite";
 
 import { ecomAiN8nProxyPlugin } from "./vite-ai-n8n-proxy";
+
+/**
+ * Last-resort /api/* handler: never fall through to the SPA HTML shell.
+ * Unmatched API calls used to return 200 + `<!DOCTYPE html>`, and any
+ * `res.json()` then crashed with "Unexpected token '<'".
+ */
+function ecomApiJson404FallbackPlugin(): Plugin {
+  return {
+    name: "ecom-api-json-404-fallback",
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        const url = req.url?.split("?")[0] ?? "";
+        if (!url.startsWith("/api/")) {
+          next();
+          return;
+        }
+        res.statusCode = 404;
+        res.setHeader("Content-Type", "application/json");
+        res.end(
+          JSON.stringify({
+            error: {
+              code: "NOT_FOUND",
+              message: `No handler for ${req.method ?? "GET"} ${url}`,
+            },
+          }),
+        );
+      });
+    },
+    configurePreviewServer(server) {
+      server.middlewares.use((req, res, next) => {
+        const url = req.url?.split("?")[0] ?? "";
+        if (!url.startsWith("/api/")) {
+          next();
+          return;
+        }
+        res.statusCode = 404;
+        res.setHeader("Content-Type", "application/json");
+        res.end(
+          JSON.stringify({
+            error: {
+              code: "NOT_FOUND",
+              message: `No handler for ${req.method ?? "GET"} ${url}`,
+            },
+          }),
+        );
+      });
+    },
+  };
+}
 
 /** Resolve a package that may only exist under pnpm's virtual store. */
 function resolveWorkspacePackage(packageName: string): string | undefined {
@@ -423,7 +472,13 @@ function bookingMockApiPlugin(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [react(), bookingMockApiPlugin(), ecomAiN8nProxyPlugin()],
+  plugins: [
+    react(),
+    bookingMockApiPlugin(),
+    ecomAiN8nProxyPlugin(),
+    // After booking + AI proxies so only truly unmatched /api/* become JSON 404.
+    ecomApiJson404FallbackPlugin(),
+  ],
   resolve: {
     alias: {
       ...(tiptapCorePath ? { "@tiptap/core": tiptapCorePath } : {}),

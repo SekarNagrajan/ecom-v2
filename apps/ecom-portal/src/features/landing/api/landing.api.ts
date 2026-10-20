@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-10-18 10:30)
+// Modified by Sekar Nagarajan (2026-10-20)
 import type { EquipmentType, PortOption, TabConfig } from '../types/landing.types';
 
 // ---------------------------------------------------------------------------
@@ -40,14 +40,21 @@ export async function fetchEquipmentTypes(): Promise<EquipmentType[]> {
  * Returns which tabs are publicly accessible vs. require login.
  */
 export async function fetchTabConfig(): Promise<TabConfig> {
-  const res = await fetch('/api/config/menu-access');
-  if (!res.ok) {
-    // Default: all tabs public — safe fallback
-    return { schedules: 'public', tracking: 'public', rates: 'public' };
+  const fallback: TabConfig = {
+    schedules: 'public',
+    tracking: 'public',
+    rates: 'public',
+  };
+  try {
+    const res = await fetch('/api/config/menu-access');
+    if (!res.ok) return fallback;
+    const contentType = res.headers.get('content-type') ?? '';
+    if (!contentType.includes('application/json')) return fallback;
+    const json = (await res.json()) as { data: TabConfig };
+    return json.data ?? fallback;
+  } catch {
+    return fallback;
   }
-
-  const json = (await res.json()) as { data: TabConfig };
-  return json.data;
 }
 
 /** Validate image captcha code — parity with JSP remote validation rule. */

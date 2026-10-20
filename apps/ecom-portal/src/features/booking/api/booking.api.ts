@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-10-16 23:20)
+// Modified by Sekar Nagarajan (2026-10-20)
 
 import type {
   BookingCustomerOption,
@@ -33,6 +33,12 @@ export type { BookingRateOption } from '../../../mocks/fixture-api/bridges/booki
 async function readJson<T>(res: Response): Promise<T> {
   if (!res.ok) {
     throw new Error(`Request failed (${res.status})`);
+  }
+  const contentType = res.headers.get("content-type") ?? "";
+  if (!contentType.includes("application/json")) {
+    throw new Error(
+      `Request failed: expected JSON but got ${contentType || "unknown content-type"}`,
+    );
   }
   return (await res.json()) as T;
 }

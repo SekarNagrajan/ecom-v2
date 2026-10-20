@@ -196,8 +196,8 @@ export function AssistantModuleStyles() {
         max-width: 100%;
       }
       .assistant-row--user { justify-content: flex-end; align-items: flex-end; }
-      /* Assistant content is a borderless, full-width column beside the avatar.
-         Only cards and tool rows keep their own borders. */
+      /* Assistant content is a full-width column beside the avatar, boxed with
+         a border + tinted background so each response reads as one unit. */
       .assistant-content {
         flex: 1;
         min-width: 0;
@@ -209,6 +209,10 @@ export function AssistantModuleStyles() {
         line-height: ${token.lineHeight};
         letter-spacing: var(--app-letter-spacing, 0em);
         overflow-wrap: break-word;
+        border: 1px solid ${token.colorErrorBorder};
+        background: ${token.colorErrorBg};
+        border-radius: ${token.borderRadiusLG}px;
+        padding: ${token.paddingSM}px ${token.padding}px;
       }
       .assistant-block + .assistant-block { margin-top: ${token.marginSM}px; }
       /* Blocks own their spacing — neutralise the inner components' margins. */

@@ -40,12 +40,16 @@ def is_openai_endpoint(base_url: str) -> bool:
 def get_openai(settings: Settings) -> AsyncOpenAI:
     global _client
     if _client is None:
-        _client = AsyncOpenAI(
-            api_key=settings.openai_api_key or None,
+        kwargs: dict[str, Any] = {
+            "api_key": settings.openai_api_key or None,
             # Point at any OpenAI-compatible provider (Groq, OpenRouter,
             # Ollama, …); empty falls back to api.openai.com.
-            base_url=settings.openai_base_url or None,
-        )
+            "base_url": settings.openai_base_url or None,
+        }
+        if settings.openai_base_url:
+            # Local Ollama can idle many seconds between CPU tokens.
+            kwargs["timeout"] = 600.0
+        _client = AsyncOpenAI(**kwargs)
     return _client
 
 

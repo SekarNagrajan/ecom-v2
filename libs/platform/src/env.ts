@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-10-20 13:05)
+// Modified by Sekar Nagarajan (2026-10-20 20:45)
 import { z } from 'zod';
 
 const EnvSchema = z.object({
@@ -14,13 +14,14 @@ const EnvSchema = z.object({
 export type EnvConfig = z.infer<typeof EnvSchema>;
 
 function parseEnv(): EnvConfig {
+  // Use import.meta.env.VITE_* (no optional chaining) so Vite can statically inject values.
   const envObj = {
-    VITE_API_URL: import.meta.env?.VITE_API_URL || 'http://localhost:8080/api/v1',
-    VITE_API_MODE: import.meta.env?.VITE_API_MODE || 'mock',
-    VITE_APP_TITLE: import.meta.env?.VITE_APP_TITLE || 'Solverminds E-Commerce Portal',
-    VITE_ASSISTANT_ENABLED: import.meta.env?.VITE_ASSISTANT_ENABLED || 'false',
+    VITE_API_URL: import.meta.env.VITE_API_URL || 'http://localhost:8080/api/v1',
+    VITE_API_MODE: import.meta.env.VITE_API_MODE || 'mock',
+    VITE_APP_TITLE: import.meta.env.VITE_APP_TITLE || 'Solverminds E-Commerce Portal',
+    VITE_ASSISTANT_ENABLED: import.meta.env.VITE_ASSISTANT_ENABLED || 'false',
     VITE_AI_ASSISTANT_USE_MSW_STUB:
-      import.meta.env?.VITE_AI_ASSISTANT_USE_MSW_STUB || 'false',
+      import.meta.env.VITE_AI_ASSISTANT_USE_MSW_STUB || 'false',
   };
 
   const result = EnvSchema.safeParse(envObj);

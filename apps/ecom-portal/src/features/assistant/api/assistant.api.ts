@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-10-20 13:05)
+// Modified by Sekar Nagarajan (2026-10-20 22:15)
 import type {
   AssistantEvent,
   ChatRequestBody,
@@ -9,6 +9,11 @@ import { parseSse } from "./sse-parser";
 
 const CHAT_PATH = "/api/assistant/v1/chat";
 const UNAUTHORIZED_EVENT = "ecom:unauthorized";
+const DONE: AssistantEvent = {
+  type: "done",
+  awaiting_tools: false,
+  pending_call_ids: [],
+};
 
 function authHeaders(): HeadersInit {
   const token = localStorage.getItem("ecom_auth_token");
@@ -30,6 +35,8 @@ function throwUnauthorized(): never {
 /**
  * Stream a chat turn. Yields AssistantEvent values.
  * Falls back to a single token when the proxy buffers JSON.
+ * If the transport drops after tokens arrived, synthesizes `done` so the UI
+ * keeps the partial answer instead of flashing "Connection lost".
  */
 export async function* streamChat(
   body: ChatRequestBody,
@@ -40,6 +47,8 @@ export async function* streamChat(
     headers: authHeaders(),
     body: JSON.stringify(body),
     signal,
+    // Prefer no intermediary caching of the SSE body.
+    cache: "no-store",
   });
 
   if (response.status === 401) {
@@ -63,7 +72,7 @@ export async function* streamChat(
       message,
       retryable: response.status >= 500,
     };
-    yield { type: "done", awaiting_tools: false, pending_call_ids: [] };
+    yield DONE;
     return;
   }
 
@@ -87,7 +96,7 @@ export async function* streamChat(
     if (text) {
       yield { type: "token", delta: text };
     }
-    yield { type: "done", awaiting_tools: false, pending_call_ids: [] };
+    yield DONE;
     return;
   }
 
@@ -98,11 +107,29 @@ export async function* streamChat(
       message: "Empty response body",
       retryable: true,
     };
-    yield { type: "done", awaiting_tools: false, pending_call_ids: [] };
+    yield DONE;
     return;
   }
 
-  yield* parseSse(response.body);
+  let sawToken = false;
+  let sawDone = false;
+  try {
+    for await (const event of parseSse(response.body)) {
+      if (event.type === "token") sawToken = true;
+      if (event.type === "done") sawDone = true;
+      yield event;
+    }
+  } catch (err) {
+    if (signal?.aborted) throw err;
+    if (sawToken && !sawDone) {
+      yield DONE;
+      return;
+    }
+    throw err;
+  }
+  if (sawToken && !sawDone) {
+    yield DONE;
+  }
 }
 
 export async function getConversation(

@@ -158,10 +158,15 @@ OPENAI_CHAT_MODEL=<a local model with tool support>
 ### Fully local setup (Ollama)
 
 ```bash
+# Linux / macOS
 ./scripts/setup_local_llm.sh              # installs Ollama, pulls a model
 ./scripts/setup_local_llm.sh qwen2.5:7b   # or pick your own model
 
-# paste the printed .env block, then prove tool calling works:
+# Windows (PowerShell)
+.\scripts\setup_local_llm.ps1
+.\scripts\setup_local_llm.ps1 qwen2.5:7b
+
+# paste the printed .env block (or use the repo .env.example defaults), then:
 uv run python scripts/check_local_llm.py
 ```
 

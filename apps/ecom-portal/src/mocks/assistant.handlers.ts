@@ -1,9 +1,9 @@
-// Modified by Sekar Nagarajan (2026-10-20 18:20)
-import { bypass, http, HttpResponse } from "msw";
+// Modified by Sekar Nagarajan (2026-10-20 22:10)
+import { http, HttpResponse } from "msw";
 
 /**
- * Live assistant (default): pass `/api/assistant/*` through MSW so Vite's
- * `ecomAssistantProxyPlugin` can forward to the AI service.
+ * Live assistant (default): leave `/api/assistant/*` unhandled by MSW so the
+ * browser hits Vite's streaming proxy directly (see ecomAssistantProxyPlugin).
  *
  * Offline stubs: set `VITE_AI_ASSISTANT_USE_MSW_STUB=true` before starting Vite.
  */
@@ -188,9 +188,12 @@ export const assistantStubHandlers = [
   }),
 ];
 
-export const assistantPassthroughHandlers = [
-  http.all("/api/assistant/*", ({ request }) => fetch(bypass(request))),
-];
+/**
+ * Live path: no MSW handlers. The service worker itself also early-returns for
+ * `/api/assistant/*` (see public/mockServiceWorker.js) so SSE never goes through
+ * SW-mediated fetch — that path was the permanent "Connection lost" root cause.
+ */
+export const assistantPassthroughHandlers: typeof assistantStubHandlers = [];
 
 export const assistantHandlers = useMswStub
   ? assistantStubHandlers

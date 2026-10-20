@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-10-20 20:15)
+// Modified by Sekar Nagarajan (2026-10-20 22:15)
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
@@ -311,23 +311,34 @@ export function useAssistantController() {
           status: "stopped",
         });
       } else {
-        const message =
-          err instanceof Error ? err.message : t("errors.INTERNAL");
-        useAssistantStore.getState().setError({
-          code: "NETWORK_ERROR",
-          message,
-          retryable: true,
-        });
-        useAssistantStore.getState().patchMessage(assistantMsg.id, (m) => ({
-          ...m,
-          status: "error",
-          error: {
+        const partial = useAssistantStore
+          .getState()
+          .messages.find((m) => m.id === assistantMsg.id);
+        // Transport dropped after tokens — keep the answer, don't flash
+        // "Connection lost" over usable text.
+        if (partial?.text?.trim()) {
+          useAssistantStore.getState().updateMessage(assistantMsg.id, {
+            status: "complete",
+          });
+        } else {
+          const message =
+            err instanceof Error ? err.message : t("errors.INTERNAL");
+          useAssistantStore.getState().setError({
             code: "NETWORK_ERROR",
             message,
             retryable: true,
-          },
-          text: m.text || message,
-        }));
+          });
+          useAssistantStore.getState().patchMessage(assistantMsg.id, (m) => ({
+            ...m,
+            status: "error",
+            error: {
+              code: "NETWORK_ERROR",
+              message,
+              retryable: true,
+            },
+            text: m.text || message,
+          }));
+        }
       }
     } finally {
       useAssistantStore.getState().setStreaming(false);

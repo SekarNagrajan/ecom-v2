@@ -41,7 +41,7 @@ TOOL = [
 
 
 async def run_case(settings: Settings, label: str, prompt: str, tools: list) -> dict:
-    print(f"\n── {label} ──")
+    print(f"\n-- {label} --")
     messages = [{"role": "user", "content": [{"type": "text", "text": prompt}]}]
     final: dict = {}
     streamed = 0
@@ -87,7 +87,7 @@ async def main() -> int:
         return 1
 
     calls = [b for b in tool.get("content", []) if b.get("type") == "tool_use"]
-    print("\n" + "=" * 56)
+    print("\n" + ("=" * 56))
     if calls:
         print(f"PASS  tool calling works — model requested: {calls[0]['name']}")
         print(f"      arguments: {calls[0]['input']}")

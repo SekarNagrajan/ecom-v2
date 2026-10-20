@@ -82,7 +82,11 @@ async function bootstrap() {
     const { worker } = await import("./mocks/browser");
     await worker.start({
       onUnhandledRequest: "bypass",
-      serviceWorker: { url: "/mockServiceWorker.js" },
+      serviceWorker: {
+        url: "/mockServiceWorker.js",
+        // Always fetch the latest worker so the /api/assistant SSE bypass lands.
+        options: { updateViaCache: "none" },
+      },
     });
     // Restore booking / SI+BL / VGM / user mutations written to mock-data/runtime/ (survives refresh).
     const { rehydrateBookingDb } = await import(

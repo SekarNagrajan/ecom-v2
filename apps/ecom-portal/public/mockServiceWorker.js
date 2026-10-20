@@ -105,6 +105,19 @@ addEventListener('fetch', function (event) {
     return
   }
 
+  // E-Com: never mediate the AI assistant. Returning without respondWith lets
+  // the browser talk to Vite's streaming proxy natively. SW-wrapped fetch
+  // (including MSW "passthrough") tears down long SSE streams mid-token
+  // ("Connection lost") when the local LLM is slow.
+  try {
+    const pathname = new URL(event.request.url).pathname
+    if (pathname === '/api/assistant' || pathname.startsWith('/api/assistant/')) {
+      return
+    }
+  } catch (_) {
+    // ignore URL parse errors; fall through to normal MSW handling
+  }
+
   // Bypass all requests when there are no active clients.
   // Prevents the self-unregistered worked from handling requests
   // after it's been terminated (still remains active until the next reload).

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-10-20 13:05)
+// Modified by Sekar Nagarajan (2026-10-20 22:15)
 /**
  * Dev + preview proxy: same-origin `/api/assistant/*` → AI service.
  * Strips `/api/assistant` so `/api/assistant/v1/chat` → `${base}/v1/chat`.
@@ -42,7 +42,10 @@ function sendUnavailable(res: ServerResponse): void {
   res.setHeader("Content-Type", "application/json");
   res.end(
     JSON.stringify({
-      error: { code: "ASSISTANT_UNAVAILABLE", message: "Assistant upstream unavailable" },
+      error: {
+        code: "ASSISTANT_UNAVAILABLE",
+        message: "Assistant upstream unavailable",
+      },
     }),
   );
 }
@@ -61,6 +64,8 @@ function pipeUpstream(
   const headers: http.OutgoingHttpHeaders = { ...req.headers };
   delete headers.host;
   headers.host = target.host;
+  // Avoid intermediary buffering of SSE.
+  headers["accept-encoding"] = "identity";
 
   const upstream = transport.request(
     {
@@ -70,22 +75,40 @@ function pipeUpstream(
       path: `${target.pathname}${target.search}`,
       method: req.method,
       headers,
+      // Local LLM streams can idle between tokens for a long time.
+      timeout: 0,
     },
     (upstreamRes) => {
       res.statusCode = upstreamRes.statusCode ?? 502;
       for (const [key, value] of Object.entries(upstreamRes.headers)) {
-        if (value !== undefined) {
+        if (value !== undefined && key.toLowerCase() !== "transfer-encoding") {
           res.setHeader(key, value);
         }
       }
       res.setHeader("Cache-Control", "no-cache, no-transform");
       res.setHeader("X-Accel-Buffering", "no");
-      if (typeof (res as ServerResponse & { flushHeaders?: () => void }).flushHeaders === "function") {
+      res.setHeader("Connection", "keep-alive");
+      if (
+        typeof (res as ServerResponse & { flushHeaders?: () => void })
+          .flushHeaders === "function"
+      ) {
         (res as ServerResponse & { flushHeaders: () => void }).flushHeaders();
       }
       upstreamRes.pipe(res);
+      upstreamRes.on("error", () => {
+        if (!res.writableEnded) {
+          res.end();
+        }
+      });
     },
   );
+
+  upstream.setTimeout(0);
+  upstream.on("socket", (socket) => {
+    socket.setTimeout(0);
+    socket.setNoDelay(true);
+    socket.setKeepAlive(true, 60_000);
+  });
 
   upstream.on("error", (err) => {
     console.warn(
@@ -94,17 +117,26 @@ function pipeUpstream(
     );
     if (!res.headersSent) {
       sendUnavailable(res);
-    } else {
+    } else if (!res.writableEnded) {
       res.end();
     }
   });
 
-  req.on("aborted", () => {
-    upstream.destroy();
+  // Only tear down upstream when the *client* aborts mid-stream.
+  // Do not destroy on res "close" after a normal end — that race cuts SSE
+  // short and surfaces as "Connection lost" in the portal.
+  const abortUpstream = () => {
+    if (!upstream.destroyed) {
+      upstream.destroy();
+    }
+  };
+  req.on("aborted", abortUpstream);
+  req.on("close", () => {
+    if (!req.complete) {
+      abortUpstream();
+    }
   });
-  res.on("close", () => {
-    upstream.destroy();
-  });
+  res.on("error", abortUpstream);
 
   req.pipe(upstream);
 }

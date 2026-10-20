@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-10-20 19:40)
+// Modified by Sekar Nagarajan (2026-10-20 22:10)
 import type { AssistantEvent } from "../types/assistant.types";
 
 function parseEventBlock(block: string): AssistantEvent | null {
@@ -9,10 +9,15 @@ function parseEventBlock(block: string): AssistantEvent | null {
     else if (line.startsWith("data:")) data.push(line.slice(5).trimStart());
   }
   if (!data.length) return null;
-  return {
-    type: event,
-    ...(JSON.parse(data.join("\n")) as object),
-  } as AssistantEvent;
+  try {
+    return {
+      type: event,
+      ...(JSON.parse(data.join("\n")) as object),
+    } as AssistantEvent;
+  } catch {
+    // Malformed frame mid-stream — skip rather than abort the whole turn.
+    return null;
+  }
 }
 
 /**

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-10-20 13:05)
+// Modified by Sekar Nagarajan (2026-10-20 20:45)
 import react from "@vitejs/plugin-react";
 import fs from "fs";
 import path from "path";
@@ -473,6 +473,8 @@ function bookingMockApiPlugin(): Plugin {
 }
 
 export default defineConfig({
+  // Always load apps/ecom-portal/.env even if Vite is started from the monorepo root.
+  envDir: path.resolve(__dirname),
   plugins: [
     react(),
     bookingMockApiPlugin(),

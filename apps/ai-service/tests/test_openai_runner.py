@@ -94,6 +94,10 @@ def test_no_base_url_defaults_to_openai(monkeypatch):
     from app.llm import openai_runner
 
     openai_runner.reset_openai()
-    client = openai_runner.get_openai(Settings(openai_api_key="test-key"))
+    # Explicit empty base_url so a developer .env pointing at Ollama does not
+    # bleed into this assertion.
+    client = openai_runner.get_openai(
+        Settings(openai_api_key="test-key", openai_base_url="")
+    )
     assert "api.openai.com" in str(client.base_url)
     openai_runner.reset_openai()

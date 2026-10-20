@@ -209,8 +209,8 @@ export function AssistantModuleStyles() {
         line-height: ${token.lineHeight};
         letter-spacing: var(--app-letter-spacing, 0em);
         overflow-wrap: break-word;
-        border: 1px solid ${token.colorErrorBorder};
-        background: ${token.colorErrorBg};
+        border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorBgElevated};
         border-radius: ${token.borderRadiusLG}px;
         padding: ${token.paddingSM}px ${token.padding}px;
       }

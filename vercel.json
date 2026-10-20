@@ -18,6 +18,10 @@
       "destination": "https://n8n.sedge.ai/webhook/v2/mail/rewrite"
     },
     {
+      "source": "/api/assistant/:path*",
+      "destination": "https://AI_SERVICE_HOST/:path*"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

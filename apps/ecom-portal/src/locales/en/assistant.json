@@ -1,0 +1,333 @@
+{
+  "title": "E-Com AI Assistant",
+  "subtitle": "Ask about bookings, schedules, tracking and documents.",
+  "actingAs": "Acting as {{name}}",
+  "launcher": {
+    "tooltip": "AI Assistant"
+  },
+  "modes": {
+    "label": "Assistant mode",
+    "assistant": {
+      "label": "E-Commerce Assistant",
+      "badge": "Assistant",
+      "placeholder": "Ask about bookings, tracking, schedules…",
+      "welcomeTitle": "How Can I Help?",
+      "welcomeBody": "I can look up your shipments, explain portal screens, and start a booking for you.",
+      "suggestions": [
+        "How do I create a booking?",
+        "Track a container for me",
+        "Show my open bookings",
+        "Explain VGM cutoffs"
+      ]
+    },
+    "automation": {
+      "label": "E-Commerce Automation",
+      "badge": "Automation",
+      "placeholder": "Describe the booking or operation to prepare…",
+      "welcomeTitle": "Let’s Prepare An Operation",
+      "welcomeBody": "I can collect booking details and submit only after you confirm a summary card.",
+      "suggestions": [
+        "Start a booking from Singapore to Rotterdam",
+        "Help me prepare a booking for next week",
+        "Submit a booking after we confirm the details",
+        "What details do you need for a booking?"
+      ]
+    },
+    "sql": {
+      "label": "SQL Analysis",
+      "badge": "SQL",
+      "placeholder": "Ask about schemas or run a read-only query…",
+      "welcomeTitle": "SQL Analysis",
+      "welcomeBody": "I can describe logical portal schemas and run read-only SQL when the SQL service is configured (SQL capability required).",
+      "suggestions": [
+        "Describe the bookings schema",
+        "Show me a sample SELECT for open bookings",
+        "How are bookings related to shipping instructions?",
+        "Explain tracking_events columns"
+      ]
+    },
+    "docs": {
+      "label": "Documents & Tutorials",
+      "badge": "Docs",
+      "placeholder": "Ask for a tutorial or how-to…",
+      "welcomeTitle": "Tutorials & Guides",
+      "welcomeBody": "I explain verified portal workflows step by step using the user guide (booking, tracking, SI, B/L, VGM and more).",
+      "suggestions": [
+        "Tutorial: create an export booking",
+        "How do I submit VGM?",
+        "Explain the SI workflow step by step",
+        "What is a CRO and when is it issued?"
+      ]
+    }
+  },
+  "welcome": {
+    "title": "How Can I Help?",
+    "body": "I can look up your shipments, explain portal screens, and start a booking for you."
+  },
+  "composer": {
+    "placeholder": "Ask a question…",
+    "dictate": "Dictate",
+    "shortcutHint": "Enter to send · Shift+Enter for a new line",
+    "disclaimer": "Uses AI. Verify results."
+  },
+  "actions": {
+    "send": "Send",
+    "stop": "Stop",
+    "retry": "Retry",
+    "newChat": "New Chat",
+    "copy": "Copy",
+    "helpful": "Helpful",
+    "notHelpful": "Not Helpful",
+    "openScreen": "Open Screen",
+    "more": "More",
+    "expandWindow": "Expand",
+    "shrinkWindow": "Shrink",
+    "regenerate": "Regenerate",
+    "history": "History",
+    "cancel": "Cancel"
+  },
+  "stopped": "Response stopped.",
+  "toasts": {
+    "copied": "Copied to clipboard"
+  },
+  "a11y": {
+    "conversation": "Assistant conversation",
+    "typing": "Assistant is thinking",
+    "loading": "Loading conversation",
+    "scrollToBottom": "Scroll to latest"
+  },
+  "status": {
+    "online": "Online"
+  },
+  "lookingUp": "Looking up…",
+  "lookingUpDone": "Lookup complete",
+  "openBooking": "Open In Booking",
+  "openScreen": "Open Screen",
+  "dismiss": "Dismiss",
+  "navigateCardTitle": "Go To Screen",
+  "bookingNotAllowed": "Booking is not allowed for this sailing.",
+  "unsupportedAction": "This action is not supported yet.",
+  "automation": {
+    "title": "Confirm Booking Submit",
+    "tag": "Automation",
+    "scheduleId": "Schedule",
+    "confirmTitle": "Submit This Booking?",
+    "confirmBody": "This will create a booking using the details below. This cannot be undone from chat.",
+    "confirmOk": "Submit Booking",
+    "submitSuccess": "Booking submitted: {{reference}}",
+    "submitFailed": "Submit failed ({{reason}})"
+  },
+  "sql": {
+    "title": "Query Results",
+    "rows": "{{count}} rows",
+    "truncated": "Truncated",
+    "empty": "No rows returned."
+  },
+  "confirmPrefillTitle": "Open Booking Wizard?",
+  "confirmPrefillBody": "This will prefill the booking form. Nothing will be submitted.",
+  "confirmReplaceWizardTitle": "Replace Current Booking Draft?",
+  "confirmReplaceWizardBody": "Your unsaved booking details will be replaced.",
+  "confirmNavigateTitle": "Open This Screen?",
+  "confirmNavigateBody": "Navigate to {{route}}?",
+  "errors": {
+    "UNAUTHORIZED": "Your session has expired. Please log in again.",
+    "RATE_LIMITED": "Too many messages. Please wait a minute.",
+    "rateLimited": "Too many messages. Please wait a minute.",
+    "LLM_UNAVAILABLE": "The assistant is busy. Please try again.",
+    "ASSISTANT_UNAVAILABLE": "The assistant is unavailable right now.",
+    "TOOL_LIMIT": "That took too many steps. Try a more specific question.",
+    "NETWORK_ERROR": "Connection lost. Please try again.",
+    "BAD_REQUEST": "The request could not be processed.",
+    "INTERNAL": "Something went wrong. Please try again.",
+    "TOOL_FAILED": "A lookup failed. Please try again."
+  },
+  "tools": {
+    "track_shipment": {
+      "running": "Looking up tracking…",
+      "done": "Tracking checked",
+      "failed": "Tracking lookup failed"
+    },
+    "search_schedules": {
+      "running": "Searching sailings…",
+      "done": "Sailings found",
+      "failed": "Schedule search failed"
+    },
+    "list_bookings": {
+      "running": "Loading your bookings…",
+      "done": "Bookings loaded",
+      "failed": "Could not load bookings"
+    },
+    "get_booking": {
+      "running": "Loading booking…",
+      "done": "Booking loaded",
+      "failed": "Could not load booking"
+    },
+    "list_shipping_instructions": {
+      "running": "Loading shipping instructions…",
+      "done": "Shipping instructions loaded",
+      "failed": "Could not load shipping instructions"
+    },
+    "list_bills_of_lading": {
+      "running": "Loading bills of lading…",
+      "done": "Bills of lading loaded",
+      "failed": "Could not load bills of lading"
+    },
+    "list_vgm": {
+      "running": "Loading VGM records…",
+      "done": "VGM records loaded",
+      "failed": "Could not load VGM"
+    },
+    "list_cro": {
+      "running": "Loading CRO records…",
+      "done": "CRO records loaded",
+      "failed": "Could not load CRO"
+    },
+    "list_delivery_orders": {
+      "running": "Loading delivery orders…",
+      "done": "Delivery orders loaded",
+      "failed": "Could not load delivery orders"
+    },
+    "list_arrival_notices": {
+      "running": "Loading arrival notices…",
+      "done": "Arrival notices loaded",
+      "failed": "Could not load arrival notices"
+    },
+    "get_customer_statement": {
+      "running": "Loading statement…",
+      "done": "Statement loaded",
+      "failed": "Could not load statement"
+    },
+    "estimate_carbon": {
+      "running": "Estimating carbon…",
+      "done": "Carbon estimate ready",
+      "failed": "Carbon estimate failed"
+    },
+    "get_rates": {
+      "running": "Looking up rates…",
+      "done": "Rates found",
+      "failed": "Rate lookup failed"
+    },
+    "get_dashboard_summary": {
+      "running": "Loading dashboard…",
+      "done": "Dashboard loaded",
+      "failed": "Dashboard lookup failed"
+    },
+    "get_hotline": {
+      "running": "Loading contacts…",
+      "done": "Contacts loaded",
+      "failed": "Could not load contacts"
+    }
+  },
+  "prefill": {
+    "title": "Booking Draft Ready",
+    "tag": "Prefill",
+    "origin": "Origin",
+    "delivery": "Delivery",
+    "cargoReady": "Cargo Ready Date",
+    "sailing": "Sailing",
+    "containers": "Containers",
+    "open": "Open In Booking",
+    "replaceTitle": "Replace Current Booking Draft?",
+    "replaceBody": "Your unsaved booking details will be replaced.",
+    "replaceOk": "Replace"
+  },
+  "cards": {
+    "tracking": {
+      "title": "Tracking",
+      "notFound": "Not Found",
+      "reference": "Reference",
+      "route": "Route",
+      "vessel": "Vessel",
+      "lastEvent": "Last Event",
+      "open": "Open In Tracking"
+    },
+    "schedules": {
+      "title": "Sailings",
+      "count": "{{count}} Found",
+      "recommended": "Recommended",
+      "transit": "{{days}} Days",
+      "book": "Book This Sailing"
+    },
+    "records": {
+      "title": "Records",
+      "empty": "No records returned.",
+      "list_bookings": "Bookings",
+      "get_booking": "Booking",
+      "list_shipping_instructions": "Shipping Instructions",
+      "list_bills_of_lading": "Bills Of Lading",
+      "list_vgm": "VGM",
+      "list_cro": "CRO"
+    }
+  },
+  "suggestions": {
+    "booking": [
+      "What fields are required to create a booking?",
+      "Show my bookings awaiting acceptance",
+      "Create a booking from Chennai to Rotterdam"
+    ],
+    "tracking": [
+      "Where is my container?",
+      "What does Discharged mean?"
+    ],
+    "schedules": [
+      "Sailings from Singapore to Rotterdam next 2 weeks",
+      "What is the VGM cutoff for this sailing?"
+    ],
+    "shipping-instruction": [
+      "How do I create an SI from my booking?",
+      "Why is my SI locked?"
+    ],
+    "rates": [
+      "Find rates for SGSIN to NLRTM",
+      "Show tariffs for my trade lane"
+    ],
+    "vgm": [
+      "How do I submit a VGM?",
+      "Show my pending VGM submissions"
+    ],
+    "bl": [
+      "Show my open bills of lading",
+      "How do I download a BL?"
+    ],
+    "carbon": [
+      "Estimate carbon for SGSIN to NLRTM with 2 containers"
+    ],
+    "default": [
+      "Track a container",
+      "Find a sailing",
+      "How do I submit a VGM?"
+    ]
+  },
+  "history": {
+    "title": "Conversation History",
+    "empty": "No previous conversations in this session.",
+    "messages_one": "{{count}} message",
+    "messages_other": "{{count}} messages",
+    "searchPlaceholder": "Search chats…",
+    "noMatches": "No chats match \"{{query}}\".",
+    "rename": "Rename",
+    "renameLabel": "Chat name",
+    "renamed": "Chat renamed",
+    "pin": "Pin",
+    "unpin": "Unpin",
+    "delete": "Delete",
+    "deleted": "Deleted \"{{title}}\"",
+    "undo": "Undo",
+    "restored": "Chat restored",
+    "clearAll": "Clear all",
+    "clearConfirmTitle": "Clear chat history?",
+    "clearConfirmBody_one": "{{count}} chat will be removed. Pinned chats are kept.",
+    "clearConfirmBody_other": "{{count}} chats will be removed. Pinned chats are kept.",
+    "clearOk": "Clear",
+    "cleared_one": "{{count}} chat removed",
+    "cleared_other": "{{count}} chats removed",
+    "archiveCurrent": "Archive current",
+    "archiveCurrentTooltip": "Move the open chat into history",
+    "archived": "Chat archived",
+    "resumeTooltip": "Open this chat"
+  },
+  "context": {
+    "tooltip": "Share the current screen with the assistant",
+    "thisScreen": "This screen"
+  }
+}

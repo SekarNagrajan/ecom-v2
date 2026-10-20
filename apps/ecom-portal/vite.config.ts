@@ -1,10 +1,11 @@
-// Modified by Sekar Nagarajan (2026-10-20)
+// Modified by Sekar Nagarajan (2026-10-20 13:05)
 import react from "@vitejs/plugin-react";
 import fs from "fs";
 import path from "path";
 import { defineConfig, type Plugin } from "vite";
 
 import { ecomAiN8nProxyPlugin } from "./vite-ai-n8n-proxy";
+import { ecomAssistantProxyPlugin } from "./vite-assistant-proxy";
 
 /**
  * Last-resort /api/* handler: never fall through to the SPA HTML shell.
@@ -476,6 +477,7 @@ export default defineConfig({
     react(),
     bookingMockApiPlugin(),
     ecomAiN8nProxyPlugin(),
+    ecomAssistantProxyPlugin(),
     // After booking + AI proxies so only truly unmatched /api/* become JSON 404.
     ecomApiJson404FallbackPlugin(),
   ],
@@ -545,6 +547,10 @@ export default defineConfig({
       "@solverminds/shared-ui/email": path.resolve(
         __dirname,
         "../../libs/shared/ui/src/components/email/index.ts",
+      ),
+      "@solverminds/shared-ui/components": path.resolve(
+        __dirname,
+        "../../libs/shared/ui/src/components",
       ),
       "@solverminds/shared-ui/chart": path.resolve(
         __dirname,

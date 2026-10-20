@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-17 11:56)
+// Modified by Sekar Nagarajan (2026-10-20 15:15)
 
 import {
   PRECONFIGURED_TENANTS,
@@ -6,6 +6,7 @@ import {
   usePermission,
   useTenantStore,
 } from "@solverminds/auth";
+import { env } from "@solverminds/platform";
 import { AppButton } from "@solverminds/shared-ui";
 import { useConfirm, useToast } from "@solverminds/shared-ui/hooks";
 import { useNavigate } from "@tanstack/react-router";
@@ -24,6 +25,8 @@ import {
 } from "antd";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { AssistantWindow } from "../../features/assistant/components/AssistantWindow";
+import { AssistantLauncher } from "../../features/assistant/components/AssistantLauncher";
 import { CustomerPickerModal } from "../../features/auth/components/customer-picker-modal";
 import { useImpersonationController } from "../../features/auth/hooks/use-impersonation-controller";
 import { ContactUsDrawer } from "../../features/contact-us/components/ContactUsDrawer";
@@ -39,6 +42,8 @@ import { ProfileView } from "../../features/user-modules/components/ProfileView"
 import { AppIcon, Icons } from "../icons";
 import { AccountPreferencesDrawer } from "./account-preferences-drawer";
 import { HeaderLanguageSelect } from "./header-language-select";
+
+const assistantEnabled = env.VITE_ASSISTANT_ENABLED === "true";
 
 const { Header } = Layout;
 const { Text } = Typography;
@@ -482,6 +487,9 @@ export function AuthenticatedLayoutHeader({
 
           <HeaderLanguageSelect buttonClassName="app-header-action" />
 
+          {/* AI Assistant — header icon only (opens right drawer; no floating FAB) */}
+          {assistantEnabled ? <AssistantLauncher /> : null}
+
           <Tooltip
             title={
               isFullscreen
@@ -492,6 +500,7 @@ export function AuthenticatedLayoutHeader({
             <AppButton
               type="text"
               shape="circle"
+              className="app-header-action"
               icon={
                 isFullscreen ? (
                   <AppIcon icon={Icons.minimize} size={16} />
@@ -573,6 +582,8 @@ export function AuthenticatedLayoutHeader({
           open={contactUsDrawerOpen}
           onClose={() => setContactUsDrawerOpen(false)}
         />
+
+        {assistantEnabled ? <AssistantWindow /> : null}
 
         {/* Theme & Appearance Customization Panel */}
         <AccountPreferencesDrawer

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-10-18 23:30)
+// Modified by Sekar Nagarajan (2026-10-20 13:05)
 /**
  * Every MSW handler of the portal, in registration order. Shared by the browser worker
  * (browser.ts) and the Node-side tests (msw/node), so both intercept exactly the same routes.
@@ -9,6 +9,7 @@ import { accessibilityHandlers } from './accessibility.handlers';
 import { adminHandlers } from './admin.handlers';
 import { aiAssistHandlers } from './ai-assist.handlers';
 import { arrivalNoticeHandlers } from './arrival-notice.handlers';
+import { assistantHandlers } from './assistant.handlers';
 import { authAdminHandlers } from './auth-admin.handlers';
 import { authHandlers } from './auth.handlers';
 import { blHandlers } from './bl.handlers';
@@ -42,6 +43,7 @@ export const handlers = [
   ...contactUsHandlers,
   ...hotlineHandlers,
   ...aiAssistHandlers,
+  ...assistantHandlers,
   ...adminHandlers,
   ...userCreationHandlers,
   ...userModulesHandlers,

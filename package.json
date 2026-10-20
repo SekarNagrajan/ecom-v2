@@ -12,7 +12,8 @@
     "build": "pnpm --filter @solverminds/ecom-portal build",
     "preview": "pnpm --filter @solverminds/ecom-portal preview",
     "typecheck": "tsc --noEmit -p apps/ecom-portal/tsconfig.json",
-    "test": "vitest run"
+    "test": "vitest run",
+    "e2e": "playwright test -c apps/ecom-portal/playwright.config.ts"
   },
   "dependencies": {
     "@ant-design/cssinjs": "^2.0.2",

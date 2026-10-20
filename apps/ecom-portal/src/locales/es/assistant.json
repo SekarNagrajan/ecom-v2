@@ -1,0 +1,333 @@
+{
+  "title": "Asistente de IA",
+  "subtitle": "Pregunte sobre reservas, itinerarios, seguimiento y documentos.",
+  "actingAs": "Actuando como {{name}}",
+  "launcher": {
+    "tooltip": "Asistente de IA"
+  },
+  "modes": {
+    "label": "Modo del asistente",
+    "assistant": {
+      "label": "Asistente E-Commerce",
+      "badge": "Asistente",
+      "placeholder": "Pregunte sobre reservas, seguimiento, itinerarios…",
+      "welcomeTitle": "¿Cómo Puedo Ayudar?",
+      "welcomeBody": "Puedo consultar envíos, explicar pantallas del portal e iniciar una reserva.",
+      "suggestions": [
+        "¿Cómo creo una reserva?",
+        "Rastrea un contenedor",
+        "Muestra mis reservas abiertas",
+        "Explica los cortes de VGM"
+      ]
+    },
+    "automation": {
+      "label": "Automatización E-Commerce",
+      "badge": "Automatización",
+      "placeholder": "Describa la reserva u operación a preparar…",
+      "welcomeTitle": "Preparemos Una Operación",
+      "welcomeBody": "Puedo recopilar datos de reserva y enviar solo después de que confirme una tarjeta resumen.",
+      "suggestions": [
+        "Inicia una reserva de Singapur a Róterdam",
+        "Ayúdame a preparar una reserva para la próxima semana",
+        "Envía una reserva después de confirmar los detalles",
+        "¿Qué datos necesitas para una reserva?"
+      ]
+    },
+    "sql": {
+      "label": "Análisis SQL",
+      "badge": "SQL",
+      "placeholder": "Pregunte por esquemas o ejecute una consulta de solo lectura…",
+      "welcomeTitle": "Análisis SQL",
+      "welcomeBody": "Puedo describir esquemas lógicos del portal y ejecutar SQL de solo lectura cuando el servicio SQL esté configurado (capacidad SQL requerida).",
+      "suggestions": [
+        "Describe el esquema de reservas",
+        "Muéstrame un SELECT de ejemplo para reservas abiertas",
+        "¿Cómo se relacionan reservas e instrucciones SI?",
+        "Explica las columnas de tracking_events"
+      ]
+    },
+    "docs": {
+      "label": "Documentos y Tutoriales",
+      "badge": "Docs",
+      "placeholder": "Pida un tutorial o guía…",
+      "welcomeTitle": "Tutoriales y Guías",
+      "welcomeBody": "Explico flujos verificados del portal paso a paso usando la guía de usuario.",
+      "suggestions": [
+        "Tutorial: crear una reserva de exportación",
+        "¿Cómo envío VGM?",
+        "Explica el flujo de SI",
+        "¿Qué significa el estado Confirmed?"
+      ]
+    }
+  },
+  "welcome": {
+    "title": "¿Cómo Puedo Ayudar?",
+    "body": "Puedo consultar envíos, explicar pantallas del portal e iniciar una reserva."
+  },
+  "composer": {
+    "placeholder": "Haga una pregunta…",
+    "dictate": "Dictar",
+    "disclaimer": "Usa IA. Verifique los resultados.",
+    "shortcutHint": "Enter para enviar · Shift+Enter para nueva línea"
+  },
+  "actions": {
+    "send": "Enviar",
+    "stop": "Detener",
+    "retry": "Reintentar",
+    "newChat": "Nuevo Chat",
+    "copy": "Copiar",
+    "helpful": "Útil",
+    "notHelpful": "No Útil",
+    "openScreen": "Abrir Pantalla",
+    "more": "Más",
+    "expandWindow": "Ampliar",
+    "shrinkWindow": "Reducir",
+    "regenerate": "Regenerar",
+    "history": "Historial",
+    "cancel": "Cancelar"
+  },
+  "stopped": "Respuesta detenida.",
+  "toasts": {
+    "copied": "Copiado al portapapeles"
+  },
+  "a11y": {
+    "conversation": "Conversación del asistente",
+    "typing": "El asistente está pensando",
+    "loading": "Cargando conversación",
+    "scrollToBottom": "Ir a lo más reciente"
+  },
+  "status": {
+    "online": "En Línea"
+  },
+  "lookingUp": "Consultando…",
+  "lookingUpDone": "Consulta completa",
+  "openBooking": "Abrir En Reserva",
+  "openScreen": "Abrir Pantalla",
+  "dismiss": "Descartar",
+  "navigateCardTitle": "Ir A La Pantalla",
+  "bookingNotAllowed": "La reserva no está permitida para este viaje.",
+  "unsupportedAction": "Esta acción aún no es compatible.",
+  "automation": {
+    "title": "Confirmar Envío De Reserva",
+    "tag": "Automatización",
+    "scheduleId": "Itinerario",
+    "confirmTitle": "¿Enviar Esta Reserva?",
+    "confirmBody": "Se creará una reserva con los datos siguientes. No se puede deshacer desde el chat.",
+    "confirmOk": "Enviar Reserva",
+    "submitSuccess": "Reserva enviada: {{reference}}",
+    "submitFailed": "Error al enviar ({{reason}})"
+  },
+  "sql": {
+    "title": "Resultados De Consulta",
+    "rows": "{{count}} filas",
+    "truncated": "Truncado",
+    "empty": "No se devolvieron filas."
+  },
+  "confirmPrefillTitle": "Open Booking Wizard?",
+  "confirmPrefillBody": "This will prefill the booking form. Nothing will be submitted.",
+  "confirmReplaceWizardTitle": "Replace Current Booking Draft?",
+  "confirmReplaceWizardBody": "Your unsaved booking details will be replaced.",
+  "confirmNavigateTitle": "Open This Screen?",
+  "confirmNavigateBody": "Navigate to {{route}}?",
+  "errors": {
+    "UNAUTHORIZED": "Your session has expired. Please log in again.",
+    "RATE_LIMITED": "Too many messages. Please wait a minute.",
+    "rateLimited": "Too many messages. Please wait a minute.",
+    "LLM_UNAVAILABLE": "The assistant is busy. Please try again.",
+    "ASSISTANT_UNAVAILABLE": "The assistant is unavailable right now.",
+    "TOOL_LIMIT": "That took too many steps. Try a more specific question.",
+    "NETWORK_ERROR": "Connection lost. Please try again.",
+    "BAD_REQUEST": "The request could not be processed.",
+    "INTERNAL": "Something went wrong. Please try again.",
+    "TOOL_FAILED": "A lookup failed. Please try again."
+  },
+  "tools": {
+    "track_shipment": {
+      "running": "Looking up tracking…",
+      "done": "Tracking checked",
+      "failed": "Tracking lookup failed"
+    },
+    "search_schedules": {
+      "running": "Searching sailings…",
+      "done": "Sailings found",
+      "failed": "Schedule search failed"
+    },
+    "list_bookings": {
+      "running": "Loading your bookings…",
+      "done": "Bookings loaded",
+      "failed": "Could not load bookings"
+    },
+    "get_booking": {
+      "running": "Loading booking…",
+      "done": "Booking loaded",
+      "failed": "Could not load booking"
+    },
+    "list_shipping_instructions": {
+      "running": "Loading shipping instructions…",
+      "done": "Shipping instructions loaded",
+      "failed": "Could not load shipping instructions"
+    },
+    "list_bills_of_lading": {
+      "running": "Loading bills of lading…",
+      "done": "Bills of lading loaded",
+      "failed": "Could not load bills of lading"
+    },
+    "list_vgm": {
+      "running": "Loading VGM records…",
+      "done": "VGM records loaded",
+      "failed": "Could not load VGM"
+    },
+    "list_cro": {
+      "running": "Loading CRO records…",
+      "done": "CRO records loaded",
+      "failed": "Could not load CRO"
+    },
+    "list_delivery_orders": {
+      "running": "Loading delivery orders…",
+      "done": "Delivery orders loaded",
+      "failed": "Could not load delivery orders"
+    },
+    "list_arrival_notices": {
+      "running": "Loading arrival notices…",
+      "done": "Arrival notices loaded",
+      "failed": "Could not load arrival notices"
+    },
+    "get_customer_statement": {
+      "running": "Loading statement…",
+      "done": "Statement loaded",
+      "failed": "Could not load statement"
+    },
+    "estimate_carbon": {
+      "running": "Estimating carbon…",
+      "done": "Carbon estimate ready",
+      "failed": "Carbon estimate failed"
+    },
+    "get_rates": {
+      "running": "Looking up rates…",
+      "done": "Rates found",
+      "failed": "Rate lookup failed"
+    },
+    "get_dashboard_summary": {
+      "running": "Loading dashboard…",
+      "done": "Dashboard loaded",
+      "failed": "Dashboard lookup failed"
+    },
+    "get_hotline": {
+      "running": "Loading contacts…",
+      "done": "Contacts loaded",
+      "failed": "Could not load contacts"
+    }
+  },
+  "prefill": {
+    "title": "Borrador De Reserva Listo",
+    "tag": "Rellenar",
+    "origin": "Origen",
+    "delivery": "Entrega",
+    "cargoReady": "Fecha Lista De Carga",
+    "sailing": "Sailing",
+    "containers": "Containers",
+    "open": "Abrir En Reserva",
+    "replaceTitle": "¿Reemplazar El Borrador Actual?",
+    "replaceBody": "Se reemplazarán los detalles de reserva no guardados.",
+    "replaceOk": "Reemplazar"
+  },
+  "cards": {
+    "tracking": {
+      "title": "Tracking",
+      "notFound": "Not Found",
+      "reference": "Reference",
+      "route": "Route",
+      "vessel": "Vessel",
+      "lastEvent": "Last Event",
+      "open": "Open In Tracking"
+    },
+    "schedules": {
+      "title": "Sailings",
+      "count": "{{count}} Found",
+      "recommended": "Recommended",
+      "transit": "{{days}} Days",
+      "book": "Book This Sailing"
+    },
+    "records": {
+      "title": "Records",
+      "empty": "No records returned.",
+      "list_bookings": "Bookings",
+      "get_booking": "Booking",
+      "list_shipping_instructions": "Shipping Instructions",
+      "list_bills_of_lading": "Bills Of Lading",
+      "list_vgm": "VGM",
+      "list_cro": "CRO"
+    }
+  },
+  "suggestions": {
+    "booking": [
+      "What fields are required to create a booking?",
+      "Show my bookings awaiting acceptance",
+      "Create a booking from Chennai to Rotterdam"
+    ],
+    "tracking": [
+      "Where is my container?",
+      "What does Discharged mean?"
+    ],
+    "schedules": [
+      "Sailings from Singapore to Rotterdam next 2 weeks",
+      "What is the VGM cutoff for this sailing?"
+    ],
+    "shipping-instruction": [
+      "How do I create an SI from my booking?",
+      "Why is my SI locked?"
+    ],
+    "rates": [
+      "Find rates for SGSIN to NLRTM",
+      "Show tariffs for my trade lane"
+    ],
+    "vgm": [
+      "How do I submit a VGM?",
+      "Show my pending VGM submissions"
+    ],
+    "bl": [
+      "Show my open bills of lading",
+      "How do I download a BL?"
+    ],
+    "carbon": [
+      "Estimate carbon for SGSIN to NLRTM with 2 containers"
+    ],
+    "default": [
+      "Track a container",
+      "Find a sailing",
+      "How do I submit a VGM?"
+    ]
+  },
+  "history": {
+    "title": "Historial de Conversaciones",
+    "empty": "No hay conversaciones anteriores en esta sesión.",
+    "messages_one": "{{count}} mensaje",
+    "messages_other": "{{count}} mensajes",
+    "searchPlaceholder": "Buscar chats…",
+    "noMatches": "Ningún chat coincide con \"{{query}}\".",
+    "rename": "Renombrar",
+    "renameLabel": "Nombre del chat",
+    "renamed": "Chat renombrado",
+    "pin": "Fijar",
+    "unpin": "Desfijar",
+    "delete": "Eliminar",
+    "deleted": "\"{{title}}\" eliminado",
+    "undo": "Deshacer",
+    "restored": "Chat restaurado",
+    "clearAll": "Borrar Todo",
+    "clearConfirmTitle": "¿Borrar el historial de chats?",
+    "clearConfirmBody_one": "Se eliminará {{count}} chat. Los chats fijados se conservan.",
+    "clearConfirmBody_other": "Se eliminarán {{count}} chats. Los chats fijados se conservan.",
+    "clearOk": "Borrar",
+    "cleared_one": "{{count}} chat eliminado",
+    "cleared_other": "{{count}} chats eliminados",
+    "archiveCurrent": "Archivar Actual",
+    "archiveCurrentTooltip": "Mover el chat abierto al historial",
+    "archived": "Chat archivado",
+    "resumeTooltip": "Abrir este chat"
+  },
+  "context": {
+    "tooltip": "Compartir la pantalla actual con el asistente",
+    "thisScreen": "Esta pantalla"
+  }
+}

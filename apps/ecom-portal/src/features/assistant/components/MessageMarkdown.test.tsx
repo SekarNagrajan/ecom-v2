@@ -1,0 +1,28 @@
+// Modified by Sekar Nagarajan (2026-10-20 14:14)
+// @vitest-environment jsdom
+import { render, screen } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
+
+vi.mock("@tanstack/react-router", () => ({
+  Link: ({ to, children }: { to: string; children: React.ReactNode }) => (
+    <a href={to} data-testid="router-link">
+      {children}
+    </a>
+  ),
+}));
+
+import { MessageMarkdown } from "./MessageMarkdown";
+
+describe("MessageMarkdown", () => {
+  it("escapes raw HTML script tags as text", () => {
+    render(<MessageMarkdown text={'Hello <script>alert(1)</script>'} />);
+    expect(screen.getByText(/script/i)).toBeTruthy();
+    expect(document.querySelector("script")).toBeNull();
+  });
+
+  it("renders internal /app/ links via the router Link", () => {
+    render(<MessageMarkdown text={"See [Booking](/app/booking)"} />);
+    const link = screen.getByTestId("router-link");
+    expect(link.getAttribute("href")).toBe("/app/booking");
+  });
+});

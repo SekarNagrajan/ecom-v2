@@ -1,0 +1,330 @@
+{
+  "title": "AI 助手",
+  "subtitle": "询问订舱、船期、追踪和单证。",
+  "actingAs": "当前身份：{{name}}",
+  "launcher": {
+    "tooltip": "AI 助手"
+  },
+  "modes": {
+    "label": "助手模式",
+    "assistant": {
+      "label": "电商助手",
+      "badge": "助手",
+      "placeholder": "询问订舱、追踪、船期…",
+      "welcomeTitle": "我能帮您什么？",
+      "welcomeBody": "我可以查询货运、解释门户页面，并帮您开始订舱。",
+      "suggestions": [
+        "如何创建订舱？",
+        "帮我追踪集装箱",
+        "显示我的未完成订舱",
+        "解释 VGM 截止时间"
+      ]
+    },
+    "automation": {
+      "label": "电商自动化",
+      "badge": "自动化",
+      "placeholder": "描述要准备的订舱或操作…",
+      "welcomeTitle": "一起准备操作",
+      "welcomeBody": "我可以收集订舱信息，并仅在您确认摘要卡片后提交。",
+      "suggestions": [
+        "从新加坡到鹿特丹开始订舱",
+        "帮我准备下周的订舱",
+        "确认详情后提交订舱",
+        "订舱需要哪些信息？"
+      ]
+    },
+    "sql": {
+      "label": "SQL 分析",
+      "badge": "SQL",
+      "placeholder": "询问结构或运行只读查询…",
+      "welcomeTitle": "SQL 分析",
+      "welcomeBody": "我可以说明门户逻辑结构，并在已配置 SQL 服务时运行只读 SQL（需要 SQL 权限）。",
+      "suggestions": [
+        "说明 bookings 结构",
+        "给我一个未关闭订舱的 SELECT 示例",
+        "订舱与装船指示如何关联？",
+        "解释 tracking_events 列"
+      ]
+    },
+    "docs": {
+      "label": "文档与教程",
+      "badge": "文档",
+      "placeholder": "询问教程或操作指南…",
+      "welcomeTitle": "教程与指南",
+      "welcomeBody": "我根据用户指南逐步说明已验证的门户流程。",
+      "suggestions": [
+        "教程：创建出口订舱",
+        "如何提交 VGM？",
+        "说明装船指示流程",
+        "订舱状态 Confirmed 是什么意思？"
+      ]
+    }
+  },
+  "welcome": {
+    "title": "我能帮您什么？",
+    "body": "我可以查询货运、解释门户页面，并帮您开始订舱。"
+  },
+  "composer": {
+    "placeholder": "输入问题…",
+    "dictate": "语音输入",
+    "disclaimer": "使用 AI。请核实结果。",
+    "shortcutHint": "Enter 发送 · Shift+Enter 换行"
+  },
+  "actions": {
+    "send": "发送",
+    "stop": "停止",
+    "retry": "重试",
+    "newChat": "新对话",
+    "copy": "复制",
+    "helpful": "有帮助",
+    "notHelpful": "没帮助",
+    "openScreen": "打开页面",
+    "more": "更多",
+    "expandWindow": "放大",
+    "shrinkWindow": "缩小",
+    "regenerate": "重新生成",
+    "history": "历史记录",
+    "cancel": "取消"
+  },
+  "stopped": "已停止回复。",
+  "toasts": {
+    "copied": "已复制到剪贴板"
+  },
+  "a11y": {
+    "conversation": "助手对话",
+    "typing": "助手正在思考",
+    "loading": "正在加载对话",
+    "scrollToBottom": "滚动到最新"
+  },
+  "status": {
+    "online": "在线"
+  },
+  "lookingUp": "正在查询…",
+  "lookingUpDone": "查询完成",
+  "openBooking": "在订舱中打开",
+  "openScreen": "打开页面",
+  "dismiss": "忽略",
+  "navigateCardTitle": "前往页面",
+  "bookingNotAllowed": "此航次不允许订舱。",
+  "unsupportedAction": "暂不支持此操作。",
+  "automation": {
+    "title": "确认提交订舱",
+    "tag": "自动化",
+    "scheduleId": "船期",
+    "confirmTitle": "提交此订舱？",
+    "confirmBody": "将使用下列信息创建订舱。无法从聊天中撤销。",
+    "confirmOk": "提交订舱",
+    "submitSuccess": "订舱已提交：{{reference}}",
+    "submitFailed": "提交失败（{{reason}}）"
+  },
+  "sql": {
+    "title": "查询结果",
+    "rows": "{{count}} 行",
+    "truncated": "已截断",
+    "empty": "没有返回行。"
+  },
+  "confirmPrefillTitle": "打开订舱向导？",
+  "confirmPrefillBody": "将预填订舱表单，不会提交。",
+  "confirmReplaceWizardTitle": "替换当前订舱草稿？",
+  "confirmReplaceWizardBody": "未保存的订舱详情将被替换。",
+  "confirmNavigateTitle": "打开此页面？",
+  "confirmNavigateBody": "前往 {{route}}？",
+  "errors": {
+    "UNAUTHORIZED": "会话已过期，请重新登录。",
+    "RATE_LIMITED": "消息过多，请稍等一分钟。",
+    "rateLimited": "消息过多，请稍等一分钟。",
+    "LLM_UNAVAILABLE": "助手正忙，请重试。",
+    "ASSISTANT_UNAVAILABLE": "助手当前不可用。",
+    "TOOL_LIMIT": "步骤过多，请提出更具体的问题。",
+    "NETWORK_ERROR": "连接中断，请重试。",
+    "BAD_REQUEST": "无法处理该请求。",
+    "INTERNAL": "出现错误，请重试。",
+    "TOOL_FAILED": "查询失败，请重试。"
+  },
+  "tools": {
+    "track_shipment": {
+      "running": "Looking up tracking…",
+      "done": "Tracking checked",
+      "failed": "Tracking lookup failed"
+    },
+    "search_schedules": {
+      "running": "Searching sailings…",
+      "done": "Sailings found",
+      "failed": "Schedule search failed"
+    },
+    "list_bookings": {
+      "running": "Loading your bookings…",
+      "done": "Bookings loaded",
+      "failed": "Could not load bookings"
+    },
+    "get_booking": {
+      "running": "Loading booking…",
+      "done": "Booking loaded",
+      "failed": "Could not load booking"
+    },
+    "list_shipping_instructions": {
+      "running": "Loading shipping instructions…",
+      "done": "Shipping instructions loaded",
+      "failed": "Could not load shipping instructions"
+    },
+    "list_bills_of_lading": {
+      "running": "Loading bills of lading…",
+      "done": "Bills of lading loaded",
+      "failed": "Could not load bills of lading"
+    },
+    "list_vgm": {
+      "running": "Loading VGM records…",
+      "done": "VGM records loaded",
+      "failed": "Could not load VGM"
+    },
+    "list_cro": {
+      "running": "Loading CRO records…",
+      "done": "CRO records loaded",
+      "failed": "Could not load CRO"
+    },
+    "list_delivery_orders": {
+      "running": "Loading delivery orders…",
+      "done": "Delivery orders loaded",
+      "failed": "Could not load delivery orders"
+    },
+    "list_arrival_notices": {
+      "running": "Loading arrival notices…",
+      "done": "Arrival notices loaded",
+      "failed": "Could not load arrival notices"
+    },
+    "get_customer_statement": {
+      "running": "Loading statement…",
+      "done": "Statement loaded",
+      "failed": "Could not load statement"
+    },
+    "estimate_carbon": {
+      "running": "Estimating carbon…",
+      "done": "Carbon estimate ready",
+      "failed": "Carbon estimate failed"
+    },
+    "get_rates": {
+      "running": "Looking up rates…",
+      "done": "Rates found",
+      "failed": "Rate lookup failed"
+    },
+    "get_dashboard_summary": {
+      "running": "Loading dashboard…",
+      "done": "Dashboard loaded",
+      "failed": "Dashboard lookup failed"
+    },
+    "get_hotline": {
+      "running": "Loading contacts…",
+      "done": "Contacts loaded",
+      "failed": "Could not load contacts"
+    }
+  },
+  "prefill": {
+    "title": "订舱草稿已就绪",
+    "tag": "预填",
+    "origin": "起运地",
+    "delivery": "目的地",
+    "cargoReady": "备货日期",
+    "sailing": "航次",
+    "containers": "集装箱",
+    "open": "在订舱中打开",
+    "replaceTitle": "替换当前订舱草稿？",
+    "replaceBody": "未保存的订舱详情将被替换。",
+    "replaceOk": "替换"
+  },
+  "cards": {
+    "tracking": {
+      "title": "Tracking",
+      "notFound": "Not Found",
+      "reference": "Reference",
+      "route": "Route",
+      "vessel": "Vessel",
+      "lastEvent": "Last Event",
+      "open": "Open In Tracking"
+    },
+    "schedules": {
+      "title": "Sailings",
+      "count": "{{count}} Found",
+      "recommended": "Recommended",
+      "transit": "{{days}} Days",
+      "book": "Book This Sailing"
+    },
+    "records": {
+      "title": "Records",
+      "empty": "No records returned.",
+      "list_bookings": "Bookings",
+      "get_booking": "Booking",
+      "list_shipping_instructions": "Shipping Instructions",
+      "list_bills_of_lading": "Bills Of Lading",
+      "list_vgm": "VGM",
+      "list_cro": "CRO"
+    }
+  },
+  "suggestions": {
+    "booking": [
+      "What fields are required to create a booking?",
+      "Show my bookings awaiting acceptance",
+      "Create a booking from Chennai to Rotterdam"
+    ],
+    "tracking": [
+      "Where is my container?",
+      "What does Discharged mean?"
+    ],
+    "schedules": [
+      "Sailings from Singapore to Rotterdam next 2 weeks",
+      "What is the VGM cutoff for this sailing?"
+    ],
+    "shipping-instruction": [
+      "How do I create an SI from my booking?",
+      "Why is my SI locked?"
+    ],
+    "rates": [
+      "Find rates for SGSIN to NLRTM",
+      "Show tariffs for my trade lane"
+    ],
+    "vgm": [
+      "How do I submit a VGM?",
+      "Show my pending VGM submissions"
+    ],
+    "bl": [
+      "Show my open bills of lading",
+      "How do I download a BL?"
+    ],
+    "carbon": [
+      "Estimate carbon for SGSIN to NLRTM with 2 containers"
+    ],
+    "default": [
+      "Track a container",
+      "Find a sailing",
+      "How do I submit a VGM?"
+    ]
+  },
+  "history": {
+    "title": "对话历史",
+    "empty": "本次会话暂无历史对话。",
+    "messages_other": "{{count}} 条消息",
+    "searchPlaceholder": "搜索对话…",
+    "noMatches": "没有匹配 \"{{query}}\" 的对话。",
+    "rename": "重命名",
+    "renameLabel": "对话名称",
+    "renamed": "已重命名",
+    "pin": "置顶",
+    "unpin": "取消置顶",
+    "delete": "删除",
+    "deleted": "已删除 \"{{title}}\"",
+    "undo": "撤销",
+    "restored": "已恢复对话",
+    "clearAll": "清空",
+    "clearConfirmTitle": "清空对话历史？",
+    "clearConfirmBody_other": "将删除 {{count}} 条对话，置顶的对话会保留。",
+    "clearOk": "清空",
+    "cleared_other": "已删除 {{count}} 条对话",
+    "archiveCurrent": "归档当前",
+    "archiveCurrentTooltip": "将当前对话移入历史",
+    "archived": "已归档",
+    "resumeTooltip": "打开此对话"
+  },
+  "context": {
+    "tooltip": "与助手共享当前屏幕",
+    "thisScreen": "当前屏幕"
+  }
+}

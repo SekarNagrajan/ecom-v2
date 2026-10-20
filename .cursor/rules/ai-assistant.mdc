@@ -1,0 +1,19 @@
+---
+description: AI assistant (chatbot) feature — portal drawer + Python ai-service
+globs:
+  - "apps/ecom-portal/src/features/assistant/**"
+  - "apps/ecom-portal/src/mocks/assistant.handlers.ts"
+  - "apps/ecom-portal/vite-assistant-proxy.ts"
+  - "apps/ai-service/**"
+alwaysApply: false
+---
+- Source of truth for request/response/events: apps/ai-service/CONTRACT.md. Never invent fields.
+- Frontend follows apps/ecom-portal/ECOM-PORTAL-FEATURE-BLUEPRINT.md and .cursor/rules/agenct.md
+  (AppDrawer/AppButton/useToast/useConfirm from @solverminds/shared-ui, no inline style, no hex colours, no `any`).
+- The browser runs tools by calling EXISTING feature api functions (bookingApi, trackingApi, schedulesApi, ...).
+  Never add new backend endpoints for tools; never call fixtures/bridges directly from the assistant.
+- Default assistant mode never submits a booking — it prefills via useBookingStore + buildMasterDetailsFromSchedule.
+- Automation mode may submit only after explicit user confirm on AutomationConfirmCard → actions/submit-booking.action.ts (guardrail allowlist).
+- All assistant HTTP goes to same-origin /api/assistant/* . Never call the AI service URL directly from the browser.
+- Python: FastAPI + anthropic SDK, pydantic v2 models for every request/event, async everywhere, no DB connection to ecom data.
+- Never log or persist the Authorization token.

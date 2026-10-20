@@ -1,0 +1,330 @@
+{
+  "title": "Pembantu AI",
+  "subtitle": "Tanya tentang tempahan, jadual, penjejakan dan dokumen.",
+  "actingAs": "Bertindak sebagai {{name}}",
+  "launcher": {
+    "tooltip": "Pembantu AI"
+  },
+  "modes": {
+    "label": "Mod pembantu",
+    "assistant": {
+      "label": "Pembantu E-Dagang",
+      "badge": "Pembantu",
+      "placeholder": "Tanya tentang tempahan, penjejakan, jadual…",
+      "welcomeTitle": "Bagaimana Saya Boleh Membantu?",
+      "welcomeBody": "Saya boleh mencari penghantaran, terangkan skrin portal, dan mula tempahan untuk anda.",
+      "suggestions": [
+        "Bagaimana saya buat tempahan baharu?",
+        "Jejak kontena untuk saya",
+        "Tunjukkan tempahan terbuka saya",
+        "Terangkan potongan VGM"
+      ]
+    },
+    "automation": {
+      "label": "Automasi E-Dagang",
+      "badge": "Automasi",
+      "placeholder": "Terangkan tempahan atau operasi untuk disediakan…",
+      "welcomeTitle": "Mari Sediakan Operasi",
+      "welcomeBody": "Saya boleh kumpul butiran tempahan dan hantar hanya selepas anda sahkan kad ringkasan.",
+      "suggestions": [
+        "Mula tempahan dari Singapura ke Rotterdam",
+        "Bantu saya sediakan tempahan minggu depan",
+        "Hantar tempahan selepas kami sahkan butiran",
+        "Butiran apa yang anda perlukan untuk tempahan?"
+      ]
+    },
+    "sql": {
+      "label": "Analisis SQL",
+      "badge": "SQL",
+      "placeholder": "Tanya tentang skema atau jalankan pertanyaan baca sahaja…",
+      "welcomeTitle": "Analisis SQL",
+      "welcomeBody": "Saya boleh terangkan skema logik portal dan jalankan SQL baca sahaja apabila perkhidmatan SQL dikonfigurasi (keupayaan SQL diperlukan).",
+      "suggestions": [
+        "Terangkan skema bookings",
+        "Tunjukkan contoh SELECT untuk tempahan terbuka",
+        "Bagaimana tempahan berkaitan dengan SI?",
+        "Terangkan lajur tracking_events"
+      ]
+    },
+    "docs": {
+      "label": "Dokumen & Tutorial",
+      "badge": "Docs",
+      "placeholder": "Minta tutorial atau cara…",
+      "welcomeTitle": "Tutorial & Panduan",
+      "welcomeBody": "Saya terangkan aliran portal yang disahkan langkah demi langkah menggunakan panduan pengguna.",
+      "suggestions": [
+        "Tutorial: cipta tempahan eksport",
+        "Bagaimana saya hantar VGM?",
+        "Terangkan aliran SI",
+        "Apakah maksud status Confirmed?"
+      ]
+    }
+  },
+  "welcome": {
+    "title": "Bagaimana Saya Boleh Membantu?",
+    "body": "Saya boleh mencari penghantaran, terangkan skrin portal, dan mula tempahan untuk anda."
+  },
+  "composer": {
+    "placeholder": "Tanya soalan…",
+    "dictate": "Imlak",
+    "disclaimer": "Menggunakan AI. Sahkan hasil.",
+    "shortcutHint": "Enter untuk hantar · Shift+Enter untuk baris baharu"
+  },
+  "actions": {
+    "send": "Hantar",
+    "stop": "Berhenti",
+    "retry": "Cuba Semula",
+    "newChat": "Sembang Baharu",
+    "copy": "Salin",
+    "helpful": "Membantu",
+    "notHelpful": "Tidak Membantu",
+    "openScreen": "Buka Skrin",
+    "more": "Lagi",
+    "expandWindow": "Kembangkan",
+    "shrinkWindow": "Kecilkan",
+    "regenerate": "Jana Semula",
+    "history": "Sejarah",
+    "cancel": "Batal"
+  },
+  "stopped": "Respons dihentikan.",
+  "toasts": {
+    "copied": "Disalin ke papan keratan"
+  },
+  "a11y": {
+    "conversation": "Perbualan pembantu",
+    "typing": "Pembantu sedang berfikir",
+    "loading": "Memuatkan perbualan",
+    "scrollToBottom": "Tatal ke terkini"
+  },
+  "status": {
+    "online": "Dalam Talian"
+  },
+  "lookingUp": "Sedang mencari…",
+  "lookingUpDone": "Carian selesai",
+  "openBooking": "Buka Dalam Tempahan",
+  "openScreen": "Buka Skrin",
+  "dismiss": "Buang",
+  "navigateCardTitle": "Pergi Ke Skrin",
+  "bookingNotAllowed": "Tempahan tidak dibenarkan untuk pelayaran ini.",
+  "unsupportedAction": "Tindakan ini belum disokong.",
+  "automation": {
+    "title": "Sahkan Hantar Tempahan",
+    "tag": "Automasi",
+    "scheduleId": "Jadual",
+    "confirmTitle": "Hantar Tempahan Ini?",
+    "confirmBody": "Ini akan cipta tempahan menggunakan butiran di bawah. Tidak boleh dibatalkan dari sembang.",
+    "confirmOk": "Hantar Tempahan",
+    "submitSuccess": "Tempahan dihantar: {{reference}}",
+    "submitFailed": "Gagal hantar ({{reason}})"
+  },
+  "sql": {
+    "title": "Keputusan Pertanyaan",
+    "rows": "{{count}} baris",
+    "truncated": "Dipotong",
+    "empty": "Tiada baris dikembalikan."
+  },
+  "confirmPrefillTitle": "Open Booking Wizard?",
+  "confirmPrefillBody": "This will prefill the booking form. Nothing will be submitted.",
+  "confirmReplaceWizardTitle": "Replace Current Booking Draft?",
+  "confirmReplaceWizardBody": "Your unsaved booking details will be replaced.",
+  "confirmNavigateTitle": "Open This Screen?",
+  "confirmNavigateBody": "Navigate to {{route}}?",
+  "errors": {
+    "UNAUTHORIZED": "Your session has expired. Please log in again.",
+    "RATE_LIMITED": "Too many messages. Please wait a minute.",
+    "rateLimited": "Too many messages. Please wait a minute.",
+    "LLM_UNAVAILABLE": "The assistant is busy. Please try again.",
+    "ASSISTANT_UNAVAILABLE": "The assistant is unavailable right now.",
+    "TOOL_LIMIT": "That took too many steps. Try a more specific question.",
+    "NETWORK_ERROR": "Connection lost. Please try again.",
+    "BAD_REQUEST": "The request could not be processed.",
+    "INTERNAL": "Something went wrong. Please try again.",
+    "TOOL_FAILED": "A lookup failed. Please try again."
+  },
+  "tools": {
+    "track_shipment": {
+      "running": "Looking up tracking…",
+      "done": "Tracking checked",
+      "failed": "Tracking lookup failed"
+    },
+    "search_schedules": {
+      "running": "Searching sailings…",
+      "done": "Sailings found",
+      "failed": "Schedule search failed"
+    },
+    "list_bookings": {
+      "running": "Loading your bookings…",
+      "done": "Bookings loaded",
+      "failed": "Could not load bookings"
+    },
+    "get_booking": {
+      "running": "Loading booking…",
+      "done": "Booking loaded",
+      "failed": "Could not load booking"
+    },
+    "list_shipping_instructions": {
+      "running": "Loading shipping instructions…",
+      "done": "Shipping instructions loaded",
+      "failed": "Could not load shipping instructions"
+    },
+    "list_bills_of_lading": {
+      "running": "Loading bills of lading…",
+      "done": "Bills of lading loaded",
+      "failed": "Could not load bills of lading"
+    },
+    "list_vgm": {
+      "running": "Loading VGM records…",
+      "done": "VGM records loaded",
+      "failed": "Could not load VGM"
+    },
+    "list_cro": {
+      "running": "Loading CRO records…",
+      "done": "CRO records loaded",
+      "failed": "Could not load CRO"
+    },
+    "list_delivery_orders": {
+      "running": "Loading delivery orders…",
+      "done": "Delivery orders loaded",
+      "failed": "Could not load delivery orders"
+    },
+    "list_arrival_notices": {
+      "running": "Loading arrival notices…",
+      "done": "Arrival notices loaded",
+      "failed": "Could not load arrival notices"
+    },
+    "get_customer_statement": {
+      "running": "Loading statement…",
+      "done": "Statement loaded",
+      "failed": "Could not load statement"
+    },
+    "estimate_carbon": {
+      "running": "Estimating carbon…",
+      "done": "Carbon estimate ready",
+      "failed": "Carbon estimate failed"
+    },
+    "get_rates": {
+      "running": "Looking up rates…",
+      "done": "Rates found",
+      "failed": "Rate lookup failed"
+    },
+    "get_dashboard_summary": {
+      "running": "Loading dashboard…",
+      "done": "Dashboard loaded",
+      "failed": "Dashboard lookup failed"
+    },
+    "get_hotline": {
+      "running": "Loading contacts…",
+      "done": "Contacts loaded",
+      "failed": "Could not load contacts"
+    }
+  },
+  "prefill": {
+    "title": "Draf Tempahan Sedia",
+    "tag": "Prisi",
+    "origin": "Asal",
+    "delivery": "Penghantaran",
+    "cargoReady": "Tarikh Kargo Sedia",
+    "sailing": "Sailing",
+    "containers": "Containers",
+    "open": "Buka Dalam Tempahan",
+    "replaceTitle": "Ganti Draf Tempahan Semasa?",
+    "replaceBody": "Butiran tempahan yang belum disimpan akan diganti.",
+    "replaceOk": "Ganti"
+  },
+  "cards": {
+    "tracking": {
+      "title": "Tracking",
+      "notFound": "Not Found",
+      "reference": "Reference",
+      "route": "Route",
+      "vessel": "Vessel",
+      "lastEvent": "Last Event",
+      "open": "Open In Tracking"
+    },
+    "schedules": {
+      "title": "Sailings",
+      "count": "{{count}} Found",
+      "recommended": "Recommended",
+      "transit": "{{days}} Days",
+      "book": "Book This Sailing"
+    },
+    "records": {
+      "title": "Records",
+      "empty": "No records returned.",
+      "list_bookings": "Bookings",
+      "get_booking": "Booking",
+      "list_shipping_instructions": "Shipping Instructions",
+      "list_bills_of_lading": "Bills Of Lading",
+      "list_vgm": "VGM",
+      "list_cro": "CRO"
+    }
+  },
+  "suggestions": {
+    "booking": [
+      "What fields are required to create a booking?",
+      "Show my bookings awaiting acceptance",
+      "Create a booking from Chennai to Rotterdam"
+    ],
+    "tracking": [
+      "Where is my container?",
+      "What does Discharged mean?"
+    ],
+    "schedules": [
+      "Sailings from Singapore to Rotterdam next 2 weeks",
+      "What is the VGM cutoff for this sailing?"
+    ],
+    "shipping-instruction": [
+      "How do I create an SI from my booking?",
+      "Why is my SI locked?"
+    ],
+    "rates": [
+      "Find rates for SGSIN to NLRTM",
+      "Show tariffs for my trade lane"
+    ],
+    "vgm": [
+      "How do I submit a VGM?",
+      "Show my pending VGM submissions"
+    ],
+    "bl": [
+      "Show my open bills of lading",
+      "How do I download a BL?"
+    ],
+    "carbon": [
+      "Estimate carbon for SGSIN to NLRTM with 2 containers"
+    ],
+    "default": [
+      "Track a container",
+      "Find a sailing",
+      "How do I submit a VGM?"
+    ]
+  },
+  "history": {
+    "title": "Sejarah Perbualan",
+    "empty": "Tiada perbualan terdahulu dalam sesi ini.",
+    "messages_other": "{{count}} mesej",
+    "searchPlaceholder": "Cari sembang…",
+    "noMatches": "Tiada sembang sepadan \"{{query}}\".",
+    "rename": "Namakan Semula",
+    "renameLabel": "Nama sembang",
+    "renamed": "Sembang dinamakan semula",
+    "pin": "Sematkan",
+    "unpin": "Nyahsemat",
+    "delete": "Padam",
+    "deleted": "\"{{title}}\" dipadam",
+    "undo": "Buat Asal",
+    "restored": "Sembang dipulihkan",
+    "clearAll": "Kosongkan Semua",
+    "clearConfirmTitle": "Kosongkan sejarah sembang?",
+    "clearConfirmBody_other": "{{count}} sembang akan dibuang. Sembang bersemat dikekalkan.",
+    "clearOk": "Kosongkan",
+    "cleared_other": "{{count}} sembang dibuang",
+    "archiveCurrent": "Arkibkan Semasa",
+    "archiveCurrentTooltip": "Pindahkan sembang terbuka ke sejarah",
+    "archived": "Sembang diarkibkan",
+    "resumeTooltip": "Buka sembang ini"
+  },
+  "context": {
+    "tooltip": "Kongsi skrin semasa dengan pembantu",
+    "thisScreen": "Skrin ini"
+  }
+}

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-10-19 10:50)
+// Modified by Sekar Nagarajan (2026-10-26 16:35)
 import { AppDrawer } from "@solverminds/shared-ui";
 import { Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
@@ -76,7 +76,6 @@ function sortMovementsForTimeline(
     return parseEventDate(b.eventDate) - parseEventDate(a.eventDate);
   });
 
-  // Pin the exact latestActivity row first when date/name match is available.
   const pinIndex = sorted.findIndex(
     (event) =>
       event.isActual &&
@@ -129,11 +128,9 @@ function MovementEventCard({
 
       <div className="tracking-movement-event__body">
         <div className="tracking-movement-event__head">
-          <div className="tracking-movement-event__title-block">
-            <Text strong className="tracking-movement-event__name">
-              {event.eventName}
-            </Text>
-          </div>
+          <Text strong className="tracking-movement-event__name">
+            {event.eventName}
+          </Text>
           <time
             className="tracking-movement-event__time"
             dateTime={event.eventDate}
@@ -152,7 +149,7 @@ function MovementEventCard({
                 type="secondary"
                 className="tracking-movement-event__meta-label"
               >
-                Activity Location:
+                Activity Location
               </Text>
               <Text className="tracking-movement-event__meta-value">
                 {event.locationName}
@@ -171,7 +168,7 @@ function MovementEventCard({
                   type="secondary"
                   className="tracking-movement-event__meta-label"
                 >
-                  Vessel Details :
+                  Vessel Details
                 </Text>
                 <Text className="tracking-movement-event__meta-value">
                   {vesselDetails}
@@ -219,11 +216,6 @@ export function TrackingMovementDrawer({
             <Title level={5} className="tracking-movement-drawer__heading">
               {container.containerNo}
             </Title>
-            {/* <Text type="secondary" className="tracking-movement-drawer__meta">
-              {container.latestActivity}
-              {" · "}
-              {container.activityLocation}
-            </Text> */}
           </div>
         </div>
       }

@@ -1148,6 +1148,7 @@ export function TrackingModuleStyles() {
         margin: ${token.marginXXS}px 0;
         border-left: 2px solid ${tokenMix(token.colorPrimary, 35)};
       }
+      /* Modified by Sekar Nagarajan (2026-10-26 16:35) — aligned event card layout */
       .tracking-movement-event__body {
         min-width: 0;
         padding: ${token.paddingSM}px ${token.paddingMD}px;
@@ -1155,6 +1156,9 @@ export function TrackingModuleStyles() {
         border-radius: ${token.borderRadiusLG}px;
         border: 1px solid ${token.colorBorderSecondary};
         background: ${token.colorBgContainer};
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginSM}px;
       }
       .tracking-movement-event:last-child .tracking-movement-event__body {
         margin-bottom: 0;
@@ -1167,55 +1171,15 @@ export function TrackingModuleStyles() {
         display: flex;
         align-items: flex-start;
         justify-content: space-between;
-        gap: ${token.marginSM}px;
-        margin-bottom: ${token.marginSM}px;
-      }
-      .tracking-movement-event__title-block {
-        min-width: 0;
-        display: flex;
-        flex-direction: column;
-        gap: ${token.marginXXS}px;
+        gap: ${token.marginMD}px;
       }
       .tracking-movement-event__name {
         display: block;
         margin: 0;
+        min-width: 0;
+        flex: 1 1 auto;
         font-size: ${token.fontSize}px;
-        line-height: 1.3;
-      }
-      .tracking-movement-event__chips {
-        display: flex;
-        flex-wrap: wrap;
-        gap: ${token.marginXXS}px;
-      }
-      .tracking-movement-chip {
-        display: inline-flex;
-        align-items: center;
-        padding: 0 ${token.paddingXS}px;
-        border-radius: ${token.borderRadiusSM}px;
-        font-size: ${token.fontSizeSM - 1}px;
-        font-weight: ${token.fontWeightStrong};
-        line-height: ${token.controlHeightSM - 8}px;
-        letter-spacing: 0.02em;
-      }
-      .tracking-movement-chip--code {
-        background: ${token.colorInfoBg};
-        color: ${token.colorInfo};
-      }
-      .tracking-movement-chip--mode {
-        background: ${tokenMix(token.colorInfoActive, 12)};
-        color: ${token.colorInfoActive};
-      }
-      .tracking-movement-chip--actual {
-        background: ${tokenMix(token.colorSuccess, 12)};
-        color: ${token.colorSuccess};
-      }
-      .tracking-movement-chip--estimate {
-        background: ${token.colorWarningBg};
-        color: ${token.colorWarning};
-      }
-      .tracking-movement-chip--latest {
-        background: ${token.colorPrimaryBg};
-        color: ${token.colorPrimary};
+        line-height: 1.35;
       }
       .tracking-movement-event__time {
         flex-shrink: 0;
@@ -1224,6 +1188,7 @@ export function TrackingModuleStyles() {
         color: ${token.colorTextSecondary};
         white-space: nowrap;
         line-height: 1.4;
+        text-align: right;
       }
       .tracking-movement-event--latest .tracking-movement-event__time {
         color: ${token.colorPrimary};
@@ -1231,56 +1196,47 @@ export function TrackingModuleStyles() {
       .tracking-movement-event__meta {
         display: flex;
         flex-direction: column;
-        gap: ${token.marginXXS}px;
+        gap: ${token.marginSM}px;
+        padding-top: ${token.paddingSM}px;
+        border-top: 1px solid ${token.colorBorderSecondary};
       }
       .tracking-movement-event__meta-item {
-        display: flex;
-        align-items: center;
-        gap: ${token.marginXS}px;
+        display: grid;
+        grid-template-columns: 28px minmax(0, 1fr);
+        gap: ${token.marginSM}px;
+        align-items: start;
         min-width: 0;
       }
       .tracking-movement-event__meta-icon {
-        width: 22px;
-        height: 22px;
+        width: 28px;
+        height: 28px;
         border-radius: ${token.borderRadiusSM}px;
         background: ${token.colorFillAlter};
         color: ${token.colorTextSecondary};
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        flex-shrink: 0;
       }
-      /* Modified by Sekar Nagarajan (2026-09-17 23:52) — single-row label + value */
       .tracking-movement-event__meta-copy {
         min-width: 0;
         display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-items: baseline;
-        gap: ${token.marginXXS}px;
+        flex-direction: column;
+        gap: 2px;
       }
       .tracking-movement-event__meta-label {
-        display: inline;
+        display: block;
         margin: 0;
-        flex-shrink: 0;
         font-size: ${token.fontSizeSM}px;
-        line-height: 1.4;
+        line-height: 1.3;
       }
       .tracking-movement-event__meta-value {
-        display: inline;
+        display: block;
         margin: 0;
         font-size: ${token.fontSizeSM}px;
         font-weight: ${token.fontWeightStrong};
         color: ${token.colorText};
         line-height: 1.4;
         word-break: break-word;
-      }
-      .tracking-movement-event__meta-code {
-        color: ${token.colorTextSecondary};
-        font-weight: ${token.fontWeightStrong};
-      }
-      .tracking-movement-event__meta-sub {
-        display: none;
       }
       .tracking-movement-empty {
         padding: ${token.paddingMD}px 0;
@@ -1726,6 +1682,7 @@ export function TrackingModuleStyles() {
         }
         .tracking-movement-event__time {
           white-space: normal;
+          text-align: left;
         }
       }
 

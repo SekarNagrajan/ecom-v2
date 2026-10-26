@@ -47,6 +47,7 @@ import type {
   VolumeKpi,
   VolumeTrendPeriod,
   VolumeTrendPoint,
+  VolumeTrendRecord,
 } from '../../../features/dashboard/api/dashboard.api';
 import type { DashboardReport } from '../../../features/dashboard/types/dashboard-export.types';
 import {
@@ -634,8 +635,50 @@ function volumeTrend(facts: BookingFact[], now: Date, g: Granularity, points: nu
   const cur = periodStart(now, g);
   return Array.from({ length: points }, (_, i) => {
     const s = shiftPeriod(cur, g, i - (points - 1));
-    return { month: periodLabel(s, g), feus: sumTeus(facts, s, shiftPeriod(s, g, 1)) };
+    return {
+      month: periodLabel(s, g),
+      feus: sumTeus(facts, s, shiftPeriod(s, g, 1)),
+      periodKey: fmtIso(s),
+    };
   });
+}
+
+function parseIsoLocal(iso: string): Date | null {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso.trim());
+  if (!m) return null;
+  const d = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  return Number.isNaN(+d) ? null : d;
+}
+
+function volumeTrendRecords(
+  facts: BookingFact[],
+  portNames: Map<string, string>,
+  g: Granularity,
+  periodKey: string,
+): VolumeTrendRecord[] {
+  const from = parseIsoLocal(periodKey);
+  if (!from) return [];
+  const to = shiftPeriod(from, g, 1);
+  const port = (code: unknown) => {
+    const c = up(code);
+    if (!c) return '—';
+    const name = portNames.get(c);
+    return name ? `${c} – ${name}` : c;
+  };
+  return facts
+    .filter((f) => f.volumeDate >= from && f.volumeDate < to)
+    .sort((a, b) => +b.volumeDate - +a.volumeDate)
+    .map((f) => ({
+      id: f.ebookno || f.bookNo || `${f.volumeDate.toISOString()}-${f.teus}`,
+      bookingNo: f.bookNo || f.ebookno || '—',
+      blNo: f.blNo || '',
+      origin: port(f.row.originPortId),
+      destination: port(f.row.finalPortId),
+      teus: f.teus,
+      volumeDate: fmtDay(f.volumeDate),
+      status: label(BOOKING_LIST_STATUS, f.code) || f.code || '—',
+      consignee: f.consignee || '—',
+    }));
 }
 
 const TREND_SPEC: Record<VolumeTrendPeriod, { g: Granularity; points: number }> = {
@@ -678,6 +721,24 @@ export function fixtureVolumeAnalytics(
   return buildVolumeAnalytics(buildFacts(tables, now), stage, period, now);
 }
 
+/** Shipment TEU rows for one volume-trend point (periodKey = local YYYY-MM-DD start). */
+export function fixtureVolumeTrendRecords(
+  stage: VolumeAnalyticsStage = 'all',
+  period: VolumeTrendPeriod = 'Monthly',
+  periodKey: string,
+  options: DashboardOptions = {},
+): VolumeTrendRecord[] {
+  const tables = options.tables ?? dashboardTables();
+  const now = options.now ?? new Date();
+  const facts = stageFacts(buildFacts(tables, now), stage);
+  return volumeTrendRecords(
+    facts,
+    portNameIndex(tables),
+    TREND_SPEC[period].g,
+    periodKey,
+  );
+}
+
 // ─── Lanes ───────────────────────────────────────────────────────
 const laneKey = (pol: unknown, pod: unknown) => `${up(pol)}|${up(pod)}`;
 const splitLane = (k: string) => {
@@ -695,7 +756,8 @@ export function buildLanes(facts: BookingFact[], tables: DashboardTables): Dashb
     if (!lastByLane.has(k) || lastByLane.get(k)! < f.updated) lastByLane.set(k, f.updated);
   }
   const totalTeus = [...teusByLane.values()].reduce((s, v) => s + v, 0);
-  const top: TopLane[] = sortedEntries(teusByLane).filter(([, v]) => v > 0).slice(0, 5).map(([k, feus], i) => ({
+  // Full ranked list for View All; cards preview the first rows.
+  const top: TopLane[] = sortedEntries(teusByLane).filter(([, v]) => v > 0).map(([k, feus], i) => ({
     rank: i + 1,
     ...splitLane(k),
     feus,
@@ -703,7 +765,6 @@ export function buildLanes(facts: BookingFact[], tables: DashboardTables): Dashb
   }));
   const lastUsed: LastUsedLane[] = [...lastByLane.entries()]
     .sort((a, b) => +b[1] - +a[1])
-    .slice(0, 3)
     .map(([k, d]) => ({ ...splitLane(k), date: fmtLong(d) }));
 
   // Lanes the customer priced (route searches) but never booked = quiet lanes.
@@ -711,7 +772,6 @@ export function buildLanes(facts: BookingFact[], tables: DashboardTables): Dashb
   const searched = countBy(tables.routeSearchLog, r => laneKey(r.originport, r.destport));
   const contracted: ContractedLane[] = sortedEntries(searched)
     .filter(([k]) => !booked.has(k) && !k.startsWith('|') && !k.endsWith('|'))
-    .slice(0, 3)
     .map(([k]) => ({ ...splitLane(k), lastActivity: null }));
   const quiet = new Set(contracted.map(l => laneKey(l.pol, l.pod)));
 
@@ -719,14 +779,13 @@ export function buildLanes(facts: BookingFact[], tables: DashboardTables): Dashb
   const siLanes = countBy(tables.shippingInstructions, si => laneKey(si.pol, si.pod));
   const opportunities: OpportunityLane[] = sortedEntries(siLanes)
     .filter(([k]) => !booked.has(k) && !quiet.has(k) && !k.startsWith('|') && !k.endsWith('|'))
-    .slice(0, 3)
     .map(([k, n]) => ({ ...splitLane(k), suggestion: n >= 2 ? 'High Potential' : 'Medium Potential' }));
 
   return { top, lastUsed, contracted, opportunities };
 }
 
 // ─── Shipment intelligence ───────────────────────────────────────
-function breakdown(facts: BookingFact[], nameOf: (f: BookingFact) => string, top = 5): IntelligenceBreakdown[] {
+function breakdown(facts: BookingFact[], nameOf: (f: BookingFact) => string, top = 50): IntelligenceBreakdown[] {
   const teusBy = new Map<string, number>();
   for (const f of facts) {
     const name = nameOf(f);

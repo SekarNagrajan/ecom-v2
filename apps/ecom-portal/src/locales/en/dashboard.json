@@ -99,6 +99,23 @@
       "thisMonth": "This Month",
       "thisQuarter": "This Quarter",
       "thisYear": "This Year"
+    },
+    "drilldown": {
+      "clickHint": "Click a point with TEUs to view shipment records",
+      "title": "{{label}} — {{teus}} TEUs",
+      "loading": "Loading TEU records…",
+      "emptyTitle": "No TEU records",
+      "emptyMessage": "No shipments contributed TEUs in this period.",
+      "columns": {
+        "bookingNo": "Booking No",
+        "blNo": "B/L No",
+        "origin": "Origin",
+        "destination": "Destination",
+        "teus": "TEUs",
+        "volumeDate": "Volume Date",
+        "status": "Status",
+        "consignee": "Consignee"
+      }
     }
   },
   "planning": {
@@ -198,6 +215,23 @@
       "highPotential": "High Potential",
       "mediumPotential": "Medium Potential"
     }
+  },
+  "viewAllModal": {
+    "titles": {
+      "topLanes": "All Top Active Lanes",
+      "lastUsed": "All Recently Used Lanes",
+      "opportunities": "All Lane Opportunities",
+      "intelligence": "Shipment Intelligence Report",
+      "consignees": "All Top Consignees"
+    },
+    "columns": {
+      "rank": "#",
+      "lastUsedDate": "Last Used",
+      "category": "Category",
+      "status": "Status"
+    },
+    "emptyTitle": "No records",
+    "emptyMessage": "There is no data to show for this view."
   },
   "schedules": {
     "title": "Upcoming Vessel Schedules",

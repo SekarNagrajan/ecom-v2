@@ -99,6 +99,23 @@
       "thisMonth": "本月",
       "thisQuarter": "本季度",
       "thisYear": "本年"
+    },
+    "drilldown": {
+      "clickHint": "点击有 TEU 的数据点查看货运记录",
+      "title": "{{label}} — {{teus}} TEUs",
+      "loading": "正在加载 TEU 记录…",
+      "emptyTitle": "无 TEU 记录",
+      "emptyMessage": "该期间没有贡献 TEU 的货运。",
+      "columns": {
+        "bookingNo": "订舱号",
+        "blNo": "提单号",
+        "origin": "起运地",
+        "destination": "目的地",
+        "teus": "TEUs",
+        "volumeDate": "运量日期",
+        "status": "状态",
+        "consignee": "收货人"
+      }
     }
   },
   "planning": {
@@ -198,6 +215,23 @@
       "highPotential": "高潜力",
       "mediumPotential": "中等潜力"
     }
+  },
+  "viewAllModal": {
+    "titles": {
+      "topLanes": "全部热门活跃航线",
+      "lastUsed": "全部最近使用的航线",
+      "opportunities": "全部航线机会",
+      "intelligence": "货运情报报告",
+      "consignees": "全部主要收货人"
+    },
+    "columns": {
+      "rank": "#",
+      "lastUsedDate": "最近使用",
+      "category": "类别",
+      "status": "状态"
+    },
+    "emptyTitle": "无记录",
+    "emptyMessage": "此视图没有可显示的数据。"
   },
   "schedules": {
     "title": "即将到来的船舶船期",

@@ -264,7 +264,7 @@ describe('fixtureVolumeAnalytics', () => {
     expect(year).toMatchObject({ period: 'Year (2026)', value: 8 });
     expect(week.sparkline).toHaveLength(10);
     expect(all.trend).toHaveLength(12);
-    expect(all.trend.at(-1)).toEqual({ month: 'Oct 2026', feus: 8 });
+    expect(all.trend.at(-1)).toEqual({ month: 'Oct 2026', feus: 8, periodKey: '2026-10-01' });
   });
 
   it('narrows the slice per lifecycle stage and trend granularity', () => {
@@ -273,8 +273,13 @@ describe('fixtureVolumeAnalytics', () => {
     expect(fixtureVolumeAnalytics('booking', 'Quarterly', { tables, now: NOW }).kpis[1].value).toBe(7);
     const weekly = fixtureVolumeAnalytics('all', 'Weekly', { tables, now: NOW });
     expect(weekly.trend).toHaveLength(12);
-    expect(weekly.trend.at(-1)).toEqual({ month: 'W42', feus: 1 });
-    expect(fixtureVolumeAnalytics('all', 'Quarterly', { tables, now: NOW }).trend.at(-1)).toEqual({ month: 'Q4 2026', feus: 8 });
+    expect(weekly.trend.at(-1)).toMatchObject({ month: 'W42', feus: 1 });
+    expect(weekly.trend.at(-1)?.periodKey).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    expect(fixtureVolumeAnalytics('all', 'Quarterly', { tables, now: NOW }).trend.at(-1)).toEqual({
+      month: 'Q4 2026',
+      feus: 8,
+      periodKey: '2026-10-01',
+    });
   });
 });
 

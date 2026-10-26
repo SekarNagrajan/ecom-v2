@@ -4,7 +4,8 @@
  * KPI filter cards → Upcoming Shipment Planning → Ongoing Transactions, plus analytics sections.
  */
 import { AppButton } from "@solverminds/shared-ui";
-import { Col, Row, Space, Spin } from "antd";
+import { Space, Spin } from "antd";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
@@ -22,13 +23,20 @@ import type {
 } from "../api/dashboard.api";
 import { useDashboardController } from "../hooks/use-dashboard-controller";
 import { filterDashboardShipments } from "../utils/filter-dashboard-shipments";
+import {
+  DashboardAnalyticsViewAllModal,
+  type DashboardAnalyticsViewAllState,
+} from "./dashboard-analytics-view-all-modal";
 import { DashboardExportButton } from "./dashboard-export-button";
 import { DashboardModuleStyles } from "./dashboard-module-styles";
 import { DashboardKpiCards } from "./DashboardKpiCards";
 import { DashboardOngoingTable } from "./DashboardOngoingTable";
 import { LaneOpportunitySection, TopActiveLanesSection } from "./LanesSection";
 import { PlanningDayBookingsDrawer } from "./PlanningDayBookingsDrawer";
-import { ShipmentIntelligenceSection } from "./ShipmentIntelligenceSection";
+import {
+  InteractiveShipmentIntelligenceCard,
+  TopConsigneesCard,
+} from "./ShipmentIntelligenceSection";
 import { ShipmentPlanningSection } from "./ShipmentPlanningSection";
 import { VolumeAnalyticsSection } from "./VolumeAnalyticsSection";
 
@@ -51,6 +59,8 @@ const EMPTY_BREAKDOWNS: IntelligenceBreakdowns = {
 export function EnhancedDashboardView() {
   const { t } = useTranslation(["dashboard", "common", "modules"]);
   const controller = useDashboardController();
+  const [viewAllState, setViewAllState] =
+    useState<DashboardAnalyticsViewAllState | null>(null);
   const counts = controller.summary?.counts;
   const shipments = controller.summary?.shipments ?? [];
   const planning = controller.summary?.planning;
@@ -149,32 +159,49 @@ export function EnhancedDashboardView() {
           />
         </Spin>
 
-        <div className="dashboard-twin-sections">
-          <Spin spinning={controller.isLoading}>
-            <Row gutter={[16, 16]} className="dashboard-equal-row">
-              <Col xs={24} lg={12}>
-                <TopActiveLanesSection
-                  lanes={lanes?.top ?? []}
-                  lastUsed={lanes?.lastUsed ?? []}
-                />
-              </Col>
-              <Col xs={24} lg={12}>
-                <LaneOpportunitySection
-                  contracted={lanes?.contracted ?? []}
-                  opportunities={lanes?.opportunities ?? []}
-                />
-              </Col>
-            </Row>
-          </Spin>
-
-          <Spin spinning={controller.isLoading}>
-            <ShipmentIntelligenceSection
-              consignees={intelligence?.consignees ?? []}
-              breakdowns={intelligence?.breakdowns ?? EMPTY_BREAKDOWNS}
-            />
-          </Spin>
-        </div>
+        <Spin spinning={controller.isLoading}>
+          <div className="dashboard-analytics-grid">
+            <div className="dashboard-analytics-grid__cell dashboard-analytics-grid__cell--lanes">
+              <TopActiveLanesSection
+                lanes={lanes?.top ?? []}
+                lastUsed={lanes?.lastUsed ?? []}
+                onViewAllLanes={() => setViewAllState({ kind: "top-lanes" })}
+                onViewAllLastUsed={() => setViewAllState({ kind: "last-used" })}
+              />
+            </div>
+            <div className="dashboard-analytics-grid__cell dashboard-analytics-grid__cell--opportunities">
+              <LaneOpportunitySection
+                contracted={lanes?.contracted ?? []}
+                opportunities={lanes?.opportunities ?? []}
+                onViewAll={() => setViewAllState({ kind: "opportunities" })}
+              />
+            </div>
+            <div className="dashboard-analytics-grid__cell dashboard-analytics-grid__cell--intelligence">
+              <InteractiveShipmentIntelligenceCard
+                breakdowns={intelligence?.breakdowns ?? EMPTY_BREAKDOWNS}
+                onViewReport={() => setViewAllState({ kind: "intelligence" })}
+              />
+            </div>
+            <div className="dashboard-analytics-grid__cell dashboard-analytics-grid__cell--consignees">
+              <TopConsigneesCard
+                consignees={intelligence?.consignees ?? []}
+                onViewAll={() => setViewAllState({ kind: "consignees" })}
+              />
+            </div>
+          </div>
+        </Spin>
       </Space>
+
+      <DashboardAnalyticsViewAllModal
+        state={viewAllState}
+        onClose={() => setViewAllState(null)}
+        topLanes={lanes?.top ?? []}
+        lastUsed={lanes?.lastUsed ?? []}
+        contracted={lanes?.contracted ?? []}
+        opportunities={lanes?.opportunities ?? []}
+        consignees={intelligence?.consignees ?? []}
+        breakdowns={intelligence?.breakdowns ?? EMPTY_BREAKDOWNS}
+      />
 
       {controller.planningDay ? (
         <PlanningDayBookingsDrawer

@@ -588,9 +588,30 @@ function ScheduleCard({
               </Tag>
             )} */}
             {/* {item.isMultimodal ? <Tag color="cyan">Multimodal</Tag> : null} */}
-            <Tag color="orange" onClick={() => onViewVessel(item.vesselCode)}>
+            {/* <Tag color="orange" onClick={() => onViewVessel(item.vesselCode)}>
               {item.vesselName} ({item.voyage} - {item.bound})
-            </Tag>
+            </Tag> */}
+             <Tooltip title={t("actions.vesselDetails")}>
+              <Tag
+                className="schedule-card__vessel-tag"
+                color="orange"
+                role="button"
+                tabIndex={0}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onViewVessel(item.vesselCode);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    onViewVessel(item.vesselCode);
+                  }
+                }}
+              >
+                {item.vesselName} ({item.voyage} - {item.bound})
+              </Tag>
+            </Tooltip>
             {/* <Text type="secondary" className="schedule-card__distance">
               {item.distanceKm.toLocaleString()} km
             </Text> */}

@@ -54,11 +54,23 @@ function getLaneSuggestionLabel(
 interface TopLanesProps {
   lanes: TopLane[];
   lastUsed: LastUsedLane[];
+  onViewAllLanes?: () => void;
+  onViewAllLastUsed?: () => void;
 }
 
-export function TopActiveLanesSection({ lanes, lastUsed }: TopLanesProps) {
+const TOP_LANES_PREVIEW = 5;
+const LAST_USED_PREVIEW = 3;
+
+export function TopActiveLanesSection({
+  lanes,
+  lastUsed,
+  onViewAllLanes,
+  onViewAllLastUsed,
+}: TopLanesProps) {
   const { t } = useTranslation(["dashboard", "common", "modules"]);
-  const maxFeus = lanes[0]?.feus ?? 1;
+  const previewLanes = lanes.slice(0, TOP_LANES_PREVIEW);
+  const previewLastUsed = lastUsed.slice(0, LAST_USED_PREVIEW);
+  const maxFeus = previewLanes[0]?.feus ?? 1;
 
   return (
     <Card
@@ -70,7 +82,7 @@ export function TopActiveLanesSection({ lanes, lastUsed }: TopLanesProps) {
       }
       extra={
         <Tooltip title={t("lanes.viewAllByFeu")}>
-          <AppButton type="link" size="small">
+          <AppButton type="link" size="small" onClick={onViewAllLanes}>
             {t("actions.viewAll")}
           </AppButton>
         </Tooltip>
@@ -96,7 +108,7 @@ export function TopActiveLanesSection({ lanes, lastUsed }: TopLanesProps) {
               </tr>
             </thead>
             <tbody>
-              {lanes.map((lane) => (
+              {previewLanes.map((lane) => (
                 <tr
                   key={lane.rank}
                   className={lane.rank % 2 === 0 ? "is-alt" : undefined}
@@ -139,13 +151,13 @@ export function TopActiveLanesSection({ lanes, lastUsed }: TopLanesProps) {
               </Text>
             </div>
             <Tooltip title={t("lanes.viewAllRecentlyUsed")}>
-              <AppButton type="link" size="small">
+              <AppButton type="link" size="small" onClick={onViewAllLastUsed}>
                 {t("actions.viewAll")}
               </AppButton>
             </Tooltip>
           </div>
           <div className="dashboard-last-used__grid">
-            {lastUsed.map((lane) => (
+            {previewLastUsed.map((lane) => (
               <div
                 key={`${lane.pol}-${lane.pod}-${lane.date}`}
                 className="dashboard-last-used__card"
@@ -166,13 +178,19 @@ export function TopActiveLanesSection({ lanes, lastUsed }: TopLanesProps) {
 interface LaneOpportunityProps {
   contracted: ContractedLane[];
   opportunities: OpportunityLane[];
+  onViewAll?: () => void;
 }
+
+const OPPORTUNITY_PREVIEW = 3;
 
 export function LaneOpportunitySection({
   contracted,
   opportunities,
+  onViewAll,
 }: LaneOpportunityProps) {
   const { t } = useTranslation(["dashboard", "common", "modules"]);
+  const previewContracted = contracted.slice(0, OPPORTUNITY_PREVIEW);
+  const previewOpportunities = opportunities.slice(0, OPPORTUNITY_PREVIEW);
 
   return (
     <Card
@@ -184,7 +202,7 @@ export function LaneOpportunitySection({
       }
       extra={
         <Tooltip title={t("lanes.viewAllOpportunities")}>
-          <AppButton type="link" size="small">
+          <AppButton type="link" size="small" onClick={onViewAll}>
             {t("actions.viewAll")}
           </AppButton>
         </Tooltip>
@@ -201,7 +219,7 @@ export function LaneOpportunitySection({
             </Text>
           </div>
           <div className="dashboard-opportunity-list custom-scroll">
-            {contracted.map((lane) => (
+            {previewContracted.map((lane) => (
               <div
                 key={`${lane.pol}-${lane.pod}`}
                 className="dashboard-list-row"
@@ -225,7 +243,7 @@ export function LaneOpportunitySection({
             </Text>
           </div>
           <div className="dashboard-opportunity-list custom-scroll">
-            {opportunities.map((lane) => {
+            {previewOpportunities.map((lane) => {
               const isHigh = lane.suggestion === "High Potential";
               return (
                 <div

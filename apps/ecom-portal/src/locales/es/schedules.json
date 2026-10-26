@@ -148,6 +148,7 @@
     "daySailingsAria_one": "{{date}}, {{count}} salida",
     "daySailingsAria_other": "{{date}}, {{count}} salidas",
     "more": "+{{count}} más",
+    "selectedSailing": "Salida seleccionada",
     "legendAria": "Leyenda del calendario",
     "legendDirect": "Directo",
     "legendTransshipment": "Transbordo",
@@ -193,6 +194,8 @@
     "imoCallSign": "IMO: {{imo}} | Indicativo: {{callSign}}",
     "specifications": "Especificaciones del buque",
     "portCallSequence": "Secuencia de escalas del viaje",
+    "portCallCount_one": "{{count}} escala",
+    "portCallCount_other": "{{count}} escalas",
     "fields": {
       "vesselCode": "Código del buque",
       "flag": "Bandera",

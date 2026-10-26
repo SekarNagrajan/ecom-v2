@@ -11,6 +11,7 @@
 import {
   fixtureDashboardSummary,
   fixtureVolumeAnalytics,
+  fixtureVolumeTrendRecords,
 } from "../../../mocks/fixture-api/bridges/dashboard.bridge";
 import type { BookingListDTO } from "../../booking/types/booking-list.types";
 
@@ -26,8 +27,24 @@ export interface VolumeKpi {
 }
 
 export interface VolumeTrendPoint {
+  /** Display label (e.g. "Oct 2026", "W42", "Q4 2026"). */
   month: string;
   feus: number;
+  /** Period start as local ISO date (YYYY-MM-DD) — used for TEU drill-down. */
+  periodKey: string;
+}
+
+/** One shipment contributing TEUs to a volume-trend bucket. */
+export interface VolumeTrendRecord {
+  id: string;
+  bookingNo: string;
+  blNo: string;
+  origin: string;
+  destination: string;
+  teus: number;
+  volumeDate: string;
+  status: string;
+  consignee: string;
 }
 
 /** Shipment lifecycle stage for volume analytics. */
@@ -383,6 +400,13 @@ export interface VolumeAnalyticsQuery {
   period?: VolumeTrendPeriod;
 }
 
+export interface VolumeTrendRecordsQuery {
+  stage?: VolumeAnalyticsStage;
+  period: VolumeTrendPeriod;
+  /** Matches `VolumeTrendPoint.periodKey`. */
+  periodKey: string;
+}
+
 const simulateDelay = (ms = 400) =>
   new Promise<void>((resolve) => setTimeout(resolve, ms));
 
@@ -398,5 +422,17 @@ export const dashboardApi = {
   ): Promise<VolumeAnalyticsResponse> {
     await simulateDelay(220);
     return fixtureVolumeAnalytics(query.stage ?? "all", query.period ?? "Monthly");
+  },
+
+  /** Shipment rows that contribute TEUs to one volume-trend point. */
+  async getVolumeTrendRecords(
+    query: VolumeTrendRecordsQuery,
+  ): Promise<VolumeTrendRecord[]> {
+    await simulateDelay(180);
+    return fixtureVolumeTrendRecords(
+      query.stage ?? "all",
+      query.period,
+      query.periodKey,
+    );
   },
 };

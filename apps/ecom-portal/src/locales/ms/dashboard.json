@@ -99,6 +99,23 @@
       "thisMonth": "Bulan Ini",
       "thisQuarter": "Suku Ini",
       "thisYear": "Tahun Ini"
+    },
+    "drilldown": {
+      "clickHint": "Klik titik dengan TEU untuk melihat rekod penghantaran",
+      "title": "{{label}} — {{teus}} TEUs",
+      "loading": "Memuatkan rekod TEU…",
+      "emptyTitle": "Tiada rekod TEU",
+      "emptyMessage": "Tiada penghantaran menyumbang TEU dalam tempoh ini.",
+      "columns": {
+        "bookingNo": "No. Tempahan",
+        "blNo": "No. B/L",
+        "origin": "Asal",
+        "destination": "Destinasi",
+        "teus": "TEUs",
+        "volumeDate": "Tarikh Volum",
+        "status": "Status",
+        "consignee": "Konsaini"
+      }
     }
   },
   "planning": {
@@ -198,6 +215,23 @@
       "highPotential": "Potensi Tinggi",
       "mediumPotential": "Potensi Sederhana"
     }
+  },
+  "viewAllModal": {
+    "titles": {
+      "topLanes": "Semua Laluan Aktif Teratas",
+      "lastUsed": "Semua Laluan Digunakan Baru-baru Ini",
+      "opportunities": "Semua Peluang Laluan",
+      "intelligence": "Laporan Kecerdasan Penghantaran",
+      "consignees": "Semua Konsaini Teratas"
+    },
+    "columns": {
+      "rank": "#",
+      "lastUsedDate": "Terakhir Digunakan",
+      "category": "Kategori",
+      "status": "Status"
+    },
+    "emptyTitle": "Tiada rekod",
+    "emptyMessage": "Tiada data untuk ditunjukkan bagi paparan ini."
   },
   "schedules": {
     "title": "Jadual Kapal Akan Datang",

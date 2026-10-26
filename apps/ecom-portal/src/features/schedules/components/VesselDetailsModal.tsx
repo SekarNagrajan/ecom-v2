@@ -1,6 +1,6 @@
-// Modified by Sekar Nagarajan (2026-08-25 18:40)
+// Modified by Sekar Nagarajan (2026-10-26 16:05)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
-import { Card, Descriptions, Table, Tag, Typography } from "antd";
+import { Table, Tag, Typography } from "antd";
 import type { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
 
@@ -16,8 +16,10 @@ interface VesselDetailsModalProps {
   onClose: () => void;
 }
 
+type PortCall = NonNullable<VesselParticulars["portCalls"]>[number];
+
 function portCallStatusLabel(
-  status: NonNullable<VesselParticulars["portCalls"]>[number]["status"],
+  status: PortCall["status"],
   t: TFunction<"schedules">,
 ): string {
   switch (status) {
@@ -34,6 +36,19 @@ function portCallStatusLabel(
   }
 }
 
+function SpecRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="schedule-vessel-details__spec">
+      <Text type="secondary" className="schedule-vessel-details__spec-label">
+        {label}
+      </Text>
+      <Text strong className="schedule-vessel-details__spec-value">
+        {value || "—"}
+      </Text>
+    </div>
+  );
+}
+
 export function VesselDetailsModal({
   vessel,
   open,
@@ -48,9 +63,13 @@ export function VesselDetailsModal({
       title: t("vessel.columns.portCodeName"),
       dataIndex: "portCode",
       key: "portCode",
-      render: (code: string, record: { portName: string }) => (
-        <span>
-          <Tag color="blue">{code}</Tag> <b>{record.portName}</b>
+      width: 280,
+      render: (code: string, record: PortCall) => (
+        <span className="schedule-vessel-details__port-cell">
+          <Tag color="blue">{code}</Tag>
+          <Text strong ellipsis className="schedule-vessel-details__port-name">
+            {record.portName}
+          </Text>
         </span>
       ),
     },
@@ -58,16 +77,26 @@ export function VesselDetailsModal({
       title: t("vessel.columns.terminal"),
       dataIndex: "terminal",
       key: "terminal",
+      ellipsis: true,
     },
-    { title: t("calendar.eta"), dataIndex: "eta", key: "eta" },
-    { title: t("calendar.etd"), dataIndex: "etd", key: "etd" },
+    {
+      title: t("calendar.eta"),
+      dataIndex: "eta",
+      key: "eta",
+      width: 148,
+    },
+    {
+      title: t("calendar.etd"),
+      dataIndex: "etd",
+      key: "etd",
+      width: 148,
+    },
     {
       title: t("vessel.columns.status"),
       dataIndex: "status",
       key: "status",
-      render: (
-        status: NonNullable<VesselParticulars["portCalls"]>[number]["status"],
-      ) => (
+      width: 120,
+      render: (status: PortCall["status"]) => (
         <Tag
           color={
             status === "COMPLETED"
@@ -87,13 +116,19 @@ export function VesselDetailsModal({
     <AppDrawer
       open={open}
       onClose={onClose}
-      width="50%"
-      classNames={{ body: "schedule-drawer-body custom-scroll" }}
+      dialogSize="lg"
+      classNames={{
+        header: "schedule-vessel-drawer__header-wrap",
+        body: "schedule-drawer-body schedule-vessel-drawer__body custom-scroll",
+        footer: "schedule-vessel-drawer__footer-wrap",
+      }}
       title={
-        <div className="schedule-drawer-title">
-          <AppIcon icon={NavVesselIcon} size={20} />
-          <div>
-            <Title level={4} className="schedule-drawer-title__text">
+        <div className="schedule-drawer-title schedule-vessel-drawer__title">
+          <span className="schedule-vessel-drawer__icon app-icon-inherit">
+            <AppIcon icon={NavVesselIcon} size={22} />
+          </span>
+          <div className="schedule-vessel-drawer__title-copy">
+            <Title level={5} className="schedule-drawer-title__text">
               {vessel.vesselName}
             </Title>
             <Text type="secondary" className="schedule-drawer-title__meta">
@@ -119,62 +154,104 @@ export function VesselDetailsModal({
         </div>
       }
     >
-      <Card title={t("vessel.specifications")} className="schedule-panel">
-        <Descriptions column={2} size="small" bordered>
-          <Descriptions.Item label={t("vessel.fields.vesselCode")}>
-            {vessel.vesselCode}
-          </Descriptions.Item>
-          <Descriptions.Item label={t("vessel.fields.flag")}>
-            {vessel.flag}
-          </Descriptions.Item>
-          <Descriptions.Item label={t("vessel.fields.vesselType")}>
-            {vessel.vesselType}
-          </Descriptions.Item>
-          <Descriptions.Item label={t("vessel.fields.operator")}>
-            {vessel.vesselOperator}
-          </Descriptions.Item>
-          <Descriptions.Item label={t("vessel.fields.owner")}>
-            {vessel.vesselOwner}
-          </Descriptions.Item>
-          <Descriptions.Item label={t("vessel.fields.builtYear")}>
-            {vessel.builtYear}
-          </Descriptions.Item>
-          <Descriptions.Item label={t("vessel.fields.portOfRegistry")}>
-            {vessel.portOfRegistry}
-          </Descriptions.Item>
-          <Descriptions.Item label={t("vessel.fields.lengthOverall")}>
-            {vessel.lengthOverall}
-          </Descriptions.Item>
-          <Descriptions.Item label={t("vessel.fields.teuNominal")}>
-            {vessel.teuNominal}
-          </Descriptions.Item>
-          <Descriptions.Item label={t("vessel.fields.grossTonnage")}>
-            {vessel.grossTonnage}
-          </Descriptions.Item>
-          <Descriptions.Item label={t("vessel.fields.netTonnage")}>
-            {vessel.netTonnage}
-          </Descriptions.Item>
-          <Descriptions.Item label={t("vessel.fields.imoLloyds")}>
-            {vessel.imoNumber}
-          </Descriptions.Item>
-        </Descriptions>
-      </Card>
+      <div className="schedule-vessel-details">
+        <div className="schedule-vessel-details__chips" role="list">
+          <span className="schedule-vessel-details__chip" role="listitem">
+            <Text type="secondary">{t("vessel.fields.vesselCode")}</Text>
+            <Text strong>{vessel.vesselCode || "—"}</Text>
+          </span>
+          <span className="schedule-vessel-details__chip" role="listitem">
+            <Text type="secondary">{t("vessel.fields.flag")}</Text>
+            <Text strong>{vessel.flag || "—"}</Text>
+          </span>
+          <span className="schedule-vessel-details__chip" role="listitem">
+            <Text type="secondary">{t("vessel.fields.vesselType")}</Text>
+            <Text strong>{vessel.vesselType || "—"}</Text>
+          </span>
+          <span className="schedule-vessel-details__chip" role="listitem">
+            <Text type="secondary">{t("vessel.fields.teuNominal")}</Text>
+            <Text strong>{vessel.teuNominal || "—"}</Text>
+          </span>
+          <span className="schedule-vessel-details__chip" role="listitem">
+            <Text type="secondary">{t("vessel.fields.builtYear")}</Text>
+            <Text strong>{vessel.builtYear || "—"}</Text>
+          </span>
+        </div>
 
-      {vessel.portCalls && vessel.portCalls.length > 0 ? (
-        <Card title={t("vessel.portCallSequence")} className="schedule-panel">
-          <div className="responsive-table-wrap custom-scroll">
-            <Table
-              dataSource={vessel.portCalls.map((item, idx) => ({
-                ...item,
-                key: idx,
-              }))}
-              columns={portCallColumns}
-              pagination={false}
-              size="small"
+        <section className="schedule-vessel-details__section">
+          <Title level={5} className="schedule-vessel-details__section-title">
+            {t("vessel.specifications")}
+          </Title>
+          <div className="schedule-vessel-details__spec-grid">
+            <SpecRow
+              label={t("vessel.fields.operator")}
+              value={vessel.vesselOperator}
+            />
+            <SpecRow
+              label={t("vessel.fields.owner")}
+              value={vessel.vesselOwner}
+            />
+            <SpecRow
+              label={t("vessel.fields.portOfRegistry")}
+              value={vessel.portOfRegistry}
+            />
+            <SpecRow
+              label={t("vessel.fields.lengthOverall")}
+              value={vessel.lengthOverall}
+            />
+            <SpecRow
+              label={t("vessel.fields.grossTonnage")}
+              value={vessel.grossTonnage}
+            />
+            <SpecRow
+              label={t("vessel.fields.netTonnage")}
+              value={vessel.netTonnage}
+            />
+            <SpecRow
+              label={t("vessel.fields.imoLloyds")}
+              value={vessel.imoNumber}
+            />
+            <SpecRow
+              label={t("vessel.fields.vesselCode")}
+              value={vessel.vesselCode}
             />
           </div>
-        </Card>
-      ) : null}
+        </section>
+
+        {vessel.portCalls && vessel.portCalls.length > 0 ? (
+          <section className="schedule-vessel-details__section">
+            <div className="schedule-vessel-details__section-head">
+              <Title
+                level={5}
+                className="schedule-vessel-details__section-title"
+              >
+                {t("vessel.portCallSequence")}
+              </Title>
+              <Text type="secondary">
+                {t("vessel.portCallCount", {
+                  count: vessel.portCalls.length,
+                })}
+              </Text>
+            </div>
+            <div className="schedule-vessel-details__table-wrap custom-scroll">
+              <Table
+                className="schedule-vessel-details__table"
+                dataSource={vessel.portCalls.map((item, idx) => ({
+                  ...item,
+                  key: `${item.portCode}-${idx}`,
+                }))}
+                columns={portCallColumns}
+                pagination={{
+                  pageSize: 10,
+                }}
+                
+                size="small"
+                scroll={{ x: 720 }}
+              />
+            </div>
+          </section>
+        ) : null}
+      </div>
     </AppDrawer>
   );
 }

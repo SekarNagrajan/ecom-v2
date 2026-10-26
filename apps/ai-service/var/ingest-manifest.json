@@ -1,0 +1,8 @@
+{
+ "fingerprint": "260fd058a0276df0de6d3ea57d3226c3b16ecaacb5fc21dc5c943ccfff37bd5e",
+ "chunks": 239,
+ "upserted": 24,
+ "deleted": 0,
+ "embedding_model": "all-MiniLM-L6-v2",
+ "built_at": "2026-10-20T17:59:12.022540+00:00"
+}

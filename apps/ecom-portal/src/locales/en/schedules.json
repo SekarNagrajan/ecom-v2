@@ -151,6 +151,7 @@
     "daySailingsAria_one": "{{date}}, {{count}} sailing",
     "daySailingsAria_other": "{{date}}, {{count}} sailings",
     "more": "+{{count}} more",
+    "selectedSailing": "Selected sailing",
     "legendAria": "Calendar legend",
     "legendDirect": "Direct",
     "legendTransshipment": "Transshipment",
@@ -196,6 +197,8 @@
     "imoCallSign": "IMO: {{imo}} | Call Sign: {{callSign}}",
     "specifications": "Vessel Specifications",
     "portCallSequence": "Voyage Port Call Sequence",
+    "portCallCount_one": "{{count}} port call",
+    "portCallCount_other": "{{count}} port calls",
     "fields": {
       "vesselCode": "Vessel Code",
       "flag": "Flag",

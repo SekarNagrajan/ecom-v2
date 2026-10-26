@@ -12,7 +12,8 @@ export type CalendarDayCell = {
   isToday: boolean;
 };
 
-const MAX_VISIBLE_EVENTS = 3;
+/** Keep cells compact — overflow opens the day panel via "+N more". */
+const MAX_VISIBLE_EVENTS = 2;
 
 export function getScheduleAnchorDate(
   item: ScheduleItem,

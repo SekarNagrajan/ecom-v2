@@ -312,8 +312,44 @@ export function DashboardModuleStyles() {
         flex: 1;
         height: 100%;
       }
-      /* CSS twin row — equal columns to match Top Active Lanes / Lane Opportunities */
-      /* Modified by Sekar Nagarajan (2026-09-17 22:08) */
+      /*
+       * Analytics 2×2 — aligned columns, readable scan order:
+       * Top Active Lanes | Lane Opportunities
+       * Shipment Intelligence (wider) | Top Consignees
+       */
+      .dashboard-analytics-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+        grid-template-areas:
+          "lanes opportunities"
+          "intelligence consignees";
+        gap: ${token.marginMD}px;
+        align-items: stretch;
+      }
+      .dashboard-analytics-grid__cell {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        min-height: 0;
+      }
+      .dashboard-analytics-grid__cell--lanes {
+        grid-area: lanes;
+      }
+      .dashboard-analytics-grid__cell--opportunities {
+        grid-area: opportunities;
+      }
+      .dashboard-analytics-grid__cell--intelligence {
+        grid-area: intelligence;
+      }
+      .dashboard-analytics-grid__cell--consignees {
+        grid-area: consignees;
+      }
+      .dashboard-analytics-grid .dashboard-panel.ant-card {
+        flex: 1;
+        height: 100%;
+        min-height: ${token.controlHeightLG * 9}px;
+      }
+      /* Legacy twin row kept for any remaining callers */
       .dashboard-equal-row.dashboard-intelligence-row {
         display: grid;
         grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -405,6 +441,26 @@ export function DashboardModuleStyles() {
         grid-template-columns: minmax(140px, 0.42fr) minmax(0, 1fr);
         gap: ${token.marginMD}px;
         align-items: stretch;
+      }
+      /* Intelligence sits in the wider column — keep chart + table side by side */
+      .dashboard-analytics-grid .dashboard-intelligence-layout {
+        grid-template-columns: minmax(150px, 0.4fr) minmax(0, 1fr);
+        align-items: center;
+      }
+      .dashboard-analytics-grid .dashboard-intelligence-chart {
+        min-height: ${token.controlHeightLG * 4.5}px;
+      }
+      .dashboard-analytics-grid .dashboard-donut {
+        height: ${token.controlHeightLG * 4.5}px;
+      }
+      .dashboard-analytics-grid .dashboard-intelligence-table,
+      .dashboard-analytics-grid .dashboard-panel-stack__grow {
+        max-height: ${token.controlHeightLG * 7.5}px;
+        overflow-y: auto;
+      }
+      .dashboard-analytics-grid .dashboard-opportunity-list {
+        max-height: ${token.controlHeightLG * 4}px;
+        overflow-y: auto;
       }
       .dashboard-intelligence-chart {
         display: flex;
@@ -1495,6 +1551,49 @@ export function DashboardModuleStyles() {
         flex-direction: column;
         gap: ${token.marginLG}px;
       }
+
+      .dashboard-trend-click-hint {
+        display: block;
+        font-size: ${token.fontSizeSM}px;
+        margin-bottom: ${token.marginXXS}px;
+      }
+      .dashboard-volume-trend-records-modal .ant-modal-body {
+        padding-block-start: ${token.paddingSM}px;
+        max-height: min(75vh, 720px);
+        overflow-y: auto;
+      }
+      .dashboard-volume-trend-records-modal__loading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: ${token.marginSM}px;
+        min-height: 220px;
+      }
+
+      /* View All analytics popup grid — autoHeight AG Grid (modal has no height chain) */
+      .dashboard-analytics-view-all-modal .ant-modal-body {
+        padding-block-start: ${token.paddingSM}px;
+        max-height: min(75vh, 720px);
+        overflow-y: auto;
+      }
+      .dashboard-analytics-view-all {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginSM}px;
+      }
+      .dashboard-analytics-view-all__toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: ${token.marginSM}px;
+        flex-shrink: 0;
+      }
+      .dashboard-analytics-view-all__grid {
+        width: 100%;
+        min-height: 280px;
+      }
       @media (max-width: 1399px) {
         .dashboard-kpi-overview {
           grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1523,6 +1622,17 @@ export function DashboardModuleStyles() {
         .dashboard-planning-stat:nth-child(-n + 2) {
           padding-bottom: ${token.paddingSM}px;
           border-bottom: 1px solid ${token.colorBorderSecondary};
+        }
+        .dashboard-analytics-grid {
+          grid-template-columns: minmax(0, 1fr);
+          grid-template-areas:
+            "lanes"
+            "opportunities"
+            "intelligence"
+            "consignees";
+        }
+        .dashboard-analytics-grid .dashboard-panel.ant-card {
+          min-height: 0;
         }
         .dashboard-equal-row.dashboard-intelligence-row {
           grid-template-columns: minmax(0, 1fr);

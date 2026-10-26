@@ -181,12 +181,17 @@ function BreakdownTable({ data, dimensionLabel }: BreakdownTableProps) {
   );
 }
 
+const INTELLIGENCE_PREVIEW = 5;
+const CONSIGNEES_PREVIEW = 5;
+
 interface InteractiveShipmentIntelligenceCardProps {
   breakdowns: IntelligenceBreakdowns;
+  onViewReport?: () => void;
 }
 
 export function InteractiveShipmentIntelligenceCard({
   breakdowns,
+  onViewReport,
 }: InteractiveShipmentIntelligenceCardProps) {
   const { t } = useTranslation(["dashboard", "common", "modules"]);
   const [activeKey, setActiveKey] = useState<string>("origin");
@@ -236,7 +241,9 @@ export function InteractiveShipmentIntelligenceCard({
 
   const current =
     dimensions.find((d) => d.key === activeKey) ?? dimensions[0];
+  const previewData = current.data.slice(0, INTELLIGENCE_PREVIEW);
   const totalFeus = current.data.reduce((sum, row) => sum + row.feus, 0);
+  const previewTotalFeus = previewData.reduce((sum, row) => sum + row.feus, 0);
 
   return (
     <Card
@@ -248,7 +255,7 @@ export function InteractiveShipmentIntelligenceCard({
       }
       extra={
         <Tooltip title={t("intelligence.viewReportTooltip")}>
-          <AppButton type="link" size="small">
+          <AppButton type="link" size="small" onClick={onViewReport}>
             {t("actions.viewReport")}
           </AppButton>
         </Tooltip>
@@ -274,17 +281,20 @@ export function InteractiveShipmentIntelligenceCard({
               })}
             </Text>
             <Text type="secondary">·</Text>
-            <Text type="secondary">
+            {/* <Text type="secondary">
               {t("intelligence.segments", { count: current.data.length })}
-            </Text>
+            </Text> */}
           </div>
         </div>
 
         <div className="dashboard-intelligence-layout">
           <div className="dashboard-intelligence-chart">
-            <DonutChart data={current.data} totalFeus={totalFeus} />
+            <DonutChart data={previewData} totalFeus={previewTotalFeus} />
           </div>
-          <BreakdownTable data={current.data} dimensionLabel={current.column} />
+          <BreakdownTable
+            data={previewData}
+            dimensionLabel={current.column}
+          />
         </div>
       </div>
     </Card>
@@ -293,12 +303,17 @@ export function InteractiveShipmentIntelligenceCard({
 
 interface TopConsigneesProps {
   consignees: TopConsignee[];
+  onViewAll?: () => void;
 }
 
-export function TopConsigneesCard({ consignees }: TopConsigneesProps) {
+export function TopConsigneesCard({
+  consignees,
+  onViewAll,
+}: TopConsigneesProps) {
   const { t } = useTranslation(["dashboard", "common", "modules"]);
   const { token } = theme.useToken();
-  const max = consignees[0]?.feus ?? 1;
+  const previewConsignees = consignees.slice(0, CONSIGNEES_PREVIEW);
+  const max = previewConsignees[0]?.feus ?? 1;
 
   return (
     <Card
@@ -310,7 +325,7 @@ export function TopConsigneesCard({ consignees }: TopConsigneesProps) {
       }
       extra={
         <Tooltip title={t("intelligence.viewAllConsigneesTooltip")}>
-          <AppButton type="link" size="small">
+          <AppButton type="link" size="small" onClick={onViewAll}>
             {t("actions.viewAll")}
           </AppButton>
         </Tooltip>
@@ -335,7 +350,7 @@ export function TopConsigneesCard({ consignees }: TopConsigneesProps) {
             </tr>
           </thead>
           <tbody>
-            {consignees.map((c, idx) => {
+            {previewConsignees.map((c, idx) => {
               const stroke = resolveDashboardTone(
                 token,
                 c.tone as DashboardTone,
@@ -384,19 +399,30 @@ export function TopConsigneesCard({ consignees }: TopConsigneesProps) {
 interface ShipmentIntelligenceProps {
   consignees: TopConsignee[];
   breakdowns: IntelligenceBreakdowns;
+  onViewReport?: () => void;
+  onViewAllConsignees?: () => void;
 }
 
+/** Prefer placing these cards as siblings in `dashboard-analytics-grid`. */
 export function ShipmentIntelligenceSection({
   consignees,
   breakdowns,
+  onViewReport,
+  onViewAllConsignees,
 }: ShipmentIntelligenceProps) {
   return (
     <div className="dashboard-equal-row dashboard-intelligence-row">
       <div className="dashboard-intelligence-row__primary">
-        <InteractiveShipmentIntelligenceCard breakdowns={breakdowns} />
+        <InteractiveShipmentIntelligenceCard
+          breakdowns={breakdowns}
+          onViewReport={onViewReport}
+        />
       </div>
       <div className="dashboard-intelligence-row__secondary">
-        <TopConsigneesCard consignees={consignees} />
+        <TopConsigneesCard
+          consignees={consignees}
+          onViewAll={onViewAllConsignees}
+        />
       </div>
     </div>
   );

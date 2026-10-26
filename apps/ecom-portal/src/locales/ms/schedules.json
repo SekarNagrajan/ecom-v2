@@ -148,6 +148,7 @@
     "daySailingsAria_one": "{{date}}, {{count}} pelayaran",
     "daySailingsAria_other": "{{date}}, {{count}} pelayaran",
     "more": "+{{count}} lagi",
+    "selectedSailing": "Pelayaran dipilih",
     "legendAria": "Legenda kalendar",
     "legendDirect": "Terus",
     "legendTransshipment": "Transshipment",
@@ -193,6 +194,8 @@
     "imoCallSign": "IMO: {{imo}} | Tanda Panggilan: {{callSign}}",
     "specifications": "Spesifikasi Kapal",
     "portCallSequence": "Urutan Singgah Pelabuhan Pelayaran",
+    "portCallCount_one": "{{count}} singgah pelabuhan",
+    "portCallCount_other": "{{count}} singgah pelabuhan",
     "fields": {
       "vesselCode": "Kod Kapal",
       "flag": "Bendera",

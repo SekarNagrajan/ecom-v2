@@ -148,6 +148,7 @@
     "daySailingsAria_one": "{{date}}，{{count}} 个航班",
     "daySailingsAria_other": "{{date}}，{{count}} 个航班",
     "more": "+{{count}} 更多",
+    "selectedSailing": "已选航次",
     "legendAria": "日历图例",
     "legendDirect": "直达",
     "legendTransshipment": "中转",
@@ -193,6 +194,8 @@
     "imoCallSign": "IMO：{{imo}} | 呼号：{{callSign}}",
     "specifications": "船舶规格",
     "portCallSequence": "航次挂靠港顺序",
+    "portCallCount_one": "{{count}} 个挂靠港",
+    "portCallCount_other": "{{count}} 个挂靠港",
     "fields": {
       "vesselCode": "船舶代码",
       "flag": "船旗",

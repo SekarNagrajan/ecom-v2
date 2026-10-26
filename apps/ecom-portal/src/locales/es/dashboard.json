@@ -99,6 +99,23 @@
       "thisMonth": "Este mes",
       "thisQuarter": "Este trimestre",
       "thisYear": "Este año"
+    },
+    "drilldown": {
+      "clickHint": "Haga clic en un punto con TEUs para ver los envíos",
+      "title": "{{label}} — {{teus}} TEUs",
+      "loading": "Cargando registros de TEU…",
+      "emptyTitle": "Sin registros de TEU",
+      "emptyMessage": "Ningún envío aportó TEUs en este período.",
+      "columns": {
+        "bookingNo": "N.º de reserva",
+        "blNo": "N.º B/L",
+        "origin": "Origen",
+        "destination": "Destino",
+        "teus": "TEUs",
+        "volumeDate": "Fecha de volumen",
+        "status": "Estado",
+        "consignee": "Consignatario"
+      }
     }
   },
   "planning": {
@@ -198,6 +215,23 @@
       "highPotential": "Alto potencial",
       "mediumPotential": "Potencial medio"
     }
+  },
+  "viewAllModal": {
+    "titles": {
+      "topLanes": "Todas las rutas activas principales",
+      "lastUsed": "Todas las rutas usadas recientemente",
+      "opportunities": "Todas las oportunidades de rutas",
+      "intelligence": "Informe de inteligencia de envíos",
+      "consignees": "Todos los consignatarios principales"
+    },
+    "columns": {
+      "rank": "#",
+      "lastUsedDate": "Último uso",
+      "category": "Categoría",
+      "status": "Estado"
+    },
+    "emptyTitle": "Sin registros",
+    "emptyMessage": "No hay datos para mostrar en esta vista."
   },
   "schedules": {
     "title": "Horarios de buques próximos",

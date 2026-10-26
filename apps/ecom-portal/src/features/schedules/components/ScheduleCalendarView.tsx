@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-15 14:45)
+// Modified by Sekar Nagarajan (2026-10-26 15:45)
 import { AppButton } from "@solverminds/shared-ui";
 import { Segmented, Space, Tag, Tooltip, Typography } from "antd";
 import dayjs, { type Dayjs } from "dayjs";
@@ -123,49 +123,84 @@ function ScheduleCalendarActions({
   );
 }
 
-function ScheduleDaySailingCard({
+function ScheduleDaySailingRow({
   schedule,
   dateAnchor,
   isSelected,
   onSelect,
+}: {
+  schedule: ScheduleItem;
+  dateAnchor: ScheduleDateAnchor;
+  isSelected: boolean;
+  onSelect: () => void;
+}) {
+  const { t } = useTranslation(["schedules", "common", "modules"]);
+  const anchorTime = getScheduleAnchorTime(schedule, dateAnchor);
+
+  return (
+    <button
+      type="button"
+      className={[
+        "schedule-calendar-day-row",
+        isSelected ? "schedule-calendar-day-row--selected" : undefined,
+        schedule.isDefaultRoute
+          ? "schedule-calendar-day-row--recommended"
+          : undefined,
+      ]
+        .filter(Boolean)
+        .join(" ")}
+      onClick={onSelect}
+      aria-pressed={isSelected}
+    >
+      <span className="schedule-calendar-day-row__time">
+        {anchorTime || "—"}
+      </span>
+      <span className="schedule-calendar-day-row__main">
+        <Text strong className="schedule-calendar-day-row__route">
+          {schedule.polPortId} → {schedule.podPortId}
+        </Text>
+        <Text type="secondary" className="schedule-calendar-day-row__meta">
+          {schedule.vesselName} · {schedule.voyage}
+          {schedule.bound}
+        </Text>
+      </span>
+      <Tag className="module-status-tag schedule-calendar-day-row__tag" color="blue">
+        {schedule.serviceCode}
+      </Tag>
+      {schedule.isDefaultRoute ? (
+        <span className="schedule-calendar-day-row__badge" title={t("calendar.legendRecommended")}>
+          ★
+        </span>
+      ) : null}
+    </button>
+  );
+}
+
+function ScheduleDayDetailCard({
+  schedule,
   onBookNow,
   onViewVessel,
   onViewRates,
   onOpenCarbonModal,
 }: {
   schedule: ScheduleItem;
-  dateAnchor: ScheduleDateAnchor;
-  isSelected: boolean;
-  onSelect: () => void;
   onBookNow: (schedule: ScheduleItem) => void;
   onViewVessel: (vesselCode: string) => void;
   onViewRates: (schedule: ScheduleItem) => void;
   onOpenCarbonModal: (schedule: ScheduleItem) => void;
 }) {
   const { t } = useTranslation(["schedules", "common", "modules"]);
-  const anchorTime = getScheduleAnchorTime(schedule, dateAnchor);
 
   return (
     <article
       className={[
         "schedule-calendar-day-card",
-        isSelected ? "schedule-calendar-day-card--selected" : undefined,
         schedule.isDefaultRoute
           ? "schedule-calendar-day-card--recommended"
           : undefined,
       ]
         .filter(Boolean)
         .join(" ")}
-      onClick={onSelect}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          onSelect();
-        }
-      }}
-      role="button"
-      tabIndex={0}
-      aria-pressed={isSelected}
     >
       <div className="schedule-calendar-day-card__top">
         <div className="schedule-calendar-day-card__meta">
@@ -174,7 +209,7 @@ function ScheduleDaySailingCard({
           </Text>
           <Text type="secondary" className="schedule-calendar-day-card__voyage">
             {schedule.voyage}
-            {schedule.bound} · {anchorTime || "—"}
+            {schedule.bound} · {schedule.serviceCode}
           </Text>
         </div>
         <Tag className="module-status-tag" color="blue">
@@ -253,6 +288,10 @@ function ScheduleDayPanel({
   onOpenCarbonModal: (schedule: ScheduleItem) => void;
 }) {
   const { t } = useTranslation(["schedules", "common", "modules"]);
+  const selected =
+    sailings.find((item) => item.id === selectedScheduleId) ??
+    sailings[0] ??
+    null;
 
   if (!selectedDate) {
     return (
@@ -280,30 +319,45 @@ function ScheduleDayPanel({
           {dateAnchor.toUpperCase()}
         </Text>
       </div>
-      <div className="schedule-calendar-day-panel__body custom-scroll">
-        {sailings.length === 0 ? (
+
+      {sailings.length === 0 ? (
+        <div className="schedule-calendar-day-panel__empty">
           <ModuleEmptyState
             variant="filtered"
             title={t("calendar.noSailingsDayTitle")}
             message={t("calendar.noSailingsDayMessage")}
             artSize="sm"
           />
-        ) : (
-          sailings.map((item) => (
-            <ScheduleDaySailingCard
-              key={item.id}
-              schedule={item}
-              dateAnchor={dateAnchor}
-              isSelected={selectedScheduleId === item.id}
-              onSelect={() => onSelectSchedule(item.id)}
-              onBookNow={onBookNow}
-              onViewVessel={onViewVessel}
-              onViewRates={onViewRates}
-              onOpenCarbonModal={onOpenCarbonModal}
-            />
-          ))
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className="schedule-calendar-day-panel__content">
+          <div className="schedule-calendar-day-panel__list custom-scroll">
+            {sailings.map((item) => (
+              <ScheduleDaySailingRow
+                key={item.id}
+                schedule={item}
+                dateAnchor={dateAnchor}
+                isSelected={selected?.id === item.id}
+                onSelect={() => onSelectSchedule(item.id)}
+              />
+            ))}
+          </div>
+          {selected ? (
+            <div className="schedule-calendar-day-panel__detail custom-scroll">
+              <Text className="schedule-calendar-day-panel__detail-label">
+                {t("calendar.selectedSailing")}
+              </Text>
+              <ScheduleDayDetailCard
+                schedule={selected}
+                onBookNow={onBookNow}
+                onViewVessel={onViewVessel}
+                onViewRates={onViewRates}
+                onOpenCarbonModal={onOpenCarbonModal}
+              />
+            </div>
+          ) : null}
+        </div>
+      )}
     </aside>
   );
 }
@@ -621,7 +675,7 @@ export function ScheduleCalendarView({
                         </span>
                       ) : null}
                     </div>
-                    <div className="schedule-calendar__cell-events custom-scroll">
+                    <div className="schedule-calendar__cell-events">
                       {visible.map((sch) => {
                         const time = getScheduleAnchorTime(sch, dateAnchor);
                         return (

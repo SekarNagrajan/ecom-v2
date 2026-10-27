@@ -1794,33 +1794,43 @@ export function ScheduleModuleStyles() {
       }
 
       .schedule-rates-stepper {
-        display: inline-flex;
-        align-items: center;
-        gap: ${token.marginXXS}px;
         justify-self: start;
         grid-column: 1 / -1;
+        width: 148px;
+        max-width: 100%;
       }
-      .schedule-rates-stepper__btn.sm-app-button,
-      .schedule-rates-stepper__btn.ant-btn {
-        width: 28px;
-        min-width: 28px;
-        height: 28px;
-        padding: 0;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
+      /* Same control pattern as booking cargo QuantityStepper */
+      .schedule-rates-stepper .booking-qty-stepper {
+        width: 100%;
       }
-      .schedule-rates-stepper__input.ant-input-number {
-        width: 52px;
-        min-width: 52px;
-        height: 28px;
+      .schedule-rates-stepper .booking-qty-stepper .booking-qty-stepper__input {
+        flex: 1 1 auto;
+        min-width: 0;
+        width: 100%;
       }
-      .schedule-rates-stepper__input.ant-input-number .ant-input-number-input {
-        height: 26px;
-        padding: 0 ${token.paddingXXS}px;
+      .schedule-rates-stepper .booking-qty-stepper .booking-qty-stepper__input.ant-input-number {
+        width: 100%;
+        border-radius: 0;
+        border-left-width: 0;
+        border-right-width: 0;
+      }
+      .schedule-rates-stepper .booking-qty-stepper .ant-input-number-input {
         text-align: center;
-        font-weight: ${token.fontWeightStrong};
-        font-variant-numeric: tabular-nums;
+      }
+      .schedule-rates-stepper .booking-qty-stepper .booking-qty-stepper__btn-wrap {
+        display: inline-flex;
+        flex: 0 0 auto;
+      }
+      .schedule-rates-stepper .booking-qty-stepper .booking-qty-stepper__btn-wrap .ant-btn {
+        height: 100%;
+      }
+      .schedule-rates-stepper .booking-qty-stepper .booking-qty-stepper__btn--minus {
+        border-top-right-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+      }
+      .schedule-rates-stepper .booking-qty-stepper .booking-qty-stepper__btn--plus {
+        border-top-left-radius: 0 !important;
+        border-bottom-left-radius: 0 !important;
       }
 
       .schedule-rates-commodity {

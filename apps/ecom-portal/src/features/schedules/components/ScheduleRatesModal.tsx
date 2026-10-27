@@ -1,10 +1,11 @@
-// Modified by Sekar Nagarajan (2026-10-27 12:35)
+// Modified by Sekar Nagarajan (2026-10-27 12:45)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
-import { InputNumber, Select, Switch, Table, Typography } from "antd";
+import { Select, Switch, Table, Typography } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons, NavRatesIcon } from "../../../components/icons";
+import { QuantityStepper } from "../../booking/components/quantity-stepper";
 import type { ScheduleItem } from "../types/schedules.types";
 
 const { Text, Title } = Typography;
@@ -82,65 +83,6 @@ const COMMODITY_OPTIONS = [
   "Automotive Parts",
   "Textiles",
 ] as const;
-
-function clampQty(value: number | null | undefined): number {
-  if (value == null || Number.isNaN(value)) return QTY_MIN;
-  return Math.min(QTY_MAX, Math.max(QTY_MIN, Math.trunc(value)));
-}
-
-function QtyStepper({
-  value,
-  onChange,
-  ariaLabel,
-}: {
-  value: number;
-  onChange: (next: number) => void;
-  ariaLabel: string;
-}) {
-  return (
-    <div className="schedule-rates-stepper" aria-label={ariaLabel}>
-      <AppButton
-        type="default"
-        size="small"
-        className="schedule-rates-stepper__btn"
-        aria-label="Decrease quantity"
-        disabled={value <= QTY_MIN}
-        onClick={() => onChange(clampQty(value - 1))}
-        icon={
-          <span className="app-icon-inherit">
-            <AppIcon icon={Icons.minus} size={14} />
-          </span>
-        }
-      />
-      <InputNumber
-        className="schedule-rates-stepper__input"
-        size="small"
-        min={QTY_MIN}
-        max={QTY_MAX}
-        step={1}
-        precision={0}
-        controls={false}
-        value={value}
-        aria-label={ariaLabel}
-        onChange={(next) => onChange(clampQty(next))}
-        onBlur={() => onChange(clampQty(value))}
-      />
-      <AppButton
-        type="default"
-        size="small"
-        className="schedule-rates-stepper__btn"
-        aria-label="Increase quantity"
-        disabled={value >= QTY_MAX}
-        onClick={() => onChange(clampQty(value + 1))}
-        icon={
-          <span className="app-icon-inherit">
-            <AppIcon icon={Icons.plus} size={14} />
-          </span>
-        }
-      />
-    </div>
-  );
-}
 
 export function ScheduleRatesModal({
   schedule,
@@ -387,17 +329,27 @@ export function ScheduleRatesModal({
                       {t(row.reefer ? meta.reeferSubKey : meta.drySubKey)}
                     </Text>
                   </div>
-                  <QtyStepper
-                    value={row.qty}
-                    onChange={(qty) => updateQty(key, qty)}
-                    ariaLabel={t(meta.titleKey)}
-                  />
+                  <div className="schedule-rates-stepper">
+                    <QuantityStepper
+                      value={row.qty}
+                      min={QTY_MIN}
+                      max={QTY_MAX}
+                      onChange={(qty) =>
+                        updateQty(
+                          key,
+                          typeof qty === "number" && !Number.isNaN(qty)
+                            ? Math.min(QTY_MAX, Math.max(QTY_MIN, Math.trunc(qty)))
+                            : QTY_MIN,
+                        )
+                      }
+                    />
+                  </div>
                   <div className="schedule-rates-eq-row__reefer">
                     <Text type="secondary" className="schedule-rates-eq-row__reefer-label">
                       {t("ratesModal.reeferHint")}
                     </Text>
                     <Switch
-                      size="small"
+                      size="medium"
                       checked={row.reefer}
                       onChange={(checked) => updateReefer(key, checked)}
                     />

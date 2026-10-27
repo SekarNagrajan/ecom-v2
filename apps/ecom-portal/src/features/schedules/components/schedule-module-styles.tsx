@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-17 10:58)
+// Modified by Sekar Nagarajan (2026-10-27 12:30) — rates estimator drawer redesign
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -1623,23 +1623,268 @@ export function ScheduleModuleStyles() {
       .schedule-eq-hint {
         font-size: ${token.fontSizeSM}px;
       }
+
+      /* Freight Rates & Surcharge Estimator drawer */
+      .schedule-rates-drawer {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginMD}px;
+      }
+      .schedule-rates-drawer__title {
+        align-items: center;
+      }
+      .schedule-rates-drawer__title-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: ${token.borderRadiusSM}px;
+        background: ${token.colorPrimaryBg};
+        color: ${token.colorPrimary};
+        flex-shrink: 0;
+      }
+      .schedule-rates-drawer__body.custom-scroll {
+        padding: ${token.paddingMD}px ${token.paddingLG}px;
+      }
+      .schedule-rates-drawer__footer-wrap {
+        padding: ${token.paddingMD}px ${token.paddingLG}px !important;
+        border-top: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorBgContainer};
+      }
+
+      .schedule-rates-route {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        align-items: center;
+        gap: ${token.marginSM}px;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px solid ${token.colorPrimaryBorder};
+       
+      }
+      .schedule-rates-route__endpoint,
+      .schedule-rates-route__service {
+        display: flex;
+        align-items: flex-start;
+        gap: ${token.marginSM}px;
+        min-width: 0;
+      }
+      .schedule-rates-route__service {
+        grid-column: 1 / -1;
+        padding-top: ${token.paddingXS}px;
+        border-top: 1px solid ${tokenMix(token.colorPrimary, 18)};
+      }
+      .schedule-rates-route__icon {
+        width: 28px;
+        height: 28px;
+        border-radius: ${token.borderRadiusSM}px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        background: ${token.colorBgContainer};
+        color: ${token.colorPrimary};
+      }
+      .schedule-rates-route__icon--pod {
+        color: ${token.colorInfo};
+      }
+      .schedule-rates-route__icon--svc {
+        color: ${token.colorPrimary};
+      }
+      .schedule-rates-route__copy {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+      }
+      .schedule-rates-route__label {
+        font-size: ${token.fontSizeSM}px;
+        line-height: 1.2;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+      .schedule-rates-route__value {
+        display: block;
+        line-height: 1.3;
+        max-width: 100%;
+      }
+      .schedule-rates-route__arrow {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: ${token.colorTextSecondary};
+        line-height: 1;
+      }
+
+      .schedule-rates-panel {
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorBgContainer};
+        padding: ${token.paddingMD}px;
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginSM}px;
+      }
+      .schedule-rates-panel__title {
+        display: block;
+        font-size: ${token.fontSize}px;
+        line-height: 1.3;
+      }
+
+      .schedule-rates-eq-list {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXS}px;
+      }
+      .schedule-rates-eq-row {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: ${token.marginSM}px ${token.marginMD}px;
+        align-items: center;
+        padding: ${token.paddingSM}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadius}px;
+        background: ${token.colorFillAlter};
+      }
+      .schedule-rates-eq-row__icon {
+        width: 36px;
+        height: 36px;
+        border-radius: ${token.borderRadiusSM}px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .schedule-rates-eq-row__icon--pol {
+        background: ${token.colorPrimaryBg};
+        color: ${token.colorPrimary};
+      }
+      .schedule-rates-eq-row__icon--success {
+        background: ${tokenMix(token.colorSuccess, 12)};
+        color: ${token.colorSuccess};
+      }
+      .schedule-rates-eq-row__icon--purple {
+        background: ${tokenMix(token.colorInfo, 12)};
+        color: ${token.colorInfo};
+      }
+      .schedule-rates-eq-row__copy {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+      }
+      .schedule-rates-eq-row__title {
+        line-height: 1.25;
+      }
+      .schedule-rates-eq-row__sub {
+        font-size: ${token.fontSizeSM}px;
+        line-height: 1.2;
+      }
+      .schedule-rates-eq-row__reefer {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: ${token.marginSM}px;
+        grid-column: 1 / -1;
+      }
+      .schedule-rates-eq-row__reefer-label {
+        font-size: ${token.fontSizeSM}px;
+        line-height: 1.2;
+      }
+
+      .schedule-rates-stepper {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        justify-self: start;
+        grid-column: 1 / -1;
+      }
+      .schedule-rates-stepper__btn.sm-app-button,
+      .schedule-rates-stepper__btn.ant-btn {
+        width: 28px;
+        min-width: 28px;
+        height: 28px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .schedule-rates-stepper__input.ant-input-number {
+        width: 52px;
+        min-width: 52px;
+        height: 28px;
+      }
+      .schedule-rates-stepper__input.ant-input-number .ant-input-number-input {
+        height: 26px;
+        padding: 0 ${token.paddingXXS}px;
+        text-align: center;
+        font-weight: ${token.fontWeightStrong};
+        font-variant-numeric: tabular-nums;
+      }
+
+      .schedule-rates-commodity {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXS}px;
+        padding-top: ${token.paddingXS}px;
+      }
+      .schedule-rates-commodity__label {
+        font-size: ${token.fontSizeSM}px;
+      }
+      .schedule-rates-commodity__select {
+        width: 100%;
+      }
+
+      .schedule-rates-breakdown__table .ant-table-thead > tr > th {
+        background: ${token.colorFillAlter} !important;
+        white-space: nowrap;
+      }
+      .schedule-rates-breakdown__subtotal {
+        color: ${token.colorText};
+        white-space: nowrap;
+      }
       .schedule-rates-total {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-top: ${token.marginMD}px;
-        padding-top: ${token.paddingSM}px;
-        border-top: 2px solid ${token.colorBorderSecondary};
         gap: ${token.marginSM}px;
         flex-wrap: wrap;
+        margin-top: 0;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        border-radius: ${token.borderRadius}px;
+        border: 1px solid ${token.colorPrimaryBorder};
+        background: ${token.colorPrimaryBg};
       }
       .schedule-rates-total__label {
-        font-size: ${token.fontSizeLG}px;
+        font-size: ${token.fontSize}px;
         font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
       }
       .schedule-rates-total__value {
         margin: 0 !important;
         color: ${token.colorPrimary} !important;
+        line-height: 1.2 !important;
+      }
+
+      @media (min-width: 640px) {
+        .schedule-rates-route {
+          grid-template-columns: minmax(0, 1.2fr) auto minmax(0, 1.2fr) auto minmax(100px, 0.7fr);
+        }
+        .schedule-rates-route__service {
+          grid-column: auto;
+          padding-top: 0;
+          border-top: none;
+          padding-inline-start: ${token.paddingMD}px;
+          border-inline-start: 1px solid ${tokenMix(token.colorPrimary, 18)};
+        }
+        .schedule-rates-eq-row {
+          grid-template-columns: auto minmax(0, 1fr) auto auto;
+        }
+        .schedule-rates-stepper,
+        .schedule-rates-eq-row__reefer {
+          grid-column: auto;
+        }
       }
 
       /* Modified by Sekar Nagarajan (2026-09-17 10:54) — carbon drawer layout */

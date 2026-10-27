@@ -136,28 +136,6 @@ export function CarbonCalculatorModuleStyles() {
       .co2-result-empty {
         padding: ${token.paddingMD}px;
       }
-      .co2-result-toolbar {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: ${token.marginMD}px;
-        flex-wrap: wrap;
-      }
-      .co2-result-toolbar__meta {
-        display: flex;
-        flex-direction: column;
-        gap: ${token.marginXXS}px;
-        min-width: 0;
-      }
-      .co2-result-toolbar__lane {
-        font-weight: ${token.fontWeightStrong};
-        color: ${token.colorText};
-        font-size: ${token.fontSizeLG}px;
-      }
-      .co2-result-toolbar__sub {
-        color: ${token.colorTextSecondary};
-        font-size: ${token.fontSizeSM}px;
-      }
       .co2-kpi-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));

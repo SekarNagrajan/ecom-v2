@@ -1,5 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-16 12:13)
-import { AppButton } from "@solverminds/shared-ui";
+// Modified by Sekar Nagarajan (2026-10-27 13:10)
 import {
   DataView,
   type DataViewColumn,
@@ -10,10 +9,7 @@ import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
-import {
-  useCarbonComputeQuery,
-  useCarbonExportMutation,
-} from "../api/carbon.queries";
+import { useCarbonComputeQuery } from "../api/carbon.queries";
 import type { CarbonInput, CarbonLegResult } from "../types/carbon.types";
 import { formatCo2e, pickDisplayTotal } from "../types/carbon.types";
 import {
@@ -74,13 +70,11 @@ export function CarbonResultPanel({ input }: CarbonResultPanelProps) {
     isError,
     error,
   } = useCarbonComputeQuery(input);
-  const exportMutation = useCarbonExportMutation();
   const [breakdownView, setBreakdownView] =
     useState<CarbonBreakdownView>("list");
 
   const unit = input.unit;
   const spinning = isLoading || isFetching;
-  const laneLabel = `${input.origin} → ${input.destination}`;
   const legRows = result ? toLegRows(result.legs) : [];
 
   const unitLabels = useMemo(
@@ -183,28 +177,6 @@ export function CarbonResultPanel({ input }: CarbonResultPanelProps) {
       {result ? (
         <Spin spinning={spinning}>
           <div className="co2-result-content">
-            <div className="co2-result-toolbar">
-              <div className="co2-result-toolbar__meta">
-                <span className="co2-result-toolbar__lane">{laneLabel}</span>
-                <span className="co2-result-toolbar__sub">
-                  {input.equipment} ·{" "}
-                  {t("results.containers", { count: input.containerCount })} ·{" "}
-                  {input.cargoWeightKg.toLocaleString("en-US")} {t("units.kg")}
-                </span>
-              </div>
-              <AppButton
-                type="default"
-                size="medium"
-                loading={exportMutation.isPending}
-                icon={
-                  <AppIcon icon={Icons.download} size={16} tone="download" />
-                }
-                onClick={() => exportMutation.mutate(input)}
-              >
-                {t("actions.exportPdf")}
-              </AppButton>
-            </div>
-
             <div className="co2-kpi-grid">
               <div className="co2-kpi-card co2-kpi-card--total">
                 <span className="co2-kpi-card__label">{t("kpi.totalCo2e")}</span>

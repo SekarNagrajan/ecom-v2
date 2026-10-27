@@ -19,6 +19,11 @@ export function TrackingModuleStyles() {
         70% { transform: scale(2.4); opacity: 0; }
         100% { opacity: 0; }
       }
+      @keyframes tracking-route-pulse {
+        0% { transform: scale(0.85); opacity: 0.55; }
+        70% { transform: scale(1.55); opacity: 0; }
+        100% { opacity: 0; }
+      }
 
       .tracking-search-panel.ant-card {
         border-radius: ${token.borderRadiusLG}px;
@@ -91,71 +96,201 @@ export function TrackingModuleStyles() {
         flex: 1;
       }
 
+      /* Modified by Sekar Nagarajan (2026-10-27 11:00) — overview route strip + facts */
       .tracking-overview.ant-card {
         border-radius: ${token.borderRadiusLG}px;
         border: 1px solid ${token.colorBorderSecondary};
         background: ${token.colorBgContainer};
         box-shadow: none !important;
         margin-bottom: ${token.marginMD}px;
-        border:2px solid ${token.colorBorderSecondary};
-       
       }
       .tracking-overview .ant-card-body {
-        padding: ${token.paddingSM}px;
+        padding: ${token.paddingMD}px ${token.paddingLG}px;
       }
-      .tracking-overview__meta {
-        margin-bottom: 0;
+      .tracking-overview__header {
+        width: 100%;
+      }
+      .tracking-overview__summary {
+        display: flex;
+        align-items: stretch;
+        gap: 0;
+        width: 100%;
+        min-width: 0;
       }
       .tracking-overview__journey .tracking-journey {
         margin-bottom: 0;
       }
-      .tracking-meta-item {
-        display: flex;
+
+      .tracking-overview-route {
+        display: grid;
+        grid-template-columns: minmax(96px, 140px) minmax(120px, 1fr) minmax(96px, 140px);
         align-items: center;
         gap: ${token.marginSM}px;
+        flex: 1 1 280px;
+        min-width: 0;
+        padding-right: ${token.marginLG}px;
+        margin-right: ${token.marginLG}px;
+        border-right: 1px solid ${token.colorBorderSecondary};
       }
-      .tracking-meta-item__label {
-        font-size: ${token.fontSizeSM}px;
+      .tracking-overview-route__port {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .tracking-overview-route__port--pod {
+        text-align: left;
+      }
+      .tracking-overview-route__port-code {
         display: block;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-      }
-      .tracking-meta-item__value {
+        margin: 0;
         font-size: ${token.fontSizeLG}px;
-        display: block;
+        line-height: 1.25;
+        color: ${token.colorText};
       }
-      .tracking-meta-item__sub {
+      .tracking-overview-route__port-name {
         display: block;
+        margin: 0;
+        max-width: 100%;
         font-size: ${token.fontSizeSM}px;
+        line-height: 1.3;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        cursor: default;
+      }
+      .tracking-overview-route__track {
+        position: relative;
+        display: flex;
+        align-items: center;
+        min-width: 0;
+        height: ${token.controlHeight}px;
+        overflow: visible;
+      }
+      .tracking-overview-route__rail {
+        position: relative;
+        display: block;
+        width: 100%;
+        height: 3px;
+        border-radius: ${token.borderRadiusSM}px;
+        background: ${token.colorBorderSecondary};
+        overflow: hidden;
+      }
+      .tracking-overview-route__rail-fill {
+        display: block;
+        height: 100%;
+        border-radius: inherit;
+        background: ${token.colorPrimary};
+        transition: width 0.55s ease;
+      }
+      .tracking-overview-route__marker {
+        position: absolute;
+        top: 50%;
+        width: 32px;
+        height: 32px;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        background: ${token.colorPrimary};
+        color: ${token.colorTextLightSolid};
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 0 3px ${token.colorPrimaryBg};
+        z-index: 1;
+        transition: left 0.55s ease;
+        pointer-events: none;
+      }
+      .tracking-overview-route__marker-pulse {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background: ${tokenMix(token.colorPrimary, 45)};
+        z-index: -1;
+      }
+      .tracking-overview-route__track--in-transit
+        .tracking-overview-route__marker-pulse {
+        animation: tracking-route-pulse 1.8s ease-out infinite;
+      }
+
+      .tracking-overview-facts {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(120px, 160px));
+        gap: 0;
+        flex: 0 1 auto;
+        min-width: 0;
+        align-items: stretch;
+        padding-right: ${token.marginLG}px;
+        margin-right: ${token.marginLG}px;
+        border-right: 1px solid ${token.colorBorderSecondary};
+      }
+      .tracking-overview-fact {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 2px;
+        padding-inline: ${token.marginMD}px;
+      }
+      .tracking-overview-fact:first-child {
+        padding-left: 0;
+      }
+      .tracking-overview-fact:not(:first-child) {
+        border-left: 1px solid ${token.colorBorderSecondary};
+      }
+      .tracking-overview-fact__label {
+        display: block;
+        margin: 0;
+        font-size: ${token.fontSizeSM}px;
+        line-height: 1.25;
+        color: ${token.colorTextSecondary};
+      }
+      .tracking-overview-fact__value {
+        display: block;
+        margin: 0;
+        font-size: ${token.fontSize}px;
+        line-height: 1.3;
+        color: ${token.colorText};
+        max-width: 100%;
+        color: ${token.colorPrimaryActive};
+      }
+      .tracking-overview-fact__sub {
+        display: block;
+        margin: 0;
+        max-width: 100%;
+        font-size: ${token.fontSizeSM}px;
+        line-height: 1.3;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       .tracking-pipeline,
       .tracking-journey {
-        background: ${token.colorFillAlter};
+        background: ${token.colorBgContainer};
         padding: ${token.paddingLG}px;
         border-radius: ${token.borderRadiusLG}px;
         border: 1px solid ${token.colorBorderSecondary};
         margin-bottom: ${token.marginMD}px;
       }
-      /* Modified by Sekar Nagarajan (2026-09-11 12:58) — horizontal booking-style route timeline */
+      /* Modified by Sekar Nagarajan (2026-10-27 10:50) — cargo journey match reference */
       .tracking-journey__header {
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: ${token.marginSM}px;
         flex-wrap: wrap;
-        margin-bottom: ${token.marginMD}px;
+        margin-bottom: ${token.marginLG}px;
       }
       .tracking-journey__header-main {
         display: inline-flex;
         align-items: center;
-        gap: ${token.marginXS}px;
+        gap: ${token.marginSM}px;
         min-width: 0;
       }
       .tracking-journey__header-icon {
-        width: 28px;
-        height: 28px;
-        border-radius: ${token.borderRadiusSM}px;
+        width: ${token.controlHeight}px;
+        height: ${token.controlHeight}px;
+        border-radius: ${token.borderRadius}px;
         background: ${token.colorPrimaryBg};
         color: ${token.colorPrimary};
         display: inline-flex;
@@ -165,8 +300,25 @@ export function TrackingModuleStyles() {
       }
       .tracking-journey__title {
         margin: 0 !important;
-        color: ${token.colorPrimary} !important;
+        color: ${token.colorText} !important;
         font-weight: ${token.fontWeightStrong} !important;
+        line-height: 1.3 !important;
+      }
+      .tracking-journey__updated {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        font-size: ${token.fontSizeSM}px;
+        line-height: 1.35;
+        color: ${token.colorTextSecondary};
+      }
+      .tracking-journey__updated-icon {
+        display: inline-flex;
+        color: ${token.colorTextTertiary};
+      }
+      .tracking-journey__updated-value {
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
       }
       .tracking-journey__eta {
         font-size: ${token.fontSizeSM}px;
@@ -188,7 +340,7 @@ export function TrackingModuleStyles() {
         gap: 0;
         overflow-x: auto;
         overflow-y: hidden;
-        padding-bottom: ${token.paddingXS}px;
+        padding: ${token.paddingXS}px 0 ${token.paddingSM}px;
       }
       .tracking-journey-timeline--vertical {
         max-height: 420px;
@@ -197,8 +349,9 @@ export function TrackingModuleStyles() {
       }
 
       .tracking-journey-stop__node {
-        width: 36px;
-        height: 36px;
+        position: relative;
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
         background: ${token.colorPrimary};
         color: ${token.colorTextLightSolid};
@@ -214,6 +367,15 @@ export function TrackingModuleStyles() {
       }
       .tracking-journey-stop__node .app-icon {
         display: block;
+        position: relative;
+        z-index: 1;
+      }
+      .tracking-journey-stop__node-pulse {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background: ${tokenMix(token.colorPrimary, 45)};
+        z-index: 0;
       }
       .tracking-journey-stop--completed .tracking-journey-stop__node {
         background: ${token.colorSuccess};
@@ -224,12 +386,15 @@ export function TrackingModuleStyles() {
         background: ${token.colorPrimary};
         border-color: ${token.colorPrimary};
         color: ${token.colorTextLightSolid};
-        box-shadow: 0 0 0 3px ${token.colorPrimaryBg};
+        box-shadow: 0 0 0 4px ${token.colorPrimaryBg};
+      }
+      .tracking-journey-stop--current .tracking-journey-stop__node-pulse {
+        animation: tracking-route-pulse 1.8s ease-out infinite;
       }
       .tracking-journey-stop--upcoming .tracking-journey-stop__node {
         background: ${token.colorBgContainer};
         border-color: ${token.colorBorder};
-        color: ${token.colorTextQuaternary};
+        color: ${token.colorTextTertiary};
       }
       .tracking-journey-stop__spin {
         display: inline-flex;
@@ -240,71 +405,84 @@ export function TrackingModuleStyles() {
         border-style: solid;
       }
       .tracking-journey-stop__line--dotted {
-        border-color: ${tokenMix(token.colorPrimary, 45)};
+        border-color: ${token.colorBorder};
         border-style: dashed;
+      }
+      .tracking-journey-stop__line--ghost {
+        visibility: hidden;
+      }
+      .tracking-journey-stop__line--hidden {
+        display: none;
       }
       .tracking-journey-stop__place {
         display: block;
         margin: 0;
+        max-width: 100%;
         font-size: ${token.fontSize}px;
         font-weight: ${token.fontWeightStrong};
         color: ${token.colorText};
         line-height: 1.35;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        cursor: default;
       }
       .tracking-journey-stop--upcoming .tracking-journey-stop__place {
         color: ${token.colorTextSecondary};
-        font-weight: normal;
       }
       .tracking-journey-stop__terminal {
         display: block;
         margin: 0;
+        max-width: 100%;
         font-size: ${token.fontSizeSM}px;
         color: ${token.colorTextSecondary};
         line-height: 1.35;
-      }
-      .tracking-journey-stop__badges {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: ${token.marginXXS}px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        cursor: default;
       }
       .tracking-journey-stop__badge {
         display: inline-flex;
         align-items: center;
         gap: ${token.marginXXS}px;
-        padding: ${token.paddingXXS}px ${token.paddingSM}px;
+        padding: 2px ${token.paddingSM}px;
         border-radius: ${token.borderRadiusLG * 2}px;
         font-size: ${token.fontSizeSM - 1}px;
         font-weight: ${token.fontWeightStrong};
-        line-height: 1.2;
+        line-height: 1.4;
         white-space: nowrap;
       }
+      .tracking-journey-stop__badge-icon {
+        display: inline-flex;
+        flex-shrink: 0;
+      }
       .tracking-journey-stop__badge--done {
-        background: ${tokenMix(token.colorSuccess, 10)};
+        background: ${tokenMix(token.colorSuccess, 12)};
         color: ${token.colorSuccess};
         border: 1px solid ${tokenMix(token.colorSuccess, 22)};
       }
       .tracking-journey-stop__badge--current {
         background: ${token.colorPrimaryBg};
         color: ${token.colorPrimary};
-        border: 1px solid ${tokenMix(token.colorPrimary, 35)};
+        border: 1px solid ${tokenMix(token.colorPrimary, 30)};
       }
       .tracking-journey-stop__badge--todo {
-        background: ${token.colorBgContainer};
+        background: ${token.colorFillAlter};
         color: ${token.colorTextSecondary};
-        border: 1px solid ${token.colorBorder};
-      }
-      .tracking-journey-stop__badge--mode {
-        background: ${token.colorBgContainer};
-        color: ${token.colorText};
-        border: 1px solid ${token.colorBorder};
+        border: 1px solid ${token.colorBorderSecondary};
       }
       .tracking-journey-stop__time {
         display: block;
         margin: 0;
+        margin-top: ${token.marginXXS}px;
         font-size: ${token.fontSizeSM}px;
         color: ${token.colorTextSecondary};
         line-height: 1.35;
+        min-height: 1.35em;
+      }
+      .tracking-journey-stop__time--empty {
+        visibility: hidden;
       }
       .tracking-journey-stop__time-date {
         font-weight: ${token.fontWeightStrong};
@@ -317,7 +495,7 @@ export function TrackingModuleStyles() {
         color: ${token.colorPrimary};
       }
 
-      /* Horizontal: node + connector on top, copy aligned underneath — full width */
+      /* Horizontal: icon centered; half-lines left/right so copy sits under the node */
       .tracking-journey--horizontal .tracking-journey-timeline--horizontal {
         width: 100%;
       }
@@ -326,44 +504,56 @@ export function TrackingModuleStyles() {
         flex-direction: column;
         align-items: stretch;
         flex: 1 1 0;
-        min-width: 120px;
+        min-width: 148px;
       }
       .tracking-journey--horizontal .tracking-journey-stop__rail {
         display: flex;
         flex-direction: row;
         align-items: center;
+        justify-content: center;
         width: 100%;
-        min-height: 36px;
-        margin-bottom: ${token.marginSM}px;
+        min-height: 40px;
+        margin-bottom: ${token.marginMD}px;
       }
       .tracking-journey--horizontal .tracking-journey-stop__line {
-        flex: 1 1 auto;
+        flex: 1 1 0;
         height: 0;
-        min-width: ${token.marginMD}px;
-        margin-left: ${token.marginXXS}px;
+        min-width: 0;
         border-top-width: 2px;
         border-left: 0;
         border-right: 0;
         border-bottom: 0;
       }
-      .tracking-journey--horizontal .tracking-journey-stop:last-child {
-        flex: 0 0 auto;
-        min-width: 120px;
-        max-width: 180px;
+      .tracking-journey--horizontal .tracking-journey-stop__line--before {
+        margin-right: ${token.marginXXS}px;
+      }
+      .tracking-journey--horizontal .tracking-journey-stop__line--after {
+        margin-left: ${token.marginXXS}px;
       }
       .tracking-journey--horizontal .tracking-journey-stop__body {
         display: flex;
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
+        text-align: center;
         gap: ${token.marginXXS}px;
         min-width: 0;
-        padding-right: ${token.paddingSM}px;
+        width: 100%;
+        padding-inline: ${token.paddingXXS}px;
+      }
+      .tracking-journey--horizontal .tracking-journey-stop__place,
+      .tracking-journey--horizontal .tracking-journey-stop__terminal,
+      .tracking-journey--horizontal .tracking-journey-stop__time {
+        width: 100%;
+        text-align: center;
+      }
+      .tracking-journey--horizontal .tracking-journey-stop__terminal {
+        white-space: nowrap;
       }
 
       /* Vertical compact (drawer) — booking route rail */
       .tracking-journey--vertical .tracking-journey-stop {
         display: grid;
-        grid-template-columns: 32px minmax(0, 1fr);
+        grid-template-columns: 40px minmax(0, 1fr);
         gap: ${token.marginSM}px;
         align-items: stretch;
       }
@@ -382,11 +572,16 @@ export function TrackingModuleStyles() {
         border-right: 0;
         border-bottom: 0;
       }
+      .tracking-journey--vertical .tracking-journey-stop__line--before {
+        display: none;
+      }
       .tracking-journey--vertical .tracking-journey-stop__body {
         min-width: 0;
         padding-bottom: ${token.paddingLG}px;
         display: flex;
         flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
         gap: ${token.marginXXS}px;
       }
       .tracking-journey--vertical .tracking-journey-stop:last-child
@@ -429,16 +624,23 @@ export function TrackingModuleStyles() {
         display: flex;
         justify-content: flex-end;
         align-items: center;
+        flex-shrink: 0;
+        margin-left: auto;
+        padding-left: ${token.marginSM}px;
       }
       .tracking-overview__toggle.ant-btn {
         width: 36px;
         height: 36px;
         padding: 0;
-        border-radius: ${token.borderRadiusSM}px;
+        border-radius: 50%;
+        border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorBgContainer};
+        color: ${token.colorPrimary};
       }
       .tracking-overview__toggle--open {
         background: ${token.colorPrimaryBg};
         color: ${token.colorPrimary};
+        border-color: ${tokenMix(token.colorPrimary, 30)};
       }
       .tracking-overview__toggle-chevron {
         display: inline-flex;
@@ -447,10 +649,67 @@ export function TrackingModuleStyles() {
       .tracking-overview__toggle--open .tracking-overview__toggle-chevron {
         transform: rotate(180deg);
       }
+      @media (max-width: 1199px) {
+        .tracking-overview__summary {
+          flex-wrap: wrap;
+          row-gap: ${token.marginMD}px;
+        }
+        .tracking-overview-route {
+          flex: 1 1 100%;
+          padding-right: 0;
+          margin-right: 0;
+          border-right: none;
+          padding-bottom: ${token.marginMD}px;
+          margin-bottom: 0;
+          border-bottom: 1px solid ${token.colorBorderSecondary};
+        }
+        .tracking-overview-facts {
+          flex: 1 1 auto;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          padding-right: ${token.marginMD}px;
+          margin-right: ${token.marginMD}px;
+        }
+      }
+      @media (max-width: 767px) {
+        .tracking-overview-route {
+          grid-template-columns: minmax(0, 1fr) minmax(72px, 1fr) minmax(0, 1fr);
+          gap: ${token.marginXS}px;
+        }
+        .tracking-overview-facts {
+          grid-template-columns: 1fr;
+          width: 100%;
+          padding-right: 0;
+          margin-right: 0;
+          border-right: none;
+          padding-bottom: ${token.marginMD}px;
+          border-bottom: 1px solid ${token.colorBorderSecondary};
+        }
+        .tracking-overview-fact {
+          padding-inline: 0;
+          padding-block: ${token.paddingSM}px;
+        }
+        .tracking-overview-fact:not(:first-child) {
+          border-left: none;
+          border-top: 1px solid ${token.colorBorderSecondary};
+        }
+        .tracking-overview__toggle-col {
+          margin-left: 0;
+          width: 100%;
+          justify-content: flex-end;
+          padding-left: 0;
+        }
+      }
       @media (prefers-reduced-motion: reduce) {
         .tracking-overview__journey-panel,
-        .tracking-overview__toggle-chevron {
+        .tracking-overview__toggle-chevron,
+        .tracking-overview-route__rail-fill,
+        .tracking-overview-route__marker {
           transition: none;
+        }
+        .tracking-overview-route__track--in-transit
+          .tracking-overview-route__marker-pulse,
+        .tracking-journey-stop--current .tracking-journey-stop__node-pulse {
+          animation: none;
         }
       }
 
@@ -822,27 +1081,35 @@ export function TrackingModuleStyles() {
       }
 
       .tracking-deadlines {
-        display: flex;
-        align-items: center;
-        gap: ${token.marginMD}px;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        align-items: stretch;
+        gap: ${token.marginSM}px;
         font-size: ${token.fontSizeSM}px;
         color: ${token.colorTextSecondary};
+        padding: ${token.paddingMD}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorFillAlter};
+      }
+      .tracking-deadlines__heading {
+        display: none;
       }
       .tracking-deadline {
         display: inline-flex;
         align-items: center;
-        gap: ${token.marginXS}px;
-        padding: ${token.paddingXXS}px ${token.paddingSM}px;
-        border-radius: ${token.borderRadius}px;
+        gap: ${token.marginSM}px;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        border-radius: ${token.borderRadiusLG}px;
         border: 1px solid ${token.colorBorderSecondary};
         background: ${token.colorBgContainer};
         font-size: ${token.fontSizeSM}px;
+        min-width: 0;
       }
       .tracking-deadline__icon {
-        width: 26px;
-        height: 26px;
-        border-radius: ${token.borderRadiusSM}px;
+        width: 32px;
+        height: 32px;
+        border-radius: ${token.borderRadius}px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -864,12 +1131,13 @@ export function TrackingModuleStyles() {
         display: block;
         color: ${token.colorTextSecondary};
         line-height: 1.2;
+        font-size: ${token.fontSizeSM}px;
       }
       .tracking-deadline__value {
         display: block;
         font-weight: ${token.fontWeightStrong};
         color: ${token.colorText};
-        line-height: 1.2;
+        line-height: 1.3;
       }
 
       .tracking-results-panel {
@@ -1668,10 +1936,13 @@ export function TrackingModuleStyles() {
           width: 100%;
         }
         .tracking-journey--horizontal .tracking-journey-stop {
-          min-width: 140px;
+          min-width: 156px;
         }
-        .tracking-journey--horizontal .tracking-journey-stop:last-child {
-          max-width: none;
+        .tracking-journey__updated {
+          width: 100%;
+        }
+        .tracking-deadlines {
+          grid-template-columns: 1fr;
         }
         .tracking-movement-summary__grid {
           grid-template-columns: 1fr 1fr;

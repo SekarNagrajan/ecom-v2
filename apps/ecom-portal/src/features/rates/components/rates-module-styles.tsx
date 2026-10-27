@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-10-19 16:55)
+// Modified by Sekar Nagarajan (2026-10-27 12:10) — actions column right padding
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -60,18 +60,18 @@ export function RatesModuleStyles() {
         display: flex;
         flex-wrap: wrap;
         align-items: flex-end;
-        gap: ${token.marginMD}px;
+        gap: ${token.marginSM}px;
         width: 100%;
         min-width: 0;
         overflow-x: hidden;
       }
       .rates-search-field {
-        flex: 1 1 140px;
+        flex: 1 1 148px;
         min-width: 0;
         max-width: 100%;
       }
       .rates-search-field--port {
-        flex: 1.2 1 160px;
+        flex: 1.2 1 168px;
         min-width: 0;
       }
       .rates-search-field--swap {
@@ -84,17 +84,18 @@ export function RatesModuleStyles() {
       }
       .rates-search-field--eqp,
       .rates-search-field--commodity {
-        flex: 1 1 140px;
+        flex: 1 1 148px;
         min-width: 0;
       }
       .rates-search-field--date {
-        flex: 1 1 132px;
+        flex: 1 1 140px;
         min-width: 0;
       }
       .rates-search-field--actions {
-        flex: 0 0 auto;
+        flex: 1 1 auto;
         min-width: 0;
         align-self: flex-end;
+        margin-left: auto;
       }
       .rates-search-fields-row .ant-form-item {
         margin-bottom: 0 !important;
@@ -148,12 +149,6 @@ export function RatesModuleStyles() {
         background: ${token.colorFillSecondary};
         color: ${token.colorText};
       }
-      .rates-port-swap-col {
-        display: flex;
-        align-items: flex-end;
-        justify-content: center;
-        padding-bottom: ${token.marginSM}px;
-      }
       .rates-search-swap-field .ant-form-item-label > label,
       .rates-search-actions-field .ant-form-item-label > label {
         visibility: hidden;
@@ -185,7 +180,7 @@ export function RatesModuleStyles() {
         width: 100%;
         align-items: center;
         justify-content: flex-end;
-        flex-wrap: nowrap;
+        flex-wrap: wrap;
         min-height: ${token.controlHeightLG}px;
       }
       .rates-search-actions .sm-app-button,
@@ -217,6 +212,15 @@ export function RatesModuleStyles() {
         border: 1px solid ${token.colorBorderSecondary};
         gap: ${token.marginSM}px;
         flex-wrap: wrap;
+        min-height: ${token.controlHeightLG}px;
+      }
+      .rates-results-bar__lead {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginSM}px;
+        flex-wrap: wrap;
+        min-width: 0;
+        flex: 1 1 auto;
       }
       .rates-results-bar__count {
         display: inline-flex;
@@ -241,7 +245,6 @@ export function RatesModuleStyles() {
         background: ${token.colorBgContainer};
         border-color: ${token.colorBorder};
         flex-shrink: 0;
-        margin-left: auto;
       }
       .rates-results-bar .module-view-mode-tabs.ant-segmented
         .ant-segmented-item {
@@ -280,7 +283,7 @@ export function RatesModuleStyles() {
       .rates-list-grid {
         width: 100%;
         flex: 1;
-        min-height: calc(100vh - 360px);
+        min-height: min(480px, calc(100vh - 420px));
         height: 100%;
         display: flex;
         flex-direction: column;
@@ -295,7 +298,7 @@ export function RatesModuleStyles() {
         display: flex;
         flex-direction: column;
         flex: 1;
-        min-height: calc(100vh - 360px);
+        min-height: min(480px, calc(100vh - 420px));
         height: 100%;
       }
       .rates-list-grid .rates-data-view .ant-card {
@@ -315,7 +318,7 @@ export function RatesModuleStyles() {
       .rates-list-grid .ag-theme-alpine,
       .rates-list-grid .ag-root-wrapper {
         height: 100% !important;
-        min-height: calc(100vh - 360px);
+        min-height: 360px;
       }
       .rates-list-grid .ag-row.rates-list-row--recommended,
       .rates-list-grid .ag-row.rates-list-row--recommended .ag-cell {
@@ -357,7 +360,7 @@ export function RatesModuleStyles() {
       .rates-card-list {
         display: flex;
         flex-direction: column;
-        gap: ${token.marginMD}px;
+        gap: ${token.marginSM}px;
         width: 100%;
       }
       .rates-card {
@@ -366,173 +369,204 @@ export function RatesModuleStyles() {
         background: ${token.colorBgContainer};
         overflow: hidden;
         box-shadow: none !important;
-        transition: border-color 0.2s ease;
+        transition: border-color 0.25s ease;
       }
       .rates-card:hover {
         border-color: ${tokenMix(token.colorPrimary, 30)};
         box-shadow: none !important;
       }
-      .rates-card--recommended {
-        border-color: ${tokenMix(token.colorWarning, 40)};
-        box-shadow: none !important;
+      .rates-card--recommended,
+      .rates-card--expanded {
+        border-color: ${tokenMix(token.colorPrimary, 45)};
       }
-      .rates-card__main {
+      .rates-card--recommended.rates-card--expanded {
+        border-color: ${tokenMix(token.colorWarning, 55)};
+      }
+
+      /* —— Expand / collapse panels —— */
+      .rates-card__panel {
+        display: grid;
+        grid-template-rows: 0fr;
+        opacity: 0;
+        transition:
+          grid-template-rows 0.32s ease,
+          opacity 0.24s ease;
+      }
+      .rates-card__panel--open {
+        grid-template-rows: 1fr;
+        opacity: 1;
+      }
+      .rates-card__panel--closed {
+        grid-template-rows: 0fr;
+        opacity: 0;
+        pointer-events: none;
+      }
+      .rates-card__panel-inner {
+        overflow: hidden;
+        min-height: 0;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .rates-card__panel {
+          transition: none;
+        }
+      }
+
+      /* —— Collapsed summary row —— */
+      .rates-card__summary {
         display: grid;
         grid-template-columns: 1fr;
-        gap: ${token.marginMD}px;
-        padding: ${token.paddingLG}px;
-        align-items: start;
+        gap: ${token.marginXS}px;
+        align-items: center;
+        padding: ${token.paddingXS}px ${token.paddingMD}px;
+        min-width: 0;
       }
-      .rates-card__content {
+      .rates-card__summary-route {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        align-items: center;
+        column-gap: ${token.marginSM}px;
+        min-width: 0;
+        width: 100%;
+      }
+      .rates-card__summary-port {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXS}px;
+        min-width: 0;
+      }
+      .rates-card__summary-icon {
+        width: 24px;
+        height: 24px;
+        border-radius: ${token.borderRadiusSM}px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        background: ${token.colorPrimaryBg};
+        color: ${token.colorPrimary};
+      }
+      .rates-card__summary-port-copy {
         min-width: 0;
         display: flex;
         flex-direction: column;
-        gap: ${token.marginMD}px;
+        line-height: 1.2;
+      }
+      .rates-card__summary-place {
+        display: block;
+        font-size: ${token.fontSizeSM}px;
+        max-width: 100%;
+      }
+      .rates-card__summary-code {
+        font-size: ${token.fontSize}px;
+        color: ${token.colorText};
+        letter-spacing: 0.02em;
+      }
+      .rates-card__summary-arrow {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        justify-self: center;
+        align-self: center;
+        flex-shrink: 0;
+        color: ${token.colorTextSecondary};
+        line-height: 1;
+      }
+      .rates-card__summary-price {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .rates-card__summary-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: ${token.marginXXS}px;
+        align-items: center;
+        min-width: 0;
+      }
+      .rates-card__summary-valid {
+        font-size: ${token.fontSizeSM}px;
+        white-space: nowrap;
+      }
+      .rates-card__summary-actions {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: ${token.marginXS}px;
+      }
+
+      /* —— Expanded card —— */
+      .rates-card__top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: ${token.marginSM}px;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        border-bottom: 1px solid ${token.colorBorderSecondary};
       }
       .rates-card__meta {
         display: flex;
         flex-wrap: wrap;
-        gap: ${token.marginXS}px;
+        gap: ${token.marginXXS}px;
         align-items: center;
+        row-gap: ${token.marginXXS}px;
+        min-width: 0;
+      }
+      .rates-card__meta .ant-tag {
+        margin-inline-end: 0;
+        line-height: 1.35;
+      }
+      .rates-card__top-end {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXS}px;
+        flex-shrink: 0;
       }
       .rates-card__ref {
+        margin: 0;
         font-size: ${token.fontSizeSM}px;
         color: ${token.colorTextSecondary};
         white-space: nowrap;
-        margin-left: auto;
+        line-height: 1.35;
+      }
+      .rates-card__expand-toggle.sm-app-button,
+      .rates-card__expand-toggle.ant-btn {
+        width: 28px;
+        height: 28px;
+        min-width: 28px;
+        padding: 0;
+        color: ${token.colorPrimary};
+        background: ${token.colorPrimaryBg};
+        border-radius: ${token.borderRadiusSM}px;
+        transition: transform 0.28s ease, background 0.2s ease;
+      }
+      .rates-card__expand-toggle--open.sm-app-button,
+      .rates-card__expand-toggle--open.ant-btn {
+        background: transparent;
       }
 
-      .rates-card__route {
+      .rates-card__body {
         display: grid;
         grid-template-columns: 1fr;
-        gap: ${token.marginMD}px;
-        align-items: start;
+        gap: ${token.marginSM}px;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        align-items: center;
+      }
+      .rates-card__route-panel {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        align-items: center;
+        column-gap: ${token.marginSM}px;
+        min-width: 0;
         width: 100%;
       }
       .rates-card__endpoint {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginXS}px;
         min-width: 0;
-        display: flex;
-        flex-direction: column;
-        gap: ${token.marginXXS}px;
       }
-      .rates-card__endpoint--dest {
-        text-align: left;
-        align-items: flex-start;
-      }
-      .rates-card__place {
-        display: block;
-        font-size: ${token.fontSizeLG}px;
-        color: ${token.colorTextSecondary};
-        line-height: 1.35;
-      }
-      .rates-card__port-code {
-        font-weight: ${token.fontWeightStrong};
-        color: ${token.colorText};
-      }
-      .rates-card__etime {
-        margin-top: ${token.marginXXS}px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: ${token.marginXXS}px;
-      }
-      .rates-card__terminal {
-        display: block;
-        font-size: ${token.fontSizeSM}px;
-        color: ${token.colorTextSecondary};
-        line-height: 1.35;
-      }
-      .rates-card__connector {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: ${token.marginXXS}px;
-        min-width: 0;
-        padding: ${token.paddingXS}px 0;
-      }
-      .rates-card__connector-line {
-        display: flex;
-        align-items: center;
-        width: 100%;
-        max-width: 280px;
-      }
-      .rates-card__connector-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: ${token.colorPrimary};
-        flex-shrink: 0;
-      }
-      .rates-card__connector-rail {
-        flex: 1;
-        height: 2px;
-        background: ${token.colorBorder};
-      }
-      .rates-card__connector-pill {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: ${token.paddingXXS}px ${token.paddingSM}px;
-        border-radius: ${token.borderRadiusLG}px;
-        background: ${tokenMix(token.colorSuccess, 10)};
-        border: 1px solid ${token.colorSuccessBorder};
-        color: ${token.colorSuccess};
-        font-size: ${token.fontSizeSM}px;
-        font-weight: ${token.fontWeightStrong};
-        white-space: nowrap;
-        margin: 0 ${token.marginXXS}px;
-      }
-      .rates-card__connector-type {
-        font-size: ${token.fontSizeSM}px;
-        color: ${token.colorTextSecondary};
-        text-align: center;
-      }
-      .rates-card__connector-hint {
-        font-size: ${token.fontSizeSM}px;
-        color: ${token.colorTextSecondary};
-        text-align: center;
-      }
-
-      .rates-card__actions {
-        display: flex;
-        flex-direction: column;
-        gap: ${token.marginXS}px;
-      }
-      .rates-card__actions-secondary {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: ${token.marginXS}px;
-      }
-      .rates-card__actions .sm-app-button {
-        width: 100%;
-      }
-      .rates-card__footer {
-        padding: ${token.paddingSM}px ${token.paddingLG}px;
-        border-top: 1px solid ${token.colorBorderSecondary};
-        background: ${token.colorFillAlter};
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: ${token.marginSM}px;
-        flex-wrap: wrap;
-      }
-      .rates-card__validity {
-        display: flex;
-        flex-wrap: wrap;
-        gap: ${token.marginSM}px;
-      }
-      .rates-card__validity-chip {
-        display: inline-flex;
-        align-items: center;
-        gap: ${token.marginXS}px;
-        padding: ${token.paddingXXS}px ${token.paddingSM}px;
-        border-radius: ${token.borderRadius}px;
-        border: 1px solid ${token.colorBorderSecondary};
-        background: ${token.colorBgContainer};
-        font-size: ${token.fontSizeSM}px;
-        color: ${token.colorText};
-      }
-      .rates-card__validity-icon {
+      .rates-card__endpoint-icon {
         width: 28px;
         height: 28px;
         border-radius: ${token.borderRadiusSM}px;
@@ -541,50 +575,162 @@ export function RatesModuleStyles() {
         justify-content: center;
         flex-shrink: 0;
       }
-      .rates-card__validity-icon--from {
-        background: ${token.colorInfoBg};
-        color: ${token.colorInfo};
-      }
-      .rates-card__validity-icon--to {
-        background: ${token.colorWarningBg};
-        color: ${token.colorWarning};
-      }
-      .rates-card__validity-icon--contract {
+      .rates-card__endpoint-icon--pol {
         background: ${token.colorPrimaryBg};
         color: ${token.colorPrimary};
       }
-      .rates-card__validity-icon--tariff {
-        background: ${tokenMix(token.colorSuccess, 10)};
-        color: ${token.colorSuccess};
+      .rates-card__endpoint-icon--pod {
+        background: ${token.colorInfoBg};
+        color: ${token.colorInfo};
       }
-      .rates-card__validity-label {
+      .rates-card__endpoint-copy {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+      .rates-card__place {
         display: block;
         font-size: ${token.fontSizeSM}px;
         color: ${token.colorTextSecondary};
         line-height: 1.2;
+        max-width: 100%;
       }
-      .rates-card__validity-value {
+      .rates-card__port-code {
         display: block;
+        font-size: ${token.fontSizeLG}px;
         font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+        letter-spacing: 0.02em;
+        line-height: 1.15;
+      }
+      .rates-card__country {
+        display: block;
+        font-size: ${token.fontSizeSM}px;
         line-height: 1.2;
       }
-      .rates-card__surcharges {
-        margin: 0 ${token.paddingLG}px ${token.paddingMD}px;
-        padding: ${token.paddingMD}px;
-        background: ${token.colorFillAlter};
-        border-radius: ${token.borderRadiusLG}px;
-        border: 1px solid ${token.colorBorderSecondary};
+      .rates-card__route-arrow {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        justify-self: center;
+        align-self: center;
+        flex-shrink: 0;
+        color: ${token.colorTextSecondary};
+        line-height: 1;
       }
-      .rates-card__surcharge-row {
+
+      .rates-card__price-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        min-width: 0;
+        justify-content: center;
+      }
+      .rates-card__price-label {
+        font-size: ${token.fontSizeSM}px;
+        line-height: 1.2;
+      }
+      .rates-card__price-value {
+        color: ${token.colorSuccess};
+        font-size: ${token.fontSizeLG}px;
+        line-height: 1.15;
+        font-variant-numeric: tabular-nums;
+      }
+      .rates-card__price-value--lg {
+        font-size: ${token.fontSizeHeading4}px;
+      }
+      .rates-card__price-breakdown {
+        font-size: ${token.fontSizeSM}px;
+        line-height: 1.25;
+      }
+      .rates-card__price-ofr {
+        color: ${token.colorPrimary};
+      }
+      .rates-card__price-surcharge {
+        color: ${token.colorWarning};
+      }
+
+      .rates-card__facts-panel {
         display: grid;
-        grid-template-columns: 1fr;
-        gap: ${token.marginXXS}px;
-        padding: ${token.paddingXS}px 0;
-        border-bottom: 1px solid ${token.colorBorderSecondary};
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+        gap: ${token.marginXS}px ${token.marginSM}px;
+        min-width: 0;
+        align-content: center;
       }
-      .rates-card__surcharge-row:last-child {
-        border-bottom: none;
-        padding-bottom: 0;
+      .rates-card__fact {
+        display: flex;
+        align-items: flex-start;
+        gap: ${token.marginXS}px;
+        min-width: 0;
+      }
+      .rates-card__fact-icon {
+        width: 22px;
+        height: 22px;
+        border-radius: ${token.borderRadiusSM}px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        background: ${token.colorFillAlter};
+        color: ${token.colorTextSecondary};
+      }
+      .rates-card__fact-copy {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+      .rates-card__fact-label {
+        display: block;
+        font-size: ${token.fontSizeSM}px;
+        line-height: 1.15;
+      }
+      .rates-card__fact-value {
+        display: block;
+        font-size: ${token.fontSize}px;
+        line-height: 1.2;
+        max-width: 100%;
+      }
+
+      .rates-card__actions {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: center;
+        gap: ${token.marginXS}px;
+        min-width: 0;
+        margin-inline-start: auto;
+        padding-block: ${token.paddingXXS}px;
+        padding-inline: ${token.paddingSM}px;
+        box-sizing: border-box;
+      }
+      .rates-card__actions .sm-app-button,
+      .rates-card__actions .ant-btn {
+        width: 100%;
+        margin: 0;
+      }
+      .rates-card__actions .rates-card__actions-button--surcharge.sm-app-button,
+      .rates-card__actions .rates-card__actions-button--surcharge.ant-btn {
+        color: ${token.colorWhite} !important;
+        border-color: ${token.colorWarningBorder} !important;
+        background: ${token.colorWarning} !important;
+        box-shadow: none !important;
+      }
+      .rates-card__actions .rates-card__actions-button--surcharge.sm-app-button:hover,
+      .rates-card__actions .rates-card__actions-button--surcharge.ant-btn:hover,
+      .rates-card__actions .rates-card__actions-button--surcharge.sm-app-button:focus-visible,
+      .rates-card__actions .rates-card__actions-button--surcharge.ant-btn:focus-visible {
+        color: ${token.colorWhite} !important;
+        border-color: ${token.colorWarning} !important;
+        background: ${token.colorWarning} !important;
+      }
+      .rates-card__actions .rates-card__actions-button--surcharge.sm-app-button:active,
+      .rates-card__actions .rates-card__actions-button--surcharge.ant-btn:active {
+        color: ${token.colorWhite} !important;
+        border-color: ${token.colorWarning} !important;
+        background: ${token.colorWarning} !important;
       }
 
       .rates-empty {
@@ -706,23 +852,21 @@ export function RatesModuleStyles() {
       .rates-drawer-form-row {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 0 ${token.marginMD}px;
+        gap: ${token.marginXS}px ${token.marginMD}px;
         width: 100%;
       }
       .rates-drawer-form-row .ant-form-item {
         min-width: 0;
+        margin-bottom: ${token.marginMD}px;
       }
-        .rates-card__actions-button{
-        background: ${token.colorWarning};
-        border: 1px solid ${token.colorWarningBorder};
-        color: ${token.colorTextLightSolid};
-        }
-
       /* Modified by Sekar Nagarajan (2026-09-11 16:25) — share via mail drawer */
       .rates-share-mail-form {
         display: flex;
         flex-direction: column;
         gap: ${token.marginMD}px;
+      }
+      .rates-share-mail-form > .ant-form-item {
+        margin-bottom: 0;
       }
       .rates-share-mail-summary {
         padding: ${token.paddingMD}px;
@@ -747,7 +891,6 @@ export function RatesModuleStyles() {
       .rates-share-mail-editor {
         width: 100%;
         min-width: 0;
-        margin-top: ${token.marginSM}px;
         --rte-content-padding-block: ${token.paddingMD}px;
         --rte-content-padding-inline: ${token.paddingLG}px;
       }
@@ -776,24 +919,61 @@ export function RatesModuleStyles() {
       }
 
       @media (min-width: 768px) {
-        .rates-card__route {
-          grid-template-columns: 1fr auto 1fr;
+        .rates-card__summary {
+          grid-template-columns:
+            minmax(200px, 1.4fr)
+            minmax(110px, 0.7fr)
+            minmax(140px, 1fr)
+            auto
+            auto;
+          gap: ${token.marginSM}px;
+        }
+        .rates-card__body {
+          grid-template-columns:
+            minmax(0, 1.45fr)
+            minmax(140px, 0.85fr)
+            minmax(180px, 1fr)
+            minmax(140px, 0.7fr);
+          gap: 0;
           align-items: center;
         }
-        .rates-card__endpoint--dest {
-          text-align: right;
-          align-items: flex-end;
+        .rates-card__route-panel,
+        .rates-card__price-panel,
+        .rates-card__facts-panel {
+          padding-inline: ${token.paddingSM}px;
         }
-        .rates-card__surcharge-row {
-          grid-template-columns: 1fr auto;
-          align-items: center;
+        .rates-card__route-panel {
+          padding-inline-start: 0;
+        }
+        .rates-card__price-panel,
+        .rates-card__facts-panel,
+        .rates-card__actions {
+          border-inline-start: 1px solid ${token.colorBorderSecondary};
+          padding-inline: ${token.paddingSM}px;
+        }
+        .rates-card__actions {
+          margin-inline-start: 0;
+          padding-inline: ${token.paddingMD}px ${token.paddingSM}px;
+          justify-content: center;
+          align-self: stretch;
         }
       }
 
       @media (min-width: 992px) {
-        .rates-card__main {
-          grid-template-columns: minmax(0, 1fr) 200px;
-          align-items: start;
+        .rates-search-actions {
+          flex-wrap: nowrap;
+        }
+        .rates-search-field--actions {
+          flex: 0 0 auto;
+        }
+      }
+
+      @media (max-width: 1199px) {
+        .rates-search-field--actions {
+          flex: 1 1 100%;
+          margin-left: 0;
+          display: flex;
+          justify-content: flex-end;
         }
       }
 
@@ -806,8 +986,8 @@ export function RatesModuleStyles() {
           overflow-x: hidden;
         }
         .rates-search-field {
-          flex: 1 1 calc(50% - ${token.marginSM}px);
-          min-width: calc(50% - ${token.marginSM}px);
+          flex: 1 1 calc((100% - ${token.marginSM}px) / 2);
+          min-width: calc((100% - ${token.marginSM}px) / 2);
           max-width: none;
         }
         .rates-search-field--swap {
@@ -821,11 +1001,7 @@ export function RatesModuleStyles() {
         .rates-search-field--actions {
           flex: 1 1 100%;
           min-width: 100%;
-        }
-        .rates-port-swap-col {
-          align-items: center;
-          padding-bottom: ${token.paddingXS}px;
-          padding-top: ${token.paddingXXS}px;
+          margin-left: 0;
         }
         .rates-search-actions {
           flex-wrap: wrap;
@@ -847,16 +1023,15 @@ export function RatesModuleStyles() {
           grid-template-columns: 1fr;
           gap: 0;
         }
-        .rates-card__main {
+        .rates-card__summary,
+        .rates-card__body {
           padding: ${token.paddingMD}px;
         }
-        .rates-card__footer {
-          flex-direction: column;
-          align-items: flex-start;
+        .rates-card__top {
+          padding: ${token.paddingMD}px ${token.paddingMD}px ${token.paddingSM}px;
         }
-        .rates-card__surcharges {
-          margin-left: ${token.paddingMD}px;
-          margin-right: ${token.paddingMD}px;
+        .rates-card__summary-valid {
+          white-space: normal;
         }
         .rates-filter-select.ant-select {
           width: 100%;
@@ -941,8 +1116,9 @@ export function RatesModuleStyles() {
       .rates-surcharge-route__connector {
         display: flex;
         align-items: center;
-        flex: 1 1 auto;
-        min-width: 96px;
+        flex: 0 1 140px;
+        min-width: 72px;
+        max-width: 180px;
         gap: ${token.marginXS}px;
       }
       .rates-surcharge-route__track {
@@ -1107,7 +1283,8 @@ export function RatesModuleStyles() {
       .rates-surcharge-validity {
         font-size: ${token.fontSizeSM}px;
         color: ${token.colorTextSecondary};
-        white-space: nowrap;
+        white-space: normal;
+        line-height: 1.35;
       }
       .rates-surcharge-empty {
         display: flex;

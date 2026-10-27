@@ -80,6 +80,7 @@
   "actions": {
     "viewQuotes": "Ver cotizaciones",
     "requestForQuote": "Solicitud de cotización",
+    "book": "Reservar",
     "bookAtThisRate": "Reservar a esta tarifa",
     "viewSurcharges": "Ver recargos",
     "shareRateQuote": "Compartir cotización",
@@ -115,15 +116,18 @@
   "rateCard": {
     "recommendedTag": "Flete publicado más bajo",
     "ref": "Ref: {{id}}",
+    "commodity": "Mercancía",
     "commodityLabel": "Mercancía: {{value}}",
     "commodityFallback": "Mercancía",
+    "expandDetails": "Expandir detalles de la tarifa",
+    "collapseDetails": "Contraer detalles de la tarifa",
     "connector": {
       "accessorial": "Accesorio",
       "quotedAmount": "Importe cotizado",
       "allInEstimate": "Estimación todo incluido",
       "breakdown": "OFR ${{base}} + recargos ${{surcharge}}"
     },
-    "validRange": "Válido {{from}} → {{to}}",
+    "validRange": "Válido: {{from}} → {{to}}",
     "validFrom": "Válido desde",
     "validTo": "Válido hasta",
     "rateType": "Tipo de tarifa",

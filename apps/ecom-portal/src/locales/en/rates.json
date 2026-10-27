@@ -92,10 +92,11 @@
   "actions": {
     "viewQuotes": "View Quotes",
     "requestForQuote": "Request for Quote",
+    "book": "Book",
     "bookAtThisRate": "Book at This Rate",
     "viewSurcharges": "View Surcharges",
     "shareRateQuote": "Share Rate Quote",
-    "share": "Share",
+    "share": "Share Rate Quote",
     "viewTariffTerms": "View Published Tariff Terms",
     "convertQuote": "Convert Quote into e-Booking",
     "viewQuoteTerms": "View Quotation Terms & Conditions",
@@ -127,15 +128,18 @@
   "rateCard": {
     "recommendedTag": "Lowest Published Freight",
     "ref": "Ref: {{id}}",
+    "commodity": "Commodity",
     "commodityLabel": "Commodity: {{value}}",
     "commodityFallback": "Commodity",
+    "expandDetails": "Expand rate details",
+    "collapseDetails": "Collapse rate details",
     "connector": {
       "accessorial": "Accessorial",
       "quotedAmount": "Quoted amount",
       "allInEstimate": "All-in estimate",
       "breakdown": "OFR ${{base}} + surcharges ${{surcharge}}"
     },
-    "validRange": "Valid {{from}} → {{to}}",
+    "validRange": "Valid: {{from}} → {{to}}",
     "validFrom": "Valid From",
     "validTo": "Valid To",
     "rateType": "Rate Type",

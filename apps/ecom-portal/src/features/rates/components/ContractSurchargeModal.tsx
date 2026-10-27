@@ -157,11 +157,7 @@ export function ContractSurchargeModal({
           </div>
         </div>
       }
-      footer={
-        <div className="rates-drawer-actions">
-          <AppButton onClick={onClose}>{t("common:actions.close")}</AppButton>
-        </div>
-      }
+   
     >
       <div className="rates-stack rates-surcharge-drawer">
         {/* Contract summary — route band + key facts + rate tiles */}

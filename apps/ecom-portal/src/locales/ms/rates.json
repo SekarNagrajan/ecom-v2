@@ -80,6 +80,7 @@
   "actions": {
     "viewQuotes": "Lihat Sebut Harga",
     "requestForQuote": "Permintaan Sebut Harga",
+    "book": "Tempah",
     "bookAtThisRate": "Tempah pada Kadar Ini",
     "viewSurcharges": "Lihat Surcaj",
     "shareRateQuote": "Kongsi Sebut Harga Kadar",
@@ -115,15 +116,18 @@
   "rateCard": {
     "recommendedTag": "Pengangkutan Diterbitkan Terendah",
     "ref": "Ruj: {{id}}",
+    "commodity": "Komoditi",
     "commodityLabel": "Komoditi: {{value}}",
     "commodityFallback": "Komoditi",
+    "expandDetails": "Kembangkan butiran kadar",
+    "collapseDetails": "Kuncupkan butiran kadar",
     "connector": {
       "accessorial": "Aksesori",
       "quotedAmount": "Jumlah sebut harga",
       "allInEstimate": "Anggaran all-in",
       "breakdown": "OFR ${{base}} + surcaj ${{surcharge}}"
     },
-    "validRange": "Sah {{from}} → {{to}}",
+    "validRange": "Sah: {{from}} → {{to}}",
     "validFrom": "Sah Dari",
     "validTo": "Sah Hingga",
     "rateType": "Jenis Kadar",

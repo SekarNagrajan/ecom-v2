@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-10-18 10:40)
+// Modified by Sekar Nagarajan (2026-10-26 17:05)
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { Card, Space, Spin, Typography } from "antd";
@@ -96,12 +96,9 @@ export function RatesRoute() {
         />
 
         <div className="rates-results-bar">
-          <Space align="center" size={10} wrap>
+          <div className="rates-results-bar__lead">
             <AppIcon icon={Icons.dollarSign} size={18} />
             <Text className="rates-results-bar__title">{resultsTitle}</Text>
-            {/* <span className="rates-results-bar__count">
-              {hasSearched ? cardRates.length : 0}
-            </span> */}
             {isLoading ? (
               <span
                 className="module-loading-center"
@@ -111,7 +108,7 @@ export function RatesRoute() {
                 <Spin size="small" />
               </span>
             ) : null}
-          </Space>
+          </div>
           <ModuleViewModeTabs value={viewMode} onChange={setViewMode} />
         </div>
 

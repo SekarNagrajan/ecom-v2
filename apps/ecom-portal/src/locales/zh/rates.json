@@ -80,6 +80,7 @@
   "actions": {
     "viewQuotes": "查看报价",
     "requestForQuote": "询价申请",
+    "book": "订舱",
     "bookAtThisRate": "按此运价订舱",
     "viewSurcharges": "查看附加费",
     "shareRateQuote": "分享运价报价",
@@ -115,15 +116,18 @@
   "rateCard": {
     "recommendedTag": "最低已发布运价",
     "ref": "编号：{{id}}",
+    "commodity": "货品",
     "commodityLabel": "货品：{{value}}",
     "commodityFallback": "货品",
+    "expandDetails": "展开运价详情",
+    "collapseDetails": "收起运价详情",
     "connector": {
       "accessorial": "杂费",
       "quotedAmount": "报价金额",
       "allInEstimate": "全包预估",
       "breakdown": "海运费 ${{base}} + 附加费 ${{surcharge}}"
     },
-    "validRange": "有效期 {{from}} → {{to}}",
+    "validRange": "有效期：{{from}} → {{to}}",
     "validFrom": "有效期起",
     "validTo": "有效期至",
     "rateType": "运价类型",

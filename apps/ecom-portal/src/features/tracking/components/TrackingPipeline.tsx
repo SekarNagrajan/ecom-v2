@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-11 13:02)
+// Modified by Sekar Nagarajan (2026-10-27 11:10)
 import { Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
 
@@ -24,28 +24,33 @@ const TRANSPORT_ICON: Record<
   BARGE: Icons.anchor,
 };
 
-const TRANSPORT_LABEL: Record<
-  NonNullable<TrackingMilestone["transportMode"]>,
-  string
-> = {
-  VESSEL: "Vessel",
-  TRUCK: "Truck",
-  RAIL: "Rail",
-  BARGE: "Barge",
-};
-
+/**
+ * Pipeline progress icons — match shipment steps from buildMilestones:
+ * Booking → Empty Pick-up → Pre-carriage → Gate In → Loaded →
+ * Transhipment → Discharged → On-carriage → Delivered.
+ */
 function milestoneIcon(milestone: TrackingMilestone): LucideIcon {
+  const name = milestone.stepName.toLowerCase();
+
+  if (name.includes("book")) return Icons.fileCheck;
+  if (name.includes("pick")) return Icons.container;
+  if (name.includes("pre-carriage") || name.includes("on-carriage")) {
+    return milestone.transportMode
+      ? TRANSPORT_ICON[milestone.transportMode]
+      : Icons.truck;
+  }
+  if (name.includes("gate in")) return Icons.truck;
+  if (name.includes("loaded") || name.includes("on board")) return Icons.ship;
+  if (name.includes("tranship") || name.includes("transship")) {
+    return Icons.boxes;
+  }
+  if (name.includes("discharge")) return Icons.anchor;
+  if (name.includes("delivered") || name.includes("gate out")) {
+    return Icons.packageCheck;
+  }
+
   if (milestone.transportMode) {
     return TRANSPORT_ICON[milestone.transportMode];
-  }
-  const name = milestone.stepName.toLowerCase();
-  if (name.includes("gate in")) return Icons.container;
-  if (name.includes("loaded")) return Icons.boxes;
-  if (name.includes("departure")) return Icons.ship;
-  if (name.includes("ocean") || name.includes("transit")) return Icons.ship;
-  if (name.includes("discharge")) return Icons.anchor;
-  if (name.includes("gate out") || name.includes("delivered")) {
-    return Icons.packageCheck;
   }
   return Icons.mapPin;
 }
@@ -59,9 +64,33 @@ function stopStateClass(m: TrackingMilestone): string {
 }
 
 function statusLabel(m: TrackingMilestone): string {
-  if (m.isCurrent) return "In progress";
+  if (m.isCurrent) return "In Progress";
   if (m.isCompleted) return "Completed";
   return "Upcoming";
+}
+
+function statusBadgeIcon(m: TrackingMilestone): LucideIcon {
+  if (m.isCurrent) return Icons.history;
+  if (m.isCompleted) return Icons.checkCircle;
+  return Icons.clock;
+}
+
+function connectorLineClass(m: TrackingMilestone | undefined): string {
+  if (!m) return "tracking-journey-stop__line--dotted";
+  if (m.isCompleted && !m.isCurrent) {
+    return "tracking-journey-stop__line--solid";
+  }
+  return "tracking-journey-stop__line--dotted";
+}
+
+function lastUpdatedLabel(
+  milestones: TrackingMilestone[],
+  eta: string,
+): string {
+  const stamped = [...milestones]
+    .reverse()
+    .find((m) => (m.isCompleted || m.isCurrent) && m.timestamp);
+  return stamped?.timestamp || eta || "—";
 }
 
 export function TrackingPipeline({
@@ -70,12 +99,15 @@ export function TrackingPipeline({
   orientation = "horizontal",
 }: TrackingPipelineProps) {
   const isVertical = orientation === "vertical";
+  const updatedAt = lastUpdatedLabel(milestones, eta);
 
   return (
     <div
       className={[
         "tracking-journey",
-        isVertical ? "tracking-journey--vertical" : "tracking-journey--horizontal",
+        isVertical
+          ? "tracking-journey--vertical"
+          : "tracking-journey--horizontal",
       ].join(" ")}
     >
       <div className="tracking-journey__header">
@@ -84,12 +116,12 @@ export function TrackingPipeline({
             <AppIcon icon={Icons.ship} size={16} />
           </span>
           <Title level={5} className="tracking-journey__title">
-            Cargo journey
+            Cargo Journey
           </Title>
         </div>
-        <Text type="secondary" className="tracking-journey__eta">
-          Estimated arrival (ETA):{" "}
-          <span className="tracking-journey__eta-value">{eta}</span>
+        <Text type="secondary" className="tracking-journey__updated">
+          Last updated:{" "}
+          <span className="tracking-journey__updated-value">{updatedAt}</span>
         </Text>
       </div>
 
@@ -103,77 +135,102 @@ export function TrackingPipeline({
         ].join(" ")}
       >
         {milestones.map((milestone, index) => {
+          const isFirst = index === 0;
           const isLast = index === milestones.length - 1;
-          const lineStyle = milestone.isCurrent
-            ? "tracking-journey-stop__line--dotted"
-            : milestone.isCompleted
-              ? "tracking-journey-stop__line--solid"
-              : "tracking-journey-stop__line--dotted";
-          const nodeIcon = milestone.isCompleted && !milestone.isCurrent
-            ? Icons.check
-            : milestoneIcon(milestone);
+          const prev = isFirst ? undefined : milestones[index - 1];
+          const beforeLine = connectorLineClass(prev);
+          const afterLine = connectorLineClass(milestone);
+          const nodeIcon = milestoneIcon(milestone);
+          const badgeIcon = statusBadgeIcon(milestone);
 
           return (
             <li key={milestone.id} className={stopStateClass(milestone)}>
               <div className="tracking-journey-stop__rail">
+                {isVertical ? null : (
+                  <span
+                    className={[
+                      "tracking-journey-stop__line",
+                      "tracking-journey-stop__line--before",
+                      beforeLine,
+                      isFirst ? "tracking-journey-stop__line--ghost" : "",
+                    ]
+                      .filter(Boolean)
+                      .join(" ")}
+                    aria-hidden
+                  />
+                )}
                 <span
                   className="tracking-journey-stop__node app-icon-inherit"
                   aria-label={statusLabel(milestone)}
                 >
                   {milestone.isCurrent ? (
-                    <span className="tracking-journey-stop__spin">
-                      <AppIcon icon={Icons.refreshCw} size={18} />
-                    </span>
-                  ) : (
-                    <AppIcon icon={nodeIcon} size={18} />
-                  )}
+                    <span
+                      className="tracking-journey-stop__node-pulse"
+                      aria-hidden
+                    />
+                  ) : null}
+                  <AppIcon icon={nodeIcon} size={18} />
                 </span>
-                {isLast ? null : (
+                {isLast && isVertical ? null : (
                   <span
-                    className={["tracking-journey-stop__line", lineStyle].join(
-                      " ",
-                    )}
+                    className={[
+                      "tracking-journey-stop__line",
+                      "tracking-journey-stop__line--after",
+                      afterLine,
+                      isLast && !isVertical
+                        ? "tracking-journey-stop__line--ghost"
+                        : "",
+                      isLast && isVertical
+                        ? "tracking-journey-stop__line--hidden"
+                        : "",
+                    ]
+                      .filter(Boolean)
+                      .join(" ")}
                     aria-hidden
                   />
                 )}
               </div>
 
               <div className="tracking-journey-stop__body">
-                <Text className="tracking-journey-stop__place">
+                <Text
+                  className="tracking-journey-stop__place"
+                  ellipsis={{ tooltip: milestone.stepName }}
+                >
                   {milestone.stepName}
                 </Text>
                 <Text
                   type="secondary"
                   className="tracking-journey-stop__terminal"
+                  ellipsis={{ tooltip: milestone.location }}
                 >
                   {milestone.location}
                 </Text>
-                <div className="tracking-journey-stop__badges">
-                  <span
-                    className={[
-                      "tracking-journey-stop__badge",
-                      milestone.isCurrent
-                        ? "tracking-journey-stop__badge--current"
-                        : milestone.isCompleted
-                          ? "tracking-journey-stop__badge--done"
-                          : "tracking-journey-stop__badge--todo",
-                    ].join(" ")}
-                  >
-                    {statusLabel(milestone)}
+                <span
+                  className={[
+                    "tracking-journey-stop__badge",
+                    milestone.isCurrent
+                      ? "tracking-journey-stop__badge--current"
+                      : milestone.isCompleted
+                        ? "tracking-journey-stop__badge--done"
+                        : "tracking-journey-stop__badge--todo",
+                  ].join(" ")}
+                >
+                  <span className="tracking-journey-stop__badge-icon app-icon-inherit">
+                    <AppIcon icon={badgeIcon} size={12} />
                   </span>
-                  {milestone.transportMode ? (
-                    <span className="tracking-journey-stop__badge tracking-journey-stop__badge--mode">
-                      {TRANSPORT_LABEL[milestone.transportMode]}
-                    </span>
-                  ) : null}
-                </div>
+                  {statusLabel(milestone)}
+                </span>
                 {milestone.timestamp ? (
                   <Text className="tracking-journey-stop__time">
                     <span className="tracking-journey-stop__time-date">
                       {milestone.timestamp}
                     </span>
                   </Text>
-                ) : null}
+                ) : (
+                  <Text className="tracking-journey-stop__time tracking-journey-stop__time--empty">
+                    —
+                  </Text>
+                )}
               </div>
             </li>
           );

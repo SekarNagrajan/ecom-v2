@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-11 18:25)
+// Modified by Sekar Nagarajan (2026-10-26 17:05)
 // QuoteRequestDrawer — ApplicationResource_en.properties Request for Quote fields
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -141,117 +141,119 @@ export function QuoteRequestDrawer({
       }
     >
       <Form layout="vertical" requiredMark={false}>
-        <Form.Item
-          label={
-            <span className="form-field-label">
-              {t("quoteRequest.fields.portOfLoad")}{" "}
-              <Text type="danger">*</Text>
-            </span>
-          }
-          validateStatus={errors.originPort ? "error" : ""}
-          help={
-            errors.originPort ? (
-              <Text type="danger" className="form-field-error">
-                {errors.originPort.message}
-              </Text>
-            ) : undefined
-          }
-        >
-          <Controller
-            name="originPort"
-            control={control}
-            render={({ field }) => (
-              <Select
-                {...field}
-                size="large"
-                showSearch
-                options={[
-                  { value: "USNYC", label: t("options.ports.USNYC") },
-                  { value: "DEHAM", label: t("options.ports.DEHAM") },
-                  { value: "INNSA", label: t("options.ports.INNSA") },
-                ]}
-              />
-            )}
-          />
-        </Form.Item>
+        <div className="rates-drawer-form-row">
+          <Form.Item
+            label={
+              <span className="form-field-label">
+                {t("quoteRequest.fields.portOfLoad")}{" "}
+                <Text type="danger">*</Text>
+              </span>
+            }
+            validateStatus={errors.originPort ? "error" : ""}
+            help={
+              errors.originPort ? (
+                <Text type="danger" className="form-field-error">
+                  {errors.originPort.message}
+                </Text>
+              ) : undefined
+            }
+          >
+            <Controller
+              name="originPort"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  size="large"
+                  showSearch
+                  options={[
+                    { value: "USNYC", label: t("options.ports.USNYC") },
+                    { value: "DEHAM", label: t("options.ports.DEHAM") },
+                    { value: "INNSA", label: t("options.ports.INNSA") },
+                  ]}
+                />
+              )}
+            />
+          </Form.Item>
 
-        <Form.Item
-          label={
-            <span className="form-field-label">
-              {t("quoteRequest.fields.portOfDischarge")}{" "}
-              <Text type="danger">*</Text>
-            </span>
-          }
-          validateStatus={errors.deliveryPort ? "error" : ""}
-          help={
-            errors.deliveryPort ? (
-              <Text type="danger" className="form-field-error">
-                {errors.deliveryPort.message}
-              </Text>
-            ) : undefined
-          }
-        >
-          <Controller
-            name="deliveryPort"
-            control={control}
-            render={({ field }) => (
-              <Select
-                {...field}
-                size="large"
-                showSearch
-                options={[
-                  { value: "SGSIN", label: t("options.ports.SGSIN") },
-                  { value: "CNSHA", label: t("options.ports.CNSHA") },
-                  { value: "AEDXB", label: t("options.ports.AEDXB") },
-                ]}
-              />
-            )}
-          />
-        </Form.Item>
-
-        <Form.Item
-          label={
-            <span className="form-field-label">
-              {t("quoteRequest.fields.cargoType")}{" "}
-              <Text type="danger">*</Text>
-            </span>
-          }
-          validateStatus={errors.eqpType ? "error" : ""}
-          help={
-            errors.eqpType ? (
-              <Text type="danger" className="form-field-error">
-                {errors.eqpType.message}
-              </Text>
-            ) : undefined
-          }
-        >
-          <Controller
-            name="eqpType"
-            control={control}
-            render={({ field }) => (
-              <Select
-                {...field}
-                size="large"
-                options={[
-                  {
-                    value: "20' Standard Dry",
-                    label: t("options.equipment.20dv"),
-                  },
-                  {
-                    value: "40' High Cube Dry",
-                    label: t("options.equipment.40hc"),
-                  },
-                  {
-                    value: "40' Reefer Container",
-                    label: t("options.equipment.40rf"),
-                  },
-                ]}
-              />
-            )}
-          />
-        </Form.Item>
+          <Form.Item
+            label={
+              <span className="form-field-label">
+                {t("quoteRequest.fields.portOfDischarge")}{" "}
+                <Text type="danger">*</Text>
+              </span>
+            }
+            validateStatus={errors.deliveryPort ? "error" : ""}
+            help={
+              errors.deliveryPort ? (
+                <Text type="danger" className="form-field-error">
+                  {errors.deliveryPort.message}
+                </Text>
+              ) : undefined
+            }
+          >
+            <Controller
+              name="deliveryPort"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  size="large"
+                  showSearch
+                  options={[
+                    { value: "SGSIN", label: t("options.ports.SGSIN") },
+                    { value: "CNSHA", label: t("options.ports.CNSHA") },
+                    { value: "AEDXB", label: t("options.ports.AEDXB") },
+                  ]}
+                />
+              )}
+            />
+          </Form.Item>
+        </div>
 
         <div className="rates-drawer-form-row">
+          <Form.Item
+            label={
+              <span className="form-field-label">
+                {t("quoteRequest.fields.cargoType")}{" "}
+                <Text type="danger">*</Text>
+              </span>
+            }
+            validateStatus={errors.eqpType ? "error" : ""}
+            help={
+              errors.eqpType ? (
+                <Text type="danger" className="form-field-error">
+                  {errors.eqpType.message}
+                </Text>
+              ) : undefined
+            }
+          >
+            <Controller
+              name="eqpType"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  size="large"
+                  options={[
+                    {
+                      value: "20' Standard Dry",
+                      label: t("options.equipment.20dv"),
+                    },
+                    {
+                      value: "40' High Cube Dry",
+                      label: t("options.equipment.40hc"),
+                    },
+                    {
+                      value: "40' Reefer Container",
+                      label: t("options.equipment.40rf"),
+                    },
+                  ]}
+                />
+              )}
+            />
+          </Form.Item>
+
           <Form.Item
             label={
               <span className="form-field-label">
@@ -281,36 +283,36 @@ export function QuoteRequestDrawer({
               )}
             />
           </Form.Item>
-
-          <Form.Item
-            label={
-              <span className="form-field-label">
-                {t("quoteRequest.fields.commodity")}{" "}
-                <Text type="danger">*</Text>
-              </span>
-            }
-            validateStatus={errors.commodity ? "error" : ""}
-            help={
-              errors.commodity ? (
-                <Text type="danger" className="form-field-error">
-                  {errors.commodity.message}
-                </Text>
-              ) : undefined
-            }
-          >
-            <Controller
-              name="commodity"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  size="large"
-                  placeholder={t("quoteRequest.placeholders.commodity")}
-                />
-              )}
-            />
-          </Form.Item>
         </div>
+
+        <Form.Item
+          label={
+            <span className="form-field-label">
+              {t("quoteRequest.fields.commodity")}{" "}
+              <Text type="danger">*</Text>
+            </span>
+          }
+          validateStatus={errors.commodity ? "error" : ""}
+          help={
+            errors.commodity ? (
+              <Text type="danger" className="form-field-error">
+                {errors.commodity.message}
+              </Text>
+            ) : undefined
+          }
+        >
+          <Controller
+            name="commodity"
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                size="large"
+                placeholder={t("quoteRequest.placeholders.commodity")}
+              />
+            )}
+          />
+        </Form.Item>
 
         <div className="rates-drawer-form-row">
           <Form.Item

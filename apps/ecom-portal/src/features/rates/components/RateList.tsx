@@ -46,7 +46,7 @@ export function RateList({
     () => [
       buildActionsColumn<CombinedRateItem>({
         field: "id",
-        width: 150,
+        width: 176,
         cellRenderer: (params: { data?: CombinedRateItem }) => {
           const record = params.data;
           if (!record) return null;

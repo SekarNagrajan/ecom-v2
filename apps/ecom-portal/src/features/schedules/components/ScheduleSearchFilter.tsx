@@ -1,9 +1,31 @@
-// Modified by Sekar Nagarajan (2026-08-31 11:25)
+// Modified by Sekar Nagarajan (2026-10-19 12:15)
 import { AppButton } from "@solverminds/shared-ui";
-import { Col, DatePicker, Form, Row, Select, Tabs, Typography } from "antd";
+import {
+  Col,
+  DatePicker,
+  Form,
+  Row,
+  Select,
+  Tabs,
+  Tooltip,
+  Typography,
+} from "antd";
+import type { FormInstance } from "antd/es/form";
 import dayjs from "dayjs";
-import { AppIcon, Icons } from "../../../components/icons";
+import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
+import { AppIcon, Icons } from "../../../components/icons";
+import {
+  usePortByCode,
+  usePortSearch,
+} from "../../landing/api/landing.queries";
+import {
+  DEFAULT_LANE,
+  portLabelOf,
+  SCHEDULE_PORT_CODES,
+} from "../../landing/utils/landing-search";
+import { schedulesApi } from "../api/schedules.api";
 import type {
   ScheduleSearchParams,
   ScheduleSearchType,
@@ -12,27 +34,65 @@ import type {
 const { RangePicker } = DatePicker;
 const { Text } = Typography;
 
-const POPULAR_PORTS = [
-  { value: "USNYC", label: "USNYC - New York, USA" },
-  { value: "SGSIN", label: "SGSIN - Singapore, Singapore" },
-  { value: "NLRTM", label: "NLRTM - Rotterdam, Netherlands" },
-  { value: "CNSHA", label: "CNSHA - Shanghai, China" },
-  { value: "DEHAM", label: "DEHAM - Hamburg, Germany" },
-  { value: "AEJEA", label: "AEJEA - Jebel Ali, UAE" },
-  { value: "USLAX", label: "USLAX - Los Angeles, USA" },
-  { value: "JPTYO", label: "JPTYO - Tokyo, Japan" },
-];
+const SEARCH_ROW_GUTTER: [number, number] = [12, 8];
+const HEADER_ROW_GUTTER: [number, number] = [8, 4];
 
-const POPULAR_VESSELS = [
-  { value: "AGEX", label: "ANTIGRAVITY EXPRESS (AGEX)" },
-  { value: "SMVY", label: "SOLVERMINDS VOYAGER (SMVY)" },
-  { value: "GLHZ", label: "GLOBAL HORIZON (GLHZ)" },
-  { value: "OCPN", label: "OCEAN PIONEER (OCPN)" },
-];
+type PortSelectOption = { value: string; label: string };
 
-interface ScheduleSearchFilterProps {
+/**
+ * Same port source as landing Schedule tab: masters typeahead + showcase fallbacks.
+ * Always keeps a labeled option for `selectedCode` so the sticky header remount
+ * (and deep links) show "CODE - NAME" instead of the bare code.
+ */
+function useSchedulePortOptions(selectedCode?: string) {
+  const { t } = useTranslation("schedules");
+  const [query, setQuery] = useState("");
+  const { data: ports = [], isFetching } = usePortSearch(query);
+  const selected = String(selectedCode ?? "").trim().toUpperCase();
+  const { data: selectedPort } = usePortByCode(selected);
+
+  const fallbackPorts = useMemo(
+    () =>
+      SCHEDULE_PORT_CODES.map((value) => ({
+        value,
+        label: t(`options.ports.${value}`, { defaultValue: value }),
+      })),
+    [t],
+  );
+
+  const options = useMemo(() => {
+    const fromSearch: PortSelectOption[] =
+      ports.length === 0
+        ? fallbackPorts
+        : ports.map((p) => ({
+            value: p.portCode,
+            label: portLabelOf(p),
+          }));
+
+    if (!selected) return fromSearch;
+    if (fromSearch.some((o) => o.value.toUpperCase() === selected)) {
+      return fromSearch;
+    }
+
+    const label = selectedPort
+      ? portLabelOf(selectedPort)
+      : t(`options.ports.${selected}`, { defaultValue: selected });
+
+    return [{ value: selected, label }, ...fromSearch];
+  }, [ports, fallbackPorts, selected, selectedPort, t]);
+
+  return { setQuery, options, isFetching };
+}
+
+export type ScheduleSearchFilterVariant = "page" | "header";
+
+export interface ScheduleSearchFilterProps {
   onSearch: (params: ScheduleSearchParams) => void;
+  onReset?: () => void;
   isLoading?: boolean;
+  variant?: ScheduleSearchFilterVariant;
+  /** Lifted form instance so the filter can portal without losing values. */
+  form?: FormInstance;
 }
 
 function SearchActionsLabel() {
@@ -42,10 +102,48 @@ function SearchActionsLabel() {
 function SearchActionsField({
   isLoading,
   onReset,
+  compact,
+  t,
 }: {
   isLoading?: boolean;
   onReset: () => void;
+  compact?: boolean;
+  t: (key: string) => string;
 }) {
+  const searchLabel = t("search.searchSchedules");
+  const resetLabel = t("common:actions.reset");
+  const resetAria = t("search.resetAria");
+
+  if (compact) {
+    return (
+      <Form.Item className="schedule-search-actions-field">
+        <div className="schedule-search-actions schedule-search-actions--compact">
+          <Tooltip title={searchLabel}>
+            <AppButton
+              type="primary"
+              size="middle"
+              htmlType="submit"
+              loading={isLoading}
+              className="schedule-search-actions__icon-btn"
+              icon={<AppIcon icon={Icons.search} size={16} />}
+              aria-label={searchLabel}
+            />
+          </Tooltip>
+          <Tooltip title={resetLabel}>
+            <AppButton
+              danger
+              size="middle"
+              className="schedule-search-actions__icon-btn"
+              icon={<AppIcon icon={Icons.refreshCw} size={16} tone="delete" />}
+              onClick={onReset}
+              aria-label={resetAria}
+            />
+          </Tooltip>
+        </div>
+      </Form.Item>
+    );
+  }
+
   return (
     <Form.Item
       label={<SearchActionsLabel />}
@@ -59,16 +157,16 @@ function SearchActionsField({
           loading={isLoading}
           icon={<AppIcon icon={Icons.search} size={16} />}
         >
-          Search Schedules
+          {searchLabel}
         </AppButton>
         <AppButton
           danger
           size="large"
           icon={<AppIcon icon={Icons.refreshCw} size={16} tone="delete" />}
           onClick={onReset}
-          aria-label="Reset search filters"
+          aria-label={resetAria}
         >
-          Reset
+          {resetLabel}
         </AppButton>
       </div>
     </Form.Item>
@@ -77,11 +175,32 @@ function SearchActionsField({
 
 export function ScheduleSearchFilter({
   onSearch,
+  onReset,
   isLoading,
+  variant = "page",
+  form: formProp,
 }: ScheduleSearchFilterProps) {
-  const [form] = Form.useForm();
+  const { t } = useTranslation(["schedules", "common", "modules"]);
+  const [internalForm] = Form.useForm();
+  const form = formProp ?? internalForm;
+  const isHeader = variant === "header";
+
   const searchType: ScheduleSearchType =
     Form.useWatch("searchType", form) || "POINT_TO_POINT";
+  const polCode = Form.useWatch("polCode", form) as string | undefined;
+  const podCode = Form.useWatch("podCode", form) as string | undefined;
+  const portCode = Form.useWatch("portCode", form) as string | undefined;
+
+  // Same port catalogue as landing Schedule tab (masters search + SCHEDULE_PORT_CODES fallback).
+  // Pass selected codes so header remount / deep link still resolve "CODE - NAME" labels.
+  const polPorts = useSchedulePortOptions(polCode);
+  const podPorts = useSchedulePortOptions(podCode);
+  const callPorts = useSchedulePortOptions(portCode);
+
+  // Labels come from the vessel master (CODE - NAME), not i18n keys — fixture codes change per extract.
+  const popularVessels = useMemo(() => schedulesApi.listVesselOptions(), []);
+  const controlSize = isHeader ? "middle" : "large";
+  const gutter = isHeader ? HEADER_ROW_GUTTER : SEARCH_ROW_GUTTER;
 
   const handleSwapPorts = () => {
     const pol = form.getFieldValue("polCode");
@@ -91,6 +210,12 @@ export function ScheduleSearchFilter({
 
   const handleReset = () => {
     form.resetFields();
+    onReset?.();
+  };
+
+  const handleSearchTypeChange = (key: string) => {
+    form.setFieldValue("searchType", key as ScheduleSearchType);
+    onReset?.();
   };
 
   const handleFinish = (values: Record<string, unknown>) => {
@@ -109,242 +234,364 @@ export function ScheduleSearchFilter({
   };
 
   return (
-    <div className="schedule-search-panel">
-      {/* <div className="schedule-search-panel__header">
-        <span className="schedule-search-panel__header-icon app-icon-inherit primary-surface">
-          <AppIcon icon={Icons.search} size={20} />
-        </span>
-        <div>
-          <Text className="schedule-search-panel__header-title">
-            Find Your Sailing
-          </Text>
-          <Text className="schedule-search-panel__header-subtitle">
-            Search by route, vessel, or port to view available departures
-          </Text>
-        </div>
-      </div> */}
-
+    <div
+      className={[
+        "schedule-search-panel",
+        isHeader ? "schedule-search-panel--header" : undefined,
+      ]
+        .filter(Boolean)
+        .join(" ")}
+    >
       <div className="schedule-search-panel__body">
         <Form
           form={form}
-          layout="vertical"
+          layout={isHeader ? "horizontal" : "vertical"}
           requiredMark={false}
           initialValues={{
             searchType: "POINT_TO_POINT",
-            polCode: "USNYC",
-            podCode: "SGSIN",
+            polCode: DEFAULT_LANE.pol,
+            podCode: DEFAULT_LANE.pod,
             dateRange: [dayjs(), dayjs().add(30, "day")],
           }}
           onFinish={handleFinish}
         >
-          <div className="schedule-search-type-wrap">
-            <Form.Item
-              name="searchType"
-              className="schedule-search-type"
-              hidden
-            >
+          {isHeader ? (
+            <Form.Item name="searchType" hidden>
               <input type="hidden" />
             </Form.Item>
-            <Tabs
-              activeKey={searchType}
-              onChange={(key) =>
-                form.setFieldValue("searchType", key as ScheduleSearchType)
-              }
-              className="schedule-search-tabs"
-              items={[
-                {
-                  key: "POINT_TO_POINT",
-                  label: (
-                    <span className="schedule-tab-label">Point to Point</span>
-                  ),
-                },
-                {
-                  key: "VESSEL_SCHEDULE",
-                  label: <span className="schedule-tab-label">By Vessel</span>,
-                },
-                {
-                  key: "PORT_SCHEDULE",
-                  label: <span className="schedule-tab-label">By Port</span>,
-                },
-              ]}
-            />
-          </div>
+          ) : (
+            <div className="schedule-search-type-wrap">
+              <Form.Item
+                name="searchType"
+                className="schedule-search-type"
+                hidden
+              >
+                <input type="hidden" />
+              </Form.Item>
+              <Tabs
+                activeKey={searchType}
+                onChange={handleSearchTypeChange}
+                className="schedule-search-tabs"
+                items={[
+                  {
+                    key: "POINT_TO_POINT",
+                    label: (
+                      <span className="schedule-tab-label">
+                        {t("modes.byRoute")}
+                      </span>
+                    ),
+                  },
+                  {
+                    key: "VESSEL_SCHEDULE",
+                    label: (
+                      <span className="schedule-tab-label">
+                        {t("modes.byVessel")}
+                      </span>
+                    ),
+                  },
+                  {
+                    key: "PORT_SCHEDULE",
+                    label: (
+                      <span className="schedule-tab-label">
+                        {t("modes.byPort")}
+                      </span>
+                    ),
+                  },
+                ]}
+              />
+            </div>
+          )}
 
           {searchType === "POINT_TO_POINT" && (
-            <Row gutter={[16, 16]}>
-              <Col xs={24} md={11} lg={6}>
+            <Row gutter={gutter} align="middle" wrap={!isHeader}>
+              {/* Modified by Sekar Nagarajan (2026-09-17 21:19) — wider POL/POD in header strip */}
+              <Col
+                xs={24}
+                md={isHeader ? undefined : 11}
+                lg={isHeader ? undefined : 6}
+                flex={isHeader ? "2 1 260px" : undefined}
+                className={
+                  isHeader ? "schedule-search-header-col--port" : undefined
+                }
+              >
                 <Form.Item
                   name="polCode"
                   label={
-                    <span className="form-field-label">
-                      Origin Port (POL) <Text type="danger">*</Text>
-                    </span>
+                    isHeader ? null : (
+                      <span className="form-field-label">
+                        {t("search.originPort")} <Text type="danger">*</Text>
+                      </span>
+                    )
                   }
-                  rules={[{ required: true, message: "Select origin port" }]}
+                  rules={[
+                    { required: true, message: t("search.selectOrigin") },
+                  ]}
                 >
                   <Select
-                    size="large"
+                    size={controlSize}
                     showSearch
-                    placeholder="Where are you shipping from?"
-                    options={POPULAR_PORTS}
-                    filterOption={(input, option) =>
-                      (option?.label ?? "")
-                        .toLowerCase()
-                        .includes(input.toLowerCase())
+                    placeholder={
+                      isHeader
+                        ? t("search.originShort")
+                        : t("search.originPlaceholder")
                     }
+                    options={polPorts.options}
+                    optionLabelProp="label"
+                    popupMatchSelectWidth={360}
+                    aria-label={t("search.originPortAria")}
+                    loading={polPorts.isFetching}
+                    onSearch={polPorts.setQuery}
+                    filterOption={false}
                   />
                 </Form.Item>
               </Col>
 
-              <Col xs={24} md={2} lg={1}>
+              <Col
+                xs={24}
+                md={isHeader ? undefined : 2}
+                lg={isHeader ? undefined : 1}
+                flex={isHeader ? "0 0 auto" : undefined}
+                className={
+                  isHeader ? "schedule-search-header-col--swap" : undefined
+                }
+              >
                 <Form.Item
-                  label={<SearchActionsLabel />}
+                  label={isHeader ? null : <SearchActionsLabel />}
                   className="schedule-search-actions-field schedule-port-swap-field"
                 >
-                  <AppButton
-                    type="default"
-                    size="large"
-                    shape="circle"
-                    icon={<AppIcon icon={Icons.arrowLeftRight} size={16} />}
-                    onClick={handleSwapPorts}
-                    aria-label="Swap origin and delivery ports"
-                  />
+                  <Tooltip title={t("search.swapTooltip")}>
+                    <AppButton
+                      type="default"
+                      size={controlSize}
+                      shape="circle"
+                      icon={<AppIcon icon={Icons.arrowLeftRight} size={16} />}
+                      onClick={handleSwapPorts}
+                      aria-label={t("search.swapAria")}
+                    />
+                  </Tooltip>
                 </Form.Item>
               </Col>
 
-              <Col xs={24} md={11} lg={5}>
+              <Col
+                xs={24}
+                md={isHeader ? undefined : 11}
+                lg={isHeader ? undefined : 5}
+                flex={isHeader ? "2 1 260px" : undefined}
+                className={
+                  isHeader ? "schedule-search-header-col--port" : undefined
+                }
+              >
                 <Form.Item
                   name="podCode"
                   label={
-                    <span className="form-field-label">
-                      Delivery Port (POD) <Text type="danger">*</Text>
-                    </span>
+                    isHeader ? null : (
+                      <span className="form-field-label">
+                        {t("search.deliveryPort")} <Text type="danger">*</Text>
+                      </span>
+                    )
                   }
-                  rules={[{ required: true, message: "Select delivery port" }]}
+                  rules={[
+                    { required: true, message: t("search.selectDelivery") },
+                  ]}
                 >
                   <Select
-                    size="large"
+                    size={controlSize}
                     showSearch
-                    placeholder="Where is cargo going?"
-                    options={POPULAR_PORTS}
-                    filterOption={(input, option) =>
-                      (option?.label ?? "")
-                        .toLowerCase()
-                        .includes(input.toLowerCase())
+                    placeholder={
+                      isHeader
+                        ? t("search.deliveryShort")
+                        : t("search.deliveryPlaceholder")
                     }
+                    options={podPorts.options}
+                    optionLabelProp="label"
+                    popupMatchSelectWidth={360}
+                    aria-label={t("search.deliveryPortAria")}
+                    loading={podPorts.isFetching}
+                    onSearch={podPorts.setQuery}
+                    filterOption={false}
                   />
                 </Form.Item>
               </Col>
 
-              <Col xs={24} md={12} lg={6}>
+              <Col
+                xs={24}
+                md={isHeader ? undefined : 12}
+                lg={isHeader ? undefined : 6}
+                flex={isHeader ? "0 1 220px" : undefined}
+                className={
+                  isHeader ? "schedule-search-header-col--date" : undefined
+                }
+              >
                 <Form.Item
                   name="dateRange"
                   label={
-                    <span className="form-field-label">
-                      Departure Date Range
-                    </span>
+                    isHeader ? null : (
+                      <span className="form-field-label">
+                        {t("search.departureDateRange")}
+                      </span>
+                    )
                   }
                 >
                   <RangePicker
-                    size="large"
+                    size={controlSize}
                     className="schedule-date-range"
                     format="YYYY-MM-DD"
+                    aria-label={t("search.departureDateRangeAria")}
                   />
                 </Form.Item>
               </Col>
 
-              <Col xs={24} md={12} lg={6}>
+              <Col
+                xs={24}
+                md={isHeader ? undefined : 12}
+                lg={isHeader ? undefined : 6}
+                flex={isHeader ? "0 0 auto" : undefined}
+                className={
+                  isHeader ? "schedule-search-header-col--actions" : undefined
+                }
+              >
                 <SearchActionsField
                   isLoading={isLoading}
                   onReset={handleReset}
+                  compact={isHeader}
+                  t={t}
                 />
               </Col>
             </Row>
           )}
 
           {searchType === "VESSEL_SCHEDULE" && (
-            <Row gutter={[16, 16]}>
-              <Col xs={24} lg={9}>
+            <Row gutter={gutter} align="middle" wrap={!isHeader}>
+              <Col
+                xs={24}
+                lg={isHeader ? undefined : 9}
+                flex={isHeader ? "1 1 160px" : undefined}
+              >
                 <Form.Item
                   name="vesselCode"
                   label={
-                    <span className="form-field-label">
-                      Vessel Name / Code <Text type="danger">*</Text>
-                    </span>
+                    isHeader ? null : (
+                      <span className="form-field-label">
+                        {t("search.vesselNameCode")}{" "}
+                        <Text type="danger">*</Text>
+                      </span>
+                    )
                   }
-                  rules={[{ required: true, message: "Select vessel" }]}
+                  rules={[
+                    { required: true, message: t("search.selectVessel") },
+                  ]}
                 >
                   <Select
-                    size="large"
+                    size={controlSize}
                     showSearch
-                    placeholder="Select vessel"
-                    options={POPULAR_VESSELS}
+                    optionFilterProp="label"
+                    placeholder={t("search.vesselPlaceholder")}
+                    options={popularVessels}
+                    aria-label={t("search.vesselAria")}
                   />
                 </Form.Item>
               </Col>
-              <Col xs={24} lg={8}>
+              <Col
+                xs={24}
+                lg={isHeader ? undefined : 8}
+                flex={isHeader ? "1 1 180px" : undefined}
+              >
                 <Form.Item
                   name="dateRange"
                   label={
-                    <span className="form-field-label">Voyage Date Range</span>
+                    isHeader ? null : (
+                      <span className="form-field-label">
+                        {t("search.voyageDateRange")}
+                      </span>
+                    )
                   }
                 >
                   <RangePicker
-                    size="large"
+                    size={controlSize}
                     className="schedule-date-range"
                     format="YYYY-MM-DD"
+                    aria-label={t("search.voyageDateRangeAria")}
                   />
                 </Form.Item>
               </Col>
-              <Col xs={24} lg={7}>
+              <Col
+                xs={24}
+                lg={isHeader ? undefined : 7}
+                flex={isHeader ? "0 0 auto" : undefined}
+              >
                 <SearchActionsField
                   isLoading={isLoading}
                   onReset={handleReset}
+                  compact={isHeader}
+                  t={t}
                 />
               </Col>
             </Row>
           )}
 
           {searchType === "PORT_SCHEDULE" && (
-            <Row gutter={[16, 16]}>
-              <Col xs={24} lg={9}>
+            <Row gutter={gutter} align="middle" wrap={!isHeader}>
+              <Col
+                xs={24}
+                lg={isHeader ? undefined : 9}
+                flex={isHeader ? "1 1 160px" : undefined}
+              >
                 <Form.Item
                   name="portCode"
                   label={
-                    <span className="form-field-label">
-                      Port of Call <Text type="danger">*</Text>
-                    </span>
+                    isHeader ? null : (
+                      <span className="form-field-label">
+                        {t("search.portOfCall")} <Text type="danger">*</Text>
+                      </span>
+                    )
                   }
-                  rules={[{ required: true, message: "Select port" }]}
+                  rules={[{ required: true, message: t("search.selectPort") }]}
                 >
                   <Select
-                    size="large"
+                    size={controlSize}
                     showSearch
-                    placeholder="Select port"
-                    options={POPULAR_PORTS}
+                    placeholder={t("search.portOfCallPlaceholder")}
+                    options={callPorts.options}
+                    aria-label={t("search.portOfCallAria")}
+                    loading={callPorts.isFetching}
+                    onSearch={callPorts.setQuery}
+                    filterOption={false}
                   />
                 </Form.Item>
               </Col>
-              <Col xs={24} lg={8}>
+              <Col
+                xs={24}
+                lg={isHeader ? undefined : 8}
+                flex={isHeader ? "1 1 180px" : undefined}
+              >
                 <Form.Item
                   name="dateRange"
                   label={
-                    <span className="form-field-label">
-                      Arrival / Departure Window
-                    </span>
+                    isHeader ? null : (
+                      <span className="form-field-label">
+                        {t("search.arrivalDepartureWindow")}
+                      </span>
+                    )
                   }
                 >
                   <RangePicker
-                    size="large"
+                    size={controlSize}
                     className="schedule-date-range"
                     format="YYYY-MM-DD"
+                    aria-label={t("search.arrivalDepartureWindowAria")}
                   />
                 </Form.Item>
               </Col>
-              <Col xs={24} lg={7}>
+              <Col
+                xs={24}
+                lg={isHeader ? undefined : 7}
+                flex={isHeader ? "0 0 auto" : undefined}
+              >
                 <SearchActionsField
                   isLoading={isLoading}
                   onReset={handleReset}
+                  compact={isHeader}
+                  t={t}
                 />
               </Col>
             </Row>

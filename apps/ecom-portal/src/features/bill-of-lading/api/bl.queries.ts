@@ -1,7 +1,9 @@
 // Modified by Sekar Nagarajan (2026-08-24 23:56)
 import { useToast } from '@solverminds/shared-ui/hooks';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 
+import { siKeys } from '../../shipping-instruction/api/si.keys';
 import {
   batchPrintBL,
   cancelBL,
@@ -106,6 +108,7 @@ export function useBLPrintMutation() {
 }
 
 export function useBLBatchPrintMutation() {
+  const { t } = useTranslation('bill-of-lading');
   const queryClient = useQueryClient();
   const toast = useToast();
 
@@ -125,7 +128,7 @@ export function useBLBatchPrintMutation() {
       a.click();
       URL.revokeObjectURL(url);
       queryClient.invalidateQueries({ queryKey: blKeys.lists() });
-      toast.success('Batch print downloaded');
+      toast.success(t('toasts.batchPrintDownloaded'));
     },
     onError: (error) => {
       toast.error(error.message);
@@ -134,6 +137,7 @@ export function useBLBatchPrintMutation() {
 }
 
 export function useBLVerifyMutation() {
+  const { t } = useTranslation('bill-of-lading');
   const queryClient = useQueryClient();
   const toast = useToast();
 
@@ -144,7 +148,7 @@ export function useBLVerifyMutation() {
         toast.error(res.error.message);
         return;
       }
-      toast.success('B/L accepted and confirmed');
+      toast.success(t('toasts.acceptedAndConfirmed'));
       queryClient.invalidateQueries({ queryKey: blKeys.detail(blNo) });
       queryClient.invalidateQueries({ queryKey: blKeys.lists() });
     },
@@ -153,6 +157,7 @@ export function useBLVerifyMutation() {
 }
 
 export function useBLCancelMutation() {
+  const { t } = useTranslation('bill-of-lading');
   const queryClient = useQueryClient();
   const toast = useToast();
 
@@ -163,7 +168,7 @@ export function useBLCancelMutation() {
         toast.error(res.error.message);
         return;
       }
-      toast.success('Submitted B/L cancelled');
+      toast.success(t('toasts.submittedCancelled'));
       queryClient.invalidateQueries({ queryKey: blKeys.detail(blNo) });
       queryClient.invalidateQueries({ queryKey: blKeys.lists() });
     },
@@ -172,6 +177,7 @@ export function useBLCancelMutation() {
 }
 
 export function useBLSubmitMutation() {
+  const { t } = useTranslation('bill-of-lading');
   const queryClient = useQueryClient();
   const toast = useToast();
 
@@ -182,7 +188,7 @@ export function useBLSubmitMutation() {
         toast.error(res.error.message);
         return;
       }
-      toast.success('B/L submitted successfully');
+      toast.success(t('toasts.submittedSuccessfully'));
       queryClient.invalidateQueries({ queryKey: blKeys.detail(blNo) });
       queryClient.invalidateQueries({ queryKey: blKeys.lists() });
     },
@@ -191,6 +197,7 @@ export function useBLSubmitMutation() {
 }
 
 export function useBLIssueMutation() {
+  const { t } = useTranslation('bill-of-lading');
   const queryClient = useQueryClient();
   const toast = useToast();
 
@@ -201,7 +208,7 @@ export function useBLIssueMutation() {
         toast.error(res.error.message);
         return;
       }
-      toast.success('B/L issued');
+      toast.success(t('toasts.issued'));
       queryClient.invalidateQueries({ queryKey: blKeys.detail(blNo) });
       queryClient.invalidateQueries({ queryKey: blKeys.lists() });
     },
@@ -222,12 +229,17 @@ export function useBLSaveDraftMutation() {
         return;
       }
       queryClient.setQueryData(blKeys.detail(blNo), res.data);
+      // First-edit clone must appear on the B/L (and SI) grids without a full reload.
+      queryClient.invalidateQueries({ queryKey: blKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: blKeys.mcn.lists() });
+      queryClient.invalidateQueries({ queryKey: siKeys.lists() });
     },
     onError: (error: Error) => toast.error(error.message),
   });
 }
 
 export function useBLUpdateMutation() {
+  const { t } = useTranslation('bill-of-lading');
   const queryClient = useQueryClient();
   const toast = useToast();
 
@@ -239,7 +251,7 @@ export function useBLUpdateMutation() {
         toast.error(res.error.message);
         return;
       }
-      toast.success('B/L saved');
+      toast.success(t('toasts.saved'));
       queryClient.invalidateQueries({ queryKey: blKeys.detail(blNo) });
       queryClient.invalidateQueries({ queryKey: blKeys.lists() });
     },
@@ -271,6 +283,7 @@ export function useMCNDetailQuery(mcnId: string, enabled = true) {
 }
 
 export function useMCNPrintMutation() {
+  const { t } = useTranslation('bill-of-lading');
   const toast = useToast();
 
   return useMutation({
@@ -288,7 +301,7 @@ export function useMCNPrintMutation() {
       });
       a.click();
       URL.revokeObjectURL(url);
-      toast.success('Manifest downloaded');
+      toast.success(t('toasts.manifestDownloaded'));
     },
     onError: (error: Error) => toast.error(error.message),
   });

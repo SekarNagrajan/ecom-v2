@@ -1,0 +1,471 @@
+[
+ {
+  "trptsvccode": "10",
+  "trptsvcname": "LI /  CY",
+  "receipt": "LINER IN",
+  "delivery": "CONTAINER YARD",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "20",
+  "trptsvcname": "WF /  CY",
+  "receipt": "WHARF",
+  "delivery": "CONTAINER YARD",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "21",
+  "trptsvcname": "LI / WA",
+  "receipt": "LINER IN",
+  "delivery": "WHARF",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "AA",
+  "trptsvcname": "WF / WF",
+  "receipt": "WHARF",
+  "delivery": "WHARF",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "AF",
+  "trptsvcname": "WF / FO",
+  "receipt": "WHARF",
+  "delivery": "FREE OUT",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "AH",
+  "trptsvcname": "WF / HK",
+  "receipt": "WHARF",
+  "delivery": "HOOK",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "AL",
+  "trptsvcname": "WF / LO",
+  "receipt": "WHARF",
+  "delivery": "LINER OUT",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "CC",
+  "trptsvcname": "CFS / CY",
+  "receipt": "CONTAINER FREIGHT STATION",
+  "delivery": "CONTAINER YARD",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "CD",
+  "trptsvcname": "CFS / DO",
+  "receipt": "CONTAINER FREIGHT STATION",
+  "delivery": "DOOR",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "CF",
+  "trptsvcname": "CFS / FO",
+  "receipt": "CONTAINER FREIGHT STATION",
+  "delivery": "FREE OUT",
+  "trptterm": "LIFO"
+ },
+ {
+  "trptsvccode": "CR",
+  "trptsvcname": "CFS / RA",
+  "receipt": "CONTAINER FREIGHT STATION",
+  "delivery": "RAMP",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "CS",
+  "trptsvcname": "CY / CFS",
+  "receipt": "CONTAINER YARD",
+  "delivery": "CONTAINER FREIGHT STATION",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "DC",
+  "trptsvcname": "DO / CY",
+  "receipt": "DOOR",
+  "delivery": "CONTAINER YARD",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "DD",
+  "trptsvcname": "DO / DO",
+  "receipt": "DOOR",
+  "delivery": "DOOR",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "DF",
+  "trptsvcname": "DO / CFS",
+  "receipt": "DOOR",
+  "delivery": "CONTAINER FREIGHT STATION",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "DH",
+  "trptsvcname": "DO / HK",
+  "receipt": "DOOR",
+  "delivery": "HOOK",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "DI",
+  "trptsvcname": "DO / ICD",
+  "receipt": "DOOR",
+  "delivery": "INLAND CONTAINER DEPOT",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "DO",
+  "trptsvcname": "DO / FO",
+  "receipt": "DOOR",
+  "delivery": "FREE OUT",
+  "trptterm": "LIFO"
+ },
+ {
+  "trptsvccode": "DR",
+  "trptsvcname": "DO / RA",
+  "receipt": "DOOR",
+  "delivery": "RAMP",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "ES",
+  "trptsvcname": "FREE IN  /  FREE OUT",
+  "receipt": "FREE IN",
+  "delivery": "FREE OUT",
+  "trptterm": "LIFO"
+ },
+ {
+  "trptsvccode": "FA",
+  "trptsvcname": "FI / WF",
+  "receipt": "FREE IN",
+  "delivery": "WHARF",
+  "trptterm": "FI"
+ },
+ {
+  "trptsvccode": "FC",
+  "trptsvcname": "FI / CFS",
+  "receipt": "FREE IN",
+  "delivery": "CONTAINER FREIGHT STATION",
+  "trptterm": "FILO"
+ },
+ {
+  "trptsvccode": "FD",
+  "trptsvcname": "FI / DO",
+  "receipt": "FREE IN",
+  "delivery": "DOOR",
+  "trptterm": "FILO"
+ },
+ {
+  "trptsvccode": "FF",
+  "trptsvcname": "FI / CY",
+  "receipt": "FREE IN",
+  "delivery": "CONTAINER YARD",
+  "trptterm": "FILO"
+ },
+ {
+  "trptsvccode": "FH",
+  "trptsvcname": "FI / HK",
+  "receipt": "FREE IN",
+  "delivery": "HOOK",
+  "trptterm": "FILO"
+ },
+ {
+  "trptsvccode": "FI",
+  "trptsvcname": "FI / ICD",
+  "receipt": "FREE IN",
+  "delivery": "INLAND CONTAINER DEPOT",
+  "trptterm": "FILO"
+ },
+ {
+  "trptsvccode": "FL",
+  "trptsvcname": "FI / LO",
+  "receipt": "FREE IN",
+  "delivery": "LINER OUT",
+  "trptterm": "FILO"
+ },
+ {
+  "trptsvccode": "FO",
+  "trptsvcname": "FI / FO",
+  "receipt": "FREE IN",
+  "delivery": "FREE OUT",
+  "trptterm": "FIFO"
+ },
+ {
+  "trptsvccode": "FR",
+  "trptsvcname": "FI / RA",
+  "receipt": "FREE IN",
+  "delivery": "RAMP",
+  "trptterm": "FILO"
+ },
+ {
+  "trptsvccode": "FS",
+  "trptsvcname": "FI/SH",
+  "receipt": "FREE IN",
+  "delivery": "SHIPS HOOK",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "FW",
+  "trptsvcname": "FI / WA",
+  "receipt": "FREE IN",
+  "delivery": "WATER",
+  "trptterm": "FILO"
+ },
+ {
+  "trptsvccode": "HA",
+  "trptsvcname": "HK / WF",
+  "receipt": "HOOK",
+  "delivery": "WHARF",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "HC",
+  "trptsvcname": "HK / CY",
+  "receipt": "HOOK",
+  "delivery": "CONTAINER YARD",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "HD",
+  "trptsvcname": "HK / DO",
+  "receipt": "HOOK",
+  "delivery": "DOOR",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "HF",
+  "trptsvcname": "HK / FO",
+  "receipt": "HOOK",
+  "delivery": "FREE OUT",
+  "trptterm": "LIFO"
+ },
+ {
+  "trptsvccode": "HH",
+  "trptsvcname": "HK / HK",
+  "receipt": "HOOK",
+  "delivery": "HOOK",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "HL",
+  "trptsvcname": "HK / LO",
+  "receipt": "HOOK",
+  "delivery": "LINER OUT",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "HR",
+  "trptsvcname": "HK / RA",
+  "receipt": "HOOK",
+  "delivery": "RAMP",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "HW",
+  "trptsvcname": "HK / WA",
+  "receipt": "HOOK",
+  "delivery": "WATER",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "IC",
+  "trptsvcname": "ICD / CY",
+  "receipt": "INLAND CONTAINER DEPOT",
+  "delivery": "CONTAINER YARD",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "ID",
+  "trptsvcname": "ICD / DO",
+  "receipt": "INLAND CONTAINER DEPOT",
+  "delivery": "DOOR",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "IF",
+  "trptsvcname": "ICD / FO",
+  "receipt": "INLAND CONTAINER DEPOT",
+  "delivery": "FREE OUT",
+  "trptterm": "LIFO"
+ },
+ {
+  "trptsvccode": "IH",
+  "trptsvcname": "ICD / HK",
+  "receipt": "INLAND CONTAINER DEPOT",
+  "delivery": "HOOK",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "LA",
+  "trptsvcname": "LI / WF",
+  "receipt": "LINER IN",
+  "delivery": "WHARF",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "LF",
+  "trptsvcname": "LI / FO",
+  "receipt": "LINER IN",
+  "delivery": "FREE OUT",
+  "trptterm": "LIFO"
+ },
+ {
+  "trptsvccode": "LH",
+  "trptsvcname": "LI / HK",
+  "receipt": "LINER IN",
+  "delivery": "HOOK",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "LL",
+  "trptsvcname": "LI / LO",
+  "receipt": "LINER IN",
+  "delivery": "LINER OUT",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "LR",
+  "trptsvcname": "LI / RA",
+  "receipt": "LINER IN",
+  "delivery": "RAMP",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "MM",
+  "trptsvcname": "MM/MM",
+  "receipt": "LINER",
+  "delivery": "LINER",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "OH",
+  "trptsvcname": "CY / HK",
+  "receipt": "CONTAINER YARD",
+  "delivery": "HOOK",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "RC",
+  "trptsvcname": "RA / CY",
+  "receipt": "RAMP",
+  "delivery": "CONTAINER YARD",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "RD",
+  "trptsvcname": "RA / DO",
+  "receipt": "RAMP",
+  "delivery": "DOOR",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "RF",
+  "trptsvcname": "RA / FO",
+  "receipt": "RAMP",
+  "delivery": "FREE OUT",
+  "trptterm": "LIFO"
+ },
+ {
+  "trptsvccode": "RH",
+  "trptsvcname": "RA / HK",
+  "receipt": "RAMP",
+  "delivery": "HOOK",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "RP",
+  "trptsvcname": "RA / RA",
+  "receipt": "RAMP",
+  "delivery": "RAMP",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "SS",
+  "trptsvcname": "CFS / CFS",
+  "receipt": "CONTAINER FREIGHT STATION",
+  "delivery": "CONTAINER FREIGHT STATION",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "WC",
+  "trptsvcname": "WA / CY",
+  "receipt": "WATER",
+  "delivery": "CONTAINER YARD",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "WF",
+  "trptsvcname": "WA / FO",
+  "receipt": "WATER",
+  "delivery": "FREE OUT",
+  "trptterm": "LIFO"
+ },
+ {
+  "trptsvccode": "WH",
+  "trptsvcname": "WA / HK",
+  "receipt": "WATER",
+  "delivery": "HOOK",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "WL",
+  "trptsvcname": "WA / LO",
+  "receipt": "WATER",
+  "delivery": "LINER OUT",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "WW",
+  "trptsvcname": "WA / WA",
+  "receipt": "WATER",
+  "delivery": "WATER",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "YD",
+  "trptsvcname": "CY / DO",
+  "receipt": "CONTAINER YARD",
+  "delivery": "DOOR",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "YF",
+  "trptsvcname": "CY / FO",
+  "receipt": "CONTAINER YARD",
+  "delivery": "FREE OUT",
+  "trptterm": "LIFO"
+ },
+ {
+  "trptsvccode": "YI",
+  "trptsvcname": "CY / ICD",
+  "receipt": "CONTAINER YARD",
+  "delivery": "INLAND CONTAINER DEPOT",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "YR",
+  "trptsvcname": "CY / RA",
+  "receipt": "CONTAINER YARD",
+  "delivery": "RAMP",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "YW",
+  "trptsvcname": "CY / WA",
+  "receipt": "CONTAINER YARD",
+  "delivery": "WATER",
+  "trptterm": "LINER"
+ },
+ {
+  "trptsvccode": "YY",
+  "trptsvcname": "CY / CY",
+  "receipt": "CONTAINER YARD",
+  "delivery": "CONTAINER YARD",
+  "trptterm": "LINER"
+ }
+]

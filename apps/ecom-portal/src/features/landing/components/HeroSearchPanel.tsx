@@ -1,7 +1,8 @@
-// Modified by Sekar Nagarajan (2026-08-25 17:25)
-import { Flex, Grid, Tabs, theme } from "antd";
-import { AppIcon, Icons } from "../../../components/icons";
+// Modified by Sekar Nagarajan (2026-09-11 14:35)
+import { Flex, Grid, Spin, Tabs, theme } from "antd";
+import { useTranslation } from "react-i18next";
 
+import { AppIcon, Icons } from "../../../components/icons";
 import type { useLandingController } from "../hooks/use-landing-controller";
 import type { LandingTab, TabConfig } from "../types/landing.types";
 import { RatesSearchTab } from "./RatesSearchTab";
@@ -14,9 +15,11 @@ interface HeroSearchPanelProps {
 }
 
 export function HeroSearchPanel({ controller }: HeroSearchPanelProps) {
+  const { t } = useTranslation(["landing", "common", "modules"]);
   const { token } = theme.useToken();
   const screens = Grid.useBreakpoint();
   const isMobile = !screens.md;
+  const isSearching = controller.isSearching;
 
   const tabLabelStyle = {
     fontSize: 16,
@@ -30,13 +33,14 @@ export function HeroSearchPanel({ controller }: HeroSearchPanelProps) {
       label: (
         <Flex align="center" gap={8} style={tabLabelStyle}>
           <AppIcon icon={Icons.calendar} size={18} />
-          <span>Schedule</span>
+          <span>{t("tabs.schedule")}</span>
         </Flex>
       ),
       children: (
         <ScheduleSearchTab
           form={controller.scheduleForm}
           onSubmit={controller.handleScheduleSubmit}
+          isSearching={isSearching}
         />
       ),
     },
@@ -45,7 +49,7 @@ export function HeroSearchPanel({ controller }: HeroSearchPanelProps) {
       label: (
         <Flex align="center" gap={8} style={tabLabelStyle}>
           <AppIcon icon={Icons.mapPin} size={18} />
-          <span>Tracking</span>
+          <span>{t("common:nav.tracking")}</span>
         </Flex>
       ),
       children: (
@@ -53,6 +57,7 @@ export function HeroSearchPanel({ controller }: HeroSearchPanelProps) {
           form={controller.trackingForm}
           onSubmit={controller.handleTrackingSubmit}
           showImageCaptcha
+          isSearching={isSearching}
         />
       ),
     },
@@ -61,13 +66,14 @@ export function HeroSearchPanel({ controller }: HeroSearchPanelProps) {
       label: (
         <Flex align="center" gap={8} style={tabLabelStyle}>
           <AppIcon icon={Icons.dollarSign} size={18} />
-          <span>Rates</span>
+          <span>{t("common:nav.rates")}</span>
         </Flex>
       ),
       children: (
         <RatesSearchTab
           form={controller.ratesForm}
           onSubmit={controller.handleRatesSubmit}
+          isSearching={isSearching}
         />
       ),
     },
@@ -75,11 +81,14 @@ export function HeroSearchPanel({ controller }: HeroSearchPanelProps) {
 
   return (
     <div
-      className={
+      className={[
         isMobile
           ? "pub-landing__search-card pub-landing__search-card--mobile"
-          : "pub-landing__search-card"
-      }
+          : "pub-landing__search-card",
+        isSearching ? "pub-landing__search-card--loading" : undefined,
+      ]
+        .filter(Boolean)
+        .join(" ")}
     >
       <Tabs
         activeKey={controller.activeTab}
@@ -104,6 +113,16 @@ export function HeroSearchPanel({ controller }: HeroSearchPanelProps) {
             : "pub-landing__search-tabs-pad"
         }
       />
+
+      {isSearching ? (
+        <div
+          className="pub-landing__search-loading module-loading-center"
+          role="status"
+          aria-label={t("common:status.loading")}
+        >
+          <Spin size="medium" />
+        </div>
+      ) : null}
     </div>
   );
 }

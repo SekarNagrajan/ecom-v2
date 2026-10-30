@@ -1,0 +1,17 @@
+[
+ {
+  "id": 3,
+  "module": "BOL",
+  "moduledesc": "Bill of Lading"
+ },
+ {
+  "id": 2,
+  "module": "SHI",
+  "moduledesc": "Shipping Instruction"
+ },
+ {
+  "id": 1,
+  "module": "BKG",
+  "moduledesc": "Booking"
+ }
+]

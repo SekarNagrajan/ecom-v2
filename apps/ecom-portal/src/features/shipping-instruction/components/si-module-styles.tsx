@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-01 16:40)
+// Modified by Sekar Nagarajan (2026-10-20)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -59,13 +59,184 @@ export function SiModuleStyles() {
       }
       .si-page-header {
         flex-shrink: 0;
-        padding: ${token.paddingMD}px ${token.paddingLG}px 0;
+        padding: ${token.paddingMD}px ${token.paddingXL}px 0;
       }
+      .si-page-header .module-screen-header__actions {
+        align-items: center;
+      }
+      .si-page-header .module-screen-header__actions .ant-space {
+        align-items: center;
+      }
+      .si-page-header .module-view-mode-tabs.ant-segmented {
+        flex-shrink: 0;
+      }
+      .si-page-header .module-view-mode-tabs.ant-segmented
+        .ant-segmented-item:not(.ant-segmented-item-selected)
+        .app-icon {
+        color: ${token.colorPrimary} !important;
+      }
+      .si-page-header .module-view-mode-tabs.ant-segmented
+        .ant-segmented-thumb {
+        background: ${token.colorPrimary} !important;
+      }
+      .si-page-header .module-view-mode-tabs.ant-segmented
+        .ant-segmented-item-selected {
+        background: ${token.colorPrimary} !important;
+        color: ${token.colorTextLightSolid} !important;
+      }
+      .si-page-header .module-view-mode-tabs.ant-segmented
+        .ant-segmented-item-selected
+        .app-icon {
+        color: ${token.colorTextLightSolid} !important;
+      }
+      /* Card view — compact action row icon alignment */
+      .si-list-grid .list-actions-row {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: ${token.marginXXS}px;
+      }
+      .si-list-grid .list-action-button.ant-btn {
+        align-items: center;
+        display: inline-flex;
+        height: ${token.controlHeightSM}px;
+        justify-content: center;
+        min-width: ${token.controlHeightSM}px;
+        padding-inline: ${token.paddingXXS}px;
+      }
+
+      /* SI record card — match booking/BL outlined card layout */
+      .si-record-card {
+        height: 100%;
+      }
+      .si-record-card__body {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        gap: ${token.marginSM}px;
+        min-height: 0;
+        padding: ${token.paddingMD}px ${token.paddingMD}px ${token.paddingSM}px;
+      }
+      .si-record-card__header {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXS}px;
+        min-width: 0;
+      }
+      .si-record-card__title-row {
+        align-items: center;
+        display: flex;
+        gap: ${token.marginSM}px;
+        min-width: 0;
+      }
+      .si-record-card__title {
+        color: ${token.colorTextHeading};
+        flex: 1;
+        font-size: ${token.fontSizeLG}px;
+        font-weight: ${token.fontWeightStrong};
+        line-height: 1.3;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .si-record-card__status.ant-tag {
+        flex-shrink: 0;
+        margin-inline-end: 0;
+        max-width: 45%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .si-record-card__lane {
+        align-items: center;
+        color: ${token.colorTextSecondary};
+        display: flex;
+        font-size: ${token.fontSizeSM}px;
+        gap: ${token.marginXS}px;
+        line-height: ${token.lineHeightSM};
+        min-width: 0;
+      }
+      .si-record-card__lane > span {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .si-record-card__lane .app-icon {
+        color: ${token.colorPrimary};
+        flex-shrink: 0;
+      }
+      .si-record-card__meta {
+        align-content: flex-start;
+        background: ${token.colorFillTertiary};
+        border-radius: ${token.borderRadius}px;
+        display: grid;
+        flex: 1;
+        gap: ${token.marginSM}px ${token.marginMD}px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        margin-top: ${token.marginXXS}px;
+        min-height: 0;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+      }
+      .si-record-card__meta-item {
+        align-items: flex-start;
+        display: flex;
+        gap: ${token.marginXS}px;
+        min-width: 0;
+      }
+      .si-record-card__meta-icon {
+        color: ${token.colorPrimary};
+        display: inline-flex;
+        flex-shrink: 0;
+        line-height: 1;
+        margin-top: 2px;
+      }
+      .si-record-card__meta-copy {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        gap: 2px;
+        min-width: 0;
+      }
+      .si-record-card__meta-label {
+        color: ${token.colorTextTertiary};
+        font-size: ${Math.max(Number(token.fontSizeSM) - 1, 11)}px;
+        letter-spacing: 0.02em;
+        line-height: 1.2;
+        text-transform: uppercase;
+      }
+      .si-record-card__meta-value {
+        color: ${token.colorText};
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        line-height: 1.35;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .si-record-card__footer {
+        border-top: 1px solid ${token.colorBorderSecondary};
+        display: flex;
+        flex-shrink: 0;
+        margin-top: auto;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+      }
+      .si-record-card__footer .list-actions-row {
+        gap: ${token.marginXS}px;
+        height: auto;
+        width: 100%;
+      }
+      .si-record-card__footer .list-action-button.ant-btn {
+        height: ${token.controlHeightSM}px;
+        min-width: ${token.controlHeightSM}px;
+      }
+
       .si-grid-wrap {
         flex: 1;
         min-height: calc(100vh - 280px);
         width: 100%;
-        padding: ${token.paddingMD}px ${token.paddingLG}px ${token.paddingLG}px;
+        padding: ${token.paddingMD}px ${token.paddingXL}px ${token.paddingLG}px;
         display: flex;
         flex-direction: column;
       }
@@ -73,6 +244,10 @@ export function SiModuleStyles() {
         flex: 1;
         min-height: 0;
         height: 100%;
+      }
+      /* View-mode toggle lives in ModuleScreenHeader — hide empty DataView toolbar card */
+      .si-grid-wrap--no-toolbar .si-data-view > .ant-card:first-child {
+        display: none;
       }
       .si-list-grid {
         width: 100%;
@@ -90,6 +265,9 @@ export function SiModuleStyles() {
       .si-list-grid .ag-theme-alpine,
       .si-list-grid .ag-root-wrapper {
         height: 100% !important;
+        min-height: calc(100vh - 280px);
+      }
+      .si-list-grid .si-data-view {
         min-height: calc(100vh - 280px);
       }
 
@@ -562,9 +740,17 @@ export function SiModuleStyles() {
         gap: ${token.marginXS}px;
       }
 
-      /* Modified by Sekar Nagarajan (2026-09-01 12:29) — SI view drawer section rows */
+      /* Modified by Sekar Nagarajan (2026-09-08 14:54) — SI view single-row preview sections */
       .si-view-sections {
         width: 100%;
+      }
+      .si-view-sections--single {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginLG}px;
+      }
+      .si-view-sections--single .booking-review__section {
+        margin: 0;
       }
       .si-view-row {
         display: grid;
@@ -603,18 +789,18 @@ export function SiModuleStyles() {
         grid-template-columns: 1fr;
         gap: ${token.marginSM}px;
       }
-      .si-cargo-grid,
-      .si-charges-grid {
+      .si-cargo-grid.responsive-table-wrap,
+      .si-charges-grid.responsive-table-wrap {
         height: 280px;
         min-height: 220px;
         width: 100%;
         display: flex;
         flex-direction: column;
       }
-      .si-cargo-grid .ag-theme-alpine,
-      .si-cargo-grid > div,
-      .si-charges-grid .ag-theme-alpine,
-      .si-charges-grid > div {
+      .si-cargo-grid.responsive-table-wrap .ag-theme-alpine,
+      .si-cargo-grid.responsive-table-wrap > div,
+      .si-charges-grid.responsive-table-wrap .ag-theme-alpine,
+      .si-charges-grid.responsive-table-wrap > div {
         flex: 1;
         min-height: 0;
         height: 100%;
@@ -703,31 +889,58 @@ export function SiModuleStyles() {
         color: ${token.colorTextSecondary};
       }
 
+      /* Modified by Sekar Nagarajan (2026-10-19 17:00) — SI view drawer title, hero, lifecycle */
       .si-drawer-title {
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         gap: ${token.marginSM}px;
+        min-width: 0;
+      }
+      .si-drawer-title__icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: ${token.controlHeight}px;
+        height: ${token.controlHeight}px;
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${primaryTint8};
+        border: 1px solid ${token.colorPrimaryBorder};
       }
       .si-drawer-title__text {
         margin: 0 !important;
         line-height: 1.25 !important;
       }
       .si-drawer-title__meta {
-        font-size: ${token.fontSizeSM}px;
-        display: block;
-        margin-top: ${token.marginXXS}px;
-      }
-      .si-drawer-title__tags {
         display: flex;
         flex-wrap: wrap;
-        gap: ${token.marginXXS}px;
+        gap: ${token.marginXXS}px ${token.marginSM}px;
         margin-top: ${token.marginXXS}px;
+        font-size: ${token.fontSizeSM}px;
+        line-height: 1.4;
+      }
+      .si-drawer-title__meta-item {
+        white-space: nowrap;
+      }
+      .si-drawer-title__meta-item + .si-drawer-title__meta-item {
+        padding-left: ${token.paddingSM}px;
+        border-left: 1px solid ${token.colorBorderSecondary};
+      }
+      .si-drawer-title__copy {
+        min-width: 0;
+        flex: 1;
       }
       .si-drawer-actions {
         display: flex;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         gap: ${token.marginXS}px;
         align-items: center;
+        justify-content: flex-end;
+        width: 100%;
+        overflow-x: auto;
+      }
+      .si-drawer-footer-bar.ant-drawer-footer {
+        padding: ${token.paddingSM}px ${token.paddingLG}px;
       }
       .si-drawer-body.custom-scroll {
         overflow-y: auto;
@@ -800,30 +1013,6 @@ export function SiModuleStyles() {
         flex: 1;
         height: ${token.lineWidth}px;
         background: ${token.colorBorder};
-      }
-
-      .si-summary-chips {
-        display: flex;
-        flex-wrap: wrap;
-        gap: ${token.marginSM}px;
-      }
-      .si-summary-chip {
-        display: inline-flex;
-        align-items: center;
-        gap: ${token.marginXS}px;
-        padding: ${token.paddingXS}px ${token.paddingSM}px;
-        border-radius: ${token.borderRadiusLG}px;
-        background: ${token.colorFillAlter};
-        border: 1px solid ${token.colorBorderSecondary};
-      }
-      .si-summary-chip__label {
-        display: block;
-        font-size: ${token.fontSizeSM}px;
-        color: ${token.colorTextSecondary};
-      }
-      .si-summary-chip__value {
-        display: block;
-        font-weight: ${token.fontWeightStrong};
       }
 
       .si-panel > .ant-card-body {
@@ -1532,6 +1721,19 @@ export function SiModuleStyles() {
         }
       }
 
+      /* Modified by Sekar Nagarajan (2026-09-15 11:20) — booking FileUploadStep parity */
+      .si-upload-type-row {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+        margin-bottom: ${token.marginLG}px;
+        max-width: 420px;
+      }
+      .si-upload-list {
+        margin: ${token.marginMD}px 0 0;
+        padding-inline-start: ${token.paddingLG}px;
+      }
+
       @media (max-width: 767px) {
         .si-master-vessel-leg__route {
           grid-template-columns: minmax(0, 1fr);
@@ -1574,6 +1776,264 @@ export function SiModuleStyles() {
         }
         .si-drawer-actions .sm-app-button {
           flex: 1;
+        }
+      }
+
+      .si-view-hero {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginMD}px;
+        width: 100%;
+        padding: ${token.paddingLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG + 2}px;
+        background: linear-gradient(
+          180deg,
+          ${primaryTint8} 0%,
+          ${token.colorBgContainer} 100%
+        );
+      }
+      .si-view-hero__status {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: ${token.marginSM}px ${token.marginXL}px;
+      }
+      .si-view-hero__tags {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: ${token.marginXXS}px;
+      }
+      .si-view-hero__tag.ant-tag {
+        margin-inline-end: 0;
+        border-radius: ${token.borderRadiusSM}px;
+      }
+      /* Accepted status — soft emerald wash (theme success #047857 @ 8%) */
+      .si-view-hero__tag.ant-tag-success {
+        background: ${successTint8};
+        border-color: ${successTint8};
+      }
+      .si-status-stepper {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        flex: 1 1 auto;
+        min-width: 0;
+        max-width: 420px;
+      }
+      .si-status-stepper__step {
+        display: flex;
+        align-items: center;
+        flex: 1 1 0;
+        min-width: 0;
+        gap: ${token.marginXS}px;
+        color: ${token.colorTextTertiary};
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+      }
+      .si-status-stepper__step:last-child {
+        flex: 0 0 auto;
+      }
+      .si-status-stepper__step:not(:last-child)::after {
+        content: "";
+        flex: 1 1 auto;
+        min-width: ${token.marginSM}px;
+        height: ${token.lineWidthBold}px;
+        margin: 0 ${token.marginXS}px;
+        border-radius: ${token.lineWidthBold}px;
+        background: ${token.colorBorderSecondary};
+      }
+      .si-status-stepper__dot {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: ${token.controlHeightSM - 2}px;
+        height: ${token.controlHeightSM - 2}px;
+        border-radius: 50%;
+        border: ${token.lineWidth}px solid ${token.colorBorder};
+        background: ${token.colorBgContainer};
+        color: ${token.colorTextTertiary};
+        font-size: ${token.fontSizeSM - 1}px;
+        line-height: 1;
+      }
+      .si-status-stepper__label {
+        white-space: nowrap;
+      }
+      .si-status-stepper__step.is-done {
+        color: ${token.colorSuccess};
+      }
+      .si-status-stepper__step.is-done .si-status-stepper__dot {
+        background: ${token.colorSuccess};
+        border-color: ${token.colorSuccess};
+        color: ${token.colorTextLightSolid};
+      }
+      .si-status-stepper__step.is-done::after {
+        background: ${tokenMix(token.colorSuccess, 45)};
+      }
+      .si-status-stepper__step.is-current {
+        color: ${token.colorPrimary};
+      }
+      .si-status-stepper__step.is-current .si-status-stepper__dot {
+        background: ${token.colorPrimary};
+        border-color: ${token.colorPrimary};
+        color: ${token.colorTextLightSolid};
+        box-shadow: 0 0 0 ${token.lineWidthBold * 2}px ${primaryTint14};
+      }
+      .si-status-stepper__step.is-error {
+        color: ${token.colorError};
+      }
+      .si-status-stepper__step.is-error .si-status-stepper__dot {
+        background: ${token.colorError};
+        border-color: ${token.colorError};
+        color: ${token.colorTextLightSolid};
+      }
+      .si-view-route {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginMD}px;
+        width: 100%;
+        padding-top: ${token.paddingMD}px;
+        border-top: 1px solid ${token.colorBorderSecondary};
+      }
+      .si-view-route__stop {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: ${token.marginXXS}px;
+        flex: 1 1 0;
+        min-width: 0;
+      }
+      .si-view-route__stop--dest {
+        align-items: flex-end;
+        text-align: right;
+      }
+      .si-view-route__eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: ${token.colorTextTertiary};
+        line-height: 1.2;
+      }
+      .si-view-route__stop--dest .si-view-route__eyebrow {
+        color: ${token.colorSuccess};
+      }
+      .si-view-route__stop:not(.si-view-route__stop--dest) .si-view-route__eyebrow {
+        color: ${token.colorPrimary};
+      }
+      .si-view-route__code {
+        font-size: ${token.fontSizeHeading4}px;
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+        line-height: 1.2;
+        word-break: break-word;
+      }
+      .si-view-route__connector {
+        position: relative;
+        display: flex;
+        align-items: center;
+        flex: 1 1 auto;
+        min-width: 120px;
+        gap: ${token.marginXS}px;
+        padding-bottom: ${token.paddingMD}px;
+      }
+      .si-view-route__track {
+        flex: 1 1 auto;
+        height: 0;
+        border-top: ${token.lineWidthBold}px dashed ${tokenMix(token.colorPrimary, 40)};
+      }
+      .si-view-route__ship {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: ${token.controlHeightSM}px;
+        height: ${token.controlHeightSM}px;
+        border-radius: 50%;
+        border: ${token.lineWidth}px solid ${token.colorPrimaryBorder};
+        background: ${token.colorBgContainer};
+        color: ${token.colorPrimary};
+      }
+      .si-view-route__label {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        text-align: center;
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextTertiary};
+        white-space: nowrap;
+        line-height: 1.2;
+      }
+      .si-view-facts {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: ${token.marginSM}px ${token.marginMD}px;
+        margin: 0;
+        padding-top: ${token.paddingMD}px;
+        border-top: 1px solid ${token.colorBorderSecondary};
+      }
+      .si-view-fact {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+        min-width: 0;
+      }
+      .si-view-fact__label {
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+        line-height: 1.3;
+      }
+      .si-view-fact__value {
+        margin: 0;
+        font-size: ${token.fontSize}px;
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+        line-height: 1.4;
+        word-break: break-word;
+      }
+      @media (max-width: 767px) {
+        .si-view-hero {
+          padding: ${token.paddingMD}px;
+        }
+        .si-view-hero__status {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .si-status-stepper {
+          max-width: none;
+        }
+        .si-status-stepper__label {
+          white-space: normal;
+        }
+        .si-view-route {
+          flex-direction: column;
+          align-items: stretch;
+          gap: ${token.marginSM}px;
+        }
+        .si-view-route__stop--dest {
+          align-items: flex-start;
+          text-align: left;
+        }
+        .si-view-route__connector {
+          min-width: 0;
+          width: 100%;
+        }
+        .si-view-facts {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+      @media (max-width: 575px) {
+        .si-view-facts {
+          grid-template-columns: minmax(0, 1fr);
         }
       }
     `}</style>

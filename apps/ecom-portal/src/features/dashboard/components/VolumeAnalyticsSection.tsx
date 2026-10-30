@@ -1,16 +1,36 @@
-// Modified by Sekar Nagarajan (2026-09-02 12:08)
-import { Card, Select, Tooltip, Typography } from "antd";
+// Modified by Sekar Nagarajan (2026-10-26 15:35)
+import { Card, Segmented, Select, Tooltip, Typography } from "antd";
 import * as echarts from "echarts";
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { useChartTokens } from "../../theme/utils/use-portal-chart-tokens";
-import type { VolumeKpi, VolumeTrendPoint } from "../mocks/dashboard.mock";
+import {
+  dashboardApi,
+  VOLUME_ANALYTICS_STAGE_OPTIONS,
+  VOLUME_TREND_PERIOD_OPTIONS,
+  type VolumeAnalyticsStage,
+  type VolumeKpi,
+  type VolumeTrendPeriod,
+  type VolumeTrendPoint,
+} from "../api/dashboard.api";
+import {
+  DashboardVolumeTrendRecordsModal,
+  type VolumeTrendDrilldownState,
+} from "./dashboard-volume-trend-records-modal";
 
 const { Text, Title } = Typography;
 
 /** Sidebar margin transition is 0.25s — remeasure after it settles. */
 const SIDEBAR_LAYOUT_SETTLE_MS = 280;
+
+const VOLUME_KPI_LABEL_KEYS: Record<string, string> = {
+  "This Week": "volume.kpiLabels.thisWeek",
+  "This Month": "volume.kpiLabels.thisMonth",
+  "This Quarter": "volume.kpiLabels.thisQuarter",
+  "This Year": "volume.kpiLabels.thisYear",
+};
 
 interface SparklineProps {
   data: number[];
@@ -71,19 +91,35 @@ function Sparkline({ data, color }: SparklineProps) {
 
 interface VolumeTrendChartProps {
   data: VolumeTrendPoint[];
-  period: string;
-  onPeriodChange: (v: string) => void;
+  period: VolumeTrendPeriod;
+  onPeriodChange: (v: VolumeTrendPeriod) => void;
+  onPointClick: (point: VolumeTrendPoint) => void;
 }
 
 function VolumeTrendChart({
   data,
   period,
   onPeriodChange,
+  onPointClick,
 }: VolumeTrendChartProps) {
+  const { t } = useTranslation(["dashboard", "common", "modules"]);
   const chartTokens = useChartTokens();
   const containerRef = useRef<HTMLDivElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<echarts.ECharts | null>(null);
+  const dataRef = useRef(data);
+  const onPointClickRef = useRef(onPointClick);
+  dataRef.current = data;
+  onPointClickRef.current = onPointClick;
+
+  const periodOptions = useMemo(
+    () =>
+      VOLUME_TREND_PERIOD_OPTIONS.map((option) => ({
+        value: option.value,
+        label: t(`volume.periods.${option.value}`),
+      })),
+    [t],
+  );
 
   // Init once; keep instance alive across sidebar toggles / parent re-renders.
   useLayoutEffect(() => {
@@ -92,6 +128,15 @@ function VolumeTrendChart({
 
     const chart = echarts.init(container, undefined, { renderer: "canvas" });
     chartRef.current = chart;
+
+    chart.on("click", (params) => {
+      if (params.componentType !== "series") return;
+      const index =
+        typeof params.dataIndex === "number" ? params.dataIndex : -1;
+      const point = dataRef.current[index];
+      if (!point || point.feus <= 0) return;
+      onPointClickRef.current(point);
+    });
 
     let rafId: number | null = null;
     let settleTimer: ReturnType<typeof setTimeout> | null = null;
@@ -176,7 +221,14 @@ function VolumeTrendChart({
             type: "line",
             lineStyle: { color: chartTokens.colorPrimary, type: "dashed" },
           },
-          formatter: "{b}: <b>{c} FEUs</b>",
+          formatter: (params: unknown) => {
+            const point = Array.isArray(params) ? params[0] : params;
+            const p = point as { axisValue?: string; value?: number };
+            return t("volume.tooltipTeus", {
+              label: p.axisValue ?? "",
+              value: p.value ?? "",
+            });
+          },
         },
         grid: { top: 12, right: 12, bottom: 8, left: 8, containLabel: true },
         xAxis: {
@@ -212,14 +264,27 @@ function VolumeTrendChart({
         series: [
           {
             type: "line",
-            data: data.map((d) => d.feus),
+            data: data.map((d) => ({
+              value: d.feus,
+              // Clickable points with TEUs get a larger hit target.
+              symbolSize: d.feus > 0 ? 8 : 4,
+            })),
             smooth: true,
             symbol: "circle",
-            symbolSize: 6,
+            cursor: "pointer",
             itemStyle: {
               color: chartTokens.colorPrimary,
               borderColor: chartTokens.colorBgContainer,
               borderWidth: 2,
+            },
+            emphasis: {
+              scale: true,
+              scaleSize: 4,
+              itemStyle: {
+                color: chartTokens.colorPrimary,
+                shadowBlur: 6,
+                shadowColor: `${chartTokens.colorPrimary}55`,
+              },
             },
             lineStyle: { color: chartTokens.colorPrimary, width: 2.5 },
             areaStyle: {
@@ -234,14 +299,21 @@ function VolumeTrendChart({
       { notMerge: true },
     );
     chart.resize();
-  }, [data, chartTokens]);
+  }, [data, chartTokens, t]);
+
+  const periodHint =
+    period === "Weekly"
+      ? t("volume.periodHintWeekly")
+      : period === "Quarterly"
+        ? t("volume.periodHintQuarterly")
+        : t("volume.periodHintMonthly");
 
   return (
     <div ref={wrapRef} className="dashboard-trend-wrap">
       <div className="dashboard-trend-head">
         <Text strong className="dashboard-metric-tile__label">
-          Volume Trend (FEUs){" "}
-          <Tooltip title="Monthly FEU Volume Over The Selected Period">
+          {t("volume.trendTitle")}{" "}
+          <Tooltip title={periodHint}>
             <AppIcon icon={Icons.info} size={12} />
           </Tooltip>
         </Text>
@@ -250,13 +322,12 @@ function VolumeTrendChart({
           value={period}
           onChange={onPeriodChange}
           className="dashboard-select-sm"
-          options={[
-            { value: "Monthly", label: "Monthly" },
-            { value: "Weekly", label: "Weekly" },
-            { value: "Quarterly", label: "Quarterly" },
-          ]}
+          options={periodOptions}
         />
       </div>
+      <Text type="secondary" className="dashboard-trend-click-hint">
+        {t("volume.drilldown.clickHint")}
+      </Text>
       <div ref={containerRef} className="dashboard-trend-chart" />
     </div>
   );
@@ -265,93 +336,184 @@ function VolumeTrendChart({
 interface VolumeAnalyticsProps {
   kpis: VolumeKpi[];
   trend: VolumeTrendPoint[];
-  trendPeriod: string;
-  onTrendPeriodChange: (v: string) => void;
+  trendPeriod: VolumeTrendPeriod;
+  volumeStage: VolumeAnalyticsStage;
+  onTrendPeriodChange: (v: VolumeTrendPeriod) => void;
+  onVolumeStageChange: (v: VolumeAnalyticsStage) => void;
+}
+
+function getVolumeStageLabel(
+  stage: VolumeAnalyticsStage,
+  t: (key: string) => string,
+): string {
+  switch (stage) {
+    case "all":
+      return t("volume.stages.all");
+    case "booking":
+      return t("volume.stages.booking");
+    case "si":
+      return t("volume.stages.si");
+    case "bl":
+      return t("volume.stages.bl");
+    case "inTransit":
+      return t("kpi.inTransit");
+    default: {
+      const _exhaustive: never = stage;
+      return _exhaustive;
+    }
+  }
+}
+
+function getVolumeKpiLabel(
+  label: string,
+  t: (key: string) => string,
+): string {
+  const key = VOLUME_KPI_LABEL_KEYS[label];
+  return key ? t(key) : label;
 }
 
 export function VolumeAnalyticsSection({
   kpis,
   trend,
   trendPeriod,
+  volumeStage,
   onTrendPeriodChange,
+  onVolumeStageChange,
 }: VolumeAnalyticsProps) {
+  const { t } = useTranslation(["dashboard", "common", "modules"]);
   const chartTokens = useChartTokens();
+  const stageLabel = getVolumeStageLabel(volumeStage, t);
+  const [drilldown, setDrilldown] = useState<VolumeTrendDrilldownState | null>(
+    null,
+  );
+
+  const stageOptions = useMemo(
+    () =>
+      VOLUME_ANALYTICS_STAGE_OPTIONS.map((option) => ({
+        value: option.value,
+        label: getVolumeStageLabel(option.value, t),
+      })),
+    [t],
+  );
+
+  const handleTrendPointClick = async (point: VolumeTrendPoint) => {
+    if (point.feus <= 0) return;
+    setDrilldown({ point, loading: true, records: [] });
+    try {
+      const records = await dashboardApi.getVolumeTrendRecords({
+        stage: volumeStage,
+        period: trendPeriod,
+        periodKey: point.periodKey,
+      });
+      setDrilldown({ point, loading: false, records });
+    } catch {
+      setDrilldown({ point, loading: false, records: [] });
+    }
+  };
 
   return (
-    <Card
-      className="dashboard-panel dashboard-volume-panel"
-      title={
-        <Text strong className="dashboard-panel__title">
-          Shipment Volume Analytics (FEUs){" "}
-        </Text>
-      }
-    >
-      <div className="dashboard-volume-analytics-grid">
-        <div className="dashboard-volume-kpi-grid">
-          {kpis.map((kpi) => {
-            const isPositive = kpi.change >= 0;
-            return (
-              <div key={kpi.label} className="dashboard-metric-tile">
-                <div>
-                  <Text className="dashboard-metric-tile__label">
-                    {kpi.label}
-                  </Text>
-                  <Text className="dashboard-metric-tile__period">
-                    ({kpi.period})
-                  </Text>
-                  <div className="dashboard-metric-tile__value-row">
-                    <Title level={3} className="dashboard-metric-tile__value">
-                      {kpi.value.toLocaleString()}
-                    </Title>
-                    <Text className="dashboard-metric-tile__unit">
-                      {kpi.unit}
+    <>
+      <Card
+        className="dashboard-panel dashboard-volume-panel"
+        title={
+          <Text strong className="dashboard-panel__title">
+            {t("volume.title")}{" "}
+            <Text type="secondary" className="dashboard-volume-stage-label">
+              · {stageLabel}
+            </Text>
+          </Text>
+        }
+        extra={
+          <Segmented
+            size="middle"
+            className="dashboard-volume-stage-segmented"
+            value={volumeStage}
+            onChange={(value) =>
+              onVolumeStageChange(value as VolumeAnalyticsStage)
+            }
+            options={stageOptions}
+          />
+        }
+      >
+        <div className="dashboard-volume-analytics-grid">
+          <div className="dashboard-volume-kpi-grid">
+            {kpis.map((kpi) => {
+              const isPositive = kpi.change >= 0;
+              return (
+                <div key={kpi.label} className="dashboard-metric-tile">
+                  <div>
+                    <Text className="dashboard-metric-tile__label">
+                      {getVolumeKpiLabel(kpi.label, t)}
                     </Text>
-                  </div>
-                  <div className="dashboard-metric-tile__delta">
-                    <span
-                      className={
-                        isPositive
-                          ? "dashboard-delta-badge dashboard-delta-badge--up"
-                          : "dashboard-delta-badge dashboard-delta-badge--down"
-                      }
-                    >
-                      {isPositive ? (
-                        <AppIcon icon={Icons.arrowUp} size={14} tone="create" />
-                      ) : (
-                        <AppIcon
-                          icon={Icons.arrowDown}
-                          size={14}
-                          tone="delete"
-                        />
-                      )}
-                      {Math.abs(kpi.change)}%
-                    </span>
-                    <Text
-                      type="secondary"
-                      className="dashboard-metric-tile__period"
-                    >
-                      vs prev ({kpi.changePrev.toLocaleString()})
+                    <Text className="dashboard-metric-tile__period">
+                      ({kpi.period})
                     </Text>
+                    <div className="dashboard-metric-tile__value-row">
+                      <Title level={3} className="dashboard-metric-tile__value">
+                        {kpi.value.toLocaleString()}
+                      </Title>
+                      <Text className="dashboard-metric-tile__unit">
+                        {kpi.unit}
+                      </Text>
+                    </div>
+                    <div className="dashboard-metric-tile__delta">
+                      <span
+                        className={
+                          isPositive
+                            ? "dashboard-delta-badge dashboard-delta-badge--up"
+                            : "dashboard-delta-badge dashboard-delta-badge--down"
+                        }
+                      >
+                        {isPositive ? (
+                          <AppIcon
+                            icon={Icons.arrowUp}
+                            size={14}
+                            tone="create"
+                          />
+                        ) : (
+                          <AppIcon
+                            icon={Icons.arrowDown}
+                            size={14}
+                            tone="delete"
+                          />
+                        )}
+                        {Math.abs(kpi.change)}%
+                      </span>
+                      <Text
+                        type="secondary"
+                        className="dashboard-metric-tile__period"
+                      >
+                        {t("volume.vsPrev", {
+                          value: kpi.changePrev.toLocaleString(),
+                        })}
+                      </Text>
+                    </div>
                   </div>
+                  <Sparkline
+                    data={kpi.sparkline}
+                    color={
+                      isPositive
+                        ? chartTokens.colorSuccess
+                        : chartTokens.colorError
+                    }
+                  />
                 </div>
-                <Sparkline
-                  data={kpi.sparkline}
-                  color={
-                    isPositive
-                      ? chartTokens.colorSuccess
-                      : chartTokens.colorError
-                  }
-                />
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
+          <VolumeTrendChart
+            data={trend}
+            period={trendPeriod}
+            onPeriodChange={onTrendPeriodChange}
+            onPointClick={(point) => void handleTrendPointClick(point)}
+          />
         </div>
-        <VolumeTrendChart
-          data={trend}
-          period={trendPeriod}
-          onPeriodChange={onTrendPeriodChange}
-        />
-      </div>
-    </Card>
+      </Card>
+
+      <DashboardVolumeTrendRecordsModal
+        state={drilldown}
+        onClose={() => setDrilldown(null)}
+      />
+    </>
   );
 }

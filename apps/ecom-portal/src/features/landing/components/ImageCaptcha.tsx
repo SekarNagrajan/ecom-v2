@@ -3,6 +3,8 @@ import { Button, Flex, Image, Input, Skeleton, theme } from "antd";
 import { useEffect, useState } from "react";
 import type { Control } from "react-hook-form";
 import { Controller } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+
 import { AppIcon, Icons } from "../../../components/icons";
 
 interface ImageCaptchaProps {
@@ -29,6 +31,7 @@ export function ImageCaptcha({
   captchaType = "",
   errorMessage,
 }: ImageCaptchaProps) {
+  const { t } = useTranslation(["landing", "common", "modules"]);
   const { token } = theme.useToken();
   const [version, setVersion] = useState(() => Date.now());
   const [loaded, setLoaded] = useState(false);
@@ -64,7 +67,7 @@ export function ImageCaptcha({
           )}
           <Image
             src={src}
-            alt="CAPTCHA"
+            alt={t("captcha.alt")}
             preview={false}
             onLoad={() => setLoaded(true)}
             style={{
@@ -76,7 +79,7 @@ export function ImageCaptcha({
           />
         </div>
         <Button
-          aria-label="Reload captcha"
+          aria-label={t("captcha.reloadAria")}
           icon={<AppIcon icon={Icons.refreshCw} size={16} />}
           onClick={refresh}
           size="middle"
@@ -91,9 +94,9 @@ export function ImageCaptcha({
               <Input
                 {...field}
                 id={`captcha-${name}`}
-                aria-label="Enter captcha code"
+                aria-label={t("captcha.enterAria")}
                 autoComplete="off"
-                placeholder="Enter code"
+                placeholder={t("captcha.placeholder")}
                 status={errorMessage ? "error" : undefined}
                 style={{
                   height: 48,

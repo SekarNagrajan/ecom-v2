@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-25 17:25)
+// Modified by Sekar Nagarajan (2026-09-28 15:50)
 /**
  * Thin portal shell — CRM parity: Ant Design theme comes from the root
  * AppConfigProvider (buildAntdTheme + darkAlgorithm). This provider only
@@ -7,6 +7,7 @@
 import { useTenantStore } from "@solverminds/auth";
 import React, { useEffect } from "react";
 
+import { AccessibilityEffects } from "../../features/theme/components/AccessibilityEffects";
 import { useAppConfigStore } from "../../features/theme/stores/app-config.store";
 import { AppIconStyles } from "../icons/app-icon-styles";
 import { GlobalThemeStyles } from "../shared/global-theme-styles";
@@ -73,6 +74,7 @@ export function TenantThemeProvider({ children }: TenantThemeProviderProps) {
 
   return (
     <>
+      <AccessibilityEffects />
       <AppIconStyles />
       <GlobalThemeStyles />
       {children}

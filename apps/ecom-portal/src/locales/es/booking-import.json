@@ -1,0 +1,62 @@
+{
+  "subtitle": "Complete una reserva por fila, luego revise y envíe.",
+  "entityLabel": "reservas",
+  "toasts": {
+    "importSuccess_one": "Se importó {{count}} reserva.",
+    "importSuccess_other": "Se importaron {{count}} reservas.",
+    "importPartial": "Se importaron {{successCount}} de {{totalRows}} reservas. Corrija las filas restantes y vuelva a enviar."
+  },
+  "columns": {
+    "origin": "Origen",
+    "delivery": "Entrega",
+    "cargoReadyDate": "Fecha de carga lista",
+    "shipperName": "Nombre del cargador",
+    "agreementParty": "Parte del acuerdo",
+    "siSubmittingParty": "Parte que presenta SI",
+    "containerType": "Tipo de contenedor",
+    "quantity": "Cantidad",
+    "hsCode": "Código HS",
+    "weight": "Peso",
+    "haulageOriginType": "Tipo de transporte terrestre de origen",
+    "haulageDestinationType": "Tipo de transporte terrestre de destino",
+    "carriageContract": "Contrato de transporte",
+    "agencyReference": "Referencia de agencia",
+    "customerReference": "Referencia del cliente",
+    "onlineBookingNo": "N.º de reserva en línea",
+    "shipperContact": "Contacto del cargador",
+    "shipperEmail": "Correo del cargador",
+    "consigneeName": "Nombre del consignatario",
+    "consigneeContact": "Contacto del consignatario",
+    "consigneeEmail": "Correo del consignatario",
+    "notifyPartyName": "Nombre de la parte notificada",
+    "notifyPartyContact": "Contacto de la parte notificada",
+    "notifyPartyEmail": "Correo de la parte notificada",
+    "commodityDescription": "Descripción de la mercancía"
+  },
+  "options": {
+    "haulage": {
+      "merchant": "Comerciante",
+      "carrier": "Transportista"
+    }
+  },
+  "validation": {
+    "originRequired": "El origen es obligatorio",
+    "deliveryRequired": "La entrega es obligatoria",
+    "cargoReadyDateRequired": "La fecha de carga lista es obligatoria",
+    "shipperNameRequired": "La parte reservante es obligatoria",
+    "agreementPartyRequired": "La parte del acuerdo es obligatoria",
+    "siSubmittingPartyRequired": "La parte que presenta SI es obligatoria",
+    "containerTypeRequired": "El tipo de contenedor es obligatorio",
+    "hsCodeRequired": "El código HS es obligatorio",
+    "weightRequired": "El peso es obligatorio",
+    "invalidEmail": "Correo electrónico no válido",
+    "invalidContainerType": "Seleccione un tipo de contenedor válido"
+  },
+  "errors": {
+    "duplicateRow": "Duplicado de otra fila con el mismo origen, entrega, fecha de carga lista y cargador"
+  },
+  "actions": {
+    "submit_one": "Enviar {{count}} reserva",
+    "submit_other": "Enviar {{count}} reservas"
+  }
+}

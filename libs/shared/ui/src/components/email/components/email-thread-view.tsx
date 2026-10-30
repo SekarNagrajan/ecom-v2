@@ -1,8 +1,9 @@
 import { RollbackOutlined, ShareAltOutlined } from '@ant-design/icons';
-import { Alert, Empty, Flex, Typography, theme } from 'antd';
+import { Alert, Flex, Typography, theme } from 'antd';
 
 import { useDateFormat } from '../../../hooks';
 import { AppButton } from '../../ui/button';
+import { AppEmptyState } from '../../ui/empty-state';
 import {
   useEmailCenterActions,
   useEmailCenterStore,
@@ -116,7 +117,12 @@ export function EmailThreadView({
           padding: token.paddingLG,
         }}
       >
-        <Empty description="Select an email to view details" />
+        <AppEmptyState
+          variant="blank"
+          artSize="sm"
+          title="Select an email to view details"
+          hideArt
+        />
       </Flex>
     );
   }
@@ -173,7 +179,12 @@ export function EmailThreadView({
           )}
 
           {!messageLoading && sortedMessages.length === 0 && (
-            <Empty description="No messages found for this thread" />
+            <AppEmptyState
+              variant="blank"
+              artSize="sm"
+              title="No messages found for this thread"
+              hideArt
+            />
           )}
 
           {sortedMessages.map((message, index) => {

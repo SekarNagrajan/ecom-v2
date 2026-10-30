@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 13:04)
+// Modified by Sekar Nagarajan (2026-09-16 14:31)
 import type { BLWizardConfig } from "../config/bl-wizard-config";
 import { DEFAULT_BL_WIZARD_CONFIG } from "../config/bl-wizard-config";
 import type {
@@ -304,10 +304,19 @@ export async function sendBLAmendmentMail(
   }
 }
 
-export async function submitBL(blNo: string): Promise<ApiResponse<BLDTO>> {
+export async function submitBL(
+  blNo: string,
+  payload?: Partial<BLDTO>,
+): Promise<ApiResponse<BLDTO>> {
   try {
     const res = await fetch(`/api/bl/${encodeURIComponent(blNo)}/submit`, {
       method: "POST",
+      ...(payload
+        ? {
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          }
+        : {}),
     });
     return readApiJson<BLDTO>(res, "Failed to submit B/L");
   } catch (error: unknown) {
@@ -442,63 +451,6 @@ export async function fetchMCNDetail(
     }
     return parsed;
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : "Network error";
-    return { error: { code: "NETWORK_ERROR", message } };
-  }
-}
-
-export async function fetchBLExcelTemplate(
-  blNo: string,
-): Promise<{ data?: Blob; error?: { message: string; code?: string } }> {
-  try {
-    const res = await fetch(
-      `/api/bl/${encodeURIComponent(blNo)}/excel/template`,
-    );
-    if (!res.ok) {
-      const parsed = await readApiJson<unknown>(
-        res,
-        "Failed to download Excel template",
-      );
-      return {
-        error: parsed.error ?? {
-          code: "ERROR",
-          message: "Failed to download Excel template",
-        },
-      };
-    }
-    return { data: await res.blob() };
-  } catch (error: unknown) {
-    if (import.meta.env.DEV) {
-      return {
-        data: new Blob(["BL Excel template stub"], {
-          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        }),
-      };
-    }
-    const message = error instanceof Error ? error.message : "Network error";
-    return { error: { message } };
-  }
-}
-
-export async function importBLExcel(
-  blNo: string,
-  file: File,
-): Promise<ApiResponse<{ importedRows: number }>> {
-  try {
-    const formData = new FormData();
-    formData.append("file", file);
-    const res = await fetch(
-      `/api/bl/${encodeURIComponent(blNo)}/excel/import`,
-      {
-        method: "POST",
-        body: formData,
-      },
-    );
-    return readApiJson<{ importedRows: number }>(res, "Failed to import Excel");
-  } catch (error: unknown) {
-    if (import.meta.env.DEV) {
-      return { data: { importedRows: 1 } };
-    }
     const message = error instanceof Error ? error.message : "Network error";
     return { error: { code: "NETWORK_ERROR", message } };
   }

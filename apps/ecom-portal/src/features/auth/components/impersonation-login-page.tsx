@@ -1,7 +1,8 @@
-// Modified by Sekar Nagarajan (2026-08-27 12:23)
+// Modified by Sekar Nagarajan (2026-09-29 12:40)
 import type { SubCustomerAccount } from "@solverminds/auth";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Icons } from "../../../components/icons";
 import { useAdminLoginController } from "../hooks/use-admin-login-controller";
@@ -9,6 +10,7 @@ import { AdminLoginShell } from "./admin-login-shell";
 import { CustomerPickerModal } from "./customer-picker-modal";
 
 export function ImpersonationLoginPage() {
+  const { t } = useTranslation("auth");
   const navigate = useNavigate();
   const [customerList, setCustomerList] = useState<SubCustomerAccount[]>([]);
   const [showPicker, setShowPicker] = useState(false);
@@ -35,11 +37,11 @@ export function ImpersonationLoginPage() {
     <>
       <AdminLoginShell
         entryType="admin"
-        title="Admin Access"
-        subtitle="Sign in to access and manage customer accounts."
+        title={t("impersonationLogin.title")}
+        subtitle={t("impersonationLogin.subtitle")}
         icon={Icons.userCog}
-        submitLabel="Sign In"
-        userIdPlaceholder="e.g. impersonate or support"
+        submitLabel={t("impersonationLogin.submit")}
+        userIdPlaceholder={t("impersonationLogin.userIdPlaceholder")}
         control={control}
         errors={errors}
         handleSubmit={handleSubmit}

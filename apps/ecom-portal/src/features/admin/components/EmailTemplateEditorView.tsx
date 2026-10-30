@@ -12,6 +12,7 @@ import { useForm, useWatch, type Resolver } from "react-hook-form";
 import { z } from "zod";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { useAiTextAssist } from "../../ai-assist";
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import type { EmailTemplate } from "../types/admin.types";
 import { AdminLoadingCenter } from "./admin-loading-center";
@@ -60,6 +61,7 @@ export function EmailTemplateEditorView({
   templates,
   onSave,
 }: EmailTemplateEditorViewProps) {
+  const { textareaAssistProps } = useAiTextAssist();
   const [selectedId, setSelectedId] = useState(templates[0]?.id ?? "");
   const activeTemplate =
     templates.find((item) => item.id === selectedId) ?? templates[0];
@@ -229,6 +231,7 @@ export function EmailTemplateEditorView({
                 rows={12}
                 className="admin-mono-textarea custom-scroll"
                 formItemProps={FIELD_ITEM_PROPS}
+                {...textareaAssistProps}
               />
 
               <div className="admin-preview-box">

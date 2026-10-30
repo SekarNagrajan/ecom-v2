@@ -1,0 +1,52 @@
+{
+  "tooltips": {
+    "grammarImprove": "Mejorar la gramática",
+    "dictation": "Dictar con IA",
+    "dictationRecording": "Detener la grabación",
+    "dictationTranscribing": "Transcribiendo…",
+    "toneRewrite": "Reescribir con IA"
+  },
+  "toasts": {
+    "grammarEmptyInput": "Agregue texto antes de mejorar la gramática.",
+    "grammarEmptyResponse": "El servicio de gramática devolvió una respuesta vacía. No se aplicaron cambios.",
+    "grammarFormattingLoss": "Nota: el formato del texto (negrita, enlaces, listas) se simplificará después de la corrección gramatical.",
+    "rewriteEmptyInput": "Agregue el contenido del mensaje antes de reescribir.",
+    "rewriteEmptyResponse": "La reescritura devolvió una respuesta vacía. No se aplicaron cambios.",
+    "permissionDenied": "El acceso al micrófono está bloqueado. Habilítelo en el navegador para dictar.",
+    "unsupported": "El dictado por voz no es compatible con este navegador.",
+    "noMicrophone": "No se detectó ningún micrófono. Conecte uno e inténtelo de nuevo.",
+    "recordingFailed": "La grabación falló. Inténtelo de nuevo.",
+    "maxLengthExceeded": "La transcripción se truncó en {{truncatedChars}} caracteres para ajustarse al campo."
+  },
+  "tones": {
+    "engaging": "Atractivo",
+    "persuasive": "Persuasivo",
+    "anticipatory": "Anticipatorio",
+    "assertive": "Asertivo",
+    "compassionate": "Compasivo",
+    "confident": "Seguro",
+    "constructive": "Constructivo",
+    "cooperative": "Cooperativo",
+    "diplomatic": "Diplomático",
+    "empathetic": "Empático",
+    "friendly": "Amable",
+    "inspirational": "Inspirador",
+    "exciting": "Emocionante",
+    "casual": "Informal"
+  },
+  "rewriteActions": {
+    "improve": "Mejorar la redacción",
+    "more_descriptive": "Más descriptivo",
+    "more_detailed": "Más detallado",
+    "simplify": "Simplificar",
+    "informative": "Informativo",
+    "paraphrase": "Parafrasear",
+    "fix_mistakes": "Corregir ortografía y gramática",
+    "fluent": "Hacerlo fluido",
+    "objective": "Hacerlo objetivo",
+    "professional": "Profesional"
+  },
+  "errors": {
+    "generic": "Algo salió mal. Inténtelo de nuevo."
+  }
+}

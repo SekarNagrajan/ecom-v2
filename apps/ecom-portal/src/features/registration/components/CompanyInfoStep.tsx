@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-27 22:15)
+// Modified by Sekar Nagarajan (2026-09-11 12:02)
 import { useToast } from "@solverminds/shared-ui/hooks";
 import {
   AutoComplete,
@@ -12,6 +12,7 @@ import {
 } from "antd";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import { checkCustomerCode, searchAddress } from "../api/registration.api";
@@ -21,6 +22,8 @@ import type {
 } from "../types/registration.schema";
 
 const { Text } = Typography;
+
+const COL3 = RESPONSIVE_COL.formThird;
 
 function FieldLabel({
   children,
@@ -38,6 +41,7 @@ function FieldLabel({
 }
 
 export function CompanyInfoStep() {
+  const { t } = useTranslation(["registration", "common"]);
   const {
     control,
     watch,
@@ -53,6 +57,22 @@ export function CompanyInfoStep() {
   const toast = useToast();
 
   const customerType = watch("customerType");
+  const isExisting = customerType === "EXISTING";
+
+  const countryOptions = [
+    { value: "US", label: t("options.countries.US") },
+    { value: "GB", label: t("options.countries.GB") },
+    { value: "CA", label: t("options.countries.CA") },
+    { value: "IN", label: t("options.countries.IN") },
+    { value: "AU", label: t("options.countries.AU") },
+    { value: "SG", label: t("options.countries.SG") },
+  ];
+
+  const agencyOptions = [
+    { value: "AGENCY_US", label: t("options.agencies.AGENCY_US") },
+    { value: "AGENCY_GB", label: t("options.agencies.AGENCY_GB") },
+    { value: "AGENCY_SG", label: t("options.agencies.AGENCY_SG") },
+  ];
 
   const handleSearch = async (value: string) => {
     if (!value) {
@@ -88,7 +108,7 @@ export function CompanyInfoStep() {
       const data = await checkCustomerCode(code);
       if (data.valid) {
         clearErrors("customerCode");
-        toast.success("Customer code verified. Auto-filling details.");
+        toast.success(t("toasts.customerCodeVerified"));
         if (data.companyName) {
           setValue("companyName", data.companyName, { shouldValidate: true });
         }
@@ -104,326 +124,379 @@ export function CompanyInfoStep() {
       } else {
         setError("customerCode", {
           type: "manual",
-          message: "Invalid Customer Code",
+          message: t("validation.invalidCustomerCode"),
         });
       }
     } catch {
       setError("customerCode", {
         type: "manual",
-        message: "Error validating code",
+        message: t("validation.errorValidatingCode"),
       });
     } finally {
       setIsCheckingCode(false);
     }
   };
 
+  const companyNameField = (
+    <Col {...COL3}>
+      <Flex vertical gap={8}>
+        <FieldLabel required>{t("company.companyName")}</FieldLabel>
+        <Controller
+          name="companyName"
+          control={control}
+          render={({ field }) => (
+            <div>
+              <AutoComplete
+                options={addressOptions}
+                onSearch={handleSearch}
+                onSelect={handleSelect}
+                value={field.value}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                className="reg-field-full"
+              >
+                <Input
+                  size="large"
+                  placeholder={t("company.companyName")}
+                  status={errors.companyName ? "error" : undefined}
+                />
+              </AutoComplete>
+              {errors.companyName ? (
+                <Text type="danger" className="form-field-error">
+                  {errors.companyName.message}
+                </Text>
+              ) : null}
+            </div>
+          )}
+        />
+      </Flex>
+    </Col>
+  );
+
+  const countryField = (
+    <Col {...COL3}>
+      <Flex vertical gap={8}>
+        <FieldLabel required>{t("company.country")}</FieldLabel>
+        <Controller
+          name="country"
+          control={control}
+          render={({ field }) => (
+            <div>
+              <Select
+                {...field}
+                value={field.value || undefined}
+                size="large"
+                placeholder={t("company.country")}
+                status={errors.country ? "error" : undefined}
+                className="reg-field-full"
+                options={countryOptions}
+              />
+              {errors.country ? (
+                <Text type="danger" className="form-field-error">
+                  {errors.country.message}
+                </Text>
+              ) : null}
+            </div>
+          )}
+        />
+      </Flex>
+    </Col>
+  );
+
+  const agencyField = (
+    <Col {...COL3}>
+      <Flex vertical gap={8}>
+        <FieldLabel required>{t("company.controllingAgency")}</FieldLabel>
+        <Controller
+          name="location"
+          control={control}
+          render={({ field }) => (
+            <div>
+              <Select
+                {...field}
+                value={field.value || undefined}
+                size="large"
+                placeholder={t("company.controllingAgency")}
+                status={errors.location ? "error" : undefined}
+                className="reg-field-full"
+                options={agencyOptions}
+              />
+              {errors.location ? (
+                <Text type="danger" className="form-field-error">
+                  {errors.location.message}
+                </Text>
+              ) : null}
+            </div>
+          )}
+        />
+      </Flex>
+    </Col>
+  );
+
+  const cityField = (
+    <Col {...COL3}>
+      <Flex vertical gap={8}>
+        <FieldLabel required>{t("company.city")}</FieldLabel>
+        <Controller
+          name="city"
+          control={control}
+          render={({ field }) => (
+            <div>
+              <Input
+                {...field}
+                size="large"
+                placeholder={t("company.city")}
+                status={errors.city ? "error" : undefined}
+              />
+              {errors.city ? (
+                <Text type="danger" className="form-field-error">
+                  {errors.city.message}
+                </Text>
+              ) : null}
+            </div>
+          )}
+        />
+      </Flex>
+    </Col>
+  );
+
+  const postalField = (
+    <Col {...COL3}>
+      <Flex vertical gap={8}>
+        <FieldLabel>{t("company.postalCode")}</FieldLabel>
+        <Controller
+          name="postalCode"
+          control={control}
+          render={({ field }) => (
+            <Input
+              {...field}
+              size="large"
+              placeholder={t("company.postalCode")}
+            />
+          )}
+        />
+      </Flex>
+    </Col>
+  );
+
+  const address1Field = (
+    <Col {...COL3}>
+      <Flex vertical gap={8}>
+        <FieldLabel required>{t("company.address1")}</FieldLabel>
+        <Controller
+          name="address1"
+          control={control}
+          render={({ field }) => (
+            <div>
+              <Input
+                {...field}
+                size="large"
+                placeholder={t("company.address1")}
+                status={errors.address1 ? "error" : undefined}
+              />
+              {errors.address1 ? (
+                <Text type="danger" className="form-field-error">
+                  {errors.address1.message}
+                </Text>
+              ) : null}
+            </div>
+          )}
+        />
+      </Flex>
+    </Col>
+  );
+
+  const address2Field = (
+    <Col {...COL3}>
+      <Flex vertical gap={8}>
+        <FieldLabel>{t("company.address2")}</FieldLabel>
+        <Controller
+          name="address2"
+          control={control}
+          render={({ field }) => (
+            <Input
+              {...field}
+              size="large"
+              placeholder={t("company.address2")}
+            />
+          )}
+        />
+      </Flex>
+    </Col>
+  );
+
+  const websiteField = (
+    <Col {...COL3}>
+      <Flex vertical gap={8}>
+        <FieldLabel>{t("company.website")}</FieldLabel>
+        <Controller
+          name="companyDomain"
+          control={control}
+          render={({ field }) => (
+            <Input
+              {...field}
+              size="large"
+              placeholder={t("company.website")}
+            />
+          )}
+        />
+      </Flex>
+    </Col>
+  );
+
+  const recentBlField = (
+    <Col {...COL3}>
+      <Flex vertical gap={8}>
+        <FieldLabel>{t("company.recentBl")}</FieldLabel>
+        <Controller
+          name="recentBL"
+          control={control}
+          render={({ field }) => (
+            <Input
+              {...field}
+              size="large"
+              placeholder={t("company.recentBl")}
+            />
+          )}
+        />
+      </Flex>
+    </Col>
+  );
+
+  const phoneField = (
+    <Col {...COL3}>
+      <Flex vertical gap={8}>
+        <FieldLabel required>{t("company.companyPhone")}</FieldLabel>
+        <Flex gap={8}>
+          <Controller
+            name="companyPhoneCountryCode"
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                size="large"
+                placeholder={t("company.phoneCodePlaceholder")}
+                className="reg-phone-code"
+              />
+            )}
+          />
+          <Controller
+            name="companyPhoneNo"
+            control={control}
+            render={({ field }) => (
+              <div className="reg-phone-number">
+                <Input
+                  {...field}
+                  size="large"
+                  placeholder={t("company.phonePlaceholder")}
+                  status={errors.companyPhoneNo ? "error" : undefined}
+                />
+              </div>
+            )}
+          />
+        </Flex>
+        {errors.companyPhoneNo ? (
+          <Text type="danger" className="form-field-error">
+            {errors.companyPhoneNo.message}
+          </Text>
+        ) : null}
+      </Flex>
+    </Col>
+  );
+
   return (
-    <Flex vertical gap={16} className="reg-step-body">
+    <Flex vertical gap={12} className="reg-step-body">
       <Controller
         name="customerType"
         control={control}
         render={({ field }) => (
           <Radio.Group {...field} optionType="button" buttonStyle="solid">
-            <Radio value="NEW">New Customer</Radio>
-            <Radio value="EXISTING">Existing Customer</Radio>
+            <Radio value="NEW">{t("company.newCustomer")}</Radio>
+            <Radio value="EXISTING">{t("company.existingCustomer")}</Radio>
           </Radio.Group>
         )}
       />
 
-      {customerType === "EXISTING" ? (
-        <Row gutter={[16, 16]}>
-          <Col {...RESPONSIVE_COL.formThird}>
-            <Flex vertical gap={8}>
-              <FieldLabel required>Customer Code</FieldLabel>
-              <Controller
-                name="customerCode"
-                control={control}
-                render={({ field }) => (
-                  <div>
-                    <Input
-                      {...field}
-                      size="large"
-                      placeholder="Enter Customer Code"
-                      status={errors.customerCode ? "error" : undefined}
-                      onBlur={(e) => {
-                        field.onBlur();
-                        handleCustomerCodeBlur(e.target.value);
-                      }}
-                      disabled={isCheckingCode}
-                    />
-                    {errors.customerCode ? (
-                      <Text type="danger" className="form-field-error">
-                        {errors.customerCode.message}
-                      </Text>
-                    ) : null}
-                  </div>
-                )}
-              />
-            </Flex>
-          </Col>
-        </Row>
-      ) : null}
-
-      <Row gutter={[16, 16]}>
-        <Col {...RESPONSIVE_COL.formThird}>
-          <Flex vertical gap={8}>
-            <FieldLabel required>Company Name</FieldLabel>
-            <Controller
-              name="companyName"
-              control={control}
-              render={({ field }) => (
-                <div>
-                  <AutoComplete
-                    options={addressOptions}
-                    onSearch={handleSearch}
-                    onSelect={handleSelect}
-                    value={field.value}
-                    onChange={field.onChange}
-                    onBlur={field.onBlur}
-                    className="reg-field-full"
-                  >
-                    <Input
-                      size="large"
-                      placeholder="Company Name"
-                      status={errors.companyName ? "error" : undefined}
-                    />
-                  </AutoComplete>
-                  {errors.companyName ? (
-                    <Text type="danger" className="form-field-error">
-                      {errors.companyName.message}
-                    </Text>
-                  ) : null}
-                </div>
-              )}
-            />
-          </Flex>
-        </Col>
-
-        <Col {...RESPONSIVE_COL.formThird}>
-          <Flex vertical gap={8}>
-            <FieldLabel required>Country</FieldLabel>
-            <Controller
-              name="country"
-              control={control}
-              render={({ field }) => (
-                <div>
-                  <Select
-                    {...field}
-                    value={field.value || undefined}
-                    size="large"
-                    placeholder="Country"
-                    status={errors.country ? "error" : undefined}
-                    className="reg-field-full"
-                    options={[
-                      { value: "US", label: "United States" },
-                      { value: "GB", label: "United Kingdom" },
-                      { value: "CA", label: "Canada" },
-                      { value: "IN", label: "India" },
-                      { value: "AU", label: "Australia" },
-                      { value: "SG", label: "Singapore" },
-                    ]}
-                  />
-                  {errors.country ? (
-                    <Text type="danger" className="form-field-error">
-                      {errors.country.message}
-                    </Text>
-                  ) : null}
-                </div>
-              )}
-            />
-          </Flex>
-        </Col>
-
-        <Col {...RESPONSIVE_COL.formThird}>
-          <Flex vertical gap={8}>
-            <FieldLabel required>Controlling Agency</FieldLabel>
-            <Controller
-              name="location"
-              control={control}
-              render={({ field }) => (
-                <div>
-                  <Select
-                    {...field}
-                    value={field.value || undefined}
-                    size="large"
-                    placeholder="Controlling Agency"
-                    status={errors.location ? "error" : undefined}
-                    className="reg-field-full"
-                    options={[
-                      { value: "AGENCY_US", label: "US Agency" },
-                      { value: "AGENCY_GB", label: "UK Agency" },
-                      { value: "AGENCY_SG", label: "Singapore Agency" },
-                    ]}
-                  />
-                  {errors.location ? (
-                    <Text type="danger" className="form-field-error">
-                      {errors.location.message}
-                    </Text>
-                  ) : null}
-                </div>
-              )}
-            />
-          </Flex>
-        </Col>
-
-        <Col {...RESPONSIVE_COL.formThird}>
-          <Flex vertical gap={8}>
-            <FieldLabel required>City</FieldLabel>
-            <Controller
-              name="city"
-              control={control}
-              render={({ field }) => (
-                <div>
-                  <Input
-                    {...field}
-                    size="large"
-                    placeholder="City"
-                    status={errors.city ? "error" : undefined}
-                  />
-                  {errors.city ? (
-                    <Text type="danger" className="form-field-error">
-                      {errors.city.message}
-                    </Text>
-                  ) : null}
-                </div>
-              )}
-            />
-          </Flex>
-        </Col>
-
-        <Col {...RESPONSIVE_COL.formThird}>
-          <Flex vertical gap={8}>
-            <FieldLabel>Postal Code</FieldLabel>
-            <Controller
-              name="postalCode"
-              control={control}
-              render={({ field }) => (
-                <Input {...field} size="large" placeholder="Postal Code" />
-              )}
-            />
-          </Flex>
-        </Col>
-
-        <Col {...RESPONSIVE_COL.formThird}>
-          <Flex vertical gap={8}>
-            <FieldLabel>Tax ID</FieldLabel>
-            <Controller
-              name="taxId"
-              control={control}
-              render={({ field }) => (
-                <Input {...field} size="large" placeholder="Tax ID" />
-              )}
-            />
-          </Flex>
-        </Col>
-
-        <Col {...RESPONSIVE_COL.formThird}>
-          <Flex vertical gap={8}>
-            <FieldLabel required>Address 1</FieldLabel>
-            <Controller
-              name="address1"
-              control={control}
-              render={({ field }) => (
-                <div>
-                  <Input
-                    {...field}
-                    size="large"
-                    placeholder="Address 1"
-                    status={errors.address1 ? "error" : undefined}
-                  />
-                  {errors.address1 ? (
-                    <Text type="danger" className="form-field-error">
-                      {errors.address1.message}
-                    </Text>
-                  ) : null}
-                </div>
-              )}
-            />
-          </Flex>
-        </Col>
-
-        <Col {...RESPONSIVE_COL.formThird}>
-          <Flex vertical gap={8}>
-            <FieldLabel>Address 2</FieldLabel>
-            <Controller
-              name="address2"
-              control={control}
-              render={({ field }) => (
-                <Input {...field} size="large" placeholder="Address 2" />
-              )}
-            />
-          </Flex>
-        </Col>
-
-        <Col {...RESPONSIVE_COL.formThird}>
-          <Flex vertical gap={8}>
-            <FieldLabel>Website</FieldLabel>
-            <Controller
-              name="companyDomain"
-              control={control}
-              render={({ field }) => (
-                <Input {...field} size="large" placeholder="Website" />
-              )}
-            />
-          </Flex>
-        </Col>
-
-        <Col {...RESPONSIVE_COL.formThird}>
-          <Flex vertical gap={8}>
-            <FieldLabel>Recent BL/Booking number</FieldLabel>
-            <Controller
-              name="recentBL"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  size="large"
-                  placeholder="Recent BL/Booking number"
+      {isExisting ? (
+        <>
+          {/* Row 1 — 3 cols */}
+          <Row gutter={[16, 12]}>
+            <Col {...COL3}>
+              <Flex vertical gap={8}>
+                <FieldLabel required>{t("company.customerCode")}</FieldLabel>
+                <Controller
+                  name="customerCode"
+                  control={control}
+                  render={({ field }) => (
+                    <div>
+                      <Input
+                        {...field}
+                        size="large"
+                        placeholder={t("company.customerCodePlaceholder")}
+                        status={errors.customerCode ? "error" : undefined}
+                        onBlur={(e) => {
+                          field.onBlur();
+                          handleCustomerCodeBlur(e.target.value);
+                        }}
+                        disabled={isCheckingCode}
+                      />
+                      {errors.customerCode ? (
+                        <Text type="danger" className="form-field-error">
+                          {errors.customerCode.message}
+                        </Text>
+                      ) : null}
+                    </div>
+                  )}
                 />
-              )}
-            />
-          </Flex>
-        </Col>
+              </Flex>
+            </Col>
+            {companyNameField}
+            {countryField}
+          </Row>
 
-        <Col {...RESPONSIVE_COL.formThird}>
-          <Flex vertical gap={8}>
-            <FieldLabel required>Company Phone</FieldLabel>
-            <Flex gap={8}>
-              <Controller
-                name="companyPhoneCountryCode"
-                control={control}
-                render={({ field }) => (
-                  <Input
-                    {...field}
-                    size="large"
-                    placeholder="+1"
-                    className="reg-phone-code"
-                  />
-                )}
-              />
-              <Controller
-                name="companyPhoneNo"
-                control={control}
-                render={({ field }) => (
-                  <div className="reg-phone-number">
-                    <Input
-                      {...field}
-                      size="large"
-                      placeholder="Phone"
-                      status={errors.companyPhoneNo ? "error" : undefined}
-                    />
-                  </div>
-                )}
-              />
-            </Flex>
-            {errors.companyPhoneNo ? (
-              <Text type="danger" className="form-field-error">
-                {errors.companyPhoneNo.message}
-              </Text>
-            ) : null}
-          </Flex>
-        </Col>
-      </Row>
+          {/* Row 2 — 3 cols */}
+          <Row gutter={[16, 12]}>
+            {agencyField}
+            {cityField}
+            {postalField}
+          </Row>
+
+          {/* Row 3 — 3 cols */}
+          <Row gutter={[16, 12]}>
+            {address1Field}
+            {address2Field}
+            {websiteField}
+          </Row>
+
+          {/* Row 4 — remaining fields on same 3-col grid */}
+          <Row gutter={[16, 12]}>
+            {recentBlField}
+            {phoneField}
+          </Row>
+        </>
+      ) : (
+        <>
+          <Row gutter={[16, 12]}>
+            {companyNameField}
+            {countryField}
+            {agencyField}
+          </Row>
+
+          <Row gutter={[16, 12]}>
+            {cityField}
+            {postalField}
+            {address1Field}
+          </Row>
+
+          <Row gutter={[16, 12]}>
+            {address2Field}
+            {websiteField}
+            {recentBlField}
+          </Row>
+
+          <Row gutter={[16, 12]}>{phoneField}</Row>
+        </>
+      )}
     </Flex>
   );
 }

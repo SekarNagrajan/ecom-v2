@@ -2,6 +2,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
 import { Card, Input, InputNumber, Select, Typography } from "antd";
+import { useMemo } from "react";
 import {
     Controller,
     useFieldArray,
@@ -9,6 +10,7 @@ import {
     type Control,
     type FieldErrors,
 } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../../components/icons";
 import {
@@ -24,12 +26,6 @@ import { BlWizardFooter } from "../bl-wizard-footer";
 import type { BLWizardStepProps } from "./MasterDetailsStep";
 
 const { Text } = Typography;
-
-const PC_OPTIONS: { value: BLPrepaidCollect; label: string }[] = [
-  { value: "PREPAID", label: "Prepaid" },
-  { value: "COLLECT", label: "Collect" },
-  { value: "PAY_AT", label: "Pay At" },
-];
 
 const CURRENCY_OPTIONS = [
   { value: "USD", label: "USD" },
@@ -56,10 +52,14 @@ function ChargeLineFields({
   control,
   index,
   errors,
+  t,
+  pcOptions,
 }: {
   control: Control<BLChargesStepValues>;
   index: number;
   errors: FieldErrors<BLChargesStepValues>;
+  t: (key: string, options?: Record<string, unknown>) => string;
+  pcOptions: { value: BLPrepaidCollect; label: string }[];
 }) {
   const rowErrors = errors.charges?.[index];
 
@@ -67,7 +67,7 @@ function ChargeLineFields({
     <div className="bl-master-detail-grid bl-charges-form-grid">
       <div className="form-field-cell bl-master-readonly-field">
         <label className="form-field-label">
-          Code <Text type="danger">*</Text>
+          {t("columns.code")} <Text type="danger">*</Text>
         </label>
         <Controller
           control={control}
@@ -83,7 +83,7 @@ function ChargeLineFields({
 
       <div className="form-field-cell bl-master-readonly-field">
         <label className="form-field-label">
-          Description <Text type="danger">*</Text>
+          {t("columns.description")} <Text type="danger">*</Text>
         </label>
         <Controller
           control={control}
@@ -99,7 +99,7 @@ function ChargeLineFields({
 
       <div className="form-field-cell bl-master-readonly-field">
         <label className="form-field-label">
-          Amount <Text type="danger">*</Text>
+          {t("columns.amount")} <Text type="danger">*</Text>
         </label>
         <Controller
           control={control}
@@ -117,7 +117,7 @@ function ChargeLineFields({
 
       <div className="form-field-cell bl-master-readonly-field">
         <label className="form-field-label">
-          Currency <Text type="danger">*</Text>
+          {t("wizard.charges.currency")} <Text type="danger">*</Text>
         </label>
         <Controller
           control={control}
@@ -135,7 +135,7 @@ function ChargeLineFields({
 
       <div className="form-field-cell bl-master-readonly-field">
         <label className="form-field-label">
-          P/C <Text type="danger">*</Text>
+          {t("wizard.charges.pceShort")} <Text type="danger">*</Text>
         </label>
         <Controller
           control={control}
@@ -145,7 +145,7 @@ function ChargeLineFields({
               {...field}
               size="large"
               className="form-field-full-width"
-              options={PC_OPTIONS}
+              options={pcOptions}
             />
           )}
         />
@@ -153,7 +153,7 @@ function ChargeLineFields({
 
       <div className="form-field-cell bl-master-readonly-field">
         <label className="form-field-label">
-          Payor <Text type="danger">*</Text>
+          {t("columns.payor")} <Text type="danger">*</Text>
         </label>
         <Controller
           control={control}
@@ -175,10 +175,20 @@ export function ChargesStep({
   onNext,
   onPrevious,
   onUpdate,
-  onGoToStep,
   isFirstStep,
   isSubmitting,
 }: BLWizardStepProps) {
+  const { t } = useTranslation(["bill-of-lading", "common"]);
+
+  const pcOptions = useMemo(
+    (): { value: BLPrepaidCollect; label: string }[] => [
+      { value: "PREPAID", label: t("charges.prepaid") },
+      { value: "COLLECT", label: t("charges.collect") },
+      { value: "PAY_AT", label: t("charges.payAt") },
+    ],
+    [t],
+  );
+
   const {
     control,
     handleSubmit,
@@ -209,14 +219,14 @@ export function ChargesStep({
       <div className="custom-scroll form-step-scroll bl-charges-step">
         <Card
           className="form-step-card form-step-section bl-charges-card"
-          title="Freight Charges"
+          title={t("wizard.charges.title")}
           extra={
             <AppButton
               type="dashed"
               icon={<AppIcon icon={Icons.filePlus} size={14} />}
               onClick={() => append(createEmptyCharge())}
             >
-              Add Charge
+              {t("wizard.charges.addCharge")}
             </AppButton>
           }
         >
@@ -235,12 +245,12 @@ export function ChargesStep({
                 key={field.id}
                 size="small"
                 className="form-step-card bl-charges-line-card"
-                title={`Charge ${index + 1}`}
+                title={t("wizard.charges.chargeLineTitle", { n: index + 1 })}
                 extra={
                   fields.length > 1 ? (
                     <ListActionsRow>
                       <ListActionButton
-                        title="Remove charge"
+                        title={t("wizard.charges.removeCharge")}
                         icon={
                           <AppIcon icon={Icons.x} size={16} tone="delete" />
                         }
@@ -255,6 +265,8 @@ export function ChargesStep({
                   control={control}
                   index={index}
                   errors={errors}
+                  t={t}
+                  pcOptions={pcOptions}
                 />
               </Card>
             ))}

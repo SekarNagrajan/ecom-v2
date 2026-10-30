@@ -1,6 +1,7 @@
 // Modified by Sekar Nagarajan (2026-08-26 14:26)
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 
 import { doApi } from "./delivery-order.api";
 import { doKeys } from "./delivery-order.keys";
@@ -18,13 +19,16 @@ export function useDOSummaryQuery(filters: DOListFilters = {}) {
 }
 
 export function useDODownloadMutation() {
+  const { t } = useTranslation("delivery-order");
   const queryClient = useQueryClient();
   const toast = useToast();
 
   return useMutation({
     mutationFn: async (delOrdNo: string) => {
       const res = await doApi.downloadDocument(delOrdNo);
-      if (res.error) throw new Error(res.error.message);
+      if (res.error) {
+        throw new Error(res.error.message || t("errors.download"));
+      }
       return { blob: res.data, delOrdNo };
     },
     onSuccess: ({ blob, delOrdNo }) => {
@@ -36,11 +40,11 @@ export function useDODownloadMutation() {
       });
       a.click();
       URL.revokeObjectURL(url);
-      toast.success(`Delivery Order ${delOrdNo} downloaded.`);
+      toast.success(t("toasts.documentDownloaded", { delOrdNo }));
       queryClient.invalidateQueries({ queryKey: doKeys.lists() });
     },
     onError: (error: Error) => {
-      toast.error(error.message || "Failed to download Delivery Order.");
+      toast.error(error.message || t("errors.download"));
     },
   });
 }

@@ -1,0 +1,32 @@
+[
+ {
+  "id": "3673061",
+  "bkstatus": "D",
+  "shipperRefNo": null,
+  "loadPortId": "INNSA",
+  "dischargePortId": "SGSIN",
+  "custRefNo": "",
+  "polAt": "2024-03-20T20:55:06.465Z",
+  "book_no": "SVMINDMAA0000456",
+  "servicecode": "8072",
+  "vesselcode": "FED639",
+  "voyagecode": "379AE",
+  "bound": "E",
+  "bpCustId": "20001374",
+  "bpName": null,
+  "bpCustTypeId": null,
+  "apCustTypeId": "",
+  "apCustId": "",
+  "apName": "",
+  "originPortId": "INNSA",
+  "finalPortId": "SGSIN",
+  "polTerminal": "INNSANSI00",
+  "podTerminal": "SGSINPSA00",
+  "bl_no": "",
+  "blstatus": "",
+  "datecr": "2024-05-03T01:32:07.422Z",
+  "refid": 714580,
+  "agencyrefno": "",
+  "appversion": 2
+ }
+]

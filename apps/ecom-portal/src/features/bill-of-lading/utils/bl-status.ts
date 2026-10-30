@@ -1,6 +1,8 @@
-// Modified by Sekar Nagarajan (2026-08-31 16:45)
+// Modified by Sekar Nagarajan (2026-09-29 12:50)
 import type { BLListDTO, BLRowStatus } from "../types/bl.types";
 import { BL_STATUS_LABELS } from "../types/bl.types";
+
+type TranslateFn = (key: string, options?: Record<string, unknown>) => string;
 
 export function getBLStatusColor(status: BLRowStatus): string {
   switch (status) {
@@ -12,8 +14,10 @@ export function getBLStatusColor(status: BLRowStatus): string {
       return "warning";
     case "C":
       return "success";
-    default:
-      return "default";
+    default: {
+      const _exhaustive: never = status;
+      return _exhaustive;
+    }
   }
 }
 
@@ -25,7 +29,26 @@ export function getBLListStatusColor(
   return getBLStatusColor(row.status);
 }
 
-export function getBLStatusLabel(status: BLRowStatus): string {
+export function getBLStatusLabel(
+  status: BLRowStatus,
+  t?: TranslateFn,
+): string {
+  if (t) {
+    switch (status) {
+      case "D":
+        return t("status.draft");
+      case "S":
+        return t("status.submitted");
+      case "C":
+        return t("status.confirmed");
+      case "I":
+        return t("status.issued");
+      default: {
+        const _exhaustive: never = status;
+        return BL_STATUS_LABELS[_exhaustive];
+      }
+    }
+  }
   return BL_STATUS_LABELS[status];
 }
 

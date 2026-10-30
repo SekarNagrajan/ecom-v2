@@ -1,12 +1,20 @@
-// Modified by Sekar Nagarajan (2026-08-27 22:15)
+// Modified by Sekar Nagarajan (2026-09-28 14:57) — GWFC-8388 link to GWF legal pages
 import { Checkbox, Flex, Typography } from "antd";
 import { Controller, useFormContext } from "react-hook-form";
+import { Trans, useTranslation } from "react-i18next";
 
+import { LEGAL_LINKS } from "../../../constants/legal-links";
 import type { RegistrationFormData } from "../types/registration.schema";
 
 const { Text, Title } = Typography;
 
+const externalLinkProps = {
+  target: "_blank",
+  rel: "noopener noreferrer",
+} as const;
+
 export function TermsStep() {
+  const { t } = useTranslation(["registration", "common"]);
   const {
     control,
     formState: { errors },
@@ -16,26 +24,38 @@ export function TermsStep() {
     <Flex vertical gap={24} className="reg-step-body">
       <div className="reg-terms-box custom-scroll">
         <Title level={5} className="reg-page__title">
-          Terms and Conditions
+          {t("terms.heading")}
         </Title>
         <Text className="reg-terms-box__para">
-          1. Acceptance of Terms: By registering for an account on the E-Com
-          Portal, you agree to abide by these terms and conditions.
+          <Trans
+            i18nKey="terms.paragraphs.acceptance"
+            ns="registration"
+            components={{
+              termsLink: (
+                <a
+                  href={LEGAL_LINKS.websiteTermsOfUse.href}
+                  {...externalLinkProps}
+                />
+              ),
+            }}
+          />
         </Text>
         <Text className="reg-terms-box__para">
-          2. Privacy Policy: We are committed to protecting your privacy. Your
-          personal and company information will be handled in accordance with
-          our Privacy Policy and applicable data protection laws.
+          <Trans
+            i18nKey="terms.paragraphs.privacy"
+            ns="registration"
+            components={{
+              privacyLink: (
+                <a href={LEGAL_LINKS.privacyPolicy.href} {...externalLinkProps} />
+              ),
+            }}
+          />
         </Text>
         <Text className="reg-terms-box__para">
-          3. Account Security: You are responsible for maintaining the
-          confidentiality of your account credentials and for all activities
-          that occur under your account.
+          {t("terms.paragraphs.security")}
         </Text>
         <Text className="reg-terms-box__para">
-          4. Accurate Information: You agree to provide accurate, current, and
-          complete information during the registration process and to update
-          such information to keep it accurate, current, and complete.
+          {t("terms.paragraphs.accurate")}
         </Text>
       </div>
 
@@ -50,7 +70,19 @@ export function TermsStep() {
               onChange={(e) => onChange(e.target.checked)}
             >
               <span className="form-field-label">
-                I Agree the terms and condition
+                <Trans
+                  i18nKey="terms.agree"
+                  ns="registration"
+                  components={{
+                    termsLink: (
+                      <a
+                        href={LEGAL_LINKS.websiteTermsOfUse.href}
+                        {...externalLinkProps}
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                    ),
+                  }}
+                />
                 <Text type="danger"> *</Text>
               </span>
             </Checkbox>

@@ -1,65 +1,33 @@
-// Modified by Sekar Nagarajan (2026-08-26 16:25)
-import { DataView, type DataViewColumn } from "@solverminds/shared-ui/data-view";
+// Modified by Sekar Nagarajan (2026-10-16 23:35)
+import {
+  DataView,
+  type DataViewColumn,
+} from "@solverminds/shared-ui/data-view";
 import { useConfirm, useToast } from "@solverminds/shared-ui/hooks";
 import { Tag, Typography } from "antd";
 import { useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { NavAgencyApprovalIcon } from "../../../components/icons/nav-svg-icons";
 import { buildActionsColumn } from "../../../components/shared/build-actions-column";
 import {
   ListActionButton,
   ListActionsRow,
 } from "../../../components/shared/list-action-button";
-import { MODULE_TITLES } from "../../../constants/module-titles";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
+import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
+import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
+import { useModuleTitles } from "../../../i18n/use-module-titles";
+import {
+  applyApprovalStatus,
+  vendorApprovals,
+} from "../../../mocks/fixture-api/bridges/approvals.bridge";
 import type {
   ApprovalStatus,
   VendorApprovalItem,
 } from "../types/vendor-approvals.types";
 
-const { Text, Title } = Typography;
-
-const INITIAL_ITEMS: VendorApprovalItem[] = [
-  {
-    id: "1",
-    referenceNo: "BKG-2026-0991",
-    customerName: "Apex Logistics Global",
-    submittedDate: "2026-08-21 09:30",
-    type: "BOOKING",
-    originPort: "USNYC",
-    destPort: "SGSIN",
-    status: "PENDING",
-  },
-  {
-    id: "2",
-    referenceNo: "SI-2026-8812",
-    customerName: "Atlantic Freight LLC",
-    submittedDate: "2026-08-21 10:15",
-    type: "SI",
-    originPort: "NLRTM",
-    destPort: "CNSHA",
-    status: "PENDING",
-  },
-  {
-    id: "3",
-    referenceNo: "VGM-2026-4410",
-    customerName: "Pacific Maritime Corp",
-    submittedDate: "2026-08-21 08:45",
-    type: "VGM",
-    originPort: "DEHAM",
-    destPort: "USNYC",
-    status: "PENDING",
-  },
-  {
-    id: "4",
-    referenceNo: "BKG-2026-0988",
-    customerName: "Global Shippers Inc",
-    submittedDate: "2026-08-20 16:20",
-    type: "BOOKING",
-    originPort: "SGSIN",
-    destPort: "AEJEA",
-    status: "APPROVED",
-  },
-];
+const { Text } = Typography;
 
 const TYPE_META: Record<
   VendorApprovalItem["type"],
@@ -77,11 +45,20 @@ const STATUS_META: Record<ApprovalStatus, { color: string; label: string }> = {
 };
 
 export function VendorApprovalsView() {
+  const MODULE_TITLES = useModuleTitles();
   const toast = useToast();
   const confirm = useConfirm();
-  const [items, setItems] = useState<VendorApprovalItem[]>(INITIAL_ITEMS);
+  const { profileHandlers } = useLocalGridProfiles("vendor-approvals");
+  // Queue derived from the ecombooking / ecomSI / ecom_vgmsolas fixtures (src/mocks/fixtures)
+  const [items, setItems] = useState<VendorApprovalItem[]>(() =>
+    vendorApprovals(),
+  );
 
-  const applyStatus = (id: string, status: Exclude<ApprovalStatus, "PENDING">) => {
+  const applyStatus = (
+    id: string,
+    status: Exclude<ApprovalStatus, "PENDING">,
+  ) => {
+    applyApprovalStatus(id, status);
     setItems((prev) =>
       prev.map((item) => (item.id === id ? { ...item, status } : item)),
     );
@@ -121,7 +98,11 @@ export function VendorApprovalsView() {
         const rec = params.data;
         if (!rec) return null;
         if (rec.status !== "PENDING") {
-          return <Text type="secondary" className="va-status-done">Done</Text>;
+          return (
+            <Text type="secondary" className="va-status-done">
+              Done
+            </Text>
+          );
         }
         return (
           <ListActionsRow>
@@ -210,38 +191,42 @@ export function VendorApprovalsView() {
 
   const pendingCount = items.filter((i) => i.status === "PENDING").length;
   const approvedCount = items.filter((i) => i.status === "APPROVED").length;
+  const rejectedCount = items.filter((i) => i.status === "REJECTED").length;
 
   return (
     <div className="va-page-layout">
-      <div className="va-panel-header">
-        <div className="va-panel-header__main">
-          <span className="va-panel-header__icon" aria-hidden>
-            <AppIcon icon={Icons.checkSquare} size={24} />
-          </span>
-          <div className="va-panel-header__copy">
-            <Title level={4} className="va-panel-header__title">
-              {MODULE_TITLES.agencyApprovals}
-            </Title>
-            <Text type="secondary" className="va-panel-header__description">
-              Review and process customer bookings, shipping instructions, and
-              VGM submissions.
-            </Text>
-          </div>
-        </div>
+      {/* Modified by Sekar Nagarajan (2026-09-16 17:38) — VGM/ARN page shell layout */}
+      <div className="va-page-header">
+        <ModuleScreenHeader
+          icon={NavAgencyApprovalIcon}
+          title={MODULE_TITLES.agencyApprovals}
+          subtitle="Review and process customer bookings, shipping instructions, and VGM submissions."
+          marginBottom={0}
+        />
       </div>
 
-      <div className="va-summary-strip" aria-label="Approval summary">
-        <div className="va-summary-chip va-summary-chip--warning">
-          <span className="va-summary-chip__label">Pending</span>
-          <span className="va-summary-chip__value">{pendingCount}</span>
-        </div>
-        <div className="va-summary-chip va-summary-chip--success">
-          <span className="va-summary-chip__label">Approved</span>
-          <span className="va-summary-chip__value">{approvedCount}</span>
-        </div>
-        <div className="va-summary-chip">
-          <span className="va-summary-chip__label">Total</span>
-          <span className="va-summary-chip__value">{items.length}</span>
+      <div
+        className="va-summary-panel"
+        role="group"
+        aria-label="Approval summary"
+      >
+        <div className="va-summary-strip">
+          <div className="va-summary-chip va-summary-chip--warning">
+            <span className="va-summary-chip__label">Pending</span>
+            <span className="va-summary-chip__value">{pendingCount}</span>
+          </div>
+          <div className="va-summary-chip va-summary-chip--success">
+            <span className="va-summary-chip__label">Approved</span>
+            <span className="va-summary-chip__value">{approvedCount}</span>
+          </div>
+          <div className="va-summary-chip va-summary-chip--error">
+            <span className="va-summary-chip__label">Rejected</span>
+            <span className="va-summary-chip__value">{rejectedCount}</span>
+          </div>
+          <div className="va-summary-chip va-summary-chip--neutral">
+            <span className="va-summary-chip__label">Total</span>
+            <span className="va-summary-chip__value">{items.length}</span>
+          </div>
         </div>
       </div>
 
@@ -250,14 +235,25 @@ export function VendorApprovalsView() {
           className="va-data-view"
           columnDefs={columnDefs}
           rowData={items}
+          emptyState={
+            <ModuleEmptyState
+              variant="blank"
+              title="No approval requests to review"
+              message="New booking, shipping instruction, and VGM approval requests will appear here."
+            />
+          }
           allowedViewModes={["list"]}
           defaultViewMode="list"
           renderToolbar={() => null}
           listOptions={{
-            showToolbar: false,
+            ...profileHandlers,
+            showToolbar: { showTotalCount: true, fullScreen: true },
+            pagination: true,
+            paginationPageSize: 20,
+            pageSizeOptions: [10, 20, 50, 100],
+            sideBar: true,
+            defaultColDef: { filter: true },
             gridOptions: {
-              domLayout: "autoHeight",
-              overlayNoRowsTemplate: "No approval requests to review.",
               suppressCellFocus: true,
             },
           }}

@@ -1,5 +1,6 @@
+// Modified by Sekar Nagarajan (2026-10-18 10:30)
 import { useQuery } from '@tanstack/react-query';
-import { fetchEquipmentTypes, fetchTabConfig, searchPorts } from './landing.api';
+import { fetchEquipmentTypes, fetchPortByCode, fetchTabConfig, searchPorts } from './landing.api';
 import { landingKeys } from './landing.keys';
 
 /** Port typeahead — debounce query at the call site (min 2 chars). */
@@ -10,6 +11,16 @@ export function usePortSearch(query: string) {
     enabled: query.trim().length >= 2,
     staleTime: 5 * 60 * 1000, // 5 min — port list rarely changes
     placeholderData: (prev) => prev,
+  });
+}
+
+/** A port's typeahead label for a known code (used for the default lane). */
+export function usePortByCode(code: string) {
+  return useQuery({
+    queryKey: landingKeys.portByCode(code),
+    queryFn: () => fetchPortByCode(code),
+    enabled: code.trim().length >= 2,
+    staleTime: 60 * 60 * 1000,
   });
 }
 

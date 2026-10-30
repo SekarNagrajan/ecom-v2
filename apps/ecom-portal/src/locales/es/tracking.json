@@ -1,0 +1,7 @@
+{
+  "subtitle": "Rastree movimientos de contenedores en tiempo real, hitos de viaje del buque, cierres de puerto y registros de eventos de transporte.",
+  "exportingToast": "Exportando el historial de rastreo de contenedores a Excel…",
+  "shareToast": "Abriendo el diálogo para compartir el estado de seguimiento por correo…",
+  "emptyTitle": "No se encontraron registros de seguimiento",
+  "emptyMessage": "Pruebe con otro contenedor, reserva o referencia de BL para este tipo de búsqueda."
+}

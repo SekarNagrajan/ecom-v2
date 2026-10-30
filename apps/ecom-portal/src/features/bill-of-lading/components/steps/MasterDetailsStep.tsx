@@ -7,13 +7,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, Col, Row, Segmented, Tag, Typography } from "antd";
 import type { ReactNode } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { RESPONSIVE_COL } from "../../../../constants/responsive-grid";
 import type { BLWizardStepId } from "../../config/bl-wizard-config";
-import { useBLWizardConfig } from "../../hooks/use-bl-wizard-config";
 import type { BLDTO, BLMasterStepValues } from "../../types/bl.types";
-import { BL_STATUS_LABELS, blMasterStepSchema } from "../../types/bl.types";
-import { getBLStatusColor } from "../../utils/bl-status";
+import { blMasterStepSchema } from "../../types/bl.types";
+import { getBLStatusColor, getBLStatusLabel } from "../../utils/bl-status";
 import { BlWizardFooter } from "../bl-wizard-footer";
 
 const { Text, Title } = Typography;
@@ -69,11 +69,10 @@ export function MasterDetailsStep({
   onNext,
   onPrevious,
   onUpdate,
-  onGoToStep,
   isFirstStep,
   isSubmitting,
 }: BLWizardStepProps) {
-  const { data: config } = useBLWizardConfig();
+  const { t } = useTranslation(["bill-of-lading", "common"]);
   const {
     control,
     handleSubmit,
@@ -122,29 +121,36 @@ export function MasterDetailsStep({
               className="form-step-card form-step-section bl-master-step-card"
               title={
                 <Title level={5} className="form-step-card-title">
-                  Document References
+                  {t("wizard.master.documentReferences")}
                 </Title>
               }
             >
               <div className="bl-master-detail-grid bl-master-detail-grid--refs">
-                <ReadonlyField label="B/L Number" value={data.blNo} emphasis />
-                <ReadonlyField label="Booking Number" value={data.bookingNo} />
                 <ReadonlyField
-                  label="SI Number"
+                  label={t("columns.blNumber")}
+                  value={data.blNo}
+                  emphasis
+                />
+                <ReadonlyField
+                  label={t("labels.bookingNumber")}
+                  value={data.bookingNo}
+                />
+                <ReadonlyField
+                  label={t("labels.siNumber")}
                   value={data.siNo?.trim() || "—"}
                 />
                 <ReadonlyField
-                  label="Agency Ref"
+                  label={t("labels.agencyRef")}
                   value={data.agencyRefNo?.trim() || "—"}
                 />
                 <ReadonlyField
-                  label="Status"
+                  label={t("columns.status")}
                   value={
                     <Tag
                       className="bl-status-tag"
                       color={getBLStatusColor(data.status)}
                     >
-                      {BL_STATUS_LABELS[data.status]}
+                      {getBLStatusLabel(data.status, t)}
                     </Tag>
                   }
                 />
@@ -157,14 +163,14 @@ export function MasterDetailsStep({
               className="form-step-card form-step-section bl-master-step-card"
               title={
                 <Title level={5} className="form-step-card-title">
-                  Bill of Lading Options
+                  {t("wizard.master.blOptions")}
                 </Title>
               }
             >
               <div className="bl-master-detail-grid bl-master-options-grid">
                 <div className="form-field-cell bl-master-readonly-field">
                   <label className="form-field-label">
-                    B/L Type <Text type="danger"> *</Text>
+                    {t("labels.blType")} <Text type="danger"> *</Text>
                   </label>
                   <Controller
                     control={control}
@@ -176,8 +182,14 @@ export function MasterDetailsStep({
                         value={value}
                         onChange={onChange}
                         options={[
-                          { label: "Original B/L", value: "Original" },
-                          { label: "Sea Waybill", value: "Seaway" },
+                          {
+                            label: t("wizard.master.originalBl"),
+                            value: "Original",
+                          },
+                          {
+                            label: t("wizard.master.seaWaybill"),
+                            value: "Seaway",
+                          },
                         ]}
                       />
                     )}
@@ -191,7 +203,7 @@ export function MasterDetailsStep({
 
                 <div className="form-field-cell bl-master-readonly-field">
                   <label className="form-field-label">
-                    Release Type <Text type="danger"> *</Text>
+                    {t("labels.releaseType")} <Text type="danger"> *</Text>
                   </label>
                   <Controller
                     control={control}
@@ -203,8 +215,11 @@ export function MasterDetailsStep({
                         value={value}
                         onChange={onChange}
                         options={[
-                          { label: "Original", value: "O" },
-                          { label: "Telex Release", value: "T" },
+                          { label: t("labels.original"), value: "O" },
+                          {
+                            label: t("wizard.master.telexRelease"),
+                            value: "T",
+                          },
                         ]}
                       />
                     )}
@@ -218,7 +233,8 @@ export function MasterDetailsStep({
 
                 <div className="form-field-cell bl-master-readonly-field">
                   <label className="form-field-label">
-                    Freight Terms <Text type="danger"> *</Text>
+                    {t("wizard.master.freightTerms")}{" "}
+                    <Text type="danger"> *</Text>
                   </label>
                   <Controller
                     control={control}
@@ -230,8 +246,8 @@ export function MasterDetailsStep({
                         value={value}
                         onChange={onChange}
                         options={[
-                          { label: "Prepaid", value: "PREPAID" },
-                          { label: "Collect", value: "COLLECT" },
+                          { label: t("charges.prepaid"), value: "PREPAID" },
+                          { label: t("charges.collect"), value: "COLLECT" },
                         ]}
                       />
                     )}
@@ -255,24 +271,33 @@ export function MasterDetailsStep({
               title={
                 <div className="bl-master-card-title-row">
                   <Title level={5} className="form-step-card-title">
-                    Vessels
+                    {t("wizard.master.vessels")}
                   </Title>
                 </div>
               }
             >
               <div className="bl-master-detail-grid bl-master-detail-grid--5">
                 <ReadonlyField
-                  label="Vessel / Voyage Number"
+                  label={t("wizard.master.vesselVoyageNumber")}
                   value={vesselVoyage}
                   emphasis
                 />
-                <ReadonlyField label="Place of Receipt" value={origin} />
-                <ReadonlyField label="Port of Loading" value={loadPort} />
                 <ReadonlyField
-                  label="Port of Discharge"
+                  label={t("wizard.master.placeOfReceipt")}
+                  value={origin}
+                />
+                <ReadonlyField
+                  label={t("wizard.master.portOfLoading")}
+                  value={loadPort}
+                />
+                <ReadonlyField
+                  label={t("wizard.master.portOfDischarge")}
                   value={dischargePort}
                 />
-                <ReadonlyField label="Place of Delivery" value={delivery} />
+                <ReadonlyField
+                  label={t("wizard.master.placeOfDelivery")}
+                  value={delivery}
+                />
               </div>
             </Card>
           </Col>

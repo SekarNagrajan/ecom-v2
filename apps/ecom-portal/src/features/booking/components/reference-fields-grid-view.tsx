@@ -1,4 +1,5 @@
 // Created by Sekar Nagarajan (2026-09-02 11:20)
+import { useTranslation } from "react-i18next";
 import { AppIcon, Icons } from "../../../components/icons";
 import {
   ListActionButton,
@@ -19,6 +20,7 @@ export function ReferenceFieldsGridView({
   onUpdateValue,
   onDelete,
 }: ReferenceFieldsGridViewProps) {
+  const { t } = useTranslation("booking");
   return (
     <div className="ref-fields-list">
       {fields.map((field) => (
@@ -30,7 +32,7 @@ export function ReferenceFieldsGridView({
             <div className="ref-fields-row__actions">
               <ListActionsRow>
                 <ListActionButton
-                  title="Remove Field"
+                  title={t("wizard.references.removeField")}
                   icon={
                     <AppIcon icon={Icons.trash} size={16} tone="delete" />
                   }

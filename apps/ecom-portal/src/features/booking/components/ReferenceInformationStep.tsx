@@ -2,6 +2,7 @@
 import { AppButton } from "@solverminds/shared-ui";
 import { Card } from "antd";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { useBookingStore } from "../stores/booking.store";
 import {
@@ -11,6 +12,7 @@ import {
 import { ReferenceFieldsPanel } from "./reference-fields-panel";
 
 export function ReferenceInformationStep() {
+  const { t } = useTranslation(["booking", "common"]);
   const { payload, updateReferenceFields, nextStep, prevStep } =
     useBookingStore();
   const [fields, setFields] = useState<ReferenceField[]>(() =>
@@ -35,9 +37,9 @@ export function ReferenceInformationStep() {
       </div>
 
       <div className="form-step-footer">
-        <AppButton onClick={prevStep}>Previous</AppButton>
+        <AppButton onClick={prevStep}>{t("common:actions.previous")}</AppButton>
         <AppButton type="primary" onClick={handleNext}>
-          Next
+          {t("common:actions.next")}
         </AppButton>
       </div>
     </div>

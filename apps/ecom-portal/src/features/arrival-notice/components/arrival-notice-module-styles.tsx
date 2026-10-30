@@ -1,13 +1,10 @@
-// Modified by Sekar Nagarajan (2026-08-26 14:50)
+// Modified by Sekar Nagarajan (2026-10-19 18:20)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
 
 export function ArrivalNoticeModuleStyles() {
   const { token } = theme.useToken();
-  const primaryTint8 = tokenMix(token.colorPrimary, 8);
-  const successTint8 = tokenMix(token.colorSuccess, 8);
-  const warningTint8 = tokenMix(token.colorWarning, 8);
 
   return (
     <style>{`
@@ -173,47 +170,326 @@ export function ArrivalNoticeModuleStyles() {
       .arn-data-view .data-view-toolbar {
         display: none !important;
       }
+      /* Modified by Sekar Nagarajan (2026-10-19 18:20) — view drawer: hero, timeline, stacked cards (DO parity) */
       .arn-status-tag.ant-tag {
         margin: 0;
         border-radius: ${token.borderRadiusSM}px;
       }
+      .arn-status-tag.ant-tag-success {
+        color: ${token.colorSuccess};
+        background: ${tokenMix(token.colorSuccess, 8)};
+        border-color: ${tokenMix(token.colorSuccess, 28)};
+      }
+      .arn-status-tag.ant-tag-warning {
+        color: ${token.colorWarning};
+        background: ${tokenMix(token.colorWarning, 10)};
+        border-color: ${tokenMix(token.colorWarning, 35)};
+      }
+      .arn-status-tag.ant-tag-error {
+        color: ${token.colorError};
+        background: ${tokenMix(token.colorError, 8)};
+        border-color: ${tokenMix(token.colorError, 30)};
+      }
+
       .arn-drawer-title {
         display: flex;
-        align-items: flex-start;
-        gap: ${token.marginSM}px;
+        align-items: center;
+        gap: ${token.marginMD}px;
+        min-width: 0;
+      }
+      .arn-drawer-title__icon {
+        width: ${token.controlHeightLG}px;
+        height: ${token.controlHeightLG}px;
+        border-radius: ${token.borderRadiusLG}px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        background: ${token.colorPrimaryBg};
+        border: 1px solid ${token.colorPrimaryBorder};
+        color: ${token.colorPrimary};
+      }
+      .arn-drawer-title__copy {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS / 2}px;
+      }
+      .arn-drawer-title__eyebrow {
+        display: block;
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: ${token.colorTextTertiary};
+        line-height: 1.2;
       }
       .arn-drawer-title__text {
         margin: 0 !important;
-        line-height: 1.25 !important;
+        line-height: 1.2 !important;
+        color: ${token.colorText} !important;
+        font-weight: ${token.fontWeightStrong} !important;
+        font-size: ${token.fontSizeHeading4}px !important;
+      }
+      .arn-drawer-title__text .ant-typography-copy {
+        color: ${token.colorTextSecondary};
+        margin-inline-start: ${token.marginXS}px;
+      }
+      .arn-drawer-title__text .ant-typography-copy:hover {
+        color: ${token.colorPrimary};
+      }
+      .arn-drawer-title__meta-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: ${token.marginSM}px;
       }
       .arn-drawer-title__meta {
         font-size: ${token.fontSizeSM}px;
-        display: block;
-        margin-top: ${token.marginXXS}px;
+        margin: 0;
       }
-      .arn-drawer-title__tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: ${token.marginXXS}px;
-        margin-top: ${token.marginXXS}px;
-      }
-      .arn-drawer-actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: ${token.marginXS}px;
-        align-items: center;
+      .arn-drawer-title__bl {
+        color: ${token.colorInfo};
+        font-weight: ${token.fontWeightStrong};
       }
       .arn-drawer-body.custom-scroll {
         display: flex;
         flex-direction: column;
-        gap: ${token.marginLG}px;
+        gap: ${token.marginMD}px;
         padding: ${token.paddingLG}px;
         overflow-y: auto;
-        max-height: calc(100vh - 105px);
+        background: ${token.colorBgLayout};
+      }
+      .arn-drawer-footer {
+        padding: ${token.paddingMD}px ${token.paddingLG}px !important;
+        border-top: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorBgContainer};
+      }
+      .arn-drawer-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: ${token.marginSM}px;
+        align-items: center;
+        justify-content: flex-end;
+      }
+
+      .arn-hero {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginMD}px;
+        padding: ${token.paddingLG}px;
+        border-radius: ${token.borderRadiusLG + 2}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        background: linear-gradient(
+          180deg,
+          ${tokenMix(token.colorPrimary, 8)} 0%,
+          ${token.colorBgContainer} 100%
+        );
+      }
+      .arn-hero__route {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(96px, 0.8fr) minmax(0, 1fr);
+        gap: ${token.marginMD}px;
+        align-items: center;
+        min-width: 0;
+      }
+      .arn-route-port {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: ${token.marginXXS}px;
+        min-width: 0;
+      }
+      .arn-route-port--discharge {
+        align-items: flex-end;
+        text-align: right;
+      }
+      .arn-route-port__label {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: ${token.colorPrimary};
+        line-height: 1.2;
+      }
+      .arn-route-port--discharge .arn-route-port__label {
+        color: ${token.colorSuccess};
+      }
+      .arn-route-port__code {
+        font-size: ${token.fontSizeHeading3}px;
+        font-weight: ${token.fontWeightStrong};
+        letter-spacing: 0.02em;
+        color: ${token.colorText};
+        line-height: 1.1;
+        word-break: break-word;
+      }
+      .arn-route-port__name {
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+        line-height: 1.4;
+        word-break: break-word;
+      }
+      .arn-route-connector {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginXS}px;
+        min-width: 0;
+      }
+      .arn-route-connector__dot {
+        flex-shrink: 0;
+        width: ${token.marginXS + 2}px;
+        height: ${token.marginXS + 2}px;
+        border-radius: 50%;
+      }
+      .arn-route-connector__dot--vessel {
+        background: ${token.colorPrimary};
+      }
+      .arn-route-connector__dot--discharge {
+        background: ${token.colorSuccess};
+      }
+      .arn-route-connector__track {
+        flex: 1 1 0;
+        min-width: ${token.marginSM}px;
+        height: 0;
+        border-top: ${token.lineWidthBold}px dashed ${tokenMix(token.colorPrimary, 40)};
+      }
+      .arn-route-connector__ship {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: ${token.controlHeightSM}px;
+        height: ${token.controlHeightSM}px;
+        border-radius: 50%;
+        border: ${token.lineWidth}px solid ${token.colorPrimaryBorder};
+        background: ${token.colorBgContainer};
+        color: ${token.colorPrimary};
+      }
+
+      .arn-hero__timeline {
+        list-style: none;
+        margin: 0;
+        padding: ${token.paddingMD}px 0 0;
+        display: flex;
+        align-items: center;
+        border-top: 1px solid ${token.colorBorderSecondary};
+      }
+      .arn-timeline__step {
+        display: flex;
+        align-items: center;
+        flex: 1 1 0;
+        min-width: 0;
+        gap: ${token.marginXS}px;
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextTertiary};
+      }
+      .arn-timeline__step:last-child {
+        flex: 0 0 auto;
+      }
+      .arn-timeline__step:not(:last-child)::after {
+        content: "";
+        flex: 1 1 auto;
+        min-width: ${token.marginSM}px;
+        height: ${token.lineWidthBold}px;
+        margin: 0 ${token.marginXS}px;
+        border-radius: ${token.lineWidthBold}px;
+        background: ${token.colorBorderSecondary};
+      }
+      .arn-timeline__step.is-done::after {
+        background: ${tokenMix(token.colorSuccess, 45)};
+      }
+      .arn-timeline__dot {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: ${token.controlHeightSM - 2}px;
+        height: ${token.controlHeightSM - 2}px;
+        border-radius: 50%;
+        border: ${token.lineWidth}px solid ${token.colorBorder};
+        background: ${token.colorBgContainer};
+        color: ${token.colorTextTertiary};
+        font-size: ${token.fontSizeSM - 1}px;
+        font-weight: ${token.fontWeightStrong};
+        line-height: 1;
+      }
+      .arn-timeline__step.is-done .arn-timeline__dot {
+        background: ${token.colorSuccess};
+        border-color: ${token.colorSuccess};
+        color: ${token.colorTextLightSolid};
+      }
+      .arn-timeline__step.is-current .arn-timeline__dot {
+        background: ${token.colorPrimary};
+        border-color: ${token.colorPrimary};
+        color: ${token.colorTextLightSolid};
+        box-shadow: 0 0 0 ${token.lineWidthBold * 2}px ${tokenMix(token.colorPrimary, 14)};
+      }
+      .arn-timeline__copy {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        line-height: 1.3;
+      }
+      .arn-timeline__name {
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+        white-space: nowrap;
+      }
+      .arn-timeline__step.is-upcoming .arn-timeline__name {
+        color: ${token.colorTextSecondary};
+      }
+      .arn-timeline__date {
+        color: ${token.colorTextSecondary};
+        white-space: nowrap;
+      }
+
+      .arn-drawer-alert.ant-alert {
+        border-radius: ${token.borderRadiusLG}px;
+      }
+      .arn-drawer-alert .ant-alert-message {
+        color: ${token.colorText};
+      }
+
+      .arn-section-stack {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginMD}px;
+        width: 100%;
+      }
+      .arn-drawer-section {
+        min-width: 0;
+        padding: ${token.paddingMD}px ${token.paddingLG}px;
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorBgContainer};
+        border: 1px solid ${token.colorBorderSecondary};
+      }
+      .arn-drawer-section__head {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginSM}px;
+        margin-bottom: ${token.marginMD}px;
+        color: ${token.colorPrimary};
+      }
+      .arn-drawer-section__title {
+        margin: 0 !important;
+        color: ${token.colorPrimary} !important;
+        font-size: ${token.fontSizeLG}px !important;
+      }
+      .arn-drawer-section__count.ant-tag {
+        margin-inline-start: auto;
+        margin-inline-end: 0;
+        border-radius: ${token.borderRadiusLG * 2}px;
+        color: ${token.colorTextSecondary};
+        background: ${token.colorFillAlter};
+        border-color: ${token.colorBorderSecondary};
+        font-variant-numeric: tabular-nums;
       }
       .arn-meta-grid {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: ${token.marginMD}px ${token.marginLG}px;
       }
       .arn-meta-item {
@@ -224,141 +500,61 @@ export function ArrivalNoticeModuleStyles() {
       }
       .arn-meta-item .form-field-label {
         margin-bottom: 0;
+        color: ${token.colorTextSecondary};
       }
       .arn-meta-item__value {
         font-weight: ${token.fontWeightStrong};
         color: ${token.colorText};
         word-break: break-word;
       }
-      .arn-route-strip {
-        display: flex;
-        align-items: stretch;
-        gap: ${token.marginMD}px;
+      .arn-table-wrap {
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG}px;
+        overflow: hidden;
+      }
+      .arn-table {
         width: 100%;
       }
-      .arn-route-port {
-        flex: 1;
-        min-width: 0;
-        padding: ${token.paddingMD}px;
-        border-radius: ${token.borderRadiusLG}px;
+      .arn-table .ant-table-thead > tr > th {
         background: ${token.colorFillAlter};
-        border: 1px solid ${token.colorBorderSecondary};
-      }
-      .arn-route-port--vessel {
-        border-left: 4px solid ${token.colorPrimary};
-        background: linear-gradient(180deg, ${primaryTint8} 0%, ${
-      token.colorFillAlter
-    } 100%);
-      }
-      .arn-route-port--discharge {
-        border-left: 4px solid ${token.colorSuccess};
-        background: linear-gradient(180deg, ${successTint8} 0%, ${
-      token.colorFillAlter
-    } 100%);
-      }
-      .arn-route-port__label {
-        display: flex;
-        align-items: center;
-        gap: ${token.marginXXS}px;
+        color: ${token.colorTextSecondary};
         font-size: ${token.fontSizeSM}px;
         font-weight: ${token.fontWeightStrong};
-        color: ${token.colorTextSecondary};
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-        margin-bottom: ${token.marginXXS}px;
-      }
-      .arn-route-port__code {
-        margin: 0 !important;
-        font-size: ${token.fontSizeHeading4}px !important;
-        line-height: 1.15 !important;
-        font-weight: ${token.fontWeightStrong} !important;
-      }
-      .arn-route-port__code--vessel {
-        color: ${token.colorPrimary} !important;
-      }
-      .arn-route-port__code--discharge {
-        color: ${token.colorSuccess} !important;
-      }
-      .arn-route-port__name {
-        display: block;
-        margin-top: ${token.marginXXS}px;
-        font-size: ${token.fontSizeSM}px;
-        color: ${token.colorTextSecondary};
-      }
-      .arn-route-connector {
-        flex: 0 0 auto;
-        min-width: 96px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: ${token.marginXXS}px;
-        text-align: center;
-        padding: ${token.paddingXS}px 0;
-      }
-      .arn-route-connector__label {
-        font-size: ${token.fontSizeSM}px;
-        font-weight: ${token.fontWeightStrong};
-        color: ${token.colorTextSecondary};
         text-transform: uppercase;
         letter-spacing: 0.03em;
       }
-      .arn-route-connector__line {
-        display: flex;
-        align-items: center;
-        width: 100%;
-        max-width: 120px;
-        color: ${token.colorPrimary};
+      .arn-table .ant-table-tbody > tr > td {
+        vertical-align: middle;
       }
-      .arn-route-connector__dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        flex-shrink: 0;
+      .arn-table .ant-table-summary > tr > td {
+        background: ${token.colorFillAlter};
+        border-top: ${token.lineWidthBold}px solid ${token.colorBorderSecondary};
       }
-      .arn-route-connector__dot--vessel {
-        background: ${token.colorPrimary};
+      .arn-table .ant-table-placeholder .ant-table-cell {
+        padding: ${token.paddingSM}px;
       }
-      .arn-route-connector__dot--discharge {
-        background: ${token.colorSuccess};
-      }
-      .arn-route-connector__track {
-        flex: 1;
-        height: 2px;
-        margin: 0 ${token.marginXXS}px;
-        background: linear-gradient(90deg, ${token.colorPrimary} 0%, ${
-      token.colorSuccess
-    } 100%);
-      }
-      .arn-free-time-card {
-        padding: ${token.paddingMD}px;
-        border-radius: ${token.borderRadiusLG}px;
-        border: 1px solid ${token.colorBorderSecondary};
-        background: linear-gradient(180deg, ${warningTint8} 0%, ${
-      token.colorFillAlter
-    } 100%);
-      }
-      .arn-free-time-card__title {
-        display: block;
-        font-size: ${token.fontSizeSM}px;
+      .arn-container-no {
         font-weight: ${token.fontWeightStrong};
-        color: ${token.colorTextSecondary};
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-        margin-bottom: ${token.marginXS}px;
+        color: ${token.colorPrimary};
+        letter-spacing: 0.02em;
+        font-variant-numeric: tabular-nums;
       }
-      .arn-free-time-card__grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: ${token.marginMD}px;
+      .arn-amount {
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
       }
-      .arn-section-title {
-        margin: 0 0 ${token.marginSM}px !important;
-        font-size: ${token.fontSizeLG}px !important;
+      .arn-amount--due {
+        color: ${token.colorWarning};
       }
-      .arn-containers-table,
-      .arn-charges-table {
-        width: 100%;
+      .arn-charge-code.ant-tag {
+        margin-inline-end: 0;
+        font-weight: ${token.fontWeightStrong};
+      }
+
+      @media (max-width: 991px) {
+        .arn-meta-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
       }
 
       @media (max-width: 767px) {
@@ -388,30 +584,44 @@ export function ArrivalNoticeModuleStyles() {
         .arn-grid-wrap {
           padding: 0 ${token.paddingMD}px ${token.paddingMD}px;
         }
-        .arn-route-strip {
+        .arn-hero {
+          padding: ${token.paddingMD}px;
+          gap: ${token.marginMD}px;
+        }
+        .arn-hero__route {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .arn-route-port--discharge {
+          align-items: flex-start;
+          text-align: left;
+        }
+        .arn-hero__timeline {
           flex-direction: column;
+          align-items: stretch;
+          gap: ${token.marginXS}px;
         }
-        .arn-route-connector {
-          min-width: 0;
-          width: 100%;
-          flex-direction: row;
-          justify-content: center;
-          gap: ${token.marginSM}px;
+        .arn-timeline__step:not(:last-child)::after {
+          display: none;
         }
-        .arn-route-connector__line {
-          max-width: 80px;
+        .arn-timeline__name,
+        .arn-timeline__date {
+          white-space: normal;
         }
-        .arn-meta-grid,
-        .arn-free-time-card__grid {
-          grid-template-columns: 1fr;
+        .arn-meta-grid {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .arn-drawer-section {
+          padding: ${token.paddingMD}px;
         }
         .arn-drawer-body.custom-scroll {
           padding: ${token.paddingMD}px;
         }
         .arn-drawer-actions {
           width: 100%;
+          justify-content: stretch;
         }
-        .arn-drawer-actions .sm-app-button {
+        .arn-drawer-actions .sm-app-button,
+        .arn-drawer-actions .ant-btn {
           flex: 1;
         }
       }

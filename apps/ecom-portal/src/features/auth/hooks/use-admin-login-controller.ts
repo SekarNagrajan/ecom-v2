@@ -1,17 +1,18 @@
-// Modified by Sekar Nagarajan (2026-08-27 12:19)
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+// Modified by Sekar Nagarajan (2026-09-29 12:40)
+import { zodResolver } from "@hookform/resolvers/zod";
+import type { SubCustomerAccount } from "@solverminds/auth";
+import { useAuthStore, useTenantStore } from "@solverminds/auth";
+import { useMutation } from "@tanstack/react-query";
+import { useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
-import type { SubCustomerAccount } from '@solverminds/auth';
-import { useAuthStore, useTenantStore } from '@solverminds/auth';
-import { loginAdmin } from '../api/auth.api';
+import { loginAdmin } from "../api/auth.api";
 import {
-  adminLoginSchema,
+  createAdminLoginSchema,
   type AdminLoginForm,
   type LoginEntryType,
-} from '../types/auth.types';
+} from "../types/auth.types";
 
 interface UseAdminLoginControllerOptions {
   entryType: LoginEntryType;
@@ -22,13 +23,15 @@ export function useAdminLoginController({
   entryType,
   onSuccess,
 }: UseAdminLoginControllerOptions) {
+  const { t } = useTranslation("auth");
   const { login, setActiveSubCustomer } = useAuthStore();
   const { setTenant } = useTenantStore();
   const [serverError, setServerError] = useState<string | null>(null);
+  const schema = useMemo(() => createAdminLoginSchema(t), [t]);
 
   const form = useForm<AdminLoginForm>({
-    resolver: zodResolver(adminLoginSchema),
-    defaultValues: { userId: '', password: '' },
+    resolver: zodResolver(schema),
+    defaultValues: { userId: "", password: "" },
   });
 
   const mutation = useMutation({
@@ -52,7 +55,7 @@ export function useAdminLoginController({
       onSuccess?.(data.customerList);
     },
     onError: (err: Error) => {
-      setServerError(err.message ?? 'Invalid credentials');
+      setServerError(err.message ?? t("errors.invalidCredentials"));
     },
   });
 

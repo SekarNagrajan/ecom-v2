@@ -1,5 +1,5 @@
-// Modified by Sekar Nagarajan (2026-08-26 16:20)
-import { Typography } from "antd";
+// Modified by Sekar Nagarajan (2026-09-15 18:55)
+import { Badge, Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -14,6 +14,8 @@ export interface UmPanelHeaderProps {
   extra?: ReactNode;
   /** Compact variant for AppDrawer title slots. */
   compact?: boolean;
+  /** Grid / list record count shown as a red badge next to the title. */
+  recordCount?: number;
 }
 
 /** Shared module/drawer header: icon + Title Case name + description. */
@@ -23,7 +25,11 @@ export function UmPanelHeader({
   description,
   extra,
   compact = false,
+  recordCount,
 }: UmPanelHeaderProps) {
+  const showRecordCount =
+    typeof recordCount === "number" && Number.isFinite(recordCount);
+
   return (
     <div
       className={[
@@ -38,12 +44,23 @@ export function UmPanelHeader({
           <AppIcon icon={icon} size={compact ? 22 : 24} />
         </span>
         <div className="um-panel-header__copy">
-          <Title
-            level={compact ? 5 : 4}
-            className="um-panel-header__title"
-          >
-            {title}
-          </Title>
+          <div className="um-panel-header__title-row">
+            <Title
+              level={compact ? 5 : 4}
+              className="um-panel-header__title"
+            >
+              {title}
+            </Title>
+            {showRecordCount ? (
+              <Badge
+                count={recordCount}
+                overflowCount={9999}
+                showZero
+                className="module-screen-header__record-count"
+                title={`${recordCount} record${recordCount === 1 ? "" : "s"}`}
+              />
+            ) : null}
+          </div>
           <Text type="secondary" className="um-panel-header__description">
             {description}
           </Text>

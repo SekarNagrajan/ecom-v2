@@ -42,8 +42,9 @@ export function useCancelSiMutation() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => siApi.cancel(id),
-    onSuccess: () => {
+    onSuccess: (_data, id) => {
       void queryClient.invalidateQueries({ queryKey: siKeys.lists() });
+      void queryClient.invalidateQueries({ queryKey: siKeys.detail(id) });
     },
   });
 }
@@ -51,9 +52,11 @@ export function useCancelSiMutation() {
 export function useSubmitSiMutation() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => siApi.submit(id),
-    onSuccess: () => {
+    mutationFn: (args: { id: string; payload?: Parameters<typeof siApi.submit>[1] }) =>
+      siApi.submit(args.id, args.payload),
+    onSuccess: (_data, args) => {
       void queryClient.invalidateQueries({ queryKey: siKeys.lists() });
+      void queryClient.invalidateQueries({ queryKey: siKeys.detail(args.id) });
     },
   });
 }

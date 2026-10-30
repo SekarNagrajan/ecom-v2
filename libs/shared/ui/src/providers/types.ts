@@ -18,6 +18,43 @@ export type CurrencyDisplay = 'symbol' | 'code' | 'name';
 
 export type Direction = 'ltr' | 'rtl';
 
+/** Letter-spacing step index for accessibility Text Spacing tiles (0–6). */
+export type LetterSpacingLevel = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+
+export type ContrastMode = 'enhanced' | 'high';
+
+export type ReadingMaskSize = 'small' | 'medium' | 'large' | 'custom';
+
+export type NotificationBehavior = 'auto' | 'manual';
+
+export type ToastNotificationType = 'success' | 'info' | 'warning' | 'error';
+
+export interface ReadingMaskPreferences {
+  enabled: boolean;
+  size: ReadingMaskSize;
+  /** Focus cutout height in px (used when size is custom). */
+  focusHeight: number;
+  /** Focus cutout width in px (used when size is custom). */
+  focusWidth: number;
+  /** Mask dim opacity 0–1. */
+  opacity: number;
+}
+
+export interface NotificationTimingPreference {
+  behavior: NotificationBehavior;
+  /** Auto-close timeout in seconds. */
+  timeout: number;
+}
+
+export interface NotificationPreferences {
+  /** When false, framework defaults apply (auto-close 3s for all types). */
+  customTimingEnabled: boolean;
+  success: NotificationTimingPreference;
+  info: NotificationTimingPreference;
+  warning: NotificationTimingPreference;
+  error: NotificationTimingPreference;
+}
+
 // 1. Configuration specific to OUR application logic
 // These values will be accessible via our custom hook
 export interface AppCustomConfig {
@@ -54,6 +91,17 @@ export interface AppCustomConfig {
   // Custom: Not in AntD Token by default, accessible via Context/Hooks
   secondaryColor: string;
   neutralColor: string; // Often maps to Text/Border colors
+
+  // --- Accessibility (Vision preferences) ---
+  letterSpacing: LetterSpacingLevel;
+  contrastEnabled: boolean;
+  contrastMode: ContrastMode;
+  /** Page zoom percent (100–150). */
+  pageZoom: number;
+
+  // --- Accessibility (Behavior preferences) ---
+  readingMask: ReadingMaskPreferences;
+  notifications: NotificationPreferences;
 }
 
 export interface AppConfigContextValue extends AppCustomConfig {

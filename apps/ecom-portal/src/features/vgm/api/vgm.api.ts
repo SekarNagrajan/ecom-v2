@@ -1,35 +1,55 @@
-// Modified by Sekar Nagarajan (2026-08-26 12:48)
+// Modified by Sekar Nagarajan (2026-10-16 23:40)
 import type { ApiResponse } from "../../../types/api.types";
-import { MOCK_VGM_DATA } from "../mocks/vgm.mock";
 import type { VgmDeclarationDTO, VgmSubmitPayload } from "../types/vgm.types";
 
-const delay = (ms: number) =>
-  new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
+/**
+ * Vite SPA fallback returns HTML for unhandled /api/* routes, so never call res.json() blindly.
+ * Returns the JSON envelope; non-JSON or non-2xx responses become an `{ error }` envelope.
+ */
+async function readApiJson<T>(res: Response, fallbackMessage: string): Promise<ApiResponse<T>> {
+  const isJson = (res.headers.get("content-type") ?? "").includes("application/json");
+  if (!isJson) {
+    return {
+      error: {
+        code: "INVALID_RESPONSE",
+        message: `${fallbackMessage}: API returned non-JSON (check MSW handlers / mock worker).`,
+      },
+    };
+  }
+  const json = (await res.json()) as ApiResponse<T>;
+  if (!res.ok) {
+    return { error: json.error ?? { code: "ERROR", message: fallbackMessage } };
+  }
+  return json;
+}
 
-/** VGM API — mock-backed until REST/OpenAPI is wired (agenct parity). */
+/**
+ * VGM API — served by src/mocks/vgm.handlers.ts in mock mode (fixture-backed), REST later.
+ * Errors are thrown as `{ error: { code, message } }` so extractVgmErrorMessage keeps working.
+ */
 export const vgmApi = {
   async searchReference(
     type: "bookno" | "blno",
     referenceNo: string,
   ): Promise<ApiResponse<VgmDeclarationDTO>> {
-    await delay(800); // simulated latency
-    const data = MOCK_VGM_DATA[referenceNo];
-    if (data && data.referenceDetails.type === type) {
-      return { data };
-    }
-    throw {
-      error: { code: "NOT_FOUND", message: "Invalid Booking or BL Number." },
-    };
+    const params = new URLSearchParams({ type, ref: referenceNo.trim() });
+    const res = await fetch(`/api/vgm/search?${params.toString()}`);
+    const body = await readApiJson<VgmDeclarationDTO>(res, "Invalid Booking or BL Number.");
+    if (body.error) throw { error: body.error };
+    return body;
   },
 
   async submit(
     payload: VgmSubmitPayload,
   ): Promise<ApiResponse<{ message: string }>> {
-    await delay(1000); // simulated submit
-    void payload;
-    return { data: { message: "VGM successfully submitted and email sent." } };
+    const res = await fetch("/api/vgm/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    const body = await readApiJson<{ message: string }>(res, "An error occurred during submission");
+    if (body.error) throw { error: body.error };
+    return body;
   },
 };
 

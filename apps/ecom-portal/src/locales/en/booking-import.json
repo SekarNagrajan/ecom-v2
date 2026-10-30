@@ -1,0 +1,62 @@
+{
+  "subtitle": "Fill one booking per row, then review and submit.",
+  "entityLabel": "bookings",
+  "toasts": {
+    "importSuccess_one": "Imported {{count}} booking.",
+    "importSuccess_other": "Imported {{count}} bookings.",
+    "importPartial": "Imported {{successCount}} of {{totalRows}} bookings. Fix remaining rows and resubmit."
+  },
+  "columns": {
+    "origin": "Origin",
+    "delivery": "Delivery",
+    "cargoReadyDate": "Cargo Ready Date",
+    "shipperName": "Shipper Name",
+    "agreementParty": "Agreement Party",
+    "siSubmittingParty": "SI Submitting Party",
+    "containerType": "Container Type",
+    "quantity": "Quantity",
+    "hsCode": "HS Code",
+    "weight": "Weight",
+    "haulageOriginType": "Haulage Origin Type",
+    "haulageDestinationType": "Haulage Destination Type",
+    "carriageContract": "Carriage Contract",
+    "agencyReference": "Agency Reference",
+    "customerReference": "Customer Reference",
+    "onlineBookingNo": "Online Booking No",
+    "shipperContact": "Shipper Contact",
+    "shipperEmail": "Shipper Email",
+    "consigneeName": "Consignee Name",
+    "consigneeContact": "Consignee Contact",
+    "consigneeEmail": "Consignee Email",
+    "notifyPartyName": "Notify Party Name",
+    "notifyPartyContact": "Notify Party Contact",
+    "notifyPartyEmail": "Notify Party Email",
+    "commodityDescription": "Commodity Description"
+  },
+  "options": {
+    "haulage": {
+      "merchant": "Merchant",
+      "carrier": "Carrier"
+    }
+  },
+  "validation": {
+    "originRequired": "Origin is required",
+    "deliveryRequired": "Delivery is required",
+    "cargoReadyDateRequired": "Cargo Ready Date is required",
+    "shipperNameRequired": "Booking Party is required",
+    "agreementPartyRequired": "Agreement Party is required",
+    "siSubmittingPartyRequired": "SI Submitting Party is required",
+    "containerTypeRequired": "Container Type is required",
+    "hsCodeRequired": "HS Code is required",
+    "weightRequired": "Weight is required",
+    "invalidEmail": "Invalid email",
+    "invalidContainerType": "Select a valid container type"
+  },
+  "errors": {
+    "duplicateRow": "Duplicate of another row with the same origin, delivery, cargo ready date, and shipper"
+  },
+  "actions": {
+    "submit_one": "Submit {{count}} Booking",
+    "submit_other": "Submit {{count}} Bookings"
+  }
+}

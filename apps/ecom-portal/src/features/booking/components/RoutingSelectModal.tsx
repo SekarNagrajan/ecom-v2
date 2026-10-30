@@ -1,10 +1,15 @@
-// Modified by Sekar Nagarajan (2026-09-01 15:52)
+// Modified by Sekar Nagarajan (2026-09-10 22:13)
 import { useQuery } from "@tanstack/react-query";
-import { Empty, Spin } from "antd";
+import { Spin } from "antd";
 import { useState } from "react";
 
+import { useTranslation } from "react-i18next";
 import { Icons } from "../../../components/icons";
 import { BookingTemplateModalShell } from "../../../components/shared/booking-template-modal-shell";
+import {
+  buildRetryAction,
+  ModuleEmptyState,
+} from "../../../components/shared/module-empty-state";
 import { bookingApi } from "../api/booking.api";
 import { bookingKeys } from "../api/booking.keys";
 import type { SelectedRoute } from "../types/booking.types";
@@ -15,6 +20,8 @@ interface RoutingSelectModalProps {
   origin: string;
   delivery: string;
   cargoReadyDate: string;
+  /** Currently chosen route — highlighted in the list when changing route. */
+  selectedRouteId?: string | null;
   onCancel: () => void;
   onSelect: (route: SelectedRoute) => void;
 }
@@ -24,15 +31,18 @@ export function RoutingSelectModal({
   origin,
   delivery,
   cargoReadyDate,
+  selectedRouteId = null,
   onCancel,
   onSelect,
 }: RoutingSelectModalProps) {
+  const { t } = useTranslation(["booking", "common"]);
   const [expandedRouteId, setExpandedRouteId] = useState<string | null>(null);
 
   const {
     data: routes = [],
     isFetching,
     isError,
+    refetch,
   } = useQuery({
     queryKey: bookingKeys.routing(origin, delivery, cargoReadyDate),
     queryFn: () =>
@@ -52,17 +62,19 @@ export function RoutingSelectModal({
       open={open}
       onClose={handleClose}
       icon={Icons.ship}
-      title="Select Vessel / Route"
-      subtitle={`${origin || "—"} → ${delivery || "—"} · Cargo ready ${
-        cargoReadyDate || "—"
-      }`}
+      title={t("booking:wizard.routing.selectVesselRoute")}
+      subtitle={t("booking:wizard.routing.modalSubtitle", {
+        origin: origin || "—",
+        delivery: delivery || "—",
+        date: cargoReadyDate || "—",
+      })}
       dialogSize="xl"
     >
       <div className="booking-routing-modal custom-scroll">
         {isFetching ? (
           <div
             className="booking-routing-modal__loading"
-            aria-label="Loading"
+            aria-label={t("booking:wizard.routing.loadingAria")}
             role="status"
           >
             <Spin size="medium" />
@@ -70,31 +82,47 @@ export function RoutingSelectModal({
         ) : null}
 
         {!isFetching && isError ? (
-          <Empty description="Unable to load vessel schedules. Try again." />
+          <ModuleEmptyState
+            variant="error"
+            title={t("booking:wizard.routing.loadErrorTitle")}
+            message={t("booking:wizard.routing.loadErrorMessage")}
+            actions={[buildRetryAction(() => void refetch())]}
+            artSize="sm"
+          />
         ) : null}
 
         {!isFetching && !isError && routes.length === 0 ? (
-          <Empty description="No records found for this origin and delivery." />
+          <ModuleEmptyState
+            variant="filtered"
+            title={t("booking:wizard.routing.emptyTitle")}
+            message={t("booking:wizard.routing.emptyMessage")}
+            artSize="sm"
+          />
         ) : null}
 
         {!isFetching && !isError
-          ? routes.map((route) => (
-              <BookingRouteCard
-                key={route.routeId}
-                route={route}
-                expanded={expandedRouteId === route.routeId}
-                onToggle={() =>
-                  setExpandedRouteId((prev) =>
-                    prev === route.routeId ? null : route.routeId,
-                  )
-                }
-                action={{
-                  label: "Select",
-                  icon: Icons.check,
-                  onClick: () => onSelect(route),
-                }}
-              />
-            ))
+          ? routes.map((route) => {
+              const isSelected = selectedRouteId === route.routeId;
+              return (
+                <BookingRouteCard
+                  key={route.routeId}
+                  route={route}
+                  selected={isSelected}
+                  expanded={expandedRouteId === route.routeId}
+                  onToggle={() =>
+                    setExpandedRouteId((prev) =>
+                      prev === route.routeId ? null : route.routeId,
+                    )
+                  }
+                  action={{
+                    label: isSelected ? t("booking:wizard.routing.selected") : t("common:actions.select"),
+                    icon: Icons.check,
+                    type: isSelected ? "default" : "primary",
+                    onClick: () => onSelect(route),
+                  }}
+                />
+              );
+            })
           : null}
       </div>
     </BookingTemplateModalShell>

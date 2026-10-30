@@ -1,0 +1,60 @@
+{
+  "subtitle": "Track real-time container movements, vessel voyage milestones, port cut-offs, and transport event logs.",
+  "exportingToast": "Exporting container tracking trace history to Excel…",
+  "exportSuccessToast": "Downloaded tracking Excel ({{count}} container(s)).",
+  "exportFailedToast": "Could not export tracking data. Please try again.",
+  "exportEmptyToast": "Search for a tracking reference first, then export.",
+  "shareToast": "Opening tracking status email share dialog…",
+  "shareEmptyToast": "Search for a tracking reference first, then share by email.",
+  "emptyTitle": "No tracking records found",
+  "emptyMessage": "Try another container, booking, or BL reference for this search type.",
+  "actions": {
+    "sendEmail": "Send Email"
+  },
+  "shareMail": {
+    "title": "Share via Mail",
+    "to": "To",
+    "cc": "Cc",
+    "subject": "Subject",
+    "message": "Message",
+    "sharingTitle": "Sharing {{vessel}} / {{voyage}}",
+    "moreContainers_one": "+{{count}} more container",
+    "moreContainers_other": "+{{count}} more containers",
+    "placeholders": {
+      "to": "recipient@company.com",
+      "cc": "optional@company.com",
+      "message": "Compose your tracking status message…"
+    },
+    "validation": {
+      "toRequired": "Recipient email is required",
+      "toInvalid": "Enter a valid email address (separate multiple with commas)",
+      "ccInvalid": "Enter valid CC email addresses (separate with commas)",
+      "subjectRequired": "Subject is required",
+      "subjectMax": "Subject must be 200 characters or fewer",
+      "messageRequired": "Message is required",
+      "messageMax": "Message must be 4000 characters or fewer"
+    },
+    "toasts": {
+      "success_one": "Tracking status emailed successfully ({{count}} recipient).",
+      "success_other": "Tracking status emailed successfully ({{count}} recipients).",
+      "error": "Failed to share tracking status by email. Please try again."
+    },
+    "subjectTemplate": "Tracking status — {{vessel}} {{voyage}}{{bound}} ({{pol}} → {{pod}}) · {{ref}}",
+    "body": {
+      "hello": "Hello,",
+      "intro": "Please find the container tracking status below.",
+      "shipmentHeading": "{{vessel}} ({{voyage}}{{bound}})",
+      "reference": "Reference: {{value}}",
+      "booking": "Booking: {{value}}",
+      "bl": "B/L: {{value}}",
+      "lane": "Lane: {{value}}",
+      "etd": "ETD: {{value}}",
+      "eta": "ETA: {{value}}",
+      "containersHeading": "Containers ({{count}}):",
+      "moreContainers_one": "+{{count}} more container",
+      "moreContainers_other": "+{{count}} more containers",
+      "regards": "Regards,",
+      "signature": "E-Com Portal"
+    }
+  }
+}

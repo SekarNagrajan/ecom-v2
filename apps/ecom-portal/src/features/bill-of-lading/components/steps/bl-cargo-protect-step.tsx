@@ -1,18 +1,18 @@
 // Modified by Sekar Nagarajan (2026-08-28 11:33)
 import { AppButton } from "@solverminds/shared-ui";
-import { Card, Input, InputNumber, Select, Typography } from "antd";
+import { Card, Input, InputNumber, Select } from "antd";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../../components/icons";
 import {
   ListActionButton,
   ListActionsRow,
 } from "../../../../components/shared/list-action-button";
+import { ModuleEmptyState } from "../../../../components/shared/module-empty-state";
 import type { BLCargoProtectLine } from "../../types/bl.types";
 import { BlWizardFooter } from "../bl-wizard-footer";
 import type { BLWizardStepProps } from "./MasterDetailsStep";
-
-const { Text } = Typography;
 
 function createEmptyLine(): BLCargoProtectLine {
   return {
@@ -31,10 +31,14 @@ function CargoProtectLineFields({
   line: BLCargoProtectLine;
   onUpdate: (patch: Partial<BLCargoProtectLine>) => void;
 }) {
+  const { t } = useTranslation(["bill-of-lading", "common"]);
+
   return (
     <div className="bl-master-detail-grid bl-cargo-protect-form-grid">
       <div className="form-field-cell bl-master-readonly-field">
-        <label className="form-field-label">Product Code</label>
+        <label className="form-field-label">
+          {t("wizard.cargoProtect.productCode")}
+        </label>
         <Input
           size="large"
           value={line.productCode}
@@ -42,7 +46,9 @@ function CargoProtectLineFields({
         />
       </div>
       <div className="form-field-cell bl-master-readonly-field">
-        <label className="form-field-label">Description</label>
+        <label className="form-field-label">
+          {t("columns.description")}
+        </label>
         <Input
           size="large"
           value={line.description}
@@ -50,7 +56,9 @@ function CargoProtectLineFields({
         />
       </div>
       <div className="form-field-cell bl-master-readonly-field">
-        <label className="form-field-label">Amount</label>
+        <label className="form-field-label">
+          {t("columns.amount")}
+        </label>
         <InputNumber
           size="large"
           min={0}
@@ -60,7 +68,9 @@ function CargoProtectLineFields({
         />
       </div>
       <div className="form-field-cell bl-master-readonly-field">
-        <label className="form-field-label">Currency</label>
+        <label className="form-field-label">
+          {t("wizard.charges.currency")}
+        </label>
         <Select
           size="large"
           className="form-field-full-width"
@@ -86,6 +96,8 @@ export function BlCargoProtectStep({
   isFirstStep,
   isSubmitting,
 }: BLWizardStepProps) {
+  const { t } = useTranslation(["bill-of-lading", "common"]);
+
   const [lines, setLines] = useState<BLCargoProtectLine[]>(
     () => data.cargoProtect ?? [],
   );
@@ -114,22 +126,25 @@ export function BlCargoProtectStep({
       <div className="custom-scroll form-step-scroll bl-cargo-protect-step">
         <Card
           className="form-step-card form-step-section bl-cargo-protect-card"
-          title="Cargo Protect Products"
+          title={t("wizard.cargoProtect.productsTitle")}
           extra={
             <AppButton
               type="dashed"
               icon={<AppIcon icon={Icons.filePlus} size={14} />}
               onClick={addLine}
             >
-              Add Row
+              {t("wizard.cargoProtect.addRow")}
             </AppButton>
           }
         >
           {lines.length === 0 ? (
-            <Text type="secondary" className="bl-cargo-protect-empty">
-              No cargo protect lines. Click Add Row to include coverage
-              products.
-            </Text>
+            <ModuleEmptyState
+              artSize="sm"
+              variant="blank"
+              title={t("wizard.cargoProtect.emptyTitle")}
+              message={t("wizard.cargoProtect.emptyMessage")}
+              style={{ padding: 12 }}
+            />
           ) : (
             <div className="bl-cargo-protect-lines">
               {lines.map((line, index) => (
@@ -137,11 +152,13 @@ export function BlCargoProtectStep({
                   key={line.id}
                   size="small"
                   className="form-step-card bl-cargo-protect-line-card"
-                  title={`Line ${index + 1}`}
+                  title={t("wizard.cargoProtect.lineTitle", {
+                    n: index + 1,
+                  })}
                   extra={
                     <ListActionsRow>
                       <ListActionButton
-                        title="Remove row"
+                        title={t("wizard.cargoProtect.removeRow")}
                         icon={
                           <AppIcon icon={Icons.x} size={16} tone="delete" />
                         }

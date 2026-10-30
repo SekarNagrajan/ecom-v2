@@ -1,21 +1,22 @@
-// Modified by Sekar Nagarajan (2026-09-02 15:18)
+// Modified by Sekar Nagarajan (2026-09-28 15:25)
 import {
-    Outlet,
-    useLocation,
-    useNavigate,
-    useSearch,
+  Outlet,
+  useLocation,
+  useNavigate,
+  useSearch,
 } from "@tanstack/react-router";
 import type { MenuProps } from "antd";
 import { Card, Drawer, Layout, Menu, Tooltip, Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
+import { SESSION_EXPIRED_SEARCH_REASON } from "../../features/auth/api/session-expiry";
 import { useLoginController } from "../../features/auth/hooks/use-login-controller";
 import { usePostLoginRedirectStore } from "../../features/auth/stores/use-post-login-redirect-store";
 import {
-    appPathnameToMenuKey,
-    isPublicMenuKey,
-    menuKeyToAppPath,
+  appPathnameToMenuKey,
+  isPublicMenuKey,
+  menuKeyToAppPath,
 } from "../../features/auth/utils/public-menu-access";
 import { HeroSearchPanel } from "../../features/landing/components/HeroSearchPanel";
 import { PublicLoginPanel } from "../../features/landing/components/PublicLoginPanel";
@@ -40,7 +41,10 @@ function menuLabel(text: string, locked: boolean) {
 }
 
 export function PublicLayout() {
-  const search = useSearch({ strict: false }) as { login?: boolean };
+  const search = useSearch({ strict: false }) as {
+    login?: boolean;
+    reason?: typeof SESSION_EXPIRED_SEARCH_REASON;
+  };
   const navigate = useNavigate();
   const location = useLocation();
   const { useMobileNav, stackHero, tier } = useResponsiveLayout();
@@ -52,6 +56,7 @@ export function PublicLayout() {
     (s) => s.consumeIntendedPath,
   );
 
+  const sessionExpired = search.reason === SESSION_EXPIRED_SEARCH_REASON;
   const [loginPanelOpen, setLoginPanelOpen] = useState(Boolean(search.login));
   const [collapsed, setCollapsed] = useState(true);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -312,7 +317,7 @@ export function PublicLayout() {
                     seconds — all from one quick-action workspace in the Carrier
                     Portal.
                   </Text>
-                  <div className="pub-landing__cards">
+                  <div className="pub-landing__cards custom-scroll">
                     <Card
                       size="small"
                       className={
@@ -328,7 +333,7 @@ export function PublicLayout() {
                         <AppIcon icon={NavIcons.schedules} size={20} />
                       </span>
                       <Text strong className="pub-landing__card-label">
-                        Live sailing
+                        Search schedule
                       </Text>
                     </Card>
                     <Card
@@ -346,9 +351,7 @@ export function PublicLayout() {
                         <AppIcon icon={NavIcons.tracking} size={20} />
                       </span>
                       <Text strong className="pub-landing__card-label">
-                        Real-time
-                        <br />
-                        tracking
+                        Track your cargo
                       </Text>
                     </Card>
                     <Card
@@ -364,9 +367,7 @@ export function PublicLayout() {
                         <AppIcon icon={NavIcons.rates} size={20} />
                       </span>
                       <Text strong className="pub-landing__card-label">
-                        Instant spot-
-                        <br />
-                        rate quotes
+                        Know your rates
                       </Text>
                     </Card>
                   </div>
@@ -395,6 +396,7 @@ export function PublicLayout() {
           clearIntendedPath();
         }}
         controller={loginController}
+        sessionExpired={sessionExpired}
       />
     </Layout>
   );

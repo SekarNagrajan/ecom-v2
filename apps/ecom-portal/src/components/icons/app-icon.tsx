@@ -18,7 +18,8 @@ export type AppIconActionTone =
   | "track"
   | "history"
   | "download"
-  | "muted";
+  | "muted"
+  | "text";
 
 /** One CSS class per tone — colors defined uniquely in AppIconStyles. */
 const ACTION_TONE_CLASS: Record<AppIconActionTone, string> = {
@@ -34,6 +35,7 @@ const ACTION_TONE_CLASS: Record<AppIconActionTone, string> = {
   history: "app-icon-tone-history",
   download: "app-icon-tone-download",
   muted: "app-icon-tone-muted",
+  text: "app-icon-tone-text",
 };
 
 export interface AppIconProps {

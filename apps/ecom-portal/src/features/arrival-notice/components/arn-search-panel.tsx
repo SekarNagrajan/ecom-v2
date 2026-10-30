@@ -1,13 +1,15 @@
-// Created by Sekar Nagarajan (2026-08-26 14:50)
+// Modified by Sekar Nagarajan (2026-09-29 12:35)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton, FormDatePicker } from "@solverminds/shared-ui";
 import { Typography } from "antd";
 import { DateTime } from "luxon";
+import { useMemo } from "react";
 import { useForm, type Resolver } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import type { ArnSearchValues } from "../types/arrival-notice.types";
-import { arnSearchSchema } from "../types/arrival-notice.types";
+import { createArnSearchSchema } from "../types/arrival-notice.types";
 
 const { Text } = Typography;
 
@@ -30,9 +32,11 @@ function ArnFieldLabel({ children }: { children: React.ReactNode }) {
 }
 
 export function ArnSearchPanel({ isSearching, onSearch }: ArnSearchPanelProps) {
+  const { t } = useTranslation("arrival-notice");
+  const schema = useMemo(() => createArnSearchSchema(t), [t]);
   const { control, handleSubmit } = useForm<ArnSearchValues>({
     // preprocess widens input type; assert for RHF
-    resolver: zodResolver(arnSearchSchema) as Resolver<ArnSearchValues>,
+    resolver: zodResolver(schema) as Resolver<ArnSearchValues>,
     defaultValues,
     mode: "onSubmit",
   });
@@ -47,7 +51,7 @@ export function ArnSearchPanel({ isSearching, onSearch }: ArnSearchPanelProps) {
         >
           <div className="arn-search-form-row">
             <div className="arn-search-field">
-              <ArnFieldLabel>From Date</ArnFieldLabel>
+              <ArnFieldLabel>{t("search.fromDate")}</ArnFieldLabel>
               <div className="arn-search-field__control">
                 <FormDatePicker
                   control={control}
@@ -64,7 +68,7 @@ export function ArnSearchPanel({ isSearching, onSearch }: ArnSearchPanelProps) {
             </div>
 
             <div className="arn-search-field">
-              <ArnFieldLabel>To Date</ArnFieldLabel>
+              <ArnFieldLabel>{t("search.toDate")}</ArnFieldLabel>
               <div className="arn-search-field__control">
                 <FormDatePicker
                   control={control}
@@ -91,7 +95,7 @@ export function ArnSearchPanel({ isSearching, onSearch }: ArnSearchPanelProps) {
                 icon={<AppIcon icon={Icons.search} size={16} />}
                 loading={isSearching}
               >
-                Show
+                {t("search.show")}
               </AppButton>
             </div>
           </div>

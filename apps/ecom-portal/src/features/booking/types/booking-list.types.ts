@@ -28,7 +28,7 @@ export interface BookingListDTO {
 export function getBookingListStatusColor(status: BookingListStatus): string {
   switch (status) {
     case "Draft":
-      return "default";
+      return "warning";
     case "Submitted":
     case "Awaiting Acceptance":
       return "processing";
@@ -41,7 +41,9 @@ export function getBookingListStatusColor(status: BookingListStatus): string {
       return "error";
     case "Rejected":
       return "error";
-    default:
-      return "default";
+    default: {
+      const _exhaustive: never = status;
+      return _exhaustive;
+    }
   }
 }

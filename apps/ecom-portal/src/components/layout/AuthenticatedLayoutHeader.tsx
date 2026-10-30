@@ -39,6 +39,7 @@ import { ProfileView } from "../../features/user-modules/components/ProfileView"
 import { AppIcon, Icons } from "../icons";
 import { AccountPreferencesDrawer } from "./account-preferences-drawer";
 import { HeaderLanguageSelect } from "./header-language-select";
+import { HeaderNotificationsPopover } from "./header-notifications-popover";
 
 const { Header } = Layout;
 const { Text } = Typography;
@@ -507,6 +508,12 @@ export function AuthenticatedLayoutHeader({
               }
             />
           </Tooltip>
+
+          {!isGuest ? (
+            <HeaderNotificationsPopover
+              onOpenPreferences={() => setMyAlertDrawerOpen(true)}
+            />
+          ) : null}
 
           <div className="app-header-user-cluster">
             <Dropdown

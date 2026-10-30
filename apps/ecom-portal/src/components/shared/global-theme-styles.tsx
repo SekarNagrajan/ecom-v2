@@ -1263,6 +1263,58 @@ export function GlobalThemeStyles() {
         transform: translateY(0);
         box-shadow: 0 1px 4px ${tokenMix(token.colorPrimary, 18)};
       }
+      .app-header-notifications-trigger {
+        display: inline-flex;
+        align-items: center;
+        line-height: 1;
+      }
+      .app-header-notifications-trigger .app-header-action.ant-btn,
+      .app-header-notifications-trigger .sm-app-button.app-header-action {
+        padding-inline: 0;
+        width: ${token.controlHeightSM}px;
+        min-width: ${token.controlHeightSM}px;
+      }
+      .app-header-notifications-panel {
+        width: 360px;
+        max-width: min(360px, 90vw);
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXS}px;
+      }
+      .app-header-notifications-panel__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: ${token.marginXS}px;
+        padding-bottom: ${token.paddingXXS}px;
+        border-bottom: 1px solid ${token.colorBorderSecondary};
+      }
+      .app-header-notifications-panel__title {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXS}px;
+        min-width: 0;
+      }
+      .app-header-notifications-panel__count.ant-badge {
+        flex-shrink: 0;
+        line-height: 1;
+      }
+      .app-header-notifications-panel__count .ant-badge-count {
+        background: ${token.colorPrimaryBg};
+        color: ${token.colorText};
+        box-shadow: none;
+        font-weight: ${token.fontWeightStrong};
+      }
+      .app-header-notifications-panel__list.um-alerts-log.custom-scroll {
+        max-height: 280px;
+        margin: 0;
+      }
+      .app-header-notifications-panel__footer {
+        display: flex;
+        justify-content: flex-end;
+        padding-top: ${token.paddingXXS}px;
+        border-top: 1px solid ${token.colorBorderSecondary};
+      }
       .app-header-select {
         min-width: 160px;
       }

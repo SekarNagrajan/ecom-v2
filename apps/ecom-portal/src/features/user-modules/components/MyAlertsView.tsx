@@ -1,13 +1,11 @@
 // Modified by Sekar Nagarajan (2026-09-08 10:54)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
-import { Badge, Card, List, Switch, Tag, Typography } from "antd";
+import { Card, Switch, Typography } from "antd";
 import { useEffect, useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
-import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import { useModuleTitles } from "../../../i18n/use-module-titles";
 import {
-  useAlertLogsQuery,
   useAlertPreferencesQuery,
   useUpdateAlertPreferencesMutation,
 } from "../api/user-modules.queries";
@@ -100,7 +98,6 @@ export function MyAlertsView({ open = true, onClose }: MyAlertsViewProps) {
   const MODULE_TITLES = useModuleTitles();
   const isDrawer = Boolean(onClose);
   const prefsQuery = useAlertPreferencesQuery(open);
-  const logsQuery = useAlertLogsQuery(open);
   const { mutateAsync: savePrefs, isPending: isSaving } =
     useUpdateAlertPreferencesMutation();
 
@@ -112,8 +109,7 @@ export function MyAlertsView({ open = true, onClose }: MyAlertsViewProps) {
     }
   }, [prefsQuery.data]);
 
-  const isLoading = prefsQuery.isLoading || logsQuery.isLoading;
-  const logs = logsQuery.data ?? [];
+  const isLoading = prefsQuery.isLoading;
 
   const handleToggle = (key: keyof AlertPreference, checked: boolean) => {
     setPrefs((prev) => ({ ...prev, [key]: checked }));
@@ -177,55 +173,6 @@ export function MyAlertsView({ open = true, onClose }: MyAlertsViewProps) {
               </li>
             ))}
           </ul>
-        </Card>
-      </div>
-
-      <div className="um-alerts-row">
-        <Card
-          className="um-alerts-card"
-          title="Recent Alert Activity Log"
-          type="inner"
-        >
-          <List
-            className="um-alerts-log custom-scroll"
-            itemLayout="horizontal"
-            dataSource={logs}
-            locale={{
-              emptyText: (
-                <ModuleEmptyState
-                  artSize="sm"
-                  variant="blank"
-                  title="No recent alert activity"
-                  className="um-alerts-empty"
-                />
-              ),
-            }}
-            renderItem={(log) => (
-              <List.Item className="um-alerts-log__item">
-                <List.Item.Meta
-                  avatar={
-                    <Badge status={log.isRead ? "default" : "processing"} />
-                  }
-                  title={
-                    <div className="um-alerts-log__title">
-                      <Text strong>{log.title}</Text>
-                      <Tag color="blue">{log.category}</Tag>
-                    </div>
-                  }
-                  description={
-                    <div className="um-alerts-log__desc">
-                      <Text className="um-alerts-log__message">
-                        {log.message}
-                      </Text>
-                      <Text type="secondary" className="um-alerts-log__meta">
-                        {log.timestamp} • Ref: {log.referenceNo}
-                      </Text>
-                    </div>
-                  }
-                />
-              </List.Item>
-            )}
-          />
         </Card>
       </div>
 

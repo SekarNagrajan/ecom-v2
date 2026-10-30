@@ -531,6 +531,13 @@ export function UserModulesModuleStyles() {
         overflow-y: auto;
         padding-right: ${token.paddingXXS}px;
       }
+      .um-alerts-log-loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 120px;
+        width: 100%;
+      }
       .um-alerts-log__item.ant-list-item {
         padding-inline: 0;
       }

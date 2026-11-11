@@ -2,10 +2,18 @@
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import type { CreateSubUserPayload } from "../types/user-creation.types";
+import type {
+  CreateSubUserPayload,
+  UpdateSubUserPayload,
+} from "../types/user-creation.types";
 import { EMPTY_USER_LIMIT } from "../types/user-creation.types";
 import { userCreationApi } from "./user-creation.api";
 import { userCreationKeys } from "./user-creation.keys";
+
+function invalidateUserCreation(queryClient: ReturnType<typeof useQueryClient>) {
+  queryClient.invalidateQueries({ queryKey: userCreationKeys.lists() });
+  queryClient.invalidateQueries({ queryKey: userCreationKeys.limits() });
+}
 
 export function useSubUsersQuery() {
   return useQuery({
@@ -45,12 +53,89 @@ export function useCreateSubUserMutation() {
           res.error.message || "Failed to create sub-user profile",
         );
       }
+      return { data: res.data, mode: payload.provisionMode };
+    },
+    onSuccess: (result) => {
+      invalidateUserCreation(queryClient);
+      toast.success(
+        result.mode === "INVITE"
+          ? "Invitation sent successfully"
+          : "Sub-user profile created successfully",
+      );
+    },
+    onError: (error: Error) => {
+      toast.error(error.message);
+    },
+  });
+}
+
+export function useUpdateSubUserMutation() {
+  const queryClient = useQueryClient();
+  const toast = useToast();
+
+  return useMutation({
+    mutationFn: async ({
+      id,
+      payload,
+    }: {
+      id: string;
+      payload: UpdateSubUserPayload;
+    }) => {
+      const res = await userCreationApi.updateSubUser(id, payload);
+      if (res.error) {
+        throw new Error(
+          res.error.message || "Failed to update sub-user profile",
+        );
+      }
       return res.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: userCreationKeys.lists() });
-      queryClient.invalidateQueries({ queryKey: userCreationKeys.limits() });
-      toast.success("Sub-user profile created successfully");
+      invalidateUserCreation(queryClient);
+      toast.success("Sub-user profile updated successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message);
+    },
+  });
+}
+
+export function useDeleteSubUserMutation() {
+  const queryClient = useQueryClient();
+  const toast = useToast();
+
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const res = await userCreationApi.deleteSubUser(id);
+      if (res.error) {
+        throw new Error(res.error.message || "Failed to delete sub-user");
+      }
+      return res.data;
+    },
+    onSuccess: () => {
+      invalidateUserCreation(queryClient);
+      toast.success("Sub-user deleted successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message);
+    },
+  });
+}
+
+export function useResendInviteMutation() {
+  const queryClient = useQueryClient();
+  const toast = useToast();
+
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const res = await userCreationApi.resendInvite(id);
+      if (res.error) {
+        throw new Error(res.error.message || "Failed to resend invitation");
+      }
+      return res.data;
+    },
+    onSuccess: () => {
+      invalidateUserCreation(queryClient);
+      toast.success("Invitation resent successfully");
     },
     onError: (error: Error) => {
       toast.error(error.message);
@@ -71,7 +156,7 @@ export function useToggleSubUserStatusMutation() {
       return res.data;
     },
     onSuccess: (_data, variables) => {
-      queryClient.invalidateQueries({ queryKey: userCreationKeys.lists() });
+      invalidateUserCreation(queryClient);
       toast.success(
         variables.active ? "Account enabled" : "Account disabled",
       );

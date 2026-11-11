@@ -177,17 +177,56 @@ describe('user creation', () => {
     expect(limit.limitReached).toBe(false);
     const created = await post('/api/v1/user-creation/sub-users', {
       loginName: 'new.user@example.com', password: 'secret1', firstName: 'New', lastName: 'User', email: 'new.user@example.com', companyName: 'Acme',
-      custCountryCode: '+91', custPhoneCode: '22', custPhoneNo: '12345', mobileCode: '+91', mobileNo: '9', defLanguage: 'en', prefLanguage: 'en', allowedModules: ['BKG'],
+      custCountryCode: '+91', custPhoneCode: '22', custPhoneNo: '12345', mobileCode: '+91', mobileNo: '9', defLanguage: 'en', prefLanguage: 'en',
+      allowedModules: ['BKG'], provisionMode: 'PASSWORD',
     });
     expect(created.status).toBe(200);
-    const sub = created.body.data as { id: string; loginName: string };
+    const sub = created.body.data as { id: string; loginName: string; inviteStatus: string };
     expect(sub.loginName).toBe('new.user@example.com');
+    expect(sub.inviteStatus).toBe('NONE');
     expect(((await json('/api/v1/user-creation/sub-users')).body.data as unknown[]).length).toBe(before.length + 1);
     const toggled = await json(`/api/v1/user-creation/sub-users/${sub.id}/status`, { method: 'PATCH', body: JSON.stringify({ active: false }) });
     expect((toggled.body.data as { isActive: boolean }).isActive).toBe(false);
     expect((await json('/api/v1/user-creation/sub-users/ud-0/status', { method: 'PATCH', body: JSON.stringify({ active: true }) })).status).toBe(404);
-    const dupe = await post('/api/v1/user-creation/sub-users', { loginName: 'new.user@example.com', password: 'secret1', firstName: 'N', lastName: 'U', email: 'new.user@example.com', companyName: 'Acme', custPhoneNo: '12345', allowedModules: [] });
+    const dupe = await post('/api/v1/user-creation/sub-users', {
+      loginName: 'new.user@example.com', password: 'secret1', firstName: 'N', lastName: 'U', email: 'new.user@example.com',
+      companyName: 'Acme', custPhoneNo: '12345', allowedModules: ['BKG'], provisionMode: 'PASSWORD',
+    });
     expect(dupe.status).toBe(400);
+  });
+
+  it('supports invite create, update, resend, and delete', async () => {
+    const invited = await post('/api/v1/user-creation/sub-users', {
+      loginName: 'invite.user@example.com', firstName: 'Invite', lastName: 'User', email: 'invite.user@example.com', companyName: 'Acme',
+      custCountryCode: '+1', custPhoneCode: '212', custPhoneNo: '5550199', mobileCode: '+1', defLanguage: 'en', prefLanguage: 'en',
+      allowedModules: ['SCH'], provisionMode: 'INVITE',
+    });
+    expect(invited.status).toBe(200);
+    const sub = invited.body.data as { id: string; inviteStatus: string; lastInvitedAt?: string; firstName: string };
+    expect(sub.inviteStatus).toBe('PENDING');
+    expect(sub.lastInvitedAt).toBeTruthy();
+
+    const updated = await json(`/api/v1/user-creation/sub-users/${sub.id}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        firstName: 'Updated', lastName: 'User', email: 'invite.user@example.com', companyName: 'Acme',
+        custCountryCode: '+1', custPhoneCode: '212', custPhoneNo: '5550199', mobileCode: '+1',
+        defLanguage: 'en', prefLanguage: 'en', allowedModules: ['SCH', 'TRK'],
+      }),
+    });
+    expect(updated.status).toBe(200);
+    expect((updated.body.data as { firstName: string }).firstName).toBe('Updated');
+
+    const resent = await post(`/api/v1/user-creation/sub-users/${sub.id}/resend-invite`, {});
+    expect(resent.status).toBe(200);
+    expect((resent.body.data as { inviteStatus: string }).inviteStatus).toBe('PENDING');
+
+    const beforeLimit = (await json('/api/v1/user-creation/limit')).body.data as { currentlyAllocated: number };
+    const deleted = await json(`/api/v1/user-creation/sub-users/${sub.id}`, { method: 'DELETE' });
+    expect(deleted.status).toBe(200);
+    const afterLimit = (await json('/api/v1/user-creation/limit')).body.data as { currentlyAllocated: number };
+    expect(afterLimit.currentlyAllocated).toBeLessThanOrEqual(beforeLimit.currentlyAllocated);
+    expect((await json(`/api/v1/user-creation/sub-users/${sub.id}`, { method: 'DELETE' })).status).toBe(404);
   });
 });
 

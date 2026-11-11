@@ -245,7 +245,7 @@ export function AuthenticatedLayoutHeader({
         navigate({ to: "/app/payments" as any });
         break;
       case "user-creation":
-        navigate({ to: "/app/sub-users" as any });
+        navigate({ to: "/app/user-creation" });
         break;
       default:
         break;

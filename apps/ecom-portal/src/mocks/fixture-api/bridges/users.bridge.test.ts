@@ -4,8 +4,9 @@ import { describe, expect, it } from 'vitest';
 import { db, type Row } from '../db';
 import {
   activateUser, addressSuggestions, buildAdminProfile, buildCustomerProfile, buildImpersonatedUser, companyNameFor, configuredUserLimit,
-  createSubUser, customerAccounts, customerCodeLookup, DEMO_CUSTOMER_CODE, emailAvailable, findAdminAccount, findUser, firstUserOfCustomer,
-  moduleMappingCustomers, registerUser, resetUserPassword, resolveCustomerLogin, setSubUserActive, subAccountsOf, subUsersOf, userLimit,
+  createSubUser, customerAccounts, customerCodeLookup, deleteSubUser, DEMO_CUSTOMER_CODE, emailAvailable, findAdminAccount, findUser, firstUserOfCustomer,
+  moduleMappingCustomers, registerUser, resendSubUserInvite, resetUserPassword, resolveCustomerLogin, setSubUserActive, subAccountsOf,
+  subUsersOf, updateSubUser, userLimit,
 } from './users.bridge';
 
 const users: Row[] = [
@@ -129,15 +130,52 @@ describe('sub-users and user limit', () => {
     const d = details.map(r => ({ ...r }));
     const created = createSubUser('20001374', {
       loginName: 'new@example.com', password: 'secret1', firstName: 'New', lastName: 'User', email: 'new@example.com', companyName: 'Acme Lines',
-      custCountryCode: '+91', custPhoneCode: '22', custPhoneNo: '5555', mobileCode: '+91', mobileNo: '9', defLanguage: 'en', prefLanguage: 'en', allowedModules: ['BKG', 'SI'],
+      custCountryCode: '+91', custPhoneCode: '22', custPhoneNo: '5555', mobileCode: '+91', mobileNo: '9', defLanguage: 'en', prefLanguage: 'en',
+      allowedModules: ['BKG', 'SI'], provisionMode: 'PASSWORD',
     }, u[0], u, d);
-    expect(created).toMatchObject({ id: 'ud-13', loginName: 'new@example.com', isActive: true, custPhoneNo: '+91225555' });
+    expect(created).toMatchObject({ id: 'ud-13', loginName: 'new@example.com', isActive: true, custPhoneNo: '+91225555', inviteStatus: 'NONE' });
     expect(created.allowedModules).toEqual(expect.arrayContaining(['BKG', 'SI']));
-    expect(u.at(-1)).toMatchObject({ id: 4, Cust_Code: '20001374', isValid: 'Y', RegType: 'S' });
+    expect(u.at(-1)).toMatchObject({ id: 4, Cust_Code: '20001374', isValid: 'Y', RegType: 'S', password: 'secret1' });
     expect(setSubUserActive('ud-13', false, d, u, [])?.isActive).toBe(false);
     const cu = customerUsers.map(r => ({ ...r }));
     expect(setSubUserActive('cu-6', false, d, u, cu)?.isActive).toBe(false);
     expect(setSubUserActive('ud-404', true, d, u, cu)).toBeUndefined();
+  });
+
+  it('creates invite-mode users without password and supports update/delete/resend', () => {
+    const u = users.map(r => ({ ...r }));
+    const d = details.map(r => ({ ...r }));
+    const cu = customerUsers.map(r => ({ ...r }));
+    const invited = createSubUser('20001374', {
+      loginName: 'invitee@example.com', firstName: 'In', lastName: 'Vite', email: 'invitee@example.com', companyName: 'Acme Lines',
+      custCountryCode: '+1', custPhoneCode: '212', custPhoneNo: '5550199', mobileCode: '+1', defLanguage: 'en', prefLanguage: 'en',
+      allowedModules: ['SCH', 'TRK'], provisionMode: 'INVITE',
+    }, u[0], u, d);
+    expect(invited).toMatchObject({ inviteStatus: 'PENDING', loginName: 'invitee@example.com' });
+    expect(invited.lastInvitedAt).toBeTruthy();
+    expect(u.at(-1)).toMatchObject({ password: null, InviteStatus: 'PENDING', Remarks: 'User Created By Invitation' });
+
+    const updated = updateSubUser(invited.id, {
+      firstName: 'Ivy', lastName: 'Updated', email: 'invitee@example.com', companyName: 'Acme Lines',
+      custCountryCode: '+1', custPhoneCode: '212', custPhoneNo: '5550199', mobileCode: '+1',
+      defLanguage: 'en', prefLanguage: 'en', allowedModules: ['BKG'],
+    }, d, u, cu);
+    expect(updated).toMatchObject({ firstName: 'Ivy', lastName: 'Updated' });
+    expect(updated?.allowedModules).toEqual(expect.arrayContaining(['BKG']));
+
+    const resent = resendSubUserInvite(invited.id, d, u, cu);
+    expect(resent?.inviteStatus).toBe('PENDING');
+    expect(resent?.lastInvitedAt).toBeTruthy();
+    expect(resendSubUserInvite('ud-11', d, u, cu)).toBeUndefined();
+
+    const beforeCount = subUsersOf('20001374', d, u, cu).length;
+    expect(deleteSubUser(invited.id, d, u, cu)).toBe(true);
+    expect(subUsersOf('20001374', d, u, cu).length).toBe(beforeCount - 1);
+    expect(deleteSubUser('ud-404', d, u, cu)).toBe(false);
+
+    const activeBefore = userLimit('20001374', d, u, cu).currentlyAllocated;
+    setSubUserActive('ud-11', false, d, u, cu);
+    expect(userLimit('20001374', d, u, cu).currentlyAllocated).toBe(activeBefore - 1);
   });
 });
 

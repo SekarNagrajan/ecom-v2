@@ -7,7 +7,13 @@
 import type { LoginEntryType, SubCustomerAccount, UserProfile } from '@solverminds/auth';
 import type { ModuleMappingCustomer } from '../../../features/admin/types/admin.types';
 import type { AddressLookupResult, CustomerCodeCheckResult } from '../../../features/registration/types/registration.schema';
-import type { CreateSubUserPayload, SubUser, UserLimitResponse } from '../../../features/user-creation/types/user-creation.types';
+import type {
+  CreateSubUserPayload,
+  InviteStatus,
+  SubUser,
+  UpdateSubUserPayload,
+  UserLimitResponse,
+} from '../../../features/user-creation/types/user-creation.types';
 import { db, eq, nextRef, nowIso, type Row } from '../db';
 import { toIsoOrNull } from './format';
 import { customerName, customerRow } from './masters.bridge';
@@ -219,8 +225,16 @@ const subUserId = {
   customerUser: (c: Row) => `cu-${str(c.id)}`,
 };
 
+function inviteStatusFromRow(user: Row | undefined, detail?: Row): InviteStatus {
+  const raw = str(user?.InviteStatus || detail?.InviteStatus || 'NONE').toUpperCase();
+  if (raw === 'PENDING' || raw === 'ACCEPTED') return raw;
+  if (/invitation/i.test(str(user?.Remarks))) return 'PENDING';
+  return 'NONE';
+}
+
 export function mapSubUserFromDetails(d: Row, user: Row | undefined): SubUser {
   const prefLang = (str(user?.prefLang) || 'en').toLowerCase();
+  const inviteStatus = inviteStatusFromRow(user, d);
   return {
     id: subUserId.details(d),
     loginName: str(d.EmailID),
@@ -239,11 +253,14 @@ export function mapSubUserFromDetails(d: Row, user: Row | undefined): SubUser {
     isActive: eq(d.Status, 'A'),
     createdDate: dateOnly(d.AcceptedDate ?? user?.Registered_Date),
     allowedModules: capabilitiesForMenuIds(splitMenuIds(d.MenuId)),
+    inviteStatus,
+    lastInvitedAt: str(user?.LastInvitedAt || d.LastInvitedAt) || undefined,
   };
 }
 
 export function mapSubUserFromCustomerUser(c: Row, companyName: string): SubUser {
   const prefLang = (str(c.preferredLang) || 'en').toLowerCase();
+  const inviteStatus = inviteStatusFromRow(c);
   return {
     id: subUserId.customerUser(c),
     loginName: str(c.username) || str(c.email),
@@ -261,6 +278,8 @@ export function mapSubUserFromCustomerUser(c: Row, companyName: string): SubUser
     isActive: eq(c.status, 'A'),
     createdDate: dateOnly(c.acceptedAt ?? c.createdAt),
     allowedModules: capabilitiesForMenuIds([]),
+    inviteStatus,
+    lastInvitedAt: str(c.LastInvitedAt) || undefined,
   };
 }
 
@@ -310,6 +329,7 @@ export function menuIdsForModules(modules: string[], menus: Row[] = db.menus): s
 /** POST /user-creation/sub-users: inserts eCom_Reg_Details + ecomuserdetails rows under the customer. */
 export function createSubUser(custCode: string, payload: CreateSubUserPayload, parent: Row | undefined, users: Row[] = db.users, details: Row[] = db.userDetails): SubUser {
   const now = nowIso();
+  const inviteMode = payload.provisionMode === 'INVITE';
   const phone = [payload.custCountryCode, payload.custPhoneCode, payload.custPhoneNo].map(str).filter(Boolean).join('');
   const mobile = [payload.mobileCode, payload.mobileNo].map(str).filter(Boolean).join('');
   const user: Row = {
@@ -318,17 +338,123 @@ export function createSubUser(custCode: string, payload: CreateSubUserPayload, p
     Title: null, First_Name: payload.firstName, Last_Name: payload.lastName, User_Phone: phone, User_Mobile: mobile, User_Fax: null,
     User_Email: payload.email, type: 'N', isValid: 'Y', status: 'A', control_location: str(parent?.control_location), Address2: str(parent?.Address2),
     agencycode: str(parent?.agencycode), Registered_Date: now, ActionBy: str(parent?.loginname) || 'SUPERUSER', ActionDate: now,
-    Remarks: 'User Created By Invitation', prefLang: (payload.prefLanguage ?? 'en').toUpperCase(), loginname: payload.loginName, RegType: 'S',
+    Remarks: inviteMode ? 'User Created By Invitation' : 'User Created With Password',
+    prefLang: (payload.prefLanguage ?? 'en').toUpperCase(), loginname: payload.loginName, RegType: 'S',
     reg_no: nextRef('REG'), preferredTimezone: str(parent?.preferredTimezone) || null,
+    password: inviteMode ? null : str(payload.password) || null,
+    InviteStatus: inviteMode ? 'PENDING' : 'NONE',
+    LastInvitedAt: inviteMode ? now : null,
   };
   const detail: Row = {
     Id: nextNumericId(details, 'Id'), EmailID: payload.loginName, userRole: 'N', CustomerCode: custCode, Status: 'A', AcceptedDate: now,
     MenuId: joinMenuIds(menuIdsForModules(payload.allowedModules ?? [])), ccmailid: null, preferredTimezone: str(parent?.preferredTimezone) || null,
-    lastpwdup: now, logindate: null, logoutdate: null, WrgPassAtmpt: 0, LockedStatus: 'N', LockedTime: null,
+    lastpwdup: inviteMode ? null : now, logindate: null, logoutdate: null, WrgPassAtmpt: 0, LockedStatus: 'N', LockedTime: null,
+    InviteStatus: inviteMode ? 'PENDING' : 'NONE',
+    LastInvitedAt: inviteMode ? now : null,
   };
   users.push(user);
   details.push(detail);
   return mapSubUserFromDetails(detail, user);
+}
+
+function findSubUserPair(
+  id: string,
+  details: Row[] = db.userDetails,
+  users: Row[] = db.users,
+  customerUsers: Row[] = db.customerUsers,
+): { kind: 'details'; detail: Row; user?: Row } | { kind: 'customer'; row: Row } | null {
+  const d = details.find(r => subUserId.details(r) === id);
+  if (d) return { kind: 'details', detail: d, user: findUser(str(d.EmailID), users) };
+  const c = customerUsers.find(r => subUserId.customerUser(r) === id);
+  if (c) return { kind: 'customer', row: c };
+  return null;
+}
+
+/** PUT /sub-users/:id — update profile + module entitlements. */
+export function updateSubUser(
+  id: string,
+  payload: UpdateSubUserPayload,
+  details: Row[] = db.userDetails,
+  users: Row[] = db.users,
+  customerUsers: Row[] = db.customerUsers,
+): SubUser | undefined {
+  const found = findSubUserPair(id, details, users, customerUsers);
+  if (!found) return undefined;
+  const phone = [payload.custCountryCode, payload.custPhoneCode, payload.custPhoneNo].map(str).filter(Boolean).join('');
+  const mobile = [payload.mobileCode, payload.mobileNo].map(str).filter(Boolean).join('');
+  if (found.kind === 'details') {
+    const { detail, user } = found;
+    detail.MenuId = joinMenuIds(menuIdsForModules(payload.allowedModules ?? []));
+    if (user) {
+      user.First_Name = payload.firstName;
+      user.Last_Name = payload.lastName;
+      user.User_Email = payload.email;
+      user.Comp_Name = payload.companyName;
+      user.Comp_Phone = phone;
+      user.User_Phone = phone;
+      user.User_Mobile = mobile;
+      user.prefLang = (payload.prefLanguage ?? 'en').toUpperCase();
+    }
+    return mapSubUserFromDetails(detail, user ?? findUser(str(detail.EmailID), users));
+  }
+  const row = found.row;
+  row.firstName = payload.firstName;
+  row.lastName = payload.lastName;
+  row.email = payload.email;
+  row.mobile = mobile || phone;
+  row.preferredLang = payload.prefLanguage ?? 'en';
+  return mapSubUserFromCustomerUser(row, payload.companyName);
+}
+
+/** DELETE /sub-users/:id — remove the sub-user from fixture tables. */
+export function deleteSubUser(
+  id: string,
+  details: Row[] = db.userDetails,
+  users: Row[] = db.users,
+  customerUsers: Row[] = db.customerUsers,
+): boolean {
+  const found = findSubUserPair(id, details, users, customerUsers);
+  if (!found) return false;
+  if (found.kind === 'details') {
+    const login = str(found.detail.EmailID);
+    const dIdx = details.findIndex(r => subUserId.details(r) === id);
+    if (dIdx >= 0) details.splice(dIdx, 1);
+    const uIdx = users.findIndex(u => eq(u.loginname, login) || eq(u.User_Email, login));
+    if (uIdx >= 0) users.splice(uIdx, 1);
+    return true;
+  }
+  const cIdx = customerUsers.findIndex(r => subUserId.customerUser(r) === id);
+  if (cIdx >= 0) customerUsers.splice(cIdx, 1);
+  return true;
+}
+
+/** POST /sub-users/:id/resend-invite — refresh invite timestamp for pending invites. */
+export function resendSubUserInvite(
+  id: string,
+  details: Row[] = db.userDetails,
+  users: Row[] = db.users,
+  customerUsers: Row[] = db.customerUsers,
+): SubUser | undefined {
+  const found = findSubUserPair(id, details, users, customerUsers);
+  if (!found) return undefined;
+  const now = nowIso();
+  if (found.kind === 'details') {
+    const current = mapSubUserFromDetails(found.detail, found.user);
+    if (current.inviteStatus !== 'PENDING') return undefined;
+    found.detail.InviteStatus = 'PENDING';
+    found.detail.LastInvitedAt = now;
+    if (found.user) {
+      found.user.InviteStatus = 'PENDING';
+      found.user.LastInvitedAt = now;
+      found.user.Remarks = 'User Created By Invitation';
+    }
+    return mapSubUserFromDetails(found.detail, found.user);
+  }
+  const current = mapSubUserFromCustomerUser(found.row, companyNameFor(str(found.row.customerCode), users));
+  if (current.inviteStatus !== 'PENDING') return undefined;
+  found.row.InviteStatus = 'PENDING';
+  found.row.LastInvitedAt = now;
+  return mapSubUserFromCustomerUser(found.row, companyNameFor(str(found.row.customerCode), users));
 }
 
 /** PATCH /sub-users/:id/status for either id form (ud-<Id> | cu-<id>). */

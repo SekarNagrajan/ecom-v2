@@ -1,15 +1,21 @@
 // Modified by Sekar Nagarajan (2026-10-16 23:35)
 import { http, HttpResponse } from "msw";
 
-import type { CreateSubUserPayload } from "../features/user-creation/types/user-creation.types";
+import type {
+  CreateSubUserPayload,
+  UpdateSubUserPayload,
+} from "../features/user-creation/types/user-creation.types";
 import { bearerUser } from "./auth-token-registry";
 import {
   createSubUser,
+  deleteSubUser,
   DEMO_CUSTOMER_CODE,
   findUser,
   firstUserOfCustomer,
+  resendSubUserInvite,
   setSubUserActive,
   subUsersOf,
+  updateSubUser,
   userLimit,
 } from "./fixture-api/bridges/users.bridge";
 import {
@@ -41,26 +47,52 @@ export const userCreationHandlers = [
     const body = (await request.json()) as CreateSubUserPayload;
     if (userLimit(custCode).limitReached) {
       return HttpResponse.json(
-        { error: { code: "LIMIT_REACHED", message: "Creation of user profile limit has been reached" } },
+        {
+          error: {
+            code: "LIMIT_REACHED",
+            message: "Creation of user profile limit has been reached",
+          },
+        },
         { status: 400 },
       );
     }
     if (findUser(body.loginName) || findUser(body.email)) {
       return HttpResponse.json(
-        { error: { code: "DUPLICATE", message: "Login name or e-mail is already registered" } },
+        {
+          error: {
+            code: "DUPLICATE",
+            message: "Login name or e-mail is already registered",
+          },
+        },
         { status: 400 },
       );
     }
-    const parent = findUser(bearerUser(request)?.email ?? "") ?? firstUserOfCustomer(custCode)?.user;
+    if (
+      body.provisionMode === "PASSWORD" &&
+      (!body.password || body.password.length < 6)
+    ) {
+      return HttpResponse.json(
+        {
+          error: {
+            code: "VALIDATION",
+            message: "Password must be at least 6 characters",
+          },
+        },
+        { status: 400 },
+      );
+    }
+    const parent =
+      findUser(bearerUser(request)?.email ?? "") ??
+      firstUserOfCustomer(custCode)?.user;
     const created = createSubUser(custCode, body, parent);
     persistUserDb();
     return HttpResponse.json({ data: created });
   }),
 
-  http.patch("/api/v1/user-creation/sub-users/:id/status", async ({ params, request }) => {
+  http.put("/api/v1/user-creation/sub-users/:id", async ({ params, request }) => {
     await ensureUserDbReady();
-    const body = (await request.json()) as { active: boolean };
-    const updated = setSubUserActive(String(params.id), body.active);
+    const body = (await request.json()) as UpdateSubUserPayload;
+    const updated = updateSubUser(String(params.id), body);
     if (!updated) {
       return HttpResponse.json(
         { error: { code: "NOT_FOUND", message: "Sub-user not found" } },
@@ -70,4 +102,55 @@ export const userCreationHandlers = [
     persistUserDb();
     return HttpResponse.json({ data: updated });
   }),
+
+  http.delete("/api/v1/user-creation/sub-users/:id", async ({ params }) => {
+    await ensureUserDbReady();
+    const ok = deleteSubUser(String(params.id));
+    if (!ok) {
+      return HttpResponse.json(
+        { error: { code: "NOT_FOUND", message: "Sub-user not found" } },
+        { status: 404 },
+      );
+    }
+    persistUserDb();
+    return HttpResponse.json({ data: { success: true } });
+  }),
+
+  http.post(
+    "/api/v1/user-creation/sub-users/:id/resend-invite",
+    async ({ params }) => {
+      await ensureUserDbReady();
+      const updated = resendSubUserInvite(String(params.id));
+      if (!updated) {
+        return HttpResponse.json(
+          {
+            error: {
+              code: "NOT_FOUND",
+              message: "Pending invitation not found for this sub-user",
+            },
+          },
+          { status: 404 },
+        );
+      }
+      persistUserDb();
+      return HttpResponse.json({ data: updated });
+    },
+  ),
+
+  http.patch(
+    "/api/v1/user-creation/sub-users/:id/status",
+    async ({ params, request }) => {
+      await ensureUserDbReady();
+      const body = (await request.json()) as { active: boolean };
+      const updated = setSubUserActive(String(params.id), body.active);
+      if (!updated) {
+        return HttpResponse.json(
+          { error: { code: "NOT_FOUND", message: "Sub-user not found" } },
+          { status: 404 },
+        );
+      }
+      persistUserDb();
+      return HttpResponse.json({ data: updated });
+    },
+  ),
 ];

@@ -3,6 +3,7 @@ import type { ApiResponse } from "../../../types/api.types";
 import type {
   CreateSubUserPayload,
   SubUser,
+  UpdateSubUserPayload,
   UserLimitResponse,
 } from "../types/user-creation.types";
 
@@ -55,7 +56,9 @@ async function readApiJson<T>(
   }
 }
 
-function networkError(error: unknown): { error: { code: string; message: string } } {
+function networkError(error: unknown): {
+  error: { code: string; message: string };
+} {
   const message = error instanceof Error ? error.message : "Network error";
   return { error: { code: "NETWORK_ERROR", message } };
 }
@@ -96,6 +99,51 @@ export const userCreationApi = {
         res,
         "Failed to create sub-user profile",
       );
+    } catch (error: unknown) {
+      return networkError(error);
+    }
+  },
+
+  async updateSubUser(
+    id: string,
+    payload: UpdateSubUserPayload,
+  ): Promise<ApiResponse<SubUser>> {
+    try {
+      const res = await fetch(`/api/v1/user-creation/sub-users/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      return await readApiJson<SubUser>(
+        res,
+        "Failed to update sub-user profile",
+      );
+    } catch (error: unknown) {
+      return networkError(error);
+    }
+  },
+
+  async deleteSubUser(id: string): Promise<ApiResponse<{ success: boolean }>> {
+    try {
+      const res = await fetch(`/api/v1/user-creation/sub-users/${id}`, {
+        method: "DELETE",
+      });
+      return await readApiJson<{ success: boolean }>(
+        res,
+        "Failed to delete sub-user",
+      );
+    } catch (error: unknown) {
+      return networkError(error);
+    }
+  },
+
+  async resendInvite(id: string): Promise<ApiResponse<SubUser>> {
+    try {
+      const res = await fetch(
+        `/api/v1/user-creation/sub-users/${id}/resend-invite`,
+        { method: "POST" },
+      );
+      return await readApiJson<SubUser>(res, "Failed to resend invitation");
     } catch (error: unknown) {
       return networkError(error);
     }

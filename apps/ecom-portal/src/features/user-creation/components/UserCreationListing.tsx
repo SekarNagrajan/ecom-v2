@@ -1,52 +1,52 @@
-// Created by Sekar Nagarajan (2026-08-26 15:06)
+// Modified by Sekar Nagarajan (2026-11-11 15:10)
 import { AppButton } from "@solverminds/shared-ui";
 import {
   DataView,
   type DataViewColumn,
 } from "@solverminds/shared-ui/data-view";
-import { useToast } from "@solverminds/shared-ui/hooks";
-import {
-  Alert,
-  Card,
-  Col,
-  Progress,
-  Row,
-  Space,
-  Switch,
-  Tag,
-  Tooltip,
-} from "antd";
-import { useState } from "react";
+import { useConfirm, useToast } from "@solverminds/shared-ui/hooks";
+import { Space, Tag, Tooltip } from "antd";
+import { useEffect, useRef, useState } from "react";
 
 import { AppIcon, Icons, NavIcons } from "../../../components/icons";
 import { buildActionsColumn } from "../../../components/shared/build-actions-column";
 import {
+  ListActionButton,
+  ListActionsRow,
+} from "../../../components/shared/list-action-button";
+import {
   ModuleEmptyState,
-  buildClearFiltersAction,
   buildRetryAction,
 } from "../../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
 import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
 import { useModuleTitles } from "../../../i18n/use-module-titles";
-import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import {
+  useDeleteSubUserMutation,
+  useResendInviteMutation,
   useSubUsersQuery,
   useToggleSubUserStatusMutation,
   useUserLimitQuery,
 } from "../api/user-creation.queries";
 import type { SubUser } from "../types/user-creation.types";
 import { EMPTY_USER_LIMIT } from "../types/user-creation.types";
-import { filterSubUsers, getSubUserFullName } from "../utils/usc.utils";
-import { UscCreateDrawer } from "./upsert/UscCreateDrawer";
+import {
+  filterSubUsersByStatus,
+  getSubUserFullName,
+  type UscStatusFilter,
+} from "../utils/usc.utils";
+import { UscStatusFilterBar } from "./UscStatusFilterBar";
+import { UscUpsertDrawer } from "./upsert/UscUpsertDrawer";
 import { UscLoadingCenter } from "./usc-loading-center";
-import { UscSearchPanel } from "./usc-search-panel";
 
 export function UserCreationListing() {
   const MODULE_TITLES = useModuleTitles();
   const toast = useToast();
+  const confirm = useConfirm();
   const { profileHandlers } = useLocalGridProfiles("user-creation");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [statusFilter, setStatusFilter] = useState<UscStatusFilter>("all");
+  const [drawerMode, setDrawerMode] = useState<"create" | "edit" | null>(null);
+  const [editingUser, setEditingUser] = useState<SubUser | null>(null);
 
   const {
     data: subUsers = [],
@@ -57,35 +57,135 @@ export function UserCreationListing() {
   } = useSubUsersQuery();
   const { data: limitInfo = EMPTY_USER_LIMIT } = useUserLimitQuery();
   const { mutate: toggleStatus } = useToggleSubUserStatusMutation();
+  const { mutate: deleteSubUser } = useDeleteSubUserMutation();
+  const { mutate: resendInvite } = useResendInviteMutation();
 
-  const filteredUsers = filterSubUsers(subUsers, searchTerm);
-  const percentUsed =
-    limitInfo.allowedUserLimit > 0
-      ? Math.round(
-          (limitInfo.currentlyAllocated / limitInfo.allowedUserLimit) * 100,
-        )
-      : 0;
+  const filteredUsers = filterSubUsersByStatus(subUsers, statusFilter);
+  const limitToastShown = useRef(false);
+
+  useEffect(() => {
+    if (!limitInfo.limitReached) {
+      limitToastShown.current = false;
+      return;
+    }
+    if (limitToastShown.current) return;
+    limitToastShown.current = true;
+    toast.warning(
+      "Your user profile quota is full. Contact a system admin to expand allowed users.",
+      { title: "Creation limit reached" },
+    );
+  }, [limitInfo.limitReached, toast]);
+
+  const openCreate = () => {
+    if (limitInfo.limitReached) {
+      toast.warning(
+        "Your user profile quota is full. Contact a system admin to expand allowed users.",
+        { title: "Creation limit reached" },
+      );
+      return;
+    }
+    setEditingUser(null);
+    setDrawerMode("create");
+  };
+
+  const openEdit = (user: SubUser) => {
+    setEditingUser(user);
+    setDrawerMode("edit");
+  };
+
+  const closeDrawer = () => {
+    setDrawerMode(null);
+    setEditingUser(null);
+  };
+
+  const handleToggleStatus = (record: SubUser, active: boolean) => {
+    if (!active) {
+      confirm.danger({
+        title: "Disable account",
+        content: `Disable ${record.loginName}? They will lose portal access until re-enabled.`,
+        okText: "Disable",
+        cancelText: "Cancel",
+        onOk: () => toggleStatus({ id: record.id, active: false }),
+      });
+      return;
+    }
+    toggleStatus({ id: record.id, active: true });
+  };
+
+  const handleDelete = (record: SubUser) => {
+    confirm.danger({
+      title: "Delete sub-user",
+      content: `Permanently remove ${record.loginName}? This cannot be undone.`,
+      okText: "Delete",
+      cancelText: "Cancel",
+      onOk: () => deleteSubUser(record.id),
+    });
+  };
+
+  const handleResendInvite = (record: SubUser) => {
+    confirm.show({
+      title: "Resend invitation",
+      content: `Send a new invitation email to ${record.email}?`,
+      okText: "Resend",
+      cancelText: "Cancel",
+      onOk: () => resendInvite(record.id),
+    });
+  };
 
   const columns: DataViewColumn<SubUser>[] = [
     {
       ...buildActionsColumn<SubUser>({
         field: "id",
-        width: 110,
+        width: 148,
         cellRenderer: (params) => {
           if (!params.data) return null;
           const record = params.data;
           return (
-            <Tooltip
-              title={record.isActive ? "Disable account" : "Enable account"}
-            >
-              <Switch
-                size="small"
-                checked={record.isActive}
-                onChange={(checked) =>
-                  toggleStatus({ id: record.id, active: checked })
-                }
+            <ListActionsRow>
+              <ListActionButton
+                title="Edit"
+                tone="edit"
+                icon={<AppIcon icon={Icons.edit} size={16} />}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  openEdit(record);
+                }}
               />
-            </Tooltip>
+              <ListActionButton
+                title={record.isActive ? "Disable account" : "Enable account"}
+                tone={record.isActive ? "reject" : "approve"}
+                icon={
+                  <AppIcon
+                    icon={record.isActive ? Icons.circleX : Icons.checkCircle}
+                    size={16} tone={record.isActive ? "delete" : "create"}
+                  />
+                }
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleToggleStatus(record, !record.isActive);
+                }}
+              />
+              {record.inviteStatus === "PENDING" ? (
+                <ListActionButton
+                  title="Resend invite"
+                  tone="navigate"
+                  icon={<AppIcon icon={Icons.send} size={16} />}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleResendInvite(record);
+                  }}
+                />
+              ) : null}
+              <ListActionButton
+                title="Delete"
+                danger
+                icon={<AppIcon icon={Icons.trash} size={16} />}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDelete(record);
+                }}
+              />
+            </ListActionsRow>
           );
         },
       }),
@@ -95,14 +195,15 @@ export function UserCreationListing() {
       headerName: "Login Username",
       field: "loginName",
       sortable: true,
+      minWidth: 160,
       cellRenderer: (params: { data?: SubUser }) => {
         const record = params.data;
         if (!record) return null;
         return (
-          <Space>
-            <AppIcon icon={Icons.user} size={16} />
-            <strong>{record.loginName}</strong>
-          </Space>
+          <span className="usc-login-cell">
+            
+            {record.loginName}
+          </span>
         );
       },
     },
@@ -117,6 +218,7 @@ export function UserCreationListing() {
       headerName: "Email Address",
       field: "email",
       sortable: true,
+      minWidth: 180,
     },
     {
       headerName: "Company Name",
@@ -129,15 +231,16 @@ export function UserCreationListing() {
       sortable: true,
     },
     {
-      headerName: "Allowed Capabilities",
+      headerName: "Modules",
       field: "allowedModules",
       sortable: false,
+      minWidth: 160,
       cellRenderer: (params: { data?: SubUser }) => {
         const mods = params.data?.allowedModules || [];
         return (
-          <Space wrap size={[2, 4]}>
+          <Space wrap size={[4, 4]}>
             {mods.map((m) => (
-              <Tag className="usc-module-tag" color="blue" key={m}>
+              <Tag className="usc-module-tag" key={m}>
                 {m}
               </Tag>
             ))}
@@ -146,19 +249,51 @@ export function UserCreationListing() {
       },
     },
     {
-      headerName: "Account Status",
+      headerName: "Invite",
+      field: "inviteStatus",
+      sortable: true,
+      width: 110,
+      cellRenderer: (params: { data?: SubUser }) => {
+        const status = params.data?.inviteStatus ?? "NONE";
+        if (status === "NONE") {
+          return (
+            <span>-</span>
+          );
+        }
+        return (
+          <span
+            className={[
+              "",
+              status === "ACCEPTED" ? "usc-invite-pill--accepted" : undefined,
+            ]
+              .filter(Boolean)
+              .join(" ")}
+          >
+            {status === "PENDING" ? "Pending" : "Accepted"}
+          </span>
+        );
+      },
+    },
+    {
+      headerName: "Status",
       field: "isActive",
       sortable: true,
+      width: 120,
       cellRenderer: (params: { data?: SubUser }) => {
         const record = params.data;
         if (!record) return null;
         return (
-          <Tag
-            className="usc-status-tag"
-            color={record.isActive ? "success" : "error"}
+          <span
+            className={[
+              "usc-status-pill",
+              record.isActive
+                ? "usc-status-pill--active"
+                : "usc-status-pill--disabled",
+            ].join(" ")}
           >
+            <span  aria-hidden />
             {record.isActive ? "Active" : "Disabled"}
-          </Tag>
+          </span>
         );
       },
     },
@@ -174,17 +309,16 @@ export function UserCreationListing() {
     />
   ) : (
     <ModuleEmptyState
-      variant={searchTerm ? "filtered" : "blank"}
-      title={searchTerm ? "No sub-users match your search" : "No sub-users yet"}
-      message={
-        searchTerm
-          ? "Try another name or clear the search to see all sub-users."
-          : "Create a sub-user to grant an employee or delegate access."
+      variant={statusFilter === "all" ? "blank" : "filtered"}
+      title={
+        statusFilter === "all"
+          ? "No sub-users yet"
+          : "No sub-users in this status"
       }
-      actions={
-        searchTerm
-          ? [buildClearFiltersAction(() => setSearchTerm(""), "Clear search")]
-          : undefined
+      message={
+        statusFilter === "all"
+          ? "Add a sub-user to grant an employee or delegate access."
+          : "Try another status filter or clear it to see all sub-users."
       }
     />
   );
@@ -195,7 +329,7 @@ export function UserCreationListing() {
         <ModuleScreenHeader
           icon={NavIcons.userCreation}
           title={MODULE_TITLES.userCreation}
-          // recordCount={filteredUsers.length}
+         
           subtitle="Create and manage sub-user credentials for company employees, agents, and delegates."
           marginBottom={0}
           extra={
@@ -203,67 +337,27 @@ export function UserCreationListing() {
               title={
                 limitInfo.limitReached
                   ? "User profile limit reached"
-                  : "Create New Sub-User"
+                  : "Add Sub-User"
               }
             >
               <AppButton
                 type="primary"
-                size="large"
+                size="medium"
                 icon={<AppIcon icon={Icons.userPlus} size={16} tone="create" />}
-                disabled={limitInfo.limitReached}
-                onClick={() => setIsDrawerOpen(true)}
+                onClick={openCreate}
               >
-                Create New Sub-User
+                Add Sub-User
               </AppButton>
             </Tooltip>
           }
         />
       </div>
 
-      <Card className="usc-limit-card" bordered={false}>
-        <Row gutter={[16, 16]} align="middle">
-          <Col {...RESPONSIVE_COL.third}>
-            <span className="usc-limit-card__label">
-              Customer user profile limit
-            </span>
-            <div className="usc-limit-card__count">
-              {limitInfo.currentlyAllocated} / {limitInfo.allowedUserLimit}{" "}
-              Users
-            </div>
-          </Col>
-          <Col {...RESPONSIVE_COL.twoThirds} lg={10}>
-            <span className="usc-limit-card__label">
-              Account allocation ({limitInfo.remainingSlots} slots remaining)
-            </span>
-            <Progress
-              percent={percentUsed}
-              status={limitInfo.limitReached ? "exception" : "active"}
-            />
-          </Col>
-          <Col xs={24} lg={6}>
-            <div className="usc-limit-card__status">
-              <Tag
-                className="usc-status-tag"
-                color={limitInfo.limitReached ? "error" : "success"}
-              >
-                {limitInfo.limitReached ? "Limit Reached" : "Slots Available"}
-              </Tag>
-            </div>
-          </Col>
-        </Row>
-      </Card>
-
-      {limitInfo.limitReached ? (
-        <Alert
-          className="usc-alert"
-          message="Creation Limit Exceeded"
-          description="Creation of user profile limit has been reached. Please contact system admin to expand your allowed user quota."
-          type="warning"
-          showIcon
-        />
-      ) : null}
-
-      <UscSearchPanel value={searchTerm} onChange={setSearchTerm} />
+      <UscStatusFilterBar
+        users={subUsers}
+        value={statusFilter}
+        onChange={setStatusFilter}
+      />
 
       {showLoading ? (
         <UscLoadingCenter fill />
@@ -271,38 +365,45 @@ export function UserCreationListing() {
         emptyState
       ) : (
         <div className="usc-grid-wrap responsive-table-wrap custom-scroll">
-          <DataView
-            columnDefs={columns}
-            rowData={filteredUsers}
-            loading={isFetching}
-            emptyState={emptyState}
-            allowedViewModes={["list"]}
-            defaultViewMode="list"
-            renderToolbar={() => null}
-            className="usc-data-view"
-            listOptions={{
-              ...profileHandlers,
-              showToolbar: { showTotalCount: true, fullScreen: true },
-              sideBar: true,
-              pagination: true,
-              paginationPageSize: 20,
-              pageSizeOptions: [10, 20, 50, 100],
-              defaultColDef: { filter: true },
-              gridOptions: {
-                getRowId: (params: { data: SubUser }) => params.data.id,
-              },
-            }}
-          />
+          <div className="usc-table-card">
+            <DataView
+              columnDefs={columns}
+              rowData={filteredUsers}
+              loading={isFetching}
+              emptyState={emptyState}
+              allowedViewModes={["list"]}
+              defaultViewMode="list"
+              renderToolbar={() => null}
+              className="usc-data-view"
+              listOptions={{
+                ...profileHandlers,
+                showToolbar: { showTotalCount: true, fullScreen: true },
+                sideBar: true,
+                pagination: true,
+                paginationPageSize: 20,
+                pageSizeOptions: [10, 20, 50, 100],
+                defaultColDef: { filter: true },
+                gridOptions: {
+                  getRowId: (params: { data: SubUser }) => params.data.id,
+                },
+              }}
+            />
+          </div>
         </div>
       )}
 
-      {isDrawerOpen ? (
-        <UscCreateDrawer
+      {drawerMode ? (
+        <UscUpsertDrawer
           open
+          mode={drawerMode}
+          editingUser={editingUser}
           limitReached={limitInfo.limitReached}
-          onClose={() => setIsDrawerOpen(false)}
+          onClose={closeDrawer}
           onLimitBlocked={() =>
-            toast.error("Creation of user profile limit has been reached")
+            toast.warning(
+              "Your user profile quota is full. Contact a system admin to expand allowed users.",
+              { title: "Creation limit reached" },
+            )
           }
         />
       ) : null}

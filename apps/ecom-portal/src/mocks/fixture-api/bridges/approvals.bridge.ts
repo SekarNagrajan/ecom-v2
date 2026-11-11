@@ -103,16 +103,24 @@ export function vendorApprovals(src: Sources = {}): VendorApprovalItem[] {
  * Approve / reject: writes the matching legacy status code back onto the fixture row.
  * When mutating the live `db` (no `src` override for that domain), persists via the
  * Booking / SI / VGM runtime overlays so the decision survives refresh.
+ * Reject remarks are stored on `declined_remarks` (booking/SI) or `remarks` (VGM).
  */
-export function applyApprovalStatus(id: string, status: Exclude<ApprovalStatus, 'PENDING'>, src: Sources = {}): boolean {
+export function applyApprovalStatus(
+  id: string,
+  status: Exclude<ApprovalStatus, 'PENDING'>,
+  src: Sources = {},
+  remarks?: string,
+): boolean {
   const [prefix, ...rest] = id.split(':');
   const key = rest.join(':');
   const approved = status === 'APPROVED';
+  const note = str(remarks);
   if (prefix === ID_PREFIX.BOOKING) {
     const live = !src.bookings;
     const row = (src.bookings ?? db.bookings).find(b => eq(b.ebookno, key));
     if (!row) return false;
     row.ebook_status = approved ? 'A' : 'V';
+    if (!approved && note) row.declined_remarks = note;
     if (live) persistBookingDb();
     return true;
   }
@@ -121,6 +129,7 @@ export function applyApprovalStatus(id: string, status: Exclude<ApprovalStatus, 
     const row = (src.si ?? db.shippingInstructions).find(s => eq(s.eSINo, key));
     if (!row) return false;
     row.status = approved ? 'A' : 'V';
+    if (!approved && note) row.declined_remarks = note;
     if (live) persistSiDb();
     return true;
   }
@@ -129,6 +138,7 @@ export function applyApprovalStatus(id: string, status: Exclude<ApprovalStatus, 
     const row = (src.vgm ?? db.vgm).find(v => eq(v.id, key));
     if (!row) return false;
     row.status = approved ? 'C' : 'I';
+    if (!approved && note) row.remarks = note;
     if (live) persistVgmDb();
     return true;
   }

@@ -4,8 +4,9 @@ import {
   type DataViewColumn,
 } from "@solverminds/shared-ui/data-view";
 import { useConfirm, useToast } from "@solverminds/shared-ui/hooks";
+import type { GridApi } from "ag-grid-community";
 import { Tag, Typography } from "antd";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { NavAgencyApprovalIcon } from "../../../components/icons/nav-svg-icons";
@@ -26,6 +27,15 @@ import type {
   ApprovalStatus,
   VendorApprovalItem,
 } from "../types/vendor-approvals.types";
+import {
+  buildBulkConfirmContent,
+  VendorApprovalsBulkBar,
+} from "./VendorApprovalsBulkBar";
+import { VendorApprovalsRejectModal } from "./VendorApprovalsRejectModal";
+import {
+  type SummaryFilter,
+  VendorApprovalsSummaryPanel,
+} from "./VendorApprovalsSummaryPanel";
 
 const { Text } = Typography;
 
@@ -53,41 +63,117 @@ export function VendorApprovalsView() {
   const [items, setItems] = useState<VendorApprovalItem[]>(() =>
     vendorApprovals(),
   );
+  const [summaryFilter, setSummaryFilter] = useState<SummaryFilter>("ALL");
+  const [selectedRows, setSelectedRows] = useState<VendorApprovalItem[]>([]);
+  const [rejectTargets, setRejectTargets] = useState<VendorApprovalItem[]>([]);
+  const gridApiRef = useRef<GridApi<VendorApprovalItem> | null>(null);
+
+  const selectedPending = selectedRows.filter(
+    (row) => row.status === "PENDING",
+  );
+  const selectedPendingCount = selectedPending.length;
+  const rejectModalOpen = rejectTargets.length > 0;
+
+  const clearSelection = () => {
+    gridApiRef.current?.deselectAll();
+    setSelectedRows([]);
+  };
 
   const applyStatus = (
-    id: string,
+    ids: string[],
     status: Exclude<ApprovalStatus, "PENDING">,
+    remarks?: string,
   ) => {
-    applyApprovalStatus(id, status);
+    if (ids.length === 0) return;
+    ids.forEach((id) => applyApprovalStatus(id, status, {}, remarks));
+    const idSet = new Set(ids);
     setItems((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, status } : item)),
+      prev.map((item) =>
+        idSet.has(item.id)
+          ? {
+              ...item,
+              status,
+              rejectRemarks:
+                status === "REJECTED" ? remarks : item.rejectRemarks,
+            }
+          : item,
+      ),
     );
+    clearSelection();
+    setRejectTargets([]);
     toast.success(
       status === "APPROVED"
-        ? "Request approved successfully."
-        : "Request rejected successfully.",
+        ? ids.length === 1
+          ? "Request approved successfully."
+          : `${ids.length} requests approved successfully.`
+        : ids.length === 1
+          ? "Request rejected successfully."
+          : `${ids.length} requests rejected successfully.`,
     );
   };
 
-  // Use confirm.show / confirm.danger so Cancel is always available (success modals are OK-only).
+  // Use confirm.show so Cancel is always available (success modals are OK-only).
   const handleApprove = (item: VendorApprovalItem) => {
     confirm.show({
       title: "Approve Request",
       content: `Approve ${item.referenceNo} for ${item.customerName}?`,
       okText: "Approve",
       cancelText: "Cancel",
-      onOk: () => applyStatus(item.id, "APPROVED"),
+      onOk: () => applyStatus([item.id], "APPROVED"),
     });
   };
 
   const handleReject = (item: VendorApprovalItem) => {
-    confirm.danger({
-      title: "Reject Request",
-      content: `Reject ${item.referenceNo} for ${item.customerName}?`,
-      okText: "Reject",
+    setRejectTargets([item]);
+  };
+
+  const handleBulkApprove = () => {
+    if (selectedPendingCount === 0) return;
+    confirm.show({
+      title:
+        selectedPendingCount === 1
+          ? "Approve Request"
+          : `Approve ${selectedPendingCount} Requests`,
+      content: buildBulkConfirmContent(selectedPending, "approve"),
+      okText:
+        selectedPendingCount === 1
+          ? "Approve"
+          : `Approve ${selectedPendingCount}`,
       cancelText: "Cancel",
-      onOk: () => applyStatus(item.id, "REJECTED"),
+      onOk: () =>
+        applyStatus(
+          selectedPending.map((row) => row.id),
+          "APPROVED",
+        ),
     });
+  };
+
+  const handleBulkReject = () => {
+    if (selectedPendingCount === 0) return;
+    setRejectTargets(selectedPending);
+  };
+
+  const handleRejectConfirm = (remarks: string) => {
+    applyStatus(
+      rejectTargets.map((row) => row.id),
+      "REJECTED",
+      remarks,
+    );
+  };
+
+  const handleSelectAllPending = () => {
+    const api = gridApiRef.current;
+    if (!api) return;
+    api.forEachNode((node) => {
+      if (node.data?.status === "PENDING") {
+        node.setSelected(true);
+      }
+    });
+  };
+
+  const handleSummaryFilterChange = (filter: SummaryFilter) => {
+    setSummaryFilter(filter);
+    clearSelection();
   };
 
   const columnDefs: DataViewColumn<VendorApprovalItem>[] = [
@@ -107,9 +193,10 @@ export function VendorApprovalsView() {
         return (
           <ListActionsRow>
             <ListActionButton
-              title="Approve Request"
+              title={`Approve ${rec.referenceNo}`}
+              ariaLabel={`Approve ${rec.referenceNo}`}
               icon={
-                <AppIcon icon={Icons.checkCircle} size={16} tone="approve" />
+                <AppIcon icon={Icons.checkCircle} size={16} tone="create" />
               }
               onClick={(event) => {
                 event.stopPropagation();
@@ -117,8 +204,9 @@ export function VendorApprovalsView() {
               }}
             />
             <ListActionButton
-              title="Reject Request"
-              icon={<AppIcon icon={Icons.circleX} size={16} tone="reject" />}
+              title={`Reject ${rec.referenceNo}`}
+              ariaLabel={`Reject ${rec.referenceNo}`}
+              icon={<AppIcon icon={Icons.circleX} size={16} tone="delete" />}
               danger
               onClick={(event) => {
                 event.stopPropagation();
@@ -193,6 +281,14 @@ export function VendorApprovalsView() {
   const approvedCount = items.filter((i) => i.status === "APPROVED").length;
   const rejectedCount = items.filter((i) => i.status === "REJECTED").length;
 
+  const visibleItems =
+    summaryFilter === "ALL"
+      ? items
+      : items.filter((item) => item.status === summaryFilter);
+  const pendingInViewCount = visibleItems.filter(
+    (item) => item.status === "PENDING",
+  ).length;
+
   return (
     <div className="va-page-layout">
       {/* Modified by Sekar Nagarajan (2026-09-16 17:38) — VGM/ARN page shell layout */}
@@ -205,36 +301,29 @@ export function VendorApprovalsView() {
         />
       </div>
 
-      <div
-        className="va-summary-panel"
-        role="group"
-        aria-label="Approval summary"
-      >
-        <div className="va-summary-strip">
-          <div className="va-summary-chip va-summary-chip--warning">
-            <span className="va-summary-chip__label">Pending</span>
-            <span className="va-summary-chip__value">{pendingCount}</span>
-          </div>
-          <div className="va-summary-chip va-summary-chip--success">
-            <span className="va-summary-chip__label">Approved</span>
-            <span className="va-summary-chip__value">{approvedCount}</span>
-          </div>
-          <div className="va-summary-chip va-summary-chip--error">
-            <span className="va-summary-chip__label">Rejected</span>
-            <span className="va-summary-chip__value">{rejectedCount}</span>
-          </div>
-          <div className="va-summary-chip va-summary-chip--neutral">
-            <span className="va-summary-chip__label">Total</span>
-            <span className="va-summary-chip__value">{items.length}</span>
-          </div>
-        </div>
-      </div>
+      <VendorApprovalsSummaryPanel
+        pendingCount={pendingCount}
+        approvedCount={approvedCount}
+        rejectedCount={rejectedCount}
+        totalCount={items.length}
+        activeFilter={summaryFilter}
+        onFilterChange={handleSummaryFilterChange}
+      />
+
+      <VendorApprovalsBulkBar
+        selectedRows={selectedPending}
+        pendingInViewCount={pendingInViewCount}
+        onApprove={handleBulkApprove}
+        onReject={handleBulkReject}
+        onClear={clearSelection}
+        onSelectAllPending={handleSelectAllPending}
+      />
 
       <div className="va-grid-wrap va-approvals-grid responsive-table-wrap custom-scroll">
         <DataView
           className="va-data-view"
           columnDefs={columnDefs}
-          rowData={items}
+          rowData={visibleItems}
           emptyState={
             <ModuleEmptyState
               variant="blank"
@@ -248,17 +337,40 @@ export function VendorApprovalsView() {
           listOptions={{
             ...profileHandlers,
             showToolbar: { showTotalCount: true, fullScreen: true },
+            selectionMode: "multiple",
+            showCheckboxes: true,
+            onGridReady: (params) => {
+              gridApiRef.current = params.api;
+            },
+            onSelectionChanged: (rows) =>
+              setSelectedRows(rows as VendorApprovalItem[]),
             pagination: true,
             paginationPageSize: 20,
             pageSizeOptions: [10, 20, 50, 100],
             sideBar: true,
             defaultColDef: { filter: true },
+            rowSelection: {
+              mode: "multiRow",
+              checkboxes: true,
+              headerCheckbox: true,
+              enableClickSelection: false,
+              hideDisabledCheckboxes: true,
+              isRowSelectable: (node) => node.data?.status === "PENDING",
+            },
             gridOptions: {
               suppressCellFocus: true,
+              getRowId: (params) => params.data.id,
             },
           }}
         />
       </div>
+
+      <VendorApprovalsRejectModal
+        open={rejectModalOpen}
+        items={rejectTargets}
+        onCancel={() => setRejectTargets([])}
+        onConfirm={handleRejectConfirm}
+      />
     </div>
   );
 }

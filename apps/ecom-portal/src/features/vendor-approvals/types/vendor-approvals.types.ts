@@ -11,4 +11,6 @@ export interface VendorApprovalItem {
   originPort: string;
   destPort: string;
   status: ApprovalStatus;
+  /** Set when the agency rejects the request. */
+  rejectRemarks?: string;
 }

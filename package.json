@@ -12,7 +12,18 @@
     "build": "pnpm --filter @solverminds/ecom-portal build",
     "preview": "pnpm --filter @solverminds/ecom-portal preview",
     "typecheck": "tsc --noEmit -p apps/ecom-portal/tsconfig.json",
-    "test": "vitest run"
+    "typecheck:ci": "node scripts/typecheck-baseline.mjs",
+    "typecheck:baseline": "node scripts/typecheck-baseline.mjs --update",
+    "lint": "eslint . --cache --cache-location node_modules/.cache/eslint",
+    "lint:fix": "eslint . --fix --cache --cache-location node_modules/.cache/eslint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "storybook": "pnpm --filter @solverminds/shared-ui storybook",
+    "storybook:build": "pnpm --filter @solverminds/shared-ui storybook:build",
+    "prepare": "husky"
   },
   "dependencies": {
     "@ant-design/cssinjs": "^2.0.2",
@@ -34,8 +45,8 @@
     "@tanstack/react-query-persist-client": "^5.90.21",
     "@tanstack/react-router": "^1.161.4",
     "@tanstack/react-virtual": "^3.13.18",
-    "@tiptap/extension-character-count": "^3.19.0",
     "@tiptap/core": "^3.19.0",
+    "@tiptap/extension-character-count": "^3.19.0",
     "@tiptap/extension-file-handler": "^3.20.0",
     "@tiptap/extension-image": "^3.19.0",
     "@tiptap/extension-link": "^3.19.0",
@@ -117,13 +128,13 @@
     "@types/crypto-js": "^4.2.2",
     "@types/dompurify": "^3.0.5",
     "@types/luxon": "^3.7.1",
-    "@types/node": "^20.11.30",
-    "@types/react": "^18.2.66",
-    "@types/react-dom": "^18.2.22",
+    "@types/node": "^24.19.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "@types/turndown": "^5.0.6",
     "@vitejs/plugin-react": "^4.2.1",
-    "@vitest/coverage-v8": "^4.0.0",
-    "@vitest/ui": "^4.0.0",
+    "@vitest/coverage-v8": "^1.6.1",
+    "@vitest/ui": "^1.6.1",
     "ajv": "^8.18.0",
     "autoprefixer": "10.4.13",
     "babel-plugin-react-compiler": "^1.0.0",
@@ -135,13 +146,15 @@
     "eslint-plugin-playwright": "^1.6.2",
     "eslint-plugin-react": "7.35.0",
     "eslint-plugin-react-hooks": "^7.0.1",
+    "globals": "^17.14.0",
     "husky": "^9.1.7",
     "jiti": "2.4.2",
     "jsdom": "~22.1.0",
+    "lint-staged": "^17.6.0",
     "nx": "22.3.3",
     "openapi-typescript": "^7.13.0",
     "postcss": "8.4.38",
-    "prettier": "^2.6.2",
+    "prettier": "^3.9.6",
     "rollup-plugin-visualizer": "^6.0.5",
     "storybook": "10.2.13",
     "tailwindcss": "^4.1.18",
@@ -156,6 +169,15 @@
   "msw": {
     "workerDirectory": [
       "apps/ecom-portal/public"
+    ]
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,mjs,cjs}": [
+      "eslint --fix --cache --cache-location node_modules/.cache/eslint",
+      "prettier --write"
+    ],
+    "*.{json,css,yml,yaml}": [
+      "prettier --write"
     ]
   }
 }

@@ -37,3 +37,9 @@ coverage
 # Antigravity temporary brain / scratch files
 .gemini
 .env*
+
+# quality tooling outputs
+storybook-static
+.eslintcache
+playwright-report
+test-results

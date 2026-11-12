@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 13:05)
+// Modified by Sekar Nagarajan (2026-11-12 13:20)
 /**
  * Control Panel stylesheet — one token-backed <style> injector (agenct.md: no inline styles, no
  * hex, tokens for colour / spacing / radius, custom-scroll on scroll surfaces).
@@ -208,7 +208,7 @@ export function AdminModuleStyles() {
       /* Page-level form footer (singleton / bulk screens) */
       .admin-form-footer.form-step-footer {
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
         align-items: center;
         gap: ${token.marginSM}px;
         flex-wrap: wrap;
@@ -224,9 +224,80 @@ export function AdminModuleStyles() {
         margin: 0;
         min-width: ${controlLG * 2}px;
       }
+      .admin-form-footer__meta {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: ${token.marginSM}px;
+        min-width: 0;
+        color: ${token.colorTextSecondary};
+        font-size: ${token.fontSizeSM}px;
+      }
+      .admin-form-footer__hint {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        color: ${token.colorWarning};
+        font-weight: ${token.fontWeightStrong};
+      }
+      .admin-form-footer__actions {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginSM}px;
+        margin-left: auto;
+      }
 
-      /* Drawer anatomy */
-      .admin-drawer-body {
+      /* Drawer anatomy (AdminDrawer) */
+      .admin-drawer-header-bar.ant-drawer-header {
+        padding: ${token.paddingMD}px ${token.paddingLG}px;
+        background: linear-gradient(180deg, ${primaryTint8} 0%, ${token.colorBgContainer} 100%);
+        border-bottom: 1px solid ${token.colorBorderSecondary};
+      }
+      .admin-drawer-title {
+        display: flex;
+        align-items: flex-start;
+        gap: ${token.marginSM}px;
+        min-width: 0;
+      }
+      .admin-drawer-title__icon {
+        flex-shrink: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: ${controlLG}px;
+        height: ${controlLG}px;
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorBgContainer};
+        border: 1px solid ${token.colorPrimaryBorder};
+        color: ${token.colorPrimary};
+      }
+      .admin-drawer-title__copy {
+        min-width: 0;
+        padding-top: ${token.paddingXXS / 2}px;
+      }
+      .admin-drawer-title__text {
+        margin: 0;
+        font-size: ${token.fontSizeLG}px;
+        font-weight: ${token.fontWeightStrong};
+        line-height: ${token.lineHeightHeading5};
+        color: ${token.colorText};
+      }
+      .admin-drawer-title__meta {
+        margin-top: ${token.marginXXS / 2}px;
+        font-size: ${token.fontSizeSM}px;
+        line-height: ${token.lineHeight};
+        color: ${token.colorTextSecondary};
+      }
+      .admin-drawer-body.custom-scroll {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginMD}px;
+        padding: ${token.paddingMD}px ${token.paddingLG}px ${token.paddingLG}px;
+        overflow-y: auto;
+        background: ${token.colorFillAlter};
+      }
+      /* legacy drawer body used by the pre-redesign Banner / Advisory drawers */
+      .admin-drawer-body:not(.custom-scroll) {
         display: flex;
         flex-direction: column;
         gap: ${token.marginMD}px;
@@ -265,6 +336,253 @@ export function AdminModuleStyles() {
       .admin-banner-thumb {
         object-fit: cover;
         border-radius: ${token.borderRadiusSM}px;
+      }
+
+      /* Form section card (AdminFormSection) */
+      .admin-form-section {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginMD}px;
+        margin: 0;
+        padding: ${token.paddingMD}px ${token.paddingLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorBgContainer};
+      }
+      .admin-form-section__header {
+        display: flex;
+        align-items: flex-start;
+        gap: ${token.marginSM}px;
+      }
+      .admin-form-section__step,
+      .admin-form-section__icon {
+        flex-shrink: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: ${token.controlHeightSM}px;
+        height: ${token.controlHeightSM}px;
+        border-radius: 50%;
+        background: ${primaryTint8};
+        color: ${token.colorPrimary};
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+      }
+      .admin-form-section__heading {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS / 2}px;
+        min-width: 0;
+        flex: 1;
+      }
+      .admin-form-section__title {
+        margin: 0;
+        font-size: ${token.fontSize}px;
+        font-weight: ${token.fontWeightStrong};
+        line-height: ${token.lineHeight};
+        color: ${token.colorText};
+      }
+      .admin-form-section__hint {
+        margin: 0;
+        font-size: ${token.fontSizeSM}px;
+        line-height: ${token.lineHeight};
+        color: ${token.colorTextSecondary};
+      }
+      .admin-form-section__extra {
+        flex-shrink: 0;
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXS}px;
+      }
+      .admin-form-section__body {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginSM}px;
+        min-width: 0;
+      }
+      .admin-form-section__body .ant-form-item {
+        margin-bottom: 0;
+      }
+
+      /* Status pill (AdminStatusPill) */
+      .admin-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXXS + 2}px;
+        margin: 0;
+        padding: ${token.paddingXXS / 2}px ${token.paddingXS + 2}px;
+        border-radius: ${token.borderRadiusSM}px;
+        border: 1px solid transparent;
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        line-height: ${token.lineHeight};
+        white-space: nowrap;
+      }
+      .admin-pill__dot {
+        width: ${token.sizeXS - 2}px;
+        height: ${token.sizeXS - 2}px;
+        border-radius: 50%;
+        background: currentColor;
+        flex-shrink: 0;
+      }
+      .admin-pill__icon.app-icon {
+        color: inherit;
+      }
+      .admin-pill--success {
+        color: ${token.colorSuccess};
+        background: ${successTint8};
+        border-color: ${tokenMix(token.colorSuccess, 16)};
+      }
+      .admin-pill--neutral {
+        color: ${token.colorTextSecondary};
+        background: ${token.colorFillAlter};
+        border-color: ${token.colorBorderSecondary};
+      }
+      .admin-pill--warning {
+        color: ${token.colorWarning};
+        background: ${warningTint8};
+        border-color: ${tokenMix(token.colorWarning, 16)};
+      }
+      .admin-pill--error {
+        color: ${token.colorError};
+        background: ${tokenMix(token.colorError, 8)};
+        border-color: ${tokenMix(token.colorError, 16)};
+      }
+      .admin-pill--info {
+        color: ${token.colorInfo};
+        background: ${token.colorInfoBg};
+        border-color: ${token.colorInfoBorder};
+      }
+      .admin-pill--processing,
+      .admin-pill--primary {
+        color: ${token.colorPrimary};
+        background: ${primaryTint8};
+        border-color: ${token.colorPrimaryBorder};
+      }
+
+      /* Filter pills (AdminFilterPills) */
+      .admin-filter-pills {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: ${token.marginXS}px;
+        padding: ${token.paddingSM}px;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorBgContainer};
+      }
+      .admin-filter-pills__pill {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXS}px;
+        margin: 0;
+        padding: ${token.paddingXXS + 2}px ${token.paddingSM}px;
+        border-radius: ${token.borderRadiusSM}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorBgContainer};
+        color: ${token.colorText};
+        font-size: ${token.fontSize}px;
+        line-height: ${token.lineHeight};
+        cursor: pointer;
+        transition: background-color ${token.motionDurationFast} ease,
+          border-color ${token.motionDurationFast} ease,
+          color ${token.motionDurationFast} ease;
+      }
+      .admin-filter-pills__pill:hover {
+        border-color: ${token.colorPrimaryBorder};
+        background: ${primaryTint8};
+      }
+      .admin-filter-pills__pill:focus-visible {
+        outline: ${token.lineWidthBold}px solid ${token.colorPrimaryBorder};
+        outline-offset: 1px;
+      }
+      .admin-filter-pills__pill--selected {
+        border-color: transparent;
+        background: ${primaryTint8};
+        color: ${token.colorPrimary};
+        font-weight: ${token.fontWeightStrong};
+      }
+      .admin-filter-pills__pill--empty {
+        opacity: ${token.opacityLoading};
+      }
+      .admin-filter-pills__dot {
+        width: ${token.sizeXS}px;
+        height: ${token.sizeXS}px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        background: ${token.colorPrimary};
+      }
+      .admin-filter-pills__pill--success .admin-filter-pills__dot {
+        background: ${token.colorSuccess};
+      }
+      .admin-filter-pills__pill--neutral .admin-filter-pills__dot {
+        background: ${token.colorTextQuaternary};
+      }
+      .admin-filter-pills__pill--warning .admin-filter-pills__dot {
+        background: ${token.colorWarning};
+      }
+      .admin-filter-pills__pill--error .admin-filter-pills__dot {
+        background: ${token.colorError};
+      }
+      .admin-filter-pills__pill--info .admin-filter-pills__dot {
+        background: ${token.colorInfo};
+      }
+      .admin-filter-pills__label {
+        font-weight: ${token.fontWeightStrong};
+      }
+      .admin-filter-pills__count {
+        color: ${token.colorTextSecondary};
+      }
+      .admin-filter-pills__pill--selected .admin-filter-pills__count {
+        color: inherit;
+        opacity: ${token.opacityLoading + 0.1};
+      }
+
+      /* Locked identity field (AdminLockedField) */
+      .admin-locked-field {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginSM}px;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        border-radius: ${token.borderRadius}px;
+        border: 1px dashed ${token.colorBorder};
+        background: ${token.colorFillAlter};
+      }
+      .admin-locked-field__icon {
+        flex-shrink: 0;
+        display: inline-flex;
+        color: ${token.colorTextSecondary};
+      }
+      .admin-locked-field__copy {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS / 2}px;
+        min-width: 0;
+        flex: 1;
+      }
+      .admin-locked-field__label {
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+      }
+      .admin-locked-field__value {
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+        word-break: break-word;
+      }
+      .admin-locked-field__hint {
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextTertiary};
+      }
+      .admin-locked-field__badge {
+        flex-shrink: 0;
+        padding: 0 ${token.paddingXS}px;
+        border-radius: ${token.borderRadiusSM}px;
+        background: ${token.colorFillSecondary};
+        color: ${token.colorTextSecondary};
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
       }
 
       /* ================================================================== */
@@ -963,6 +1281,17 @@ export function AdminModuleStyles() {
         .admin-drawer-actions.form-step-footer .ant-btn {
           width: 100%;
           min-width: 0;
+        }
+        .admin-form-footer__meta,
+        .admin-form-footer__actions {
+          width: 100%;
+          margin-left: 0;
+        }
+        .admin-form-footer__actions {
+          flex-direction: column-reverse;
+        }
+        .admin-filter-pills {
+          padding: ${token.paddingXS}px;
         }
         .admin-drawer-body {
           padding: ${token.paddingMD}px;

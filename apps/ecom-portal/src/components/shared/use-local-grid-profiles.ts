@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-16 11:10)
+// Modified by Sekar Nagarajan (2026-11-12 13:55)
 import type {
   GridProfile,
   ProfileRenameInput,
@@ -30,6 +30,11 @@ export type LocalGridProfileCategory =
   | "customer-statement"
   | "user-creation"
   | "admin-cutoff"
+  | "admin-menus"
+  | "admin-field-config"
+  | "admin-route-restrictions"
+  | "admin-banners"
+  | "admin-advisories"
   | "vendor-approvals"
   | "payment-history"
   | "quotes"

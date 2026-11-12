@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 13:20)
+// Modified by Sekar Nagarajan (2026-11-12 13:55)
 /**
  * Control Panel stylesheet — one token-backed <style> injector (agenct.md: no inline styles, no
  * hex, tokens for colour / spacing / radius, custom-scroll on scroll surfaces).
@@ -585,6 +585,130 @@ export function AdminModuleStyles() {
         letter-spacing: 0.04em;
       }
 
+      /* Settings rows (AdminSettingRow) */
+      .admin-setting-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: ${token.marginMD}px;
+        padding: ${token.paddingSM}px 0;
+        border-top: 1px solid ${token.colorBorderSecondary};
+      }
+      .admin-setting-row:first-child {
+        border-top: none;
+        padding-top: 0;
+      }
+      .admin-setting-row--stacked {
+        flex-direction: column;
+        align-items: stretch;
+        gap: ${token.marginXS}px;
+      }
+      .admin-setting-row__copy {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS / 2}px;
+        min-width: 0;
+        flex: 1;
+      }
+      .admin-setting-row__title {
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+      }
+      .admin-setting-row__description {
+        font-size: ${token.fontSizeSM}px;
+        line-height: ${token.lineHeight};
+      }
+      .admin-setting-row__control {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        min-width: 0;
+      }
+      .admin-setting-row--stacked .admin-setting-row__control {
+        justify-content: stretch;
+        width: 100%;
+      }
+      .admin-setting-row--stacked .admin-setting-row__control > * {
+        width: 100%;
+      }
+      .admin-setting-row__item.ant-form-item {
+        margin-bottom: 0;
+      }
+      .admin-setting-row__item.ant-form-item .ant-form-item-label {
+        display: none;
+      }
+      .admin-setting-row__number.ant-input-number-group-wrapper,
+      .admin-setting-row__number.ant-input-number {
+        width: ${controlLG * 4.5}px;
+      }
+      .admin-field-hint {
+        display: block;
+        margin-top: calc(-1 * ${token.marginXS}px);
+        font-size: ${token.fontSizeSM}px;
+      }
+      .admin-mono-input input {
+        font-family: ${token.fontFamilyCode};
+      }
+
+      /* Result receipt (Password Reset) */
+      .admin-receipt {
+        display: flex;
+        align-items: flex-start;
+        gap: ${token.marginSM}px;
+        margin-top: ${token.marginMD}px;
+        padding: ${token.paddingMD}px;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px solid ${tokenMix(token.colorSuccess, 24)};
+        background: ${successTint8};
+      }
+      .admin-receipt__icon {
+        flex-shrink: 0;
+        display: inline-flex;
+        color: ${token.colorSuccess};
+      }
+      .admin-receipt__icon .app-icon {
+        color: inherit;
+      }
+      .admin-receipt__copy {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+        min-width: 0;
+        flex: 1;
+      }
+      .admin-receipt__meta {
+        font-size: ${token.fontSizeSM}px;
+      }
+      .admin-receipt__message {
+        word-break: break-word;
+      }
+
+      /* Grids */
+      .admin-grid-wrap {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        min-width: 0;
+      }
+      .admin-grid-wrap .admin-data-view {
+        width: 100%;
+      }
+      /* DataView always renders its toolbar card; with renderToolbar={() => null} it is empty. */
+      .admin-grid-wrap .admin-data-view > .ant-card:first-child:has(> .ant-card-body:empty) {
+        display: none;
+      }
+      .admin-lane {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXS}px;
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+      }
+      .admin-lane__arrow.app-icon {
+        color: ${token.colorTextSecondary};
+      }
+
       /* ================================================================== */
       /* 3. Module Mapping — dual-list board + drag-and-drop                 */
       /* ================================================================== */
@@ -807,96 +931,6 @@ export function AdminModuleStyles() {
       /* 4. Legacy per-view blocks — removed as each tab is redesigned       */
       /* ================================================================== */
 
-      /* legacy: Global Configuration (GlobalConfigAdminView) */
-      .admin-config-form input:-webkit-autofill,
-      .admin-config-form input:-webkit-autofill:hover,
-      .admin-config-form input:-webkit-autofill:focus {
-        -webkit-box-shadow: 0 0 0 1000px ${token.colorBgContainer} inset !important;
-        transition: background-color 50000s ease-in-out 0s !important;
-      }
-      .admin-config-section__title {
-        display: inline-flex;
-        align-items: center;
-        gap: ${token.marginSM}px;
-        font-weight: ${token.fontWeightStrong};
-      }
-      .admin-config-section__body {
-        display: flex;
-        flex-direction: column;
-        gap: ${token.marginSM}px;
-        width: 100%;
-        min-width: 0;
-        padding: 0;
-      }
-      .admin-config-section__body .ant-form-item {
-        margin-bottom: 0;
-      }
-      .admin-config-section__body .ant-form-item .ant-form-item-label {
-        padding: 0 0 ${token.paddingXXS}px;
-      }
-      .admin-config-section__body .ant-form-item-control,
-      .admin-config-section__body .ant-form-item-control-input,
-      .admin-config-section__body .ant-form-item-control-input-content {
-        min-width: 0;
-        width: 100%;
-      }
-      .admin-config-toggle.ant-form-item {
-        width: 100%;
-        margin-bottom: 0;
-        padding: ${token.paddingSM}px ${token.paddingMD}px;
-        border-radius: ${token.borderRadius}px;
-        border: 1px solid ${token.colorBorderSecondary};
-        background: ${token.colorFillAlter};
-      }
-      .admin-config-toggle.ant-form-item .ant-form-item-row {
-        flex-direction: row;
-        flex-wrap: nowrap;
-        align-items: center;
-        justify-content: space-between;
-        gap: ${token.marginSM}px;
-        width: 100%;
-      }
-      .admin-config-toggle.ant-form-item .ant-form-item-label {
-        padding: 0;
-        flex: 1 1 auto;
-        min-width: 0;
-      }
-      .admin-config-toggle.ant-form-item .ant-form-item-label > label {
-        height: auto;
-        white-space: normal;
-      }
-      .admin-config-toggle.ant-form-item .ant-form-item-control {
-        flex: 0 0 auto;
-        width: auto;
-        max-width: none;
-      }
-      .admin-config-toggle .ant-form-item-control-input,
-      .admin-config-toggle .ant-form-item-control-input-content {
-        min-height: 0;
-        display: flex;
-        justify-content: flex-end;
-      }
-      .admin-toggle-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: ${token.marginSM}px;
-        width: 100%;
-        margin: 0;
-        padding: 0;
-      }
-      .admin-inner-card.ant-card {
-        border-radius: ${token.borderRadiusLG}px;
-        border: 1px solid ${token.colorBorderSecondary};
-      }
-      .admin-inner-card.ant-card > .ant-card-head {
-        padding: ${token.paddingSM}px;
-        min-height: 0;
-      }
-      .admin-inner-card.ant-card > .ant-card-body {
-        padding: ${token.paddingSM}px;
-      }
-
       /* legacy: Module Creation (MenuManagementView) */
       .admin-menu-create.ant-collapse {
         border-radius: ${token.borderRadiusLG}px;
@@ -1035,11 +1069,6 @@ export function AdminModuleStyles() {
         min-height: 0;
       }
 
-      /* legacy: Password Reset (AdminPasswordResetView) */
-      .admin-password-alert {
-        margin-top: ${token.marginMD}px;
-      }
-
       /* legacy: Email Templates (EmailTemplateEditorView) */
       .admin-email-sidebar,
       .admin-email-editor {
@@ -1092,136 +1121,6 @@ export function AdminModuleStyles() {
         overflow-y: auto;
         min-width: 0;
         padding: ${token.paddingXS}px 0;
-      }
-
-      /* legacy: Route Restrictions cards (ServiceRestrictionsView) */
-      .admin-route-list {
-        display: flex;
-        flex-direction: column;
-        gap: ${token.marginMD}px;
-      }
-      .admin-route-card.ant-card {
-        border-radius: ${token.borderRadiusLG}px;
-        border: 1px solid ${token.colorBorderSecondary};
-      }
-      .admin-route-card.ant-card > .ant-card-body {
-        padding: ${token.paddingMD}px;
-        display: flex;
-        flex-direction: column;
-        gap: ${token.marginMD}px;
-      }
-      .admin-route-card__actions {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        gap: ${token.marginSM}px;
-        margin: 0 0 ${token.marginMD}px;
-        padding: 0;
-      }
-      .admin-route-strip {
-        display: flex;
-        align-items: stretch;
-        gap: ${token.marginMD}px;
-        width: 100%;
-      }
-      .admin-route-port {
-        flex: 1;
-        min-width: 0;
-        padding: ${token.paddingMD}px;
-        border-radius: ${token.borderRadiusLG}px;
-        background: ${token.colorFillAlter};
-        border: 1px solid ${token.colorBorderSecondary};
-      }
-      .admin-route-port--origin {
-        border-left: ${unit}px solid ${token.colorPrimary};
-        background: linear-gradient(180deg, ${primaryTint8} 0%, ${token.colorFillAlter} 100%);
-      }
-      .admin-route-port--delivery {
-        border-left: ${unit}px solid ${token.colorSuccess};
-        background: linear-gradient(180deg, ${successTint8} 0%, ${token.colorFillAlter} 100%);
-      }
-      .admin-route-port__label {
-        display: flex;
-        align-items: center;
-        gap: ${token.marginXS}px;
-        font-size: ${token.fontSizeSM}px;
-        font-weight: ${token.fontWeightStrong};
-        color: ${token.colorTextSecondary};
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-        margin-bottom: ${token.marginXS}px;
-      }
-      .admin-route-port__code.ant-typography {
-        margin: 0;
-        font-size: ${token.fontSizeHeading4}px;
-        line-height: ${token.lineHeightHeading4};
-        font-weight: ${token.fontWeightStrong};
-      }
-      .admin-route-port__code--origin.ant-typography {
-        color: ${token.colorPrimary};
-      }
-      .admin-route-port__code--delivery.ant-typography {
-        color: ${token.colorSuccess};
-      }
-      .admin-route-connector {
-        flex: 0 0 auto;
-        min-width: ${controlLG * 2.4}px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: ${token.marginXS}px;
-        text-align: center;
-        padding: ${token.paddingSM}px 0;
-      }
-      .admin-route-connector__label {
-        font-size: ${token.fontSizeSM}px;
-        font-weight: ${token.fontWeightStrong};
-        color: ${token.colorTextSecondary};
-        text-transform: uppercase;
-        letter-spacing: 0.03em;
-      }
-      .admin-route-connector__line {
-        display: flex;
-        align-items: center;
-        width: 100%;
-        max-width: ${controlLG * 3}px;
-        color: ${token.colorPrimary};
-      }
-      .admin-route-connector__dot {
-        width: ${token.sizeXS}px;
-        height: ${token.sizeXS}px;
-        border-radius: 50%;
-        flex-shrink: 0;
-      }
-      .admin-route-connector__dot--origin {
-        background: ${token.colorPrimary};
-      }
-      .admin-route-connector__dot--delivery {
-        background: ${token.colorSuccess};
-      }
-      .admin-route-connector__track {
-        flex: 1;
-        height: ${token.lineWidthBold}px;
-        margin: 0 ${token.marginXXS}px;
-        background: linear-gradient(90deg, ${token.colorPrimary} 0%, ${token.colorSuccess} 100%);
-      }
-      .admin-route-meta {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: ${token.marginMD}px ${token.marginLG}px;
-        margin-top: ${token.marginXS}px;
-      }
-      .admin-route-meta__label {
-        display: block;
-        font-size: ${token.fontSizeSM}px;
-        color: ${token.colorTextSecondary};
-        margin-bottom: ${token.marginXXS}px;
-      }
-      .admin-route-meta__value {
-        font-weight: ${token.fontWeightStrong};
-        color: ${token.colorText};
-        word-break: break-word;
       }
 
       /* ================================================================== */
@@ -1293,6 +1192,18 @@ export function AdminModuleStyles() {
         .admin-filter-pills {
           padding: ${token.paddingXS}px;
         }
+        .admin-setting-row {
+          flex-direction: column;
+          align-items: stretch;
+          gap: ${token.marginXS}px;
+        }
+        .admin-setting-row__control {
+          justify-content: flex-start;
+        }
+        .admin-setting-row__number.ant-input-number-group-wrapper,
+        .admin-setting-row__number.ant-input-number {
+          width: 100%;
+        }
         .admin-drawer-body {
           padding: ${token.paddingMD}px;
           gap: ${token.marginSM}px;
@@ -1309,9 +1220,6 @@ export function AdminModuleStyles() {
           width: 100%;
         }
         /* legacy */
-        .admin-config-toggle.ant-form-item .ant-form-item-row {
-          flex-wrap: wrap;
-        }
         .admin-cutoff-create__row--5,
         .admin-cutoff-create__row--2 {
           grid-template-columns: 1fr;
@@ -1324,23 +1232,6 @@ export function AdminModuleStyles() {
         .admin-cutoff-create__actions .sm-app-button,
         .admin-cutoff-create__actions .ant-btn {
           flex: 1 1 auto;
-        }
-        .admin-route-strip {
-          flex-direction: column;
-        }
-        .admin-route-connector {
-          min-width: 0;
-          width: 100%;
-          flex-direction: row;
-          justify-content: center;
-          gap: ${token.marginSM}px;
-        }
-        .admin-route-connector__line {
-          max-width: ${controlLG * 2}px;
-        }
-        .admin-route-meta {
-          grid-template-columns: 1fr;
-          gap: ${token.marginSM}px;
         }
       }
     `}</style>

@@ -1,5 +1,5 @@
-// Created by Sekar Nagarajan (2026-11-12 12:40)
-/** Global Configuration tab — a failed load now shows an error state with retry instead of spinning forever. */
+// Modified by Sekar Nagarajan (2026-11-12 13:40)
+/** Global Configuration tab — a failed load shows an error state with retry instead of spinning forever. */
 import {
   useGlobalConfigQuery,
   useUpdateGlobalConfigMutation,
@@ -20,12 +20,15 @@ export function GlobalConfigSection() {
       error={query.error}
       onRetry={() => void query.refetch()}
     >
-      <GlobalConfigAdminView
-        config={query.data}
-        onSave={(config: GlobalConfig) =>
-          settleMutation(() => update.mutateAsync(config))
-        }
-      />
+      {query.data ? (
+        <GlobalConfigAdminView
+          config={query.data}
+          isSaving={update.isPending}
+          onSave={(config: GlobalConfig) =>
+            settleMutation(() => update.mutateAsync(config))
+          }
+        />
+      ) : null}
     </AdminSectionState>
   );
 }

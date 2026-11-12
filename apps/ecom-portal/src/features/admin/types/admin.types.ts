@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 12:20)
+// Modified by Sekar Nagarajan (2026-11-12 13:40)
 import { z } from 'zod';
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
@@ -200,6 +200,17 @@ export const GlobalConfigSchema = z.object({
   dashboardDisplay: z.boolean(),
 });
 export type GlobalConfig = z.infer<typeof GlobalConfigSchema>;
+
+/** Form schema: the site key becomes mandatory while login reCAPTCHA is switched on. */
+export const GlobalConfigFormSchema = GlobalConfigSchema.superRefine((values, ctx) => {
+  if (values.enableLoginCaptcha && values.captchaSecretKey.trim().length === 0) {
+    ctx.addIssue({
+      code: 'custom',
+      path: ['captchaSecretKey'],
+      message: 'Site key is required while login reCAPTCHA is enabled',
+    });
+  }
+});
 
 export const GLOBAL_CONFIG_DEFAULTS: GlobalConfig = {
   enableLoginCaptcha: false,

@@ -1,4 +1,4 @@
-// Created by Sekar Nagarajan (2026-11-12 12:40)
+// Modified by Sekar Nagarajan (2026-11-12 13:55)
 /** Route Restrictions tab — an empty list renders a blank state instead of nothing. */
 import {
   useServiceRestrictionsQuery,
@@ -6,7 +6,7 @@ import {
 } from "../../api/admin.queries";
 import type { ServiceRestriction } from "../../types/admin.types";
 import { settleMutation } from "../../utils/admin.utils";
-import { ServiceRestrictionsView } from "../ServiceRestrictionsView";
+import { RouteRestrictionsView } from "../RouteRestrictionsView";
 import { AdminSectionState } from "../shared/AdminSectionState";
 
 export function RouteRestrictionsSection() {
@@ -24,8 +24,10 @@ export function RouteRestrictionsSection() {
       emptyTitle="No route restrictions configured"
       emptyMessage="Service-loop lane restrictions will appear here once they exist on the server."
     >
-      <ServiceRestrictionsView
+      <RouteRestrictionsView
         restrictions={restrictions}
+        isSaving={update.isPending}
+        isFetching={query.isFetching}
         onSave={(items: ServiceRestriction[]) =>
           settleMutation(() => update.mutateAsync(items))
         }

@@ -1,4 +1,9 @@
-// Modified by Sekar Nagarajan (2026-11-12 12:40)
+// Modified by Sekar Nagarajan (2026-11-12 13:40)
+/**
+ * Global Configuration — security policy, captcha and platform feature flags as settings rows.
+ * RHF `values` keeps the form in sync with the server; the footer and the navigation guard
+ * react to `formState.isDirty`.
+ */
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AppButton,
@@ -6,196 +11,247 @@ import {
   FormInputNumber,
   FormSwitch,
 } from "@solverminds/shared-ui";
-import { Card, Col, Row, Typography } from "antd";
-import { useState } from "react";
+import { useToast } from "@solverminds/shared-ui/hooks";
+import { Col, Row, Tooltip } from "antd";
 import { useForm, type Resolver } from "react-hook-form";
 
 import { AppIcon, Icons } from "../../../components/icons";
-import { FIELD_ITEM_PROPS, optLabel, reqLabel } from "../../../components/shared/form-field-label";
+import {
+  FIELD_GUTTER,
+  FIELD_ITEM_PROPS,
+  reqLabel,
+} from "../../../components/shared/form-field-label";
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import {
-  GlobalConfigSchema,
+  GLOBAL_CONFIG_LIMITS,
+  GlobalConfigFormSchema,
   type GlobalConfig,
 } from "../types/admin.types";
-import { AdminLoadingCenter } from "./shared/admin-loading-center";
+import { AdminFormFooter } from "./shared/AdminFormFooter";
+import { AdminFormSection } from "./shared/AdminFormSection";
 import { AdminSectionPage } from "./shared/AdminSectionPage";
+import { AdminSettingRow } from "./shared/AdminSettingRow";
+import { AdminUnsavedGuard } from "./shared/AdminUnsavedGuard";
 
-const { Text } = Typography;
-
-const TOGGLE_ITEM_PROPS = {
-  layout: "horizontal" as const,
-  colon: false,
-  className: "admin-config-toggle",
-};
-
-const DEFAULT_GLOBAL_CONFIG: GlobalConfig = {
-  enableLoginCaptcha: true,
-  captchaSecretKey: "",
-  attemptLimit: 3,
-  accountLockDurationMinutes: 30,
-  enablePasswordValidation: true,
-  allowIncompletedRegToLogin: true,
-  v1DataEnableStatus: true,
-  dashboardDisplay: true,
-};
+/** Switch rows carry their own title; the Form.Item label is dropped. */
+const SWITCH_ITEM_PROPS = { ...FIELD_ITEM_PROPS, className: "admin-setting-row__item" };
+const NUMBER_ITEM_PROPS = { ...FIELD_ITEM_PROPS, className: "admin-setting-row__item" };
 
 interface GlobalConfigAdminViewProps {
-  config?: GlobalConfig;
-  onSave: (config: GlobalConfig) => void | Promise<void>;
+  config: GlobalConfig;
+  onSave: (config: GlobalConfig) => Promise<void>;
+  isSaving: boolean;
 }
 
 export function GlobalConfigAdminView({
   config,
   onSave,
+  isSaving,
 }: GlobalConfigAdminViewProps) {
-  const [isSaving, setIsSaving] = useState(false);
+  const toast = useToast();
 
   const form = useForm<GlobalConfig>({
-    resolver: zodResolver(GlobalConfigSchema) as Resolver<GlobalConfig>,
-    defaultValues: DEFAULT_GLOBAL_CONFIG,
+    resolver: zodResolver(GlobalConfigFormSchema) as Resolver<GlobalConfig>,
     values: config,
     mode: "onChange",
   });
+  const { isDirty, dirtyFields } = form.formState;
+  const captchaEnabled = form.watch("enableLoginCaptcha");
+  const siteKey = form.watch("captchaSecretKey");
 
-  const handleCancel = () => {
-    form.reset(config ?? DEFAULT_GLOBAL_CONFIG);
+  const save = async (values: GlobalConfig) => {
+    await onSave(values);
+    form.reset(values);
   };
 
-  const handleUpdate = form.handleSubmit(async (values) => {
-    setIsSaving(true);
-    try {
-      await onSave(values);
-    } finally {
-      setIsSaving(false);
-    }
-  });
+  const handleSave = form.handleSubmit(save);
+  const handleCancel = () => form.reset(config);
 
-  if (!config) {
-    return (
-      <AdminSectionPage>
-        <AdminLoadingCenter />
-      </AdminSectionPage>
-    );
-  }
+  const copySiteKey = async () => {
+    if (!siteKey) return;
+    try {
+      await navigator.clipboard.writeText(siteKey);
+      toast.success("Site key copied");
+    } catch {
+      toast.error("Couldn't copy the site key");
+    }
+  };
 
   return (
     <AdminSectionPage>
+      <AdminUnsavedGuard
+        isDirty={isDirty}
+        onSave={async () => {
+          const valid = await form.trigger();
+          if (!valid) return false;
+          await save(form.getValues());
+          return true;
+        }}
+        onDiscard={handleCancel}
+      />
+
       <div className="admin-config-form">
-        <Row gutter={[16, 16]} align="top">
+        <Row gutter={FIELD_GUTTER} align="top">
           <Col {...RESPONSIVE_COL.formHalf}>
-            <Card
-              className="admin-inner-card"
-              type="inner"
-              title={
-                <span className="admin-config-section__title">
-                  <AppIcon icon={Icons.shieldCheck} size={16} />
-                  <span>Security & Authentication Controls</span>
-                </span>
-              }
+            <AdminFormSection
+              icon={Icons.shieldCheck}
+              title="Security & Authentication"
+              hint="Login protection applied to every customer and agency sign-in."
             >
-              <div className="admin-config-section__body">
-                <FormSwitch
-                  control={form.control}
-                  name="enableLoginCaptcha"
-                  label={optLabel("Enable Login reCAPTCHA v2")}
-                  formItemProps={TOGGLE_ITEM_PROPS}
+              <AdminSettingRow
+                title="Login reCAPTCHA v2"
+                description="Show a reCAPTCHA challenge on the login page."
+                control={({ titleId, descriptionId }) => (
+                  <FormSwitch
+                    control={form.control}
+                    name="enableLoginCaptcha"
+                    aria-labelledby={titleId}
+                    aria-describedby={descriptionId}
+                    formItemProps={SWITCH_ITEM_PROPS}
+                  />
+                )}
+              />
+              {captchaEnabled ? (
+                <AdminSettingRow
+                  stacked
+                  title="reCAPTCHA Site Key"
+                  description="Public key rendered on the login page. The secret key stays on the server."
+                  control={
+                    <FormInput
+                      control={form.control}
+                      name="captchaSecretKey"
+                      label={reqLabel("Site Key")}
+                      size="large"
+                      autoComplete="off"
+                      className="admin-mono-input"
+                      prefix={<AppIcon icon={Icons.key} size={16} />}
+                      suffix={
+                        <Tooltip title="Copy Site Key">
+                          <AppButton
+                            type="text"
+                            size="small"
+                            aria-label="Copy site key"
+                            disabled={!siteKey}
+                            icon={<AppIcon icon={Icons.copy} size={14} />}
+                            onClick={() => void copySiteKey()}
+                          />
+                        </Tooltip>
+                      }
+                      formItemProps={FIELD_ITEM_PROPS}
+                    />
+                  }
                 />
-
-                <FormInput
-                  control={form.control}
-                  name="captchaSecretKey"
-                  label={optLabel("Captcha Secret Key")}
-                  size="large"
-                  type="password"
-                  autoComplete="off"
-                  prefix={<AppIcon icon={Icons.lock} size={16} />}
-                  formItemProps={FIELD_ITEM_PROPS}
-                />
-
-                <FormInputNumber
-                  control={form.control}
-                  name="attemptLimit"
-                  label={reqLabel("Max Invalid Password Attempts")}
-                  size="large"
-                  min={1}
-                  max={10}
-                  numericMode="positive-integer"
-                  className="admin-stack-full"
-                  formItemProps={FIELD_ITEM_PROPS}
-                />
-
-                <FormInputNumber
-                  control={form.control}
-                  name="accountLockDurationMinutes"
-                  label={reqLabel("Account Lock Duration (Minutes)")}
-                  size="large"
-                  min={5}
-                  max={1440}
-                  numericMode="positive-integer"
-                  className="admin-stack-full"
-                  formItemProps={FIELD_ITEM_PROPS}
-                />
-
-                <FormSwitch
-                  control={form.control}
-                  name="enablePasswordValidation"
-                  label={optLabel("Enable Password Complexity Rules")}
-                  formItemProps={TOGGLE_ITEM_PROPS}
-                />
-              </div>
-            </Card>
+              ) : null}
+              <AdminSettingRow
+                title="Max Invalid Password Attempts"
+                description={`Lock the account after this many failed attempts (${GLOBAL_CONFIG_LIMITS.attemptLimit.min}–${GLOBAL_CONFIG_LIMITS.attemptLimit.max}).`}
+                control={({ titleId, descriptionId }) => (
+                  <FormInputNumber
+                    control={form.control}
+                    name="attemptLimit"
+                    size="large"
+                    min={GLOBAL_CONFIG_LIMITS.attemptLimit.min}
+                    max={GLOBAL_CONFIG_LIMITS.attemptLimit.max}
+                    numericMode="positive-integer"
+                    addonAfter="attempts"
+                    aria-labelledby={titleId}
+                    aria-describedby={descriptionId}
+                    className="admin-setting-row__number"
+                    formItemProps={NUMBER_ITEM_PROPS}
+                  />
+                )}
+              />
+              <AdminSettingRow
+                title="Account Lock Duration"
+                description={`How long a locked account stays locked (${GLOBAL_CONFIG_LIMITS.accountLockDurationMinutes.min}–${GLOBAL_CONFIG_LIMITS.accountLockDurationMinutes.max} minutes).`}
+                control={({ titleId, descriptionId }) => (
+                  <FormInputNumber
+                    control={form.control}
+                    name="accountLockDurationMinutes"
+                    size="large"
+                    min={GLOBAL_CONFIG_LIMITS.accountLockDurationMinutes.min}
+                    max={GLOBAL_CONFIG_LIMITS.accountLockDurationMinutes.max}
+                    numericMode="positive-integer"
+                    addonAfter="minutes"
+                    aria-labelledby={titleId}
+                    aria-describedby={descriptionId}
+                    className="admin-setting-row__number"
+                    formItemProps={NUMBER_ITEM_PROPS}
+                  />
+                )}
+              />
+              <AdminSettingRow
+                title="Password Complexity Rules"
+                description="Require upper/lower case, a number and a symbol in new passwords."
+                control={({ titleId, descriptionId }) => (
+                  <FormSwitch
+                    control={form.control}
+                    name="enablePasswordValidation"
+                    aria-labelledby={titleId}
+                    aria-describedby={descriptionId}
+                    formItemProps={SWITCH_ITEM_PROPS}
+                  />
+                )}
+              />
+            </AdminFormSection>
           </Col>
 
           <Col {...RESPONSIVE_COL.formHalf}>
-            <Card
-              className="admin-inner-card"
-              type="inner"
-              title={
-                <span className="admin-config-section__title">
-                  <AppIcon icon={Icons.layoutGrid} size={16} />
-                  <span>Platform & Tenant Feature Flags</span>
-                </span>
-              }
+            <AdminFormSection
+              icon={Icons.layoutGrid}
+              title="Platform & Feature Flags"
+              hint="Portal-wide behaviour switches."
             >
-              <div className="admin-config-section__body">
-                <FormSwitch
-                  control={form.control}
-                  name="allowIncompletedRegToLogin"
-                  label={optLabel("Allow Incomplete Registration Login")}
-                  formItemProps={TOGGLE_ITEM_PROPS}
-                />
-
-                <FormSwitch
-                  control={form.control}
-                  name="v1DataEnableStatus"
-                  label={optLabel("V1 Data Synchronization Engine")}
-                  formItemProps={TOGGLE_ITEM_PROPS}
-                />
-
-                <FormSwitch
-                  control={form.control}
-                  name="dashboardDisplay"
-                  label={optLabel("Enable Executive Cargo Dashboard")}
-                  formItemProps={TOGGLE_ITEM_PROPS}
-                />
-              </div>
-            </Card>
+              <AdminSettingRow
+                title="Allow Incomplete Registration Login"
+                description="Let users whose registration is still pending approval sign in with limited access."
+                control={({ titleId, descriptionId }) => (
+                  <FormSwitch
+                    control={form.control}
+                    name="allowIncompletedRegToLogin"
+                    aria-labelledby={titleId}
+                    aria-describedby={descriptionId}
+                    formItemProps={SWITCH_ITEM_PROPS}
+                  />
+                )}
+              />
+              <AdminSettingRow
+                title="V1 Data Synchronization"
+                description="Keep syncing shipment data from the legacy V1 engine."
+                control={({ titleId, descriptionId }) => (
+                  <FormSwitch
+                    control={form.control}
+                    name="v1DataEnableStatus"
+                    aria-labelledby={titleId}
+                    aria-describedby={descriptionId}
+                    formItemProps={SWITCH_ITEM_PROPS}
+                  />
+                )}
+              />
+              <AdminSettingRow
+                title="Executive Cargo Dashboard"
+                description="Show the cargo dashboard as the landing page after login."
+                control={({ titleId, descriptionId }) => (
+                  <FormSwitch
+                    control={form.control}
+                    name="dashboardDisplay"
+                    aria-labelledby={titleId}
+                    aria-describedby={descriptionId}
+                    formItemProps={SWITCH_ITEM_PROPS}
+                  />
+                )}
+              />
+            </AdminFormSection>
           </Col>
         </Row>
 
-        <div className="admin-form-footer form-step-footer">
-          <AppButton onClick={handleCancel} disabled={isSaving}>
-            Cancel
-          </AppButton>
-          <AppButton
-            type="primary"
-            icon={<AppIcon icon={Icons.save} size={16} />}
-            loading={isSaving}
-            onClick={handleUpdate}
-          >
-            Update
-          </AppButton>
-        </div>
+        <AdminFormFooter
+          isDirty={isDirty}
+          isSaving={isSaving}
+          dirtyCount={Object.keys(dirtyFields).length}
+          onCancel={handleCancel}
+          onSave={() => void handleSave()}
+        />
       </div>
     </AdminSectionPage>
   );

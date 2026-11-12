@@ -1,7 +1,6 @@
-// Modified by Sekar Nagarajan (2026-08-26 16:57)
+// Modified by Sekar Nagarajan (2026-11-12 12:20)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton, FormInput } from "@solverminds/shared-ui";
-import { useToast } from "@solverminds/shared-ui/hooks";
 import { Alert, Col, Row, Typography } from "antd";
 import { useState } from "react";
 import { useForm, type Resolver } from "react-hook-form";
@@ -41,7 +40,6 @@ function reqLabel(label: string) {
 export function AdminPasswordResetView({
   onResetPassword,
 }: AdminPasswordResetViewProps) {
-  const toast = useToast();
   const [isSaving, setIsSaving] = useState(false);
   const [resultMsg, setResultMsg] = useState<string | null>(null);
 
@@ -62,10 +60,9 @@ export function AdminPasswordResetView({
     try {
       const res = await onResetPassword(values.username.trim());
       setResultMsg(res.message);
-      toast.success(res.message);
       form.reset({ username: "" });
     } catch {
-      toast.error("Failed to reset password");
+      /* surfaced by the mutation's onError toast */
     } finally {
       setIsSaving(false);
     }

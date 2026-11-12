@@ -1,15 +1,20 @@
-// Modified by Sekar Nagarajan (2026-08-27 12:56)
+// Modified by Sekar Nagarajan (2026-11-12 12:20)
 /**
  * Module Mapping — SpecialPrivilege.jsp parity with friendlier dual-list + drag-drop UX.
  */
 import { AppButton, AppModal } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
-import { Alert, Input, Spin, Tag, Tooltip, Typography } from "antd";
+import { Input, Spin, Tag, Tooltip, Typography } from "antd";
 import { useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
-import { useModuleMappingController } from "../hooks/use-admin-controller";
+import {
+  useAddModulePrivilegesMutation,
+  useModuleMappingCustomersQuery,
+  useModuleMappingQuery,
+  useRemoveModulePrivilegesMutation,
+} from "../api/admin.queries";
 import type { ModuleMappingCustomer } from "../types/admin.types";
 import { AdminPanelShell } from "./AdminPanelShell";
 import { ModuleMappingBoard } from "./module-mapping-board";
@@ -26,21 +31,18 @@ export function SpecialPrivilegesView() {
     [],
   );
   const [selectedAssignedIds, setSelectedAssignedIds] = useState<string[]>([]);
-  const [statusMessage, setStatusMessage] = useState<{
-    type: "add" | "remove";
-    text: string;
-  } | null>(null);
 
-  const {
-    menus,
-    isLoadingMenus,
-    customers,
-    isLoadingCustomers,
-    addPrivileges,
-    removePrivileges,
-    isAdding,
-    isRemoving,
-  } = useModuleMappingController(selectedCustomer);
+  const customersQuery = useModuleMappingCustomersQuery();
+  const mappingQuery = useModuleMappingQuery(selectedCustomer);
+  const addMutation = useAddModulePrivilegesMutation(selectedCustomer);
+  const removeMutation = useRemoveModulePrivilegesMutation(selectedCustomer);
+
+  const menus = mappingQuery.data ?? [];
+  const isLoadingMenus = mappingQuery.isLoading;
+  const customers = customersQuery.data ?? [];
+  const isLoadingCustomers = customersQuery.isLoading;
+  const isAdding = addMutation.isPending;
+  const isRemoving = removeMutation.isPending;
 
   const availableMenus = menus.filter((m) => m.category === "P");
   const defaultMenus = menus.filter((m) => m.category === "D");
@@ -61,7 +63,6 @@ export function SpecialPrivilegesView() {
   const handleSelectCustomer = (customer: ModuleMappingCustomer) => {
     setSelectedCustomer(customer);
     clearSelection();
-    setStatusMessage(null);
     setSearchOpen(false);
     setSearchTerm("");
   };
@@ -69,7 +70,6 @@ export function SpecialPrivilegesView() {
   const handleReset = () => {
     setSelectedCustomer(null);
     clearSelection();
-    setStatusMessage(null);
   };
 
   const toggleId = (
@@ -92,16 +92,10 @@ export function SpecialPrivilegesView() {
       return;
     }
     try {
-      await addPrivileges(menuIds);
+      await addMutation.mutateAsync(menuIds);
       clearSelection();
-
-      toast.success(
-        menuIds.length === 1
-          ? "Module assigned to customer"
-          : `${menuIds.length} modules assigned`,
-      );
     } catch {
-      toast.error("Failed to add privileges");
+      /* surfaced by the mutation's onError toast */
     }
   };
 
@@ -115,16 +109,10 @@ export function SpecialPrivilegesView() {
       return;
     }
     try {
-      await removePrivileges(menuIds);
+      await removeMutation.mutateAsync(menuIds);
       clearSelection();
-
-      toast.success(
-        menuIds.length === 1
-          ? "Module removed from customer"
-          : `${menuIds.length} modules removed`,
-      );
     } catch {
-      toast.error("Failed to remove privileges");
+      /* surfaced by the mutation's onError toast */
     }
   };
 
@@ -135,18 +123,6 @@ export function SpecialPrivilegesView() {
       subtitle="Assign privileged modules to a customer — drag between lists, or select and transfer."
     >
       <div className="admin-mapping-form">
-        {statusMessage ? (
-          <Alert
-            type="success"
-            showIcon
-            closable
-            className="admin-mapping-alert"
-            message="Success!"
-            description={statusMessage.text}
-            onClose={() => setStatusMessage(null)}
-          />
-        ) : null}
-
         <div className="admin-mapping-customer">
           <label className="form-field-label" htmlFor="mapping-customer">
             Select Customer <Text type="danger">*</Text>

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 16:57)
+// Modified by Sekar Nagarajan (2026-11-12 12:20)
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AppButton,
@@ -6,7 +6,6 @@ import {
   FormInput,
   FormInputNumber,
 } from "@solverminds/shared-ui";
-import { useToast } from "@solverminds/shared-ui/hooks";
 import { Image, Table, Tag, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { useState } from "react";
@@ -66,7 +65,6 @@ export function BannerManagerView({
   banners,
   onCreate,
 }: BannerManagerViewProps) {
-  const toast = useToast();
   const [draft, setDraft] = useState<BannerConfig[]>(banners);
   const [appliedSignature, setAppliedSignature] = useState(() =>
     bannersSignature(banners),
@@ -103,10 +101,9 @@ export function BannerManagerView({
         sortOrder: values.sortOrder,
         isActive: true,
       });
-      toast.success("Banner uploaded successfully");
       closeDrawer();
     } catch {
-      toast.error("Failed to create banner");
+      /* surfaced by the mutation's onError toast */
     } finally {
       setIsSaving(false);
     }

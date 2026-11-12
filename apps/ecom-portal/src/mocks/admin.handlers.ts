@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-10-16 23:35)
+// Modified by Sekar Nagarajan (2026-11-12 12:20)
 import { http, HttpResponse } from 'msw';
 import type {
   BannerConfig,
@@ -60,6 +60,10 @@ import {
 
 /** GlobalConfig fields with no fixture column (attempt limit, lock duration) are kept per session. */
 let globalConfigOverrides: Partial<GlobalConfig> = {};
+
+/** CustomerAdvisory severity / effectiveTo have no fixture column either — posted values are kept per session by id. */
+let advisoryOverrides: Record<string, Pick<CustomerAdvisory, 'severity' | 'effectiveTo'>> = {};
+const withAdvisoryOverrides = (advisory: CustomerAdvisory): CustomerAdvisory => ({ ...advisory, ...advisoryOverrides[advisory.id] });
 
 const notFound = (message: string) => HttpResponse.json({ error: { code: 'NOT_FOUND', message } }, { status: 404 });
 
@@ -155,10 +159,12 @@ export const adminHandlers = [
   }),
 
   // 9. Customer Advisories ← EcomCustomerAdvisory
-  http.get('/api/v1/admin/customer-advisories', () => HttpResponse.json(advisories())),
+  http.get('/api/v1/admin/customer-advisories', () => HttpResponse.json(advisories().map(withAdvisoryOverrides))),
   http.post('/api/v1/admin/customer-advisories', async ({ request }) => {
     const body = (await request.json()) as Omit<CustomerAdvisory, 'id'>;
-    return HttpResponse.json({ success: true, data: { ...mapAdvisory(advisoryRow(body)), severity: body.severity, effectiveTo: body.effectiveTo } });
+    const created = mapAdvisory(advisoryRow(body));
+    advisoryOverrides[created.id] = { severity: body.severity, effectiveTo: body.effectiveTo ?? '' };
+    return HttpResponse.json({ success: true, data: withAdvisoryOverrides(created) });
   }),
 
   // 10. Cutoff Configuration (CutoffConfiguration.jsp parity) ← ecom_cutoffconfig

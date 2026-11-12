@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 16:53)
+// Modified by Sekar Nagarajan (2026-11-12 12:20)
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AppButton,
@@ -6,6 +6,7 @@ import {
   FormInput,
   FormTextarea,
 } from "@solverminds/shared-ui";
+import { sanitizeHtml } from "@solverminds/shared-ui/utils";
 import { Col, Row, Space, Tag, Tooltip, Typography } from "antd";
 import { useState } from "react";
 import { useForm, useWatch, type Resolver } from "react-hook-form";
@@ -240,7 +241,7 @@ export function EmailTemplateEditorView({
                 </Text>
                 <div
                   className="admin-preview-box__content custom-scroll"
-                  dangerouslySetInnerHTML={{ __html: bodyHtml }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(bodyHtml) }}
                 />
               </div>
             </div>

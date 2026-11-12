@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-27 15:00)
+// Modified by Sekar Nagarajan (2026-11-12 12:20)
 /**
  * Cutoff Configuration — parity with CutoffConfiguration.jsp / CutoffConfigurationView.jsp.
  */
@@ -13,8 +13,7 @@ import {
   DataView,
   type DataViewColumn,
 } from "@solverminds/shared-ui/data-view";
-import { useConfirm, useToast } from "@solverminds/shared-ui/hooks";
-import { useQuery } from "@tanstack/react-query";
+import { useConfirm } from "@solverminds/shared-ui/hooks";
 import { Tag, Typography } from "antd";
 import { useState } from "react";
 import { useForm, type Resolver } from "react-hook-form";
@@ -27,8 +26,10 @@ import {
 } from "../../../components/shared/list-action-button";
 import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
-import { adminApi } from "../api/admin.api";
-import { ADMIN_KEYS } from "../hooks/use-admin-controller";
+import {
+  useCutoffPortsQuery,
+  useCutoffTerminalsQuery,
+} from "../api/admin.queries";
 import {
   CutoffConfigFormSchema,
   type CutoffConfig,
@@ -86,7 +87,6 @@ export function CutoffConfigView({
   onUpdate,
   onDelete,
 }: CutoffConfigViewProps) {
-  const toast = useToast();
   const confirm = useConfirm();
   const { profileHandlers } = useLocalGridProfiles("admin-cutoff");
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -103,18 +103,8 @@ export function CutoffConfigView({
   const portCode = form.watch("portCode");
   const isEditMode = Boolean(editingId);
 
-  const portsQuery = useQuery({
-    queryKey: ADMIN_KEYS.cutoffPorts,
-    queryFn: adminApi.getCutoffPorts,
-    staleTime: 1000 * 60 * 10, // 10 minutes
-  });
-
-  const terminalsQuery = useQuery({
-    queryKey: ADMIN_KEYS.cutoffTerminals(portCode || ""),
-    queryFn: () => adminApi.getCutoffTerminals(portCode),
-    enabled: Boolean(portCode),
-    staleTime: 1000 * 60 * 5, // 5 minutes
-  });
+  const portsQuery = useCutoffPortsQuery();
+  const terminalsQuery = useCutoffTerminalsQuery(portCode || "");
 
   const portOptions = (portsQuery.data ?? []).map((p) => ({
     value: p.portCode,
@@ -157,13 +147,8 @@ export function CutoffConfigView({
           if (editingId === row.id) {
             resetForm();
           }
-          toast.success("Cutoff configuration deleted");
-        } catch (error) {
-          toast.error(
-            error instanceof Error
-              ? error.message
-              : "Failed to delete cutoff configuration",
-          );
+        } catch {
+          /* surfaced by the mutation's onError toast */
         }
       },
     });
@@ -184,7 +169,6 @@ export function CutoffConfigView({
             excludeWeekends: values.excludeWeekends,
           },
         });
-        toast.success("Cutoff configuration updated");
       } else {
         const port = (portsQuery.data ?? []).find(
           (p) => p.portCode === values.portCode,
@@ -197,15 +181,10 @@ export function CutoffConfigView({
           portName: port?.portName ?? values.portCode,
           terminalName: terminal?.terminalName ?? values.terminalCode,
         });
-        toast.success("Cutoff configuration saved");
       }
       resetForm();
-    } catch (error) {
-      toast.error(
-        error instanceof Error
-          ? error.message
-          : "Failed to save cutoff configuration",
-      );
+    } catch {
+      /* surfaced by the mutation's onError toast */
     } finally {
       setIsSaving(false);
     }

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-11 18:25)
+// Modified by Sekar Nagarajan (2026-11-12 12:20)
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AppButton,
@@ -7,7 +7,6 @@ import {
   FormSelect,
   FormTextarea,
 } from "@solverminds/shared-ui";
-import { useToast } from "@solverminds/shared-ui/hooks";
 import { Table, Tag, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { useState } from "react";
@@ -77,7 +76,6 @@ export function CustomerAdvisoryView({
   advisories,
   onCreate,
 }: CustomerAdvisoryViewProps) {
-  const toast = useToast();
   const [draft, setDraft] = useState<CustomerAdvisory[]>(advisories);
   const [appliedSignature, setAppliedSignature] = useState(() =>
     advisoriesSignature(advisories),
@@ -116,10 +114,9 @@ export function CustomerAdvisoryView({
         effectiveTo: "2026-12-31",
         isActive: true,
       });
-      toast.success("Operational advisory published successfully");
       closeDrawer();
     } catch {
-      toast.error("Failed to publish advisory");
+      /* surfaced by the mutation's onError toast */
     } finally {
       setIsSaving(false);
     }

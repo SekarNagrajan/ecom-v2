@@ -1,4 +1,4 @@
-// Created by Sekar Nagarajan (2026-08-27 12:56)
+// Modified by Sekar Nagarajan (2026-11-12 12:20)
 /**
  * Module Mapping board — dual lists with drag-and-drop (Available ↔ Assigned).
  * Default (D) menus stay locked on the assigned side.
@@ -6,6 +6,7 @@
 import {
   DndContext,
   DragOverlay,
+  KeyboardSensor,
   PointerSensor,
   useDraggable,
   useDroppable,
@@ -311,6 +312,7 @@ export function ModuleMappingBoard({
     useSensor(PointerSensor, {
       activationConstraint: { distance: 8 }, // avoid fighting checkbox clicks
     }),
+    useSensor(KeyboardSensor), // Space / Enter picks up, arrows move, Space drops
   );
 
   const busy = disabled || isAdding || isRemoving;

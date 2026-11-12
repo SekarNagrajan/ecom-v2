@@ -1,4 +1,4 @@
-// Created by Sekar Nagarajan (2026-10-16 23:40)
+// Modified by Sekar Nagarajan (2026-11-12 12:20)
 // @vitest-environment jsdom
 /**
  * Route-level smoke tests for the fixture-backed admin / auth / registration / user-creation / hotline
@@ -157,7 +157,11 @@ describe('admin modules', () => {
     expect(db.loginImages.at(-1)?.imagename).toBe('Promo');
 
     const adv = await post('/api/v1/admin/customer-advisories', { title: 'Storm', message: 'Delay', severity: 'WARNING', effectiveFrom: '2026-10-16', effectiveTo: '2026-10-20', isActive: true });
-    expect((adv.body.data as { severity: string }).severity).toBe('WARNING');
+    const advData = adv.body.data as { id: string; severity: string; effectiveTo: string };
+    expect(advData.severity).toBe('WARNING');
+    // Severity and end date have no fixture column; the handler must still echo them on the next GET.
+    const advList = (await json('/api/v1/admin/customer-advisories')).body as unknown as { id: string; severity: string; effectiveTo: string }[];
+    expect(advList.find(a => a.id === advData.id)).toMatchObject({ severity: 'WARNING', effectiveTo: '2026-10-20' });
 
     const cfg = (await json('/api/v1/admin/global-config')).body as unknown as { enableLoginCaptcha: boolean; attemptLimit: number };
     expect(typeof cfg.enableLoginCaptcha).toBe('boolean');
@@ -165,7 +169,9 @@ describe('admin modules', () => {
     expect((saved.body.data as { enableLoginCaptcha: boolean; attemptLimit: number })).toMatchObject({ enableLoginCaptcha: !cfg.enableLoginCaptcha, attemptLimit: 7 });
 
     expect((await post('/api/v1/admin/password-reset', { username: String(db.users[0].loginname) })).body.success).toBe(true);
-    expect((await post('/api/v1/admin/password-reset', { username: 'ghost' })).status).toBe(404);
+    const ghost = await post('/api/v1/admin/password-reset', { username: 'ghost' });
+    expect(ghost.status).toBe(404);
+    expect(ghost.body).toMatchObject({ success: false, message: 'No user found for ghost.' });
   });
 });
 

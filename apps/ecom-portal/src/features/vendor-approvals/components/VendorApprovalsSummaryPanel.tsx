@@ -1,7 +1,8 @@
+// Modified by Sekar Nagarajan (2026-11-13 02:50)
+import { AppChart, type ECOption } from "@solverminds/shared-ui/chart";
 import { theme } from "antd";
-import * as echarts from "echarts";
 import type { LucideIcon } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useMemo } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import type { ApprovalStatus } from "../types/vendor-approvals.types";
@@ -34,26 +35,10 @@ export function VendorApprovalsSummaryPanel({
   onFilterChange,
 }: VendorApprovalsSummaryPanelProps) {
   const { token } = theme.useToken();
-  const chartHostRef = useRef<HTMLDivElement>(null);
-  const chartRef = useRef<echarts.ECharts | null>(null);
 
-  useEffect(() => {
-    if (!chartHostRef.current) return;
-    chartRef.current = echarts.init(chartHostRef.current, undefined, {
-      renderer: "svg",
-    });
-    const onResize = () => chartRef.current?.resize();
-    window.addEventListener("resize", onResize);
-    return () => {
-      window.removeEventListener("resize", onResize);
-      chartRef.current?.dispose();
-      chartRef.current = null;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!chartRef.current) return;
-    chartRef.current.setOption({
+  // Imperative-library exception: ECharts re-applies the option on identity change.
+  const option = useMemo<ECOption>(
+    () => ({
       animationDuration: 280,
       series: [
         {
@@ -91,16 +76,9 @@ export function VendorApprovalsSummaryPanel({
                 ].filter((d) => d.value > 0),
         },
       ],
-    });
-  }, [
-    approvedCount,
-    pendingCount,
-    rejectedCount,
-    token.colorError,
-    token.colorFillSecondary,
-    token.colorSuccess,
-    token.colorWarning,
-  ]);
+    }),
+    [approvedCount, pendingCount, rejectedCount, token],
+  );
 
   const cards: SummaryCardConfig[] = [
     {
@@ -137,7 +115,14 @@ export function VendorApprovalsSummaryPanel({
     <section className="va-summary-panel" aria-label="Approval summary">
       <div className="va-summary-panel__inner">
         <div className="va-summary-chart" aria-hidden={totalCount === 0}>
-          <div ref={chartHostRef} className="va-summary-chart__canvas" />
+          <AppChart
+            option={option}
+            renderer="svg"
+            height="auto"
+            className="va-summary-chart__canvas"
+            accessible={false}
+            ariaLabel="Approval status breakdown"
+          />
           <div className="va-summary-chart__center">
             <span className="va-summary-chart__total">{totalCount}</span>
             <span className="va-summary-chart__total-label">Total</span>

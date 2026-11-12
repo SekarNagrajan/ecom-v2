@@ -1,8 +1,8 @@
-// Modified by Sekar Nagarajan (2026-10-16 23:50)
+// Modified by Sekar Nagarajan (2026-11-13 02:50)
 import { AppButton } from "@solverminds/shared-ui";
+import { AppChart, type ECOption } from "@solverminds/shared-ui/chart";
 import { Card, Progress, Segmented, Tooltip, Typography, theme } from "antd";
-import * as echarts from "echarts";
-import { useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useChartTokens } from "../../theme/utils/use-portal-chart-tokens";
@@ -11,10 +11,7 @@ import type {
   IntelligenceBreakdowns,
   TopConsignee,
 } from "../api/dashboard.api";
-import {
-  resolveDashboardTone,
-  type DashboardTone,
-} from "../utils/dashboard-tone";
+import { resolveDashboardTone, type DashboardTone } from "../utils/dashboard-tone";
 
 const { Text } = Typography;
 
@@ -27,12 +24,10 @@ function DonutChart({ data, totalFeus }: DonutChartProps) {
   const { t } = useTranslation(["dashboard", "common", "modules"]);
   const chartTokens = useChartTokens();
   const { token } = theme.useToken();
-  const ref = useRef<HTMLDivElement>(null);
 
-  useLayoutEffect(() => {
-    if (!ref.current) return;
-    const chart = echarts.init(ref.current, undefined, { renderer: "svg" });
-    chart.setOption({
+  // Imperative-library exception: ECharts re-applies the option on identity change.
+  const option = useMemo<ECOption>(
+    () => ({
       backgroundColor: "transparent",
       tooltip: {
         trigger: "item",
@@ -94,16 +89,20 @@ function DonutChart({ data, totalFeus }: DonutChartProps) {
           })),
         },
       ],
-    });
-    const observer = new ResizeObserver(() => chart.resize());
-    observer.observe(ref.current);
-    return () => {
-      observer.disconnect();
-      chart.dispose();
-    };
-  }, [data, totalFeus, chartTokens, token, t]);
+    }),
+    [data, totalFeus, chartTokens, token, t],
+  );
 
-  return <div ref={ref} className="dashboard-donut" />;
+  return (
+    <AppChart
+      option={option}
+      renderer="svg"
+      notMerge
+      height="auto"
+      className="dashboard-donut"
+      ariaLabel={t("intelligence.title", { defaultValue: "Shipment breakdown" })}
+    />
+  );
 }
 
 interface BreakdownTableProps {
@@ -135,20 +134,12 @@ function BreakdownTable({ data, dimensionLabel }: BreakdownTableProps) {
         </thead>
         <tbody>
           {data.map((row, idx) => {
-            const stroke = resolveDashboardTone(
-              token,
-              row.tone as DashboardTone,
-            );
+            const stroke = resolveDashboardTone(token, row.tone as DashboardTone);
             return (
-              <tr
-                key={row.name}
-                className={idx % 2 === 1 ? "is-alt" : undefined}
-              >
+              <tr key={row.name} className={idx % 2 === 1 ? "is-alt" : undefined}>
                 <td>
                   <span className="dashboard-name-cell">
-                    <span
-                      className={`dashboard-dot dashboard-dot--${row.tone}`}
-                    />
+                    <span className={`dashboard-dot dashboard-dot--${row.tone}`} />
                     <Tooltip title={row.name}>
                       <Text ellipsis className="dashboard-name-cell__text">
                         {row.name}
@@ -239,8 +230,7 @@ export function InteractiveShipmentIntelligenceCard({
     [t, breakdowns],
   );
 
-  const current =
-    dimensions.find((d) => d.key === activeKey) ?? dimensions[0];
+  const current = dimensions.find((d) => d.key === activeKey) ?? dimensions[0];
   const previewData = current.data.slice(0, INTELLIGENCE_PREVIEW);
   const totalFeus = current.data.reduce((sum, row) => sum + row.feus, 0);
   const previewTotalFeus = previewData.reduce((sum, row) => sum + row.feus, 0);
@@ -291,10 +281,7 @@ export function InteractiveShipmentIntelligenceCard({
           <div className="dashboard-intelligence-chart">
             <DonutChart data={previewData} totalFeus={previewTotalFeus} />
           </div>
-          <BreakdownTable
-            data={previewData}
-            dimensionLabel={current.column}
-          />
+          <BreakdownTable data={previewData} dimensionLabel={current.column} />
         </div>
       </div>
     </Card>
@@ -306,10 +293,7 @@ interface TopConsigneesProps {
   onViewAll?: () => void;
 }
 
-export function TopConsigneesCard({
-  consignees,
-  onViewAll,
-}: TopConsigneesProps) {
+export function TopConsigneesCard({ consignees, onViewAll }: TopConsigneesProps) {
   const { t } = useTranslation(["dashboard", "common", "modules"]);
   const { token } = theme.useToken();
   const previewConsignees = consignees.slice(0, CONSIGNEES_PREVIEW);
@@ -351,15 +335,9 @@ export function TopConsigneesCard({
           </thead>
           <tbody>
             {previewConsignees.map((c, idx) => {
-              const stroke = resolveDashboardTone(
-                token,
-                c.tone as DashboardTone,
-              );
+              const stroke = resolveDashboardTone(token, c.tone as DashboardTone);
               return (
-                <tr
-                  key={c.name}
-                  className={idx % 2 === 1 ? "is-alt" : undefined}
-                >
+                <tr key={c.name} className={idx % 2 === 1 ? "is-alt" : undefined}>
                   <td className="is-center">
                     <span className="dashboard-rank-badge">{idx + 1}</span>
                   </td>
@@ -413,16 +391,10 @@ export function ShipmentIntelligenceSection({
   return (
     <div className="dashboard-equal-row dashboard-intelligence-row">
       <div className="dashboard-intelligence-row__primary">
-        <InteractiveShipmentIntelligenceCard
-          breakdowns={breakdowns}
-          onViewReport={onViewReport}
-        />
+        <InteractiveShipmentIntelligenceCard breakdowns={breakdowns} onViewReport={onViewReport} />
       </div>
       <div className="dashboard-intelligence-row__secondary">
-        <TopConsigneesCard
-          consignees={consignees}
-          onViewAll={onViewAllConsignees}
-        />
+        <TopConsigneesCard consignees={consignees} onViewAll={onViewAllConsignees} />
       </div>
     </div>
   );

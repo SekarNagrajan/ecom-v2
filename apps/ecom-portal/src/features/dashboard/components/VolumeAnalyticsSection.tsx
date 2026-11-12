@@ -1,7 +1,12 @@
-// Modified by Sekar Nagarajan (2026-10-26 15:35)
+// Modified by Sekar Nagarajan (2026-11-13 02:50)
+import {
+  AppChart,
+  AppSparkline,
+  createVerticalGradient,
+  type ECOption,
+} from "@solverminds/shared-ui/chart";
 import { Card, Segmented, Select, Tooltip, Typography } from "antd";
-import * as echarts from "echarts";
-import { useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
@@ -23,7 +28,6 @@ import {
 const { Text, Title } = Typography;
 
 /** Sidebar margin transition is 0.25s — remeasure after it settles. */
-const SIDEBAR_LAYOUT_SETTLE_MS = 280;
 
 const VOLUME_KPI_LABEL_KEYS: Record<string, string> = {
   "This Week": "volume.kpiLabels.thisWeek",
@@ -38,55 +42,7 @@ interface SparklineProps {
 }
 
 function Sparkline({ data, color }: SparklineProps) {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useLayoutEffect(() => {
-    if (!ref.current) return;
-    const chart = echarts.init(ref.current, undefined, { renderer: "canvas" });
-    chart.setOption({
-      grid: { top: 2, right: 0, bottom: 2, left: 0 },
-      xAxis: {
-        type: "category",
-        boundaryGap: false,
-        show: false,
-        data: data.map((_, i) => i),
-      },
-      yAxis: { type: "value", show: false },
-      series: [
-        {
-          type: "line",
-          data,
-          smooth: true,
-          symbol: "none",
-          lineStyle: { color, width: 2 },
-          areaStyle: {
-            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-              { offset: 0, color: `${color}35` },
-              { offset: 1, color: `${color}00` },
-            ]),
-          },
-        },
-      ],
-    });
-    let rafId: number | null = null;
-    const observer = new ResizeObserver(() => {
-      if (rafId !== null) return;
-      rafId = requestAnimationFrame(() => {
-        rafId = null;
-        chart.resize();
-      });
-    });
-    observer.observe(ref.current);
-    return () => {
-      if (rafId !== null) {
-        cancelAnimationFrame(rafId);
-      }
-      observer.disconnect();
-      chart.dispose();
-    };
-  }, [data, color]);
-
-  return <div ref={ref} className="dashboard-sparkline" />;
+  return <AppSparkline data={data} color={color} height={32} className="dashboard-sparkline" />;
 }
 
 interface VolumeTrendChartProps {
@@ -96,21 +52,9 @@ interface VolumeTrendChartProps {
   onPointClick: (point: VolumeTrendPoint) => void;
 }
 
-function VolumeTrendChart({
-  data,
-  period,
-  onPeriodChange,
-  onPointClick,
-}: VolumeTrendChartProps) {
+function VolumeTrendChart({ data, period, onPeriodChange, onPointClick }: VolumeTrendChartProps) {
   const { t } = useTranslation(["dashboard", "common", "modules"]);
   const chartTokens = useChartTokens();
-  const containerRef = useRef<HTMLDivElement>(null);
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const chartRef = useRef<echarts.ECharts | null>(null);
-  const dataRef = useRef(data);
-  const onPointClickRef = useRef(onPointClick);
-  dataRef.current = data;
-  onPointClickRef.current = onPointClick;
 
   const periodOptions = useMemo(
     () =>
@@ -121,185 +65,101 @@ function VolumeTrendChart({
     [t],
   );
 
-  // Init once; keep instance alive across sidebar toggles / parent re-renders.
-  useLayoutEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    const chart = echarts.init(container, undefined, { renderer: "canvas" });
-    chartRef.current = chart;
-
-    chart.on("click", (params) => {
-      if (params.componentType !== "series") return;
-      const index =
-        typeof params.dataIndex === "number" ? params.dataIndex : -1;
-      const point = dataRef.current[index];
-      if (!point || point.feus <= 0) return;
-      onPointClickRef.current(point);
-    });
-
-    let rafId: number | null = null;
-    let settleTimer: ReturnType<typeof setTimeout> | null = null;
-
-    const resizeChart = () => {
-      if (!chartRef.current || chartRef.current.isDisposed()) return;
-      chartRef.current.resize();
-    };
-
-    const scheduleResize = () => {
-      if (rafId !== null) {
-        cancelAnimationFrame(rafId);
-      }
-      rafId = requestAnimationFrame(() => {
-        rafId = null;
-        resizeChart();
-        // Sidebar uses a 0.25s margin transition — ResizeObserver can fire
-        // mid-animation with a stale width; remeasure after it settles.
-        if (settleTimer !== null) {
-          clearTimeout(settleTimer);
-        }
-        settleTimer = setTimeout(() => {
-          settleTimer = null;
-          resizeChart();
-        }, SIDEBAR_LAYOUT_SETTLE_MS);
-      });
-    };
-
-    const observer = new ResizeObserver(scheduleResize);
-    observer.observe(container);
-    if (wrapRef.current) {
-      observer.observe(wrapRef.current);
-    }
-
-    const layoutMain = container.closest(".app-layout-main");
-    if (layoutMain) {
-      observer.observe(layoutMain);
-      layoutMain.addEventListener("transitionend", scheduleResize);
-    }
-
-    const layoutRoot = container.closest(".app-layout-root");
-    let mutationObserver: MutationObserver | null = null;
-    if (layoutRoot) {
-      mutationObserver = new MutationObserver(scheduleResize);
-      mutationObserver.observe(layoutRoot, {
-        attributes: true,
-        attributeFilter: ["data-sidebar-collapsed"],
-      });
-    }
-
-    resizeChart();
-
-    return () => {
-      if (rafId !== null) {
-        cancelAnimationFrame(rafId);
-      }
-      if (settleTimer !== null) {
-        clearTimeout(settleTimer);
-      }
-      observer.disconnect();
-      mutationObserver?.disconnect();
-      layoutMain?.removeEventListener("transitionend", scheduleResize);
-      chart.dispose();
-      chartRef.current = null;
-    };
-  }, []);
-
-  // Apply / refresh option without disposing the chart instance.
-  useLayoutEffect(() => {
-    const chart = chartRef.current;
-    if (!chart || chart.isDisposed()) return;
-
-    chart.setOption(
-      {
-        backgroundColor: "transparent",
-        tooltip: {
-          trigger: "axis",
-          backgroundColor: chartTokens.colorBgElevated,
-          borderColor: chartTokens.colorBorderSecondary,
-          textStyle: { color: chartTokens.colorText },
-          axisPointer: {
-            type: "line",
-            lineStyle: { color: chartTokens.colorPrimary, type: "dashed" },
-          },
-          formatter: (params: unknown) => {
-            const point = Array.isArray(params) ? params[0] : params;
-            const p = point as { axisValue?: string; value?: number };
-            return t("volume.tooltipTeus", {
-              label: p.axisValue ?? "",
-              value: p.value ?? "",
-            });
+  // Imperative-library exception: ECharts re-applies the option on identity change.
+  const option = useMemo<ECOption>(
+    () => ({
+      backgroundColor: "transparent",
+      tooltip: {
+        trigger: "axis",
+        backgroundColor: chartTokens.colorBgElevated,
+        borderColor: chartTokens.colorBorderSecondary,
+        textStyle: { color: chartTokens.colorText },
+        axisPointer: {
+          type: "line",
+          lineStyle: { color: chartTokens.colorPrimary, type: "dashed" },
+        },
+        formatter: (params: unknown) => {
+          const point = Array.isArray(params) ? params[0] : params;
+          const p = point as { axisValue?: string; value?: number };
+          return t("volume.tooltipTeus", {
+            label: p.axisValue ?? "",
+            value: p.value ?? "",
+          });
+        },
+      },
+      grid: { top: 12, right: 12, bottom: 8, left: 8, containLabel: true },
+      xAxis: {
+        type: "category",
+        boundaryGap: false,
+        data: data.map((d) => d.month),
+        axisLine: { lineStyle: { color: chartTokens.colorBorderSecondary } },
+        axisTick: { show: false },
+        axisLabel: {
+          fontSize: 10,
+          color: chartTokens.colorTextSecondary,
+          hideOverlap: true,
+        },
+      },
+      yAxis: {
+        type: "value",
+        min: "dataMin",
+        axisLabel: {
+          fontSize: 10,
+          color: chartTokens.colorTextSecondary,
+          formatter: (v: number) => (v >= 1000 ? `${(v / 1000).toFixed(1)}K` : String(v)),
+        },
+        splitLine: {
+          lineStyle: {
+            color: chartTokens.colorBorderSecondary,
+            type: "dashed",
           },
         },
-        grid: { top: 12, right: 12, bottom: 8, left: 8, containLabel: true },
-        xAxis: {
-          type: "category",
-          boundaryGap: false,
-          data: data.map((d) => d.month),
-          axisLine: { lineStyle: { color: chartTokens.colorBorderSecondary } },
-          axisTick: { show: false },
-          axisLabel: {
-            fontSize: 10,
-            color: chartTokens.colorTextSecondary,
-            hideOverlap: true,
+        axisLine: { show: false },
+        axisTick: { show: false },
+      },
+      series: [
+        {
+          type: "line",
+          data: data.map((d) => ({
+            value: d.feus,
+            // Clickable points with TEUs get a larger hit target.
+            symbolSize: d.feus > 0 ? 8 : 4,
+          })),
+          smooth: true,
+          symbol: "circle",
+          cursor: "pointer",
+          itemStyle: {
+            color: chartTokens.colorPrimary,
+            borderColor: chartTokens.colorBgContainer,
+            borderWidth: 2,
           },
-        },
-        yAxis: {
-          type: "value",
-          min: "dataMin",
-          axisLabel: {
-            fontSize: 10,
-            color: chartTokens.colorTextSecondary,
-            formatter: (v: number) =>
-              v >= 1000 ? `${(v / 1000).toFixed(1)}K` : String(v),
-          },
-          splitLine: {
-            lineStyle: {
-              color: chartTokens.colorBorderSecondary,
-              type: "dashed",
-            },
-          },
-          axisLine: { show: false },
-          axisTick: { show: false },
-        },
-        series: [
-          {
-            type: "line",
-            data: data.map((d) => ({
-              value: d.feus,
-              // Clickable points with TEUs get a larger hit target.
-              symbolSize: d.feus > 0 ? 8 : 4,
-            })),
-            smooth: true,
-            symbol: "circle",
-            cursor: "pointer",
+          emphasis: {
+            scale: true,
+            scaleSize: 4,
             itemStyle: {
               color: chartTokens.colorPrimary,
-              borderColor: chartTokens.colorBgContainer,
-              borderWidth: 2,
-            },
-            emphasis: {
-              scale: true,
-              scaleSize: 4,
-              itemStyle: {
-                color: chartTokens.colorPrimary,
-                shadowBlur: 6,
-                shadowColor: `${chartTokens.colorPrimary}55`,
-              },
-            },
-            lineStyle: { color: chartTokens.colorPrimary, width: 2.5 },
-            areaStyle: {
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                { offset: 0, color: `${chartTokens.colorPrimary}40` },
-                { offset: 1, color: `${chartTokens.colorPrimary}00` },
-              ]),
+              shadowBlur: 6,
+              shadowColor: `${chartTokens.colorPrimary}55`,
             },
           },
-        ],
-      },
-      { notMerge: true },
-    );
-    chart.resize();
-  }, [data, chartTokens, t]);
+          lineStyle: { color: chartTokens.colorPrimary, width: 2.5 },
+          areaStyle: {
+            color: createVerticalGradient(chartTokens.colorPrimary, 0.25),
+          },
+        },
+      ],
+    }),
+    [data, chartTokens, t],
+  );
+
+  const handleClick = (params: unknown) => {
+    const p = params as { componentType?: string; dataIndex?: number };
+    if (p.componentType !== "series") return;
+    const index = typeof p.dataIndex === "number" ? p.dataIndex : -1;
+    const point = data[index];
+    if (!point || point.feus <= 0) return;
+    onPointClick(point);
+  };
 
   const periodHint =
     period === "Weekly"
@@ -309,7 +169,7 @@ function VolumeTrendChart({
         : t("volume.periodHintMonthly");
 
   return (
-    <div ref={wrapRef} className="dashboard-trend-wrap">
+    <div className="dashboard-trend-wrap">
       <div className="dashboard-trend-head">
         <Text strong className="dashboard-metric-tile__label">
           {t("volume.trendTitle")}{" "}
@@ -328,7 +188,14 @@ function VolumeTrendChart({
       <Text type="secondary" className="dashboard-trend-click-hint">
         {t("volume.drilldown.clickHint")}
       </Text>
-      <div ref={containerRef} className="dashboard-trend-chart" />
+      <AppChart
+        option={option}
+        notMerge
+        height="auto"
+        className="dashboard-trend-chart"
+        onEvents={{ click: handleClick }}
+        ariaLabel={t("volume.title", { defaultValue: "Volume trend" })}
+      />
     </div>
   );
 }
@@ -342,10 +209,7 @@ interface VolumeAnalyticsProps {
   onVolumeStageChange: (v: VolumeAnalyticsStage) => void;
 }
 
-function getVolumeStageLabel(
-  stage: VolumeAnalyticsStage,
-  t: (key: string) => string,
-): string {
+function getVolumeStageLabel(stage: VolumeAnalyticsStage, t: (key: string) => string): string {
   switch (stage) {
     case "all":
       return t("volume.stages.all");
@@ -364,10 +228,7 @@ function getVolumeStageLabel(
   }
 }
 
-function getVolumeKpiLabel(
-  label: string,
-  t: (key: string) => string,
-): string {
+function getVolumeKpiLabel(label: string, t: (key: string) => string): string {
   const key = VOLUME_KPI_LABEL_KEYS[label];
   return key ? t(key) : label;
 }
@@ -383,9 +244,7 @@ export function VolumeAnalyticsSection({
   const { t } = useTranslation(["dashboard", "common", "modules"]);
   const chartTokens = useChartTokens();
   const stageLabel = getVolumeStageLabel(volumeStage, t);
-  const [drilldown, setDrilldown] = useState<VolumeTrendDrilldownState | null>(
-    null,
-  );
+  const [drilldown, setDrilldown] = useState<VolumeTrendDrilldownState | null>(null);
 
   const stageOptions = useMemo(
     () =>
@@ -428,9 +287,7 @@ export function VolumeAnalyticsSection({
             size="middle"
             className="dashboard-volume-stage-segmented"
             value={volumeStage}
-            onChange={(value) =>
-              onVolumeStageChange(value as VolumeAnalyticsStage)
-            }
+            onChange={(value) => onVolumeStageChange(value as VolumeAnalyticsStage)}
             options={stageOptions}
           />
         }
@@ -445,16 +302,12 @@ export function VolumeAnalyticsSection({
                     <Text className="dashboard-metric-tile__label">
                       {getVolumeKpiLabel(kpi.label, t)}
                     </Text>
-                    <Text className="dashboard-metric-tile__period">
-                      ({kpi.period})
-                    </Text>
+                    <Text className="dashboard-metric-tile__period">({kpi.period})</Text>
                     <div className="dashboard-metric-tile__value-row">
                       <Title level={3} className="dashboard-metric-tile__value">
                         {kpi.value.toLocaleString()}
                       </Title>
-                      <Text className="dashboard-metric-tile__unit">
-                        {kpi.unit}
-                      </Text>
+                      <Text className="dashboard-metric-tile__unit">{kpi.unit}</Text>
                     </div>
                     <div className="dashboard-metric-tile__delta">
                       <span
@@ -465,24 +318,13 @@ export function VolumeAnalyticsSection({
                         }
                       >
                         {isPositive ? (
-                          <AppIcon
-                            icon={Icons.arrowUp}
-                            size={14}
-                            tone="create"
-                          />
+                          <AppIcon icon={Icons.arrowUp} size={14} tone="create" />
                         ) : (
-                          <AppIcon
-                            icon={Icons.arrowDown}
-                            size={14}
-                            tone="delete"
-                          />
+                          <AppIcon icon={Icons.arrowDown} size={14} tone="delete" />
                         )}
                         {Math.abs(kpi.change)}%
                       </span>
-                      <Text
-                        type="secondary"
-                        className="dashboard-metric-tile__period"
-                      >
+                      <Text type="secondary" className="dashboard-metric-tile__period">
                         {t("volume.vsPrev", {
                           value: kpi.changePrev.toLocaleString(),
                         })}
@@ -491,11 +333,7 @@ export function VolumeAnalyticsSection({
                   </div>
                   <Sparkline
                     data={kpi.sparkline}
-                    color={
-                      isPositive
-                        ? chartTokens.colorSuccess
-                        : chartTokens.colorError
-                    }
+                    color={isPositive ? chartTokens.colorSuccess : chartTokens.colorError}
                   />
                 </div>
               );
@@ -510,10 +348,7 @@ export function VolumeAnalyticsSection({
         </div>
       </Card>
 
-      <DashboardVolumeTrendRecordsModal
-        state={drilldown}
-        onClose={() => setDrilldown(null)}
-      />
+      <DashboardVolumeTrendRecordsModal state={drilldown} onClose={() => setDrilldown(null)} />
     </>
   );
 }

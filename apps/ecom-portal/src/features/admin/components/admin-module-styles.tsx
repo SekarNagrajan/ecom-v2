@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 15:40)
+// Modified by Sekar Nagarajan (2026-11-12 16:00)
 /**
  * Control Panel stylesheet — one token-backed <style> injector (agenct.md: no inline styles, no
  * hex, tokens for colour / spacing / radius, custom-scroll on scroll surfaces).
@@ -414,74 +414,6 @@ export function AdminModuleStyles() {
         border-color: ${token.colorPrimaryBorder};
       }
 
-      /* Filter pills (AdminFilterPills) */
-      .admin-filter-pills {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: ${token.marginXS}px;
-        padding: ${token.paddingSM}px;
-        border-radius: ${token.borderRadiusLG}px;
-        border: 1px solid ${token.colorBorderSecondary};
-        background: ${token.colorBgContainer};
-      }
-      .admin-filter-pills__pill {
-        display: inline-flex;
-        align-items: center;
-        gap: ${token.marginXS}px;
-        margin: 0;
-        padding: ${token.paddingXXS + 2}px ${token.paddingSM}px;
-        border-radius: ${token.borderRadiusSM}px;
-        border: 1px solid ${token.colorBorderSecondary};
-        background: ${token.colorBgContainer};
-        color: ${token.colorText};
-        font-size: ${token.fontSize}px;
-        line-height: ${token.lineHeight};
-        cursor: pointer;
-        transition: background-color ${token.motionDurationFast} ease,
-          border-color ${token.motionDurationFast} ease,
-          color ${token.motionDurationFast} ease;
-      }
-      .admin-filter-pills__pill:hover {
-        border-color: ${token.colorPrimaryBorder};
-        background: ${primaryTint8};
-      }
-      .admin-filter-pills__pill:focus-visible {
-        outline: ${token.lineWidthBold}px solid ${token.colorPrimaryBorder};
-        outline-offset: 1px;
-      }
-      .admin-filter-pills__pill--selected {
-        border-color: transparent;
-        background: ${primaryTint8};
-        color: ${token.colorPrimary};
-        font-weight: ${token.fontWeightStrong};
-      }
-      .admin-filter-pills__dot {
-        width: ${token.sizeXS}px;
-        height: ${token.sizeXS}px;
-        border-radius: 50%;
-        flex-shrink: 0;
-        background: ${token.colorPrimary};
-      }
-      .admin-filter-pills__pill--success .admin-filter-pills__dot {
-        background: ${token.colorSuccess};
-      }
-      .admin-filter-pills__pill--neutral .admin-filter-pills__dot {
-        background: ${token.colorTextQuaternary};
-      }
-      .admin-filter-pills__pill--warning .admin-filter-pills__dot {
-        background: ${token.colorWarning};
-      }
-      .admin-filter-pills__pill--error .admin-filter-pills__dot {
-        background: ${token.colorError};
-      }
-      .admin-filter-pills__pill--info .admin-filter-pills__dot {
-        background: ${token.colorInfo};
-      }
-      .admin-filter-pills__label {
-        font-weight: ${token.fontWeightStrong};
-      }
-
       /* Locked identity field (AdminLockedField) */
       .admin-locked-field {
         display: flex;
@@ -657,13 +589,9 @@ export function AdminModuleStyles() {
       .admin-toolbar {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: flex-end;
         flex-wrap: wrap;
         gap: ${token.marginSM}px;
-      }
-      .admin-toolbar__filters {
-        flex: 1 1 ${controlLG * 8}px;
-        min-width: 0;
       }
       .admin-toolbar__search {
         flex: 0 1 ${controlLG * 7}px;
@@ -1130,9 +1058,6 @@ export function AdminModuleStyles() {
         }
         .admin-form-footer__actions {
           flex-direction: column-reverse;
-        }
-        .admin-filter-pills {
-          padding: ${token.paddingXS}px;
         }
         .admin-toolbar__search {
           flex-basis: 100%;

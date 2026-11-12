@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 15:40)
+// Modified by Sekar Nagarajan (2026-11-12 16:00)
 /**
  * Banners & Assets — landing hero slides in a DataView grid with a create drawer. The image is
  * referenced by URL/path (asset upload is a follow-up); a live thumbnail previews the URL.
@@ -27,10 +27,7 @@ import {
   ListActionButton,
   ListActionsRow,
 } from "../../../components/shared/list-action-button";
-import {
-  ModuleEmptyState,
-  buildClearFiltersAction,
-} from "../../../components/shared/module-empty-state";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
 import {
   BANNER_UPSERT_DEFAULTS,
@@ -40,14 +37,11 @@ import {
 } from "../types/admin.types";
 import { nextOrder } from "../utils/admin.utils";
 import { AdminDrawer } from "./shared/AdminDrawer";
-import { AdminFilterPills } from "./shared/AdminFilterPills";
 import { AdminFormSection } from "./shared/AdminFormSection";
 import { AdminSectionPage } from "./shared/AdminSectionPage";
 import { AdminStatusPill } from "./shared/AdminStatusPill";
 
 const { Text } = Typography;
-
-type BannerFilter = "all" | "active" | "inactive";
 
 interface BannerManagerViewProps {
   banners: BannerConfig[];
@@ -65,7 +59,6 @@ export function BannerManagerView({
   const toast = useToast();
   const { profileHandlers } = useLocalGridProfiles("admin-banners");
   const addButtonRef = useRef<HTMLSpanElement>(null);
-  const [filter, setFilter] = useState<BannerFilter>("all");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
@@ -76,9 +69,7 @@ export function BannerManagerView({
   });
   const imageUrl = form.watch("imageUrl");
 
-  const rows = [...banners]
-    .filter((b) => filter === "all" || b.isActive === (filter === "active"))
-    .sort((a, b) => a.sortOrder - b.sortOrder);
+  const rows = [...banners].sort((a, b) => a.sortOrder - b.sortOrder);
 
   const openDrawer = () => {
     form.reset({ ...BANNER_UPSERT_DEFAULTS, sortOrder: nextOrder(banners) });
@@ -231,37 +222,18 @@ export function BannerManagerView({
       }
     >
       <div className="admin-banner-form">
-        <AdminFilterPills<BannerFilter>
-          ariaLabel="Filter banners by status"
-          value={filter}
-          onChange={setFilter}
-          items={[
-            { key: "all", label: "All", tone: "primary" },
-            { key: "active", label: "Active", tone: "success" },
-            { key: "inactive", label: "Inactive", tone: "neutral" },
-          ]}
-        />
-
         <div className="admin-grid-wrap responsive-table-wrap custom-scroll">
           <DataView
             rowData={rows}
             columnDefs={columnDefs}
             loading={isFetching}
             emptyState={
-              filter === "all" ? (
-                <ModuleEmptyState
-                  variant="blank"
-                  title="No banners yet"
-                  message="Add a landing hero slide to get started."
-                  actions={[{ key: "add", label: "Add Banner", type: "primary", onClick: openDrawer }]}
-                />
-              ) : (
-                <ModuleEmptyState
-                  variant="filtered"
-                  title="No banners match this filter"
-                  actions={[buildClearFiltersAction(() => setFilter("all"))]}
-                />
-              )
+              <ModuleEmptyState
+                variant="blank"
+                title="No banners yet"
+                message="Add a landing hero slide to get started."
+                actions={[{ key: "add", label: "Add Banner", type: "primary", onClick: openDrawer }]}
+              />
             }
             allowedViewModes={["list"]}
             defaultViewMode="list"

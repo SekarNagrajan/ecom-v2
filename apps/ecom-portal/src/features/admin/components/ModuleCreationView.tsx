@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 15:40)
+// Modified by Sekar Nagarajan (2026-11-12 16:00)
 /**
  * Module Creation — register portal menus (RegisterMenu.jsp parity) and control their category and
  * visibility. The grid is the page; Register / Edit happen in a drawer whose fields map 1:1 onto
@@ -32,10 +32,7 @@ import {
   ListActionButton,
   ListActionsRow,
 } from "../../../components/shared/list-action-button";
-import {
-  ModuleEmptyState,
-  buildClearFiltersAction,
-} from "../../../components/shared/module-empty-state";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import {
@@ -49,7 +46,6 @@ import {
 } from "../types/admin.types";
 import { menuRowId, nextOrder } from "../utils/admin.utils";
 import { AdminDrawer } from "./shared/AdminDrawer";
-import { AdminFilterPills } from "./shared/AdminFilterPills";
 import { AdminFormSection } from "./shared/AdminFormSection";
 import { AdminLockedField } from "./shared/AdminLockedField";
 import { AdminSectionPage } from "./shared/AdminSectionPage";
@@ -57,7 +53,6 @@ import { AdminStatusPill } from "./shared/AdminStatusPill";
 
 const { Text } = Typography;
 
-type MenuFilter = "all" | "enabled" | "disabled" | "default" | "privileged";
 type MenuRow = MenuConfig & { rowId: string };
 type DrawerState = { mode: "create" } | { mode: "edit"; row: MenuRow } | null;
 
@@ -118,25 +113,9 @@ export function ModuleCreationView({
   const authUser = useAuthStore((s) => s.user);
   const { profileHandlers } = useLocalGridProfiles("admin-menus");
   const registerButtonRef = useRef<HTMLSpanElement>(null);
-  const [filter, setFilter] = useState<MenuFilter>("all");
   const [drawer, setDrawer] = useState<DrawerState>(null);
 
   const rows: MenuRow[] = menus.map((m) => ({ ...m, rowId: menuRowId(m) }));
-  const visibleRows = rows.filter((r) => {
-    switch (filter) {
-      case "enabled":
-        return r.isEnabled;
-      case "disabled":
-        return !r.isEnabled;
-      case "default":
-        return r.category === "D";
-      case "privileged":
-        return r.category === "P";
-      default:
-        return true;
-    }
-  });
-
   const parentOptions = [
     { value: "ROOT", label: "ROOT (top level)" },
     ...Array.from(
@@ -343,39 +322,18 @@ export function ModuleCreationView({
       }
     >
       <div className="admin-menu-form">
-        <AdminFilterPills<MenuFilter>
-          ariaLabel="Filter menus"
-          value={filter}
-          onChange={setFilter}
-          items={[
-            { key: "all", label: "All", tone: "primary" },
-            { key: "enabled", label: "Enabled", tone: "success" },
-            { key: "disabled", label: "Disabled", tone: "neutral" },
-            { key: "default", label: "Default", tone: "info" },
-            { key: "privileged", label: "Privileged", tone: "warning" },
-          ]}
-        />
-
         <div className="admin-grid-wrap responsive-table-wrap custom-scroll">
           <DataView
-            rowData={visibleRows}
+            rowData={rows}
             columnDefs={columnDefs}
             loading={isFetching || isSaving}
             emptyState={
-              filter === "all" ? (
-                <ModuleEmptyState
-                  variant="blank"
-                  title="No menus registered yet"
-                  message="Register the first portal menu to get started."
-                  actions={[{ key: "register", label: "Register Menu", type: "primary", onClick: openCreate }]}
-                />
-              ) : (
-                <ModuleEmptyState
-                  variant="filtered"
-                  title="No menus match this filter"
-                  actions={[buildClearFiltersAction(() => setFilter("all"))]}
-                />
-              )
+              <ModuleEmptyState
+                variant="blank"
+                title="No menus registered yet"
+                message="Register the first portal menu to get started."
+                actions={[{ key: "register", label: "Register Menu", type: "primary", onClick: openCreate }]}
+              />
             }
             allowedViewModes={["list"]}
             defaultViewMode="list"
@@ -386,7 +344,8 @@ export function ModuleCreationView({
               showToolbar: { showTotalCount: true, fullScreen: true },
               sideBar: true,
               pagination: true,
-              paginationPageSize: 20,
+              
+              paginationPageSize: 10,
               pageSizeOptions: [10, 20, 50, 100],
               defaultColDef: { filter: true },
               gridOptions: {

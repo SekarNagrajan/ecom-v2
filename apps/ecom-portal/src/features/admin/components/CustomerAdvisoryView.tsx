@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 15:40)
+// Modified by Sekar Nagarajan (2026-11-12 16:00)
 /**
  * Customer Advisories — operational notices in a DataView grid with a publish drawer (severity,
  * headline, message, validity window) and a read-only detail drawer.
@@ -30,10 +30,7 @@ import {
   ListActionButton,
   ListActionsRow,
 } from "../../../components/shared/list-action-button";
-import {
-  ModuleEmptyState,
-  buildClearFiltersAction,
-} from "../../../components/shared/module-empty-state";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
 import { useAiTextAssist } from "../../ai-assist";
 import {
@@ -45,14 +42,11 @@ import {
 } from "../types/admin.types";
 import { advisoryStatus, todayIsoDate, type AdvisoryStatus } from "../utils/admin.utils";
 import { AdminDrawer } from "./shared/AdminDrawer";
-import { AdminFilterPills } from "./shared/AdminFilterPills";
 import { AdminFormSection } from "./shared/AdminFormSection";
 import { AdminSectionPage } from "./shared/AdminSectionPage";
 import { AdminStatusPill, type AdminPillTone } from "./shared/AdminStatusPill";
 
 const { Text, Paragraph } = Typography;
-
-type AdvisoryFilter = "all" | "active" | "scheduled" | "expired" | "urgent";
 
 const STATUS_META: Record<AdvisoryStatus, { label: string; tone: AdminPillTone }> = {
   active: { label: "Active", tone: "success" },
@@ -96,17 +90,11 @@ export function CustomerAdvisoryView({
   const { profileHandlers } = useLocalGridProfiles("admin-advisories");
   const { textareaAssistProps } = useAiTextAssist();
   const publishButtonRef = useRef<HTMLSpanElement>(null);
-  const [filter, setFilter] = useState<AdvisoryFilter>("all");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [viewing, setViewing] = useState<CustomerAdvisory | null>(null);
 
   const today = todayIsoDate();
-  const withStatus = advisories.map((a) => ({ ...a, status: advisoryStatus(a, today) }));
-  const rows = withStatus.filter((a) => {
-    if (filter === "all") return true;
-    if (filter === "urgent") return a.severity === "URGENT";
-    return a.status === filter;
-  });
+  const rows = advisories.map((a) => ({ ...a, status: advisoryStatus(a, today) }));
 
   const defaults = (): AdvisoryUpsertValues => ({
     severity: "WARNING",
@@ -253,39 +241,18 @@ export function CustomerAdvisoryView({
       }
     >
       <div className="admin-advisory-form">
-        <AdminFilterPills<AdvisoryFilter>
-          ariaLabel="Filter advisories"
-          value={filter}
-          onChange={setFilter}
-          items={[
-            { key: "all", label: "All", tone: "primary" },
-            { key: "active", label: "Active", tone: "success" },
-            { key: "scheduled", label: "Scheduled", tone: "info" },
-            { key: "expired", label: "Expired", tone: "neutral" },
-            { key: "urgent", label: "Urgent", tone: "error" },
-          ]}
-        />
-
         <div className="admin-grid-wrap responsive-table-wrap custom-scroll">
           <DataView
             rowData={rows}
             columnDefs={columnDefs}
             loading={isFetching}
             emptyState={
-              filter === "all" ? (
-                <ModuleEmptyState
-                  variant="blank"
-                  title="No advisories published"
-                  message="Publish an operational advisory to inform customers."
-                  actions={[{ key: "publish", label: "Publish Advisory", type: "primary", onClick: openDrawer }]}
-                />
-              ) : (
-                <ModuleEmptyState
-                  variant="filtered"
-                  title="No advisories match this filter"
-                  actions={[buildClearFiltersAction(() => setFilter("all"))]}
-                />
-              )
+              <ModuleEmptyState
+                variant="blank"
+                title="No advisories published"
+                message="Publish an operational advisory to inform customers."
+                actions={[{ key: "publish", label: "Publish Advisory", type: "primary", onClick: openDrawer }]}
+              />
             }
             allowedViewModes={["list"]}
             defaultViewMode="list"

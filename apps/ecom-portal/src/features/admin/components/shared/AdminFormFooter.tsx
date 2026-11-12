@@ -55,16 +55,9 @@ export function AdminFormFooter({
         .filter(Boolean)
         .join(" ")}
     >
-      <div className="admin-form-footer__meta">
-        {resolvedHint ? (
-          <span className="admin-form-footer__hint" role="status">
-            {resolvedHint}
-          </span>
-        ) : null}
-        {extra}
-      </div>
+     
       <div className="admin-form-footer__actions">
-        <AppButton onClick={onCancel} disabled={!isDirty || isSaving}>
+        <AppButton danger onClick={onCancel} disabled={!isDirty || isSaving}>
           {cancelLabel}
         </AppButton>
         <AppButton

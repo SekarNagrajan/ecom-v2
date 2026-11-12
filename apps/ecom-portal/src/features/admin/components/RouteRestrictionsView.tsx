@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 15:40)
+// Modified by Sekar Nagarajan (2026-11-12 16:00)
 /**
  * Route Restrictions — origin/destination lanes per service loop in a DataView grid. Restricting
  * a lane asks for confirmation; releasing does not. Each toggle PUTs the full list (the endpoint
@@ -7,7 +7,6 @@
 import { DataView, type DataViewColumn } from "@solverminds/shared-ui/data-view";
 import { useConfirm } from "@solverminds/shared-ui/hooks";
 import { Tag, Typography } from "antd";
-import { useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { buildActionsColumn } from "../../../components/shared/build-actions-column";
@@ -15,19 +14,13 @@ import {
   ListActionButton,
   ListActionsRow,
 } from "../../../components/shared/list-action-button";
-import {
-  ModuleEmptyState,
-  buildClearFiltersAction,
-} from "../../../components/shared/module-empty-state";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
 import type { ServiceRestriction } from "../types/admin.types";
-import { AdminFilterPills } from "./shared/AdminFilterPills";
 import { AdminSectionPage } from "./shared/AdminSectionPage";
 import { AdminStatusPill } from "./shared/AdminStatusPill";
 
 const { Text } = Typography;
-
-type RouteFilter = "all" | "open" | "restricted";
 
 interface RouteRestrictionsViewProps {
   restrictions: ServiceRestriction[];
@@ -54,12 +47,6 @@ export function RouteRestrictionsView({
 }: RouteRestrictionsViewProps) {
   const confirm = useConfirm();
   const { profileHandlers } = useLocalGridProfiles("admin-route-restrictions");
-  const [filter, setFilter] = useState<RouteFilter>("all");
-
-  const rows =
-    filter === "all"
-      ? restrictions
-      : restrictions.filter((r) => r.isRestricted === (filter === "restricted"));
 
   const applyToggle = (row: ServiceRestriction, isRestricted: boolean) =>
     onSave(
@@ -170,28 +157,13 @@ export function RouteRestrictionsView({
   return (
     <AdminSectionPage>
       <div className="admin-route-form">
-        <AdminFilterPills<RouteFilter>
-          ariaLabel="Filter routes by status"
-          value={filter}
-          onChange={setFilter}
-          items={[
-            { key: "all", label: "All", tone: "primary" },
-            { key: "open", label: "Open", tone: "success" },
-            { key: "restricted", label: "Restricted", tone: "error" },
-          ]}
-        />
-
         <div className="admin-grid-wrap responsive-table-wrap custom-scroll">
           <DataView
-            rowData={rows}
+            rowData={restrictions}
             columnDefs={columnDefs}
             loading={isFetching || isSaving}
             emptyState={
-              <ModuleEmptyState
-                variant="filtered"
-                title="No routes match this filter"
-                actions={[buildClearFiltersAction(() => setFilter("all"))]}
-              />
+              <ModuleEmptyState variant="blank" title="No route restrictions configured" />
             }
             allowedViewModes={["list"]}
             defaultViewMode="list"

@@ -74,7 +74,7 @@ export function AdminDrawer({
 
   const defaultFooter = (
     <div className="admin-drawer-actions form-step-footer">
-      <AppButton onClick={requestClose} disabled={isPending}>
+      <AppButton danger onClick={requestClose} disabled={isPending}>
         {cancelLabel}
       </AppButton>
       {onPrimary ? (

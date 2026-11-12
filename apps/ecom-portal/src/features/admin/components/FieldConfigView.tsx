@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 15:40)
+// Modified by Sekar Nagarajan (2026-11-12 16:00)
 /**
  * Field Configuration — visibility / mandatory flags per form field in a DataView grid. Edits are
  * kept as per-row overrides (useDraftList) until Save; dirty rows show a revert action.
@@ -26,7 +26,6 @@ import {
 } from "../../../components/shared/yes-no-switch";
 import { useDraftList } from "../hooks/use-draft-list";
 import type { FieldConfig } from "../types/admin.types";
-import { AdminFilterPills } from "./shared/AdminFilterPills";
 import { AdminFormFooter } from "./shared/AdminFormFooter";
 import { AdminSectionPage } from "./shared/AdminSectionPage";
 import { AdminUnsavedGuard } from "./shared/AdminUnsavedGuard";
@@ -49,19 +48,17 @@ export function FieldConfigView({
   const confirm = useConfirm();
   const { profileHandlers } = useLocalGridProfiles("admin-field-config");
   const draft = useDraftList(fields, (field) => field.id);
-  const [formFilter, setFormFilter] = useState<string>("all");
   const [search, setSearch] = useState("");
 
-  const formNames = Array.from(new Set(fields.map((f) => f.formName))).sort();
   const query = search.trim().toLowerCase();
   const rows = draft.items.filter(
     (row) =>
-      (formFilter === "all" || row.formName === formFilter) &&
-      (!query ||
-        row.fieldId.toLowerCase().includes(query) ||
-        row.fieldLabel.toLowerCase().includes(query)),
+      !query ||
+      row.fieldId.toLowerCase().includes(query) ||
+      row.formName.toLowerCase().includes(query) ||
+      row.fieldLabel.toLowerCase().includes(query),
   );
-  const isFiltered = formFilter !== "all" || query.length > 0;
+  const isFiltered = query.length > 0;
 
   const setFlag = (row: FieldConfig, key: "isVisible" | "isRequired", value: boolean) => {
     // A hidden field cannot be mandatory.
@@ -204,26 +201,12 @@ export function FieldConfigView({
 
       <div className="admin-field-form">
         <div className="admin-toolbar">
-          <AdminFilterPills
-            ariaLabel="Filter by form module"
-            value={formFilter}
-            onChange={setFormFilter}
-            items={[
-              { key: "all", label: "All", tone: "primary" },
-              ...formNames.map((name) => ({
-                key: name,
-                label: name,
-                tone: "neutral" as const,
-              })),
-            ]}
-            className="admin-toolbar__filters"
-          />
           <Input
             size="large"
             allowClear
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search field id or label"
+            placeholder="Search by form, field id or label"
             aria-label="Search fields"
             prefix={<AppIcon icon={Icons.search} size={16} />}
             className="admin-toolbar__search"
@@ -239,16 +222,7 @@ export function FieldConfigView({
               <ModuleEmptyState
                 variant={isFiltered ? "filtered" : "blank"}
                 title={isFiltered ? "No fields match this filter" : "No field configurations available"}
-                actions={
-                  isFiltered
-                    ? [
-                        buildClearFiltersAction(() => {
-                          setFormFilter("all");
-                          setSearch("");
-                        }),
-                      ]
-                    : undefined
-                }
+                actions={isFiltered ? [buildClearFiltersAction(() => setSearch(""))] : undefined}
               />
             }
             allowedViewModes={["list"]}

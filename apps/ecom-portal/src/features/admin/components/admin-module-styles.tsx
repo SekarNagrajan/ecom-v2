@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 18:00)
+// Modified by Sekar Nagarajan (2026-11-12 18:30)
 /**
  * Control Panel stylesheet — one token-backed <style> injector (agenct.md: no inline styles, no
  * hex, tokens for colour / spacing / radius, custom-scroll on scroll surfaces).
@@ -47,10 +47,10 @@ export function AdminModuleStyles() {
         padding: ${token.paddingMD}px ${token.paddingLG}px 0;
       }
 
+      /* Static (not sticky): the app scroll area has top padding, so a pinned strip let scrolled
+         content show through above it and overlap the tabs. */
       .admin-page-tabs {
-        position: sticky;
-        top: 0;
-        z-index: 3;
+        position: relative;
         flex-shrink: 0;
         padding: 0 ${token.paddingLG}px;
         background: ${token.colorBgContainer};
@@ -1222,11 +1222,7 @@ export function AdminModuleStyles() {
         .admin-config-layout {
           grid-template-columns: minmax(0, 1fr) ${controlLG * 8.5}px;
         }
-        .admin-config-rail {
-          position: sticky;
-          top: ${controlLG * 2}px;
-          z-index: 1;
-        }
+
       }
 
       @media (max-width: ${token.screenMDMax}px) {

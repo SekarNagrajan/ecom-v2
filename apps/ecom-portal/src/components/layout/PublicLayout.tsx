@@ -1,10 +1,6 @@
-// Modified by Sekar Nagarajan (2026-09-28 15:25)
-import {
-  Outlet,
-  useLocation,
-  useNavigate,
-  useSearch,
-} from "@tanstack/react-router";
+// Modified by Sekar Nagarajan (2026-11-13 01:10)
+import { useTenantStore } from "@solverminds/auth";
+import { Outlet, useLocation, useNavigate, useSearch } from "@tanstack/react-router";
 import type { MenuProps } from "antd";
 import { Card, Drawer, Layout, Menu, Tooltip, Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
@@ -30,9 +26,7 @@ const { Sider, Content } = Layout;
 const { Text } = Typography;
 
 function navIcon(Icon: LucideIcon, size = 20, locked = false) {
-  return (
-    <AppIcon icon={Icon} size={size} variant={locked ? "navLocked" : "nav"} />
-  );
+  return <AppIcon icon={Icon} size={size} variant={locked ? "navLocked" : "nav"} />;
 }
 
 function menuLabel(text: string, locked: boolean) {
@@ -49,12 +43,8 @@ export function PublicLayout() {
   const location = useLocation();
   const { useMobileNav, stackHero, tier } = useResponsiveLayout();
   const setIntendedPath = usePostLoginRedirectStore((s) => s.setIntendedPath);
-  const clearIntendedPath = usePostLoginRedirectStore(
-    (s) => s.clearIntendedPath,
-  );
-  const consumeIntendedPath = usePostLoginRedirectStore(
-    (s) => s.consumeIntendedPath,
-  );
+  const clearIntendedPath = usePostLoginRedirectStore((s) => s.clearIntendedPath);
+  const consumeIntendedPath = usePostLoginRedirectStore((s) => s.consumeIntendedPath);
 
   const sessionExpired = search.reason === SESSION_EXPIRED_SEARCH_REASON;
   const [loginPanelOpen, setLoginPanelOpen] = useState(Boolean(search.login));
@@ -234,6 +224,8 @@ export function PublicLayout() {
     }
   };
 
+  const activeTenant = useTenantStore((state) => state.activeTenant);
+
   const mainClassName = useMobileNav
     ? "pub-layout-main"
     : "pub-layout-main pub-layout-main--with-rail";
@@ -241,7 +233,7 @@ export function PublicLayout() {
   return (
     <Layout className="pub-layout-root" data-viewport-tier={tier}>
       <PublicLayoutHeader
-        logoUrl="/logo.png"
+        logoUrl={activeTenant.logoUrl || "/logo.png"}
         portalName="E-Com Portal"
         onLoginClick={() => openLoginPanel(null)}
         collapsed={collapsed}
@@ -283,8 +275,7 @@ export function PublicLayout() {
             {location.pathname !== "/" ? (
               <div
                 className={
-                  location.pathname === "/register" ||
-                  location.pathname === "/contact-us"
+                  location.pathname === "/register" || location.pathname === "/contact-us"
                     ? "pub-layout-page pub-layout-page--outlet pub-layout-page--outlet-locked"
                     : "pub-layout-page pub-layout-page--outlet custom-scroll"
                 }
@@ -301,21 +292,14 @@ export function PublicLayout() {
               >
                 <div
                   className={
-                    stackHero
-                      ? "pub-landing__copy"
-                      : "pub-landing__copy pub-landing__copy--narrow"
+                    stackHero ? "pub-landing__copy" : "pub-landing__copy pub-landing__copy--narrow"
                   }
                 >
-                  <span className="pub-landing__eyebrow">
-                    E-COMMERCE ONLINE PORTAL
-                  </span>
-                  <h1 className="pub-landing__title">
-                    SCHEDULES, TRACKING &amp; RATES
-                  </h1>
+                  <span className="pub-landing__eyebrow">E-COMMERCE ONLINE PORTAL</span>
+                  <h1 className="pub-landing__title">SCHEDULES, TRACKING &amp; RATES</h1>
                   <Text className="pub-landing__subtitle">
-                    Search sailings, track shipments, and request rates in
-                    seconds — all from one quick-action workspace in the Carrier
-                    Portal.
+                    Search sailings, track shipments, and request rates in seconds — all from one
+                    quick-action workspace in the Carrier Portal.
                   </Text>
                   <div className="pub-landing__cards custom-scroll">
                     <Card
@@ -325,9 +309,7 @@ export function PublicLayout() {
                           ? "pub-landing__card pub-landing__card--active"
                           : "pub-landing__card"
                       }
-                      onClick={() =>
-                        landingController.handleTabChange("schedules")
-                      }
+                      onClick={() => landingController.handleTabChange("schedules")}
                     >
                       <span className="pub-landing__card-icon">
                         <AppIcon icon={NavIcons.schedules} size={20} />
@@ -343,9 +325,7 @@ export function PublicLayout() {
                           ? "pub-landing__card pub-landing__card--active"
                           : "pub-landing__card"
                       }
-                      onClick={() =>
-                        landingController.handleTabChange("tracking")
-                      }
+                      onClick={() => landingController.handleTabChange("tracking")}
                     >
                       <span className="pub-landing__card-icon">
                         <AppIcon icon={NavIcons.tracking} size={20} />
@@ -375,9 +355,7 @@ export function PublicLayout() {
 
                 <div
                   className={
-                    stackHero
-                      ? "pub-landing__panel"
-                      : "pub-landing__panel pub-landing__panel--side"
+                    stackHero ? "pub-landing__panel" : "pub-landing__panel pub-landing__panel--side"
                   }
                 >
                   <HeroSearchPanel controller={landingController} />

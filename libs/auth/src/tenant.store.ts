@@ -1,11 +1,15 @@
-// Modified by sekar nagarajan (2026-08-21)
+// Modified by Sekar Nagarajan (2026-11-13 01:10)
 import { create } from "zustand";
 
 export interface TenantConfig {
   id: string;
   name: string;
   customerCode: string;
+  /** Full logo for the sidebar / public header; empty = house logo. */
   logoUrl: string;
+  /** Optional per-tenant favicon; empty = the default mark. */
+  faviconUrl?: string;
+  /** Brand accent. Applied unless the user picked their own accent in Preferences. */
   primaryColor: string;
   features: {
     defaultLandingRoute: string; // '/app/dashboard' or '/app/booking'
@@ -21,8 +25,9 @@ export const PRECONFIGURED_TENANTS: Record<string, TenantConfig> = {
     id: "TENANT_01",
     name: "SVM E-Commerce Portal",
     customerCode: "CUST001",
-    logoUrl: "/logos/tenant_01.png",
-    primaryColor: "#1890ff",
+    // The default tenant is the house brand: same logo and Signal Blue accent the portal ships with.
+    logoUrl: "/logo.png",
+    primaryColor: "#0a91ff",
     features: {
       defaultLandingRoute: "/app/dashboard",
       enableInsurance: true,
@@ -84,15 +89,7 @@ export const PRECONFIGURED_TENANTS: Record<string, TenantConfig> = {
       enableInsurance: true,
       enableProductDashboard: false,
       customerStatementEngine: "STANDARD",
-      allowedModules: [
-        "dashboard",
-        "schedules",
-        "tracking",
-        "booking",
-        "si",
-        "bl",
-        "payments",
-      ],
+      allowedModules: ["dashboard", "schedules", "tracking", "booking", "si", "bl", "payments"],
     },
   },
   TENANT_04: {
@@ -106,16 +103,7 @@ export const PRECONFIGURED_TENANTS: Record<string, TenantConfig> = {
       enableInsurance: false,
       enableProductDashboard: true,
       customerStatementEngine: "INVOICE",
-      allowedModules: [
-        "dashboard",
-        "schedules",
-        "tracking",
-        "rates",
-        "booking",
-        "vgm",
-        "bl",
-        "do",
-      ],
+      allowedModules: ["dashboard", "schedules", "tracking", "rates", "booking", "vgm", "bl", "do"],
     },
   },
   TENANT_05: {
@@ -159,16 +147,7 @@ export const PRECONFIGURED_TENANTS: Record<string, TenantConfig> = {
       enableInsurance: false,
       enableProductDashboard: true,
       customerStatementEngine: "STANDARD",
-      allowedModules: [
-        "dashboard",
-        "schedules",
-        "tracking",
-        "booking",
-        "si",
-        "vgm",
-        "bl",
-        "do",
-      ],
+      allowedModules: ["dashboard", "schedules", "tracking", "booking", "si", "vgm", "bl", "do"],
     },
   },
   TENANT_07: {
@@ -277,20 +256,33 @@ export const PRECONFIGURED_TENANTS: Record<string, TenantConfig> = {
   },
 };
 
+/** Where the active tenant came from: the public tenant API (authoritative) or a local preset. */
+export type TenantSource = "api" | "preset";
+
 interface TenantState {
   activeTenant: TenantConfig;
+  source: TenantSource;
+  /**
+   * Switch to a preset by id. A no-op when that tenant is already active, so a login or session
+   * rehydrate never replaces the API-loaded tenant (with its real logo/colour) by the preset of
+   * the same id. Unknown ids keep the current tenant.
+   */
   setTenant: (tenantId: string) => void;
+  /** Install the tenant returned by GET /api/public/tenant. */
   setCustomTenant: (tenant: TenantConfig) => void;
 }
 
-export const useTenantStore = create<TenantState>((set) => ({
+export const useTenantStore = create<TenantState>((set, get) => ({
   activeTenant: PRECONFIGURED_TENANTS.TENANT_01,
+  source: "preset",
   setTenant: (tenantId: string) => {
-    const tenant =
-      PRECONFIGURED_TENANTS[tenantId] || PRECONFIGURED_TENANTS.TENANT_01;
-    set({ activeTenant: tenant });
+    const { activeTenant } = get();
+    if (!tenantId || tenantId === activeTenant.id) return;
+    const tenant = PRECONFIGURED_TENANTS[tenantId];
+    if (!tenant) return;
+    set({ activeTenant: tenant, source: "preset" });
   },
   setCustomTenant: (tenant: TenantConfig) => {
-    set({ activeTenant: tenant });
+    set({ activeTenant: tenant, source: "api" });
   },
 }));

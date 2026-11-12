@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-18 12:26)
+// Modified by Sekar Nagarajan (2026-11-13 01:10)
 
 /**
  * BE ↔ UI theme config mapper.
@@ -8,10 +8,7 @@
  * backend endpoint exists, ecom persists themeMode in localStorage only
  * (`ecom-user-theme-config`). This mapper is ready for that future path.
  */
-import {
-  ACCESSIBILITY_DEFAULTS,
-  type AppCustomConfig,
-} from "@solverminds/shared-ui/providers";
+import { ACCESSIBILITY_DEFAULTS, type AppCustomConfig } from "@solverminds/shared-ui/providers";
 
 import { applyDensityThemeFields } from "./density-theme-fields";
 
@@ -70,13 +67,8 @@ export const BE_COLOR_MAP = {
   TERRA_COTTA: "#d66853",
 } as const;
 
-export const mapBeToUiConfig = (
-  beConfig: Partial<BackendAppConfig>,
-): AppCustomConfig => {
-  const result: Omit<
-    AppCustomConfig,
-    "baseFontSize" | "lineHeight" | "borderRadius"
-  > = {
+export const mapBeToUiConfig = (beConfig: Partial<BackendAppConfig>): AppCustomConfig => {
+  const result: Omit<AppCustomConfig, "baseFontSize" | "lineHeight" | "borderRadius"> = {
     timezone: beConfig.timezone || "UTC",
     dateFormat: "dd/MM/yyyy",
     timeFormat: "HH:mm",
@@ -86,17 +78,14 @@ export const mapBeToUiConfig = (
     currencyDisplay: "symbol",
     themeMode:
       beConfig.themeMode && beConfig.themeMode in BE_THEME_MODE_MAP
-        ? BE_THEME_MODE_MAP[
-            beConfig.themeMode as keyof typeof BE_THEME_MODE_MAP
-          ]
+        ? BE_THEME_MODE_MAP[beConfig.themeMode as keyof typeof BE_THEME_MODE_MAP]
         : "light",
     density:
       beConfig.densityLevel && beConfig.densityLevel in BE_DENSITY_MAP
         ? BE_DENSITY_MAP[beConfig.densityLevel as keyof typeof BE_DENSITY_MAP]
         : "normal",
-    fontFamily:
-      "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-    primaryColor: beConfig.primaryColor || BE_COLOR_MAP.SIGNAL,
+    fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    primaryColor: beConfig.primaryColor || "", // empty = inherit the tenant accent
     secondaryColor: "#595959",
     // Modified by Sekar Nagarajan (2026-08-31 12:52) — success emerald #047857
     successColor: "#047857",
@@ -110,8 +99,7 @@ export const mapBeToUiConfig = (
     pageZoom: ACCESSIBILITY_DEFAULTS.pageZoom,
     readingMask: { ...ACCESSIBILITY_DEFAULTS.readingMask },
     notifications: {
-      customTimingEnabled:
-        ACCESSIBILITY_DEFAULTS.notifications.customTimingEnabled,
+      customTimingEnabled: ACCESSIBILITY_DEFAULTS.notifications.customTimingEnabled,
       success: { ...ACCESSIBILITY_DEFAULTS.notifications.success },
       info: { ...ACCESSIBILITY_DEFAULTS.notifications.info },
       warning: { ...ACCESSIBILITY_DEFAULTS.notifications.warning },

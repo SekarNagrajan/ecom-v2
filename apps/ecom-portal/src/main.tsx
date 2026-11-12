@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 23:50)
+// Modified by Sekar Nagarajan (2026-11-13 01:10)
 import { useAuthStore, useTenantStore } from "@solverminds/auth";
 import { env, queryClient } from "@solverminds/platform";
 import { AppConfigProvider } from "@solverminds/shared-ui/providers";
@@ -8,6 +8,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 
 import { router } from "./app/router";
+import { TenantDocumentHead } from "./components/providers/TenantDocumentHead";
 import { TenantThemeProvider } from "./components/providers/TenantThemeProvider";
 import { SESSION_EXPIRED_SEARCH_REASON } from "./features/auth/api/session-expiry";
 import { ThemePreferencesProvider } from "./features/theme/providers/theme-preferences-provider";
@@ -39,6 +40,8 @@ function AppRoot() {
   const config = useAppConfigStore((state) => state.config);
   const tenantPrimary = useTenantStore((state) => state.activeTenant.primaryColor);
 
+  // Accent precedence: the user's explicit choice → the tenant brand → Signal Blue.
+  // Contrast / accessibility overrides are applied downstream by AccessibilityEffects.
   const mergedConfig = {
     ...config,
     primaryColor: config.primaryColor || tenantPrimary || BE_COLOR_MAP.SIGNAL,
@@ -48,6 +51,7 @@ function AppRoot() {
     <AppConfigProvider config={mergedConfig} theme={{ cssVar: { prefix: "ecom" } }}>
       <ThemePreferencesProvider>
         <TenantThemeProvider>
+          <TenantDocumentHead primaryColor={mergedConfig.primaryColor} />
           <RouterProvider router={router} />
         </TenantThemeProvider>
       </ThemePreferencesProvider>

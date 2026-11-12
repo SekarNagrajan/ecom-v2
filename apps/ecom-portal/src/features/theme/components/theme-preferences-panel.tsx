@@ -1,10 +1,7 @@
-// Modified by Sekar Nagarajan (2026-09-28 16:17)
+// Modified by Sekar Nagarajan (2026-11-13 01:10)
+import { useTenantStore } from "@solverminds/auth";
 import { AppButton } from "@solverminds/shared-ui";
-import type {
-  ContrastMode,
-  LetterSpacingLevel,
-  ThemeMode,
-} from "@solverminds/shared-ui/providers";
+import type { ContrastMode, LetterSpacingLevel, ThemeMode } from "@solverminds/shared-ui/providers";
 import { Alert, Modal, Select, Slider, Space, Switch, Typography } from "antd";
 import { useRef } from "react";
 
@@ -31,6 +28,7 @@ import {
   TOAST_TIMEOUT_SELECT_OPTIONS,
 } from "../constants";
 import { type useThemePreferencesController } from "../hooks/use-theme-preferences-controller";
+import { BE_COLOR_MAP } from "../utils/config-mapper";
 import {
   AccentSwatch,
   PreferenceCategoryLabel,
@@ -57,6 +55,8 @@ export function ThemePreferencesPanel({
 }) {
   const { currentConfig, saveError } = controller;
   const panelRef = useRef<HTMLDivElement>(null);
+  const activeTenant = useTenantStore((state) => state.activeTenant);
+  const tenantAccent = activeTenant.primaryColor || BE_COLOR_MAP.SIGNAL;
 
   if (!currentConfig) {
     return null;
@@ -99,17 +99,10 @@ export function ThemePreferencesPanel({
             description={
               <Space wrap>
                 <Text>{saveError}</Text>
-                <AppButton
-                  size="small"
-                  onClick={() => void controller.flushPendingChanges()}
-                >
+                <AppButton size="small" onClick={() => void controller.flushPendingChanges()}>
                   Retry
                 </AppButton>
-                <AppButton
-                  size="small"
-                  onClick={controller.discardChanges}
-                  type="default"
-                >
+                <AppButton size="small" onClick={controller.discardChanges} type="default">
                   Revert
                 </AppButton>
               </Space>
@@ -132,9 +125,7 @@ export function ThemePreferencesPanel({
                   className="a11y-tile--font"
                   ariaLabel={option.label}
                   selected={currentConfig.fontFamily === option.value}
-                  onClick={() =>
-                    controller.updatePreference("fontFamily", option.value)
-                  }
+                  onClick={() => controller.updatePreference("fontFamily", option.value)}
                   style={{ fontFamily: option.value }}
                 >
                   {option.label}
@@ -157,9 +148,7 @@ export function ThemePreferencesPanel({
                     className="a11y-tile--size"
                     ariaLabel={`Text size ${option.label}`}
                     selected={currentConfig.baseFontSize === option.value}
-                    onClick={() =>
-                      controller.updatePreference("baseFontSize", option.value)
-                    }
+                    onClick={() => controller.updatePreference("baseFontSize", option.value)}
                     style={{ fontSize: `${Math.max(11, 12 * scale)}px` }}
                   >
                     Aa
@@ -182,10 +171,7 @@ export function ThemePreferencesPanel({
                   ariaLabel={`Text spacing level ${option.value}`}
                   selected={currentConfig.letterSpacing === option.value}
                   onClick={() =>
-                    controller.updatePreference(
-                      "letterSpacing",
-                      option.value as LetterSpacingLevel,
-                    )
+                    controller.updatePreference("letterSpacing", option.value as LetterSpacingLevel)
                   }
                   style={{
                     letterSpacing: `${LETTER_SPACING_EM[option.value]}em`,
@@ -211,22 +197,15 @@ export function ThemePreferencesPanel({
                   <button
                     key={option.value}
                     type="button"
-                    className={[
-                      "a11y-mode-card",
-                      selected ? "a11y-mode-card--selected" : "",
-                    ]
+                    className={["a11y-mode-card", selected ? "a11y-mode-card--selected" : ""]
                       .filter(Boolean)
                       .join(" ")}
                     aria-pressed={selected}
                     aria-label={MODE_LABELS[option.value]}
-                    onClick={() =>
-                      controller.updatePreference("themeMode", option.value)
-                    }
+                    onClick={() => controller.updatePreference("themeMode", option.value)}
                   >
                     <ThemeModePreview mode={option.value} />
-                    <span className="a11y-mode-card__label">
-                      {MODE_LABELS[option.value]}
-                    </span>
+                    <span className="a11y-mode-card__label">{MODE_LABELS[option.value]}</span>
                     {selected ? (
                       <span className="a11y-tile__check" aria-hidden>
                         <AppIcon icon={Icons.check} size={11} />
@@ -244,15 +223,19 @@ export function ThemePreferencesPanel({
               description="Select a desired accent color to use in the application."
             />
             <div className="a11y-swatch-row">
+              <AccentSwatch
+                color={tenantAccent}
+                label={`Organisation colour (${activeTenant.name})`}
+                selected={!currentConfig.primaryColor}
+                onClick={() => controller.updatePreference("primaryColor", "")}
+              />
               {COLOR_OPTIONS.map((option) => (
                 <AccentSwatch
                   key={option.value}
                   color={option.value}
                   label={option.label}
                   selected={currentConfig.primaryColor === option.value}
-                  onClick={() =>
-                    controller.updatePreference("primaryColor", option.value)
-                  }
+                  onClick={() => controller.updatePreference("primaryColor", option.value)}
                 />
               ))}
             </div>
@@ -267,9 +250,7 @@ export function ThemePreferencesPanel({
               action={
                 <Switch
                   checked={currentConfig.contrastEnabled}
-                  onChange={(checked) =>
-                    controller.updatePreference("contrastEnabled", checked)
-                  }
+                  onChange={(checked) => controller.updatePreference("contrastEnabled", checked)}
                   aria-label="Enable contrast level"
                 />
               }
@@ -283,10 +264,7 @@ export function ThemePreferencesPanel({
                     ariaLabel={option.label}
                     selected={currentConfig.contrastMode === option.value}
                     onClick={() =>
-                      controller.updatePreference(
-                        "contrastMode",
-                        option.value as ContrastMode,
-                      )
+                      controller.updatePreference("contrastMode", option.value as ContrastMode)
                     }
                   >
                     {option.label}
@@ -304,9 +282,7 @@ export function ThemePreferencesPanel({
               description="Adjust the size of page elements for your viewing comfort."
             />
             <div className="a11y-zoom">
-              <Text className="a11y-zoom__label">
-                Zoom Level · {currentConfig.pageZoom}%
-              </Text>
+              <Text className="a11y-zoom__label">Zoom Level · {currentConfig.pageZoom}%</Text>
               <Slider
                 className="a11y-zoom__slider"
                 min={PAGE_ZOOM_MIN}
@@ -314,10 +290,7 @@ export function ThemePreferencesPanel({
                 step={PAGE_ZOOM_STEP}
                 value={currentConfig.pageZoom}
                 onChange={(value) =>
-                  controller.updatePreference(
-                    "pageZoom",
-                    Array.isArray(value) ? value[0] : value,
-                  )
+                  controller.updatePreference("pageZoom", Array.isArray(value) ? value[0] : value)
                 }
                 tooltip={{ formatter: (v) => `${v}%` }}
               />
@@ -342,29 +315,21 @@ export function ThemePreferencesPanel({
               action={
                 <Switch
                   checked={readingMask.enabled}
-                  onChange={(checked) =>
-                    controller.updateReadingMask({ enabled: checked })
-                  }
+                  onChange={(checked) => controller.updateReadingMask({ enabled: checked })}
                   aria-label="Enable reading mask"
                 />
               }
             />
             {readingMask.enabled ? (
               <>
-                <div
-                  className="a11y-tile-row"
-                  role="group"
-                  aria-label="Reading mask size"
-                >
+                <div className="a11y-tile-row" role="group" aria-label="Reading mask size">
                   {READING_MASK_SIZE_OPTIONS.map((option) => (
                     <SelectableTile
                       key={option.value}
                       className="a11y-tile--mask-size"
                       ariaLabel={option.label}
                       selected={readingMask.size === option.value}
-                      onClick={() =>
-                        controller.updateReadingMask({ size: option.value })
-                      }
+                      onClick={() => controller.updateReadingMask({ size: option.value })}
                     >
                       {option.label}
                     </SelectableTile>
@@ -373,10 +338,7 @@ export function ThemePreferencesPanel({
                 {readingMask.size === "custom" ? (
                   <div className="a11y-slider-stack">
                     <div className="a11y-slider-field">
-                      <Text
-                        id="reading-mask-height-label"
-                        className="a11y-slider-field__label"
-                      >
+                      <Text id="reading-mask-height-label" className="a11y-slider-field__label">
                         Focus Height
                       </Text>
                       <Slider
@@ -387,19 +349,14 @@ export function ThemePreferencesPanel({
                         value={readingMask.focusHeight}
                         onChange={(value) =>
                           controller.updateReadingMask({
-                            focusHeight: Array.isArray(value)
-                              ? value[0]
-                              : value,
+                            focusHeight: Array.isArray(value) ? value[0] : value,
                           })
                         }
                         tooltip={{ formatter: (v) => `${v}px` }}
                       />
                     </div>
                     <div className="a11y-slider-field">
-                      <Text
-                        id="reading-mask-width-label"
-                        className="a11y-slider-field__label"
-                      >
+                      <Text id="reading-mask-width-label" className="a11y-slider-field__label">
                         Focus Width
                       </Text>
                       <Slider
@@ -417,10 +374,7 @@ export function ThemePreferencesPanel({
                       />
                     </div>
                     <div className="a11y-slider-field">
-                      <Text
-                        id="reading-mask-opacity-label"
-                        className="a11y-slider-field__label"
-                      >
+                      <Text id="reading-mask-opacity-label" className="a11y-slider-field__label">
                         Mask Opacity
                       </Text>
                       <Slider
@@ -493,16 +447,11 @@ export function ThemePreferencesPanel({
             />
             {notifications.customTimingEnabled ? (
               <div className="a11y-toast-prefs">
-                <Text className="a11y-toast-prefs__heading">
-                  Set your timing preferences
-                </Text>
+                <Text className="a11y-toast-prefs__heading">Set your timing preferences</Text>
                 <div className="a11y-toast-prefs__grid">
                   <div className="a11y-toast-prefs__controls">
                     <div className="a11y-toast-prefs__field">
-                      <Text
-                        id="toast-success-behavior-label"
-                        className="a11y-toast-prefs__label"
-                      >
+                      <Text id="toast-success-behavior-label" className="a11y-toast-prefs__label">
                         Success and info notifications behavior
                       </Text>
                       <Select
@@ -518,10 +467,7 @@ export function ThemePreferencesPanel({
                     </div>
                     {successInfo.behavior === "auto" ? (
                       <div className="a11y-toast-prefs__field">
-                        <Text
-                          id="toast-success-timeout-label"
-                          className="a11y-toast-prefs__label"
-                        >
+                        <Text id="toast-success-timeout-label" className="a11y-toast-prefs__label">
                           Automatic timeout duration
                         </Text>
                         <Select
@@ -537,10 +483,7 @@ export function ThemePreferencesPanel({
                       </div>
                     ) : null}
                     <div className="a11y-toast-prefs__field">
-                      <Text
-                        id="toast-warning-behavior-label"
-                        className="a11y-toast-prefs__label"
-                      >
+                      <Text id="toast-warning-behavior-label" className="a11y-toast-prefs__label">
                         Warning and error notifications behavior
                       </Text>
                       <Select
@@ -556,10 +499,7 @@ export function ThemePreferencesPanel({
                     </div>
                     {warningError.behavior === "auto" ? (
                       <div className="a11y-toast-prefs__field">
-                        <Text
-                          id="toast-warning-timeout-label"
-                          className="a11y-toast-prefs__label"
-                        >
+                        <Text id="toast-warning-timeout-label" className="a11y-toast-prefs__label">
                           Automatic timeout duration
                         </Text>
                         <Select
@@ -601,13 +541,10 @@ export function ThemePreferencesPanel({
           <PreferenceSectionRow>
             <div className="a11y-reset-card">
               <div className="a11y-reset-card__copy">
-                <Text className="a11y-field-header__title">
-                  Reset Accessibility Settings
-                </Text>
+                <Text className="a11y-field-header__title">Reset Accessibility Settings</Text>
                 <Text className="a11y-field-header__description">
-                  Restore reading mask, toast timing, contrast, spacing, and
-                  zoom to application defaults. Branding and locale are not
-                  affected.
+                  Restore reading mask, toast timing, contrast, spacing, and zoom to application
+                  defaults. Branding and locale are not affected.
                 </Text>
               </div>
               <AppButton type="primary" onClick={confirmResetAll}>

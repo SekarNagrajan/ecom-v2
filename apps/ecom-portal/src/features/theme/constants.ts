@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-28 16:17)
+// Modified by Sekar Nagarajan (2026-11-13 01:10)
 import {
   ACCESSIBILITY_DEFAULTS,
   NOTIFICATION_TIMEOUT_OPTIONS,
@@ -42,12 +42,10 @@ export const NOTIFICATION_BEHAVIOR_OPTIONS: ReadonlyArray<{
   { label: "Manual Close", value: "manual" },
 ];
 
-export const TOAST_TIMEOUT_SELECT_OPTIONS = NOTIFICATION_TIMEOUT_OPTIONS.map(
-  (seconds) => ({
-    label: `${seconds} Sec(s)`,
-    value: seconds,
-  }),
-);
+export const TOAST_TIMEOUT_SELECT_OPTIONS = NOTIFICATION_TIMEOUT_OPTIONS.map((seconds) => ({
+  label: `${seconds} Sec(s)`,
+  value: seconds,
+}));
 
 export const INTER_FONT_STACK =
   "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" as const;
@@ -93,9 +91,10 @@ export const LETTER_SPACING_EM: Record<LetterSpacingLevel, number> = {
 export const LETTER_SPACING_OPTIONS: ReadonlyArray<{
   label: string;
   value: LetterSpacingLevel;
-}> = (
-  [0, 1, 2, 3, 4, 5, 6] as const satisfies readonly LetterSpacingLevel[]
-).map((value) => ({ label: "ABCD", value }));
+}> = ([0, 1, 2, 3, 4, 5, 6] as const satisfies readonly LetterSpacingLevel[]).map((value) => ({
+  label: "ABCD",
+  value,
+}));
 
 export const CONTRAST_MODE_OPTIONS: ReadonlyArray<{
   label: string;
@@ -205,8 +204,8 @@ export const DEFAULT_APP_CONFIG: AppCustomConfig = {
   baseFontSize: BASE_FONT_SIZE_OPTIONS[1].value, // 14px
   lineHeight: DEFAULT_DENSITY_FIELDS.lineHeight,
 
-  // Colors — Signal Blue primary when no persisted preference exists
-  primaryColor: BE_COLOR_MAP.SIGNAL,
+  // Colors — an empty accent means "use the organisation (tenant) colour"; main.tsx resolves it
+  primaryColor: "",
   successColor: BE_COLOR_MAP.GREEN,
   warningColor: BE_COLOR_MAP.GOLD,
   errorColor: BE_COLOR_MAP.RED,
@@ -221,8 +220,7 @@ export const DEFAULT_APP_CONFIG: AppCustomConfig = {
   pageZoom: ACCESSIBILITY_DEFAULTS.pageZoom,
   readingMask: { ...ACCESSIBILITY_DEFAULTS.readingMask },
   notifications: {
-    customTimingEnabled:
-      ACCESSIBILITY_DEFAULTS.notifications.customTimingEnabled,
+    customTimingEnabled: ACCESSIBILITY_DEFAULTS.notifications.customTimingEnabled,
     success: { ...ACCESSIBILITY_DEFAULTS.notifications.success },
     info: { ...ACCESSIBILITY_DEFAULTS.notifications.info },
     warning: { ...ACCESSIBILITY_DEFAULTS.notifications.warning },

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-28 16:17)
+// Modified by Sekar Nagarajan (2026-11-13 01:10)
 import { persist } from "zustand/middleware";
 import {
   withAccessibilityDefaults,
@@ -16,12 +16,10 @@ export interface AppConfigState {
 }
 
 /** Legacy Ant Design / interim success greens — migrate persisted configs to current default. */
-const LEGACY_SUCCESS_COLORS = new Set([
-  "#52c41a",
-  "#0f766e",
-  "#52C41A",
-  "#0F766E",
-]);
+const LEGACY_SUCCESS_COLORS = new Set(["#52c41a", "#0f766e", "#52C41A", "#0F766E"]);
+
+/** Signal Blue was the persisted default before v5; users who never chose an accent get "inherit". */
+const LEGACY_DEFAULT_ACCENT = "#0a91ff";
 
 function applyAccessibilityDefaults(config: AppCustomConfig): AppCustomConfig {
   const a11y = withAccessibilityDefaults(config);
@@ -55,8 +53,7 @@ export const useAppConfigStore = create<AppConfigState>()(
       toggleThemeMode: () => {
         const currentConfig = get().config;
         if (!currentConfig) return;
-        const nextThemeMode =
-          currentConfig.themeMode === "dark" ? "light" : "dark";
+        const nextThemeMode = currentConfig.themeMode === "dark" ? "light" : "dark";
         set({
           config: {
             ...currentConfig,
@@ -68,16 +65,15 @@ export const useAppConfigStore = create<AppConfigState>()(
     {
       name: "ecom-user-theme-config",
       // v4 — readingMask + notifications accessibility preferences
-      version: 4,
+      // v5 — accent "" = inherit the organisation colour; a stored default Signal Blue is cleared
+      version: 5,
       migrate: (persistedState, version) => {
         const state = persistedState as AppConfigState | undefined;
         if (!state?.config) {
           return { config: DEFAULT_APP_CONFIG } as AppConfigState;
         }
 
-        const nextSuccess = LEGACY_SUCCESS_COLORS.has(
-          state.config.successColor,
-        )
+        const nextSuccess = LEGACY_SUCCESS_COLORS.has(state.config.successColor)
           ? DEFAULT_APP_CONFIG.successColor
           : state.config.successColor;
 
@@ -85,22 +81,22 @@ export const useAppConfigStore = create<AppConfigState>()(
         // still on the old Maritime / 28px demo defaults.
         const wasDemoPrimary =
           version < 2 &&
-          (state.config.primaryColor === "#1B6DAB" ||
-            state.config.primaryColor === "#1b6dab");
-        const wasDemoFontSize =
-          version < 2 && state.config.baseFontSize === 28;
+          (state.config.primaryColor === "#1B6DAB" || state.config.primaryColor === "#1b6dab");
+        const wasDemoFontSize = version < 2 && state.config.baseFontSize === 28;
+
+        const storedDefaultAccent =
+          version < 5 &&
+          typeof state.config.primaryColor === "string" &&
+          state.config.primaryColor.toLowerCase() === LEGACY_DEFAULT_ACCENT;
 
         const merged = applyAccessibilityDefaults({
           ...state.config,
           successColor: nextSuccess,
-          ...(wasDemoPrimary
+          ...(wasDemoPrimary || storedDefaultAccent
             ? { primaryColor: DEFAULT_APP_CONFIG.primaryColor }
             : {}),
-          ...(wasDemoFontSize
-            ? { baseFontSize: DEFAULT_APP_CONFIG.baseFontSize }
-            : {}),
-          fontFamily:
-            state.config.fontFamily || DEFAULT_APP_CONFIG.fontFamily,
+          ...(wasDemoFontSize ? { baseFontSize: DEFAULT_APP_CONFIG.baseFontSize } : {}),
+          fontFamily: state.config.fontFamily || DEFAULT_APP_CONFIG.fontFamily,
         });
 
         return {

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-17 11:56)
+// Modified by Sekar Nagarajan (2026-11-13 01:10)
 
 import {
   PRECONFIGURED_TENANTS,
@@ -36,6 +36,7 @@ import { useThemePreferences } from "../../features/theme/providers/theme-prefer
 import { ChangePasswordView } from "../../features/user-modules/components/ChangePasswordView";
 import { MyAlertsView } from "../../features/user-modules/components/MyAlertsView";
 import { ProfileView } from "../../features/user-modules/components/ProfileView";
+import { isMockMode } from "../../data-source";
 import { AppIcon, Icons } from "../icons";
 import { AccountPreferencesDrawer } from "./account-preferences-drawer";
 import { HeaderLanguageSelect } from "./header-language-select";
@@ -70,17 +71,14 @@ export function AuthenticatedLayoutHeader({
   const { photoUrl } = useProfilePhoto();
   const user = useAuthStore((state) => state.user);
   const { isImpersonating: isImpersonatingFn } = usePermission();
-  const setActiveSubCustomer = useAuthStore(
-    (state) => state.setActiveSubCustomer,
-  );
+  const setActiveSubCustomer = useAuthStore((state) => state.setActiveSubCustomer);
 
   const { activeTenant, setTenant } = useTenantStore();
 
   const impersonation = useImpersonationController();
 
   const [profileDrawerOpen, setProfileDrawerOpen] = useState(false);
-  const [changePasswordDrawerOpen, setChangePasswordDrawerOpen] =
-    useState(false);
+  const [changePasswordDrawerOpen, setChangePasswordDrawerOpen] = useState(false);
   const [myAlertDrawerOpen, setMyAlertDrawerOpen] = useState(false);
   const [contactUsDrawerOpen, setContactUsDrawerOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -116,9 +114,7 @@ export function AuthenticatedLayoutHeader({
 
   const [preferencesOpen, setPreferencesOpen] = useState(false);
   const preferencesController = useThemePreferences();
-  const schedulesSearchActive = useSchedulesHeaderSearchStore(
-    (state) => state.active,
-  );
+  const schedulesSearchActive = useSchedulesHeaderSearchStore((state) => state.active);
 
   // Cpanel system admin — customer-scope only (not dual tenant + customer pickers)
   const isCpanelAdmin = user?.adminUserType === "A" && user?.loginType === "V";
@@ -162,10 +158,7 @@ export function AuthenticatedLayoutHeader({
 
         {/* Modified by Sekar Nagarajan (2026-09-17 21:10) — middle slot avoids flex gaps */}
         {schedulesSearchActive ? (
-          <div
-            id={SCHEDULES_HEADER_SEARCH_SLOT_ID}
-            className="app-header-schedules-search-slot"
-          />
+          <div id={SCHEDULES_HEADER_SEARCH_SLOT_ID} className="app-header-schedules-search-slot" />
         ) : null}
 
         <div className="app-header-actions">
@@ -256,12 +249,12 @@ export function AuthenticatedLayoutHeader({
   const userRoleDisplay = user?.isImpersonating
     ? t("account.roles.adminImpersonation")
     : user?.role === "ADMIN" && user?.adminUserType === "A"
-    ? t("account.roles.systemAdministrator")
-    : user?.role === "VENDOR"
-    ? t("account.roles.agencyAdministrator")
-    : user?.isSessionAdmin
-    ? t("account.roles.superuser")
-    : t("account.roles.customerAccount");
+      ? t("account.roles.systemAdministrator")
+      : user?.role === "VENDOR"
+        ? t("account.roles.agencyAdministrator")
+        : user?.isSessionAdmin
+          ? t("account.roles.superuser")
+          : t("account.roles.customerAccount");
   const initials = userNameDisplay
     ? userNameDisplay
         .split(" ")
@@ -337,11 +330,7 @@ export function AuthenticatedLayoutHeader({
           }}
         >
           <Space size="small">
-            <AppIcon
-              icon={Icons.userCog}
-              size={16}
-              style={{ color: themeToken.colorWarning }}
-            />
+            <AppIcon icon={Icons.userCog} size={16} style={{ color: themeToken.colorWarning }} />
             <Text strong>
               {t("header.actingAs", {
                 name: user.impersonatedCustomer.compName,
@@ -415,32 +404,23 @@ export function AuthenticatedLayoutHeader({
 
         {/* Modified by Sekar Nagarajan (2026-09-17 21:10) — middle slot avoids flex gaps */}
         {schedulesSearchActive ? (
-          <div
-            id={SCHEDULES_HEADER_SEARCH_SLOT_ID}
-            className="app-header-schedules-search-slot"
-          />
+          <div id={SCHEDULES_HEADER_SEARCH_SLOT_ID} className="app-header-schedules-search-slot" />
         ) : null}
 
         <div className="app-header-actions">
           {/* Customer scope: superuser / cpanel default-customer list / sub-accounts */}
           {(user?.isSessionAdmin ||
             isCpanelAdmin ||
-            (user?.subCustomerAccounts &&
-              user.subCustomerAccounts.length > 0 &&
-              !isCpanelAdmin)) &&
+            (user?.subCustomerAccounts && user.subCustomerAccounts.length > 0 && !isCpanelAdmin)) &&
           !compactHeader &&
           (user?.subCustomerAccounts?.length ?? 0) > 0 ? (
             <Space size={4} align="center">
               <AppIcon icon={Icons.users} size={16} />
               <Select
-                value={
-                  user?.activeSubCustomer || subCustomerAccounts[0]?.custCode
-                }
+                value={user?.activeSubCustomer || subCustomerAccounts[0]?.custCode}
                 onChange={(val) => {
                   setActiveSubCustomer(val);
-                  const match = subCustomerAccounts.find(
-                    (a) => a.custCode === val,
-                  );
+                  const match = subCustomerAccounts.find((a) => a.custCode === val);
                   toast.success(
                     t("header.switchedCustomerScope", {
                       name: match ? match.compName : val,
@@ -456,8 +436,8 @@ export function AuthenticatedLayoutHeader({
             </Space>
           ) : null}
 
-          {/* Tenant switcher: ADMIN only — hidden for cpanel (uses customer selector above) */}
-          {user?.role === "ADMIN" && !isCpanelAdmin && !compactHeader ? (
+          {/* Tenant switcher (demo presets): ADMIN only, mock mode only — the real backend derives the tenant from the host */}
+          {isMockMode() && user?.role === "ADMIN" && !isCpanelAdmin && !compactHeader ? (
             <Space size={4} align="center">
               <AppIcon icon={Icons.layoutGrid} size={16} />
               <Select
@@ -483,13 +463,7 @@ export function AuthenticatedLayoutHeader({
 
           <HeaderLanguageSelect buttonClassName="app-header-action" />
 
-          <Tooltip
-            title={
-              isFullscreen
-                ? t("header.exitFullscreen")
-                : t("header.enterFullscreen")
-            }
-          >
+          <Tooltip title={isFullscreen ? t("header.exitFullscreen") : t("header.enterFullscreen")}>
             <AppButton
               type="text"
               shape="circle"
@@ -501,18 +475,12 @@ export function AuthenticatedLayoutHeader({
                 )
               }
               onClick={toggleFullscreen}
-              aria-label={
-                isFullscreen
-                  ? t("header.exitFullscreen")
-                  : t("header.enterFullscreen")
-              }
+              aria-label={isFullscreen ? t("header.exitFullscreen") : t("header.enterFullscreen")}
             />
           </Tooltip>
 
           {!isGuest ? (
-            <HeaderNotificationsPopover
-              onOpenPreferences={() => setMyAlertDrawerOpen(true)}
-            />
+            <HeaderNotificationsPopover onOpenPreferences={() => setMyAlertDrawerOpen(true)} />
           ) : null}
 
           <div className="app-header-user-cluster">
@@ -526,11 +494,7 @@ export function AuthenticatedLayoutHeader({
                 className="app-header-user-trigger"
                 aria-label={t("header.openAccountMenu")}
               >
-                <Avatar
-                  className="app-header-avatar"
-                  size="default"
-                  src={photoUrl ?? undefined}
-                >
+                <Avatar className="app-header-avatar" size="default" src={photoUrl ?? undefined}>
                   {photoUrl ? null : initials}
                 </Avatar>
                 <div className="app-header-user-meta">
@@ -558,10 +522,7 @@ export function AuthenticatedLayoutHeader({
         </div>
 
         {/* Account Profile Drawer */}
-        <ProfileView
-          open={profileDrawerOpen}
-          onClose={() => setProfileDrawerOpen(false)}
-        />
+        <ProfileView open={profileDrawerOpen} onClose={() => setProfileDrawerOpen(false)} />
 
         {/* Change Password Drawer */}
         <ChangePasswordView
@@ -570,16 +531,10 @@ export function AuthenticatedLayoutHeader({
         />
 
         {/* My Alert Preferences Drawer */}
-        <MyAlertsView
-          open={myAlertDrawerOpen}
-          onClose={() => setMyAlertDrawerOpen(false)}
-        />
+        <MyAlertsView open={myAlertDrawerOpen} onClose={() => setMyAlertDrawerOpen(false)} />
 
         {/* Global Contact Us Drawer */}
-        <ContactUsDrawer
-          open={contactUsDrawerOpen}
-          onClose={() => setContactUsDrawerOpen(false)}
-        />
+        <ContactUsDrawer open={contactUsDrawerOpen} onClose={() => setContactUsDrawerOpen(false)} />
 
         {/* Theme & Appearance Customization Panel */}
         <AccountPreferencesDrawer

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 12:40)
+// Modified by Sekar Nagarajan (2026-11-12 13:05)
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AppButton,
@@ -182,7 +182,7 @@ export function BannerManagerView({
                   artSize="sm"
                   variant="blank"
                   title="No banners uploaded"
-                  style={{ padding: 12 }}
+                  className="admin-empty-inline"
                 />
               ),
             }}

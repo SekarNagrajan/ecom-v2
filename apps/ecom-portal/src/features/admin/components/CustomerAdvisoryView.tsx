@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 12:40)
+// Modified by Sekar Nagarajan (2026-11-12 13:05)
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AppButton,
@@ -209,7 +209,7 @@ export function CustomerAdvisoryView({
                   artSize="sm"
                   variant="blank"
                   title="No customer advisories published"
-                  style={{ padding: 12 }}
+                  className="admin-empty-inline"
                 />
               ),
             }}

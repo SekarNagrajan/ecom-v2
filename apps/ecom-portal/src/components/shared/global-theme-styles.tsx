@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-28 15:28)
+// Modified by Sekar Nagarajan (2026-11-12 13:05)
 import { theme } from "antd";
 
 import { BE_COLOR_MAP } from "../../features/theme/utils/config-mapper";
@@ -1052,75 +1052,6 @@ export function GlobalThemeStyles() {
         font-size: ${token.fontSizeLG}px;
         font-weight: ${token.fontWeightStrong};
       }
-      .admin-layout {
-        display: flex;
-        flex-direction: column;
-        gap: ${token.marginSM}px;
-      }
-      .admin-layout__header {
-        background: ${token.colorBgContainer};
-        border-bottom: 1px solid ${token.colorBorderSecondary};
-        padding: ${token.paddingSM}px ${token.paddingMD}px;
-        border-radius: ${token.borderRadiusLG}px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: ${token.marginSM}px;
-      }
-      .admin-layout__header-main {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        min-width: 0;
-      }
-      .admin-layout__header-icon {
-        padding: ${token.paddingXS}px;
-        border-radius: ${token.borderRadiusLG}px;
-        background: ${token.colorPrimaryBg};
-        display: inline-flex;
-      }
-      .admin-layout__header-title {
-        margin: 0 !important;
-        font-size: ${token.fontSizeLG}px !important;
-        font-weight: ${token.fontWeightStrong} !important;
-      }
-      .admin-layout__header-subtitle {
-        font-size: ${token.fontSizeSM}px;
-      }
-      .admin-redesigned-tabs .ant-tabs-nav {
-        background: ${token.colorBgContainer};
-        padding: 4px 6px;
-        border-radius: ${token.borderRadiusLG}px;
-        border: 1px solid ${token.colorBorderSecondary};
-        margin-bottom: ${token.marginSM}px !important;
-        overflow-x: auto;
-        flex-wrap: nowrap;
-      }
-      .admin-redesigned-tabs .ant-tabs-tab {
-        border-radius: ${token.borderRadiusLG}px !important;
-        padding: 6px 12px !important;
-        margin-right: 4px !important;
-        border: none !important;
-        background: transparent !important;
-        font-weight: 500;
-        white-space: nowrap;
-      }
-      .admin-redesigned-tabs .ant-tabs-tab:hover {
-        background: ${token.colorFillAlter} !important;
-        color: ${token.colorPrimary} !important;
-      }
-      .admin-redesigned-tabs .ant-tabs-tab-active {
-        background: ${token.colorPrimaryBg} !important;
-        border: 1px solid ${token.colorPrimaryBorder} !important;
-      }
-      .admin-redesigned-tabs .ant-tabs-tab-active span {
-        font-weight: ${token.fontWeightStrong} !important;
-        color: ${token.colorPrimary} !important;
-      }
-      .admin-redesigned-tabs .ant-tabs-ink-bar {
-        display: none !important;
-      }
       .tracking-results-panel {
         background: ${token.colorBgContainer};
         border-radius: ${token.borderRadiusLG}px;
@@ -1165,10 +1096,6 @@ export function GlobalThemeStyles() {
       .tracking-search-actions .sm-app-button,
       .tracking-search-actions .ant-btn {
         min-height: ${token.controlHeightLG}px;
-      }
-      .admin-layout__badge {
-        font-weight: ${token.fontWeightStrong};
-        color: ${token.colorSuccess};
       }
       .responsive-table-wrap,
       .ag-theme-alpine {
@@ -2237,10 +2164,6 @@ export function GlobalThemeStyles() {
         }
         .feature-page-card .ant-card-body {
           padding: ${token.paddingSM}px;
-        }
-        .admin-layout__header {
-          flex-direction: column;
-          align-items: flex-start;
         }
       }
 

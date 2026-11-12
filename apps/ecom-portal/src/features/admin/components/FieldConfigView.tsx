@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 12:40)
+// Modified by Sekar Nagarajan (2026-11-12 13:05)
 import { AppButton, AppSwitch } from "@solverminds/shared-ui";
 import { Table, Tag, Tooltip, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
@@ -188,7 +188,7 @@ export function FieldConfigView({ fields, onSave }: FieldConfigViewProps) {
                   artSize="sm"
                   variant="blank"
                   title="No field configurations available"
-                  style={{ padding: 12 }}
+                  className="admin-empty-inline"
                 />
               ),
             }}

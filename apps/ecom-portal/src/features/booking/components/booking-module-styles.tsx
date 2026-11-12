@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-10-19 19:20)
+// Modified by Sekar Nagarajan (2026-11-13 02:10)
 import { theme } from "antd";
 
 import { BE_COLOR_MAP } from "../../theme/utils/config-mapper";
@@ -795,9 +795,7 @@ export function BookingModuleStyles() {
         token.marginSM
       }px; }
       .booking-port-row__origin-field { grid-area: origin-field; }
-      .booking-port-row__origin-error { grid-area: origin-error; margin-top: ${
-        token.marginXXS
-      }px; }
+      .booking-port-row__origin-error { grid-area: origin-error; margin-top: ${token.marginXXS}px; }
       .booking-port-row__delivery-label { grid-area: delivery-label; align-self: start; margin-bottom: ${
         token.marginSM
       }px; }
@@ -809,9 +807,7 @@ export function BookingModuleStyles() {
         token.marginSM
       }px; }
       .booking-port-row__date-field { grid-area: date-field; }
-      .booking-port-row__date-error { grid-area: date-error; margin-top: ${
-        token.marginXXS
-      }px; }
+      .booking-port-row__date-error { grid-area: date-error; margin-top: ${token.marginXXS}px; }
       .booking-port-row__swap {
         grid-area: swap;
         display: flex;
@@ -1418,9 +1414,7 @@ export function BookingModuleStyles() {
       }
       .booking-selected-rate-panel__field {
         display: grid;
-        grid-template-columns: minmax(${
-          token.controlHeightLG * 2
-        }px, 0.9fr) minmax(0, 1.2fr);
+        grid-template-columns: minmax(${token.controlHeightLG * 2}px, 0.9fr) minmax(0, 1.2fr);
         align-items: baseline;
         gap: ${token.marginXS}px;
         
@@ -2316,34 +2310,18 @@ export function BookingModuleStyles() {
         margin-bottom: ${token.marginMD}px;
       }
 
+      /* Activity feed rows are rendered by @solverminds/shared-ui AppTimeline; only the scroll cap
+         and the per-tone icon tints stay here. */
       .booking-activity-steps {
-        list-style: none;
-        margin: 0;
-        padding: 0;
         max-height: 360px;
-        overflow-y: auto;
-      }
-      .booking-activity-steps__item {
-        display: flex;
-        align-items: stretch;
-        gap: ${token.marginSM}px;
-        min-width: 0;
-      }
-      .booking-activity-steps__rail {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        flex-shrink: 0;
-        width: 28px;
       }
       .booking-activity-steps__icon {
-        width: 28px;
-        height: 28px;
+        width: 100%;
+        height: 100%;
         border-radius: 50%;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        flex-shrink: 0;
       }
       .booking-activity-steps__icon--primary {
         background: ${primaryTint8};
@@ -2367,36 +2345,6 @@ export function BookingModuleStyles() {
       }
       .booking-activity-steps__icon--muted {
         background: ${token.colorFillSecondary};
-        color: ${token.colorTextSecondary};
-      }
-      .booking-activity-steps__connector {
-        flex: 1;
-        width: 2px;
-        min-height: ${token.marginMD}px;
-        margin-top: ${token.marginXXS}px;
-        margin-bottom: ${token.marginXXS}px;
-        background: ${token.colorBorderSecondary};
-      }
-      .booking-activity-steps__body {
-        flex: 1;
-        min-width: 0;
-        padding-bottom: ${token.paddingMD}px;
-      }
-      .booking-activity-steps__item--last .booking-activity-steps__body {
-        padding-bottom: 0;
-      }
-      .booking-activity-steps__action {
-        display: block;
-        line-height: 1.3;
-      }
-      .booking-activity-steps__meta {
-        display: block;
-        font-size: ${token.fontSizeSM}px;
-        margin-top: ${token.marginXXS}px;
-      }
-      .booking-activity-steps__note {
-        display: block;
-        margin-top: ${token.marginXXS}px;
         color: ${token.colorTextSecondary};
       }
 

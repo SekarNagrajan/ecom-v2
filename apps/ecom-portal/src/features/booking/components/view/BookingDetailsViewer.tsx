@@ -1,6 +1,7 @@
-// Modified by Sekar Nagarajan (2026-09-08 14:58)
+// Modified by Sekar Nagarajan (2026-11-13 02:00)
+import { AppTimeline, type AppTimelineItem } from "@solverminds/shared-ui";
 import { useQuery } from "@tanstack/react-query";
-import { Result, Skeleton, Typography } from "antd";
+import { Result, Skeleton } from "antd";
 import type { LucideIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
@@ -10,10 +11,7 @@ import { bookingApi } from "../../api/booking.api";
 import { bookingKeys } from "../../api/booking.keys";
 import type { BookingActivityEvent } from "../../types/booking.types";
 import { migrateLegacyCargo } from "../../types/booking.types";
-import {
-  partiesToCards,
-  type PartyRoleKey,
-} from "../../utils/party-role.utils";
+import { partiesToCards, type PartyRoleKey } from "../../utils/party-role.utils";
 import { BookingModuleStyles } from "../booking-module-styles";
 import { PreviewCargoReview } from "../preview/PreviewCargoReview";
 import {
@@ -24,26 +22,13 @@ import {
   BookingPreviewSection,
 } from "../preview/booking-preview-section";
 
-const { Text } = Typography;
-
 interface BookingDetailsViewerProps {
   bookingId?: string;
 }
 
-type ActivityTone =
-  | "primary"
-  | "success"
-  | "warning"
-  | "error"
-  | "info"
-  | "muted";
+type ActivityTone = "primary" | "success" | "warning" | "error" | "info" | "muted";
 
-const REVIEW_PARTY_ROLES: PartyRoleKey[] = [
-  "shipper",
-  "consignee",
-  "notifyParty",
-  "forwarder",
-];
+const REVIEW_PARTY_ROLES: PartyRoleKey[] = ["shipper", "consignee", "notifyParty", "forwarder"];
 
 function dash(value?: string | number | null): string {
   if (value === undefined || value === null || value === "") return "—";
@@ -64,11 +49,7 @@ function getActivityStepVisual(action: string): {
   if (key.includes("amend") || key.includes("edit") || key.includes("update")) {
     return { icon: Icons.squarePen, tone: "warning" };
   }
-  if (
-    key.includes("submit") ||
-    key.includes("sent") ||
-    key.includes("forward")
-  ) {
+  if (key.includes("submit") || key.includes("sent") || key.includes("forward")) {
     return { icon: Icons.send, tone: "info" };
   }
   if (key.includes("creat") || key.includes("draft") || key.includes("new")) {
@@ -78,46 +59,33 @@ function getActivityStepVisual(action: string): {
 }
 
 function ActivitySteps({ events }: { events: BookingActivityEvent[] }) {
+  const items: AppTimelineItem[] = events.map((event) => {
+    const visual = getActivityStepVisual(event.action);
+    return {
+      id: event.id,
+      title: event.action,
+      subtitle: `${event.by} · ${event.at}`,
+      meta: event.note,
+      status: "neutral",
+      icon: (
+        <span
+          className={`booking-activity-steps__icon booking-activity-steps__icon--${visual.tone} app-icon-inherit`}
+        >
+          <AppIcon icon={visual.icon} size={14} />
+        </span>
+      ),
+    };
+  });
   return (
-    <ol className="booking-activity-steps custom-scroll">
-      {events.map((event, index) => {
-        const visual = getActivityStepVisual(event.action);
-        const isLast = index === events.length - 1;
-        return (
-          <li
-            key={event.id}
-            className={[
-              "booking-activity-steps__item",
-              isLast ? "booking-activity-steps__item--last" : "",
-            ]
-              .filter(Boolean)
-              .join(" ")}
-          >
-            <div className="booking-activity-steps__rail" aria-hidden>
-              <span
-                className={`booking-activity-steps__icon booking-activity-steps__icon--${visual.tone} app-icon-inherit`}
-              >
-                <AppIcon icon={visual.icon} size={14} />
-              </span>
-              {!isLast ? (
-                <span className="booking-activity-steps__connector" />
-              ) : null}
-            </div>
-            <div className="booking-activity-steps__body">
-              <Text strong className="booking-activity-steps__action">
-                {event.action}
-              </Text>
-              <Text type="secondary" className="booking-activity-steps__meta">
-                {event.by} · {event.at}
-              </Text>
-              {event.note ? (
-                <Text className="booking-activity-steps__note">{event.note}</Text>
-              ) : null}
-            </div>
-          </li>
-        );
-      })}
-    </ol>
+    <AppTimeline
+      items={items}
+      orientation="vertical"
+      size="sm"
+      showStatusBadge={false}
+      ariaLabel="Booking activity"
+      className="booking-activity-steps custom-scroll"
+      emptyText="No activity recorded for this booking."
+    />
   );
 }
 
@@ -230,9 +198,7 @@ export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
             items={[
               {
                 label: t("labels.cargoValue"),
-                value: `${dash(booking.insurance.cargoValue)} ${dash(
-                  booking.insurance.currency,
-                )}`,
+                value: `${dash(booking.insurance.cargoValue)} ${dash(booking.insurance.currency)}`,
               },
               {
                 label: t("labels.termsAccepted"),
@@ -246,10 +212,7 @@ export function BookingDetailsViewer({ bookingId }: BookingDetailsViewerProps) {
       </BookingPreviewSection>
 
       {booking.ens?.euCustomsZone ? (
-        <BookingPreviewSection
-          variant="airy"
-          title={WIZARD_STEP_TITLES.ensDetails}
-        >
+        <BookingPreviewSection variant="airy" title={WIZARD_STEP_TITLES.ensDetails}>
           <BookingPreviewFieldGrid
             items={[
               { label: t("labels.blType"), value: dash(booking.ens.blType) },

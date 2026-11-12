@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 16:00)
+// Modified by Sekar Nagarajan (2026-11-12 18:00)
 /**
  * Control Panel stylesheet — one token-backed <style> injector (agenct.md: no inline styles, no
  * hex, tokens for colour / spacing / radius, custom-scroll on scroll surfaces).
@@ -50,7 +50,7 @@ export function AdminModuleStyles() {
       .admin-page-tabs {
         position: sticky;
         top: 0;
-        z-index: 2;
+        z-index: 3;
         flex-shrink: 0;
         padding: 0 ${token.paddingLG}px;
         background: ${token.colorBgContainer};
@@ -123,11 +123,7 @@ export function AdminModuleStyles() {
         overflow: auto;
       }
       .admin-section__footer {
-        position: sticky;
-        bottom: 0;
-        z-index: 1;
-        padding-top: ${token.paddingSM}px;
-        background: ${token.colorBgContainer};
+        margin-top: ${token.marginSM}px;
       }
 
       /* ================================================================== */
@@ -461,6 +457,171 @@ export function AdminModuleStyles() {
         letter-spacing: 0.04em;
       }
 
+      /* Global Configuration page: settings column + posture / pending-changes rail */
+      .admin-config-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: ${token.marginMD}px;
+        align-items: start;
+      }
+      .admin-config-main {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginMD}px;
+        min-width: 0;
+        max-width: ${controlLG * 22}px;
+      }
+      .admin-config-rail {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginSM}px;
+        min-width: 0;
+      }
+      .admin-posture,
+      .admin-pending {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginSM}px;
+        padding: ${token.paddingMD}px;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorBgContainer};
+      }
+      .admin-posture__head,
+      .admin-pending__head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: ${token.marginSM}px;
+      }
+      .admin-posture__list,
+      .admin-pending__list,
+      .admin-confirm-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXS}px;
+      }
+      .admin-confirm-list li::before {
+        content: "•";
+        margin-right: ${token.marginXS}px;
+        color: ${token.colorWarning};
+      }
+      .admin-posture__item {
+        display: flex;
+        align-items: flex-start;
+        gap: ${token.marginSM}px;
+      }
+      .admin-posture__icon {
+        flex-shrink: 0;
+        display: inline-flex;
+        margin-top: ${token.marginXXS / 2}px;
+        color: ${token.colorSuccess};
+      }
+      .admin-posture__icon .app-icon {
+        color: inherit;
+      }
+      .admin-posture__item--off .admin-posture__icon {
+        color: ${token.colorTextQuaternary};
+      }
+      .admin-posture__copy {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS / 2}px;
+        min-width: 0;
+      }
+      .admin-posture__label {
+        font-weight: ${token.fontWeightStrong};
+      }
+      .admin-posture__item--off .admin-posture__label {
+        color: ${token.colorTextSecondary};
+      }
+      .admin-posture__detail,
+      .admin-posture__note,
+      .admin-pending__empty {
+        font-size: ${token.fontSizeSM}px;
+      }
+      .admin-config-warning.ant-alert {
+        border-radius: ${token.borderRadiusLG}px;
+      }
+      .admin-pending__item {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: ${token.marginXXS}px ${token.marginXS}px;
+        align-items: center;
+        padding: ${token.paddingXS}px ${token.paddingSM}px;
+        border-radius: ${token.borderRadius}px;
+        background: ${warningTint8};
+      }
+      .admin-pending__field {
+        font-weight: ${token.fontWeightStrong};
+        font-size: ${token.fontSizeSM}px;
+      }
+      .admin-pending__diff {
+        grid-column: 1;
+        display: inline-flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: ${token.marginXXS}px;
+        font-size: ${token.fontSizeSM}px;
+      }
+      .admin-pending__arrow.app-icon {
+        color: ${token.colorTextSecondary};
+      }
+      .admin-pending__item > .ant-btn {
+        grid-column: 2;
+        grid-row: 1 / span 2;
+      }
+
+      /* Lockout rule sentence */
+      .admin-rule-sentence {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: ${token.marginXS}px ${token.marginSM}px;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorFillAlter};
+        border: 1px solid ${token.colorBorderSecondary};
+      }
+      .admin-rule-sentence__text {
+        font-size: ${token.fontSizeLG}px;
+        color: ${token.colorText};
+      }
+      .admin-rule-sentence__number.ant-input-number,
+      .admin-rule-sentence__number.ant-input-number-group-wrapper {
+        width: ${controlLG * 2.2}px;
+      }
+      .admin-rule-sentence__number--wide.ant-input-number,
+      .admin-rule-sentence__number--wide.ant-input-number-group-wrapper {
+        width: ${controlLG * 4.5}px;
+      }
+      .admin-rule-sentence__meta {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: ${token.marginXS}px ${token.marginMD}px;
+        font-size: ${token.fontSizeSM}px;
+      }
+      .admin-rule-sentence__badges {
+        display: inline-flex;
+        flex-wrap: wrap;
+        gap: ${token.marginXS}px;
+      }
+      .admin-rule-sentence__badges .ant-btn {
+        height: auto;
+        padding: 0 ${token.paddingXXS}px;
+        font-size: ${token.fontSizeSM}px;
+      }
+      .admin-section__footer .admin-form-footer.form-step-footer {
+        margin: 0;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+      }
+
       /* Settings rows (AdminSettingRow) */
       .admin-setting-row {
         display: flex;
@@ -479,6 +640,23 @@ export function AdminModuleStyles() {
         align-items: stretch;
         gap: ${token.marginXS}px;
       }
+      .admin-setting-row__icon {
+        flex-shrink: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: ${token.controlHeightSM}px;
+        height: ${token.controlHeightSM}px;
+        border-radius: ${token.borderRadius}px;
+        background: ${primaryTint8};
+        color: ${token.colorPrimary};
+      }
+      .admin-setting-row__icon .app-icon {
+        color: inherit;
+      }
+      .admin-setting-row--stacked .admin-setting-row__icon {
+        display: none;
+      }
       .admin-setting-row__copy {
         display: flex;
         flex-direction: column;
@@ -486,9 +664,31 @@ export function AdminModuleStyles() {
         min-width: 0;
         flex: 1;
       }
+      .admin-setting-row__stack {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXS}px;
+        width: 100%;
+      }
+      .admin-setting-row__title-row {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: ${token.marginXS}px;
+      }
       .admin-setting-row__title {
         font-weight: ${token.fontWeightStrong};
         color: ${token.colorText};
+      }
+      .admin-setting-row--modified {
+        box-shadow: inset ${token.lineWidthBold}px 0 0 ${token.colorWarning};
+        padding-left: ${token.paddingSM}px;
+        margin-left: -${token.paddingSM}px;
+      }
+      .admin-setting-row__revert.ant-btn {
+        height: auto;
+        padding: 0 ${token.paddingXXS}px;
+        font-size: ${token.fontSizeSM}px;
       }
       .admin-setting-row__description {
         font-size: ${token.fontSizeSM}px;
@@ -650,6 +850,19 @@ export function AdminModuleStyles() {
         flex-wrap: wrap;
         gap: ${token.marginXS}px;
         margin-top: ${token.marginXXS}px;
+      }
+      .admin-detail-modal__body {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginSM}px;
+      }
+      .admin-detail-modal__message {
+        max-height: ${controlLG * 8}px;
+        overflow-y: auto;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorFillAlter};
       }
       .admin-descriptions .ant-descriptions-item-label {
         color: ${token.colorTextSecondary};
@@ -1006,6 +1219,14 @@ export function AdminModuleStyles() {
         .admin-email-editor-grid {
           grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
         }
+        .admin-config-layout {
+          grid-template-columns: minmax(0, 1fr) ${controlLG * 8.5}px;
+        }
+        .admin-config-rail {
+          position: sticky;
+          top: ${controlLG * 2}px;
+          z-index: 1;
+        }
       }
 
       @media (max-width: ${token.screenMDMax}px) {
@@ -1074,6 +1295,13 @@ export function AdminModuleStyles() {
         .admin-setting-row__number.ant-input-number-group-wrapper,
         .admin-setting-row__number.ant-input-number {
           width: 100%;
+        }
+        .admin-rule-sentence__presets {
+          width: 100%;
+        }
+        .admin-setting-row--modified {
+          padding-left: ${token.paddingXS}px;
+          margin-left: -${token.paddingXS}px;
         }
         .admin-drawer-body {
           padding: ${token.paddingMD}px;

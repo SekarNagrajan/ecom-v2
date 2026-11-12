@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 16:00)
+// Modified by Sekar Nagarajan (2026-11-12 18:15)
 /**
  * Banners & Assets — landing hero slides in a DataView grid with a create drawer. The image is
  * referenced by URL/path (asset upload is a follow-up); a live thumbnail previews the URL.
@@ -12,13 +12,14 @@ import {
 } from "@solverminds/shared-ui";
 import { DataView, type DataViewColumn } from "@solverminds/shared-ui/data-view";
 import { useToast } from "@solverminds/shared-ui/hooks";
-import { Image, Typography } from "antd";
+import { Col, Image, Row, Typography } from "antd";
 import { useRef, useState } from "react";
 import { useForm, type Resolver } from "react-hook-form";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { buildActionsColumn } from "../../../components/shared/build-actions-column";
 import {
+  FIELD_GUTTER,
   FIELD_ITEM_PROPS,
   optLabel,
   reqLabel,
@@ -29,6 +30,7 @@ import {
 } from "../../../components/shared/list-action-button";
 import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
+import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import {
   BANNER_UPSERT_DEFAULTS,
   BannerUpsertSchema,
@@ -285,61 +287,77 @@ export function BannerManagerView({
           returnFocusRef={addButtonRef}
         >
           <AdminFormSection step={1} title="Content" hint="What the slide shows and where it links.">
-            <FormInput
-              control={form.control}
-              name="title"
-              label={reqLabel("Banner Title")}
-              size="large"
-              placeholder="e.g. SOLAS VGM Digital Filing"
-              formItemProps={FIELD_ITEM_PROPS}
-            />
-            <FormInput
-              control={form.control}
-              name="imageUrl"
-              label={reqLabel("Image URL")}
-              size="large"
-              placeholder="https://… or /assets/hero.png"
-              prefix={<AppIcon icon={Icons.image} size={16} />}
-              formItemProps={FIELD_ITEM_PROPS}
-            />
-            {imageUrl && !form.formState.errors.imageUrl ? (
-              <Image
-                src={imageUrl}
-                alt="Image preview"
-                preview={false}
-                className="admin-banner-thumb admin-banner-thumb--form"
-                fallback=""
-              />
-            ) : null}
-            <FormInput
-              control={form.control}
-              name="linkUrl"
-              label={optLabel("Link URL")}
-              size="large"
-              placeholder="Where the slide should navigate (optional)"
-              prefix={<AppIcon icon={Icons.link} size={16} />}
-              formItemProps={FIELD_ITEM_PROPS}
-            />
+            <Row gutter={FIELD_GUTTER}>
+              <Col {...RESPONSIVE_COL.formHalf}>
+                <FormInput
+                  control={form.control}
+                  name="title"
+                  label={reqLabel("Banner Title")}
+                  size="large"
+                  placeholder="e.g. SOLAS VGM Digital Filing"
+                  formItemProps={FIELD_ITEM_PROPS}
+                />
+              </Col>
+              <Col {...RESPONSIVE_COL.formHalf}>
+                <FormInput
+                  control={form.control}
+                  name="linkUrl"
+                  label={optLabel("Link URL")}
+                  size="large"
+                  placeholder="Where the slide navigates (optional)"
+                  prefix={<AppIcon icon={Icons.link} size={16} />}
+                  formItemProps={FIELD_ITEM_PROPS}
+                />
+              </Col>
+              <Col {...RESPONSIVE_COL.full}>
+                <FormInput
+                  control={form.control}
+                  name="imageUrl"
+                  label={reqLabel("Image URL")}
+                  size="large"
+                  placeholder="https://… or /assets/hero.png"
+                  prefix={<AppIcon icon={Icons.image} size={16} />}
+                  formItemProps={FIELD_ITEM_PROPS}
+                />
+              </Col>
+              {imageUrl && !form.formState.errors.imageUrl ? (
+                <Col {...RESPONSIVE_COL.full}>
+                  <Image
+                    src={imageUrl}
+                    alt="Image preview"
+                    preview={false}
+                    className="admin-banner-thumb admin-banner-thumb--form"
+                    fallback=""
+                  />
+                </Col>
+              ) : null}
+            </Row>
           </AdminFormSection>
 
           <AdminFormSection step={2} title="Placement" hint="Position in the carousel and whether it is live.">
-            <FormInputNumber
-              control={form.control}
-              name="sortOrder"
-              label={reqLabel("Display Order")}
-              size="large"
-              min={1}
-              numericMode="positive-integer"
-              className="admin-stack-full"
-              formItemProps={FIELD_ITEM_PROPS}
-            />
-            <FormSwitch
-              control={form.control}
-              name="isActive"
-              label={optLabel("Active")}
-              description="Inactive banners stay saved but are hidden from the landing page."
-              formItemProps={FIELD_ITEM_PROPS}
-            />
+            <Row gutter={FIELD_GUTTER} align="bottom">
+              <Col {...RESPONSIVE_COL.formHalf}>
+                <FormInputNumber
+                  control={form.control}
+                  name="sortOrder"
+                  label={reqLabel("Display Order")}
+                  size="large"
+                  min={1}
+                  numericMode="positive-integer"
+                  className="admin-stack-full"
+                  formItemProps={FIELD_ITEM_PROPS}
+                />
+              </Col>
+              <Col {...RESPONSIVE_COL.formHalf}>
+                <FormSwitch
+                  control={form.control}
+                  name="isActive"
+                  label={optLabel("Active")}
+                  description="Inactive banners stay saved but are hidden from the landing page."
+                  formItemProps={FIELD_ITEM_PROPS}
+                />
+              </Col>
+            </Row>
           </AdminFormSection>
         </AdminDrawer>
       ) : null}

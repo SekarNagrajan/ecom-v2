@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 16:00)
+// Modified by Sekar Nagarajan (2026-11-12 16:20)
 /**
  * Module Creation — register portal menus (RegisterMenu.jsp parity) and control their category and
  * visibility. The grid is the page; Register / Edit happen in a drawer whose fields map 1:1 onto
@@ -115,7 +115,14 @@ export function ModuleCreationView({
   const registerButtonRef = useRef<HTMLSpanElement>(null);
   const [drawer, setDrawer] = useState<DrawerState>(null);
 
-  const rows: MenuRow[] = menus.map((m) => ({ ...m, rowId: menuRowId(m) }));
+  // The server key can repeat in legacy data (e.g. two INV rows); suffix repeats so AG Grid ids stay unique.
+  const seen = new Map<string, number>();
+  const rows: MenuRow[] = menus.map((m) => {
+    const base = menuRowId(m);
+    const n = (seen.get(base) ?? 0) + 1;
+    seen.set(base, n);
+    return { ...m, rowId: n === 1 ? base : `${base}#${n}` };
+  });
   const parentOptions = [
     { value: "ROOT", label: "ROOT (top level)" },
     ...Array.from(

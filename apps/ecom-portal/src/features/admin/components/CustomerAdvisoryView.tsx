@@ -1,11 +1,12 @@
-// Modified by Sekar Nagarajan (2026-11-12 16:00)
+// Modified by Sekar Nagarajan (2026-11-12 18:00)
 /**
  * Customer Advisories — operational notices in a DataView grid with a publish drawer (severity,
- * headline, message, validity window) and a read-only detail drawer.
+ * headline, message, validity window) and a read-only detail popup.
  */
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AppButton,
+  AppModal,
   FormDatePicker,
   FormInput,
   FormSegmented,
@@ -14,7 +15,7 @@ import {
 } from "@solverminds/shared-ui";
 import { DataView, type DataViewColumn } from "@solverminds/shared-ui/data-view";
 import { useConfirm } from "@solverminds/shared-ui/hooks";
-import { Descriptions, Typography } from "antd";
+import { Col, Descriptions, Row, Typography } from "antd";
 import { DateTime } from "luxon";
 import { useRef, useState } from "react";
 import { useForm, type Resolver } from "react-hook-form";
@@ -22,6 +23,7 @@ import { useForm, type Resolver } from "react-hook-form";
 import { AppIcon, Icons } from "../../../components/icons";
 import { buildActionsColumn } from "../../../components/shared/build-actions-column";
 import {
+  FIELD_GUTTER,
   FIELD_ITEM_PROPS,
   optLabel,
   reqLabel,
@@ -32,6 +34,7 @@ import {
 } from "../../../components/shared/list-action-button";
 import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
+import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import { useAiTextAssist } from "../../ai-assist";
 import {
   ADVISORY_SEVERITY_OPTIONS,
@@ -326,48 +329,65 @@ export function CustomerAdvisoryView({
           </AdminFormSection>
 
           <AdminFormSection step={3} title="Validity" hint="Leave the end date empty for an open-ended advisory.">
-            <FormDatePicker
-              control={form.control}
-              name="effectiveFrom"
-              label={reqLabel("Effective From")}
-              size="large"
-              valueFormat="calendar-date"
-              className="admin-stack-full"
-              formItemProps={FIELD_ITEM_PROPS}
-            />
-            <FormDatePicker
-              control={form.control}
-              name="effectiveTo"
-              label={optLabel("Effective To")}
-              size="large"
-              valueFormat="calendar-date"
-              minDate={effectiveFrom ? DateTime.fromISO(effectiveFrom) : undefined}
-              className="admin-stack-full"
-              formItemProps={FIELD_ITEM_PROPS}
-            />
+            <Row gutter={FIELD_GUTTER}>
+              <Col {...RESPONSIVE_COL.formHalf}>
+                <FormDatePicker
+                  control={form.control}
+                  name="effectiveFrom"
+                  label={reqLabel("Effective From")}
+                  size="large"
+                  valueFormat="calendar-date"
+                  className="admin-stack-full"
+                  formItemProps={FIELD_ITEM_PROPS}
+                />
+              </Col>
+              <Col {...RESPONSIVE_COL.formHalf}>
+                <FormDatePicker
+                  control={form.control}
+                  name="effectiveTo"
+                  label={optLabel("Effective To")}
+                  size="large"
+                  valueFormat="calendar-date"
+                  minDate={effectiveFrom ? DateTime.fromISO(effectiveFrom) : undefined}
+                  className="admin-stack-full"
+                  formItemProps={FIELD_ITEM_PROPS}
+                />
+              </Col>
+            </Row>
           </AdminFormSection>
         </AdminDrawer>
       ) : null}
 
       {viewing ? (
-        <AdminDrawer
-          open={viewing !== null}
-          onClose={() => setViewing(null)}
-          icon={SEVERITY_META[viewing.severity].icon}
-          title={viewing.title}
-          subtitle={
-            <span className="admin-drawer-title__pills">
-              <SeverityPill severity={viewing.severity} />
-              <AdminStatusPill tone={STATUS_META[advisoryStatus(viewing, today)].tone}>
-                {STATUS_META[advisoryStatus(viewing, today)].label}
-              </AdminStatusPill>
-            </span>
-          }
+        <AppModal
+          open
+          centered
           dialogSize="sm"
-          cancelLabel="Close"
+          destroyOnHidden
+          onCancel={() => setViewing(null)}
+          className="admin-detail-modal"
+          title={
+            <div className="admin-drawer-title">
+              <span className="admin-drawer-title__icon" aria-hidden>
+                <AppIcon icon={SEVERITY_META[viewing.severity].icon} size={20} />
+              </span>
+              <div className="admin-drawer-title__copy">
+                <div className="admin-drawer-title__text">{viewing.title}</div>
+                <span className="admin-drawer-title__pills">
+                  <SeverityPill severity={viewing.severity} />
+                  <AdminStatusPill tone={STATUS_META[advisoryStatus(viewing, today)].tone}>
+                    {STATUS_META[advisoryStatus(viewing, today)].label}
+                  </AdminStatusPill>
+                </span>
+              </div>
+            </div>
+          }
+          footer={
+           null
+          }
         >
-          <AdminFormSection title="Details">
-            <Descriptions column={1} size="small" colon={false} className="admin-descriptions">
+          <div className="admin-detail-modal__body">
+            <Descriptions column={{ xs: 1, sm: 2 }} size="small" colon={false} className="admin-descriptions">
               <Descriptions.Item label="Effective From">
                 <FormattedDate value={viewing.effectiveFrom || null} />
               </Descriptions.Item>
@@ -375,9 +395,11 @@ export function CustomerAdvisoryView({
                 <FormattedDate value={viewing.effectiveTo || null} fallback="Open-ended" />
               </Descriptions.Item>
             </Descriptions>
-            <Paragraph className="admin-prewrap">{viewing.message}</Paragraph>
-          </AdminFormSection>
-        </AdminDrawer>
+            <div className="admin-detail-modal__message custom-scroll">
+              <Paragraph className="admin-prewrap">{viewing.message}</Paragraph>
+            </div>
+          </div>
+        </AppModal>
       ) : null}
     </AdminSectionPage>
   );

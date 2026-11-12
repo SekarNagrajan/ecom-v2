@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 15:40)
+// Modified by Sekar Nagarajan (2026-11-12 16:20)
 /**
  * Email Templates — pick a transactional template, edit subject + HTML body, insert placeholders
  * at the caret, and preview the sanitised result. The open template lives in `?template=` so a
@@ -24,7 +24,7 @@ import { FIELD_ITEM_PROPS, reqLabel } from "../../../components/shared/form-fiel
 import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import { useResponsiveLayout } from "../../../hooks/use-responsive-layout";
 import { useAiTextAssist } from "../../ai-assist";
-import { adminRoute } from "../admin-route";
+import { useAdminSection } from "../hooks/use-admin-section";
 import {
   EmailTemplateEditSchema,
   type EmailTemplate,
@@ -75,8 +75,8 @@ export function EmailTemplateEditorView({
   const confirm = useConfirm();
   const { compactHeader: isNarrow } = useResponsiveLayout();
   const { textareaAssistProps } = useAiTextAssist();
-  const { template: templateParam } = adminRoute.useSearch();
-  const navigate = adminRoute.useNavigate();
+  const { search: routeSearch, setSubSelection } = useAdminSection();
+  const templateParam = routeSearch.template;
 
   const [search, setSearch] = useState("");
   const [pane, setPane] = useState<EditorPane>("editor");
@@ -102,12 +102,7 @@ export function EmailTemplateEditorView({
       humaniseTemplateCode(t.templateCode).toLowerCase().includes(query),
   );
 
-  const goToTemplate = (id: string) => {
-    void navigate({
-      search: (prev: Record<string, unknown>) => ({ ...prev, template: id }),
-      replace: true,
-    } as never);
-  };
+  const goToTemplate = (id: string) => setSubSelection({ template: id });
 
   const selectTemplate = (id: string) => {
     if (!activeTemplate || id === activeTemplate.id) return;

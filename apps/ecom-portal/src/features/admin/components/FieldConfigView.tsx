@@ -200,18 +200,7 @@ export function FieldConfigView({
       />
 
       <div className="admin-field-form">
-        <div className="admin-toolbar">
-          <Input
-            size="large"
-            allowClear
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by form, field id or label"
-            aria-label="Search fields"
-            prefix={<AppIcon icon={Icons.search} size={16} />}
-            className="admin-toolbar__search"
-          />
-        </div>
+       
 
         <div className="admin-grid-wrap responsive-table-wrap custom-scroll">
           <DataView

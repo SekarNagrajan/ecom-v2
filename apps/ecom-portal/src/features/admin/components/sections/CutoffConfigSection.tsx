@@ -1,4 +1,4 @@
-// Created by Sekar Nagarajan (2026-11-12 12:40)
+// Modified by Sekar Nagarajan (2026-11-12 14:40)
 /** Cutoff Configuration tab. */
 import {
   useCreateCutoffMutation,
@@ -27,6 +27,8 @@ export function CutoffConfigSection() {
         onCreate={create.mutateAsync}
         onUpdate={update.mutateAsync}
         onDelete={remove.mutateAsync}
+        isSaving={create.isPending || update.isPending}
+        isFetching={query.isFetching || remove.isPending}
       />
     </AdminSectionState>
   );

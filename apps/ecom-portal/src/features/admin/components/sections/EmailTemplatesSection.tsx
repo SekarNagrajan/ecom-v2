@@ -1,10 +1,10 @@
-// Created by Sekar Nagarajan (2026-11-12 12:40)
+// Modified by Sekar Nagarajan (2026-11-12 14:40)
 /** Email Templates tab — an empty template list is an empty state, not an endless spinner. */
 import {
   useEmailTemplatesQuery,
   useUpdateEmailTemplateMutation,
 } from "../../api/admin.queries";
-import type { EmailTemplate } from "../../types/admin.types";
+import type { EmailTemplateEditValues } from "../../types/admin.types";
 import { settleMutation } from "../../utils/admin.utils";
 import { EmailTemplateEditorView } from "../EmailTemplateEditorView";
 import { AdminSectionState } from "../shared/AdminSectionState";
@@ -26,7 +26,8 @@ export function EmailTemplatesSection() {
     >
       <EmailTemplateEditorView
         templates={templates}
-        onSave={(id: string, data: Partial<EmailTemplate>) =>
+        isSaving={update.isPending}
+        onSave={(id: string, data: EmailTemplateEditValues) =>
           settleMutation(() => update.mutateAsync({ id, data }))
         }
       />

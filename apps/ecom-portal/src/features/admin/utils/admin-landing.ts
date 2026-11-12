@@ -1,4 +1,4 @@
-// Created by Sekar Nagarajan (2026-11-12 12:40)
+// Modified by Sekar Nagarajan (2026-11-12 14:40)
 import { useAuthStore } from "@solverminds/auth";
 
 import {
@@ -9,6 +9,8 @@ import {
 
 export interface AdminRouteSearch {
   section: AdminSectionKey;
+  /** Sub-selection inside a section (e.g. the open email template id). */
+  template?: string;
 }
 
 /**

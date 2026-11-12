@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 14:10)
+// Modified by Sekar Nagarajan (2026-11-12 14:40)
 /**
  * Control Panel stylesheet — one token-backed <style> injector (agenct.md: no inline styles, no
  * hex, tokens for colour / spacing / radius, custom-scroll on scroll surfaces).
@@ -781,6 +781,149 @@ export function AdminModuleStyles() {
         word-break: break-word;
       }
 
+      /* Email Templates */
+      .admin-email-layout {
+        display: grid;
+        grid-template-columns: minmax(${controlLG * 6}px, 1fr) minmax(0, 2.4fr);
+        gap: ${token.marginMD}px;
+        align-items: start;
+      }
+      .admin-email-layout--narrow {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .admin-template-pane {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginSM}px;
+        min-width: 0;
+      }
+      .admin-template-list {
+        list-style: none;
+        margin: 0;
+        padding: ${token.paddingXXS}px;
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+        max-height: calc(100vh - ${controlLG * 9}px);
+        min-height: ${controlLG * 5}px;
+        overflow-y: auto;
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorBgContainer};
+      }
+      .admin-template-list__item {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS / 2}px;
+        width: 100%;
+        margin: 0;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        border: 1px solid transparent;
+        border-radius: ${token.borderRadius}px;
+        background: transparent;
+        color: ${token.colorText};
+        text-align: left;
+        cursor: pointer;
+        transition: background-color ${token.motionDurationFast} ease,
+          border-color ${token.motionDurationFast} ease;
+      }
+      .admin-template-list__item:hover {
+        background: ${token.colorFillTertiary};
+      }
+      .admin-template-list__item:focus-visible {
+        outline: ${token.lineWidthBold}px solid ${token.colorPrimaryBorder};
+        outline-offset: -${token.lineWidthBold}px;
+      }
+      .admin-template-list__item--active {
+        background: ${primaryTint8};
+        border-color: ${token.colorPrimaryBorder};
+      }
+      .admin-template-list__title {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXS}px;
+        font-weight: ${token.fontWeightStrong};
+      }
+      .admin-template-list__item--active .admin-template-list__title {
+        color: ${token.colorPrimary};
+      }
+      .admin-template-list__meta {
+        font-size: ${token.fontSizeSM}px;
+      }
+      .admin-template-list__empty {
+        padding: ${token.paddingMD}px;
+        text-align: center;
+      }
+      .admin-email-editor-pane {
+        min-width: 0;
+      }
+      .admin-email-editor-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: ${token.marginMD}px;
+      }
+      .admin-email-editor-grid__editor,
+      .admin-email-editor-grid__preview {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginSM}px;
+        min-width: 0;
+      }
+      .admin-template-vars {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXS}px;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px dashed ${token.colorBorder};
+        background: ${token.colorFillAlter};
+      }
+      .admin-template-vars__label {
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+      }
+      .admin-template-vars__chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: ${token.marginXS}px;
+      }
+      .admin-template-vars__chip.ant-btn {
+        font-family: ${token.fontFamilyCode};
+        font-size: ${token.fontSizeSM}px;
+      }
+      .admin-template-preview {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXS}px;
+        padding: ${token.paddingMD}px;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px dashed ${token.colorBorder};
+        background: ${token.colorBgContainer};
+      }
+      .admin-template-preview__label {
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+      .admin-template-preview__content {
+        max-height: ${controlLG * 10}px;
+        overflow-y: auto;
+        min-width: 0;
+        word-break: break-word;
+      }
+      .admin-template-preview__content img {
+        max-width: 100%;
+      }
+      .admin-email-var {
+        padding: 0 ${token.paddingXXS}px;
+        border-radius: ${token.borderRadiusXS}px;
+        background: ${warningTint8};
+        color: ${token.colorWarningText};
+        font-family: ${token.fontFamilyCode};
+        font-size: 0.95em;
+      }
+
       /* ================================================================== */
       /* 3. Module Mapping — dual-list board + drag-and-drop                 */
       /* ================================================================== */
@@ -1050,131 +1193,15 @@ export function AdminModuleStyles() {
         vertical-align: middle;
       }
 
-      /* legacy: Cutoff Configuration inline form + grid (CutoffConfigView) */
-      .admin-cutoff-create {
-        display: flex;
-        flex-direction: column;
-        gap: ${token.marginMD}px;
-        width: 100%;
-      }
-      .admin-cutoff-create__row {
-        display: grid;
-        gap: ${token.marginMD}px;
-        width: 100%;
-        align-items: end; /* one baseline when labels wrap */
-      }
-      .admin-cutoff-create__row--5 {
-        grid-template-columns: repeat(5, minmax(0, 1fr));
-      }
-      .admin-cutoff-create__row--2 {
-        grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
-      }
-      .admin-cutoff-create__row .ant-form-item {
-        margin-bottom: 0;
-        min-width: 0;
-        position: relative;
-      }
-      .admin-cutoff-create__row .ant-form-item .ant-form-item-label {
-        padding: 0 0 ${token.paddingXXS}px;
-      }
-      /* validation text must not grow the item, or align-items:end shifts siblings */
-      .admin-cutoff-create__row .ant-form-item-explain,
-      .admin-cutoff-create__row .ant-form-item-additional {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        z-index: 1;
-      }
-      .admin-cutoff-weekend {
-        display: flex;
-        flex-direction: column;
-        gap: ${token.marginSM}px;
-        justify-content: flex-end;
-        min-width: 0;
-        padding: ${token.paddingSM}px 0;
-      }
-      .admin-cutoff-create__actions.form-step-footer {
-        display: inline-flex;
-        align-items: center;
-        justify-content: flex-end;
-        gap: ${token.marginSM}px;
-        flex-wrap: wrap;
-        min-width: 0;
-        width: auto;
-        margin: 0;
-        padding: ${token.paddingSM}px 0;
-        border: none;
-      }
-      .admin-cutoff-grid-wrap {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        min-width: 0;
-        min-height: ${controlLG * 9}px;
-      }
-      .admin-cutoff-grid-wrap > * {
-        flex: 1;
-        min-height: 0;
-      }
-
-      /* legacy: Email Templates (EmailTemplateEditorView) */
-      .admin-email-sidebar,
-      .admin-email-editor {
-        display: flex;
-        flex-direction: column;
-        gap: ${token.marginMD}px;
-        width: 100%;
-        min-width: 0;
-      }
-      .admin-email-editor .ant-form-item {
-        margin-bottom: 0;
-      }
-      .admin-vars-box {
-        margin-top: 0;
-        padding: ${token.paddingMD}px;
-        border-radius: ${token.borderRadiusLG}px;
-        background: ${token.colorFillAlter};
-        border: 1px solid ${token.colorBorderSecondary};
-        display: flex;
-        flex-direction: column;
-        gap: ${token.marginSM}px;
-      }
-      .admin-vars-box__hint {
-        display: block;
-        font-size: ${token.fontSizeSM}px;
-        margin: 0;
-      }
-      .admin-vars-box__tags {
-        width: 100%;
-        margin: 0;
-      }
-      .admin-vars-tag.ant-tag {
-        cursor: pointer;
-        margin-inline-end: ${token.marginXXS}px;
-        margin-bottom: ${token.marginXXS}px;
-      }
-      .admin-preview-box {
-        padding: ${token.paddingMD}px;
-        border-radius: ${token.borderRadiusLG}px;
-        background: ${token.colorBgContainer};
-        border: 1px dashed ${token.colorBorder};
-      }
-      .admin-preview-box__label {
-        display: block;
-        margin-bottom: ${token.marginSM}px;
-        font-size: ${token.fontSizeSM}px;
-      }
-      .admin-preview-box__content {
-        max-height: ${controlLG * 6}px;
-        overflow-y: auto;
-        min-width: 0;
-        padding: ${token.paddingXS}px 0;
-      }
-
       /* ================================================================== */
       /* 5. Responsive                                                       */
       /* ================================================================== */
+      @media (min-width: ${token.screenXL}px) {
+        .admin-email-editor-grid {
+          grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+        }
+      }
+
       @media (max-width: ${token.screenMDMax}px) {
         .admin-page-body {
           padding: ${token.paddingLG}px;
@@ -1189,14 +1216,6 @@ export function AdminModuleStyles() {
         /* legacy */
         .admin-menu-create__grid {
           grid-template-columns: 1fr;
-        }
-        .admin-cutoff-create__row--5,
-        .admin-cutoff-create__row--2 {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-        .admin-cutoff-create__actions.form-step-footer {
-          grid-column: 1 / -1;
-          justify-content: flex-end;
         }
       }
 
@@ -1273,19 +1292,6 @@ export function AdminModuleStyles() {
           width: 100%;
         }
         /* legacy */
-        .admin-cutoff-create__row--5,
-        .admin-cutoff-create__row--2 {
-          grid-template-columns: 1fr;
-        }
-        .admin-cutoff-create__actions.form-step-footer {
-          grid-column: auto;
-          width: 100%;
-          justify-content: stretch;
-        }
-        .admin-cutoff-create__actions .sm-app-button,
-        .admin-cutoff-create__actions .ant-btn {
-          flex: 1 1 auto;
-        }
       }
     `}</style>
   );

@@ -1,116 +1,124 @@
-// Modified by Sekar Nagarajan (2026-11-12 12:40)
+// Modified by Sekar Nagarajan (2026-11-12 14:40)
 /**
- * Cutoff Configuration — parity with CutoffConfiguration.jsp / CutoffConfigurationView.jsp.
+ * Cutoff Configuration — per port / terminal closing hours (CutoffConfiguration.jsp parity).
+ * The grid is the page; create and edit happen in a drawer. A duplicate port+terminal (409) is
+ * shown on the Terminal field, and the saved row is scrolled into view and flashed.
  */
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AppButton,
-  FormCheckbox,
   FormInputNumber,
   FormSelect,
+  FormSwitch,
 } from "@solverminds/shared-ui";
-import {
-  DataView,
-  type DataViewColumn,
-} from "@solverminds/shared-ui/data-view";
+import { DataView, type DataViewColumn } from "@solverminds/shared-ui/data-view";
 import { useConfirm } from "@solverminds/shared-ui/hooks";
-import { Tag, Typography } from "antd";
-import { useState } from "react";
+import type { GridApi, RowDataUpdatedEvent } from "ag-grid-community";
+import { Col, Row } from "antd";
+import { useRef, useState } from "react";
 import { useForm, type Resolver } from "react-hook-form";
 
 import { AppIcon, Icons } from "../../../components/icons";
-import { FIELD_ITEM_PROPS, reqLabel } from "../../../components/shared/form-field-label";
 import { buildActionsColumn } from "../../../components/shared/build-actions-column";
+import {
+  FIELD_GUTTER,
+  FIELD_ITEM_PROPS,
+  optLabel,
+  reqLabel,
+} from "../../../components/shared/form-field-label";
 import {
   ListActionButton,
   ListActionsRow,
 } from "../../../components/shared/list-action-button";
 import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
+import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
+import { AdminApiError } from "../api/admin-request";
+import type { CutoffCreatePayload, CutoffUpdatePayload } from "../api/admin.api";
+import { useCutoffPortsQuery, useCutoffTerminalsQuery } from "../api/admin.queries";
 import {
-  useCutoffPortsQuery,
-  useCutoffTerminalsQuery,
-} from "../api/admin.queries";
-import {
+  CUTOFF_FORM_DEFAULTS,
   CutoffConfigFormSchema,
   type CutoffConfig,
+  type CutoffConfigFormInput,
   type CutoffConfigFormValues,
 } from "../types/admin.types";
-import { AdminLoadingCenter } from "./shared/admin-loading-center";
+import { AdminDrawer } from "./shared/AdminDrawer";
+import { AdminFormSection } from "./shared/AdminFormSection";
+import { AdminLockedField } from "./shared/AdminLockedField";
 import { AdminSectionPage } from "./shared/AdminSectionPage";
+import { AdminStatusPill } from "./shared/AdminStatusPill";
 
-const { Text } = Typography;
-
-const DEFAULT_FORM: CutoffConfigFormValues = {
-  portCode: "",
-  terminalCode: "",
-  cfsClosing: undefined as unknown as number,
-  vgmClosing: undefined as unknown as number,
-  documentClosing: undefined as unknown as number,
-  ediDecClosing: undefined as unknown as number,
-  fullCntrGateClosing: undefined as unknown as number,
-  excludeWeekends: false,
-};
+type DrawerState = { mode: "create" } | { mode: "edit"; row: CutoffConfig } | null;
 
 interface CutoffConfigViewProps {
   cutoffConfigs: CutoffConfig[];
-  isLoading?: boolean;
-  onCreate: (
-    data: CutoffConfigFormValues & {
-      portName: string;
-      terminalName: string;
-    },
-  ) => Promise<CutoffConfig>;
-  onUpdate: (payload: {
-    id: string;
-    data: Omit<CutoffConfigFormValues, "portCode" | "terminalCode">;
-  }) => Promise<CutoffConfig>;
+  onCreate: (data: CutoffCreatePayload) => Promise<CutoffConfig>;
+  onUpdate: (payload: { id: string; data: CutoffUpdatePayload }) => Promise<CutoffConfig>;
   onDelete: (id: string) => Promise<void>;
+  isSaving: boolean;
+  isFetching: boolean;
 }
+
+const CLOSING_FIELDS: {
+  name: keyof Pick<
+    CutoffConfigFormValues,
+    "cfsClosing" | "vgmClosing" | "documentClosing" | "ediDecClosing" | "fullCntrGateClosing"
+  >;
+  label: string;
+  header: string;
+}[] = [
+  { name: "cfsClosing", label: "CFS Closing", header: "CFS" },
+  { name: "vgmClosing", label: "VGM Closing", header: "VGM" },
+  { name: "documentClosing", label: "Document Closing", header: "Docs" },
+  { name: "ediDecClosing", label: "EDI Declaration Closing", header: "EDI" },
+  { name: "fullCntrGateClosing", label: "Full Container Gate-in Closing", header: "Gate-in" },
+];
+
+const hoursFormatter = (params: { value?: number | null }) =>
+  params.value == null ? "" : `${params.value} h`;
 
 export function CutoffConfigView({
   cutoffConfigs,
-  isLoading = false,
   onCreate,
   onUpdate,
   onDelete,
+  isSaving,
+  isFetching,
 }: CutoffConfigViewProps) {
   const confirm = useConfirm();
   const { profileHandlers } = useLocalGridProfiles("admin-cutoff");
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [isSaving, setIsSaving] = useState(false);
+  const addButtonRef = useRef<HTMLSpanElement>(null);
+  const gridApiRef = useRef<GridApi<CutoffConfig> | null>(null);
+  const pendingHighlightId = useRef<string | null>(null);
+  const [drawer, setDrawer] = useState<DrawerState>(null);
 
-  const form = useForm<CutoffConfigFormValues>({
-    resolver: zodResolver(
-      CutoffConfigFormSchema,
-    ) as Resolver<CutoffConfigFormValues>,
-    defaultValues: DEFAULT_FORM,
+  const form = useForm<CutoffConfigFormInput, unknown, CutoffConfigFormValues>({
+    resolver: zodResolver(CutoffConfigFormSchema) as Resolver<
+      CutoffConfigFormInput,
+      unknown,
+      CutoffConfigFormValues
+    >,
+    defaultValues: CUTOFF_FORM_DEFAULTS,
     mode: "onChange",
   });
+  const portCode = form.watch("portCode") ?? "";
+  const isEdit = drawer?.mode === "edit";
 
-  const portCode = form.watch("portCode");
-  const isEditMode = Boolean(editingId);
+  const portsQuery = useCutoffPortsQuery({ enabled: drawer !== null });
+  const terminalsQuery = useCutoffTerminalsQuery(isEdit ? "" : portCode);
 
-  const portsQuery = useCutoffPortsQuery();
-  const terminalsQuery = useCutoffTerminalsQuery(portCode || "");
-
-  const portOptions = (portsQuery.data ?? []).map((p) => ({
-    value: p.portCode,
-    label: p.label,
-  }));
-
+  const portOptions = (portsQuery.data ?? []).map((p) => ({ value: p.portCode, label: p.label }));
   const terminalOptions = (terminalsQuery.data ?? []).map((t) => ({
     value: t.terminalCode,
     label: t.terminalName,
   }));
 
-  const resetForm = () => {
-    setEditingId(null);
-    form.reset(DEFAULT_FORM);
+  const openCreate = () => {
+    form.reset(CUTOFF_FORM_DEFAULTS);
+    setDrawer({ mode: "create" });
   };
-
-  const handleEdit = (row: CutoffConfig) => {
-    setEditingId(row.id);
+  const openEdit = (row: CutoffConfig) => {
     form.reset({
       portCode: row.portCode,
       terminalCode: row.terminalCode,
@@ -121,20 +129,72 @@ export function CutoffConfigView({
       fullCntrGateClosing: row.fullCntrGateClosing,
       excludeWeekends: row.excludeWeekends,
     });
+    setDrawer({ mode: "edit", row });
   };
+  const closeDrawer = () => {
+    setDrawer(null);
+    form.reset(CUTOFF_FORM_DEFAULTS);
+  };
+
+  const highlightRow = (id: string) => {
+    pendingHighlightId.current = id;
+    const api = gridApiRef.current;
+    const node = api?.getRowNode(id);
+    if (api && node) {
+      api.ensureNodeVisible(node);
+      api.flashCells({ rowNodes: [node] });
+      pendingHighlightId.current = null;
+    }
+  };
+
+  const onRowDataUpdated = (event: RowDataUpdatedEvent<CutoffConfig>) => {
+    const id = pendingHighlightId.current;
+    if (!id) return;
+    const node = event.api.getRowNode(id);
+    if (!node) return;
+    event.api.ensureNodeVisible(node);
+    event.api.flashCells({ rowNodes: [node] });
+    pendingHighlightId.current = null;
+  };
+
+  const handleSubmit = form.handleSubmit(async (values) => {
+    try {
+      if (drawer?.mode === "edit") {
+        const { portCode: _port, terminalCode: _terminal, ...data } = values;
+        const saved = await onUpdate({ id: drawer.row.id, data });
+        closeDrawer();
+        highlightRow(saved.id);
+        return;
+      }
+      const port = (portsQuery.data ?? []).find((p) => p.portCode === values.portCode);
+      const terminal = (terminalsQuery.data ?? []).find((t) => t.terminalCode === values.terminalCode);
+      const saved = await onCreate({
+        ...values,
+        portName: port?.portName ?? values.portCode,
+        terminalName: terminal?.terminalName ?? values.terminalCode,
+      });
+      closeDrawer();
+      highlightRow(saved.id);
+    } catch (error: unknown) {
+      if (error instanceof AdminApiError && error.code === "DUPLICATE") {
+        form.setError("terminalCode", {
+          message: "A cutoff already exists for this port and terminal",
+        });
+      }
+      /* other failures are surfaced by the mutation's onError toast */
+    }
+  });
 
   const handleDelete = (row: CutoffConfig) => {
     confirm.danger({
       title: "Delete Cutoff Configuration",
-      content: `Do you want to delete ${row.portCode} / ${row.terminalName}?`,
+      content: `Delete the cutoff for ${row.portName} / ${row.terminalName}? Bookings fall back to the default closing times.`,
       okText: "Delete",
       cancelText: "Cancel",
       onOk: async () => {
         try {
           await onDelete(row.id);
-          if (editingId === row.id) {
-            resetForm();
-          }
+          if (drawer?.mode === "edit" && drawer.row.id === row.id) closeDrawer();
         } catch {
           /* surfaced by the mutation's onError toast */
         }
@@ -142,65 +202,29 @@ export function CutoffConfigView({
     });
   };
 
-  const handleSubmit = form.handleSubmit(async (values) => {
-    setIsSaving(true);
-    try {
-      if (isEditMode && editingId) {
-        await onUpdate({
-          id: editingId,
-          data: {
-            cfsClosing: values.cfsClosing,
-            vgmClosing: values.vgmClosing,
-            documentClosing: values.documentClosing,
-            ediDecClosing: values.ediDecClosing,
-            fullCntrGateClosing: values.fullCntrGateClosing,
-            excludeWeekends: values.excludeWeekends,
-          },
-        });
-      } else {
-        const port = (portsQuery.data ?? []).find(
-          (p) => p.portCode === values.portCode,
-        );
-        const terminal = (terminalsQuery.data ?? []).find(
-          (t) => t.terminalCode === values.terminalCode,
-        );
-        await onCreate({
-          ...values,
-          portName: port?.portName ?? values.portCode,
-          terminalName: terminal?.terminalName ?? values.terminalCode,
-        });
-      }
-      resetForm();
-    } catch {
-      /* surfaced by the mutation's onError toast */
-    } finally {
-      setIsSaving(false);
-    }
-  });
-
   const columnDefs: DataViewColumn<CutoffConfig>[] = [
     {
       ...buildActionsColumn<CutoffConfig>({
         field: "id",
-        width: 110,
+        width: 100,
         cellRenderer: (params) => {
-          if (!params.data) return null;
           const row = params.data;
+          if (!row) return null;
           return (
             <ListActionsRow>
               <ListActionButton
                 title="Edit"
                 tone="edit"
-                icon={<AppIcon icon={Icons.edit} size={16} tone="edit" />}
+                icon={<AppIcon icon={Icons.edit} size={16} />}
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleEdit(row);
+                  openEdit(row);
                 }}
               />
               <ListActionButton
                 title="Delete"
                 tone="delete"
-                icon={<AppIcon icon={Icons.trash} size={16} tone="delete" />}
+                icon={<AppIcon icon={Icons.trash} size={16} />}
                 onClick={(e) => {
                   e.stopPropagation();
                   handleDelete(row);
@@ -215,247 +239,67 @@ export function CutoffConfigView({
     {
       headerName: "Port",
       field: "portCode",
-      flex: 1.2,
-      minWidth: 160,
-      valueGetter: (params) => {
-        const row = params.data;
-        if (!row) return "";
-        return `${row.portCode} - ${row.portName}`;
-      },
+      flex: 1.3,
+      minWidth: 180,
+      valueGetter: (params) =>
+        params.data ? `${params.data.portCode} – ${params.data.portName}` : "",
     },
+    { headerName: "Terminal", field: "terminalName", flex: 1, minWidth: 140 },
+    ...CLOSING_FIELDS.map<DataViewColumn<CutoffConfig>>((f) => ({
+      headerName: f.header,
+      headerTooltip: `${f.label} (hours before ETD)`,
+      field: f.name,
+      width: 104,
+      type: "numericColumn",
+      valueFormatter: hoursFormatter,
+    })),
     {
-      headerName: "Terminal",
-      field: "terminalName",
-      flex: 1,
-      minWidth: 140,
-    },
-    {
-      headerName: "CFS Full Container Gate-in Closing",
-      field: "cfsClosing",
-      width: 160,
-      cellRenderer: (params: { value?: number }) =>
-        params.value == null ? null : (
-          <Tag className="admin-code-tag">{params.value}</Tag>
-        ),
-    },
-    {
-      headerName: "VGM Closing",
-      field: "vgmClosing",
-      width: 120,
-      cellRenderer: (params: { value?: number }) =>
-        params.value == null ? null : (
-          <Tag className="admin-code-tag">{params.value}</Tag>
-        ),
-    },
-    {
-      headerName: "Document Closing",
-      field: "documentClosing",
-      width: 140,
-      cellRenderer: (params: { value?: number }) =>
-        params.value == null ? null : (
-          <Tag className="admin-code-tag">{params.value}</Tag>
-        ),
-    },
-    {
-      headerName: "EDI Declaration Closing",
-      field: "ediDecClosing",
-      width: 160,
-      cellRenderer: (params: { value?: number }) =>
-        params.value == null ? null : (
-          <Tag className="admin-code-tag">{params.value}</Tag>
-        ),
-    },
-    {
-      headerName: "Full Container Gate-in Closing",
-      field: "fullCntrGateClosing",
-      width: 170,
-      cellRenderer: (params: { value?: number }) =>
-        params.value == null ? null : (
-          <Tag className="admin-code-tag">{params.value}</Tag>
-        ),
-    },
-    {
-      headerName: "Exclude Weekends",
+      headerName: "Weekends",
+      headerTooltip: "Exclude weekends when counting hours",
       field: "excludeWeekends",
-      width: 140,
+      width: 130,
       cellRenderer: (params: { value?: boolean }) => (
-        <Tag
-          className="admin-status-tag"
-          color={params.value ? "success" : "default"}
-        >
-          {params.value ? "Y" : "N"}
-        </Tag>
+        <AdminStatusPill tone={params.value ? "info" : "neutral"}>
+          {params.value ? "Excluded" : "Counted"}
+        </AdminStatusPill>
       ),
+      valueFormatter: (params) => (params.value ? "Excluded" : "Counted"),
     },
   ];
 
-  if (isLoading) {
-    return (
-      <AdminSectionPage>
-        <AdminLoadingCenter />
-      </AdminSectionPage>
-    );
-  }
-
   return (
-    <AdminSectionPage>
+    <AdminSectionPage
+      recordCount={cutoffConfigs.length}
+      extra={
+        <span ref={addButtonRef} className="admin-section__action">
+          <AppButton
+            type="primary"
+            icon={<AppIcon icon={Icons.plus} size={16} />}
+            onClick={openCreate}
+          >
+            Add Cutoff
+          </AppButton>
+        </span>
+      }
+    >
       <div className="admin-cutoff-form">
-        <form
-          className="admin-cutoff-create"
-          onSubmit={handleSubmit}
-          autoComplete="off"
-        >
-          {/* Row 1 — 5 columns */}
-          <div className="admin-cutoff-create__row admin-cutoff-create__row--5">
-            <FormSelect
-              control={form.control}
-              name="portCode"
-              label={reqLabel("Port")}
-              size="large"
-              showSearch
-              optionFilterProp="label"
-              placeholder="Select port"
-              options={portOptions}
-              disabled={isEditMode || isSaving}
-              formItemProps={FIELD_ITEM_PROPS}
-              className="admin-stack-full"
-              onSelect={() => {
-                form.setValue("terminalCode", "", { shouldValidate: true });
-              }}
-            />
-
-            <FormSelect
-              control={form.control}
-              name="terminalCode"
-              label={reqLabel("Terminal")}
-              size="large"
-              placeholder="Select Terminal"
-              options={terminalOptions}
-              disabled={isEditMode || isSaving || !portCode}
-              formItemProps={FIELD_ITEM_PROPS}
-              className="admin-stack-full"
-            />
-
-            <FormInputNumber
-              control={form.control}
-              name="cfsClosing"
-              label={reqLabel("CFS Full Container Gate-in Closing")}
-              size="large"
-              min={1}
-              max={999}
-              placeholder="In hours"
-              numericMode="positive-integer"
-              className="admin-stack-full"
-              formItemProps={FIELD_ITEM_PROPS}
-            />
-
-            <FormInputNumber
-              control={form.control}
-              name="vgmClosing"
-              label={reqLabel("VGM Closing")}
-              size="large"
-              min={1}
-              max={999}
-              placeholder="In hours"
-              numericMode="positive-integer"
-              className="admin-stack-full"
-              formItemProps={FIELD_ITEM_PROPS}
-            />
-
-            <FormInputNumber
-              control={form.control}
-              name="documentClosing"
-              label={reqLabel("Document Closing")}
-              size="large"
-              min={1}
-              max={999}
-              placeholder="In hours"
-              numericMode="positive-integer"
-              className="admin-stack-full"
-              formItemProps={FIELD_ITEM_PROPS}
-            />
-          </div>
-
-          {/* Row 2 — remaining fields + Cancel / Save */}
-          <div className="admin-cutoff-create__row admin-cutoff-create__row--2">
-            <FormInputNumber
-              control={form.control}
-              name="ediDecClosing"
-              label={reqLabel("EDI Declaration Closing")}
-              size="large"
-              min={1}
-              max={999}
-              placeholder="In hours"
-              numericMode="positive-integer"
-              className="admin-stack-full"
-              formItemProps={FIELD_ITEM_PROPS}
-            />
-
-            <FormInputNumber
-              control={form.control}
-              name="fullCntrGateClosing"
-              label={reqLabel("Full Container Gate-In Closing")}
-              size="large"
-              min={1}
-              max={999}
-              placeholder="In hours"
-              numericMode="positive-integer"
-              className="admin-stack-full"
-              formItemProps={FIELD_ITEM_PROPS}
-            />
-
-            <div className="admin-cutoff-weekend">
-              <FormCheckbox
-                control={form.control}
-                name="excludeWeekends"
-                disabled={isSaving}
-                formItemProps={FIELD_ITEM_PROPS}
-              >
-                Exclude Weekends
-              </FormCheckbox>
-            </div>
-
-            <div className="admin-cutoff-create__actions form-step-footer">
-              <AppButton
-                danger
-                htmlType="button"
-                onClick={resetForm}
-                disabled={isSaving}
-              >
-                Cancel
-              </AppButton>
-              <AppButton
-                type="primary"
-                htmlType="submit"
-                loading={isSaving}
-                icon={
-                  <AppIcon
-                    icon={isEditMode ? Icons.edit : Icons.save}
-                    size={16}
-                  />
-                }
-              >
-                {isEditMode ? "Update" : "Save"}
-              </AppButton>
-            </div>
-          </div>
-        </form>
-
-        <div className="admin-cutoff-grid-wrap responsive-table-wrap custom-scroll">
+        <div className="admin-grid-wrap responsive-table-wrap custom-scroll">
           <DataView
             rowData={cutoffConfigs}
             columnDefs={columnDefs}
+            loading={isFetching}
             emptyState={
               <ModuleEmptyState
                 variant="blank"
                 title="No cutoff configurations yet"
-                message="Add a port and terminal cutoff configuration using the form above."
+                message="Add a port and terminal to set its closing hours."
+                actions={[{ key: "add", label: "Add Cutoff", type: "primary", onClick: openCreate }]}
               />
             }
             allowedViewModes={["list"]}
             defaultViewMode="list"
             renderToolbar={() => null}
-            className="admin-cutoff-data-view"
+            className="admin-data-view"
             listOptions={{
               ...profileHandlers,
               showToolbar: { showTotalCount: true, fullScreen: true },
@@ -464,13 +308,119 @@ export function CutoffConfigView({
               paginationPageSize: 20,
               pageSizeOptions: [10, 20, 50, 100],
               defaultColDef: { filter: true },
+              onGridReady: (params) => {
+                gridApiRef.current = params.api;
+              },
               gridOptions: {
+                domLayout: "autoHeight",
                 getRowId: (params: { data: CutoffConfig }) => params.data.id,
+                onRowDataUpdated,
               },
             }}
           />
         </div>
       </div>
+
+      {drawer ? (
+        <AdminDrawer
+          open
+          onClose={closeDrawer}
+          icon={Icons.clock}
+          title={isEdit ? "Edit Cutoff" : "Add Cutoff"}
+          subtitle={
+            isEdit
+              ? `${drawer.row.portName} / ${drawer.row.terminalName}`
+              : "Closing hours are counted back from the vessel ETD."
+          }
+          isPending={isSaving}
+          isDirty={form.formState.isDirty}
+          primaryLabel={isEdit ? "Save Changes" : "Add Cutoff"}
+          primaryIcon={isEdit ? Icons.save : Icons.plus}
+          onPrimary={() => void handleSubmit()}
+          returnFocusRef={addButtonRef}
+        >
+          <AdminFormSection step={1} title="Location" hint="The port and terminal this cutoff applies to.">
+            {isEdit ? (
+              <Row gutter={FIELD_GUTTER}>
+                <Col {...RESPONSIVE_COL.formHalf}>
+                  <AdminLockedField
+                    label="Port"
+                    icon={Icons.anchor}
+                    value={`${drawer.row.portCode} – ${drawer.row.portName}`}
+                  />
+                </Col>
+                <Col {...RESPONSIVE_COL.formHalf}>
+                  <AdminLockedField label="Terminal" value={drawer.row.terminalName} />
+                </Col>
+              </Row>
+            ) : (
+              <Row gutter={FIELD_GUTTER}>
+                <Col {...RESPONSIVE_COL.formHalf}>
+                  <FormSelect
+                    control={form.control}
+                    name="portCode"
+                    label={reqLabel("Port")}
+                    size="large"
+                    showSearch
+                    optionFilterProp="label"
+                    placeholder="Select port"
+                    options={portOptions}
+                    loading={portsQuery.isLoading}
+                    className="admin-stack-full"
+                    formItemProps={FIELD_ITEM_PROPS}
+                    onSelect={() => form.setValue("terminalCode", "", { shouldValidate: true })}
+                  />
+                </Col>
+                <Col {...RESPONSIVE_COL.formHalf}>
+                  <FormSelect
+                    control={form.control}
+                    name="terminalCode"
+                    label={reqLabel("Terminal")}
+                    size="large"
+                    placeholder={portCode ? "Select terminal" : "Select a port first"}
+                    options={terminalOptions}
+                    loading={terminalsQuery.isLoading}
+                    disabled={!portCode}
+                    className="admin-stack-full"
+                    formItemProps={FIELD_ITEM_PROPS}
+                  />
+                </Col>
+              </Row>
+            )}
+          </AdminFormSection>
+
+          <AdminFormSection step={2} title="Closing Times" hint="Hours before the vessel's estimated departure.">
+            <Row gutter={FIELD_GUTTER}>
+              {CLOSING_FIELDS.map((f) => (
+                <Col key={f.name} {...RESPONSIVE_COL.formHalf}>
+                  <FormInputNumber
+                    control={form.control}
+                    name={f.name}
+                    label={reqLabel(f.label)}
+                    size="large"
+                    min={1}
+                    max={999}
+                    numericMode="positive-integer"
+                    addonAfter="hrs"
+                    className="admin-stack-full"
+                    formItemProps={FIELD_ITEM_PROPS}
+                  />
+                </Col>
+              ))}
+            </Row>
+          </AdminFormSection>
+
+          <AdminFormSection step={3} title="Calendar">
+            <FormSwitch
+              control={form.control}
+              name="excludeWeekends"
+              label={optLabel("Exclude Weekends")}
+              description="Skip Saturday and Sunday when counting the hours."
+              formItemProps={FIELD_ITEM_PROPS}
+            />
+          </AdminFormSection>
+        </AdminDrawer>
+      ) : null}
     </AdminSectionPage>
   );
 }

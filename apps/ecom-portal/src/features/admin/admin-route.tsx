@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 12:40)
+// Modified by Sekar Nagarajan (2026-11-12 14:40)
 /**
  * /app/admin — the Control Panel. One route, one lazily loaded shell; the active section lives in
  * `?section=` (aliases from the old URL keys are normalised and redirected to the canonical key).
@@ -26,6 +26,9 @@ export const adminRoute = createRoute({
   path: "/admin",
   validateSearch: (search: Record<string, unknown>): AdminRouteSearch => ({
     section: normalizeAdminSectionKey(search.section) ?? DEFAULT_ADMIN_SECTION,
+    ...(typeof search.template === "string" && search.template
+      ? { template: search.template }
+      : {}),
   }),
   beforeLoad: ({ search, location }) => {
     assertAdminAccess();

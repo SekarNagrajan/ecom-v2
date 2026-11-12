@@ -109,6 +109,8 @@ export interface AppConfigContextValue extends AppCustomConfig {
 }
 
 export interface AppConfigProviderProps {
+  /** Max simultaneously visible toasts (antd notification `maxCount`). Default 4. */
+  toastMaxCount?: number;
   children: ReactNode;
 
   /** The merged application config (from mergeAppConfig or API). */

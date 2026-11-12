@@ -1,15 +1,11 @@
-// Modified by Sekar Nagarajan (2026-10-17 02:20)
+// Modified by Sekar Nagarajan (2026-11-13 03:20)
 /**
  * User-module routes (profile, password, quotes, alerts, payment history) served from the
  * SQL-extracted fixtures via src/mocks/fixture-api/bridges/{user,payments}.bridge.ts.
  * Mutations update fixture rows + session sidecars and persist via user-persistence.
  */
 import { http, HttpResponse } from 'msw';
-import type {
-  AlertPreference,
-  CustomerProfile,
-  QuoteItem,
-} from '../features/user-modules/types/user-modules.types';
+import type { AlertPreference, CustomerProfile, QuoteItem } from '../features/user-modules/types/user-modules.types';
 import { nowIso } from './fixture-api/db';
 import {
   buildPaymentReceiptPdf,
@@ -24,14 +20,12 @@ import {
   currentFixtureUser,
   customerParty,
   fixtureAlertLogs,
+  markFixtureAlertRead,
   fixtureAlertPreferences,
   mapProfile,
 } from './fixture-api/bridges/user.bridge';
 import { createQuote, listQuotes, surchargeAmount } from './fixture-api/bridges/rates.bridge';
-import {
-  ensureUserDbReady,
-  persistUserDb,
-} from './fixture-api/user-persistence';
+import { ensureUserDbReady, persistUserDb } from './fixture-api/user-persistence';
 import type { QuoteDTO } from '../features/rates/types/rates.types';
 
 // Quotes: one store with the rates module (fixture-api/bridges/rates.bridge.ts) — enquiries derived from the
@@ -58,7 +52,10 @@ const toQuoteItem = (q: QuoteDTO): QuoteItem => {
 };
 
 const noUser = () =>
-  HttpResponse.json({ error: { code: 'NOT_FOUND', message: 'No fixture user for the demo customer' } }, { status: 404 });
+  HttpResponse.json(
+    { error: { code: 'NOT_FOUND', message: 'No fixture user for the demo customer' } },
+    { status: 404 },
+  );
 
 export const userModulesHandlers = [
   // 1. Profile — users (eCom_Reg_Details) + userDetails (ecomuserdetails)
@@ -105,7 +102,11 @@ export const userModulesHandlers = [
       commodity?: string;
       targetDate?: string;
     };
-    const code = (port?: string) => String(port ?? '').replace(/^.*\(([A-Z0-9]{5})\).*$/, '$1').slice(0, 5).toUpperCase();
+    const code = (port?: string) =>
+      String(port ?? '')
+        .replace(/^.*\(([A-Z0-9]{5})\).*$/, '$1')
+        .slice(0, 5)
+        .toUpperCase();
     const quote = createQuote({
       originPort: code(body.polPort),
       deliveryPort: code(body.podPort),
@@ -136,16 +137,24 @@ export const userModulesHandlers = [
     await ensureUserDbReady();
     return HttpResponse.json(fixtureAlertLogs());
   }),
+  // Order matters: the literal `read-all` path must be registered before the `:id/read` pattern.
+  http.post('/api/v1/user/alerts/logs/read-all', async () => {
+    await ensureUserDbReady();
+    markFixtureAlertRead();
+    return HttpResponse.json({ status: 'SUCCESS' });
+  }),
+  http.post('/api/v1/user/alerts/logs/:id/read', async ({ params }) => {
+    await ensureUserDbReady();
+    markFixtureAlertRead(String(params.id));
+    return HttpResponse.json({ status: 'SUCCESS' });
+  }),
 
   // 5. Payments — receipt PDF first (more specific than the list route)
   http.get('*/api/v1/user/payments/:paymentKey/receipt', ({ params }) => {
     const paymentKey = String(params.paymentKey ?? '');
     const record = findSuccessfulPaymentReceipt(currentCustomerCode(), paymentKey);
     if (!record) {
-      return HttpResponse.json(
-        { message: 'Payment receipt not found' },
-        { status: 404 },
-      );
+      return HttpResponse.json({ message: 'Payment receipt not found' }, { status: 404 });
     }
     const filename = `PaymentReceipt_${record.paymentRefNo}.pdf`;
     const content = buildPaymentReceiptPdf(record);

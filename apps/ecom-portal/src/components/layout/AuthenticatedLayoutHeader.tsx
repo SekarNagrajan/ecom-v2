@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-13 01:10)
+// Modified by Sekar Nagarajan (2026-11-13 03:20)
 
 import {
   PRECONFIGURED_TENANTS,
@@ -40,7 +40,7 @@ import { isMockMode } from "../../data-source";
 import { AppIcon, Icons } from "../icons";
 import { AccountPreferencesDrawer } from "./account-preferences-drawer";
 import { HeaderLanguageSelect } from "./header-language-select";
-import { HeaderNotificationsPopover } from "./header-notifications-popover";
+import { HeaderNotificationsCenter } from "./header-notifications-center";
 
 const { Header } = Layout;
 const { Text } = Typography;
@@ -480,7 +480,7 @@ export function AuthenticatedLayoutHeader({
           </Tooltip>
 
           {!isGuest ? (
-            <HeaderNotificationsPopover onOpenPreferences={() => setMyAlertDrawerOpen(true)} />
+            <HeaderNotificationsCenter onOpenPreferences={() => setMyAlertDrawerOpen(true)} />
           ) : null}
 
           <div className="app-header-user-cluster">

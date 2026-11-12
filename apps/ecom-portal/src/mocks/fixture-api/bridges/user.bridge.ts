@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-10-17 00:20)
+// Modified by Sekar Nagarajan (2026-11-13 03:20)
 /**
  * Current demo user, profile, alert preferences and alert history derived from the fixtures:
  *   users (eCom_Reg_Details) + userDetails (ecomuserdetails)          → profile
@@ -27,7 +27,11 @@ export interface FixtureUser {
 }
 
 /** First userDetails row of the customer whose EmailID exists in users (pure; used by the tests). */
-export function pickCurrentUser(users: Row[], userDetails: Row[], customerCode = DEMO_CUSTOMER_CODE): FixtureUser | null {
+export function pickCurrentUser(
+  users: Row[],
+  userDetails: Row[],
+  customerCode = DEMO_CUSTOMER_CODE,
+): FixtureUser | null {
   for (const d of userDetails) {
     if (!eq(d.CustomerCode, customerCode)) continue;
     const user = users.find(u => eq(u.loginname, d.EmailID) || eq(u.User_Email, d.EmailID));
@@ -55,7 +59,9 @@ export function currentCustomerCode(): string {
  * (countries.isdcode) is preferred, then the longest dial code of the country master that prefixes the number.
  */
 export function splitDialCode(phone: unknown, country: unknown): { code: string; number: string } {
-  const raw = String(phone ?? '').replace(/\s+/g, '').trim();
+  const raw = String(phone ?? '')
+    .replace(/\s+/g, '')
+    .trim();
   const preferred = countryDialCode(String(country ?? '').toUpperCase()) || undefined;
   if (!raw) return { code: preferred ?? '+1', number: '' };
   if (preferred && raw.startsWith(preferred)) return { code: preferred, number: raw.slice(preferred.length) };
@@ -99,9 +105,16 @@ export function toDbTimezone(portalValue: string): string {
  * newest booking first — fills the address when eCom_Reg_Details left it blank.
  */
 export function customerParty(customerCode: string, bookingCust: Row[] = db.bookingCust): Row | null {
-  return bookingCust
-    .filter(c => eq(c.custId, customerCode) && ['AP', 'BP', 'SH'].includes(String(c.custTypeId ?? '').toUpperCase()) && String(c.address1 ?? '').trim())
-    .sort((a, b) => Number(b.cid) - Number(a.cid))[0] ?? null;
+  return (
+    bookingCust
+      .filter(
+        c =>
+          eq(c.custId, customerCode) &&
+          ['AP', 'BP', 'SH'].includes(String(c.custTypeId ?? '').toUpperCase()) &&
+          String(c.address1 ?? '').trim(),
+      )
+      .sort((a, b) => Number(b.cid) - Number(a.cid))[0] ?? null
+  );
 }
 
 export function mapProfile(user: Row, details: Row | null, party: Row | null = null): CustomerProfile {
@@ -131,7 +144,11 @@ export function mapProfile(user: Row, details: Row | null, party: Row | null = n
 }
 
 /** Writes an edited profile back into the users / userDetails rows (session-only mutation). */
-export function applyProfilePatch(target: FixtureUser, patch: Partial<CustomerProfile>, party: Row | null = null): CustomerProfile {
+export function applyProfilePatch(
+  target: FixtureUser,
+  patch: Partial<CustomerProfile>,
+  party: Row | null = null,
+): CustomerProfile {
   const { user, details } = target;
   const current = mapProfile(user, details, party);
   const next = { ...current, ...patch };
@@ -159,7 +176,11 @@ export function applyProfilePatch(target: FixtureUser, patch: Partial<CustomerPr
 type ModuleKey = 'bookingUpdates' | 'siConfirmation' | 'blRelease';
 
 /** ecom_activity.module → preference flag. */
-export const ALERT_KEY_BY_MODULE: Record<string, ModuleKey> = { BKG: 'bookingUpdates', SHI: 'siConfirmation', BOL: 'blRelease' };
+export const ALERT_KEY_BY_MODULE: Record<string, ModuleKey> = {
+  BKG: 'bookingUpdates',
+  SHI: 'siConfirmation',
+  BOL: 'blRelease',
+};
 /** notificationSettings.category → preference flag. */
 export const ALERT_KEY_BY_CATEGORY: Record<string, ModuleKey> = {
   BOOKING: 'bookingUpdates',
@@ -204,7 +225,9 @@ export function resetAlertOverrides() {
 }
 
 const activityModule = (activities: Row[], code: unknown) =>
-  String(activities.find(a => eq(String(a.activitycode ?? '').trim(), String(code ?? '').trim()))?.module ?? '').toUpperCase();
+  String(
+    activities.find(a => eq(String(a.activitycode ?? '').trim(), String(code ?? '').trim()))?.module ?? '',
+  ).toUpperCase();
 
 export function mapAlertPreferences(src: AlertSources, overrides: Partial<AlertPreference> = {}): AlertPreference {
   const flags: Record<ModuleKey, boolean> = { bookingUpdates: false, siConfirmation: false, blRelease: false };
@@ -275,7 +298,16 @@ export function applyAlertPreferences(prefs: AlertPreference): AlertPreference {
       existing.chguser = login;
       existing.chgedate = ts;
     } else {
-      db.mailAlerts.push(ciRow({ id: maxId(db.mailAlerts) + 1, loginname: login, activitycode: code, mail, chguser: login, chgedate: ts }));
+      db.mailAlerts.push(
+        ciRow({
+          id: maxId(db.mailAlerts) + 1,
+          loginname: login,
+          activitycode: code,
+          mail,
+          chguser: login,
+          chgedate: ts,
+        }),
+      );
     }
   }
   const customerUser = db.customerUsers.find(u => eq(u.email, login));
@@ -283,16 +315,26 @@ export function applyAlertPreferences(prefs: AlertPreference): AlertPreference {
     for (const setting of db.notificationSettings) {
       const key = ALERT_KEY_BY_CATEGORY[String(setting.category ?? '').toUpperCase()];
       if (!key) continue;
-      const existing = db.customerNotifications.find(n => eq(n.customerUserId, customerUser.id) && eq(n.notificationId, setting.id));
+      const existing = db.customerNotifications.find(
+        n => eq(n.customerUserId, customerUser.id) && eq(n.notificationId, setting.id),
+      );
       if (existing) {
         existing.isEnabled = prefs[key];
         existing.updatedAt = ts;
         existing.updatedBy = login;
       } else {
-        db.customerNotifications.push(ciRow({
-          id: String(maxId(db.customerNotifications) + 1), customerUserId: customerUser.id, notificationId: setting.id,
-          isEnabled: prefs[key], createdAt: ts, createdBy: login, updatedAt: null, updatedBy: null,
-        }));
+        db.customerNotifications.push(
+          ciRow({
+            id: String(maxId(db.customerNotifications) + 1),
+            customerUserId: customerUser.id,
+            notificationId: setting.id,
+            isEnabled: prefs[key],
+            createdAt: ts,
+            createdBy: login,
+            updatedAt: null,
+            updatedBy: null,
+          }),
+        );
       }
     }
   }
@@ -305,11 +347,23 @@ export function applyAlertPreferences(prefs: AlertPreference): AlertPreference {
 // ─── Alert history (EcommuserlogDetails) ─────────────────────────────────────
 
 const LOG_CATEGORY: Record<string, AlertHistoryLog['category']> = {
-  BOOKING: 'BOOKING', BKG: 'BOOKING', SI: 'SI', SHI: 'SI', BL: 'BL', BOL: 'BL',
-  PAYMENT: 'PAYMENT', PAY: 'PAYMENT', SCHEDULE: 'SCHEDULE', SCH: 'SCHEDULE',
+  BOOKING: 'BOOKING',
+  BKG: 'BOOKING',
+  SI: 'SI',
+  SHI: 'SI',
+  BL: 'BL',
+  BOL: 'BL',
+  PAYMENT: 'PAYMENT',
+  PAY: 'PAYMENT',
+  SCHEDULE: 'SCHEDULE',
+  SCH: 'SCHEDULE',
 };
 const CATEGORY_TITLE: Record<AlertHistoryLog['category'], string> = {
-  BOOKING: 'Booking', SI: 'Shipping Instruction', BL: 'Bill of Lading', PAYMENT: 'Payment', SCHEDULE: 'Schedule',
+  BOOKING: 'Booking',
+  SI: 'Shipping Instruction',
+  BL: 'Bill of Lading',
+  PAYMENT: 'Payment',
+  SCHEDULE: 'Schedule',
 };
 
 /** A user-log row → alert entry; read when it is older than the user's last login. */
@@ -328,6 +382,15 @@ export function mapAlertLog(row: Row, lastLogin: unknown): AlertHistoryLog {
   };
 }
 
+/** Alerts the user marked read in this session (the legacy log table has no read flag). */
+const readAlertIds = new Set<string>();
+let allAlertsReadAt: number | null = null;
+
+export function markFixtureAlertRead(id?: string): void {
+  if (id === undefined) allAlertsReadAt = Date.now();
+  else readAlertIds.add(id);
+}
+
 export function fixtureAlertLogs(): AlertHistoryLog[] {
   const cur = currentFixtureUser();
   const customerCode = currentCustomerCode();
@@ -335,5 +398,10 @@ export function fixtureAlertLogs(): AlertHistoryLog[] {
   return (db.EcommuserlogDetails ?? [])
     .filter(r => eq(r.customercode, customerCode))
     .sort((a, b) => +new Date(b.Logdate) - +new Date(a.Logdate))
-    .map(r => mapAlertLog(r, lastLogin));
+    .map(r => {
+      const log = mapAlertLog(r, lastLogin);
+      const readByUser =
+        readAlertIds.has(log.id) || (allAlertsReadAt !== null && +new Date(r.Logdate) <= allAlertsReadAt);
+      return readByUser ? { ...log, isRead: true } : log;
+    });
 }

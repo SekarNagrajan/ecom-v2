@@ -51,6 +51,7 @@ export * from './ui/grammar-improve-button';
 export * from './ui/tone-rewrite-button';
 export * from './ui/app-textarea';
 export * from './ui/timeline';
+export * from './notifications';
 
 /**
  * Display components

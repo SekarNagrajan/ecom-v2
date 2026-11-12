@@ -25,7 +25,17 @@ const output = `${tsc.stdout ?? ""}${tsc.stderr ?? ""}`;
 const errorLines = output.split(/\r?\n/).filter((line) => /error TS\d+:/.test(line));
 
 // Positions churn with every edit; the fingerprint keeps file + code + message so diffs stay useful.
-const fingerprint = (line) => line.replace(/\(\d+,\d+\)/, "");
+// TypeScript prints union members in a non-deterministic order, so they are sorted before comparing.
+const fingerprint = (line) =>
+  line.replace(/\(\d+,\d+\)/, "").replace(
+    /'((?:"[^"]*"\s*\|\s*)+"[^"]*")'/g,
+    (_match, members) =>
+      `'${members
+        .split("|")
+        .map((m) => m.trim())
+        .sort()
+        .join(" | ")}'`,
+  );
 const current = {
   count: errorLines.length,
   errors: [...new Set(errorLines.map(fingerprint))].sort(),

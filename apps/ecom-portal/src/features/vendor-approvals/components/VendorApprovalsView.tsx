@@ -1,8 +1,5 @@
-// Modified by Sekar Nagarajan (2026-10-16 23:35)
-import {
-  DataView,
-  type DataViewColumn,
-} from "@solverminds/shared-ui/data-view";
+// Modified by Sekar Nagarajan (2026-11-12 23:55)
+import { DataView, type DataViewColumn } from "@solverminds/shared-ui/data-view";
 import { useConfirm, useToast } from "@solverminds/shared-ui/hooks";
 import type { GridApi } from "ag-grid-community";
 import { Tag, Typography } from "antd";
@@ -11,38 +8,21 @@ import { useRef, useState } from "react";
 import { AppIcon, Icons } from "../../../components/icons";
 import { NavAgencyApprovalIcon } from "../../../components/icons/nav-svg-icons";
 import { buildActionsColumn } from "../../../components/shared/build-actions-column";
-import {
-  ListActionButton,
-  ListActionsRow,
-} from "../../../components/shared/list-action-button";
+import { ListActionButton, ListActionsRow } from "../../../components/shared/list-action-button";
 import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
 import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
 import { useModuleTitles } from "../../../i18n/use-module-titles";
-import {
-  applyApprovalStatus,
-  vendorApprovals,
-} from "../../../mocks/fixture-api/bridges/approvals.bridge";
-import type {
-  ApprovalStatus,
-  VendorApprovalItem,
-} from "../types/vendor-approvals.types";
-import {
-  buildBulkConfirmContent,
-  VendorApprovalsBulkBar,
-} from "./VendorApprovalsBulkBar";
+import { vendorApprovalsApi } from "../api/vendor-approvals.api";
+import { useVendorApprovalsQuery } from "../api/vendor-approvals.queries";
+import type { ApprovalStatus, VendorApprovalItem } from "../types/vendor-approvals.types";
+import { buildBulkConfirmContent, VendorApprovalsBulkBar } from "./VendorApprovalsBulkBar";
 import { VendorApprovalsRejectModal } from "./VendorApprovalsRejectModal";
-import {
-  type SummaryFilter,
-  VendorApprovalsSummaryPanel,
-} from "./VendorApprovalsSummaryPanel";
+import { type SummaryFilter, VendorApprovalsSummaryPanel } from "./VendorApprovalsSummaryPanel";
 
 const { Text } = Typography;
 
-const TYPE_META: Record<
-  VendorApprovalItem["type"],
-  { color: string; label: string }
-> = {
+const TYPE_META: Record<VendorApprovalItem["type"], { color: string; label: string }> = {
   BOOKING: { color: "blue", label: "Booking" },
   SI: { color: "purple", label: "Shipping Instruction" },
   VGM: { color: "green", label: "VGM" },
@@ -59,18 +39,21 @@ export function VendorApprovalsView() {
   const toast = useToast();
   const confirm = useConfirm();
   const { profileHandlers } = useLocalGridProfiles("vendor-approvals");
-  // Queue derived from the ecombooking / ecomSI / ecom_vgmsolas fixtures (src/mocks/fixtures)
-  const [items, setItems] = useState<VendorApprovalItem[]>(() =>
-    vendorApprovals(),
+  // Queue derived from the ecombooking / ecomSI / ecom_vgmsolas fixtures through the data-source seam.
+  const approvalsQuery = useVendorApprovalsQuery();
+  // Optimistic status changes layered over the fetched queue until the next refetch.
+  const [statusPatches, setStatusPatches] = useState<
+    Record<string, Pick<VendorApprovalItem, "status" | "rejectRemarks">>
+  >({});
+  const items: VendorApprovalItem[] = (approvalsQuery.data ?? []).map((item) =>
+    statusPatches[item.id] ? { ...item, ...statusPatches[item.id] } : item,
   );
   const [summaryFilter, setSummaryFilter] = useState<SummaryFilter>("ALL");
   const [selectedRows, setSelectedRows] = useState<VendorApprovalItem[]>([]);
   const [rejectTargets, setRejectTargets] = useState<VendorApprovalItem[]>([]);
   const gridApiRef = useRef<GridApi<VendorApprovalItem> | null>(null);
 
-  const selectedPending = selectedRows.filter(
-    (row) => row.status === "PENDING",
-  );
+  const selectedPending = selectedRows.filter((row) => row.status === "PENDING");
   const selectedPendingCount = selectedPending.length;
   const rejectModalOpen = rejectTargets.length > 0;
 
@@ -79,26 +62,29 @@ export function VendorApprovalsView() {
     setSelectedRows([]);
   };
 
-  const applyStatus = (
+  const applyStatus = async (
     ids: string[],
     status: Exclude<ApprovalStatus, "PENDING">,
     remarks?: string,
   ) => {
     if (ids.length === 0) return;
-    ids.forEach((id) => applyApprovalStatus(id, status, {}, remarks));
-    const idSet = new Set(ids);
-    setItems((prev) =>
-      prev.map((item) =>
-        idSet.has(item.id)
-          ? {
-              ...item,
-              status,
-              rejectRemarks:
-                status === "REJECTED" ? remarks : item.rejectRemarks,
-            }
-          : item,
-      ),
-    );
+    try {
+      await vendorApprovalsApi.applyStatus(ids, status, remarks);
+    } catch {
+      toast.error("Couldn't update the request status. Please try again.");
+      return;
+    }
+    setStatusPatches((prev) => {
+      const next = { ...prev };
+      ids.forEach((id) => {
+        const current = items.find((item) => item.id === id);
+        next[id] = {
+          status,
+          rejectRemarks: status === "REJECTED" ? remarks : current?.rejectRemarks,
+        };
+      });
+      return next;
+    });
     clearSelection();
     setRejectTargets([]);
     toast.success(
@@ -131,14 +117,9 @@ export function VendorApprovalsView() {
     if (selectedPendingCount === 0) return;
     confirm.show({
       title:
-        selectedPendingCount === 1
-          ? "Approve Request"
-          : `Approve ${selectedPendingCount} Requests`,
+        selectedPendingCount === 1 ? "Approve Request" : `Approve ${selectedPendingCount} Requests`,
       content: buildBulkConfirmContent(selectedPending, "approve"),
-      okText:
-        selectedPendingCount === 1
-          ? "Approve"
-          : `Approve ${selectedPendingCount}`,
+      okText: selectedPendingCount === 1 ? "Approve" : `Approve ${selectedPendingCount}`,
       cancelText: "Cancel",
       onOk: () =>
         applyStatus(
@@ -154,7 +135,7 @@ export function VendorApprovalsView() {
   };
 
   const handleRejectConfirm = (remarks: string) => {
-    applyStatus(
+    void applyStatus(
       rejectTargets.map((row) => row.id),
       "REJECTED",
       remarks,
@@ -195,9 +176,7 @@ export function VendorApprovalsView() {
             <ListActionButton
               title={`Approve ${rec.referenceNo}`}
               ariaLabel={`Approve ${rec.referenceNo}`}
-              icon={
-                <AppIcon icon={Icons.checkCircle} size={16} tone="create" />
-              }
+              icon={<AppIcon icon={Icons.checkCircle} size={16} tone="create" />}
               onClick={(event) => {
                 event.stopPropagation();
                 handleApprove(rec);
@@ -223,9 +202,7 @@ export function VendorApprovalsView() {
       sortable: true,
       flex: 1,
       minWidth: 140,
-      cellRenderer: (params: { value?: string }) => (
-        <strong>{params.value}</strong>
-      ),
+      cellRenderer: (params: { value?: string }) => <strong>{params.value}</strong>,
     },
     {
       headerName: "Type",
@@ -253,9 +230,7 @@ export function VendorApprovalsView() {
       flex: 1,
       minWidth: 130,
       valueGetter: (params: { data?: VendorApprovalItem }) =>
-        params.data
-          ? `${params.data.originPort} → ${params.data.destPort}`
-          : "",
+        params.data ? `${params.data.originPort} → ${params.data.destPort}` : "",
     },
     {
       headerName: "Submitted",
@@ -282,12 +257,8 @@ export function VendorApprovalsView() {
   const rejectedCount = items.filter((i) => i.status === "REJECTED").length;
 
   const visibleItems =
-    summaryFilter === "ALL"
-      ? items
-      : items.filter((item) => item.status === summaryFilter);
-  const pendingInViewCount = visibleItems.filter(
-    (item) => item.status === "PENDING",
-  ).length;
+    summaryFilter === "ALL" ? items : items.filter((item) => item.status === summaryFilter);
+  const pendingInViewCount = visibleItems.filter((item) => item.status === "PENDING").length;
 
   return (
     <div className="va-page-layout">
@@ -321,6 +292,7 @@ export function VendorApprovalsView() {
 
       <div className="va-grid-wrap va-approvals-grid responsive-table-wrap custom-scroll">
         <DataView
+          loading={approvalsQuery.isLoading}
           className="va-data-view"
           columnDefs={columnDefs}
           rowData={visibleItems}
@@ -342,8 +314,7 @@ export function VendorApprovalsView() {
             onGridReady: (params) => {
               gridApiRef.current = params.api;
             },
-            onSelectionChanged: (rows) =>
-              setSelectedRows(rows as VendorApprovalItem[]),
+            onSelectionChanged: (rows) => setSelectedRows(rows as VendorApprovalItem[]),
             pagination: true,
             paginationPageSize: 20,
             pageSizeOptions: [10, 20, 50, 100],

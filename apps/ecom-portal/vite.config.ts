@@ -1,8 +1,9 @@
-// Modified by Sekar Nagarajan (2026-10-20)
+// Modified by Sekar Nagarajan (2026-11-12 23:50)
 import react from "@vitejs/plugin-react";
 import fs from "fs";
 import path from "path";
-import { defineConfig, type Plugin } from "vite";
+import { visualizer } from "rollup-plugin-visualizer";
+import { defineConfig, loadEnv, type Plugin } from "vite";
 
 import { ecomAiN8nProxyPlugin } from "./vite-ai-n8n-proxy";
 
@@ -63,24 +64,15 @@ function resolveWorkspacePackage(packageName: string): string | undefined {
     return direct;
   }
 
-  const [scope, name] = packageName.startsWith("@")
-    ? packageName.split("/")
-    : [null, packageName];
+  const [scope, name] = packageName.startsWith("@") ? packageName.split("/") : [null, packageName];
   const pnpmDir = path.join(rootNodeModules, ".pnpm");
   if (!fs.existsSync(pnpmDir)) return undefined;
 
   const prefix = scope ? `${scope}+${name}@` : `${name}@`;
-  const match = fs
-    .readdirSync(pnpmDir)
-    .find((entry) => entry.startsWith(prefix));
+  const match = fs.readdirSync(pnpmDir).find((entry) => entry.startsWith(prefix));
   if (!match) return undefined;
 
-  const candidate = path.join(
-    pnpmDir,
-    match,
-    "node_modules",
-    ...(scope ? [scope, name] : [name]),
-  );
+  const candidate = path.join(pnpmDir, match, "node_modules", ...(scope ? [scope, name] : [name]));
   return fs.existsSync(candidate) ? candidate : undefined;
 }
 
@@ -223,18 +215,12 @@ function writeRuntimeOverlay(
   );
   for (const name of tableNames) {
     const rows = Array.isArray(tables[name]) ? tables[name] : [];
-    fs.writeFileSync(
-      path.join(dir, `${name}.json`),
-      JSON.stringify(rows, null, 1),
-    );
+    fs.writeFileSync(path.join(dir, `${name}.json`), JSON.stringify(rows, null, 1));
   }
   const sidecars = payload.sidecars ?? {};
   for (const name of sidecarNames) {
     if (!Object.prototype.hasOwnProperty.call(sidecars, name)) continue;
-    fs.writeFileSync(
-      path.join(dir, `${name}.json`),
-      JSON.stringify(sidecars[name], null, 2),
-    );
+    fs.writeFileSync(path.join(dir, `${name}.json`), JSON.stringify(sidecars[name], null, 2));
   }
 }
 
@@ -264,11 +250,7 @@ function handleRuntimeDbRoute(
     dir: string;
     tables: readonly string[];
     sidecars?: readonly string[];
-    json: (
-      res: import("http").ServerResponse,
-      body: unknown,
-      status?: number,
-    ) => void;
+    json: (res: import("http").ServerResponse, body: unknown, status?: number) => void;
   },
 ): boolean {
   const sidecarNames = opts.sidecars ?? [];
@@ -295,8 +277,7 @@ function handleRuntimeDbRoute(
           res,
           {
             error: {
-              message:
-                err instanceof Error ? err.message : "Invalid payload",
+              message: err instanceof Error ? err.message : "Invalid payload",
             },
           },
           400,
@@ -323,11 +304,7 @@ function handleRuntimeDbRoute(
  * fixture layer can persist under mock-data/runtime/ (use msw `bypass` from handlers).
  */
 function bookingMockApiPlugin(): Plugin {
-  const json = (
-    res: import("http").ServerResponse,
-    body: unknown,
-    status = 200,
-  ) => {
+  const json = (res: import("http").ServerResponse, body: unknown, status = 200) => {
     res.statusCode = status;
     res.setHeader("Content-Type", "application/json");
     res.end(JSON.stringify(body));
@@ -471,97 +448,134 @@ function bookingMockApiPlugin(): Plugin {
   };
 }
 
-export default defineConfig({
-  plugins: [
-    react(),
-    bookingMockApiPlugin(),
-    ecomAiN8nProxyPlugin(),
-    // After booking + AI proxies so only truly unmatched /api/* become JSON 404.
-    ecomApiJson404FallbackPlugin(),
-  ],
-  resolve: {
-    alias: {
-      ...(tiptapCorePath ? { "@tiptap/core": tiptapCorePath } : {}),
-      "@solverminds/platform": path.resolve(
-        __dirname,
-        "../../libs/platform/src/index.ts",
-      ),
-      "@solverminds/auth": path.resolve(
-        __dirname,
-        "../../libs/auth/src/index.ts",
-      ),
-      "@solverminds/theme": path.resolve(
-        __dirname,
-        "../../libs/theme/src/index.ts",
-      ),
-      "@solverminds/shared-ui/styles.css": path.resolve(
-        __dirname,
-        "../../libs/shared/ui/src/styles.css",
-      ),
-      "@solverminds/shared-ui/providers": path.resolve(
-        __dirname,
-        "../../libs/shared/ui/src/providers/index.ts",
-      ),
-      "@solverminds/shared-ui/hooks": path.resolve(
-        __dirname,
-        "../../libs/shared/ui/src/hooks/index.ts",
-      ),
-      "@solverminds/shared-ui/utils": path.resolve(
-        __dirname,
-        "../../libs/shared/ui/src/utils/index.ts",
-      ),
-      "@solverminds/shared-ui/schemas": path.resolve(
-        __dirname,
-        "../../libs/shared/ui/src/schemas/index.ts",
-      ),
-      "@solverminds/shared-ui/data-view/list-view": path.resolve(
-        __dirname,
-        "../../libs/shared/ui/src/components/data-view/list-view/index.ts",
-      ),
-      "@solverminds/shared-ui/data-view/kanban-view": path.resolve(
-        __dirname,
-        "../../libs/shared/ui/src/components/data-view/kanban-view/index.ts",
-      ),
-      "@solverminds/shared-ui/data-view/card-view": path.resolve(
-        __dirname,
-        "../../libs/shared/ui/src/components/data-view/card-view/index.ts",
-      ),
-      "@solverminds/shared-ui/data-view/ag-grid-license": path.resolve(
-        __dirname,
-        "../../libs/shared/ui/src/components/data-view/ag-grid-license.ts",
-      ),
-      "@solverminds/shared-ui/data-view": path.resolve(
-        __dirname,
-        "../../libs/shared/ui/src/components/data-view/index.ts",
-      ),
-      "@solverminds/shared-ui/editor": path.resolve(
-        __dirname,
-        "../../libs/shared/ui/src/components/ui/rich-text-editor/index.ts",
-      ),
-      "@solverminds/shared-ui/form-editor": path.resolve(
-        __dirname,
-        "../../libs/shared/ui/src/components/form-fields/rich-text-editor/index.ts",
-      ),
-      "@solverminds/shared-ui/email": path.resolve(
-        __dirname,
-        "../../libs/shared/ui/src/components/email/index.ts",
-      ),
-      "@solverminds/shared-ui/chart": path.resolve(
-        __dirname,
-        "../../libs/shared/ui/src/components/chart/index.ts",
-      ),
-      "@solverminds/shared-ui": path.resolve(
-        __dirname,
-        "../../libs/shared/ui/src/index.ts",
-      ),
-      "@solverminds/shared-util": path.resolve(
-        __dirname,
-        "../../libs/shared-util/src/index.ts",
-      ),
+/**
+ * Vendor chunking. Heavy libraries get a stable chunk each so a feature change does not
+ * invalidate them, and so the bundle budget (scripts/check-bundle-size.mjs) can track them.
+ * Returning `undefined` leaves everything else to Rollup's default splitting.
+ */
+const VENDOR_CHUNKS: ReadonlyArray<readonly [name: string, test: RegExp]> = [
+  ["ag-grid", /[\\/]node_modules[\\/](ag-grid-community|ag-grid-enterprise|ag-grid-react)[\\/]/],
+  ["echarts", /[\\/]node_modules[\\/](echarts|zrender)[\\/]/],
+  ["tiptap", /[\\/]node_modules[\\/](@tiptap|prosemirror-[^\\/]+)[\\/]/],
+  ["maps", /[\\/]node_modules[\\/](maplibre-gl|leaflet|react-leaflet)[\\/]/],
+  ["calendar", /[\\/]node_modules[\\/]@fullcalendar[\\/]/],
+  ["pdf", /[\\/]node_modules[\\/](jspdf|html2canvas|html2canvas-pro|fflate)[\\/]/],
+  ["antd", /[\\/]node_modules[\\/](antd|@ant-design|rc-[^\\/]+|@rc-component)[\\/]/],
+];
+
+function vendorChunk(id: string): string | undefined {
+  if (!id.includes("node_modules")) return undefined;
+  return VENDOR_CHUNKS.find(([, test]) => test.test(id))?.[0];
+}
+
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, __dirname, "VITE_");
+  const agGridLicenseKey =
+    env.VITE_AG_GRID_LICENSE_KEY ?? process.env.VITE_AG_GRID_LICENSE_KEY ?? "";
+
+  return {
+    plugins: [
+      react(),
+      bookingMockApiPlugin(),
+      ecomAiN8nProxyPlugin(),
+      // After booking + AI proxies so only truly unmatched /api/* become JSON 404.
+      ecomApiJson404FallbackPlugin(),
+      // `ANALYZE=1 pnpm build` writes an interactive treemap to dist/stats.html.
+      ...(process.env.ANALYZE
+        ? [
+            visualizer({
+              filename: "dist/stats.html",
+              gzipSize: true,
+              brotliSize: true,
+              template: "treemap",
+            }),
+          ]
+        : []),
+    ],
+    // Consumed by @solverminds/shared-ui's ListView (see libs/shared/ui/src/build-globals.d.ts).
+    define: {
+      __AG_GRID_LICENSE_KEY__: JSON.stringify(agGridLicenseKey),
     },
-  },
-  server: {
-    port: 3000,
-    open: true,
-  },
+    build: {
+      // Maps are emitted without a sourceMappingURL comment: available for error reporting, not served.
+      sourcemap: "hidden",
+      // The AG Grid Enterprise chunk is legitimately above Vite's 500 kB default.
+      chunkSizeWarningLimit: 1200,
+      rollupOptions: {
+        output: {
+          manualChunks: vendorChunk,
+        },
+      },
+    },
+    resolve: {
+      alias: {
+        ...(tiptapCorePath ? { "@tiptap/core": tiptapCorePath } : {}),
+        "@solverminds/platform": path.resolve(__dirname, "../../libs/platform/src/index.ts"),
+        "@solverminds/auth": path.resolve(__dirname, "../../libs/auth/src/index.ts"),
+        "@solverminds/theme": path.resolve(__dirname, "../../libs/theme/src/index.ts"),
+        "@solverminds/shared-ui/styles.css": path.resolve(
+          __dirname,
+          "../../libs/shared/ui/src/styles.css",
+        ),
+        "@solverminds/shared-ui/providers": path.resolve(
+          __dirname,
+          "../../libs/shared/ui/src/providers/index.ts",
+        ),
+        "@solverminds/shared-ui/hooks": path.resolve(
+          __dirname,
+          "../../libs/shared/ui/src/hooks/index.ts",
+        ),
+        "@solverminds/shared-ui/utils": path.resolve(
+          __dirname,
+          "../../libs/shared/ui/src/utils/index.ts",
+        ),
+        "@solverminds/shared-ui/schemas": path.resolve(
+          __dirname,
+          "../../libs/shared/ui/src/schemas/index.ts",
+        ),
+        "@solverminds/shared-ui/data-view/list-view": path.resolve(
+          __dirname,
+          "../../libs/shared/ui/src/components/data-view/list-view/index.ts",
+        ),
+        "@solverminds/shared-ui/data-view/kanban-view": path.resolve(
+          __dirname,
+          "../../libs/shared/ui/src/components/data-view/kanban-view/index.ts",
+        ),
+        "@solverminds/shared-ui/data-view/card-view": path.resolve(
+          __dirname,
+          "../../libs/shared/ui/src/components/data-view/card-view/index.ts",
+        ),
+        "@solverminds/shared-ui/data-view/ag-grid-license": path.resolve(
+          __dirname,
+          "../../libs/shared/ui/src/components/data-view/ag-grid-license.ts",
+        ),
+        "@solverminds/shared-ui/data-view": path.resolve(
+          __dirname,
+          "../../libs/shared/ui/src/components/data-view/index.ts",
+        ),
+        "@solverminds/shared-ui/editor": path.resolve(
+          __dirname,
+          "../../libs/shared/ui/src/components/ui/rich-text-editor/index.ts",
+        ),
+        "@solverminds/shared-ui/form-editor": path.resolve(
+          __dirname,
+          "../../libs/shared/ui/src/components/form-fields/rich-text-editor/index.ts",
+        ),
+        "@solverminds/shared-ui/email": path.resolve(
+          __dirname,
+          "../../libs/shared/ui/src/components/email/index.ts",
+        ),
+        "@solverminds/shared-ui/chart": path.resolve(
+          __dirname,
+          "../../libs/shared/ui/src/components/chart/index.ts",
+        ),
+        "@solverminds/shared-ui": path.resolve(__dirname, "../../libs/shared/ui/src/index.ts"),
+        "@solverminds/shared-util": path.resolve(__dirname, "../../libs/shared-util/src/index.ts"),
+      },
+    },
+    server: {
+      port: 3000,
+      open: true,
+    },
+  };
 });

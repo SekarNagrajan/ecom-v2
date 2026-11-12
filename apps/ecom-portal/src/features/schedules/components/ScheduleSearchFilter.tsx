@@ -1,35 +1,16 @@
-// Modified by Sekar Nagarajan (2026-10-19 12:15)
+// Modified by Sekar Nagarajan (2026-11-12 23:55)
 import { AppButton } from "@solverminds/shared-ui";
-import {
-  Col,
-  DatePicker,
-  Form,
-  Row,
-  Select,
-  Tabs,
-  Tooltip,
-  Typography,
-} from "antd";
+import { Col, DatePicker, Form, Row, Select, Tabs, Tooltip, Typography } from "antd";
 import type { FormInstance } from "antd/es/form";
 import dayjs from "dayjs";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
-import {
-  usePortByCode,
-  usePortSearch,
-} from "../../landing/api/landing.queries";
-import {
-  DEFAULT_LANE,
-  portLabelOf,
-  SCHEDULE_PORT_CODES,
-} from "../../landing/utils/landing-search";
-import { schedulesApi } from "../api/schedules.api";
-import type {
-  ScheduleSearchParams,
-  ScheduleSearchType,
-} from "../types/schedules.types";
+import { usePortByCode, usePortSearch } from "../../landing/api/landing.queries";
+import { DEFAULT_LANE, portLabelOf, SCHEDULE_PORT_CODES } from "../../landing/utils/landing-search";
+import { useScheduleVesselOptionsQuery } from "../api/schedules.queries";
+import type { ScheduleSearchParams, ScheduleSearchType } from "../types/schedules.types";
 
 const { RangePicker } = DatePicker;
 const { Text } = Typography;
@@ -48,7 +29,9 @@ function useSchedulePortOptions(selectedCode?: string) {
   const { t } = useTranslation("schedules");
   const [query, setQuery] = useState("");
   const { data: ports = [], isFetching } = usePortSearch(query);
-  const selected = String(selectedCode ?? "").trim().toUpperCase();
+  const selected = String(selectedCode ?? "")
+    .trim()
+    .toUpperCase();
   const { data: selectedPort } = usePortByCode(selected);
 
   const fallbackPorts = useMemo(
@@ -145,10 +128,7 @@ function SearchActionsField({
   }
 
   return (
-    <Form.Item
-      label={<SearchActionsLabel />}
-      className="schedule-search-actions-field"
-    >
+    <Form.Item label={<SearchActionsLabel />} className="schedule-search-actions-field">
       <div className="schedule-search-actions">
         <AppButton
           type="primary"
@@ -185,8 +165,7 @@ export function ScheduleSearchFilter({
   const form = formProp ?? internalForm;
   const isHeader = variant === "header";
 
-  const searchType: ScheduleSearchType =
-    Form.useWatch("searchType", form) || "POINT_TO_POINT";
+  const searchType: ScheduleSearchType = Form.useWatch("searchType", form) || "POINT_TO_POINT";
   const polCode = Form.useWatch("polCode", form) as string | undefined;
   const podCode = Form.useWatch("podCode", form) as string | undefined;
   const portCode = Form.useWatch("portCode", form) as string | undefined;
@@ -198,7 +177,7 @@ export function ScheduleSearchFilter({
   const callPorts = useSchedulePortOptions(portCode);
 
   // Labels come from the vessel master (CODE - NAME), not i18n keys — fixture codes change per extract.
-  const popularVessels = useMemo(() => schedulesApi.listVesselOptions(), []);
+  const { data: popularVessels = [] } = useScheduleVesselOptionsQuery();
   const controlSize = isHeader ? "middle" : "large";
   const gutter = isHeader ? HEADER_ROW_GUTTER : SEARCH_ROW_GUTTER;
 
@@ -219,9 +198,7 @@ export function ScheduleSearchFilter({
   };
 
   const handleFinish = (values: Record<string, unknown>) => {
-    const dateRange = values.dateRange as
-      | [dayjs.Dayjs, dayjs.Dayjs]
-      | undefined;
+    const dateRange = values.dateRange as [dayjs.Dayjs, dayjs.Dayjs] | undefined;
     onSearch({
       searchType: values.searchType as ScheduleSearchType,
       polCode: values.polCode as string,
@@ -235,10 +212,7 @@ export function ScheduleSearchFilter({
 
   return (
     <div
-      className={[
-        "schedule-search-panel",
-        isHeader ? "schedule-search-panel--header" : undefined,
-      ]
+      className={["schedule-search-panel", isHeader ? "schedule-search-panel--header" : undefined]
         .filter(Boolean)
         .join(" ")}
     >
@@ -261,11 +235,7 @@ export function ScheduleSearchFilter({
             </Form.Item>
           ) : (
             <div className="schedule-search-type-wrap">
-              <Form.Item
-                name="searchType"
-                className="schedule-search-type"
-                hidden
-              >
+              <Form.Item name="searchType" className="schedule-search-type" hidden>
                 <input type="hidden" />
               </Form.Item>
               <Tabs
@@ -275,27 +245,15 @@ export function ScheduleSearchFilter({
                 items={[
                   {
                     key: "POINT_TO_POINT",
-                    label: (
-                      <span className="schedule-tab-label">
-                        {t("modes.byRoute")}
-                      </span>
-                    ),
+                    label: <span className="schedule-tab-label">{t("modes.byRoute")}</span>,
                   },
                   {
                     key: "VESSEL_SCHEDULE",
-                    label: (
-                      <span className="schedule-tab-label">
-                        {t("modes.byVessel")}
-                      </span>
-                    ),
+                    label: <span className="schedule-tab-label">{t("modes.byVessel")}</span>,
                   },
                   {
                     key: "PORT_SCHEDULE",
-                    label: (
-                      <span className="schedule-tab-label">
-                        {t("modes.byPort")}
-                      </span>
-                    ),
+                    label: <span className="schedule-tab-label">{t("modes.byPort")}</span>,
                   },
                 ]}
               />
@@ -310,9 +268,7 @@ export function ScheduleSearchFilter({
                 md={isHeader ? undefined : 11}
                 lg={isHeader ? undefined : 6}
                 flex={isHeader ? "2 1 260px" : undefined}
-                className={
-                  isHeader ? "schedule-search-header-col--port" : undefined
-                }
+                className={isHeader ? "schedule-search-header-col--port" : undefined}
               >
                 <Form.Item
                   name="polCode"
@@ -323,18 +279,12 @@ export function ScheduleSearchFilter({
                       </span>
                     )
                   }
-                  rules={[
-                    { required: true, message: t("search.selectOrigin") },
-                  ]}
+                  rules={[{ required: true, message: t("search.selectOrigin") }]}
                 >
                   <Select
                     size={controlSize}
                     showSearch
-                    placeholder={
-                      isHeader
-                        ? t("search.originShort")
-                        : t("search.originPlaceholder")
-                    }
+                    placeholder={isHeader ? t("search.originShort") : t("search.originPlaceholder")}
                     options={polPorts.options}
                     optionLabelProp="label"
                     popupMatchSelectWidth={360}
@@ -351,9 +301,7 @@ export function ScheduleSearchFilter({
                 md={isHeader ? undefined : 2}
                 lg={isHeader ? undefined : 1}
                 flex={isHeader ? "0 0 auto" : undefined}
-                className={
-                  isHeader ? "schedule-search-header-col--swap" : undefined
-                }
+                className={isHeader ? "schedule-search-header-col--swap" : undefined}
               >
                 <Form.Item
                   label={isHeader ? null : <SearchActionsLabel />}
@@ -377,9 +325,7 @@ export function ScheduleSearchFilter({
                 md={isHeader ? undefined : 11}
                 lg={isHeader ? undefined : 5}
                 flex={isHeader ? "2 1 260px" : undefined}
-                className={
-                  isHeader ? "schedule-search-header-col--port" : undefined
-                }
+                className={isHeader ? "schedule-search-header-col--port" : undefined}
               >
                 <Form.Item
                   name="podCode"
@@ -390,17 +336,13 @@ export function ScheduleSearchFilter({
                       </span>
                     )
                   }
-                  rules={[
-                    { required: true, message: t("search.selectDelivery") },
-                  ]}
+                  rules={[{ required: true, message: t("search.selectDelivery") }]}
                 >
                   <Select
                     size={controlSize}
                     showSearch
                     placeholder={
-                      isHeader
-                        ? t("search.deliveryShort")
-                        : t("search.deliveryPlaceholder")
+                      isHeader ? t("search.deliveryShort") : t("search.deliveryPlaceholder")
                     }
                     options={podPorts.options}
                     optionLabelProp="label"
@@ -418,17 +360,13 @@ export function ScheduleSearchFilter({
                 md={isHeader ? undefined : 12}
                 lg={isHeader ? undefined : 6}
                 flex={isHeader ? "0 1 220px" : undefined}
-                className={
-                  isHeader ? "schedule-search-header-col--date" : undefined
-                }
+                className={isHeader ? "schedule-search-header-col--date" : undefined}
               >
                 <Form.Item
                   name="dateRange"
                   label={
                     isHeader ? null : (
-                      <span className="form-field-label">
-                        {t("search.departureDateRange")}
-                      </span>
+                      <span className="form-field-label">{t("search.departureDateRange")}</span>
                     )
                   }
                 >
@@ -446,9 +384,7 @@ export function ScheduleSearchFilter({
                 md={isHeader ? undefined : 12}
                 lg={isHeader ? undefined : 6}
                 flex={isHeader ? "0 0 auto" : undefined}
-                className={
-                  isHeader ? "schedule-search-header-col--actions" : undefined
-                }
+                className={isHeader ? "schedule-search-header-col--actions" : undefined}
               >
                 <SearchActionsField
                   isLoading={isLoading}
@@ -462,24 +398,17 @@ export function ScheduleSearchFilter({
 
           {searchType === "VESSEL_SCHEDULE" && (
             <Row gutter={gutter} align="middle" wrap={!isHeader}>
-              <Col
-                xs={24}
-                lg={isHeader ? undefined : 9}
-                flex={isHeader ? "1 1 160px" : undefined}
-              >
+              <Col xs={24} lg={isHeader ? undefined : 9} flex={isHeader ? "1 1 160px" : undefined}>
                 <Form.Item
                   name="vesselCode"
                   label={
                     isHeader ? null : (
                       <span className="form-field-label">
-                        {t("search.vesselNameCode")}{" "}
-                        <Text type="danger">*</Text>
+                        {t("search.vesselNameCode")} <Text type="danger">*</Text>
                       </span>
                     )
                   }
-                  rules={[
-                    { required: true, message: t("search.selectVessel") },
-                  ]}
+                  rules={[{ required: true, message: t("search.selectVessel") }]}
                 >
                   <Select
                     size={controlSize}
@@ -491,18 +420,12 @@ export function ScheduleSearchFilter({
                   />
                 </Form.Item>
               </Col>
-              <Col
-                xs={24}
-                lg={isHeader ? undefined : 8}
-                flex={isHeader ? "1 1 180px" : undefined}
-              >
+              <Col xs={24} lg={isHeader ? undefined : 8} flex={isHeader ? "1 1 180px" : undefined}>
                 <Form.Item
                   name="dateRange"
                   label={
                     isHeader ? null : (
-                      <span className="form-field-label">
-                        {t("search.voyageDateRange")}
-                      </span>
+                      <span className="form-field-label">{t("search.voyageDateRange")}</span>
                     )
                   }
                 >
@@ -514,11 +437,7 @@ export function ScheduleSearchFilter({
                   />
                 </Form.Item>
               </Col>
-              <Col
-                xs={24}
-                lg={isHeader ? undefined : 7}
-                flex={isHeader ? "0 0 auto" : undefined}
-              >
+              <Col xs={24} lg={isHeader ? undefined : 7} flex={isHeader ? "0 0 auto" : undefined}>
                 <SearchActionsField
                   isLoading={isLoading}
                   onReset={handleReset}
@@ -531,11 +450,7 @@ export function ScheduleSearchFilter({
 
           {searchType === "PORT_SCHEDULE" && (
             <Row gutter={gutter} align="middle" wrap={!isHeader}>
-              <Col
-                xs={24}
-                lg={isHeader ? undefined : 9}
-                flex={isHeader ? "1 1 160px" : undefined}
-              >
+              <Col xs={24} lg={isHeader ? undefined : 9} flex={isHeader ? "1 1 160px" : undefined}>
                 <Form.Item
                   name="portCode"
                   label={
@@ -559,18 +474,12 @@ export function ScheduleSearchFilter({
                   />
                 </Form.Item>
               </Col>
-              <Col
-                xs={24}
-                lg={isHeader ? undefined : 8}
-                flex={isHeader ? "1 1 180px" : undefined}
-              >
+              <Col xs={24} lg={isHeader ? undefined : 8} flex={isHeader ? "1 1 180px" : undefined}>
                 <Form.Item
                   name="dateRange"
                   label={
                     isHeader ? null : (
-                      <span className="form-field-label">
-                        {t("search.arrivalDepartureWindow")}
-                      </span>
+                      <span className="form-field-label">{t("search.arrivalDepartureWindow")}</span>
                     )
                   }
                 >
@@ -582,11 +491,7 @@ export function ScheduleSearchFilter({
                   />
                 </Form.Item>
               </Col>
-              <Col
-                xs={24}
-                lg={isHeader ? undefined : 7}
-                flex={isHeader ? "0 0 auto" : undefined}
-              >
+              <Col xs={24} lg={isHeader ? undefined : 7} flex={isHeader ? "0 0 auto" : undefined}>
                 <SearchActionsField
                   isLoading={isLoading}
                   onReset={handleReset}

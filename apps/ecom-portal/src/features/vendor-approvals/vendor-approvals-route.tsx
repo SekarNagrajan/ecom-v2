@@ -1,23 +1,9 @@
-// Modified by Sekar Nagarajan (2026-09-16 17:38)
+// Modified by Sekar Nagarajan (2026-11-12 23:50)
 import { useAuthStore } from "@solverminds/auth";
-import { createRoute, redirect } from "@tanstack/react-router";
-import { Card } from "antd";
+import { createRoute, lazyRouteComponent, redirect } from "@tanstack/react-router";
 
 import { appRoute } from "../../app/router";
-import { FeaturePageShell } from "../../components/shared/feature-page-shell";
-import { VendorApprovalsView } from "./components/VendorApprovalsView";
-import { VendorApprovalsModuleStyles } from "./components/vendor-approvals-module-styles";
-
-function VendorApprovalsPage() {
-  return (
-    <FeaturePageShell>
-      <VendorApprovalsModuleStyles />
-      <Card className="feature-page-card va-page-card" bordered={false}>
-        <VendorApprovalsView />
-      </Card>
-    </FeaturePageShell>
-  );
-}
+import { AppRoutePendingFallback } from "../../components/pending/app-route-pending";
 
 export const vendorApprovalsRoute = createRoute({
   getParentRoute: () => appRoute,
@@ -31,5 +17,6 @@ export const vendorApprovalsRoute = createRoute({
       throw redirect({ to: "/app/dashboard" });
     }
   },
-  component: VendorApprovalsPage,
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: lazyRouteComponent(() => import("./vendor-approvals-page"), "VendorApprovalsPage"),
 });

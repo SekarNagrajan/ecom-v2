@@ -1,7 +1,6 @@
-// Modified by Sekar Nagarajan (2026-09-18 12:26)
+// Modified by Sekar Nagarajan (2026-11-12 23:50)
 import { useAuthStore, useTenantStore } from "@solverminds/auth";
 import { env, queryClient } from "@solverminds/platform";
-import { initAgGridLicense } from "@solverminds/shared-ui/data-view/ag-grid-license";
 import { AppConfigProvider } from "@solverminds/shared-ui/providers";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider } from "@tanstack/react-router";
@@ -19,7 +18,6 @@ import { installPreloadErrorHandler } from "./utils/preload-error-handler";
 
 import "@solverminds/shared-ui/styles.css";
 
-initAgGridLicense(import.meta.env.VITE_AG_GRID_LICENSE_KEY);
 installPreloadErrorHandler();
 
 /**
@@ -28,9 +26,7 @@ installPreloadErrorHandler();
  * localStorage, so component chrome and UI text match immediately.
  */
 function syncInitialLocale(): void {
-  const detected = (i18n.resolvedLanguage ??
-    i18n.language ??
-    "en") as SupportedLanguage;
+  const detected = (i18n.resolvedLanguage ?? i18n.language ?? "en") as SupportedLanguage;
   const targetLocale = LANG_TO_ANTD_LOCALE[detected];
   if (!targetLocale) return;
   const store = useAppConfigStore.getState();
@@ -41,9 +37,7 @@ function syncInitialLocale(): void {
 
 function AppRoot() {
   const config = useAppConfigStore((state) => state.config);
-  const tenantPrimary = useTenantStore(
-    (state) => state.activeTenant.primaryColor,
-  );
+  const tenantPrimary = useTenantStore((state) => state.activeTenant.primaryColor);
 
   const mergedConfig = {
     ...config,
@@ -51,10 +45,7 @@ function AppRoot() {
   };
 
   return (
-    <AppConfigProvider
-      config={mergedConfig}
-      theme={{ cssVar: { prefix: "ecom" } }}
-    >
+    <AppConfigProvider config={mergedConfig} theme={{ cssVar: { prefix: "ecom" } }}>
       <ThemePreferencesProvider>
         <TenantThemeProvider>
           <RouterProvider router={router} />
@@ -85,18 +76,10 @@ async function bootstrap() {
       serviceWorker: { url: "/mockServiceWorker.js" },
     });
     // Restore booking / SI+BL / VGM / user mutations written to mock-data/runtime/ (survives refresh).
-    const { rehydrateBookingDb } = await import(
-      "./mocks/fixture-api/booking-persistence"
-    );
-    const { rehydrateSiDb } = await import(
-      "./mocks/fixture-api/si-persistence"
-    );
-    const { rehydrateVgmDb } = await import(
-      "./mocks/fixture-api/vgm-persistence"
-    );
-    const { rehydrateUserDb } = await import(
-      "./mocks/fixture-api/user-persistence"
-    );
+    const { rehydrateBookingDb } = await import("./mocks/fixture-api/booking-persistence");
+    const { rehydrateSiDb } = await import("./mocks/fixture-api/si-persistence");
+    const { rehydrateVgmDb } = await import("./mocks/fixture-api/vgm-persistence");
+    const { rehydrateUserDb } = await import("./mocks/fixture-api/user-persistence");
     await rehydrateBookingDb();
     await rehydrateSiDb();
     await rehydrateVgmDb();

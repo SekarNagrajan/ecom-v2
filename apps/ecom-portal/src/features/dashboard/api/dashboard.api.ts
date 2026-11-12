@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-10-16 23:25)
+// Modified by Sekar Nagarajan (2026-11-12 23:50)
 /**
  * Dashboard API types and service.
  * Business parity with: enhancedDashboard.jsp, dashboard.jsp, DashBoardCharts.jsp.
@@ -8,12 +8,12 @@
  * The types below are the single source of truth for the dashboard DTOs; the bridge
  * imports them type-only, so there is no runtime cycle.
  */
-import {
-  fixtureDashboardSummary,
-  fixtureVolumeAnalytics,
-  fixtureVolumeTrendRecords,
-} from "../../../mocks/fixture-api/bridges/dashboard.bridge";
+import { loadBridge } from "../../../data-source";
 import type { BookingListDTO } from "../../booking/types/booking-list.types";
+
+/** Fixture bridge, loaded on first use so the fixtures stay out of the entry bundle. */
+const dashboardBridge = () =>
+  loadBridge(() => import("../../../mocks/fixture-api/bridges/dashboard.bridge"));
 
 // ─── Volume analytics ────────────────────────────────────────────
 export interface VolumeKpi {
@@ -48,12 +48,7 @@ export interface VolumeTrendRecord {
 }
 
 /** Shipment lifecycle stage for volume analytics. */
-export type VolumeAnalyticsStage =
-  | "all"
-  | "booking"
-  | "si"
-  | "bl"
-  | "inTransit";
+export type VolumeAnalyticsStage = "all" | "booking" | "si" | "bl" | "inTransit";
 
 export type VolumeTrendPeriod = "Weekly" | "Monthly" | "Quarterly";
 
@@ -128,14 +123,7 @@ export interface PlanningKpi {
   atRisk: number;
 }
 
-export type CalendarWeekday =
-  | "mon"
-  | "tue"
-  | "wed"
-  | "thu"
-  | "fri"
-  | "sat"
-  | "sun";
+export type CalendarWeekday = "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun";
 
 /** Planning calendar booking with SI / payment flags (JSP missingSIFlag / pendingPaymentFlag). */
 export interface PlanningBookingDTO extends BookingListDTO {
@@ -178,12 +166,7 @@ export interface DashboardPlanning {
 
 // ─── Shipment intelligence ───────────────────────────────────────
 export type DashboardBreakdownTone =
-  | "primary"
-  | "success"
-  | "warning"
-  | "error"
-  | "purple"
-  | "neutral";
+  "primary" | "success" | "warning" | "error" | "purple" | "neutral";
 
 export interface IntelligenceBreakdown {
   name: string;
@@ -201,17 +184,9 @@ export interface TopConsignee {
 }
 
 export type IntelligenceDimension =
-  | "origin"
-  | "pol"
-  | "pod"
-  | "pickup"
-  | "consignee"
-  | "destination";
+  "origin" | "pol" | "pod" | "pickup" | "consignee" | "destination";
 
-export type IntelligenceBreakdowns = Record<
-  IntelligenceDimension,
-  IntelligenceBreakdown[]
->;
+export type IntelligenceBreakdowns = Record<IntelligenceDimension, IntelligenceBreakdown[]>;
 
 /** Derived shipment statistics (transit time, cargo mix, commodities). */
 export interface ShipmentIntelligenceStats {
@@ -333,12 +308,7 @@ export const DASHBOARD_QUICK_ACTIONS: ReadonlyArray<DashboardQuickAction> = [
 ];
 
 export type RecentBookingStatus =
-  | "Confirmed"
-  | "SI Pending"
-  | "In Transit"
-  | "Pending"
-  | "B/L Issued"
-  | "Completed";
+  "Confirmed" | "SI Pending" | "In Transit" | "Pending" | "B/L Issued" | "Completed";
 
 export interface RecentBookingRow {
   id: string;
@@ -407,32 +377,26 @@ export interface VolumeTrendRecordsQuery {
   periodKey: string;
 }
 
-const simulateDelay = (ms = 400) =>
-  new Promise<void>((resolve) => setTimeout(resolve, ms));
+const simulateDelay = (ms = 400) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
 export const dashboardApi = {
   async getSummary(): Promise<DashboardSummaryResponse> {
     await simulateDelay();
+    const { fixtureDashboardSummary } = await dashboardBridge();
     return fixtureDashboardSummary({ quickActions: DASHBOARD_QUICK_ACTIONS });
   },
 
   /** Volume KPIs + trend for a lifecycle stage and trend granularity. */
-  async getVolumeAnalytics(
-    query: VolumeAnalyticsQuery = {},
-  ): Promise<VolumeAnalyticsResponse> {
+  async getVolumeAnalytics(query: VolumeAnalyticsQuery = {}): Promise<VolumeAnalyticsResponse> {
     await simulateDelay(220);
+    const { fixtureVolumeAnalytics } = await dashboardBridge();
     return fixtureVolumeAnalytics(query.stage ?? "all", query.period ?? "Monthly");
   },
 
   /** Shipment rows that contribute TEUs to one volume-trend point. */
-  async getVolumeTrendRecords(
-    query: VolumeTrendRecordsQuery,
-  ): Promise<VolumeTrendRecord[]> {
+  async getVolumeTrendRecords(query: VolumeTrendRecordsQuery): Promise<VolumeTrendRecord[]> {
     await simulateDelay(180);
-    return fixtureVolumeTrendRecords(
-      query.stage ?? "all",
-      query.period,
-      query.periodKey,
-    );
+    const { fixtureVolumeTrendRecords } = await dashboardBridge();
+    return fixtureVolumeTrendRecords(query.stage ?? "all", query.period, query.periodKey);
   },
 };

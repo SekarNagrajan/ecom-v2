@@ -1,5 +1,5 @@
 {
-  "count": 24,
+  "count": 23,
   "errors": [
     "apps/ecom-portal/src/components/shared/cookie-consent-banner-styles.tsx: error TS2551: Property 'controlHeightMD' does not exist on type 'GlobalToken'. Did you mean 'controlHeight'?",
     "apps/ecom-portal/src/features/auth/components/customer-picker-modal.tsx: error TS2322: Type '{ children: Element[]; title: string; open: boolean; onCancel: () => void; footer: null; width: number; }' is not assignable to type 'IntrinsicAttributes & AppModalProps'.",
@@ -12,7 +12,6 @@
     "apps/ecom-portal/src/features/dashboard/components/dashboard-module-styles.tsx: error TS2551: Property 'controlHeightMD' does not exist on type 'GlobalToken'. Did you mean 'controlHeight'?",
     "apps/ecom-portal/src/features/shipping-instruction/cargo-import.test.ts: error TS2322: Type '{ __rowId: string; containerNo: string; description: string; hsCode: string; packageCount: number; containerType: string; carrierSeal: string; shipperSeal: string; marksAndNumbers: string; commodityCode: string; packageType: string; grossWeight: number; volume: number; }' is not assignable to type 'SpreadsheetImportGridRow<CargoImportValues>'.",
     "apps/ecom-portal/src/features/shipping-instruction/smart-import.test.ts: error TS2339: Property 'error' does not exist on type 'SmartImportApplyResult'.",
-    "apps/ecom-portal/src/main.tsx: error TS2307: Cannot find module '@solverminds/shared-ui/data-view/ag-grid-license' or its corresponding type declarations.",
     "apps/ecom-portal/src/mocks/fixture-api/booking-persistence.test.ts: error TS2339: Property 'length' does not exist on type 'BookingChildren'.",
     "apps/ecom-portal/src/mocks/fixture-api/user-persistence.test.ts: error TS2345: Argument of type '{ loginName: string; password: string; firstName: string; lastName: string; email: string; companyName: string; custPhoneNo: string; allowedModules: undefined[]; }' is not assignable to parameter of type '{ loginName: string; firstName: string; lastName: string; email: string; companyName: string; custCountryCode: string; custPhoneCode: string; custPhoneNo: string; mobileCode: string; defLanguage: string; ... 4 more ...; password?: string; }'.",
     "libs/shared/ui/src/components/data-view/list-view/components/ag-grid-number-floating-filter.tsx: error TS2322: Type 'Timeout' is not assignable to type 'number'.",

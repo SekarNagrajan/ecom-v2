@@ -10,6 +10,8 @@
   "scripts": {
     "dev": "pnpm --filter @solverminds/ecom-portal dev",
     "build": "pnpm --filter @solverminds/ecom-portal build",
+    "build:check": "node scripts/check-bundle-size.mjs",
+    "build:analyze": "ANALYZE=1 pnpm build",
     "preview": "pnpm --filter @solverminds/ecom-portal preview",
     "typecheck": "tsc --noEmit -p apps/ecom-portal/tsconfig.json",
     "typecheck:ci": "node scripts/typecheck-baseline.mjs",

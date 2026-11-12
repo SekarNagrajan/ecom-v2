@@ -465,7 +465,7 @@ export function ModuleMappingBoard({
               danger
               loading={isRemoving}
               disabled={busy || selectedAssignedIds.length === 0}
-              icon={<AppIcon icon={Icons.arrowLeft} size={16} />}
+              icon={<AppIcon icon={Icons.arrowLeft} size={16} tone="delete"/>}
               onClick={onRemoveSelected}
               aria-label="Remove selected privileges"
             />

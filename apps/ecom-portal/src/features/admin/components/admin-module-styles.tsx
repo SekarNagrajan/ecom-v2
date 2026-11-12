@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 15:10)
+// Modified by Sekar Nagarajan (2026-11-12 15:40)
 /**
  * Control Panel stylesheet — one token-backed <style> injector (agenct.md: no inline styles, no
  * hex, tokens for colour / spacing / radius, custom-scroll on scroll surfaces).
@@ -456,9 +456,6 @@ export function AdminModuleStyles() {
         color: ${token.colorPrimary};
         font-weight: ${token.fontWeightStrong};
       }
-      .admin-filter-pills__pill--empty {
-        opacity: ${token.opacityLoading};
-      }
       .admin-filter-pills__dot {
         width: ${token.sizeXS}px;
         height: ${token.sizeXS}px;
@@ -483,13 +480,6 @@ export function AdminModuleStyles() {
       }
       .admin-filter-pills__label {
         font-weight: ${token.fontWeightStrong};
-      }
-      .admin-filter-pills__count {
-        color: ${token.colorTextSecondary};
-      }
-      .admin-filter-pills__pill--selected .admin-filter-pills__count {
-        color: inherit;
-        opacity: ${token.opacityLoading + 0.1};
       }
 
       /* Locked identity field (AdminLockedField) */

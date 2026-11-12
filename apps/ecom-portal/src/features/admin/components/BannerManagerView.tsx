@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 14:10)
+// Modified by Sekar Nagarajan (2026-11-12 15:40)
 /**
  * Banners & Assets — landing hero slides in a DataView grid with a create drawer. The image is
  * referenced by URL/path (asset upload is a follow-up); a live thumbnail previews the URL.
@@ -76,7 +76,6 @@ export function BannerManagerView({
   });
   const imageUrl = form.watch("imageUrl");
 
-  const activeCount = banners.filter((b) => b.isActive).length;
   const rows = [...banners]
     .filter((b) => filter === "all" || b.isActive === (filter === "active"))
     .sort((a, b) => a.sortOrder - b.sortOrder);
@@ -219,7 +218,6 @@ export function BannerManagerView({
 
   return (
     <AdminSectionPage
-      recordCount={banners.length}
       extra={
         <span ref={addButtonRef} className="admin-section__action">
           <AppButton
@@ -238,9 +236,9 @@ export function BannerManagerView({
           value={filter}
           onChange={setFilter}
           items={[
-            { key: "all", label: "All", count: banners.length, tone: "primary" },
-            { key: "active", label: "Active", count: activeCount, tone: "success" },
-            { key: "inactive", label: "Inactive", count: banners.length - activeCount, tone: "neutral" },
+            { key: "all", label: "All", tone: "primary" },
+            { key: "active", label: "Active", tone: "success" },
+            { key: "inactive", label: "Inactive", tone: "neutral" },
           ]}
         />
 

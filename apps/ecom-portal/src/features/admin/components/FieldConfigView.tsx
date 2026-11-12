@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 14:10)
+// Modified by Sekar Nagarajan (2026-11-12 15:40)
 /**
  * Field Configuration — visibility / mandatory flags per form field in a DataView grid. Edits are
  * kept as per-row overrides (useDraftList) until Save; dirty rows show a revert action.
@@ -192,7 +192,7 @@ export function FieldConfigView({
   ];
 
   return (
-    <AdminSectionPage recordCount={fields.length}>
+    <AdminSectionPage>
       <AdminUnsavedGuard
         isDirty={draft.isDirty}
         onSave={async () => {
@@ -209,11 +209,10 @@ export function FieldConfigView({
             value={formFilter}
             onChange={setFormFilter}
             items={[
-              { key: "all", label: "All", count: fields.length, tone: "primary" },
+              { key: "all", label: "All", tone: "primary" },
               ...formNames.map((name) => ({
                 key: name,
                 label: name,
-                count: fields.filter((f) => f.formName === name).length,
                 tone: "neutral" as const,
               })),
             ]}

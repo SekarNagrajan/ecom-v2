@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 14:10)
+// Modified by Sekar Nagarajan (2026-11-12 15:40)
 /**
  * Customer Advisories — operational notices in a DataView grid with a publish drawer (severity,
  * headline, message, validity window) and a read-only detail drawer.
@@ -102,12 +102,6 @@ export function CustomerAdvisoryView({
 
   const today = todayIsoDate();
   const withStatus = advisories.map((a) => ({ ...a, status: advisoryStatus(a, today) }));
-  const counts = {
-    active: withStatus.filter((a) => a.status === "active").length,
-    scheduled: withStatus.filter((a) => a.status === "scheduled").length,
-    expired: withStatus.filter((a) => a.status === "expired").length,
-    urgent: withStatus.filter((a) => a.severity === "URGENT").length,
-  };
   const rows = withStatus.filter((a) => {
     if (filter === "all") return true;
     if (filter === "urgent") return a.severity === "URGENT";
@@ -246,7 +240,6 @@ export function CustomerAdvisoryView({
 
   return (
     <AdminSectionPage
-      recordCount={advisories.length}
       extra={
         <span ref={publishButtonRef} className="admin-section__action">
           <AppButton
@@ -265,11 +258,11 @@ export function CustomerAdvisoryView({
           value={filter}
           onChange={setFilter}
           items={[
-            { key: "all", label: "All", count: advisories.length, tone: "primary" },
-            { key: "active", label: "Active", count: counts.active, tone: "success" },
-            { key: "scheduled", label: "Scheduled", count: counts.scheduled, tone: "info" },
-            { key: "expired", label: "Expired", count: counts.expired, tone: "neutral" },
-            { key: "urgent", label: "Urgent", count: counts.urgent, tone: "error" },
+            { key: "all", label: "All", tone: "primary" },
+            { key: "active", label: "Active", tone: "success" },
+            { key: "scheduled", label: "Scheduled", tone: "info" },
+            { key: "expired", label: "Expired", tone: "neutral" },
+            { key: "urgent", label: "Urgent", tone: "error" },
           ]}
         />
 

@@ -1,6 +1,6 @@
-// Created by Sekar Nagarajan (2026-11-12 13:20)
+// Modified by Sekar Nagarajan (2026-11-12 15:40)
 /**
- * Count pills that filter a list client-side (same interaction as user-creation's status bar):
+ * Pills that filter a list client-side (same interaction as user-creation's status bar):
  * `role="tablist"` + `aria-selected`, keyboard reachable, tone dot per item.
  */
 import type { AdminPillTone } from "./AdminStatusPill";
@@ -8,7 +8,6 @@ import type { AdminPillTone } from "./AdminStatusPill";
 export interface AdminFilterPillItem<K extends string = string> {
   key: K;
   label: string;
-  count?: number;
   tone?: AdminPillTone;
 }
 
@@ -33,9 +32,8 @@ export function AdminFilterPills<K extends string = string>({
       role="tablist"
       aria-label={ariaLabel}
     >
-      {items.map((item, index) => {
+      {items.map((item) => {
         const selected = item.key === value;
-        const empty = index > 0 && item.count === 0;
         return (
           <button
             key={item.key}
@@ -46,7 +44,6 @@ export function AdminFilterPills<K extends string = string>({
               "admin-filter-pills__pill",
               item.tone ? `admin-filter-pills__pill--${item.tone}` : "",
               selected ? "admin-filter-pills__pill--selected" : "",
-              empty ? "admin-filter-pills__pill--empty" : "",
             ]
               .filter(Boolean)
               .join(" ")}
@@ -54,9 +51,6 @@ export function AdminFilterPills<K extends string = string>({
           >
             <span className="admin-filter-pills__dot" aria-hidden />
             <span className="admin-filter-pills__label">{item.label}</span>
-            {typeof item.count === "number" ? (
-              <span className="admin-filter-pills__count">({item.count})</span>
-            ) : null}
           </button>
         );
       })}

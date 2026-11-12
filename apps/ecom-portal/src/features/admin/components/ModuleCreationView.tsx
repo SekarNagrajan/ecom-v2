@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 15:10)
+// Modified by Sekar Nagarajan (2026-11-12 15:40)
 /**
  * Module Creation — register portal menus (RegisterMenu.jsp parity) and control their category and
  * visibility. The grid is the page; Register / Edit happen in a drawer whose fields map 1:1 onto
@@ -122,10 +122,6 @@ export function ModuleCreationView({
   const [drawer, setDrawer] = useState<DrawerState>(null);
 
   const rows: MenuRow[] = menus.map((m) => ({ ...m, rowId: menuRowId(m) }));
-  const counts = {
-    enabled: rows.filter((r) => r.isEnabled).length,
-    default: rows.filter((r) => r.category === "D").length,
-  };
   const visibleRows = rows.filter((r) => {
     switch (filter) {
       case "enabled":
@@ -334,7 +330,6 @@ export function ModuleCreationView({
 
   return (
     <AdminSectionPage
-      recordCount={menus.length}
       extra={
         <span ref={registerButtonRef} className="admin-section__action">
           <AppButton
@@ -353,11 +348,11 @@ export function ModuleCreationView({
           value={filter}
           onChange={setFilter}
           items={[
-            { key: "all", label: "All", count: rows.length, tone: "primary" },
-            { key: "enabled", label: "Enabled", count: counts.enabled, tone: "success" },
-            { key: "disabled", label: "Disabled", count: rows.length - counts.enabled, tone: "neutral" },
-            { key: "default", label: "Default", count: counts.default, tone: "info" },
-            { key: "privileged", label: "Privileged", count: rows.length - counts.default, tone: "warning" },
+            { key: "all", label: "All", tone: "primary" },
+            { key: "enabled", label: "Enabled", tone: "success" },
+            { key: "disabled", label: "Disabled", tone: "neutral" },
+            { key: "default", label: "Default", tone: "info" },
+            { key: "privileged", label: "Privileged", tone: "warning" },
           ]}
         />
 

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 14:40)
+// Modified by Sekar Nagarajan (2026-11-12 15:40)
 /**
  * Cutoff Configuration — per port / terminal closing hours (CutoffConfiguration.jsp parity).
  * The grid is the page; create and edit happen in a drawer. A duplicate port+terminal (409) is
@@ -269,7 +269,6 @@ export function CutoffConfigView({
 
   return (
     <AdminSectionPage
-      recordCount={cutoffConfigs.length}
       extra={
         <span ref={addButtonRef} className="admin-section__action">
           <AppButton

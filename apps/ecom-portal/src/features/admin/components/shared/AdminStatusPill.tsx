@@ -46,7 +46,7 @@ export function AdminStatusPill({
       {icon ? (
         <AppIcon icon={icon} size={12} className="admin-pill__icon" />
       ) : showDot ? (
-        <span className="admin-pill__dot" aria-hidden />
+        <span  aria-hidden />
       ) : null}
       {children}
     </span>

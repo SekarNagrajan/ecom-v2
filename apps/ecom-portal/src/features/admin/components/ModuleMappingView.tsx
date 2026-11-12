@@ -118,8 +118,8 @@ export function ModuleMappingView() {
     <AdminSectionPage
       extra={
         selectedCustomer ? (
-          <AppButton
-            icon={<AppIcon icon={Icons.x} size={16} />}
+          <AppButton danger
+            icon={<AppIcon icon={Icons.x} size={16} tone="delete"/>}
             onClick={() => handleSelectCustomer(undefined)}
           >
             Clear Selection

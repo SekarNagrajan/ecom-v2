@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 14:40)
+// Modified by Sekar Nagarajan (2026-11-12 15:40)
 /**
  * Email Templates — pick a transactional template, edit subject + HTML body, insert placeholders
  * at the caret, and preview the sanitised result. The open template lives in `?template=` so a
@@ -169,7 +169,7 @@ export function EmailTemplateEditorView({
 
   if (!activeTemplate) {
     return (
-      <AdminSectionPage recordCount={0}>
+      <AdminSectionPage>
         <ModuleEmptyState variant="blank" title="No email templates configured" />
       </AdminSectionPage>
     );
@@ -313,7 +313,7 @@ export function EmailTemplateEditorView({
   );
 
   return (
-    <AdminSectionPage recordCount={templates.length}>
+    <AdminSectionPage>
       <AdminUnsavedGuard
         isDirty={isDirty}
         onSave={async () => {

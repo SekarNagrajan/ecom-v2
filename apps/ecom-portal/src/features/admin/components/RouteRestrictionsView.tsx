@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 13:55)
+// Modified by Sekar Nagarajan (2026-11-12 15:40)
 /**
  * Route Restrictions — origin/destination lanes per service loop in a DataView grid. Restricting
  * a lane asks for confirmation; releasing does not. Each toggle PUTs the full list (the endpoint
@@ -56,8 +56,6 @@ export function RouteRestrictionsView({
   const { profileHandlers } = useLocalGridProfiles("admin-route-restrictions");
   const [filter, setFilter] = useState<RouteFilter>("all");
 
-  const restrictedCount = restrictions.filter((r) => r.isRestricted).length;
-  const openCount = restrictions.length - restrictedCount;
   const rows =
     filter === "all"
       ? restrictions
@@ -170,16 +168,16 @@ export function RouteRestrictionsView({
   ];
 
   return (
-    <AdminSectionPage recordCount={restrictions.length}>
+    <AdminSectionPage>
       <div className="admin-route-form">
         <AdminFilterPills<RouteFilter>
           ariaLabel="Filter routes by status"
           value={filter}
           onChange={setFilter}
           items={[
-            { key: "all", label: "All", count: restrictions.length, tone: "primary" },
-            { key: "open", label: "Open", count: openCount, tone: "success" },
-            { key: "restricted", label: "Restricted", count: restrictedCount, tone: "error" },
+            { key: "all", label: "All", tone: "primary" },
+            { key: "open", label: "Open", tone: "success" },
+            { key: "restricted", label: "Restricted", tone: "error" },
           ]}
         />
 

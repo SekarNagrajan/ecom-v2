@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 13:55)
+// Modified by Sekar Nagarajan (2026-11-12 14:10)
 /**
  * Control Panel stylesheet — one token-backed <style> injector (agenct.md: no inline styles, no
  * hex, tokens for colour / spacing / radius, custom-scroll on scroll surfaces).
@@ -295,13 +295,6 @@ export function AdminModuleStyles() {
         padding: ${token.paddingMD}px ${token.paddingLG}px ${token.paddingLG}px;
         overflow-y: auto;
         background: ${token.colorFillAlter};
-      }
-      /* legacy drawer body used by the pre-redesign Banner / Advisory drawers */
-      .admin-drawer-body:not(.custom-scroll) {
-        display: flex;
-        flex-direction: column;
-        gap: ${token.marginMD}px;
-        padding: ${token.paddingMD}px;
       }
       .admin-drawer-footer-bar.ant-drawer-footer {
         padding: 0;
@@ -709,6 +702,85 @@ export function AdminModuleStyles() {
         color: ${token.colorTextSecondary};
       }
 
+      /* Toolbar row: pills left, search right */
+      .admin-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: ${token.marginSM}px;
+      }
+      .admin-toolbar__filters {
+        flex: 1 1 ${controlLG * 8}px;
+        min-width: 0;
+      }
+      .admin-toolbar__search {
+        flex: 0 1 ${controlLG * 7}px;
+        min-width: ${controlLG * 5}px;
+      }
+
+      /* Grid cells */
+      .admin-switch-cell {
+        display: inline-flex;
+        align-items: center;
+        height: 100%;
+      }
+      .admin-cell-text {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXS}px;
+        min-width: 0;
+      }
+      .admin-dirty-dot {
+        display: inline-block;
+        width: ${token.sizeXS}px;
+        height: ${token.sizeXS}px;
+        border-radius: 50%;
+        background: ${token.colorWarning};
+        flex-shrink: 0;
+      }
+      .admin-link-cell {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        min-width: 0;
+        color: ${token.colorPrimary};
+      }
+      .admin-link-cell__text {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .admin-banner-thumb--form {
+        display: block;
+        width: 100%;
+        max-height: ${controlLG * 4}px;
+        object-fit: cover;
+        border: 1px solid ${token.colorBorderSecondary};
+      }
+      .admin-visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+      .admin-drawer-title__pills {
+        display: inline-flex;
+        flex-wrap: wrap;
+        gap: ${token.marginXS}px;
+        margin-top: ${token.marginXXS}px;
+      }
+      .admin-descriptions .ant-descriptions-item-label {
+        color: ${token.colorTextSecondary};
+      }
+      .admin-prewrap.ant-typography {
+        margin: 0;
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
       /* ================================================================== */
       /* 3. Module Mapping — dual-list board + drag-and-drop                 */
       /* ================================================================== */
@@ -971,30 +1043,7 @@ export function AdminModuleStyles() {
         padding: ${token.paddingXXS}px 0;
       }
 
-      /* legacy: Field Configuration (FieldConfigView) */
-      .admin-field-actions {
-        display: flex;
-        flex-direction: column;
-        gap: ${token.marginSM}px;
-        min-width: 0;
-        margin: 0;
-        padding: ${token.paddingXS}px 0;
-      }
-      .admin-field-actions__item {
-        display: inline-flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: ${token.marginMD}px;
-        width: 100%;
-        margin: 0;
-        padding: ${token.paddingXXS}px 0;
-      }
-      .admin-field-actions__label {
-        font-size: ${token.fontSizeSM}px;
-        margin: 0;
-      }
-
-      /* legacy: antd Table cells (Menu / Field / Banner / Advisory views) */
+      /* legacy: antd Table cells (MenuManagementView) */
       .admin-section .responsive-table-wrap .ant-table-thead > tr > th,
       .admin-section .responsive-table-wrap .ant-table-tbody > tr > td {
         padding: ${token.paddingSM}px ${token.paddingMD}px;
@@ -1191,6 +1240,10 @@ export function AdminModuleStyles() {
         }
         .admin-filter-pills {
           padding: ${token.paddingXS}px;
+        }
+        .admin-toolbar__search {
+          flex-basis: 100%;
+          min-width: 0;
         }
         .admin-setting-row {
           flex-direction: column;

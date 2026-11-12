@@ -1,4 +1,4 @@
-// Created by Sekar Nagarajan (2026-11-12 12:40)
+// Modified by Sekar Nagarajan (2026-11-12 14:10)
 /** Banners & Assets tab. */
 import { useBannersQuery, useCreateBannerMutation } from "../../api/admin.queries";
 import { BannerManagerView } from "../BannerManagerView";
@@ -15,7 +15,12 @@ export function BannersSection() {
       error={query.error}
       onRetry={() => void query.refetch()}
     >
-      <BannerManagerView banners={query.data ?? []} onCreate={create.mutateAsync} />
+      <BannerManagerView
+        banners={query.data ?? []}
+        onCreate={create.mutateAsync}
+        isCreating={create.isPending}
+        isFetching={query.isFetching}
+      />
     </AdminSectionState>
   );
 }

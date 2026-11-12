@@ -30,7 +30,7 @@ export interface AdminDrawerProps {
   cancelLabel?: ReactNode;
   /** Replaces the default Cancel + primary footer. Pass `null` for no footer. */
   footer?: ReactNode | null;
-  /** Element to focus again when the drawer closes (usually the button that opened it). */
+  /** Element (or a wrapper around the button) to focus again when the drawer closes. */
   returnFocusRef?: RefObject<HTMLElement | null>;
   className?: string;
 }
@@ -108,7 +108,13 @@ export function AdminDrawer({
       }}
       styles={{ body: { padding: 0 } }}
       afterOpenChange={(isOpen) => {
-        if (!isOpen) returnFocusRef?.current?.focus();
+        if (isOpen) return;
+        const host = returnFocusRef?.current;
+        if (!host) return;
+        const target = host.matches("button, [tabindex]")
+          ? host
+          : host.querySelector<HTMLElement>("button, [tabindex]");
+        target?.focus();
       }}
       title={
         <div className="admin-drawer-title">

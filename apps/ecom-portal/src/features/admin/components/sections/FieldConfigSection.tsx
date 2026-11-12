@@ -1,4 +1,4 @@
-// Created by Sekar Nagarajan (2026-11-12 12:40)
+// Modified by Sekar Nagarajan (2026-11-12 14:10)
 /** Field Configuration tab. */
 import {
   useFieldConfigsQuery,
@@ -22,6 +22,8 @@ export function FieldConfigSection() {
     >
       <FieldConfigView
         fields={query.data ?? []}
+        isSaving={update.isPending}
+        isFetching={query.isFetching}
         onSave={(fields: FieldConfig[]) =>
           settleMutation(() => update.mutateAsync(fields))
         }

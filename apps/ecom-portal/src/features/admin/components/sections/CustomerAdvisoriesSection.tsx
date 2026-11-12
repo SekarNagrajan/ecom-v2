@@ -1,4 +1,4 @@
-// Created by Sekar Nagarajan (2026-11-12 12:40)
+// Modified by Sekar Nagarajan (2026-11-12 14:10)
 /** Customer Advisories tab. */
 import {
   useCreateAdvisoryMutation,
@@ -21,6 +21,8 @@ export function CustomerAdvisoriesSection() {
       <CustomerAdvisoryView
         advisories={query.data ?? []}
         onCreate={create.mutateAsync}
+        isCreating={create.isPending}
+        isFetching={query.isFetching}
       />
     </AdminSectionState>
   );

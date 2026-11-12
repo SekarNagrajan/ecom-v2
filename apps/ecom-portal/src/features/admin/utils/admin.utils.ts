@@ -1,7 +1,7 @@
-// Modified by Sekar Nagarajan (2026-11-12 14:10)
+// Modified by Sekar Nagarajan (2026-11-12 15:10)
 /** Pure helpers shared by the Control Panel sections. */
 import { MODULE_TITLES } from "../../../constants/module-titles";
-import type { CustomerAdvisory, ModuleMappingMenu } from "../types/admin.types";
+import type { CustomerAdvisory, MenuConfig, ModuleMappingMenu } from "../types/admin.types";
 
 /**
  * Await a mutation whose errors are already surfaced by its hook's onError toast, so callers
@@ -79,6 +79,11 @@ export function menuDisplayName(
 ): string {
   const key = menu.refNo ? REFNO_TO_MODULE_TITLE[menu.refNo.toUpperCase()] : undefined;
   return key ? titles[key] : menu.menuName;
+}
+
+/** Server identity of a menu row (menus.bridge matches on refNo + parentMenu + userType). */
+export function menuRowId(menu: Pick<MenuConfig, "refNo" | "parentMenu" | "userType">): string {
+  return `${menu.refNo}|${menu.parentMenu ?? ""}|${menu.userType ?? "U"}`.toUpperCase();
 }
 
 /** Next free display order for a new menu / banner: max + 1 (1 when the list is empty). */

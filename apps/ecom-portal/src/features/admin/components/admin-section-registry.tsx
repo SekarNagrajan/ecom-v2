@@ -1,4 +1,4 @@
-// Created by Sekar Nagarajan (2026-11-12 12:40)
+// Modified by Sekar Nagarajan (2026-11-12 15:10)
 /**
  * The only place that imports section screens. Each section is code-split so opening the Control
  * Panel loads just the shell and the active tab; views are self-contained (they fetch their own
@@ -29,8 +29,8 @@ function lazySection<TModule extends Record<string, unknown>>(
 
 const SECTION_COMPONENTS: Record<AdminSectionKey, LazyExoticComponent<ComponentType>> = {
   "module-mapping": lazySection(
-    () => import("./SpecialPrivilegesView"),
-    "SpecialPrivilegesView",
+    () => import("./ModuleMappingView"),
+    "ModuleMappingView",
   ),
   "module-creation": lazySection(
     () => import("./sections/ModuleCreationSection"),

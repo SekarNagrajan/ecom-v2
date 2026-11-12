@@ -93,7 +93,7 @@ export function attrRoute(attrValue: unknown): string {
   return m ? m[1] : raw;
 }
 
-/** `href="AdminAccess.do?type=specialprivi"` → `specialprivi` (the legacy key AdminLayout maps to a section). */
+/** `href="AdminAccess.do?type=specialprivi"` → `specialprivi` (the legacy key admin-menu-access maps to a section). */
 export function adminAccessType(attrValue: unknown): string | null {
   const m = /[?&]type=([^&"\s]+)/i.exec(String(attrValue ?? ''));
   return m ? m[1] : null;

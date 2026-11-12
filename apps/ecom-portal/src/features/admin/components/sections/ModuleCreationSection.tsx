@@ -1,5 +1,5 @@
-// Created by Sekar Nagarajan (2026-11-12 12:40)
-/** Module Creation tab — self-contained data wiring around the existing view (redesigned in Phase 5). */
+// Modified by Sekar Nagarajan (2026-11-12 15:10)
+/** Module Creation tab. */
 import {
   useCreateMenuMutation,
   useMenuConfigsQuery,
@@ -7,7 +7,7 @@ import {
 } from "../../api/admin.queries";
 import type { MenuConfig, MenuCreatePayload } from "../../types/admin.types";
 import { settleMutation } from "../../utils/admin.utils";
-import { MenuManagementView } from "../MenuManagementView";
+import { ModuleCreationView } from "../ModuleCreationView";
 import { AdminSectionState } from "../shared/AdminSectionState";
 
 export function ModuleCreationSection() {
@@ -22,13 +22,13 @@ export function ModuleCreationSection() {
       error={query.error}
       onRetry={() => void query.refetch()}
     >
-      <MenuManagementView
+      <ModuleCreationView
         menus={query.data ?? []}
-        onSave={(menus: MenuConfig[]) =>
+        isSaving={updateMenus.isPending || createMenu.isPending}
+        isFetching={query.isFetching}
+        onCreate={(data: MenuCreatePayload) => createMenu.mutateAsync(data).then(() => undefined)}
+        onSaveAll={(menus: MenuConfig[]) =>
           settleMutation(() => updateMenus.mutateAsync(menus))
-        }
-        onCreate={(data: MenuCreatePayload) =>
-          settleMutation(() => createMenu.mutateAsync(data))
         }
       />
     </AdminSectionState>

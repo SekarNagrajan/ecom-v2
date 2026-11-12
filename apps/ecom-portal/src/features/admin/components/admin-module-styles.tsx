@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 14:40)
+// Modified by Sekar Nagarajan (2026-11-12 15:10)
 /**
  * Control Panel stylesheet — one token-backed <style> injector (agenct.md: no inline styles, no
  * hex, tokens for colour / spacing / radius, custom-scroll on scroll surfaces).
@@ -6,10 +6,8 @@
  * Layout of this file:
  *   1. Shell & chrome    — page card, module header, tab strip, section header/body/footer
  *   2. Shared primitives — loading, summary chips, tags, drawer body/footer, form footer, stacks
- *   3. Module Mapping    — dual-list board + drag-and-drop (kept; redesigned in place)
- *   4. Legacy blocks     — per-view rules the pre-redesign screens still need. Each block is
- *                          deleted when its section is redesigned (Phase 5).
- *   5. Responsive        — two token-driven breakpoints (screenMDMax / screenSMMax)
+ *   3. Module Mapping    — dual-list board + drag-and-drop
+ *   4. Responsive        — token-driven breakpoints (screenXL / screenMDMax / screenSMMax)
  */
 import { theme } from "antd";
 
@@ -143,9 +141,6 @@ export function AdminModuleStyles() {
         min-height: ${controlLG * 4}px;
         padding: ${token.paddingLG}px;
       }
-      .admin-empty-inline {
-        padding: ${token.paddingSM}px;
-      }
 
       /* Module body stacks */
       .admin-config-form,
@@ -165,41 +160,7 @@ export function AdminModuleStyles() {
         min-width: 0;
       }
 
-      /* Summary chips (counts above lists) */
-      .admin-menu-summary {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: stretch;
-        gap: ${token.marginSM}px;
-        width: 100%;
-        margin: 0;
-        padding: 0;
-      }
-      .admin-menu-summary__chip {
-        display: inline-flex;
-        align-items: center;
-        gap: ${token.marginSM}px;
-        min-width: 0;
-        margin: 0;
-        padding: ${token.paddingSM}px ${token.paddingMD}px;
-        border-radius: ${token.borderRadiusLG}px;
-        border: 1px solid ${token.colorBorderSecondary};
-        background: ${token.colorFillAlter};
-        color: ${token.colorText};
-      }
-      .admin-menu-summary__chip--success {
-        border-color: ${token.colorSuccessBorder};
-        background: ${successTint8};
-        color: ${token.colorSuccess};
-      }
-      .admin-menu-summary__chip--warning {
-        border-color: ${token.colorWarningBorder};
-        background: ${warningTint8};
-        color: ${token.colorWarning};
-      }
-
-      /* Tags */
-      .admin-status-tag.ant-tag,
+      /* Code tags */
       .admin-code-tag.ant-tag {
         margin: 0;
         border-radius: ${token.borderRadiusSM}px;
@@ -933,18 +894,6 @@ export function AdminModuleStyles() {
         gap: ${token.marginXS}px;
         width: 100%;
       }
-      .admin-mapping-customer__row {
-        display: flex;
-        align-items: center;
-        gap: ${token.marginSM}px;
-        width: 100%;
-        flex-wrap: wrap;
-      }
-      .admin-mapping-customer__row .ant-input-affix-wrapper,
-      .admin-mapping-customer__row > .ant-input {
-        flex: 1 1 ${controlLG * 6}px;
-        min-width: 0;
-      }
       .admin-mapping-customer__meta {
         display: flex;
         flex-wrap: wrap;
@@ -958,8 +907,20 @@ export function AdminModuleStyles() {
       .admin-mapping-summary {
         display: inline-flex;
         flex-wrap: wrap;
-        gap: ${token.marginXXS}px;
+        gap: ${token.marginXS}px;
         margin-inline-start: auto;
+      }
+      .admin-mapping-option {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS / 2}px;
+        min-width: 0;
+      }
+      .admin-mapping-option__name {
+        font-weight: ${token.fontWeightStrong};
+      }
+      .admin-mapping-option__meta {
+        font-size: ${token.fontSizeSM}px;
       }
       .admin-mapping-empty {
         display: flex;
@@ -980,6 +941,17 @@ export function AdminModuleStyles() {
       .admin-mapping-board--busy {
         opacity: ${token.opacityLoading};
         pointer-events: none;
+      }
+      .admin-mapping-board--single {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .admin-mapping-board--single .admin-mapping-transfer {
+        flex-direction: row;
+        justify-content: center;
+        order: 2;
+      }
+      .admin-mapping-column--hidden {
+        display: none;
       }
       .admin-mapping-column {
         display: flex;
@@ -1109,92 +1081,8 @@ export function AdminModuleStyles() {
         margin: 0;
         font-weight: ${token.fontWeightStrong};
       }
-      .admin-mapping-search-input {
-        margin-bottom: ${token.marginMD}px;
-      }
-      .admin-mapping-search-list {
-        display: flex;
-        flex-direction: column;
-        gap: ${token.marginXS}px;
-        max-height: ${controlLG * 9}px;
-        overflow-y: auto;
-      }
-      .admin-mapping-search-item {
-        display: flex;
-        align-items: flex-start;
-        gap: ${token.marginMD}px;
-        width: 100%;
-        margin: 0;
-        padding: ${token.paddingMD}px;
-        border: 1px solid ${token.colorBorderSecondary};
-        border-radius: ${token.borderRadiusLG}px;
-        background: ${token.colorBgContainer};
-        text-align: left;
-        cursor: pointer;
-        transition: border-color ${token.motionDurationMid} ease,
-          background-color ${token.motionDurationMid} ease;
-      }
-      .admin-mapping-search-item:hover {
-        border-color: ${token.colorPrimaryBorder};
-        background: ${primaryTint8};
-      }
-      .admin-mapping-search-item__title.ant-typography {
-        margin: 0 0 ${token.marginXXS}px;
-      }
-
       /* ================================================================== */
-      /* 4. Legacy per-view blocks — removed as each tab is redesigned       */
-      /* ================================================================== */
-
-      /* legacy: Module Creation (MenuManagementView) */
-      .admin-menu-create.ant-collapse {
-        border-radius: ${token.borderRadiusLG}px;
-        border: 1px solid ${token.colorBorderSecondary};
-        background: ${token.colorFillAlter};
-      }
-      .admin-menu-create.ant-collapse .ant-collapse-header {
-        align-items: center;
-        font-weight: ${token.fontWeightStrong};
-      }
-      .admin-menu-create__form {
-        display: flex;
-        flex-direction: column;
-        gap: ${token.marginMD}px;
-        width: 100%;
-      }
-      .admin-menu-create__grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: ${token.marginMD}px;
-        width: 100%;
-      }
-      .admin-menu-create__grid .admin-login-page__field {
-        display: flex;
-        flex-direction: column;
-        gap: ${token.marginXXS}px;
-        min-width: 0;
-      }
-      .admin-menu-create .admin-form-footer.form-step-footer {
-        margin-top: ${token.marginSM}px;
-      }
-      .admin-menu-action {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        min-width: 0;
-        margin: 0;
-        padding: ${token.paddingXXS}px 0;
-      }
-
-      /* legacy: antd Table cells (MenuManagementView) */
-      .admin-section .responsive-table-wrap .ant-table-thead > tr > th,
-      .admin-section .responsive-table-wrap .ant-table-tbody > tr > td {
-        padding: ${token.paddingSM}px ${token.paddingMD}px;
-        vertical-align: middle;
-      }
-
-      /* ================================================================== */
-      /* 5. Responsive                                                       */
+      /* 4. Responsive                                                       */
       /* ================================================================== */
       @media (min-width: ${token.screenXL}px) {
         .admin-email-editor-grid {
@@ -1212,10 +1100,6 @@ export function AdminModuleStyles() {
         .admin-mapping-transfer {
           flex-direction: row;
           justify-content: center;
-        }
-        /* legacy */
-        .admin-menu-create__grid {
-          grid-template-columns: 1fr;
         }
       }
 
@@ -1279,17 +1163,6 @@ export function AdminModuleStyles() {
         .admin-drawer-body {
           padding: ${token.paddingMD}px;
           gap: ${token.marginSM}px;
-        }
-        .admin-menu-summary {
-          gap: ${token.marginXS}px;
-        }
-        .admin-mapping-customer__row {
-          flex-direction: column;
-          align-items: stretch;
-        }
-        .admin-mapping-customer__row .sm-app-button,
-        .admin-mapping-customer__row .ant-btn {
-          width: 100%;
         }
         /* legacy */
       }

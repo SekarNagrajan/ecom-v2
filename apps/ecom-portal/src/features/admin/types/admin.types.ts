@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 13:40)
+// Modified by Sekar Nagarajan (2026-11-12 15:10)
 import { z } from 'zod';
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
@@ -79,25 +79,6 @@ export const MENU_CATEGORY_OPTIONS = [
   { label: 'Default', value: 'D' },
   { label: 'Privileged', value: 'P' },
 ] as const;
-
-/** @deprecated Use MenuUpsertSchema; kept until MenuManagementView is redesigned. */
-export const MenuCreateSchema = z.object({
-  menuName: z.string().min(1, 'Menu name is required'),
-  menuOrder: z.number({ error: 'Menu order is required' }).min(1, 'Menu order is required'),
-  userType: z.enum(['U', 'V'], { message: 'User type is required' }),
-  developedBy: z.string().optional(),
-  refNo: z.string().min(1, 'Ref No is required').max(100),
-  status: z.enum(['A', 'I']),
-  category: z.enum(['D', 'P']),
-  createdBy: z.string().optional(),
-  classValue: z.string().optional(),
-  attrValue: z.string().min(1, 'Route / attr value is required'),
-  labelValue: z.string().min(1, 'Label value is required'),
-  menuType: z.string().optional(),
-  parentMenu: z.string().optional(),
-});
-/** @deprecated Use MenuUpsertValues. */
-export type MenuCreateForm = z.infer<typeof MenuCreateSchema>;
 
 // ---------------------------------------------------------------------------
 // 2. Module Mapping (SpecialPrivilege.jsp parity)

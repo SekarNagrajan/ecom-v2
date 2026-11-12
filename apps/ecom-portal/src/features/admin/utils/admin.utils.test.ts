@@ -1,7 +1,7 @@
-// Created by Sekar Nagarajan (2026-11-12 14:10)
+// Modified by Sekar Nagarajan (2026-11-12 15:10)
 import { describe, expect, it } from 'vitest';
 
-import { advisoryStatus, menuDisplayName, nextOrder, settleMutation, todayIsoDate } from './admin.utils';
+import { advisoryStatus, menuDisplayName, menuRowId, nextOrder, settleMutation, todayIsoDate } from './admin.utils';
 
 describe('advisoryStatus', () => {
   const today = '2026-11-12';
@@ -45,5 +45,13 @@ describe('settleMutation', () => {
   it('swallows rejections (the hook already toasted) and resolves', async () => {
     await expect(settleMutation(() => Promise.reject(new Error('boom')))).resolves.toBeUndefined();
     await expect(settleMutation(() => Promise.resolve(1))).resolves.toBeUndefined();
+  });
+});
+
+describe('menuRowId', () => {
+  it('builds the composite server key and defaults userType to U', () => {
+    expect(menuRowId({ refNo: 'bkg', parentMenu: 'root', userType: 'V' })).toBe('BKG|ROOT|V');
+    expect(menuRowId({ refNo: 'INV' })).toBe('INV||U');
+    expect(menuRowId({ refNo: 'INV', userType: 'U' })).not.toBe(menuRowId({ refNo: 'INV', userType: 'V' }));
   });
 });

@@ -1,8 +1,10 @@
-import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
-import { env } from './env';
+// Modified by Sekar Nagarajan (2026-11-13 00:40)
+import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
+import { env } from "./env";
+import { resolveApiBaseUrl } from "./http/paths";
 
 export interface ApiResponse<T = any> {
-  status: 'SUCCESS' | 'ERROR';
+  status: "SUCCESS" | "ERROR";
   data: T;
   error?: {
     code: string;
@@ -17,8 +19,8 @@ export interface ApiResponse<T = any> {
 }
 
 export const apiClient: AxiosInstance = axios.create({
-  // Mock/MSW uses relative `/api/*` paths; real mode uses the configured API host.
-  baseURL: env.VITE_API_MODE === "mock" ? "" : env.VITE_API_URL,
+  // Same origin in mock mode (MSW); the backend host in real mode. Paths carry `/api/…` themselves.
+  baseURL: resolveApiBaseUrl(env),
   headers: {
     "Content-Type": "application/json",
   },
@@ -43,10 +45,7 @@ apiClient.interceptors.response.use(
     if (error.response?.status === 401) {
       const url = error.config?.url ?? "";
       // Session probe / login failures are handled by callers — don't hard-redirect.
-      const isAuthProbe =
-        url.includes("/api/auth/me") ||
-        url.includes("/api/auth/login") ||
-        url.includes("/api/auth/admin-login");
+      const isAuthProbe = /\/auth\/(me|login|admin-login)(\?|$)/.test(url);
       if (!isAuthProbe) {
         window.dispatchEvent(
           new CustomEvent("ecom:unauthorized", {
@@ -61,10 +60,7 @@ apiClient.interceptors.response.use(
 
 export function extractApiError(error: unknown): string {
   if (axios.isAxiosError(error)) {
-    const data = error.response?.data as
-      | ApiResponse
-      | { message?: string }
-      | undefined;
+    const data = error.response?.data as ApiResponse | { message?: string } | undefined;
     if (data && typeof data === "object") {
       if ("error" in data && data.error?.message) {
         return data.error.message;

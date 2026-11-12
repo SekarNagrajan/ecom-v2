@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-07 17:24)
+// Modified by Sekar Nagarajan (2026-11-12 12:40)
 import { useAuthStore, useTenantStore } from "@solverminds/auth";
 import { env, queryClient } from "@solverminds/platform";
 import {
@@ -17,17 +17,11 @@ import { PublicLayout } from "../components/layout/PublicLayout";
 import { AppRoutePendingFallback } from "../components/pending/app-route-pending";
 import { PublicPendingFallback } from "../components/pending/public-pending";
 import { NotFound } from "../components/shared/not-found";
-import { AdminRoute } from "../features/admin/admin-route";
+import { adminRoute } from "../features/admin/admin-route";
+import { resolveAdminLandingSearch } from "../features/admin/utils/admin-landing";
 import { rehydrateSession } from "../features/auth/api/rehydrate-session";
 import { SESSION_EXPIRED_SEARCH_REASON } from "../features/auth/api/session-expiry";
 import { redirectForMissingCapability } from "../features/auth/utils/capability-guard";
-import {
-  DEFAULT_ADMIN_SECTION,
-  isAdminSectionKey,
-  resolveAllowedAdminSections,
-  resolveDefaultAdminSection,
-  type AdminSectionKey,
-} from "../features/admin/utils/admin-menu-access";
 import { ArrivalNoticeRoute } from "../features/arrival-notice/arrival-notice-route";
 import { ActivationRoute } from "../features/auth/activation-route";
 import { AdminLoginPage } from "../features/auth/components/admin-login-page";
@@ -106,7 +100,7 @@ function assertCapability(code: string) {
   };
 }
 
-function assertAdminAccess() {
+export function assertAdminAccess() {
   const user = useAuthStore.getState().user;
   if (!user) {
     throw redirect({ to: "/", search: { login: true } as never });
@@ -240,7 +234,7 @@ const cpanelLoginRoute = createRoute({
     if (useAuthStore.getState().isAuthenticated) {
       throw redirect({
         to: "/app/admin",
-        search: { section: DEFAULT_ADMIN_SECTION } as never,
+        search: resolveAdminLandingSearch() as never,
       });
     }
   },
@@ -324,33 +318,7 @@ const ratesRoute = createRoute({
   component: () => <RatesRoute />,
 });
 
-// 3.5 System Admin Control Panel — ADMIN only
-const adminRoute = createRoute({
-  getParentRoute: () => appRoute,
-  path: "/admin",
-  validateSearch: (search: Record<string, unknown>): {
-    section: AdminSectionKey;
-  } => ({
-    section: isAdminSectionKey(search.section)
-      ? search.section
-      : DEFAULT_ADMIN_SECTION,
-  }),
-  beforeLoad: ({ search }) => {
-    assertAdminAccess();
-    const user = useAuthStore.getState().user;
-    const allowed = resolveAllowedAdminSections(user?.vendorMenuList);
-    const fallback = resolveDefaultAdminSection(allowed);
-    const section =
-      allowed.includes(search.section) ? search.section : fallback;
-    if (section !== search.section) {
-      throw redirect({
-        to: "/app/admin",
-        search: { section } as never,
-      });
-    }
-  },
-  component: () => <AdminRoute />,
-});
+// 3.5 System Admin Control Panel — ADMIN only: owned by features/admin/admin-route.tsx
 
 // 3.6 Booking — capability BKG
 const bookingDashboardRoute = createRoute({

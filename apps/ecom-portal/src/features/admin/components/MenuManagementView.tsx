@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-27 12:42)
+// Modified by Sekar Nagarajan (2026-11-12 12:40)
 /**
  * Module Creation — parity with RegisterMenu.jsp:
  * create form + list with enable/disable (Global Menu Management).
@@ -16,7 +16,7 @@ import {
   type MenuConfig,
   type MenuCreateForm,
 } from "../types/admin.types";
-import { AdminPanelShell } from "./AdminPanelShell";
+import { AdminSectionPage } from "./shared/AdminSectionPage";
 
 const { Text } = Typography;
 
@@ -235,11 +235,7 @@ export function MenuManagementView({
   ];
 
   return (
-    <AdminPanelShell
-      icon={Icons.list}
-      title="Module Creation"
-      subtitle="Register new menus and configure visibility / category entitlement rules."
-    >
+    <AdminSectionPage>
       <div className="admin-menu-form">
         <Collapse
           className="admin-menu-create"
@@ -552,6 +548,6 @@ export function MenuManagementView({
           </AppButton>
         </div>
       </div>
-    </AdminPanelShell>
+    </AdminSectionPage>
   );
 }

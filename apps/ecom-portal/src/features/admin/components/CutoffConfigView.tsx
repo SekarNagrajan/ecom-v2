@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 12:20)
+// Modified by Sekar Nagarajan (2026-11-12 12:40)
 /**
  * Cutoff Configuration — parity with CutoffConfiguration.jsp / CutoffConfigurationView.jsp.
  */
@@ -19,6 +19,7 @@ import { useState } from "react";
 import { useForm, type Resolver } from "react-hook-form";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { FIELD_ITEM_PROPS, reqLabel } from "../../../components/shared/form-field-label";
 import { buildActionsColumn } from "../../../components/shared/build-actions-column";
 import {
   ListActionButton,
@@ -35,15 +36,10 @@ import {
   type CutoffConfig,
   type CutoffConfigFormValues,
 } from "../types/admin.types";
-import { AdminLoadingCenter } from "./admin-loading-center";
-import { AdminPanelShell } from "./AdminPanelShell";
+import { AdminLoadingCenter } from "./shared/admin-loading-center";
+import { AdminSectionPage } from "./shared/AdminSectionPage";
 
 const { Text } = Typography;
-
-const FIELD_ITEM_PROPS = {
-  layout: "vertical" as const,
-  colon: false,
-};
 
 const DEFAULT_FORM: CutoffConfigFormValues = {
   portCode: "",
@@ -70,14 +66,6 @@ interface CutoffConfigViewProps {
     data: Omit<CutoffConfigFormValues, "portCode" | "terminalCode">;
   }) => Promise<CutoffConfig>;
   onDelete: (id: string) => Promise<void>;
-}
-
-function reqLabel(label: string) {
-  return (
-    <span className="form-field-label">
-      {label} <Text type="danger">*</Text>
-    </span>
-  );
 }
 
 export function CutoffConfigView({
@@ -303,23 +291,14 @@ export function CutoffConfigView({
 
   if (isLoading) {
     return (
-      <AdminPanelShell
-        icon={Icons.clock}
-        title="Cutoff Configuration"
-        subtitle="Configure port and terminal closing hours for CFS, VGM, documents, EDI, and gate-in."
-      >
+      <AdminSectionPage>
         <AdminLoadingCenter />
-      </AdminPanelShell>
+      </AdminSectionPage>
     );
   }
 
   return (
-    <AdminPanelShell
-      icon={Icons.clock}
-      title="Cutoff Configuration"
-      // recordCount={cutoffConfigs.length}
-      subtitle="Configure port and terminal closing hours for CFS, VGM, documents, EDI, and gate-in."
-    >
+    <AdminSectionPage>
       <div className="admin-cutoff-form">
         <form
           className="admin-cutoff-create"
@@ -492,6 +471,6 @@ export function CutoffConfigView({
           />
         </div>
       </div>
-    </AdminPanelShell>
+    </AdminSectionPage>
   );
 }

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 12:20)
+// Modified by Sekar Nagarajan (2026-11-12 12:40)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton, FormInput } from "@solverminds/shared-ui";
 import { Alert, Col, Row, Typography } from "antd";
@@ -7,15 +7,11 @@ import { useForm, type Resolver } from "react-hook-form";
 import { z } from "zod";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { FIELD_ITEM_PROPS, reqLabel } from "../../../components/shared/form-field-label";
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
-import { AdminPanelShell } from "./AdminPanelShell";
+import { AdminSectionPage } from "./shared/AdminSectionPage";
 
 const { Text } = Typography;
-
-const FIELD_ITEM_PROPS = {
-  layout: "vertical" as const,
-  colon: false,
-};
 
 const passwordResetSchema = z.object({
   username: z.string().min(1, "Username is required"),
@@ -27,14 +23,6 @@ interface AdminPasswordResetViewProps {
   onResetPassword: (
     username: string,
   ) => Promise<{ success: boolean; message: string }>;
-}
-
-function reqLabel(label: string) {
-  return (
-    <span className="form-field-label">
-      {label} <Text type="danger">*</Text>
-    </span>
-  );
 }
 
 export function AdminPasswordResetView({
@@ -69,11 +57,7 @@ export function AdminPasswordResetView({
   });
 
   return (
-    <AdminPanelShell
-      icon={Icons.lock}
-      title="Admin Password Reset"
-      subtitle="Force password reset and generate temporary OTP credentials for customer and agency accounts."
-    >
+    <AdminSectionPage>
       <div className="admin-password-form">
         <Row gutter={[16, 16]}>
           <Col {...RESPONSIVE_COL.formHalf}>
@@ -114,6 +98,6 @@ export function AdminPasswordResetView({
           </AppButton>
         </div>
       </div>
-    </AdminPanelShell>
+    </AdminSectionPage>
   );
 }

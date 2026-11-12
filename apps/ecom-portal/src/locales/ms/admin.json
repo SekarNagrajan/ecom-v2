@@ -1,0 +1,57 @@
+{
+  "title": "Panel Kawalan",
+  "subtitle": "Manage access, platform settings, communications and service rules.",
+  "tabsLabel": "Control Panel sections",
+  "categories": {
+    "access": "Access & Security",
+    "platform": "Platform Settings",
+    "communications": "Communications & Content",
+    "operations": "Operations"
+  },
+  "sections": {
+    "module-mapping": {
+      "title": "Module Mapping",
+      "subtitle": "Assign privileged modules to individual customer accounts."
+    },
+    "module-creation": {
+      "title": "Module Creation",
+      "subtitle": "Register portal menus and control their category and visibility rules."
+    },
+    "password-reset": {
+      "title": "Password Reset",
+      "subtitle": "Force a password reset and issue temporary OTP credentials for a login."
+    },
+    "global-config": {
+      "title": "Global Configuration",
+      "subtitle": "Manage security policies, captcha rules and portal-wide feature flags."
+    },
+    "field-config": {
+      "title": "Field Configuration",
+      "subtitle": "Control which form fields are visible and mandatory across the portal."
+    },
+    "email-templates": {
+      "title": "Email Templates",
+      "subtitle": "Edit transactional notification templates and their dynamic placeholders."
+    },
+    "customer-advisories": {
+      "title": "Customer Advisories",
+      "subtitle": "Publish operational advisories, port alerts and announcements to customers."
+    },
+    "banner-manager": {
+      "title": "Banners & Assets",
+      "subtitle": "Manage landing hero slides, promotional carousels and media assets."
+    },
+    "cutoff-config": {
+      "title": "Cutoff Configuration",
+      "subtitle": "Set port and terminal cutoff hours for CFS, VGM, documentation, EDI and gate-in."
+    },
+    "route-restrictions": {
+      "title": "Route Restrictions",
+      "subtitle": "Allow or block origin–destination port pairs per service loop."
+    }
+  },
+  "states": {
+    "loadErrorTitle": "Couldn't load this section",
+    "retry": "Try again"
+  }
+}

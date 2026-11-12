@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 16:35)
+// Modified by Sekar Nagarajan (2026-11-12 12:40)
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AppButton,
@@ -11,20 +11,16 @@ import { useState } from "react";
 import { useForm, type Resolver } from "react-hook-form";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { FIELD_ITEM_PROPS, optLabel, reqLabel } from "../../../components/shared/form-field-label";
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import {
   GlobalConfigSchema,
   type GlobalConfig,
 } from "../types/admin.types";
-import { AdminLoadingCenter } from "./admin-loading-center";
-import { AdminPanelShell } from "./AdminPanelShell";
+import { AdminLoadingCenter } from "./shared/admin-loading-center";
+import { AdminSectionPage } from "./shared/AdminSectionPage";
 
 const { Text } = Typography;
-
-const FIELD_ITEM_PROPS = {
-  layout: "vertical" as const,
-  colon: false,
-};
 
 const TOGGLE_ITEM_PROPS = {
   layout: "horizontal" as const,
@@ -46,18 +42,6 @@ const DEFAULT_GLOBAL_CONFIG: GlobalConfig = {
 interface GlobalConfigAdminViewProps {
   config?: GlobalConfig;
   onSave: (config: GlobalConfig) => void | Promise<void>;
-}
-
-function optLabel(label: string) {
-  return <span className="form-field-label">{label}</span>;
-}
-
-function reqLabel(label: string) {
-  return (
-    <span className="form-field-label">
-      {label} <Text type="danger">*</Text>
-    </span>
-  );
 }
 
 export function GlobalConfigAdminView({
@@ -88,22 +72,14 @@ export function GlobalConfigAdminView({
 
   if (!config) {
     return (
-      <AdminPanelShell
-        icon={Icons.settings}
-        title="Global System Configuration"
-        subtitle="Manage core security rules, captcha policies, and feature flags."
-      >
+      <AdminSectionPage>
         <AdminLoadingCenter />
-      </AdminPanelShell>
+      </AdminSectionPage>
     );
   }
 
   return (
-    <AdminPanelShell
-      icon={Icons.settings}
-      title="Global System Configuration"
-      subtitle="Manage core security rules, captcha policies, and feature flags."
-    >
+    <AdminSectionPage>
       <div className="admin-config-form">
         <Row gutter={[16, 16]} align="top">
           <Col {...RESPONSIVE_COL.formHalf}>
@@ -221,6 +197,6 @@ export function GlobalConfigAdminView({
           </AppButton>
         </div>
       </div>
-    </AdminPanelShell>
+    </AdminSectionPage>
   );
 }

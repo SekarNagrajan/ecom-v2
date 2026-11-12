@@ -1,10 +1,10 @@
-// Modified by Sekar Nagarajan (2026-11-12 12:20)
+// Modified by Sekar Nagarajan (2026-11-12 12:40)
 /**
  * Module Mapping — SpecialPrivilege.jsp parity with friendlier dual-list + drag-drop UX.
  */
 import { AppButton, AppModal } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
-import { Input, Spin, Tag, Tooltip, Typography } from "antd";
+import { Input, Tag, Tooltip, Typography } from "antd";
 import { useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
@@ -16,7 +16,8 @@ import {
   useRemoveModulePrivilegesMutation,
 } from "../api/admin.queries";
 import type { ModuleMappingCustomer } from "../types/admin.types";
-import { AdminPanelShell } from "./AdminPanelShell";
+import { AdminLoadingCenter } from "./shared/admin-loading-center";
+import { AdminSectionPage } from "./shared/AdminSectionPage";
 import { ModuleMappingBoard } from "./module-mapping-board";
 
 const { Text, Title } = Typography;
@@ -117,11 +118,7 @@ export function SpecialPrivilegesView() {
   };
 
   return (
-    <AdminPanelShell
-      icon={Icons.key}
-      title="Module Mapping"
-      subtitle="Assign privileged modules to a customer — drag between lists, or select and transfer."
-    >
+    <AdminSectionPage>
       <div className="admin-mapping-form">
         <div className="admin-mapping-customer">
           <label className="form-field-label" htmlFor="mapping-customer">
@@ -201,13 +198,7 @@ export function SpecialPrivilegesView() {
             />
           </div>
         ) : isLoadingMenus ? (
-          <div
-            className="admin-loading-center"
-            role="status"
-            aria-label="Loading"
-          >
-            <Spin size="medium" />
-          </div>
+          <AdminLoadingCenter />
         ) : (
           <>
             <ModuleMappingBoard
@@ -254,13 +245,7 @@ export function SpecialPrivilegesView() {
         />
         <div className="admin-mapping-search-list custom-scroll">
           {isLoadingCustomers ? (
-            <div
-              className="admin-loading-center"
-              role="status"
-              aria-label="Loading"
-            >
-              <Spin size="medium" />
-            </div>
+            <AdminLoadingCenter />
           ) : filteredCustomers.length === 0 ? (
             <ModuleEmptyState
               variant="filtered"
@@ -291,6 +276,6 @@ export function SpecialPrivilegesView() {
           )}
         </div>
       </AppModal>
-    </AdminPanelShell>
+    </AdminSectionPage>
   );
 }

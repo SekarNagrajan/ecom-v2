@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-27 15:00)
+// Modified by Sekar Nagarajan (2026-11-12 12:40)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -1186,6 +1186,128 @@ export function AdminModuleStyles() {
         .admin-mapping-customer__row .sm-app-button,
         .admin-mapping-customer__row .ant-btn {
           width: 100%;
+        }
+      }
+
+      /* ------------------------------------------------------------------ */
+      /* Phase-2 shell: page card, module header, section tabs, section body */
+      /* (full stylesheet rewrite follows in Phase 3)                        */
+      /* ------------------------------------------------------------------ */
+      .feature-page-card.admin-page-card.ant-card {
+        border: none;
+        border-radius: ${token.borderRadiusLG}px;
+      }
+      .feature-page-card.admin-page-card > .ant-card-body {
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+        min-height: calc(100vh - 160px);
+      }
+      .admin-page-layout {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-width: 0;
+      }
+      .admin-page-header {
+        flex-shrink: 0;
+        padding: ${token.paddingMD}px ${token.paddingLG}px 0;
+      }
+      .admin-page-tabs {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        flex-shrink: 0;
+        padding: 0 ${token.paddingLG}px;
+        background: ${token.colorBgContainer};
+        border-bottom: 1px solid ${token.colorBorderSecondary};
+      }
+      .admin-page-tabs .ant-tabs-nav {
+        margin: 0;
+      }
+      .admin-page-tabs .ant-tabs-nav::before {
+        border-bottom: none;
+      }
+      .admin-page-tabs .ant-tabs-content-holder {
+        display: none;
+      }
+      .admin-tab-label {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXS}px;
+        white-space: nowrap;
+      }
+      .admin-tab-label .app-icon {
+        color: inherit;
+      }
+      .admin-page-body {
+        flex: 1;
+        min-width: 0;
+        padding: ${token.paddingLG}px ${token.paddingXL}px ${token.paddingXL}px;
+      }
+
+      .admin-section {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginMD}px;
+        min-width: 0;
+      }
+      .admin-section__header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: ${token.marginSM}px ${token.marginMD}px;
+      }
+      .admin-section__heading {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+        min-width: 0;
+      }
+      .admin-section__title.ant-typography {
+        margin: 0;
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXS}px;
+      }
+      .admin-section__extra {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: ${token.marginXS}px;
+        margin-left: auto;
+      }
+      .admin-section__body {
+        min-width: 0;
+      }
+      .admin-section__body--scroll {
+        overflow: auto;
+      }
+      .admin-section__footer {
+        position: sticky;
+        bottom: 0;
+        z-index: 1;
+        padding-top: ${token.paddingSM}px;
+        background: ${token.colorBgContainer};
+      }
+
+      @media (max-width: ${token.screenSMMax}px) {
+        .admin-page-header {
+          padding: ${token.paddingSM}px ${token.paddingMD}px 0;
+        }
+        .admin-page-tabs {
+          padding: 0 ${token.paddingMD}px;
+        }
+        .admin-tab-label__text {
+          display: none;
+        }
+        .admin-page-body {
+          padding: ${token.paddingMD}px;
+        }
+        .admin-section__extra {
+          width: 100%;
+          margin-left: 0;
         }
       }
     `}</style>

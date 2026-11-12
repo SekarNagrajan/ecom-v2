@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 12:20)
+// Modified by Sekar Nagarajan (2026-11-12 12:40)
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AppButton,
@@ -13,18 +13,14 @@ import { useForm, useWatch, type Resolver } from "react-hook-form";
 import { z } from "zod";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { FIELD_ITEM_PROPS, reqLabel } from "../../../components/shared/form-field-label";
 import { useAiTextAssist } from "../../ai-assist";
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import type { EmailTemplate } from "../types/admin.types";
-import { AdminLoadingCenter } from "./admin-loading-center";
-import { AdminPanelShell } from "./AdminPanelShell";
+import { AdminLoadingCenter } from "./shared/admin-loading-center";
+import { AdminSectionPage } from "./shared/AdminSectionPage";
 
 const { Text } = Typography;
-
-const FIELD_ITEM_PROPS = {
-  layout: "vertical" as const,
-  colon: false,
-};
 
 const emailEditorSchema = z.object({
   subject: z.string().min(1, "Subject is required"),
@@ -39,18 +35,6 @@ interface EmailTemplateEditorViewProps {
     id: string,
     data: Partial<EmailTemplate>,
   ) => void | Promise<void>;
-}
-
-function optLabel(label: string) {
-  return <span className="form-field-label">{label}</span>;
-}
-
-function reqLabel(label: string) {
-  return (
-    <span className="form-field-label">
-      {label} <Text type="danger">*</Text>
-    </span>
-  );
 }
 
 function templateSyncKey(template: EmailTemplate | undefined) {
@@ -139,22 +123,14 @@ export function EmailTemplateEditorView({
 
   if (!templates.length || !activeTemplate) {
     return (
-      <AdminPanelShell
-        icon={Icons.mail}
-        title="Email Template Editor"
-        subtitle="Create and customize transactional notification templates with dynamic variables."
-      >
+      <AdminSectionPage>
         <AdminLoadingCenter />
-      </AdminPanelShell>
+      </AdminSectionPage>
     );
   }
 
   return (
-    <AdminPanelShell
-      icon={Icons.mail}
-      title="Email Template Editor"
-      subtitle="Create and customize transactional notification templates with dynamic variables."
-    >
+    <AdminSectionPage>
       <div className="admin-email-form">
         <div className="admin-menu-summary" aria-label="Template summary">
           <span className="admin-menu-summary__chip">
@@ -262,6 +238,6 @@ export function EmailTemplateEditorView({
           </AppButton>
         </div>
       </div>
-    </AdminPanelShell>
+    </AdminSectionPage>
   );
 }

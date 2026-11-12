@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-02 15:18)
+// Modified by Sekar Nagarajan (2026-11-12 12:40)
 import { useAuthStore, usePermission, useTenantStore } from "@solverminds/auth";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import type { MenuProps } from "antd";
@@ -8,14 +8,7 @@ import type { ReactNode } from "react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import {
-  adminSectionToMenuKey,
-  isAdminSectionKey,
-  menuKeyToAdminSection,
-  resolveAllowedAdminSections,
-  resolveDefaultAdminSection,
-} from "../../features/admin/utils/admin-menu-access";
-import { buildAdminSectionNavItems } from "../../features/admin/utils/admin-section-nav";
+import { resolveAdminLandingSearch } from "../../features/admin/utils/admin-landing";
 import { useMenuCategories } from "../../features/auth/api/menu-access.queries";
 import {
   appPathnameToMenuKey,
@@ -177,33 +170,25 @@ export function AuthenticatedSidebar({
     isGuest && !isPublicMenuKey(key, menuCategories);
   const lockedLabel = t("nav.signInRequired");
 
-  // Cpanel: Module Mapping / Email Config / Cutoff as sidebar modules
+  // Cpanel system admin: the Control Panel is their single module; its sections are the
+  // in-page tabs of /app/admin, so the sidebar shows one entry.
   if (isCpanelAdmin && !isGuest) {
-    const allowedSections = resolveAllowedAdminSections(user?.vendorMenuList);
-    const sectionNavItems = buildAdminSectionNavItems(allowedSections);
-    const searchSection = (location.search as { section?: string } | undefined)
-      ?.section;
-    const activeSection = isAdminSectionKey(searchSection)
-      ? searchSection
-      : resolveDefaultAdminSection(allowedSections);
-    const selectedAdminKey = adminSectionToMenuKey(activeSection);
+    const selectedAdminKey = "admin";
+    const cpanelMenuItems: MenuProps["items"] = [
+      {
+        key: "admin",
+        icon: navIcon(NavIcons.admin, 20),
+        title: t("nav.controlPanelAdmin"),
+        label: t("nav.controlPanelAdmin"),
+      },
+    ];
 
-    const cpanelMenuItems: MenuProps["items"] = sectionNavItems.map((item) => ({
-      key: adminSectionToMenuKey(item.key),
-      icon: navIcon(item.icon, 20),
-      title: item.label,
-      label: item.label,
-    }));
-
-    const onCpanelMenuSelect: MenuProps["onSelect"] = ({ key }) => {
+    const onCpanelMenuSelect: MenuProps["onSelect"] = () => {
       onMobileClose?.();
-      const section = menuKeyToAdminSection(key);
-      if (section) {
-        navigate({
-          to: "/app/admin",
-          search: { section },
-        } as never);
-      }
+      navigate({
+        to: "/app/admin",
+        search: resolveAdminLandingSearch(),
+      } as never);
     };
 
     const brandBlock = (
@@ -373,24 +358,14 @@ export function AuthenticatedSidebar({
       children: [
         isAdminUser
           ? {
-              key: "admin-group",
+              key: "admin",
               icon: navIcon(NavIcons.admin, 20, lock("admin")),
-              title: t("nav.controlPanelAdmin"),
               ...sidebarMenuLabel(
                 t("nav.controlPanelAdmin"),
                 lock("admin"),
                 lockedLabel,
               ),
               className: lock("admin") ? "ant-menu-item-locked" : undefined,
-              children: buildAdminSectionNavItems(
-                resolveAllowedAdminSections(user?.vendorMenuList),
-              ).map((item) => ({
-                key: adminSectionToMenuKey(item.key),
-                icon: navIcon(item.icon, 18, lock("admin")),
-                title: item.label,
-                ...sidebarMenuLabel(item.label, lock("admin"), lockedLabel),
-                className: lock("admin") ? "ant-menu-item-locked" : undefined,
-              })),
             }
           : null,
         {
@@ -467,20 +442,6 @@ export function AuthenticatedSidebar({
     return tenantModules.includes(key);
   });
 
-  // Highlight active admin section under More when on /app/admin
-  const searchSection = (location.search as { section?: string } | undefined)
-    ?.section;
-  const adminSelectedKey =
-    selectedKey === "admin" && isAdminSectionKey(searchSection)
-      ? adminSectionToMenuKey(searchSection)
-      : selectedKey === "admin"
-      ? adminSectionToMenuKey(
-          resolveDefaultAdminSection(
-            resolveAllowedAdminSections(user?.vendorMenuList),
-          ),
-        )
-      : selectedKey;
-
   const onMenuSelect: MenuProps["onSelect"] = ({ key }) => {
     onMobileClose?.();
 
@@ -496,22 +457,10 @@ export function AuthenticatedSidebar({
     } else if (key === "do") {
       navigate({ to: "/app/delivery-order" });
     } else {
-      const adminSection = menuKeyToAdminSection(key);
-      if (adminSection) {
-        navigate({
-          to: "/app/admin",
-          search: { section: adminSection },
-        } as never);
-        return;
-      }
       if (key === "admin") {
         navigate({
           to: "/app/admin",
-          search: {
-            section: resolveDefaultAdminSection(
-              resolveAllowedAdminSections(user?.vendorMenuList),
-            ),
-          },
+          search: resolveAdminLandingSearch(),
         } as never);
         return;
       }
@@ -531,7 +480,7 @@ export function AuthenticatedSidebar({
       theme="light"
       mode="inline"
       inlineCollapsed={isIconRail}
-      selectedKeys={[adminSelectedKey]}
+      selectedKeys={[selectedKey]}
       {...(isIconRail
         ? {}
         : {

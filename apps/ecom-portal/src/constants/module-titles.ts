@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-28 15:28)
+// Modified by Sekar Nagarajan (2026-11-12 12:40)
 export const MODULE_TITLES = {
   dashboard: "Dashboard",
   schedules: "Schedules",
@@ -31,7 +31,7 @@ export const MODULE_TITLES = {
   myAlerts: "My Alerts",
   profile: "Profile",
   changePassword: "Change Password",
-  admin: "Control Panel Admin",
+  admin: "Control Panel",
 } as const;
 
 export const WIZARD_STEP_TITLES = {

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 16:57)
+// Modified by Sekar Nagarajan (2026-11-12 12:40)
 import { AppButton, AppSwitch } from "@solverminds/shared-ui";
 import { Table, Tag, Tooltip, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
@@ -7,7 +7,7 @@ import { useState } from "react";
 import { AppIcon, Icons } from "../../../components/icons";
 import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import type { FieldConfig } from "../types/admin.types";
-import { AdminPanelShell } from "./AdminPanelShell";
+import { AdminSectionPage } from "./shared/AdminSectionPage";
 
 const { Text } = Typography;
 
@@ -149,11 +149,7 @@ export function FieldConfigView({ fields, onSave }: FieldConfigViewProps) {
   ];
 
   return (
-    <AdminPanelShell
-      icon={Icons.formInput}
-      title="Form Field Configuration"
-      subtitle="Dynamically manage form field visibility and mandatory rules across all forms."
-    >
+    <AdminSectionPage>
       <div className="admin-field-form">
         <div className="admin-menu-summary" aria-label="Field config summary">
           <span className="admin-menu-summary__chip">
@@ -213,6 +209,6 @@ export function FieldConfigView({ fields, onSave }: FieldConfigViewProps) {
           </AppButton>
         </div>
       </div>
-    </AdminPanelShell>
+    </AdminSectionPage>
   );
 }

@@ -1,8 +1,9 @@
-// Modified by Sekar Nagarajan (2026-09-29 12:40)
+// Modified by Sekar Nagarajan (2026-11-12 12:40)
 import { useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { resolveAdminLandingSearch } from "../../admin/utils/admin-landing";
 import { useAdminLoginController } from "../hooks/use-admin-login-controller";
 import { AdminLoginShell } from "./admin-login-shell";
 
@@ -22,7 +23,7 @@ export function AdminLoginPage() {
       onSuccess: () => {
         navigate({
           to: "/app/admin",
-          search: { section: "special-privileges" },
+          search: resolveAdminLandingSearch(),
         } as never);
       },
     });

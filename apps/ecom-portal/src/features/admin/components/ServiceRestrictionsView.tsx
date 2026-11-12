@@ -1,11 +1,11 @@
-// Modified by Sekar Nagarajan (2026-08-26 16:57)
+// Modified by Sekar Nagarajan (2026-11-12 12:40)
 import { AppButton, AppSwitch } from "@solverminds/shared-ui";
 import { Card, Tag, Tooltip, Typography } from "antd";
 import { useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import type { ServiceRestriction } from "../types/admin.types";
-import { AdminPanelShell } from "./AdminPanelShell";
+import { AdminSectionPage } from "./shared/AdminSectionPage";
 
 const { Title, Text } = Typography;
 
@@ -61,11 +61,7 @@ export function ServiceRestrictionsView({
   };
 
   return (
-    <AdminPanelShell
-      icon={Icons.stopCircle}
-      title="Service & Route Restrictions"
-      subtitle="Enable or restrict specific origin/destination port pairs and maritime service loops."
-    >
+    <AdminSectionPage>
       <div className="admin-route-form">
         <div className="admin-menu-summary" aria-label="Route summary">
           <span className="admin-menu-summary__chip">
@@ -200,6 +196,6 @@ export function ServiceRestrictionsView({
           </AppButton>
         </div>
       </div>
-    </AdminPanelShell>
+    </AdminSectionPage>
   );
 }

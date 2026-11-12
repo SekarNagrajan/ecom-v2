@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-12 12:20)
+// Modified by Sekar Nagarajan (2026-11-12 12:40)
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AppButton,
@@ -14,17 +14,13 @@ import { useForm, type Resolver } from "react-hook-form";
 import { z } from "zod";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { FIELD_ITEM_PROPS, optLabel, reqLabel } from "../../../components/shared/form-field-label";
 import { useAiTextAssist } from "../../ai-assist";
 import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import type { CustomerAdvisory } from "../types/admin.types";
-import { AdminPanelShell } from "./AdminPanelShell";
+import { AdminSectionPage } from "./shared/AdminSectionPage";
 
 const { Text } = Typography;
-
-const FIELD_ITEM_PROPS = {
-  layout: "vertical" as const,
-  colon: false,
-};
 
 const SEVERITY_OPTIONS = [
   { label: "Info (General Update)", value: "INFO" },
@@ -58,18 +54,6 @@ function advisoriesSignature(items: CustomerAdvisory[]) {
         `${item.id}:${item.isActive}:${item.severity}:${item.title}:${item.message}`,
     )
     .join("|");
-}
-
-function reqLabel(label: string) {
-  return (
-    <span className="form-field-label">
-      {label} <Text type="danger">*</Text>
-    </span>
-  );
-}
-
-function optLabel(label: string) {
-  return <span className="form-field-label">{label}</span>;
 }
 
 export function CustomerAdvisoryView({
@@ -181,10 +165,7 @@ export function CustomerAdvisoryView({
   const { textareaAssistProps } = useAiTextAssist();
 
   return (
-    <AdminPanelShell
-      icon={Icons.bell}
-      title="Customer Advisory Admin"
-      subtitle="Publish operational advisories, port congestion alerts, and announcements."
+    <AdminSectionPage
       extra={
         <AppButton
           type="primary"
@@ -294,6 +275,6 @@ export function CustomerAdvisoryView({
           />
         </div>
       </AppDrawer>
-    </AdminPanelShell>
+    </AdminSectionPage>
   );
 }

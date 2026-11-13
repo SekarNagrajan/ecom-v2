@@ -1,0 +1,30 @@
+{
+  "steps": {
+    "view": "头像",
+    "select": "上传照片",
+    "crop": "裁剪头像"
+  },
+  "actions": {
+    "changeImage": "更换图片",
+    "removePhoto": "移除照片"
+  },
+  "upload": {
+    "title": "将头像拖放到此处",
+    "selectButton": "从电脑选择照片",
+    "or": "或"
+  },
+  "helper": "支持：.jpg、.jpeg、.png、.gif · 最大大小：2MB",
+  "confirms": {
+    "removeTitle": "移除头像？",
+    "removeContent": "您的头像将恢复为显示姓名首字母。"
+  },
+  "toasts": {
+    "updated": "头像已更新",
+    "removed": "头像已移除",
+    "cropFailed": "处理裁剪图片失败。请重试。"
+  },
+  "errors": {
+    "uploadFailed": "上传头像失败",
+    "removeFailed": "移除头像失败"
+  }
+}

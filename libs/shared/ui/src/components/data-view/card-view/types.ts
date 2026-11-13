@@ -65,6 +65,11 @@ export interface CardViewOptions<TData extends DataViewItem = DataViewItem> {
   totalCount?: number;
   /** Empty state description override */
   emptyDescription?: ReactNode;
+  /**
+   * Custom empty UI. When provided, takes precedence over
+   * `emptyDescription`. Defaults to AppEmptyState when omitted.
+   */
+  emptyState?: ReactNode;
   /** Callback when page or page size changes */
   onPaginationChange?: (page: number, pageSize: number) => void;
   /** Triggered when bottom is reached (infinite scroll mode) */
@@ -175,6 +180,11 @@ export interface CardViewProps<TData extends DataViewItem>
   totalCount?: number;
   /** Empty state description override */
   emptyDescription?: ReactNode;
+  /**
+   * Custom empty UI. When provided, takes precedence over
+   * `emptyDescription`. Defaults to AppEmptyState when omitted.
+   */
+  emptyState?: ReactNode;
   /** Callback when page or page size changes */
   onPaginationChange?: (page: number, pageSize: number) => void;
   /** Triggered when the bottom of the list is reached */

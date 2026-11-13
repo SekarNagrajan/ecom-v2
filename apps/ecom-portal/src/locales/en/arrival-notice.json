@@ -1,0 +1,95 @@
+{
+  "subtitle": "Filter by date range, review vessel and charges, and print arrival notices.",
+  "search": {
+    "fromDate": "From Date",
+    "toDate": "To Date",
+    "show": "Show"
+  },
+  "columns": {
+    "anNo": "AN No",
+    "blNumber": "B/L Number",
+    "vessel": "Vessel",
+    "voyage": "Voyage",
+    "discharge": "Discharge",
+    "terminal": "Terminal",
+    "eta": "ETA",
+    "arrival": "Arrival",
+    "lastFreeDay": "Last Free Day",
+    "chargesDue": "Charges Due"
+  },
+  "actions": {
+    "viewDetails": "View Details",
+    "printArrivalNotice": "Print Arrival Notice",
+    "downloadPdf": "Download PDF",
+    "copyAnNumber": "Copy AN number",
+    "copied": "Copied"
+  },
+  "empty": {
+    "loadErrorTitle": "Couldn't load arrival notices",
+    "loadErrorMessage": "The request didn't complete. Check your connection and try again.",
+    "noResultsTitle": "No arrival notices match your search",
+    "noResultsMessage": "Nothing came back for this date range. Widen the dates or clear the filters to see more results.",
+    "noContainers": "No containers on this notice"
+  },
+  "errors": {
+    "fetchList": "Failed to fetch arrival notices",
+    "fetchDetail": "Failed to fetch arrival notice detail",
+    "download": "Failed to download arrival notice document"
+  },
+  "toasts": {
+    "documentDownloaded": "Arrival notice {{anNo}} document downloaded"
+  },
+  "status": {
+    "printed": "Printed",
+    "notPrinted": "Not Printed"
+  },
+  "validation": {
+    "fromDateRequired": "From date is required",
+    "toDateRequired": "To date is required",
+    "fromBeforeTo": "From date must be on or before To date"
+  },
+  "drawer": {
+    "blPrefix": "B/L:",
+    "routeEyebrow": "Vessel to Port",
+    "vessel": "Vessel",
+    "arriving": "Arriving",
+    "discharge": "Discharge",
+    "sections": {
+      "details": "Arrival Notice Details",
+      "shipment": "Shipment Details",
+      "freeTime": "Free Time",
+      "charges": "Charges",
+      "containers": "Containers"
+    },
+    "labels": {
+      "anNumber": "AN Number",
+      "blNumber": "B/L Number",
+      "eta": "ETA",
+      "arrivalDate": "Arrival Date",
+      "chargesDue": "Charges Due",
+      "printStatus": "Print Status",
+      "vessel": "Vessel",
+      "voyage": "Voyage",
+      "terminal": "Terminal",
+      "consignee": "Consignee",
+      "notifyParty": "Notify Party",
+      "manifestIgm": "Manifest / IGM",
+      "freeDays": "Free Days",
+      "lastFreeDay": "Last Free Day",
+      "demurrageFrom": "Demurrage From"
+    },
+    "chargeColumns": {
+      "code": "Code",
+      "description": "Description",
+      "amount": "Amount"
+    },
+    "containerColumns": {
+      "containerNo": "Container No",
+      "sizeType": "Size/Type",
+      "sealNo": "Seal No"
+    },
+    "alerts": {
+      "freeTimeEndsOn": "Free time ends on <date/>."
+    }
+  }
+}

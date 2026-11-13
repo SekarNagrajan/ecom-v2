@@ -1,3 +1,4 @@
+// Modified by Sekar Nagarajan (2026-10-20)
 import type { EquipmentType, PortOption, TabConfig } from '../types/landing.types';
 
 // ---------------------------------------------------------------------------
@@ -16,6 +17,14 @@ export async function searchPorts(query: string): Promise<PortOption[]> {
   return json.data;
 }
 
+/** One port resolved by its UN/LOCODE (the typeahead search also returns name matches). */
+export async function fetchPortByCode(code: string): Promise<PortOption | null> {
+  const wanted = code.trim().toUpperCase();
+  if (wanted.length < 2) return null;
+  const ports = await searchPorts(wanted);
+  return ports.find((p) => p.portCode.trim().toUpperCase() === wanted) ?? null;
+}
+
 /** Equipment type list — parity with JSP `SESSION_HASH_EQUIPMENT_TYPE`. */
 export async function fetchEquipmentTypes(): Promise<EquipmentType[]> {
   const res = await fetch('/api/equipment-types');
@@ -31,21 +40,50 @@ export async function fetchEquipmentTypes(): Promise<EquipmentType[]> {
  * Returns which tabs are publicly accessible vs. require login.
  */
 export async function fetchTabConfig(): Promise<TabConfig> {
-  const res = await fetch('/api/config/menu-access');
-  if (!res.ok) {
-    // Default: all tabs public — safe fallback
-    return { schedules: 'public', tracking: 'public', rates: 'public' };
+  const fallback: TabConfig = {
+    schedules: 'public',
+    tracking: 'public',
+    rates: 'public',
+  };
+  try {
+    const res = await fetch('/api/config/menu-access');
+    if (!res.ok) return fallback;
+    const contentType = res.headers.get('content-type') ?? '';
+    if (!contentType.includes('application/json')) return fallback;
+    const json = (await res.json()) as { data: TabConfig };
+    return json.data ?? fallback;
+  } catch {
+    return fallback;
   }
-
-  const json = (await res.json()) as { data: TabConfig };
-  return json.data;
 }
 
 /** Validate image captcha code — parity with JSP remote validation rule. */
-export async function validateCaptcha(captchaCode: string, type = ''): Promise<boolean> {
-  const params = new URLSearchParams({ code: captchaCode });
-  if (type) params.set('type', type);
+export async function validateCaptcha(
+  captchaCode: string,
+  type = "",
+): Promise<boolean> {
+  const trimmed = captchaCode.trim();
+  if (!trimmed) {
+    return false;
+  }
 
-  const res = await fetch(`/api/captcha/validate?${params.toString()}`);
-  return res.ok;
+  const params = new URLSearchParams({ code: trimmed });
+  if (type) params.set("type", type);
+
+  try {
+    const res = await fetch(`/api/captcha/validate?${params.toString()}`);
+    if (!res.ok) {
+      return false;
+    }
+    const json = (await res.json()) as { valid?: boolean; data?: boolean };
+    if (typeof json.valid === "boolean") {
+      return json.valid;
+    }
+    if (typeof json.data === "boolean") {
+      return json.data;
+    }
+    return true;
+  } catch {
+    return false;
+  }
 }

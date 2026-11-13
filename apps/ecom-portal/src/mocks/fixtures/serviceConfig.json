@@ -1,0 +1,56 @@
+[
+ {
+  "id": 6,
+  "service": "FSIS",
+  "vessel": "AIM056",
+  "cutoffvoyage": "4",
+  "bound": "S",
+  "svctype": "F",
+  "cutoffdate": "2018-03-24T02:27:06.465Z"
+ },
+ {
+  "id": 5,
+  "service": "fces",
+  "vessel": "aim006",
+  "cutoffvoyage": "456",
+  "bound": "E",
+  "svctype": "F",
+  "cutoffdate": "2018-04-02T15:05:06.465Z"
+ },
+ {
+  "id": 4,
+  "service": "fdm",
+  "vessel": "aim019",
+  "cutoffvoyage": "456",
+  "bound": "E",
+  "svctype": "F",
+  "cutoffdate": "2017-11-12T14:20:06.465Z"
+ },
+ {
+  "id": 3,
+  "service": "FCES",
+  "vessel": "AIM006",
+  "cutoffvoyage": "342",
+  "bound": "E",
+  "svctype": "F",
+  "cutoffdate": "2018-04-02T15:05:06.465Z"
+ },
+ {
+  "id": 2,
+  "service": "EAGI",
+  "vessel": "ABE",
+  "cutoffvoyage": "454",
+  "bound": "W",
+  "svctype": "M",
+  "cutoffdate": "2017-11-10T14:20:06.465Z"
+ },
+ {
+  "id": 1,
+  "service": "EMSS",
+  "vessel": "CGM",
+  "cutoffvoyage": "346",
+  "bound": "E",
+  "svctype": "M",
+  "cutoffdate": "2017-11-03T15:05:06.465Z"
+ }
+]

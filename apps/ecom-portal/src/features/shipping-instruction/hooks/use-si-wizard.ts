@@ -37,7 +37,10 @@ export function useSiWizard(siId: string, serverDetail: SIDTO | undefined) {
 
   const handleSubmit = async () => {
     try {
-      const res = await submitMutation.mutateAsync(siId);
+      const res = await submitMutation.mutateAsync({
+        id: siId,
+        payload: draft,
+      });
       const siNo = res.data?.siNo ?? `SIN-${siId}`;
       setConfirmationSiNo(siNo);
       toast.success("Shipping Instruction submitted successfully");

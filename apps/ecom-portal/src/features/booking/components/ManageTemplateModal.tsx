@@ -2,8 +2,9 @@
 import { useConfirm, useToast } from "@solverminds/shared-ui/hooks";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { Flex, Table, Typography } from "antd";
+import { Table, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import {
@@ -15,6 +16,7 @@ import {
   ListActionButton,
   ListActionsRow,
 } from "../../../components/shared/list-action-button";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import { bookingApi } from "../api/booking.api";
 import { useBookingStore } from "../stores/booking.store";
 import type { BookingTemplate } from "../types/booking.types";
@@ -30,6 +32,7 @@ export function ManageTemplateModal({
   open,
   onCancel,
 }: ManageTemplateModalProps) {
+  const { t } = useTranslation(["booking", "common"]);
   const toast = useToast();
   const confirm = useConfirm();
   const navigate = useNavigate();
@@ -46,11 +49,11 @@ export function ManageTemplateModal({
   const deleteMutation = useMutation({
     mutationFn: bookingApi.deleteTemplate,
     onSuccess: () => {
-      toast.success("Template deleted successfully");
+      toast.success(t("toasts.templateDeleted"));
       queryClient.invalidateQueries({ queryKey: ["booking-templates"] });
     },
     onError: () => {
-      toast.error("Failed to delete template");
+      toast.error(t("toasts.templateDeleteFailed"));
     },
   });
 
@@ -67,7 +70,7 @@ export function ManageTemplateModal({
           </Text>
         </div>
       ),
-      okText: "Close",
+      okText: t("common:actions.close"),
     });
   };
 
@@ -75,61 +78,61 @@ export function ManageTemplateModal({
     initializeFromBooking(template.payload);
     onCancel();
     navigate({ to: "/app/booking/new" });
-    toast.success(`Loaded template: ${template.templateName}`);
+    toast.success(t("toasts.templateLoaded", { name: template.templateName }));
   };
 
   const handleDelete = (template: BookingTemplate) => {
     confirm.danger({
-      title: "Delete Template",
-      content: `Are you sure you want to delete "${template.templateName}"? This action cannot be undone.`,
-      okText: "Delete",
-      cancelText: "Cancel",
+      title: t("confirms.deleteTemplateTitle"),
+      content: t("confirms.deleteTemplateContent", { name: template.templateName }),
+      okText: t("common:actions.delete"),
+      cancelText: t("common:actions.cancel"),
       onOk: () => deleteMutation.mutateAsync(template.id),
     });
   };
 
   const columns: ColumnsType<BookingTemplate> = [
     {
-      title: "S.No",
+      title: t("templates.columns.sno"),
       key: "sno",
       width: 72,
       align: "center",
       render: (_: unknown, __: BookingTemplate, index: number) => index + 1,
     },
     {
-      title: "Template Name",
+      title: t("templates.columns.templateName"),
       dataIndex: "templateName",
       ellipsis: true,
       render: (value: string) => <TemplateNameCell name={value} />,
     },
     {
-      title: "Origin",
+      title: t("templates.columns.origin"),
       dataIndex: "origin",
       width: 180,
       ellipsis: true,
       render: (value: string) => <TemplateRouteCell value={value} />,
     },
     {
-      title: "Delivery",
+      title: t("templates.columns.delivery"),
       dataIndex: "delivery",
       width: 180,
       ellipsis: true,
       render: (value: string) => <TemplateRouteCell value={value} />,
     },
     {
-      title: "Action",
+      title: t("templates.columns.action"),
       key: "action",
       width: 132,
       align: "center",
       render: (_: unknown, record: BookingTemplate) => (
         <ListActionsRow>
           <ListActionButton
-            title="Edit"
+            title={t("common:actions.edit")}
             icon={<AppIcon icon={Icons.edit} size={16} tone="edit" />}
             onClick={() => handleEdit(record)}
           />
           <ListActionButton
-            title="Delete"
+            title={t("common:actions.delete")}
             icon={<AppIcon icon={Icons.trash} size={16} tone="delete" />}
             danger
             disabled={deleteMutation.isPending}
@@ -145,8 +148,8 @@ export function ManageTemplateModal({
       open={open}
       onClose={onCancel}
       icon={Icons.settings}
-      title="Manage Booking Templates"
-      subtitle="View, edit, or remove your saved booking templates"
+      title={t("templates.manageTitle")}
+      subtitle={t("templates.manageSubtitle")}
       dialogSize="lg"
     >
       <Table
@@ -159,22 +162,19 @@ export function ManageTemplateModal({
           pageSize: 10,
           showSizeChanger: false,
           showTotal: (total, range) =>
-            `Showing ${range[0]} to ${range[1]} of ${total} entries`,
+            t("templates.showingRange", { from: range[0], to: range[1], total }),
         }}
         bordered={false}
         size="middle"
         tableLayout="fixed"
         locale={{
           emptyText: (
-            <Flex
-              vertical
-              align="center"
-              gap={8}
-              className="booking-template-modal__empty"
-            >
-              <AppIcon icon={Icons.inbox} size={28} />
-              <Text type="secondary">No templates saved yet</Text>
-            </Flex>
+            <ModuleEmptyState
+              artSize="sm"
+              variant="blank"
+              title={t("templates.emptyManage")}
+              style={{ padding: 12 }}
+            />
           ),
         }}
       />

@@ -1,0 +1,16 @@
+{
+  "description": "按国家/地区和港口联系您当地的代理。",
+  "countries": {
+    "Malaysia": "马来西亚",
+    "Netherlands": "荷兰",
+    "Singapore": "新加坡",
+    "United Arab Emirates": "阿拉伯联合酋长国"
+  },
+  "ports": {
+    "Port Klang": "巴生港",
+    "Rotterdam": "鹿特丹",
+    "Singapore": "新加坡",
+    "Dubai": "迪拜",
+    "Jebel Ali": "杰贝阿里"
+  }
+}

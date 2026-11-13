@@ -1,12 +1,5 @@
-// Modified by Sekar Nagarajan (2026-08-26 14:57)
+// Modified by Sekar Nagarajan (2026-10-17 00:34)
 import type { ApiResponse } from "../../../types/api.types";
-import {
-  filterCroByDate,
-  getMockCRODetail,
-  getMockCROEligibilityByBooking,
-  markCroPrinted,
-  mockContainerReleaseOrders,
-} from "../mocks/cro.mock";
 import type {
   CRODTO,
   CROEligibility,
@@ -52,39 +45,7 @@ async function readApiJson<T>(
   }
 }
 
-async function mockListFallback(
-  filters: CROListFilters,
-): Promise<ApiResponse<CROListDTO[]> | null> {
-  if (!import.meta.env.DEV) return null;
-  return {
-    data: filterCroByDate(
-      mockContainerReleaseOrders,
-      filters.fromDate,
-      filters.toDate,
-    ).map((row) => ({ ...row })),
-  };
-}
-
-async function mockDetailFallback(
-  croNo: string,
-): Promise<ApiResponse<CRODTO> | null> {
-  if (!import.meta.env.DEV) return null;
-  const detail = getMockCRODetail(croNo);
-  if (!detail) return null;
-  const listRow = mockContainerReleaseOrders.find((r) => r.croNo === croNo);
-  return {
-    data: {
-      ...detail,
-      printStatus: listRow?.printStatus ?? detail.printStatus,
-      printCount:
-        listRow?.printStatus === "Y"
-          ? Math.max(1, detail.printCount)
-          : detail.printCount,
-    },
-  };
-}
-
-/** Container Release Order API — REST with DEV mock fallback (agenct parity). */
+/** Container Release Order API — REST; mock mode is served by MSW (src/mocks/cro.handlers.ts). */
 export const croApi = {
   async fetchList(
     filters: CROListFilters = {},
@@ -97,18 +58,11 @@ export const croApi = {
       const res = await fetch(
         `/api/ecom/imp/container-release-orders?${params.toString()}`,
       );
-      const parsed = await readApiJson<CROListDTO[]>(
+      return await readApiJson<CROListDTO[]>(
         res,
         "Failed to fetch CRO summary",
       );
-      if (!parsed.error) return parsed;
-
-      const fallback = await mockListFallback(filters);
-      if (fallback) return fallback;
-      return parsed;
     } catch (error: unknown) {
-      const fallback = await mockListFallback(filters);
-      if (fallback) return fallback;
       const message =
         error instanceof Error ? error.message : "Network error";
       return { error: { code: "NETWORK_ERROR", message } };
@@ -120,18 +74,11 @@ export const croApi = {
       const res = await fetch(
         `/api/ecom/imp/container-release-orders/${encodeURIComponent(croNo)}`,
       );
-      const parsed = await readApiJson<CRODTO>(
+      return await readApiJson<CRODTO>(
         res,
         "Failed to fetch CRO detail",
       );
-      if (!parsed.error) return parsed;
-
-      const fallback = await mockDetailFallback(croNo);
-      if (fallback) return fallback;
-      return parsed;
     } catch (error: unknown) {
-      const fallback = await mockDetailFallback(croNo);
-      if (fallback) return fallback;
       const message =
         error instanceof Error ? error.message : "Network error";
       return { error: { code: "NETWORK_ERROR", message } };
@@ -146,20 +93,11 @@ export const croApi = {
       const res = await fetch(
         `/api/ecom/imp/container-release-orders/eligibility?${params.toString()}`,
       );
-      const parsed = await readApiJson<CROEligibility>(
+      return await readApiJson<CROEligibility>(
         res,
         "Failed to fetch CRO eligibility",
       );
-      if (!parsed.error) return parsed;
-
-      if (import.meta.env.DEV) {
-        return { data: getMockCROEligibilityByBooking(bookingNo) };
-      }
-      return parsed;
     } catch (error: unknown) {
-      if (import.meta.env.DEV) {
-        return { data: getMockCROEligibilityByBooking(bookingNo) };
-      }
       const message =
         error instanceof Error ? error.message : "Network error";
       return { error: { code: "NETWORK_ERROR", message } };
@@ -188,13 +126,6 @@ export const croApi = {
       }
       return { data: await res.blob() };
     } catch (error: unknown) {
-      if (import.meta.env.DEV) {
-        markCroPrinted(croNo);
-        const content = `%PDF-1.4 Mock Container Release Order for ${croNo}`;
-        return {
-          data: new Blob([content], { type: "application/pdf" }),
-        };
-      }
       const message =
         error instanceof Error ? error.message : "Network error";
       return { error: { message } };

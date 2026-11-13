@@ -1,59 +1,96 @@
-// Modified by Sekar Nagarajan (2026-08-28 15:07)
+// Modified by Sekar Nagarajan (2026-10-18 10:30)
 // Controller hook for Rates — mode-aware cards + surcharge rollup (JSP parity)
 
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { useNavigate } from "@tanstack/react-router";
+import type { TFunction } from "i18next";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
+import { useModuleViewMode } from "../../../components/shared/hooks/use-module-view-mode";
 import {
   useContractsQuery,
   useQuotesQuery,
   useSurchargesQuery,
   useTariffsQuery,
 } from "../api/rates.queries";
-import type { CombinedRateItem } from "../components/RateCardList";
 import type {
   RateSearchMode,
   RateSearchParams,
 } from "../components/RateSearchFilter";
-import type { ContractDTO, CreateQuoteInput } from "../types/rates.types";
+import type {
+  CombinedRateItem,
+  ContractDTO,
+  CreateQuoteInput,
+  QuoteDTO,
+} from "../types/rates.types";
+import { normalizeRateEquipment, portCodeFromLabel } from "../utils/rate-equipment";
 
-const RESULTS_TITLE: Record<RateSearchMode, string> = {
-  PUBLISHED_TARIFF: "Published Freight Rates",
-  SERVICE_CONTRACTS: "Service Contracts",
-  SURCHARGES: "Surcharges & Accessorials",
-  SPOT_QUOTES: "Spot Rate Quotes",
+// Modified by Sekar Nagarajan (2026-10-17 02:30) — default to the lane the extracted tariffs and bookings cover
+const DEFAULT_SEARCH_PARAMS: RateSearchParams = {
+  searchMode: "PUBLISHED_TARIFF",
+  polCode: "INNSA",
+  podCode: "AEJEA",
+  eqpType: "20' Standard Dry",
+  commodity: "GEN-CGO",
 };
 
+const RATES_VIEW_MODE_KEY = "ecom.rates.viewMode.v2";
+
+function getResultsTitle(mode: RateSearchMode, t: TFunction<"rates">): string {
+  switch (mode) {
+    case "PUBLISHED_TARIFF":
+      return t("modes.results.publishedTariff");
+    case "SERVICE_CONTRACTS":
+      return t("modes.results.serviceContracts");
+    case "SURCHARGES":
+      return t("modes.results.surcharges");
+    case "SPOT_QUOTES":
+      return t("modes.results.spotQuotes");
+    default: {
+      const _exhaustive: never = mode;
+      return _exhaustive;
+    }
+  }
+}
+
 export function useRatesController() {
+  const { t } = useTranslation(["rates", "common", "modules"]);
   const toast = useToast();
   const navigate = useNavigate();
-  const [viewMode, setViewMode] = useState<"CARD" | "DATAVIEW">("CARD");
-  const [searchParams, setSearchParams] = useState<RateSearchParams>({
-    searchMode: "PUBLISHED_TARIFF",
-    polCode: "USNYC",
-    podCode: "SGSIN",
-    eqpType: "40' High Cube Dry",
-    commodity: "GEN-CGO",
-  });
+  const { viewMode, setViewMode } = useModuleViewMode(
+    RATES_VIEW_MODE_KEY,
+    "card",
+  );
+  const [searchParams, setSearchParams] =
+    useState<RateSearchParams>(DEFAULT_SEARCH_PARAMS);
+  /** Results only after explicit Search (or deep-link from landing). */
+  const [hasSearched, setHasSearched] = useState(false);
   const [isQuoteDrawerOpen, setIsQuoteDrawerOpen] = useState(false);
   const [quoteDefaults, setQuoteDefaults] = useState<
     Partial<CreateQuoteInput> | undefined
   >(undefined);
+  const [isShareMailOpen, setIsShareMailOpen] = useState(false);
+  const [shareMailRates, setShareMailRates] = useState<CombinedRateItem[]>([]);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const pol = urlParams.get("pol") || urlParams.get("ratepol");
     const pod = urlParams.get("pod") || urlParams.get("ratepod");
     const eqp = urlParams.get("eqpType") || urlParams.get("rateseqp");
+    const shipmentDate = urlParams.get("shipmentdate") || urlParams.get("date");
 
     if (pol || pod || eqp) {
+      // Landing / deep links send port codes and the equipment master code (20DC, 40HC…);
+      // the filter works in its own vocabulary ("20' Standard Dry").
       setSearchParams((prev) => ({
         ...prev,
-        polCode: pol || prev.polCode,
-        podCode: pod || prev.podCode,
-        eqpType: eqp || prev.eqpType,
+        polCode: pol ? portCodeFromLabel(pol, prev.polCode ?? "") : prev.polCode,
+        podCode: pod ? portCodeFromLabel(pod, prev.podCode ?? "") : prev.podCode,
+        eqpType: eqp ? normalizeRateEquipment(eqp) : prev.eqpType,
+        fromDate: shipmentDate || prev.fromDate,
       }));
+      setHasSearched(true);
     }
   }, []);
 
@@ -72,33 +109,53 @@ export function useRatesController() {
       ? searchParams.eqpType
       : undefined;
 
-  const { data: tariffs = [], isLoading: isTariffsLoading } = useTariffsQuery({
-    loadPort: searchParams.polCode,
-    dischPort: searchParams.podCode,
-    eqpType: eqpFilter,
-    commodity: commodityFilter,
-  });
+  const fetchTariffs = hasSearched && mode === "PUBLISHED_TARIFF";
+  const fetchContracts = hasSearched && mode === "SERVICE_CONTRACTS";
+  const fetchSurcharges =
+    hasSearched && (mode === "PUBLISHED_TARIFF" || mode === "SURCHARGES");
+  const fetchQuotes = hasSearched && mode === "SPOT_QUOTES";
+
+  const { data: tariffs = [], isLoading: isTariffsLoading } = useTariffsQuery(
+    {
+      loadPort: searchParams.polCode,
+      dischPort: searchParams.podCode,
+      eqpType: eqpFilter,
+      commodity: commodityFilter,
+      date: searchParams.fromDate,
+    },
+    { enabled: fetchTariffs },
+  );
 
   const { data: contracts = [], isLoading: isContractsLoading } =
-    useContractsQuery({
-      pol: searchParams.polCode,
-      pod: searchParams.podCode,
-    });
+    useContractsQuery(
+      {
+        pol: searchParams.polCode,
+        pod: searchParams.podCode,
+      },
+      { enabled: fetchContracts },
+    );
 
   const { data: surcharges = [], isLoading: isSurchargesLoading } =
-    useSurchargesQuery({
-      pol: searchParams.polCode,
-      pod: searchParams.podCode,
-      eqpType: eqpFilter,
-    });
+    useSurchargesQuery(
+      {
+        pol: searchParams.polCode,
+        pod: searchParams.podCode,
+        eqpType: eqpFilter,
+      },
+      { enabled: fetchSurcharges },
+    );
 
-  const { data: quotes = [], isLoading: isQuotesLoading } = useQuotesQuery();
+  const { data: quotes = [], isLoading: isQuotesLoading } = useQuotesQuery({
+    enabled: fetchQuotes,
+  });
 
-  const isLoading =
-    isTariffsLoading ||
-    isContractsLoading ||
-    (mode === "SURCHARGES" && isSurchargesLoading) ||
-    (mode === "SPOT_QUOTES" && isQuotesLoading);
+  const isLoading = !hasSearched
+    ? false
+    : (mode === "PUBLISHED_TARIFF" &&
+        (isTariffsLoading || isSurchargesLoading)) ||
+      (mode === "SERVICE_CONTRACTS" && isContractsLoading) ||
+      (mode === "SURCHARGES" && isSurchargesLoading) ||
+      (mode === "SPOT_QUOTES" && isQuotesLoading);
 
   const surchargeRollup = surcharges.reduce((sum, s) => sum + s.amount, 0);
   const hasNorSurcharge = surcharges.some((s) => s.isNor);
@@ -138,7 +195,7 @@ export function useRatesController() {
   const tariffCards: CombinedRateItem[] = tariffs.map((trf, idx) => ({
     id: trf.id,
     type: "TARIFF" as const,
-    title: "Published Freight Tariff",
+    title: t("rateCard.tariffDefaultTitle"),
     code: `TRF-${trf.loadPort}-${trf.dischPort}`,
     originPort: trf.loadPort,
     originPortName: trf.loadPortName,
@@ -171,7 +228,9 @@ export function useRatesController() {
     deliveryPortName: sur.dischargeRegion || sur.delivery || "",
     eqpType: sur.eqpType,
     commodity: "",
-    commodityName: sur.isNor ? "NOR applicable" : "Accessorial",
+    commodityName: sur.isNor
+      ? t("rateCard.norApplicable")
+      : t("rateCard.accessorialCommodity"),
     currency: sur.currency,
     baseAmount: sur.amount,
     surchargeAmount: 0,
@@ -221,20 +280,26 @@ export function useRatesController() {
     }));
 
   let cardRates: CombinedRateItem[] = [];
-  switch (mode) {
-    case "SERVICE_CONTRACTS":
-      cardRates = contractCards;
-      break;
-    case "SURCHARGES":
-      cardRates = surchargeCards;
-      break;
-    case "SPOT_QUOTES":
-      cardRates = quoteCards;
-      break;
-    case "PUBLISHED_TARIFF":
-    default:
-      cardRates = tariffCards;
-      break;
+  if (hasSearched) {
+    switch (mode) {
+      case "SERVICE_CONTRACTS":
+        cardRates = contractCards;
+        break;
+      case "SURCHARGES":
+        cardRates = surchargeCards;
+        break;
+      case "SPOT_QUOTES":
+        cardRates = quoteCards;
+        break;
+      case "PUBLISHED_TARIFF":
+        cardRates = tariffCards;
+        break;
+      default: {
+        const _exhaustive: never = mode;
+        cardRates = _exhaustive;
+        break;
+      }
+    }
   }
 
   const openQuoteDrawer = (defaults?: Partial<CreateQuoteInput>) => {
@@ -250,20 +315,39 @@ export function useRatesController() {
 
   const handleSearch = (params: RateSearchParams) => {
     setSearchParams(params);
-    if (params.searchMode === "SPOT_QUOTES" && viewMode === "CARD") {
-      toast.info("Showing spot quotes for this lane…");
+    setHasSearched(true);
+    if (params.searchMode === "SPOT_QUOTES" && viewMode === "card") {
+      toast.info(t("search.toastSpotQuotes"));
     } else {
       toast.info(
-        `Searching ${RESULTS_TITLE[params.searchMode]} for ${params.polCode || "All"} → ${params.podCode || "All"}...`,
+        t("search.toastSearching", {
+          title: getResultsTitle(params.searchMode, t),
+          pol: params.polCode || t("search.allPorts"),
+          pod: params.podCode || t("search.allPorts"),
+        }),
       );
     }
   };
 
+  const handleReset = () => {
+    setSearchParams(DEFAULT_SEARCH_PARAMS);
+    setHasSearched(false);
+  };
+
+  const handleSearchModeChange = (nextMode: RateSearchMode) => {
+    setSearchParams((prev) => ({ ...prev, searchMode: nextMode }));
+    setHasSearched(false);
+  };
+
   const handleBookNow = (rate: CombinedRateItem) => {
     toast.success(
-      `Selected rate ${rate.code} (${rate.currency} $${rate.totalEstimatedAmount.toFixed(2)}). Proceeding to Schedules & Booking...`,
+      t("toasts.bookSelected", {
+        code: rate.code,
+        currency: rate.currency,
+        amount: rate.totalEstimatedAmount.toFixed(2),
+      }),
     );
-    navigate({ to: "/schedules" as never });
+    navigate({ to: "/app/schedules" });
   };
 
   const handleViewSurcharges = (rate: CombinedRateItem) => {
@@ -296,7 +380,22 @@ export function useRatesController() {
   };
 
   const handleShareRate = (rate: CombinedRateItem) => {
-    toast.info(`Opening rate quote email share dialog for ${rate.code}...`);
+    setShareMailRates([rate]);
+    setIsShareMailOpen(true);
+  };
+
+  const handleShareResultsViaMail = () => {
+    if (cardRates.length === 0) {
+      toast.warning(t("errors.shareNoResults"));
+      return;
+    }
+    setShareMailRates(cardRates);
+    setIsShareMailOpen(true);
+  };
+
+  const handleCloseShareMail = () => {
+    setIsShareMailOpen(false);
+    setShareMailRates([]);
   };
 
   const handleRequestQuote = () => {
@@ -308,20 +407,38 @@ export function useRatesController() {
     });
   };
 
+  /** After RFQ create: jump to Spot Quotes for that lane so the new quote appears at the top. */
+  const handleQuoteCreated = (quote: QuoteDTO) => {
+    setSearchParams({
+      searchMode: "SPOT_QUOTES",
+      polCode: quote.originPort,
+      podCode: quote.deliveryPort,
+      eqpType: quote.eqpType || searchParams.eqpType,
+      commodity: quote.commodity || searchParams.commodity,
+    });
+    setHasSearched(true);
+  };
+
   return {
     viewMode,
     setViewMode,
     searchParams,
     searchMode: searchParams.searchMode,
-    setSearchMode: (nextMode: RateSearchMode) =>
-      setSearchParams((prev) => ({ ...prev, searchMode: nextMode })),
-    resultsTitle: RESULTS_TITLE[mode],
+    setSearchMode: (nextMode: RateSearchMode) => {
+      setSearchParams((prev) => ({ ...prev, searchMode: nextMode }));
+      setHasSearched(false);
+    },
+    resultsTitle: getResultsTitle(mode, t),
     cardRates,
+    hasSearched,
     isLoading,
     handleSearch,
+    handleReset,
+    handleSearchModeChange,
     handleBookNow,
     handleViewSurcharges,
     handleShareRate,
+    handleShareResultsViaMail,
     handleRequestQuote,
     selectedContract,
     isSurchargeModalOpen,
@@ -329,5 +446,9 @@ export function useRatesController() {
     isQuoteDrawerOpen,
     quoteDefaults,
     handleCloseQuoteDrawer: () => setIsQuoteDrawerOpen(false),
+    handleQuoteCreated,
+    isShareMailOpen,
+    shareMailRates,
+    handleCloseShareMail,
   };
 }

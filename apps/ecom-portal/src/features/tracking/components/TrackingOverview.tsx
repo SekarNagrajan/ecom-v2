@@ -1,13 +1,11 @@
-// Modified by Sekar Nagarajan (2026-08-25 19:15)
-import { Card, Col, Row, Space, Tooltip, Typography } from "antd";
-import type { LucideIcon } from "lucide-react";
-import type { CSSProperties } from "react";
+// Modified by Sekar Nagarajan (2026-10-27 11:05)
+import { AppButton } from "@solverminds/shared-ui";
+import { Card, Tooltip, Typography } from "antd";
+import { useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
-import type {
-  TrackingMilestone,
-  TrackingSearchResult,
-} from "../types/tracking.types";
+import type { TrackingSearchResult } from "../types/tracking.types";
+import { TrackingPipeline } from "./TrackingPipeline";
 
 const { Text } = Typography;
 
@@ -15,201 +13,200 @@ interface TrackingOverviewProps {
   data: TrackingSearchResult;
 }
 
-function milestoneIcon(stepName: string): LucideIcon {
-  const name = stepName.toLowerCase();
-  if (name.includes("gate in")) return Icons.container;
-  if (name.includes("loaded")) return Icons.boxes;
-  if (name.includes("departure")) return Icons.ship;
-  if (name.includes("ocean") || name.includes("transit")) return Icons.network;
-  if (name.includes("discharge")) return Icons.anchor;
-  if (name.includes("gate out") || name.includes("delivered")) {
-    return Icons.packageCheck;
-  }
-  return Icons.ship;
-}
-
-function stepStateClass(m: TrackingMilestone): string {
-  if (m.isCurrent)
-    return "tracking-pipeline__step tracking-pipeline__step--current";
-  if (m.isCompleted) {
-    return "tracking-pipeline__step tracking-pipeline__step--completed";
-  }
-  return "tracking-pipeline__step";
-}
-
-export function TrackingOverview({ data }: TrackingOverviewProps) {
-  const completedCount = data.milestones.filter((m) => m.isCompleted).length;
-  const linePercent = Math.min(
-    100,
-    Math.max(
-      0,
-      ((completedCount - 1) / Math.max(1, data.milestones.length - 1)) * 100,
-    ),
+function PortName({ name }: { name: string }) {
+  return (
+    <Text
+      type="secondary"
+      className="tracking-overview-route__port-name"
+      ellipsis={{ tooltip: name }}
+    >
+      {name}
+    </Text>
   );
+}
 
-  const progressStyle = {
-    ["--tracking-pipeline-progress" as string]: String(linePercent),
-  } as CSSProperties;
+/** Compact route + facts header; cargo journey expands via chevron. */
+export function TrackingOverview({ data }: TrackingOverviewProps) {
+  const [journeyOpen, setJourneyOpen] = useState(false);
+  const progress = Math.max(0, Math.min(100, data.progressPercent ?? 0));
+  const etaIsActual = Boolean(data.actualEta);
 
   return (
     <Card className="tracking-overview">
-      <Row gutter={[16, 16]} align="middle" className="tracking-overview__meta">
-        <Col xs={24} md={6}>
-          <div className="tracking-meta-item">
-            <AppIcon icon={Icons.ship} size={22} tone="view" />
-            <div>
-              <Text type="secondary" className="tracking-meta-item__label">
-                Origin Port (POL)
-              </Text>
-              <Text strong className="tracking-meta-item__value">
+      <div className="tracking-overview__header">
+        <div className="tracking-overview__summary">
+          <div className="tracking-overview-route" aria-label="Route progress">
+            <div className="tracking-overview-route__port tracking-overview-route__port--pol">
+              <Text strong className="tracking-overview-route__port-code">
                 {data.polPortCode}
               </Text>
-              <Text type="secondary" className="tracking-meta-item__sub">
-                {data.polPortName}
-              </Text>
+              <PortName name={data.polPortName} />
             </div>
-          </div>
-        </Col>
 
-        <Col xs={24} md={6}>
-          <div className="tracking-meta-item">
-            <AppIcon icon={Icons.mapPin} size={22} tone="create" />
-            <div>
-              <Text type="secondary" className="tracking-meta-item__label">
-                Destination (POD)
-              </Text>
-              <Text strong className="tracking-meta-item__value">
+            <div
+              className={[
+                "tracking-overview-route__track",
+                progress > 0 && progress < 100
+                  ? "tracking-overview-route__track--in-transit"
+                  : undefined,
+              ]
+                .filter(Boolean)
+                .join(" ")}
+            >
+              <span className="tracking-overview-route__rail" aria-hidden>
+                <span
+                  className="tracking-overview-route__rail-fill"
+                  style={{ width: `${progress}%` }}
+                />
+              </span>
+              <span
+                className="tracking-overview-route__marker app-icon-inherit"
+                style={{ left: `${progress}%` }}
+                aria-label={`${progress}% complete`}
+              >
+                <span className="tracking-overview-route__marker-pulse" aria-hidden />
+                <AppIcon icon={Icons.ship} size={16} />
+              </span>
+            </div>
+
+            <div className="tracking-overview-route__port tracking-overview-route__port--pod">
+              <Text strong className="tracking-overview-route__port-code">
                 {data.podPortCode}
               </Text>
-              <Text type="secondary" className="tracking-meta-item__sub">
-                {data.podPortName}
-              </Text>
+              <PortName name={data.podPortName} />
             </div>
+            
           </div>
-        </Col>
 
-        <Col xs={24} md={6}>
-          <div className="tracking-meta-item">
-            <AppIcon icon={Icons.notebook} size={22} tone="print" />
-            <div>
-              <Text type="secondary" className="tracking-meta-item__label">
-                Booking & BL Ref
+          <div className="tracking-overview-facts">
+            <div className="tracking-overview-fact">
+              <Text type="secondary" className="tracking-overview-fact__label">
+                Booking no
               </Text>
-              <Text strong className="tracking-meta-item__value">
+              <Text strong className="tracking-overview-fact__value" ellipsis>
                 {data.bookingNo}
               </Text>
-              <Text type="secondary" className="tracking-meta-item__sub">
-                BL: {data.blNo}
-              </Text>
+              <Tooltip title={data.blNo ? `BL: ${data.blNo}` : undefined}>
+                <Text
+                  type="secondary"
+                  className="tracking-overview-fact__sub"
+                >
+                  {data.blNo || "—"}
+                </Text>
+              </Tooltip>
             </div>
-          </div>
-        </Col>
 
-        <Col xs={24} md={6}>
-          <div className="tracking-meta-item">
-            <AppIcon icon={Icons.ship} size={22} tone="navigate" />
-            <div>
-              <Text type="secondary" className="tracking-meta-item__label">
-                Vessel & Voyage
+            <div className="tracking-overview-fact">
+              <Text type="secondary" className="tracking-overview-fact__label">
+                Carrier
               </Text>
-              <Text strong className="tracking-meta-item__value">
+              <Text strong className="tracking-overview-fact__value" ellipsis>
                 {data.vesselName}
               </Text>
-              <Text type="secondary" className="tracking-meta-item__sub">
-                Voyage: {data.voyage}
+              <Text type="secondary" className="tracking-overview-fact__sub">
+                Voyage {data.voyage}
+                {data.bound ? ` ${data.bound}` : ""}
+              </Text>
+            </div>
+
+            <div className="tracking-overview-fact">
+              <Text type="secondary" className="tracking-overview-fact__label">
+                ETA 
+              </Text>
+              <Text strong className="tracking-overview-fact__value" ellipsis>
+                {data.eta || "—"}
+              </Text>
+              <Text type="secondary" className="tracking-overview-fact__sub">
+                {etaIsActual ? "Actual" : "Estimated"}
               </Text>
             </div>
           </div>
-        </Col>
-      </Row>
 
-      <div className="tracking-pipeline">
-        <div className="tracking-pipeline__head">
-          <Space align="center" size={8}>
-            <AppIcon icon={Icons.ship} size={16} />
-            <Text className="tracking-pipeline__title">
-              Cargo Journey Pipeline
-            </Text>
-          </Space>
-          <Text type="secondary" className="tracking-pipeline__eta">
-            Estimated Arrival (ETA): <strong>{data.eta}</strong>
-          </Text>
-        </div>
-
-        <div className="tracking-pipeline__track" style={progressStyle}>
-          <div className="tracking-pipeline__line" />
-          <div className="tracking-pipeline__line-progress" />
-          <div className="tracking-pipeline__steps custom-scroll">
-            {data.milestones.map((m) => (
-              <div key={m.id} className={stepStateClass(m)}>
-                <div className="tracking-pipeline__badge app-icon-inherit">
-                  {m.isCurrent ? (
-                    <span className="tracking-pipeline__spin">
-                      <AppIcon icon={Icons.refreshCw} size={18} />
-                    </span>
-                  ) : (
-                    <AppIcon icon={milestoneIcon(m.stepName)} size={18} />
-                  )}
-                </div>
-                <Text className="tracking-pipeline__step-name">
-                  {m.stepName}
-                </Text>
-                <Text type="secondary" className="tracking-pipeline__step-loc">
-                  {m.location}
-                </Text>
-                <Text className="tracking-pipeline__step-time">
-                  {m.timestamp}
-                </Text>
-              </div>
-            ))}
+          <div className="tracking-overview__toggle-col">
+            <Tooltip
+              title={journeyOpen ? "Hide Cargo Journey" : "Show Cargo Journey"}
+            >
+              <AppButton
+                appVariant="ghost"
+                className={[
+                  "tracking-overview__toggle",
+                  journeyOpen ? "tracking-overview__toggle--open" : undefined,
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
+                aria-expanded={journeyOpen}
+                aria-controls="tracking-overview-journey"
+                onClick={() => setJourneyOpen((open) => !open)}
+                icon={
+                  <span className="tracking-overview__toggle-chevron app-icon-inherit">
+                    <AppIcon icon={Icons.chevronDown} size={18} />
+                  </span>
+                }
+              />
+            </Tooltip>
           </div>
         </div>
       </div>
 
-      <div className="tracking-deadlines">
-        <Space size={6}>
-          <AppIcon icon={Icons.calendar} size={16} />
-          <strong>Cut-Off Deadlines:</strong>
-        </Space>
-        <Tooltip title="Container Gate-In Closing">
-          <div className="tracking-deadline">
-            <span className="tracking-deadline__icon tracking-deadline__icon--gate app-icon-inherit">
-              <AppIcon icon={Icons.container} size={14} />
-            </span>
-            <span>
-              <span className="tracking-deadline__label">Gate-In</span>
-              <span className="tracking-deadline__value">
-                {data.deadlines.containerGateIn}
-              </span>
-            </span>
+      <div
+        id="tracking-overview-journey"
+        className={[
+          "tracking-overview__journey-panel",
+          journeyOpen ? "tracking-overview__journey-panel--open" : undefined,
+        ]
+          .filter(Boolean)
+          .join(" ")}
+        aria-hidden={!journeyOpen}
+      >
+        <div className="tracking-overview__journey-panel-inner">
+          <div className="tracking-overview__journey">
+            <TrackingPipeline milestones={data.milestones} eta={data.eta} />
+
+            <div className="tracking-deadlines" aria-label="Cut-off deadlines">
+              <Tooltip title="Container Gate-In Closing">
+                <div className="tracking-deadline">
+                  <span className="tracking-deadline__icon tracking-deadline__icon--gate app-icon-inherit">
+                    <AppIcon icon={Icons.calendar} size={16} />
+                  </span>
+                  <span>
+                    <span className="tracking-deadline__label">Gate-In</span>
+                    <span className="tracking-deadline__value">
+                      {data.deadlines.containerGateIn}
+                    </span>
+                  </span>
+                </div>
+              </Tooltip>
+              <Tooltip title="Shipping Instruction Document Closing">
+                <div className="tracking-deadline">
+                  <span className="tracking-deadline__icon tracking-deadline__icon--si app-icon-inherit">
+                    <AppIcon icon={Icons.calendar} size={16} />
+                  </span>
+                  <span>
+                    <span className="tracking-deadline__label">SI Cut-Off</span>
+                    <span className="tracking-deadline__value">
+                      {data.deadlines.siDocClosing}
+                    </span>
+                  </span>
+                </div>
+              </Tooltip>
+              <Tooltip title="Verified Gross Mass (VGM) Closing">
+                <div className="tracking-deadline">
+                  <span className="tracking-deadline__icon tracking-deadline__icon--vgm app-icon-inherit">
+                    <AppIcon icon={Icons.calendar} size={16} />
+                  </span>
+                  <span>
+                    <span className="tracking-deadline__label">
+                      VGM Cut-Off
+                    </span>
+                    <span className="tracking-deadline__value">
+                      {data.deadlines.vgmClosing}
+                    </span>
+                  </span>
+                </div>
+              </Tooltip>
+            </div>
           </div>
-        </Tooltip>
-        <Tooltip title="Shipping Instruction Document Closing">
-          <div className="tracking-deadline">
-            <span className="tracking-deadline__icon tracking-deadline__icon--si app-icon-inherit">
-              <AppIcon icon={Icons.clipboardList} size={14} />
-            </span>
-            <span>
-              <span className="tracking-deadline__label">SI Cut-Off</span>
-              <span className="tracking-deadline__value">
-                {data.deadlines.siDocClosing}
-              </span>
-            </span>
-          </div>
-        </Tooltip>
-        <Tooltip title="Verified Gross Mass (VGM) Closing">
-          <div className="tracking-deadline">
-            <span className="tracking-deadline__icon tracking-deadline__icon--vgm app-icon-inherit">
-              <AppIcon icon={Icons.shieldCheck} size={14} />
-            </span>
-            <span>
-              <span className="tracking-deadline__label">VGM Cut-Off</span>
-              <span className="tracking-deadline__value">
-                {data.deadlines.vgmClosing}
-              </span>
-            </span>
-          </div>
-        </Tooltip>
+        </div>
       </div>
     </Card>
   );

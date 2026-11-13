@@ -1,76 +1,105 @@
-// Modified by Sekar Nagarajan (2026-08-25 19:25)
+// Modified by Sekar Nagarajan (2026-09-08 14:23)
 import { AppButton } from "@solverminds/shared-ui";
 import { DataView, DataViewColumn } from "@solverminds/shared-ui/data-view";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { useNavigate } from "@tanstack/react-router";
-import { Card, Flex, Space, Spin, Tag, Tooltip, Typography } from "antd";
+import { Card, Flex, Space, Spin, Tag, Typography } from "antd";
+import type { TFunction } from "i18next";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { buildActionsColumn } from "../../../components/shared/build-actions-column";
+import {
+  ListActionButton,
+  ListActionsRow,
+} from "../../../components/shared/list-action-button";
+import {
+  ModuleEmptyState,
+  buildRetryAction,
+} from "../../../components/shared/module-empty-state";
+import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
 import { useQuotesQuery } from "../api/rates.queries";
 import type { QuoteDTO } from "../types/rates.types";
 import { QuoteRequestDrawer } from "./QuoteRequestDrawer";
 
 const { Text } = Typography;
 
+function quoteStatusLabel(
+  status: QuoteDTO["status"] | undefined,
+  t: TFunction<"rates">,
+): string {
+  if (!status) return "";
+  switch (status) {
+    case "DRAFT":
+      return t("quotes.status.DRAFT");
+    case "PENDING_REVIEW":
+      return t("quotes.status.PENDING_REVIEW");
+    case "QUOTED":
+      return t("quotes.status.QUOTED");
+    case "ACCEPTED":
+      return t("quotes.status.ACCEPTED");
+    case "EXPIRED":
+      return t("quotes.status.EXPIRED");
+    default: {
+      const _exhaustive: never = status;
+      return _exhaustive;
+    }
+  }
+}
+
 export function QuotesView() {
+  const { t } = useTranslation(["rates", "common", "modules"]);
   const toast = useToast();
   const navigate = useNavigate();
+  const { profileHandlers } = useLocalGridProfiles("rates-rfq");
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  const { data: quotes = [], isLoading } = useQuotesQuery();
+  const { data: quotes = [], isLoading, isError, refetch } = useQuotesQuery();
 
   const handleConvertBooking = (quote: QuoteDTO) => {
-    toast.info(`Converting Quote ${quote.quoteNo} into e-Booking...`);
-    navigate({ to: "/schedules" as never });
+    toast.info(t("toasts.convertingQuote", { quoteNo: quote.quoteNo }));
+    navigate({ to: "/app/schedules" });
   };
 
   const columnDefs: DataViewColumn<QuoteDTO>[] = [
-    {
-      headerName: "Actions",
+    buildActionsColumn<QuoteDTO>({
       field: "id",
-      sortable: false,
       width: 120,
-      pinned: "left",
       cellRenderer: (params: { data?: QuoteDTO }) => {
         const record = params.data;
         if (!record) return null;
         return (
-          <Space size={4}>
-            <Tooltip title="Convert Quote into e-Booking">
-              <AppButton
-                type="text"
-                size="small"
-                disabled={
-                  record.status === "EXPIRED" ||
-                  record.status === "PENDING_REVIEW"
-                }
-                icon={
-                  <AppIcon
-                    icon={Icons.arrowRight}
-                    size={16}
-                    gridAction
-                    tone="navigate"
-                  />
-                }
-                onClick={() => handleConvertBooking(record)}
-              />
-            </Tooltip>
-            <Tooltip title="View Quotation Terms & Conditions">
-              <AppButton
-                type="text"
-                size="small"
-                icon={
-                  <AppIcon icon={Icons.eye} size={16} gridAction tone="view" />
-                }
-              />
-            </Tooltip>
-          </Space>
+          <ListActionsRow>
+            <ListActionButton
+              title={t("actions.convertQuote")}
+              disabled={
+                record.status === "EXPIRED" ||
+                record.status === "PENDING_REVIEW"
+              }
+              icon={
+                <AppIcon
+                  icon={Icons.arrowRight}
+                  size={16}
+                  gridAction
+                  tone="navigate"
+                />
+              }
+              onClick={() => handleConvertBooking(record)}
+            />
+            <ListActionButton
+              title={t("actions.viewQuoteTerms")}
+              icon={
+                <AppIcon icon={Icons.eye} size={16} gridAction tone="view" />
+              }
+              onClick={() => undefined}
+            />
+          </ListActionsRow>
         );
       },
-    },
+    }),
     {
-      headerName: "Quote Ref No",
+      headerName: t("quotes.columns.quoteRefNo"),
       field: "quoteNo",
       minWidth: 160,
       cellRenderer: (params: { data?: QuoteDTO }) => (
@@ -83,12 +112,12 @@ export function QuotesView() {
       ),
     },
     {
-      headerName: "Customer Name",
+      headerName: t("quotes.columns.customerName"),
       field: "customerName",
       minWidth: 180,
     },
     {
-      headerName: "Shipment Route",
+      headerName: t("quotes.columns.shipmentRoute"),
       field: "originPort",
       minWidth: 200,
       cellRenderer: (params: { data?: QuoteDTO }) => (
@@ -98,7 +127,7 @@ export function QuotesView() {
       ),
     },
     {
-      headerName: "Equipment & Qty",
+      headerName: t("quotes.columns.equipmentQty"),
       field: "eqpType",
       minWidth: 180,
       cellRenderer: (params: { data?: QuoteDTO }) => (
@@ -109,7 +138,7 @@ export function QuotesView() {
       ),
     },
     {
-      headerName: "Quoted Rate (USD)",
+      headerName: t("quotes.columns.quotedRateUsd"),
       field: "quotedAmountUsd",
       minWidth: 160,
       cellRenderer: (params: { data?: QuoteDTO }) => (
@@ -123,13 +152,15 @@ export function QuotesView() {
           ].join(" ")}
         >
           {params.data?.quotedAmountUsd
-            ? `$${params.data.quotedAmountUsd.toFixed(2)} USD`
-            : "Pending Pricing"}
+            ? t("quotes.amountUsd", {
+                amount: params.data.quotedAmountUsd.toFixed(2),
+              })
+            : t("quotes.pendingPricing")}
         </Text>
       ),
     },
     {
-      headerName: "Status",
+      headerName: t("quotes.columns.status"),
       field: "status",
       width: 140,
       cellRenderer: (params: { data?: QuoteDTO }) => {
@@ -139,20 +170,38 @@ export function QuotesView() {
         if (status === "ACCEPTED") color = "green";
         if (status === "PENDING_REVIEW") color = "orange";
         if (status === "EXPIRED") color = "red";
-        return <Tag color={color}>{status?.replace("_", " ")}</Tag>;
+        return <Tag color={color}>{quoteStatusLabel(status, t)}</Tag>;
       },
     },
     {
-      headerName: "Validity Window",
+      headerName: t("quotes.columns.validityWindow"),
       field: "validFrom",
       minWidth: 180,
       cellRenderer: (params: { data?: QuoteDTO }) => (
         <Text className="rates-cell-sub">
-          {params.data?.validFrom} to {params.data?.validTo}
+          {t("quotes.validityRange", {
+            from: params.data?.validFrom,
+            to: params.data?.validTo,
+          })}
         </Text>
       ),
     },
   ];
+
+  const emptyState = isError ? (
+    <ModuleEmptyState
+      variant="error"
+      title={t("errors.quotesLoadTitle")}
+      message={t("errors.loadFailedMessage")}
+      actions={[buildRetryAction(() => void refetch())]}
+    />
+  ) : (
+    <ModuleEmptyState
+      variant="blank"
+      title={t("empty.quotesTitle")}
+      message={t("empty.quotesMessage")}
+    />
+  );
 
   return (
     <div className="rates-stack">
@@ -160,11 +209,10 @@ export function QuotesView() {
         <Flex justify="space-between" align="center" wrap="wrap" gap="middle">
           <div className="rates-toolbar-copy">
             <Text className="rates-toolbar-copy__title">
-              Spot Rate Inquiries & Quotes
+              {t("quotes.toolbarTitle")}
             </Text>
             <Text type="secondary" className="rates-toolbar-copy__sub">
-              Submit spot rate inquiries and convert approved quotes into
-              e-Bookings.
+              {t("quotes.toolbarSub")}
             </Text>
           </div>
 
@@ -173,20 +221,29 @@ export function QuotesView() {
             icon={<AppIcon icon={Icons.plus} size={16} />}
             onClick={() => setIsDrawerOpen(true)}
           >
-            Request Spot Quote
+            {t("actions.requestSpotQuote")}
           </AppButton>
         </Flex>
       </Card>
 
-      <Spin spinning={isLoading} tip="Loading quotation requests...">
+      <Spin spinning={isLoading} tip={t("quotes.loading")}>
         <Card className="rates-grid-panel">
           <div className="rates-grid responsive-table-wrap custom-scroll">
             <DataView
-              data={quotes}
+              rowData={quotes}
+              emptyState={emptyState}
               columnDefs={columnDefs}
-              pagination
-              paginationPageSize={10}
+              listOptions={{
+                ...profileHandlers,
+                showToolbar: { showTotalCount: true, fullScreen: true },
+                sideBar: true,
+                pagination: true,
+                paginationPageSize: 10,
+                pageSizeOptions: [10, 20, 50, 100],
+                defaultColDef: { filter: true },
+              }}
               className="rates-grid"
+              renderToolbar={() => null}
             />
           </div>
         </Card>

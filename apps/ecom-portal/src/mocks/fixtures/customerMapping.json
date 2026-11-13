@@ -1,0 +1,112 @@
+[
+ {
+  "id": 20,
+  "LoginCustCode": "20001374",
+  "APcustCode": "20120004232",
+  "CrDate": "2024-02-12T04:35:31.728Z",
+  "CrUser": "SUPERUSER",
+  "ChgDate": "2024-02-12T23:34:24.192Z",
+  "ChgUser": "SUPERUSER",
+  "Status": "A"
+ },
+ {
+  "id": 4,
+  "LoginCustCode": "20170000392",
+  "APcustCode": "20120004239",
+  "CrDate": "2024-02-11T23:51:17.438Z",
+  "CrUser": "SUPERUSER",
+  "ChgDate": "2024-02-11T23:54:12.818Z",
+  "ChgUser": "SUPERUSER",
+  "Status": "A"
+ },
+ {
+  "id": 2,
+  "LoginCustCode": "20170000291",
+  "APcustCode": "20130004324",
+  "CrDate": "2024-01-14T02:16:45.438Z",
+  "CrUser": "SUPERUSER",
+  "ChgDate": null,
+  "ChgUser": null,
+  "Status": "A"
+ },
+ {
+  "id": 24,
+  "LoginCustCode": "2021000073",
+  "APcustCode": "2026000090",
+  "CrDate": "2026-09-13T01:19:19.692Z",
+  "CrUser": "SUPERUSER",
+  "ChgDate": null,
+  "ChgUser": null,
+  "Status": "A"
+ },
+ {
+  "id": 23,
+  "LoginCustCode": "2021000073",
+  "APcustCode": "20001374",
+  "CrDate": "2026-09-13T01:09:35.448Z",
+  "CrUser": "SUPERUSER",
+  "ChgDate": null,
+  "ChgUser": null,
+  "Status": "A"
+ },
+ {
+  "id": 22,
+  "LoginCustCode": "20001374",
+  "APcustCode": "INSVM497",
+  "CrDate": "2024-02-12T04:38:52.662Z",
+  "CrUser": "SUPERUSER",
+  "ChgDate": null,
+  "ChgUser": null,
+  "Status": "A"
+ },
+ {
+  "id": 21,
+  "LoginCustCode": "20001374",
+  "APcustCode": "20140004483",
+  "CrDate": "2024-02-12T04:35:47.018Z",
+  "CrUser": "SUPERUSER",
+  "ChgDate": null,
+  "ChgUser": null,
+  "Status": "A"
+ },
+ {
+  "id": 19,
+  "LoginCustCode": "20001374",
+  "APcustCode": "SM17004",
+  "CrDate": "2024-02-12T04:35:07.888Z",
+  "CrUser": "SUPERUSER",
+  "ChgDate": null,
+  "ChgUser": null,
+  "Status": "A"
+ },
+ {
+  "id": 14,
+  "LoginCustCode": "2021000073",
+  "APcustCode": "20130004364",
+  "CrDate": "2024-02-12T02:57:28.898Z",
+  "CrUser": "SUPERUSER",
+  "ChgDate": null,
+  "ChgUser": null,
+  "Status": "A"
+ },
+ {
+  "id": 13,
+  "LoginCustCode": "2021000073",
+  "APcustCode": "20130004329",
+  "CrDate": "2024-02-12T02:57:03.435Z",
+  "CrUser": "SUPERUSER",
+  "ChgDate": null,
+  "ChgUser": null,
+  "Status": "A"
+ },
+ {
+  "id": 12,
+  "LoginCustCode": "2021000073",
+  "APcustCode": "20120004252",
+  "CrDate": "2024-02-12T02:56:53.832Z",
+  "CrUser": "SUPERUSER",
+  "ChgDate": null,
+  "ChgUser": null,
+  "Status": "A"
+ }
+]

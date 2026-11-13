@@ -1,10 +1,12 @@
+// Modified by Sekar Nagarajan (2026-09-28 15:50)
 import { AppDrawer } from "@solverminds/shared-ui";
 import { Flex, Typography, theme } from "antd";
+import { useTranslation } from "react-i18next";
 
 import { ThemePreferencesPanel } from "../../features/theme/components/theme-preferences-panel";
 import { type useThemePreferencesController } from "../../features/theme/hooks/use-theme-preferences-controller";
 
-const { Text } = Typography;
+const { Text, Title } = Typography;
 
 interface AccountPreferencesDrawerProps {
   email?: string;
@@ -22,15 +24,16 @@ export function AccountPreferencesDrawer({
   open,
   preferencesController,
 }: AccountPreferencesDrawerProps) {
+  const { t } = useTranslation("common");
   const { token } = theme.useToken();
 
   const statusLabel =
     preferencesController.saveStatus === "saving"
-      ? "Saving..."
+      ? t("status.saving")
       : preferencesController.saveStatus === "dirty"
-      ? "Not saved"
+      ? t("status.notSaved")
       : preferencesController.saveStatus === "error"
-      ? "Save failed"
+      ? t("status.saveFailed")
       : null;
 
   const statusColor =
@@ -43,22 +46,42 @@ export function AccountPreferencesDrawer({
   return (
     <AppDrawer
       mask={{ blur: false }}
-      width="50%"
+      width="40%"
       onClose={onClose}
       open={open}
+      classNames={{
+        body: "a11y-prefs-drawer-body custom-scroll",
+      }}
       title={
-        <Flex align="center" justify="space-between" gap={token.marginMD}>
-          <span style={{ fontWeight: 700 }}>Theme and Preferences</span>
-          {statusLabel ? (
-            <Text
-              style={{
-                color: statusColor,
-                fontSize: token.fontSizeSM,
-                fontWeight: token.fontWeightStrong,
-              }}
-            ></Text>
-          ) : null}
-        </Flex>
+        <div className="a11y-prefs-drawer-header">
+          <Flex vertical gap={2} style={{ minWidth: 0 }}>
+            <Title level={5} className="a11y-prefs-drawer-header__title">
+              {t("account.accessibilityControls")}
+            </Title>
+
+            {statusLabel ? (
+              <Text
+                style={{
+                  color: statusColor,
+                  fontSize: token.fontSizeSM,
+                  fontWeight: token.fontWeightStrong,
+                }}
+              >
+                {statusLabel}
+              </Text>
+            ) : null}
+          </Flex>
+          {/* <div className="a11y-prefs-drawer-header__actions">
+            <Tooltip title="Adjust vision preferences for text, appearance, contrast, and zoom.">
+              <AppButton
+                type="text"
+                shape="circle"
+                aria-label="Accessibility help"
+                icon={<AppIcon icon={Icons.info} size={18} />}
+              />
+            </Tooltip>
+          </div> */}
+        </div>
       }
       styles={{
         body: {

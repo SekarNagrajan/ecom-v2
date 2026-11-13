@@ -2,8 +2,9 @@
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { useQuery } from "@tanstack/react-query";
-import { Flex, Table, Typography } from "antd";
+import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import {
@@ -11,11 +12,10 @@ import {
   TemplateNameCell,
   TemplateRouteCell,
 } from "../../../components/shared/booking-template-modal-shell";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import { bookingApi } from "../api/booking.api";
 import { useBookingStore } from "../stores/booking.store";
 import type { BookingTemplate } from "../types/booking.types";
-
-const { Text } = Typography;
 
 interface SelectTemplateModalProps {
   open: boolean;
@@ -26,6 +26,7 @@ export function SelectTemplateModal({
   open,
   onCancel,
 }: SelectTemplateModalProps) {
+  const { t } = useTranslation(["booking", "common"]);
   const toast = useToast();
   const { initializeFromBooking } = useBookingStore();
 
@@ -38,13 +39,13 @@ export function SelectTemplateModal({
 
   const handleSelect = (template: BookingTemplate) => {
     initializeFromBooking(template.payload);
-    toast.success(`Applied template: ${template.templateName}`);
+    toast.success(t("toasts.templateApplied", { name: template.templateName }));
     onCancel();
   };
 
   const columns: ColumnsType<BookingTemplate> = [
     {
-      title: "Action",
+      title: t("templates.columns.action"),
       key: "action",
       width: 100,
       align: "center",
@@ -55,32 +56,32 @@ export function SelectTemplateModal({
           icon={<AppIcon icon={Icons.check} size={14} />}
           onClick={() => handleSelect(record)}
         >
-          Select
+          {t("common:actions.select")}
         </AppButton>
       ),
     },
     {
-      title: "S.No",
+      title: t("templates.columns.sno"),
       key: "sno",
       width: 72,
       align: "center",
       render: (_: unknown, __: BookingTemplate, index: number) => index + 1,
     },
     {
-      title: "Template Name",
+      title: t("templates.columns.templateName"),
       dataIndex: "templateName",
       ellipsis: true,
       render: (value: string) => <TemplateNameCell name={value} />,
     },
     {
-      title: "Origin",
+      title: t("templates.columns.origin"),
       dataIndex: "origin",
       width: 180,
       ellipsis: true,
       render: (value: string) => <TemplateRouteCell value={value} />,
     },
     {
-      title: "Delivery",
+      title: t("templates.columns.delivery"),
       dataIndex: "delivery",
       width: 180,
       ellipsis: true,
@@ -93,8 +94,8 @@ export function SelectTemplateModal({
       open={open}
       onClose={onCancel}
       icon={Icons.clipboardList}
-      title="Select Booking Template"
-      subtitle="Choose a saved template to pre-fill your booking form"
+      title={t("templates.selectTitle")}
+      subtitle={t("templates.selectSubtitle")}
       dialogSize="lg"
     >
       <Table
@@ -107,22 +108,19 @@ export function SelectTemplateModal({
           pageSize: 10,
           showSizeChanger: false,
           showTotal: (total, range) =>
-            `Showing ${range[0]} to ${range[1]} of ${total} entries`,
+            t("templates.showingRange", { from: range[0], to: range[1], total }),
         }}
         bordered={false}
         size="middle"
         tableLayout="fixed"
         locale={{
           emptyText: (
-            <Flex
-              vertical
-              align="center"
-              gap={8}
-              className="booking-template-modal__empty"
-            >
-              <AppIcon icon={Icons.inbox} size={28} />
-              <Text type="secondary">No templates available</Text>
-            </Flex>
+            <ModuleEmptyState
+              artSize="sm"
+              variant="blank"
+              title={t("templates.emptySelect")}
+              style={{ padding: 12 }}
+            />
           ),
         }}
       />

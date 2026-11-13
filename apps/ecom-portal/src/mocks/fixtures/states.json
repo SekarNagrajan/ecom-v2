@@ -1,0 +1,297 @@
+[
+ {
+  "statecode": "AE",
+  "statedesc": "DUBAI PORT, UNITED ARAB EMIRATES AND LINE COM",
+  "countrycode": "AE"
+ },
+ {
+  "statecode": "AS",
+  "statedesc": "ASDFG",
+  "countrycode": "AF"
+ },
+ {
+  "statecode": "QW",
+  "statedesc": "ASDFG",
+  "countrycode": "AL"
+ },
+ {
+  "statecode": "AR",
+  "statedesc": "QWERTY",
+  "countrycode": "AL"
+ },
+ {
+  "statecode": "AU",
+  "statedesc": "Victoria",
+  "countrycode": "AU"
+ },
+ {
+  "statecode": "WB",
+  "statedesc": "West Bengal",
+  "countrycode": "BT"
+ },
+ {
+  "statecode": "XMN",
+  "statedesc": "XIAMEN",
+  "countrycode": "CN"
+ },
+ {
+  "statecode": "123",
+  "statedesc": "s",
+  "countrycode": "GW"
+ },
+ {
+  "statecode": "LKL",
+  "statedesc": "781",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "AN",
+  "statedesc": "Andaman and Nicobar Islands",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "AP",
+  "statedesc": "Andhra Pradesh",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "AD",
+  "statedesc": "Andhra Pradesh (New)",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "AR",
+  "statedesc": "Arunachal Pradesh",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "AS",
+  "statedesc": "Assam",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "BH",
+  "statedesc": "Bihar",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "CH",
+  "statedesc": "Chandigarhhhh",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "CT",
+  "statedesc": "Chattisgarh",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "DN",
+  "statedesc": "Dadra and Nagar Haveli",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "DD",
+  "statedesc": "Daman and Diu",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "DL",
+  "statedesc": "Delhi",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "GA",
+  "statedesc": "Goa",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "HR",
+  "statedesc": "Haryana",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "HP",
+  "statedesc": "Himachal Pradesh",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "JK",
+  "statedesc": "Jammu and Kashmir",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "JH",
+  "statedesc": "Jharkhand",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "KA",
+  "statedesc": "Karnataka",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "KL",
+  "statedesc": "Kerala",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "sp",
+  "statedesc": "kerala",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "KLL",
+  "statedesc": "KERALA",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "LO",
+  "statedesc": "KERALA",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "LD",
+  "statedesc": "Lakshadweep Islands",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "MP",
+  "statedesc": "Madhya Pradesh",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "MH",
+  "statedesc": "Maharashtra",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "MN",
+  "statedesc": "Manipur",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "ME",
+  "statedesc": "Meghalaya",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "MI",
+  "statedesc": "Mizoram",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "NL",
+  "statedesc": "Nagaland",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "OR",
+  "statedesc": "Odisha",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "PY",
+  "statedesc": "Pondicherry",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "PB",
+  "statedesc": "Punjab",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "QW",
+  "statedesc": "Qwerty",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "RJ",
+  "statedesc": "Rajasthan",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "SK",
+  "statedesc": "Sikkim",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "TN",
+  "statedesc": "Tamil Nadu",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "ZS",
+  "statedesc": "TAMILNADU",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "TS",
+  "statedesc": "Telangana",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "TR",
+  "statedesc": "Tripura",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "UP",
+  "statedesc": "Uttar Pradesh",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "UT",
+  "statedesc": "Uttarakhand",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "WB",
+  "statedesc": "West Bengal",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "ewr",
+  "statedesc": "wqe",
+  "countrycode": "IN"
+ },
+ {
+  "statecode": "JPT",
+  "statedesc": "TOKYO",
+  "countrycode": "JP"
+ },
+ {
+  "statecode": "MY",
+  "statedesc": "Kuala Lumpur",
+  "countrycode": "MY"
+ },
+ {
+  "statecode": "WB",
+  "statedesc": "West Bengal",
+  "countrycode": "NP"
+ },
+ {
+  "statecode": "SAL",
+  "statedesc": "SALALAH",
+  "countrycode": "OM"
+ },
+ {
+  "statecode": "STA",
+  "statedesc": "(PH) Philippines",
+  "countrycode": "PH"
+ },
+ {
+  "statecode": "PB",
+  "statedesc": "Panjab Pakistan",
+  "countrycode": "PK"
+ },
+ {
+  "statecode": "SG",
+  "statedesc": "SELANGOR",
+  "countrycode": "SG"
+ },
+ {
+  "statecode": "NY",
+  "statedesc": "New York",
+  "countrycode": "US"
+ }
+]

@@ -12,15 +12,16 @@ import {
   Switch,
   Typography,
 } from "antd";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { Controller, useForm, type Resolver } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import {
   FORM_YES_NO_SWITCH_CLASS,
   yesNoSwitchInner,
 } from "../../../components/shared/yes-no-switch";
 import { useBookingStore } from "../stores/booking.store";
-import { insuranceSchema, type InsuranceData } from "../types/booking.types";
+import { createInsuranceSchema, type InsuranceData } from "../types/booking.types";
 
 const { Text } = Typography;
 
@@ -32,8 +33,11 @@ const defaults: InsuranceData = {
 };
 
 export function InsuranceStep() {
+  const { t } = useTranslation(["booking", "common"]);
   const { payload, updateInsurance, clearInsurance, nextStep, prevStep } =
     useBookingStore();
+
+  const schema = useMemo(() => createInsuranceSchema((k) => t(k)), [t]);
 
   const {
     control,
@@ -42,8 +46,7 @@ export function InsuranceStep() {
     formState: { errors },
     reset,
   } = useForm<InsuranceData>({
-    // Modified by Sekar Nagarajan (2026-08-27 18:41)
-    resolver: zodResolver(insuranceSchema) as Resolver<InsuranceData>,
+    resolver: zodResolver(schema) as Resolver<InsuranceData>,
     defaultValues: payload.insurance || defaults,
   });
 
@@ -73,7 +76,7 @@ export function InsuranceStep() {
         <Card size="small" className="form-step-card form-step-section">
           <div className="form-field-cell">
             <label className="form-field-label">
-              Do you require Cargo Insurance?
+              {t("wizard.insurance.requireQuestion")}
             </label>
             {/* Modified by Sekar Nagarajan (2026-09-01 16:12) — compact yes/no switch */}
             <Controller
@@ -96,13 +99,13 @@ export function InsuranceStep() {
         {isInsuranceRequired ? (
           <Card
             size="small"
-            title="Insurance Details"
+            title={t("wizard.insurance.detailsTitle")}
             className="form-step-card form-step-section"
           >
             <Row gutter={[24, 24]}>
               <Col xs={24} md={12}>
                 <label className="form-field-label">
-                  Currency <Text type="danger">*</Text>
+                  {t("wizard.insurance.currency")} <Text type="danger">*</Text>
                 </label>
                 <Controller
                   control={control}
@@ -128,7 +131,7 @@ export function InsuranceStep() {
               </Col>
               <Col xs={24} md={12}>
                 <label className="form-field-label">
-                  Cargo Value <Text type="danger">*</Text>
+                  {t("labels.cargoValue")} <Text type="danger">*</Text>
                 </label>
                 <Controller
                   control={control}
@@ -153,8 +156,8 @@ export function InsuranceStep() {
                   className="form-step-section"
                   type="info"
                   showIcon
-                  message="Insurance Terms & Conditions"
-                  description="By requesting cargo insurance, you agree to the carrier's standard insurance terms. Premium will be added to the freight invoice."
+                  message={t("wizard.insurance.termsTitle")}
+                  description={t("wizard.insurance.termsBody")}
                 />
                 <Controller
                   control={control}
@@ -165,7 +168,7 @@ export function InsuranceStep() {
                       checked={value}
                       onChange={(e) => onChange(e.target.checked)}
                     >
-                      I accept the Insurance Terms and Conditions{" "}
+                      {t("wizard.insurance.acceptTerms")}{" "}
                       <Text type="danger">*</Text>
                     </Checkbox>
                   )}
@@ -182,9 +185,9 @@ export function InsuranceStep() {
       </div>
 
       <div className="form-step-footer">
-        <AppButton onClick={prevStep}>Previous</AppButton>
+        <AppButton onClick={prevStep}>{t("common:actions.previous")}</AppButton>
         <AppButton type="primary" htmlType="submit">
-          Next
+          {t("common:actions.next")}
         </AppButton>
       </div>
     </form>

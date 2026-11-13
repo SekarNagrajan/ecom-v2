@@ -1,4 +1,5 @@
 // Modified by Sekar Nagarajan (2026-08-26 14:57)
+import type { TFunction } from "i18next";
 import { z } from "zod";
 
 export type CROPrintStatus = "Y" | "N";
@@ -51,32 +52,35 @@ export interface CROListFilters {
 }
 
 /** DatePicker clears to null — normalize before string checks. */
-function requiredCalendarDate(label: string) {
+function requiredCalendarDate(message: string) {
   return z.preprocess(
     (value) => {
       if (value == null) return "";
       if (typeof value === "string") return value.trim();
       return "";
     },
-    z.string().min(1, `${label} is required`),
+    z.string().min(1, message),
   );
 }
 
-export const croSearchSchema = z
-  .object({
-    fromDate: requiredCalendarDate("From date"),
-    toDate: requiredCalendarDate("To date"),
-  })
-  .superRefine((values, ctx) => {
-    if (!values.fromDate || !values.toDate) return;
-    if (values.fromDate > values.toDate) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "From date must be on or before To date",
-        path: ["toDate"],
-      });
-    }
-  });
+/** Build the search schema with localized validation messages. */
+export function createCroSearchSchema(t: TFunction<"container-release-order">) {
+  return z
+    .object({
+      fromDate: requiredCalendarDate(t("validation.fromDateRequired")),
+      toDate: requiredCalendarDate(t("validation.toDateRequired")),
+    })
+    .superRefine((values, ctx) => {
+      if (!values.fromDate || !values.toDate) return;
+      if (values.fromDate > values.toDate) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: t("validation.fromBeforeTo"),
+          path: ["toDate"],
+        });
+      }
+    });
+}
 
 export type CroSearchValues = {
   fromDate: string;

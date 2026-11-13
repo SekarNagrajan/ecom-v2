@@ -1,0 +1,64 @@
+{
+  "tabs": {
+    "schedule": "Horario"
+  },
+  "schedule": {
+    "origin": "Origen",
+    "delivery": "Entrega",
+    "fromDate": "Fecha desde",
+    "toDate": "Fecha hasta",
+    "originPlaceholder": "Singapur",
+    "deliveryPlaceholder": "Róterdam",
+    "datePlaceholder": "MM/DD/YYYY",
+    "searchSailings": "Buscar salidas",
+    "swapAria": "Intercambiar origen y entrega"
+  },
+  "tracking": {
+    "containerNo": "N.º de contenedor",
+    "bookingNo": "N.º de reserva",
+    "billOfLading": "Conocimiento de embarque (BL)",
+    "securityVerification": "Verificación de seguridad",
+    "trackShipment": "Rastrear envío",
+    "fieldLabel": {
+      "CONTAINER": "Introduzca el número de contenedor",
+      "BOOKING": "Introduzca el número de reserva",
+      "BL": "Introduzca el número de conocimiento de embarque (BL)"
+    },
+    "fieldPlaceholder": {
+      "CONTAINER": "p. ej. SMLU8829102",
+      "BOOKING": "p. ej. BKG-2026-9901",
+      "BL": "p. ej. BL-SHA-88401"
+    }
+  },
+  "rates": {
+    "origin": "Origen",
+    "delivery": "Entrega",
+    "equipment": "Equipo",
+    "date": "Fecha",
+    "securityVerification": "Verificación de seguridad",
+    "originPlaceholder": "Singapur",
+    "deliveryPlaceholder": "Róterdam",
+    "selectType": "Seleccionar tipo",
+    "datePlaceholder": "MM/DD/YYYY",
+    "getRates": "Obtener tarifas",
+    "swapAria": "Intercambiar origen y entrega"
+  },
+  "captcha": {
+    "alt": "CAPTCHA",
+    "reloadAria": "Recargar captcha",
+    "enterAria": "Introducir código captcha",
+    "placeholder": "Introducir código"
+  },
+  "validation": {
+    "captchaRequired": "Introduzca el código captcha",
+    "trackingNumberMin": "Introduzca un número válido de contenedor, reserva o conocimiento de embarque (BL)"
+  },
+  "errors": {
+    "captchaIncorrect": "Captcha introducido incorrectamente"
+  },
+  "a11y": {
+    "resetScheduleSearch": "Restablecer búsqueda de horarios",
+    "resetTrackingSearch": "Restablecer búsqueda de seguimiento",
+    "resetRatesSearch": "Restablecer búsqueda de tarifas"
+  }
+}

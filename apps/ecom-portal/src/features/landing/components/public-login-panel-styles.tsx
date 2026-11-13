@@ -18,7 +18,11 @@ export function PublicLoginPanelStyles() {
         top: ${token.marginLG}px;
         right: ${token.marginLG}px;
         color: ${token.colorError};
+        border: none !important;
         z-index: 1;
+      }
+      .pub-login-panel__close.ant-btn .app-icon {
+        color: ${token.colorError};
       }
       .pub-login-panel__header {
         margin-top: ${token.marginMD}px;

@@ -1,12 +1,11 @@
 // Modified by Sekar Nagarajan (2026-09-01 16:36)
 import { Input, Select, Typography } from "antd";
+import { useMemo } from "react";
 import type { Control, FieldErrors } from "react-hook-form";
 import { Controller } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
-import {
-  SI_ENS_PERSON_TYPE_OPTIONS,
-  type SiEnsStepForm,
-} from "../types/si.types";
+import type { SiEnsStepForm } from "../types/si.types";
 
 const { Text } = Typography;
 
@@ -27,19 +26,49 @@ function FieldError({ message }: { message?: string }) {
   );
 }
 
+function RequiredMark() {
+  return <Text type="danger"> *</Text>;
+}
+
 export function SiEnsPartyFields({
   control,
   prefix,
   errors,
 }: SiEnsPartyFieldsProps) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
   const partyErrors = errors[prefix];
-  const label = prefix === "buyer" ? "Buyer" : "Seller";
+
+  const roleLabel =
+    prefix === "buyer" ? t("wizard.ens.buyer") : t("wizard.ens.seller");
+
+  const personTypeOptions = useMemo(
+    () => [
+      {
+        value: "",
+        label: t("wizard.ens.personTypeOptions.placeholder"),
+      },
+      {
+        value: "Legal",
+        label: t("wizard.ens.personTypeOptions.legal"),
+      },
+      {
+        value: "Natural",
+        label: t("wizard.ens.personTypeOptions.natural"),
+      },
+      {
+        value: "Association of persons",
+        label: t("wizard.ens.personTypeOptions.association"),
+      },
+    ],
+    [t],
+  );
 
   return (
     <div className="form-ens-party-grid">
       <div className="form-field-cell">
         <label className="form-field-label">
-          {label} Name <Text type="danger"> *</Text>
+          {t("wizard.ens.party.name", { role: roleLabel })}
+          <RequiredMark />
         </label>
         <Controller
           control={control}
@@ -58,7 +87,8 @@ export function SiEnsPartyFields({
 
       <div className="form-field-cell">
         <label className="form-field-label">
-          Address <Text type="danger"> *</Text>
+          {t("wizard.ens.party.address")}
+          <RequiredMark />
         </label>
         <Controller
           control={control}
@@ -76,7 +106,9 @@ export function SiEnsPartyFields({
       </div>
 
       <div className="form-field-cell">
-        <label className="form-field-label">Address 2</label>
+        <label className="form-field-label">
+          {t("wizard.ens.party.address2")}
+        </label>
         <Controller
           control={control}
           name={`${prefix}.address2`}
@@ -96,7 +128,8 @@ export function SiEnsPartyFields({
 
       <div className="form-field-cell">
         <label className="form-field-label">
-          City <Text type="danger"> *</Text>
+          {t("wizard.ens.party.city")}
+          <RequiredMark />
         </label>
         <Controller
           control={control}
@@ -115,7 +148,8 @@ export function SiEnsPartyFields({
 
       <div className="form-field-cell">
         <label className="form-field-label">
-          Country <Text type="danger"> *</Text>
+          {t("wizard.ens.party.country")}
+          <RequiredMark />
         </label>
         <Controller
           control={control}
@@ -128,7 +162,7 @@ export function SiEnsPartyFields({
       </div>
 
       <div className="form-field-cell">
-        <label className="form-field-label">State</label>
+        <label className="form-field-label">{t("wizard.ens.party.state")}</label>
         <Controller
           control={control}
           name={`${prefix}.state`}
@@ -147,7 +181,9 @@ export function SiEnsPartyFields({
       </div>
 
       <div className="form-field-cell">
-        <label className="form-field-label">Zip Code</label>
+        <label className="form-field-label">
+          {t("wizard.ens.party.zipCode")}
+        </label>
         <Controller
           control={control}
           name={`${prefix}.zip`}
@@ -166,7 +202,9 @@ export function SiEnsPartyFields({
       </div>
 
       <div className="form-field-cell">
-        <label className="form-field-label">Telephone</label>
+        <label className="form-field-label">
+          {t("wizard.ens.party.telephone")}
+        </label>
         <Controller
           control={control}
           name={`${prefix}.phone`}
@@ -185,7 +223,7 @@ export function SiEnsPartyFields({
       </div>
 
       <div className="form-field-cell">
-        <label className="form-field-label">Fax</label>
+        <label className="form-field-label">{t("wizard.ens.party.fax")}</label>
         <Controller
           control={control}
           name={`${prefix}.fax`}
@@ -204,7 +242,7 @@ export function SiEnsPartyFields({
       </div>
 
       <div className="form-field-cell">
-        <label className="form-field-label">Email</label>
+        <label className="form-field-label">{t("wizard.ens.party.email")}</label>
         <Controller
           control={control}
           name={`${prefix}.email`}
@@ -221,10 +259,11 @@ export function SiEnsPartyFields({
             />
           )}
         />
+        <FieldError message={partyErrors?.email?.message} />
       </div>
 
       <div className="form-field-cell">
-        <label className="form-field-label">EORI</label>
+        <label className="form-field-label">{t("wizard.ens.party.eori")}</label>
         <Controller
           control={control}
           name={`${prefix}.eori`}
@@ -243,7 +282,9 @@ export function SiEnsPartyFields({
       </div>
 
       <div className="form-field-cell">
-        <label className="form-field-label">Type of Person</label>
+        <label className="form-field-label">
+          {t("wizard.ens.party.personType")}
+        </label>
         <Controller
           control={control}
           name={`${prefix}.personType`}
@@ -251,7 +292,7 @@ export function SiEnsPartyFields({
             <Select
               size="large"
               className="form-field-full-width"
-              options={[...SI_ENS_PERSON_TYPE_OPTIONS]}
+              options={personTypeOptions}
               value={field.value ?? ""}
               onChange={field.onChange}
               onBlur={field.onBlur}

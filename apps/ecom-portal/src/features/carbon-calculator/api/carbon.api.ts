@@ -1,10 +1,11 @@
 // Modified by Sekar Nagarajan (2026-08-25 13:00)
+import i18n from "../../../i18n/config";
 import type {
   ApiResponse,
   CarbonInput,
   CarbonLookupsDTO,
   CarbonResultDTO,
-} from '../types/carbon.types';
+} from "../types/carbon.types";
 
 /**
  * Vite SPA fallback returns HTML for unhandled /api/* routes.
@@ -12,15 +13,15 @@ import type {
  */
 async function readApiJson<T>(
   res: Response,
-  fallbackMessage: string
+  fallbackMessage: string,
 ): Promise<ApiResponse<T>> {
-  const contentType = res.headers.get('content-type') ?? '';
-  const isJson = contentType.includes('application/json');
+  const contentType = res.headers.get("content-type") ?? "";
+  const isJson = contentType.includes("application/json");
 
   if (!isJson) {
     return {
       error: {
-        code: 'INVALID_RESPONSE',
+        code: "INVALID_RESPONSE",
         message: `${fallbackMessage}: API returned non-JSON (check MSW handlers / mock worker).`,
       },
     };
@@ -32,14 +33,14 @@ async function readApiJson<T>(
     };
     if (!res.ok) {
       return {
-        error: json.error ?? { code: 'ERROR', message: fallbackMessage },
+        error: json.error ?? { code: "ERROR", message: fallbackMessage },
       };
     }
     return json;
   } catch {
     return {
       error: {
-        code: 'INVALID_RESPONSE',
+        code: "INVALID_RESPONSE",
         message: `${fallbackMessage}: response could not be parsed as JSON.`,
       },
     };
@@ -48,55 +49,74 @@ async function readApiJson<T>(
 
 export async function getCarbonLookups(): Promise<ApiResponse<CarbonLookupsDTO>> {
   try {
-    const res = await fetch('/api/ecom/co2/lookups');
-    return readApiJson<CarbonLookupsDTO>(res, 'Failed to fetch carbon lookups');
+    const res = await fetch("/api/ecom/co2/lookups");
+    return readApiJson<CarbonLookupsDTO>(
+      res,
+      i18n.t("carbon-calculator:errors.lookupsFailed"),
+    );
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'Network error';
-    return { error: { code: 'NETWORK_ERROR', message } };
+    const message =
+      error instanceof Error
+        ? error.message
+        : i18n.t("carbon-calculator:errors.networkError");
+    return { error: { code: "NETWORK_ERROR", message } };
   }
 }
 
 export async function computeCarbon(
-  input: CarbonInput
+  input: CarbonInput,
 ): Promise<ApiResponse<CarbonResultDTO>> {
   try {
-    const res = await fetch('/api/ecom/co2/compute', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const res = await fetch("/api/ecom/co2/compute", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(input),
     });
-    return readApiJson<CarbonResultDTO>(res, 'Failed to compute carbon footprint');
+    return readApiJson<CarbonResultDTO>(
+      res,
+      i18n.t("carbon-calculator:errors.computeFailed"),
+    );
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'Network error';
-    return { error: { code: 'NETWORK_ERROR', message } };
+    const message =
+      error instanceof Error
+        ? error.message
+        : i18n.t("carbon-calculator:errors.networkError");
+    return { error: { code: "NETWORK_ERROR", message } };
   }
 }
 
 export async function downloadCarbonDocument(
-  input: CarbonInput
+  input: CarbonInput,
 ): Promise<{ data?: Blob; error?: { message: string } }> {
   try {
-    const res = await fetch('/api/ecom/co2/document?format=pdf', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const res = await fetch("/api/ecom/co2/document?format=pdf", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(input),
     });
     if (!res.ok) {
-      const contentType = res.headers.get('content-type') ?? '';
-      if (contentType.includes('application/json')) {
+      const contentType = res.headers.get("content-type") ?? "";
+      if (contentType.includes("application/json")) {
         const err = (await res.json()) as ApiResponse;
         return {
           error: {
-            message: err.error?.message || 'Failed to download carbon estimate PDF',
+            message:
+              err.error?.message ||
+              i18n.t("carbon-calculator:errors.downloadFailed"),
           },
         };
       }
-      return { error: { message: 'Failed to download carbon estimate PDF' } };
+      return {
+        error: { message: i18n.t("carbon-calculator:errors.downloadFailed") },
+      };
     }
     const blob = await res.blob();
     return { data: blob };
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'Network error';
+    const message =
+      error instanceof Error
+        ? error.message
+        : i18n.t("carbon-calculator:errors.networkError");
     return { error: { message } };
   }
 }

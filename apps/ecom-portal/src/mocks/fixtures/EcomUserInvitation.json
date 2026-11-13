@@ -1,0 +1,53 @@
+[
+ {
+  "id": "2",
+  "userType": "CUSTOMER",
+  "firstName": "Rowan",
+  "lastName": "Vandervort",
+  "email": "alfonso49@example.com",
+  "invitedBy": "5",
+  "expiresAt": "2026-10-23T18:39:37.545Z",
+  "acceptedAt": "2026-10-16T18:41:10.702Z",
+  "createdUserId": "9",
+  "ipAddress": "192.168.10.84",
+  "status": "I",
+  "createdAt": "2026-10-16T18:39:37.545Z",
+  "createdBy": "user.invitation",
+  "updatedAt": "2026-10-16T18:41:10.702Z",
+  "updatedBy": "user.invitation"
+ },
+ {
+  "id": "1",
+  "userType": "CUSTOMER",
+  "firstName": "Sabryna",
+  "lastName": "Kshlerin",
+  "email": "kenyon35@example.com",
+  "invitedBy": "1",
+  "expiresAt": "2026-10-17T21:05:18.138Z",
+  "acceptedAt": "2026-10-12T20:16:45.965Z",
+  "createdUserId": "7",
+  "ipAddress": "192.168.10.84",
+  "status": "I",
+  "createdAt": "2026-10-10T21:05:18.138Z",
+  "createdBy": "user.invitation",
+  "updatedAt": "2026-10-12T20:16:45.965Z",
+  "updatedBy": "user.invitation"
+ },
+ {
+  "id": "3",
+  "userType": "CUSTOMER",
+  "firstName": "Sabryna",
+  "lastName": "Kshlerin",
+  "email": "santos_miller51@example.com",
+  "invitedBy": "5",
+  "expiresAt": "2026-10-25T08:36:23.795Z",
+  "acceptedAt": null,
+  "createdUserId": null,
+  "ipAddress": "192.168.10.84",
+  "status": "A",
+  "createdAt": "2026-10-18T08:36:23.795Z",
+  "createdBy": "user.invitation",
+  "updatedAt": null,
+  "updatedBy": null
+ }
+]

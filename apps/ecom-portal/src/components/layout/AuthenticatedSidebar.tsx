@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-02 15:18)
+// Modified by Sekar Nagarajan (2026-11-13 01:10)
 import { useAuthStore, usePermission, useTenantStore } from "@solverminds/auth";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import type { MenuProps } from "antd";
@@ -6,15 +6,9 @@ import { Drawer, Layout, Menu, Tooltip } from "antd";
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
-import {
-  adminSectionToMenuKey,
-  isAdminSectionKey,
-  menuKeyToAdminSection,
-  resolveAllowedAdminSections,
-  resolveDefaultAdminSection,
-} from "../../features/admin/utils/admin-menu-access";
-import { buildAdminSectionNavItems } from "../../features/admin/utils/admin-section-nav";
+import { resolveAdminLandingSearch } from "../../features/admin/utils/admin-landing";
 import { useMenuCategories } from "../../features/auth/api/menu-access.queries";
 import {
   appPathnameToMenuKey,
@@ -23,6 +17,7 @@ import {
   menuKeyToOpenGroupKeys,
 } from "../../features/auth/utils/public-menu-access";
 import { AppIcon, Icons, NavIcons } from "../icons";
+import { NavAgencyApprovalIcon } from "../icons/nav-svg-icons";
 
 const { Sider } = Layout;
 
@@ -31,20 +26,16 @@ const SIDEBAR_COLLAPSED_WIDTH = 80;
 const SOLVERMINDS_LOGO_URL = "/logo.png";
 const SOLVERMINDS_MARK_URL = "/solverminds-mark.png";
 
-function SidebarBrandBlock({
-  collapsed,
-  isMobile,
-}: {
-  collapsed: boolean;
-  isMobile: boolean;
-}) {
+function SidebarBrandBlock({ collapsed, isMobile }: { collapsed: boolean; isMobile: boolean }) {
   const showFullLogo = !collapsed || isMobile;
+  const activeTenant = useTenantStore((state) => state.activeTenant);
+  const fullLogoUrl = activeTenant.logoUrl || SOLVERMINDS_LOGO_URL;
 
   return (
     <div className="app-sidebar-brand">
       <img
-        src={showFullLogo ? SOLVERMINDS_LOGO_URL : SOLVERMINDS_MARK_URL}
-        alt="Solverminds"
+        src={showFullLogo ? fullLogoUrl : SOLVERMINDS_MARK_URL}
+        alt={activeTenant.name || "Solverminds"}
         className={
           showFullLogo
             ? "app-sidebar-brand__logo app-sidebar-brand__logo--solverminds"
@@ -56,16 +47,14 @@ function SidebarBrandBlock({
 }
 
 function navIcon(Icon: LucideIcon, size = 18, locked = false) {
-  return (
-    <AppIcon icon={Icon} size={size} variant={locked ? "navLocked" : "nav"} />
-  );
+  return <AppIcon icon={Icon} size={size} variant={locked ? "navLocked" : "nav"} />;
 }
 
 /** Label + tooltip title for expanded vs icon-rail collapsed menu. */
-function sidebarMenuLabel(text: string, locked: boolean) {
+function sidebarMenuLabel(text: string, locked: boolean, lockedLabel: string) {
   return {
-    title: locked ? "Sign In Required" : text,
-    label: locked ? <Tooltip title="Sign In Required">{text}</Tooltip> : text,
+    title: locked ? lockedLabel : text,
+    label: locked ? <Tooltip title={lockedLabel}>{text}</Tooltip> : text,
   };
 }
 
@@ -82,7 +71,8 @@ function SidebarDesktopShell({
   brandBlock,
   menuBlock,
 }: SidebarDesktopShellProps) {
-  const collapseLabel = collapsed ? "Expand sidebar" : "Collapse sidebar";
+  const { t } = useTranslation("common");
+  const collapseLabel = collapsed ? t("nav.expandSidebar") : t("nav.collapseSidebar");
 
   return (
     <Sider
@@ -107,13 +97,8 @@ function SidebarDesktopShell({
               aria-label={collapseLabel}
               aria-expanded={!collapsed}
             >
-              <AppIcon
-                icon={collapsed ? Icons.panelLeftOpen : Icons.panelLeftClose}
-                size={18}
-              />
-              {!collapsed ? (
-                <span className="app-sidebar-collapse-trigger__label"></span>
-              ) : null}
+              <AppIcon icon={collapsed ? Icons.panelLeftOpen : Icons.panelLeftClose} size={18} />
+              {!collapsed ? <span className="app-sidebar-collapse-trigger__label"></span> : null}
             </button>
           </Tooltip>
         </div>
@@ -142,6 +127,7 @@ export function AuthenticatedSidebar({
   isGuest = false,
   onLoginRequired,
 }: AuthenticatedSidebarProps) {
+  const { t } = useTranslation("common");
   const { can, isAdmin, isVendor, isSuperuser } = usePermission();
   const user = useAuthStore((state) => state.user);
   const activeTenant = useTenantStore((state) => state.activeTenant);
@@ -167,41 +153,31 @@ export function AuthenticatedSidebar({
     "tracking",
   ];
 
-  const lock = (key: string) =>
-    isGuest && !isPublicMenuKey(key, menuCategories);
+  const lock = (key: string) => isGuest && !isPublicMenuKey(key, menuCategories);
+  const lockedLabel = t("nav.signInRequired");
 
-  // Cpanel: Module Mapping / Email Config / Cutoff as sidebar modules
+  // Cpanel system admin: the Control Panel is their single module; its sections are the
+  // in-page tabs of /app/admin, so the sidebar shows one entry.
   if (isCpanelAdmin && !isGuest) {
-    const allowedSections = resolveAllowedAdminSections(user?.vendorMenuList);
-    const sectionNavItems = buildAdminSectionNavItems(allowedSections);
-    const searchSection = (location.search as { section?: string } | undefined)
-      ?.section;
-    const activeSection = isAdminSectionKey(searchSection)
-      ? searchSection
-      : resolveDefaultAdminSection(allowedSections);
-    const selectedAdminKey = adminSectionToMenuKey(activeSection);
+    const selectedAdminKey = "admin";
+    const cpanelMenuItems: MenuProps["items"] = [
+      {
+        key: "admin",
+        icon: navIcon(NavIcons.admin, 20),
+        title: t("nav.controlPanelAdmin"),
+        label: t("nav.controlPanelAdmin"),
+      },
+    ];
 
-    const cpanelMenuItems: MenuProps["items"] = sectionNavItems.map((item) => ({
-      key: adminSectionToMenuKey(item.key),
-      icon: navIcon(item.icon, 20),
-      title: item.label,
-      label: item.label,
-    }));
-
-    const onCpanelMenuSelect: MenuProps["onSelect"] = ({ key }) => {
+    const onCpanelMenuSelect: MenuProps["onSelect"] = () => {
       onMobileClose?.();
-      const section = menuKeyToAdminSection(key);
-      if (section) {
-        navigate({
-          to: "/app/admin",
-          search: { section },
-        } as never);
-      }
+      navigate({
+        to: "/app/admin",
+        search: resolveAdminLandingSearch(),
+      } as never);
     };
 
-    const brandBlock = (
-      <SidebarBrandBlock collapsed={collapsed} isMobile={isMobile} />
-    );
+    const brandBlock = <SidebarBrandBlock collapsed={collapsed} isMobile={isMobile} />;
 
     const isIconRail = collapsed && !isMobile;
     const menuBlock = (
@@ -255,89 +231,87 @@ export function AuthenticatedSidebar({
     {
       key: "dashboard",
       icon: navIcon(NavIcons.dashboard, 20, lock("dashboard")),
-      ...sidebarMenuLabel("Dashboard", lock("dashboard")),
+      ...sidebarMenuLabel(t("nav.dashboard"), lock("dashboard"), lockedLabel),
       className: lock("dashboard") ? "ant-menu-item-locked" : undefined,
     },
     {
       key: "schedules-group",
       icon: navIcon(NavIcons.schedules),
-      title: "Schedules",
-      label: "Schedules",
+      title: t("nav.schedules"),
+      label: t("nav.schedules"),
       children: [
         {
           key: "schedules",
           icon: navIcon(NavIcons.schedules, 20),
-          ...sidebarMenuLabel("Schedules", false),
+          ...sidebarMenuLabel(t("nav.schedules"), false, lockedLabel),
           disabled: !isGuest && !can("SCH"),
         },
         {
           key: "tracking",
           icon: navIcon(NavIcons.tracking, 20),
-          ...sidebarMenuLabel("Tracking", false),
+          ...sidebarMenuLabel(t("nav.tracking"), false, lockedLabel),
           disabled: !isGuest && !can("TRK"),
         },
-      ].filter(
-        (child) => isGuest || isSuperUser || tenantModules.includes(child.key),
-      ),
+      ].filter((child) => isGuest || isSuperUser || tenantModules.includes(child.key)),
     },
     {
       key: "rates",
       icon: navIcon(NavIcons.rates, 20, lock("rates")),
-      ...sidebarMenuLabel("Rates", lock("rates")),
+      ...sidebarMenuLabel(t("nav.rates"), lock("rates"), lockedLabel),
       disabled: !isGuest && !can("SCH"),
       className: lock("rates") ? "ant-menu-item-locked" : undefined,
     },
     {
       key: "booking",
       icon: navIcon(NavIcons.booking, 20, lock("booking")),
-      ...sidebarMenuLabel("Booking", lock("booking")),
+      ...sidebarMenuLabel(t("nav.booking"), lock("booking"), lockedLabel),
       disabled: !isGuest && !can("BKG"),
       className: lock("booking") ? "ant-menu-item-locked" : undefined,
     },
     {
       key: "si",
       icon: navIcon(NavIcons.shippingInstruction, 20, lock("si")),
-      ...sidebarMenuLabel("Shipping Instruction", lock("si")),
+      ...sidebarMenuLabel(t("nav.shippingInstruction"), lock("si"), lockedLabel),
       disabled: !isGuest && !can("SI"),
       className: lock("si") ? "ant-menu-item-locked" : undefined,
     },
     {
       key: "vgm",
       icon: navIcon(NavIcons.vgm, 20, lock("vgm")),
-      ...sidebarMenuLabel("VGM", lock("vgm")),
+      ...sidebarMenuLabel(t("nav.vgm"), lock("vgm"), lockedLabel),
       disabled: !isGuest && !can("VGM"),
       className: lock("vgm") ? "ant-menu-item-locked" : undefined,
     },
     {
       key: "bl",
       icon: navIcon(NavIcons.billOfLading, 20, lock("bl")),
-      ...sidebarMenuLabel("Bill of Lading", lock("bl")),
+      ...sidebarMenuLabel(t("nav.billOfLading"), lock("bl"), lockedLabel),
       disabled: !isGuest && !can("BL"),
       className: lock("bl") ? "ant-menu-item-locked" : undefined,
     },
     {
       key: "do",
       icon: navIcon(NavIcons.deliveryOrder, 20, lock("do")),
-      ...sidebarMenuLabel("Delivery Order", lock("do")),
+      ...sidebarMenuLabel(t("nav.deliveryOrder"), lock("do"), lockedLabel),
       className: lock("do") ? "ant-menu-item-locked" : undefined,
     },
     {
       key: "arrival-notice",
       icon: navIcon(NavIcons.arrivalNotice, 20, lock("arrival-notice")),
-      ...sidebarMenuLabel("Arrival Notice", lock("arrival-notice")),
+      ...sidebarMenuLabel(t("nav.arrivalNotice"), lock("arrival-notice"), lockedLabel),
       className: lock("arrival-notice") ? "ant-menu-item-locked" : undefined,
     },
     {
       key: "cro",
       icon: navIcon(NavIcons.containerRelease, 20, lock("cro")),
-      ...sidebarMenuLabel("Container Release Order", lock("cro")),
+      ...sidebarMenuLabel(t("nav.containerReleaseOrder"), lock("cro"), lockedLabel),
       disabled: !isGuest && !can("CRO"),
       className: lock("cro") ? "ant-menu-item-locked" : undefined,
     },
     {
       key: "customer-stmt",
       icon: navIcon(NavIcons.customerStatement, 20, lock("customer-stmt")),
-      ...sidebarMenuLabel("Customer Statement", lock("customer-stmt")),
+      ...sidebarMenuLabel(t("nav.customerStatement"), lock("customer-stmt"), lockedLabel),
       disabled: !isGuest && !can("STMT"),
       className: lock("customer-stmt") ? "ant-menu-item-locked" : undefined,
     },
@@ -345,38 +319,28 @@ export function AuthenticatedSidebar({
     {
       key: "more-group",
       icon: navIcon(NavIcons.more, 20),
-      title: "More",
-      label: "More",
+      title: t("nav.more"),
+      label: t("nav.more"),
       children: [
         isAdminUser
           ? {
-              key: "admin-group",
+              key: "admin",
               icon: navIcon(NavIcons.admin, 20, lock("admin")),
-              title: "Control Panel Admin",
-              ...sidebarMenuLabel("Control Panel Admin", lock("admin")),
+              ...sidebarMenuLabel(t("nav.controlPanelAdmin"), lock("admin"), lockedLabel),
               className: lock("admin") ? "ant-menu-item-locked" : undefined,
-              children: buildAdminSectionNavItems(
-                resolveAllowedAdminSections(user?.vendorMenuList),
-              ).map((item) => ({
-                key: adminSectionToMenuKey(item.key),
-                icon: navIcon(item.icon, 18, lock("admin")),
-                title: item.label,
-                ...sidebarMenuLabel(item.label, lock("admin")),
-                className: lock("admin") ? "ant-menu-item-locked" : undefined,
-              })),
             }
           : null,
         {
           key: "payments",
           icon: navIcon(NavIcons.payments, 20, lock("payments")),
-          ...sidebarMenuLabel("Payment History", lock("payments")),
+          ...sidebarMenuLabel(t("nav.paymentHistory"), lock("payments"), lockedLabel),
           disabled: !isGuest && !can("PAY"),
           className: lock("payments") ? "ant-menu-item-locked" : undefined,
         },
         {
           key: "carbon",
           icon: navIcon(NavIcons.carbon, 20, lock("carbon")),
-          ...sidebarMenuLabel("Carbon Calculator", lock("carbon")),
+          ...sidebarMenuLabel(t("nav.carbonCalculator"), lock("carbon"), lockedLabel),
           disabled: !isGuest && !can("CO2"),
           className: lock("carbon") ? "ant-menu-item-locked" : undefined,
         },
@@ -384,31 +348,22 @@ export function AuthenticatedSidebar({
           ? {
               key: "user-creation",
               icon: navIcon(NavIcons.userCreation, 20, lock("user-creation")),
-              ...sidebarMenuLabel("User Creation (USC)", lock("user-creation")),
-              className: lock("user-creation")
-                ? "ant-menu-item-locked"
-                : undefined,
+              ...sidebarMenuLabel(t("nav.userCreation"), lock("user-creation"), lockedLabel),
+              className: lock("user-creation") ? "ant-menu-item-locked" : undefined,
             }
           : null,
         isVendorUser
           ? {
               key: "vendor-approvals",
-              icon: navIcon(
-                NavIcons.vendorApprovals,
-                20,
-                lock("vendor-approvals"),
-              ),
-              ...sidebarMenuLabel("Agency Approvals", lock("vendor-approvals")),
-              className: lock("vendor-approvals")
-                ? "ant-menu-item-locked"
-                : undefined,
+              icon: navIcon(NavAgencyApprovalIcon, 20, lock("vendor-approvals")),
+              ...sidebarMenuLabel(t("nav.agencyApprovals"), lock("vendor-approvals"), lockedLabel),
+              className: lock("vendor-approvals") ? "ant-menu-item-locked" : undefined,
             }
           : null,
       ]
         .filter(Boolean)
         .filter(
-          (child) =>
-            isGuest || isSuperUser || tenantModules.includes(child!.key),
+          (child) => isGuest || isSuperUser || tenantModules.includes(child!.key),
         ) as NonNullable<MenuProps["items"]>,
     },
   ];
@@ -423,20 +378,6 @@ export function AuthenticatedSidebar({
     }
     return tenantModules.includes(key);
   });
-
-  // Highlight active admin section under More when on /app/admin
-  const searchSection = (location.search as { section?: string } | undefined)
-    ?.section;
-  const adminSelectedKey =
-    selectedKey === "admin" && isAdminSectionKey(searchSection)
-      ? adminSectionToMenuKey(searchSection)
-      : selectedKey === "admin"
-      ? adminSectionToMenuKey(
-          resolveDefaultAdminSection(
-            resolveAllowedAdminSections(user?.vendorMenuList),
-          ),
-        )
-      : selectedKey;
 
   const onMenuSelect: MenuProps["onSelect"] = ({ key }) => {
     onMobileClose?.();
@@ -453,22 +394,10 @@ export function AuthenticatedSidebar({
     } else if (key === "do") {
       navigate({ to: "/app/delivery-order" });
     } else {
-      const adminSection = menuKeyToAdminSection(key);
-      if (adminSection) {
-        navigate({
-          to: "/app/admin",
-          search: { section: adminSection },
-        } as never);
-        return;
-      }
       if (key === "admin") {
         navigate({
           to: "/app/admin",
-          search: {
-            section: resolveDefaultAdminSection(
-              resolveAllowedAdminSections(user?.vendorMenuList),
-            ),
-          },
+          search: resolveAdminLandingSearch(),
         } as never);
         return;
       }
@@ -476,9 +405,7 @@ export function AuthenticatedSidebar({
     }
   };
 
-  const brandBlock = (
-    <SidebarBrandBlock collapsed={collapsed} isMobile={isMobile} />
-  );
+  const brandBlock = <SidebarBrandBlock collapsed={collapsed} isMobile={isMobile} />;
 
   /** Icon-rail (collapsed): leave openKeys uncontrolled so AntD popup submenus work.
    *  Expanded: keep parent groups open for the active module. */
@@ -488,7 +415,7 @@ export function AuthenticatedSidebar({
       theme="light"
       mode="inline"
       inlineCollapsed={isIconRail}
-      selectedKeys={[adminSelectedKey]}
+      selectedKeys={[selectedKey]}
       {...(isIconRail
         ? {}
         : {

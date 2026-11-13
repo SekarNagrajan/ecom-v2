@@ -5,6 +5,7 @@ node_modules
 # production / build outputs
 dist
 build
+.vercel
 .next
 .turbo
 .cache
@@ -35,3 +36,10 @@ coverage
 
 # Antigravity temporary brain / scratch files
 .gemini
+.env*
+
+# quality tooling outputs
+storybook-static
+.eslintcache
+playwright-report
+test-results

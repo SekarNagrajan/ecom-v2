@@ -1,8 +1,9 @@
-// Created by Sekar Nagarajan (2026-08-28 11:50)
+// Modified by Sekar Nagarajan (2026-09-29 12:50)
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { Card, InputNumber, Space, Typography } from "antd";
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { createBLPaymentIntent } from "../api/bl.api";
@@ -23,6 +24,7 @@ export function BlPaymentBar({
   onSelectionChange,
   enabled = true,
 }: BlPaymentBarProps) {
+  const { t } = useTranslation(["bill-of-lading", "common", "modules"]);
   const toast = useToast();
   const [amountUsd, setAmountUsd] = useState<number | null>(null);
   const [paying, setPaying] = useState(false);
@@ -48,11 +50,11 @@ export function BlPaymentBar({
 
   const handlePay = async () => {
     if (selectedBlNos.length === 0) {
-      toast.error("Select at least one B/L for payment");
+      toast.error(t("toasts.selectBlForPayment"));
       return;
     }
     if (!sameAgency) {
-      toast.error("Selected B/Ls must belong to the same issuing agency");
+      toast.error(t("toasts.sameAgencyRequired"));
       return;
     }
     setPaying(true);
@@ -62,9 +64,8 @@ export function BlPaymentBar({
         toast.error(res.error.message);
         return;
       }
-      toast.success(
-        `Mock payment intent created (${res.data?.clientSecret?.slice(0, 20)}…)`,
-      );
+      const secret = res.data?.clientSecret?.slice(0, 20) ?? "";
+      toast.success(t("toasts.paymentIntentCreated", { secret }));
       onSelectionChange([]);
     } finally {
       setPaying(false);
@@ -77,7 +78,9 @@ export function BlPaymentBar({
     <Card size="small" className="bl-payment-bar">
       <Space wrap align="center">
         <AppIcon icon={Icons.creditCard} size={18} />
-        <Text strong>{selectedBlNos.length} B/L(s) selected</Text>
+        <Text strong>
+          {t("payment.selectedCount", { count: selectedBlNos.length })}
+        </Text>
         <InputNumber
           min={0}
           prefix="$"
@@ -85,10 +88,10 @@ export function BlPaymentBar({
           onChange={(val) => setAmountUsd(Number(val ?? 0))}
         />
         <AppButton type="primary" loading={paying} onClick={handlePay}>
-          Pay with Stripe (Mock)
+          {t("actions.payWithStripeMock")}
         </AppButton>
         {!sameAgency ? (
-          <Text type="danger">Mixed agencies — payment not allowed</Text>
+          <Text type="danger">{t("payment.mixedAgencies")}</Text>
         ) : null}
       </Space>
     </Card>

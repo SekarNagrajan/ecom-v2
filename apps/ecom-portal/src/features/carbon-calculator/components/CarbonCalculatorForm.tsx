@@ -3,6 +3,7 @@ import { AppButton } from "@solverminds/shared-ui";
 import { Col, InputNumber, Row, Select, Typography } from "antd";
 import type { UseFormReturn } from "react-hook-form";
 import { Controller } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { useCarbonLookupsQuery } from "../api/carbon.queries";
@@ -49,6 +50,7 @@ export function CarbonCalculatorForm({
   onReset,
   calculating = false,
 }: CarbonCalculatorFormProps) {
+  const { t } = useTranslation(["carbon-calculator", "common"]);
   const {
     control,
     formState: { errors },
@@ -89,7 +91,7 @@ export function CarbonCalculatorForm({
           <Row gutter={[16, 16]} align="bottom" className="co2-criteria-row">
             <Col {...FIELD_COL.port}>
               <div className="co2-search-field">
-                <FieldLabel label="Origin" required />
+                <FieldLabel label={t("form.origin")} required />
                 <Controller
                   name="origin"
                   control={control}
@@ -99,7 +101,7 @@ export function CarbonCalculatorForm({
                       showSearch
                       optionFilterProp="label"
                       loading={lookupsLoading}
-                      placeholder="Origin"
+                      placeholder={t("form.placeholders.origin")}
                       options={portOptions}
                       value={field.value || undefined}
                       onChange={field.onChange}
@@ -113,7 +115,7 @@ export function CarbonCalculatorForm({
 
             <Col {...FIELD_COL.port}>
               <div className="co2-search-field">
-                <FieldLabel label="Destination" required />
+                <FieldLabel label={t("form.destination")} required />
                 <Controller
                   name="destination"
                   control={control}
@@ -123,7 +125,7 @@ export function CarbonCalculatorForm({
                       showSearch
                       optionFilterProp="label"
                       loading={lookupsLoading}
-                      placeholder="Destination"
+                      placeholder={t("form.placeholders.destination")}
                       options={portOptions}
                       value={field.value || undefined}
                       onChange={field.onChange}
@@ -137,7 +139,7 @@ export function CarbonCalculatorForm({
 
             <Col {...FIELD_COL.weight}>
               <div className="co2-search-field">
-                <FieldLabel label="Weight (kg)" required />
+                <FieldLabel label={t("form.weightKg")} required />
                 <Controller
                   name="cargoWeightKg"
                   control={control}
@@ -158,7 +160,7 @@ export function CarbonCalculatorForm({
 
             <Col {...FIELD_COL.equipment}>
               <div className="co2-search-field">
-                <FieldLabel label="Equipment" required />
+                <FieldLabel label={t("form.equipment")} required />
                 <Controller
                   name="equipment"
                   control={control}
@@ -166,7 +168,7 @@ export function CarbonCalculatorForm({
                     <Select
                       size="large"
                       loading={lookupsLoading}
-                      placeholder="Equipment"
+                      placeholder={t("form.placeholders.equipment")}
                       options={equipmentOptions}
                       value={field.value || undefined}
                       onChange={field.onChange}
@@ -180,7 +182,7 @@ export function CarbonCalculatorForm({
 
             <Col {...FIELD_COL.count}>
               <div className="co2-search-field">
-                <FieldLabel label="Qty" required />
+                <FieldLabel label={t("form.qty")} required />
                 <Controller
                   name="containerCount"
                   control={control}
@@ -202,7 +204,7 @@ export function CarbonCalculatorForm({
 
             <Col {...FIELD_COL.fuel}>
               <div className="co2-search-field">
-                <FieldLabel label="Fuel" />
+                <FieldLabel label={t("form.fuel")} />
                 <Controller
                   name="fuelType"
                   control={control}
@@ -211,7 +213,7 @@ export function CarbonCalculatorForm({
                       size="large"
                       allowClear
                       loading={lookupsLoading}
-                      placeholder="Optional"
+                      placeholder={t("form.placeholders.fuelOptional")}
                       options={fuelOptions}
                       value={field.value || undefined}
                       onChange={(v) => field.onChange(v ?? undefined)}
@@ -224,7 +226,7 @@ export function CarbonCalculatorForm({
 
             <Col {...FIELD_COL.unit}>
               <div className="co2-search-field">
-                <FieldLabel label="Unit" required />
+                <FieldLabel label={t("form.unit")} required />
                 <Controller
                   name="unit"
                   control={control}
@@ -232,8 +234,8 @@ export function CarbonCalculatorForm({
                     <Select
                       size="large"
                       options={[
-                        { value: "kg", label: "kg CO₂e" },
-                        { value: "t", label: "t CO₂e" },
+                        { value: "kg", label: t("units.kgCo2e") },
+                        { value: "t", label: t("units.tCo2e") },
                       ]}
                       value={field.value}
                       onChange={field.onChange}
@@ -247,7 +249,7 @@ export function CarbonCalculatorForm({
             <Col {...FIELD_COL.actions}>
               <div className="co2-search-actions-field">
                 <span className="co2-search-actions-field__spacer form-field-label">
-                  Actions
+                  {t("form.actions")}
                 </span>
                 <div className="co2-search-actions">
                   <AppButton
@@ -258,7 +260,7 @@ export function CarbonCalculatorForm({
                     disabled={calculating}
                     icon={<AppIcon icon={Icons.calculator} size={16} />}
                   >
-                    Calculate
+                    {t("actions.calculate")}
                   </AppButton>
                   <AppButton
                     danger
@@ -269,7 +271,7 @@ export function CarbonCalculatorForm({
                     onClick={onReset}
                     disabled={calculating}
                   >
-                    Reset
+                    {t("common:actions.reset")}
                   </AppButton>
                 </div>
               </div>

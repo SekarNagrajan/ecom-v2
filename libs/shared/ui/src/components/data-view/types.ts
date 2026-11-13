@@ -131,6 +131,12 @@ export type DataViewProps<TData extends DataViewItem> = DataViewFilterProps &
 
     loading?: boolean;
     onTotalCountChange?: (count: number) => void;
+    /**
+     * Shared empty / no-rows UI for list + card views. Prefer this over
+     * per-view `listOptions.emptyState` / `cardOptions.emptyState` when
+     * the copy is the same across modes. Falls back to AppEmptyState.
+     */
+    emptyState?: ReactNode;
     headerActions?: ReactNode;
     /**
      * Render-prop that lets the parent fully compose the toolbar layout. When

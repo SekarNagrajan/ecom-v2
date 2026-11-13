@@ -1,22 +1,25 @@
-// Modified by Sekar Nagarajan (2026-09-01 10:58) — ScheduleCardList visual parity
-import { AppButton } from "@solverminds/shared-ui";
-import { Card, Tag, Tooltip, Typography, theme } from "antd";
-import { useState } from "react";
+// Modified by Sekar Nagarajan (2026-10-19 17:25)
+import { Card, Tag } from "antd";
 
 import { AppIcon, Icons } from "../../../components/icons";
-import { ScheduleModuleStyles } from "../../schedules/components/schedule-module-styles";
-import { tokenMix } from "../../theme/utils/token-mix";
 import type { VgmReferenceDetailsDTO } from "../types/vgm.types";
 import { parsePortLabel } from "../utils/vgm.utils";
-
-const { Text } = Typography;
 
 interface VgmReferenceStripProps {
   details: VgmReferenceDetailsDTO;
 }
 
+function dash(value?: string | null): string {
+  return value && value.trim() !== "" ? value : "—";
+}
+
 function portCity(name: string): string {
   return name.replace(/\s*\([^)]*\)\s*/g, "").trim();
+}
+
+/** Place name without the code; empty when the label carried no name part. */
+function placeLabel(port: { code: string; name: string }): string {
+  return port.name && port.name !== port.code ? portCity(port.name) : "";
 }
 
 function transitDays(etd?: string, eta?: string): number {
@@ -27,228 +30,126 @@ function transitDays(etd?: string, eta?: string): number {
   return Math.max(1, Math.round((end - start) / 86_400_000));
 }
 
-function VgmReferenceScheduleCardStyles() {
-  const { token } = theme.useToken();
-  const primaryTint8 = tokenMix(token.colorPrimary, 8);
-  const successTint8 = tokenMix(token.colorSuccess, 8);
-
-  return (
-    <style>{`
-      .vgm-reference-schedule-card.schedule-card {
-        width: 100%;
-        border: none;
-        border-radius: 0;
-      }
-      .vgm-reference-schedule-card .schedule-card__main {
-        grid-template-columns: minmax(0, 1fr) !important;
-        width: 100%;
-        padding: ${token.paddingLG}px ${token.paddingXL}px;
-      }
-      .vgm-reference-schedule-card .schedule-card__content,
-      .vgm-reference-schedule-card .schedule-card__meta,
-      .vgm-reference-schedule-card .schedule-card__transport,
-      .vgm-reference-schedule-card .schedule-card__footer {
-        width: 100%;
-      }
-      .vgm-reference-schedule-card .schedule-card__route {
-        width: 100%;
-        gap: ${token.marginLG}px;
-      }
-      .vgm-reference-schedule-card .schedule-card__endpoint {
-        padding: ${token.paddingMD}px ${token.paddingLG}px;
-        border-radius: ${token.borderRadiusLG}px;
-        border: 1px solid ${token.colorBorderSecondary};
-        background: ${token.colorFillAlter};
-        min-height: ${token.controlHeightLG * 3}px;
-        justify-content: center;
-      }
-      .vgm-reference-schedule-card .schedule-card__endpoint--origin {
-        border-left: 4px solid ${token.colorPrimary};
-        background: linear-gradient(
-          180deg,
-          ${primaryTint8} 0%,
-          ${token.colorFillAlter} 100%
-        );
-      }
-      .vgm-reference-schedule-card .schedule-card__endpoint--dest {
-        border-left: 4px solid ${token.colorSuccess};
-        background: linear-gradient(
-          180deg,
-          ${successTint8} 0%,
-          ${token.colorFillAlter} 100%
-        );
-      }
-      .vgm-reference-schedule-card .schedule-card__place {
-        font-size: ${token.fontSizeHeading5}px;
-        font-weight: ${token.fontWeightStrong};
-        color: ${token.colorText};
-        line-height: 1.3;
-      }
-      .vgm-reference-schedule-card .schedule-card__connector {
-        min-width: 0;
-        width: 100%;
-        padding-top: ${token.paddingMD}px;
-      }
-      .vgm-reference-schedule-card .schedule-card__connector-pill {
-        padding: ${token.paddingXXS}px ${token.paddingMD}px;
-        font-size: ${token.fontSize}px;
-      }
-      .vgm-reference-schedule-card .schedule-card__deadline-icon--party {
-        background: ${token.colorInfoBg};
-        color: ${token.colorInfo};
-      }
-      .vgm-reference-schedule-card .schedule-card__deadline-icon--shipper {
-        background: ${token.colorWarningBg};
-        color: ${token.colorWarning};
-      }
-      .vgm-reference-schedule-card .schedule-card__deadline-icon--pol,
-      .vgm-reference-schedule-card .schedule-card__deadline-icon--pod {
-        background: ${tokenMix(token.colorPrimary, 10)};
-        color: ${token.colorPrimary};
-      }
-      @media (min-width: 768px) {
-        .vgm-reference-schedule-card .schedule-card__route {
-          grid-template-columns: minmax(0, 1.2fr) minmax(180px, 1fr) minmax(0, 1.2fr);
-          align-items: stretch;
-        }
-        .vgm-reference-schedule-card .schedule-card__endpoint--dest {
-          text-align: right;
-          align-items: flex-end;
-          border-left: 1px solid ${token.colorBorderSecondary};
-          border-right: 4px solid ${token.colorSuccess};
-        }
-        .vgm-reference-schedule-card .schedule-card__connector {
-          align-self: center;
-        }
-      }
-    `}</style>
-  );
-}
-
+/**
+ * Booking / B/L reference summary shown above the VGM declaration form:
+ * parties on the left, origin → delivery route band with ETD / ETA and the
+ * VGM POL / POD pair on the right. Everything is visible without toggles.
+ */
 export function VgmReferenceStrip({ details }: VgmReferenceStripProps) {
   const originPort = parsePortLabel(details.origin || details.pol || "");
   const deliveryPort = parsePortLabel(details.delivery || details.pod || "");
   const polPort = parsePortLabel(details.pol || "");
   const podPort = parsePortLabel(details.pod || "");
-  const [open, setOpen] = useState(false);
   const referenceLabel = details.type === "blno" ? "B/L" : "Booking";
   const transitTimeDays = transitDays(details.etd, details.eta);
+  const originPlace = placeLabel(originPort);
+  const deliveryPlace = placeLabel(deliveryPort);
 
   return (
     <Card
-      className="vgm-section-card form-step-card"
+      className="vgm-section-card vgm-reference-card form-step-card"
       title="Booking / B/L Details"
       bordered={false}
       extra={
-        <div className="vgm-header-extra">
-          <div className="vgm-meta-row vgm-meta-row--header">
-            <div className="vgm-meta-item">
-              <span className="vgm-meta-item__label">A/P Name</span>
-              <span className="vgm-meta-item__value">{details.apName}</span>
-            </div>
-            <div className="vgm-meta-item">
-              <span className="vgm-meta-item__label">Shipper Name</span>
-              <span className="vgm-meta-item__value">
-                {details.shipperName}
-              </span>
-            </div>
-            <div className="vgm-meta-item">
-              <span className="vgm-meta-item__label">VGM POL</span>
-              <span className="vgm-meta-item__value">{details.pol}</span>
-            </div>
-            <div className="vgm-meta-item">
-              <span className="vgm-meta-item__label">VGM POD</span>
-              <span className="vgm-meta-item__value">{details.pod}</span>
-            </div>
-          </div>
-          <Tooltip title={open ? "Collapse details" : "Expand details"}>
-            <AppButton
-              type="text"
-              size="small"
-              aria-label={open ? "Collapse details" : "Expand details"}
-              icon={
-                <AppIcon
-                  icon={open ? Icons.chevronUp : Icons.chevronDown}
-                  size={18}
-                />
-              }
-              onClick={() => setOpen((prev) => !prev)}
-            />
-          </Tooltip>
-        </div>
+        <Tag color="blue" className="vgm-reference-card__ref-tag">
+          <span className="vgm-reference-card__ref-kind">{referenceLabel}</span>
+          <span className="vgm-reference-card__ref-no">{details.referenceNo}</span>
+        </Tag>
       }
     >
-      {open ? (
-        <div className="vgm-reference-schedule-wrap">
-          <ScheduleModuleStyles />
-          <VgmReferenceScheduleCardStyles />
-          <article className="schedule-card vgm-reference-schedule-card">
-            <div className="schedule-card__main">
-              <div className="schedule-card__content">
-                {/* <div className="schedule-card__meta">
-                  <Tag color="blue">
-                    {referenceLabel} · {details.referenceNo}
-                  </Tag>
-                  <Tag color="cyan">{details.shipperName}</Tag>
-                  <Tag color="geekblue">{details.apName}</Tag>
-                  <Text type="secondary" className="schedule-card__distance">
-                    Port to Port
-                  </Text>
-                </div> */}
-
-                <div className="schedule-card__route">
-                  <div className="schedule-card__endpoint schedule-card__endpoint--origin">
-                    <Text className="schedule-card__place">
-                      {portCity(originPort.name).toUpperCase()},{" "}
-                      <span className="schedule-card__port-code">
-                        {originPort.code}
-                      </span>
-                    </Text>
-                    <div className="schedule-card__etime">
-                      <Tag color="blue">ETD {details.etd ?? "—"}</Tag>
-                    </div>
-                    <Text className="schedule-card__terminal">
-                      POL: {polPort.code} — {polPort.name}
-                    </Text>
-                  </div>
-
-                  <div className="schedule-card__connector">
-                    <div className="schedule-card__connector-line">
-                      <span className="schedule-card__connector-dot" />
-                      <span className="schedule-card__connector-rail" />
-                      <span className="schedule-card__connector-pill">
-                        {transitTimeDays > 0
-                          ? `${transitTimeDays} Days`
-                          : "Ocean"}
-                      </span>
-                      <span className="schedule-card__connector-rail" />
-                      <span className="schedule-card__connector-dot" />
-                    </div>
-                    <Text className="schedule-card__connector-type">
-                      Direct
-                    </Text>
-                  </div>
-
-                  <div className="schedule-card__endpoint schedule-card__endpoint--dest">
-                    <Text className="schedule-card__place">
-                      {portCity(deliveryPort.name).toUpperCase()},{" "}
-                      <span className="schedule-card__port-code">
-                        {deliveryPort.code}
-                      </span>
-                    </Text>
-                    <div className="schedule-card__etime">
-                      <Tag color="green">ETA {details.eta ?? "—"}</Tag>
-                    </div>
-                    <Text className="schedule-card__terminal">
-                      POD: {podPort.code} — {podPort.name}
-                    </Text>
-                  </div>
-                </div>
-              </div>
+      <div className="vgm-reference-layout">
+        {/* Parties */}
+        <div className="vgm-reference-parties">
+          <div className="vgm-reference-fact">
+            <span className="vgm-reference-fact__icon vgm-reference-fact__icon--ap app-icon-inherit">
+              <AppIcon icon={Icons.building} size={18} />
+            </span>
+            <div className="vgm-reference-fact__copy">
+              <span className="vgm-reference-fact__label">A/P Name</span>
+              <span className="vgm-reference-fact__value" title={details.apName}>
+                {dash(details.apName)}
+              </span>
             </div>
-          </article>
+          </div>
+          <div className="vgm-reference-fact">
+            <span className="vgm-reference-fact__icon vgm-reference-fact__icon--shipper app-icon-inherit">
+              <AppIcon icon={Icons.user} size={18} />
+            </span>
+            <div className="vgm-reference-fact__copy">
+              <span className="vgm-reference-fact__label">Shipper Name</span>
+              <span
+                className="vgm-reference-fact__value"
+                title={details.shipperName}
+              >
+                {dash(details.shipperName)}
+              </span>
+            </div>
+          </div>
         </div>
-      ) : null}
+
+        {/* Route */}
+        <div className="vgm-reference-route">
+          <div className="vgm-reference-route__band">
+            <div className="vgm-reference-route__stop">
+              <span className="vgm-reference-route__eyebrow">Origin</span>
+              <span className="vgm-reference-route__place">
+                {originPlace || dash(originPort.code)}
+              </span>
+              {originPlace ? (
+                <span className="vgm-reference-route__code">{originPort.code}</span>
+              ) : null}
+              <span className="vgm-reference-route__pill vgm-reference-route__pill--etd">
+                ETD {dash(details.etd)}
+              </span>
+            </div>
+
+            <div className="vgm-reference-route__connector" aria-hidden>
+              <span className="vgm-reference-route__dot vgm-reference-route__dot--origin" />
+              <span className="vgm-reference-route__dash" />
+              <span className="vgm-reference-route__transit app-icon-inherit">
+                <AppIcon icon={Icons.ship} size={14} />
+                {transitTimeDays > 0 ? `${transitTimeDays} Days` : "Ocean"}
+              </span>
+              <span className="vgm-reference-route__dash" />
+              <span className="vgm-reference-route__dot vgm-reference-route__dot--dest" />
+            </div>
+
+            <div className="vgm-reference-route__stop vgm-reference-route__stop--dest">
+              <span className="vgm-reference-route__eyebrow">Delivery</span>
+              <span className="vgm-reference-route__place">
+                {deliveryPlace || dash(deliveryPort.code)}
+              </span>
+              {deliveryPlace ? (
+                <span className="vgm-reference-route__code">
+                  {deliveryPort.code}
+                </span>
+              ) : null}
+              <span className="vgm-reference-route__pill vgm-reference-route__pill--eta">
+                ETA {dash(details.eta)}
+              </span>
+            </div>
+          </div>
+
+          <div className="vgm-reference-route__ports">
+            <span className="vgm-reference-port app-icon-inherit">
+              <AppIcon icon={Icons.anchor} size={12} />
+              <span className="vgm-reference-port__label">VGM POL</span>
+              <span className="vgm-reference-port__code">{dash(polPort.code)}</span>
+              {polPort.name !== polPort.code ? (
+                <span className="vgm-reference-port__name">{polPort.name}</span>
+              ) : null}
+            </span>
+            <span className="vgm-reference-port vgm-reference-port--pod app-icon-inherit">
+              <AppIcon icon={Icons.anchor} size={12} />
+              <span className="vgm-reference-port__label">VGM POD</span>
+              <span className="vgm-reference-port__code">{dash(podPort.code)}</span>
+              {podPort.name !== podPort.code ? (
+                <span className="vgm-reference-port__name">{podPort.name}</span>
+              ) : null}
+            </span>
+          </div>
+        </div>
+      </div>
     </Card>
   );
 }

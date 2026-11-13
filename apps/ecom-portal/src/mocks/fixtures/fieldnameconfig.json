@@ -1,0 +1,30 @@
+[
+ {
+  "id": 5,
+  "module": "SHI",
+  "fieldcode": "SHS",
+  "fieldname": "SI/BL Shipper Seal",
+  "shipmenttype": "E"
+ },
+ {
+  "id": 4,
+  "module": "SHI",
+  "fieldcode": "SHC",
+  "fieldname": "SI/BL Header Configuration",
+  "shipmenttype": "I"
+ },
+ {
+  "id": 2,
+  "module": "BKG",
+  "fieldcode": "HSC",
+  "fieldname": "HS Code",
+  "shipmenttype": "I"
+ },
+ {
+  "id": 1,
+  "module": "BKG",
+  "fieldcode": "NAT",
+  "fieldname": "NAT Code",
+  "shipmenttype": "I"
+ }
+]

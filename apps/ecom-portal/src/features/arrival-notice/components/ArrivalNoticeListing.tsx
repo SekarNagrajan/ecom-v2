@@ -1,10 +1,14 @@
-// Modified by Sekar Nagarajan (2026-08-26 14:50)
+// Modified by Sekar Nagarajan (2026-09-29 12:35)
 import { FormattedDate } from "@solverminds/shared-ui";
-import { DataView, type DataViewColumn } from "@solverminds/shared-ui/data-view";
+import {
+  DataView,
+  type DataViewColumn,
+} from "@solverminds/shared-ui/data-view";
 import type { RowDoubleClickedEvent } from "ag-grid-community";
 import { Tag } from "antd";
 import { DateTime } from "luxon";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons, NavIcons } from "../../../components/icons";
 import { buildActionsColumn } from "../../../components/shared/build-actions-column";
@@ -12,16 +16,22 @@ import {
   ListActionButton,
   ListActionsRow,
 } from "../../../components/shared/list-action-button";
+import {
+  ModuleEmptyState,
+  buildClearFiltersAction,
+  buildRetryAction,
+} from "../../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
-import { MODULE_TITLES } from "../../../constants/module-titles";
+import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
+import { useModuleTitles } from "../../../i18n/use-module-titles";
 import {
   useArrivalNoticeDownloadMutation,
   useArrivalNoticeListQuery,
 } from "../api/arrival-notice.queries";
 import type {
+  ArnSearchValues,
   ArrivalNoticeListDTO,
   ArrivalNoticeListFilters,
-  ArnSearchValues,
 } from "../types/arrival-notice.types";
 import {
   formatArnAmount,
@@ -38,6 +48,9 @@ const initialFilters: ArrivalNoticeListFilters = {
 };
 
 export function ArrivalNoticeListing() {
+  const { t } = useTranslation(["arrival-notice", "common"]);
+  const MODULE_TITLES = useModuleTitles();
+  const { profileHandlers } = useLocalGridProfiles("arrival-notice");
   const [filters, setFilters] =
     useState<ArrivalNoticeListFilters>(initialFilters);
   const [selectedAnNo, setSelectedAnNo] = useState<string | null>(null);
@@ -46,12 +59,16 @@ export function ArrivalNoticeListing() {
     data: rows = [],
     isLoading,
     isFetching,
+    isError,
+    refetch,
   } = useArrivalNoticeListQuery(filters.fromDate, filters.toDate);
   const { mutate: downloadDoc } = useArrivalNoticeDownloadMutation();
 
   const handleSearch = (values: ArnSearchValues) => {
     setFilters({ fromDate: values.fromDate, toDate: values.toDate });
   };
+
+  const handleClearFilters = () => setFilters(initialFilters);
 
   const handleView = (anNo: string) => {
     setSelectedAnNo(anNo);
@@ -75,7 +92,7 @@ export function ArrivalNoticeListing() {
           return (
             <ListActionsRow>
               <ListActionButton
-                title="View Details"
+                title={t("actions.viewDetails")}
                 icon={<AppIcon icon={Icons.eye} size={16} tone="view" />}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -83,7 +100,7 @@ export function ArrivalNoticeListing() {
                 }}
               />
               <ListActionButton
-                title="Print Arrival Notice"
+                title={t("actions.printArrivalNotice")}
                 icon={<AppIcon icon={Icons.printer} size={16} tone="print" />}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -96,36 +113,36 @@ export function ArrivalNoticeListing() {
       }),
       colId: "actions",
     },
-    { field: "anNo", headerName: "AN No", width: 130, pinned: "left" },
-    { field: "blNumber", headerName: "B/L Number", width: 140 },
-    { field: "vessel", headerName: "Vessel", width: 140 },
-    { field: "voyage", headerName: "Voyage", width: 100 },
-    { field: "dischargePort", headerName: "Discharge", width: 160 },
-    { field: "terminal", headerName: "Terminal", width: 120 },
+    { field: "anNo", headerName: t("columns.anNo"), width: 130, pinned: "left" },
+    { field: "blNumber", headerName: t("columns.blNumber"), width: 140 },
+    { field: "vessel", headerName: t("columns.vessel"), width: 140 },
+    { field: "voyage", headerName: t("columns.voyage"), width: 100 },
+    { field: "dischargePort", headerName: t("columns.discharge"), width: 160 },
+    { field: "terminal", headerName: t("columns.terminal"), width: 120 },
     {
       field: "etaDate",
-      headerName: "ETA",
+      headerName: t("columns.eta"),
       width: 130,
       cellRenderer: (p: { value?: string }) =>
         p.value ? <FormattedDate value={p.value} /> : "-",
     },
     {
       field: "arrivalDate",
-      headerName: "Arrival",
+      headerName: t("columns.arrival"),
       width: 130,
       cellRenderer: (p: { value?: string }) =>
         p.value ? <FormattedDate value={p.value} /> : "-",
     },
     {
       field: "lastFreeDay",
-      headerName: "Last Free Day",
+      headerName: t("columns.lastFreeDay"),
       width: 130,
       cellRenderer: (p: { value?: string }) =>
         p.value ? <FormattedDate value={p.value} /> : "-",
     },
     {
       field: "chargesDue",
-      headerName: "Charges Due",
+      headerName: t("columns.chargesDue"),
       width: 140,
       cellRenderer: (params: { data?: ArrivalNoticeListDTO }) => {
         if (!params.data) return null;
@@ -134,7 +151,7 @@ export function ArrivalNoticeListing() {
       },
     },
     {
-      headerName: "Print",
+      headerName: t("common:actions.print"),
       field: "printStatus",
       width: 120,
       cellRenderer: (params: { data?: ArrivalNoticeListDTO }) => {
@@ -144,7 +161,7 @@ export function ArrivalNoticeListing() {
             className="arn-status-tag"
             color={getArnPrintStatusColor(params.data.printStatus)}
           >
-            {getArnPrintStatusLabel(params.data.printStatus)}
+            {getArnPrintStatusLabel(params.data.printStatus, t)}
           </Tag>
         );
       },
@@ -152,6 +169,21 @@ export function ArrivalNoticeListing() {
   ];
 
   const showLoading = isLoading && rows.length === 0;
+  const emptyState = isError ? (
+    <ModuleEmptyState
+      variant="error"
+      title={t("empty.loadErrorTitle")}
+      message={t("empty.loadErrorMessage")}
+      actions={[buildRetryAction(() => void refetch())]}
+    />
+  ) : (
+    <ModuleEmptyState
+      variant="filtered"
+      title={t("empty.noResultsTitle")}
+      message={t("empty.noResultsMessage")}
+      actions={[buildClearFiltersAction(handleClearFilters)]}
+    />
+  );
 
   return (
     <div className="arn-page-layout">
@@ -159,7 +191,7 @@ export function ArrivalNoticeListing() {
         <ModuleScreenHeader
           icon={NavIcons.arrivalNotice}
           title={MODULE_TITLES.arrivalNotice}
-          subtitle="Filter by date range, review vessel and charges, and print arrival notices."
+          subtitle={t("subtitle")}
           marginBottom={0}
         />
       </div>
@@ -168,23 +200,31 @@ export function ArrivalNoticeListing() {
 
       {showLoading ? (
         <ArnLoadingCenter fill />
+      ) : isError && rows.length === 0 ? (
+        emptyState
       ) : (
         <div className="arn-grid-wrap responsive-table-wrap custom-scroll">
           <DataView
             rowData={rows}
             columnDefs={columns}
             loading={isFetching}
+            emptyState={emptyState}
             allowedViewModes={["list"]}
             defaultViewMode="list"
             renderToolbar={() => null}
             className="arn-data-view"
             listOptions={{
-              showToolbar: false,
+              ...profileHandlers,
+              showToolbar: { showTotalCount: true, fullScreen: true },
+              sideBar: true,
+              pagination: true,
+              paginationPageSize: 20,
+              pageSizeOptions: [10, 20, 50, 100],
+              defaultColDef: { filter: true },
               gridOptions: {
                 getRowId: (params: { data: ArrivalNoticeListDTO }) =>
                   params.data.anNo,
                 onRowDoubleClicked: handleRowDoubleClick,
-                overlayNoRowsTemplate: "No arrival notices found.",
               },
             }}
           />

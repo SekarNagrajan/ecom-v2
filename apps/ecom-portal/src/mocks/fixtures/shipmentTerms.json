@@ -1,0 +1,58 @@
+[
+ {
+  "ShipTerms": "BTH",
+  "termsDesc": "prepaid and collect"
+ },
+ {
+  "ShipTerms": "CIF",
+  "termsDesc": "Cost, Insurance and Freight"
+ },
+ {
+  "ShipTerms": "CNF",
+  "termsDesc": "Cost and Freight"
+ },
+ {
+  "ShipTerms": "COL",
+  "termsDesc": "COL"
+ },
+ {
+  "ShipTerms": "DDP",
+  "termsDesc": ""
+ },
+ {
+  "ShipTerms": "DDU",
+  "termsDesc": ""
+ },
+ {
+  "ShipTerms": "ELS",
+  "termsDesc": "ELS"
+ },
+ {
+  "ShipTerms": "EXW",
+  "termsDesc": "Ex-Works"
+ },
+ {
+  "ShipTerms": "FOB",
+  "termsDesc": "Free on Board "
+ },
+ {
+  "ShipTerms": "PRE",
+  "termsDesc": "PRE"
+ },
+ {
+  "ShipTerms": "SA1",
+  "termsDesc": "qweq"
+ },
+ {
+  "ShipTerms": "TES",
+  "termsDesc": "TEST"
+ },
+ {
+  "ShipTerms": "TSU",
+  "termsDesc": "Twenty equalant unit"
+ },
+ {
+  "ShipTerms": "XTR",
+  "termsDesc": "x-trade"
+ }
+]

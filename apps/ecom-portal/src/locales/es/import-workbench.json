@@ -1,0 +1,169 @@
+{
+  "header": {
+    "defaultSubtitle": "Cargue un libro, revise las filas y envíe las filas válidas.",
+    "replaceFile": "Reemplazar archivo",
+    "downloadTemplate": "Descargar plantilla",
+    "exportReview": "Exportar revisión",
+    "columnGuide": "Guía de columnas"
+  },
+  "empty": {
+    "uploadAria": "Cargar libro",
+    "uploadTitle": "Cargar libro",
+    "uploadHint": "Suelte aquí su archivo Excel, o descargue primero la plantilla para que los encabezados coincidan con las columnas requeridas.",
+    "xlsxOnly": "Solo .xlsx",
+    "headerRequired": "Se requiere fila de encabezado",
+    "maxSize": "Máx. {{maxMb}} MB",
+    "dropTitle": "Soltar libro",
+    "dropDescription": "Arrastre y suelte o haga clic para explorar",
+    "columnGuideAria": "Guía de columnas",
+    "columnGuideTitle": "Guía de columnas",
+    "columnGuideHint": "Los campos obligatorios aparecen primero en la plantilla y en esta lista."
+  },
+  "metrics": {
+    "ariaLabel": "Métricas de revisión de importación",
+    "file": "Archivo",
+    "rows": "Filas",
+    "invalid": "No válidas",
+    "issues": "Problemas",
+    "valid": "Válidas"
+  },
+  "toolbar": {
+    "allColumns": "Todas las columnas",
+    "sheet": "Hoja",
+    "allRows": "Todas las filas",
+    "errors": "Errores",
+    "addCountryCode": "Añadir código de país",
+    "replaceInvalid": "Reemplazar no válidos",
+    "fillEmpty": "Rellenar vacíos",
+    "prev": "Ant.",
+    "hideErrors": "Ocultar errores",
+    "invalidCount": "{{count}} no válidos",
+    "emptyCount": "{{count}} vacíos"
+  },
+  "actions": {
+    "submitDefault": "Enviar {{count}} {{entityLabel}}"
+  },
+  "status": {
+    "row": "Fila",
+    "status": "Estado",
+    "ready": "Listo",
+    "fixed": "Corregido",
+    "errorsCount": "{{count}} errores"
+  },
+  "confirms": {
+    "leaveTitle": "¿Salir de la importación?",
+    "leaveMessage": "Se perderán el libro cargado y las correcciones. Permanezca en esta página para continuar, o descarte y salga."
+  },
+  "toasts": {
+    "templateFailed": "No se pudo generar la plantilla de importación. Inténtelo de nuevo."
+  },
+  "errors": {
+    "maxRows": "Esta hoja tiene {{rowCount}} filas. La importación masiva acepta un máximo de {{maxRowCount}} {{entityLabel}} por archivo. Divida el libro e inténtelo de nuevo.",
+    "unableToRead": "No se puede leer el archivo Excel seleccionado."
+  },
+  "a11y": {
+    "previousError": "Error anterior",
+    "nextError": "Error siguiente",
+    "toggleErrors": "Alternar errores",
+    "hideErrors": "Ocultar errores"
+  },
+  "grid": {
+    "analyzing": "Analizando libro..."
+  },
+  "badges": {
+    "required": "Obligatorio",
+    "optional": "Opcional"
+  },
+  "errorsDrawer": {
+    "title": "Errores",
+    "titleWithCount": "Errores ({{count}})",
+    "noErrors": "Sin errores de validación.",
+    "ignoredColumns": "Columnas ignoradas: {{columns}}",
+    "rowField": "Fila {{rowNumber}} · {{fieldLabel}}",
+    "serverPrefix": "Servidor: {{message}}",
+    "serverField": "Servidor",
+    "kinds": {
+      "required": "Obligatorio",
+      "selectValid": "Seleccione una opción válida",
+      "invalidLength": "Longitud no válida",
+      "invalidPhone": "Teléfono no válido",
+      "invalidEmail": "Correo no válido"
+    }
+  },
+  "bulkFix": {
+    "modes": {
+      "invalid": "Reemplazar valores no válidos",
+      "countryCode": "Añadir código de país",
+      "empty": "Rellenar valores vacíos"
+    },
+    "descriptions": {
+      "invalid": "Solo cambiarán las celdas que fallen la validación de esta columna. Las celdas en blanco no se modifican.",
+      "countryCode": "Solo se actualizarán los números de teléfono sin código de país cuando puedan normalizarse.",
+      "empty": "Solo cambiarán las celdas en blanco de esta columna. Los valores existentes no se tocan."
+    },
+    "labels": {
+      "countryCode": "Código de país",
+      "replacementFor": "Valor de reemplazo para {{field}}",
+      "fillInto": "Valor para rellenar en celdas vacías de {{field}}",
+      "matchingCells": "Celdas coincidentes",
+      "valueType": "Tipo de valor",
+      "format": "Formato",
+      "missingCountryCode": "Sin código de país",
+      "otherInvalidPhones": "Otros teléfonos no válidos",
+      "empty": "Vacío",
+      "phoneE164": "Teléfono (E.164)"
+    },
+    "placeholders": {
+      "select": "Seleccionar…",
+      "selectField": "Seleccionar {{field}}",
+      "enterAmount": "Introducir importe",
+      "enter": "Introducir…",
+      "enterField": "Introducir {{field}}",
+      "selectCountryCode": "Seleccionar código de país"
+    },
+    "options": {
+      "clearValue": "Borrar valor"
+    },
+    "hints": {
+      "clearOptional": "Déjelo en blanco para borrar este campo opcional en las celdas coincidentes.",
+      "countryCodeConvert": "Elija un país y los números coincidentes se convertirán al formato internacional.",
+      "enterValid": "Introduzca un {{field}} válido para habilitar la aplicación."
+    },
+    "apply": {
+      "replaceCells_one": "Reemplazar {{count}} celda",
+      "replaceCells_other": "Reemplazar {{count}} celdas",
+      "updateNumbers_one": "Actualizar {{count}} número",
+      "updateNumbers_other": "Actualizar {{count}} números",
+      "fillCells_one": "Rellenar {{count}} celda",
+      "fillCells_other": "Rellenar {{count}} celdas"
+    }
+  },
+  "fieldOverview": {
+    "requiredFields": "Campos obligatorios",
+    "optionalFields": "Campos opcionales",
+    "required": "Obligatorio",
+    "optional": "Opcional",
+    "eg": "p. ej. {{value}}",
+    "default": "Predeterminado: {{value}}",
+    "header": "Encabezado: {{headers}}",
+    "example": "Ejemplo: {{value}}"
+  },
+  "columnGuide": {
+    "intro": "Use estos formatos de ejemplo al revisar o corregir valores del libro.",
+    "alsoAccepts": "También acepta: {{aliases}}",
+    "format": "Formato: {{format}}",
+    "defaultsTo": "Por defecto {{value}} cuando está vacío",
+    "freeText": "Texto libre"
+  },
+  "formatHints": {
+    "phone": "Formato internacional con código de país",
+    "email": "Dirección de correo estándar",
+    "currency": "Importe numérico",
+    "number": "Valor numérico"
+  },
+  "phone": {
+    "required": "El número de teléfono es obligatorio",
+    "invalid": "Número de teléfono no válido",
+    "countryCodeRequired": "Se requiere el código de país. Use el formato internacional como +919876543210."
+  }
+}

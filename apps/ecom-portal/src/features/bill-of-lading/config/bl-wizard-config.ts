@@ -24,6 +24,8 @@ export interface BLWizardConfig {
   showChargeTab: boolean;
   showEns: boolean;
   showExcelImport: boolean;
+  // Modified by Sekar Nagarajan (2026-09-16 16:17) — SI Smart Import parity
+  showSmartImport: boolean;
   showNnPrint: boolean;
   showChargeSummary: boolean;
   hideAgencyRefColumn: boolean;
@@ -46,7 +48,7 @@ export interface BLWizardConfig {
   allowedFileExtensions: string[];
 }
 
-// Modified by Sekar Nagarajan (2026-08-28 15:10)
+// Modified by Sekar Nagarajan (2026-09-16 16:17)
 export const DEFAULT_BL_WIZARD_CONFIG: BLWizardConfig = {
   showRouting: false,
   showInsurance: false,
@@ -55,6 +57,7 @@ export const DEFAULT_BL_WIZARD_CONFIG: BLWizardConfig = {
   showChargeTab: false,
   showEns: true,
   showExcelImport: true,
+  showSmartImport: true,
   showNnPrint: true,
   showChargeSummary: true,
   hideAgencyRefColumn: false,

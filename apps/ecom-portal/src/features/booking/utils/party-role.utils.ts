@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-31 22:44)
+// Modified by Sekar Nagarajan (2026-09-11 12:12)
 import type { PartiesData } from "../types/booking.types";
 
 export type PartyRoleKey =
@@ -21,7 +21,7 @@ export interface PartyCardData {
 }
 
 /**
- * Primary parties always shown on the top row.
+ * Primary parties always shown in the Assigned Parties grid.
  * Booking Party (shipper) is view-only; Agreement Party is editable but not deletable.
  */
 export const DEFAULT_PARTY_ROLES: readonly PartyRoleKey[] = [
@@ -30,13 +30,13 @@ export const DEFAULT_PARTY_ROLES: readonly PartyRoleKey[] = [
 ] as const;
 
 export const PARTY_ROLE_OPTIONS: { key: PartyRoleKey; label: string }[] = [
-  { key: "shipper", label: "Booking Party" },
+  // { key: "shipper", label: "Booking Party" },
+  { key: "siSubmittingParty", label: "Shipper" },
   { key: "consignee", label: "Consignee" },
   { key: "notifyParty", label: "Notify Party" },
   { key: "notifyParty2", label: "Notify Party 2" },
   { key: "forwarder", label: "Forwarder" },
-  { key: "agreementParty", label: "Agreement Party" },
-  { key: "siSubmittingParty", label: "SI Submitting Party" },
+  // { key: "agreementParty", label: "Agreement Party" },
 ];
 
 export const PARTY_ROLE_LABEL: Record<PartyRoleKey, string> = {
@@ -46,8 +46,48 @@ export const PARTY_ROLE_LABEL: Record<PartyRoleKey, string> = {
   notifyParty2: "Notify Party 2",
   forwarder: "Forwarder",
   agreementParty: "Agreement Party",
-  siSubmittingParty: "SI Submitting Party",
+  siSubmittingParty: "Shipper",
 };
+
+/** Preview/review labels — differ for shipper ("Shipper") and forwarder ("Freight Forwarder"). */
+const REVIEW_PARTY_ROLE_LABEL: Record<PartyRoleKey, string> = {
+  shipper: "Shipper",
+  consignee: "Consignee",
+  notifyParty: "Notify Party",
+  notifyParty2: "Notify Party 2",
+  forwarder: "Freight Forwarder",
+  agreementParty: "Agreement Party",
+  siSubmittingParty: "Shipper",
+};
+
+type TranslateFn = (key: string, options?: Record<string, unknown>) => string;
+
+export function getPartyRoleLabel(role: PartyRoleKey, t?: TranslateFn): string {
+  if (!t) return PARTY_ROLE_LABEL[role];
+  switch (role) {
+    case "shipper": return t("wizard.parties.roles.shipper");
+    case "siSubmittingParty": return t("wizard.parties.roles.siSubmittingParty");
+    case "consignee": return t("wizard.parties.roles.consignee");
+    case "notifyParty": return t("wizard.parties.roles.notifyParty");
+    case "notifyParty2": return t("wizard.parties.roles.notifyParty2");
+    case "forwarder": return t("wizard.parties.roles.forwarder");
+    case "agreementParty": return t("wizard.parties.roles.agreementParty");
+    default: { const _exhaustive: never = role; return PARTY_ROLE_LABEL[_exhaustive]; }
+  }
+}
+
+export function getPreviewPartyRoleLabel(role: PartyRoleKey, t?: TranslateFn): string {
+  if (!t) return REVIEW_PARTY_ROLE_LABEL[role];
+  switch (role) {
+    case "shipper": return t("wizard.parties.previewRoles.shipper");
+    case "forwarder": return t("wizard.parties.previewRoles.forwarder");
+    default: return getPartyRoleLabel(role, t);
+  }
+}
+
+export function getPartyRoleOptions(t: TranslateFn): { key: PartyRoleKey; label: string }[] {
+  return PARTY_ROLE_OPTIONS.map((o) => ({ key: o.key, label: getPartyRoleLabel(o.key, t) }));
+}
 
 /** ecom-app CustomerDetailsStep demo seed — used when parties are empty. */
 const BOOKING_PARTY_SEED: PartyCardData = {
@@ -179,13 +219,55 @@ export function partiesToCards(
   return cards;
 }
 
+/** `cardsToParties` mirrors the Booking Party into the required
+ *  `siSubmittingParty` field when the user never assigned one, so a value that
+ *  still matches the Booking Party is a derived default, not an assignment. */
+function isDerivedSiSubmittingParty(parties: PartiesData): boolean {
+  return (
+    !!parties.siSubmittingParty &&
+    parties.siSubmittingParty === parties.shipperName &&
+    (parties.siSubmittingPartyContact || "") === (parties.shipperContact || "")
+  );
+}
+
+// Modified by Sekar Nagarajan (2026-09-11 12:12)
+/** Cards the user actually assigned — drops the derived SI Submitting Party so
+ *  revisiting Customer Details does not grow an extra card. */
+export function assignedPartyCards(
+  parties: PartiesData | null | undefined,
+): Partial<Record<PartyRoleKey, PartyCardData>> {
+  const cards = partiesToCards(parties);
+  if (parties && isDerivedSiSubmittingParty(parties)) {
+    delete cards.siSubmittingParty;
+  }
+  return cards;
+}
+
+/** Assigned parties in the order Customer Details renders them: the default
+ *  roles first, then any extra role in `PARTY_ROLE_OPTIONS` order. */
+export function orderedAssignedParties(
+  parties: PartiesData | null | undefined,
+): [PartyRoleKey, PartyCardData][] {
+  const cards = assignedPartyCards(parties);
+  const order: PartyRoleKey[] = [
+    ...DEFAULT_PARTY_ROLES,
+    ...PARTY_ROLE_OPTIONS.map((option) => option.key).filter(
+      (key) => !DEFAULT_PARTY_ROLES.includes(key),
+    ),
+  ];
+  return order.flatMap((role) => {
+    const card = cards[role];
+    return card ? [[role, card] as [PartyRoleKey, PartyCardData]] : [];
+  });
+}
+
 // Modified by Sekar Nagarajan (2026-08-31 23:08)
 /** Use saved parties when present; otherwise seed ecom-app mock defaults.
  *  Auto-populates agreementParty from shipper when missing. */
 export function initialPartyCards(
   parties: PartiesData | null | undefined,
 ): Partial<Record<PartyRoleKey, PartyCardData>> {
-  const fromPayload = partiesToCards(parties);
+  const fromPayload = assignedPartyCards(parties);
   if (Object.keys(fromPayload).length > 0) {
     if (!fromPayload.agreementParty && fromPayload.shipper) {
       fromPayload.agreementParty = { ...fromPayload.shipper };

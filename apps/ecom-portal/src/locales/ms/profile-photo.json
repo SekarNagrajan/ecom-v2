@@ -1,0 +1,30 @@
+{
+  "steps": {
+    "view": "Foto Profil",
+    "select": "Muat Naik Foto",
+    "crop": "Potong Foto Profil"
+  },
+  "actions": {
+    "changeImage": "Tukar Imej",
+    "removePhoto": "Buang Foto"
+  },
+  "upload": {
+    "title": "Seret Foto Profil Ke Sini",
+    "selectButton": "Pilih foto dari komputer anda",
+    "or": "atau"
+  },
+  "helper": "Sokongan: .jpg, .jpeg, .png, .gif · Saiz maksimum: 2MB",
+  "confirms": {
+    "removeTitle": "Buang foto profil?",
+    "removeContent": "Avatar anda akan kembali memaparkan inisial anda."
+  },
+  "toasts": {
+    "updated": "Foto profil dikemas kini",
+    "removed": "Foto profil dibuang",
+    "cropFailed": "Gagal memproses imej yang dipotong. Sila cuba lagi."
+  },
+  "errors": {
+    "uploadFailed": "Gagal memuat naik foto profil",
+    "removeFailed": "Gagal membuang foto profil"
+  }
+}

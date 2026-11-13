@@ -1,0 +1,201 @@
+// Modified by Sekar Nagarajan (2026-10-18 11:15)
+import { AppButton, AppModal } from "@solverminds/shared-ui";
+import { Form, Tooltip } from "antd";
+import dayjs from "dayjs";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { useTranslation } from "react-i18next";
+
+import { AppIcon, Icons } from "../../../components/icons";
+import { useResponsiveLayout } from "../../../hooks/use-responsive-layout";
+import {
+  SCHEDULES_HEADER_SEARCH_SLOT_ID,
+  useSchedulesHeaderSearchStore,
+} from "../stores/schedules-header-search.store";
+import type { ScheduleSearchParams } from "../types/schedules.types";
+import { ScheduleSearchFilter } from "./ScheduleSearchFilter";
+
+export interface ScheduleSearchHostProps {
+  /** Criteria the page was opened with (landing search / deep link); the form shows them. */
+  params?: ScheduleSearchParams | null;
+  onSearch: (params: ScheduleSearchParams) => void;
+  onReset?: () => void;
+  isLoading?: boolean;
+}
+
+/**
+ * Single search form that portals into the auth header when scrolled off-screen.
+ * Uses a 1px pin sentinel (not a height-matched spacer) so results sit flush
+ * under the header with no empty white gap.
+ */
+export function ScheduleSearchHost({
+  params,
+  onSearch,
+  onReset,
+  isLoading,
+}: ScheduleSearchHostProps) {
+  const { t } = useTranslation(["schedules", "common", "modules"]);
+  const [form] = Form.useForm();
+
+  // Deep link / landing search: the form must show the lane, vessel or port and dates that were searched.
+  useEffect(() => {
+    if (!params) return;
+    form.setFieldsValue({
+      searchType: params.searchType,
+      polCode: params.polCode,
+      podCode: params.podCode,
+      vesselCode: params.vesselCode,
+      portCode: params.portCode,
+      ...(params.fromDate
+        ? { dateRange: [dayjs(params.fromDate), dayjs(params.toDate ?? params.fromDate)] }
+        : {}),
+    });
+  }, [params, form]);
+  const pinSentinelRef = useRef<HTMLDivElement>(null);
+  const [slotEl, setSlotEl] = useState<HTMLElement | null>(null);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+
+  const { compactHeader } = useResponsiveLayout();
+  const pinned = useSchedulesHeaderSearchStore((s) => s.pinned);
+  const setActive = useSchedulesHeaderSearchStore((s) => s.setActive);
+  const setPinned = useSchedulesHeaderSearchStore((s) => s.setPinned);
+  const resetStore = useSchedulesHeaderSearchStore((s) => s.reset);
+
+  useEffect(() => {
+    setActive(true);
+    return () => {
+      resetStore();
+    };
+  }, [resetStore, setActive]);
+
+  useEffect(() => {
+    const root = document.querySelector(".app-content-main");
+    const target = pinSentinelRef.current;
+    if (!root || !target) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry) return;
+        // Pin once the in-page search origin scrolls under the sticky header.
+        setPinned(!entry.isIntersecting);
+      },
+      {
+        root,
+        threshold: 0,
+        // Match app header height so unpin happens as search would reappear.
+        rootMargin: "-64px 0px 0px 0px",
+      },
+    );
+
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, [setPinned]);
+
+  useEffect(() => {
+    if (!pinned) {
+      setMobileSearchOpen(false);
+    }
+  }, [pinned]);
+
+  useLayoutEffect(() => {
+    if (!pinned) {
+      setSlotEl(null);
+      return;
+    }
+
+    const resolveSlot = () =>
+      document.getElementById(SCHEDULES_HEADER_SEARCH_SLOT_ID);
+
+    const el = resolveSlot();
+    setSlotEl(el);
+    if (el) {
+      return;
+    }
+
+    const frame = requestAnimationFrame(() => {
+      setSlotEl(resolveSlot());
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [pinned]);
+
+  const handleSearch = (params: ScheduleSearchParams) => {
+    onSearch(params);
+    setMobileSearchOpen(false);
+  };
+
+  const handleReset = () => {
+    onReset?.();
+  };
+
+  const filterProps = {
+    form,
+    onSearch: handleSearch,
+    onReset: handleReset,
+    isLoading,
+  };
+
+  const searchSchedulesLabel = t("search.searchSchedules");
+
+  const mobileHeaderControl = (
+    <Tooltip title={searchSchedulesLabel}>
+      <AppButton
+        type="primary"
+        shape="circle"
+        className="app-header-schedules-search-trigger"
+        icon={<AppIcon icon={Icons.search} size={16} />}
+        onClick={() => setMobileSearchOpen(true)}
+        aria-label={searchSchedulesLabel}
+      />
+    </Tooltip>
+  );
+
+  const showHeaderPortal = pinned && Boolean(slotEl);
+  const portalDesktop = showHeaderPortal && !compactHeader && slotEl;
+  const portalMobileIcon = showHeaderPortal && compactHeader && slotEl;
+
+  return (
+    <>
+      {/* Stable 1px marker — height never collapses, so pin/unpin does not flicker */}
+      <div
+        ref={pinSentinelRef}
+        className="schedule-search-pin-sentinel"
+        aria-hidden
+      />
+
+      <div
+        className={[
+          "schedule-search-sentinel",
+          pinned ? "schedule-search-sentinel--pinned" : undefined,
+        ]
+          .filter(Boolean)
+          .join(" ")}
+      >
+        {pinned ? null : (
+          <ScheduleSearchFilter {...filterProps} variant="page" />
+        )}
+      </div>
+
+      {portalDesktop
+        ? createPortal(
+            <ScheduleSearchFilter {...filterProps} variant="header" />,
+            slotEl,
+          )
+        : null}
+      {portalMobileIcon ? createPortal(mobileHeaderControl, slotEl) : null}
+
+      {compactHeader ? (
+        <AppModal
+          open={mobileSearchOpen}
+          title={searchSchedulesLabel}
+          onCancel={() => setMobileSearchOpen(false)}
+          footer={null}
+          dialogSize="md"
+        >
+          <ScheduleSearchFilter {...filterProps} variant="page" />
+        </AppModal>
+      ) : null}
+    </>
+  );
+}

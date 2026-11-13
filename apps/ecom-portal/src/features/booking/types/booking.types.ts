@@ -1,7 +1,8 @@
-// Modified by Sekar Nagarajan (2026-08-31 14:46)
+// Modified by Sekar Nagarajan (2026-09-11 11:52)
 import { z } from "zod";
 import type { ApiResponse } from "../../../types/api.types";
 import type { BookingRateOption } from "../mocks/booking-rates.mock";
+import { defaultTareWeightKg } from "../utils/default-tare-weight";
 import type { ReferenceField } from "../utils/reference-field.utils";
 
 /** One sail/move leg — JSP Route row inside a routing option (module details). */
@@ -121,7 +122,7 @@ export const partiesSchema = z.object({
   shipperCountry: z.string().optional(),
   shipperEmail: z.string().email("Invalid email").optional().or(z.literal("")),
   shipperPhone: z.string().optional(),
-  consigneeName: z.string().min(3, "Consignee Name is required"),
+  consigneeName: z.string().optional(),
   consigneeContact: z.string().optional(),
   consigneeAddress: z.string().optional(),
   consigneeCity: z.string().optional(),
@@ -159,16 +160,104 @@ const newId = () =>
     ? crypto.randomUUID()
     : `id-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
 
+/** Sequential suffix for mock container numbers (…TNB1, …TNB2, …). Starts at 1. */
+let mockContainerSeq = 0;
+
+/** Reset so the next mock number uses …TNB1 (or continue after `startAt`). */
+export function resetMockContainerSeq(startAt = 0): void {
+  mockContainerSeq = Math.max(0, startAt);
+}
+
+/** Advance the sequencer past any …TNBn values already present. */
+export function syncMockContainerSeqFromNos(
+  containerNos: Array<string | undefined>,
+): void {
+  let max = 0;
+  for (const no of containerNos) {
+    const match = (no ?? "").trim().match(/TNB(\d+)$/i);
+    if (match?.[1]) {
+      max = Math.max(max, Number(match[1]));
+    }
+  }
+  if (max > mockContainerSeq) {
+    mockContainerSeq = max;
+  }
+}
+
+/** Normalize equipment type to a 4-char mock prefix (e.g. 20DC, 40HC). */
+export function mockContainerTypeCode(containerType?: string): string {
+  const raw = (containerType ?? "20DC").replace(/[^a-zA-Z0-9]/g, "").toUpperCase();
+  const code = raw.slice(0, 4);
+  return code.padEnd(4, "X");
+}
+
+/**
+ * Mock container number: {type}TNB{n} — e.g. 20DCTNB1, 40HCTNB2.
+ * `n` starts at 1 and increments for each new number (unless uniqueIndex is passed).
+ */
+export function createMockContainerNo(
+  containerType = "20DC",
+  uniqueIndex?: number,
+): string {
+  const typeCode = mockContainerTypeCode(containerType);
+  let seq: number;
+  if (uniqueIndex !== undefined && uniqueIndex > 0) {
+    seq = uniqueIndex;
+    if (uniqueIndex > mockContainerSeq) {
+      mockContainerSeq = uniqueIndex;
+    }
+  } else {
+    seq = ++mockContainerSeq;
+  }
+  return `${typeCode}TNB${seq}`;
+}
+
+/** Keep unique suffix when type changes on an existing mock number. */
+export function applyContainerTypeToMockNo(
+  containerNo: string | undefined,
+  containerType: string,
+): string {
+  const current = (containerNo ?? "").trim();
+  const typeCode = mockContainerTypeCode(containerType);
+  const match = current.match(/^.{4}(TN.*)$/i);
+  if (match?.[1]) {
+    return `${typeCode}${match[1].toUpperCase()}`;
+  }
+  return createMockContainerNo(containerType);
+}
+
+export type ValidationTranslateFn = (key: string) => string;
+
+function defaultVT(key: string): string {
+  const fallback: Record<string, string> = {
+    "wizard.cargo.validation.commodityRequired": "Commodity is required",
+    "wizard.cargo.validation.weightRequired": "Weight is required",
+    "wizard.cargo.validation.containerTypeRequired": "Container type is required",
+    "wizard.cargo.validation.atLeastOneCommodity": "At least one commodity is required",
+    "wizard.cargo.validation.atLeastOneContainer": "At least one container is required",
+    "wizard.cargo.validation.setTempRequired": "Set Temp is required for operating reefer",
+    "wizard.cargo.validation.tempUnitRequired": "Temp Unit is required for operating reefer",
+    "wizard.cargo.validation.dimensionUnitRequired": "Dimension Unit is required for OOG",
+    "wizard.cargo.validation.unNoRequired": "UN No is required",
+    "wizard.cargo.validation.dgClassRequired": "DG Class is required",
+    "wizard.insurance.validation.currencyRequired": "Currency is required",
+    "wizard.insurance.validation.cargoValueMin": "Cargo value must be greater than 0",
+    "wizard.insurance.validation.acceptTerms": "You must accept the insurance terms",
+    "wizard.ens.validation.invalidEmail": "Invalid email",
+  };
+  return fallback[key] ?? key;
+}
+
 export const commodityItemSchema = z.object({
   id: z.string().min(1),
   commodity: z.string().optional(),
-  hsCode: z.string().min(1, "Commodity Code is required"),
+  hsCode: z.string().min(1, "Commodity is required"),
   classCode: z.string().optional(),
   weight: z.number().min(1, "Weight is required"),
-  volume: z.number().min(0, "Volume is required"),
-  packageType: z.string().min(1, "Package Type is required"),
-  packageQuantity: z.number().min(1, "Quantity is required"),
-  description: z.string().min(1, "Commodity Description is required"),
+  volume: z.number().min(0).optional(),
+  packageType: z.string().optional(),
+  packageQuantity: z.number().min(0).optional(),
+  description: z.string().optional(),
   marksAndNumbers: z.string().optional(),
   isDangerousGoods: z.boolean().default(false),
   unNumber: z.string().optional(),
@@ -205,59 +294,108 @@ export const containerItemSchema = z.object({
     .min(1, "At least one commodity is required"),
 });
 
-export const cargoSchema = z
-  .object({
-    containers: z
-      .array(containerItemSchema)
-      .min(1, "At least one container is required"),
-  })
-  .superRefine((data, ctx) => {
-    data.containers.forEach((container, ci) => {
-      if (container.reeferMode === "operating") {
-        if (container.setTemp === undefined || container.setTemp === null) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "Set Temp is required for operating reefer",
-            path: ["containers", ci, "setTemp"],
-          });
-        }
-        if (!container.tempUnit || container.tempUnit.trim() === "") {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "Temp Unit is required for operating reefer",
-            path: ["containers", ci, "tempUnit"],
-          });
-        }
-      }
-      if (container.isOog) {
-        if (!container.dimensionUnit || container.dimensionUnit.trim() === "") {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "Dimension Unit is required for OOG",
-            path: ["containers", ci, "dimensionUnit"],
-          });
-        }
-      }
-      container.commodities.forEach((c, mi) => {
-        if (c.isDangerousGoods) {
-          if (!c.unNumber || c.unNumber.trim() === "") {
+export function createCargoSchema(t: ValidationTranslateFn = defaultVT) {
+  const commoditySchema = z.object({
+    id: z.string().min(1),
+    commodity: z.string().optional(),
+    hsCode: z.string().min(1, t("wizard.cargo.validation.commodityRequired")),
+    classCode: z.string().optional(),
+    weight: z.number().min(1, t("wizard.cargo.validation.weightRequired")),
+    volume: z.number().min(0).optional(),
+    packageType: z.string().optional(),
+    packageQuantity: z.number().min(0).optional(),
+    description: z.string().optional(),
+    marksAndNumbers: z.string().optional(),
+    isDangerousGoods: z.boolean().default(false),
+    unNumber: z.string().optional(),
+    dgClass: z.string().optional(),
+    flashPoint: z.string().optional(),
+    marinePollutant: z.boolean().default(false),
+    shippingName: z.string().optional(),
+  });
+
+  const containerSchema = z.object({
+    id: z.string().min(1),
+    containerType: z.string().min(1, t("wizard.cargo.validation.containerTypeRequired")),
+    containerNo: z.string().optional(),
+    quantity: z.number().min(1).max(100),
+    eqpStatus: z.enum(["LADEN", "EMPTY"]).default("LADEN"),
+    tareWeight: z.number().optional(),
+    isSoc: z.boolean().default(false),
+    reeferMode: z.enum(["none", "operating", "nor"]).default("none"),
+    setTemp: z.number().optional(),
+    minTemp: z.number().optional(),
+    maxTemp: z.number().optional(),
+    tempUnit: z.string().optional(),
+    isLcl: z.boolean().default(false),
+    isOog: z.boolean().default(false),
+    olForward: z.number().optional(),
+    olAft: z.number().optional(),
+    owLeft: z.number().optional(),
+    owRight: z.number().optional(),
+    oh: z.number().optional(),
+    dimensionUnit: z.string().optional(),
+    commodities: z
+      .array(commoditySchema)
+      .min(1, t("wizard.cargo.validation.atLeastOneCommodity")),
+  });
+
+  return z
+    .object({
+      containers: z
+        .array(containerSchema)
+        .min(1, t("wizard.cargo.validation.atLeastOneContainer")),
+    })
+    .superRefine((data, ctx) => {
+      data.containers.forEach((container, ci) => {
+        if (container.reeferMode === "operating") {
+          if (container.setTemp === undefined || container.setTemp === null) {
             ctx.addIssue({
               code: z.ZodIssueCode.custom,
-              message: "UN No is required",
-              path: ["containers", ci, "commodities", mi, "unNumber"],
+              message: t("wizard.cargo.validation.setTempRequired"),
+              path: ["containers", ci, "setTemp"],
             });
           }
-          if (!c.dgClass || c.dgClass.trim() === "") {
+          if (!container.tempUnit || container.tempUnit.trim() === "") {
             ctx.addIssue({
               code: z.ZodIssueCode.custom,
-              message: "DG Class is required",
-              path: ["containers", ci, "commodities", mi, "dgClass"],
+              message: t("wizard.cargo.validation.tempUnitRequired"),
+              path: ["containers", ci, "tempUnit"],
             });
           }
         }
+        if (container.isOog) {
+          if (!container.dimensionUnit || container.dimensionUnit.trim() === "") {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: t("wizard.cargo.validation.dimensionUnitRequired"),
+              path: ["containers", ci, "dimensionUnit"],
+            });
+          }
+        }
+        container.commodities.forEach((c, mi) => {
+          if (c.isDangerousGoods) {
+            if (!c.unNumber || c.unNumber.trim() === "") {
+              ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: t("wizard.cargo.validation.unNoRequired"),
+                path: ["containers", ci, "commodities", mi, "unNumber"],
+              });
+            }
+            if (!c.dgClass || c.dgClass.trim() === "") {
+              ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: t("wizard.cargo.validation.dgClassRequired"),
+                path: ["containers", ci, "commodities", mi, "dgClass"],
+              });
+            }
+          }
+        });
       });
     });
-  });
+}
+
+export const cargoSchema = createCargoSchema();
 
 export type CommodityItem = z.infer<typeof commodityItemSchema>;
 export type ContainerItem = z.infer<typeof containerItemSchema>;
@@ -268,7 +406,7 @@ export function createEmptyCommodity(): CommodityItem {
     commodity: "",
     hsCode: "",
     classCode: "",
-    weight: 1,
+    weight: 10000,
     volume: 0,
     packageType: "",
     packageQuantity: 1,
@@ -283,15 +421,20 @@ export function createEmptyCommodity(): CommodityItem {
   };
 }
 
-export function createEmptyContainer(): ContainerItem {
+export function createEmptyContainer(
+  containerType = "20DC",
+  options?: { allocateMockNo?: boolean },
+): ContainerItem {
+  const allocateMockNo = options?.allocateMockNo !== false;
+  // Modified by Sekar Nagarajan (2026-09-17 23:28) — auto tare from container type (JSP getTareweight parity)
   return {
     id: newId(),
     // Modified by Sekar Nagarajan (2026-08-28 12:04)
-    containerType: "20DC",
-    containerNo: "",
+    containerType,
+    containerNo: allocateMockNo ? createMockContainerNo(containerType) : "",
     quantity: 1,
     eqpStatus: "LADEN",
-    tareWeight: undefined,
+    tareWeight: defaultTareWeightKg(containerType),
     isSoc: false,
     reeferMode: "none",
     setTemp: undefined,
@@ -311,6 +454,7 @@ export function createEmptyContainer(): ContainerItem {
 }
 
 export function defaultCargoData(): CargoData {
+  resetMockContainerSeq(0);
   return { containers: [createEmptyContainer()] };
 }
 
@@ -319,46 +463,49 @@ export function migrateLegacyCargo(legacy: unknown): CargoData {
   if (!legacy || typeof legacy !== "object") return defaultCargoData();
   const raw = legacy as Record<string, unknown>;
   if (Array.isArray(raw.containers) && raw.containers.length > 0) {
-    return {
-      containers: (raw.containers as Record<string, unknown>[]).map(
-        (containerRaw) => {
-          const base = createEmptyContainer();
-          const commoditiesRaw = Array.isArray(containerRaw.commodities)
-            ? containerRaw.commodities
-            : [];
-          return {
-            ...base,
-            ...containerRaw,
-            id: String(containerRaw.id ?? base.id),
-            containerNo: String(
+    const containers = (raw.containers as Record<string, unknown>[]).map(
+      (containerRaw) => {
+        const type = String(containerRaw.containerType ?? "20DC");
+        const base = createEmptyContainer(type, { allocateMockNo: false });
+        const commoditiesRaw = Array.isArray(containerRaw.commodities)
+          ? containerRaw.commodities
+          : [];
+        return {
+          ...base,
+          ...containerRaw,
+          id: String(containerRaw.id ?? base.id),
+          containerType: type,
+          containerNo:
+            String(
               containerRaw.containerNo ?? containerRaw.containerNumber ?? "",
-            ),
-            commodities:
-              commoditiesRaw.length > 0
-                ? commoditiesRaw.map((item) => {
-                    const row = (item ?? {}) as Record<string, unknown>;
-                    const empty = createEmptyCommodity();
-                    return {
-                      ...empty,
-                      ...row,
-                      id: String(row.id ?? empty.id),
-                      commodity: String(row.commodity ?? ""),
-                      hsCode: String(row.hsCode ?? ""),
-                      weight: Number(row.weight ?? 1) || 1,
-                      volume: typeof row.volume === "number" ? row.volume : 0,
-                      packageType: String(row.packageType ?? ""),
-                      packageQuantity: Number(row.packageQuantity ?? 1) || 1,
-                      description: String(
-                        row.description ?? row.commodity ?? "",
-                      ),
-                      marksAndNumbers: String(row.marksAndNumbers ?? ""),
-                    } as CommodityItem;
-                  })
-                : [createEmptyCommodity()],
-          } as ContainerItem;
-        },
-      ),
-    };
+            ).trim() || createMockContainerNo(type),
+          commodities:
+            commoditiesRaw.length > 0
+              ? commoditiesRaw.map((item) => {
+                  const row = (item ?? {}) as Record<string, unknown>;
+                  const empty = createEmptyCommodity();
+                  return {
+                    ...empty,
+                    ...row,
+                    id: String(row.id ?? empty.id),
+                    commodity: String(row.commodity ?? ""),
+                    hsCode: String(row.hsCode ?? ""),
+                    weight: Number(row.weight ?? 1) || 1,
+                    volume: typeof row.volume === "number" ? row.volume : 0,
+                    packageType: String(row.packageType ?? ""),
+                    packageQuantity: Number(row.packageQuantity ?? 1) || 1,
+                    description: String(
+                      row.description ?? row.commodity ?? "",
+                    ),
+                    marksAndNumbers: String(row.marksAndNumbers ?? ""),
+                  } as CommodityItem;
+                })
+              : [createEmptyCommodity()],
+        } as ContainerItem;
+      },
+    );
+    syncMockContainerSeqFromNos(containers.map((c) => c.containerNo));
+    return { containers };
   }
   const commodity = createEmptyCommodity();
   commodity.commodity = String(raw.commodity ?? "");
@@ -404,74 +551,82 @@ export interface BookingDocument {
   uploadedAt: string;
 }
 
-export const ensSchema = z.object({
-  euCustomsZone: z.boolean().default(false),
-  blType: z.enum(["Straight BL", "Master BL"]).default("Straight BL"),
-  ensFilingType: z
-    .enum(["Single Filing", "Multiple Filing"])
-    .default("Single Filing"),
-  paymentMethod: z
-    .enum(["Wire Transfer", "Not Prepaid"])
-    .default("Wire Transfer"),
+export function createEnsSchema(t: ValidationTranslateFn = defaultVT) {
+  return z.object({
+    euCustomsZone: z.boolean().default(false),
+    blType: z.enum(["Straight BL", "Master BL"]).default("Straight BL"),
+    ensFilingType: z
+      .enum(["Single Filing", "Multiple Filing"])
+      .default("Single Filing"),
+    paymentMethod: z
+      .enum(["Wire Transfer", "Not Prepaid"])
+      .default("Wire Transfer"),
 
-  // Declarant
-  declarantName: z.string().optional(),
-  declarantAddress: z.string().optional(),
-  declarantCity: z.string().optional(),
-  declarantCountry: z.string().optional(),
-  declarantEori: z.string().optional(),
-  declarantEmail: z
-    .string()
-    .email("Invalid email")
-    .optional()
-    .or(z.literal("")),
+    // Declarant
+    declarantName: z.string().optional(),
+    declarantAddress: z.string().optional(),
+    declarantCity: z.string().optional(),
+    declarantCountry: z.string().optional(),
+    declarantEori: z.string().optional(),
+    declarantEmail: z
+      .string()
+      .email(t("wizard.ens.validation.invalidEmail"))
+      .optional()
+      .or(z.literal("")),
 
-  // Buyer
-  buyerName: z.string().optional(),
-  buyerAddress: z.string().optional(),
-  buyerCity: z.string().optional(),
-  buyerCountry: z.string().optional(),
+    // Buyer
+    buyerName: z.string().optional(),
+    buyerAddress: z.string().optional(),
+    buyerCity: z.string().optional(),
+    buyerCountry: z.string().optional(),
 
-  // Seller
-  sellerName: z.string().optional(),
-  sellerAddress: z.string().optional(),
-  sellerCity: z.string().optional(),
-  sellerCountry: z.string().optional(),
-});
+    // Seller
+    sellerName: z.string().optional(),
+    sellerAddress: z.string().optional(),
+    sellerCity: z.string().optional(),
+    sellerCountry: z.string().optional(),
+  });
+}
+
+export const ensSchema = createEnsSchema();
 
 // Step 5: Insurance
-export const insuranceSchema = z
-  .object({
-    isInsuranceRequired: z.boolean().default(false),
-    currency: z.string().optional(),
-    cargoValue: z.number().optional(),
-    termsAccepted: z.boolean().default(false),
-  })
-  .superRefine((data, ctx) => {
-    if (data.isInsuranceRequired) {
-      if (!data.currency) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Currency is required",
-          path: ["currency"],
-        });
+export function createInsuranceSchema(t: ValidationTranslateFn = defaultVT) {
+  return z
+    .object({
+      isInsuranceRequired: z.boolean().default(false),
+      currency: z.string().optional(),
+      cargoValue: z.number().optional(),
+      termsAccepted: z.boolean().default(false),
+    })
+    .superRefine((data, ctx) => {
+      if (data.isInsuranceRequired) {
+        if (!data.currency) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: t("wizard.insurance.validation.currencyRequired"),
+            path: ["currency"],
+          });
+        }
+        if (!data.cargoValue || data.cargoValue <= 0) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: t("wizard.insurance.validation.cargoValueMin"),
+            path: ["cargoValue"],
+          });
+        }
+        if (!data.termsAccepted) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: t("wizard.insurance.validation.acceptTerms"),
+            path: ["termsAccepted"],
+          });
+        }
       }
-      if (!data.cargoValue || data.cargoValue <= 0) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Cargo value must be greater than 0",
-          path: ["cargoValue"],
-        });
-      }
-      if (!data.termsAccepted) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "You must accept the insurance terms",
-          path: ["termsAccepted"],
-        });
-      }
-    }
-  });
+    });
+}
+
+export const insuranceSchema = createInsuranceSchema();
 
 // Complete Booking Payload
 export type MasterDetailsData = z.infer<typeof masterDetailsSchema>;
@@ -491,6 +646,13 @@ export interface BookingPayload {
   referenceFields?: ReferenceField[];
   /** Soft draft id when saved via Save Draft. */
   draftId?: string;
+  /**
+   * When set (duplicate flow), submit/draft always creates a new booking even if
+   * the wizard content is identical to the source booking.
+   */
+  forceCreateNew?: boolean;
+  /** Online/agency ref of the booking this wizard payload was duplicated from. */
+  duplicatedFromId?: string;
 }
 
 export interface BookingActivityEvent {

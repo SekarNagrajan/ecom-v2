@@ -1,4 +1,5 @@
 // Modified by Sekar Nagarajan (2026-08-25 16:25)
+import i18n from "../../../i18n/config";
 import type { ContactUsFormData } from "../types/contact-us.schema";
 
 export interface ContactUsResponse {
@@ -22,7 +23,7 @@ export interface StateOption {
  * New endpoint: POST /api/contact-us
  */
 export async function submitContactUs(
-  data: ContactUsFormData
+  data: ContactUsFormData,
 ): Promise<ContactUsResponse> {
   const response = await fetch("/api/contact-us", {
     method: "POST",
@@ -34,7 +35,9 @@ export async function submitContactUs(
     const error = (await response.json().catch(() => ({
       message: "Unknown error",
     }))) as { message?: string };
-    throw new Error(error.message || "Failed to send message");
+    throw new Error(
+      error.message || i18n.t("contact-us:errors.sendFailed"),
+    );
   }
 
   return (await response.json()) as ContactUsResponse;
@@ -49,10 +52,10 @@ export async function fetchCountries(): Promise<{
 }
 
 export async function fetchStates(
-  countryCode: string
+  countryCode: string,
 ): Promise<{ states: StateOption[] }> {
   const res = await fetch(
-    `/api/states?country=${encodeURIComponent(countryCode)}`
+    `/api/states?country=${encodeURIComponent(countryCode)}`,
   );
   if (!res.ok) throw new Error("Failed to fetch states");
   return (await res.json()) as { states: StateOption[] };

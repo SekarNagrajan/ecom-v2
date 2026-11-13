@@ -53,6 +53,46 @@ export const SI_PARTY_ROLE_LABEL: Record<SiPartyRoleKey, string> = {
   agreementParty: "Agreement Party",
 };
 
+type PartyTranslateFn = (key: string) => string;
+
+/** Display label for party cards / preview (Shipper, Consignee, …). */
+export function getSiPartyRoleLabel(
+  role: SiPartyRoleKey,
+  t: PartyTranslateFn,
+): string {
+  switch (role) {
+    case "shipper":
+      return t("parties.shipper");
+    case "consignee":
+      return t("parties.consignee");
+    case "notify":
+      return t("parties.notify");
+    case "notify2":
+      return t("parties.notify2");
+    case "notify3":
+      return t("parties.notify3");
+    case "forwarder":
+      return t("parties.forwarder");
+    case "warehouse":
+      return t("parties.warehouse");
+    case "agreementParty":
+      return t("parties.agreementParty");
+    default: {
+      const _exhaustive: never = role;
+      return _exhaustive;
+    }
+  }
+}
+
+/** Assign-panel chip label (Booking Party for shipper). */
+export function getSiPartyRoleOptionLabel(
+  role: SiPartyRoleKey,
+  t: PartyTranslateFn,
+): string {
+  if (role === "shipper") return t("parties.bookingParty");
+  return getSiPartyRoleLabel(role, t);
+}
+
 function toSiCard(card: PartyCardData): SiPartyCardData {
   return {
     ...card,

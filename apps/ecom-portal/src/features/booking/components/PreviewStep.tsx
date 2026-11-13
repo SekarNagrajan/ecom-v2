@@ -1,36 +1,30 @@
-// Modified by Sekar Nagarajan (2026-09-01 16:19)
+// Modified by Sekar Nagarajan (2026-09-11 12:12)
 /**
- * Preview — summary of all wizard step inputs with Edit → jump to step.
+ * Preview — airy review of all wizard inputs with Edit → jump to step.
+ * Layout: header + section stack (route, master, parties, cargo, ENS,
+ * insurance, documents, references) + terms + footer.
  */
 import { AppButton } from "@solverminds/shared-ui";
-import { useToast } from "@solverminds/shared-ui/hooks";
 import { useNavigate } from "@tanstack/react-router";
-import {
-  Col,
-  Descriptions,
-  Flex,
-  Result,
-  Row,
-  Table,
-  Tag,
-  Typography,
-} from "antd";
+import { Checkbox, Flex, Result } from "antd";
 import { useState } from "react";
 
+import { useTranslation } from "react-i18next";
 import { AppIcon, Icons } from "../../../components/icons";
-import { WIZARD_STEP_TITLES } from "../../../constants/module-titles";
-import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
-import { bookingApi } from "../api/booking.api";
+import { useWizardStepTitles } from "../../../i18n/use-module-titles";
 import { useBookingStore } from "../stores/booking.store";
-import { BOOKING_CARGO_LINE_COLUMNS } from "../utils/booking-cargo-line-columns";
+import type { SelectedRoute } from "../types/booking.types";
+import { orderedAssignedParties } from "../utils/party-role.utils";
 import { BookingModuleStyles } from "./booking-module-styles";
+import { PreviewCargoReview } from "./preview/PreviewCargoReview";
+import { PreviewRouteBand } from "./preview/PreviewRouteBand";
+import { PreviewSummaryStrip } from "./preview/PreviewSummaryStrip";
 import {
   BookingPreviewEmpty,
-  BookingPreviewPartyBlock,
+  BookingPreviewFieldGrid,
+  BookingPreviewPartyCard,
   BookingPreviewSection,
 } from "./preview/booking-preview-section";
-
-const { Title, Text } = Typography;
 
 /** Wizard step indices — mirrors booking-wizard-route Steps order. */
 const BOOKING_STEP = {
@@ -48,39 +42,82 @@ function dash(value?: string | number | null): string {
   return String(value);
 }
 
+function portCodeFromValue(value?: string): string {
+  if (!value) return "";
+  const beforeDash = value.split(" - ")[0]?.trim() ?? "";
+  if (beforeDash && /^[A-Z]{5}$/i.test(beforeDash)) return beforeDash;
+  const token = value.split(/[\s-]/)[0]?.trim() ?? "";
+  return token || value;
+}
+
+function formatDocumentType(type: string): string {
+  return type.replace(/_/g, " ");
+}
+
+function formatMoney(value?: number, currency?: string): string {
+  if (value === undefined || value === null) return "—";
+  const amount = value.toLocaleString();
+  return currency ? `${currency} ${amount}` : amount;
+}
+
+function buildReviewSummary(
+  bookingNo: string | undefined,
+  route: SelectedRoute | null | undefined,
+  origin: string | undefined,
+  delivery: string | undefined,
+): string {
+  const originCode = route?.polPortId || portCodeFromValue(origin) || "—";
+  const destCode = route?.podPortId || portCodeFromValue(delivery) || "—";
+  const vesselVoyage = route
+    ? [route.vesselName, `${route.voyage ?? ""}${route.bound ?? ""}`]
+        .filter(Boolean)
+        .join(" ")
+        .trim()
+    : "";
+  const transit =
+    route && typeof route.transitTimeDays === "number"
+      ? `${route.transitTimeDays} days${
+          route.isDirect
+            ? ", Direct"
+            : route.shipmentKind
+            ? `, ${route.shipmentKind}`
+            : ""
+        }`
+      : "";
+  return [
+    bookingNo?.trim() || "Draft",
+    `${originCode} → ${destCode}`,
+    vesselVoyage,
+    transit,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+}
+
 interface PreviewStepProps {
   onSubmit: () => void;
   isSubmitting: boolean;
 }
 
 export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
-  const toast = useToast();
+  const { t } = useTranslation(["booking", "common", "modules"]);
+  const WIZARD_STEP_TITLES = useWizardStepTitles();
   const navigate = useNavigate();
-  const { payload, prevStep, setCurrentStep } = useBookingStore();
-  const [savingDraft, setSavingDraft] = useState(false);
+  const payload = useBookingStore((s) => s.payload);
+  const prevStep = useBookingStore((s) => s.prevStep);
+  const setCurrentStep = useBookingStore((s) => s.setCurrentStep);
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
   const go = (step: (typeof BOOKING_STEP)[keyof typeof BOOKING_STEP]) => {
     setCurrentStep(step);
-  };
-
-  const handleSaveDraft = async () => {
-    setSavingDraft(true);
-    try {
-      const { draftId } = await bookingApi.saveDraft(payload);
-      toast.success(`Draft saved (${draftId})`);
-    } catch {
-      toast.error("Failed to save draft");
-    } finally {
-      setSavingDraft(false);
-    }
   };
 
   if (!payload.masterDetails || !payload.parties || !payload.cargo) {
     return (
       <Result
         status="warning"
-        title="Missing Information"
-        subTitle="Please go back and complete all previous steps before submitting."
+        title={t("booking:wizard.preview.missingTitle")}
+        subTitle={t("booking:wizard.preview.missingSubtitle")}
       />
     );
   }
@@ -95,316 +132,251 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
     referenceFields = [],
   } = payload;
   const route = masterDetails.selectedRoute;
-  const busy = isSubmitting || savingDraft;
+
+  const partyEntries = orderedAssignedParties(parties);
+
+  const masterRows: { label: string; value: string }[] = [
+    { label: t("booking:columns.origin"), value: dash(masterDetails.origin) },
+    { label: t("booking:columns.delivery"), value: dash(masterDetails.delivery) },
+    { label: t("booking:labels.cargoReadyDate"), value: dash(masterDetails.cargoReadyDate) },
+    { label: t("booking:labels.haulageOrigin"), value: dash(masterDetails.haulageOriginType) },
+    {
+      label: t("booking:labels.haulageDestination"),
+      value: dash(masterDetails.haulageDestinationType),
+    },
+    { label: t("booking:labels.carriageContract"), value: dash(masterDetails.carriageContract) },
+    { label: t("booking:wizard.master.preferredAgency"), value: dash(masterDetails.preferredAgency) },
+    { label: t("booking:wizard.master.rateReference"), value: dash(masterDetails.rateReference) },
+  ];
+
+  const ensRows: { label: string; value: string }[] = ens?.euCustomsZone
+    ? [
+        { label: t("booking:wizard.preview.euCustomsZone"), value: t("common:actions.yes") },
+        { label: t("booking:labels.blType"), value: dash(ens.blType) },
+        { label: t("booking:labels.filingType"), value: dash(ens.ensFilingType) },
+        { label: t("booking:wizard.preview.paymentMethod"), value: dash(ens.paymentMethod) },
+        ...(ens.ensFilingType === "Single Filing"
+          ? [
+              { label: t("booking:wizard.preview.buyer"), value: dash(ens.buyerName) },
+              { label: t("booking:wizard.preview.seller"), value: dash(ens.sellerName) },
+            ]
+          : [
+              {
+                label: t("booking:wizard.preview.declarant"),
+                value: ens.declarantName
+                  ? `${ens.declarantName}${
+                      ens.declarantCountry ? ` (${ens.declarantCountry})` : ""
+                    }`
+                  : "—",
+              },
+            ]),
+      ]
+    : [{ label: t("booking:wizard.preview.ensRequired"), value: t("common:actions.no") }];
+
+  const originCode =
+    route?.polPortId || portCodeFromValue(masterDetails.origin);
+  const destCode =
+    route?.podPortId || portCodeFromValue(masterDetails.delivery);
 
   return (
     <div className="form-step-layout">
       <BookingModuleStyles />
-      <div className="custom-scroll form-step-scroll booking-preview-scroll">
+      <div className="custom-scroll form-step-scroll booking-preview-scroll booking-review">
+        <PreviewSummaryStrip
+          summary={buildReviewSummary(
+            masterDetails.onlineBookingNo,
+            route,
+            masterDetails.origin,
+            masterDetails.delivery,
+          )}
+        />
+
         <BookingPreviewSection
-          title={WIZARD_STEP_TITLES.masterDetails}
+          variant="airy"
+          title={t("booking:wizard.preview.sections.routeSchedule")}
           onEdit={() => go(BOOKING_STEP.master)}
         >
-          <Descriptions
-            size="small"
-            column={{ xs: 1, sm: 2, md: 3 }}
-            className="booking-preview-descriptions"
-          >
-            <Descriptions.Item label="Origin">
-              {dash(masterDetails.origin)}
-            </Descriptions.Item>
-            <Descriptions.Item label="Delivery">
-              {dash(masterDetails.delivery)}
-            </Descriptions.Item>
-            <Descriptions.Item label="Cargo Ready Date">
-              {dash(masterDetails.cargoReadyDate)}
-            </Descriptions.Item>
-            <Descriptions.Item label="Haulage Origin">
-              {dash(masterDetails.haulageOriginType)}
-            </Descriptions.Item>
-            <Descriptions.Item label="Haulage Destination">
-              {dash(masterDetails.haulageDestinationType)}
-            </Descriptions.Item>
-            <Descriptions.Item label="Carriage Contract">
-              {dash(masterDetails.carriageContract)}
-            </Descriptions.Item>
-            <Descriptions.Item label="Agreement Party">
-              {dash(masterDetails.agreementParty)}
-            </Descriptions.Item>
-            <Descriptions.Item label="Preferred Agency">
-              {dash(masterDetails.preferredAgency)}
-            </Descriptions.Item>
-          </Descriptions>
-
           {route ? (
-            <div className="booking-selected-route">
-              <div>
-                <Text strong className="booking-selected-route__title">
-                  Selected route: {route.serviceName} ({route.serviceCode})
-                </Text>
-                <Text type="secondary" className="booking-selected-route__meta">
-                  {route.vesselName} · Voy {route.voyage}
-                  {route.bound ? `/${route.bound}` : ""} · ETD {route.etd} · ETA{" "}
-                  {route.eta} · {route.transitTimeDays} days
-                </Text>
-              </div>
-            </div>
+            <PreviewRouteBand
+              route={route}
+              originCode={originCode}
+              destCode={destCode}
+              carriageContract={masterDetails.carriageContract}
+              haulageOrigin={masterDetails.haulageOriginType}
+              haulageDestination={masterDetails.haulageDestinationType}
+            />
           ) : (
-            <BookingPreviewEmpty label="No route selected" />
+            <BookingPreviewEmpty label={t("booking:wizard.preview.empty.noRoute")} />
           )}
         </BookingPreviewSection>
 
         <BookingPreviewSection
-          title={WIZARD_STEP_TITLES.customerDetails}
+          variant="airy"
+          title={t("booking:sections.masterDetails")}
+          onEdit={() => go(BOOKING_STEP.master)}
+        >
+          <BookingPreviewFieldGrid items={masterRows} />
+        </BookingPreviewSection>
+
+        <BookingPreviewSection
+          variant="airy"
+          title={t("booking:sections.customerDetails")}
           onEdit={() => go(BOOKING_STEP.parties)}
         >
-          <Row gutter={[24, 24]}>
-            <Col {...RESPONSIVE_COL.third}>
-              <BookingPreviewPartyBlock
-                role="Booking Party"
-                roleKey="shipper"
-                name={parties.shipperName}
-                address={parties.shipperAddress}
-                city={parties.shipperCity}
-                country={parties.shipperCountry}
-              />
-            </Col>
-            <Col {...RESPONSIVE_COL.third}>
-              <BookingPreviewPartyBlock
-                role="Agreement Party"
-                roleKey="agreementParty"
-                name={parties.agreementParty}
-              />
-            </Col>
-            {parties.consigneeName ? (
-              <Col {...RESPONSIVE_COL.third}>
-                <BookingPreviewPartyBlock
-                  role="Consignee"
-                  roleKey="consignee"
-                  name={parties.consigneeName}
-                  address={parties.consigneeAddress}
-                  city={parties.consigneeCity}
-                  country={parties.consigneeCountry}
-                />
-              </Col>
-            ) : null}
-            {parties.notifyPartyName ? (
-              <Col {...RESPONSIVE_COL.third}>
-                <BookingPreviewPartyBlock
-                  role="Notify Party"
-                  roleKey="notifyParty"
-                  name={parties.notifyPartyName}
-                  address={parties.notifyPartyAddress}
-                  city={parties.notifyPartyCity}
-                  country={parties.notifyPartyCountry}
-                />
-              </Col>
-            ) : null}
-            {parties.notifyParty2Name ? (
-              <Col {...RESPONSIVE_COL.third}>
-                <BookingPreviewPartyBlock
-                  role="Notify Party 2"
-                  roleKey="notifyParty2"
-                  name={parties.notifyParty2Name}
-                />
-              </Col>
-            ) : null}
-            {parties.freightForwarder ? (
-              <Col {...RESPONSIVE_COL.third}>
-                <BookingPreviewPartyBlock
-                  role="Forwarder"
-                  roleKey="forwarder"
-                  name={parties.freightForwarder}
-                />
-              </Col>
-            ) : null}
-            {parties.siSubmittingParty ? (
-              <Col {...RESPONSIVE_COL.third}>
-                <BookingPreviewPartyBlock
-                  role="SI Submitting Party"
-                  roleKey="siSubmittingParty"
-                  name={parties.siSubmittingParty}
-                />
-              </Col>
-            ) : null}
-          </Row>
-        </BookingPreviewSection>
-
-        <BookingPreviewSection
-          title={WIZARD_STEP_TITLES.cargoDetails}
-          onEdit={() => go(BOOKING_STEP.cargo)}
-        >
-          {cargo.containers.length === 0 ? (
-            <BookingPreviewEmpty label="No containers" />
+          {partyEntries.length > 0 ? (
+            <div className="booking-review__party-grid">
+              {partyEntries.map(([role, card]) => (
+                <div key={role} className="booking-party-grid__col">
+                  <BookingPreviewPartyCard role={role} card={card} />
+                </div>
+              ))}
+            </div>
           ) : (
-            cargo.containers.map((container, idx) => (
-              <div key={container.id} className="booking-container-block">
-                <div className="booking-container-block__header">
-                  <Text strong className="booking-container-block__title">
-                    Container {idx + 1}: {container.containerNo || "—"} (
-                    {container.containerType})
-                  </Text>
-                  <div className="booking-container-block__meta">
-                    <Tag>{container.eqpStatus}</Tag>
-                    {container.isSoc ? <Tag color="blue">SOC</Tag> : null}
-                    {container.reeferMode !== "none" ? (
-                      <Tag color="cyan">Reefer {container.reeferMode}</Tag>
-                    ) : null}
-                    {container.isLcl ? <Tag color="purple">LCL</Tag> : null}
-                    {container.isOog ? <Tag color="orange">OOG</Tag> : null}
-                  </div>
-                </div>
-                <div className="responsive-table-wrap custom-scroll">
-                  <Table
-                    size="small"
-                    dataSource={container.commodities}
-                    rowKey="id"
-                    pagination={false}
-                    bordered
-                    columns={BOOKING_CARGO_LINE_COLUMNS}
-                    locale={{ emptyText: "No commodities" }}
-                  />
-                </div>
-              </div>
-            ))
+            <BookingPreviewEmpty label={t("booking:wizard.preview.empty.noParties")} />
           )}
         </BookingPreviewSection>
 
         <BookingPreviewSection
+          variant="airy"
+          title={t("booking:sections.cargoDetails")}
+          onEdit={() => go(BOOKING_STEP.cargo)}
+        >
+          <PreviewCargoReview containers={cargo.containers ?? []} />
+        </BookingPreviewSection>
+
+        <BookingPreviewSection
+          variant="airy"
           title={WIZARD_STEP_TITLES.ensDetails}
           onEdit={() => go(BOOKING_STEP.ens)}
         >
-          {ens?.euCustomsZone ? (
-            <Descriptions
-              size="small"
-              column={{ xs: 1, sm: 2, md: 3 }}
-              className="booking-preview-descriptions"
-            >
-              <Descriptions.Item label="EU Customs Zone">Yes</Descriptions.Item>
-              <Descriptions.Item label="BL Type">
-                {dash(ens.blType)}
-              </Descriptions.Item>
-              <Descriptions.Item label="Filing Type">
-                {dash(ens.ensFilingType)}
-              </Descriptions.Item>
-              <Descriptions.Item label="Payment Method">
-                {dash(ens.paymentMethod)}
-              </Descriptions.Item>
-              {ens.ensFilingType === "Single Filing" ? (
-                <>
-                  <Descriptions.Item label="Buyer">
-                    {dash(ens.buyerName)}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Seller">
-                    {dash(ens.sellerName)}
-                  </Descriptions.Item>
-                </>
-              ) : (
-                <Descriptions.Item label="Declarant">
-                  {ens.declarantName
-                    ? `${ens.declarantName}${
-                        ens.declarantCountry ? ` (${ens.declarantCountry})` : ""
-                      }`
-                    : "—"}
-                </Descriptions.Item>
-              )}
-            </Descriptions>
-          ) : (
-            <Tag>ENS not required</Tag>
-          )}
+          <BookingPreviewFieldGrid items={ensRows} />
         </BookingPreviewSection>
 
         <BookingPreviewSection
-          title={WIZARD_STEP_TITLES.insurance}
+          variant="airy"
+          title={t("booking:wizard.preview.sections.insuranceCharges")}
           onEdit={() => go(BOOKING_STEP.insurance)}
         >
           {insurance?.isInsuranceRequired ? (
-            <Descriptions
-              size="small"
-              column={{ xs: 1, sm: 2, md: 3 }}
-              className="booking-preview-descriptions"
-            >
-              <Descriptions.Item label="Required">Yes</Descriptions.Item>
-              <Descriptions.Item label="Cargo Value">
-                {dash(insurance.cargoValue)} {dash(insurance.currency)}
-              </Descriptions.Item>
-              <Descriptions.Item label="Terms Accepted">
-                {insurance.termsAccepted ? "Yes" : "No"}
-              </Descriptions.Item>
-            </Descriptions>
+            <div className="booking-review__grid">
+              <div className="booking-review__field">
+                <span className="booking-review__label">{t("booking:wizard.preview.ensRequired")}</span>
+                <span className="booking-review__value">{t("common:actions.yes")}</span>
+              </div>
+              <div className="booking-review__field">
+                <span className="booking-review__label">{t("booking:wizard.preview.currency")}</span>
+                <span className="booking-review__value">
+                  {dash(insurance.currency)}
+                </span>
+              </div>
+              <div className="booking-review__field">
+                <span className="booking-review__label">{t("booking:labels.termsAccepted")}</span>
+                <span className="booking-review__value">
+                  {insurance.termsAccepted ? t("common:actions.yes") : t("common:actions.no")}
+                </span>
+              </div>
+              <div className="booking-review__value-tile">
+                <span className="booking-review__label">{t("booking:wizard.preview.declaredValue")}</span>
+                <span className="booking-review__value-tile-amount">
+                  {formatMoney(insurance.cargoValue, insurance.currency)}
+                </span>
+              </div>
+            </div>
           ) : (
-            <Tag>Insurance not required</Tag>
+            <div className="booking-review__grid">
+              <div className="booking-review__field">
+                <span className="booking-review__label">{t("booking:wizard.preview.ensRequired")}</span>
+                <span className="booking-review__value">{t("common:actions.no")}</span>
+              </div>
+              <div className="booking-review__field">
+                <span className="booking-review__label">{t("booking:wizard.preview.currency")}</span>
+                <span className="booking-review__value">—</span>
+              </div>
+              <div className="booking-review__field">
+                <span className="booking-review__label">{t("booking:labels.termsAccepted")}</span>
+                <span className="booking-review__value">—</span>
+              </div>
+              <div className="booking-review__value-tile">
+                <span className="booking-review__label">{t("booking:wizard.preview.declaredValue")}</span>
+                <span className="booking-review__value-tile-amount">—</span>
+              </div>
+            </div>
           )}
         </BookingPreviewSection>
 
         <BookingPreviewSection
-          title={WIZARD_STEP_TITLES.fileUpload}
+          variant="airy"
+          title={t("booking:sections.documents")}
           onEdit={() => go(BOOKING_STEP.files)}
         >
           {documents.length > 0 ? (
-            <ul className="booking-preview-list">
-              {documents.map((d) => (
-                <li key={d.id}>
-                  {d.fileName} ({d.type})
-                </li>
+            <div className="booking-review__grid">
+              {documents.map((doc) => (
+                <div key={doc.id} className="booking-review__doc-chip">
+                  <span className="booking-review__doc-chip-name">
+                    <AppIcon icon={Icons.fileText} size={16} />
+                    <span className="booking-review__value">
+                      {doc.fileName}
+                    </span>
+                  </span>
+                  <span className="booking-review__label">
+                    {formatDocumentType(doc.type)}
+                  </span>
+                </div>
               ))}
-            </ul>
+            </div>
           ) : (
-            <BookingPreviewEmpty label="No files uploaded" />
+            <BookingPreviewEmpty label={t("booking:wizard.preview.empty.noFiles")} />
           )}
         </BookingPreviewSection>
 
         <BookingPreviewSection
+          variant="airy"
           title={WIZARD_STEP_TITLES.references}
           onEdit={() => go(BOOKING_STEP.references)}
         >
           {referenceFields.length > 0 ? (
-            <Descriptions
-              size="small"
-              column={{ xs: 1, sm: 2, md: 3 }}
-              className="booking-preview-descriptions"
-            >
-              {referenceFields.map((field) => (
-                <Descriptions.Item key={field.id} label={field.name}>
-                  {dash(field.value)}
-                </Descriptions.Item>
-              ))}
-            </Descriptions>
+            <BookingPreviewFieldGrid
+              items={referenceFields.map((field) => ({
+                label: field.name,
+                value: dash(field.value),
+              }))}
+            />
           ) : (
-            <BookingPreviewEmpty label="No reference fields" />
+            <BookingPreviewEmpty label={t("booking:wizard.preview.empty.noReferences")} />
           )}
         </BookingPreviewSection>
+
+        <div className="booking-review__terms">
+          <Checkbox
+            checked={termsAccepted}
+            onChange={(event) => setTermsAccepted(event.target.checked)}
+          >
+            {t("booking:wizard.preview.termsCheckbox")}
+          </Checkbox>
+        </div>
       </div>
 
       <div className="form-step-footer form-step-footer--split">
         <div className="form-step-footer__start custom-scroll">
-          <AppButton onClick={prevStep} disabled={busy}>
-            Previous
+          <AppButton onClick={prevStep} disabled={isSubmitting}>
+            {t("common:actions.previous")}
           </AppButton>
           <AppButton
             onClick={() => navigate({ to: "/app/booking" })}
-            disabled={busy}
+            disabled={isSubmitting}
           >
-            Cancel
+            {t("common:actions.cancel")}
           </AppButton>
         </div>
         <Flex gap="small" wrap="wrap">
           <AppButton
-            icon={<AppIcon icon={Icons.save} size={16} />}
-            loading={savingDraft}
-            disabled={isSubmitting}
-            onClick={() => void handleSaveDraft()}
-          >
-            Save Draft
-          </AppButton>
-          <AppButton
             type="primary"
-            icon={<AppIcon icon={Icons.check} size={16} />}
             onClick={onSubmit}
             loading={isSubmitting}
-            disabled={savingDraft}
+            disabled={!termsAccepted}
           >
-            Submit Booking
+            {t("booking:wizard.actions.submitBooking")}
           </AppButton>
         </Flex>
       </div>

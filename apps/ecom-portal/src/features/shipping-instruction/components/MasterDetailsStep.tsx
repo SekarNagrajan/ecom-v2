@@ -1,13 +1,15 @@
-// Modified by Sekar Nagarajan (2026-09-01 16:40)
+// Modified by Sekar Nagarajan (2026-09-29 16:55)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
 import { Card, Col, Input, Row, Segmented, Typography } from "antd";
 import type { ReactNode } from "react";
+import { useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import type { SiMasterDetailsForm, SIWizardStepProps } from "../types/si.types";
-import { siMasterDetailsSchema } from "../types/si.types";
+import { createSiMasterDetailsSchema } from "../types/si.types";
 
 const { Text, Title } = Typography;
 
@@ -51,12 +53,14 @@ export function MasterDetailsStep({
   isFirstStep,
   isSubmitting,
 }: SIWizardStepProps) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
+  const schema = useMemo(() => createSiMasterDetailsSchema(t), [t]);
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm<SiMasterDetailsForm>({
-    resolver: zodResolver(siMasterDetailsSchema),
+    resolver: zodResolver(schema),
     defaultValues: {
       blType: data.blType,
       releaseType: data.releaseType,
@@ -100,19 +104,24 @@ export function MasterDetailsStep({
               className="form-step-card form-step-section si-master-step-card"
               title={
                 <Title level={5} className="form-step-card-title">
-                  Document References
+                  {t("wizard.master.documentReferences")}
                 </Title>
               }
             >
               <div className="si-master-detail-grid si-master-detail-grid--3">
                 <ReadonlyField
-                  label="Booking Number"
+                  label={t("labels.bookingNumber")}
                   value={data.bookingNo}
                   emphasis
                 />
-                <ReadonlyField label="SI Number" value={data.siNo || "Draft"} />
+                <ReadonlyField
+                  label={t("labels.siNumber")}
+                  value={data.siNo || t("labels.draft")}
+                />
                 <div className="form-field-cell si-master-readonly-field">
-                  <label className="form-field-label">Agency Ref</label>
+                  <label className="form-field-label">
+                    {t("labels.agencyRef")}
+                  </label>
                   <Controller
                     control={control}
                     name="agencyRefNo"
@@ -121,7 +130,7 @@ export function MasterDetailsStep({
                         {...field}
                         size="large"
                         maxLength={35}
-                        placeholder="Enter agency reference"
+                        placeholder={t("wizard.master.agencyRefPlaceholder")}
                         className="form-field-full-width"
                       />
                     )}
@@ -136,14 +145,14 @@ export function MasterDetailsStep({
               className="form-step-card form-step-section si-master-step-card"
               title={
                 <Title level={5} className="form-step-card-title">
-                  Bill of Lading Options
+                  {t("wizard.master.blOptions")}
                 </Title>
               }
             >
               <div className="si-master-detail-grid si-master-options-grid">
                 <div className="form-field-cell si-master-readonly-field">
                   <label className="form-field-label">
-                    B/L Type <Text type="danger"> *</Text>
+                    {t("labels.blType")} <Text type="danger"> *</Text>
                   </label>
                   <Controller
                     control={control}
@@ -155,8 +164,14 @@ export function MasterDetailsStep({
                         value={value}
                         onChange={onChange}
                         options={[
-                          { label: "Original B/L", value: "Original" },
-                          { label: "Sea Waybill", value: "Seaway" },
+                          {
+                            label: t("labels.originalBl"),
+                            value: "Original",
+                          },
+                          {
+                            label: t("labels.seaWaybill"),
+                            value: "Seaway",
+                          },
                         ]}
                       />
                     )}
@@ -170,7 +185,7 @@ export function MasterDetailsStep({
 
                 <div className="form-field-cell si-master-readonly-field">
                   <label className="form-field-label">
-                    Release Type <Text type="danger"> *</Text>
+                    {t("labels.releaseType")} <Text type="danger"> *</Text>
                   </label>
                   <Controller
                     control={control}
@@ -182,8 +197,11 @@ export function MasterDetailsStep({
                         value={value}
                         onChange={onChange}
                         options={[
-                          { label: "Original", value: "O" },
-                          { label: "Telex Release", value: "T" },
+                          { label: t("labels.original"), value: "O" },
+                          {
+                            label: t("labels.telexRelease"),
+                            value: "T",
+                          },
                         ]}
                       />
                     )}
@@ -197,7 +215,8 @@ export function MasterDetailsStep({
 
                 <div className="form-field-cell si-master-readonly-field">
                   <label className="form-field-label">
-                    Freight Terms <Text type="danger"> *</Text>
+                    {t("wizard.master.freightTerms")}{" "}
+                    <Text type="danger"> *</Text>
                   </label>
                   <Controller
                     control={control}
@@ -209,8 +228,8 @@ export function MasterDetailsStep({
                         value={value}
                         onChange={onChange}
                         options={[
-                          { label: "Prepaid", value: "PREPAID" },
-                          { label: "Collect", value: "COLLECT" },
+                          { label: t("labels.prepaid"), value: "PREPAID" },
+                          { label: t("labels.collect"), value: "COLLECT" },
                         ]}
                       />
                     )}
@@ -234,23 +253,32 @@ export function MasterDetailsStep({
               title={
                 <div className="si-master-card-title-row">
                   <Title level={5} className="form-step-card-title">
-                    Vessel Details
+                    {t("wizard.master.vesselDetails")}
                   </Title>
                 </div>
               }
             >
               <div className="si-master-detail-grid si-master-detail-grid--5">
                 <ReadonlyField
-                  label="Vessel / Voyage Number"
+                  label={t("wizard.master.vesselVoyageNumber")}
                   value={vesselVoyage}
                 />
-                <ReadonlyField label="Place of Receipt" value={origin} />
-                <ReadonlyField label="Port of Loading" value={loadPort} />
                 <ReadonlyField
-                  label="Port of Discharge"
+                  label={t("wizard.master.placeOfReceipt")}
+                  value={origin}
+                />
+                <ReadonlyField
+                  label={t("wizard.master.portOfLoading")}
+                  value={loadPort}
+                />
+                <ReadonlyField
+                  label={t("wizard.master.portOfDischarge")}
                   value={dischargePort}
                 />
-                <ReadonlyField label="Place of Delivery" value={delivery} />
+                <ReadonlyField
+                  label={t("wizard.master.placeOfDelivery")}
+                  value={delivery}
+                />
               </div>
             </Card>
           </Col>
@@ -259,10 +287,10 @@ export function MasterDetailsStep({
 
       <div className="form-step-footer">
         <AppButton onClick={onPrevious} disabled={isFirstStep || isSubmitting}>
-          Previous
+          {t("common:actions.previous")}
         </AppButton>
         <AppButton type="primary" htmlType="submit" disabled={isSubmitting}>
-          Next
+          {t("common:actions.next")}
         </AppButton>
       </div>
     </form>

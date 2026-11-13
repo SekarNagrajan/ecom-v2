@@ -1,36 +1,50 @@
 // Modified by Sekar Nagarajan (2026-08-25 19:25)
-import { AppButton } from "@solverminds/shared-ui";
 import { DataView, DataViewColumn } from "@solverminds/shared-ui/data-view";
-import { Card, Flex, Select, Space, Spin, Tag, Tooltip, Typography } from "antd";
+import { Card, Flex, Select, Space, Spin, Tag, Typography } from "antd";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { buildActionsColumn } from "../../../components/shared/build-actions-column";
+import {
+  ListActionButton,
+  ListActionsRow,
+} from "../../../components/shared/list-action-button";
+import {
+  ModuleEmptyState,
+  buildClearFiltersAction,
+  buildRetryAction,
+} from "../../../components/shared/module-empty-state";
+import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
 import { useSurchargesQuery } from "../api/rates.queries";
 import type { SurchargeDTO } from "../types/rates.types";
 
 const { Text } = Typography;
 
 export function SurchargeView() {
+  const { t } = useTranslation(["rates", "common", "modules"]);
+  const { profileHandlers } = useLocalGridProfiles("rates-surcharge");
   const [pol, setPol] = useState<string | undefined>();
   const [pod, setPod] = useState<string | undefined>();
 
-  const { data: surcharges = [], isLoading } = useSurchargesQuery({ pol, pod });
+  const {
+    data: surcharges = [],
+    isLoading,
+    isError,
+    refetch,
+  } = useSurchargesQuery({ pol, pod });
 
   const columnDefs: DataViewColumn<SurchargeDTO>[] = [
-    {
-      headerName: "Actions",
+    buildActionsColumn<SurchargeDTO>({
       field: "id",
-      sortable: false,
       width: 110,
-      pinned: "left",
       cellRenderer: (params: { data?: SurchargeDTO }) => {
         const record = params.data;
         if (!record) return null;
         return (
-          <Tooltip title="View Surcharge History">
-            <AppButton
-              type="text"
-              size="small"
+          <ListActionsRow>
+            <ListActionButton
+              title={t("actions.viewSurchargeHistory")}
               icon={
                 <AppIcon
                   icon={Icons.history}
@@ -39,13 +53,14 @@ export function SurchargeView() {
                   tone="history"
                 />
               }
+              onClick={() => undefined}
             />
-          </Tooltip>
+          </ListActionsRow>
         );
       },
-    },
+    }),
     {
-      headerName: "Charge Name",
+      headerName: t("surchargeView.columns.chargeName"),
       field: "chargeName",
       minWidth: 200,
       cellRenderer: (params: { data?: SurchargeDTO }) => (
@@ -53,7 +68,7 @@ export function SurchargeView() {
       ),
     },
     {
-      headerName: "Charge Code",
+      headerName: t("surchargeView.columns.chargeCode"),
       field: "chargeCode",
       minWidth: 130,
       cellRenderer: (params: { data?: SurchargeDTO }) => (
@@ -61,7 +76,7 @@ export function SurchargeView() {
       ),
     },
     {
-      headerName: "Origin",
+      headerName: t("rateList.columns.origin"),
       field: "origin",
       minWidth: 150,
       cellRenderer: (params: { data?: SurchargeDTO }) => (
@@ -69,17 +84,17 @@ export function SurchargeView() {
       ),
     },
     {
-      headerName: "Port of Load",
+      headerName: t("tariff.columns.portOfLoad"),
       field: "loadRegion",
       minWidth: 160,
     },
     {
-      headerName: "Port Of Discharge",
+      headerName: t("tariff.columns.portOfDischarge"),
       field: "dischargeRegion",
       minWidth: 160,
     },
     {
-      headerName: "Delivery",
+      headerName: t("rateList.columns.delivery"),
       field: "delivery",
       minWidth: 150,
       cellRenderer: (params: { data?: SurchargeDTO }) => (
@@ -87,7 +102,7 @@ export function SurchargeView() {
       ),
     },
     {
-      headerName: "Cargo Type",
+      headerName: t("surchargeView.columns.cargoType"),
       field: "eqpType",
       minWidth: 160,
       cellRenderer: (params: { data?: SurchargeDTO }) => (
@@ -95,12 +110,12 @@ export function SurchargeView() {
       ),
     },
     {
-      headerName: "Currency",
+      headerName: t("tariff.columns.currency"),
       field: "currency",
       width: 100,
     },
     {
-      headerName: "Amount",
+      headerName: t("tariff.columns.amount"),
       field: "amount",
       minWidth: 140,
       cellRenderer: (params: { data?: SurchargeDTO }) => (
@@ -110,7 +125,7 @@ export function SurchargeView() {
       ),
     },
     {
-      headerName: "NOR",
+      headerName: t("surchargeView.columns.nor"),
       field: "isNor",
       width: 100,
       cellRenderer: (params: { data?: SurchargeDTO }) => (
@@ -121,52 +136,86 @@ export function SurchargeView() {
     },
   ];
 
+  const emptyState = isError ? (
+    <ModuleEmptyState
+      variant="error"
+      title={t("errors.surchargesLoadTitle")}
+      message={t("errors.loadFailedMessage")}
+      actions={[buildRetryAction(() => void refetch())]}
+    />
+  ) : (
+    <ModuleEmptyState
+      variant={pol || pod ? "filtered" : "blank"}
+      title={t("empty.surchargesTitle")}
+      message={t("empty.surchargesMessage")}
+      actions={
+        pol || pod
+          ? [
+              buildClearFiltersAction(() => {
+                setPol(undefined);
+                setPod(undefined);
+              }),
+            ]
+          : undefined
+      }
+    />
+  );
+
   return (
     <div className="rates-stack">
       <Card className="rates-filter-card">
         <Flex gap="middle" align="center" wrap="wrap">
           <Space>
             <AppIcon icon={Icons.filter} size={16} />
-            <Text strong>Filter Surcharge:</Text>
+            <Text strong>{t("surchargeView.filterHeading")}</Text>
           </Space>
 
           <Select
-            placeholder="Port of Load"
+            placeholder={t("tariff.portOfLoad")}
             allowClear
             size="large"
             className="rates-filter-select"
             value={pol}
             onChange={setPol}
             options={[
-              { label: "USNYC - New York", value: "USNYC" },
-              { label: "DEHAM - Hamburg", value: "DEHAM" },
+              { label: t("options.ports.USNYC_short"), value: "USNYC" },
+              { label: t("options.ports.DEHAM_short"), value: "DEHAM" },
             ]}
           />
 
           <Select
-            placeholder="Port Of Discharge"
+            placeholder={t("tariff.portOfDischarge")}
             allowClear
             size="large"
             className="rates-filter-select"
             value={pod}
             onChange={setPod}
             options={[
-              { label: "SGSIN - Singapore", value: "SGSIN" },
-              { label: "CNSHA - Shanghai", value: "CNSHA" },
+              { label: t("options.ports.SGSIN_short"), value: "SGSIN" },
+              { label: t("options.ports.CNSHA_short"), value: "CNSHA" },
             ]}
           />
         </Flex>
       </Card>
 
-      <Spin spinning={isLoading} tip="Loading surcharge breakdown...">
+      <Spin spinning={isLoading} tip={t("surchargeView.loading")}>
         <Card className="rates-grid-panel">
           <div className="rates-grid responsive-table-wrap custom-scroll">
             <DataView
-              data={surcharges}
+              rowData={surcharges}
+              emptyState={emptyState}
               columnDefs={columnDefs}
-              pagination
-              paginationPageSize={10}
+              listOptions={{
+                ...profileHandlers,
+                showToolbar: { showTotalCount: true, fullScreen: true },
+                sideBar: true,
+                pagination: true,
+                paginationPageSize: 10,
+                pageSizeOptions: [10, 20, 50, 100],
+                defaultColDef: { filter: true },
+              }}
               className="rates-grid"
+              renderToolbar={() => null}
             />
           </div>
         </Card>

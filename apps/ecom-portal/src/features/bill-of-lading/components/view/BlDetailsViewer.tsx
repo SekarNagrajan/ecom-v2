@@ -1,24 +1,37 @@
-// Modified by Sekar Nagarajan (2026-09-01 14:04)
+// Modified by Sekar Nagarajan (2026-10-19 19:05)
 import { ListView } from "@solverminds/shared-ui/data-view/list-view";
 import type { ColDef } from "ag-grid-community";
-import { Card, Col, Row, Typography } from "antd";
+import { Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
-import type { ReactNode } from "react";
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../../components/icons";
-import { RESPONSIVE_COL } from "../../../../constants/responsive-grid";
-import { WIZARD_STEP_TITLES } from "../../../../constants/module-titles";
-import { SI_CARGO_LINE_COL_DEFS } from "../../../shipping-instruction/utils/si-cargo-line-col-defs";
+import { useWizardStepTitles } from "../../../../i18n/use-module-titles";
+import { BookingModuleStyles } from "../../../booking/components/booking-module-styles";
+import { SiPreviewCargoReview } from "../../../shipping-instruction/components/SiPreviewCargoReview";
+import type { SiPartyRoleKey } from "../../../shipping-instruction/utils/si-party.utils";
 import { useBLDetailQuery } from "../../api/bl.queries";
 import type {
   BLChargeLine,
+  BLFileUploadItem,
   BLParty,
+  BLPreviewFields,
   BLRowStatus,
+  BLDTO,
 } from "../../types/bl.types";
-import { BL_STATUS_LABELS } from "../../types/bl.types";
+import { getBLStatusLabel } from "../../utils/bl-status";
 import { BlLoadingCenter } from "../bl-loading-center";
+import {
+  BlPreviewEmpty,
+  BlPreviewEmptyPartyCard,
+  BlPreviewFieldGrid,
+  BlPreviewPartyCard,
+  BlPreviewSection,
+} from "../preview/bl-preview-section";
+import { BlRouteBand } from "./BlRouteBand";
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 export interface BlViewActivityHints {
   createdDate?: string | null;
@@ -30,6 +43,8 @@ export interface BlViewActivityHints {
 interface BlDetailsViewerProps {
   blNo: string;
   activityHints?: BlViewActivityHints;
+  /** Hide the Routing section when the host already shows the route (drawer hero). */
+  showRouting?: boolean;
 }
 
 interface ActivityEvent {
@@ -48,61 +63,63 @@ type ActivityTone =
   | "info"
   | "muted";
 
-function MetaItem({ label, value }: { label: string; value: ReactNode }) {
-  return (
-    <div className="bl-meta-item">
-      <span className="bl-meta-item__label">{label}</span>
-      <span className="bl-meta-item__value">{value}</span>
-    </div>
-  );
+type TranslateFn = (key: string, options?: Record<string, unknown>) => string;
+
+const REVIEW_PARTY_ROLES: SiPartyRoleKey[] = [
+  "shipper",
+  "consignee",
+  "notify",
+  "forwarder",
+];
+
+const EXTRA_PARTY_ROLES: SiPartyRoleKey[] = [
+  "agreementParty",
+  "notify2",
+  "notify3",
+  "warehouse",
+];
+
+function dash(value?: string | number | null): string {
+  if (value === undefined || value === null || value === "") return "—";
+  return String(value);
 }
 
-function SectionTitle({
-  icon,
-  children,
-}: {
-  icon: ReactNode;
-  children: ReactNode;
-}) {
-  return (
-    <span className="bl-section-title-row">
-      {icon}
-      <Title level={5} className="bl-section-title">
-        {children}
-      </Title>
-    </span>
-  );
+/** Date-only text for ISO / "YYYY-MM-DD HH:mm" strings; falls back to the raw value. */
+function formatDate(value?: string | null): string {
+  if (!value) return "—";
+  const date = new Date(value.replace(" ", "T"));
+  if (Number.isNaN(date.getTime())) return value;
+  return date.toLocaleDateString(undefined, {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
 }
 
-function PartyBlock({
-  label,
-  party,
-  roleClass,
-  extra,
-}: {
-  label: string;
-  party?: BLParty & { toOrder?: boolean };
-  roleClass: string;
-  extra?: ReactNode;
-}) {
-  if (!party) {
-    return (
-      <div className={`bl-party-block ${roleClass}`}>
-        <Text className="form-field-label">{label}</Text>
-        <Text type="secondary">N/A</Text>
-      </div>
-    );
+function partyForRole(
+  parties: BLDTO["parties"],
+  role: SiPartyRoleKey,
+): BLParty | undefined {
+  switch (role) {
+    case "shipper":
+      return parties.shipper;
+    case "consignee":
+      return parties.consignee;
+    case "notify":
+      return parties.notify;
+    case "notify2":
+      return parties.notify2;
+    case "notify3":
+      return parties.notify3;
+    case "forwarder":
+      return parties.forwarder;
+    case "warehouse":
+      return parties.warehouse;
+    case "agreementParty":
+      return parties.agreementParty;
+    default:
+      return undefined;
   }
-  return (
-    <div className={`bl-party-block ${roleClass}`}>
-      <Text className="form-field-label">
-        {label} {extra}
-      </Text>
-      <Text strong>{party.name}</Text>
-      <Text>{party.address}</Text>
-      <Text>{[party.city, party.country].filter(Boolean).join(", ")}</Text>
-    </div>
-  );
 }
 
 function getActivityStepVisual(action: string): {
@@ -172,21 +189,80 @@ function ActivitySteps({ events }: { events: ActivityEvent[] }) {
   );
 }
 
-function buildBlActivityEvents(params: {
-  status: BLRowStatus;
-  issuedAt: string | null;
-  printCount: number;
-  fileCount: number;
-  hints?: BlViewActivityHints;
-}): ActivityEvent[] {
+function DocumentChips({ files }: { files: BLFileUploadItem[] }) {
+  const { t } = useTranslation("bill-of-lading");
+  return (
+    <div className="bl-doc-grid">
+      {files.map((file) => (
+        <div key={file.id} className="booking-review__doc-chip">
+          <span className="booking-review__doc-chip-name">
+            <AppIcon icon={Icons.fileText} size={16} />
+            <Text strong ellipsis className="bl-doc-chip__file" title={file.fileName}>
+              {file.fileName}
+            </Text>
+          </span>
+          <Text type="secondary" className="bl-doc-chip__meta">
+            {t(`wizard.files.categories.${file.category.toLowerCase()}`, {
+              defaultValue: file.category,
+            })}
+            {" · "}
+            {dash(file.uploadedAt)}
+          </Text>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function buildPreviewRows(
+  preview: BLPreviewFields | undefined,
+  t: TranslateFn,
+): { label: string; value: string }[] {
+  if (!preview) return [];
+  const rows: { label: string; value: string }[] = [];
+  const push = (label: string, value?: string | null) => {
+    if (value === undefined || value === null || value === "") return;
+    rows.push({ label, value });
+  };
+  push(t("labels.declaredValue"), preview.declaredValue);
+  push(t("wizard.preview.customerRemarks"), preview.siCustRemarks);
+  push(t("wizard.preview.aesNumber"), preview.siAesNumber);
+  if (preview.aesDisclaimer) {
+    push(
+      t("wizard.preview.aesDisclaimer"),
+      preview.aesDisclaimer === "provided"
+        ? t("wizard.preview.aesProvided")
+        : t("wizard.preview.aesNotApplicable"),
+    );
+  }
+  push(t("labels.packingList"), preview.packingList);
+  push(t("labels.invoiceUpload"), preview.invoiceUpload);
+  push(t("wizard.preview.blTypeUae"), preview.blTypeUae);
+  push(t("wizard.preview.mpciIdUae"), preview.mpciIdUae);
+  push(t("labels.acidValue"), preview.acidValue);
+  return rows;
+}
+
+function buildBlActivityEvents(
+  params: {
+    status: BLRowStatus;
+    issuedAt: string | null;
+    printCount: number;
+    fileCount: number;
+    hints?: BlViewActivityHints;
+  },
+  t: TranslateFn,
+): ActivityEvent[] {
   const events: ActivityEvent[] = [];
-  const by = "System";
+  const by = t("labels.system");
   events.push({
     id: "bl-created",
-    action: "B/L Draft Created",
+    action: t("activity.draftCreated"),
     by,
     at: params.hints?.createdDate || "—",
-    note: `Status: ${BL_STATUS_LABELS[params.status]}`,
+    note: t("labels.statusPrefix", {
+      status: getBLStatusLabel(params.status, t),
+    }),
   });
   if (
     params.status === "S" ||
@@ -196,7 +272,7 @@ function buildBlActivityEvents(params: {
   ) {
     events.push({
       id: "bl-confirmed",
-      action: "B/L Confirmed",
+      action: t("activity.confirmed"),
       by,
       at: params.hints?.confirmedDate || "—",
     });
@@ -204,7 +280,7 @@ function buildBlActivityEvents(params: {
   if (params.issuedAt || params.status === "I") {
     events.push({
       id: "bl-issued",
-      action: "B/L Issued",
+      action: t("activity.issued"),
       by,
       at: params.issuedAt || "—",
     });
@@ -212,7 +288,7 @@ function buildBlActivityEvents(params: {
   if (params.hints?.isLocked) {
     events.push({
       id: "bl-locked",
-      action: "B/L Locked",
+      action: t("activity.locked"),
       by,
       at: "—",
     });
@@ -220,43 +296,73 @@ function buildBlActivityEvents(params: {
   if (params.printCount > 0) {
     events.push({
       id: "bl-printed",
-      action: "B/L Printed",
+      action: t("activity.printed"),
       by,
       at: "—",
-      note: `Print count: ${params.printCount}`,
+      note: t("labels.printCount", { count: params.printCount }),
     });
   }
   if (params.fileCount > 0) {
     events.push({
       id: "bl-docs",
-      action: "Documents Uploaded",
+      action: t("activity.documentsUploaded"),
       by,
       at: "—",
-      note: `${params.fileCount} file(s)`,
+      note: t("labels.fileCount", { count: params.fileCount }),
     });
   }
   return events;
 }
 
-const CHARGE_COL_DEFS: ColDef[] = [
-  { field: "chargeCode", headerName: "Code", minWidth: 100 },
-  { field: "description", headerName: "Description", minWidth: 180, flex: 1 },
-  { field: "prepaidCollect", headerName: "P/C/E", minWidth: 90 },
-  {
-    headerName: "Amount",
-    minWidth: 120,
-    valueGetter: (p) => {
-      const row = p.data as BLChargeLine | undefined;
-      return row ? `${row.amount} ${row.currency}` : "";
-    },
-  },
-];
-
+/**
+ * Read-only B/L details body shared by the full-page view and the list
+ * drawer. Sections: master → routing band → parties → cargo → preview
+ * fields → charges → insurance → documents | activity → ENS.
+ */
 export function BlDetailsViewer({
   blNo,
   activityHints,
+  showRouting = true,
 }: BlDetailsViewerProps) {
+  const { t } = useTranslation(["bill-of-lading", "common", "modules"]);
+  const WIZARD_STEP_TITLES = useWizardStepTitles();
   const { data, isLoading, isError } = useBLDetailQuery(blNo);
+
+  const chargeColDefs: ColDef[] = useMemo(
+    () => [
+      {
+        field: "chargeCode",
+        headerName: t("columns.code"),
+        minWidth: 100,
+      },
+      {
+        field: "description",
+        headerName: t("columns.description"),
+        minWidth: 180,
+        flex: 1,
+      },
+      {
+        field: "prepaidCollect",
+        headerName: t("columns.pce"),
+        minWidth: 90,
+      },
+      {
+        field: "payByCustType",
+        headerName: t("columns.payor"),
+        minWidth: 110,
+      },
+      {
+        headerName: t("columns.amount"),
+        minWidth: 120,
+        type: "rightAligned",
+        valueGetter: (p) => {
+          const row = p.data as BLChargeLine | undefined;
+          return row ? `${row.amount} ${row.currency}` : "";
+        },
+      },
+    ],
+    [t],
+  );
 
   if (isLoading) {
     return (
@@ -268,319 +374,201 @@ export function BlDetailsViewer({
 
   if (isError || !data) {
     return (
-      <Card className="bl-panel feature-page-card" size="small">
-        <Text type="danger">Unable to load Bill of Lading details.</Text>
-      </Card>
+      <div className="bl-panel">
+        <Text type="danger">{t("empty.unableToLoadDetails")}</Text>
+      </div>
     );
   }
 
   const files = data.files ?? [];
   const charges = data.charges ?? [];
   const insuranceRequired = Boolean(data.insurance?.isInsuranceRequired);
-  const activity = buildBlActivityEvents({
-    status: data.status,
-    issuedAt: data.issuedAt,
-    printCount: data.printCount,
-    fileCount: files.length,
-    hints: activityHints,
-  });
+  const activity = buildBlActivityEvents(
+    {
+      status: data.status,
+      issuedAt: data.issuedAt,
+      printCount: data.printCount,
+      fileCount: files.length,
+      hints: activityHints,
+    },
+    t,
+  );
+  const previewRows = buildPreviewRows(data.preview, t);
+
+  const extraPartyRoles = EXTRA_PARTY_ROLES.filter((role) =>
+    Boolean(partyForRole(data.parties, role)?.name),
+  );
+
+  const masterRows = [
+    { label: t("labels.bookingNumber"), value: dash(data.bookingNo) },
+    { label: t("labels.siNumber"), value: dash(data.siNo) },
+    { label: t("labels.agencyRef"), value: dash(data.agencyRefNo) },
+    { label: t("labels.mcn"), value: dash(data.mcnNo) },
+    { label: t("labels.blType"), value: dash(data.blType) },
+    {
+      label: t("labels.releaseType"),
+      value:
+        data.releaseType === "O" ? t("labels.original") : t("labels.telex"),
+    },
+    { label: t("labels.freightOption"), value: dash(data.freightOption) },
+    { label: t("labels.issuedOn"), value: formatDate(data.issuedAt) },
+  ];
 
   return (
-    <div className="bl-view-sections">
-      {/* Modified by Sekar Nagarajan (2026-09-01 14:04) — Master Details and Parties as separate full-width rows */}
-      <Row gutter={[16, 16]} className="bl-view-row-line">
-        <Col {...RESPONSIVE_COL.full}>
-          <Card
-            className="bl-panel feature-page-card bl-view-section-card"
-            size="small"
-            title={
-              <SectionTitle icon={<AppIcon icon={Icons.ship} size={16} />}>
-                {WIZARD_STEP_TITLES.masterDetails}
-              </SectionTitle>
-            }
-          >
-            <div className="bl-meta-grid">
-              <MetaItem label="Booking Number" value={data.bookingNo} />
-              <MetaItem label="SI Number" value={data.siNo} />
-              <MetaItem label="B/L Type" value={data.blType} />
-              <MetaItem
-                label="Release Type"
-                value={data.releaseType === "O" ? "Original" : "Telex"}
-              />
-              <MetaItem label="Freight Option" value={data.freightOption} />
-              <MetaItem
-                label="Route"
-                value={`${data.origin} → ${data.delivery}`}
-              />
-            </div>
-          </Card>
-        </Col>
-      </Row>
+    <div className="booking-review bl-view-sections bl-view-sections--single">
+      <BookingModuleStyles />
 
-      <Row gutter={[16, 16]} className="bl-view-row-line">
-        <Col {...RESPONSIVE_COL.full}>
-          <Card
-            className="bl-panel feature-page-card bl-view-section-card"
-            size="small"
-            title={
-              <SectionTitle icon={<AppIcon icon={Icons.users} size={16} />}>
-                Parties
-              </SectionTitle>
-            }
-          >
-            <div className="bl-party-grid">
-              <PartyBlock
-                label="Shipper"
-                party={data.parties.shipper}
-                roleClass="booking-party-card--shipper"
-              />
-              <PartyBlock
-                label="Consignee"
-                party={data.parties.consignee}
-                roleClass="booking-party-card--consignee"
-                extra={
-                  data.parties.consignee?.toOrder ? (
-                    <Text type="warning">(To Order)</Text>
-                  ) : null
-                }
-              />
-              <PartyBlock
-                label="Notify Party"
-                party={data.parties.notify}
-                roleClass="booking-party-card--notify"
-              />
-            </div>
-          </Card>
-        </Col>
-      </Row>
+      <BlPreviewSection
+        variant="airy"
+        title={WIZARD_STEP_TITLES.masterDetails}
+      >
+        <BlPreviewFieldGrid items={masterRows} />
+      </BlPreviewSection>
 
-      <Row gutter={[16, 16]} className="bl-view-row-line">
-        <Col {...RESPONSIVE_COL.formHalf}>
-          <Card
-            className="bl-panel feature-page-card bl-view-section-card"
-            size="small"
-            title={
-              <SectionTitle icon={<AppIcon icon={Icons.anchor} size={16} />}>
-                {WIZARD_STEP_TITLES.routing}
-              </SectionTitle>
-            }
-          >
-            {data.routing ? (
-              <div className="bl-meta-grid">
-                <MetaItem
-                  label="Vessel / Voyage"
-                  value={data.routing.vesselVoyage || "N/A"}
-                />
-                <MetaItem
-                  label="Origin (Print)"
-                  value={data.routing.originPrint}
-                />
-                <MetaItem label="POL (Print)" value={data.routing.polPrint} />
-                <MetaItem label="POD (Print)" value={data.routing.podPrint} />
-                <MetaItem
-                  label="Delivery (Print)"
-                  value={data.routing.deliveryPrint}
-                />
-                <MetaItem
-                  label="Schedule Legs"
-                  value={String(data.routing.scheduleLegs?.length ?? 0)}
-                />
-              </div>
-            ) : (
-              <Text type="secondary">No routing details.</Text>
-            )}
-          </Card>
-        </Col>
-
-        <Col {...RESPONSIVE_COL.formHalf}>
-          <Card
-            className="bl-panel feature-page-card bl-view-section-card"
-            size="small"
-            title={
-              <SectionTitle
-                icon={<AppIcon icon={Icons.shieldCheck} size={16} />}
-              >
-                {WIZARD_STEP_TITLES.insurance}
-              </SectionTitle>
-            }
-          >
-            {insuranceRequired && data.insurance ? (
-              <div className="bl-meta-grid">
-                <MetaItem
-                  label="Cargo Value"
-                  value={`${data.insurance.cargoValue ?? "—"} ${data.insurance.currency ?? ""}`}
-                />
-                <MetaItem
-                  label="Policy No"
-                  value={data.insurance.policyNo || "N/A"}
-                />
-                <MetaItem
-                  label="Terms Accepted"
-                  value={data.insurance.termsAccepted ? "Yes" : "No"}
-                />
-                <MetaItem
-                  label="Opt Out"
-                  value={data.insurance.optOut ? "Yes" : "No"}
-                />
-              </div>
-            ) : (
-              <Text type="secondary">
-                Insurance not required for this bill of lading.
-              </Text>
-            )}
-          </Card>
-        </Col>
-      </Row>
-
-      <Row gutter={[16, 16]} className="bl-view-row-line">
-        <Col {...RESPONSIVE_COL.full}>
-          <Card
-            className="bl-panel feature-page-card bl-view-section-card"
-            size="small"
-            title={
-              <SectionTitle icon={<AppIcon icon={Icons.boxes} size={16} />}>
-                Cargo & Containers
-              </SectionTitle>
-            }
-          >
-            {data.containers.length === 0 ? (
-              <Text type="secondary">No containers recorded.</Text>
-            ) : (
-              data.containers.map((c, i) => (
-                <div key={c.id} className="bl-container-block">
-                  <div className="bl-container-block__header">
-                    <Text strong>
-                      Container {i + 1}: {c.containerNo || "—"} (
-                      {c.eqpSize || "—"})
-                    </Text>
-                  </div>
-                  <div className="bl-cargo-grid responsive-table-wrap custom-scroll ag-theme-alpine">
-                    <ListView
-                      rowData={c.cargoLines}
-                      columnDefs={SI_CARGO_LINE_COL_DEFS}
-                      showToolbar={false}
-                      pagination
-                      paginationPageSize={10}
-                      gridOptions={{ animateRows: true }}
-                    />
-                  </div>
-                </div>
-              ))
-            )}
-          </Card>
-        </Col>
-      </Row>
-
-      {data.ens?.euCustomsZone ? (
-        <Row gutter={[16, 16]} className="bl-view-row-line">
-          <Col {...RESPONSIVE_COL.full}>
-            <Card
-              className="bl-panel feature-page-card bl-view-section-card"
-              size="small"
-              title={
-                <SectionTitle
-                  icon={<AppIcon icon={Icons.fileText} size={16} />}
-                >
-                  ENS Details
-                </SectionTitle>
-              }
-            >
-              <div className="bl-meta-grid">
-                <MetaItem label="B/L Type" value={data.ens.blType || "N/A"} />
-                <MetaItem
-                  label="Filing Type"
-                  value={data.ens.ensFilingType || "N/A"}
-                />
-                <MetaItem
-                  label="Payment Method"
-                  value={data.ens.paymentMethod || "N/A"}
-                />
-                <MetaItem
-                  label="Declarant"
-                  value={data.ens.declarantName || "N/A"}
-                />
-                <MetaItem label="Buyer" value={data.ens.buyerName || "N/A"} />
-                <MetaItem label="Seller" value={data.ens.sellerName || "N/A"} />
-              </div>
-            </Card>
-          </Col>
-        </Row>
+      {showRouting ? (
+        <BlPreviewSection variant="airy" title={WIZARD_STEP_TITLES.routing}>
+          {data.routing ? (
+            <BlRouteBand routing={data.routing} />
+          ) : (
+            <BlPreviewEmpty label={t("empty.noRouting")} />
+          )}
+        </BlPreviewSection>
       ) : null}
 
-      <Row gutter={[16, 16]} className="bl-view-row-line">
-        <Col {...RESPONSIVE_COL.formHalf}>
-          <Card
-            className="bl-panel feature-page-card bl-view-section-card"
-            size="small"
-            title={
-              <SectionTitle icon={<AppIcon icon={Icons.inbox} size={16} />}>
-                Documents
-              </SectionTitle>
-            }
-          >
-            {files.length === 0 ? (
-              <Text type="secondary">No documents uploaded.</Text>
-            ) : (
-              <div className="bl-meta-grid">
-                {files.map((f) => (
-                  <MetaItem
-                    key={f.id}
-                    label={f.category}
-                    value={`${f.fileName} · ${f.uploadedAt}`}
+      <BlPreviewSection variant="airy" title={WIZARD_STEP_TITLES.parties}>
+        <div className="booking-review__party-grid">
+          {REVIEW_PARTY_ROLES.map((role) => {
+            const party = partyForRole(data.parties, role);
+            return (
+              <div key={role} className="booking-party-grid__col">
+                {party?.name ? (
+                  <BlPreviewPartyCard
+                    roleKey={role}
+                    party={party}
+                    extra={
+                      role === "consignee" &&
+                      data.parties.consignee?.toOrder ? (
+                        <Text type="warning"> {t("labels.toOrder")}</Text>
+                      ) : null
+                    }
                   />
-                ))}
+                ) : (
+                  <BlPreviewEmptyPartyCard roleKey={role} />
+                )}
               </div>
-            )}
-          </Card>
-        </Col>
-
-        <Col {...RESPONSIVE_COL.formHalf}>
-          <Card
-            className="bl-panel feature-page-card bl-view-section-card"
-            size="small"
-            title={
-              <SectionTitle icon={<AppIcon icon={Icons.history} size={16} />}>
-                Activity
-              </SectionTitle>
-            }
-          >
-            {activity.length === 0 ? (
-              <Text type="secondary">No activity recorded.</Text>
-            ) : (
-              <ActivitySteps events={activity} />
-            )}
-          </Card>
-        </Col>
-      </Row>
-
-      <Row gutter={[16, 16]} className="bl-view-row-line">
-        <Col {...RESPONSIVE_COL.full}>
-          <Card
-            className="bl-panel feature-page-card bl-view-section-card"
-            size="small"
-            title={
-              <SectionTitle icon={<AppIcon icon={Icons.banknote} size={16} />}>
-                Charges
-              </SectionTitle>
-            }
-          >
-            {charges.length === 0 ? (
-              <Text type="secondary">No charges recorded.</Text>
-            ) : (
-              <div className="bl-charges-grid responsive-table-wrap custom-scroll ag-theme-alpine">
-                <ListView
-                  rowData={charges}
-                  columnDefs={CHARGE_COL_DEFS}
-                  showToolbar={false}
-                  pagination
-                  paginationPageSize={10}
-                  gridOptions={{ animateRows: true }}
-                />
+            );
+          })}
+          {extraPartyRoles.map((role) => {
+            const party = partyForRole(data.parties, role);
+            if (!party?.name) return null;
+            return (
+              <div key={role} className="booking-party-grid__col">
+                <BlPreviewPartyCard roleKey={role} party={party} />
               </div>
-            )}
-          </Card>
-        </Col>
-      </Row>
+            );
+          })}
+        </div>
+      </BlPreviewSection>
+
+      <BlPreviewSection variant="airy" title={WIZARD_STEP_TITLES.cargoDetails}>
+        <SiPreviewCargoReview containers={data.containers} />
+      </BlPreviewSection>
+
+      {previewRows.length > 0 ? (
+        <BlPreviewSection variant="airy" title={t("labels.previewFields")}>
+          <BlPreviewFieldGrid items={previewRows} />
+        </BlPreviewSection>
+      ) : null}
+
+      {charges.length > 0 ? (
+        <BlPreviewSection variant="airy" title={WIZARD_STEP_TITLES.charges}>
+          <div className="bl-charges-grid responsive-table-wrap custom-scroll ag-theme-alpine">
+            <ListView
+              rowData={charges}
+              columnDefs={chargeColDefs}
+              showToolbar={false}
+              sideBar={false}
+              pagination
+              paginationPageSize={10}
+              pageSizeOptions={[10, 20, 50]}
+              gridOptions={{ animateRows: true }}
+            />
+          </div>
+        </BlPreviewSection>
+      ) : null}
+
+      <BlPreviewSection variant="airy" title={WIZARD_STEP_TITLES.insurance}>
+        {insuranceRequired && data.insurance ? (
+          <BlPreviewFieldGrid
+            items={[
+              {
+                label: t("labels.cargoValue"),
+                value: `${dash(data.insurance.cargoValue)} ${dash(
+                  data.insurance.currency,
+                )}`,
+              },
+              {
+                label: t("labels.policyNo"),
+                value: dash(data.insurance.policyNo),
+              },
+              {
+                label: t("labels.termsAccepted"),
+                value: data.insurance.termsAccepted
+                  ? t("labels.yes")
+                  : t("labels.no"),
+              },
+              {
+                label: t("labels.optOut"),
+                value: data.insurance.optOut ? t("labels.yes") : t("labels.no"),
+              },
+            ]}
+          />
+        ) : (
+          <BlPreviewEmpty label={t("empty.insuranceNotRequired")} />
+        )}
+      </BlPreviewSection>
+
+      <div className="bl-view-row bl-view-row--2 bl-view-row--sections">
+        <BlPreviewSection variant="airy" title={WIZARD_STEP_TITLES.fileUpload}>
+          {files.length === 0 ? (
+            <BlPreviewEmpty label={t("empty.noDocuments")} />
+          ) : (
+            <DocumentChips files={files} />
+          )}
+        </BlPreviewSection>
+
+        <BlPreviewSection variant="airy" title={t("labels.activity")}>
+          {activity.length === 0 ? (
+            <BlPreviewEmpty label={t("empty.noActivity")} />
+          ) : (
+            <ActivitySteps events={activity} />
+          )}
+        </BlPreviewSection>
+      </div>
+
+      {data.ens?.euCustomsZone ? (
+        <BlPreviewSection variant="airy" title={WIZARD_STEP_TITLES.ensDetails}>
+          <BlPreviewFieldGrid
+            items={[
+              { label: t("labels.blType"), value: dash(data.ens.blType) },
+              {
+                label: t("labels.filingType"),
+                value: dash(data.ens.ensFilingType),
+              },
+              {
+                label: t("labels.paymentMethod"),
+                value: dash(data.ens.paymentMethod),
+              },
+              {
+                label: t("labels.declarant"),
+                value: dash(data.ens.declarantName),
+              },
+              { label: t("labels.buyer"), value: dash(data.ens.buyerName) },
+              { label: t("labels.seller"), value: dash(data.ens.sellerName) },
+            ]}
+          />
+        </BlPreviewSection>
+      ) : null}
     </div>
   );
 }

@@ -1,23 +1,30 @@
-// Modified by Sekar Nagarajan (2026-09-02 12:22)
+// Modified by Sekar Nagarajan (2026-09-11 11:36)
 import { Input, InputNumber, Select, Switch, Typography } from "antd";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Controller,
   type Control,
   type UseFormSetValue,
 } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import {
   ListActionButton,
   ListActionsRow,
 } from "../../../components/shared/list-action-button";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import {
   FORM_YES_NO_SWITCH_CLASS,
   yesNoSwitchInner,
 } from "../../../components/shared/yes-no-switch";
-import type { CargoData, ContainerItem } from "../types/booking.types";
+import {
+  applyContainerTypeToMockNo,
+  type CargoData,
+  type ContainerItem,
+} from "../types/booking.types";
 import { isReeferContainerType } from "../utils/booking-cargo-completeness";
+import { defaultTareWeightKg } from "../utils/default-tare-weight";
 import {
   BookingCargoGridExtrasModal,
   type BookingCargoGridExtrasTarget,
@@ -26,6 +33,13 @@ import { HsCodeAutoComplete } from "./cargo-code-lookups";
 import { QuantityStepper } from "./quantity-stepper";
 
 const { Text } = Typography;
+
+/** Short type code for the grid Type cell (e.g. 20DC → 20 DC). */
+function formatGridContainerType(code: string | undefined): string {
+  const raw = (code ?? "").trim().toUpperCase();
+  if (!raw) return "";
+  return raw.replace(/^(\d+)([A-Z].*)$/, "$1 $2");
+}
 
 interface LookupOpt {
   value: string;
@@ -50,21 +64,25 @@ export interface BookingCargoGridViewProps {
  * Grid: commodity fields + SOC/OOG/NOR toggles.
  * OOG / operating reefer / DG detail forms open in a compact popup.
  */
-const GRID_HEADERS = [
-  "Actions",
-  "Container No",
-  "Type",
-  "Qty",
-  "SOC",
-  "OOG",
-  "NOR",
-  "HS Code",
-  "Package Type",
-  "Pkg Qty",
-  "Weight",
-  "Volume",
-  "Hazardous",
+const GRID_HEADER_KEYS = [
+  "cols.actions",
+  "cols.containerNo",
+  "cols.type",
+  "cols.qty",
+  "cols.soc",
+  "cols.oog",
+  "cols.nor",
+  "cols.hsCode",
+  "cols.packageType",
+  "cols.pkgQty",
+  "cols.weight",
+  "cols.volume",
+  "cols.hazardous",
 ] as const;
+
+function makeGridHeaders(t: (key: string) => string) {
+  return GRID_HEADER_KEYS.map((k) => t(`wizard.cargo.${k}`));
+}
 
 export function BookingCargoGridView({
   pageIndexes,
@@ -79,19 +97,21 @@ export function BookingCargoGridView({
   onDuplicateLine,
   onRemoveLine,
 }: BookingCargoGridViewProps) {
+  const { t } = useTranslation(["booking", "common"]);
   const [extrasTarget, setExtrasTarget] =
     useState<BookingCargoGridExtrasTarget | null>(null);
 
   const closeExtras = () => setExtrasTarget(null);
+  const gridHeaders = useMemo(() => makeGridHeaders(t), [t]);
 
   if (pageIndexes.length === 0) {
     return (
-      <div className="si-cargo-empty">
-        <div className="si-cargo-empty__icon">
-          <AppIcon icon={Icons.inbox} size={22} />
-        </div>
-        <Text strong>No containers match</Text>
-      </div>
+      <ModuleEmptyState
+        artSize="sm"
+        variant="filtered"
+        title={t("wizard.cargo.noContainersMatch")}
+        style={{ padding: 12 }}
+      />
     );
   }
 
@@ -101,11 +121,23 @@ export function BookingCargoGridView({
         <table className="si-cargo-grid">
           <thead>
             <tr>
-              {GRID_HEADERS.map((h) => (
+              {gridHeaders.map((h, idx) => (
                 <th
-                  key={h}
+                  key={GRID_HEADER_KEYS[idx]}
                   className={
-                    h === "Actions" ? "si-cargo-grid__th-actions" : undefined
+                    idx === 0
+                      ? "si-cargo-grid__th-actions"
+                      : idx === 1
+                      ? "si-cargo-grid__th-container"
+                      : idx === 2
+                      ? "si-cargo-grid__th-type"
+                      : idx === 3 ||
+                        idx === 4 ||
+                        idx === 5 ||
+                        idx === 6 ||
+                        idx === 12
+                      ? "si-cargo-grid__th-switch"
+                      : undefined
                   }
                 >
                   {h}
@@ -132,7 +164,7 @@ export function BookingCargoGridView({
                       <ListActionsRow>
                         {first ? (
                           <ListActionButton
-                            title="Add Commodity Line"
+                            title={t("wizard.cargo.addCommodityLine")}
                             icon={
                               <AppIcon
                                 icon={Icons.plus}
@@ -150,7 +182,7 @@ export function BookingCargoGridView({
                           />
                         )}
                         <ListActionButton
-                          title="Duplicate Commodity Line"
+                          title={t("wizard.cargo.duplicateCommodityLine")}
                           icon={
                             <AppIcon icon={Icons.copy} size={16} tone="view" />
                           }
@@ -160,8 +192,8 @@ export function BookingCargoGridView({
                         <ListActionButton
                           title={
                             canRemove
-                              ? "Delete Commodity Line"
-                              : "At Least One Commodity Is Required"
+                              ? t("wizard.cargo.deleteCommodityLine")
+                              : t("wizard.cargo.atLeastOneCommodityLine")
                           }
                           icon={
                             <AppIcon
@@ -186,7 +218,7 @@ export function BookingCargoGridView({
                               {...field}
                               value={field.value ?? ""}
                               size="large"
-                              placeholder="Container No."
+                              placeholder={t("wizard.cargo.containerNo")}
                               className="si-cargo-grid__field si-cargo-grid__field--container"
                             />
                           )}
@@ -211,9 +243,29 @@ export function BookingCargoGridView({
                               optionFilterProp="label"
                               popupMatchSelectWidth={220}
                               className="si-cargo-grid__field si-cargo-grid__field--kind"
-                              placeholder="Type"
+                              placeholder={t("wizard.cargo.cols.type")}
+                              optionLabelProp="value"
+                              labelRender={({ value }) =>
+                                formatGridContainerType(
+                                  typeof value === "string"
+                                    ? value
+                                    : String(value ?? ""),
+                                )
+                              }
                               onChange={(value: string) => {
                                 field.onChange(value);
+                                setValue(
+                                  `containers.${ci}.containerNo`,
+                                  applyContainerTypeToMockNo(
+                                    containersWatch[ci]?.containerNo,
+                                    value,
+                                  ),
+                                );
+                                // Modified by Sekar Nagarajan (2026-09-17 23:28) — JSP getTareweight on eqp change
+                                const tare = defaultTareWeightKg(value);
+                                if (tare != null) {
+                                  setValue(`containers.${ci}.tareWeight`, tare);
+                                }
                                 if (!isReeferContainerType(value)) {
                                   setValue(
                                     `containers.${ci}.reeferMode`,
@@ -229,10 +281,7 @@ export function BookingCargoGridView({
                                 }
                                 const currentMode =
                                   containersWatch[ci]?.reeferMode;
-                                if (
-                                  currentMode === "none" ||
-                                  !currentMode
-                                ) {
+                                if (currentMode === "none" || !currentMode) {
                                   setValue(
                                     `containers.${ci}.reeferMode`,
                                     "operating",
@@ -268,19 +317,21 @@ export function BookingCargoGridView({
                     </td>
                     <td className="si-cargo-grid__td-switch">
                       {first ? (
-                        <Controller
-                          control={control}
-                          name={`containers.${ci}.isSoc`}
-                          render={({ field: { value, onChange } }) => (
-                            <Switch
-                              size="medium"
-                              className={FORM_YES_NO_SWITCH_CLASS}
-                              checked={value}
-                              onChange={onChange}
-                              {...yesNoSwitchInner}
-                            />
-                          )}
-                        />
+                        <div className="si-cargo-grid__switch-cell">
+                          <Controller
+                            control={control}
+                            name={`containers.${ci}.isSoc`}
+                            render={({ field: { value, onChange } }) => (
+                              <Switch
+                                size="medium"
+                                className={FORM_YES_NO_SWITCH_CLASS}
+                                checked={value}
+                                onChange={onChange}
+                                {...yesNoSwitchInner}
+                              />
+                            )}
+                          />
+                        </div>
                       ) : null}
                     </td>
                     <td className="si-cargo-grid__td-switch">
@@ -313,7 +364,7 @@ export function BookingCargoGridView({
                                 />
                                 {value ? (
                                   <ListActionButton
-                                    title="Edit OOG Details"
+                                    title={t("wizard.cargo.editOogDetails")}
                                     icon={
                                       <AppIcon
                                         icon={Icons.edit}
@@ -371,7 +422,7 @@ export function BookingCargoGridView({
                                   />
                                   {field.value === "operating" ? (
                                     <ListActionButton
-                                      title="Edit Reefer Details"
+                                      title={t("wizard.cargo.editReeferDetails")}
                                       icon={
                                         <AppIcon
                                           icon={Icons.edit}
@@ -450,7 +501,7 @@ export function BookingCargoGridView({
                             optionFilterProp="label"
                             popupMatchSelectWidth={220}
                             className="si-cargo-grid__field si-cargo-grid__field--kind"
-                            placeholder="Package Type"
+                            placeholder={t("wizard.cargo.packageTypePlaceholder")}
                           />
                         )}
                       />
@@ -480,8 +531,8 @@ export function BookingCargoGridView({
                             min={1}
                             size="large"
                             className="si-cargo-grid__field si-cargo-grid__field--weight"
-                            addonAfter="kg"
-                            placeholder="kg"
+                            addonAfter={t("wizard.cargo.units.kg")}
+                            placeholder={t("wizard.cargo.units.kg")}
                           />
                         )}
                       />
@@ -496,8 +547,8 @@ export function BookingCargoGridView({
                             min={0}
                             size="large"
                             className="si-cargo-grid__field si-cargo-grid__field--weight"
-                            addonAfter="m³"
-                            placeholder="m³"
+                            addonAfter={t("wizard.cargo.units.m3")}
+                            placeholder={t("wizard.cargo.units.m3")}
                           />
                         )}
                       />
@@ -533,7 +584,7 @@ export function BookingCargoGridView({
                               />
                               {value ? (
                                 <ListActionButton
-                                  title="Edit DG Details"
+                                  title={t("wizard.cargo.editDgDetails")}
                                   icon={
                                     <AppIcon
                                       icon={Icons.edit}
@@ -563,13 +614,13 @@ export function BookingCargoGridView({
           </tbody>
         </table>
       </div>
-      <div className="si-cargo-grid-hint">
+      {/* <div className="si-cargo-grid-hint">
         <Text type="secondary">
           Toggle OOG, NOR off (operating reefer), or Hazardous to open a popup
           for detail fields. SOC is a flag only. NOR appears for reefer
           types.
         </Text>
-      </div>
+      </div> */}
 
       <BookingCargoGridExtrasModal
         open={extrasTarget !== null}

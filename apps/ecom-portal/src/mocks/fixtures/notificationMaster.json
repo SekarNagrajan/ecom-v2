@@ -1,0 +1,902 @@
+[
+ {
+  "id": 179,
+  "custtype": "C",
+  "msgid": "EN179",
+  "message": "testing",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2026-09-17T10:33:02.532Z"
+ },
+ {
+  "id": 178,
+  "custtype": "C",
+  "msgid": "EN178",
+  "message": "Testing Ecomm By Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-07-28T04:19:29.972Z"
+ },
+ {
+  "id": 177,
+  "custtype": "A",
+  "msgid": "EN177",
+  "message": "Testing Ecomm All Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-07-28T04:18:02.195Z"
+ },
+ {
+  "id": 176,
+  "custtype": "C",
+  "msgid": "EN176",
+  "message": "Testing Ecomm By Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-07-28T04:14:09.252Z"
+ },
+ {
+  "id": 175,
+  "custtype": "A",
+  "msgid": "EN175",
+  "message": "Testing Ecomm All Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-07-28T04:12:25.132Z"
+ },
+ {
+  "id": 174,
+  "custtype": "C",
+  "msgid": "EN174",
+  "message": "Testing Ecomm By Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-07-28T04:03:52.715Z"
+ },
+ {
+  "id": 173,
+  "custtype": "A",
+  "msgid": "EN173",
+  "message": "Testing Ecomm All Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-07-28T03:57:50.168Z"
+ },
+ {
+  "id": 172,
+  "custtype": "C",
+  "msgid": "EN172",
+  "message": "Testing Ecomm By Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-07-27T00:04:36.915Z"
+ },
+ {
+  "id": 171,
+  "custtype": "A",
+  "msgid": "EN171",
+  "message": "Testing Ecomm All Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-07-27T00:03:32.732Z"
+ },
+ {
+  "id": 170,
+  "custtype": "C",
+  "msgid": "EN170",
+  "message": "Testing Ecomm By Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-07-26T22:09:00.948Z"
+ },
+ {
+  "id": 169,
+  "custtype": "A",
+  "msgid": "EN169",
+  "message": "Testing Ecomm All Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-07-26T22:04:15.015Z"
+ },
+ {
+  "id": 168,
+  "custtype": "C",
+  "msgid": "EN168",
+  "message": "Testing Ecomm By Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-07-15T05:08:52.255Z"
+ },
+ {
+  "id": 167,
+  "custtype": "A",
+  "msgid": "EN167",
+  "message": "Testing Ecomm All Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-07-15T05:04:15.518Z"
+ },
+ {
+  "id": 166,
+  "custtype": "A",
+  "msgid": "EN166",
+  "message": "Testing Ecomm All Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-07-15T04:32:31.038Z"
+ },
+ {
+  "id": 165,
+  "custtype": "C",
+  "msgid": "EN165",
+  "message": "Testing Ecomm By Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-07-15T04:26:56.042Z"
+ },
+ {
+  "id": 164,
+  "custtype": "C",
+  "msgid": "EN164",
+  "message": "Testing Ecomm By Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-07-15T04:21:21.348Z"
+ },
+ {
+  "id": 163,
+  "custtype": "C",
+  "msgid": "EN163",
+  "message": "Testing Ecomm By Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-07-15T04:21:20.872Z"
+ },
+ {
+  "id": 162,
+  "custtype": "C",
+  "msgid": "EN162",
+  "message": "Testing Ecomm By Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-07-14T23:50:25.275Z"
+ },
+ {
+  "id": 161,
+  "custtype": "A",
+  "msgid": "EN161",
+  "message": "Testing Ecomm All Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-07-14T23:48:00.265Z"
+ },
+ {
+  "id": 160,
+  "custtype": "A",
+  "msgid": "EN160",
+  "message": "Testing Ecomm All Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-06-13T23:05:45.755Z"
+ },
+ {
+  "id": 159,
+  "custtype": "A",
+  "msgid": "EN159",
+  "message": "Testing Ecomm All Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-05-31T23:30:41.715Z"
+ },
+ {
+  "id": 158,
+  "custtype": "A",
+  "msgid": "EN158",
+  "message": "Testing Ecomm All Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-05-31T23:27:58.948Z"
+ },
+ {
+  "id": 157,
+  "custtype": "A",
+  "msgid": "EN157",
+  "message": "Testing Ecomm All Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-05-31T23:10:23.362Z"
+ },
+ {
+  "id": 156,
+  "custtype": "A",
+  "msgid": "EN156",
+  "message": "Testing Ecomm All Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-05-31T22:41:57.012Z"
+ },
+ {
+  "id": 155,
+  "custtype": "C",
+  "msgid": "EN155",
+  "message": "Testing Ecomm By Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-05-25T21:58:52.338Z"
+ },
+ {
+  "id": 154,
+  "custtype": "A",
+  "msgid": "EN154",
+  "message": "Testing Ecomm All Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-05-25T21:57:35.588Z"
+ },
+ {
+  "id": 153,
+  "custtype": "C",
+  "msgid": "EN153",
+  "message": "Testing Ecomm By Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-05-20T02:28:44.915Z"
+ },
+ {
+  "id": 152,
+  "custtype": "C",
+  "msgid": "EN152",
+  "message": "Testing Ecomm By Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-05-20T02:21:30.908Z"
+ },
+ {
+  "id": 151,
+  "custtype": "A",
+  "msgid": "EN151",
+  "message": "Testing Ecomm All Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-05-20T02:17:08.882Z"
+ },
+ {
+  "id": 150,
+  "custtype": "C",
+  "msgid": "EN150",
+  "message": "Testing Ecomm By Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-05-04T05:21:58.258Z"
+ },
+ {
+  "id": 149,
+  "custtype": "A",
+  "msgid": "EN149",
+  "message": "Testing Ecomm All Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-05-04T05:20:38.298Z"
+ },
+ {
+  "id": 148,
+  "custtype": "C",
+  "msgid": "EN148",
+  "message": "testing",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-04-28T05:10:08.448Z"
+ },
+ {
+  "id": 147,
+  "custtype": "C",
+  "msgid": "EN147",
+  "message": "Testing Ecomm By Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-04-17T22:11:42.625Z"
+ },
+ {
+  "id": 146,
+  "custtype": "A",
+  "msgid": "EN146",
+  "message": "Testing Ecomm All Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-04-17T22:08:51.062Z"
+ },
+ {
+  "id": 145,
+  "custtype": "C",
+  "msgid": "EN145",
+  "message": "Testing Ecomm By Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-04-03T05:13:31.042Z"
+ },
+ {
+  "id": 144,
+  "custtype": "A",
+  "msgid": "EN144",
+  "message": "Testing Ecomm All Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-04-03T05:11:14.778Z"
+ },
+ {
+  "id": 143,
+  "custtype": "C",
+  "msgid": "EN143",
+  "message": "Testing Ecomm By Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-04-02T22:59:06.192Z"
+ },
+ {
+  "id": 142,
+  "custtype": "A",
+  "msgid": "EN142",
+  "message": "Testing Ecomm All Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-04-02T22:53:55.932Z"
+ },
+ {
+  "id": 141,
+  "custtype": "C",
+  "msgid": "EN141",
+  "message": "Testing Ecomm By Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-04-01T00:27:30.055Z"
+ },
+ {
+  "id": 140,
+  "custtype": "A",
+  "msgid": "EN140",
+  "message": "Testing Ecomm All Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-04-01T00:25:10.412Z"
+ },
+ {
+  "id": 139,
+  "custtype": "C",
+  "msgid": "EN139",
+  "message": "Automation",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-03-30T12:27:50.298Z"
+ },
+ {
+  "id": 138,
+  "custtype": "C",
+  "msgid": "EN138",
+  "message": "Testing Ecomm By Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-03-30T04:53:56.562Z"
+ },
+ {
+  "id": 137,
+  "custtype": "A",
+  "msgid": "EN137",
+  "message": "Testing Ecomm All Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-03-30T04:51:51.878Z"
+ },
+ {
+  "id": 136,
+  "custtype": "C",
+  "msgid": "EN136",
+  "message": "tesing",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-03-30T04:29:09.178Z"
+ },
+ {
+  "id": 135,
+  "custtype": "C",
+  "msgid": "EN135",
+  "message": "Testing Ecomm By Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-03-30T04:23:48.888Z"
+ },
+ {
+  "id": 134,
+  "custtype": "A",
+  "msgid": "EN134",
+  "message": "Testing Ecomm All Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-03-30T04:21:36.012Z"
+ },
+ {
+  "id": 133,
+  "custtype": "C",
+  "msgid": "EN133",
+  "message": "Testing Ecomm By Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-03-30T03:46:24.378Z"
+ },
+ {
+  "id": 132,
+  "custtype": "A",
+  "msgid": "EN132",
+  "message": "Testing Ecomm All Customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-03-30T03:44:18.605Z"
+ },
+ {
+  "id": 131,
+  "custtype": "C",
+  "msgid": "EN131",
+  "message": "Testing Ecomm",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-03-30T03:02:07.935Z"
+ },
+ {
+  "id": 130,
+  "custtype": "A",
+  "msgid": "EN130",
+  "message": "Testing Ecomm",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-03-30T02:59:59.638Z"
+ },
+ {
+  "id": 129,
+  "custtype": "A",
+  "msgid": "EN129",
+  "message": "Testing Ecomm",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-03-30T02:57:26.532Z"
+ },
+ {
+  "id": 128,
+  "custtype": "C",
+  "msgid": "EN128",
+  "message": "testing abcs",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-03-30T01:52:28.948Z"
+ },
+ {
+  "id": 127,
+  "custtype": "C",
+  "msgid": "EN127",
+  "message": "testing",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-03-30T01:34:31.002Z"
+ },
+ {
+  "id": 126,
+  "custtype": "C",
+  "msgid": "EN126",
+  "message": "Automation",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-03-21T22:17:10.942Z"
+ },
+ {
+  "id": 125,
+  "custtype": "C",
+  "msgid": "EN125",
+  "message": "Automation",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-03-21T22:07:41.045Z"
+ },
+ {
+  "id": 124,
+  "custtype": "C",
+  "msgid": "EN124",
+  "message": "Automation",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-03-21T06:50:45.962Z"
+ },
+ {
+  "id": 123,
+  "custtype": "C",
+  "msgid": "EN123",
+  "message": "Automation",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-03-21T06:47:36.218Z"
+ },
+ {
+  "id": 122,
+  "custtype": "C",
+  "msgid": "EN122",
+  "message": "test",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-03-21T06:40:59.748Z"
+ },
+ {
+  "id": 121,
+  "custtype": "C",
+  "msgid": "EN121",
+  "message": "dhd",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-03-21T06:39:29.415Z"
+ },
+ {
+  "id": 120,
+  "custtype": "C",
+  "msgid": "EN120",
+  "message": "trrrt",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-03-21T06:37:28.675Z"
+ },
+ {
+  "id": 119,
+  "custtype": "C",
+  "msgid": "EN119",
+  "message": "sfafa",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-03-21T06:19:42.278Z"
+ },
+ {
+  "id": 118,
+  "custtype": "C",
+  "msgid": "EN118",
+  "message": "Ecom notice",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-03-21T05:43:51.035Z"
+ },
+ {
+  "id": 117,
+  "custtype": "C",
+  "msgid": "EN117",
+  "message": "sfzs",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-03-21T05:27:27.195Z"
+ },
+ {
+  "id": 116,
+  "custtype": "C",
+  "msgid": "EN116",
+  "message": "Ecom notification",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-02-24T02:58:24.745Z"
+ },
+ {
+  "id": 115,
+  "custtype": "C",
+  "msgid": "EN115",
+  "message": "Agency user edit the booking or si and manualy added the customer code. while adding the customer code the system will populate the msg asper below and the user the has selected 'YES' in t",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-02-24T02:57:18.228Z"
+ },
+ {
+  "id": 114,
+  "custtype": "C",
+  "msgid": "EN114",
+  "message": "Agency user edit the booking or si and manualy added the customer code. while adding the customer code the system will populate the msg asper below and the user the has selected 'YES' in t",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-02-24T02:56:49.922Z"
+ },
+ {
+  "id": 113,
+  "custtype": "C",
+  "msgid": "EN113",
+  "message": "Testing",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2025-02-24T02:54:59.288Z"
+ },
+ {
+  "id": 112,
+  "custtype": "C",
+  "msgid": "EN112",
+  "message": "Ecom test notification..//.",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2023-01-24T04:36:17.165Z"
+ },
+ {
+  "id": 111,
+  "custtype": "C",
+  "msgid": "EN111",
+  "message": "Ecom notification /,.....",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2023-01-24T03:26:55.465Z"
+ },
+ {
+  "id": 110,
+  "custtype": "C",
+  "msgid": "EN110",
+  "message": "Ecom test notification.////\r\nEcom customer\\\\]]],......//\\/||/>/\r\ncustomer//.",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2023-01-21T21:10:47.812Z"
+ },
+ {
+  "id": 109,
+  "custtype": "C",
+  "msgid": "EN109",
+  "message": "Ecom test notification///..\\\\>\r\ncustomer <//][\\\\.,//\r\nEcom test notification///..\\\\>\r\ncustomer <//][\\\\.,//\r\nEcom test notification///..\\\\>\r\ncustomer <//][\\\\.,//\r\nEcom test notification///..\\",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2023-01-21T04:35:52.262Z"
+ },
+ {
+  "id": 108,
+  "custtype": "C",
+  "msgid": "EN108",
+  "message": "Ecom..,,,,,\\\\\\\r\nTest////////,,,,,.....\r\nCustomer..........//\\|/",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2023-01-14T03:05:41.868Z"
+ },
+ {
+  "id": 107,
+  "custtype": "C",
+  "msgid": "EN107",
+  "message": "Ecom///..;;\r\nnotification..,;;[[[//\r\ncustomer//",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2023-01-14T03:00:57.395Z"
+ },
+ {
+  "id": 106,
+  "custtype": "C",
+  "msgid": "EN106",
+  "message": "Ecom notification ////...,,\r\nTest....\r\ncustomer//.",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2023-01-14T02:50:51.582Z"
+ },
+ {
+  "id": 105,
+  "custtype": "C",
+  "msgid": "EN105",
+  "message": "Test ecom customer send to notification",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2023-01-14T02:49:26.315Z"
+ },
+ {
+  "id": 104,
+  "custtype": "C",
+  "msgid": "EN104",
+  "message": "Ecom notify customer 01",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2023-01-14T02:45:18.315Z"
+ },
+ {
+  "id": 103,
+  "custtype": "C",
+  "msgid": "EN103",
+  "message": "Ecommmmmmmmmmmmmmmmmmmmmmmm.........",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2023-01-13T00:33:42.985Z"
+ },
+ {
+  "id": 102,
+  "custtype": "C",
+  "msgid": "EN102",
+  "message": "Ecom",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2023-01-13T00:32:23.372Z"
+ },
+ {
+  "id": 101,
+  "custtype": "C",
+  "msgid": "EN101",
+  "message": "EEEEEEEEEEEEEEEE",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2023-01-13T00:30:11.328Z"
+ },
+ {
+  "id": 100,
+  "custtype": "C",
+  "msgid": "EN100",
+  "message": "TEST",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2023-01-13T00:28:40.622Z"
+ },
+ {
+  "id": 99,
+  "custtype": "C",
+  "msgid": "EN99",
+  "message": "Testing",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2023-01-13T00:27:45.235Z"
+ },
+ {
+  "id": 98,
+  "custtype": "C",
+  "msgid": "EN98",
+  "message": "Ecom notification to customer",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2022-12-24T03:11:05.398Z"
+ },
+ {
+  "id": 97,
+  "custtype": "C",
+  "msgid": "EN97",
+  "message": "Ecom test notification",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2022-12-16T04:19:26.502Z"
+ },
+ {
+  "id": 96,
+  "custtype": "C",
+  "msgid": "EN96",
+  "message": "Notify 3421",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2022-12-10T04:46:23.622Z"
+ },
+ {
+  "id": 95,
+  "custtype": "C",
+  "msgid": "EN95",
+  "message": "Ecom notification to customer 33442211........",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2022-12-10T04:43:58.512Z"
+ },
+ {
+  "id": 94,
+  "custtype": "C",
+  "msgid": "EN94",
+  "message": "Ecom test notify 004",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2022-12-10T04:15:10.075Z"
+ },
+ {
+  "id": 93,
+  "custtype": "C",
+  "msgid": "EN93",
+  "message": "Ecom customer 222444",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2022-12-10T04:12:06.572Z"
+ },
+ {
+  "id": 92,
+  "custtype": "C",
+  "msgid": "EN92",
+  "message": "Ecom customer to notificetion441122",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2022-12-10T04:10:55.005Z"
+ },
+ {
+  "id": 91,
+  "custtype": "C",
+  "msgid": "EN91",
+  "message": "Test ecom notification 12341",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2022-12-10T03:54:26.325Z"
+ },
+ {
+  "id": 90,
+  "custtype": "C",
+  "msgid": "EN90",
+  "message": "Test",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2022-12-10T02:45:04.285Z"
+ },
+ {
+  "id": 89,
+  "custtype": "C",
+  "msgid": "EN89",
+  "message": "EEE",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2022-12-10T02:27:54.898Z"
+ },
+ {
+  "id": 88,
+  "custtype": "C",
+  "msgid": "EN88",
+  "message": "Ecom user",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2022-12-10T02:26:50.825Z"
+ },
+ {
+  "id": 87,
+  "custtype": "C",
+  "msgid": "EN87",
+  "message": "Ecom test customer 001",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2022-12-10T01:37:51.368Z"
+ },
+ {
+  "id": 86,
+  "custtype": "C",
+  "msgid": "EN86",
+  "message": "Test Ecom notification 44.,",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2022-12-10T01:21:27.605Z"
+ },
+ {
+  "id": 85,
+  "custtype": "C",
+  "msgid": "EN85",
+  "message": "E",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2022-12-10T00:13:43.315Z"
+ },
+ {
+  "id": 84,
+  "custtype": "A",
+  "msgid": "EN84",
+  "message": "Test eco notification--",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2022-12-09T23:55:00.592Z"
+ },
+ {
+  "id": 83,
+  "custtype": "C",
+  "msgid": "EN83",
+  "message": "Ecom noti 212244",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2022-12-09T23:52:46.355Z"
+ },
+ {
+  "id": 82,
+  "custtype": "C",
+  "msgid": "EN82",
+  "message": "Ecom notification 11111111111111111333333333\r\n2222222222233\r\n////////////\r\nhhhhhhhhhhhdssssssssssssss\r\n......................\r\n\\\\\\\\\\\\\\\\\\\\\\\\\r\n;;;;;;;;;",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2022-12-09T23:37:15.648Z"
+ },
+ {
+  "id": 81,
+  "custtype": "C",
+  "msgid": "EN81",
+  "message": "New Service testing!!!!!!!!!!!",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2022-12-09T23:32:27.305Z"
+ },
+ {
+  "id": 80,
+  "custtype": "C",
+  "msgid": "EN80",
+  "message": "Mail notification 01",
+  "status": "A",
+  "cruser": "SUPERUSER",
+  "crdate": "2022-12-09T23:30:29.152Z"
+ }
+]

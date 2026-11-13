@@ -3,6 +3,7 @@ import { useToast } from "@solverminds/shared-ui/hooks";
 import { Flex, Typography, Upload } from "antd";
 import type { UploadFile } from "antd/es/upload/interface";
 import { Controller, useFormContext } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import type { RegistrationFormData } from "../types/registration.schema";
@@ -27,6 +28,7 @@ function toFileList(value: unknown): UploadFile[] {
 }
 
 export function FileUploadStep() {
+  const { t } = useTranslation(["registration", "common"]);
   const { control } = useFormContext<RegistrationFormData>();
   const toast = useToast();
 
@@ -34,12 +36,9 @@ export function FileUploadStep() {
     <Flex vertical gap={24} className="reg-step-body">
       <div>
         <Title level={5} className="reg-page__title">
-          KYC Document Upload
+          {t("kyc.title")}
         </Title>
-        <Text type="secondary">
-          Please upload your company registration certificate, trade license, or
-          other KYC documents as required by the controlling agency.
-        </Text>
+        <Text type="secondary">{t("kyc.description")}</Text>
       </div>
 
       <Controller
@@ -54,7 +53,7 @@ export function FileUploadStep() {
             beforeUpload={(file) => {
               const isLt10M = file.size / 1024 / 1024 < 10;
               if (!isLt10M) {
-                toast.error("File must be smaller than 10MB!");
+                toast.error(t("toasts.fileTooLarge"));
                 return Upload.LIST_IGNORE;
               }
 
@@ -66,9 +65,7 @@ export function FileUploadStep() {
                 "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
               ];
               if (!allowedTypes.includes(file.type)) {
-                toast.error(
-                  "You can only upload PDF, JPG, PNG or DOC/DOCX files!"
-                );
+                toast.error(t("toasts.fileTypeInvalid"));
                 return Upload.LIST_IGNORE;
               }
 
@@ -82,12 +79,9 @@ export function FileUploadStep() {
             <p className="ant-upload-drag-icon">
               <AppIcon icon={Icons.inbox} size={16} />
             </p>
-            <p className="ant-upload-text">
-              Click or drag file to this area to upload
-            </p>
+            <p className="ant-upload-text">{t("kyc.dragText")}</p>
             <p className="ant-upload-hint reg-upload-hint">
-              Support for a single PDF, DOCX, JPG, or PNG upload. Maximum size
-              10MB.
+              {t("kyc.dragHint")}
             </p>
           </Dragger>
         )}

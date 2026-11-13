@@ -1,7 +1,8 @@
-// Modified by Sekar Nagarajan (2026-08-25 16:40)
+// Modified by Sekar Nagarajan (2026-09-29 12:40)
 import { AppButton } from "@solverminds/shared-ui";
 import { Alert, Flex, Input, Result, Spin, Tooltip, Typography } from "antd";
 import { Controller } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { ImageCaptcha } from "../../landing/components/ImageCaptcha";
@@ -17,6 +18,7 @@ interface ForgotPasswordPanelContentProps {
 export function ForgotPasswordPanelContent({
   onBack,
 }: ForgotPasswordPanelContentProps) {
+  const { t } = useTranslation("auth");
   const controller = useForgotPasswordController();
   const { form, handleSubmit, serverError, isSubmitting, isSuccess } =
     controller;
@@ -32,8 +34,8 @@ export function ForgotPasswordPanelContent({
         <Flex vertical className="forgot-panel forgot-panel__success">
           <Result
             status="success"
-            title="Password Reset Email Sent"
-            subTitle="If the username matches an existing account, an email with password reset instructions will be sent."
+            title={t("forgotPasswordPanel.successTitle")}
+            subTitle={t("forgotPasswordPanel.successSubtitle")}
             extra={
               <div className="forgot-panel__success-actions">
                 <AppButton
@@ -42,14 +44,14 @@ export function ForgotPasswordPanelContent({
                   size="large"
                   onClick={onBack}
                 >
-                  Back to Login
+                  {t("forgotPasswordPanel.backToLogin")}
                 </AppButton>
                 <AppButton
                   key="tryAgain"
                   type="text"
                   onClick={controller.resetForm}
                 >
-                  Didn't receive it? Try again
+                  {t("forgotPasswordPanel.tryAgain")}
                 </AppButton>
               </div>
             }
@@ -64,14 +66,14 @@ export function ForgotPasswordPanelContent({
       <ForgotPasswordPanelStyles />
       <Flex vertical className="forgot-panel">
         <div className="forgot-panel__back">
-          <Tooltip title="Back to Login">
+          <Tooltip title={t("forgotPasswordPanel.backToLogin")}>
             <AppButton
               type="text"
               icon={<AppIcon icon={Icons.arrowLeft} size={16} />}
               onClick={onBack}
-              aria-label="Back to Login"
+              aria-label={t("forgotPasswordPanel.backToLogin")}
             >
-              Back to Login
+              {t("forgotPasswordPanel.backToLogin")}
             </AppButton>
           </Tooltip>
         </div>
@@ -82,11 +84,10 @@ export function ForgotPasswordPanelContent({
               <span className="forgot-panel__icon app-icon-inherit">
                 <AppIcon icon={Icons.key} size={16} />
               </span>
-              Forgot Password
+              {t("forgotPasswordPanel.title")}
             </Title>
             <Text type="secondary" className="forgot-panel__subtitle">
-              Enter your login username below to receive password reset
-              instructions.
+              {t("forgotPasswordPanel.subtitle")}
             </Text>
           </div>
 
@@ -94,7 +95,7 @@ export function ForgotPasswordPanelContent({
             <Alert
               type="error"
               showIcon
-              message="Request Failed"
+              message={t("forgotPasswordPanel.requestFailed")}
               description={serverError}
             />
           )}
@@ -106,7 +107,7 @@ export function ForgotPasswordPanelContent({
           >
             <div className="forgot-panel__field">
               <label htmlFor="forgotUsername" className="form-field-label">
-                Login Username
+                {t("forgotPasswordPanel.loginUsername")}
                 <Text type="danger"> *</Text>
               </label>
               <Controller
@@ -117,7 +118,7 @@ export function ForgotPasswordPanelContent({
                     {...field}
                     id="forgotUsername"
                     prefix={<AppIcon icon={Icons.user} size={16} />}
-                    placeholder="Enter your username (e.g. cust001)"
+                    placeholder={t("forgotPasswordPanel.usernamePlaceholder")}
                     size="large"
                     maxLength={50}
                     autoFocus
@@ -134,7 +135,7 @@ export function ForgotPasswordPanelContent({
 
             <div className="forgot-panel__field forgot-panel__field--captcha">
               <span className="form-field-label">
-                Security Check
+                {t("securityCheck")}
                 <Text type="danger"> *</Text>
               </span>
               <ImageCaptcha
@@ -153,7 +154,9 @@ export function ForgotPasswordPanelContent({
               type="primary"
               icon={isSubmitting ? <Spin size="small" /> : undefined}
             >
-              {isSubmitting ? "Sending Request..." : "Reset Password"}
+              {isSubmitting
+                ? t("forgotPasswordPanel.sending")
+                : t("forgotPasswordPanel.resetPassword")}
             </AppButton>
           </form>
         </Flex>

@@ -1,0 +1,7178 @@
+[
+ {
+  "portcode": "MGTMM",
+  "countrycode": "AE"
+ },
+ {
+  "portcode": "RERER",
+  "countrycode": "AE"
+ },
+ {
+  "portcode": "SCPOV",
+  "countrycode": "AE"
+ },
+ {
+  "portcode": "AOLAD",
+  "countrycode": "AO"
+ },
+ {
+  "portcode": "DZALG",
+  "countrycode": "DZ"
+ },
+ {
+  "portcode": "GALBV",
+  "countrycode": "GA"
+ },
+ {
+  "portcode": "GWOXB",
+  "countrycode": "GW"
+ },
+ {
+  "portcode": "LRMLW",
+  "countrycode": "LR"
+ },
+ {
+  "portcode": "LYTIP",
+  "countrycode": "LY"
+ },
+ {
+  "portcode": "MACAS",
+  "countrycode": "MA"
+ },
+ {
+  "portcode": "MAPTM",
+  "countrycode": "MA"
+ },
+ {
+  "portcode": "MGTOA",
+  "countrycode": "MG"
+ },
+ {
+  "portcode": "MUPLU",
+  "countrycode": "MU"
+ },
+ {
+  "portcode": "MWLLW",
+  "countrycode": "MW"
+ },
+ {
+  "portcode": "MZMNC",
+  "countrycode": "MZ"
+ },
+ {
+  "portcode": "MZMPM",
+  "countrycode": "MZ"
+ },
+ {
+  "portcode": "NAWVB",
+  "countrycode": "NA"
+ },
+ {
+  "portcode": "NGABV",
+  "countrycode": "NG"
+ },
+ {
+  "portcode": "SDPZU",
+  "countrycode": "SD"
+ },
+ {
+  "portcode": "SLFNA",
+  "countrycode": "SL"
+ },
+ {
+  "portcode": "SSJUB",
+  "countrycode": "SS"
+ },
+ {
+  "portcode": "TNTUN",
+  "countrycode": "TN"
+ },
+ {
+  "portcode": "TZDAR",
+  "countrycode": "TZ"
+ },
+ {
+  "portcode": "ZABOK",
+  "countrycode": "ZA"
+ },
+ {
+  "portcode": "ZACPT",
+  "countrycode": "ZA"
+ },
+ {
+  "portcode": "ZADUR",
+  "countrycode": "ZA"
+ },
+ {
+  "portcode": "ZAMDB",
+  "countrycode": "ZA"
+ },
+ {
+  "portcode": "ZAPLZ",
+  "countrycode": "ZA"
+ },
+ {
+  "portcode": "ZMMFR",
+  "countrycode": "ZM"
+ },
+ {
+  "portcode": "A1908",
+  "countrycode": "AF"
+ },
+ {
+  "portcode": "AEAJM",
+  "countrycode": "AE"
+ },
+ {
+  "portcode": "AEDXB",
+  "countrycode": "AE"
+ },
+ {
+  "portcode": "AEFJR",
+  "countrycode": "AE"
+ },
+ {
+  "portcode": "AEHAM",
+  "countrycode": "AE"
+ },
+ {
+  "portcode": "AEJE1",
+  "countrycode": "AE"
+ },
+ {
+  "portcode": "AEJEA",
+  "countrycode": "AE"
+ },
+ {
+  "portcode": "AEJED",
+  "countrycode": "AE"
+ },
+ {
+  "portcode": "AEQIW",
+  "countrycode": "AE"
+ },
+ {
+  "portcode": "AERKT",
+  "countrycode": "AE"
+ },
+ {
+  "portcode": "AESHJ",
+  "countrycode": "AE"
+ },
+ {
+  "portcode": "AFISQ",
+  "countrycode": "AF"
+ },
+ {
+  "portcode": "ATTQS",
+  "countrycode": "AF"
+ },
+ {
+  "portcode": "CNNSA",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CSAAT",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "FGHJ1",
+  "countrycode": "AL"
+ },
+ {
+  "portcode": "IQBAQ",
+  "countrycode": "IQ"
+ },
+ {
+  "portcode": "IQBSR",
+  "countrycode": "IQ"
+ },
+ {
+  "portcode": "IRASA",
+  "countrycode": "IR"
+ },
+ {
+  "portcode": "IRBAZ",
+  "countrycode": "IR"
+ },
+ {
+  "portcode": "IRBKM",
+  "countrycode": "IR"
+ },
+ {
+  "portcode": "IRBND",
+  "countrycode": "IR"
+ },
+ {
+  "portcode": "IRBUZ",
+  "countrycode": "IR"
+ },
+ {
+  "portcode": "IRKHO",
+  "countrycode": "IR"
+ },
+ {
+  "portcode": "IRQSH",
+  "countrycode": "IR"
+ },
+ {
+  "portcode": "IRZBR",
+  "countrycode": "IR"
+ },
+ {
+  "portcode": "OMOPQ",
+  "countrycode": "OM"
+ },
+ {
+  "portcode": "PAASA",
+  "countrycode": "AF"
+ },
+ {
+  "portcode": "PKKHI",
+  "countrycode": "PK"
+ },
+ {
+  "portcode": "POAAS",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "QAUMS",
+  "countrycode": "QA"
+ },
+ {
+  "portcode": "SADMM",
+  "countrycode": "SA"
+ },
+ {
+  "portcode": "SADMN",
+  "countrycode": "SA"
+ },
+ {
+  "portcode": "SARUH",
+  "countrycode": "SA"
+ },
+ {
+  "portcode": "TESTI",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "TZZNZ",
+  "countrycode": "TZ"
+ },
+ {
+  "portcode": "VIJAI",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "AELOO",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "ATVIE",
+  "countrycode": "AT"
+ },
+ {
+  "portcode": "AWWAW",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "CNDCB",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNNSS",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "COMET",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "FJSUV",
+  "countrycode": "FJ"
+ },
+ {
+  "portcode": "GHJKA",
+  "countrycode": "AF"
+ },
+ {
+  "portcode": "INBOM",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INNAG",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "LABBA",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "MYTPP",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "NZAKL",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "PTSET",
+  "countrycode": "PT"
+ },
+ {
+  "portcode": "QQQQQ",
+  "countrycode": "AF"
+ },
+ {
+  "portcode": "THLCH",
+  "countrycode": "TH"
+ },
+ {
+  "portcode": "TZDZZ",
+  "countrycode": "KE"
+ },
+ {
+  "portcode": "WERTQ",
+  "countrycode": "AF"
+ },
+ {
+  "portcode": "AQAAA",
+  "countrycode": "AF"
+ },
+ {
+  "portcode": "AUBWY",
+  "countrycode": "DZ"
+ },
+ {
+  "portcode": "GBTRA",
+  "countrycode": "AF"
+ },
+ {
+  "portcode": "GRPIR",
+  "countrycode": "GR"
+ },
+ {
+  "portcode": "INDHA",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "NEWWS",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "OMSOH",
+  "countrycode": "OM"
+ },
+ {
+  "portcode": "POLOA",
+  "countrycode": "AF"
+ },
+ {
+  "portcode": "SDERT",
+  "countrycode": "AL"
+ },
+ {
+  "portcode": "SDFGH",
+  "countrycode": "AS"
+ },
+ {
+  "portcode": "SWOLF",
+  "countrycode": "AF"
+ },
+ {
+  "portcode": "AUADL",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUALH",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUASB",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUASP",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUBBG",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUBBY",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUBCO",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUBEA",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUBEL",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUBGR",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUBGT",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUBLG",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUBME",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUBN1",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUBNE",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUBWB",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUBWT",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUCAV",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUCN1",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUCNS",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUDA1",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUDPO",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUDRW",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUEPR",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUEUA",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUFR1",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUFRE",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUGEX",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUGLT",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUGOV",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUGTT",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUHAL",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUHBA",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUKGN",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUKWI",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AULST",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AULVO",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUMKY",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUNT1",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUNTL",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUPH1",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUPHE",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUPHP",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUPKL",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUPLO",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUPTJ",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUPTL",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUQDN",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUROK",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUSOM",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUTHE",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUTSV",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUWEP",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUWWY",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUWYA",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUWYD",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUYBA",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "CXXCH",
+  "countrycode": "CX"
+ },
+ {
+  "portcode": "98767",
+  "countrycode": "AF"
+ },
+ {
+  "portcode": "A0909",
+  "countrycode": "AL"
+ },
+ {
+  "portcode": "AEKLF",
+  "countrycode": "AE"
+ },
+ {
+  "portcode": "ATSZG",
+  "countrycode": "AT"
+ },
+ {
+  "portcode": "AUAD1",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUMEL",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUSYD",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "AUTS1",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "CIABJ",
+  "countrycode": "AF"
+ },
+ {
+  "portcode": "CNQZJ",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNSNH",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "IDJKT",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "NZNP1",
+  "countrycode": "NZ"
+ },
+ {
+  "portcode": "NZWL1",
+  "countrycode": "NZ"
+ },
+ {
+  "portcode": "QAHMD",
+  "countrycode": "QA"
+ },
+ {
+  "portcode": "RUNVS",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "TEST1",
+  "countrycode": "AL"
+ },
+ {
+  "portcode": "USHSV",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "CHZRH",
+  "countrycode": "CH"
+ },
+ {
+  "portcode": "CNNGB",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "HKHKG",
+  "countrycode": "HK"
+ },
+ {
+  "portcode": "MYPGU",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYPKG",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "PLC03",
+  "countrycode": "AX"
+ },
+ {
+  "portcode": "AEKHA",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "CNSGH",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "EGAIS",
+  "countrycode": "AX"
+ },
+ {
+  "portcode": "LOCA6",
+  "countrycode": "DZ"
+ },
+ {
+  "portcode": "MYSBU",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "PLC01",
+  "countrycode": "AS"
+ },
+ {
+  "portcode": "PRSJU",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "PTO01",
+  "countrycode": "AX"
+ },
+ {
+  "portcode": "SADMJ",
+  "countrycode": "AD"
+ },
+ {
+  "portcode": "AUBDB",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "CNSHK",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "JPHKT",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "KRPUS",
+  "countrycode": "KR"
+ },
+ {
+  "portcode": "PORT1",
+  "countrycode": "AS"
+ },
+ {
+  "portcode": "USMNH",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "ZAAAA",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "AASAR",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "AASAS",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "ABCDE",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "ABCDZ",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "AESAR",
+  "countrycode": "AE"
+ },
+ {
+  "portcode": "ARASA",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "ARASS",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "ARAYE",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "ARAYV",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "ASASS",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "ASDSR",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "ASDSS",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "AZCDB",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "AZCDZ",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "DEMON",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "DROGN",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "DSAAD",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "TRIST",
+  "countrycode": "TR"
+ },
+ {
+  "portcode": "USNYC",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "BBBGI",
+  "countrycode": "BB"
+ },
+ {
+  "portcode": "BBSLC",
+  "countrycode": "BB"
+ },
+ {
+  "portcode": "BSNAS",
+  "countrycode": "BS"
+ },
+ {
+  "portcode": "GYGEO",
+  "countrycode": "GY"
+ },
+ {
+  "portcode": "HTFOM",
+  "countrycode": "HT"
+ },
+ {
+  "portcode": "JMKIN",
+  "countrycode": "JM"
+ },
+ {
+  "portcode": "MXATM",
+  "countrycode": "MX"
+ },
+ {
+  "portcode": "MXESE",
+  "countrycode": "MX"
+ },
+ {
+  "portcode": "MXLZC",
+  "countrycode": "MX"
+ },
+ {
+  "portcode": "MXMEX",
+  "countrycode": "MX"
+ },
+ {
+  "portcode": "MXMZT",
+  "countrycode": "MX"
+ },
+ {
+  "portcode": "MXVER",
+  "countrycode": "MX"
+ },
+ {
+  "portcode": "MXZLO",
+  "countrycode": "MX"
+ },
+ {
+  "portcode": "PABLB",
+  "countrycode": "PA"
+ },
+ {
+  "portcode": "PAMIT",
+  "countrycode": "PA"
+ },
+ {
+  "portcode": "PAPTY",
+  "countrycode": "PA"
+ },
+ {
+  "portcode": "SVAQJ",
+  "countrycode": "SV"
+ },
+ {
+  "portcode": "SVLUN",
+  "countrycode": "SV"
+ },
+ {
+  "portcode": "TTTUN",
+  "countrycode": "TT"
+ },
+ {
+  "portcode": "CDBUX",
+  "countrycode": "KE"
+ },
+ {
+  "portcode": "JPCHF",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "KEMBA",
+  "countrycode": "KE"
+ },
+ {
+  "portcode": "KMMUT",
+  "countrycode": "KM"
+ },
+ {
+  "portcode": "MZBEW",
+  "countrycode": "MZ"
+ },
+ {
+  "portcode": "SIKOP",
+  "countrycode": "SI"
+ },
+ {
+  "portcode": "SOMGQ",
+  "countrycode": "SO"
+ },
+ {
+  "portcode": "TZFMA",
+  "countrycode": "TZ"
+ },
+ {
+  "portcode": "TZMYW",
+  "countrycode": "TZ"
+ },
+ {
+  "portcode": "TZTGT",
+  "countrycode": "TZ"
+ },
+ {
+  "portcode": "UGKLA",
+  "countrycode": "UG"
+ },
+ {
+  "portcode": "USHTD",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "ARROS",
+  "countrycode": "AR"
+ },
+ {
+  "portcode": "ARZAE",
+  "countrycode": "AR"
+ },
+ {
+  "portcode": "EGALY",
+  "countrycode": "EG"
+ },
+ {
+  "portcode": "KRKAN",
+  "countrycode": "BR"
+ },
+ {
+  "portcode": "TRALI",
+  "countrycode": "TR"
+ },
+ {
+  "portcode": "TRIZT",
+  "countrycode": "TR"
+ },
+ {
+  "portcode": "TRMER",
+  "countrycode": "TR"
+ },
+ {
+  "portcode": "ATENA",
+  "countrycode": "AT"
+ },
+ {
+  "portcode": "ATLNZ",
+  "countrycode": "AT"
+ },
+ {
+  "portcode": "BGVAR",
+  "countrycode": "BG"
+ },
+ {
+  "portcode": "CHBSL",
+  "countrycode": "CH"
+ },
+ {
+  "portcode": "CHGVA",
+  "countrycode": "CH"
+ },
+ {
+  "portcode": "CHLAU",
+  "countrycode": "CH"
+ },
+ {
+  "portcode": "CYLMS",
+  "countrycode": "CY"
+ },
+ {
+  "portcode": "CZPRB",
+  "countrycode": "CZ"
+ },
+ {
+  "portcode": "CZPRG",
+  "countrycode": "CZ"
+ },
+ {
+  "portcode": "DEBRE",
+  "countrycode": "DE"
+ },
+ {
+  "portcode": "DEBRV",
+  "countrycode": "DE"
+ },
+ {
+  "portcode": "DECGN",
+  "countrycode": "DE"
+ },
+ {
+  "portcode": "DECUX",
+  "countrycode": "DE"
+ },
+ {
+  "portcode": "DEDTM",
+  "countrycode": "DE"
+ },
+ {
+  "portcode": "DEDUI",
+  "countrycode": "DE"
+ },
+ {
+  "portcode": "DEDUS",
+  "countrycode": "DE"
+ },
+ {
+  "portcode": "DEFRA",
+  "countrycode": "DE"
+ },
+ {
+  "portcode": "DEKEH",
+  "countrycode": "DE"
+ },
+ {
+  "portcode": "DEKEL",
+  "countrycode": "DE"
+ },
+ {
+  "portcode": "DELEE",
+  "countrycode": "DE"
+ },
+ {
+  "portcode": "DELUH",
+  "countrycode": "DE"
+ },
+ {
+  "portcode": "DEMAI",
+  "countrycode": "DE"
+ },
+ {
+  "portcode": "DEMHD",
+  "countrycode": "DE"
+ },
+ {
+  "portcode": "DEMHG",
+  "countrycode": "DE"
+ },
+ {
+  "portcode": "DEMUC",
+  "countrycode": "DE"
+ },
+ {
+  "portcode": "DENUE",
+  "countrycode": "DE"
+ },
+ {
+  "portcode": "DEULM",
+  "countrycode": "DE"
+ },
+ {
+  "portcode": "DEWIR",
+  "countrycode": "DE"
+ },
+ {
+  "portcode": "DKAAR",
+  "countrycode": "DK"
+ },
+ {
+  "portcode": "DKCPH",
+  "countrycode": "DK"
+ },
+ {
+  "portcode": "DKFRC",
+  "countrycode": "DK"
+ },
+ {
+  "portcode": "DKHLS",
+  "countrycode": "DK"
+ },
+ {
+  "portcode": "DKKAL",
+  "countrycode": "DK"
+ },
+ {
+  "portcode": "DKRSS",
+  "countrycode": "DK"
+ },
+ {
+  "portcode": "DKTLV",
+  "countrycode": "DK"
+ },
+ {
+  "portcode": "EEPLA",
+  "countrycode": "EE"
+ },
+ {
+  "portcode": "EETLL",
+  "countrycode": "EE"
+ },
+ {
+  "portcode": "EGDAM",
+  "countrycode": "EG"
+ },
+ {
+  "portcode": "EGEDK",
+  "countrycode": "EG"
+ },
+ {
+  "portcode": "EGPSD",
+  "countrycode": "EG"
+ },
+ {
+  "portcode": "EGSUZ",
+  "countrycode": "EG"
+ },
+ {
+  "portcode": "ESALG",
+  "countrycode": "ES"
+ },
+ {
+  "portcode": "ESBCN",
+  "countrycode": "ES"
+ },
+ {
+  "portcode": "ESBIO",
+  "countrycode": "ES"
+ },
+ {
+  "portcode": "ESCAD",
+  "countrycode": "ES"
+ },
+ {
+  "portcode": "ESEAS",
+  "countrycode": "ES"
+ },
+ {
+  "portcode": "ESGIJ",
+  "countrycode": "ES"
+ },
+ {
+  "portcode": "ESHUV",
+  "countrycode": "ES"
+ },
+ {
+  "portcode": "ESIBZ",
+  "countrycode": "ES"
+ },
+ {
+  "portcode": "ESMAD",
+  "countrycode": "ES"
+ },
+ {
+  "portcode": "ESSDR",
+  "countrycode": "ES"
+ },
+ {
+  "portcode": "ESTAR",
+  "countrycode": "ES"
+ },
+ {
+  "portcode": "ESVAL",
+  "countrycode": "ES"
+ },
+ {
+  "portcode": "ESVFB",
+  "countrycode": "ES"
+ },
+ {
+  "portcode": "ESVGO",
+  "countrycode": "ES"
+ },
+ {
+  "portcode": "ESVLC",
+  "countrycode": "ES"
+ },
+ {
+  "portcode": "FIHEL",
+  "countrycode": "FI"
+ },
+ {
+  "portcode": "FIHKO",
+  "countrycode": "FI"
+ },
+ {
+  "portcode": "FIKOK",
+  "countrycode": "FI"
+ },
+ {
+  "portcode": "FIKTK",
+  "countrycode": "FI"
+ },
+ {
+  "portcode": "FIMTY",
+  "countrycode": "FI"
+ },
+ {
+  "portcode": "FIRAU",
+  "countrycode": "FI"
+ },
+ {
+  "portcode": "FIROY",
+  "countrycode": "FI"
+ },
+ {
+  "portcode": "FITKU",
+  "countrycode": "FI"
+ },
+ {
+  "portcode": "FITOR",
+  "countrycode": "FI"
+ },
+ {
+  "portcode": "FRBES",
+  "countrycode": "FR"
+ },
+ {
+  "portcode": "FRBNY",
+  "countrycode": "FR"
+ },
+ {
+  "portcode": "FRBOD",
+  "countrycode": "FR"
+ },
+ {
+  "portcode": "FRDGS",
+  "countrycode": "FR"
+ },
+ {
+  "portcode": "FRDKK",
+  "countrycode": "FR"
+ },
+ {
+  "portcode": "FRFOS",
+  "countrycode": "FR"
+ },
+ {
+  "portcode": "FRLEH",
+  "countrycode": "FR"
+ },
+ {
+  "portcode": "FRLIO",
+  "countrycode": "FR"
+ },
+ {
+  "portcode": "FRLLE",
+  "countrycode": "FR"
+ },
+ {
+  "portcode": "FRLYC",
+  "countrycode": "FR"
+ },
+ {
+  "portcode": "FRLZI",
+  "countrycode": "FR"
+ },
+ {
+  "portcode": "FRMIE",
+  "countrycode": "FR"
+ },
+ {
+  "portcode": "FRMRS",
+  "countrycode": "FR"
+ },
+ {
+  "portcode": "FRNHD",
+  "countrycode": "FR"
+ },
+ {
+  "portcode": "FRNOR",
+  "countrycode": "FR"
+ },
+ {
+  "portcode": "FRNUR",
+  "countrycode": "FR"
+ },
+ {
+  "portcode": "FRPAR",
+  "countrycode": "FR"
+ },
+ {
+  "portcode": "FRRAD",
+  "countrycode": "FR"
+ },
+ {
+  "portcode": "FRSOL",
+  "countrycode": "FR"
+ },
+ {
+  "portcode": "FRSXB",
+  "countrycode": "FR"
+ },
+ {
+  "portcode": "FRTLN",
+  "countrycode": "FR"
+ },
+ {
+  "portcode": "FRTLS",
+  "countrycode": "FR"
+ },
+ {
+  "portcode": "FRULN",
+  "countrycode": "FR"
+ },
+ {
+  "portcode": "FRURO",
+  "countrycode": "FR"
+ },
+ {
+  "portcode": "FRVAF",
+  "countrycode": "FR"
+ },
+ {
+  "portcode": "GBABD",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBBEL",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBBEY",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBBHM",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBBLT",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBBLY",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBBOH",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBBRF",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBBRN",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBBRS",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBCAO",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBCAX",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBCBH",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBCDF",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBCEG",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBCES",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBCEY",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBCHN",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBCHP",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBCHR",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBCLK",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBCLP",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBCLT",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBCLW",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBCMG",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBCNK",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBCNW",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBCRE",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBCRI",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBCRO",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBCRY",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBCSE",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBCVT",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBDFR",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBDKG",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBDNG",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBDON",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBDRH",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBDTM",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBDVR",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBDXY",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBEBO",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBELN",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBENF",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBEPP",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBEPS",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBETN",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBEVE",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBEXE",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBFAL",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBFAW",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBFLE",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBFLI",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBFLM",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBFOF",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBFOH",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBFOR",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBFXF",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBFXT",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBGAI",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBGDD",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBGFD",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBGIL",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBGLF",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBGLO",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBGLW",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBGNG",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBGRA",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBGRG",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBGRK",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBGRY",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBGSF",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBGST",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBGSY",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBHDF",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBHEN",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBHEV",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBHFX",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBHIL",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBHMM",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBHMP",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBHMS",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBHMT",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBHOG",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBHRO",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBHTD",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBHTF",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBHTG",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBHTL",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBHUF",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBHUL",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBHUR",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBIMM",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBING",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBINV",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBIPS",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBIST",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBJER",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBKDM",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBKEW",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBKMK",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBKNO",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBKNS",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBKTR",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBKWT",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBLAL",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBLAN",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBLAU",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBLBA",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBLBR",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBLCN",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBLCS",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBLDY",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBLGP",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBLHF",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBLIV",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBLON",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBLTC",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBLUT",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBLYD",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBLYH",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBMFD",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBMGT",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBMME",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBMNC",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBMON",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBMOW",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBNCL",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBNHP",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBNKT",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBNLN",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBNOM",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBNPO",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBNPT",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBNQY",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBNRW",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBNTG",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBODH",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBOMA",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBOXF",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBPEM",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBPET",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBPHD",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBPLY",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBPME",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBPMT",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBPOF",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBPRE",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBPSB",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBPTY",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBQVG",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBRAH",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBRAM",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBRCH",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBRCS",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBRDN",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBREB",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBREN",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBRGP",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBRGV",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBRLH",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBRMG",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBROL",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBROS",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBRTH",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBRTR",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBRUN",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBRUS",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBRYD",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBRYE",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSAE",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSAV",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSBR",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSCA",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSCK",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSCP",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSDW",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSEF",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSFY",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSHE",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSHP",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSHY",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSIG",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSKE",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSKI",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSLL",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSLO",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSLS",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSND",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSNN",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSOE",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSOT",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSOU",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSOX",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSPU",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSRD",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSRH",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSRT",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSSH",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSTF",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSTK",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSTR",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSTW",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSUB",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSUN",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSUS",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSWA",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSWK",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBSWN",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBTAF",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBTAS",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBTAW",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBTBB",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBTDN",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBTEE",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBTEF",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBTET",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBTFD",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBTHB",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBTHE",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBTHN",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBTHO",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBTHP",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBTID",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBTIL",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBTIM",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBTKM",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBTLH",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBTOE",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBTOR",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBTPN",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBTRN",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBTSK",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBTTR",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBTTT",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBTWC",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBTWL",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBTYN",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBUPT",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBUXB",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWAF",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWAL",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWBD",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWBR",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWBY",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWDM",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWDN",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWDS",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWEB",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWES",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWET",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWEY",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWFD",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWFI",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWGN",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWHF",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWID",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWKG",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWLW",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWNE",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWNS",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWOF",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWOO",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWOR",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWOT",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWOV",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWPS",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWRN",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWRO",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWRS",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWSR",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWST",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWSY",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWTB",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWTR",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWTW",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWUG",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWXH",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBWXR",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBYAL",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBYAT",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBYEO",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBYMO",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBYRD",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBYRK",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GBYTE",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "GIGIB",
+  "countrycode": "GI"
+ },
+ {
+  "portcode": "GRGPA",
+  "countrycode": "GR"
+ },
+ {
+  "portcode": "GRSKG",
+  "countrycode": "GR"
+ },
+ {
+  "portcode": "HRRJK",
+  "countrycode": "HR"
+ },
+ {
+  "portcode": "HUBUD",
+  "countrycode": "HU"
+ },
+ {
+  "portcode": "IEDUB",
+  "countrycode": "IE"
+ },
+ {
+  "portcode": "IEORK",
+  "countrycode": "IE"
+ },
+ {
+  "portcode": "ILASH",
+  "countrycode": "IL"
+ },
+ {
+  "portcode": "ILHFA",
+  "countrycode": "IL"
+ },
+ {
+  "portcode": "ITAOI",
+  "countrycode": "IT"
+ },
+ {
+  "portcode": "ITAUG",
+  "countrycode": "IT"
+ },
+ {
+  "portcode": "ITBLQ",
+  "countrycode": "IT"
+ },
+ {
+  "portcode": "ITCAG",
+  "countrycode": "IT"
+ },
+ {
+  "portcode": "ITCVV",
+  "countrycode": "IT"
+ },
+ {
+  "portcode": "ITGAE",
+  "countrycode": "IT"
+ },
+ {
+  "portcode": "ITGIT",
+  "countrycode": "IT"
+ },
+ {
+  "portcode": "ITGOA",
+  "countrycode": "IT"
+ },
+ {
+  "portcode": "ITLIV",
+  "countrycode": "IT"
+ },
+ {
+  "portcode": "ITMDC",
+  "countrycode": "IT"
+ },
+ {
+  "portcode": "ITMIL",
+  "countrycode": "IT"
+ },
+ {
+  "portcode": "ITMOD",
+  "countrycode": "IT"
+ },
+ {
+  "portcode": "ITNAP",
+  "countrycode": "IT"
+ },
+ {
+  "portcode": "ITPCZ",
+  "countrycode": "IT"
+ },
+ {
+  "portcode": "ITPDA",
+  "countrycode": "IT"
+ },
+ {
+  "portcode": "ITPMA",
+  "countrycode": "IT"
+ },
+ {
+  "portcode": "ITPMO",
+  "countrycode": "IT"
+ },
+ {
+  "portcode": "ITPZL",
+  "countrycode": "IT"
+ },
+ {
+  "portcode": "ITRAN",
+  "countrycode": "IT"
+ },
+ {
+  "portcode": "ITRIV",
+  "countrycode": "IT"
+ },
+ {
+  "portcode": "ITRMI",
+  "countrycode": "IT"
+ },
+ {
+  "portcode": "ITRUB",
+  "countrycode": "IT"
+ },
+ {
+  "portcode": "ITSAL",
+  "countrycode": "IT"
+ },
+ {
+  "portcode": "ITSPE",
+  "countrycode": "IT"
+ },
+ {
+  "portcode": "ITSVN",
+  "countrycode": "IT"
+ },
+ {
+  "portcode": "ITTER",
+  "countrycode": "IT"
+ },
+ {
+  "portcode": "ITTPS",
+  "countrycode": "IT"
+ },
+ {
+  "portcode": "ITTRE",
+  "countrycode": "IT"
+ },
+ {
+  "portcode": "ITTRS",
+  "countrycode": "IT"
+ },
+ {
+  "portcode": "ITVCE",
+  "countrycode": "IT"
+ },
+ {
+  "portcode": "ITVDL",
+  "countrycode": "IT"
+ },
+ {
+  "portcode": "JOAQB",
+  "countrycode": "JO"
+ },
+ {
+  "portcode": "LBBEY",
+  "countrycode": "LB"
+ },
+ {
+  "portcode": "LTKLJ",
+  "countrycode": "LT"
+ },
+ {
+  "portcode": "LVRIX",
+  "countrycode": "LV"
+ },
+ {
+  "portcode": "MTMAR",
+  "countrycode": "MT"
+ },
+ {
+  "portcode": "MTMLA",
+  "countrycode": "MT"
+ },
+ {
+  "portcode": "NLAMS",
+  "countrycode": "NL"
+ },
+ {
+  "portcode": "NLHGL",
+  "countrycode": "NL"
+ },
+ {
+  "portcode": "NLTNZ",
+  "countrycode": "NL"
+ },
+ {
+  "portcode": "NOBGO",
+  "countrycode": "NO"
+ },
+ {
+  "portcode": "NOBVK",
+  "countrycode": "NO"
+ },
+ {
+  "portcode": "NODRM",
+  "countrycode": "NO"
+ },
+ {
+  "portcode": "NOFRK",
+  "countrycode": "NO"
+ },
+ {
+  "portcode": "NOKRS",
+  "countrycode": "NO"
+ },
+ {
+  "portcode": "NOOSL",
+  "countrycode": "NO"
+ },
+ {
+  "portcode": "NOTAE",
+  "countrycode": "NO"
+ },
+ {
+  "portcode": "PLGDK",
+  "countrycode": "PL"
+ },
+ {
+  "portcode": "PLGDN",
+  "countrycode": "PL"
+ },
+ {
+  "portcode": "PLGDY",
+  "countrycode": "PL"
+ },
+ {
+  "portcode": "PLNOW",
+  "countrycode": "PL"
+ },
+ {
+  "portcode": "PLSCZ",
+  "countrycode": "PL"
+ },
+ {
+  "portcode": "PLSZZ",
+  "countrycode": "PL"
+ },
+ {
+  "portcode": "PTAVI",
+  "countrycode": "PT"
+ },
+ {
+  "portcode": "PTFNC",
+  "countrycode": "PT"
+ },
+ {
+  "portcode": "PTLDP",
+  "countrycode": "PT"
+ },
+ {
+  "portcode": "PTLEI",
+  "countrycode": "PT"
+ },
+ {
+  "portcode": "PTLIS",
+  "countrycode": "PT"
+ },
+ {
+  "portcode": "PTM6E",
+  "countrycode": "PT"
+ },
+ {
+  "portcode": "PTMAT",
+  "countrycode": "PT"
+ },
+ {
+  "portcode": "PTOPO",
+  "countrycode": "PT"
+ },
+ {
+  "portcode": "PTPXO",
+  "countrycode": "PT"
+ },
+ {
+  "portcode": "ROCND",
+  "countrycode": "RO"
+ },
+ {
+  "portcode": "RULED",
+  "countrycode": "RU"
+ },
+ {
+  "portcode": "SEGOT",
+  "countrycode": "SE"
+ },
+ {
+  "portcode": "SEGVX",
+  "countrycode": "SE"
+ },
+ {
+  "portcode": "SEHEL",
+  "countrycode": "SE"
+ },
+ {
+  "portcode": "SEKAN",
+  "countrycode": "SE"
+ },
+ {
+  "portcode": "SEMMA",
+  "countrycode": "SE"
+ },
+ {
+  "portcode": "SENRK",
+  "countrycode": "SE"
+ },
+ {
+  "portcode": "SESTO",
+  "countrycode": "SE"
+ },
+ {
+  "portcode": "SEVST",
+  "countrycode": "SE"
+ },
+ {
+  "portcode": "SEWAL",
+  "countrycode": "SE"
+ },
+ {
+  "portcode": "SKDJA",
+  "countrycode": "SK"
+ },
+ {
+  "portcode": "SYDAM",
+  "countrycode": "SY"
+ },
+ {
+  "portcode": "TRAMB",
+  "countrycode": "TR"
+ },
+ {
+  "portcode": "TRAYT",
+  "countrycode": "TR"
+ },
+ {
+  "portcode": "TRDRC",
+  "countrycode": "TR"
+ },
+ {
+  "portcode": "TREYP",
+  "countrycode": "TR"
+ },
+ {
+  "portcode": "TRGEB",
+  "countrycode": "TR"
+ },
+ {
+  "portcode": "TRGEM",
+  "countrycode": "TR"
+ },
+ {
+  "portcode": "TRHAY",
+  "countrycode": "TR"
+ },
+ {
+  "portcode": "TRISK",
+  "countrycode": "TR"
+ },
+ {
+  "portcode": "TRIZM",
+  "countrycode": "TR"
+ },
+ {
+  "portcode": "TRKMX",
+  "countrycode": "TR"
+ },
+ {
+  "portcode": "TRMAD",
+  "countrycode": "TR"
+ },
+ {
+  "portcode": "TRMAR",
+  "countrycode": "TR"
+ },
+ {
+  "portcode": "TRYAR",
+  "countrycode": "TR"
+ },
+ {
+  "portcode": "UAODS",
+  "countrycode": "UA"
+ },
+ {
+  "portcode": "CNCOZ",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNFUG",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNJNZ",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNNCH",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNSHA",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNTAO",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "EGSOK",
+  "countrycode": "EG"
+ },
+ {
+  "portcode": "JPTBT",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "RUVYP",
+  "countrycode": "RU"
+ },
+ {
+  "portcode": "SGSIN",
+  "countrycode": "SG"
+ },
+ {
+  "portcode": "XXINS",
+  "countrycode": "HK"
+ },
+ {
+  "portcode": "XXLIN",
+  "countrycode": "HK"
+ },
+ {
+  "portcode": "CNAQG",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNBAN",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNBIH",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNBIJ",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNBJS",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNBYQ",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNCGS",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNCHI",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNCHQ",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNCSH",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNCWN",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNCZX",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNDAL",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNDFG",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNDGG",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNDJK",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNDLN",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNDOU",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNFAN",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNFOS",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNFZH",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNGGZ",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNGLA",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNGOM",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNGUG",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNHES",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNHKO",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNHMN",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNHSI",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNHSN",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNHUA",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNHUD",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNHUI",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNHZS",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNJGY",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNJHA",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNJIU",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNJMN",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNJUJ",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNJYN",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNJZU",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNKHN",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNKUS",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNLIH",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNLKU",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNLNS",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNLSN",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNLUU",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNLUZ",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNLYA",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNLYG",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNMAA",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNMAW",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNMWN",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNNAH",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNNBO",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNNDE",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNNGG",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNNGW",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNNHS",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNNJI",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNNNG",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNNTG",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNPUT",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNPYU",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNQDG",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNQGY",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNQZH",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNROQ",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNRZH",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNSBU",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNSDG",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNSHD",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNSHE",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNSHP",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNSIH",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNSJJ",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNSJQ",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNSRG",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNSTG",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNSTI",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNSUD",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNSZP",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNSZX",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNTAC",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNTIS",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNTOL",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNTSN",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNTXG",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNTZO",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNWAZ",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNWEI",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNWHG",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNWHI",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNWNZ",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNWUZ",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNWZO",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNXAB",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNXAO",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNXIN",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNXMG",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNXMN",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNXNG",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNXZH",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNYCG",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNYIK",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNYIU",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNYNT",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNYPG",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNYTG",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNYTN",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNYUF",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNYYA",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNYZH",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNZHE",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNZJG",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNZNG",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNZOS",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNZPU",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNZQG",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNZSN",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "CNZUH",
+  "countrycode": "CN"
+ },
+ {
+  "portcode": "MNULN",
+  "countrycode": "MN"
+ },
+ {
+  "portcode": "MOMFM",
+  "countrycode": "MO"
+ },
+ {
+  "portcode": "TWKEL",
+  "countrycode": "TW"
+ },
+ {
+  "portcode": "TWKHH",
+  "countrycode": "TW"
+ },
+ {
+  "portcode": "TWTPE",
+  "countrycode": "TW"
+ },
+ {
+  "portcode": "TWTXG",
+  "countrycode": "TW"
+ },
+ {
+  "portcode": "TWTYN",
+  "countrycode": "TW"
+ },
+ {
+  "portcode": "A1B2C",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "AUDAM",
+  "countrycode": "AU"
+ },
+ {
+  "portcode": "INAMD",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INBLR",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INCCU",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INDEL",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INGNU",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INGOI",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INHAL",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INHYD",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INHZR",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INMAA",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INMUN",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INNNN",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INNS1",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INNSA",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INTKD",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INTUT",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INVVA",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "BDCGP",
+  "countrycode": "BD"
+ },
+ {
+  "portcode": "BDDAC",
+  "countrycode": "BD"
+ },
+ {
+  "portcode": "BDMGL",
+  "countrycode": "BD"
+ },
+ {
+  "portcode": "INAGR",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INAKV",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INALA",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INATQ",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INBDQ",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INBFR",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INBHW",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INBRC",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INBWD",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INCOK",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INDIG",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INDRA",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INDRI",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INENR",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INFBD",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INGGN",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INGHR",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INGIN",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INGWL",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INHZA",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INIDR",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INISK",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INIXA",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INIXC",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INIXE",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INIXJ",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INIXU",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INIXY",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INJAI",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INJAJ",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INJDH",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INJKA",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INJUC",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INKAK",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INKAT",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INKHO",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INKNU",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INKRI",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INKTU",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INLNI",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INLON",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INLUH",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INMBD",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INMER",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INMOR",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INMPR",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INMRM",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INMUL",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INMUZ",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INNDA",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INNML",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INPAP",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INPAV",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INPIR",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INPNK",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INPNQ",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INPPG",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INPPT",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INPRT",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INPTL",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INPWL",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INREA",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INSAA",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INSAC",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INSIK",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INSJP",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INSON",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INSRE",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INSTV",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INUDR",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INVBM",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INVIG",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INVNS",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INVPI",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "INVTZ",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "LKCMB",
+  "countrycode": "LK"
+ },
+ {
+  "portcode": "MVMLE",
+  "countrycode": "MV"
+ },
+ {
+  "portcode": "PKBQM",
+  "countrycode": "PK"
+ },
+ {
+  "portcode": "PKGWD",
+  "countrycode": "PK"
+ },
+ {
+  "portcode": "AEAUH",
+  "countrycode": "AE"
+ },
+ {
+  "portcode": "BHBAH",
+  "countrycode": "BH"
+ },
+ {
+  "portcode": "BHKBS",
+  "countrycode": "BH"
+ },
+ {
+  "portcode": "IQUQR",
+  "countrycode": "IQ"
+ },
+ {
+  "portcode": "KWKWI",
+  "countrycode": "KW"
+ },
+ {
+  "portcode": "KWSAA",
+  "countrycode": "KW"
+ },
+ {
+  "portcode": "KWSWK",
+  "countrycode": "KW"
+ },
+ {
+  "portcode": "OMMCT",
+  "countrycode": "OM"
+ },
+ {
+  "portcode": "OMRUS",
+  "countrycode": "OM"
+ },
+ {
+  "portcode": "OMSLL",
+  "countrycode": "OM"
+ },
+ {
+  "portcode": "QADOH",
+  "countrycode": "QA"
+ },
+ {
+  "portcode": "QAMES",
+  "countrycode": "QA"
+ },
+ {
+  "portcode": "QARLF",
+  "countrycode": "QA"
+ },
+ {
+  "portcode": "SAGIZ",
+  "countrycode": "SA"
+ },
+ {
+  "portcode": "SAJUB",
+  "countrycode": "SA"
+ },
+ {
+  "portcode": "SAKAC",
+  "countrycode": "SA"
+ },
+ {
+  "portcode": "YEADE",
+  "countrycode": "YE"
+ },
+ {
+  "portcode": "YEHOD",
+  "countrycode": "YE"
+ },
+ {
+  "portcode": "AEKHL",
+  "countrycode": "AE"
+ },
+ {
+  "portcode": "ASPPG",
+  "countrycode": "AS"
+ },
+ {
+  "portcode": "PHTAG",
+  "countrycode": "PH"
+ },
+ {
+  "portcode": "CRLIO",
+  "countrycode": "CR"
+ },
+ {
+  "portcode": "CRPTC",
+  "countrycode": "CR"
+ },
+ {
+  "portcode": "GTPRQ",
+  "countrycode": "GT"
+ },
+ {
+  "portcode": "HNPCR",
+  "countrycode": "HN"
+ },
+ {
+  "portcode": "CLIQQ",
+  "countrycode": "CL"
+ },
+ {
+  "portcode": "CLLQN",
+  "countrycode": "CL"
+ },
+ {
+  "portcode": "COBUN",
+  "countrycode": "CO"
+ },
+ {
+  "portcode": "PEPAI",
+  "countrycode": "PE"
+ },
+ {
+  "portcode": "PEPUE",
+  "countrycode": "PE"
+ },
+ {
+  "portcode": "FMKSA",
+  "countrycode": "FM"
+ },
+ {
+  "portcode": "FMPNI",
+  "countrycode": "FM"
+ },
+ {
+  "portcode": "FMTKK",
+  "countrycode": "FM"
+ },
+ {
+  "portcode": "FMYAP",
+  "countrycode": "FM"
+ },
+ {
+  "portcode": "GUGUM",
+  "countrycode": "GU"
+ },
+ {
+  "portcode": "MPSPN",
+  "countrycode": "MP"
+ },
+ {
+  "portcode": "PWROR",
+  "countrycode": "PW"
+ },
+ {
+  "portcode": "PHILO",
+  "countrycode": "PH"
+ },
+ {
+  "portcode": "CAABB",
+  "countrycode": "CA"
+ },
+ {
+  "portcode": "CABFF",
+  "countrycode": "CA"
+ },
+ {
+  "portcode": "CACAL",
+  "countrycode": "CA"
+ },
+ {
+  "portcode": "CACHM",
+  "countrycode": "CA"
+ },
+ {
+  "portcode": "CACRO",
+  "countrycode": "CA"
+ },
+ {
+  "portcode": "CAdBB",
+  "countrycode": "CA"
+ },
+ {
+  "portcode": "CAdBd",
+  "countrycode": "CA"
+ },
+ {
+  "portcode": "CAdBs",
+  "countrycode": "CA"
+ },
+ {
+  "portcode": "CAdBx",
+  "countrycode": "CA"
+ },
+ {
+  "portcode": "CADCN",
+  "countrycode": "CA"
+ },
+ {
+  "portcode": "CAEDM",
+  "countrycode": "CA"
+ },
+ {
+  "portcode": "CAEXX",
+  "countrycode": "CA"
+ },
+ {
+  "portcode": "CAFRM",
+  "countrycode": "CA"
+ },
+ {
+  "portcode": "CAHAL",
+  "countrycode": "CA"
+ },
+ {
+  "portcode": "CAHMC",
+  "countrycode": "CA"
+ },
+ {
+  "portcode": "CAMTR",
+  "countrycode": "CA"
+ },
+ {
+  "portcode": "CANNO",
+  "countrycode": "CA"
+ },
+ {
+  "portcode": "CANWE",
+  "countrycode": "CA"
+ },
+ {
+  "portcode": "CAPAC",
+  "countrycode": "CA"
+ },
+ {
+  "portcode": "CAPML",
+  "countrycode": "CA"
+ },
+ {
+  "portcode": "CASAK",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "CASBR",
+  "countrycode": "CA"
+ },
+ {
+  "portcode": "CASJB",
+  "countrycode": "CA"
+ },
+ {
+  "portcode": "CASQA",
+  "countrycode": "CA"
+ },
+ {
+  "portcode": "CASRA",
+  "countrycode": "CA"
+ },
+ {
+  "portcode": "CATOR",
+  "countrycode": "CA"
+ },
+ {
+  "portcode": "CAVAN",
+  "countrycode": "CA"
+ },
+ {
+  "portcode": "CAVLF",
+  "countrycode": "CA"
+ },
+ {
+  "portcode": "CAWNP",
+  "countrycode": "CA"
+ },
+ {
+  "portcode": "CAWOO",
+  "countrycode": "CA"
+ },
+ {
+  "portcode": "CAYVH",
+  "countrycode": "CA"
+ },
+ {
+  "portcode": "CAYVR",
+  "countrycode": "CA"
+ },
+ {
+  "portcode": "MYPEN",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "US001",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USABI",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USABY",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USACF",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USACT",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USACW",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USADM",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USADV",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USAHN",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USAHU",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USAIH",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USANA",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USAPJ",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USATL",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USAUS",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USAVD",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USAVE",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USAXD",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USBAL",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USBAY",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USBBK",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USBCB",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USBFE",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USBHM",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USBJC",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USBMN",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USBNA",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USBOI",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USBOS",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USBOX",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USBOY",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USBQC",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USBQT",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USBRO",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USBSB",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USBTM",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USBTR",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USBUF",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USBUN",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USCAH",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USCAM",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USCAX",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USCBF",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USCC5",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USCCR",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USCDE",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USCEK",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USCF7",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USCHA",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USCHI",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USCHK",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USCHS",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USCKL",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USCLD",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USCLE",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USCLM",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USCMH",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USCNJ",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USCNO",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USCOB",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USCPM",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USCQE",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USCQX",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USCRC",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USCRS",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USCRU",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USCSG",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USCSN",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USCVG",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USCYI",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USCZE",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USDAA",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USDAE",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USDAL",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USDAY",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USDEC",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USDEN",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USDET",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USDKK",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USDNK",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USDNN",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USDRH",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USDRT",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USDSI",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USDTT",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USDVT",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USDYT",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USEAI",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USEAT",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USEDR",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USEEU",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USEKA",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USELP",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USELZ",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USEMT",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USEPD",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USEPM",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USEQU",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USESP",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USEV5",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USEVT",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USEWR",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USEZA",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USFCP",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USFEP",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USFLD",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USFLI",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USFLL",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USFNC",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USFPO",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USFRP",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USFTT",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USFUL",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USFWA",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USFXO",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USGAC",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USGBG",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USGG5",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USGHC",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USGHR",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USGLH",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USGLS",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USGRB",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USGSO",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USGSP",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USGV9",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USGYR",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USHAT",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USHHE",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USHHR",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USHID",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USHKQ",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USHLI",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USHNL",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USHOU",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USHPZ",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USHQM",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USHWD",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USICT",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USIDI",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USIDN",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USILG",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USILM",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USIND",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USING",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USIOW",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USIRD",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USIVN",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USJAN",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USJAU",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USJAX",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USJDY",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USJEC",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USJEP",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USJES",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USJID",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USJOR",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USKAH",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USKAM",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USKCK",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USKDY",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USKED",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USKEG",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USKET",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USKIN",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USLAX",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USLBH",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USLCK",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USLDI",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USLFJ",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USLGB",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USLGC",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USLGE",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USLHM",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USLIB",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USLIT",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USLMI",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USLNC",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USLNS",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USLNW",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USLOG",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USLPC",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USLRD",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USLRM",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USLUI",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USLXA",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USLYJ",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USMBL",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USMDF",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USMEM",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USMEQ",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USMES",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USMHT",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USMIA",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USMIC",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USMIK",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USMIO",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USMKC",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USMKE",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USMKL",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USMMF",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USMOB",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USMOD",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USMOO",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USMOW",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USMPT",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USMRH",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USMRN",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USMRP",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USMRQ",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USMSW",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USMSY",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USMTB",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USMTT",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USMV4",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USMXI",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USMYG",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USNAP",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USNAQ",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USNBA",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USNIJ",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USNPV",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USNTD",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USNUE",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USNVL",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USNVM",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USOAK",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USOCR",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USOEU",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USOFL",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USOGD",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USOGG",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USOKA",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USOKC",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USOKW",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USONT",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USOPI",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USORF",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USORG",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USORL",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USOTC",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USOXN",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USPAE",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USPBG",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USPDX",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USPEF",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USPER",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USPFN",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USPFP",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USPGL",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USPHD",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USPHL",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USPHX",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USPLQ",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USPOV",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USPQC",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USPQU",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USPRD",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USPRP",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USPSM",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USPTM",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USPTQ",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USPUB",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USPUY",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USPWM",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USPXX",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USQPW",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USRAL",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USRCH",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USRCU",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USRDG",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USRDO",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USREW",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USRFS",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USRIC",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USRID",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USRIP",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USRKL",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USRLO",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USRLS",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USRNE",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USRNO",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USROA",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USRPN",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USRRJ",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USRTO",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USRUQ",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USRUS",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSAC",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSAE",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSAN",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSAT",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSAV",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSBK",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSBT",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSBZ",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSCB",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSCK",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSDM",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSEA",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSFO",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSGC",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSGF",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSGR",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSHG",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSHI",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSHV",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSII",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSIR",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSLC",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSLD",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSLE",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSLY",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSNH",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSPQ",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSQS",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSRF",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSRG",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSRP",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USST2",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSTL",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSTP",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSTZ",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSUU",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USSYF",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USTEO",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USTI1",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USTIH",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USTIW",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USTLH",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USTMC",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USTMI",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USTNS",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USTOA",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USTOB",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USTOL",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USTPA",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USTPE",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USTRC",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USTRL",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USTUK",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USTUL",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USTUP",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USTUZ",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USTWD",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USTWL",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USTYH",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USUGN",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USUNC",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USUXN",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USUYR",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USV7X",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USVAN",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USVCA",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USVNY",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USWAM",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USWAW",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USWBU",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USWDG",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USWDQ",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USWHE",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USWHR",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USWIL",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USWLA",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USWLU",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USWMB",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USWTN",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USXCV",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USXFQ",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USXFR",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USXHE",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USXKQ",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USXKX",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USXMH",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USXNJ",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USXRL",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USYKW",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USYLA",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USYSM",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USYSZ",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USZAF",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USZRB",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USZRN",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USZWK",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "JPABU",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPAKI",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPAXT",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPCHB",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPFKY",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPHBI",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPHHE",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPHIC",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPHIJ",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPHIU",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPHKR",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPHMD",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPHSM",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPIMB",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPIMI",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPISI",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPISM",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPIWK",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPIYM",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPKAN",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPKCZ",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPKIJ",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPKIS",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPKMJ",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPKNU",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPKNZ",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPKOK",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPKSM",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPKUH",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPKWS",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPMAI",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPMIZ",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPMKX",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPMOJ",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPMYJ",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPNAH",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPNAO",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPNGO",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPNGS",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPOIT",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPONA",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPONH",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPOSA",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPOTK",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPOTR",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPSAG",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPSBS",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPSDJ",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPSEN",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPSHA",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPSHO",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPSKT",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPSMN",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPSMZ",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPTAK",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPTBN",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPTHS",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPTKS",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPTKY",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPTMK",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPTOK",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPTOS",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPTOY",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPTRG",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPTYO",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPUKB",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPWAK",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPYAT",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPYKK",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPYOK",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "JPYWA",
+  "countrycode": "JP"
+ },
+ {
+  "portcode": "KRDBL",
+  "countrycode": "KR"
+ },
+ {
+  "portcode": "KRICN",
+  "countrycode": "KR"
+ },
+ {
+  "portcode": "KRINC",
+  "countrycode": "KR"
+ },
+ {
+  "portcode": "KRKPO",
+  "countrycode": "KR"
+ },
+ {
+  "portcode": "KRKUV",
+  "countrycode": "KR"
+ },
+ {
+  "portcode": "KRKWA",
+  "countrycode": "KR"
+ },
+ {
+  "portcode": "KRKWJ",
+  "countrycode": "KR"
+ },
+ {
+  "portcode": "KRMAS",
+  "countrycode": "KR"
+ },
+ {
+  "portcode": "KRMOK",
+  "countrycode": "KR"
+ },
+ {
+  "portcode": "KRONS",
+  "countrycode": "KR"
+ },
+ {
+  "portcode": "KRPTK",
+  "countrycode": "KR"
+ },
+ {
+  "portcode": "KRSEL",
+  "countrycode": "KR"
+ },
+ {
+  "portcode": "KRTGA",
+  "countrycode": "KR"
+ },
+ {
+  "portcode": "KRUSN",
+  "countrycode": "KR"
+ },
+ {
+  "portcode": "KRYNG",
+  "countrycode": "KR"
+ },
+ {
+  "portcode": "ATBDH",
+  "countrycode": "AT"
+ },
+ {
+  "portcode": "DE222",
+  "countrycode": "DE"
+ },
+ {
+  "portcode": "DEWVN",
+  "countrycode": "DE"
+ },
+ {
+  "portcode": "DKAAL",
+  "countrycode": "DK"
+ },
+ {
+  "portcode": "FIOUL",
+  "countrycode": "FR"
+ },
+ {
+  "portcode": "NLRTM",
+  "countrycode": "NL"
+ },
+ {
+  "portcode": "NOLAR",
+  "countrycode": "NO"
+ },
+ {
+  "portcode": "NOMSS",
+  "countrycode": "NO"
+ },
+ {
+  "portcode": "RUVVO",
+  "countrycode": "RU"
+ },
+ {
+  "portcode": "NZBHE",
+  "countrycode": "NZ"
+ },
+ {
+  "portcode": "NZBLU",
+  "countrycode": "NZ"
+ },
+ {
+  "portcode": "NZCHC",
+  "countrycode": "NZ"
+ },
+ {
+  "portcode": "NZDUD",
+  "countrycode": "NZ"
+ },
+ {
+  "portcode": "NZGIS",
+  "countrycode": "NZ"
+ },
+ {
+  "portcode": "NZHLZ",
+  "countrycode": "NZ"
+ },
+ {
+  "portcode": "NZIVC",
+  "countrycode": "NZ"
+ },
+ {
+  "portcode": "NZLYT",
+  "countrycode": "NZ"
+ },
+ {
+  "portcode": "NZMAP",
+  "countrycode": "NZ"
+ },
+ {
+  "portcode": "NZMMU",
+  "countrycode": "NZ"
+ },
+ {
+  "portcode": "NZMOR",
+  "countrycode": "NZ"
+ },
+ {
+  "portcode": "NZMRO",
+  "countrycode": "NZ"
+ },
+ {
+  "portcode": "NZNPE",
+  "countrycode": "NZ"
+ },
+ {
+  "portcode": "NZNPL",
+  "countrycode": "NZ"
+ },
+ {
+  "portcode": "NZNSN",
+  "countrycode": "NZ"
+ },
+ {
+  "portcode": "NZPMR",
+  "countrycode": "NZ"
+ },
+ {
+  "portcode": "NZPOE",
+  "countrycode": "NZ"
+ },
+ {
+  "portcode": "NZSDL",
+  "countrycode": "NZ"
+ },
+ {
+  "portcode": "NZTIU",
+  "countrycode": "NZ"
+ },
+ {
+  "portcode": "NZTRG",
+  "countrycode": "NZ"
+ },
+ {
+  "portcode": "NZTWI",
+  "countrycode": "NZ"
+ },
+ {
+  "portcode": "NZWAG",
+  "countrycode": "NZ"
+ },
+ {
+  "portcode": "NZWLG",
+  "countrycode": "NZ"
+ },
+ {
+  "portcode": "NZWRE",
+  "countrycode": "NZ"
+ },
+ {
+  "portcode": "PGBAS",
+  "countrycode": "PG"
+ },
+ {
+  "portcode": "PGBUA",
+  "countrycode": "PG"
+ },
+ {
+  "portcode": "PGDAU",
+  "countrycode": "PG"
+ },
+ {
+  "portcode": "PGGKA",
+  "countrycode": "PG"
+ },
+ {
+  "portcode": "PGGUR",
+  "countrycode": "PG"
+ },
+ {
+  "portcode": "PGHGU",
+  "countrycode": "PG"
+ },
+ {
+  "portcode": "PGKIE",
+  "countrycode": "PG"
+ },
+ {
+  "portcode": "PGKIM",
+  "countrycode": "PG"
+ },
+ {
+  "portcode": "PGKOP",
+  "countrycode": "PG"
+ },
+ {
+  "portcode": "PGKVG",
+  "countrycode": "PG"
+ },
+ {
+  "portcode": "PGLAE",
+  "countrycode": "PG"
+ },
+ {
+  "portcode": "PGLNV",
+  "countrycode": "PG"
+ },
+ {
+  "portcode": "PGLOL",
+  "countrycode": "PG"
+ },
+ {
+  "portcode": "PGLOM",
+  "countrycode": "PG"
+ },
+ {
+  "portcode": "PGLOR",
+  "countrycode": "PG"
+ },
+ {
+  "portcode": "PGMAG",
+  "countrycode": "PG"
+ },
+ {
+  "portcode": "PGMTK",
+  "countrycode": "PG"
+ },
+ {
+  "portcode": "PGMXH",
+  "countrycode": "PG"
+ },
+ {
+  "portcode": "PGOBX",
+  "countrycode": "PG"
+ },
+ {
+  "portcode": "PGOPU",
+  "countrycode": "PG"
+ },
+ {
+  "portcode": "PGPNP",
+  "countrycode": "PG"
+ },
+ {
+  "portcode": "PGPOM",
+  "countrycode": "PG"
+ },
+ {
+  "portcode": "PGRAB",
+  "countrycode": "PG"
+ },
+ {
+  "portcode": "PGROR",
+  "countrycode": "PG"
+ },
+ {
+  "portcode": "PGSMU",
+  "countrycode": "PG"
+ },
+ {
+  "portcode": "PGUNG",
+  "countrycode": "PG"
+ },
+ {
+  "portcode": "PGVAI",
+  "countrycode": "PG"
+ },
+ {
+  "portcode": "PGWOK",
+  "countrycode": "PG"
+ },
+ {
+  "portcode": "PGWWK",
+  "countrycode": "PG"
+ },
+ {
+  "portcode": "SBHIR",
+  "countrycode": "SB"
+ },
+ {
+  "portcode": "SBNOR",
+  "countrycode": "SB"
+ },
+ {
+  "portcode": "SBXYA",
+  "countrycode": "SB"
+ },
+ {
+  "portcode": "CKAIT",
+  "countrycode": "CK"
+ },
+ {
+  "portcode": "CKMHX",
+  "countrycode": "CK"
+ },
+ {
+  "portcode": "CKPYE",
+  "countrycode": "CK"
+ },
+ {
+  "portcode": "CKPZK",
+  "countrycode": "CK"
+ },
+ {
+  "portcode": "CKRAR",
+  "countrycode": "CK"
+ },
+ {
+  "portcode": "FJLTK",
+  "countrycode": "FJ"
+ },
+ {
+  "portcode": "FJNAN",
+  "countrycode": "FJ"
+ },
+ {
+  "portcode": "FJSVU",
+  "countrycode": "FJ"
+ },
+ {
+  "portcode": "KICXI",
+  "countrycode": "KI"
+ },
+ {
+  "portcode": "KITRW",
+  "countrycode": "KI"
+ },
+ {
+  "portcode": "MHMAJ",
+  "countrycode": "MH"
+ },
+ {
+  "portcode": "MHQEE",
+  "countrycode": "MH"
+ },
+ {
+  "portcode": "NCDNB",
+  "countrycode": "NC"
+ },
+ {
+  "portcode": "NCNOU",
+  "countrycode": "NC"
+ },
+ {
+  "portcode": "NCPNY",
+  "countrycode": "NC"
+ },
+ {
+  "portcode": "NCTON",
+  "countrycode": "NC"
+ },
+ {
+  "portcode": "NCVAV",
+  "countrycode": "NC"
+ },
+ {
+  "portcode": "NRINU",
+  "countrycode": "NR"
+ },
+ {
+  "portcode": "NUALO",
+  "countrycode": "NU"
+ },
+ {
+  "portcode": "NUIUE",
+  "countrycode": "NU"
+ },
+ {
+  "portcode": "PFPPT",
+  "countrycode": "PF"
+ },
+ {
+  "portcode": "PFRGI",
+  "countrycode": "PF"
+ },
+ {
+  "portcode": "TONEI",
+  "countrycode": "TO"
+ },
+ {
+  "portcode": "TOTBU",
+  "countrycode": "TO"
+ },
+ {
+  "portcode": "TVFUN",
+  "countrycode": "TV"
+ },
+ {
+  "portcode": "VUMAN",
+  "countrycode": "VU"
+ },
+ {
+  "portcode": "VUSAN",
+  "countrycode": "VU"
+ },
+ {
+  "portcode": "VUTAH",
+  "countrycode": "VU"
+ },
+ {
+  "portcode": "VUVLI",
+  "countrycode": "VU"
+ },
+ {
+  "portcode": "WFMAU",
+  "countrycode": "WF"
+ },
+ {
+  "portcode": "WFSIG",
+  "countrycode": "WF"
+ },
+ {
+  "portcode": "DJJIB",
+  "countrycode": "DJ"
+ },
+ {
+  "portcode": "JOAQJ",
+  "countrycode": "JO"
+ },
+ {
+  "portcode": "SAJED",
+  "countrycode": "SA"
+ },
+ {
+  "portcode": "SAYNB",
+  "countrycode": "SA"
+ },
+ {
+  "portcode": "NLMOE",
+  "countrycode": "NL"
+ },
+ {
+  "portcode": "ZAJNB",
+  "countrycode": "ZA"
+ },
+ {
+  "portcode": "ARBUE",
+  "countrycode": "AR"
+ },
+ {
+  "portcode": "ARRGA",
+  "countrycode": "AR"
+ },
+ {
+  "portcode": "BRIOA",
+  "countrycode": "BR"
+ },
+ {
+  "portcode": "BRITJ",
+  "countrycode": "BR"
+ },
+ {
+  "portcode": "BRNAT",
+  "countrycode": "BR"
+ },
+ {
+  "portcode": "BRNVT",
+  "countrycode": "BR"
+ },
+ {
+  "portcode": "BRPEC",
+  "countrycode": "BR"
+ },
+ {
+  "portcode": "BRPNG",
+  "countrycode": "BR"
+ },
+ {
+  "portcode": "BRRIG",
+  "countrycode": "BR"
+ },
+ {
+  "portcode": "BRRIO",
+  "countrycode": "BR"
+ },
+ {
+  "portcode": "BRSAO",
+  "countrycode": "BR"
+ },
+ {
+  "portcode": "BRSPB",
+  "countrycode": "BR"
+ },
+ {
+  "portcode": "BRSSZ",
+  "countrycode": "BR"
+ },
+ {
+  "portcode": "BRSTS",
+  "countrycode": "BR"
+ },
+ {
+  "portcode": "BRSUA",
+  "countrycode": "BR"
+ },
+ {
+  "portcode": "BRVIX",
+  "countrycode": "BR"
+ },
+ {
+  "portcode": "CLARI",
+  "countrycode": "CL"
+ },
+ {
+  "portcode": "CLSAI",
+  "countrycode": "CL"
+ },
+ {
+  "portcode": "CLSCL",
+  "countrycode": "CL"
+ },
+ {
+  "portcode": "CLTAL",
+  "countrycode": "CL"
+ },
+ {
+  "portcode": "CLVAP",
+  "countrycode": "CL"
+ },
+ {
+  "portcode": "COCTG",
+  "countrycode": "CO"
+ },
+ {
+  "portcode": "COPNM",
+  "countrycode": "CO"
+ },
+ {
+  "portcode": "ECGYE",
+  "countrycode": "EC"
+ },
+ {
+  "portcode": "PECLL",
+  "countrycode": "PE"
+ },
+ {
+  "portcode": "UYMVD",
+  "countrycode": "UY"
+ },
+ {
+  "portcode": "BNMUA",
+  "countrycode": "BN"
+ },
+ {
+  "portcode": "IDBDJ",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDBDO",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDBEN",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDBIT",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDBKS",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDBLW",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDBOA",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDBPN",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDBTH",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDBTM",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDCBN",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDCIG",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDCKR",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDDJB",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDDJJ",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDDPS",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDJOG",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDKAB",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDMAK",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDMAL",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDMES",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDMKW",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDMOW",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDMRK",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDPDG",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDPJG",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDPKU",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDPLM",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDPNJ",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDPTL",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDPWG",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDSEQ",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDSOQ",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDSRG",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDSRI",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDSUB",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDSWQ",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDTBR",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDTRG",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDTRK",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDTTE",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "IDUPG",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "KHKOS",
+  "countrycode": "KH"
+ },
+ {
+  "portcode": "KHPNH",
+  "countrycode": "KH"
+ },
+ {
+  "portcode": "LAVTE",
+  "countrycode": "LA"
+ },
+ {
+  "portcode": "MMRGN",
+  "countrycode": "MM"
+ },
+ {
+  "portcode": "MYBKI",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYBTU",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYGTI",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYIPH",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYJEP",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYJGP",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYJHB",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYKAJ",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYKAP",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYKCH",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYKLI",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYKTI",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYKUA",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYKUL",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYLBH",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYLBU",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYLDU",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYMEP",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYMSI",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYMUA",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYMYY",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYPGB",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYPJA",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYPOW",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYPUC",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYREJ",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYSBS",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYSBW",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYSDK",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYSEI",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYSGM",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYSHA",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYSKB",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYSRB",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYSUB",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYTAM",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYTEB",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYTKK",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYTMP",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYTPI",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYTWU",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYUTI",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "MYYPG",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "PHBCO",
+  "countrycode": "PH"
+ },
+ {
+  "portcode": "PHBTG",
+  "countrycode": "PH"
+ },
+ {
+  "portcode": "PHCEB",
+  "countrycode": "PH"
+ },
+ {
+  "portcode": "PHCGY",
+  "countrycode": "PH"
+ },
+ {
+  "portcode": "PHDGT",
+  "countrycode": "PH"
+ },
+ {
+  "portcode": "PHDVO",
+  "countrycode": "PH"
+ },
+ {
+  "portcode": "PHGES",
+  "countrycode": "PH"
+ },
+ {
+  "portcode": "PHISL",
+  "countrycode": "PH"
+ },
+ {
+  "portcode": "PHMNL",
+  "countrycode": "PH"
+ },
+ {
+  "portcode": "PHMNS",
+  "countrycode": "PH"
+ },
+ {
+  "portcode": "PHSFS",
+  "countrycode": "PH"
+ },
+ {
+  "portcode": "PHZAM",
+  "countrycode": "PH"
+ },
+ {
+  "portcode": "THBKK",
+  "countrycode": "TH"
+ },
+ {
+  "portcode": "THBSP",
+  "countrycode": "TH"
+ },
+ {
+  "portcode": "THHKT",
+  "countrycode": "TH"
+ },
+ {
+  "portcode": "THKSI",
+  "countrycode": "TH"
+ },
+ {
+  "portcode": "THLKR",
+  "countrycode": "TH"
+ },
+ {
+  "portcode": "THMAT",
+  "countrycode": "TH"
+ },
+ {
+  "portcode": "THMTP",
+  "countrycode": "TH"
+ },
+ {
+  "portcode": "THPAT",
+  "countrycode": "TH"
+ },
+ {
+  "portcode": "THPPA",
+  "countrycode": "TH"
+ },
+ {
+  "portcode": "THRYG",
+  "countrycode": "TH"
+ },
+ {
+  "portcode": "THSCS",
+  "countrycode": "TH"
+ },
+ {
+  "portcode": "THSGK",
+  "countrycode": "TH"
+ },
+ {
+  "portcode": "THSRI",
+  "countrycode": "TH"
+ },
+ {
+  "portcode": "THTRG",
+  "countrycode": "TH"
+ },
+ {
+  "portcode": "THTST",
+  "countrycode": "TH"
+ },
+ {
+  "portcode": "TLBCH",
+  "countrycode": "TL"
+ },
+ {
+  "portcode": "TLOEC",
+  "countrycode": "TL"
+ },
+ {
+  "portcode": "TLSUA",
+  "countrycode": "TL"
+ },
+ {
+  "portcode": "VNCLI",
+  "countrycode": "VN"
+ },
+ {
+  "portcode": "VNCLN",
+  "countrycode": "VN"
+ },
+ {
+  "portcode": "VNCMT",
+  "countrycode": "VN"
+ },
+ {
+  "portcode": "VNDAD",
+  "countrycode": "VN"
+ },
+ {
+  "portcode": "VNHAN",
+  "countrycode": "VN"
+ },
+ {
+  "portcode": "VNHPH",
+  "countrycode": "VN"
+ },
+ {
+  "portcode": "VNITX",
+  "countrycode": "VN"
+ },
+ {
+  "portcode": "VNPHG",
+  "countrycode": "VN"
+ },
+ {
+  "portcode": "VNPHU",
+  "countrycode": "VN"
+ },
+ {
+  "portcode": "VNUIH",
+  "countrycode": "VN"
+ },
+ {
+  "portcode": "VNVIC",
+  "countrycode": "VN"
+ },
+ {
+  "portcode": "VNVUT",
+  "countrycode": "VN"
+ },
+ {
+  "portcode": "XXOPT",
+  "countrycode": "SG"
+ },
+ {
+  "portcode": "IDLBG",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "MYLPK",
+  "countrycode": "MY"
+ },
+ {
+  "portcode": "THBK1",
+  "countrycode": "TH"
+ },
+ {
+  "portcode": "THLC1",
+  "countrycode": "TH"
+ },
+ {
+  "portcode": "THLK1",
+  "countrycode": "TH"
+ },
+ {
+  "portcode": "VNCAT",
+  "countrycode": "VN"
+ },
+ {
+  "portcode": "VNSPI",
+  "countrycode": "VN"
+ },
+ {
+  "portcode": "CRPMN",
+  "countrycode": "CR"
+ },
+ {
+  "portcode": "GTPBR",
+  "countrycode": "GT"
+ },
+ {
+  "portcode": "PAPAM",
+  "countrycode": "PA"
+ },
+ {
+  "portcode": "INBAW",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "NLLTE",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "TLDIL",
+  "countrycode": "TL"
+ },
+ {
+  "portcode": "USANC",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USCID",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "USCLT",
+  "countrycode": "US"
+ },
+ {
+  "portcode": "WSAPW",
+  "countrycode": "WS"
+ },
+ {
+  "portcode": "DEHAM",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "BEANR",
+  "countrycode": "BZ"
+ },
+ {
+  "portcode": "BEZEE",
+  "countrycode": "BZ"
+ },
+ {
+  "portcode": "NLVLI",
+  "countrycode": "NL"
+ },
+ {
+  "portcode": "VNSGN",
+  "countrycode": "VN"
+ },
+ {
+  "portcode": "BMBDA",
+  "countrycode": "BM"
+ },
+ {
+  "portcode": "GBSHS",
+  "countrycode": "GB"
+ },
+ {
+  "portcode": "IDPNK",
+  "countrycode": "ID"
+ },
+ {
+  "portcode": "CAFSD",
+  "countrycode": "CA"
+ }
+]

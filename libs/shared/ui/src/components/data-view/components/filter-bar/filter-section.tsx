@@ -1,6 +1,7 @@
 import { FilterOutlined } from '@ant-design/icons';
-import { Flex, Typography, theme, Badge, Empty, Space } from 'antd';
+import { Flex, Typography, theme, Badge, Space } from 'antd';
 
+import { AppEmptyState } from '../../../ui/empty-state';
 import {
   useFilterConfig,
   useDraftFilters,
@@ -96,9 +97,11 @@ export function FilterSection() {
 
           {filterConfig.length === 0 && (
             <div style={{ gridColumn: '1 / -1' }}>
-              <Empty
-                image={Empty.PRESENTED_IMAGE_SIMPLE}
-                description="No filterable columns available"
+              <AppEmptyState
+                variant="blank"
+                artSize="sm"
+                title="No filterable columns available"
+                hideArt
               />
             </div>
           )}

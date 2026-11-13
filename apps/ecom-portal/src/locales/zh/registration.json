@@ -1,0 +1,135 @@
+{
+  "header": {
+    "createAccount": "创建账户",
+    "complete": "注册完成",
+    "subtitleRegister": "注册 SVM E-Com Portal，以管理您的订舱与货运。",
+    "subtitleSuccess": "您的注册申请已成功提交。"
+  },
+  "steps": {
+    "companyInfo": "公司信息",
+    "userInfo": "用户信息",
+    "kycUpload": "KYC 上传",
+    "terms": "条款与条件"
+  },
+  "actions": {
+    "submitRegistration": "提交注册"
+  },
+  "company": {
+    "companyName": "公司名称",
+    "country": "国家/地区",
+    "controllingAgency": "管控代理",
+    "city": "城市",
+    "postalCode": "邮政编码",
+    "address1": "地址 1",
+    "address2": "地址 2",
+    "website": "网站",
+    "recentBl": "最近的提单/订舱号",
+    "companyPhone": "公司电话",
+    "phonePlaceholder": "电话",
+    "phoneCodePlaceholder": "+1",
+    "customerCode": "客户代码",
+    "customerCodePlaceholder": "请输入客户代码",
+    "existingCustomer": "现有客户",
+    "newCustomer": "新客户"
+  },
+  "user": {
+    "title": "称谓",
+    "firstName": "名",
+    "lastName": "姓",
+    "email": "电子邮箱",
+    "password": "密码",
+    "confirmPassword": "确认密码",
+    "timezone": "时区",
+    "defaultView": "默认视图",
+    "preferredView": "首选视图"
+  },
+  "options": {
+    "countries": {
+      "US": "美国",
+      "GB": "英国",
+      "CA": "加拿大",
+      "IN": "印度",
+      "AU": "澳大利亚",
+      "SG": "新加坡"
+    },
+    "agencies": {
+      "AGENCY_US": "美国代理",
+      "AGENCY_GB": "英国代理",
+      "AGENCY_SG": "新加坡代理"
+    },
+    "titles": {
+      "Mr": "先生",
+      "Mrs": "夫人",
+      "Ms": "女士",
+      "Dr": "博士"
+    },
+    "timezones": {
+      "GMT": "GMT - 格林威治标准时间",
+      "UTC": "UTC - 协调世界时",
+      "EST": "EST - 美国东部标准时间",
+      "PST": "PST - 美国太平洋标准时间",
+      "IST": "IST - 印度标准时间"
+    },
+    "defaultView": {
+      "STANDARD": "标准",
+      "COMPACT": "紧凑",
+      "DETAILED": "详细"
+    },
+    "preferredView": {
+      "HOME": "首页",
+      "DASHBOARD": "仪表板",
+      "TRACKING": "跟踪"
+    }
+  },
+  "kyc": {
+    "title": "KYC 文件上传",
+    "description": "请上传公司注册证明、营业执照或其他管控代理要求的 KYC 文件。",
+    "dragText": "点击或拖拽文件到此区域上传",
+    "dragHint": "支持单个 PDF、DOCX、JPG 或 PNG 文件。最大 10MB。"
+  },
+  "terms": {
+    "heading": "条款与条件",
+    "paragraphs": {
+      "acceptance": "1. 接受条款：在 E-Com Portal 注册账户即表示您同意遵守 <termsLink>网站使用条款</termsLink>。",
+      "privacy": "2. 隐私政策：我们致力于保护您的隐私。您的个人与公司信息将按照我们的 <privacyLink>隐私政策</privacyLink> 及适用的数据保护法律进行处理。",
+      "security": "3. 账户安全：您有责任对账户凭据保密，并对账户下发生的所有活动负责。",
+      "accurate": "4. 信息准确：您同意在注册过程中提供准确、最新且完整的信息，并及时更新以保持信息准确、最新且完整。"
+    },
+    "agree": "我同意 <termsLink>网站使用条款</termsLink>"
+  },
+  "validation": {
+    "companyNameRequired": "公司名称为必填项",
+    "countryRequired": "国家/地区为必填项",
+    "locationRequired": "地点为必填项",
+    "address1Required": "地址第 1 行为必填项",
+    "cityRequired": "城市为必填项",
+    "emailRequired": "电子邮箱为必填项",
+    "emailInvalid": "电子邮箱格式无效",
+    "passwordMin": "密码至少需要 8 个字符",
+    "confirmPasswordRequired": "请确认您的密码",
+    "passwordsMismatch": "两次输入的密码不一致",
+    "firstNameRequired": "名为必填项",
+    "lastNameRequired": "姓为必填项",
+    "titleRequired": "称谓为必填项",
+    "timezoneRequired": "时区为必填项",
+    "agreeToTerms": "您必须同意条款与条件",
+    "customerCodeRequired": "客户代码为必填项",
+    "companyPhoneOrMobileRequired": "公司电话或公司手机至少填写一项",
+    "invalidCustomerCode": "客户代码无效",
+    "errorValidatingCode": "验证代码时出错",
+    "emailAlreadyRegistered": "该电子邮箱已被注册。",
+    "emailVerifyFailed": "验证电子邮箱失败。"
+  },
+  "toasts": {
+    "customerCodeVerified": "客户代码已验证。正在自动填写详情。",
+    "fileTooLarge": "文件必须小于 10MB！",
+    "fileTypeInvalid": "只能上传 PDF、JPG、PNG 或 DOC/DOCX 文件！",
+    "registrationSuccess": "注册成功！请查收激活邮件。",
+    "submitFailed": "提交注册失败，请重试。",
+    "completeRequiredFields": "请正确填写所有必填项。"
+  },
+  "success": {
+    "title": "注册已成功提交！",
+    "subTitle": "您的注册申请已转交所选管控代理。您将很快收到确认邮件。"
+  }
+}

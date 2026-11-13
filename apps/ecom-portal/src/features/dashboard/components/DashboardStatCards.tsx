@@ -1,9 +1,9 @@
-// Modified by Sekar Nagarajan (2026-08-24 16:05)
+// Modified by Sekar Nagarajan (2026-10-16 23:45)
 import { Card, Col, Flex, Row, Typography, theme } from 'antd';
 import type { LucideIcon } from 'lucide-react';
 
 import { AppIcon, Icons } from '../../../components/icons';
-import type { DashboardStatCard } from '../mocks/dashboard.mock';
+import type { DashboardStatCard } from '../api/dashboard.api';
 
 const { Text, Title } = Typography;
 

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-02 11:20)
+// Modified by Sekar Nagarajan (2026-09-03 15:10)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -26,34 +26,50 @@ export function ReferenceFieldsStyles() {
         justify-content: flex-end;
         gap: ${token.marginSM}px;
       }
-      .ref-fields-view-opt {
+      /* Modified by Sekar Nagarajan (2026-09-03 15:10) — match cargo list/grid segmented */
+      .ref-fields-view-segmented.ant-segmented {
         display: inline-flex;
         align-items: center;
-        gap: ${token.marginXXS}px;
+      }
+      .ref-fields-view-segmented.ant-segmented .ant-segmented-group {
+        align-items: center;
+      }
+      .ref-fields-view-segmented.ant-segmented .ant-segmented-item {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .ref-fields-view-segmented.ant-segmented .ant-segmented-item-label {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: ${token.controlHeightLG - 8}px;
+        line-height: 1;
+        padding-inline: ${token.paddingSM}px;
+      }
+      .ref-fields-view-segmented.ant-segmented .ant-segmented-item-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-inline-end: 0;
         line-height: 1;
       }
-      .ref-fields-view-opt .app-icon {
+      .ref-fields-view-segmented.ant-segmented .ant-segmented-item-icon .app-icon {
         display: block;
-        flex: none;
+        color: ${token.colorTextSecondary};
       }
       .ref-fields-view-segmented.ant-segmented .ant-segmented-item-selected {
-        background: ${token.colorBgElevated} !important;
-        color: ${token.colorText} !important;
-      }
-      .ref-fields-view-segmented.ant-segmented
-        .ant-segmented-item-selected
-        .ant-segmented-item-label {
-        color: ${token.colorText} !important;
+        background: ${token.colorPrimary} !important;
+        color: ${token.colorTextLightSolid} !important;
       }
       .ref-fields-view-segmented.ant-segmented .ant-segmented-thumb {
-        background: ${token.colorBgElevated} !important;
-        box-shadow: ${token.boxShadowSecondary} !important;
+        background: ${token.colorPrimary} !important;
       }
       .ref-fields-view-segmented.ant-segmented
         .ant-segmented-item-selected
-        .ref-fields-view-opt
+        .ant-segmented-item-icon
         .app-icon {
-        color: ${token.colorText};
+        color: ${token.colorTextLightSolid};
       }
       .ref-fields-header__intro {
         display: flex;

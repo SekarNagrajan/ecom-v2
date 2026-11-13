@@ -1,0 +1,1100 @@
+[
+ {
+  "dmsfinaldest": "RWGTA",
+  "dmsfinaldestdesc": "GITARAMA (RWANDA)",
+  "dmspod": "USILG",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "UGLUG",
+  "dmsfinaldestdesc": "LUGAZI (UGANDA)",
+  "dmspod": "USILG",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "CDFKI",
+  "dmsfinaldestdesc": "KISANGANI (CONGO)",
+  "dmspod": "USILG",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "UGTRY",
+  "dmsfinaldestdesc": "TORORO (UGANDA)",
+  "dmspod": "USILG",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "UGMSK",
+  "dmsfinaldestdesc": "MASAKA (UGANDA)",
+  "dmspod": "CAAPA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "MWTLO",
+  "dmsfinaldestdesc": "THYOLO (MALAWI)",
+  "dmspod": "CAAPA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "UGKAB",
+  "dmsfinaldestdesc": "KABALE (UGANDA)",
+  "dmspod": "CAAPA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "CDBUX",
+  "dmsfinaldestdesc": "BUNIA (CONGO)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "KEMBA",
+  "dmsfinaldestdesc": "MOMBASA (KENYA)",
+  "dmspod": "TZDAR",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TZMWZ",
+  "dmsfinaldestdesc": "MWANZA (TANZANIA)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TZMUZ",
+  "dmsfinaldestdesc": "MUSOMA (TANZANIA)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": " TZDZZ",
+  "dmsfinaldestdesc": "ARUSHA (TANZANIA)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "CDBUX",
+  "dmsfinaldestdesc": "MOSHI (TANZANIA)",
+  "dmspod": "AUSYD",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TZTGT",
+  "dmsfinaldestdesc": "TANGA (TANZANIA)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "CDBKY",
+  "dmsfinaldestdesc": "BUKAVU (CONGO)",
+  "dmspod": "TZDAR",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "CDLKS",
+  "dmsfinaldestdesc": "LIKASI, D.R.CONGO",
+  "dmspod": "ZMLUN",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "ZMLUN",
+  "dmsfinaldestdesc": "LUSAKA (ZAMBIA)",
+  "dmspod": "TZDAR",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "CDFBM",
+  "dmsfinaldestdesc": "LUBUMBASHI (CONGO)",
+  "dmspod": "ZMLUN",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "CDGOM",
+  "dmsfinaldestdesc": "GOMA (CONGO)",
+  "dmspod": "ZMLUN",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "UGMSK",
+  "dmsfinaldestdesc": "MASAKA (UGANDA)",
+  "dmspod": "TZDAR",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TZTRI",
+  "dmsfinaldestdesc": "TARIME (TANZANIA)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "CDBUT",
+  "dmsfinaldestdesc": "BUTEMBO (CONGO)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "UGKLA",
+  "dmsfinaldestdesc": "KAMPALA (UGANDA)",
+  "dmspod": "TZDAR",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TZKRG",
+  "dmsfinaldestdesc": "KORAGWE (TANZANIA)",
+  "dmspod": "TZDAR",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "UGMAL",
+  "dmsfinaldestdesc": "MALABA (UGANDA)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TZHOR",
+  "dmsfinaldestdesc": "HOROHORO (TANZANIA)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "CGRUT",
+  "dmsfinaldestdesc": "RUTSHURU (CONGO)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "UGBUS",
+  "dmsfinaldestdesc": "BUSIA (UGANDA)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TZKRG",
+  "dmsfinaldestdesc": "KARAGWE (TANZANIA)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "SDWUU",
+  "dmsfinaldestdesc": "WAU (SOUTH SUDAN)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TZDOD",
+  "dmsfinaldestdesc": "DODOMA (TANZANIA)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "CDFIH",
+  "dmsfinaldestdesc": "KINSHASA  (CONGO)",
+  "dmspod": "TZDAR",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "SDKRT",
+  "dmsfinaldestdesc": "KHARTOUM (SUDAN)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TZMBI",
+  "dmsfinaldestdesc": "MBEYA (TANZANIA)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "UGKSE",
+  "dmsfinaldestdesc": "KASESE (UGANDA)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "ZWHRE",
+  "dmsfinaldestdesc": "HARARE (ZIMBABWE)",
+  "dmspod": "TZDAR",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "KINDU",
+  "dmsfinaldestdesc": "KINDU (CONGO)",
+  "dmspod": "ZMLUN",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TZKHM",
+  "dmsfinaldestdesc": "KAHAMA (TANZANIA)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TZDAR",
+  "dmsfinaldestdesc": "DAR ES SALAAM (TANZANIA)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TZMRG",
+  "dmsfinaldestdesc": "MOROGORO (TANZANIA)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "UGMBA",
+  "dmsfinaldestdesc": "MBALE (UGANDA)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "UGRAK",
+  "dmsfinaldestdesc": "RAKAI (UGANDA)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TZTKQ",
+  "dmsfinaldestdesc": "KIGOMA (TANZANIA)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TZMSH",
+  "dmsfinaldestdesc": "KILIMANJARO (TANZANIA)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "BIGID",
+  "dmsfinaldestdesc": "GITEGA (BURUNDI)",
+  "dmspod": "TZDAR",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "UGMBQ",
+  "dmsfinaldestdesc": "MBARARA (UGANDA)",
+  "dmspod": "TZDAR",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "UGKLA",
+  "dmsfinaldestdesc": "KAMPALA (UGANDA)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "SDJUM",
+  "dmsfinaldestdesc": "JUBA (SOUTH SUDAN)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "RWKGL",
+  "dmsfinaldestdesc": "KIGALI (RWANDA)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "BIBJM",
+  "dmsfinaldestdesc": "BUJUMBURA (BURUNDI)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "CDBKY",
+  "dmsfinaldestdesc": "GOMA (CONGO)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "UGJIN",
+  "dmsfinaldestdesc": "JINJA (UGANDA)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "ZMNLA",
+  "dmsfinaldestdesc": "NDOLA (ZAMBIA)",
+  "dmspod": "TZDAR",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "ZMKIW",
+  "dmsfinaldestdesc": "KITWE (ZAMBIA)",
+  "dmspod": "TZDAR",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "ZMCGJ",
+  "dmsfinaldestdesc": "CHINGOLA (ZAMBIA)",
+  "dmspod": "TZDAR",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "ZMLVI",
+  "dmsfinaldestdesc": "LIVINGSTONE (ZAMBIA)",
+  "dmspod": "TZDAR",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "RWKGL",
+  "dmsfinaldestdesc": "KIGALI (RWANDA)",
+  "dmspod": "TZDAR",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "BIBJM",
+  "dmsfinaldestdesc": "BUJUMBURA (BURUNDI)",
+  "dmspod": "TZDAR",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "MWLLW",
+  "dmsfinaldestdesc": "LILONGWE (MALAWI)",
+  "dmspod": "TZDAR",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "MWBLZ",
+  "dmsfinaldestdesc": "BLANTYRE (MALAWI)",
+  "dmspod": "TZDAR",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "ZMKAF",
+  "dmsfinaldestdesc": "KAFUE (ZAMBIA)",
+  "dmspod": "TZDAR",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "AMMGH",
+  "dmsfinaldestdesc": "MEGHRI (ARMENIA)",
+  "dmspod": "IRBUZ",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "AMEVN",
+  "dmsfinaldestdesc": "YEREVAN  (ARMENIA)",
+  "dmspod": "IRBUZ",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "AZLAN",
+  "dmsfinaldestdesc": "LANKARAN (AZERBAIJAN)",
+  "dmspod": "IRBUZ",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "AZBAK",
+  "dmsfinaldestdesc": "BAKU (AZERBAIJAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "GETBS",
+  "dmsfinaldestdesc": "TBILISI (GEORGIA)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TMASB",
+  "dmsfinaldestdesc": "ASHGABAT (TURKMINISTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TMMYP",
+  "dmsfinaldestdesc": "MARY (TURKMINISTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "KZAAU",
+  "dmsfinaldestdesc": "AKTAU (KAZAKHSTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "KZALA",
+  "dmsfinaldestdesc": "ALMATY (KAZAKHSTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "UZTAS",
+  "dmsfinaldestdesc": "TASHKENT (UZBEKISTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "UZBHK",
+  "dmsfinaldestdesc": "BUKHARA (UZBEKISTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "UZSKD",
+  "dmsfinaldestdesc": "SAMARQAND (UZBEKISTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TJDYU",
+  "dmsfinaldestdesc": "DUSHANBE (TAJIKISTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "KGFRU",
+  "dmsfinaldestdesc": "BISHKEK (KYRGYZESTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "AFMZR",
+  "dmsfinaldestdesc": "MAZAR E SHARIF (AFGHANISTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "AFKDH",
+  "dmsfinaldestdesc": "KANDAHAR (AFGHANISTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "AFKBL",
+  "dmsfinaldestdesc": "KABUL (AFGHANISTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "AFJAA",
+  "dmsfinaldestdesc": "JALALABAD (AFGHANISTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "AFISQ",
+  "dmsfinaldestdesc": "ESALAM QALEH (AFGHANISTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "IQIRB",
+  "dmsfinaldestdesc": "IRBIL (IRAQ)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "IQSYH",
+  "dmsfinaldestdesc": "SULAYMANIYAH (IRAQ)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "MWMUE",
+  "dmsfinaldestdesc": "MULANJE (MALAWI)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "CDMJM",
+  "dmsfinaldestdesc": "MBUJI-MAYI (D R CONGO)",
+  "dmspod": "GTPBR",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "RWRWA",
+  "dmsfinaldestdesc": "RWAMAGANA (RWANDA)",
+  "dmspod": "GTPBR",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "ZMMBK",
+  "dmsfinaldestdesc": "MAZABUKA, ZAMBIA",
+  "dmspod": "INNSA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "IQKUR",
+  "dmsfinaldestdesc": "KURDISTAN (IRAQ)",
+  "dmspod": "GTPBR",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TMAQI",
+  "dmsfinaldestdesc": "AQINA (TURKMENISTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "ZWHRE",
+  "dmsfinaldestdesc": "HARARE, ZIMBABWE",
+  "dmspod": "INNSA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "MWLLW",
+  "dmsfinaldestdesc": "LILONGWE ( MALAWI)",
+  "dmspod": "INNSA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "IQUQR",
+  "dmsfinaldestdesc": "UMM QASR (IRAQ)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TMKRW",
+  "dmsfinaldestdesc": "TURKMENBASHI (TURKMENISTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "AFIMZ",
+  "dmsfinaldestdesc": "NIMROZ (AFGHANISTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "AFXXX",
+  "dmsfinaldestdesc": "DUMMY CODE FOR AF INTRANSIT",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "ZMLUN",
+  "dmsfinaldestdesc": "LUSAKA, ZAMBIA",
+  "dmspod": "INNSA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TZBKZ",
+  "dmsfinaldestdesc": "BUKOBA (TANZANIA)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TMKIY",
+  "dmsfinaldestdesc": "TURKMINISTAN (KIYANLY)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TMBAY",
+  "dmsfinaldestdesc": "BAYRAMALY (TURKMINISTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TMKEK",
+  "dmsfinaldestdesc": "KEKRI (TURKMINISTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "UZQAR",
+  "dmsfinaldestdesc": "QARSHI (UZBAKISTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "UZJIZ",
+  "dmsfinaldestdesc": "JIZZAKH (UZBAKISTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "UZTER",
+  "dmsfinaldestdesc": "TERMIZ (UZBEKISTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "UZASA",
+  "dmsfinaldestdesc": "ASAKA  (UZBEKISTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "UZAZN",
+  "dmsfinaldestdesc": "ANDIJON (UZBEKISTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "UZNCU",
+  "dmsfinaldestdesc": "NUKUS (UZBEKISTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "UZUGC",
+  "dmsfinaldestdesc": "URGANCH (UZBEKISTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "IQKIK",
+  "dmsfinaldestdesc": "KIRKUK (IRAQ)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "IQOSM",
+  "dmsfinaldestdesc": "MOSUL (IRAQ)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "IQBAS",
+  "dmsfinaldestdesc": "BASHMAQ  (IRAQ)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TRANK",
+  "dmsfinaldestdesc": "ANKARA (TURKEY)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TRDGU",
+  "dmsfinaldestdesc": "DOGUBAYAZIT (TURKEY)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TRADA",
+  "dmsfinaldestdesc": "ADANA  (TURKEY)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TRKYA",
+  "dmsfinaldestdesc": "KONYA (TURKEY)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "KZAST",
+  "dmsfinaldestdesc": "ASTANA (KAZAKHESTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "KZZAA",
+  "dmsfinaldestdesc": "CHIMKENT (KAZAKHESTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "KZKGF",
+  "dmsfinaldestdesc": "QARAGHANDY (KAZAKHESTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TJTUR",
+  "dmsfinaldestdesc": "TURSUNZODA  (TAJIKISTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TJKUR",
+  "dmsfinaldestdesc": "QURGONTEPPA (TAJIKISTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TJLBD",
+  "dmsfinaldestdesc": "KHUJAND (TAJIKISTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "KGTUR",
+  "dmsfinaldestdesc": "TURKISTAN (KYRGYZESTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "KGOSS",
+  "dmsfinaldestdesc": "OSH (KYRGYZESTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "AFKOM",
+  "dmsfinaldestdesc": "POL E KHOMRI (AFGHANISTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "AFZAJ",
+  "dmsfinaldestdesc": "ZARANJ (AFGHANISTAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "AZNAJ",
+  "dmsfinaldestdesc": "NAXCIVAN (AZERBAIJAN)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "GEZAK",
+  "dmsfinaldestdesc": "RUSTAVI (GEORGIA)",
+  "dmspod": "IRBUZ",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "RUMCX",
+  "dmsfinaldestdesc": "MAKHACHKALA  (RUSSIA)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "AMXXX",
+  "dmsfinaldestdesc": "DUMMY CODE FOR ARMENIA IN TRANSIT",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "AZXXX",
+  "dmsfinaldestdesc": "DUMMY CODE FOR AZERBAIJAN IN TRANSIT",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "GEXXX",
+  "dmsfinaldestdesc": "DUMMY CODE FOR GEORGIA IN TRANSIT",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "IQXXX",
+  "dmsfinaldestdesc": "DUMMY CODE FOR IRAQ IN TRANSIT",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "KGXXX",
+  "dmsfinaldestdesc": "DUMMY CODE FOR KYRGYZESTAN IN TRANSIT",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "KZXXX",
+  "dmsfinaldestdesc": "DUMMY CODE FOR KAZAKHSTAN IN TRANSIT",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TJXXX",
+  "dmsfinaldestdesc": "DUMMY CODE FOR TAJIKISTAN IN TRANSIT",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TMXXX",
+  "dmsfinaldestdesc": "DUMMY CODE FOR TURKMINISTAN IN TRANSIT",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "UZXXX",
+  "dmsfinaldestdesc": "DUMMY CODE FOR UZBEKISTAN IN TRANSIT",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TRAJI",
+  "dmsfinaldestdesc": "AGRI (TURKEY)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TRXXX",
+  "dmsfinaldestdesc": "DUMMY CODE FOR TURKEY IN TRANSIT",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "RUXXX",
+  "dmsfinaldestdesc": "DUMMY CODE FOR RUSSIA IN TRANSIT",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "MWBLZ",
+  "dmsfinaldestdesc": "BLANTYRE (MALAWI)",
+  "dmspod": "INNSA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "ZMLUA",
+  "dmsfinaldestdesc": "LUANSHYA (ZAMBIA)",
+  "dmspod": "TZDAR",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TZGIT",
+  "dmsfinaldestdesc": "GEITA, TANZANIA",
+  "dmspod": "TZZNZ",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TZGIT",
+  "dmsfinaldestdesc": "GEITA (TANZANIA)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "MWLBE",
+  "dmsfinaldestdesc": "LIMBE, MALAWI",
+  "dmspod": "INNSA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "SDYEI",
+  "dmsfinaldestdesc": "YEI, SOUTH SUDAN",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "UGRUA",
+  "dmsfinaldestdesc": "ARUA (UGANDA)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "MWLBE",
+  "dmsfinaldestdesc": "LIMBE (MALAWI)",
+  "dmspod": "TZDAR",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "ZMLVI",
+  "dmsfinaldestdesc": "LIVINGSTONE (ZAMBIA)",
+  "dmspod": "INMAA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "UGLIR",
+  "dmsfinaldestdesc": "LIRA (UGANDA)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TRIST",
+  "dmsfinaldestdesc": "ISTANBUL (TURKEY)",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "ZMCIP",
+  "dmsfinaldestdesc": "CHIPATA (ZAMBIA)",
+  "dmspod": "TZDAR",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "MZVXC",
+  "dmsfinaldestdesc": "LICHINGA (MOZAMBIQUE)",
+  "dmspod": "TZDAR",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "CDARI",
+  "dmsfinaldestdesc": "AIRIWARA (D R CONGO)",
+  "dmspod": "TZDAR",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TMDHZ",
+  "dmsfinaldestdesc": "DASHHOWUZ",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "CDARI",
+  "dmsfinaldestdesc": "AIRIWARA (D R CONGO)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "CDFIH",
+  "dmsfinaldestdesc": "KINSHASA",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "AFMLK",
+  "dmsfinaldestdesc": "MILAK, AFGHANISTAN",
+  "dmspod": "IRBND",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "UGKCU",
+  "dmsfinaldestdesc": "MASINDI, UGANDA",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "ZMLUN",
+  "dmsfinaldestdesc": "LUSAKA (ZAMBIA)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "ZMNKN",
+  "dmsfinaldestdesc": "NAKONDE (ZAMBIA)",
+  "dmspod": "TZDAR",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "UGEBB",
+  "dmsfinaldestdesc": "ENTEBBE (UGANDA)",
+  "dmspod": "KEMBA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "MWLLW",
+  "dmsfinaldestdesc": "MWLLW",
+  "dmspod": "PKKHI",
+  "dmspoddesc": ""
+ },
+ {
+  "dmsfinaldest": "SGJUR",
+  "dmsfinaldestdesc": "SGJUR(SG)",
+  "dmspod": "SGSIN",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "AEJFZ",
+  "dmsfinaldestdesc": "AEJFZ(AE)",
+  "dmspod": "AEJEA",
+  "dmspoddesc": null
+ },
+ {
+  "dmsfinaldest": "TESTT",
+  "dmsfinaldestdesc": "SSTTST",
+  "dmspod": "SSTT",
+  "dmspoddesc": ""
+ },
+ {
+  "dmsfinaldest": "TESTSAMPLE",
+  "dmsfinaldestdesc": "AADDYA",
+  "dmspod": "AADDY",
+  "dmspoddesc": ""
+ },
+ {
+  "dmsfinaldest": "IRZAN",
+  "dmsfinaldestdesc": "ZANJAN",
+  "dmspod": "IRBND",
+  "dmspoddesc": "BANDAR ABBAS, IRAN"
+ },
+ {
+  "dmsfinaldest": "AZSAB",
+  "dmsfinaldestdesc": "SABIRABAD",
+  "dmspod": "IRBND",
+  "dmspoddesc": "BANDAR ABBAS, IRAN"
+ },
+ {
+  "dmsfinaldest": "AFFAH",
+  "dmsfinaldestdesc": "FARAH",
+  "dmspod": "IRBND",
+  "dmspoddesc": "BANDAR ABBAS, IRAN"
+ },
+ {
+  "dmsfinaldest": "AFZAJ",
+  "dmsfinaldestdesc": "ZARANJ",
+  "dmspod": "IRBND",
+  "dmspoddesc": "BANDAR ABBAS, IRAN"
+ },
+ {
+  "dmsfinaldest": "AFJAA",
+  "dmsfinaldestdesc": "JALALABAD, AFGHANISTAN",
+  "dmspod": "IRASA",
+  "dmspoddesc": "ASALUYEH, IRAN"
+ },
+ {
+  "dmsfinaldest": "AFJAA",
+  "dmsfinaldestdesc": "JALALABAD, AFGHANISTAN",
+  "dmspod": "IRBKM",
+  "dmspoddesc": "BANDAR IMAM KHOMEINI, IRAN"
+ },
+ {
+  "dmsfinaldest": "AFJAA",
+  "dmsfinaldestdesc": "JALALABAD, AFGHANISTAN",
+  "dmspod": "IRBUZ",
+  "dmspoddesc": "BUSHEHR, IRAN"
+ },
+ {
+  "dmsfinaldest": "AFJAA",
+  "dmsfinaldestdesc": "JALALABAD, AFGHANISTAN",
+  "dmspod": "IRKHO",
+  "dmspoddesc": "BANDAR KHORRAMSHAHR, IRAN"
+ },
+ {
+  "dmsfinaldest": "KZAAU",
+  "dmsfinaldestdesc": "AKTAU,KAZAKHSTAN",
+  "dmspod": "IRASA",
+  "dmspoddesc": "ASALUYEH, IRAN"
+ },
+ {
+  "dmsfinaldest": "KZAAU",
+  "dmsfinaldestdesc": "AKTAU,KAZAKHSTAN",
+  "dmspod": "IRBKM",
+  "dmspoddesc": "BANDAR IMAM KHOMEINI, IRAN"
+ },
+ {
+  "dmsfinaldest": "KZAAU",
+  "dmsfinaldestdesc": "AKTAU,KAZAKHSTAN",
+  "dmspod": "IRBUZ",
+  "dmspoddesc": "BUSHEHR, IRAN"
+ },
+ {
+  "dmsfinaldest": "KZAAU",
+  "dmsfinaldestdesc": "AKTAU,KAZAKHSTAN",
+  "dmspod": "IRKHO",
+  "dmspoddesc": "BANDAR KHORRAMSHAHR, IRAN"
+ },
+ {
+  "dmsfinaldest": "KZAST",
+  "dmsfinaldestdesc": "ASTANA, KAZAKHSTAN",
+  "dmspod": "IRASA",
+  "dmspoddesc": "ASALUYEH, IRAN"
+ },
+ {
+  "dmsfinaldest": "KZAST",
+  "dmsfinaldestdesc": "ASTANA, KAZAKHSTAN",
+  "dmspod": "IRBKM",
+  "dmspoddesc": "BANDAR IMAM KHOMEINI, IRAN"
+ },
+ {
+  "dmsfinaldest": "KZAST",
+  "dmsfinaldestdesc": "ASTANA, KAZAKHSTAN",
+  "dmspod": "IRBUZ",
+  "dmspoddesc": "BUSHEHR, IRAN"
+ },
+ {
+  "dmsfinaldest": "KZAST",
+  "dmsfinaldestdesc": "ASTANA, KAZAKHSTAN",
+  "dmspod": "IRKHO",
+  "dmspoddesc": "BANDAR KHORRAMSHAHR, IRAN"
+ },
+ {
+  "dmsfinaldest": "AFROZ",
+  "dmsfinaldestdesc": "ROZANAK",
+  "dmspod": "IRBND",
+  "dmspoddesc": "BANDAR ABBAS, IRAN"
+ },
+ {
+  "dmsfinaldest": "AFROZ",
+  "dmsfinaldestdesc": "ROZANAK",
+  "dmspod": "IRBUZ",
+  "dmspoddesc": "BUSHEHR, IRAN"
+ }
+]

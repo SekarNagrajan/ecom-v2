@@ -1,0 +1,135 @@
+{
+  "header": {
+    "createAccount": "Crear una cuenta",
+    "complete": "Registro completado",
+    "subtitleRegister": "Regístrese en SVM E-Com Portal para gestionar sus reservas y envíos.",
+    "subtitleSuccess": "Su registro se ha enviado correctamente."
+  },
+  "steps": {
+    "companyInfo": "Información de la empresa",
+    "userInfo": "Información del usuario",
+    "kycUpload": "Carga KYC",
+    "terms": "Términos y condiciones"
+  },
+  "actions": {
+    "submitRegistration": "Enviar registro"
+  },
+  "company": {
+    "companyName": "Nombre de la empresa",
+    "country": "País",
+    "controllingAgency": "Agencia controladora",
+    "city": "Ciudad",
+    "postalCode": "Código postal",
+    "address1": "Dirección 1",
+    "address2": "Dirección 2",
+    "website": "Sitio web",
+    "recentBl": "Número reciente de BL/reserva",
+    "companyPhone": "Teléfono de la empresa",
+    "phonePlaceholder": "Teléfono",
+    "phoneCodePlaceholder": "+1",
+    "customerCode": "Código de cliente",
+    "customerCodePlaceholder": "Introduzca el código de cliente",
+    "existingCustomer": "Cliente existente",
+    "newCustomer": "Cliente nuevo"
+  },
+  "user": {
+    "title": "Tratamiento",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "timezone": "Zona horaria",
+    "defaultView": "Vista predeterminada",
+    "preferredView": "Vista preferida"
+  },
+  "options": {
+    "countries": {
+      "US": "Estados Unidos",
+      "GB": "Reino Unido",
+      "CA": "Canadá",
+      "IN": "India",
+      "AU": "Australia",
+      "SG": "Singapur"
+    },
+    "agencies": {
+      "AGENCY_US": "Agencia de EE. UU.",
+      "AGENCY_GB": "Agencia del Reino Unido",
+      "AGENCY_SG": "Agencia de Singapur"
+    },
+    "titles": {
+      "Mr": "Sr.",
+      "Mrs": "Sra.",
+      "Ms": "Srta.",
+      "Dr": "Dr."
+    },
+    "timezones": {
+      "GMT": "GMT - Hora del meridiano de Greenwich",
+      "UTC": "UTC - Tiempo universal coordinado",
+      "EST": "EST - Hora estándar del Este",
+      "PST": "PST - Hora estándar del Pacífico",
+      "IST": "IST - Hora estándar de la India"
+    },
+    "defaultView": {
+      "STANDARD": "Estándar",
+      "COMPACT": "Compacta",
+      "DETAILED": "Detallada"
+    },
+    "preferredView": {
+      "HOME": "Página de inicio",
+      "DASHBOARD": "Panel",
+      "TRACKING": "Seguimiento"
+    }
+  },
+  "kyc": {
+    "title": "Carga de documentos KYC",
+    "description": "Cargue el certificado de registro de la empresa, la licencia comercial u otros documentos KYC según lo requiera la agencia controladora.",
+    "dragText": "Haga clic o arrastre el archivo a esta área para cargarlo",
+    "dragHint": "Se admite una sola carga PDF, DOCX, JPG o PNG. Tamaño máximo 10MB."
+  },
+  "terms": {
+    "heading": "Términos y condiciones",
+    "paragraphs": {
+      "acceptance": "1. Aceptación de los términos: Al registrar una cuenta en E-Com Portal, usted acepta cumplir los <termsLink>Términos de uso del sitio web</termsLink>.",
+      "privacy": "2. Política de privacidad: Nos comprometemos a proteger su privacidad. Su información personal y de la empresa se tratará de acuerdo con nuestra <privacyLink>Política de privacidad</privacyLink> y las leyes de protección de datos aplicables.",
+      "security": "3. Seguridad de la cuenta: Usted es responsable de mantener la confidencialidad de las credenciales de su cuenta y de todas las actividades que se realicen bajo ella.",
+      "accurate": "4. Información precisa: Usted acepta proporcionar información precisa, actual y completa durante el registro y actualizarla para que se mantenga precisa, actual y completa."
+    },
+    "agree": "Acepto los <termsLink>Términos de uso del sitio web</termsLink>"
+  },
+  "validation": {
+    "companyNameRequired": "El nombre de la empresa es obligatorio",
+    "countryRequired": "El país es obligatorio",
+    "locationRequired": "La ubicación es obligatoria",
+    "address1Required": "La línea de dirección 1 es obligatoria",
+    "cityRequired": "La ciudad es obligatoria",
+    "emailRequired": "El correo electrónico es obligatorio",
+    "emailInvalid": "Dirección de correo no válida",
+    "passwordMin": "La contraseña debe tener al menos 8 caracteres",
+    "confirmPasswordRequired": "Confirme su contraseña",
+    "passwordsMismatch": "Las contraseñas no coinciden",
+    "firstNameRequired": "El nombre es obligatorio",
+    "lastNameRequired": "El apellido es obligatorio",
+    "titleRequired": "El tratamiento es obligatorio",
+    "timezoneRequired": "La zona horaria es obligatoria",
+    "agreeToTerms": "Debe aceptar los términos y condiciones",
+    "customerCodeRequired": "El código de cliente es obligatorio",
+    "companyPhoneOrMobileRequired": "Se requiere el teléfono o el móvil de la empresa",
+    "invalidCustomerCode": "Código de cliente no válido",
+    "errorValidatingCode": "Error al validar el código",
+    "emailAlreadyRegistered": "Este correo ya está registrado.",
+    "emailVerifyFailed": "No se pudo verificar el correo."
+  },
+  "toasts": {
+    "customerCodeVerified": "Código de cliente verificado. Autocompletando detalles.",
+    "fileTooLarge": "¡El archivo debe ser menor de 10MB!",
+    "fileTypeInvalid": "¡Solo puede cargar archivos PDF, JPG, PNG o DOC/DOCX!",
+    "registrationSuccess": "¡Registro correcto! Revise su correo para la activación.",
+    "submitFailed": "No se pudo enviar el registro. Inténtelo de nuevo.",
+    "completeRequiredFields": "Complete correctamente todos los campos obligatorios."
+  },
+  "success": {
+    "title": "¡Registro enviado correctamente!",
+    "subTitle": "Su solicitud de registro se ha enviado a la agencia controladora seleccionada. Recibirá un correo de confirmación en breve."
+  }
+}

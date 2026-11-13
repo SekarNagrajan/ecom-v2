@@ -1,0 +1,98 @@
+[
+ {
+  "id": 13,
+  "username": "Daniel Rinke",
+  "userid": "daniel.rinke",
+  "usertype": "V",
+  "status": "A",
+  "crdate": "2025-11-29T01:15:17.615Z"
+ },
+ {
+  "id": 12,
+  "username": "Ecom Admin",
+  "userid": "ECOMAdmin1",
+  "usertype": "V",
+  "status": "A",
+  "crdate": "2024-02-19T23:46:06.698Z"
+ },
+ {
+  "id": 12,
+  "username": "Ecom Admin",
+  "userid": "ECOMAdmin",
+  "usertype": "V",
+  "status": "A",
+  "crdate": "2024-02-19T23:43:09.205Z"
+ },
+ {
+  "id": 11,
+  "username": "AgencyUser",
+  "userid": "agency",
+  "usertype": "C",
+  "status": "A",
+  "crdate": "2015-09-19T23:16:55.618Z"
+ },
+ {
+  "id": 10,
+  "username": "productadmin",
+  "userid": "productadmin",
+  "usertype": "V",
+  "status": "A",
+  "crdate": "2015-07-17T20:06:27.982Z"
+ },
+ {
+  "id": 8,
+  "username": "admin",
+  "userid": "wlsadmin1",
+  "usertype": "V",
+  "status": "A",
+  "crdate": "2013-09-16T05:50:08.788Z"
+ },
+ {
+  "id": 1,
+  "username": "SOLVERMINDS SHIPPING LTD",
+  "userid": "svmadmin",
+  "usertype": "V",
+  "status": "A",
+  "crdate": "2013-09-16T05:47:47.042Z"
+ },
+ {
+  "id": 1,
+  "username": "Lorenzo shipping company",
+  "userid": "lscadmin",
+  "usertype": "V",
+  "status": "A",
+  "crdate": "2013-09-16T05:47:47.035Z"
+ },
+ {
+  "id": 2,
+  "username": "admin",
+  "userid": "gssadmin",
+  "usertype": "V",
+  "status": "A",
+  "crdate": "2013-09-16T05:47:47.032Z"
+ },
+ {
+  "id": 1,
+  "username": "NMC Container shipping",
+  "userid": "nmcadmin",
+  "usertype": "V",
+  "status": "A",
+  "crdate": "2013-09-16T05:47:47.025Z"
+ },
+ {
+  "id": 2,
+  "username": "WHITE LINE",
+  "userid": "wlsadmin",
+  "usertype": "V",
+  "status": "A",
+  "crdate": "2013-09-16T04:33:53.615Z"
+ },
+ {
+  "id": 1,
+  "username": "AdminUser",
+  "userid": "admin",
+  "usertype": "A",
+  "status": "A",
+  "crdate": "2013-09-16T04:33:53.598Z"
+ }
+]

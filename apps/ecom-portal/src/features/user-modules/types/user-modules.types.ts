@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 16:00)
+// Modified by Sekar Nagarajan (2026-09-08 11:01)
 import { z } from 'zod';
 
 // ==========================================
@@ -111,11 +111,18 @@ export interface PaymentHistoryRecord {
   paymentRefNo: string;
   invoiceNo: string;
   blNumber: string;
-  gateway: 'STRIPE' | 'NGENIUS' | 'BANK_TRANSFER';
+  gateway: "STRIPE" | "NGENIUS" | "BANK_TRANSFER";
   amount: number;
   currency: string;
+  /** ISO-like display: `YYYY-MM-DD HH:mm` */
   paymentDate: string;
-  status: 'SUCCESSFUL' | 'PENDING' | 'FAILED' | 'REFUNDED';
+  status: "SUCCESSFUL" | "PENDING" | "FAILED" | "REFUNDED";
   payerName: string;
   receiptUrl?: string;
+}
+
+/** Optional date-range filter for payment history list. */
+export interface PaymentHistoryQuery {
+  fromDate?: string;
+  toDate?: string;
 }

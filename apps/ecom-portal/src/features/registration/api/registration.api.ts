@@ -40,7 +40,8 @@ export async function submitRegistration(
     const errorData = (await res.json().catch(() => ({}))) as {
       message?: string;
     };
-    throw new Error(errorData.message || "Registration submission failed");
+    // Server-owned message when present; empty string lets UI toast use i18n fallback.
+    throw new Error(errorData.message || "");
   }
 
   return (await res.json()) as RegistrationSubmitResult;

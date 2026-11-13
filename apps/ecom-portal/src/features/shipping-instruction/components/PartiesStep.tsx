@@ -1,31 +1,57 @@
-// Modified by Sekar Nagarajan (2026-08-31 22:59)
+// Modified by Sekar Nagarajan (2026-09-29 16:55)
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
-import { Card, Col, Row, Switch, Typography } from "antd";
-import { useState } from "react";
+import { Card, Switch, Tooltip, Typography } from "antd";
+import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
-import {
-  ListActionButton,
-  ListActionsRow,
-} from "../../../components/shared/list-action-button";
-import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
 import type { BookingCustomerOption } from "../../booking/api/booking.api";
 import { CustomerSearchAutoComplete } from "../../booking/components/party-edit-drawer";
-import { siPartiesSchema, type SIWizardStepProps } from "../types/si.types";
+import { BookingModuleStyles } from "../../booking/components/booking-module-styles";
+import {
+  createSiPartiesSchema,
+  type SIWizardStepProps,
+} from "../types/si.types";
 import {
   cardsToSiPartiesForm,
   DEFAULT_SI_PARTY_ROLES,
   emptySiPartyCard,
+  getSiPartyRoleLabel,
   initialSiPartyCards,
-  SI_PARTY_ROLE_LABEL,
-  siPartyRoleCardClassName,
   type SiPartyCardData,
   type SiPartyRoleKey,
 } from "../utils/si-party.utils";
 import { SiPartyEditDrawer, SiRoleAssignPanel } from "./si-party-edit-drawer";
 
-const { Text, Title } = Typography;
+const { Text } = Typography;
+
+const SI_PARTY_ROLE_ICON: Record<
+  SiPartyRoleKey,
+  (typeof Icons)[keyof typeof Icons]
+> = {
+  shipper: Icons.building,
+  consignee: Icons.user,
+  notify: Icons.bell,
+  notify2: Icons.bell,
+  notify3: Icons.bell,
+  forwarder: Icons.truck,
+  warehouse: Icons.boxes,
+  agreementParty: Icons.handshake,
+};
+
+function partySecondaryLines(card: SiPartyCardData): string[] {
+  const lines: string[] = [];
+  if (card.contact?.trim()) lines.push(card.contact.trim());
+  const location = [card.address, card.city, card.country]
+    .filter(Boolean)
+    .join(", ");
+  if (location) lines.push(location);
+  else if (card.email || card.phone) {
+    lines.push([card.email, card.phone].filter(Boolean).join(" · "));
+  }
+  return lines;
+}
 
 function SiPartyRoleCard({
   role,
@@ -33,6 +59,7 @@ function SiPartyRoleCard({
   readOnly = false,
   canEdit = true,
   canDelete = true,
+  fromAccount = false,
   onEdit,
   onDelete,
   onUpdateFlag,
@@ -42,86 +69,99 @@ function SiPartyRoleCard({
   readOnly?: boolean;
   canEdit?: boolean;
   canDelete?: boolean;
+  fromAccount?: boolean;
   onEdit: () => void;
   onDelete: () => void;
   onUpdateFlag: (
     patch: Partial<Pick<SiPartyCardData, "printOnBl" | "toOrder">>,
   ) => void;
 }) {
-  const showActions = !readOnly && (canEdit || canDelete);
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
+  const secondary = partySecondaryLines(card);
+  const showEdit = !readOnly && canEdit;
+  const showDelete = !readOnly && canDelete;
 
   return (
-    <Card
-      size="small"
-      className={siPartyRoleCardClassName(role)}
-      title={
-        <Title level={5} className="booking-party-card__title">
-          {SI_PARTY_ROLE_LABEL[role]}
-        </Title>
-      }
-      extra={
-        showActions ? (
-          <ListActionsRow>
-            {canEdit ? (
-              <ListActionButton
-                title="Edit Party"
-                icon={<AppIcon icon={Icons.edit} size={16} tone="edit" />}
+    <div className="booking-party-card booking-party-card--surface">
+      <div className="booking-party-card__head">
+        <div className="booking-party-card__role">
+          <Text strong className="booking-party-card__role-label">
+            {getSiPartyRoleLabel(role, t)}
+          </Text>
+        </div>
+        <div className="booking-party-card__actions">
+          {fromAccount ? <AppIcon icon={Icons.lock} size={16} /> : null}
+          {showEdit ? (
+            <Tooltip title={t("parties.editParty")}>
+              <AppButton
+                type="link"
+                size="small"
+                className="booking-party-card__edit-btn"
+                aria-label={t("parties.editParty")}
                 onClick={onEdit}
+                icon={<AppIcon icon={Icons.edit} size={16} tone="edit" />}
               />
-            ) : null}
-            {canDelete ? (
-              <ListActionButton
-                title="Delete Party"
-                icon={<AppIcon icon={Icons.trash} size={16} tone="delete" />}
-                tone="delete"
+            </Tooltip>
+          ) : null}
+          {showDelete ? (
+            <Tooltip title={t("parties.deleteParty")}>
+              <AppButton
+                type="link"
+                size="small"
+                className="booking-party-card__delete-btn"
+                aria-label={t("parties.deleteParty")}
+                danger
                 onClick={onDelete}
+                icon={<AppIcon icon={Icons.trash} size={16} tone="delete" />}
               />
-            ) : null}
-          </ListActionsRow>
-        ) : null
-      }
-    >
+            </Tooltip>
+          ) : null}
+        </div>
+      </div>
+
       <div className="booking-party-card__body">
         <Text strong className="booking-party-card__company">
           {card.company}
         </Text>
-        {card.contact ? (
+        {secondary.length > 0 ? (
+          secondary.map((line) => (
+            <Text
+              key={line}
+              type="secondary"
+              className="booking-party-card__meta"
+            >
+              {line}
+            </Text>
+          ))
+        ) : (
           <Text type="secondary" className="booking-party-card__meta">
-            {card.contact}
+            {t("parties.noContactDetails")}
           </Text>
-        ) : null}
-        {card.address || card.city ? (
-          <Text type="secondary" className="booking-party-card__meta">
-            {[card.address, card.city, card.country].filter(Boolean).join(", ")}
-          </Text>
-        ) : null}
-        {card.email || card.phone ? (
-          <Text type="secondary" className="booking-party-card__meta">
-            {[card.email, card.phone].filter(Boolean).join(" · ")}
-          </Text>
-        ) : null}
+        )}
         <div className="si-party-card__flags">
           <label className="si-party-card__flag">
-            <Text>Print on B/L</Text>
+            <Text>{t("parties.printOnBl")}</Text>
             <Switch
               size="small"
               checked={card.printOnBl}
+              disabled={readOnly}
               onChange={(checked) => onUpdateFlag({ printOnBl: checked })}
             />
           </label>
           {role === "consignee" ? (
             <label className="si-party-card__flag">
-              <Text>To Order</Text>
+              <Text>{t("parties.toOrderFlag")}</Text>
               <Switch
                 size="small"
                 checked={!!card.toOrder}
+                disabled={readOnly}
                 onChange={(checked) => onUpdateFlag({ toOrder: checked })}
               />
             </label>
           ) : null}
         </div>
       </div>
-    </Card>
+    </div>
   );
 }
 
@@ -132,27 +172,30 @@ function EmptySiPartySlot({
   role: SiPartyRoleKey;
   onAssign: () => void;
 }) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
   return (
-    <Card
-      size="small"
-      className={siPartyRoleCardClassName(role, true)}
-      title={
-        <Title level={5} className="booking-party-card__title">
-          {SI_PARTY_ROLE_LABEL[role]}
-        </Title>
-      }
-    >
+    <div className="booking-party-card booking-party-card--surface booking-party-card--empty">
+      <div className="booking-party-card__head">
+        <div className="booking-party-card__role">
+          <span className="booking-party-card__role-icon app-icon-inherit">
+            <AppIcon icon={SI_PARTY_ROLE_ICON[role]} size={16} />
+          </span>
+          <Text strong className="booking-party-card__role-label">
+            {getSiPartyRoleLabel(role, t)}
+          </Text>
+        </div>
+      </div>
       <div className="booking-party-card__empty-body">
-        <Text type="secondary">Not assigned yet</Text>
+        <Text type="secondary">{t("parties.notAssignedYet")}</Text>
         <AppButton
           size="small"
           icon={<AppIcon icon={Icons.plus} size={14} tone="create" />}
           onClick={onAssign}
         >
-          Assign
+          {t("actions.assign")}
         </AppButton>
       </div>
-    </Card>
+    </div>
   );
 }
 
@@ -163,7 +206,9 @@ export function PartiesStep({
   onUpdate,
   isSubmitting,
 }: SIWizardStepProps) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
   const toast = useToast();
+  const partiesSchema = useMemo(() => createSiPartiesSchema(t), [t]);
   const [cards, setCards] = useState<
     Partial<Record<SiPartyRoleKey, SiPartyCardData>>
   >(() => initialSiPartyCards(data.parties));
@@ -177,7 +222,6 @@ export function PartiesStep({
   const otherEntries = (
     Object.entries(cards) as [SiPartyRoleKey, SiPartyCardData][]
   ).filter(([role]) => !DEFAULT_SI_PARTY_ROLES.includes(role));
-  const assignedCount = assignedRoles.length;
 
   const handleSelectCustomer = (customer: BookingCustomerOption) => {
     setSelectedCustomer(customer);
@@ -191,7 +235,7 @@ export function PartiesStep({
 
   const handleAssignRoles = (roles: SiPartyRoleKey[]) => {
     if (!selectedCustomer || roles.length === 0) {
-      toast.error("Select at least one role");
+      toast.error(t("toasts.selectRole"));
       return;
     }
     const card: SiPartyCardData = {
@@ -215,7 +259,7 @@ export function PartiesStep({
       return next;
     });
     clearSelectedCustomer();
-    toast.success("Party roles assigned");
+    toast.success(t("toasts.rolesAssigned"));
   };
 
   const handleDeleteCard = (role: SiPartyRoleKey) => {
@@ -233,7 +277,7 @@ export function PartiesStep({
 
   const saveEdit = () => {
     if (!editRole || !editValue.company.trim()) {
-      toast.error("Company is required");
+      toast.error(t("toasts.companyRequired"));
       return;
     }
     setCards((prev) => ({ ...prev, [editRole]: { ...editValue } }));
@@ -253,10 +297,10 @@ export function PartiesStep({
   };
 
   const handleNext = () => {
-    const parsed = siPartiesSchema.safeParse(cardsToSiPartiesForm(cards));
+    const parsed = partiesSchema.safeParse(cardsToSiPartiesForm(cards));
     if (!parsed.success) {
       const first = parsed.error.issues[0];
-      toast.error(first?.message || "Please complete required parties");
+      toast.error(first?.message || t("toasts.completeRequiredParties"));
       return;
     }
 
@@ -294,101 +338,84 @@ export function PartiesStep({
 
   return (
     <div className="form-step-layout">
+      <BookingModuleStyles />
       <div className="custom-scroll form-step-scroll">
-        <Card className="form-step-card form-step-section" title="Customer Search">
-          <label className="form-field-label">Search Customer</label>
-          <CustomerSearchAutoComplete
-            value={searchQuery}
-            onChange={(val) => {
-              setSearchQuery(val);
-              if (!val.trim()) {
-                setSelectedCustomer(null);
-              }
-            }}
-            onSelectCustomer={handleSelectCustomer}
-          />
-
-          {selectedCustomer ? (
-            <SiRoleAssignPanel
-              customer={selectedCustomer}
-              assignedRoles={assignedRoles}
-              onAssign={handleAssignRoles}
-              onClear={clearSelectedCustomer}
-            />
-          ) : (
-            <Text type="secondary" className="booking-party-search-hint">
-              Search and select a customer, then choose roles inline below.
-            </Text>
-          )}
-        </Card>
-
-        <Card
-          className="form-step-card form-step-section booking-party-section"
-          title={
-            <div className="booking-party-section__title">
-              <span>Assigned Parties</span>
-              <Text type="secondary" className="booking-party-section__count">
-                {assignedCount} assigned
-              </Text>
+        <Card className="form-step-card form-step-section booking-customer-step">
+          <section className="booking-customer-step__section">
+            <div className="booking-customer-step__search-row">
+              <CustomerSearchAutoComplete
+                value={searchQuery}
+                placeholder={t("parties.searchPlaceholder")}
+                onChange={(val) => {
+                  setSearchQuery(val);
+                  if (!val.trim()) {
+                    setSelectedCustomer(null);
+                  }
+                }}
+                onSelectCustomer={handleSelectCustomer}
+              />
             </div>
-          }
-        >
-          {/* Modified by Sekar Nagarajan (2026-08-31 23:52) — default sections: shipper, consignee, notify */}
-          <Row gutter={[24, 24]} className="booking-party-grid">
-            {DEFAULT_SI_PARTY_ROLES.map((role) => {
-              const card = cards[role];
-              const isBookingParty = role === "shipper";
-              return (
-                <Col
-                  key={role}
-                  {...RESPONSIVE_COL.formThird}
-                  className="booking-party-grid__col"
-                >
-                  {card ? (
-                    <SiPartyRoleCard
-                      role={role}
-                      card={card}
-                      readOnly={isBookingParty}
-                      canEdit={!isBookingParty}
-                      canDelete={false}
-                      onEdit={() => openEdit(role)}
-                      onDelete={() => handleDeleteCard(role)}
-                      onUpdateFlag={(patch) => updateCardFlag(role, patch)}
-                    />
-                  ) : (
-                    <EmptySiPartySlot
-                      role={role}
-                      onAssign={() => openEdit(role)}
-                    />
-                  )}
-                </Col>
-              );
-            })}
-            {otherEntries.map(([role, card]) => (
-              <Col
-                key={role}
-                {...RESPONSIVE_COL.formThird}
-                className="booking-party-grid__col"
-              >
-                <SiPartyRoleCard
-                  role={role}
-                  card={card}
-                  onEdit={() => openEdit(role)}
-                  onDelete={() => handleDeleteCard(role)}
-                  onUpdateFlag={(patch) => updateCardFlag(role, patch)}
-                />
-              </Col>
-            ))}
-          </Row>
+
+            {selectedCustomer ? (
+              <SiRoleAssignPanel
+                customer={selectedCustomer}
+                assignedRoles={assignedRoles}
+                onAssign={handleAssignRoles}
+                onClear={clearSelectedCustomer}
+              />
+            ) : null}
+          </section>
+
+          <section className="booking-customer-step__section">
+            <div className="booking-party-grid booking-party-grid--surface">
+              {DEFAULT_SI_PARTY_ROLES.map((role) => {
+                const card = cards[role];
+                const isBookingParty = role === "shipper";
+                return (
+                  <div key={role} className="booking-party-grid__col">
+                    {card ? (
+                      <SiPartyRoleCard
+                        role={role}
+                        card={card}
+                        readOnly={isBookingParty}
+                        fromAccount={isBookingParty}
+                        canEdit={!isBookingParty}
+                        canDelete={false}
+                        onEdit={() => openEdit(role)}
+                        onDelete={() => handleDeleteCard(role)}
+                        onUpdateFlag={(patch) => updateCardFlag(role, patch)}
+                      />
+                    ) : (
+                      <EmptySiPartySlot
+                        role={role}
+                        onAssign={() => openEdit(role)}
+                      />
+                    )}
+                  </div>
+                );
+              })}
+              {otherEntries.map(([role, card]) => (
+                <div key={role} className="booking-party-grid__col">
+                  <SiPartyRoleCard
+                    role={role}
+                    card={card}
+                    onEdit={() => openEdit(role)}
+                    onDelete={() => handleDeleteCard(role)}
+                    onUpdateFlag={(patch) => updateCardFlag(role, patch)}
+                  />
+                </div>
+              ))}
+            </div>
+          </section>
         </Card>
       </div>
 
       <div className="form-step-footer">
         <AppButton onClick={onPrevious} disabled={isSubmitting}>
-          Previous
+          {t("common:actions.previous")}
         </AppButton>
         <AppButton type="primary" onClick={handleNext} disabled={isSubmitting}>
-          Next
+          {t("common:actions.next")}
         </AppButton>
       </div>
 

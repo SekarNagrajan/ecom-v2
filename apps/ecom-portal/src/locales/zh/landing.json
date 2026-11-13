@@ -1,0 +1,64 @@
+{
+  "tabs": {
+    "schedule": "船期"
+  },
+  "schedule": {
+    "origin": "起运地",
+    "delivery": "交货地",
+    "fromDate": "开始日期",
+    "toDate": "结束日期",
+    "originPlaceholder": "新加坡",
+    "deliveryPlaceholder": "鹿特丹",
+    "datePlaceholder": "MM/DD/YYYY",
+    "searchSailings": "搜索船期",
+    "swapAria": "交换起运地和交货地"
+  },
+  "tracking": {
+    "containerNo": "箱号",
+    "bookingNo": "订舱号",
+    "billOfLading": "提单（BL）",
+    "securityVerification": "安全验证",
+    "trackShipment": "追踪货运",
+    "fieldLabel": {
+      "CONTAINER": "输入集装箱号",
+      "BOOKING": "输入订舱号",
+      "BL": "输入提单（BL）号"
+    },
+    "fieldPlaceholder": {
+      "CONTAINER": "例如：SMLU8829102",
+      "BOOKING": "例如：BKG-2026-9901",
+      "BL": "例如：BL-SHA-88401"
+    }
+  },
+  "rates": {
+    "origin": "起运地",
+    "delivery": "交货地",
+    "equipment": "箱型",
+    "date": "日期",
+    "securityVerification": "安全验证",
+    "originPlaceholder": "新加坡",
+    "deliveryPlaceholder": "鹿特丹",
+    "selectType": "选择类型",
+    "datePlaceholder": "MM/DD/YYYY",
+    "getRates": "获取运价",
+    "swapAria": "交换起运地和交货地"
+  },
+  "captcha": {
+    "alt": "CAPTCHA",
+    "reloadAria": "刷新验证码",
+    "enterAria": "输入验证码",
+    "placeholder": "输入验证码"
+  },
+  "validation": {
+    "captchaRequired": "请输入验证码",
+    "trackingNumberMin": "请输入有效的集装箱号、订舱号或提单（BL）号"
+  },
+  "errors": {
+    "captchaIncorrect": "验证码输入错误"
+  },
+  "a11y": {
+    "resetScheduleSearch": "重置船期搜索",
+    "resetTrackingSearch": "重置追踪搜索",
+    "resetRatesSearch": "重置运价搜索"
+  }
+}

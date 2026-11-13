@@ -1,17 +1,24 @@
-// Modified by Sekar Nagarajan (2026-09-01 17:40)
+// Modified by Sekar Nagarajan (2026-09-16 14:24)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
-import { Input, Segmented, Tooltip, Typography } from "antd";
-import { useState, type ReactNode } from "react";
+import { Input, Segmented, Tooltip, Typography, theme } from "antd";
+import {
+  startTransition,
+  useMemo,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
 import { useFieldArray, useForm, type Resolver } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { useBookingLookups } from "../../booking/api/booking.queries";
 import {
   createEmptyCargoLine,
   createEmptyContainer,
-  siCargoStepSchema,
+  createSiCargoStepSchema,
   type SIContainer,
   type SiCargoStepForm,
 } from "../types/si.types";
@@ -27,8 +34,24 @@ const { Text } = Typography;
 
 const PAGE_SIZE = 12; // containers per page
 const MAX_ADD_QTY = 20; // keep bulk-add manageable
+const VIEW_MODE_TOOLTIP_DELAY = 0.5;
+const VIEW_MODE_ICON_SIZE = 16;
 
 type CargoViewMode = "list" | "grid";
+
+function CargoViewModeIcon({
+  title,
+  children,
+}: {
+  title: string;
+  children: ReactNode;
+}) {
+  return (
+    <Tooltip title={title} mouseEnterDelay={VIEW_MODE_TOOLTIP_DELAY}>
+      <span className="module-view-mode-tabs__icon">{children}</span>
+    </Tooltip>
+  );
+}
 
 interface CargoLinesEditorProps {
   containers: SIContainer[];
@@ -51,11 +74,17 @@ export function CargoLinesEditor({
   renderContainerFooter,
   endActions,
 }: CargoLinesEditorProps) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
+  const schema = useMemo(() => createSiCargoStepSchema(t), [t]);
   const toast = useToast();
+  const { token } = theme.useToken();
   const { data: packageTypes = [] } = useBookingLookups("packageTypes");
   const { data: containerTypes = [] } = useBookingLookups("containerTypes");
 
   const [viewMode, setViewMode] = useState<CargoViewMode>("list");
+  const viewModeRootStyle = {
+    ["--module-view-mode-h" as string]: `${token.controlHeight}px`,
+  } as CSSProperties;
   const [search, setSearch] = useState("");
   const [incompleteOnly, setIncompleteOnly] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(
@@ -75,7 +104,7 @@ export function CargoLinesEditor({
     watch,
     formState: { errors },
   } = useForm<SiCargoStepForm>({
-    resolver: zodResolver(siCargoStepSchema) as Resolver<SiCargoStepForm>,
+    resolver: zodResolver(schema) as Resolver<SiCargoStepForm>,
     defaultValues: { containers },
   });
 
@@ -172,7 +201,7 @@ export function CargoLinesEditor({
                   allowClear
                   size="large"
                   className="si-cargo-toolbar__search"
-                  placeholder="Search container or commodity…"
+                  placeholder={t("wizard.cargo.searchPlaceholder")}
                   prefix={<AppIcon icon={Icons.search} size={15} />}
                   value={search}
                   onChange={(e) => {
@@ -180,7 +209,7 @@ export function CargoLinesEditor({
                     setPage(0);
                   }}
                 />
-                <Tooltip title="Show Containers Missing Required Fields">
+                <Tooltip title={t("wizard.cargo.incompleteOnlyTooltip")}>
                   <AppButton
                     className={[
                       "si-cargo-chip",
@@ -194,34 +223,46 @@ export function CargoLinesEditor({
                       setPage(0);
                     }}
                   >
-                    Incomplete only
+                    {t("wizard.cargo.incompleteOnly")}
                   </AppButton>
                 </Tooltip>
               </div>
 
-              {/* Modified by Sekar Nagarajan (2026-08-28 18:02) */}
               <div className="si-cargo-toolbar__actions">
                 <Segmented
-                  className="si-cargo-view-segmented"
+                  className="module-view-mode-tabs si-cargo-view-tabs"
+                  size="middle"
                   value={viewMode}
-                  onChange={(v) => setViewMode(v as CargoViewMode)}
+                  aria-label={t("wizard.cargo.viewModeAria")}
+                  style={viewModeRootStyle}
+                  onChange={(next) => {
+                    startTransition(() => {
+                      if (next === "list" || next === "grid") {
+                        setViewMode(next);
+                      }
+                    });
+                  }}
                   options={[
                     {
                       value: "list",
-                      label: (
-                        <span className="si-cargo-view-opt">
-                          <AppIcon icon={Icons.layoutList} size={14} />
-                          List
-                        </span>
+                      icon: (
+                        <CargoViewModeIcon title={t("wizard.cargo.viewModeList")}>
+                          <AppIcon
+                            icon={Icons.list}
+                            size={VIEW_MODE_ICON_SIZE}
+                          />
+                        </CargoViewModeIcon>
                       ),
                     },
                     {
                       value: "grid",
-                      label: (
-                        <span className="si-cargo-view-opt">
-                          <AppIcon icon={Icons.layoutGrid} size={14} />
-                          Grid
-                        </span>
+                      icon: (
+                        <CargoViewModeIcon title={t("wizard.cargo.viewModeGrid")}>
+                          <AppIcon
+                            icon={Icons.layoutGrid}
+                            size={VIEW_MODE_ICON_SIZE}
+                          />
+                        </CargoViewModeIcon>
                       ),
                     },
                   ]}
@@ -281,29 +322,37 @@ export function CargoLinesEditor({
                 <Text strong className="si-cargo-summary__metric-value">
                   {containersWatch.length}
                 </Text>
-                <Text type="secondary">containers</Text>
+                <Text type="secondary">
+                  {t("wizard.cargo.summary.containers")}
+                </Text>
               </span>
               <span className="si-cargo-summary__metric">
                 <Text strong className="si-cargo-summary__metric-value">
                   {lineCount}
                 </Text>
-                <Text type="secondary">commodities</Text>
+                <Text type="secondary">
+                  {t("wizard.cargo.summary.commodities")}
+                </Text>
               </span>
               <span className="si-cargo-summary__metric">
                 <Text strong className="si-cargo-summary__metric-value">
                   {packageCount.toLocaleString()}
                 </Text>
-                <Text type="secondary">packages</Text>
+                <Text type="secondary">
+                  {t("wizard.cargo.summary.packages")}
+                </Text>
               </span>
               {attentionCount > 0 ? (
                 <span className="si-cargo-vchip si-cargo-vchip--warn">
                   <AppIcon icon={Icons.alertTriangle} size={12} tone="edit" />
-                  {attentionCount} need attention
+                  {t("wizard.cargo.summary.needAttention", {
+                    count: attentionCount,
+                  })}
                 </span>
               ) : (
                 <span className="si-cargo-vchip si-cargo-vchip--ok">
                   <AppIcon icon={Icons.check} size={12} />
-                  All complete
+                  {t("wizard.cargo.summary.allComplete")}
                 </span>
               )}
               {search || incompleteOnly ? (
@@ -311,7 +360,10 @@ export function CargoLinesEditor({
                   type="secondary"
                   className="si-cargo-summary__filter-hint"
                 >
-                  Showing {filteredIndexes.length} of {containersWatch.length}
+                  {t("wizard.cargo.summary.filterHint", {
+                    filtered: filteredIndexes.length,
+                    total: containersWatch.length,
+                  })}
                 </Text>
               ) : null}
             </div>
@@ -334,7 +386,7 @@ export function CargoLinesEditor({
               onDuplicate={handleDuplicateContainer}
               onDelete={(index) => {
                 if (containerFields.length <= 1) {
-                  toast.error("At least one container is required");
+                  toast.error(t("wizard.cargo.toasts.minContainer"));
                   return;
                 }
                 removeContainer(index);
@@ -369,7 +421,7 @@ export function CargoLinesEditor({
               onRemoveLine={(ci, mi) => {
                 const lines = getValues(`containers.${ci}.cargoLines`) ?? [];
                 if (lines.length <= 1) {
-                  toast.error("At least one commodity is required");
+                  toast.error(t("wizard.cargo.toasts.minCommodity"));
                   return;
                 }
                 setValue(
@@ -383,9 +435,14 @@ export function CargoLinesEditor({
           {filteredIndexes.length > PAGE_SIZE ? (
             <div className="si-cargo-pager">
               <Text>
-                {safePage * PAGE_SIZE + 1}–
-                {Math.min((safePage + 1) * PAGE_SIZE, filteredIndexes.length)}{" "}
-                of {filteredIndexes.length}
+                {t("wizard.cargo.pager.range", {
+                  from: safePage * PAGE_SIZE + 1,
+                  to: Math.min(
+                    (safePage + 1) * PAGE_SIZE,
+                    filteredIndexes.length,
+                  ),
+                  total: filteredIndexes.length,
+                })}
               </Text>
               <div className="list-actions-row">
                 <AppButton
@@ -394,7 +451,10 @@ export function CargoLinesEditor({
                   onClick={() => setPage((p) => Math.max(0, p - 1))}
                 />
                 <Text>
-                  Page {safePage + 1} / {pageCount}
+                  {t("wizard.cargo.pager.page", {
+                    current: safePage + 1,
+                    total: pageCount,
+                  })}
                 </Text>
                 <AppButton
                   disabled={safePage >= pageCount - 1}
@@ -414,11 +474,11 @@ export function CargoLinesEditor({
           onClick={onPrevious}
           disabled={isSubmitting}
         >
-          Previous
+          {t("common:actions.previous")}
         </AppButton>
 
         <AppButton type="primary" htmlType="submit" disabled={isSubmitting}>
-          Next
+          {t("common:actions.next")}
         </AppButton>
       </div>
     </form>

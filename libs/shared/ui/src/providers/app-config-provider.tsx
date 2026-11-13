@@ -16,6 +16,7 @@ export const AppConfigProvider: React.FC<AppConfigProviderProps> = ({
   config,
   theme: antdThemeOverrides,
   direction = 'ltr',
+  toastMaxCount = 4,
 }) => {
   const [antdLocale, setAntdLocale] = useState(enUS);
 
@@ -65,12 +66,8 @@ export const AppConfigProvider: React.FC<AppConfigProviderProps> = ({
   return (
     <AppConfigContext.Provider value={{ ...config, effectiveThemeMode }}>
       <StyleProvider layer>
-        <ConfigProvider
-          theme={finalAntdTheme}
-          locale={antdLocale}
-          direction={direction}
-        >
-          <App>{children}</App>
+        <ConfigProvider theme={finalAntdTheme} locale={antdLocale} direction={direction}>
+          <App notification={{ maxCount: toastMaxCount }}>{children}</App>
         </ConfigProvider>
       </StyleProvider>
     </AppConfigContext.Provider>

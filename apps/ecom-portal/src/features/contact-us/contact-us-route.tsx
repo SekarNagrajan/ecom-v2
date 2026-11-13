@@ -2,13 +2,15 @@
 import { AppButton } from "@solverminds/shared-ui";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { Card, Result } from "antd";
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../components/icons";
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
-import { MODULE_TITLES } from "../../constants/module-titles";
+import { useModuleTitles } from "../../i18n/use-module-titles";
 import { ContactPanelHeader } from "./components/contact-panel-header";
-import { ContactUsForm } from "./components/ContactUsForm";
 import { ContactUsModuleStyles } from "./components/contact-us-module-styles";
+import { ContactUsForm } from "./components/ContactUsForm";
 import { useContactUsController } from "./hooks/use-contact-us-controller";
 
 /**
@@ -18,14 +20,19 @@ import { useContactUsController } from "./hooks/use-contact-us-controller";
  * Route: /contact-us
  */
 export function ContactUsRoute() {
+  const { t, i18n } = useTranslation(["contact-us", "common"]);
+  const MODULE_TITLES = useModuleTitles();
   const navigate = useNavigate();
   const search = useSearch({ strict: false }) as Record<string, unknown>;
 
-  // Legacy parity: ?fromRegistration=Y → default subject = "Customer Code Request"
-  const defaultSubject =
-    String(search.fromRegistration || "").toUpperCase() === "Y"
-      ? "Customer Code Request"
-      : "";
+  // Legacy parity: ?fromRegistration=Y → default subject = Customer Code Request
+  const defaultSubject = useMemo(
+    () =>
+      String(search.fromRegistration || "").toUpperCase() === "Y"
+        ? t("defaults.customerCodeRequest")
+        : "",
+    [search.fromRegistration, t, i18n.language],
+  );
 
   const controller = useContactUsController({ defaultSubject });
 
@@ -38,7 +45,7 @@ export function ContactUsRoute() {
             icon={<AppIcon icon={Icons.arrowLeft} size={16} />}
             onClick={() => navigate({ to: "/" })}
           >
-            Back to Home
+            {t("common:actions.backHome")}
           </AppButton>
         </div>
 
@@ -47,8 +54,8 @@ export function ContactUsRoute() {
             <div className="contact-success custom-scroll">
               <Result
                 status="success"
-                title="Message Sent Successfully!"
-                subTitle="Thank you for contacting us. We have received your request and will process it with the concerned department immediately. You will be contacted by one of our executives shortly."
+                title={t("success.title")}
+                subTitle={t("success.subTitle")}
                 extra={[
                   <AppButton
                     type="primary"
@@ -56,7 +63,7 @@ export function ContactUsRoute() {
                     size="large"
                     onClick={() => navigate({ to: "/" })}
                   >
-                    Back to Home
+                    {t("common:actions.backHome")}
                   </AppButton>,
                 ]}
               />
@@ -66,34 +73,34 @@ export function ContactUsRoute() {
               <ContactPanelHeader
                 icon={Icons.mail}
                 title={MODULE_TITLES.contactUs}
-                description="Have a question or need help? Send us a message and we will get back to you promptly."
+                description={t("descriptions.page")}
               />
 
-              <form
-                onSubmit={controller.handleSubmit}
-                className="contact-form"
-              >
+              <form onSubmit={controller.handleSubmit} className="contact-form">
                 <div className="contact-form__scroll custom-scroll">
                   <ContactUsForm controller={controller} />
                 </div>
 
                 <div className="form-step-footer">
                   <AppButton
-                    size="large"
-                    icon={<AppIcon icon={Icons.refreshCw} size={16} />}
+                    danger
+                    size="medium"
+                    icon={
+                      <AppIcon icon={Icons.refreshCw} size={16} tone="delete" />
+                    }
                     onClick={controller.handleReset}
                     disabled={controller.isSubmitting}
                   >
-                    Reset
+                    {t("common:actions.reset")}
                   </AppButton>
                   <AppButton
                     type="primary"
-                    size="large"
+                    size="medium"
                     htmlType="submit"
                     icon={<AppIcon icon={Icons.send} size={16} />}
                     loading={controller.isSubmitting}
                   >
-                    Send Message
+                    {t("actions.sendMessage")}
                   </AppButton>
                 </div>
               </form>

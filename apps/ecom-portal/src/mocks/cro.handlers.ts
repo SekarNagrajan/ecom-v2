@@ -1,16 +1,20 @@
-// Modified by Sekar Nagarajan (2026-08-26 14:57)
+// Modified by Sekar Nagarajan (2026-10-17 00:33)
+/**
+ * Container Release Order MSW handlers, served from the SQL-extracted fixtures through
+ * fixture-api/bridges/cro.bridge.ts. No database holds a CRO table, so the rows are derived
+ * from confirmed export bookings (lrpBookings / lrpBookingCargo / containerMoves / bookings /
+ * bookingConf / cutoffConfig / depots). Downloading the document counts a print in-session.
+ */
 import { delay, http, HttpResponse } from "msw";
 
-import type { CRODTO } from "../features/container-release-order/types/cro.types";
 import {
-  filterCroByDate,
-  getMockCRODetail,
-  getMockCROEligibilityByBooking,
+  croDetail,
+  croEligibilityByBooking,
+  croList,
+  filterCros,
   markCroPrinted,
-  mockContainerReleaseOrders,
-  mockCroDetails,
-  resetMockContainerReleaseOrders,
-} from "../features/container-release-order/mocks/cro.mock";
+} from "./fixture-api/bridges/cro.bridge";
+import { resetDb } from "./fixture-api/db";
 
 /**
  * Specific paths before `/:croNo` so list / eligibility / document
@@ -22,11 +26,7 @@ export const croHandlers = [
     const url = new URL(request.url);
     const fromDate = url.searchParams.get("fromDate");
     const toDate = url.searchParams.get("toDate");
-    const data = filterCroByDate(
-      mockContainerReleaseOrders,
-      fromDate,
-      toDate,
-    );
+    const data = filterCros(croList(), fromDate, toDate);
     return HttpResponse.json({ data });
   }),
 
@@ -37,7 +37,7 @@ export const croHandlers = [
       const url = new URL(request.url);
       const bookingNo = url.searchParams.get("bookingNo") ?? "";
       return HttpResponse.json({
-        data: getMockCROEligibilityByBooking(bookingNo),
+        data: croEligibilityByBooking(bookingNo),
       });
     },
   ),
@@ -71,22 +71,13 @@ export const croHandlers = [
     async ({ params }) => {
       await delay(200);
       const croNo = String(params.croNo);
-      const live = mockCroDetails[croNo] ?? getMockCRODetail(croNo);
-      if (!live) {
+      const data = croDetail(croNo);
+      if (!data) {
         return HttpResponse.json(
           { error: { code: "NOT_FOUND", message: "CRO not found" } },
           { status: 404 },
         );
       }
-      const listRow = mockContainerReleaseOrders.find((r) => r.croNo === croNo);
-      const data: CRODTO = {
-        ...live,
-        printStatus: listRow?.printStatus ?? live.printStatus,
-        printCount:
-          listRow?.printStatus === "Y"
-            ? Math.max(1, live.printCount)
-            : live.printCount,
-      };
       return HttpResponse.json({ data });
     },
   ),
@@ -135,9 +126,9 @@ export const croHandlers = [
   ),
 ];
 
-/** Reset store for tests */
+/** Reset store for tests (restores the pristine fixtures). */
 export function resetCROMockStore() {
-  resetMockContainerReleaseOrders();
+  resetDb();
 }
 
 export function markCROPrinted(croNo: string): boolean {
@@ -145,5 +136,5 @@ export function markCROPrinted(croNo: string): boolean {
 }
 
 export function getCROListSnapshot() {
-  return mockContainerReleaseOrders.map((row) => ({ ...row }));
+  return croList();
 }

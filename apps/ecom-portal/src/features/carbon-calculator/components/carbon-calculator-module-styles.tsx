@@ -1,12 +1,15 @@
-// Modified by Sekar Nagarajan (2026-08-25 13:10)
-import { theme } from 'antd';
+// Modified by Sekar Nagarajan (2026-09-16 12:20)
+import { theme } from "antd";
 
-import { tokenMix } from '../../theme/utils/token-mix';
+import { tokenMix } from "../../theme/utils/token-mix";
 
 export function CarbonCalculatorModuleStyles() {
   const { token } = theme.useToken();
   const primaryTint8 = tokenMix(token.colorPrimary, 8);
   const successTint8 = tokenMix(token.colorSuccess, 8);
+  const warningTint8 = tokenMix(token.colorWarning, 8);
+  const infoTint8 = tokenMix(token.colorInfo, 8);
+  const errorTint8 = tokenMix(token.colorError, 8);
 
   return (
     <style>{`
@@ -106,14 +109,8 @@ export function CarbonCalculatorModuleStyles() {
         display: flex;
         align-items: center;
         justify-content: center;
-        min-height: 160px;
-        padding: ${token.paddingXL}px;
-        text-align: center;
-        color: ${token.colorTextSecondary};
-        font-size: ${token.fontSize}px;
-        border-radius: ${token.borderRadiusLG}px;
-        border: 1px dashed ${token.colorBorderSecondary};
-        background: ${token.colorFillAlter};
+        min-height: 240px;
+        padding: ${token.paddingLG}px;
       }
       .co2-result-panel {
         display: flex;
@@ -121,91 +118,204 @@ export function CarbonCalculatorModuleStyles() {
         gap: ${token.marginMD}px;
         min-height: 160px;
       }
+      .co2-result-content {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginLG}px;
+      }
       .co2-result-error {
         display: block;
       }
-      .co2-result-spin-placeholder {
-        min-height: 160px;
-      }
-      .co2-result-toolbar {
+      .co2-result-loading.module-loading-center {
         display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: ${token.marginMD}px;
-        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        min-height: 220px;
       }
-      .co2-result-toolbar__meta {
+      .co2-result-empty {
+        padding: ${token.paddingMD}px;
+      }
+      .co2-kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: ${token.marginSM}px;
+      }
+      .co2-kpi-card {
         display: flex;
         flex-direction: column;
+        justify-content: center;
         gap: ${token.marginXXS}px;
         min-width: 0;
-      }
-      .co2-result-toolbar__lane {
-        font-weight: ${token.fontWeightStrong};
-        color: ${token.colorText};
-        font-size: ${token.fontSizeLG}px;
-      }
-      .co2-result-toolbar__sub {
-        color: ${token.colorTextSecondary};
-        font-size: ${token.fontSizeSM}px;
-      }
-      .co2-summary-cards {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: ${token.marginMD}px;
-      }
-      @media (min-width: 768px) {
-        .co2-summary-cards {
-          grid-template-columns: 1.4fr 1fr 1fr;
-        }
-      }
-      .co2-summary-card {
         padding: ${token.paddingMD}px;
         border-radius: ${token.borderRadiusLG}px;
         border: 1px solid ${token.colorBorderSecondary};
-        background: ${token.colorFillAlter};
+        background: ${token.colorBgContainer};
       }
-      .co2-summary-card--total {
-        border-left: 4px solid ${token.colorPrimary};
-        background: linear-gradient(180deg, ${primaryTint8} 0%, ${token.colorFillAlter} 100%);
+      .co2-kpi-card--total {
+        min-width: 200px;
+        border-color: ${token.colorPrimaryBorder};
+        background: linear-gradient(
+          180deg,
+          ${primaryTint8} 0%,
+          ${token.colorBgContainer} 100%
+        );
       }
-      .co2-summary-card__label {
+      .co2-kpi-card--ttw {
+        border-color: ${token.colorSuccessBorder};
+        background: linear-gradient(
+          180deg,
+          ${successTint8} 0%,
+          ${token.colorBgContainer} 100%
+        );
+      }
+      .co2-kpi-card--wtt {
+        border-color: ${token.colorWarningBorder};
+        background: linear-gradient(
+          180deg,
+          ${warningTint8} 0%,
+          ${token.colorBgContainer} 100%
+        );
+      }
+      .co2-kpi-card--per-teu {
+        border-color: ${token.colorInfoBorder};
+        background: linear-gradient(
+          180deg,
+          ${infoTint8} 0%,
+          ${token.colorBgContainer} 100%
+        );
+      }
+      .co2-kpi-card--per-tkm {
+        border-color: ${token.colorErrorBorder};
+        background: linear-gradient(
+          180deg,
+          ${errorTint8} 0%,
+          ${token.colorBgContainer} 100%
+        );
+      }
+      .co2-kpi-card__label {
         display: block;
         font-size: ${token.fontSizeSM}px;
         color: ${token.colorTextSecondary};
-        margin-bottom: ${token.marginXXS}px;
+        line-height: ${token.lineHeightSM};
+        font-weight: ${token.fontWeightStrong};
       }
-      .co2-summary-card__value {
+      .co2-kpi-card__value {
         font-variant-numeric: tabular-nums;
-        font-size: ${token.fontSizeHeading3}px;
+        font-size: ${token.fontSizeHeading4}px;
         font-weight: ${token.fontWeightStrong};
         color: ${token.colorText};
         margin: 0;
         line-height: 1.25;
+        word-break: break-word;
       }
-      .co2-summary-card__value--sm {
-        font-size: ${token.fontSizeLG}px;
+      .co2-kpi-card__value--sm {
+        font-size: ${token.fontSizeMD}px;
       }
-      .co2-intensity {
+      .co2-charts {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: ${token.marginMD}px;
+      }
+      @media (min-width: 992px) {
+        .co2-charts {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+      }
+      .co2-chart-card {
         display: flex;
-        flex-wrap: wrap;
-        gap: ${token.marginMD}px ${token.marginLG}px;
-        padding: ${token.paddingSM}px ${token.paddingMD}px;
-        border-radius: ${token.borderRadius}px;
-        background: ${successTint8};
+        flex-direction: column;
+        min-width: 0;
+        border-radius: ${token.borderRadiusLG}px;
         border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorBgContainer};
+        overflow: hidden;
+      }
+      .co2-chart-card__header {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+        padding: ${token.paddingMD}px ${token.paddingMD}px 0;
+      }
+      .co2-chart-card__title {
+        margin: 0;
+        font-size: ${token.fontSize}px;
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+        line-height: ${token.lineHeight};
+      }
+      .co2-chart-card__hint {
+        margin: 0;
         font-size: ${token.fontSizeSM}px;
         color: ${token.colorTextSecondary};
+        line-height: ${token.lineHeightSM};
       }
-      .co2-intensity strong {
-        color: ${token.colorText};
+      .co2-chart-card__canvas {
+        width: 100%;
       }
-      .co2-legs-title {
-        display: block;
-        margin-bottom: ${token.marginSM}px;
+      .co2-breakdown-block {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginSM}px;
       }
-      .co2-legs-table .ant-table {
+      .co2-breakdown-block__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: ${token.marginSM}px;
+        flex-wrap: wrap;
+      }
+      .co2-breakdown-title {
+        margin: 0;
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXS}px;
+      }
+      .co2-breakdown-block__count {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: ${token.controlHeightSM}px;
+        height: ${token.controlHeightSM}px;
+        padding: 0 ${token.paddingXS}px;
+        border-radius: ${token.borderRadiusSM}px;
+        background: ${token.colorError};
+        color: ${token.colorWhite};
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
         font-variant-numeric: tabular-nums;
+        line-height: 1;
+        margin-left: ${token.marginXS}px;
+      }
+      .co2-legs-table {
+        height: 320px;
+        min-height: 240px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        overflow: hidden;
+        font-variant-numeric: tabular-nums;
+      }
+      .co2-legs-table > div,
+      .co2-legs-table .co2-legs-data-view {
+        flex: 1;
+        min-height: 0;
+        height: 100%;
+        width: 100%;
+      }
+      .co2-legs-table .co2-legs-data-view.ant-flex,
+      .co2-legs-table > .ant-flex {
+        gap: 0 !important;
+      }
+      .co2-legs-table > .ant-flex > .ant-card:first-child,
+      .co2-legs-table .co2-legs-data-view > .ant-card:first-child {
+        display: none !important;
+      }
+      .co2-legs-data-view .sm-data-view-toolbar,
+      .co2-legs-data-view .data-view-toolbar {
+        display: none !important;
       }
       .co2-info-strip {
         display: flex;
@@ -222,7 +332,9 @@ export function CarbonCalculatorModuleStyles() {
       input:-webkit-autofill,
       input:-webkit-autofill:hover,
       input:-webkit-autofill:focus {
-        -webkit-box-shadow: 0 0 0 1000px ${token.colorBgContainer} inset !important;
+        -webkit-box-shadow: 0 0 0 1000px ${
+          token.colorBgContainer
+        } inset !important;
         transition: background-color 50000s ease-in-out 0s !important;
       }
     `}</style>

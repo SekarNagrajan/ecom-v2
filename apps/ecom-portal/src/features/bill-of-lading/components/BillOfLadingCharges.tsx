@@ -1,7 +1,9 @@
-// Modified by Sekar Nagarajan (2026-08-28 11:55)
-import { Table, Typography } from 'antd';
+// Modified by Sekar Nagarajan (2026-09-29 12:50)
+import { Table, Typography } from "antd";
+import { useTranslation } from "react-i18next";
 
-import type { BLChargesDTO } from '../types/bl.types';
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
+import type { BLChargesDTO } from "../types/bl.types";
 
 const { Text, Title } = Typography;
 
@@ -10,18 +12,34 @@ interface BillOfLadingChargesProps {
   loading: boolean;
 }
 
-export function BillOfLadingCharges({ charges, loading }: BillOfLadingChargesProps) {
+export function BillOfLadingCharges({
+  charges,
+  loading,
+}: BillOfLadingChargesProps) {
+  const { t } = useTranslation(["bill-of-lading", "common", "modules"]);
+
   if (loading) {
-    return <Text type="secondary">Loading charge summary…</Text>;
+    return (
+      <Text type="secondary">{t("status.loading", { ns: "common" })}</Text>
+    );
   }
 
   if (!charges || charges.lines.length === 0) {
-    return <Text type="secondary">No charges available for this B/L.</Text>;
+    return (
+      <ModuleEmptyState
+        artSize="sm"
+        variant="blank"
+        title={t("empty.noCharges")}
+        style={{ padding: 12 }}
+      />
+    );
   }
 
   return (
     <div className="bl-charges-panel">
-      <Title level={5}>Charge Summary — {charges.blNo}</Title>
+      <Title level={5}>
+        {t("drawers.chargeSummary")} — {charges.blNo}
+      </Title>
       <Table
         size="small"
         bordered
@@ -31,44 +49,60 @@ export function BillOfLadingCharges({ charges, loading }: BillOfLadingChargesPro
         dataSource={charges.lines}
         scroll={{ y: 360, x: 800 }}
         columns={[
-          { title: 'Code', dataIndex: 'chargeCode', width: 80 },
-          { title: 'Description', dataIndex: 'description' },
           {
-            title: 'Amount',
-            key: 'amount',
+            title: t("columns.code"),
+            dataIndex: "chargeCode",
+            width: 80,
+          },
+          { title: t("columns.description"), dataIndex: "description" },
+          {
+            title: t("columns.amount"),
+            key: "amount",
             render: (_, row) => `${row.currency} ${row.amount.toFixed(2)}`,
           },
-          { title: 'P/C/E', dataIndex: 'prepaidCollect', width: 90 },
-          { title: 'Payor', dataIndex: 'payByCustType', width: 110 },
           {
-            title: 'Prepaid',
-            key: 'prepaid',
-            width: 100,
-            render: (_, row) =>
-              row.prepaidAmount != null ? row.prepaidAmount.toFixed(2) : '-',
+            title: t("columns.pce"),
+            dataIndex: "prepaidCollect",
+            width: 90,
           },
           {
-            title: 'Collect',
-            key: 'collect',
-            width: 100,
-            render: (_, row) =>
-              row.collectAmount != null ? row.collectAmount.toFixed(2) : '-',
+            title: t("columns.payor"),
+            dataIndex: "payByCustType",
+            width: 110,
           },
           {
-            title: 'Pay At',
-            key: 'payAt',
+            title: t("charges.prepaid"),
+            key: "prepaid",
             width: 100,
             render: (_, row) =>
-              row.payAtAmount != null ? row.payAtAmount.toFixed(2) : '-',
+              row.prepaidAmount != null ? row.prepaidAmount.toFixed(2) : "-",
+          },
+          {
+            title: t("charges.collect"),
+            key: "collect",
+            width: 100,
+            render: (_, row) =>
+              row.collectAmount != null ? row.collectAmount.toFixed(2) : "-",
+          },
+          {
+            title: t("charges.payAt"),
+            key: "payAt",
+            width: 100,
+            render: (_, row) =>
+              row.payAtAmount != null ? row.payAtAmount.toFixed(2) : "-",
           },
         ]}
       />
       {charges.totals.map((total) => (
         <div key={total.currency} className="bl-charges-total-row">
           <Text>
-            Totals ({total.currency}): Prepaid {total.prepaid.toFixed(2)} · Collect{' '}
-            {total.collect.toFixed(2)} · Pay At {total.payAt.toFixed(2)} · Grand{' '}
-            {total.grandTotal.toFixed(2)}
+            {t("charges.totalsLine", {
+              currency: total.currency,
+              prepaid: total.prepaid.toFixed(2),
+              collect: total.collect.toFixed(2),
+              payAt: total.payAt.toFixed(2),
+              grand: total.grandTotal.toFixed(2),
+            })}
           </Text>
         </div>
       ))}

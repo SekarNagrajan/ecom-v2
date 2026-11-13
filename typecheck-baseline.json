@@ -1,0 +1,21 @@
+{
+  "count": 23,
+  "errors": [
+    "apps/ecom-portal/src/components/shared/cookie-consent-banner-styles.tsx: error TS2551: Property 'controlHeightMD' does not exist on type 'GlobalToken'. Did you mean 'controlHeight'?",
+    "apps/ecom-portal/src/features/auth/components/customer-picker-modal.tsx: error TS2322: Type '{ children: Element[]; title: string; open: boolean; onCancel: () => void; footer: null; width: number; }' is not assignable to type 'IntrinsicAttributes & AppModalProps'.",
+    "apps/ecom-portal/src/features/bill-of-lading/api/bl.queries.ts: error TS2322: Type '(blNo: string, payload?: Partial<BLDTO>) => Promise<ApiResponse<BLDTO>>' is not assignable to type 'MutationFunction<ApiResponse<BLDTO>, string>'.",
+    "apps/ecom-portal/src/features/bill-of-lading/components/list/bl-list-card.tsx: error TS2339: Property 'icon' does not exist on type 'MetaField'.",
+    "apps/ecom-portal/src/features/booking/components/booking-selected-rate-panel.tsx: error TS2322: Type '\"primary\"' is not assignable to type 'BaseType'.",
+    "apps/ecom-portal/src/features/booking/components/list/booking-list-card.tsx: error TS2339: Property 'icon' does not exist on type 'MetaField'.",
+    "apps/ecom-portal/src/features/carbon-calculator/components/carbon-calculator-module-styles.tsx: error TS2551: Property 'fontSizeMD' does not exist on type 'GlobalToken'. Did you mean 'fontSize'?",
+    "apps/ecom-portal/src/features/customer-statement/customer-statement.mock-data.test.ts: error TS2367: This comparison appears to be unintentional because the types '\"Adjustment\" | \"CreditNote\" | \"DebitNote\" | \"Invoice\"' and '\"Payment\"' have no overlap.",
+    "apps/ecom-portal/src/features/dashboard/components/dashboard-module-styles.tsx: error TS2551: Property 'controlHeightMD' does not exist on type 'GlobalToken'. Did you mean 'controlHeight'?",
+    "apps/ecom-portal/src/features/shipping-instruction/cargo-import.test.ts: error TS2322: Type '{ __rowId: string; containerNo: string; description: string; hsCode: string; packageCount: number; containerType: string; carrierSeal: string; shipperSeal: string; marksAndNumbers: string; commodityCode: string; packageType: string; grossWeight: number; volume: number; }' is not assignable to type 'SpreadsheetImportGridRow<CargoImportValues>'.",
+    "apps/ecom-portal/src/features/shipping-instruction/smart-import.test.ts: error TS2339: Property 'error' does not exist on type 'SmartImportApplyResult'.",
+    "apps/ecom-portal/src/mocks/fixture-api/booking-persistence.test.ts: error TS2339: Property 'length' does not exist on type 'BookingChildren'.",
+    "apps/ecom-portal/src/mocks/fixture-api/user-persistence.test.ts: error TS2345: Argument of type '{ loginName: string; password: string; firstName: string; lastName: string; email: string; companyName: string; custPhoneNo: string; allowedModules: undefined[]; }' is not assignable to parameter of type '{ loginName: string; firstName: string; lastName: string; email: string; companyName: string; custCountryCode: string; custPhoneCode: string; custPhoneNo: string; mobileCode: string; defLanguage: string; ... 4 more ...; password?: string; }'.",
+    "libs/shared/ui/src/components/data-view/list-view/components/ag-grid-number-floating-filter.tsx: error TS2322: Type 'Timeout' is not assignable to type 'number'.",
+    "libs/shared/ui/src/components/data-view/list-view/components/ag-grid-text-floating-filter.tsx: error TS2322: Type 'Timeout' is not assignable to type 'number'.",
+    "libs/shared/ui/src/components/ui/dialog/app-modal.tsx: error TS2305: Module '\"antd/es/modal/interface\"' has no exported member 'ModalStylesType'."
+  ]
+}

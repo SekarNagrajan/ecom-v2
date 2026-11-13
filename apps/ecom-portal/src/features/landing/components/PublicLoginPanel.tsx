@@ -1,5 +1,6 @@
-// Modified by Sekar Nagarajan (2026-08-25 16:30)
+// Modified by Sekar Nagarajan (2026-09-11 16:08)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
+import { useConfirm, useToast } from "@solverminds/shared-ui/hooks";
 import { useNavigate } from "@tanstack/react-router";
 import {
   Alert,
@@ -11,50 +12,113 @@ import {
   Typography,
   theme,
 } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { ForgotPasswordPanelContent } from "../../auth/components/ForgotPasswordPanelContent";
+import { LoginOtpPanelContent } from "../../auth/components/LoginOtpPanelContent";
 import type { useLoginController } from "../../auth/hooks/use-login-controller";
 import { PublicLoginPanelStyles } from "./public-login-panel-styles";
 
 const { Text, Title } = Typography;
+
+type PanelView = "login" | "forgot-password" | "otp";
 
 interface PublicLoginPanelProps {
   open: boolean;
   onClose: () => void;
   /** Login controller from `useLoginController` hook */
   controller: ReturnType<typeof useLoginController>;
+  /** Shown when redirected after a dead session (CRM parity). */
+  sessionExpired?: boolean;
 }
 
 export function PublicLoginPanel({
   open,
   onClose,
   controller,
+  sessionExpired = false,
 }: PublicLoginPanelProps) {
+  const { t } = useTranslation(["auth", "common"]);
   const { token } = theme.useToken();
   const navigate = useNavigate();
-  const [view, setView] = useState<"login" | "forgot-password">("login");
+  const toast = useToast();
+  const confirm = useConfirm();
+  const [view, setView] = useState<PanelView>("login");
   const [rememberMe, setRememberMe] = useState(false);
 
-  const { form, handleSubmit, serverError, isSubmitting, showCaptcha } =
-    controller;
+  const {
+    form,
+    handleSubmit,
+    serverError,
+    isSubmitting,
+    showCaptcha,
+    phase,
+    otpSession,
+    otpEnabled,
+    clearOtpPhase,
+    completeOtpSuccess,
+  } = controller;
   const {
     control,
     formState: { errors },
   } = form;
 
-  const goToRegister = () => {
+  useEffect(() => {
+    if (otpEnabled && phase === "otp" && otpSession && view !== "otp") {
+      setView("otp");
+      toast.info(t("verificationSent"));
+    }
+  }, [otpEnabled, phase, otpSession, view, toast]);
+
+  useEffect(() => {
+    if (!open) {
+      setView("login");
+      clearOtpPhase();
+    }
+  }, [open]);
+
+  const handleClose = () => {
+    setView("login");
+    clearOtpPhase();
     onClose();
+  };
+
+  const goToRegister = () => {
+    handleClose();
     navigate({ to: "/register" });
+  };
+
+  const handleOtpBack = () => {
+    clearOtpPhase();
+    setView("login");
+  };
+
+  const handleOtpLocked = () => {
+    confirm.error({
+      title: t("accountLockedTitle"),
+      content: t("accountLockedContent"),
+      okText: t("common:actions.ok"),
+      onOk: () => {
+        clearOtpPhase();
+        setView("login");
+      },
+    });
+  };
+
+  const handleResendLimit = () => {
+    toast.error(t("resendLimit"));
+    clearOtpPhase();
+    setView("login");
   };
 
   return (
     <AppDrawer
       title={null}
       open={open}
-      onClose={onClose}
+      onClose={handleClose}
       placement="right"
       width={440}
       closable={false}
@@ -69,19 +133,12 @@ export function PublicLoginPanel({
     >
       <PublicLoginPanelStyles />
 
-      <Tooltip title="Close">
+      <Tooltip title={t("common:actions.close")}>
         <AppButton
-          type="text"
           className="pub-login-panel__close"
-          onClick={onClose}
-          aria-label="Close login panel"
-          icon={
-            <AppIcon
-              icon={Icons.x}
-              size={18}
-              style={{ color: token.colorError }}
-            />
-          }
+          onClick={handleClose}
+          aria-label={t("closeLoginPanel")}
+          icon={<AppIcon icon={Icons.x} size={18} />}
         />
       </Tooltip>
 
@@ -89,24 +146,44 @@ export function PublicLoginPanel({
         <div className="pub-login-panel__forgot-wrap">
           <ForgotPasswordPanelContent onBack={() => setView("login")} />
         </div>
+      ) : view === "otp" && otpEnabled && otpSession ? (
+        <div className="pub-login-panel__forgot-wrap">
+          <LoginOtpPanelContent
+            session={otpSession}
+            onBack={handleOtpBack}
+            onVerifiedSuccess={() => {
+              toast.success(t("signedIn"));
+              completeOtpSuccess();
+            }}
+            onLocked={handleOtpLocked}
+            onResendLimit={handleResendLimit}
+            onCodeSent={(message) => toast.info(message)}
+          />
+        </div>
       ) : (
         <div className="pub-login-panel">
           <Flex vertical className="pub-login-panel__header">
             <Title level={2} className="pub-login-panel__title">
-              Login to your Account
+              {t("loginTitle")}
             </Title>
-            <Text type="secondary" className="pub-login-panel__subtitle">
-              Welcome to E-COM PORTAL. Enter your credentials to continue.
-            </Text>
           </Flex>
 
           <div className="pub-login-panel__body">
+            {sessionExpired && (
+              <Alert
+                type="warning"
+                showIcon
+                title={t("sessionExpiredTitle")}
+                description={t("sessionExpiredDesc")}
+                className="pub-login-panel__alert"
+              />
+            )}
             {serverError && (
               <Alert
                 id="login-error-alert"
                 type="error"
                 showIcon
-                message="Login Failed"
+                title={t("loginFailed")}
                 description={serverError}
                 closable
                 className="pub-login-panel__alert"
@@ -121,7 +198,7 @@ export function PublicLoginPanel({
             >
               <div className="pub-login-panel__field">
                 <label htmlFor="login-username" className="form-field-label">
-                  Username
+                  {t("username")}
                   <Text type="danger"> *</Text>
                 </label>
                 <Controller
@@ -132,12 +209,14 @@ export function PublicLoginPanel({
                       {...field}
                       id="login-username"
                       prefix={<AppIcon icon={Icons.user} size={16} />}
-                      placeholder="Enter your username"
+                      placeholder={t("usernamePlaceholder")}
                       size="large"
                       maxLength={50}
                       autoComplete="off"
                       autoFocus
-                      status={errors.userName ? "error" : undefined}
+                      status={
+                        errors.userName || serverError ? "error" : undefined
+                      }
                     />
                   )}
                 />
@@ -150,7 +229,7 @@ export function PublicLoginPanel({
 
               <div className="pub-login-panel__field pub-login-panel__field--password">
                 <label htmlFor="login-password" className="form-field-label">
-                  Password
+                  {t("password")}
                   <Text type="danger"> *</Text>
                 </label>
                 <Controller
@@ -161,11 +240,13 @@ export function PublicLoginPanel({
                       {...field}
                       id="login-password"
                       prefix={<AppIcon icon={Icons.lock} size={16} />}
-                      placeholder="Enter your password"
+                      placeholder={t("passwordPlaceholder")}
                       size="large"
                       maxLength={20}
                       autoComplete="off"
-                      status={errors.password ? "error" : undefined}
+                      status={
+                        errors.password || serverError ? "error" : undefined
+                      }
                       iconRender={(visible) =>
                         visible ? (
                           <AppIcon icon={Icons.eye} size={16} />
@@ -192,29 +273,26 @@ export function PublicLoginPanel({
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
                 >
-                  Remember me
+                  {t("rememberMe")}
                 </Checkbox>
                 <button
                   type="button"
                   className="pub-login-panel__forgot"
                   onClick={() => setView("forgot-password")}
                 >
-                  Forgot Password?
+                  {t("forgotPassword")}
                 </button>
               </Flex>
 
               {showCaptcha && (
                 <div className="pub-login-panel__captcha">
-                  <span className="form-field-label">Security Check</span>
+                  <span className="form-field-label">{t("securityCheck")}</span>
                   <div
                     id="login-captcha-container"
                     className="pub-login-panel__captcha-box"
                   >
                     <AppIcon icon={Icons.shieldCheck} size={16} />
-                    <span>
-                      Google reCAPTCHA will appear here after too many failed
-                      attempts.
-                    </span>
+                    <span>{t("captchaHint")}</span>
                   </div>
                 </div>
               )}
@@ -235,7 +313,7 @@ export function PublicLoginPanel({
                     ) : undefined
                   }
                 >
-                  {isSubmitting ? "Logging in…" : "Login"}
+                  {isSubmitting ? t("loggingIn") : t("login")}
                 </AppButton>
                 <AppButton
                   size="large"
@@ -243,13 +321,16 @@ export function PublicLoginPanel({
                   onClick={goToRegister}
                   disabled={isSubmitting}
                 >
-                  Register Now
+                  {t("registerNow")}
                 </AppButton>
               </div>
 
               <Text className="pub-login-panel__register-hint">
-                New to the portal? Use Register Now to create an account.
+                {t("registerHint")}
               </Text>
+              {/* <Text className="pub-login-panel__register-hint">
+                Demo OTP login: demo@solverminds.com / Demo@1234
+              </Text> */}
             </form>
           </div>
         </div>

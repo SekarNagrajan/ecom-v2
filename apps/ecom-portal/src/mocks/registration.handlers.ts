@@ -1,28 +1,49 @@
+// Modified by Sekar Nagarajan (2026-10-16 23:35)
 import { http, HttpResponse, delay } from 'msw';
 
+import {
+  addressSuggestions,
+  customerCodeLookup,
+  emailAvailable,
+  registerUser,
+} from './fixture-api/bridges/users.bridge';
+import {
+  ensureUserDbReady,
+  persistUserDb,
+} from './fixture-api/user-persistence';
+
+/**
+ * Registration served from eCom_Reg_Details (db.users): e-mail / customer-code checks look the fixture
+ * users up, and a submitted registration is pushed as a pending (isValid P) user + ECOMRegHistory row.
+ */
 export const registrationHandlers = [
   http.post('/api/registration', async ({ request }) => {
     // Artificial delay to simulate network latency
     await delay(1500);
+    await ensureUserDbReady();
 
     try {
       const formData = await request.formData();
-      const companyName = formData.get('companyName');
+      const fields: Record<string, string> = {};
+      formData.forEach((value, key) => {
+        if (typeof value === 'string') fields[key] = value;
+      });
 
-      if (companyName === 'ErrorCorp') {
+      if (!fields.email || !emailAvailable(fields.email)) {
         return HttpResponse.json(
-          { success: false, message: 'Company name is blacklisted' },
+          { success: false, message: 'This e-mail address is already registered' },
           { status: 400 }
         );
       }
 
-      // Simulate success
+      const user = registerUser(fields);
+      persistUserDb();
       return HttpResponse.json({
         success: true,
         message: 'Registration successful',
-        userId: 'U' + Math.floor(Math.random() * 1000000),
+        userId: String(user.reg_no),
       });
-    } catch (e) {
+    } catch {
       return HttpResponse.json(
         { success: false, message: 'Internal server error' },
         { status: 500 }
@@ -30,53 +51,35 @@ export const registrationHandlers = [
     }
   }),
 
+  // Company typeahead ← distinct registered companies
   http.get('/api/address-lookup', async ({ request }) => {
     const url = new URL(request.url);
     const query = url.searchParams.get('q') || '';
-    
-    // Simulate delay
+
     await delay(300);
-    
-    // Mock data for address lookup
-    const mockResults = [
-      { id: '1', companyName: `${query} Global Logistics`, address1: '123 Shipping Lane', city: 'London', country: 'GB' },
-      { id: '2', companyName: `${query} Maritime Inc`, address1: '456 Harbor Blvd', city: 'Singapore', country: 'SG' },
-      { id: '3', companyName: `${query} Freight Solutions`, address1: '789 Cargo Way', city: 'New York', country: 'US' },
-    ];
-    
-    return HttpResponse.json({ results: mockResults });
+
+    return HttpResponse.json({ results: addressSuggestions(query) });
   }),
 
+  // Existing customer code ← users.Cust_Code (else a booking party with that code)
   http.get('/api/check-company', async ({ request }) => {
     const url = new URL(request.url);
-    const code = url.searchParams.get('code');
-    
+    const code = url.searchParams.get('code') ?? '';
+
     await delay(500);
-    
-    if (code === 'CUST123') {
-      return HttpResponse.json({
-        valid: true,
-        companyName: 'Acme Logistics',
-        country: 'US',
-        address1: '100 Main St',
-        city: 'Seattle',
-      });
-    }
-    
+
+    const found = customerCodeLookup(code);
+    if (found) return HttpResponse.json(found);
+
     return HttpResponse.json({ valid: false }, { status: 404 });
   }),
 
   http.get('/api/check-email', async ({ request }) => {
     const url = new URL(request.url);
-    const email = url.searchParams.get('email');
-    
+    const email = url.searchParams.get('email') ?? '';
+
     await delay(400);
-    
-    // Simulate taken email
-    if (email === 'taken@example.com') {
-      return HttpResponse.json({ available: false });
-    }
-    
-    return HttpResponse.json({ available: true });
+
+    return HttpResponse.json({ available: emailAvailable(email) });
   }),
 ];

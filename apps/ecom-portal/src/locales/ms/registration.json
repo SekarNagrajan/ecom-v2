@@ -1,0 +1,135 @@
+{
+  "header": {
+    "createAccount": "Cipta Akaun",
+    "complete": "Pendaftaran Selesai",
+    "subtitleRegister": "Daftar untuk SVM E-Com Portal bagi mengurus tempahan dan penghantaran anda.",
+    "subtitleSuccess": "Pendaftaran anda telah berjaya dihantar."
+  },
+  "steps": {
+    "companyInfo": "Maklumat Syarikat",
+    "userInfo": "Maklumat Pengguna",
+    "kycUpload": "Muat Naik KYC",
+    "terms": "Terma & Syarat"
+  },
+  "actions": {
+    "submitRegistration": "Hantar Pendaftaran"
+  },
+  "company": {
+    "companyName": "Nama Syarikat",
+    "country": "Negara",
+    "controllingAgency": "Agensi Pengawal",
+    "city": "Bandar",
+    "postalCode": "Poskod",
+    "address1": "Alamat 1",
+    "address2": "Alamat 2",
+    "website": "Laman Web",
+    "recentBl": "Nombor BL/Tempahan terkini",
+    "companyPhone": "Telefon Syarikat",
+    "phonePlaceholder": "Telefon",
+    "phoneCodePlaceholder": "+1",
+    "customerCode": "Kod Pelanggan",
+    "customerCodePlaceholder": "Masukkan Kod Pelanggan",
+    "existingCustomer": "Pelanggan Sedia Ada",
+    "newCustomer": "Pelanggan Baharu"
+  },
+  "user": {
+    "title": "Gelaran",
+    "firstName": "Nama Pertama",
+    "lastName": "Nama Akhir",
+    "email": "E-mel",
+    "password": "Kata Laluan",
+    "confirmPassword": "Sahkan Kata Laluan",
+    "timezone": "Zon Waktu",
+    "defaultView": "Paparan Lalai",
+    "preferredView": "Paparan Pilihan"
+  },
+  "options": {
+    "countries": {
+      "US": "Amerika Syarikat",
+      "GB": "United Kingdom",
+      "CA": "Kanada",
+      "IN": "India",
+      "AU": "Australia",
+      "SG": "Singapura"
+    },
+    "agencies": {
+      "AGENCY_US": "Agensi AS",
+      "AGENCY_GB": "Agensi UK",
+      "AGENCY_SG": "Agensi Singapura"
+    },
+    "titles": {
+      "Mr": "Encik",
+      "Mrs": "Puan",
+      "Ms": "Cik",
+      "Dr": "Dr."
+    },
+    "timezones": {
+      "GMT": "GMT - Greenwich Mean Time",
+      "UTC": "UTC - Universal Time Coordinated",
+      "EST": "EST - Eastern Standard Time",
+      "PST": "PST - Pacific Standard Time",
+      "IST": "IST - Indian Standard Time"
+    },
+    "defaultView": {
+      "STANDARD": "Standard",
+      "COMPACT": "Padat",
+      "DETAILED": "Terperinci"
+    },
+    "preferredView": {
+      "HOME": "Laman Utama",
+      "DASHBOARD": "Papan Pemuka",
+      "TRACKING": "Penjejakan"
+    }
+  },
+  "kyc": {
+    "title": "Muat Naik Dokumen KYC",
+    "description": "Sila muat naik sijil pendaftaran syarikat, lesen perniagaan, atau dokumen KYC lain seperti yang diperlukan oleh agensi pengawal.",
+    "dragText": "Klik atau seret fail ke kawasan ini untuk memuat naik",
+    "dragHint": "Sokongan untuk satu muat naik PDF, DOCX, JPG atau PNG. Saiz maksimum 10MB."
+  },
+  "terms": {
+    "heading": "Terma dan Syarat",
+    "paragraphs": {
+      "acceptance": "1. Penerimaan Terma: Dengan mendaftar akaun di E-Com Portal, anda bersetuju mematuhi <termsLink>Terma Penggunaan Laman Web</termsLink>.",
+      "privacy": "2. Dasar Privasi: Kami komited melindungi privasi anda. Maklumat peribadi dan syarikat anda akan diurus mengikut <privacyLink>Dasar Privasi</privacyLink> kami dan undang-undang perlindungan data yang berkenaan.",
+      "security": "3. Keselamatan Akaun: Anda bertanggungjawab mengekalkan kerahsiaan kelayakan akaun anda dan untuk semua aktiviti yang berlaku di bawah akaun anda.",
+      "accurate": "4. Maklumat Tepat: Anda bersetuju memberikan maklumat yang tepat, semasa dan lengkap semasa proses pendaftaran serta mengemas kinikannya agar kekal tepat, semasa dan lengkap."
+    },
+    "agree": "Saya bersetuju dengan <termsLink>Terma Penggunaan Laman Web</termsLink>"
+  },
+  "validation": {
+    "companyNameRequired": "Nama Syarikat diperlukan",
+    "countryRequired": "Negara diperlukan",
+    "locationRequired": "Lokasi diperlukan",
+    "address1Required": "Baris Alamat 1 diperlukan",
+    "cityRequired": "Bandar diperlukan",
+    "emailRequired": "E-mel diperlukan",
+    "emailInvalid": "Alamat e-mel tidak sah",
+    "passwordMin": "Kata laluan mestilah sekurang-kurangnya 8 aksara",
+    "confirmPasswordRequired": "Sila sahkan kata laluan anda",
+    "passwordsMismatch": "Kata laluan tidak sepadan",
+    "firstNameRequired": "Nama Pertama diperlukan",
+    "lastNameRequired": "Nama Akhir diperlukan",
+    "titleRequired": "Gelaran diperlukan",
+    "timezoneRequired": "Zon waktu diperlukan",
+    "agreeToTerms": "Anda mesti bersetuju dengan terma dan syarat",
+    "customerCodeRequired": "Kod Pelanggan diperlukan",
+    "companyPhoneOrMobileRequired": "Telefon Syarikat atau Telefon Bimbit Syarikat diperlukan",
+    "invalidCustomerCode": "Kod Pelanggan tidak sah",
+    "errorValidatingCode": "Ralat mengesahkan kod",
+    "emailAlreadyRegistered": "E-mel ini telah didaftarkan.",
+    "emailVerifyFailed": "Gagal mengesahkan e-mel."
+  },
+  "toasts": {
+    "customerCodeVerified": "Kod pelanggan disahkan. Mengisi butiran secara automatik.",
+    "fileTooLarge": "Fail mestilah lebih kecil daripada 10MB!",
+    "fileTypeInvalid": "Anda hanya boleh memuat naik fail PDF, JPG, PNG atau DOC/DOCX!",
+    "registrationSuccess": "Pendaftaran berjaya! Sila semak e-mel anda untuk pengaktifan.",
+    "submitFailed": "Gagal menghantar pendaftaran. Sila cuba lagi.",
+    "completeRequiredFields": "Sila lengkapkan semua medan wajib dengan betul."
+  },
+  "success": {
+    "title": "Pendaftaran Berjaya Dihantar!",
+    "subTitle": "Permintaan pendaftaran anda telah dihantar kepada agensi pengawal yang dipilih. Anda akan menerima pengesahan e-mel tidak lama lagi."
+  }
+}

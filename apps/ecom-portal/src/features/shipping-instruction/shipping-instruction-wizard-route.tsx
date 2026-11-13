@@ -1,15 +1,22 @@
-// Modified by Sekar Nagarajan (2026-09-01 12:41)
+// Modified by Sekar Nagarajan (2026-09-29 16:55)
 import { AppButton } from "@solverminds/shared-ui";
 import { useNavigate, useParams, useSearch } from "@tanstack/react-router";
 import { Card, Result, Steps, Typography, theme } from "antd";
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
-import { AppIcon, Icons } from "../../components/icons";
+import {
+  AppIcon,
+  Icons,
+  NavShippingInstructionIcon,
+} from "../../components/icons";
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
+import { formatModuleScreenTitle } from "../../constants/module-titles";
 import {
-  MODULE_TITLES,
-  formatModuleScreenTitle,
-} from "../../constants/module-titles";
+  useModuleTitles,
+  useWizardStepTitles,
+} from "../../i18n/use-module-titles";
 import { useSiDetailQuery } from "./api/si.queries";
 import { SiLoadingCenter } from "./components/si-loading-center";
 import { SiModuleStyles } from "./components/si-module-styles";
@@ -25,6 +32,9 @@ import {
 const { Text } = Typography;
 
 export function ShippingInstructionWizardRoute() {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
+  const MODULE_TITLES = useModuleTitles();
+  const WIZARD_STEP_TITLES = useWizardStepTitles();
   const { token } = theme.useToken();
   const navigate = useNavigate();
   const params = useParams({ from: "/app/shipping-instruction/wizard/$id" });
@@ -37,7 +47,24 @@ export function ShippingInstructionWizardRoute() {
   const { data: wizardConfig = DEFAULT_SI_WIZARD_CONFIG } =
     useSiWizardConfigQuery();
 
-  const wizardSteps = buildSiWizardSteps(wizardConfig);
+  const wizardSteps = useMemo(
+    () =>
+      buildSiWizardSteps(wizardConfig, {
+        master: WIZARD_STEP_TITLES.masterDetails,
+        parties: WIZARD_STEP_TITLES.parties,
+        routing: WIZARD_STEP_TITLES.routing,
+        cargo: WIZARD_STEP_TITLES.cargoDetails,
+        insurance: WIZARD_STEP_TITLES.insurance,
+        cargoProtect: WIZARD_STEP_TITLES.cargoProtect,
+        charges: WIZARD_STEP_TITLES.charges,
+        ens: WIZARD_STEP_TITLES.ensDetails,
+        chargeTab: WIZARD_STEP_TITLES.chargeSummary,
+        files: WIZARD_STEP_TITLES.fileUpload,
+        references: WIZARD_STEP_TITLES.references,
+        preview: WIZARD_STEP_TITLES.preview,
+      }),
+    [wizardConfig, WIZARD_STEP_TITLES],
+  );
 
   const {
     currentStep,
@@ -120,7 +147,7 @@ export function ShippingInstructionWizardRoute() {
           <div className="custom-scroll form-step-scroll">
             <Result
               status="error"
-              title="Unable to load Shipping Instruction"
+              title={t("empty.unableToLoadSi")}
               extra={
                 <AppButton
                   danger
@@ -129,7 +156,7 @@ export function ShippingInstructionWizardRoute() {
                   }
                   onClick={goDashboard}
                 >
-                  Back to SI
+                  {t("actions.backToSi")}
                 </AppButton>
               }
             />
@@ -166,7 +193,7 @@ export function ShippingInstructionWizardRoute() {
       <Card className="wizard-page-card">
         <div className="wizard-page-header">
           <ModuleScreenHeader
-            icon={Icons.clipboardList}
+            icon={NavShippingInstructionIcon}
             title={formatModuleScreenTitle(
               MODULE_TITLES.shippingInstruction,
               siDetails?.bookingNo,
@@ -180,7 +207,7 @@ export function ShippingInstructionWizardRoute() {
                 }
                 onClick={goDashboard}
               >
-                Back to SI
+                {t("actions.backToSi")}
               </AppButton>
             }
           />
@@ -191,15 +218,14 @@ export function ShippingInstructionWizardRoute() {
             <Result
               status="success"
               icon={
-                <AppIcon icon={Icons.checkCircle} size={16} tone="approve" />
+                <AppIcon icon={Icons.checkCircle} size={64} tone="approve" />
               }
-              title="Shipping Instruction Submitted Successfully"
+              title={t("wizard.submitSuccessTitle")}
               subTitle={
                 <div>
-                  Your Shipping Instruction has been forwarded to the carrier
-                  via EDI.
+                  {t("wizard.submitSuccessSubtitle")}
                   <div className="si-confirmation__ref">
-                    SI Reference:{" "}
+                    {t("wizard.siReference")}{" "}
                     <Text
                       copyable
                       strong
@@ -212,7 +238,7 @@ export function ShippingInstructionWizardRoute() {
               }
               extra={[
                 <AppButton type="primary" key="dashboard" onClick={goDashboard}>
-                  Go to Dashboard
+                  {t("actions.goToDashboard")}
                 </AppButton>,
               ]}
             />

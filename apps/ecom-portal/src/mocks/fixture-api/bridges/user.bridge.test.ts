@@ -17,16 +17,51 @@ import {
 } from './user.bridge';
 
 const users = [
-  ciRow({ id: 4950, Cust_Code: null, loginname: 'johnathon6@example.com', User_Email: 'johnathon6@example.com', First_Name: 'Rowan', Last_Name: 'Vandervort', Country: 'IN' }),
   ciRow({
-    id: 4928, Cust_Code: '20001374', Comp_Name: 'Schultz - Romaguera', Address: '2301 Church Close', Address2: 'Apt. 580', City: 'Terrenceport', Pin_Code: '68394',
-    Country: 'CN', Title: 'Mr.', First_Name: 'Gage', Last_Name: 'Keeling', User_Phone: '+19385207153', User_Mobile: '+16005730770',
-    User_Email: 'guillermo.thompson@example.com', loginname: 'guillermo.thompson@example.com', prefLang: 'EN', preferredTimezone: null,
+    id: 4950,
+    Cust_Code: null,
+    loginname: 'johnathon6@example.com',
+    User_Email: 'johnathon6@example.com',
+    First_Name: 'Rowan',
+    Last_Name: 'Vandervort',
+    Country: 'IN',
+  }),
+  ciRow({
+    id: 4928,
+    Cust_Code: '20001374',
+    Comp_Name: 'Schultz - Romaguera',
+    Address: '2301 Church Close',
+    Address2: 'Apt. 580',
+    City: 'Terrenceport',
+    Pin_Code: '68394',
+    Country: 'CN',
+    Title: 'Mr.',
+    First_Name: 'Gage',
+    Last_Name: 'Keeling',
+    User_Phone: '+19385207153',
+    User_Mobile: '+16005730770',
+    User_Email: 'guillermo.thompson@example.com',
+    loginname: 'guillermo.thompson@example.com',
+    prefLang: 'EN',
+    preferredTimezone: null,
   }),
 ];
 const userDetails = [
-  ciRow({ Id: 9, EmailID: 'nobody@example.com', userRole: 'Y', CustomerCode: '20001374', logindate: '2026-09-01T00:00:00Z' }),
-  ciRow({ Id: 2356, EmailID: 'guillermo.thompson@example.com', userRole: 'Y', CustomerCode: '20001374', preferredTimezone: '-05:00~~(GMT-05:00) Indiana (East', logindate: '2026-09-18T10:15:21.949Z' }),
+  ciRow({
+    Id: 9,
+    EmailID: 'nobody@example.com',
+    userRole: 'Y',
+    CustomerCode: '20001374',
+    logindate: '2026-09-01T00:00:00Z',
+  }),
+  ciRow({
+    Id: 2356,
+    EmailID: 'guillermo.thompson@example.com',
+    userRole: 'Y',
+    CustomerCode: '20001374',
+    preferredTimezone: '-05:00~~(GMT-05:00) Indiana (East',
+    logindate: '2026-09-18T10:15:21.949Z',
+  }),
 ];
 
 describe('user bridge — current user & profile', () => {
@@ -60,22 +95,51 @@ describe('user bridge — current user & profile', () => {
   it('maps users + userDetails onto CustomerProfile', () => {
     const p = mapProfile(users[1], userDetails[1]);
     expect(p).toMatchObject({
-      loginName: 'guillermo.thompson@example.com', customerCode: '20001374', companyName: 'Schultz - Romaguera',
-      firstName: 'Gage', lastName: 'Keeling', email: 'guillermo.thompson@example.com',
-      phoneCode: '+1', phoneNo: '9385207153', mobileCode: '+1', mobileNo: '6005730770',
-      country: 'CN', city: 'Terrenceport', address: '2301 Church Close, Apt. 580', defLanguage: 'en', prefTimeZone: 'UTC-5 (EST)',
+      loginName: 'guillermo.thompson@example.com',
+      customerCode: '20001374',
+      companyName: 'Schultz - Romaguera',
+      firstName: 'Gage',
+      lastName: 'Keeling',
+      email: 'guillermo.thompson@example.com',
+      phoneCode: '+1',
+      phoneNo: '9385207153',
+      mobileCode: '+1',
+      mobileNo: '6005730770',
+      country: 'CN',
+      city: 'Terrenceport',
+      address: '2301 Church Close, Apt. 580',
+      defLanguage: 'en',
+      prefTimeZone: 'UTC-5 (EST)',
     });
   });
 
   it('falls back to the customer party address on bookings when eCom_Reg_Details has none', () => {
     const blank = ciRow({ ...users[1], Address: '', Address2: 'Apt. 580', City: '' });
     const party = customerParty('20001374', [
-      ciRow({ cid: '1', ebookno: 'OLD', custTypeId: 'AP', custId: '20001374', address1: 'Old Street', city: 'Oldtown' }),
-      ciRow({ cid: '9', ebookno: 'NEW', custTypeId: 'BP', custId: '20001374', address1: '2301 Church Close', address2: 'Apt. 580', city: 'Terrenceport' }),
+      ciRow({
+        cid: '1',
+        ebookno: 'OLD',
+        custTypeId: 'AP',
+        custId: '20001374',
+        address1: 'Old Street',
+        city: 'Oldtown',
+      }),
+      ciRow({
+        cid: '9',
+        ebookno: 'NEW',
+        custTypeId: 'BP',
+        custId: '20001374',
+        address1: '2301 Church Close',
+        address2: 'Apt. 580',
+        city: 'Terrenceport',
+      }),
       ciRow({ cid: '10', ebookno: 'NEW', custTypeId: 'CN', custId: '2021000073', address1: 'Consignee Rd' }),
     ]);
     expect(party?.cid).toBe('9');
-    expect(mapProfile(blank, userDetails[1], party)).toMatchObject({ address: '2301 Church Close, Apt. 580', city: 'Terrenceport' });
+    expect(mapProfile(blank, userDetails[1], party)).toMatchObject({
+      address: '2301 Church Close, Apt. 580',
+      city: 'Terrenceport',
+    });
     expect(mapProfile(users[1], userDetails[1], party).address).toBe('2301 Church Close, Apt. 580');
     expect(customerParty('NOPE', [])).toBeNull();
   });
@@ -83,7 +147,16 @@ describe('user bridge — current user & profile', () => {
   it('writes a profile patch back into the fixture rows', () => {
     const user = ciRow({ ...users[1] });
     const details = ciRow({ ...userDetails[1] });
-    const next = applyProfilePatch({ user, details }, { firstName: 'Sekar', phoneNo: '5550199', address: '100 Wall Street', prefTimeZone: 'UTC+8 (SGT)', defLanguage: 'zh' });
+    const next = applyProfilePatch(
+      { user, details },
+      {
+        firstName: 'Sekar',
+        phoneNo: '5550199',
+        address: '100 Wall Street',
+        prefTimeZone: 'UTC+8 (SGT)',
+        defLanguage: 'zh',
+      },
+    );
     expect(next.firstName).toBe('Sekar');
     expect(user.First_Name).toBe('Sekar');
     expect(user.User_Phone).toBe('+15550199');
@@ -102,18 +175,38 @@ const activities = [
   ciRow({ module: 'BOL', activity: 'Send to Agency', activitycode: 'DSA ' }),
 ];
 const notificationSettings = [
-  ciRow({ id: '1', category: 'BOOKING', notificationKey: 'BOOKING_REQUEST_SUBMISSION', defaultEnabled: true, status: 'A' }),
-  ciRow({ id: '8', category: 'SHIPPING_INSTRUCTION', notificationKey: 'SHIPPING_INSTRUCTION_SUBMISSION', defaultEnabled: true, status: 'A' }),
-  ciRow({ id: '6', category: 'BILL_OF_LADING', notificationKey: 'BILL_OF_LADING_ACCEPTANCE', defaultEnabled: false, status: 'A' }),
+  ciRow({
+    id: '1',
+    category: 'BOOKING',
+    notificationKey: 'BOOKING_REQUEST_SUBMISSION',
+    defaultEnabled: true,
+    status: 'A',
+  }),
+  ciRow({
+    id: '8',
+    category: 'SHIPPING_INSTRUCTION',
+    notificationKey: 'SHIPPING_INSTRUCTION_SUBMISSION',
+    defaultEnabled: true,
+    status: 'A',
+  }),
+  ciRow({
+    id: '6',
+    category: 'BILL_OF_LADING',
+    notificationKey: 'BILL_OF_LADING_ACCEPTANCE',
+    defaultEnabled: false,
+    status: 'A',
+  }),
 ];
 const base: AlertSources = {
-  login: 'angelica83@example.com', customerCode: '20001374',
+  login: 'angelica83@example.com',
+  customerCode: '20001374',
   mailAlerts: [
     ciRow({ loginname: 'angelica83@example.com', activitycode: 'BSA', mail: 'Y' }),
     ciRow({ loginname: 'angelica83@example.com', activitycode: 'SSA', mail: 'N' }),
     ciRow({ loginname: 'angelica83@example.com', activitycode: 'DSA', mail: 'Y' }),
   ],
-  activities, notificationSettings,
+  activities,
+  notificationSettings,
   customerNotifications: [ciRow({ id: '5', customerUserId: '5', notificationId: '1', isEnabled: false })],
   customerUsers: [ciRow({ id: '5', customerCode: '20001374', email: 'baylee.howe87@example.com' })],
   payments: [ciRow({ requestId: 'X', customerCode: '20001374', status: 'COMPLETED' })],
@@ -122,8 +215,14 @@ const base: AlertSources = {
 describe('user bridge — alert preferences', () => {
   it('derives module flags from ecom_mailalert rows via ecom_activity modules', () => {
     expect(mapAlertPreferences(base)).toEqual({
-      bookingUpdates: true, siConfirmation: false, blRelease: true,
-      scheduleDelays: false, paymentInvoices: true, channelEmail: true, channelSms: false, channelPortal: true,
+      bookingUpdates: true,
+      siConfirmation: false,
+      blRelease: true,
+      scheduleDelays: false,
+      paymentInvoices: true,
+      channelEmail: true,
+      channelSms: false,
+      channelPortal: true,
     });
   });
 
@@ -145,12 +244,53 @@ describe('user bridge — alert preferences', () => {
 describe('user bridge — alert history', () => {
   it('maps an EcommuserlogDetails row onto AlertHistoryLog', () => {
     const log = mapAlertLog(
-      ciRow({ id: 30941, username: 'baylee.howe87@example.com', Logdate: '2026-10-16T13:25:17.232Z', module: 'SI', activity: 'Submit', referenceno: 'SVMDMU2694105', remarks: 'New Shipping Instruction Submitted', customercode: '20001374' }),
+      ciRow({
+        id: 30941,
+        username: 'baylee.howe87@example.com',
+        Logdate: '2026-10-16T13:25:17.232Z',
+        module: 'SI',
+        activity: 'Submit',
+        referenceno: 'SVMDMU2694105',
+        remarks: 'New Shipping Instruction Submitted',
+        customercode: '20001374',
+      }),
       '2026-10-17T00:00:00Z',
     );
-    expect(log).toMatchObject({ id: 'log-30941', category: 'SI', title: 'Shipping Instruction · Submit', message: 'New Shipping Instruction Submitted', isRead: true, referenceNo: 'SVMDMU2694105' });
+    expect(log).toMatchObject({
+      id: 'log-30941',
+      category: 'SI',
+      title: 'Submit',
+      message: 'New Shipping Instruction Submitted',
+      isRead: true,
+    });
+    // referenceno is a booking number; routeId/display resolve to the SI entity.
+    expect(log.routeId).toBeTruthy();
+    expect(log.referenceNo).toBeTruthy();
     expect(log.timestamp).toMatch(/^2026-10-16 \d{2}:\d{2}$/);
-    expect(mapAlertLog(ciRow({ id: 1, module: 'Booking', activity: 'Sent To Agency', Logdate: '2026-10-16T13:18:55Z' }), '2026-09-18T10:15:21Z').isRead).toBe(false);
+    expect(
+      mapAlertLog(
+        ciRow({ id: 1, module: 'Booking', activity: 'Sent To Agency', Logdate: '2026-10-16T13:18:55Z' }),
+        '2026-09-18T10:15:21Z',
+      ).isRead,
+    ).toBe(false);
+  });
+
+  it('resolves BL alert booking refs onto the real blNo for detail routes', () => {
+    const log = mapAlertLog(
+      ciRow({
+        id: 30942,
+        module: 'BL',
+        activity: 'Submit',
+        referenceno: 'SVMDMU2694105',
+        remarks: 'BL Correction Sent',
+        Logdate: '2026-10-16T13:25:17.232Z',
+        customercode: '20001374',
+      }),
+      '2026-10-17T00:00:00Z',
+    );
+    expect(log.category).toBe('BL');
+    expect(log.routeId).toBe('EPIRINDMUM69602');
+    expect(log.referenceNo).toBe('EPIRINDMUM69602');
   });
 
   it('has fixture rows for the demo customer', () => {

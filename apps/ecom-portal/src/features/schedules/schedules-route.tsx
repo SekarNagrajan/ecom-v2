@@ -1,14 +1,11 @@
-// Modified by Sekar Nagarajan (2026-10-18 11:15)
+// Modified by Sekar Nagarajan (2026-11-16 12:15) — Available Sailings record count badge
 import { AppButton } from "@solverminds/shared-ui";
 import { Card, Space, Spin, Typography } from "antd";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../components/icons";
-import {
-  NavRoutePinsIcon,
-  NavSchedulesIcon,
-} from "../../components/icons/nav-svg-icons";
+import { NavRoutePinsIcon, NavSchedulesIcon } from "../../components/icons/nav-svg-icons";
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
 import { ModuleCardViewPanel } from "../../components/shared/module-card-view-panel";
 import { ModuleEmptyState } from "../../components/shared/module-empty-state";
@@ -72,9 +69,7 @@ export const SchedulesRoute: React.FC = () => {
           extra={
             <Space align="center" size={12} wrap className="custom-scroll">
               <AppButton
-                icon={
-                  <AppIcon icon={Icons.download} size={16} tone="download" />
-                }
+                icon={<AppIcon icon={Icons.download} size={16} tone="download" />}
                 onClick={handleExport}
                 disabled={!hasSearched || schedules.length === 0}
               >
@@ -112,21 +107,18 @@ export const SchedulesRoute: React.FC = () => {
             <div className="schedule-results-bar">
               <Space align="center" size={10} wrap>
                 <AppIcon icon={NavRoutePinsIcon} size={18} />
-                <Text className="schedule-results-bar__title">
-                  {t("availableSailings")}
-                </Text>
-                {/* <span className="schedule-results-bar__count">
+                <Text className="schedule-results-bar__title">{t("availableSailings")}</Text>
+                <span
+                  className="schedule-results-bar__count"
+                  title={t("calendar.sailingsCount", {
+                    count: schedules.length,
+                  })}
+                  aria-label={t("calendar.sailingsCount", {
+                    count: schedules.length,
+                  })}
+                >
                   {schedules.length}
-                </span> */}
-                {isLoading ? (
-                  <span
-                    className="module-loading-center"
-                    role="status"
-                    aria-label={t("a11y.loading")}
-                  >
-                    <Spin size="small" />
-                  </span>
-                ) : null}
+                </span>
               </Space>
               <ScheduleViewModeTabs value={viewMode} onChange={setViewMode} />
             </div>

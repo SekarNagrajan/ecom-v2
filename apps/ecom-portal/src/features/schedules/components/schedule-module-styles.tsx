@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-10-27 12:30) — rates estimator drawer redesign
+// Modified by Sekar Nagarajan (2026-11-16 11:50) — route timeline fact panels
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -266,14 +266,20 @@ export function ScheduleModuleStyles() {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-width: ${token.controlHeightSM}px;
+        box-sizing: border-box;
+        width: ${token.controlHeightSM}px;
         height: ${token.controlHeightSM}px;
-        padding: 0 ${token.paddingXS}px;
+        min-width: ${token.controlHeightSM}px;
+        padding: 0;
         border-radius: ${token.borderRadius}px;
-        background: ${token.colorError};
-        color: ${token.colorTextLightSolid};
+        background: ${token.colorPrimaryBg};
+        color: ${token.colorPrimary};
+        border: 1px solid ${token.colorPrimaryBorder};
         font-size: ${token.fontSizeSM}px;
         font-weight: ${token.fontWeightStrong};
+        font-variant-numeric: tabular-nums;
+        line-height: 1;
+        text-align: center;
       }
       .schedule-results-bar__title {
         font-size: ${token.fontSizeLG}px;
@@ -396,8 +402,12 @@ export function ScheduleModuleStyles() {
         box-shadow: none !important;
       }
       .schedule-card--recommended {
-        border-color: ${tokenMix(token.colorWarning, 40)};
+        border-color: ${token.colorWarningBorder};
+        
         box-shadow: none !important;
+      }
+      .schedule-card--recommended:hover {
+        border-color: ${token.colorWarning};
       }
       .schedule-card__main {
         display: grid;
@@ -411,31 +421,6 @@ export function ScheduleModuleStyles() {
         display: flex;
         flex-direction: column;
         gap: ${token.marginMD}px;
-      }
-      .schedule-card__meta {
-        display: flex;
-        flex-wrap: wrap;
-        gap: ${token.marginXS}px;
-        align-items: center;
-      }
-      /* Modified by Sekar Nagarajan (2026-09-17 21:29) — recommended = gold star icons */
-      .schedule-card__recommended-stars {
-        display: inline-flex;
-        align-items: center;
-        gap: 2px;
-        line-height: 1;
-        color: ${token.colorWarning};
-      }
-      .schedule-card__recommended-stars .schedule-card__star.app-icon,
-      .schedule-card__recommended-stars .schedule-card__star.app-icon svg {
-        color: ${token.colorWarning};
-        fill: ${token.colorWarning};
-      }
-      .schedule-card__vessel-tag {
-      background-color: ${tokenMix(token.colorWarning, 20)};
-        color: ${token.colorText};
-        border-color: ${tokenMix(token.colorWarning, 32)};
-        cursor: pointer;
       }
       .schedule-card__distance {
         font-size: ${token.fontSizeSM}px;
@@ -498,10 +483,26 @@ export function ScheduleModuleStyles() {
         align-self: center;
         width: 100%;
       }
+      .schedule-card__connector-service {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: ${token.marginXXS}px;
+        max-width: 100%;
+        min-width: 0;
+      }
+      .schedule-card__service-tag.ant-tag {
+        margin-inline-end: 0;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
       .schedule-card__connector-line {
         display: flex;
         align-items: center;
-        width: 130%;
+        width: 100%;
+        max-width: 280px;
         gap: ${token.marginXXS}px;
       }
       .schedule-card__connector-dot {
@@ -752,12 +753,28 @@ export function ScheduleModuleStyles() {
         list-style: none;
         margin: 0;
         padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
       }
       .schedule-route-stop {
         display: grid;
-        grid-template-columns: 32px minmax(0, 1fr);
+        grid-template-columns: minmax(0, 1fr) 32px minmax(0, 2.2fr);
         gap: ${token.marginSM}px;
         align-items: stretch;
+      }
+      .schedule-route-stop__place-col {
+        min-width: 0;
+        padding-top: ${token.paddingXXS}px;
+        text-align: right;
+      }
+      .schedule-route-stop__place {
+        display: block;
+        font-size: ${token.fontSize}px;
+        color: ${token.colorText};
+        line-height: 1.3;
+        font-weight: ${token.fontWeightStrong};
+        max-width: 100%;
       }
       .schedule-route-stop__rail {
         display: flex;
@@ -768,8 +785,9 @@ export function ScheduleModuleStyles() {
         width: 28px;
         height: 28px;
         border-radius: 50%;
-        background: ${token.colorPrimary};
-        color: ${token.colorTextLightSolid};
+        border: 1px solid ${token.colorBorder};
+        background: ${token.colorBgContainer};
+        color: ${token.colorTextSecondary};
         font-size: ${token.fontSizeSM}px;
         font-weight: ${token.fontWeightStrong};
         display: inline-flex;
@@ -779,6 +797,16 @@ export function ScheduleModuleStyles() {
         z-index: 1;
         line-height: 1;
       }
+      .schedule-route-stop--departure .schedule-route-stop__node {
+        border-color: ${token.colorPrimaryBorder};
+        color: ${token.colorPrimary};
+        background: ${token.colorPrimaryBg};
+      }
+      .schedule-route-stop--arrival .schedule-route-stop__node {
+        border-color: ${token.colorInfoBorder};
+        color: ${token.colorInfo};
+        background: ${token.colorInfoBg};
+      }
       .schedule-route-stop__node .app-icon {
         display: block;
       }
@@ -787,56 +815,86 @@ export function ScheduleModuleStyles() {
         width: 0;
         min-height: ${token.controlHeightLG}px;
         margin: ${token.marginXXS}px 0;
-        border-left: 2px solid ${tokenMix(token.colorPrimary, 45)};
+        border-left: 2px dotted ${token.colorBorder};
       }
       /* Modified by Sekar Nagarajan (2026-09-11 12:35) — solid rail; stronger color = completed */
       .schedule-route-stop__line--solid {
+        border-left-style: solid;
         border-left-color: ${token.colorPrimary};
       }
       .schedule-route-stop__line--dotted {
-        border-left-color: ${tokenMix(token.colorPrimary, 45)};
+        border-left-style: dotted;
+        border-left-color: ${token.colorBorder};
       }
       .schedule-route-stop__body {
         min-width: 0;
-        padding-bottom: ${token.paddingLG}px;
+        padding-bottom: ${token.paddingMD}px;
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXS}px;
       }
       .schedule-route-stop:last-child .schedule-route-stop__body {
         padding-bottom: 0;
       }
-      .schedule-route-stop__main {
-        display: flex;
-        flex-direction: column;
-        gap: ${token.marginXS}px;
-        align-items: stretch;
+      .schedule-route-stop__panel {
+        min-width: 0;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: ${token.marginSM}px ${token.marginMD}px;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        border-radius: ${token.borderRadius}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorBgContainer};
       }
-      .schedule-route-stop__location {
+      .schedule-route-stop__panel--departure {
+        background: ${token.colorPrimaryBg};
+        border-color: ${token.colorPrimaryBorder};
+      }
+      .schedule-route-stop__panel--arrival {
+        background: transparent;
+        border-color: transparent;
+        padding-inline: 0;
+      }
+      .schedule-route-stop__fact {
         min-width: 0;
         display: flex;
         flex-direction: column;
-        gap: ${token.marginXXS}px;
+        gap: 2px;
       }
-      .schedule-route-stop__place {
-        display: block;
-        font-size: ${token.fontSize}px;
-        color: ${token.colorText};
-        line-height: 1.35;
-      }
-      .schedule-route-stop__code {
-        font-weight: ${token.fontWeightStrong};
-        color: ${token.colorText};
-      }
-      .schedule-route-stop__terminal {
-        display: block;
+      .schedule-route-stop__fact-label {
         font-size: ${token.fontSizeSM}px;
-        color: ${token.colorTextSecondary};
-        line-height: 1.35;
+        line-height: 1.2;
+      }
+      .schedule-route-stop__fact-value {
+        display: block;
+        line-height: 1.3;
+        max-width: 100%;
+        color: ${token.colorText};
+      }
+      .schedule-route-stop__fact-value--link {
+        appearance: none;
+        border: 0;
+        background: transparent;
+        padding: 0;
+        margin: 0;
+        text-align: left;
+        font: inherit;
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorPrimary};
+        cursor: pointer;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .schedule-route-stop__fact-value--link:hover {
+        text-decoration: underline;
       }
       .schedule-route-stop__badges {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
         gap: ${token.marginXS}px;
-        margin-top: ${token.marginXXS}px;
       }
       .schedule-route-stop__badge {
         display: inline-flex;
@@ -868,23 +926,6 @@ export function ScheduleModuleStyles() {
       .schedule-route-stop__badge--vessel:hover {
         border-color: ${token.colorPrimary};
         color: ${token.colorPrimary};
-      }
-      .schedule-route-stop__times {
-        display: flex;
-        flex-direction: column;
-        gap: ${token.marginXXS}px;
-        align-items: flex-start;
-      }
-      .schedule-route-stop__time {
-        display: block;
-        font-size: ${token.fontSizeSM}px;
-        color: ${token.colorTextSecondary};
-        line-height: 1.35;
-        white-space: nowrap;
-      }
-      .schedule-route-stop__time-date {
-        font-weight: ${token.fontWeightStrong};
-        color: ${token.colorText};
       }
 
       .schedule-empty {
@@ -2243,16 +2284,16 @@ export function ScheduleModuleStyles() {
           grid-template-columns: 1.2fr 1.5fr 1fr;
           align-items: center;
         }
-        .schedule-route-stop__main {
-          flex-direction: row;
-          justify-content: space-between;
-          align-items: flex-start;
-          gap: ${token.marginLG}px;
+        .schedule-route-stop {
+          grid-template-columns: minmax(140px, 0.9fr) 32px minmax(0, 2.4fr);
+          gap: ${token.marginMD}px;
         }
-        .schedule-route-stop__times {
-          align-items: flex-end;
-          text-align: right;
-          flex-shrink: 0;
+        .schedule-route-stop__panel--departure {
+          grid-template-columns: repeat(5, minmax(0, 1fr));
+          align-items: start;
+        }
+        .schedule-route-stop__panel--arrival {
+          grid-template-columns: minmax(160px, 0.35fr);
         }
       }
 
@@ -2338,6 +2379,22 @@ export function ScheduleModuleStyles() {
         }
         .schedule-card__date {
           font-size: ${token.fontSizeHeading4}px;
+        }
+        .schedule-route-stop {
+          grid-template-columns: 28px minmax(0, 1fr);
+        }
+        .schedule-route-stop__place-col {
+          grid-column: 2;
+          grid-row: 1;
+          text-align: left;
+          padding-top: 0;
+        }
+        .schedule-route-stop__rail {
+          grid-column: 1;
+          grid-row: 1 / span 2;
+        }
+        .schedule-route-stop__body {
+          grid-column: 2;
         }
         .schedule-card__legs,
         .schedule-route-details {

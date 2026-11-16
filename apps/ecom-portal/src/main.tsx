@@ -1,5 +1,5 @@
-// Modified by Sekar Nagarajan (2026-11-13 01:10)
-import { useAuthStore, useTenantStore } from "@solverminds/auth";
+// Modified by Sekar Nagarajan (2026-11-16 12:55) — lock accent to default (no tenant brand)
+import { useAuthStore } from "@solverminds/auth";
 import { env, queryClient } from "@solverminds/platform";
 import { AppConfigProvider } from "@solverminds/shared-ui/providers";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -38,13 +38,12 @@ function syncInitialLocale(): void {
 
 function AppRoot() {
   const config = useAppConfigStore((state) => state.config);
-  const tenantPrimary = useTenantStore((state) => state.activeTenant.primaryColor);
 
-  // Accent precedence: the user's explicit choice → the tenant brand → Signal Blue.
+  // Temporary: ignore customer/tenant brand accent. User preference → Signal Blue.
   // Contrast / accessibility overrides are applied downstream by AccessibilityEffects.
   const mergedConfig = {
     ...config,
-    primaryColor: config.primaryColor || tenantPrimary || BE_COLOR_MAP.SIGNAL,
+    primaryColor: config.primaryColor || BE_COLOR_MAP.SIGNAL,
   };
 
   return (

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-10-27 12:10) — actions column right padding
+// Modified by Sekar Nagarajan (2026-11-16 12:30) — square primary count badge
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -226,14 +226,20 @@ export function RatesModuleStyles() {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-width: ${token.controlHeightSM}px;
+        box-sizing: border-box;
+        width: ${token.controlHeightSM}px;
         height: ${token.controlHeightSM}px;
-        padding: 0 ${token.paddingXS}px;
+        min-width: ${token.controlHeightSM}px;
+        padding: 0;
         border-radius: ${token.borderRadius}px;
-        background: ${token.colorError};
-        color: ${token.colorTextLightSolid};
+        background: ${token.colorPrimaryBg};
+        color: ${token.colorPrimary};
+        border: 1px solid ${token.colorPrimaryBorder};
         font-size: ${token.fontSizeSM}px;
         font-weight: ${token.fontWeightStrong};
+        font-variant-numeric: tabular-nums;
+        line-height: 1;
+        text-align: center;
       }
       .rates-results-bar__title {
         font-size: ${token.fontSizeLG}px;

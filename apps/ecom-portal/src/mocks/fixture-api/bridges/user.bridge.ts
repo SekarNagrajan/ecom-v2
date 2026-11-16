@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-13 03:20)
+// Modified by Sekar Nagarajan (2026-11-16 14:45) — resolve alert routeId for SI/BL/booking
 /**
  * Current demo user, profile, alert preferences and alert history derived from the fixtures:
  *   users (eCom_Reg_Details) + userDetails (ecomuserdetails)          → profile
@@ -18,6 +18,7 @@ import type {
 import { ciRow, db, eq, nowIso, type Row } from '../db';
 import { countryDialCode, dialCodes } from './masters.bridge';
 import { formatYmdHm } from './minute-format';
+import { findBlRow, findBooking, findSiRow, str } from './si-common.bridge';
 
 export const DEMO_CUSTOMER_CODE = '20001374';
 
@@ -366,19 +367,75 @@ const CATEGORY_TITLE: Record<AlertHistoryLog['category'], string> = {
   SCHEDULE: 'Schedule',
 };
 
+/**
+ * Alert `referenceno` is often an external booking number even for SI/BL
+ * rows. Resolve the detail-route key so CTAs open the right entity.
+ */
+export function resolveAlertRouteId(
+  category: AlertHistoryLog['category'],
+  referenceNo: string,
+): { routeId?: string; displayRef: string } {
+  const ref = referenceNo.trim();
+  if (!ref) return { displayRef: '' };
+
+  if (category === 'BOOKING') {
+    const booking = findBooking(ref);
+    const ebookno = str(booking?.ebookno);
+    const ext = str(booking?.extBookNo);
+    return {
+      routeId: ebookno || ext || ref,
+      displayRef: ebookno || ext || ref,
+    };
+  }
+
+  if (category === 'SI') {
+    const si = findSiRow(ref);
+    const eSINo = str(si?.eSINo);
+    return {
+      routeId: eSINo || undefined,
+      displayRef: eSINo || ref,
+    };
+  }
+
+  if (category === 'BL') {
+    const byBl = findBlRow(ref);
+    if (byBl) {
+      const blNo = str(byBl.blno);
+      return { routeId: blNo || undefined, displayRef: blNo || ref };
+    }
+    const si = findSiRow(ref);
+    const blNo = str(si?.blno);
+    if (blNo) return { routeId: blNo, displayRef: blNo };
+    const siByBook = db.shippingInstructions.find(r => eq(r.bookno, ref) && str(r.blno)) ?? null;
+    const fromBook = str(siByBook?.blno);
+    return {
+      routeId: fromBook || undefined,
+      displayRef: fromBook || ref,
+    };
+  }
+
+  return { routeId: ref, displayRef: ref };
+}
+
 /** A user-log row → alert entry; read when it is older than the user's last login. */
 export function mapAlertLog(row: Row, lastLogin: unknown): AlertHistoryLog {
   const category = LOG_CATEGORY[String(row.module ?? '').toUpperCase()] ?? 'BOOKING';
   const activity = String(row.activity ?? '').trim();
   const seen = lastLogin ? +new Date(row.Logdate) <= +new Date(lastLogin as string) : false;
+  const logDate = row.Logdate ? new Date(String(row.Logdate)) : null;
+  const rawRef = String(row.referenceno ?? '');
+  const { routeId, displayRef } = resolveAlertRouteId(category, rawRef);
   return {
     id: `log-${row.id}`,
     category,
-    title: [CATEGORY_TITLE[category], activity].filter(Boolean).join(' · '),
+    // Activity only — category is shown on the UI meta line (2b).
+    title: activity || CATEGORY_TITLE[category],
     message: String(row.remarks || activity || ''),
     timestamp: formatYmdHm(row.Logdate),
+    timestampIso: logDate && !Number.isNaN(+logDate) ? logDate.toISOString() : undefined,
     isRead: seen,
-    referenceNo: String(row.referenceno ?? ''),
+    referenceNo: displayRef || rawRef,
+    routeId,
   };
 }
 

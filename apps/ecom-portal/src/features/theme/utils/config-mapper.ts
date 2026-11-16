@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-13 01:10)
+// Modified by Sekar Nagarajan (2026-11-16 12:55) — default accent Signal Blue
 
 /**
  * BE ↔ UI theme config mapper.
@@ -85,7 +85,8 @@ export const mapBeToUiConfig = (beConfig: Partial<BackendAppConfig>): AppCustomC
         ? BE_DENSITY_MAP[beConfig.densityLevel as keyof typeof BE_DENSITY_MAP]
         : "normal",
     fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-    primaryColor: beConfig.primaryColor || "", // empty = inherit the tenant accent
+    // Temporary: empty falls back to Signal Blue (tenant org accent disabled)
+    primaryColor: beConfig.primaryColor || BE_COLOR_MAP.SIGNAL,
     secondaryColor: "#595959",
     // Modified by Sekar Nagarajan (2026-08-31 12:52) — success emerald #047857
     successColor: "#047857",

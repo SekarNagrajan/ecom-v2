@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-13 01:10)
+// Modified by Sekar Nagarajan (2026-11-16 12:55) — default accent Signal Blue
 import {
   ACCESSIBILITY_DEFAULTS,
   NOTIFICATION_TIMEOUT_OPTIONS,
@@ -204,8 +204,8 @@ export const DEFAULT_APP_CONFIG: AppCustomConfig = {
   baseFontSize: BASE_FONT_SIZE_OPTIONS[1].value, // 14px
   lineHeight: DEFAULT_DENSITY_FIELDS.lineHeight,
 
-  // Colors — an empty accent means "use the organisation (tenant) colour"; main.tsx resolves it
-  primaryColor: "",
+  // Colors — temporary: default to Signal Blue (customer/tenant org accent disabled)
+  primaryColor: BE_COLOR_MAP.SIGNAL,
   successColor: BE_COLOR_MAP.GREEN,
   warningColor: BE_COLOR_MAP.GOLD,
   errorColor: BE_COLOR_MAP.RED,

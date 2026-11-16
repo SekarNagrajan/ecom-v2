@@ -1,12 +1,14 @@
 // @vitest-environment jsdom
-// Created by Sekar Nagarajan (2026-11-13 03:20)
-import { fireEvent, render as rtlRender, screen } from '@testing-library/react';
+// Modified by Sekar Nagarajan (2026-11-16 14:30) — popover category filter coverage
+import { cleanup, fireEvent, render as rtlRender, screen, within } from '@testing-library/react';
 import type { ReactElement } from 'react';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { AppConfigContext } from '../../providers/app-config-context';
 import { DEFAULT_APP_CONFIG } from '../../providers/defaults';
 import { AppNotificationCenter } from './app-notification-center';
+
+afterEach(() => cleanup());
 
 /** AppButton reads the app config; the bare context keeps jsdom away from antd's layered CSS. */
 const render = (ui: ReactElement) =>
@@ -17,8 +19,8 @@ const render = (ui: ReactElement) =>
   );
 
 const items = [
-  { id: 'a', title: 'Unread one', read: false },
-  { id: 'b', title: 'Read one', read: true },
+  { id: 'a', title: 'Unread one', read: false, category: 'BOOKING' },
+  { id: 'b', title: 'Read one', read: true, category: 'PAYMENT' },
 ];
 
 describe('AppNotificationCenter', () => {
@@ -47,5 +49,61 @@ describe('AppNotificationCenter', () => {
       <AppNotificationCenter items={[{ id: 'b', title: 'Read one', read: true }]} filter="unread" />
     );
     expect(screen.getByRole('status').textContent).toContain('caught up');
+  });
+
+  it('filters by category in the popover variant and can show all again', () => {
+    render(
+      <AppNotificationCenter
+        variant="popover"
+        categoryFilter
+        items={[
+          {
+            id: '1',
+            title: 'Booking Confirmed',
+            read: true,
+            category: 'BOOKING',
+            action: { label: 'View booking' },
+          },
+          {
+            id: '2',
+            title: 'Payment Failed',
+            read: false,
+            category: 'PAYMENT',
+            action: { label: 'Retry payment' },
+          },
+        ]}
+      />
+    );
+    const chips = screen.getByRole('group', { name: 'Filter by category' });
+    expect(screen.getByText('Booking Confirmed')).toBeTruthy();
+    expect(screen.getByText('Payment Failed')).toBeTruthy();
+    fireEvent.click(within(chips).getByRole('button', { name: /Payment/ }));
+    expect(screen.queryByText('Booking Confirmed')).toBeNull();
+    expect(screen.getByText('Payment Failed')).toBeTruthy();
+    fireEvent.click(within(chips).getByRole('button', { name: /^All/ }));
+    expect(screen.getByText('Booking Confirmed')).toBeTruthy();
+  });
+
+  it('fires onAction from the inline CTA without relying on a reserved column', () => {
+    const onAction = vi.fn();
+    const onMarkRead = vi.fn();
+    render(
+      <AppNotificationCenter
+        variant="popover"
+        items={[
+          {
+            id: '2',
+            title: 'Payment Failed',
+            read: false,
+            category: 'PAYMENT',
+            action: { label: 'Retry payment', href: '/payments' },
+          },
+        ]}
+        onAction={onAction}
+        onMarkRead={onMarkRead}
+      />
+    );
+    fireEvent.click(screen.getByRole('button', { name: /Retry payment — Payment Failed/ }));
+    expect(onAction).toHaveBeenCalledWith(expect.objectContaining({ id: '2' }));
   });
 });

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-13 01:10)
+// Modified by Sekar Nagarajan (2026-11-16 12:55) — lock sidebar logo to Solverminds
 import { useAuthStore, usePermission, useTenantStore } from "@solverminds/auth";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import type { MenuProps } from "antd";
@@ -28,13 +28,13 @@ const SOLVERMINDS_MARK_URL = "/solverminds-mark.png";
 
 function SidebarBrandBlock({ collapsed, isMobile }: { collapsed: boolean; isMobile: boolean }) {
   const showFullLogo = !collapsed || isMobile;
+  // Temporary: always show Solverminds branding (ignore customer/tenant logoUrl).
   const activeTenant = useTenantStore((state) => state.activeTenant);
-  const fullLogoUrl = activeTenant.logoUrl || SOLVERMINDS_LOGO_URL;
 
   return (
     <div className="app-sidebar-brand">
       <img
-        src={showFullLogo ? fullLogoUrl : SOLVERMINDS_MARK_URL}
+        src={showFullLogo ? SOLVERMINDS_LOGO_URL : SOLVERMINDS_MARK_URL}
         alt={activeTenant.name || "Solverminds"}
         className={
           showFullLogo

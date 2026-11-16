@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-10-26 17:05)
+// Modified by Sekar Nagarajan (2026-11-16 12:30) — results count; drop title spinner
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { Card, Space, Spin, Typography } from "antd";
@@ -67,9 +67,7 @@ export function RatesRoute() {
           extra={
             <Space align="center" size={12} wrap className="custom-scroll">
               <AppButton
-                icon={
-                  <AppIcon icon={Icons.download} size={16} tone="download" />
-                }
+                icon={<AppIcon icon={Icons.download} size={16} tone="download" />}
                 onClick={() => toast.success(t("exportingToast"))}
                 disabled={!hasSearched || cardRates.length === 0}
               >
@@ -99,15 +97,13 @@ export function RatesRoute() {
           <div className="rates-results-bar__lead">
             <AppIcon icon={Icons.dollarSign} size={18} />
             <Text className="rates-results-bar__title">{resultsTitle}</Text>
-            {isLoading ? (
-              <span
-                className="module-loading-center"
-                role="status"
-                aria-label={loadingLabel}
-              >
-                <Spin size="small" />
-              </span>
-            ) : null}
+            <span
+              className="rates-results-bar__count"
+              title={`${hasSearched ? cardRates.length : 0}`}
+              aria-label={`${hasSearched ? cardRates.length : 0}`}
+            >
+              {hasSearched ? cardRates.length : 0}
+            </span>
           </div>
           <ModuleViewModeTabs value={viewMode} onChange={setViewMode} />
         </div>

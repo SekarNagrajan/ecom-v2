@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-17 21:29)
+// Modified by Sekar Nagarajan (2026-11-16 12:00) — recommended warning card chrome
 import { AppButton } from "@solverminds/shared-ui";
 import { Spin, Tag, Tooltip, Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
@@ -52,9 +52,7 @@ function portCity(name: string): string {
   return name.replace(/\s*\([^)]*\)\s*/g, "").trim();
 }
 
-function vesselLabel(
-  leg: Pick<RouteLeg, "vesselName" | "voyage" | "bound">,
-): string {
+function vesselLabel(leg: Pick<RouteLeg, "vesselName" | "voyage" | "bound">): string {
   return `${leg.vesselName} (${leg.voyage}${leg.bound})`;
 }
 
@@ -64,13 +62,9 @@ function vesselLabel(
  * Transshipment: vessel · hub port · vessel
  * Direct ocean: service · vessel
  */
-function buildTransportNodes(
-  item: ScheduleItem,
-  roadLabel: string,
-): TransportNode[] {
+function buildTransportNodes(item: ScheduleItem, roadLabel: string): TransportNode[] {
   const nodes: TransportNode[] = [];
-  const hasInland =
-    item.isMultimodal || item.legs.some((leg) => leg.legType === "Inland");
+  const hasInland = item.isMultimodal || item.legs.some((leg) => leg.legType === "Inland");
 
   if (hasInland) {
     nodes.push({
@@ -174,6 +168,15 @@ type RouteStopBadge =
   | { kind: "hub"; label: string }
   | { kind: "vessel"; label: string; vesselCode: string };
 
+interface RouteStopOutbound {
+  vesselName: string;
+  vesselCode: string;
+  serviceCode: string;
+  serviceName: string;
+  voyage: string;
+  bound: string;
+}
+
 interface RouteStop {
   id: string;
   index: number;
@@ -183,20 +186,56 @@ interface RouteStop {
   eta?: string;
   etd?: string;
   badges: RouteStopBadge[];
+  outbound?: RouteStopOutbound;
 }
 
-/** Detail datetime — e.g. 09/02/2026 | 18:00 LT */
-function formatDetailDateTime(value: string): { date: string; time: string } {
+const MONTH_SHORT = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+] as const;
+
+/** Route panel datetime — e.g. 18-Nov-2026 14:04 */
+function formatRouteDateTime(value: string): string {
   const parsed = new Date(value.replace(" ", "T"));
-  if (Number.isNaN(parsed.getTime())) {
-    return { date: value, time: "" };
-  }
-  const mm = String(parsed.getMonth() + 1).padStart(2, "0");
+  if (Number.isNaN(parsed.getTime())) return value;
   const dd = String(parsed.getDate()).padStart(2, "0");
+  const mon = MONTH_SHORT[parsed.getMonth()];
   const yyyy = String(parsed.getFullYear());
   const hh = String(parsed.getHours()).padStart(2, "0");
   const min = String(parsed.getMinutes()).padStart(2, "0");
-  return { date: `${mm}/${dd}/${yyyy}`, time: `${hh}:${min} LT` };
+  return `${dd}-${mon}-${yyyy} ${hh}:${min}`;
+}
+
+function outboundFromLeg(leg: RouteLeg): RouteStopOutbound {
+  return {
+    vesselName: leg.vesselName,
+    vesselCode: leg.vesselCode,
+    serviceCode: leg.serviceCode,
+    serviceName: leg.serviceName,
+    voyage: leg.voyage,
+    bound: leg.bound,
+  };
+}
+
+function outboundFromItem(item: ScheduleItem): RouteStopOutbound {
+  return {
+    vesselName: item.vesselName,
+    vesselCode: item.vesselCode,
+    serviceCode: item.serviceCode,
+    serviceName: item.serviceName,
+    voyage: item.voyage,
+    bound: item.bound,
+  };
 }
 
 function parseScheduleInstant(value: string | undefined): number | null {
@@ -219,10 +258,7 @@ function isRouteSegmentCompleted(from: RouteStop, to: RouteStop): boolean {
   return departedFrom !== null && departedFrom <= Date.now();
 }
 
-function legOutboundBadges(
-  leg: RouteLeg,
-  options?: { includeRoad?: boolean },
-): RouteStopBadge[] {
+function legOutboundBadges(leg: RouteLeg, options?: { includeRoad?: boolean }): RouteStopBadge[] {
   const badges: RouteStopBadge[] = [];
   if (options?.includeRoad || leg.legType === "Inland") {
     badges.push({ kind: "road" });
@@ -253,6 +289,7 @@ function buildRouteStops(item: ScheduleItem): RouteStop[] {
         portName: item.polPortName,
         terminal: item.polTerminal,
         etd: item.etd,
+        outbound: outboundFromItem(item),
         badges: item.isMultimodal
           ? [{ kind: "road" }]
           : [
@@ -286,6 +323,7 @@ function buildRouteStops(item: ScheduleItem): RouteStop[] {
         portName: leg.polPortName,
         terminal: item.polTerminal || leg.terminal,
         etd: leg.etd,
+        outbound: outboundFromLeg(leg),
         badges: legOutboundBadges(leg, {
           includeRoad: item.isMultimodal && leg.legType !== "Inland",
         }),
@@ -301,6 +339,7 @@ function buildRouteStops(item: ScheduleItem): RouteStop[] {
       terminal: leg.terminal,
       eta: prev.eta,
       etd: leg.etd,
+      outbound: outboundFromLeg(leg),
       badges: legOutboundBadges(leg),
     });
   });
@@ -312,8 +351,7 @@ function buildRouteStops(item: ScheduleItem): RouteStop[] {
     portName: last.podPortName,
     terminal: item.podTerminal || last.terminal,
     eta: last.eta,
-    badges:
-      item.isMultimodal || last.legType === "Inland" ? [{ kind: "road" }] : [],
+    badges: item.isMultimodal || last.legType === "Inland" ? [{ kind: "road" }] : [],
   });
 
   return stops.map((stop, index) => ({ ...stop, index: index + 1 }));
@@ -370,30 +408,40 @@ function RouteStopBadges({
   );
 }
 
-function RouteStopTimes({ eta, etd }: { eta?: string; etd?: string }) {
-  const etaParts = eta ? formatDetailDateTime(eta) : null;
-  const etdParts = etd ? formatDetailDateTime(etd) : null;
-
+function RouteStopFact({
+  label,
+  value,
+  title,
+  onValueClick,
+}: {
+  label: string;
+  value: string;
+  title?: string;
+  onValueClick?: () => void;
+}) {
   return (
-    <div className="schedule-route-stop__times">
-      {etaParts ? (
-        <Text className="schedule-route-stop__time">
-          ETA:{" "}
-          <span className="schedule-route-stop__time-date">
-            {etaParts.date}
-          </span>
-          {etaParts.time ? ` | ${etaParts.time}` : null}
+    <div className="schedule-route-stop__fact">
+      <Text type="secondary" className="schedule-route-stop__fact-label">
+        {label}
+      </Text>
+      {onValueClick ? (
+        <button
+          type="button"
+          className="schedule-route-stop__fact-value schedule-route-stop__fact-value--link"
+          title={title || value}
+          onClick={onValueClick}
+        >
+          {value}
+        </button>
+      ) : (
+        <Text
+          strong
+          className="schedule-route-stop__fact-value"
+          ellipsis={{ tooltip: title || value }}
+        >
+          {value}
         </Text>
-      ) : null}
-      {etdParts ? (
-        <Text className="schedule-route-stop__time">
-          ETD:{" "}
-          <span className="schedule-route-stop__time-date">
-            {etdParts.date}
-          </span>
-          {etdParts.time ? ` | ${etdParts.time}` : null}
-        </Text>
-      ) : null}
+      )}
     </div>
   );
 }
@@ -407,7 +455,7 @@ function ScheduleRouteDetails({
   onViewVessel: (vesselCode: string) => void;
   t: SchedulesTranslateFn;
 }) {
-  // Modified by Sekar Nagarajan (2026-09-08 16:45)
+  // Modified by Sekar Nagarajan (2026-11-16 11:50)
   const stops = buildRouteStops(item);
 
   return (
@@ -423,19 +471,41 @@ function ScheduleRouteDetails({
           const isLast = index === stops.length - 1;
           const nextStop = stops[index + 1];
           const segmentCompleted =
-            !isLast && nextStop
-              ? isRouteSegmentCompleted(stop, nextStop)
-              : false;
-          // Departure / hub outbound → ship; arrival-only (destination) → map pin
-          const nodeIcon = stop.etd ? Icons.ship : Icons.mapPin;
+            !isLast && nextStop ? isRouteSegmentCompleted(stop, nextStop) : false;
+          const hasDeparture = Boolean(stop.etd);
+          const hasArrivalOnly = Boolean(stop.eta) && !stop.etd;
+          const nodeIcon = hasDeparture ? Icons.ship : Icons.mapPin;
+          const placeLabel = `${portCity(stop.portName).toUpperCase()} (${stop.portCode})`;
+          const roadBadges = stop.badges.filter((badge) => badge.kind === "road");
+          const voyageDirection = stop.outbound
+            ? `${stop.outbound.voyage}${stop.outbound.bound}`
+            : "";
+
           return (
-            <li key={stop.id} className="schedule-route-stop">
+            <li
+              key={stop.id}
+              className={[
+                "schedule-route-stop",
+                hasDeparture ? "schedule-route-stop--departure" : undefined,
+                hasArrivalOnly ? "schedule-route-stop--arrival" : undefined,
+              ]
+                .filter(Boolean)
+                .join(" ")}
+            >
+              <div className="schedule-route-stop__place-col">
+                <Text
+                  strong
+                  className="schedule-route-stop__place"
+                  ellipsis={{ tooltip: placeLabel }}
+                >
+                  {placeLabel}
+                </Text>
+              </div>
+
               <div className="schedule-route-stop__rail">
                 <span
                   className="schedule-route-stop__node app-icon-inherit"
-                  aria-label={
-                    stop.etd ? t("card.departure") : t("card.arrival")
-                  }
+                  aria-label={hasDeparture ? t("card.departure") : t("card.arrival")}
                 >
                   <AppIcon icon={nodeIcon} size={14} />
                 </span>
@@ -451,28 +521,62 @@ function ScheduleRouteDetails({
                   />
                 )}
               </div>
+
               <div className="schedule-route-stop__body">
-                <div className="schedule-route-stop__main">
-                  <div className="schedule-route-stop__location">
-                    <Text className="schedule-route-stop__place">
-                      {portCity(stop.portName).toUpperCase()},{" "}
-                      <span className="schedule-route-stop__code">
-                        {stop.portCode}
-                      </span>
-                    </Text>
-                    {stop.terminal ? (
-                      <Text className="schedule-route-stop__terminal">
-                        {stop.terminal}
-                      </Text>
-                    ) : null}
-                    <RouteStopBadges
-                      badges={stop.badges}
-                      onViewVessel={onViewVessel}
-                      t={t}
+                {stop.eta && hasDeparture ? (
+                  <div className="schedule-route-stop__panel schedule-route-stop__panel--arrival">
+                    <RouteStopFact
+                      label={t("card.arrival")}
+                      value={formatRouteDateTime(stop.eta)}
                     />
                   </div>
-                  <RouteStopTimes eta={stop.eta} etd={stop.etd} />
-                </div>
+                ) : null}
+
+                {hasDeparture && stop.outbound ? (
+                  <div className="schedule-route-stop__panel schedule-route-stop__panel--departure">
+                    <RouteStopFact
+                      label={t("card.departure")}
+                      value={
+                        stop.terminal?.trim()
+                          ? stop.terminal
+                          : portCity(stop.portName).toUpperCase()
+                      }
+                      title={stop.terminal || stop.portName}
+                    />
+                    <RouteStopFact
+                      label={t("card.dateAndTime")}
+                      value={formatRouteDateTime(stop.etd!)}
+                    />
+                    <RouteStopFact
+                      label={t("card.vessel")}
+                      value={stop.outbound.vesselName}
+                      onValueClick={() => onViewVessel(stop.outbound!.vesselCode)}
+                    />
+                    <RouteStopFact
+                      label={t("card.service")}
+                      value={
+                        stop.outbound.serviceName?.trim()
+                          ? stop.outbound.serviceName
+                          : stop.outbound.serviceCode
+                      }
+                      title={`${stop.outbound.serviceCode} — ${stop.outbound.serviceName}`}
+                    />
+                    <RouteStopFact label={t("card.voyageDirection")} value={voyageDirection} />
+                  </div>
+                ) : null}
+
+                {hasArrivalOnly && stop.eta ? (
+                  <div className="schedule-route-stop__panel schedule-route-stop__panel--arrival">
+                    <RouteStopFact
+                      label={t("card.arrival")}
+                      value={formatRouteDateTime(stop.eta)}
+                    />
+                  </div>
+                ) : null}
+
+                {roadBadges.length > 0 ? (
+                  <RouteStopBadges badges={roadBadges} onViewVessel={onViewVessel} t={t} />
+                ) : null}
               </div>
             </li>
           );
@@ -480,9 +584,7 @@ function ScheduleRouteDetails({
       </ol>
 
       <div className="schedule-route-details__deadlines">
-        <Text className="schedule-route-details__deadlines-title">
-          {t("card.cutoffs")}
-        </Text>
+        <Text className="schedule-route-details__deadlines-title">{t("card.cutoffs")}</Text>
         <div className="schedule-card__deadlines">
           <Tooltip title={t("card.gateInTooltip")}>
             <div className="schedule-card__deadline">
@@ -490,9 +592,7 @@ function ScheduleRouteDetails({
                 <AppIcon icon={Icons.container} size={14} />
               </span>
               <span>
-                <span className="schedule-card__deadline-label">
-                  {t("card.gateIn")}
-                </span>
+                <span className="schedule-card__deadline-label">{t("card.gateIn")}</span>
                 <span className="schedule-card__deadline-value">
                   {item.deadlines.containerGateIn}
                 </span>
@@ -505,12 +605,8 @@ function ScheduleRouteDetails({
                 <AppIcon icon={Icons.clipboardList} size={14} />
               </span>
               <span>
-                <span className="schedule-card__deadline-label">
-                  {t("card.siCutoff")}
-                </span>
-                <span className="schedule-card__deadline-value">
-                  {item.deadlines.siDocClosing}
-                </span>
+                <span className="schedule-card__deadline-label">{t("card.siCutoff")}</span>
+                <span className="schedule-card__deadline-value">{item.deadlines.siDocClosing}</span>
               </span>
             </div>
           </Tooltip>
@@ -520,12 +616,8 @@ function ScheduleRouteDetails({
                 <AppIcon icon={Icons.shieldCheck} size={14} />
               </span>
               <span>
-                <span className="schedule-card__deadline-label">
-                  {t("card.vgmCutoff")}
-                </span>
-                <span className="schedule-card__deadline-value">
-                  {item.deadlines.vgmClosing}
-                </span>
+                <span className="schedule-card__deadline-label">{t("card.vgmCutoff")}</span>
+                <span className="schedule-card__deadline-value">{item.deadlines.vgmClosing}</span>
               </span>
             </div>
           </Tooltip>
@@ -550,73 +642,14 @@ function ScheduleCard({
 
   return (
     <article
-      className={[
-        "schedule-card",
-        item.isDefaultRoute ? "schedule-card--recommended" : undefined,
-      ]
+      className={["schedule-card", item.isDefaultRoute ? "schedule-card--recommended" : undefined]
         .filter(Boolean)
         .join(" ")}
+      title={item.isDefaultRoute ? t("card.recommendedRoute") : undefined}
+      aria-label={item.isDefaultRoute ? t("card.recommendedRoute") : undefined}
     >
       <div className="schedule-card__main">
         <div className="schedule-card__content">
-          <div className="schedule-card__meta">
-            {/* Modified by Sekar Nagarajan (2026-09-17 21:29) — star icons instead of Recommended text */}
-            {item.isDefaultRoute ? (
-              <Tooltip title={t("card.recommendedRoute")}>
-                <span
-                  className="schedule-card__recommended-stars"
-                  role="img"
-                  aria-label={t("card.recommendedRoute")}
-                >
-                  <AppIcon
-                    icon={Icons.star}
-                    size={14}
-                    className="schedule-card__star"
-                  />
-                </span>
-              </Tooltip>
-            ) : null}
-            <Tag color="pink">
-              {item.serviceCode} — {item.serviceName}
-            </Tag>
-            {/* {item.isDirect ? (
-              <Tag color="green">Direct</Tag>
-            ) : (
-              <Tag color="purple">
-                {item.transshipmentCount}{" "}
-                {item.transshipmentCount === 1 ? "Stop" : "Stops"}
-              </Tag>
-            )} */}
-            {/* {item.isMultimodal ? <Tag color="cyan">Multimodal</Tag> : null} */}
-            {/* <Tag color="orange" onClick={() => onViewVessel(item.vesselCode)}>
-              {item.vesselName} ({item.voyage} - {item.bound})
-            </Tag> */}
-             <Tooltip title={t("actions.vesselDetails")}>
-              <Tag
-                className="schedule-card__vessel-tag"
-                color="orange"
-                role="button"
-                tabIndex={0}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onViewVessel(item.vesselCode);
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    onViewVessel(item.vesselCode);
-                  }
-                }}
-              >
-                {item.vesselName} ({item.voyage} - {item.bound})
-              </Tag>
-            </Tooltip>
-            {/* <Text type="secondary" className="schedule-card__distance">
-              {item.distanceKm.toLocaleString()} km
-            </Text> */}
-          </div>
-
           <div className="schedule-card__route">
             <div className="schedule-card__endpoint schedule-card__endpoint--origin">
               {/* <div className="schedule-card__date">
@@ -624,14 +657,10 @@ function ScheduleCard({
               </div> */}
               <Text className="schedule-card__place">
                 {portCity(item.polPortName).toUpperCase()},{" "}
-                <span className="schedule-card__port-code">
-                  {item.polPortId}
-                </span>
+                <span className="schedule-card__port-code">{item.polPortId}</span>
               </Text>
               <div className="schedule-card__etime">
-                <Tag className="schedule-card__etd-tag">
-                  {t("card.etd", { value: item.etd })}
-                </Tag>
+                <Tag className="schedule-card__etd-tag">{t("card.etd", { value: item.etd })}</Tag>
               </div>
               <Text className="schedule-card__terminal">
                 {t("card.terminal", { name: item.polTerminal })}
@@ -639,6 +668,15 @@ function ScheduleCard({
             </div>
 
             <div className="schedule-card__connector">
+              <div className="schedule-card__connector-service">
+                <Tag
+                  color="pink"
+                  className="schedule-card__service-tag"
+                  title={`${item.serviceCode} — ${item.serviceName}`}
+                >
+                  {item.serviceCode} — {item.serviceName}
+                </Tag>
+              </div>
               <div className="schedule-card__connector-line">
                 <span className="schedule-card__connector-dot" />
                 <span className="schedule-card__connector-rail" />
@@ -648,9 +686,7 @@ function ScheduleCard({
                 <span className="schedule-card__connector-rail" />
                 <span className="schedule-card__connector-dot" />
               </div>
-              <Text className="schedule-card__connector-type">
-                {routingLabel}
-              </Text>
+              <Text className="schedule-card__connector-type">{routingLabel}</Text>
             </div>
 
             <div className="schedule-card__endpoint schedule-card__endpoint--dest">
@@ -659,14 +695,10 @@ function ScheduleCard({
               </div> */}
               <Text className="schedule-card__place">
                 {portCity(item.podPortName).toUpperCase()},{" "}
-                <span className="schedule-card__port-code">
-                  {item.podPortId}
-                </span>
+                <span className="schedule-card__port-code">{item.podPortId}</span>
               </Text>
               <div className="schedule-card__etime">
-                <Tag className="schedule-card__eta-tag">
-                  {t("card.eta", { value: item.eta })}
-                </Tag>
+                <Tag className="schedule-card__eta-tag">{t("card.eta", { value: item.eta })}</Tag>
               </div>
               <Text className="schedule-card__terminal">
                 {t("card.terminal", { name: item.podTerminal })}
@@ -674,11 +706,7 @@ function ScheduleCard({
             </div>
           </div>
 
-          <TransportTranscript
-            item={item}
-            onViewVessel={onViewVessel}
-            roadLabel={t("card.road")}
-          />
+          <TransportTranscript item={item} onViewVessel={onViewVessel} roadLabel={t("card.road")} />
         </div>
 
         <div className="schedule-card__actions">
@@ -744,11 +772,7 @@ function ScheduleCard({
         aria-hidden={!expanded}
       >
         <div className="schedule-card__details-panel-inner">
-          <ScheduleRouteDetails
-            item={item}
-            onViewVessel={onViewVessel}
-            t={t}
-          />
+          <ScheduleRouteDetails item={item} onViewVessel={onViewVessel} t={t} />
         </div>
       </div>
     </article>

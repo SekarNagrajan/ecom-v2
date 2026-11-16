@@ -1,5 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-13 01:10)
-import { useTenantStore } from "@solverminds/auth";
+// Modified by Sekar Nagarajan (2026-11-16 12:55) — lock public header logo to Solverminds
 import { Outlet, useLocation, useNavigate, useSearch } from "@tanstack/react-router";
 import type { MenuProps } from "antd";
 import { Card, Drawer, Layout, Menu, Tooltip, Typography } from "antd";
@@ -224,8 +223,6 @@ export function PublicLayout() {
     }
   };
 
-  const activeTenant = useTenantStore((state) => state.activeTenant);
-
   const mainClassName = useMobileNav
     ? "pub-layout-main"
     : "pub-layout-main pub-layout-main--with-rail";
@@ -233,7 +230,8 @@ export function PublicLayout() {
   return (
     <Layout className="pub-layout-root" data-viewport-tier={tier}>
       <PublicLayoutHeader
-        logoUrl={activeTenant.logoUrl || "/logo.png"}
+        // Temporary: always show Solverminds branding (ignore customer/tenant logoUrl).
+        logoUrl="/logo.png"
         portalName="E-Com Portal"
         onLoginClick={() => openLoginPanel(null)}
         collapsed={collapsed}

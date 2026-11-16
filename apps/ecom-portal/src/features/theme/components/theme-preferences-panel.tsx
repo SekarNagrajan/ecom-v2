@@ -1,5 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-13 01:10)
-import { useTenantStore } from "@solverminds/auth";
+// Modified by Sekar Nagarajan (2026-11-16 12:55) — hide org/tenant accent swatch
 import { AppButton } from "@solverminds/shared-ui";
 import type { ContrastMode, LetterSpacingLevel, ThemeMode } from "@solverminds/shared-ui/providers";
 import { Alert, Modal, Select, Slider, Space, Switch, Typography } from "antd";
@@ -55,12 +54,13 @@ export function ThemePreferencesPanel({
 }) {
   const { currentConfig, saveError } = controller;
   const panelRef = useRef<HTMLDivElement>(null);
-  const activeTenant = useTenantStore((state) => state.activeTenant);
-  const tenantAccent = activeTenant.primaryColor || BE_COLOR_MAP.SIGNAL;
 
   if (!currentConfig) {
     return null;
   }
+
+  // Temporary: empty accent = default Signal Blue (tenant org colour disabled).
+  const resolvedAccent = currentConfig.primaryColor || BE_COLOR_MAP.SIGNAL;
 
   const { readingMask, notifications } = currentConfig;
   const successInfo = notifications.success;
@@ -223,18 +223,12 @@ export function ThemePreferencesPanel({
               description="Select a desired accent color to use in the application."
             />
             <div className="a11y-swatch-row">
-              <AccentSwatch
-                color={tenantAccent}
-                label={`Organisation colour (${activeTenant.name})`}
-                selected={!currentConfig.primaryColor}
-                onClick={() => controller.updatePreference("primaryColor", "")}
-              />
               {COLOR_OPTIONS.map((option) => (
                 <AccentSwatch
                   key={option.value}
                   color={option.value}
                   label={option.label}
-                  selected={currentConfig.primaryColor === option.value}
+                  selected={resolvedAccent === option.value}
                   onClick={() => controller.updatePreference("primaryColor", option.value)}
                 />
               ))}

@@ -365,7 +365,7 @@ function bookingMockApiPlugin(): Plugin {
           }
         }
 
-        // Modified by Sekar Nagarajan (2026-09-08 10:50) — public tenant bootstrap fallback
+        // Modified by Sekar Nagarajan (2026-11-16 12:55) — house logo + Signal Blue
         if (req.method === "GET" && url === "/api/public/tenant") {
           return json(res, {
             status: "SUCCESS",
@@ -373,8 +373,8 @@ function bookingMockApiPlugin(): Plugin {
               id: "TENANT_01",
               name: "SVM E-Commerce Portal",
               customerCode: "CUST001",
-              logoUrl: "/logos/tenant_01.png",
-              primaryColor: "#1890ff",
+              logoUrl: "/logo.png",
+              primaryColor: "#0a91ff",
               features: {
                 defaultLandingRoute: "/app/dashboard",
                 enableInsurance: true,

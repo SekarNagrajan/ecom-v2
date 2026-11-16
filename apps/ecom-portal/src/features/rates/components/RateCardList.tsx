@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-10-27 12:20) — expand all rate cards by default
+// Modified by Sekar Nagarajan (2026-11-16 12:35) — expand rate cards by default
 import { AppButton } from "@solverminds/shared-ui";
 import { Spin, Tag, Typography } from "antd";
 import type { TFunction } from "i18next";
@@ -38,10 +38,7 @@ interface RateCardProps {
   onShareRate: (rate: CombinedRateItem) => void;
 }
 
-function connectorTypeLabel(
-  type: CombinedRateItem["type"],
-  t: RatesTranslateFn,
-): string {
+function connectorTypeLabel(type: CombinedRateItem["type"], t: RatesTranslateFn): string {
   switch (type) {
     case "SURCHARGE":
       return t("rateCard.connector.accessorial");
@@ -65,15 +62,10 @@ function portCity(name: string): string {
     .trim();
 }
 
-function portCountry(
-  code: string,
-  t: RatesTranslateFn,
-): string | undefined {
+function portCountry(code: string, t: RatesTranslateFn): string | undefined {
   const label = t(`options.ports.${code}`, { defaultValue: "" });
   if (!label) return undefined;
-  const afterDash = label.includes(" - ")
-    ? label.split(" - ").slice(1).join(" - ")
-    : label;
+  const afterDash = label.includes(" - ") ? label.split(" - ").slice(1).join(" - ") : label;
   const parts = afterDash
     .split(",")
     .map((part) => part.trim())
@@ -98,10 +90,7 @@ function RateMetaTags({
   t: RatesTranslateFn;
   compact?: boolean;
 }) {
-  const socLabel =
-    item.soc && item.soc !== "No" && item.soc.trim() !== ""
-      ? item.soc
-      : undefined;
+  const socLabel = item.soc && item.soc !== "No" && item.soc.trim() !== "" ? item.soc : undefined;
   const serviceLabel = item.transService
     ? item.transService.startsWith("T-Svc")
       ? item.transService
@@ -122,12 +111,8 @@ function RateMetaTags({
       ) : null}
       <Tag color="cyan">{item.eqpType}</Tag>
       {serviceLabel ? <Tag color="processing">{serviceLabel}</Tag> : null}
-      {compact ? (
-        <Tag>{item.commodity || item.commodityName || "—"}</Tag>
-      ) : null}
-      {!compact && socLabel ? (
-        <Tag color="magenta">SOC {socLabel}</Tag>
-      ) : null}
+      {compact ? <Tag>{item.commodity || item.commodityName || "—"}</Tag> : null}
+      {!compact && socLabel ? <Tag color="magenta">SOC {socLabel}</Tag> : null}
       {!compact && item.nor ? <Tag color="volcano">NOR</Tag> : null}
       {!compact && item.carrTerms ? <Tag>{item.carrTerms}</Tag> : null}
       {!compact && item.quoteStatus ? (
@@ -152,17 +137,13 @@ function RateCard({
     item.type === "TARIFF" ||
     item.type === "CONTRACT" ||
     (item.type === "SURCHARGE" && hasSurcharges);
-  const showBreakdownHint =
-    item.type === "TARIFF" || item.type === "CONTRACT";
+  const showBreakdownHint = item.type === "TARIFF" || item.type === "CONTRACT";
 
   const originPlace = portCity(item.originPortName).toUpperCase();
   const destinationPlace = portCity(item.deliveryPortName).toUpperCase();
   const originCountry = portCountry(item.originPort, t);
   const destinationCountry = portCountry(item.deliveryPort, t);
-  const socLabel =
-    item.soc && item.soc !== "No" && item.soc.trim() !== ""
-      ? item.soc
-      : undefined;
+  const socLabel = item.soc && item.soc !== "No" && item.soc.trim() !== "" ? item.soc : undefined;
 
   return (
     <article
@@ -202,10 +183,7 @@ function RateCard({
                   </Text>
                 </span>
               </span>
-              <span
-                className="rates-card__summary-arrow app-icon-inherit"
-                aria-hidden
-              >
+              <span className="rates-card__summary-arrow app-icon-inherit" aria-hidden>
                 <AppIcon icon={Icons.arrowRight} size={14} />
               </span>
               <span className="rates-card__summary-port">
@@ -334,10 +312,7 @@ function RateCard({
                 </div>
               </div>
 
-              <span
-                className="rates-card__route-arrow app-icon-inherit"
-                aria-hidden
-              >
+              <span className="rates-card__route-arrow app-icon-inherit" aria-hidden>
                 <AppIcon icon={Icons.arrowRight} size={16} />
               </span>
 
@@ -369,10 +344,7 @@ function RateCard({
               <Text type="secondary" className="rates-card__price-label">
                 {connectorTypeLabel(item.type, t)}
               </Text>
-              <Text
-                strong
-                className="rates-card__price-value rates-card__price-value--lg"
-              >
+              <Text strong className="rates-card__price-value rates-card__price-value--lg">
                 {formatMoney(item.currency, item.totalEstimatedAmount)}
               </Text>
               {showBreakdownHint ? (
@@ -384,8 +356,7 @@ function RateCard({
                     <>
                       {" + "}
                       <span className="rates-card__price-surcharge">
-                        Surcharges{" "}
-                        {formatMoney(item.currency, item.surchargeAmount)}
+                        Surcharges {formatMoney(item.currency, item.surchargeAmount)}
                       </span>
                     </>
                   ) : null}
@@ -407,14 +378,10 @@ function RateCard({
                     className="rates-card__fact-value"
                     ellipsis={{
                       tooltip:
-                        item.commodityName ||
-                        item.commodity ||
-                        t("rateCard.commodityFallback"),
+                        item.commodityName || item.commodity || t("rateCard.commodityFallback"),
                     }}
                   >
-                    {item.commodity ||
-                      item.commodityName ||
-                      t("rateCard.commodityFallback")}
+                    {item.commodity || item.commodityName || t("rateCard.commodityFallback")}
                   </Text>
                 </div>
               </div>
@@ -521,19 +488,16 @@ function RateCard({
                   {t("actions.viewSurcharges")}
                 </AppButton>
               ) : null}
-             
-                <AppButton
-                  size="small"
-                  block
-                  tabIndex={expanded ? undefined : -1}
-                  icon={
-                    <AppIcon icon={Icons.mail} size={14} tone="navigate" />
-                  }
-                  onClick={() => onShareRate(item)}
-                >
-                  {t("actions.share")}
-                </AppButton>
-              
+
+              <AppButton
+                size="small"
+                block
+                tabIndex={expanded ? undefined : -1}
+                icon={<AppIcon icon={Icons.mail} size={14} tone="navigate" />}
+                onClick={() => onShareRate(item)}
+              >
+                {t("actions.share")}
+              </AppButton>
             </div>
           </div>
         </div>

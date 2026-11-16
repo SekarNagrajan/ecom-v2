@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-16 12:30) — square primary count badge
+// Modified by Sekar Nagarajan (2026-11-16 16:52) — CRO-style surcharge route band
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -428,54 +428,18 @@ export function RatesModuleStyles() {
       }
       .rates-card__summary-route {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        grid-template-columns: minmax(0, 1fr) minmax(48px, 1.2fr) minmax(0, 1fr);
         align-items: center;
-        column-gap: ${token.marginSM}px;
+        column-gap: ${token.marginXS}px;
         min-width: 0;
         width: 100%;
       }
-      .rates-card__summary-port {
-        display: inline-flex;
-        align-items: center;
-        gap: ${token.marginXS}px;
-        min-width: 0;
-      }
-      .rates-card__summary-icon {
-        width: 24px;
-        height: 24px;
-        border-radius: ${token.borderRadiusSM}px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        background: ${token.colorPrimaryBg};
-        color: ${token.colorPrimary};
-      }
-      .rates-card__summary-port-copy {
-        min-width: 0;
-        display: flex;
-        flex-direction: column;
-        line-height: 1.2;
-      }
-      .rates-card__summary-place {
-        display: block;
-        font-size: ${token.fontSizeSM}px;
-        max-width: 100%;
-      }
-      .rates-card__summary-code {
+      .rates-card__summary-route .rates-card__port-code {
         font-size: ${token.fontSize}px;
-        color: ${token.colorText};
-        letter-spacing: 0.02em;
       }
-      .rates-card__summary-arrow {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        justify-self: center;
-        align-self: center;
-        flex-shrink: 0;
-        color: ${token.colorTextSecondary};
-        line-height: 1;
+      .rates-card__summary-route .rates-card__route-ship {
+        width: 22px;
+        height: 22px;
       }
       .rates-card__summary-price {
         min-width: 0;
@@ -486,7 +450,7 @@ export function RatesModuleStyles() {
       .rates-card__summary-tags {
         display: flex;
         flex-wrap: wrap;
-        gap: ${token.marginXXS}px;
+        gap: ${token.marginXS}px;
         align-items: center;
         min-width: 0;
       }
@@ -513,14 +477,86 @@ export function RatesModuleStyles() {
       .rates-card__meta {
         display: flex;
         flex-wrap: wrap;
-        gap: ${token.marginXXS}px;
+        gap: ${token.marginXS}px;
         align-items: center;
-        row-gap: ${token.marginXXS}px;
+        row-gap: ${token.marginXS}px;
         min-width: 0;
       }
-      .rates-card__meta .ant-tag {
-        margin-inline-end: 0;
+      .rates-card__meta-code {
+        font-size: ${token.fontSize}px;
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorPrimary};
+        letter-spacing: 0.01em;
         line-height: 1.35;
+        white-space: nowrap;
+      }
+      .rates-card__lowest-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        padding: 2px ${token.paddingSM}px;
+        border-radius: ${token.borderRadiusLG * 2}px;
+        background: ${token.colorSuccess};
+        color: ${token.colorTextLightSolid};
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        line-height: 1.35;
+        white-space: nowrap;
+      }
+      .rates-card__lowest-badge-icon {
+        display: inline-flex;
+        align-items: center;
+        color: inherit;
+      }
+      .rates-card__field-chip {
+        display: inline-flex;
+        align-items: baseline;
+        gap: ${token.marginXXS}px;
+        max-width: 100%;
+        padding: 2px ${token.paddingSM}px;
+       border: 1px solid ${token.colorBorder};
+        border-radius: ${token.borderRadiusLG * 2}px;
+        background: ${token.colorBgContainer};
+        line-height: 1.35;
+      }
+      .rates-card__field-chip-label {
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextTertiary};
+        white-space: nowrap;
+      }
+      .rates-card__field-chip-value {
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 180px;
+      }
+      .rates-card__flag-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        padding: 2px ${token.paddingSM}px;
+        border: 1px solid ${token.colorWarningBorder};
+        border-radius: ${token.borderRadiusLG * 2}px;
+        background: transparent;
+        color: ${token.colorWarning};
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        line-height: 1.35;
+        white-space: nowrap;
+        cursor: default;
+      }
+      .rates-card__flag-chip-icon {
+        display: inline-flex;
+        align-items: center;
+        color: inherit;
+        opacity: 0.85;
+      }
+      .rates-card__summary-tags .rates-card__field-chip,
+      .rates-card__summary-tags .rates-card__flag-chip {
+        max-width: 100%;
       }
       .rates-card__top-end {
         display: inline-flex;
@@ -560,7 +596,7 @@ export function RatesModuleStyles() {
       }
       .rates-card__route-panel {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        grid-template-columns: minmax(0, 1fr) minmax(72px, 1.4fr) minmax(0, 1fr);
         align-items: center;
         column-gap: ${token.marginSM}px;
         min-width: 0;
@@ -568,62 +604,56 @@ export function RatesModuleStyles() {
       }
       .rates-card__endpoint {
         display: flex;
-        align-items: center;
-        gap: ${token.marginXS}px;
-        min-width: 0;
-      }
-      .rates-card__endpoint-icon {
-        width: 28px;
-        height: 28px;
-        border-radius: ${token.borderRadiusSM}px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-      }
-      .rates-card__endpoint-icon--pol {
-        background: ${token.colorPrimaryBg};
-        color: ${token.colorPrimary};
-      }
-      .rates-card__endpoint-icon--pod {
-        background: ${token.colorInfoBg};
-        color: ${token.colorInfo};
-      }
-      .rates-card__endpoint-copy {
-        min-width: 0;
-        display: flex;
         flex-direction: column;
-        gap: 0;
+        align-items: flex-start;
+        gap: 2px;
+        min-width: 0;
+      }
+      .rates-card__endpoint--dest {
+        align-items: flex-end;
+        text-align: right;
       }
       .rates-card__place {
         display: block;
         font-size: ${token.fontSizeSM}px;
         color: ${token.colorTextSecondary};
-        line-height: 1.2;
+        line-height: 1.25;
         max-width: 100%;
       }
       .rates-card__port-code {
         display: block;
+        margin: 0 !important;
         font-size: ${token.fontSizeLG}px;
         font-weight: ${token.fontWeightStrong};
         color: ${token.colorText};
         letter-spacing: 0.02em;
         line-height: 1.15;
       }
-      .rates-card__country {
-        display: block;
-        font-size: ${token.fontSizeSM}px;
-        line-height: 1.2;
+      .rates-card__route-connector {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        min-width: 0;
+        width: 100%;
+        justify-self: stretch;
       }
-      .rates-card__route-arrow {
+      .rates-card__route-track {
+        flex: 1 1 auto;
+        min-width: ${token.marginXS}px;
+        height: 0;
+        border-top: ${token.lineWidthBold}px dashed ${tokenMix(token.colorPrimary, 40)};
+      }
+      .rates-card__route-ship {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        justify-self: center;
-        align-self: center;
         flex-shrink: 0;
-        color: ${token.colorTextSecondary};
-        line-height: 1;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        border: ${token.lineWidth}px solid ${token.colorPrimaryBorder};
+        background: ${token.colorPrimaryBg};
+        color: ${token.colorPrimary};
       }
 
       .rates-card__price-panel {
@@ -1071,20 +1101,24 @@ export function RatesModuleStyles() {
         display: flex;
         flex-direction: column;
         gap: ${token.marginMD}px;
-        padding: ${token.paddingLG}px;
-        border: 1px solid ${token.colorBorderSecondary};
-        border-radius: ${token.borderRadiusLG + 2}px;
-        background: linear-gradient(
-          180deg,
-          ${tokenMix(token.colorPrimary, 8)} 0%,
-          ${token.colorBgContainer} 100%
-        );
+        padding: 0;
+        border: none;
+        border-radius: 0;
+        background: transparent;
       }
       .rates-surcharge-route {
         display: flex;
         align-items: center;
         gap: ${token.marginMD}px;
         width: 100%;
+        padding: ${token.paddingMD}px ${token.paddingLG}px;
+        border-radius: ${token.borderRadiusLG + 2}px;
+        border: 1px solid ${tokenMix(token.colorPrimary, 18)};
+        background: linear-gradient(
+          180deg,
+          ${tokenMix(token.colorPrimary, 10)} 0%,
+          ${token.colorBgContainer} 100%
+        );
       }
       .rates-surcharge-route__stop {
         display: flex;
@@ -1099,6 +1133,9 @@ export function RatesModuleStyles() {
         text-align: right;
       }
       .rates-surcharge-route__eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXXS}px;
         font-size: ${token.fontSizeSM}px;
         font-weight: ${token.fontWeightStrong};
         letter-spacing: 0.04em;
@@ -1106,51 +1143,78 @@ export function RatesModuleStyles() {
         color: ${token.colorTextTertiary};
         line-height: 1.2;
       }
+      .rates-surcharge-route__eyebrow--pol {
+        color: ${token.colorPrimary};
+      }
+      .rates-surcharge-route__eyebrow--pod {
+        color: ${token.colorSuccess};
+      }
+      .rates-surcharge-route__stop--dest .rates-surcharge-route__eyebrow {
+        flex-direction: row-reverse;
+      }
       .rates-surcharge-route__code {
         font-size: ${token.fontSizeHeading4}px;
         font-weight: ${token.fontWeightStrong};
         color: ${token.colorText};
         line-height: 1.2;
         word-break: break-word;
+        text-transform: uppercase;
       }
       .rates-surcharge-route__name {
         font-size: ${token.fontSizeSM}px;
         color: ${token.colorTextSecondary};
         line-height: 1.4;
         word-break: break-word;
+        text-transform: uppercase;
       }
       .rates-surcharge-route__connector {
         display: flex;
         align-items: center;
-        flex: 0 1 140px;
-        min-width: 72px;
-        max-width: 180px;
-        gap: ${token.marginXS}px;
+        flex: 1.2 1 auto;
+        min-width: 96px;
+        max-width: 280px;
+        gap: ${token.marginXXS}px;
+      }
+      .rates-surcharge-route__dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .rates-surcharge-route__dot--origin {
+        background: ${token.colorPrimary};
+      }
+      .rates-surcharge-route__dot--dest {
+        background: ${token.colorSuccess};
       }
       .rates-surcharge-route__track {
         flex: 1 1 auto;
+        min-width: ${token.marginSM}px;
         height: 0;
-        border-top: ${token.lineWidthBold}px dashed ${tokenMix(token.colorPrimary, 40)};
+        border-top: ${token.lineWidthBold}px dashed ${tokenMix(token.colorPrimary, 45)};
       }
       .rates-surcharge-route__ship {
         display: inline-flex;
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-        width: ${token.controlHeightSM}px;
-        height: ${token.controlHeightSM}px;
+        width: ${token.controlHeight}px;
+        height: ${token.controlHeight}px;
         border-radius: 50%;
         border: ${token.lineWidth}px solid ${token.colorPrimaryBorder};
         background: ${token.colorBgContainer};
         color: ${token.colorPrimary};
+        box-shadow: ${token.boxShadowTertiary};
       }
       .rates-surcharge-facts {
         display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: ${token.marginSM}px ${token.marginMD}px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: ${token.marginSM}px ${token.marginLG}px;
         margin: 0;
-        padding-top: ${token.paddingMD}px;
-        border-top: 1px solid ${token.colorBorderSecondary};
+        padding: ${token.paddingMD}px;
+        border: 2px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG + 2}px;
+        background: ${token.colorFillAlter};
       }
       .rates-surcharge-fact {
         display: flex;
@@ -1171,93 +1235,48 @@ export function RatesModuleStyles() {
         line-height: 1.4;
         word-break: break-word;
       }
-      .rates-surcharge-tiles {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: ${token.marginSM}px;
-      }
-      .rates-surcharge-tile {
-        display: flex;
-        flex-direction: column;
-        gap: ${token.marginXXS}px;
-        min-width: 0;
-        padding: ${token.paddingSM}px ${token.paddingMD}px;
-        border-radius: ${token.borderRadiusLG}px;
-        border: 1px solid ${token.colorBorderSecondary};
-        background: ${token.colorBgContainer};
-      }
-      .rates-surcharge-tile--freight {
-        border-color: ${tokenMix(token.colorSuccess, 35)};
-        background: ${tokenMix(token.colorSuccess, 8)};
-      }
-      .rates-surcharge-tile--charges {
-        border-color: ${tokenMix(token.colorWarning, 40)};
-        background: ${tokenMix(token.colorWarning, 10)};
-      }
-      .rates-surcharge-tile__label {
-        font-size: ${token.fontSizeSM}px;
-        color: ${token.colorTextSecondary};
-        line-height: 1.3;
-      }
-      .rates-surcharge-tile__amount {
-        font-size: ${token.fontSizeLG}px;
-        font-weight: ${token.fontWeightStrong};
-        line-height: 1.3;
-        font-variant-numeric: tabular-nums;
-      }
       .rates-surcharge-amount {
         font-variant-numeric: tabular-nums;
         white-space: nowrap;
       }
-      .rates-surcharge-amount--primary.ant-typography {
-        color: ${token.colorPrimary};
-      }
-      .rates-surcharge-amount__currency {
-        margin-right: ${token.marginXXS}px;
-        font-size: ${token.fontSizeSM}px;
-        font-weight: ${token.fontWeightStrong};
-        opacity: 0.85;
+      .rates-surcharge-code {
+        font-variant-numeric: tabular-nums;
+        letter-spacing: 0.02em;
       }
       .rates-surcharge-section {
         display: flex;
         flex-direction: column;
         gap: ${token.marginSM}px;
       }
-      .rates-surcharge-section__head {
-        display: flex;
-        align-items: center;
-        gap: ${token.marginSM}px;
-      }
-      .rates-surcharge-section__title.ant-typography {
-        margin: 0 !important;
-        color: ${token.colorPrimary} !important;
-      }
-      .rates-surcharge-section__count.ant-tag {
-        margin-inline-end: 0;
-        border-radius: ${token.borderRadiusLG * 2}px;
-        color: ${token.colorTextSecondary};
-        background: ${token.colorFillAlter};
-        border-color: ${token.colorBorderSecondary};
-      }
       .rates-surcharge-table-wrap {
-        border: 1px solid ${token.colorBorderSecondary};
-        border-radius: ${token.borderRadiusLG}px;
-        overflow: hidden;
+        border: none;
+        border-radius: 0;
+        overflow: visible;
       }
       .rates-surcharge-table .ant-table-thead > tr > th {
-        background: ${token.colorFillAlter};
-        color: ${token.colorTextSecondary};
+        background: transparent;
+        color: ${token.colorTextTertiary};
         font-size: ${token.fontSizeSM}px;
         font-weight: ${token.fontWeightStrong};
-        text-transform: uppercase;
-        letter-spacing: 0.03em;
+        padding-inline: 0 ${token.paddingSM}px;
+        border-bottom: 1px solid ${token.colorBorderSecondary};
       }
       .rates-surcharge-table .ant-table-tbody > tr > td {
         vertical-align: middle;
+        padding-inline: 0 ${token.paddingSM}px;
+        border-bottom: 1px solid ${token.colorBorderSecondary};
       }
       .rates-surcharge-table .ant-table-summary > tr > td {
-        background: ${token.colorFillAlter};
-        border-top: ${token.lineWidthBold}px solid ${token.colorBorderSecondary};
+        background: transparent;
+        padding-inline: 0 ${token.paddingSM}px;
+      }
+      .rates-surcharge-table__subtotal > td {
+        border-top: none;
+        padding-top: ${token.paddingMD}px !important;
+      }
+      .rates-surcharge-table__total > td {
+        border-top: ${token.lineWidthBold}px solid ${token.colorText} !important;
+        padding-top: ${token.paddingSM}px !important;
       }
       .rates-surcharge-line {
         display: flex;
@@ -1266,31 +1285,13 @@ export function RatesModuleStyles() {
         gap: ${token.marginXS}px;
         min-width: 0;
       }
-      .rates-surcharge-line__code.ant-tag {
-        margin-inline-end: 0;
-        font-weight: ${token.fontWeightStrong};
-        font-variant-numeric: tabular-nums;
-      }
       .rates-surcharge-line__name {
         color: ${token.colorText};
         word-break: break-word;
       }
-      .rates-surcharge-eqp {
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: ${token.marginXXS}px;
-      }
-      .rates-surcharge-nor.ant-tag {
-        margin-inline-end: 0;
+      .rates-surcharge-nor-chip {
+        padding: 0 ${token.paddingXS}px;
         font-size: ${token.fontSizeSM - 1}px;
-        line-height: 1.4;
-      }
-      .rates-surcharge-validity {
-        font-size: ${token.fontSizeSM}px;
-        color: ${token.colorTextSecondary};
-        white-space: normal;
-        line-height: 1.35;
       }
       .rates-surcharge-empty {
         display: flex;
@@ -1300,9 +1301,6 @@ export function RatesModuleStyles() {
         border: 1px dashed ${token.colorBorderSecondary};
       }
       @media (max-width: 767px) {
-        .rates-surcharge-summary {
-          padding: ${token.paddingMD}px;
-        }
         .rates-surcharge-route {
           flex-direction: column;
           align-items: stretch;
@@ -1316,13 +1314,9 @@ export function RatesModuleStyles() {
           min-width: 0;
           width: 100%;
         }
-        .rates-surcharge-facts {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
       }
       @media (max-width: 575px) {
-        .rates-surcharge-facts,
-        .rates-surcharge-tiles {
+        .rates-surcharge-facts {
           grid-template-columns: minmax(0, 1fr);
         }
       }

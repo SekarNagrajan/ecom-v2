@@ -81,6 +81,7 @@
     "viewQuotes": "Ver cotizaciones",
     "requestForQuote": "Solicitud de cotización",
     "book": "Reservar",
+    "shareShort": "Compartir",
     "bookAtThisRate": "Reservar a esta tarifa",
     "viewSurcharges": "Ver recargos",
     "shareRateQuote": "Compartir cotización",
@@ -115,6 +116,12 @@
   },
   "rateCard": {
     "recommendedTag": "Flete publicado más bajo",
+    "lowestPrice": "Precio más bajo",
+    "chipEquipment": "Equipo",
+    "chipService": "Servicio",
+    "chipTerms": "Términos",
+    "chipStatus": "Estado",
+    "socFlagTip": "SOC: {{value}}",
     "ref": "Ref: {{id}}",
     "commodity": "Mercancía",
     "commodityLabel": "Mercancía: {{value}}",
@@ -208,13 +215,22 @@
   },
   "contractSurcharge": {
     "title": "Recargos incluidos para el contrato {{contractNo}}",
+    "includedTitle": "Recargos incluidos",
+    "loadPort": "Puerto de carga",
+    "discharge": "Descarga",
+    "subtitle": "Contrato {{contractNo}} · {{name}} ({{code}})",
     "customer": "Cliente: {{name}} ({{code}})",
     "route": "Ruta: {{originName}} ({{origin}}) → {{deliveryName}} ({{delivery}})",
     "linesTitle": "Líneas de recargo",
     "lineCount": "{{count}} línea(s)",
+    "oceanFreight": "Flete marítimo acordado",
+    "surchargesSubtotal": "Subtotal de recargos",
+    "allInEstimate": "Estimación todo incluido",
     "total": "Total de recargos",
     "noSurcharges": "Este contrato no incluye recargos.",
     "columns": {
+      "code": "Código",
+      "charge": "Cargo",
       "equipment": "Equipo",
       "validity": "Vigencia"
     }

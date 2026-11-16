@@ -81,6 +81,7 @@
     "viewQuotes": "查看报价",
     "requestForQuote": "询价申请",
     "book": "订舱",
+    "shareShort": "分享",
     "bookAtThisRate": "按此运价订舱",
     "viewSurcharges": "查看附加费",
     "shareRateQuote": "分享运价报价",
@@ -115,6 +116,12 @@
   },
   "rateCard": {
     "recommendedTag": "最低已发布运价",
+    "lowestPrice": "最低价",
+    "chipEquipment": "设备",
+    "chipService": "服务",
+    "chipTerms": "条款",
+    "chipStatus": "状态",
+    "socFlagTip": "SOC：{{value}}",
     "ref": "编号：{{id}}",
     "commodity": "货品",
     "commodityLabel": "货品：{{value}}",
@@ -208,13 +215,22 @@
   },
   "contractSurcharge": {
     "title": "合同 {{contractNo}} 包含的附加费",
+    "includedTitle": "包含附加费",
+    "loadPort": "装货港",
+    "discharge": "卸货港",
+    "subtitle": "合同 {{contractNo}} · {{name}}（{{code}}）",
     "customer": "客户：{{name}}（{{code}}）",
     "route": "航线：{{originName}}（{{origin}}）→ {{deliveryName}}（{{delivery}}）",
     "linesTitle": "附加费明细",
     "lineCount": "{{count}} 项",
+    "oceanFreight": "约定海运费",
+    "surchargesSubtotal": "附加费小计",
+    "allInEstimate": "全包预估",
     "total": "附加费合计",
     "noSurcharges": "该合同不包含附加费。",
     "columns": {
+      "code": "代码",
+      "charge": "费用",
       "equipment": "箱型",
       "validity": "有效期"
     }

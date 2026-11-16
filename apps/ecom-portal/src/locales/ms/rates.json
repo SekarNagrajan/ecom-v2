@@ -81,6 +81,7 @@
     "viewQuotes": "Lihat Sebut Harga",
     "requestForQuote": "Permintaan Sebut Harga",
     "book": "Tempah",
+    "shareShort": "Kongsi",
     "bookAtThisRate": "Tempah pada Kadar Ini",
     "viewSurcharges": "Lihat Surcaj",
     "shareRateQuote": "Kongsi Sebut Harga Kadar",
@@ -115,6 +116,12 @@
   },
   "rateCard": {
     "recommendedTag": "Pengangkutan Diterbitkan Terendah",
+    "lowestPrice": "Harga Terendah",
+    "chipEquipment": "Peralatan",
+    "chipService": "Perkhidmatan",
+    "chipTerms": "Terma",
+    "chipStatus": "Status",
+    "socFlagTip": "SOC: {{value}}",
     "ref": "Ruj: {{id}}",
     "commodity": "Komoditi",
     "commodityLabel": "Komoditi: {{value}}",
@@ -208,13 +215,22 @@
   },
   "contractSurcharge": {
     "title": "Surcaj Termasuk untuk Kontrak {{contractNo}}",
+    "includedTitle": "Surcaj termasuk",
+    "loadPort": "Pelabuhan Muat",
+    "discharge": "Pelepasan",
+    "subtitle": "Kontrak {{contractNo}} · {{name}} ({{code}})",
     "customer": "Pelanggan: {{name}} ({{code}})",
     "route": "Laluan: {{originName}} ({{origin}}) → {{deliveryName}} ({{delivery}})",
     "linesTitle": "Baris Surcaj",
     "lineCount": "{{count}} baris",
+    "oceanFreight": "Tambang laut dipersetujui",
+    "surchargesSubtotal": "Jumlah kecil surcaj",
+    "allInEstimate": "Anggaran semua-dalam",
     "total": "Jumlah surcaj",
     "noSurcharges": "Tiada surcaj disertakan dalam kontrak ini.",
     "columns": {
+      "code": "Kod",
+      "charge": "Caj",
       "equipment": "Peralatan",
       "validity": "Tempoh Sah"
     }

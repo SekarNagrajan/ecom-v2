@@ -90,6 +90,7 @@
     }
   },
   "actions": {
+    "shareShort": "Share",
     "viewQuotes": "View Quotes",
     "requestForQuote": "Request for Quote",
     "book": "Book",
@@ -127,6 +128,12 @@
   },
   "rateCard": {
     "recommendedTag": "Lowest Published Freight",
+    "lowestPrice": "Lowest Price",
+    "chipEquipment": "Equipment",
+    "chipService": "Service",
+    "chipTerms": "Terms",
+    "chipStatus": "Status",
+    "socFlagTip": "SOC: {{value}}",
     "ref": "Ref: {{id}}",
     "commodity": "Commodity",
     "commodityLabel": "Commodity: {{value}}",
@@ -220,13 +227,22 @@
   },
   "contractSurcharge": {
     "title": "Included Surcharges for Contract {{contractNo}}",
+    "includedTitle": "Included surcharges",
+    "loadPort": "Load Port",
+    "discharge": "Discharge",
+    "subtitle": "Contract {{contractNo}} · {{name}} ({{code}})",
     "customer": "Customer: {{name}} ({{code}})",
     "route": "Route: {{originName}} ({{origin}}) → {{deliveryName}} ({{delivery}})",
     "linesTitle": "Surcharge Lines",
     "lineCount": "{{count}} line(s)",
+    "oceanFreight": "Agreed ocean freight",
+    "surchargesSubtotal": "Surcharges subtotal",
+    "allInEstimate": "All-in estimate",
     "total": "Total surcharges",
     "noSurcharges": "No surcharges are included in this contract.",
     "columns": {
+      "code": "Code",
+      "charge": "Charge",
       "equipment": "Equipment",
       "validity": "Validity"
     }

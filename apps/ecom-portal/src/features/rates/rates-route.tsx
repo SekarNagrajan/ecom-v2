@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-16 12:30) — results count; drop title spinner
+// Modified by Sekar Nagarajan (2026-11-16 16:45) — surcharge drawer book/share wiring
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
 import { Card, Space, Spin, Typography } from "antd";
@@ -47,6 +47,8 @@ export function RatesRoute() {
     selectedContract,
     isSurchargeModalOpen,
     handleCloseSurchargeModal,
+    handleBookFromSurcharge,
+    handleShareFromSurcharge,
     isQuoteDrawerOpen,
     quoteDefaults,
     handleCloseQuoteDrawer,
@@ -144,6 +146,8 @@ export function RatesRoute() {
           contract={selectedContract}
           open={isSurchargeModalOpen}
           onClose={handleCloseSurchargeModal}
+          onBook={handleBookFromSurcharge}
+          onShare={handleShareFromSurcharge}
         />
 
         <QuoteRequestDrawer

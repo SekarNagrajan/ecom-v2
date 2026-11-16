@@ -1,6 +1,6 @@
-// Modified by Sekar Nagarajan (2026-11-16 12:35) — expand rate cards by default
+// Modified by Sekar Nagarajan (2026-11-16 16:37) — primary route connector; drop duplicate SOC fact
 import { AppButton } from "@solverminds/shared-ui";
-import { Spin, Tag, Typography } from "antd";
+import { Spin, Tooltip, Typography } from "antd";
 import type { TFunction } from "i18next";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -9,7 +9,7 @@ import { AppIcon, Icons } from "../../../components/icons";
 import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import type { CombinedRateItem } from "../types/rates.types";
 import type { RateSearchMode } from "./RateSearchFilter";
-import { rateTypeLabel, rateTypeTagColor } from "./list/rate-list-cells";
+import { rateTypeLabel } from "./list/rate-list-cells";
 
 export type { CombinedRateItem } from "../types/rates.types";
 
@@ -74,11 +74,94 @@ function portCountry(code: string, t: RatesTranslateFn): string | undefined {
   return parts[parts.length - 1];
 }
 
+/** Secondary place line under the port code (city [, country]). */
+function routePlaceLine(portName: string, country?: string): string {
+  const city = portCity(portName);
+  if (!city) return country || "—";
+  if (!country) return city;
+  if (city.toLowerCase().includes(country.toLowerCase())) return city;
+  return `${city}, ${country}`;
+}
+
+interface RateRouteLaneProps {
+  originCode: string;
+  originPlace: string;
+  destCode: string;
+  destPlace: string;
+  compact?: boolean;
+}
+
+/** Origin → delivery lane: bold code, place below, ship on a connecting rail. */
+function RateRouteLane({
+  originCode,
+  originPlace,
+  destCode,
+  destPlace,
+  compact = false,
+}: RateRouteLaneProps) {
+  return (
+    <div className={compact ? "rates-card__summary-route" : "rates-card__route-panel"}>
+      <div className="rates-card__endpoint">
+        <Text strong className="rates-card__port-code">
+          {originCode || "—"}
+        </Text>
+        <Text type="secondary" className="rates-card__place" ellipsis={{ tooltip: originPlace }}>
+          {originPlace}
+        </Text>
+      </div>
+
+      <div className="rates-card__route-connector" aria-hidden>
+        <span className="rates-card__route-track" />
+        <span className="rates-card__route-ship app-icon-inherit">
+          <AppIcon icon={Icons.ship} size={compact ? 12 : 14} />
+        </span>
+        <span className="rates-card__route-track" />
+      </div>
+
+      <div className="rates-card__endpoint rates-card__endpoint--dest">
+        <Text strong className="rates-card__port-code">
+          {destCode || "—"}
+        </Text>
+        <Text type="secondary" className="rates-card__place" ellipsis={{ tooltip: destPlace }}>
+          {destPlace}
+        </Text>
+      </div>
+    </div>
+  );
+}
+
 function formatMoney(currency: string, amount: number): string {
   return `${currency} ${amount.toLocaleString(undefined, {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   })}`;
+}
+
+function RateFieldChip({ label, value }: { label: string; value: string }) {
+  return (
+    <span className="rates-card__field-chip">
+      <span className="rates-card__field-chip-label">{label} :</span>
+      <span className="rates-card__field-chip-value">{value}</span>
+    </span>
+  );
+}
+
+function RateFlagChip({ label, tip }: { label: string; tip?: string }) {
+  const chip = (
+    <span className="rates-card__flag-chip">
+      <span className="rates-card__flag-chip-text">{label}</span>
+      <span className="rates-card__flag-chip-icon app-icon-inherit">
+        <AppIcon icon={Icons.info} size={12} />
+      </span>
+    </span>
+  );
+  return tip ? <Tooltip title={tip}>{chip}</Tooltip> : chip;
+}
+
+function serviceValue(transService?: string): string | undefined {
+  const raw = transService?.trim();
+  if (!raw) return undefined;
+  return raw.replace(/^T-Svc\s+/i, "").trim() || raw;
 }
 
 function RateMetaTags({
@@ -90,33 +173,49 @@ function RateMetaTags({
   t: RatesTranslateFn;
   compact?: boolean;
 }) {
-  const socLabel = item.soc && item.soc !== "No" && item.soc.trim() !== "" ? item.soc : undefined;
-  const serviceLabel = item.transService
-    ? item.transService.startsWith("T-Svc")
-      ? item.transService
-      : `T-Svc ${item.transService}`
-    : undefined;
+  const socActive = item.soc && item.soc !== "No" && item.soc.trim() !== "" ? item.soc : undefined;
+  const service = serviceValue(item.transService);
+  const commodity = item.commodity || item.commodityName;
 
   return (
     <>
-      {!compact && item.isRecommended ? (
-        <Tag color="gold" icon={<AppIcon icon={Icons.star} size={12} />}>
-          {t("rateCard.recommendedTag")}
-        </Tag>
-      ) : null}
       {!compact ? (
-        <Tag color={rateTypeTagColor(item.type)}>
-          {item.code} — {item.title}
-        </Tag>
+        <span className="rates-card__meta-code" title={item.title}>
+          {item.code}
+        </span>
       ) : null}
-      <Tag color="cyan">{item.eqpType}</Tag>
-      {serviceLabel ? <Tag color="processing">{serviceLabel}</Tag> : null}
-      {compact ? <Tag>{item.commodity || item.commodityName || "—"}</Tag> : null}
-      {!compact && socLabel ? <Tag color="magenta">SOC {socLabel}</Tag> : null}
-      {!compact && item.nor ? <Tag color="volcano">NOR</Tag> : null}
-      {!compact && item.carrTerms ? <Tag>{item.carrTerms}</Tag> : null}
+      {!compact && item.isRecommended ? (
+        <span className="rates-card__lowest-badge">
+          <span className="rates-card__lowest-badge-icon app-icon-inherit">
+            <AppIcon icon={Icons.badgeCheck} size={12} />
+          </span>
+          {t("rateCard.lowestPrice")}
+        </span>
+      ) : null}
+      {item.eqpType ? (
+        <RateFieldChip label={t("rateCard.chipEquipment")} value={item.eqpType} />
+      ) : null}
+      {service ? <RateFieldChip label={t("rateCard.chipService")} value={service} /> : null}
+      {compact && commodity ? (
+        <RateFieldChip label={t("rateCard.commodity")} value={commodity} />
+      ) : null}
+      {!compact && socActive ? (
+        <RateFlagChip
+          label={t("contract.columns.soc")}
+          tip={t("rateCard.socFlagTip", { value: socActive })}
+        />
+      ) : null}
+      {!compact && item.nor ? (
+        <RateFlagChip label={t("surchargeView.columns.nor")} tip={t("rateCard.norApplicable")} />
+      ) : null}
+      {!compact && item.carrTerms ? (
+        <RateFieldChip label={t("rateCard.chipTerms")} value={item.carrTerms} />
+      ) : null}
       {!compact && item.quoteStatus ? (
-        <Tag color="blue">{item.quoteStatus.replace(/_/g, " ")}</Tag>
+        <RateFieldChip
+          label={t("rateCard.chipStatus")}
+          value={item.quoteStatus.replace(/_/g, " ")}
+        />
       ) : null}
     </>
   );
@@ -139,12 +238,10 @@ function RateCard({
     (item.type === "SURCHARGE" && hasSurcharges);
   const showBreakdownHint = item.type === "TARIFF" || item.type === "CONTRACT";
 
-  const originPlace = portCity(item.originPortName).toUpperCase();
-  const destinationPlace = portCity(item.deliveryPortName).toUpperCase();
   const originCountry = portCountry(item.originPort, t);
   const destinationCountry = portCountry(item.deliveryPort, t);
-  const socLabel = item.soc && item.soc !== "No" && item.soc.trim() !== "" ? item.soc : undefined;
-
+  const originPlace = routePlaceLine(item.originPortName, originCountry);
+  const destinationPlace = routePlaceLine(item.deliveryPortName, destinationCountry);
   return (
     <article
       className={[
@@ -165,45 +262,13 @@ function RateCard({
       >
         <div className="rates-card__panel-inner">
           <div className="rates-card__summary">
-            <div className="rates-card__summary-route">
-              <span className="rates-card__summary-port">
-                <span className="rates-card__summary-icon app-icon-inherit">
-                  <AppIcon icon={Icons.ship} size={14} />
-                </span>
-                <span className="rates-card__summary-port-copy">
-                  <Text
-                    type="secondary"
-                    className="rates-card__summary-place"
-                    ellipsis={{ tooltip: originPlace }}
-                  >
-                    {originPlace}
-                  </Text>
-                  <Text strong className="rates-card__summary-code">
-                    {item.originPort}
-                  </Text>
-                </span>
-              </span>
-              <span className="rates-card__summary-arrow app-icon-inherit" aria-hidden>
-                <AppIcon icon={Icons.arrowRight} size={14} />
-              </span>
-              <span className="rates-card__summary-port">
-                <span className="rates-card__summary-icon app-icon-inherit">
-                  <AppIcon icon={Icons.mapPin} size={14} />
-                </span>
-                <span className="rates-card__summary-port-copy">
-                  <Text
-                    type="secondary"
-                    className="rates-card__summary-place"
-                    ellipsis={{ tooltip: destinationPlace }}
-                  >
-                    {destinationPlace}
-                  </Text>
-                  <Text strong className="rates-card__summary-code">
-                    {item.deliveryPort}
-                  </Text>
-                </span>
-              </span>
-            </div>
+            <RateRouteLane
+              compact
+              originCode={item.originPort}
+              originPlace={originPlace}
+              destCode={item.deliveryPort}
+              destPlace={destinationPlace}
+            />
 
             <div className="rates-card__summary-price">
               <Text strong className="rates-card__price-value">
@@ -288,57 +353,12 @@ function RateCard({
           </div>
 
           <div className="rates-card__body">
-            <div className="rates-card__route-panel">
-              <div className="rates-card__endpoint">
-                <span className="rates-card__endpoint-icon rates-card__endpoint-icon--pol app-icon-inherit">
-                  <AppIcon icon={Icons.ship} size={16} />
-                </span>
-                <div className="rates-card__endpoint-copy">
-                  <Text
-                    type="secondary"
-                    className="rates-card__place"
-                    ellipsis={{ tooltip: originPlace }}
-                  >
-                    {originPlace}
-                  </Text>
-                  <Text strong className="rates-card__port-code">
-                    {item.originPort}
-                  </Text>
-                  {originCountry ? (
-                    <Text type="secondary" className="rates-card__country">
-                      {originCountry}
-                    </Text>
-                  ) : null}
-                </div>
-              </div>
-
-              <span className="rates-card__route-arrow app-icon-inherit" aria-hidden>
-                <AppIcon icon={Icons.arrowRight} size={16} />
-              </span>
-
-              <div className="rates-card__endpoint">
-                <span className="rates-card__endpoint-icon rates-card__endpoint-icon--pod app-icon-inherit">
-                  <AppIcon icon={Icons.mapPin} size={16} />
-                </span>
-                <div className="rates-card__endpoint-copy">
-                  <Text
-                    type="secondary"
-                    className="rates-card__place"
-                    ellipsis={{ tooltip: destinationPlace }}
-                  >
-                    {destinationPlace}
-                  </Text>
-                  <Text strong className="rates-card__port-code">
-                    {item.deliveryPort}
-                  </Text>
-                  {destinationCountry ? (
-                    <Text type="secondary" className="rates-card__country">
-                      {destinationCountry}
-                    </Text>
-                  ) : null}
-                </div>
-              </div>
-            </div>
+            <RateRouteLane
+              originCode={item.originPort}
+              originPlace={originPlace}
+              destCode={item.deliveryPort}
+              destPlace={destinationPlace}
+            />
 
             <div className="rates-card__price-panel">
               <Text type="secondary" className="rates-card__price-label">
@@ -433,21 +453,6 @@ function RateCard({
                   </Text>
                 </div>
               </div>
-              {socLabel ? (
-                <div className="rates-card__fact">
-                  <span className="rates-card__fact-icon app-icon-inherit">
-                    <AppIcon icon={Icons.container} size={13} />
-                  </span>
-                  <div className="rates-card__fact-copy">
-                    <Text type="secondary" className="rates-card__fact-label">
-                      SOC
-                    </Text>
-                    <Text strong className="rates-card__fact-value">
-                      {socLabel}
-                    </Text>
-                  </div>
-                </div>
-              ) : null}
               {item.nor ? (
                 <div className="rates-card__fact">
                   <span className="rates-card__fact-icon app-icon-inherit">

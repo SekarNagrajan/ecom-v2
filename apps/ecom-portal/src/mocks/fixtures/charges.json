@@ -1369,11 +1369,11 @@
  },
  {
   "chargecode": "FDI",
-  "chargename": "FEEDER DOCUMENTATION - EXPORT",
+  "chargename": "FEEDER DOCUMENTATION",
   "chargetype": "P",
   "chargemode": "M",
   "chargegrp": "OTHERS",
-  "defpaymode": "P"
+  "defpaymode": "C"
  },
  {
   "chargecode": "FDO",
@@ -1561,7 +1561,7 @@
  },
  {
   "chargecode": "HAZ",
-  "chargename": "HAZ Charge ",
+  "chargename": "HAZ Charge",
   "chargetype": "P",
   "chargemode": "N",
   "chargegrp": "FREIGHT",

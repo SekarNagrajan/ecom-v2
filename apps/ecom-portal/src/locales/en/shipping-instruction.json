@@ -71,8 +71,11 @@
     "created": "Created",
     "submitted": "Submitted",
     "origin": "Origin",
+    "originPol": "Origin (POL)",
     "delivery": "Delivery",
+    "deliveryPod": "Delivery (POD)",
     "portToPort": "Port to Port",
+    "destination": "Destination",
     "bookingNumber": "Booking number",
     "siNumber": "SI number",
     "blType": "B/L type",
@@ -230,6 +233,9 @@
     "loading": "Loading",
     "toggleContainerTable": "Toggle container table",
     "expand": "Expand"
+  },
+  "routeBand": {
+    "daysKind": "{{count}} days · {{kind}}"
   },
   "wizard": {
     "submitSuccessTitle": "Shipping Instruction Submitted Successfully",

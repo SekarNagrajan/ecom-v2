@@ -208,7 +208,7 @@
  },
  {
   "portcode": "INAGR",
-  "portname": "AGRA",
+  "portname": "AGRA~DELHI",
   "countrycode": "IN",
   "statecode": "UP",
   "latitude": 27.1,
@@ -702,6 +702,15 @@
   "porttype": "P"
  },
  {
+  "portcode": "ABCDD",
+  "portname": "ASDF",
+  "countrycode": "IN",
+  "statecode": "",
+  "latitude": 15,
+  "longitude": 25,
+  "porttype": "I"
+ },
+ {
   "portcode": "ABCDE",
   "portname": "ASDF",
   "countrycode": "IN",
@@ -745,6 +754,15 @@
   "latitude": 31.82,
   "longitude": 34.67,
   "porttype": "P"
+ },
+ {
+  "portcode": "GB2AB",
+  "portname": "ASTON",
+  "countrycode": "GB",
+  "statecode": "",
+  "latitude": 52.5,
+  "longitude": 1.88333,
+  "porttype": "I"
  },
  {
   "portcode": "USAHN",
@@ -1380,7 +1398,7 @@
   "portcode": "IDBIT",
   "portname": "BITUNG",
   "countrycode": "ID",
-  "statecode": "SA",
+  "statecode": "NB",
   "latitude": 1.455,
   "longitude": 125.204,
   "porttype": "P"
@@ -1650,7 +1668,7 @@
   "portcode": "AUBNE",
   "portname": "BRISBANE",
   "countrycode": "AU",
-  "statecode": "QLD",
+  "statecode": "AU",
   "latitude": 27.46,
   "longitude": 153.02,
   "porttype": "P"
@@ -4431,7 +4449,7 @@
   "portcode": "ITGOA",
   "portname": "GENOA",
   "countrycode": "IT",
-  "statecode": "GE",
+  "statecode": "",
   "latitude": 44.2400016784668,
   "longitude": 8.53999996185303,
   "porttype": "P"
@@ -4440,7 +4458,7 @@
   "portcode": "MYGTI",
   "portname": "GEORGE TOWN",
   "countrycode": "MY",
-  "statecode": "7",
+  "statecode": "MY",
   "latitude": 15,
   "longitude": 80,
   "porttype": "I"
@@ -6120,6 +6138,15 @@
   "porttype": "P"
  },
  {
+  "portcode": "SGJUR",
+  "portname": "JURONG/SINGAPORE",
+  "countrycode": "SG",
+  "statecode": "",
+  "latitude": 21,
+  "longitude": 23,
+  "porttype": "P"
+ },
+ {
   "portcode": "IDKAB",
   "portname": "KABIL",
   "countrycode": "ID",
@@ -6231,7 +6258,7 @@
   "portcode": "USMKC",
   "portname": "KANSAS CITY, MO",
   "countrycode": "US",
-  "statecode": "MO",
+  "statecode": "NY",
   "latitude": 39.0997,
   "longitude": 94.5786,
   "porttype": "I"
@@ -6477,6 +6504,15 @@
   "statecode": "AE",
   "latitude": 25.21,
   "longitude": 56.22,
+  "porttype": "P"
+ },
+ {
+  "portcode": "AEKHL",
+  "portname": "KHOR FAKKHAN",
+  "countrycode": "AE",
+  "statecode": "AE",
+  "latitude": 24.8099,
+  "longitude": 54.6495,
   "porttype": "P"
  },
  {
@@ -6888,7 +6924,7 @@
   "portcode": "ITSPE",
   "portname": "LA SPEZIA",
   "countrycode": "IT",
-  "statecode": "SP",
+  "statecode": "",
   "latitude": 44.0099983215332,
   "longitude": 9.51000022888184,
   "porttype": "P"
@@ -8229,7 +8265,7 @@
   "portcode": "USMEM",
   "portname": "MEMPHIS, TN",
   "countrycode": "US",
-  "statecode": "TN",
+  "statecode": "NY",
   "latitude": 35.15,
   "longitude": 90.05,
   "porttype": "P"
@@ -8376,15 +8412,6 @@
   "statecode": "WI",
   "latitude": 43.0389,
   "longitude": 87.9065,
-  "porttype": "P"
- },
- {
-  "portcode": "AEKHL",
-  "portname": "MINA KHALIFA",
-  "countrycode": "AE",
-  "statecode": "AE",
-  "latitude": 24.8099,
-  "longitude": 54.6495,
   "porttype": "P"
  },
  {
@@ -9342,15 +9369,6 @@
   "porttype": "P"
  },
  {
-  "portcode": "AELOO",
-  "portname": "NHAVA SHEVA, INDIA",
-  "countrycode": "IN",
-  "statecode": "",
-  "latitude": 25,
-  "longitude": 55.0200004,
-  "porttype": "P"
- },
- {
   "portcode": "QQQQQ",
   "portname": "NHAVA SHEVA, INDIA",
   "countrycode": "AF",
@@ -9362,6 +9380,15 @@
  {
   "portcode": "ZAAAA",
   "portname": "NHAVA SHEVA, INDIA11",
+  "countrycode": "IN",
+  "statecode": "",
+  "latitude": 25,
+  "longitude": 55.0200004,
+  "porttype": "P"
+ },
+ {
+  "portcode": "AELOO",
+  "portname": "NHAVA SHEVA, INDIA2",
   "countrycode": "IN",
   "statecode": "",
   "latitude": 25,
@@ -10585,7 +10612,7 @@
  },
  {
   "portcode": "MYPKG",
-  "portname": "PORT KLANG  ABNVCXS",
+  "portname": "PORT KLANG PORT KLANG ABNVCXS",
   "countrycode": "MY",
   "statecode": "MY",
   "latitude": 3,
@@ -13842,12 +13869,30 @@
   "porttype": "P"
  },
  {
+  "portcode": "QWERT",
+  "portname": "TESTING",
+  "countrycode": "DZ",
+  "statecode": "",
+  "latitude": 12.2,
+  "longitude": 23.1,
+  "porttype": "P"
+ },
+ {
   "portcode": "AUBWY",
   "portname": "TESTING",
   "countrycode": "DZ",
   "statecode": "",
   "latitude": 20.7804,
   "longitude": 115.4023,
+  "porttype": "P"
+ },
+ {
+  "portcode": "SDWER",
+  "portname": "TESTINGNEW",
+  "countrycode": "DZ",
+  "statecode": "",
+  "latitude": 12,
+  "longitude": 45,
   "porttype": "P"
  },
  {

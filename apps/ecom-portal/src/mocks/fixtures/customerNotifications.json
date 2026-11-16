@@ -1,12 +1,42 @@
 [
  {
+  "id": "5",
+  "customerUserId": "5",
+  "notificationId": "1",
+  "isEnabled": true,
+  "createdAt": "2026-10-18T11:25:11.285Z",
+  "createdBy": "customer.notification",
+  "updatedAt": "2026-11-03T04:41:39.455Z",
+  "updatedBy": "customer.notification"
+ },
+ {
+  "id": "7",
+  "customerUserId": "5",
+  "notificationId": "2",
+  "isEnabled": true,
+  "createdAt": "2026-11-02T01:18:57.918Z",
+  "createdBy": "customer.notification",
+  "updatedAt": "2026-11-03T04:41:09.372Z",
+  "updatedBy": "customer.notification"
+ },
+ {
+  "id": "6",
+  "customerUserId": "5",
+  "notificationId": "9",
+  "isEnabled": true,
+  "createdAt": "2026-11-02T01:18:51.932Z",
+  "createdBy": "customer.notification",
+  "updatedAt": "2026-11-02T01:18:57.918Z",
+  "updatedBy": "customer.notification"
+ },
+ {
   "id": "4",
   "customerUserId": "5",
   "notificationId": "8",
   "isEnabled": true,
-  "createdAt": "2026-10-16T18:12:02.732Z",
+  "createdAt": "2026-10-16T21:01:12.802Z",
   "createdBy": "customer.notification",
-  "updatedAt": "2026-10-16T18:12:20.242Z",
+  "updatedAt": "2026-11-02T01:18:57.918Z",
   "updatedBy": "customer.notification"
  },
  {
@@ -14,9 +44,9 @@
   "customerUserId": "5",
   "notificationId": "6",
   "isEnabled": true,
-  "createdAt": "2026-10-16T18:12:02.732Z",
+  "createdAt": "2026-10-16T21:01:12.802Z",
   "createdBy": "customer.notification",
-  "updatedAt": "2026-10-16T18:12:20.242Z",
+  "updatedAt": "2026-10-16T21:01:30.312Z",
   "updatedBy": "customer.notification"
  },
  {
@@ -24,27 +54,17 @@
   "customerUserId": "5",
   "notificationId": "11",
   "isEnabled": true,
-  "createdAt": "2026-10-16T18:11:47.312Z",
+  "createdAt": "2026-10-16T21:00:57.382Z",
   "createdBy": "customer.notification",
-  "updatedAt": "2026-10-16T18:11:56.882Z",
+  "updatedAt": "2026-10-16T21:01:06.952Z",
   "updatedBy": "customer.notification"
- },
- {
-  "id": "5",
-  "customerUserId": "5",
-  "notificationId": "1",
-  "isEnabled": false,
-  "createdAt": "2026-10-18T08:36:01.215Z",
-  "createdBy": "customer.notification",
-  "updatedAt": null,
-  "updatedBy": null
  },
  {
   "id": "1",
   "customerUserId": "1",
   "notificationId": "1",
   "isEnabled": false,
-  "createdAt": "2026-10-10T21:01:24.045Z",
+  "createdAt": "2026-10-10T23:50:34.115Z",
   "createdBy": "customer.notification",
   "updatedAt": null,
   "updatedBy": null

@@ -49,13 +49,6 @@
   "showrefno": "N"
  },
  {
-  "id": 8,
-  "module": "BKG",
-  "status": "X",
-  "statusdesc": "Cancellation Submitted",
-  "showrefno": "Y"
- },
- {
   "id": 7,
   "module": "BKG",
   "status": "I",

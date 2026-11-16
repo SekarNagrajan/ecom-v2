@@ -71,8 +71,11 @@
     "created": "Dicipta",
     "submitted": "Dihantar",
     "origin": "Asal",
+    "originPol": "Asal (POL)",
     "delivery": "Penghantaran",
+    "deliveryPod": "Penghantaran (POD)",
     "portToPort": "Pelabuhan ke Pelabuhan",
+    "destination": "Destinasi",
     "bookingNumber": "Nombor tempahan",
     "siNumber": "Nombor SI",
     "blType": "Jenis B/L",
@@ -230,6 +233,9 @@
     "loading": "Memuatkan",
     "toggleContainerTable": "Togol jadual kontena",
     "expand": "Kembangkan"
+  },
+  "routeBand": {
+    "daysKind": "{{count}} hari · {{kind}}"
   },
   "wizard": {
     "submitSuccessTitle": "Arahan Penghantaran Berjaya Dihantar",

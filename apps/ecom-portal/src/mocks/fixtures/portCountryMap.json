@@ -368,12 +368,20 @@
   "countrycode": "AF"
  },
  {
+  "portcode": "QWERT",
+  "countrycode": "DZ"
+ },
+ {
   "portcode": "SDERT",
   "countrycode": "AL"
  },
  {
   "portcode": "SDFGH",
   "countrycode": "AS"
+ },
+ {
+  "portcode": "SDWER",
+  "countrycode": "DZ"
  },
  {
   "portcode": "SWOLF",
@@ -433,10 +441,6 @@
  },
  {
   "portcode": "AUBN1",
-  "countrycode": "AU"
- },
- {
-  "portcode": "AUBNE",
   "countrycode": "AU"
  },
  {
@@ -724,6 +728,10 @@
   "countrycode": "DZ"
  },
  {
+  "portcode": "MYGTI",
+  "countrycode": "MY"
+ },
+ {
   "portcode": "MYSBU",
   "countrycode": "MY"
  },
@@ -777,6 +785,10 @@
  },
  {
   "portcode": "AASAS",
+  "countrycode": "IN"
+ },
+ {
+  "portcode": "ABCDD",
   "countrycode": "IN"
  },
  {
@@ -980,8 +992,20 @@
   "countrycode": "AR"
  },
  {
+  "portcode": "SGJUR",
+  "countrycode": "SG"
+ },
+ {
   "portcode": "EGALY",
   "countrycode": "EG"
+ },
+ {
+  "portcode": "ITGOA",
+  "countrycode": "IT"
+ },
+ {
+  "portcode": "ITSPE",
+  "countrycode": "IT"
  },
  {
   "portcode": "KRKAN",
@@ -2568,10 +2592,6 @@
   "countrycode": "IT"
  },
  {
-  "portcode": "ITGOA",
-  "countrycode": "IT"
- },
- {
   "portcode": "ITLIV",
   "countrycode": "IT"
  },
@@ -2629,10 +2649,6 @@
  },
  {
   "portcode": "ITSAL",
-  "countrycode": "IT"
- },
- {
-  "portcode": "ITSPE",
   "countrycode": "IT"
  },
  {
@@ -3468,6 +3484,10 @@
   "countrycode": "AU"
  },
  {
+  "portcode": "INAGR",
+  "countrycode": "IN"
+ },
+ {
   "portcode": "INAMD",
   "countrycode": "IN"
  },
@@ -3546,10 +3566,6 @@
  {
   "portcode": "BDMGL",
   "countrycode": "BD"
- },
- {
-  "portcode": "INAGR",
-  "countrycode": "IN"
  },
  {
   "portcode": "INAKV",
@@ -6048,6 +6064,10 @@
   "countrycode": "FR"
  },
  {
+  "portcode": "GB2AB",
+  "countrycode": "GB"
+ },
+ {
   "portcode": "NLRTM",
   "countrycode": "NL"
  },
@@ -6062,6 +6082,10 @@
  {
   "portcode": "RUVVO",
   "countrycode": "RU"
+ },
+ {
+  "portcode": "IDBIT",
+  "countrycode": "ID"
  },
  {
   "portcode": "NZBHE",
@@ -6158,6 +6182,10 @@
  {
   "portcode": "NZWRE",
   "countrycode": "NZ"
+ },
+ {
+  "portcode": "AUBNE",
+  "countrycode": "AU"
  },
  {
   "portcode": "PGBAS",
@@ -6556,10 +6584,6 @@
   "countrycode": "ID"
  },
  {
-  "portcode": "IDBIT",
-  "countrycode": "ID"
- },
- {
   "portcode": "IDBKS",
   "countrycode": "ID"
  },
@@ -6733,10 +6757,6 @@
  },
  {
   "portcode": "MYBTU",
-  "countrycode": "MY"
- },
- {
-  "portcode": "MYGTI",
   "countrycode": "MY"
  },
  {

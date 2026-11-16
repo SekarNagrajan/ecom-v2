@@ -15,6 +15,11 @@
   "comdtytype": "23"
  },
  {
+  "comdtycode": "1",
+  "comdtyname": "3",
+  "comdtytype": "02"
+ },
+ {
   "comdtycode": "2345454",
   "comdtyname": "4etrrdyd",
   "comdtytype": "1"
@@ -995,11 +1000,6 @@
   "comdtytype": "23"
  },
  {
-  "comdtycode": "04",
-  "comdtyname": "Appliances - White Goods",
-  "comdtytype": "23"
- },
- {
   "comdtycode": "0809100000",
   "comdtyname": "Apricots",
   "comdtytype": "23"
@@ -1035,11 +1035,6 @@
   "comdtytype": "23"
  },
  {
-  "comdtycode": "0308000000",
-  "comdtyname": "AQUATIC INVERTEBRATES OTHER THAN  CRUSTACEANS AND MOLLUSCS, LIVE, FRESH, CHILLED, FROZED, DRIED, SAILTED OR IN BRINE SMOKED AQUATIC INVERTEBRATES OTHER THAN CRUSTACEANS AND MOLLUSCS, WHETHER OR NOT COOKED BEFORE OR DURING THE SMOKING PROCESS FLOURS, MEALS",
-  "comdtytype": "18"
- },
- {
   "comdtycode": "05",
   "comdtyname": "Autoparts - General",
   "comdtytype": "23"
@@ -1050,23 +1045,18 @@
   "comdtytype": "23"
  },
  {
-  "comdtycode": "101",
-  "comdtyname": "Banana",
-  "comdtytype": "23"
- },
- {
   "comdtycode": "08",
   "comdtyname": "Beverages NOS - Fruit Juice Concentrates",
   "comdtytype": "23"
  },
  {
-  "comdtycode": "09",
-  "comdtyname": "Beverages NOS - Non Alcoholic",
+  "comdtycode": "13",
+  "comdtyname": "Chemicals - Non Haz",
   "comdtytype": "23"
  },
  {
-  "comdtycode": "13",
-  "comdtyname": "Chemicals - Non Haz",
+  "comdtycode": "0801",
+  "comdtyname": "Coconuts, Brazil nuts and cashew nuts, fresh or dried, whether or not shelled or peeled: Coconuts:",
   "comdtytype": "23"
  },
  {
@@ -1085,21 +1075,6 @@
   "comdtytype": "23"
  },
  {
-  "comdtycode": "0804",
-  "comdtyname": "Dates, figs, pineapples, avocados, guavas, mangoes and mangosteens, fresh or dried:",
-  "comdtytype": "23"
- },
- {
-  "comdtycode": "0804",
-  "comdtyname": "Dates, figs, pineapples, avocados, guavas, mangoes and mangosteens; fresh or dried",
-  "comdtytype": "13"
- },
- {
-  "comdtycode": "0804",
-  "comdtyname": "Dates, figs, pineapples, avocados, guavas, mangoes and mangosteens; fresh or dried",
-  "comdtytype": "COMM"
- },
- {
   "comdtycode": "19",
   "comdtyname": "Electronics, Computer Parts (TV or DVD or Audio etc)",
   "comdtytype": "23"
@@ -1112,6 +1087,11 @@
  {
   "comdtycode": "21",
   "comdtyname": "FOOD STUFFS (VEG OR CANNED PROD OR CONFECTIONARY, CEREALS, NUTS, SPICES, DRIED FRUITS, OILS, MILK POWDER ETC)",
+  "comdtytype": "23"
+ },
+ {
+  "comdtycode": "73",
+  "comdtyname": "Food Stuffs – Agri-products",
   "comdtytype": "23"
  },
  {
@@ -1140,11 +1120,6 @@
   "comdtytype": "23"
  },
  {
-  "comdtycode": "27",
-  "comdtyname": "Household Goods  or  Personal Effects",
-  "comdtytype": "23"
- },
- {
   "comdtycode": "00001",
   "comdtyname": "liquid's",
   "comdtytype": "1"
@@ -1170,8 +1145,33 @@
   "comdtytype": "23"
  },
  {
-  "comdtycode": "44",
-  "comdtyname": "Paper, Paper Products - Finished or Printed (Magazines, Books, Newsprint etc.)",
+  "comdtycode": "38",
+  "comdtyname": "Mineral Products",
+  "comdtytype": "23"
+ },
+ {
+  "comdtycode": "38",
+  "comdtyname": "Miscellaneous chemical products",
+  "comdtytype": "1"
+ },
+ {
+  "comdtycode": "8714940000",
+  "comdtyname": "Other :Brakes, including coaster braking hubs and hub brakes, and parts thereof",
+  "comdtytype": "23"
+ },
+ {
+  "comdtycode": "0105940000",
+  "comdtyname": "Other :Fowls of the species Gallus domesticus",
+  "comdtytype": "23"
+ },
+ {
+  "comdtycode": "8714930000",
+  "comdtyname": "Other :Hubs, other than coaster braking hubs and hub brakes, and free-wheel sprocket-wheels",
+  "comdtytype": "23"
+ },
+ {
+  "comdtycode": "51",
+  "comdtyname": "Refrigerated Cargo (Chilled) - Foodstuffs",
   "comdtytype": "23"
  },
  {

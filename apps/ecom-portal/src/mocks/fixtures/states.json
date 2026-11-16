@@ -35,9 +35,19 @@
   "countrycode": "CN"
  },
  {
+  "statecode": "LN",
+  "statedesc": "Xinjiang",
+  "countrycode": "CN"
+ },
+ {
   "statecode": "123",
   "statedesc": "s",
   "countrycode": "GW"
+ },
+ {
+  "statecode": "NB",
+  "statedesc": "North Maluku",
+  "countrycode": "ID"
  },
  {
   "statecode": "LKL",
@@ -247,11 +257,6 @@
  {
   "statecode": "WB",
   "statedesc": "West Bengal",
-  "countrycode": "IN"
- },
- {
-  "statecode": "ewr",
-  "statedesc": "wqe",
   "countrycode": "IN"
  },
  {

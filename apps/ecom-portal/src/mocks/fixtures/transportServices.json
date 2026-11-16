@@ -324,7 +324,7 @@
  {
   "trptsvccode": "LL",
   "trptsvcname": "LI / LO",
-  "receipt": "LINER IN",
+  "receipt": "LINER",
   "delivery": "LINER OUT",
   "trptterm": "LINER"
  },

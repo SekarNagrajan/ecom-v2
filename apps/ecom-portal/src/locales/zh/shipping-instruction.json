@@ -71,8 +71,11 @@
     "created": "创建",
     "submitted": "提交",
     "origin": "起运地",
+    "originPol": "起运地 (POL)",
     "delivery": "交货地",
+    "deliveryPod": "交货地 (POD)",
     "portToPort": "港到港",
+    "destination": "目的地",
     "bookingNumber": "订舱号",
     "siNumber": "SI 号",
     "blType": "提单类型",
@@ -225,6 +228,9 @@
       "hsCode": "HS 编码",
       "volumeCbm": "体积 (CBM)"
     }
+  },
+  "routeBand": {
+    "daysKind": "{{count}} 天 · {{kind}}"
   },
   "a11y": {
     "loading": "加载中",

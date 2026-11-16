@@ -71,8 +71,11 @@
     "created": "Creado",
     "submitted": "Enviado",
     "origin": "Origen",
+    "originPol": "Origen (POL)",
     "delivery": "Entrega",
+    "deliveryPod": "Entrega (POD)",
     "portToPort": "Puerto a puerto",
+    "destination": "Destino",
     "bookingNumber": "Número de reserva",
     "siNumber": "Número SI",
     "blType": "Tipo de B/L",
@@ -225,6 +228,9 @@
       "hsCode": "Código HS",
       "volumeCbm": "Volumen (CBM)"
     }
+  },
+  "routeBand": {
+    "daysKind": "{{count}} días · {{kind}}"
   },
   "a11y": {
     "loading": "Cargando",

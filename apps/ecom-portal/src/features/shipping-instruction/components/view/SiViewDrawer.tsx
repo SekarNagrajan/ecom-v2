@@ -1,14 +1,10 @@
-// Modified by Sekar Nagarajan (2026-10-19 17:00)
+// Modified by Sekar Nagarajan (2026-11-16 15:30) — preview-style route band in details
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { useNavigate } from "@tanstack/react-router";
 import { Tag, Tooltip, Typography } from "antd";
 import { useTranslation } from "react-i18next";
 
-import {
-  AppIcon,
-  Icons,
-  NavShippingInstructionIcon,
-} from "../../../../components/icons";
+import { AppIcon, Icons, NavShippingInstructionIcon } from "../../../../components/icons";
 import { formatModuleScreenTitle } from "../../../../constants/module-titles";
 import type { SIListDTO, SIStatus } from "../../types/si.types";
 import {
@@ -40,10 +36,7 @@ function dash(value?: string | null): string {
  * Draft → Submitted → Accepted lifecycle. Declined replaces the last step
  * as an error marker; Locked means the SI completed and is frozen.
  */
-function buildLifecycle(
-  status: SIStatus,
-  t: (key: string) => string,
-): LifecycleStep[] {
+function buildLifecycle(status: SIStatus, t: (key: string) => string): LifecycleStep[] {
   const base: { key: SIStatus; label: string }[] = [
     { key: "Draft", label: t("status.draft") },
     { key: "Submitted", label: t("status.submitted") },
@@ -117,10 +110,7 @@ export function SiViewDrawer({ record, onClose }: SiViewDrawerProps) {
           </span>
           <div className="si-drawer-title__copy">
             <Title level={4} className="si-drawer-title__text">
-              {formatModuleScreenTitle(
-                t("drawer.viewTitle"),
-                record.siNo || record.bookingNo,
-              )}
+              {formatModuleScreenTitle(t("drawer.viewTitle"), record.siNo || record.bookingNo)}
             </Title>
             <Text type="secondary" className="si-drawer-title__meta">
               <span className="si-drawer-title__meta-item">
@@ -155,10 +145,7 @@ export function SiViewDrawer({ record, onClose }: SiViewDrawerProps) {
         {/* Status + lifecycle */}
         <div className="si-view-hero__status">
           <div className="si-view-hero__tags">
-            <Tag
-              className="si-view-hero__tag"
-              color={getSiStatusTagColor(record.status)}
-            >
+            <Tag className="si-view-hero__tag" color={getSiStatusTagColor(record.status)}>
               {getSiStatusLabel(record.status, t)}
             </Tag>
             {record.blStatus ? (
@@ -190,32 +177,6 @@ export function SiViewDrawer({ record, onClose }: SiViewDrawerProps) {
               </li>
             ))}
           </ol>
-        </div>
-
-        {/* Route */}
-        <div className="si-view-route">
-          <div className="si-view-route__stop">
-            <span className="si-view-route__eyebrow app-icon-inherit">
-              <AppIcon icon={Icons.mapPin} size={12} />
-              {t("labels.origin")}
-            </span>
-            <span className="si-view-route__code">{dash(record.origin)}</span>
-          </div>
-          <div className="si-view-route__connector" aria-hidden>
-            <span className="si-view-route__track" />
-            <span className="si-view-route__ship app-icon-inherit">
-              <AppIcon icon={Icons.ship} size={14} />
-            </span>
-            <span className="si-view-route__track" />
-            <span className="si-view-route__label">{t("labels.portToPort")}</span>
-          </div>
-          <div className="si-view-route__stop si-view-route__stop--dest">
-            <span className="si-view-route__eyebrow app-icon-inherit">
-              <AppIcon icon={Icons.mapPin} size={12} />
-              {t("labels.delivery")}
-            </span>
-            <span className="si-view-route__code">{dash(record.delivery)}</span>
-          </div>
         </div>
 
         {/* Key references */}

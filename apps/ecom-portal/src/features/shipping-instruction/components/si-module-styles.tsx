@@ -967,15 +967,11 @@ export function SiModuleStyles() {
       }
       .si-route-port--origin {
         border-left: 4px solid ${token.colorPrimary};
-        background: linear-gradient(180deg, ${primaryTint8} 0%, ${
-      token.colorFillAlter
-    } 100%);
+        background: linear-gradient(180deg, ${primaryTint8} 0%, ${token.colorFillAlter} 100%);
       }
       .si-route-port--delivery {
         border-left: 4px solid ${token.colorSuccess};
-        background: linear-gradient(180deg, ${successTint8} 0%, ${
-      token.colorFillAlter
-    } 100%);
+        background: linear-gradient(180deg, ${successTint8} 0%, ${token.colorFillAlter} 100%);
       }
       .si-route-port__label {
         display: flex;
@@ -1892,87 +1888,7 @@ export function SiModuleStyles() {
         border-color: ${token.colorError};
         color: ${token.colorTextLightSolid};
       }
-      .si-view-route {
-        display: flex;
-        align-items: center;
-        gap: ${token.marginMD}px;
-        width: 100%;
-        padding-top: ${token.paddingMD}px;
-        border-top: 1px solid ${token.colorBorderSecondary};
-      }
-      .si-view-route__stop {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: ${token.marginXXS}px;
-        flex: 1 1 0;
-        min-width: 0;
-      }
-      .si-view-route__stop--dest {
-        align-items: flex-end;
-        text-align: right;
-      }
-      .si-view-route__eyebrow {
-        display: inline-flex;
-        align-items: center;
-        gap: ${token.marginXXS}px;
-        font-size: ${token.fontSizeSM}px;
-        font-weight: ${token.fontWeightStrong};
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-        color: ${token.colorTextTertiary};
-        line-height: 1.2;
-      }
-      .si-view-route__stop--dest .si-view-route__eyebrow {
-        color: ${token.colorSuccess};
-      }
-      .si-view-route__stop:not(.si-view-route__stop--dest) .si-view-route__eyebrow {
-        color: ${token.colorPrimary};
-      }
-      .si-view-route__code {
-        font-size: ${token.fontSizeHeading4}px;
-        font-weight: ${token.fontWeightStrong};
-        color: ${token.colorText};
-        line-height: 1.2;
-        word-break: break-word;
-      }
-      .si-view-route__connector {
-        position: relative;
-        display: flex;
-        align-items: center;
-        flex: 1 1 auto;
-        min-width: 120px;
-        gap: ${token.marginXS}px;
-        padding-bottom: ${token.paddingMD}px;
-      }
-      .si-view-route__track {
-        flex: 1 1 auto;
-        height: 0;
-        border-top: ${token.lineWidthBold}px dashed ${tokenMix(token.colorPrimary, 40)};
-      }
-      .si-view-route__ship {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        width: ${token.controlHeightSM}px;
-        height: ${token.controlHeightSM}px;
-        border-radius: 50%;
-        border: ${token.lineWidth}px solid ${token.colorPrimaryBorder};
-        background: ${token.colorBgContainer};
-        color: ${token.colorPrimary};
-      }
-      .si-view-route__label {
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        text-align: center;
-        font-size: ${token.fontSizeSM}px;
-        color: ${token.colorTextTertiary};
-        white-space: nowrap;
-        line-height: 1.2;
-      }
+      /* Modified by Sekar Nagarajan (2026-11-16 15:30) — route band uses booking-review-route */
       .si-view-facts {
         display: grid;
         grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -2013,19 +1929,6 @@ export function SiModuleStyles() {
         }
         .si-status-stepper__label {
           white-space: normal;
-        }
-        .si-view-route {
-          flex-direction: column;
-          align-items: stretch;
-          gap: ${token.marginSM}px;
-        }
-        .si-view-route__stop--dest {
-          align-items: flex-start;
-          text-align: left;
-        }
-        .si-view-route__connector {
-          min-width: 0;
-          width: 100%;
         }
         .si-view-facts {
           grid-template-columns: repeat(2, minmax(0, 1fr));

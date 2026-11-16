@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-16 14:50) — sidebar nav icons; ref number view-only
+// Modified by Sekar Nagarajan (2026-11-16 15:20) — CTA uses routeId only (no raw-ref 404s)
 /**
  * Header bell: unread badge from the polled alert feed. Desktop opens a 380px popover;
  * mobile opens the same body in a bottom AppDrawer.
@@ -62,7 +62,10 @@ export function resolveSeverity(log: AlertHistoryLog): AppNotificationSeverity {
 
 /** Build a detail (or list fallback) path for the alert's resolved route id. */
 export function resolveActionHref(log: AlertHistoryLog, severity: AppNotificationSeverity): string {
-  const key = (log.routeId || log.referenceNo || "").trim();
+  // Prefer routeId only for detail deep-links. Falling back to raw referenceNo
+  // (often an LRP book number) caused /api/booking|si/:id 404s when the mock
+  // runtime overlay was stale relative to alert fixtures.
+  const key = (log.routeId || "").trim();
   const enc = key ? encodeURIComponent(key) : "";
 
   switch (log.category) {

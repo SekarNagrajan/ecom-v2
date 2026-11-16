@@ -1,11 +1,44 @@
 [
  {
+  "id": "51",
+  "userType": "CUSTOMER",
+  "userId": "10",
+  "menuId": "3",
+  "status": "A",
+  "createdAt": "2026-11-15T08:46:46.562Z",
+  "createdBy": null,
+  "updatedAt": null,
+  "updatedBy": null
+ },
+ {
+  "id": "50",
+  "userType": "CUSTOMER",
+  "userId": "10",
+  "menuId": "2",
+  "status": "A",
+  "createdAt": "2026-11-15T08:46:46.562Z",
+  "createdBy": null,
+  "updatedAt": null,
+  "updatedBy": null
+ },
+ {
+  "id": "49",
+  "userType": "CUSTOMER",
+  "userId": "10",
+  "menuId": "1",
+  "status": "A",
+  "createdAt": "2026-11-15T08:46:46.562Z",
+  "createdBy": null,
+  "updatedAt": null,
+  "updatedBy": null
+ },
+ {
   "id": "48",
   "userType": "CUSTOMER",
   "userId": "9",
   "menuId": "12",
   "status": "A",
-  "createdAt": "2026-10-16T18:41:10.998Z",
+  "createdAt": "2026-10-16T21:30:21.068Z",
   "createdBy": "user.invitation",
   "updatedAt": null,
   "updatedBy": null
@@ -16,7 +49,7 @@
   "userId": "9",
   "menuId": "11",
   "status": "A",
-  "createdAt": "2026-10-16T18:41:10.998Z",
+  "createdAt": "2026-10-16T21:30:21.068Z",
   "createdBy": "user.invitation",
   "updatedAt": null,
   "updatedBy": null
@@ -27,7 +60,7 @@
   "userId": "9",
   "menuId": "10",
   "status": "A",
-  "createdAt": "2026-10-16T18:41:10.998Z",
+  "createdAt": "2026-10-16T21:30:21.068Z",
   "createdBy": "user.invitation",
   "updatedAt": null,
   "updatedBy": null
@@ -38,7 +71,7 @@
   "userId": "9",
   "menuId": "3",
   "status": "A",
-  "createdAt": "2026-10-16T18:41:10.998Z",
+  "createdAt": "2026-10-16T21:30:21.068Z",
   "createdBy": "user.invitation",
   "updatedAt": null,
   "updatedBy": null
@@ -49,7 +82,7 @@
   "userId": "9",
   "menuId": "9",
   "status": "A",
-  "createdAt": "2026-10-16T18:41:10.998Z",
+  "createdAt": "2026-10-16T21:30:21.068Z",
   "createdBy": "user.invitation",
   "updatedAt": null,
   "updatedBy": null
@@ -60,7 +93,7 @@
   "userId": "9",
   "menuId": "8",
   "status": "A",
-  "createdAt": "2026-10-16T18:41:10.998Z",
+  "createdAt": "2026-10-16T21:30:21.068Z",
   "createdBy": "user.invitation",
   "updatedAt": null,
   "updatedBy": null
@@ -71,7 +104,7 @@
   "userId": "9",
   "menuId": "2",
   "status": "A",
-  "createdAt": "2026-10-16T18:41:10.998Z",
+  "createdAt": "2026-10-16T21:30:21.068Z",
   "createdBy": "user.invitation",
   "updatedAt": null,
   "updatedBy": null
@@ -82,7 +115,7 @@
   "userId": "9",
   "menuId": "7",
   "status": "A",
-  "createdAt": "2026-10-16T18:41:10.998Z",
+  "createdAt": "2026-10-16T21:30:21.068Z",
   "createdBy": "user.invitation",
   "updatedAt": null,
   "updatedBy": null
@@ -93,7 +126,7 @@
   "userId": "9",
   "menuId": "6",
   "status": "A",
-  "createdAt": "2026-10-16T18:41:10.998Z",
+  "createdAt": "2026-10-16T21:30:21.068Z",
   "createdBy": "user.invitation",
   "updatedAt": null,
   "updatedBy": null
@@ -104,7 +137,7 @@
   "userId": "9",
   "menuId": "1",
   "status": "A",
-  "createdAt": "2026-10-16T18:41:10.998Z",
+  "createdAt": "2026-10-16T21:30:21.068Z",
   "createdBy": "user.invitation",
   "updatedAt": null,
   "updatedBy": null
@@ -115,7 +148,7 @@
   "userId": "8",
   "menuId": "12",
   "status": "A",
-  "createdAt": "2026-10-16T04:32:20.832Z",
+  "createdAt": "2026-10-16T07:21:30.902Z",
   "createdBy": null,
   "updatedAt": null,
   "updatedBy": null
@@ -126,7 +159,7 @@
   "userId": "8",
   "menuId": "11",
   "status": "A",
-  "createdAt": "2026-10-16T04:32:20.832Z",
+  "createdAt": "2026-10-16T07:21:30.902Z",
   "createdBy": null,
   "updatedAt": null,
   "updatedBy": null
@@ -137,7 +170,7 @@
   "userId": "8",
   "menuId": "10",
   "status": "A",
-  "createdAt": "2026-10-16T04:32:20.832Z",
+  "createdAt": "2026-10-16T07:21:30.902Z",
   "createdBy": null,
   "updatedAt": null,
   "updatedBy": null
@@ -148,7 +181,7 @@
   "userId": "8",
   "menuId": "9",
   "status": "A",
-  "createdAt": "2026-10-16T04:32:20.832Z",
+  "createdAt": "2026-10-16T07:21:30.902Z",
   "createdBy": null,
   "updatedAt": null,
   "updatedBy": null
@@ -159,7 +192,7 @@
   "userId": "8",
   "menuId": "8",
   "status": "A",
-  "createdAt": "2026-10-16T04:32:20.832Z",
+  "createdAt": "2026-10-16T07:21:30.902Z",
   "createdBy": null,
   "updatedAt": null,
   "updatedBy": null
@@ -170,7 +203,7 @@
   "userId": "8",
   "menuId": "7",
   "status": "A",
-  "createdAt": "2026-10-16T04:32:20.832Z",
+  "createdAt": "2026-10-16T07:21:30.902Z",
   "createdBy": null,
   "updatedAt": null,
   "updatedBy": null
@@ -181,7 +214,7 @@
   "userId": "8",
   "menuId": "6",
   "status": "A",
-  "createdAt": "2026-10-16T04:32:20.832Z",
+  "createdAt": "2026-10-16T07:21:30.902Z",
   "createdBy": null,
   "updatedAt": null,
   "updatedBy": null
@@ -192,7 +225,7 @@
   "userId": "8",
   "menuId": "3",
   "status": "A",
-  "createdAt": "2026-10-16T04:32:20.832Z",
+  "createdAt": "2026-10-16T07:21:30.902Z",
   "createdBy": null,
   "updatedAt": null,
   "updatedBy": null
@@ -203,7 +236,7 @@
   "userId": "8",
   "menuId": "2",
   "status": "A",
-  "createdAt": "2026-10-16T04:32:20.832Z",
+  "createdAt": "2026-10-16T07:21:30.902Z",
   "createdBy": null,
   "updatedAt": null,
   "updatedBy": null
@@ -214,7 +247,7 @@
   "userId": "8",
   "menuId": "1",
   "status": "A",
-  "createdAt": "2026-10-16T04:32:20.832Z",
+  "createdAt": "2026-10-16T07:21:30.902Z",
   "createdBy": null,
   "updatedAt": null,
   "updatedBy": null
@@ -225,7 +258,7 @@
   "userId": "7",
   "menuId": "11",
   "status": "A",
-  "createdAt": "2026-10-12T20:16:46.275Z",
+  "createdAt": "2026-10-12T23:05:56.345Z",
   "createdBy": "user.invitation",
   "updatedAt": null,
   "updatedBy": null
@@ -236,7 +269,7 @@
   "userId": "7",
   "menuId": "10",
   "status": "A",
-  "createdAt": "2026-10-12T20:16:46.275Z",
+  "createdAt": "2026-10-12T23:05:56.345Z",
   "createdBy": "user.invitation",
   "updatedAt": null,
   "updatedBy": null
@@ -247,7 +280,7 @@
   "userId": "7",
   "menuId": "3",
   "status": "A",
-  "createdAt": "2026-10-12T20:16:46.275Z",
+  "createdAt": "2026-10-12T23:05:56.345Z",
   "createdBy": "user.invitation",
   "updatedAt": null,
   "updatedBy": null
@@ -258,7 +291,7 @@
   "userId": "7",
   "menuId": "9",
   "status": "A",
-  "createdAt": "2026-10-12T20:16:46.275Z",
+  "createdAt": "2026-10-12T23:05:56.345Z",
   "createdBy": "user.invitation",
   "updatedAt": null,
   "updatedBy": null
@@ -269,7 +302,7 @@
   "userId": "7",
   "menuId": "8",
   "status": "A",
-  "createdAt": "2026-10-12T20:16:46.275Z",
+  "createdAt": "2026-10-12T23:05:56.345Z",
   "createdBy": "user.invitation",
   "updatedAt": null,
   "updatedBy": null
@@ -280,7 +313,7 @@
   "userId": "7",
   "menuId": "2",
   "status": "A",
-  "createdAt": "2026-10-12T20:16:46.275Z",
+  "createdAt": "2026-10-12T23:05:56.345Z",
   "createdBy": "user.invitation",
   "updatedAt": null,
   "updatedBy": null
@@ -291,7 +324,7 @@
   "userId": "7",
   "menuId": "7",
   "status": "A",
-  "createdAt": "2026-10-12T20:16:46.275Z",
+  "createdAt": "2026-10-12T23:05:56.345Z",
   "createdBy": "user.invitation",
   "updatedAt": null,
   "updatedBy": null
@@ -302,7 +335,7 @@
   "userId": "7",
   "menuId": "6",
   "status": "A",
-  "createdAt": "2026-10-12T20:16:46.275Z",
+  "createdAt": "2026-10-12T23:05:56.345Z",
   "createdBy": "user.invitation",
   "updatedAt": null,
   "updatedBy": null
@@ -313,7 +346,7 @@
   "userId": "7",
   "menuId": "1",
   "status": "A",
-  "createdAt": "2026-10-12T20:16:46.275Z",
+  "createdAt": "2026-10-12T23:05:56.345Z",
   "createdBy": "user.invitation",
   "updatedAt": null,
   "updatedBy": null
@@ -324,7 +357,7 @@
   "userId": "5",
   "menuId": "12",
   "status": "A",
-  "createdAt": "2026-10-12T14:53:34.588Z",
+  "createdAt": "2026-10-12T17:42:44.658Z",
   "createdBy": "superadmin",
   "updatedAt": null,
   "updatedBy": null
@@ -335,7 +368,7 @@
   "userId": "5",
   "menuId": "11",
   "status": "A",
-  "createdAt": "2026-10-11T11:58:30.552Z",
+  "createdAt": "2026-10-11T14:47:40.622Z",
   "createdBy": "SYSTEM",
   "updatedAt": null,
   "updatedBy": null
@@ -346,7 +379,7 @@
   "userId": "5",
   "menuId": "10",
   "status": "A",
-  "createdAt": "2026-10-11T11:58:30.545Z",
+  "createdAt": "2026-10-11T14:47:40.615Z",
   "createdBy": "SYSTEM",
   "updatedAt": null,
   "updatedBy": null
@@ -357,7 +390,7 @@
   "userId": "5",
   "menuId": "3",
   "status": "A",
-  "createdAt": "2026-10-11T11:58:30.542Z",
+  "createdAt": "2026-10-11T14:47:40.612Z",
   "createdBy": "SYSTEM",
   "updatedAt": null,
   "updatedBy": null
@@ -368,7 +401,7 @@
   "userId": "5",
   "menuId": "9",
   "status": "A",
-  "createdAt": "2026-10-11T11:58:30.538Z",
+  "createdAt": "2026-10-11T14:47:40.608Z",
   "createdBy": "SYSTEM",
   "updatedAt": null,
   "updatedBy": null
@@ -379,7 +412,7 @@
   "userId": "5",
   "menuId": "8",
   "status": "A",
-  "createdAt": "2026-10-11T11:58:30.535Z",
+  "createdAt": "2026-10-11T14:47:40.605Z",
   "createdBy": "SYSTEM",
   "updatedAt": null,
   "updatedBy": null
@@ -390,7 +423,7 @@
   "userId": "5",
   "menuId": "2",
   "status": "A",
-  "createdAt": "2026-10-11T11:58:30.528Z",
+  "createdAt": "2026-10-11T14:47:40.598Z",
   "createdBy": "SYSTEM",
   "updatedAt": null,
   "updatedBy": null
@@ -401,7 +434,7 @@
   "userId": "5",
   "menuId": "7",
   "status": "A",
-  "createdAt": "2026-10-11T11:58:30.525Z",
+  "createdAt": "2026-10-11T14:47:40.595Z",
   "createdBy": "SYSTEM",
   "updatedAt": null,
   "updatedBy": null
@@ -412,7 +445,7 @@
   "userId": "5",
   "menuId": "6",
   "status": "A",
-  "createdAt": "2026-10-11T11:58:30.522Z",
+  "createdAt": "2026-10-11T14:47:40.592Z",
   "createdBy": "SYSTEM",
   "updatedAt": null,
   "updatedBy": null
@@ -423,7 +456,7 @@
   "userId": "5",
   "menuId": "1",
   "status": "A",
-  "createdAt": "2026-10-11T11:58:30.515Z",
+  "createdAt": "2026-10-11T14:47:40.585Z",
   "createdBy": "SYSTEM",
   "updatedAt": null,
   "updatedBy": null
@@ -434,7 +467,7 @@
   "userId": "1",
   "menuId": "11",
   "status": "A",
-  "createdAt": "2026-10-10T14:37:27.695Z",
+  "createdAt": "2026-10-10T17:26:37.765Z",
   "createdBy": "legacy-migration",
   "updatedAt": null,
   "updatedBy": null
@@ -445,7 +478,7 @@
   "userId": "1",
   "menuId": "10",
   "status": "A",
-  "createdAt": "2026-10-10T14:37:27.688Z",
+  "createdAt": "2026-10-10T17:26:37.758Z",
   "createdBy": "legacy-migration",
   "updatedAt": null,
   "updatedBy": null
@@ -456,7 +489,7 @@
   "userId": "1",
   "menuId": "3",
   "status": "A",
-  "createdAt": "2026-10-10T14:37:27.685Z",
+  "createdAt": "2026-10-10T17:26:37.755Z",
   "createdBy": "legacy-migration",
   "updatedAt": null,
   "updatedBy": null
@@ -467,7 +500,7 @@
   "userId": "1",
   "menuId": "9",
   "status": "A",
-  "createdAt": "2026-10-10T14:37:27.678Z",
+  "createdAt": "2026-10-10T17:26:37.748Z",
   "createdBy": "legacy-migration",
   "updatedAt": null,
   "updatedBy": null
@@ -478,7 +511,7 @@
   "userId": "1",
   "menuId": "8",
   "status": "A",
-  "createdAt": "2026-10-10T14:37:27.675Z",
+  "createdAt": "2026-10-10T17:26:37.745Z",
   "createdBy": "legacy-migration",
   "updatedAt": null,
   "updatedBy": null
@@ -489,7 +522,7 @@
   "userId": "1",
   "menuId": "2",
   "status": "A",
-  "createdAt": "2026-10-10T14:37:27.668Z",
+  "createdAt": "2026-10-10T17:26:37.738Z",
   "createdBy": "legacy-migration",
   "updatedAt": null,
   "updatedBy": null
@@ -500,7 +533,7 @@
   "userId": "1",
   "menuId": "7",
   "status": "A",
-  "createdAt": "2026-10-10T14:37:27.665Z",
+  "createdAt": "2026-10-10T17:26:37.735Z",
   "createdBy": "legacy-migration",
   "updatedAt": null,
   "updatedBy": null
@@ -511,18 +544,7 @@
   "userId": "1",
   "menuId": "6",
   "status": "A",
-  "createdAt": "2026-10-10T14:37:27.658Z",
-  "createdBy": "legacy-migration",
-  "updatedAt": null,
-  "updatedBy": null
- },
- {
-  "id": "1",
-  "userType": "CUSTOMER",
-  "userId": "1",
-  "menuId": "1",
-  "status": "A",
-  "createdAt": "2026-10-10T14:37:27.648Z",
+  "createdAt": "2026-10-10T17:26:37.728Z",
   "createdBy": "legacy-migration",
   "updatedAt": null,
   "updatedBy": null

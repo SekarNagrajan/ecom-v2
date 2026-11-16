@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-11-16 14:45) — resolve alert routeId for SI/BL/booking
+// Modified by Sekar Nagarajan (2026-11-16 15:20) — omit routeId when entity missing from mock db
 /**
  * Current demo user, profile, alert preferences and alert history derived from the fixtures:
  *   users (eCom_Reg_Details) + userDetails (ecomuserdetails)          → profile
@@ -370,6 +370,8 @@ const CATEGORY_TITLE: Record<AlertHistoryLog['category'], string> = {
 /**
  * Alert `referenceno` is often an external booking number even for SI/BL
  * rows. Resolve the detail-route key so CTAs open the right entity.
+ * When the entity is missing from the current mock db, omit `routeId` so the
+ * UI falls back to the module list instead of a 404 detail page.
  */
 export function resolveAlertRouteId(
   category: AlertHistoryLog['category'],
@@ -382,9 +384,11 @@ export function resolveAlertRouteId(
     const booking = findBooking(ref);
     const ebookno = str(booking?.ebookno);
     const ext = str(booking?.extBookNo);
+    const display = ebookno || ext || ref;
+    // Only deep-link when the booking exists in the current mock db.
     return {
-      routeId: ebookno || ext || ref,
-      displayRef: ebookno || ext || ref,
+      routeId: ebookno || undefined,
+      displayRef: display,
     };
   }
 

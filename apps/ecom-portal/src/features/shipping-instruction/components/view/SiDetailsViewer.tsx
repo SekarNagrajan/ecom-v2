@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-29 16:45)
+// Modified by Sekar Nagarajan (2026-11-16 15:30) — booking-preview route band on SI view
 import { ListView } from "@solverminds/shared-ui/data-view/list-view";
 import type { ColDef } from "ag-grid-community";
 import { Typography } from "antd";
@@ -22,6 +22,7 @@ import {
 } from "../preview/si-preview-section";
 import { SiLoadingCenter } from "../si-loading-center";
 import { SiPreviewCargoReview } from "../SiPreviewCargoReview";
+import { buildSiRouteBandModelFromDetail, SiRouteBand } from "./SiRouteBand";
 
 const { Text } = Typography;
 
@@ -44,35 +45,18 @@ interface ActivityEvent {
   note?: string;
 }
 
-type ActivityTone =
-  | "primary"
-  | "success"
-  | "warning"
-  | "error"
-  | "info"
-  | "muted";
+type ActivityTone = "primary" | "success" | "warning" | "error" | "info" | "muted";
 
-type ActivityTranslateFn = (
-  key: string,
-  options?: Record<string, unknown>,
-) => string;
+type ActivityTranslateFn = (key: string, options?: Record<string, unknown>) => string;
 
-const REVIEW_PARTY_ROLES: SiPartyRoleKey[] = [
-  "shipper",
-  "consignee",
-  "notify",
-  "forwarder",
-];
+const REVIEW_PARTY_ROLES: SiPartyRoleKey[] = ["shipper", "consignee", "notify", "forwarder"];
 
 function dash(value?: string | number | null): string {
   if (value === undefined || value === null || value === "") return "—";
   return String(value);
 }
 
-function partyForRole(
-  parties: SIDTO["parties"],
-  role: SiPartyRoleKey,
-): SIParty | undefined {
+function partyForRole(parties: SIDTO["parties"], role: SiPartyRoleKey): SIParty | undefined {
   switch (role) {
     case "shipper":
       return parties.shipper;
@@ -122,10 +106,7 @@ function ActivitySteps({ events }: { events: ActivityEvent[] }) {
         return (
           <li
             key={event.id}
-            className={[
-              "si-activity-steps__item",
-              isLast ? "si-activity-steps__item--last" : "",
-            ]
+            className={["si-activity-steps__item", isLast ? "si-activity-steps__item--last" : ""]
               .filter(Boolean)
               .join(" ")}
           >
@@ -135,9 +116,7 @@ function ActivitySteps({ events }: { events: ActivityEvent[] }) {
               >
                 <AppIcon icon={visual.icon} size={14} />
               </span>
-              {!isLast ? (
-                <span className="si-activity-steps__connector" />
-              ) : null}
+              {!isLast ? <span className="si-activity-steps__connector" /> : null}
             </div>
             <div className="si-activity-steps__body">
               <Text strong className="si-activity-steps__action">
@@ -146,9 +125,7 @@ function ActivitySteps({ events }: { events: ActivityEvent[] }) {
               <Text type="secondary" className="si-activity-steps__meta">
                 {event.by} · {event.at}
               </Text>
-              {event.note ? (
-                <Text className="si-activity-steps__note">{event.note}</Text>
-              ) : null}
+              {event.note ? <Text className="si-activity-steps__note">{event.note}</Text> : null}
             </div>
           </li>
         );
@@ -187,9 +164,7 @@ function buildSiActivityEvents(
       action: t("activity.submitted"),
       by,
       at: params.hints?.submittedDate || "—",
-      note: params.siNo
-        ? t("activity.siNoNote", { siNo: params.siNo })
-        : undefined,
+      note: params.siNo ? t("activity.siNoNote", { siNo: params.siNo }) : undefined,
     });
   }
   if (params.blNo) {
@@ -213,10 +188,7 @@ function buildSiActivityEvents(
   return events;
 }
 
-export function SiDetailsViewer({
-  siId,
-  activityHints,
-}: SiDetailsViewerProps) {
+export function SiDetailsViewer({ siId, activityHints }: SiDetailsViewerProps) {
   const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
   const WIZARD_STEP_TITLES = useWizardStepTitles();
   const { data, isLoading, isError } = useSiDetailQuery(siId);
@@ -293,21 +265,20 @@ export function SiDetailsViewer({
     { label: t("labels.blType"), value: dash(data.blType) },
     {
       label: t("labels.releaseType"),
-      value:
-        data.releaseType === "O" ? t("labels.original") : t("labels.telex"),
+      value: data.releaseType === "O" ? t("labels.original") : t("labels.telex"),
     },
     { label: t("labels.freightOption"), value: dash(data.freightOption) },
     { label: t("labels.agencyRefFull"), value: dash(data.agencyRefNo) },
   ];
+  const routeBand = buildSiRouteBandModelFromDetail(data, t);
 
   return (
     <div className="booking-review si-view-sections si-view-sections--single">
       <BookingModuleStyles />
 
-      <SiPreviewSection
-        variant="airy"
-        title={WIZARD_STEP_TITLES.masterDetails}
-      >
+      <SiRouteBand model={routeBand} />
+
+      <SiPreviewSection variant="airy" title={WIZARD_STEP_TITLES.masterDetails}>
         <SiPreviewFieldGrid items={masterRows} />
       </SiPreviewSection>
 
@@ -322,8 +293,7 @@ export function SiDetailsViewer({
                     roleKey={role}
                     party={party}
                     extra={
-                      role === "consignee" &&
-                      data.parties.consignee?.toOrder ? (
+                      role === "consignee" && data.parties.consignee?.toOrder ? (
                         <Text type="warning"> {t("labels.toOrder")}</Text>
                       ) : null
                     }
@@ -378,9 +348,7 @@ export function SiDetailsViewer({
             items={[
               {
                 label: t("labels.cargoValue"),
-                value: `${dash(data.insurance.cargoValue)} ${dash(
-                  data.insurance.currency,
-                )}`,
+                value: `${dash(data.insurance.cargoValue)} ${dash(data.insurance.currency)}`,
               },
               {
                 label: t("labels.policyNo"),
@@ -394,9 +362,7 @@ export function SiDetailsViewer({
               },
               {
                 label: t("labels.optOut"),
-                value: data.insurance.optOut
-                  ? t("common:actions.yes")
-                  : t("common:actions.no"),
+                value: data.insurance.optOut ? t("common:actions.yes") : t("common:actions.no"),
               },
             ]}
           />
@@ -410,10 +376,7 @@ export function SiDetailsViewer({
       </SiPreviewSection>
 
       {data.ens?.ensRequired ? (
-        <SiPreviewSection
-          variant="airy"
-          title={WIZARD_STEP_TITLES.ensDetails}
-        >
+        <SiPreviewSection variant="airy" title={WIZARD_STEP_TITLES.ensDetails}>
           <SiPreviewFieldGrid
             items={[
               {

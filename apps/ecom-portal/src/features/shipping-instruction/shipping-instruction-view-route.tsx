@@ -1,15 +1,11 @@
-// Modified by Sekar Nagarajan (2026-09-29 16:45)
+// Modified by Sekar Nagarajan (2026-11-16 15:30) — route band lives in SiDetailsViewer
 import { AppButton } from "@solverminds/shared-ui";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { Card, Result, Space } from "antd";
 import { useTranslation } from "react-i18next";
 
-import {
-  AppIcon,
-  Icons,
-  NavShippingInstructionIcon,
-} from "../../components/icons";
+import { AppIcon, Icons, NavShippingInstructionIcon } from "../../components/icons";
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
 import { formatModuleScreenTitle } from "../../constants/module-titles";
@@ -70,17 +66,12 @@ export function ShippingInstructionViewRoute() {
         <Card className="feature-page-card" bordered={false}>
           <ModuleScreenHeader
             icon={NavShippingInstructionIcon}
-            title={formatModuleScreenTitle(
-              MODULE_TITLES.shippingInstruction,
-              listRow?.siNo || id,
-            )}
+            title={formatModuleScreenTitle(MODULE_TITLES.shippingInstruction, listRow?.siNo || id)}
             marginBottom={0}
             extra={
               <AppButton
                 danger
-                icon={
-                  <AppIcon icon={Icons.arrowLeft} size={16} tone="delete" />
-                }
+                icon={<AppIcon icon={Icons.arrowLeft} size={16} tone="delete" />}
                 onClick={goDashboard}
               >
                 {t("actions.backToSi")}
@@ -88,39 +79,6 @@ export function ShippingInstructionViewRoute() {
             }
           />
         </Card>
-
-        {listRow ? (
-          <div className="si-route-strip">
-            <div className="si-route-port si-route-port--origin">
-              <div className="si-route-port__label">
-                <AppIcon icon={Icons.mapPin} size={14} />
-                {t("labels.origin")}
-              </div>
-              <div className="si-route-port__code form-step-readonly-value">
-                {listRow.origin}
-              </div>
-            </div>
-            <div className="si-route-connector">
-              <span className="si-route-connector__label">
-                {t("labels.portToPort")}
-              </span>
-              <div className="si-route-connector__line">
-                <span className="si-route-connector__track" />
-                <AppIcon icon={Icons.arrowRight} size={14} />
-                <span className="si-route-connector__track" />
-              </div>
-            </div>
-            <div className="si-route-port si-route-port--delivery">
-              <div className="si-route-port__label">
-                <AppIcon icon={Icons.mapPin} size={14} />
-                {t("labels.delivery")}
-              </div>
-              <div className="si-route-port__code form-step-readonly-value">
-                {listRow.delivery}
-              </div>
-            </div>
-          </div>
-        ) : null}
 
         <SiDetailsViewer siId={id} />
       </Space>

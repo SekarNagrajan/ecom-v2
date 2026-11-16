@@ -1554,126 +1554,6 @@
   "type": "T"
  },
  {
-  "terminalcode": "CTA",
-  "terminalname": "C.T. ALTENWERDER (CTA)",
-  "portcode": "DEHAM",
-  "type": "T"
- },
- {
-  "terminalcode": "CTB",
-  "terminalname": "C.T. BURCHARDKAI (CTB / BUKAI)",
-  "portcode": "DEHAM",
-  "type": "T"
- },
- {
-  "terminalcode": "CTT",
-  "terminalname": "C.T. TOLLERORT",
-  "portcode": "DEHAM",
-  "type": "T"
- },
- {
-  "terminalcode": "DEHAMDCMR",
-  "terminalname": "CMRA DEPOT",
-  "portcode": "DEHAM",
-  "type": "D"
- },
- {
-  "terminalcode": "DEHAMTER01",
-  "terminalname": "DEHAMTER01",
-  "portcode": "DEHAM",
-  "type": "T"
- },
- {
-  "terminalcode": "HAMEK",
-  "terminalname": "DEHAMTML01",
-  "portcode": "DEHAM",
-  "type": "T"
- },
- {
-  "terminalcode": "EGH",
-  "terminalname": "EUROGATE CONTAINER TERMINAL",
-  "portcode": "DEHAM",
-  "type": "T"
- },
- {
-  "terminalcode": "dehamhaju",
-  "terminalname": "hamburg",
-  "portcode": "DEHAM",
-  "type": "T"
- },
- {
-  "terminalcode": "DEHAMDDDP",
-  "terminalname": "HAMBURG DEPOT",
-  "portcode": "DEHAM",
-  "type": "D"
- },
- {
-  "terminalcode": "DEHAMDHCC",
-  "terminalname": "HCCR HAMBURG CONTAINER-UND-CHASSIS",
-  "portcode": "DEHAM",
-  "type": "D"
- },
- {
-  "terminalcode": "DEHAMDHCS",
-  "terminalname": "HCS HAMBURGER CONTAINER SERVICES GMBH",
-  "portcode": "DEHAM",
-  "type": "D"
- },
- {
-  "terminalcode": "DEHAMDRGC",
-  "terminalname": "REMAIN GMBH CONTAINER - DEPOT & REPAIR",
-  "portcode": "DEHAM",
-  "type": "D"
- },
- {
-  "terminalcode": "qwqwqw",
-  "terminalname": "-----@@@@@",
-  "portcode": "DKAAR",
-  "type": "D"
- },
- {
-  "terminalcode": "DKAARDAPM",
-  "terminalname": "APM TERMINALS",
-  "portcode": "DKAAR",
-  "type": "D"
- },
- {
-  "terminalcode": "DKAARDCCA",
-  "terminalname": "CONTAINERCARE AARHUS",
-  "portcode": "DKAAR",
-  "type": "D"
- },
- {
-  "terminalcode": "DKAARDDDP",
-  "terminalname": "DEPOT AARHUS",
-  "portcode": "DKAAR",
-  "type": "D"
- },
- {
-  "terminalcode": "SOLVERSVM",
-  "terminalname": "depot code",
-  "portcode": "DKAAR",
-  "type": "D"
- },
- {
-  "terminalcode": "DKAARDPTA",
-  "terminalname": "DKAARPT AARHUS",
-  "portcode": "DKAAR",
-  "type": "D"
- },
- {
-  "terminalcode": "DKAARTER01",
-  "terminalname": "DKAARTER01",
-  "portcode": "DKAAR",
-  "type": "T"
- },
- {
-  "terminalcode": "THAMMAMPAT",
-  "terminalname": "THAM Depot",
-  "portcode": "DKAAR",
-  "type": "D"
- },
- {
   "terminalcode": "EGALYALY00",
   "terminalname": "Alexandria Terminal",
   "portcode": "EGALY",
@@ -1698,150 +1578,6 @@
   "type": "T"
  },
  {
-  "terminalcode": "HKHKGACT00",
-  "terminalname": "ACT",
-  "portcode": "HKHKG",
-  "type": "T"
- },
- {
-  "terminalcode": "HKHKGCMC00",
-  "terminalname": "China Merchants Container Services Ltd",
-  "portcode": "HKHKG",
-  "type": "T"
- },
- {
-  "terminalcode": "HKHKGDCSL",
-  "terminalname": "CONTAINER SYSTEM LTD",
-  "portcode": "HKHKG",
-  "type": "D"
- },
- {
-  "terminalcode": "HKHKGCOS00",
-  "terminalname": "COSCO HIT",
-  "portcode": "HKHKG",
-  "type": "T"
- },
- {
-  "terminalcode": "HKHKGDPW00",
-  "terminalname": "DP WORLD HONG KONG",
-  "portcode": "HKHKG",
-  "type": "T"
- },
- {
-  "terminalcode": "HKHKGFLT00",
-  "terminalname": "FLOATA CONSORTIUM",
-  "portcode": "HKHKG",
-  "type": "T"
- },
- {
-  "terminalcode": "HKHKGHIT00",
-  "terminalname": "HIT",
-  "portcode": "HKHKG",
-  "type": "T"
- },
- {
-  "terminalcode": "HIT",
-  "terminalname": "HIT (HONGKONG INTERNATIONAL TERMINALS )",
-  "portcode": "HKHKG",
-  "type": "T"
- },
- {
-  "terminalcode": "HKGHIT01",
-  "terminalname": "HKGHIT01",
-  "portcode": "HKHKG",
-  "type": "T"
- },
- {
-  "terminalcode": "HKHKGTER01",
-  "terminalname": "HKHKGTER01",
-  "portcode": "HKHKG",
-  "type": "T"
- },
- {
-  "terminalcode": "HKGMO",
-  "terminalname": "HKHKGTML01",
-  "portcode": "HKHKG",
-  "type": "T"
- },
- {
-  "terminalcode": "HKHKGDDDP",
-  "terminalname": "HONG KONG DEPOT",
-  "portcode": "HKHKG",
-  "type": "D"
- },
- {
-  "terminalcode": "HKHKGHKG00",
-  "terminalname": "HONG KONG PORT",
-  "portcode": "HKHKG",
-  "type": "T"
- },
- {
-  "terminalcode": "HKHKGMTL00",
-  "terminalname": "MODERN TERMINALS LTD",
-  "portcode": "HKHKG",
-  "type": "T"
- },
- {
-  "terminalcode": "HKHKGDPCL",
-  "terminalname": "PCL CONTAINER SERVICES LIMITED",
-  "portcode": "HKHKG",
-  "type": "D"
- },
- {
-  "terminalcode": "HKHKGRTT00",
-  "terminalname": "RIVER TRADE TERMINALS",
-  "portcode": "HKHKG",
-  "type": "T"
- },
- {
-  "terminalcode": "HKHKGDSPC",
-  "terminalname": "SUN POWER CNTR LOGI *DEPOT RT",
-  "portcode": "HKHKG",
-  "type": "D"
- },
- {
-  "terminalcode": "HKHKGDTEC",
-  "terminalname": "TECO C",
-  "portcode": "HKHKG",
-  "type": "D"
- },
- {
-  "terminalcode": "HKHKGDVKC",
-  "terminalname": "VICTORY KIND CONTAINER SERVICE LIMITED",
-  "portcode": "HKHKG",
-  "type": "D"
- },
- {
-  "terminalcode": "HKHKGYFT00",
-  "terminalname": "YUEN FAT TERMINAL",
-  "portcode": "HKHKG",
-  "type": "T"
- },
- {
-  "terminalcode": "INAMDDDDP",
-  "terminalname": "AMADABAD",
-  "portcode": "INAMD",
-  "type": "D"
- },
- {
-  "terminalcode": "INAMDRAH",
-  "terminalname": "AMADABAD RAIL HEADS",
-  "portcode": "INAMD",
-  "type": "D"
- },
- {
-  "terminalcode": "INAMDIWAHH",
-  "terminalname": "IN - WareHouse",
-  "portcode": "INAMD",
-  "type": "D"
- },
- {
-  "terminalcode": "INAMDTER01",
-  "terminalname": "INAMDTER01",
-  "portcode": "INAMD",
-  "type": "T"
- },
- {
   "terminalcode": "INBLRDDDP",
   "terminalname": "BANGALORE",
   "portcode": "INBLR",
@@ -1863,18 +1599,6 @@
   "terminalcode": "INBLRTER01",
   "terminalname": "INBLRTER01",
   "portcode": "INBLR",
-  "type": "T"
- },
- {
-  "terminalcode": "INHZAAHCT0",
-  "terminalname": "ADANI HAZIRA CONTAINER TERMINAL",
-  "portcode": "INHZA",
-  "type": "T"
- },
- {
-  "terminalcode": "INHZATER01",
-  "terminalname": "INHZATER01",
-  "portcode": "INHZA",
   "type": "T"
  },
  {
@@ -3402,12 +3126,6 @@
   "type": "T"
  },
  {
-  "terminalcode": "USNTDTER01",
-  "terminalname": "HeunemeTerminal",
-  "portcode": "USNTD",
-  "type": "T"
- },
- {
   "terminalcode": "USSEA",
   "terminalname": "SEATLET ERMINAL",
   "portcode": "USSEA",
@@ -3427,7 +3145,7 @@
  },
  {
   "terminalcode": "USSEATER01",
-  "terminalname": "USSEATER01",
+  "terminalname": "USSEA TERMINAL",
   "portcode": "USSEA",
   "type": "T"
  },

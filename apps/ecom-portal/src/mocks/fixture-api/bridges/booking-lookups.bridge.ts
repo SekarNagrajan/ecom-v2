@@ -9,7 +9,16 @@
  */
 import { db, type Row } from '../db';
 import { distinctValues, mostCommon, str } from './booking-shared.bridge';
-import { codeLabel, commodityName, customerName, equipmentRow, packageName, portLabel, portName, terminalName } from './masters.bridge';
+import {
+  codeLabel,
+  commodityName,
+  customerName,
+  equipmentRow,
+  packageName,
+  portLabel,
+  portName,
+  terminalName,
+} from './masters.bridge';
 
 export type BookingLookupOption = { label: string; value: string };
 
@@ -33,6 +42,8 @@ export interface BookingCustomerOption {
   country: string;
   email?: string;
   phone?: string;
+  /** Street address when known (e.g. session-created new customers). */
+  address?: string;
 }
 
 export interface BookingHsCodeOption {
@@ -58,7 +69,9 @@ const stripCode = (text: string) => text.replace(/\s*\([^)]*\)\s*$/, '').trim();
 
 /** Equipment codes in the data are written both ways (RE20 / 20RE / 20DV / DV20). */
 export function splitEquipmentCode(code: string): { size: string; type: string } {
-  const m = str(code).toUpperCase().match(/^([A-Z]*)(\d{2})([A-Z]*)$/);
+  const m = str(code)
+    .toUpperCase()
+    .match(/^([A-Z]*)(\d{2})([A-Z]*)$/);
   if (!m) return { size: '', type: str(code).toUpperCase() };
   return { size: m[2], type: m[1] || m[3] };
 }
@@ -103,10 +116,12 @@ export interface LookupSources {
 export function lookupOptionsFromRows(kind: BookingLookupKind, s: LookupSources): BookingLookupOption[] {
   switch (kind) {
     case 'containerTypes': {
-      const codes = [...distinctValues(s.cargo, 'eqpSize'), ...distinctValues(s.haulage, 'eqptypeid')]
-        .map(c => c.toUpperCase());
+      const codes = [...distinctValues(s.cargo, 'eqpSize'), ...distinctValues(s.haulage, 'eqptypeid')].map(c =>
+        c.toUpperCase(),
+      );
       const unique = [...new Set(codes)].sort((a, b) => {
-        const sa = splitEquipmentCode(a); const sb = splitEquipmentCode(b);
+        const sa = splitEquipmentCode(a);
+        const sb = splitEquipmentCode(b);
         return sa.size.localeCompare(sb.size) || a.localeCompare(b);
       });
       return asOptions(unique, c => equipmentLabel(c, s.lookups));
@@ -116,12 +131,23 @@ export function lookupOptionsFromRows(kind: BookingLookupKind, s: LookupSources)
       const codes = distinctValues(s.commodities, 'commodity');
       return codes.map(code => {
         const master = commodityName(code);
-        const desc = master !== code ? master : mostCommon(s.commodities.filter(c => str(c.commodity) === code), 'descr');
+        const desc =
+          master !== code
+            ? master
+            : mostCommon(
+                s.commodities.filter(c => str(c.commodity) === code),
+                'descr',
+              );
         return { value: code, label: desc ? `${code} - ${desc}` : code };
       });
     }
     case 'packageTypes':
-      return asOptions(distinctValues(s.commodities, 'package').map(p => p.toUpperCase()).sort(), p => codeLabel(p, packageName(p)));
+      return asOptions(
+        distinctValues(s.commodities, 'package')
+          .map(p => p.toUpperCase())
+          .sort(),
+        p => codeLabel(p, packageName(p)),
+      );
     case 'dgClasses':
       return asOptions(
         distinctValues(s.dg, 'class').sort((a, b) => a.localeCompare(b, undefined, { numeric: true })),
@@ -134,7 +160,10 @@ export function lookupOptionsFromRows(kind: BookingLookupKind, s: LookupSources)
     case 'agencies': {
       const codes = [...new Set([...distinctValues(s.bookings, 'agencyid'), ...distinctValues(s.users, 'agencycode')])];
       return codes.map(code => {
-        const location = mostCommon(s.users.filter(u => str(u.agencycode).toUpperCase() === code.toUpperCase()), 'control_location');
+        const location = mostCommon(
+          s.users.filter(u => str(u.agencycode).toUpperCase() === code.toUpperCase()),
+          'control_location',
+        );
         return { value: code, label: location ? `${code} - ${portName(location)}` : code };
       });
     }
@@ -157,7 +186,9 @@ export function lookupOptionsFromRows(kind: BookingLookupKind, s: LookupSources)
     }
     case 'emptyPickupFacilities': {
       // ecombooking.emptypickup is blank in the sample; the load terminals of the booked legs are the depots/terminals in use.
-      const terminals = distinctValues(s.legs, 'loadTerminal').filter(t => t.length > 1).sort();
+      const terminals = distinctValues(s.legs, 'loadTerminal')
+        .filter(t => t.length > 1)
+        .sort();
       return asOptions(terminals, t => codeLabel(t, terminalName(t)));
     }
     case 'dpwShipperTypes': {
@@ -166,7 +197,11 @@ export function lookupOptionsFromRows(kind: BookingLookupKind, s: LookupSources)
       return asOptions([...new Set([...fromLookups, ...fromUsers])]);
     }
     case 'documentTypes':
-      return asOptions(distinctValues(s.files, 'FileCatgeory').map(c => c.toUpperCase()).sort());
+      return asOptions(
+        distinctValues(s.files, 'FileCatgeory')
+          .map(c => c.toUpperCase())
+          .sort(),
+      );
     default:
       return [];
   }
@@ -244,8 +279,10 @@ export function hsCodeOptionsFromRows(commodities: Row[]): BookingHsCodeOption[]
   return distinctValues(commodities, 'HSCommodity').map(code => ({
     code,
     desc:
-      mostCommon(commodities.filter(c => str(c.HSCommodity) === code), 'descr') ||
-      commodityName(str(commodities.find(c => str(c.HSCommodity) === code)?.commodity)),
+      mostCommon(
+        commodities.filter(c => str(c.HSCommodity) === code),
+        'descr',
+      ) || commodityName(str(commodities.find(c => str(c.HSCommodity) === code)?.commodity)),
   }));
 }
 
@@ -255,14 +292,18 @@ export function searchHsCodeOptions(options: BookingHsCodeOption[], query: strin
   return options.filter(h => h.code.toLowerCase().includes(q) || h.desc.toLowerCase().includes(q));
 }
 
-export const fixtureBookingHsCodes = (query: string) => searchHsCodeOptions(hsCodeOptionsFromRows(db.bookingCommodity), query);
+export const fixtureBookingHsCodes = (query: string) =>
+  searchHsCodeOptions(hsCodeOptionsFromRows(db.bookingCommodity), query);
 
 /** ecombooking_dg has no proper-shipping-name column, so the name is the IMDG class the UN number was booked under. */
 export function unNumberOptionsFromRows(dg: Row[]): BookingUnNumberOption[] {
   return distinctValues(dg, 'unNo')
     .sort()
     .map(un => {
-      const dgClass = mostCommon(dg.filter(d => str(d.unNo) === un), 'class');
+      const dgClass = mostCommon(
+        dg.filter(d => str(d.unNo) === un),
+        'class',
+      );
       return { un, name: dgClass ? `IMDG class ${dgClass}` : '', dgClass };
     });
 }
@@ -273,4 +314,5 @@ export function searchUnNumberOptions(options: BookingUnNumberOption[], query: s
   return options.filter(u => u.un.includes(q) || u.name.toLowerCase().includes(q) || u.dgClass.includes(q));
 }
 
-export const fixtureBookingUnNumbers = (query: string) => searchUnNumberOptions(unNumberOptionsFromRows(db.bookingDg), query);
+export const fixtureBookingUnNumbers = (query: string) =>
+  searchUnNumberOptions(unNumberOptionsFromRows(db.bookingDg), query);

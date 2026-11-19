@@ -276,6 +276,10 @@
       "notAssignedYet": "Aún no asignado",
       "assign": "Asignar",
       "searchPlaceholder": "Buscar por nombre o código de cliente",
+      "newCustomer": "Cliente nuevo",
+      "addNewCustomer": "Agregar cliente nuevo",
+      "createCustomerTitle": "Cliente nuevo",
+      "createCustomerSuccess": "Cliente listo — seleccione roles para asignar",
       "rolesAssigned": "Roles de parte asignados"
     },
     "routing": {

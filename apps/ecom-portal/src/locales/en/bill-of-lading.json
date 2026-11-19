@@ -276,6 +276,10 @@
       "notAssignedYet": "Not assigned yet",
       "assign": "Assign",
       "searchPlaceholder": "Search by customer name or code",
+      "newCustomer": "New Customer",
+      "addNewCustomer": "Add new customer",
+      "createCustomerTitle": "New Customer",
+      "createCustomerSuccess": "Customer ready — select roles to assign",
       "rolesAssigned": "Party roles assigned"
     },
     "routing": {

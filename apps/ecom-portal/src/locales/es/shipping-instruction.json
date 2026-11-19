@@ -182,6 +182,10 @@
     "toOrderFlag": "A la orden",
     "notAssignedYet": "Aún no asignado",
     "searchPlaceholder": "Buscar por nombre o código de cliente",
+    "newCustomer": "Cliente nuevo",
+    "addNewCustomer": "Agregar cliente nuevo",
+    "createCustomerTitle": "Cliente nuevo",
+    "createCustomerSuccess": "Cliente listo — seleccione roles para asignar",
     "assignHint": "Seleccione roles para asignar este cliente y luego haga clic en Añadir seleccionados.",
     "assigned": "Asignado"
   },

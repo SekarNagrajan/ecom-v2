@@ -76,9 +76,7 @@ export const masterDetailsSchema = z.object({
   oceanFreight: z.enum(["Prepaid", "Collect", ""]).optional(),
   placeOfFinalReceipt: z.string().optional(),
   natCode: z.string().optional(),
-  haulageType: z
-    .enum(["Live Load", "Drop Only", "Pickup only", "Pickup & Drop", ""])
-    .optional(),
+  haulageType: z.enum(["Live Load", "Drop Only", "Pickup only", "Pickup & Drop", ""]).optional(),
   pickupDate: z.string().optional(),
   dropDate: z.string().optional(),
   haulerCode: z.string().optional(),
@@ -127,31 +125,43 @@ export const partiesSchema = z.object({
   consigneeAddress: z.string().optional(),
   consigneeCity: z.string().optional(),
   consigneeCountry: z.string().optional(),
-  consigneeEmail: z
-    .string()
-    .email("Invalid email")
-    .optional()
-    .or(z.literal("")),
+  consigneeEmail: z.string().email("Invalid email").optional().or(z.literal("")),
   consigneePhone: z.string().optional(),
   notifyPartyName: z.string().optional(),
   notifyPartyContact: z.string().optional(),
   notifyPartyAddress: z.string().optional(),
   notifyPartyCity: z.string().optional(),
   notifyPartyCountry: z.string().optional(),
-  notifyPartyEmail: z
-    .string()
-    .email("Invalid email")
-    .optional()
-    .or(z.literal("")),
+  notifyPartyEmail: z.string().email("Invalid email").optional().or(z.literal("")),
   notifyPartyPhone: z.string().optional(),
   notifyParty2Name: z.string().optional(),
   notifyParty2Contact: z.string().optional(),
+  notifyParty2Address: z.string().optional(),
+  notifyParty2City: z.string().optional(),
+  notifyParty2Country: z.string().optional(),
+  notifyParty2Email: z.string().email("Invalid email").optional().or(z.literal("")),
+  notifyParty2Phone: z.string().optional(),
   freightForwarder: z.string().optional(),
   freightForwarderContact: z.string().optional(),
+  freightForwarderAddress: z.string().optional(),
+  freightForwarderCity: z.string().optional(),
+  freightForwarderCountry: z.string().optional(),
+  freightForwarderEmail: z.string().email("Invalid email").optional().or(z.literal("")),
+  freightForwarderPhone: z.string().optional(),
   agreementParty: z.string().min(1, "Agreement Party is required"),
   agreementPartyContact: z.string().optional(),
+  agreementPartyAddress: z.string().optional(),
+  agreementPartyCity: z.string().optional(),
+  agreementPartyCountry: z.string().optional(),
+  agreementPartyEmail: z.string().email("Invalid email").optional().or(z.literal("")),
+  agreementPartyPhone: z.string().optional(),
   siSubmittingParty: z.string().min(1, "SI Submitting Party is required"),
   siSubmittingPartyContact: z.string().optional(),
+  siSubmittingPartyAddress: z.string().optional(),
+  siSubmittingPartyCity: z.string().optional(),
+  siSubmittingPartyCountry: z.string().optional(),
+  siSubmittingPartyEmail: z.string().email("Invalid email").optional().or(z.literal("")),
+  siSubmittingPartyPhone: z.string().optional(),
 });
 
 // Step 3: Cargo & Equipment — containers[] with nested commodities
@@ -169,9 +179,7 @@ export function resetMockContainerSeq(startAt = 0): void {
 }
 
 /** Advance the sequencer past any …TNBn values already present. */
-export function syncMockContainerSeqFromNos(
-  containerNos: Array<string | undefined>,
-): void {
+export function syncMockContainerSeqFromNos(containerNos: Array<string | undefined>): void {
   let max = 0;
   for (const no of containerNos) {
     const match = (no ?? "").trim().match(/TNB(\d+)$/i);
@@ -195,10 +203,7 @@ export function mockContainerTypeCode(containerType?: string): string {
  * Mock container number: {type}TNB{n} — e.g. 20DCTNB1, 40HCTNB2.
  * `n` starts at 1 and increments for each new number (unless uniqueIndex is passed).
  */
-export function createMockContainerNo(
-  containerType = "20DC",
-  uniqueIndex?: number,
-): string {
+export function createMockContainerNo(containerType = "20DC", uniqueIndex?: number): string {
   const typeCode = mockContainerTypeCode(containerType);
   let seq: number;
   if (uniqueIndex !== undefined && uniqueIndex > 0) {
@@ -289,9 +294,7 @@ export const containerItemSchema = z.object({
   owRight: z.number().optional(),
   oh: z.number().optional(),
   dimensionUnit: z.string().optional(),
-  commodities: z
-    .array(commodityItemSchema)
-    .min(1, "At least one commodity is required"),
+  commodities: z.array(commodityItemSchema).min(1, "At least one commodity is required"),
 });
 
 export function createCargoSchema(t: ValidationTranslateFn = defaultVT) {
@@ -335,16 +338,12 @@ export function createCargoSchema(t: ValidationTranslateFn = defaultVT) {
     owRight: z.number().optional(),
     oh: z.number().optional(),
     dimensionUnit: z.string().optional(),
-    commodities: z
-      .array(commoditySchema)
-      .min(1, t("wizard.cargo.validation.atLeastOneCommodity")),
+    commodities: z.array(commoditySchema).min(1, t("wizard.cargo.validation.atLeastOneCommodity")),
   });
 
   return z
     .object({
-      containers: z
-        .array(containerSchema)
-        .min(1, t("wizard.cargo.validation.atLeastOneContainer")),
+      containers: z.array(containerSchema).min(1, t("wizard.cargo.validation.atLeastOneContainer")),
     })
     .superRefine((data, ctx) => {
       data.containers.forEach((container, ci) => {
@@ -463,47 +462,42 @@ export function migrateLegacyCargo(legacy: unknown): CargoData {
   if (!legacy || typeof legacy !== "object") return defaultCargoData();
   const raw = legacy as Record<string, unknown>;
   if (Array.isArray(raw.containers) && raw.containers.length > 0) {
-    const containers = (raw.containers as Record<string, unknown>[]).map(
-      (containerRaw) => {
-        const type = String(containerRaw.containerType ?? "20DC");
-        const base = createEmptyContainer(type, { allocateMockNo: false });
-        const commoditiesRaw = Array.isArray(containerRaw.commodities)
-          ? containerRaw.commodities
-          : [];
-        return {
-          ...base,
-          ...containerRaw,
-          id: String(containerRaw.id ?? base.id),
-          containerType: type,
-          containerNo:
-            String(
-              containerRaw.containerNo ?? containerRaw.containerNumber ?? "",
-            ).trim() || createMockContainerNo(type),
-          commodities:
-            commoditiesRaw.length > 0
-              ? commoditiesRaw.map((item) => {
-                  const row = (item ?? {}) as Record<string, unknown>;
-                  const empty = createEmptyCommodity();
-                  return {
-                    ...empty,
-                    ...row,
-                    id: String(row.id ?? empty.id),
-                    commodity: String(row.commodity ?? ""),
-                    hsCode: String(row.hsCode ?? ""),
-                    weight: Number(row.weight ?? 1) || 1,
-                    volume: typeof row.volume === "number" ? row.volume : 0,
-                    packageType: String(row.packageType ?? ""),
-                    packageQuantity: Number(row.packageQuantity ?? 1) || 1,
-                    description: String(
-                      row.description ?? row.commodity ?? "",
-                    ),
-                    marksAndNumbers: String(row.marksAndNumbers ?? ""),
-                  } as CommodityItem;
-                })
-              : [createEmptyCommodity()],
-        } as ContainerItem;
-      },
-    );
+    const containers = (raw.containers as Record<string, unknown>[]).map((containerRaw) => {
+      const type = String(containerRaw.containerType ?? "20DC");
+      const base = createEmptyContainer(type, { allocateMockNo: false });
+      const commoditiesRaw = Array.isArray(containerRaw.commodities)
+        ? containerRaw.commodities
+        : [];
+      return {
+        ...base,
+        ...containerRaw,
+        id: String(containerRaw.id ?? base.id),
+        containerType: type,
+        containerNo:
+          String(containerRaw.containerNo ?? containerRaw.containerNumber ?? "").trim() ||
+          createMockContainerNo(type),
+        commodities:
+          commoditiesRaw.length > 0
+            ? commoditiesRaw.map((item) => {
+                const row = (item ?? {}) as Record<string, unknown>;
+                const empty = createEmptyCommodity();
+                return {
+                  ...empty,
+                  ...row,
+                  id: String(row.id ?? empty.id),
+                  commodity: String(row.commodity ?? ""),
+                  hsCode: String(row.hsCode ?? ""),
+                  weight: Number(row.weight ?? 1) || 1,
+                  volume: typeof row.volume === "number" ? row.volume : 0,
+                  packageType: String(row.packageType ?? ""),
+                  packageQuantity: Number(row.packageQuantity ?? 1) || 1,
+                  description: String(row.description ?? row.commodity ?? ""),
+                  marksAndNumbers: String(row.marksAndNumbers ?? ""),
+                } as CommodityItem;
+              })
+            : [createEmptyCommodity()],
+      } as ContainerItem;
+    });
     syncMockContainerSeqFromNos(containers.map((c) => c.containerNo));
     return { containers };
   }
@@ -533,8 +527,7 @@ export function migrateLegacyCargo(legacy: unknown): CargoData {
   container.minTemp = typeof raw.minTemp === "number" ? raw.minTemp : undefined;
   container.maxTemp = typeof raw.maxTemp === "number" ? raw.maxTemp : undefined;
   container.tempUnit = String(raw.tempUnit ?? "Celsius");
-  container.olForward =
-    typeof raw.olForward === "number" ? raw.olForward : undefined;
+  container.olForward = typeof raw.olForward === "number" ? raw.olForward : undefined;
   container.olAft = typeof raw.olAft === "number" ? raw.olAft : undefined;
   container.owLeft = typeof raw.owLeft === "number" ? raw.owLeft : undefined;
   container.owRight = typeof raw.owRight === "number" ? raw.owRight : undefined;
@@ -555,12 +548,8 @@ export function createEnsSchema(t: ValidationTranslateFn = defaultVT) {
   return z.object({
     euCustomsZone: z.boolean().default(false),
     blType: z.enum(["Straight BL", "Master BL"]).default("Straight BL"),
-    ensFilingType: z
-      .enum(["Single Filing", "Multiple Filing"])
-      .default("Single Filing"),
-    paymentMethod: z
-      .enum(["Wire Transfer", "Not Prepaid"])
-      .default("Wire Transfer"),
+    ensFilingType: z.enum(["Single Filing", "Multiple Filing"]).default("Single Filing"),
+    paymentMethod: z.enum(["Wire Transfer", "Not Prepaid"]).default("Wire Transfer"),
 
     // Declarant
     declarantName: z.string().optional(),

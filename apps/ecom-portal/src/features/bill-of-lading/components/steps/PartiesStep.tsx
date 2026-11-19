@@ -10,6 +10,11 @@ import type { BookingCustomerOption } from "../../../booking/api/booking.api";
 import { BookingModuleStyles } from "../../../booking/components/booking-module-styles";
 import { CustomerSearchAutoComplete } from "../../../booking/components/party-edit-drawer";
 import {
+  customerOptionToPartyCard,
+  partyCardToCustomerOption,
+} from "../../../booking/utils/party-customer.utils";
+import type { PartyCardData } from "../../../booking/utils/party-role.utils";
+import {
   SiPartyEditDrawer,
   SiRoleAssignPanel,
 } from "../../../shipping-instruction/components/si-party-edit-drawer";
@@ -22,20 +27,25 @@ import {
   type SiPartyRoleKey,
 } from "../../../shipping-instruction/utils/si-party.utils";
 import { blPartiesStepSchema } from "../../types/bl.types";
-import {
-  cardsToBlParties,
-  cardsToSiPartiesForm,
-} from "../../utils/bl-party.utils";
+import { cardsToBlParties, cardsToSiPartiesForm } from "../../utils/bl-party.utils";
 import { BlPartyStyles } from "../bl-party-styles";
 import { BlWizardFooter } from "../bl-wizard-footer";
 import type { BLWizardStepProps } from "./MasterDetailsStep";
 
+function toSiPartyCard(
+  card: PartyCardData,
+  extras?: Pick<SiPartyCardData, "toOrder">,
+): SiPartyCardData {
+  return {
+    ...card,
+    printOnBl: true,
+    ...extras,
+  };
+}
+
 const { Text } = Typography;
 
-const BL_PARTY_ROLE_ICON: Record<
-  SiPartyRoleKey,
-  (typeof Icons)[keyof typeof Icons]
-> = {
+const BL_PARTY_ROLE_ICON: Record<SiPartyRoleKey, (typeof Icons)[keyof typeof Icons]> = {
   shipper: Icons.building,
   consignee: Icons.user,
   notify: Icons.bell,
@@ -49,9 +59,7 @@ const BL_PARTY_ROLE_ICON: Record<
 function partySecondaryLines(card: SiPartyCardData): string[] {
   const lines: string[] = [];
   if (card.contact?.trim()) lines.push(card.contact.trim());
-  const location = [card.address, card.city, card.country]
-    .filter(Boolean)
-    .join(", ");
+  const location = [card.address, card.city, card.country].filter(Boolean).join(", ");
   if (location) lines.push(location);
   else if (card.email || card.phone) {
     lines.push([card.email, card.phone].filter(Boolean).join(" · "));
@@ -79,9 +87,7 @@ function BlPartyRoleCard({
   fromAccount?: boolean;
   onEdit: () => void;
   onDelete: () => void;
-  onUpdateFlag: (
-    patch: Partial<Pick<SiPartyCardData, "printOnBl" | "toOrder">>,
-  ) => void;
+  onUpdateFlag: (patch: Partial<Pick<SiPartyCardData, "printOnBl" | "toOrder">>) => void;
   t: (key: string) => string;
 }) {
   const secondary = partySecondaryLines(card);
@@ -132,11 +138,7 @@ function BlPartyRoleCard({
         </Text>
         {secondary.length > 0 ? (
           secondary.map((line) => (
-            <Text
-              key={line}
-              type="secondary"
-              className="booking-party-card__meta"
-            >
+            <Text key={line} type="secondary" className="booking-party-card__meta">
               {line}
             </Text>
           ))
@@ -216,30 +218,81 @@ export function PartiesStep({
 }: BLWizardStepProps) {
   const { t } = useTranslation(["bill-of-lading", "common"]);
   const toast = useToast();
-  const [cards, setCards] = useState<
-    Partial<Record<SiPartyRoleKey, SiPartyCardData>>
-  >(() => initialSiPartyCards(data.parties));
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCustomer, setSelectedCustomer] =
-    useState<BookingCustomerOption | null>(null);
-  const [editRole, setEditRole] = useState<SiPartyRoleKey | null>(null);
-  const [editValue, setEditValue] = useState<SiPartyCardData>(
-    emptySiPartyCard(),
+  const [cards, setCards] = useState<Partial<Record<SiPartyRoleKey, SiPartyCardData>>>(() =>
+    initialSiPartyCards(data.parties),
   );
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCustomer, setSelectedCustomer] = useState<BookingCustomerOption | null>(null);
+  const [pendingNewPartyCard, setPendingNewPartyCard] = useState<PartyCardData | null>(null);
+  const [sessionCustomers, setSessionCustomers] = useState<BookingCustomerOption[]>([]);
+  const [sessionPartyCards, setSessionPartyCards] = useState<Record<string, PartyCardData>>({});
+  const [editRole, setEditRole] = useState<SiPartyRoleKey | null>(null);
+  const [editValue, setEditValue] = useState<SiPartyCardData>(emptySiPartyCard());
+  const [createOpen, setCreateOpen] = useState(false);
+  const [createValue, setCreateValue] = useState<SiPartyCardData>(emptySiPartyCard());
 
   const assignedRoles = Object.keys(cards) as SiPartyRoleKey[];
-  const otherEntries = (
-    Object.entries(cards) as [SiPartyRoleKey, SiPartyCardData][]
-  ).filter(([role]) => !DEFAULT_SI_PARTY_ROLES.includes(role));
+  const otherEntries = (Object.entries(cards) as [SiPartyRoleKey, SiPartyCardData][]).filter(
+    ([role]) => !DEFAULT_SI_PARTY_ROLES.includes(role),
+  );
 
   const handleSelectCustomer = (customer: BookingCustomerOption) => {
     setSelectedCustomer(customer);
     setSearchQuery(customer.customerName);
+    setPendingNewPartyCard(sessionPartyCards[customer.customerCode] ?? null);
   };
 
   const clearSelectedCustomer = () => {
     setSelectedCustomer(null);
+    setPendingNewPartyCard(null);
     setSearchQuery("");
+  };
+
+  const openCreateCustomer = (typedQuery?: string) => {
+    setCreateValue({
+      ...emptySiPartyCard(),
+      company: typedQuery?.trim() || "",
+    });
+    setCreateOpen(true);
+  };
+
+  const closeCreateCustomer = () => {
+    setCreateOpen(false);
+    setCreateValue(emptySiPartyCard());
+  };
+
+  const saveCreateCustomer = () => {
+    if (!createValue.company.trim()) {
+      toast.error(t("wizard.validation.companyRequired"));
+      return;
+    }
+    const base: PartyCardData = {
+      company: createValue.company.trim(),
+      contact: createValue.contact,
+      address: createValue.address,
+      city: createValue.city,
+      country: createValue.country,
+      email: createValue.email,
+      phone: createValue.phone,
+    };
+    const option = partyCardToCustomerOption(base);
+    const cardWithCode: PartyCardData = {
+      ...base,
+      contact: option.customerCode,
+    };
+    setSessionCustomers((prev) => {
+      if (prev.some((c) => c.customerCode === option.customerCode)) return prev;
+      return [...prev, option];
+    });
+    setSessionPartyCards((prev) => ({
+      ...prev,
+      [option.customerCode]: cardWithCode,
+    }));
+    setPendingNewPartyCard(cardWithCode);
+    setSelectedCustomer(option);
+    setSearchQuery(option.customerName);
+    closeCreateCustomer();
+    toast.success(t("wizard.parties.createCustomerSuccess"));
   };
 
   const handleAssignRoles = (roles: SiPartyRoleKey[]) => {
@@ -247,16 +300,7 @@ export function PartiesStep({
       toast.error(t("wizard.validation.selectRole"));
       return;
     }
-    const card: SiPartyCardData = {
-      company: selectedCustomer.customerName,
-      contact: selectedCustomer.customerCode,
-      address: `${selectedCustomer.city}, ${selectedCustomer.country}`,
-      city: selectedCustomer.city,
-      country: selectedCustomer.country,
-      email: selectedCustomer.email || "",
-      phone: selectedCustomer.phone || "",
-      printOnBl: true,
-    };
+    const card = toSiPartyCard(customerOptionToPartyCard(selectedCustomer, pendingNewPartyCard));
     setCards((prev) => {
       const next = { ...prev };
       roles.forEach((role) => {
@@ -309,9 +353,7 @@ export function PartiesStep({
     const parsed = blPartiesStepSchema.safeParse(cardsToSiPartiesForm(cards));
     if (!parsed.success) {
       const first = parsed.error.issues[0];
-      toast.error(
-        first?.message || t("wizard.validation.completeRequiredParties"),
-      );
+      toast.error(first?.message || t("wizard.validation.completeRequiredParties"));
       return;
     }
     if (data.blType === "Seaway" && cards.consignee?.toOrder) {
@@ -333,14 +375,25 @@ export function PartiesStep({
               <CustomerSearchAutoComplete
                 value={searchQuery}
                 placeholder={t("wizard.parties.searchPlaceholder")}
+                sessionCustomers={sessionCustomers}
+                onAddNewCustomer={openCreateCustomer}
                 onChange={(val) => {
                   setSearchQuery(val);
                   if (!val.trim()) {
                     setSelectedCustomer(null);
+                    setPendingNewPartyCard(null);
                   }
                 }}
                 onSelectCustomer={handleSelectCustomer}
               />
+              <AppButton
+                type="primary"
+                className="booking-customer-step__new-customer-btn"
+                icon={<AppIcon icon={Icons.userPlus} size={16} />}
+                onClick={() => openCreateCustomer(searchQuery)}
+              >
+                {t("wizard.parties.newCustomer")}
+              </AppButton>
             </div>
 
             {selectedCustomer ? (
@@ -374,11 +427,7 @@ export function PartiesStep({
                         t={t}
                       />
                     ) : (
-                      <EmptyBlPartySlot
-                        role={role}
-                        onAssign={() => openEdit(role)}
-                        t={t}
-                      />
+                      <EmptyBlPartySlot role={role} onAssign={() => openEdit(role)} t={t} />
                     )}
                   </div>
                 );
@@ -400,11 +449,7 @@ export function PartiesStep({
         </Card>
       </div>
 
-      <BlWizardFooter
-        onPrevious={onPrevious}
-        onNext={handleNext}
-        isSubmitting={isSubmitting}
-      />
+      <BlWizardFooter onPrevious={onPrevious} onNext={handleNext} isSubmitting={isSubmitting} />
 
       <SiPartyEditDrawer
         open={!!editRole}
@@ -416,6 +461,16 @@ export function PartiesStep({
           setEditRole(null);
           setEditValue(emptySiPartyCard());
         }}
+      />
+
+      <SiPartyEditDrawer
+        open={createOpen}
+        roleKey={null}
+        title={t("wizard.parties.createCustomerTitle")}
+        value={createValue}
+        onChange={setCreateValue}
+        onSave={saveCreateCustomer}
+        onClose={closeCreateCustomer}
       />
     </div>
   );

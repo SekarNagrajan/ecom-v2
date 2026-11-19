@@ -20,6 +20,7 @@ const { Text } = Typography;
 interface SiPartyEditDrawerProps {
   open: boolean;
   roleKey: SiPartyRoleKey | null;
+  title?: string;
   value: SiPartyCardData;
   onChange: (next: SiPartyCardData) => void;
   onSave: () => void;
@@ -29,21 +30,24 @@ interface SiPartyEditDrawerProps {
 export function SiPartyEditDrawer({
   open,
   roleKey,
+  title,
   value,
   onChange,
   onSave,
   onClose,
 }: SiPartyEditDrawerProps) {
   const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
-  const title = roleKey
-    ? t("parties.editPartyRole", { role: getSiPartyRoleLabel(roleKey, t) })
-    : t("parties.editParty");
+  const resolvedTitle =
+    title ??
+    (roleKey
+      ? t("parties.editPartyRole", { role: getSiPartyRoleLabel(roleKey, t) })
+      : t("parties.editParty"));
 
   return (
     <PartyEditDrawer
       open={open}
       roleKey={null}
-      title={title}
+      title={resolvedTitle}
       value={value}
       onChange={(next) => onChange({ ...value, ...next })}
       onSave={onSave}
@@ -142,9 +146,7 @@ export function SiRoleAssignPanel({
               )}
               <span>{getSiPartyRoleOptionLabel(role.key, t)}</span>
               {already ? (
-                <span className="booking-party-role-chip__tag">
-                  {t("parties.assigned")}
-                </span>
+                <span className="booking-party-role-chip__tag">{t("parties.assigned")}</span>
               ) : null}
             </button>
           );

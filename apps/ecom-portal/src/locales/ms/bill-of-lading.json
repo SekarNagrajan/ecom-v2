@@ -276,6 +276,10 @@
       "notAssignedYet": "Belum ditetapkan",
       "assign": "Tetapkan",
       "searchPlaceholder": "Cari mengikut nama atau kod pelanggan",
+      "newCustomer": "Pelanggan Baharu",
+      "addNewCustomer": "Tambah pelanggan baharu",
+      "createCustomerTitle": "Pelanggan Baharu",
+      "createCustomerSuccess": "Pelanggan sedia — pilih peranan untuk ditugaskan",
       "rolesAssigned": "Peranan pihak ditetapkan"
     },
     "routing": {

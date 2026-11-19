@@ -1925,6 +1925,38 @@ export function BookingModuleStyles() {
         min-width: 0;
         width: auto;
       }
+      .booking-customer-step__new-customer-btn.sm-app-button.ant-btn,
+      .booking-customer-step__new-customer-btn.sm-app-button.ant-btn-primary {
+        background: ${token.colorWarning} !important;
+        border-color: ${token.colorWarning} !important;
+        color: ${token.colorTextLightSolid} !important;
+      }
+      .booking-customer-step__new-customer-btn.sm-app-button.ant-btn:hover,
+      .booking-customer-step__new-customer-btn.sm-app-button.ant-btn:focus,
+      .booking-customer-step__new-customer-btn.sm-app-button.ant-btn:focus-visible,
+      .booking-customer-step__new-customer-btn.sm-app-button.ant-btn-primary:hover,
+      .booking-customer-step__new-customer-btn.sm-app-button.ant-btn-primary:focus,
+      .booking-customer-step__new-customer-btn.sm-app-button.ant-btn-primary:focus-visible {
+        background: ${token.colorWarningHover} !important;
+        border-color: ${token.colorWarningHover} !important;
+        color: ${token.colorTextLightSolid} !important;
+      }
+      .booking-customer-step__new-customer-btn.sm-app-button.ant-btn:active,
+      .booking-customer-step__new-customer-btn.sm-app-button.ant-btn-primary:active {
+        background: ${token.colorWarningActive} !important;
+        border-color: ${token.colorWarningActive} !important;
+        color: ${token.colorTextLightSolid} !important;
+      }
+      .booking-party-search-empty {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: ${token.marginXXS}px;
+        padding: ${token.paddingXXS}px 0;
+      }
+      .booking-party-search-empty__add {
+        padding-inline: 0;
+      }
       @media (max-width: 575px) {
         .booking-customer-step__search-row {
           flex-direction: column;

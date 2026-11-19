@@ -182,6 +182,10 @@
     "toOrderFlag": "指示提单",
     "notAssignedYet": "尚未分配",
     "searchPlaceholder": "按客户名称或代码搜索",
+    "newCustomer": "新客户",
+    "addNewCustomer": "添加新客户",
+    "createCustomerTitle": "新客户",
+    "createCustomerSuccess": "客户已就绪 — 请选择要分配的角色",
     "assignHint": "选择要分配给此客户的角色，然后点击添加所选。",
     "assigned": "已分配"
   },

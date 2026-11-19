@@ -182,6 +182,10 @@
     "toOrderFlag": "To Order",
     "notAssignedYet": "Not assigned yet",
     "searchPlaceholder": "Search by customer name or code",
+    "newCustomer": "New Customer",
+    "addNewCustomer": "Add new customer",
+    "createCustomerTitle": "New Customer",
+    "createCustomerSuccess": "Customer ready — select roles to assign",
     "assignHint": "Select roles to assign this customer, then click Add Selected.",
     "assigned": "Assigned"
   },

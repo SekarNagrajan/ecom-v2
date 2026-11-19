@@ -24,10 +24,7 @@ export interface PartyCardData {
  * Primary parties always shown in the Assigned Parties grid.
  * Booking Party (shipper) is view-only; Agreement Party is editable but not deletable.
  */
-export const DEFAULT_PARTY_ROLES: readonly PartyRoleKey[] = [
-  "shipper",
-  "agreementParty",
-] as const;
+export const DEFAULT_PARTY_ROLES: readonly PartyRoleKey[] = ["shipper", "agreementParty"] as const;
 
 export const PARTY_ROLE_OPTIONS: { key: PartyRoleKey; label: string }[] = [
   // { key: "shipper", label: "Booking Party" },
@@ -65,23 +62,36 @@ type TranslateFn = (key: string, options?: Record<string, unknown>) => string;
 export function getPartyRoleLabel(role: PartyRoleKey, t?: TranslateFn): string {
   if (!t) return PARTY_ROLE_LABEL[role];
   switch (role) {
-    case "shipper": return t("wizard.parties.roles.shipper");
-    case "siSubmittingParty": return t("wizard.parties.roles.siSubmittingParty");
-    case "consignee": return t("wizard.parties.roles.consignee");
-    case "notifyParty": return t("wizard.parties.roles.notifyParty");
-    case "notifyParty2": return t("wizard.parties.roles.notifyParty2");
-    case "forwarder": return t("wizard.parties.roles.forwarder");
-    case "agreementParty": return t("wizard.parties.roles.agreementParty");
-    default: { const _exhaustive: never = role; return PARTY_ROLE_LABEL[_exhaustive]; }
+    case "shipper":
+      return t("wizard.parties.roles.shipper");
+    case "siSubmittingParty":
+      return t("wizard.parties.roles.siSubmittingParty");
+    case "consignee":
+      return t("wizard.parties.roles.consignee");
+    case "notifyParty":
+      return t("wizard.parties.roles.notifyParty");
+    case "notifyParty2":
+      return t("wizard.parties.roles.notifyParty2");
+    case "forwarder":
+      return t("wizard.parties.roles.forwarder");
+    case "agreementParty":
+      return t("wizard.parties.roles.agreementParty");
+    default: {
+      const _exhaustive: never = role;
+      return PARTY_ROLE_LABEL[_exhaustive];
+    }
   }
 }
 
 export function getPreviewPartyRoleLabel(role: PartyRoleKey, t?: TranslateFn): string {
   if (!t) return REVIEW_PARTY_ROLE_LABEL[role];
   switch (role) {
-    case "shipper": return t("wizard.parties.previewRoles.shipper");
-    case "forwarder": return t("wizard.parties.previewRoles.forwarder");
-    default: return getPartyRoleLabel(role, t);
+    case "shipper":
+      return t("wizard.parties.previewRoles.shipper");
+    case "forwarder":
+      return t("wizard.parties.previewRoles.forwarder");
+    default:
+      return getPartyRoleLabel(role, t);
   }
 }
 
@@ -101,18 +111,13 @@ const BOOKING_PARTY_SEED: PartyCardData = {
 };
 
 // Modified by Sekar Nagarajan (2026-08-31 22:47)
-export const MOCK_DEFAULT_PARTY_CARDS: Partial<
-  Record<PartyRoleKey, PartyCardData>
-> = {
+export const MOCK_DEFAULT_PARTY_CARDS: Partial<Record<PartyRoleKey, PartyCardData>> = {
   shipper: { ...BOOKING_PARTY_SEED },
   agreementParty: { ...BOOKING_PARTY_SEED },
 };
 
 /** CSS modifier for mild per-role card background (see booking-module-styles). */
-export function partyRoleCardClassName(
-  role: PartyRoleKey,
-  empty = false,
-): string {
+export function partyRoleCardClassName(role: PartyRoleKey, empty = false): string {
   return [
     "booking-party-card",
     `booking-party-card--${role}`,
@@ -176,44 +181,44 @@ export function partiesToCards(
     cards.notifyParty2 = {
       company: parties.notifyParty2Name,
       contact: parties.notifyParty2Contact || "",
-      address: "",
-      city: "",
-      country: "",
-      email: "",
-      phone: "",
+      address: parties.notifyParty2Address || "",
+      city: parties.notifyParty2City || "",
+      country: parties.notifyParty2Country || "",
+      email: parties.notifyParty2Email || "",
+      phone: parties.notifyParty2Phone || "",
     };
   }
   if (parties.freightForwarder) {
     cards.forwarder = {
       company: parties.freightForwarder,
       contact: parties.freightForwarderContact || "",
-      address: "",
-      city: "",
-      country: "",
-      email: "",
-      phone: "",
+      address: parties.freightForwarderAddress || "",
+      city: parties.freightForwarderCity || "",
+      country: parties.freightForwarderCountry || "",
+      email: parties.freightForwarderEmail || "",
+      phone: parties.freightForwarderPhone || "",
     };
   }
   if (parties.agreementParty) {
     cards.agreementParty = {
       company: parties.agreementParty,
       contact: parties.agreementPartyContact || "",
-      address: "",
-      city: "",
-      country: "",
-      email: "",
-      phone: "",
+      address: parties.agreementPartyAddress || "",
+      city: parties.agreementPartyCity || "",
+      country: parties.agreementPartyCountry || "",
+      email: parties.agreementPartyEmail || "",
+      phone: parties.agreementPartyPhone || "",
     };
   }
   if (parties.siSubmittingParty) {
     cards.siSubmittingParty = {
       company: parties.siSubmittingParty,
       contact: parties.siSubmittingPartyContact || "",
-      address: "",
-      city: "",
-      country: "",
-      email: "",
-      phone: "",
+      address: parties.siSubmittingPartyAddress || "",
+      city: parties.siSubmittingPartyCity || "",
+      country: parties.siSubmittingPartyCountry || "",
+      email: parties.siSubmittingPartyEmail || "",
+      phone: parties.siSubmittingPartyPhone || "",
     };
   }
   return cards;
@@ -226,7 +231,12 @@ function isDerivedSiSubmittingParty(parties: PartiesData): boolean {
   return (
     !!parties.siSubmittingParty &&
     parties.siSubmittingParty === parties.shipperName &&
-    (parties.siSubmittingPartyContact || "") === (parties.shipperContact || "")
+    (parties.siSubmittingPartyContact || "") === (parties.shipperContact || "") &&
+    (parties.siSubmittingPartyAddress || "") === (parties.shipperAddress || "") &&
+    (parties.siSubmittingPartyCity || "") === (parties.shipperCity || "") &&
+    (parties.siSubmittingPartyCountry || "") === (parties.shipperCountry || "") &&
+    (parties.siSubmittingPartyEmail || "") === (parties.shipperEmail || "") &&
+    (parties.siSubmittingPartyPhone || "") === (parties.shipperPhone || "")
   );
 }
 
@@ -277,9 +287,7 @@ export function initialPartyCards(
   return structuredClone(MOCK_DEFAULT_PARTY_CARDS);
 }
 
-export function cardsToParties(
-  cards: Partial<Record<PartyRoleKey, PartyCardData>>,
-): PartiesData {
+export function cardsToParties(cards: Partial<Record<PartyRoleKey, PartyCardData>>): PartiesData {
   const shipper = cards.shipper;
   const consignee = cards.consignee;
   const notify = cards.notifyParty;
@@ -313,12 +321,32 @@ export function cardsToParties(
     notifyPartyPhone: notify?.phone || "",
     notifyParty2Name: notify2?.company || "",
     notifyParty2Contact: notify2?.contact || "",
+    notifyParty2Address: notify2?.address || "",
+    notifyParty2City: notify2?.city || "",
+    notifyParty2Country: notify2?.country || "",
+    notifyParty2Email: notify2?.email || "",
+    notifyParty2Phone: notify2?.phone || "",
     freightForwarder: forwarder?.company || "",
     freightForwarderContact: forwarder?.contact || "",
+    freightForwarderAddress: forwarder?.address || "",
+    freightForwarderCity: forwarder?.city || "",
+    freightForwarderCountry: forwarder?.country || "",
+    freightForwarderEmail: forwarder?.email || "",
+    freightForwarderPhone: forwarder?.phone || "",
     agreementParty: agreement?.company || "",
     agreementPartyContact: agreement?.contact || "",
+    agreementPartyAddress: agreement?.address || "",
+    agreementPartyCity: agreement?.city || "",
+    agreementPartyCountry: agreement?.country || "",
+    agreementPartyEmail: agreement?.email || "",
+    agreementPartyPhone: agreement?.phone || "",
     // Mock / empty flow: SI Submitting defaults to Booking Party when unset
     siSubmittingParty: si?.company || shipper?.company || "",
     siSubmittingPartyContact: si?.contact || shipper?.contact || "",
+    siSubmittingPartyAddress: si?.address || shipper?.address || "",
+    siSubmittingPartyCity: si?.city || shipper?.city || "",
+    siSubmittingPartyCountry: si?.country || shipper?.country || "",
+    siSubmittingPartyEmail: si?.email || shipper?.email || "",
+    siSubmittingPartyPhone: si?.phone || shipper?.phone || "",
   };
 }

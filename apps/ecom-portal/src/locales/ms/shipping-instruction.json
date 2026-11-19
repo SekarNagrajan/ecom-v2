@@ -182,6 +182,10 @@
     "toOrderFlag": "Kepada Order",
     "notAssignedYet": "Belum ditugaskan",
     "searchPlaceholder": "Cari mengikut nama atau kod pelanggan",
+    "newCustomer": "Pelanggan Baharu",
+    "addNewCustomer": "Tambah pelanggan baharu",
+    "createCustomerTitle": "Pelanggan Baharu",
+    "createCustomerSuccess": "Pelanggan sedia — pilih peranan untuk ditugaskan",
     "assignHint": "Pilih peranan untuk menugaskan pelanggan ini, kemudian klik Tambah Dipilih.",
     "assigned": "Ditugaskan"
   },

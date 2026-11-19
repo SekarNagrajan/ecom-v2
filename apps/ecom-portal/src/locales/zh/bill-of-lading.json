@@ -276,6 +276,10 @@
       "notAssignedYet": "尚未指定",
       "assign": "指定",
       "searchPlaceholder": "按客户名称或代码搜索",
+      "newCustomer": "新客户",
+      "addNewCustomer": "添加新客户",
+      "createCustomerTitle": "新客户",
+      "createCustomerSuccess": "客户已就绪 — 请选择要分配的角色",
       "rolesAssigned": "已分配相关方角色"
     },
     "routing": {

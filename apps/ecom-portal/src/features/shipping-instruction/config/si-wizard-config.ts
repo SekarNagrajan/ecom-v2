@@ -40,11 +40,13 @@ export interface SIWizardConfig {
 // Modified by Sekar Nagarajan (2026-09-16 15:32)
 export const DEFAULT_SI_WIZARD_CONFIG: SIWizardConfig = {
   showRouting: false,
+  // Hidden for now — set true to re-enable Insurance step (component kept).
   showInsurance: false,
   showCargoProtect: false,
   showChargesInWizard: false,
   showChargeTab: false,
-  showEns: true,
+  // Hidden for now — set true to re-enable ENS Details step (component kept).
+  showEns: false,
   showFileUpload: true,
   showExcelImport: true,
   showSmartImport: true,

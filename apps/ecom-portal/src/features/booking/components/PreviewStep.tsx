@@ -12,6 +12,11 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AppIcon, Icons } from "../../../components/icons";
 import { useWizardStepTitles } from "../../../i18n/use-module-titles";
+import {
+  DEFAULT_BOOKING_WIZARD_CONFIG,
+  getBookingWizardStepIndex,
+  type BookingWizardStepId,
+} from "../config/booking-wizard-config";
 import { useBookingStore } from "../stores/booking.store";
 import type { SelectedRoute } from "../types/booking.types";
 import { orderedAssignedParties } from "../utils/party-role.utils";
@@ -25,17 +30,6 @@ import {
   BookingPreviewPartyCard,
   BookingPreviewSection,
 } from "./preview/booking-preview-section";
-
-/** Wizard step indices — mirrors booking-wizard-route Steps order. */
-const BOOKING_STEP = {
-  master: 0,
-  parties: 1,
-  cargo: 2,
-  ens: 3,
-  insurance: 4,
-  files: 5,
-  references: 6,
-} as const;
 
 function dash(value?: string | number | null): string {
   if (value === undefined || value === null || value === "") return "—";
@@ -77,19 +71,10 @@ function buildReviewSummary(
   const transit =
     route && typeof route.transitTimeDays === "number"
       ? `${route.transitTimeDays} days${
-          route.isDirect
-            ? ", Direct"
-            : route.shipmentKind
-            ? `, ${route.shipmentKind}`
-            : ""
+          route.isDirect ? ", Direct" : route.shipmentKind ? `, ${route.shipmentKind}` : ""
         }`
       : "";
-  return [
-    bookingNo?.trim() || "Draft",
-    `${originCode} → ${destCode}`,
-    vesselVoyage,
-    transit,
-  ]
+  return [bookingNo?.trim() || "Draft", `${originCode} → ${destCode}`, vesselVoyage, transit]
     .filter(Boolean)
     .join(" · ");
 }
@@ -108,8 +93,9 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
   const setCurrentStep = useBookingStore((s) => s.setCurrentStep);
   const [termsAccepted, setTermsAccepted] = useState(false);
 
-  const go = (step: (typeof BOOKING_STEP)[keyof typeof BOOKING_STEP]) => {
-    setCurrentStep(step);
+  const go = (stepId: BookingWizardStepId) => {
+    const index = getBookingWizardStepIndex(stepId);
+    if (index >= 0) setCurrentStep(index);
   };
 
   if (!payload.masterDetails || !payload.parties || !payload.cargo) {
@@ -145,7 +131,10 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
       value: dash(masterDetails.haulageDestinationType),
     },
     { label: t("booking:labels.carriageContract"), value: dash(masterDetails.carriageContract) },
-    { label: t("booking:wizard.master.preferredAgency"), value: dash(masterDetails.preferredAgency) },
+    {
+      label: t("booking:wizard.master.preferredAgency"),
+      value: dash(masterDetails.preferredAgency),
+    },
     { label: t("booking:wizard.master.rateReference"), value: dash(masterDetails.rateReference) },
   ];
 
@@ -173,10 +162,8 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
       ]
     : [{ label: t("booking:wizard.preview.ensRequired"), value: t("common:actions.no") }];
 
-  const originCode =
-    route?.polPortId || portCodeFromValue(masterDetails.origin);
-  const destCode =
-    route?.podPortId || portCodeFromValue(masterDetails.delivery);
+  const originCode = route?.polPortId || portCodeFromValue(masterDetails.origin);
+  const destCode = route?.podPortId || portCodeFromValue(masterDetails.delivery);
 
   return (
     <div className="form-step-layout">
@@ -194,7 +181,7 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
         <BookingPreviewSection
           variant="airy"
           title={t("booking:wizard.preview.sections.routeSchedule")}
-          onEdit={() => go(BOOKING_STEP.master)}
+          onEdit={() => go("master")}
         >
           {route ? (
             <PreviewRouteBand
@@ -213,7 +200,7 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
         <BookingPreviewSection
           variant="airy"
           title={t("booking:sections.masterDetails")}
-          onEdit={() => go(BOOKING_STEP.master)}
+          onEdit={() => go("master")}
         >
           <BookingPreviewFieldGrid items={masterRows} />
         </BookingPreviewSection>
@@ -221,7 +208,7 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
         <BookingPreviewSection
           variant="airy"
           title={t("booking:sections.customerDetails")}
-          onEdit={() => go(BOOKING_STEP.parties)}
+          onEdit={() => go("parties")}
         >
           {partyEntries.length > 0 ? (
             <div className="booking-review__party-grid">
@@ -239,75 +226,89 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
         <BookingPreviewSection
           variant="airy"
           title={t("booking:sections.cargoDetails")}
-          onEdit={() => go(BOOKING_STEP.cargo)}
+          onEdit={() => go("cargo")}
         >
           <PreviewCargoReview containers={cargo.containers ?? []} />
         </BookingPreviewSection>
 
-        <BookingPreviewSection
-          variant="airy"
-          title={WIZARD_STEP_TITLES.ensDetails}
-          onEdit={() => go(BOOKING_STEP.ens)}
-        >
-          <BookingPreviewFieldGrid items={ensRows} />
-        </BookingPreviewSection>
+        {DEFAULT_BOOKING_WIZARD_CONFIG.showEns ? (
+          <BookingPreviewSection
+            variant="airy"
+            title={WIZARD_STEP_TITLES.ensDetails}
+            onEdit={() => go("ens")}
+          >
+            <BookingPreviewFieldGrid items={ensRows} />
+          </BookingPreviewSection>
+        ) : null}
 
-        <BookingPreviewSection
-          variant="airy"
-          title={t("booking:wizard.preview.sections.insuranceCharges")}
-          onEdit={() => go(BOOKING_STEP.insurance)}
-        >
-          {insurance?.isInsuranceRequired ? (
-            <div className="booking-review__grid">
-              <div className="booking-review__field">
-                <span className="booking-review__label">{t("booking:wizard.preview.ensRequired")}</span>
-                <span className="booking-review__value">{t("common:actions.yes")}</span>
+        {DEFAULT_BOOKING_WIZARD_CONFIG.showInsurance ? (
+          <BookingPreviewSection
+            variant="airy"
+            title={t("booking:wizard.preview.sections.insuranceCharges")}
+            onEdit={() => go("insurance")}
+          >
+            {insurance?.isInsuranceRequired ? (
+              <div className="booking-review__grid">
+                <div className="booking-review__field">
+                  <span className="booking-review__label">
+                    {t("booking:wizard.preview.ensRequired")}
+                  </span>
+                  <span className="booking-review__value">{t("common:actions.yes")}</span>
+                </div>
+                <div className="booking-review__field">
+                  <span className="booking-review__label">
+                    {t("booking:wizard.preview.currency")}
+                  </span>
+                  <span className="booking-review__value">{dash(insurance.currency)}</span>
+                </div>
+                <div className="booking-review__field">
+                  <span className="booking-review__label">{t("booking:labels.termsAccepted")}</span>
+                  <span className="booking-review__value">
+                    {insurance.termsAccepted ? t("common:actions.yes") : t("common:actions.no")}
+                  </span>
+                </div>
+                <div className="booking-review__value-tile">
+                  <span className="booking-review__label">
+                    {t("booking:wizard.preview.declaredValue")}
+                  </span>
+                  <span className="booking-review__value-tile-amount">
+                    {formatMoney(insurance.cargoValue, insurance.currency)}
+                  </span>
+                </div>
               </div>
-              <div className="booking-review__field">
-                <span className="booking-review__label">{t("booking:wizard.preview.currency")}</span>
-                <span className="booking-review__value">
-                  {dash(insurance.currency)}
-                </span>
+            ) : (
+              <div className="booking-review__grid">
+                <div className="booking-review__field">
+                  <span className="booking-review__label">
+                    {t("booking:wizard.preview.ensRequired")}
+                  </span>
+                  <span className="booking-review__value">{t("common:actions.no")}</span>
+                </div>
+                <div className="booking-review__field">
+                  <span className="booking-review__label">
+                    {t("booking:wizard.preview.currency")}
+                  </span>
+                  <span className="booking-review__value">—</span>
+                </div>
+                <div className="booking-review__field">
+                  <span className="booking-review__label">{t("booking:labels.termsAccepted")}</span>
+                  <span className="booking-review__value">—</span>
+                </div>
+                <div className="booking-review__value-tile">
+                  <span className="booking-review__label">
+                    {t("booking:wizard.preview.declaredValue")}
+                  </span>
+                  <span className="booking-review__value-tile-amount">—</span>
+                </div>
               </div>
-              <div className="booking-review__field">
-                <span className="booking-review__label">{t("booking:labels.termsAccepted")}</span>
-                <span className="booking-review__value">
-                  {insurance.termsAccepted ? t("common:actions.yes") : t("common:actions.no")}
-                </span>
-              </div>
-              <div className="booking-review__value-tile">
-                <span className="booking-review__label">{t("booking:wizard.preview.declaredValue")}</span>
-                <span className="booking-review__value-tile-amount">
-                  {formatMoney(insurance.cargoValue, insurance.currency)}
-                </span>
-              </div>
-            </div>
-          ) : (
-            <div className="booking-review__grid">
-              <div className="booking-review__field">
-                <span className="booking-review__label">{t("booking:wizard.preview.ensRequired")}</span>
-                <span className="booking-review__value">{t("common:actions.no")}</span>
-              </div>
-              <div className="booking-review__field">
-                <span className="booking-review__label">{t("booking:wizard.preview.currency")}</span>
-                <span className="booking-review__value">—</span>
-              </div>
-              <div className="booking-review__field">
-                <span className="booking-review__label">{t("booking:labels.termsAccepted")}</span>
-                <span className="booking-review__value">—</span>
-              </div>
-              <div className="booking-review__value-tile">
-                <span className="booking-review__label">{t("booking:wizard.preview.declaredValue")}</span>
-                <span className="booking-review__value-tile-amount">—</span>
-              </div>
-            </div>
-          )}
-        </BookingPreviewSection>
+            )}
+          </BookingPreviewSection>
+        ) : null}
 
         <BookingPreviewSection
           variant="airy"
           title={t("booking:sections.documents")}
-          onEdit={() => go(BOOKING_STEP.files)}
+          onEdit={() => go("files")}
         >
           {documents.length > 0 ? (
             <div className="booking-review__grid">
@@ -315,13 +316,9 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
                 <div key={doc.id} className="booking-review__doc-chip">
                   <span className="booking-review__doc-chip-name">
                     <AppIcon icon={Icons.fileText} size={16} />
-                    <span className="booking-review__value">
-                      {doc.fileName}
-                    </span>
+                    <span className="booking-review__value">{doc.fileName}</span>
                   </span>
-                  <span className="booking-review__label">
-                    {formatDocumentType(doc.type)}
-                  </span>
+                  <span className="booking-review__label">{formatDocumentType(doc.type)}</span>
                 </div>
               ))}
             </div>
@@ -333,7 +330,7 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
         <BookingPreviewSection
           variant="airy"
           title={WIZARD_STEP_TITLES.references}
-          onEdit={() => go(BOOKING_STEP.references)}
+          onEdit={() => go("references")}
         >
           {referenceFields.length > 0 ? (
             <BookingPreviewFieldGrid
@@ -362,10 +359,7 @@ export function PreviewStep({ onSubmit, isSubmitting }: PreviewStepProps) {
           <AppButton onClick={prevStep} disabled={isSubmitting}>
             {t("common:actions.previous")}
           </AppButton>
-          <AppButton
-            onClick={() => navigate({ to: "/app/booking" })}
-            disabled={isSubmitting}
-          >
+          <AppButton onClick={() => navigate({ to: "/app/booking" })} disabled={isSubmitting}>
             {t("common:actions.cancel")}
           </AppButton>
         </div>

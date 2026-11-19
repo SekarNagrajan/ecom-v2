@@ -51,11 +51,13 @@ export interface BLWizardConfig {
 // Modified by Sekar Nagarajan (2026-09-16 16:17)
 export const DEFAULT_BL_WIZARD_CONFIG: BLWizardConfig = {
   showRouting: false,
+  // Hidden for now — set true to re-enable Insurance step (component kept).
   showInsurance: false,
   showCargoProtect: false,
   showChargesInWizard: false,
   showChargeTab: false,
-  showEns: true,
+  // Hidden for now — set true to re-enable ENS Details step (component kept).
+  showEns: false,
   showExcelImport: true,
   showSmartImport: true,
   showNnPrint: true,

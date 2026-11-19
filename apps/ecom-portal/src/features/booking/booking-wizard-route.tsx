@@ -4,31 +4,20 @@ import { useToast } from "@solverminds/shared-ui/hooks";
 import { useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { Card, Space, Steps, Typography, theme } from "antd";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AppIcon, Icons, NavBookingIcon } from "../../components/icons";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
-import {
-  useModuleTitles,
-  useWizardStepTitles,
-} from "../../i18n/use-module-titles";
+import { useModuleTitles, useWizardStepTitles } from "../../i18n/use-module-titles";
 import { bookingApi } from "./api/booking.api";
 import { bookingKeys } from "./api/booking.keys";
 import { BookingModuleStyles } from "./components/booking-module-styles";
-import { CargoStep } from "./components/CargoStep";
-import { CustomerDetailsStep } from "./components/CustomerDetailsStep";
-import { ENSStep } from "./components/ENSStep";
-import { FileUploadStep } from "./components/FileUploadStep";
-import { InsuranceStep } from "./components/InsuranceStep";
-import { MasterDetailsStep } from "./components/MasterDetailsStep";
-import { PreviewStep } from "./components/PreviewStep";
-import { ReferenceInformationStep } from "./components/ReferenceInformationStep";
+import { DEFAULT_BOOKING_WIZARD_CONFIG } from "./config/booking-wizard-config";
+import { buildBookingWizardSteps, getBookingStepIcon } from "./config/booking-wizard-steps";
 import { useBookingWizard } from "./hooks/use-booking-wizard";
 import { useBookingStore } from "./stores/booking.store";
 
 const { Text, Title } = Typography;
-
-const PIPELINE_ICON_SIZE = 25;
 
 export function BookingWizardRoute() {
   const { t } = useTranslation(["booking", "common", "modules"]);
@@ -40,14 +29,23 @@ export function BookingWizardRoute() {
   const queryClient = useQueryClient();
   const payload = useBookingStore((s) => s.payload);
   const [savingDraft, setSavingDraft] = useState(false);
-  const {
-    currentStep,
-    setCurrentStep,
-    isSubmitting,
-    handleSubmit,
-    confirmation,
-    handleStartOver,
-  } = useBookingWizard();
+  const { currentStep, setCurrentStep, isSubmitting, handleSubmit, confirmation, handleStartOver } =
+    useBookingWizard();
+
+  const wizardSteps = useMemo(
+    () =>
+      buildBookingWizardSteps(DEFAULT_BOOKING_WIZARD_CONFIG, {
+        master: WIZARD_STEP_TITLES.masterDetails,
+        parties: WIZARD_STEP_TITLES.customerDetails,
+        cargo: WIZARD_STEP_TITLES.cargoDetails,
+        ens: WIZARD_STEP_TITLES.ensDetails,
+        insurance: WIZARD_STEP_TITLES.insurance,
+        files: WIZARD_STEP_TITLES.fileUpload,
+        references: WIZARD_STEP_TITLES.references,
+        preview: WIZARD_STEP_TITLES.preview,
+      }),
+    [WIZARD_STEP_TITLES],
+  );
 
   const handleSaveDraft = async () => {
     setSavingDraft(true);
@@ -80,87 +78,12 @@ export function BookingWizardRoute() {
     }
   };
 
-  const stepsConfig = [
-    {
-      title: WIZARD_STEP_TITLES.masterDetails,
-      icon: <AppIcon icon={Icons.settings} size={PIPELINE_ICON_SIZE} />,
-    },
-    {
-      title: WIZARD_STEP_TITLES.customerDetails,
-      icon: <AppIcon icon={Icons.user} size={PIPELINE_ICON_SIZE} />,
-    },
-    {
-      title: WIZARD_STEP_TITLES.cargoDetails,
-      icon: <AppIcon icon={Icons.container} size={PIPELINE_ICON_SIZE} />,
-    },
-    {
-      title: WIZARD_STEP_TITLES.ensDetails,
-      icon: <AppIcon icon={Icons.fileCheck} size={PIPELINE_ICON_SIZE} />,
-    },
-    {
-      title: WIZARD_STEP_TITLES.insurance,
-      icon: <AppIcon icon={Icons.checkCircle} size={PIPELINE_ICON_SIZE} />,
-    },
-    {
-      title: WIZARD_STEP_TITLES.fileUpload,
-      icon: <AppIcon icon={Icons.upload} size={PIPELINE_ICON_SIZE} />,
-    },
-    {
-      title: WIZARD_STEP_TITLES.references,
-      icon: <AppIcon icon={Icons.fileText} size={PIPELINE_ICON_SIZE} />,
-    },
-    {
-      title: WIZARD_STEP_TITLES.preview,
-      icon: <AppIcon icon={Icons.eye} size={PIPELINE_ICON_SIZE} />,
-    },
-  ];
-
-  const getStepIcon = (
-    icon: React.ReactNode,
-    index: number,
-    current: number,
-  ) => {
-    const isCompleted = index < current;
-    const isActive = index === current;
-
-    let background = token.colorBgContainer;
-    let borderColor = token.colorBorder;
-    let color = token.colorTextQuaternary;
-
-    if (isCompleted) {
-      background = token.colorSuccess;
-      borderColor = token.colorSuccess;
-      color = token.colorWhite;
-    } else if (isActive) {
-      background = token.colorPrimary;
-      borderColor = token.colorPrimary;
-      color = token.colorWhite;
-    }
-
-    return (
-      <span
-        className={[
-          "wizard-step-icon",
-          isActive ? "pipeline-stage-current-badge" : undefined,
-          "app-icon-inherit",
-        ]
-          .filter(Boolean)
-          .join(" ")}
-        style={{
-          background,
-          border: `2px solid ${borderColor}`,
-          color,
-        }}
-      >
-        {icon}
-      </span>
-    );
-  };
-
-  const steps = stepsConfig.map((step, index) => ({
+  const steps = wizardSteps.map((step, index) => ({
     title: step.title,
-    icon: getStepIcon(step.icon, index, currentStep),
+    icon: getBookingStepIcon(step.icon, index, currentStep, token),
   }));
+
+  const activeStep = wizardSteps[currentStep];
 
   return (
     <Card className="wizard-page-card">
@@ -186,9 +109,7 @@ export function BookingWizardRoute() {
               {
                 <AppButton
                   danger
-                  icon={
-                    <AppIcon icon={Icons.arrowLeft} size={16} tone="delete" />
-                  }
+                  icon={<AppIcon icon={Icons.arrowLeft} size={16} tone="delete" />}
                   onClick={() => navigate({ to: "/app/booking" })}
                 >
                   {t("booking:actions.backToBooking")}
@@ -203,48 +124,24 @@ export function BookingWizardRoute() {
         <div className="wizard-confirmation">
           <Card variant="outlined" className="booking-confirmation-card">
             <div className="booking-confirmation-card__body">
-              <div
-                className="booking-confirmation-card__icon"
-                aria-hidden
-              >
-                <AppIcon
-                  icon={Icons.checkCircle}
-                  size={36}
-                  tone="approve"
-                />
+              <div className="booking-confirmation-card__icon" aria-hidden>
+                <AppIcon icon={Icons.checkCircle} size={36} tone="approve" />
               </div>
-              <Title
-                level={3}
-                className="booking-confirmation-card__title"
-              >
+              <Title level={3} className="booking-confirmation-card__title">
                 {t("booking:wizard.confirm.submittedTitle")}
               </Title>
-              <Text
-                type="secondary"
-                className="booking-confirmation-card__message"
-              >
+              <Text type="secondary" className="booking-confirmation-card__message">
                 {t("booking:wizard.confirm.submittedMessage")}
               </Text>
               <div className="booking-confirmation-card__ref">
-                <Text
-                  type="secondary"
-                  className="booking-confirmation-card__ref-label"
-                >
+                <Text type="secondary" className="booking-confirmation-card__ref-label">
                   {t("booking:wizard.confirm.bookingReference")}
                 </Text>
-                <Text
-                  copyable
-                  strong
-                  className="booking-confirmation-card__ref-value"
-                >
+                <Text copyable strong className="booking-confirmation-card__ref-value">
                   {confirmation.bookingReference}
                 </Text>
               </div>
-              <Space
-                wrap
-                size="middle"
-                className="booking-confirmation-card__actions"
-              >
+              <Space wrap size="middle" className="booking-confirmation-card__actions">
                 <AppButton
                   type="primary"
                   onClick={() => {
@@ -279,19 +176,10 @@ export function BookingWizardRoute() {
           </div>
 
           <div className="wizard-step-content">
-            {currentStep === 0 && <MasterDetailsStep />}
-            {currentStep === 1 && <CustomerDetailsStep />}
-            {currentStep === 2 && <CargoStep />}
-            {currentStep === 3 && <ENSStep />}
-            {currentStep === 4 && <InsuranceStep />}
-            {currentStep === 5 && <FileUploadStep />}
-            {currentStep === 6 && <ReferenceInformationStep />}
-            {currentStep === 7 && (
-              <PreviewStep
-                onSubmit={handleSubmit}
-                isSubmitting={isSubmitting}
-              />
-            )}
+            {activeStep?.render({
+              onSubmit: handleSubmit,
+              isSubmitting,
+            })}
           </div>
         </div>
       )}

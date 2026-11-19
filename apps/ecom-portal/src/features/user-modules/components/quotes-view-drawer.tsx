@@ -1,9 +1,9 @@
-// Modified by Sekar Nagarajan (2026-08-26 16:15)
+// Modified by Sekar Nagarajan (2026-09-08 13:02)
 import { AppDrawer, FormattedDate } from "@solverminds/shared-ui";
 import { Descriptions, Tag } from "antd";
 
 import { Icons } from "../../../components/icons";
-import { MODULE_TITLES } from "../../../constants/module-titles";
+import { useModuleTitles } from "../../../i18n/use-module-titles";
 import type { QuoteItem } from "../types/user-modules.types";
 import { UmPanelHeader } from "./um-panel-header";
 
@@ -29,6 +29,7 @@ export interface QuotesViewDrawerProps {
 }
 
 export function QuotesViewDrawer({ quote, onClose }: QuotesViewDrawerProps) {
+  const MODULE_TITLES = useModuleTitles();
   const statusMeta = quote ? STATUS_META[quote.status] : null;
 
   return (
@@ -36,7 +37,7 @@ export function QuotesViewDrawer({ quote, onClose }: QuotesViewDrawerProps) {
       open={Boolean(quote)}
       onClose={onClose}
       placement="right"
-      dialogSize="md"
+      dialogSize="sm"
       destroyOnClose
       classNames={{
         header: "um-drawer-header-bar",
@@ -56,8 +57,9 @@ export function QuotesViewDrawer({ quote, onClose }: QuotesViewDrawerProps) {
       {quote && statusMeta ? (
         <Descriptions
           bordered
-          size="small"
-          column={{ xs: 1, sm: 2 }}
+          size="medium"
+          column={1}
+          layout="horizontal"
           className="um-quote-desc"
         >
           <Descriptions.Item label="Quote No">
@@ -92,12 +94,12 @@ export function QuotesViewDrawer({ quote, onClose }: QuotesViewDrawerProps) {
           <Descriptions.Item label="THC">
             {formatUsd(quote.thcUSD)}
           </Descriptions.Item>
-          <Descriptions.Item label="Total Amount" span={2}>
+          <Descriptions.Item label="Total Amount">
             <span className="um-amount-primary">
               {formatUsd(quote.totalAmountUSD)}
             </span>
           </Descriptions.Item>
-          <Descriptions.Item label="Created" span={2}>
+          <Descriptions.Item label="Created">
             <FormattedDate value={quote.createdAt} showTime />
           </Descriptions.Item>
         </Descriptions>

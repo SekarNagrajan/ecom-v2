@@ -11,7 +11,7 @@ import type {
     RowSelectionOptions,
     SideBarDef,
 } from "ag-grid-community";
-import type { CSSProperties } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 import type { DataViewColumn } from "../column-types";
 import type { DataViewItem } from "../data-view-item";
@@ -192,6 +192,11 @@ export type ListViewOptions<TData extends DataViewItem> = ProfileOptions & {
   defaultCsvExportParams?: CsvExportParams;
   /** Same idea as `defaultCsvExportParams`, for Excel export. */
   defaultExcelExportParams?: ExcelExportParams;
+  /**
+   * Custom empty / no-rows overlay. Defaults to the shared AppEmptyState
+   * ship illustration when omitted.
+   */
+  emptyState?: ReactNode;
 };
 
 /** Full props for the ListView component */

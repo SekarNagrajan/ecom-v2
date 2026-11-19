@@ -71,11 +71,13 @@ export function createCardViewProps<TData extends DataViewItem>({
   columnDefs,
   externalLoading,
   processedData,
+  emptyState,
 }: {
   cardOptions: DataViewProps<TData>['cardOptions'];
   columnDefs: CardViewProps<TData>['columnDefs'];
   externalLoading: boolean | undefined;
   processedData: TData[];
+  emptyState?: DataViewProps<TData>['emptyState'];
 }): CardViewProps<TData> | null {
   if (!cardOptions) {
     return null;
@@ -88,6 +90,7 @@ export function createCardViewProps<TData extends DataViewItem>({
     data: data ?? processedData,
     columnDefs,
     loading: loading ?? externalLoading,
+    emptyState: cardOptions.emptyState ?? emptyState,
   };
 }
 

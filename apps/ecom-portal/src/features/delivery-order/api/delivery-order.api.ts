@@ -1,9 +1,5 @@
-// Modified by Sekar Nagarajan (2026-08-26 14:26)
+// Modified by Sekar Nagarajan (2026-10-17 00:34)
 import type { ApiResponse } from "../../../types/api.types";
-import {
-  markDoPrinted,
-  mockDeliveryOrders,
-} from "../mocks/do.mock";
 import type { DOListFilters, DOSummaryRow } from "../types/delivery-order.types";
 
 /**
@@ -44,15 +40,7 @@ async function readApiJson<T>(
   }
 }
 
-async function mockListFallback(
-  filters: DOListFilters,
-): Promise<ApiResponse<DOSummaryRow[]> | null> {
-  if (!import.meta.env.DEV) return null;
-  void filters;
-  return { data: mockDeliveryOrders.map((row) => ({ ...row })) };
-}
-
-/** Delivery Order API — REST with DEV mock fallback (agenct parity). */
+/** Delivery Order API — REST; mock mode is served by MSW (src/mocks/delivery-order.handlers.ts). */
 export const doApi = {
   async fetchList(
     filters: DOListFilters = {},
@@ -65,18 +53,11 @@ export const doApi = {
       const res = await fetch(
         `/api/ecom/imp/delivery-orders?${params.toString()}`,
       );
-      const parsed = await readApiJson<DOSummaryRow[]>(
+      return await readApiJson<DOSummaryRow[]>(
         res,
         "Failed to fetch DO summary",
       );
-      if (!parsed.error) return parsed;
-
-      const fallback = await mockListFallback(filters);
-      if (fallback) return fallback;
-      return parsed;
     } catch (error: unknown) {
-      const fallback = await mockListFallback(filters);
-      if (fallback) return fallback;
       const message =
         error instanceof Error ? error.message : "Network error";
       return { error: { code: "NETWORK_ERROR", message } };
@@ -105,13 +86,6 @@ export const doApi = {
       }
       return { data: await res.blob() };
     } catch (error: unknown) {
-      if (import.meta.env.DEV) {
-        markDoPrinted(delOrdNo);
-        const content = `%PDF-1.4 Mock Delivery Order Document for ${delOrdNo}`;
-        return {
-          data: new Blob([content], { type: "application/pdf" }),
-        };
-      }
       const message =
         error instanceof Error ? error.message : "Network error";
       return { error: { message } };

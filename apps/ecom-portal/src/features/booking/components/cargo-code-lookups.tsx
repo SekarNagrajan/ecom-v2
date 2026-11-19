@@ -1,12 +1,13 @@
-// Modified by Sekar Nagarajan (2026-08-28 12:09)
+// Modified by Sekar Nagarajan (2026-10-16 23:20)
 import { AutoComplete, Input } from "antd";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
-import { bookingApi } from "../api/booking.api";
-import type {
-  BookingHsCodeOption,
-  BookingUnNumberOption,
-} from "../mocks/booking-hs-un.mock";
+import {
+  bookingApi,
+  type BookingHsCodeOption,
+  type BookingUnNumberOption,
+} from "../api/booking.api";
 
 function formatCommodityDisplay(code?: string, name?: string): string {
   const trimmedCode = (code ?? "").trim();
@@ -21,6 +22,7 @@ export function HsCodeAutoComplete({
   onChange,
   onSelectOption,
   onClearName,
+  status,
 }: {
   value?: string;
   /** Commodity / HS description shown with the code in one field. */
@@ -29,7 +31,9 @@ export function HsCodeAutoComplete({
   onSelectOption: (opt: BookingHsCodeOption) => void;
   /** Clears the paired name when the user types a new search. */
   onClearName?: () => void;
+  status?: "error" | "warning";
 }) {
+  const { t } = useTranslation(["booking", "common"]);
   const [options, setOptions] = useState<BookingHsCodeOption[]>([]);
   const [fetching, setFetching] = useState(false);
   const [typing, setTyping] = useState(false);
@@ -78,12 +82,13 @@ export function HsCodeAutoComplete({
         onClearName?.();
       }}
       onBlur={() => setTyping(false)}
-      notFoundContent={fetching ? "Searching…" : undefined}
+      notFoundContent={fetching ? t("wizard.parties.searching") : undefined}
     >
       <Input
         size="large"
-        placeholder="Search commodity code / name"
+        placeholder={t("wizard.cargo.searchCommodityPlaceholder")}
         allowClear
+        status={status}
       />
     </AutoComplete>
   );
@@ -98,6 +103,7 @@ export function UnNumberAutoComplete({
   onChange: (value: string) => void;
   onSelectOption: (opt: BookingUnNumberOption) => void;
 }) {
+  const { t } = useTranslation(["booking", "common"]);
   const [options, setOptions] = useState<BookingUnNumberOption[]>([]);
   const [fetching, setFetching] = useState(false);
 
@@ -131,9 +137,9 @@ export function UnNumberAutoComplete({
         else onChange(String(val));
       }}
       onChange={(val) => onChange(String(val ?? ""))}
-      notFoundContent={fetching ? "Searching…" : undefined}
+      notFoundContent={fetching ? t("wizard.parties.searching") : undefined}
     >
-      <Input size="large" placeholder="e.g. 1993" allowClear />
+      <Input size="large" placeholder={t("wizard.cargo.dg.unPlaceholder")} allowClear />
     </AutoComplete>
   );
 }

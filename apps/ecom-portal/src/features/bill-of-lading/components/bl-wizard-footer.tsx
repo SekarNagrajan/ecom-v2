@@ -6,6 +6,7 @@
  */
 import { AppButton } from "@solverminds/shared-ui";
 import type { ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 
 interface BlWizardFooterProps {
   onPrevious: () => void;
@@ -31,26 +32,34 @@ export function BlWizardFooter({
   isFirstStep = false,
   isSubmitting = false,
   nextHtmlType = "button",
-  nextLabel = "Next",
+  nextLabel,
   nextIcon,
   nextLoading = false,
   split = false,
   extraStart,
   extraEnd,
 }: BlWizardFooterProps) {
+  const { t } = useTranslation(["bill-of-lading", "common"]);
+  const resolvedNextLabel = nextLabel ?? t("common:actions.next");
+
   const previousButton = (
     <AppButton
       htmlType="button"
       onClick={onPrevious}
       disabled={isFirstStep || isSubmitting}
     >
-      Previous
+      {t("common:actions.previous")}
     </AppButton>
   );
 
   const cancelButton = onCancel ? (
-    <AppButton htmlType="button" onClick={onCancel} disabled={isSubmitting}>
-      Cancel
+    <AppButton
+      danger
+      htmlType="button"
+      onClick={onCancel}
+      disabled={isSubmitting}
+    >
+      {t("actions.cancel")}
     </AppButton>
   ) : null;
 
@@ -64,7 +73,7 @@ export function BlWizardFooter({
         disabled={isSubmitting}
         onClick={nextHtmlType === "submit" ? undefined : onNext}
       >
-        {nextLabel}
+        {resolvedNextLabel}
       </AppButton>
     ) : null;
 

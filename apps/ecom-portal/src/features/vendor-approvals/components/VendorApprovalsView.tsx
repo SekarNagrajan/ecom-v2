@@ -1,70 +1,28 @@
-// Modified by Sekar Nagarajan (2026-08-26 16:25)
+// Modified by Sekar Nagarajan (2026-11-12 23:55)
 import { DataView, type DataViewColumn } from "@solverminds/shared-ui/data-view";
 import { useConfirm, useToast } from "@solverminds/shared-ui/hooks";
+import type { GridApi } from "ag-grid-community";
 import { Tag, Typography } from "antd";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { NavAgencyApprovalIcon } from "../../../components/icons/nav-svg-icons";
 import { buildActionsColumn } from "../../../components/shared/build-actions-column";
-import {
-  ListActionButton,
-  ListActionsRow,
-} from "../../../components/shared/list-action-button";
-import { MODULE_TITLES } from "../../../constants/module-titles";
-import type {
-  ApprovalStatus,
-  VendorApprovalItem,
-} from "../types/vendor-approvals.types";
+import { ListActionButton, ListActionsRow } from "../../../components/shared/list-action-button";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
+import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
+import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
+import { useModuleTitles } from "../../../i18n/use-module-titles";
+import { vendorApprovalsApi } from "../api/vendor-approvals.api";
+import { useVendorApprovalsQuery } from "../api/vendor-approvals.queries";
+import type { ApprovalStatus, VendorApprovalItem } from "../types/vendor-approvals.types";
+import { buildBulkConfirmContent, VendorApprovalsBulkBar } from "./VendorApprovalsBulkBar";
+import { VendorApprovalsRejectModal } from "./VendorApprovalsRejectModal";
+import { type SummaryFilter, VendorApprovalsSummaryPanel } from "./VendorApprovalsSummaryPanel";
 
-const { Text, Title } = Typography;
+const { Text } = Typography;
 
-const INITIAL_ITEMS: VendorApprovalItem[] = [
-  {
-    id: "1",
-    referenceNo: "BKG-2026-0991",
-    customerName: "Apex Logistics Global",
-    submittedDate: "2026-08-21 09:30",
-    type: "BOOKING",
-    originPort: "USNYC",
-    destPort: "SGSIN",
-    status: "PENDING",
-  },
-  {
-    id: "2",
-    referenceNo: "SI-2026-8812",
-    customerName: "Atlantic Freight LLC",
-    submittedDate: "2026-08-21 10:15",
-    type: "SI",
-    originPort: "NLRTM",
-    destPort: "CNSHA",
-    status: "PENDING",
-  },
-  {
-    id: "3",
-    referenceNo: "VGM-2026-4410",
-    customerName: "Pacific Maritime Corp",
-    submittedDate: "2026-08-21 08:45",
-    type: "VGM",
-    originPort: "DEHAM",
-    destPort: "USNYC",
-    status: "PENDING",
-  },
-  {
-    id: "4",
-    referenceNo: "BKG-2026-0988",
-    customerName: "Global Shippers Inc",
-    submittedDate: "2026-08-20 16:20",
-    type: "BOOKING",
-    originPort: "SGSIN",
-    destPort: "AEJEA",
-    status: "APPROVED",
-  },
-];
-
-const TYPE_META: Record<
-  VendorApprovalItem["type"],
-  { color: string; label: string }
-> = {
+const TYPE_META: Record<VendorApprovalItem["type"], { color: string; label: string }> = {
   BOOKING: { color: "blue", label: "Booking" },
   SI: { color: "purple", label: "Shipping Instruction" },
   VGM: { color: "green", label: "VGM" },
@@ -77,40 +35,126 @@ const STATUS_META: Record<ApprovalStatus, { color: string; label: string }> = {
 };
 
 export function VendorApprovalsView() {
+  const MODULE_TITLES = useModuleTitles();
   const toast = useToast();
   const confirm = useConfirm();
-  const [items, setItems] = useState<VendorApprovalItem[]>(INITIAL_ITEMS);
+  const { profileHandlers } = useLocalGridProfiles("vendor-approvals");
+  // Queue derived from the ecombooking / ecomSI / ecom_vgmsolas fixtures through the data-source seam.
+  const approvalsQuery = useVendorApprovalsQuery();
+  // Optimistic status changes layered over the fetched queue until the next refetch.
+  const [statusPatches, setStatusPatches] = useState<
+    Record<string, Pick<VendorApprovalItem, "status" | "rejectRemarks">>
+  >({});
+  const items: VendorApprovalItem[] = (approvalsQuery.data ?? []).map((item) =>
+    statusPatches[item.id] ? { ...item, ...statusPatches[item.id] } : item,
+  );
+  const [summaryFilter, setSummaryFilter] = useState<SummaryFilter>("ALL");
+  const [selectedRows, setSelectedRows] = useState<VendorApprovalItem[]>([]);
+  const [rejectTargets, setRejectTargets] = useState<VendorApprovalItem[]>([]);
+  const gridApiRef = useRef<GridApi<VendorApprovalItem> | null>(null);
 
-  const applyStatus = (id: string, status: Exclude<ApprovalStatus, "PENDING">) => {
-    setItems((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, status } : item)),
-    );
+  const selectedPending = selectedRows.filter((row) => row.status === "PENDING");
+  const selectedPendingCount = selectedPending.length;
+  const rejectModalOpen = rejectTargets.length > 0;
+
+  const clearSelection = () => {
+    gridApiRef.current?.deselectAll();
+    setSelectedRows([]);
+  };
+
+  const applyStatus = async (
+    ids: string[],
+    status: Exclude<ApprovalStatus, "PENDING">,
+    remarks?: string,
+  ) => {
+    if (ids.length === 0) return;
+    try {
+      await vendorApprovalsApi.applyStatus(ids, status, remarks);
+    } catch {
+      toast.error("Couldn't update the request status. Please try again.");
+      return;
+    }
+    setStatusPatches((prev) => {
+      const next = { ...prev };
+      ids.forEach((id) => {
+        const current = items.find((item) => item.id === id);
+        next[id] = {
+          status,
+          rejectRemarks: status === "REJECTED" ? remarks : current?.rejectRemarks,
+        };
+      });
+      return next;
+    });
+    clearSelection();
+    setRejectTargets([]);
     toast.success(
       status === "APPROVED"
-        ? "Request approved successfully."
-        : "Request rejected successfully.",
+        ? ids.length === 1
+          ? "Request approved successfully."
+          : `${ids.length} requests approved successfully.`
+        : ids.length === 1
+          ? "Request rejected successfully."
+          : `${ids.length} requests rejected successfully.`,
     );
   };
 
-  // Use confirm.show / confirm.danger so Cancel is always available (success modals are OK-only).
+  // Use confirm.show so Cancel is always available (success modals are OK-only).
   const handleApprove = (item: VendorApprovalItem) => {
     confirm.show({
       title: "Approve Request",
       content: `Approve ${item.referenceNo} for ${item.customerName}?`,
       okText: "Approve",
       cancelText: "Cancel",
-      onOk: () => applyStatus(item.id, "APPROVED"),
+      onOk: () => applyStatus([item.id], "APPROVED"),
     });
   };
 
   const handleReject = (item: VendorApprovalItem) => {
-    confirm.danger({
-      title: "Reject Request",
-      content: `Reject ${item.referenceNo} for ${item.customerName}?`,
-      okText: "Reject",
+    setRejectTargets([item]);
+  };
+
+  const handleBulkApprove = () => {
+    if (selectedPendingCount === 0) return;
+    confirm.show({
+      title:
+        selectedPendingCount === 1 ? "Approve Request" : `Approve ${selectedPendingCount} Requests`,
+      content: buildBulkConfirmContent(selectedPending, "approve"),
+      okText: selectedPendingCount === 1 ? "Approve" : `Approve ${selectedPendingCount}`,
       cancelText: "Cancel",
-      onOk: () => applyStatus(item.id, "REJECTED"),
+      onOk: () =>
+        applyStatus(
+          selectedPending.map((row) => row.id),
+          "APPROVED",
+        ),
     });
+  };
+
+  const handleBulkReject = () => {
+    if (selectedPendingCount === 0) return;
+    setRejectTargets(selectedPending);
+  };
+
+  const handleRejectConfirm = (remarks: string) => {
+    void applyStatus(
+      rejectTargets.map((row) => row.id),
+      "REJECTED",
+      remarks,
+    );
+  };
+
+  const handleSelectAllPending = () => {
+    const api = gridApiRef.current;
+    if (!api) return;
+    api.forEachNode((node) => {
+      if (node.data?.status === "PENDING") {
+        node.setSelected(true);
+      }
+    });
+  };
+
+  const handleSummaryFilterChange = (filter: SummaryFilter) => {
+    setSummaryFilter(filter);
+    clearSelection();
   };
 
   const columnDefs: DataViewColumn<VendorApprovalItem>[] = [
@@ -121,23 +165,27 @@ export function VendorApprovalsView() {
         const rec = params.data;
         if (!rec) return null;
         if (rec.status !== "PENDING") {
-          return <Text type="secondary" className="va-status-done">Done</Text>;
+          return (
+            <Text type="secondary" className="va-status-done">
+              Done
+            </Text>
+          );
         }
         return (
           <ListActionsRow>
             <ListActionButton
-              title="Approve Request"
-              icon={
-                <AppIcon icon={Icons.checkCircle} size={16} tone="approve" />
-              }
+              title={`Approve ${rec.referenceNo}`}
+              ariaLabel={`Approve ${rec.referenceNo}`}
+              icon={<AppIcon icon={Icons.checkCircle} size={16} tone="create" />}
               onClick={(event) => {
                 event.stopPropagation();
                 handleApprove(rec);
               }}
             />
             <ListActionButton
-              title="Reject Request"
-              icon={<AppIcon icon={Icons.circleX} size={16} tone="reject" />}
+              title={`Reject ${rec.referenceNo}`}
+              ariaLabel={`Reject ${rec.referenceNo}`}
+              icon={<AppIcon icon={Icons.circleX} size={16} tone="delete" />}
               danger
               onClick={(event) => {
                 event.stopPropagation();
@@ -154,9 +202,7 @@ export function VendorApprovalsView() {
       sortable: true,
       flex: 1,
       minWidth: 140,
-      cellRenderer: (params: { value?: string }) => (
-        <strong>{params.value}</strong>
-      ),
+      cellRenderer: (params: { value?: string }) => <strong>{params.value}</strong>,
     },
     {
       headerName: "Type",
@@ -184,9 +230,7 @@ export function VendorApprovalsView() {
       flex: 1,
       minWidth: 130,
       valueGetter: (params: { data?: VendorApprovalItem }) =>
-        params.data
-          ? `${params.data.originPort} → ${params.data.destPort}`
-          : "",
+        params.data ? `${params.data.originPort} → ${params.data.destPort}` : "",
     },
     {
       headerName: "Submitted",
@@ -210,59 +254,94 @@ export function VendorApprovalsView() {
 
   const pendingCount = items.filter((i) => i.status === "PENDING").length;
   const approvedCount = items.filter((i) => i.status === "APPROVED").length;
+  const rejectedCount = items.filter((i) => i.status === "REJECTED").length;
+
+  const visibleItems =
+    summaryFilter === "ALL" ? items : items.filter((item) => item.status === summaryFilter);
+  const pendingInViewCount = visibleItems.filter((item) => item.status === "PENDING").length;
 
   return (
     <div className="va-page-layout">
-      <div className="va-panel-header">
-        <div className="va-panel-header__main">
-          <span className="va-panel-header__icon" aria-hidden>
-            <AppIcon icon={Icons.checkSquare} size={24} />
-          </span>
-          <div className="va-panel-header__copy">
-            <Title level={4} className="va-panel-header__title">
-              {MODULE_TITLES.agencyApprovals}
-            </Title>
-            <Text type="secondary" className="va-panel-header__description">
-              Review and process customer bookings, shipping instructions, and
-              VGM submissions.
-            </Text>
-          </div>
-        </div>
+      {/* Modified by Sekar Nagarajan (2026-09-16 17:38) — VGM/ARN page shell layout */}
+      <div className="va-page-header">
+        <ModuleScreenHeader
+          icon={NavAgencyApprovalIcon}
+          title={MODULE_TITLES.agencyApprovals}
+          subtitle="Review and process customer bookings, shipping instructions, and VGM submissions."
+          marginBottom={0}
+        />
       </div>
 
-      <div className="va-summary-strip" aria-label="Approval summary">
-        <div className="va-summary-chip va-summary-chip--warning">
-          <span className="va-summary-chip__label">Pending</span>
-          <span className="va-summary-chip__value">{pendingCount}</span>
-        </div>
-        <div className="va-summary-chip va-summary-chip--success">
-          <span className="va-summary-chip__label">Approved</span>
-          <span className="va-summary-chip__value">{approvedCount}</span>
-        </div>
-        <div className="va-summary-chip">
-          <span className="va-summary-chip__label">Total</span>
-          <span className="va-summary-chip__value">{items.length}</span>
-        </div>
-      </div>
+      <VendorApprovalsSummaryPanel
+        pendingCount={pendingCount}
+        approvedCount={approvedCount}
+        rejectedCount={rejectedCount}
+        totalCount={items.length}
+        activeFilter={summaryFilter}
+        onFilterChange={handleSummaryFilterChange}
+      />
+
+      <VendorApprovalsBulkBar
+        selectedRows={selectedPending}
+        pendingInViewCount={pendingInViewCount}
+        onApprove={handleBulkApprove}
+        onReject={handleBulkReject}
+        onClear={clearSelection}
+        onSelectAllPending={handleSelectAllPending}
+      />
 
       <div className="va-grid-wrap va-approvals-grid responsive-table-wrap custom-scroll">
         <DataView
+          loading={approvalsQuery.isLoading}
           className="va-data-view"
           columnDefs={columnDefs}
-          rowData={items}
+          rowData={visibleItems}
+          emptyState={
+            <ModuleEmptyState
+              variant="blank"
+              title="No approval requests to review"
+              message="New booking, shipping instruction, and VGM approval requests will appear here."
+            />
+          }
           allowedViewModes={["list"]}
           defaultViewMode="list"
           renderToolbar={() => null}
           listOptions={{
-            showToolbar: false,
+            ...profileHandlers,
+            showToolbar: { showTotalCount: true, fullScreen: true },
+            selectionMode: "multiple",
+            showCheckboxes: true,
+            onGridReady: (params) => {
+              gridApiRef.current = params.api;
+            },
+            onSelectionChanged: (rows) => setSelectedRows(rows as VendorApprovalItem[]),
+            pagination: true,
+            paginationPageSize: 20,
+            pageSizeOptions: [10, 20, 50, 100],
+            sideBar: true,
+            defaultColDef: { filter: true },
+            rowSelection: {
+              mode: "multiRow",
+              checkboxes: true,
+              headerCheckbox: true,
+              enableClickSelection: false,
+              hideDisabledCheckboxes: true,
+              isRowSelectable: (node) => node.data?.status === "PENDING",
+            },
             gridOptions: {
-              domLayout: "autoHeight",
-              overlayNoRowsTemplate: "No approval requests to review.",
               suppressCellFocus: true,
+              getRowId: (params) => params.data.id,
             },
           }}
         />
       </div>
+
+      <VendorApprovalsRejectModal
+        open={rejectModalOpen}
+        items={rejectTargets}
+        onCancel={() => setRejectTargets([])}
+        onConfirm={handleRejectConfirm}
+      />
     </div>
   );
 }

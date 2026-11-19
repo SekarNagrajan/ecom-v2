@@ -1,0 +1,502 @@
+[
+ {
+  "id": 70427,
+  "Email": "robert.bergnaum@example.com",
+  "customercode": "",
+  "Remarks": "Customer Registered",
+  "Type": "C",
+  "CrDate": "2026-11-17T08:56:24.962Z",
+  "CrUser": "robert.bergnaum@example.com",
+  "Status": "I"
+ },
+ {
+  "id": 70426,
+  "Email": "bryce_lockman54@example.com",
+  "customercode": "",
+  "Remarks": "Customer Registered",
+  "Type": "C",
+  "CrDate": "2026-11-17T08:53:32.445Z",
+  "CrUser": "bryce_lockman54@example.com",
+  "Status": "I"
+ },
+ {
+  "id": 70425,
+  "Email": "marlene_schmidt55@example.com",
+  "customercode": "2026000088",
+  "Remarks": "ACCEPT- ",
+  "Type": "A",
+  "CrDate": "2026-11-15T09:16:34.258Z",
+  "CrUser": "SUPERUSER",
+  "Status": "P"
+ },
+ {
+  "id": 70424,
+  "Email": "marlene_schmidt55@example.com",
+  "customercode": "",
+  "Remarks": "Customer Activate Link Clicked",
+  "Type": "C",
+  "CrDate": "2026-11-15T09:04:19.732Z",
+  "CrUser": "marlene_schmidt55@example.com",
+  "Status": "C"
+ },
+ {
+  "id": 70423,
+  "Email": "marlene_schmidt55@example.com",
+  "customercode": "",
+  "Remarks": "Customer Registered",
+  "Type": "C",
+  "CrDate": "2026-11-15T09:03:07.288Z",
+  "CrUser": "marlene_schmidt55@example.com",
+  "Status": "I"
+ },
+ {
+  "id": 70422,
+  "Email": "arvid.pollich@example.com",
+  "customercode": null,
+  "Remarks": "Customer Registation Approved",
+  "Type": "L",
+  "CrDate": "2026-11-15T08:46:46.648Z",
+  "CrUser": "arvid.pollich@example.com",
+  "Status": "Y"
+ },
+ {
+  "id": 70421,
+  "Email": "arvid.pollich@example.com",
+  "customercode": "155042",
+  "Remarks": "ACCEPT- ",
+  "Type": "A",
+  "CrDate": "2026-11-15T08:43:27.045Z",
+  "CrUser": "SUPERUSER",
+  "Status": "P"
+ },
+ {
+  "id": 70420,
+  "Email": "arvid.pollich@example.com",
+  "customercode": "",
+  "Remarks": "Customer Activate Link Clicked",
+  "Type": "C",
+  "CrDate": "2026-11-15T08:41:34.495Z",
+  "CrUser": "arvid.pollich@example.com",
+  "Status": "C"
+ },
+ {
+  "id": 70419,
+  "Email": "arvid.pollich@example.com",
+  "customercode": "",
+  "Remarks": "Customer Registered",
+  "Type": "C",
+  "CrDate": "2026-11-15T08:40:29.132Z",
+  "CrUser": "arvid.pollich@example.com",
+  "Status": "I"
+ },
+ {
+  "id": 70418,
+  "Email": "juwan.bernier@example.com",
+  "customercode": "20001374",
+  "Remarks": "Customer Registation Approved",
+  "Type": "C",
+  "CrDate": "2026-11-15T08:33:15.638Z",
+  "CrUser": "juwan.bernier@example.com",
+  "Status": "Y"
+ },
+ {
+  "id": 70417,
+  "Email": "juwan.bernier@example.com",
+  "customercode": "",
+  "Remarks": "Customer Registered",
+  "Type": "C",
+  "CrDate": "2026-11-15T08:32:10.688Z",
+  "CrUser": "juwan.bernier@example.com",
+  "Status": "I"
+ },
+ {
+  "id": 70416,
+  "Email": "samara.nolan96@example.com",
+  "customercode": "20120004232",
+  "Remarks": "ACCEPT- ",
+  "Type": "A",
+  "CrDate": "2026-11-15T08:08:04.862Z",
+  "CrUser": "SUPERUSER",
+  "Status": "P"
+ },
+ {
+  "id": 70415,
+  "Email": "rosalee_gusikowski@example.com",
+  "customercode": "074524",
+  "Remarks": "ACCEPT- ",
+  "Type": "A",
+  "CrDate": "2026-11-15T02:22:53.332Z",
+  "CrUser": "SUPERUSER",
+  "Status": "P"
+ },
+ {
+  "id": 70414,
+  "Email": "al_osinski3@example.com",
+  "customercode": "",
+  "Remarks": "Customer Registered",
+  "Type": "C",
+  "CrDate": "2026-11-14T08:23:20.162Z",
+  "CrUser": "al_osinski3@example.com",
+  "Status": "I"
+ },
+ {
+  "id": 70413,
+  "Email": "jayda.blick56@example.com",
+  "customercode": "2026000100",
+  "Remarks": "Customer Registation Approved",
+  "Type": "C",
+  "CrDate": "2026-11-14T07:31:51.485Z",
+  "CrUser": "jayda.blick56@example.com",
+  "Status": "Y"
+ },
+ {
+  "id": 70412,
+  "Email": "jayda.blick56@example.com",
+  "customercode": "",
+  "Remarks": "Customer Registered",
+  "Type": "C",
+  "CrDate": "2026-11-14T07:31:29.315Z",
+  "CrUser": "jayda.blick56@example.com",
+  "Status": "I"
+ },
+ {
+  "id": 70411,
+  "Email": "nichole88@example.com",
+  "customercode": "20140004458",
+  "Remarks": "ACCEPT- ",
+  "Type": "A",
+  "CrDate": "2026-11-14T05:10:59.052Z",
+  "CrUser": "SUPERUSER",
+  "Status": "P"
+ },
+ {
+  "id": 70410,
+  "Email": "taurean94@example.com",
+  "customercode": "",
+  "Remarks": "Marked as Spam",
+  "Type": "L",
+  "CrDate": "2026-11-09T05:36:11.708Z",
+  "CrUser": "SUPERUSER",
+  "Status": "S"
+ },
+ {
+  "id": 70409,
+  "Email": "natasha_hansen@example.com",
+  "customercode": "",
+  "Remarks": "Marked as Spam",
+  "Type": "L",
+  "CrDate": "2026-11-09T05:34:07.785Z",
+  "CrUser": "SUPERUSER",
+  "Status": "S"
+ },
+ {
+  "id": 70408,
+  "Email": "lucinda_schinner@example.com",
+  "customercode": "",
+  "Remarks": "Marked as Spam",
+  "Type": "L",
+  "CrDate": "2026-11-09T05:33:59.218Z",
+  "CrUser": "SUPERUSER",
+  "Status": "S"
+ },
+ {
+  "id": 70407,
+  "Email": "naomi96@example.com",
+  "customercode": "",
+  "Remarks": "Marked as Spam",
+  "Type": "L",
+  "CrDate": "2026-11-09T05:33:20.968Z",
+  "CrUser": "SUPERUSER",
+  "Status": "S"
+ },
+ {
+  "id": 70406,
+  "Email": "ryley57@example.com",
+  "customercode": "",
+  "Remarks": "Marked as Spam",
+  "Type": "L",
+  "CrDate": "2026-11-09T05:32:28.208Z",
+  "CrUser": "SUPERUSER",
+  "Status": "S"
+ },
+ {
+  "id": 70405,
+  "Email": "orval43@example.com",
+  "customercode": "",
+  "Remarks": "Marked as Spam",
+  "Type": "L",
+  "CrDate": "2026-11-09T05:17:51.988Z",
+  "CrUser": "SUPERUSER",
+  "Status": "S"
+ },
+ {
+  "id": 70404,
+  "Email": "cade_ruecker@example.com",
+  "customercode": "",
+  "Remarks": "Marked as Spam",
+  "Type": "L",
+  "CrDate": "2026-11-09T05:16:05.725Z",
+  "CrUser": "SUPERUSER",
+  "Status": "S"
+ },
+ {
+  "id": 70403,
+  "Email": "timmy.marquardt94@example.com",
+  "customercode": "",
+  "Remarks": "Marked as Spam",
+  "Type": "L",
+  "CrDate": "2026-11-09T05:00:56.718Z",
+  "CrUser": "SUPERUSER",
+  "Status": "S"
+ },
+ {
+  "id": 70402,
+  "Email": "leslie21@example.com",
+  "customercode": "20001374",
+  "Remarks": "Customer Registation Approved",
+  "Type": "C",
+  "CrDate": "2026-11-09T04:38:01.925Z",
+  "CrUser": "leslie21@example.com",
+  "Status": "Y"
+ },
+ {
+  "id": 70401,
+  "Email": "leslie21@example.com",
+  "customercode": "",
+  "Remarks": "Customer Registered",
+  "Type": "C",
+  "CrDate": "2026-11-09T04:37:08.945Z",
+  "CrUser": "leslie21@example.com",
+  "Status": "I"
+ },
+ {
+  "id": 70400,
+  "Email": "forest44@example.com",
+  "customercode": "",
+  "Remarks": "Customer Registered",
+  "Type": "C",
+  "CrDate": "2026-11-06T00:40:07.058Z",
+  "CrUser": "forest44@example.com",
+  "Status": "I"
+ },
+ {
+  "id": 70399,
+  "Email": "rene_lesch@example.com",
+  "customercode": "",
+  "Remarks": "Customer Registered",
+  "Type": "C",
+  "CrDate": "2026-11-03T00:37:00.128Z",
+  "CrUser": "rene_lesch@example.com",
+  "Status": "I"
+ },
+ {
+  "id": 70398,
+  "Email": "tomasa_lebsack59@example.com",
+  "customercode": "",
+  "Remarks": "Customer Registered",
+  "Type": "C",
+  "CrDate": "2026-11-01T09:14:01.918Z",
+  "CrUser": "tomasa_lebsack59@example.com",
+  "Status": "I"
+ },
+ {
+  "id": 70397,
+  "Email": "dillan.rau50@example.com",
+  "customercode": "",
+  "Remarks": "Customer Registered",
+  "Type": "C",
+  "CrDate": "2026-10-31T09:11:47.602Z",
+  "CrUser": "dillan.rau50@example.com",
+  "Status": "I"
+ },
+ {
+  "id": 70395,
+  "Email": "nelle70@example.com",
+  "customercode": "",
+  "Remarks": "Marked as Spam",
+  "Type": "L",
+  "CrDate": "2026-10-22T11:34:21.892Z",
+  "CrUser": "SUPERUSER",
+  "Status": "S"
+ },
+ {
+  "id": 70394,
+  "Email": "ruben.cartwright50@example.com",
+  "customercode": "",
+  "Remarks": "Marked as Spam",
+  "Type": "L",
+  "CrDate": "2026-10-20T04:07:26.435Z",
+  "CrUser": "SUPERUSER",
+  "Status": "S"
+ },
+ {
+  "id": 70393,
+  "Email": "ramon_mante70@example.com",
+  "customercode": "",
+  "Remarks": "Marked as Spam",
+  "Type": "L",
+  "CrDate": "2026-10-20T04:03:27.235Z",
+  "CrUser": "SUPERUSER",
+  "Status": "S"
+ },
+ {
+  "id": 70392,
+  "Email": "johnathon6@example.com",
+  "customercode": "",
+  "Remarks": "Customer Registered",
+  "Type": "C",
+  "CrDate": "2026-10-20T00:40:01.135Z",
+  "CrUser": "johnathon6@example.com",
+  "Status": "I"
+ },
+ {
+  "id": 70391,
+  "Email": "margret58@example.com",
+  "customercode": "",
+  "Remarks": "Customer Registered",
+  "Type": "C",
+  "CrDate": "2026-10-18T11:23:37.802Z",
+  "CrUser": "margret58@example.com",
+  "Status": "I"
+ },
+ {
+  "id": 70390,
+  "Email": "alfonso49@example.com",
+  "customercode": "20001374",
+  "Remarks": "User Created By Invitation",
+  "Type": "C",
+  "CrDate": "2026-10-16T21:30:21.108Z",
+  "CrUser": "baylee.howe87@example.com",
+  "Status": "A"
+ },
+ {
+  "id": 70389,
+  "Email": "aiyana40@example.com",
+  "customercode": null,
+  "Remarks": "Customer Registation Approved",
+  "Type": "L",
+  "CrDate": "2026-10-16T07:21:30.948Z",
+  "CrUser": "aiyana40@example.com",
+  "Status": "Y"
+ },
+ {
+  "id": 70388,
+  "Email": "aiyana40@example.com",
+  "customercode": "20170000514",
+  "Remarks": "ACCEPT- ",
+  "Type": "A",
+  "CrDate": "2026-10-16T07:20:53.438Z",
+  "CrUser": "SUPERUSER",
+  "Status": "P"
+ },
+ {
+  "id": 70385,
+  "Email": "delores.bogisich51@example.com",
+  "customercode": "2021000073",
+  "Remarks": "ACCEPT- ",
+  "Type": "A",
+  "CrDate": "2026-10-16T07:16:30.065Z",
+  "CrUser": "SUPERUSER",
+  "Status": "P"
+ },
+ {
+  "id": 70384,
+  "Email": "delores.bogisich51@example.com",
+  "customercode": "20170000514",
+  "Remarks": "ACCEPT- ",
+  "Type": "A",
+  "CrDate": "2026-10-16T07:00:45.258Z",
+  "CrUser": "SUPERUSER",
+  "Status": "P"
+ },
+ {
+  "id": 70380,
+  "Email": "princess.oconnell94@example.com",
+  "customercode": "20170000514",
+  "Remarks": "ACCEPT- ",
+  "Type": "A",
+  "CrDate": "2026-10-16T05:40:42.812Z",
+  "CrUser": "SUPERUSER",
+  "Status": "P"
+ },
+ {
+  "id": 70377,
+  "Email": "princess.oconnell94@example.com",
+  "customercode": "20170000514",
+  "Remarks": "ACCEPT- ",
+  "Type": "A",
+  "CrDate": "2026-10-16T05:06:34.412Z",
+  "CrUser": "SUPERUSER",
+  "Status": "P"
+ },
+ {
+  "id": 70374,
+  "Email": "milo_kris@example.com",
+  "customercode": "20170000514",
+  "Remarks": "ACCEPT- ",
+  "Type": "A",
+  "CrDate": "2026-10-16T03:42:17.845Z",
+  "CrUser": "SUPERUSER",
+  "Status": "P"
+ },
+ {
+  "id": 70371,
+  "Email": "ashlynn41@example.com",
+  "customercode": "20170000514",
+  "Remarks": "ACCEPT- ",
+  "Type": "A",
+  "CrDate": "2026-10-16T02:53:55.498Z",
+  "CrUser": "SUPERUSER",
+  "Status": "P"
+ },
+ {
+  "id": 70387,
+  "Email": "aiyana40@example.com",
+  "customercode": "",
+  "Remarks": "Customer Activate Link Clicked",
+  "Type": "C",
+  "CrDate": "2026-10-15T20:18:35.998Z",
+  "CrUser": "aiyana40@example.com",
+  "Status": "C"
+ },
+ {
+  "id": 70386,
+  "Email": "aiyana40@example.com",
+  "customercode": "",
+  "Remarks": "Customer Registered",
+  "Type": "C",
+  "CrDate": "2026-10-15T20:17:57.978Z",
+  "CrUser": "aiyana40@example.com",
+  "Status": "I"
+ },
+ {
+  "id": 70383,
+  "Email": "princess.oconnell94@example.com",
+  "customercode": "",
+  "Remarks": "Customer Activate Link Clicked",
+  "Type": "C",
+  "CrDate": "2026-10-15T19:57:56.372Z",
+  "CrUser": "princess.oconnell94@example.com",
+  "Status": "C"
+ },
+ {
+  "id": 70382,
+  "Email": "princess.oconnell94@example.com",
+  "customercode": "",
+  "Remarks": "Customer Registered",
+  "Type": "C",
+  "CrDate": "2026-10-15T19:55:47.482Z",
+  "CrUser": "princess.oconnell94@example.com",
+  "Status": "I"
+ },
+ {
+  "id": 70381,
+  "Email": "sean.bernhard-okeefe88@example.com",
+  "customercode": "",
+  "Remarks": "Customer Registered",
+  "Type": "C",
+  "CrDate": "2026-10-15T18:40:46.585Z",
+  "CrUser": "sean.bernhard-okeefe88@example.com",
+  "Status": "I"
+ }
+]

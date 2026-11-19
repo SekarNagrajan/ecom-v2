@@ -1,0 +1,52 @@
+{
+  "tooltips": {
+    "grammarImprove": "Perbaiki tatabahasa",
+    "dictation": "Imlak dengan AI",
+    "dictationRecording": "Hentikan rakaman",
+    "dictationTranscribing": "Sedang ditranskripsikan…",
+    "toneRewrite": "Tulis semula dengan AI"
+  },
+  "toasts": {
+    "grammarEmptyInput": "Tambah teks sebelum memperbaiki tatabahasa.",
+    "grammarEmptyResponse": "Perkhidmatan tatabahasa mengembalikan respons kosong. Tiada perubahan diguna.",
+    "grammarFormattingLoss": "Nota: Pemformatan teks (tebal, pautan, senarai) akan dipermudahkan selepas pembetulan tatabahasa.",
+    "rewriteEmptyInput": "Tambah kandungan mesej sebelum menulis semula.",
+    "rewriteEmptyResponse": "Penulisan semula mengembalikan respons kosong. Tiada perubahan diguna.",
+    "permissionDenied": "Akses mikrofon disekat. Dayakannya dalam pelayar anda untuk mengimlak.",
+    "unsupported": "Imlak suara tidak disokong dalam pelayar ini.",
+    "noMicrophone": "Tiada mikrofon dikesan. Sambungkan satu dan cuba lagi.",
+    "recordingFailed": "Rakaman gagal. Sila cuba lagi.",
+    "maxLengthExceeded": "Transkrip dipotong sebanyak {{truncatedChars}} aksara untuk muat dalam medan."
+  },
+  "tones": {
+    "engaging": "Menarik",
+    "persuasive": "Meyakinkan",
+    "anticipatory": "Antisipatif",
+    "assertive": "Tegas",
+    "compassionate": "Prihatin",
+    "confident": "Yakin",
+    "constructive": "Konstruktif",
+    "cooperative": "Saling bekerjasama",
+    "diplomatic": "Diplomatik",
+    "empathetic": "Empati",
+    "friendly": "Mesra",
+    "inspirational": "Inspirasi",
+    "exciting": "Mengasyikkan",
+    "casual": "Santai"
+  },
+  "rewriteActions": {
+    "improve": "Perbaiki penulisan",
+    "more_descriptive": "Lebih deskriptif",
+    "more_detailed": "Lebih terperinci",
+    "simplify": "Permudahkan",
+    "informative": "Informatif",
+    "paraphrase": "Parafrasa",
+    "fix_mistakes": "Betulkan ejaan & tatabahasa",
+    "fluent": "Jadikan lebih lancar",
+    "objective": "Jadikan lebih objektif",
+    "professional": "Profesional"
+  },
+  "errors": {
+    "generic": "Sesuatu telah berlaku. Sila cuba lagi."
+  }
+}

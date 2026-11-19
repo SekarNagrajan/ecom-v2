@@ -1,9 +1,8 @@
-// Created by Sekar Nagarajan (2026-08-27 18:30)
+// Modified by Sekar Nagarajan (2026-10-16 23:20)
 import { useQuery } from '@tanstack/react-query';
 
-import { bookingApi } from './booking.api';
+import { bookingApi, type BookingLookupKind } from './booking.api';
 import { bookingKeys } from './booking.keys';
-import type { BookingLookupKind } from '../mocks/booking-lookups.mock';
 
 export function useBookingLookups(kind: BookingLookupKind) {
   return useQuery({

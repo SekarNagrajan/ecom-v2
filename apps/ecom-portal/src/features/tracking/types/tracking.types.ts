@@ -27,8 +27,12 @@ export interface ContainerMovementEvent {
   locationName: string;
   facility: string;
   eventDate: string;
+  /** Carrier / service code shown in Vessel Details (e.g. FIRX). */
+  vesselCode?: string;
   vesselName?: string;
   voyage?: string;
+  /** Bound letter, e.g. W / E. */
+  bound?: string;
   transportMode: "VESSEL" | "RAIL" | "TRUCK" | "BARGE";
   isActual: boolean;
   /** Optional mock coordinates for live-map event trail. */
@@ -141,4 +145,34 @@ export interface TrackingSearchResult {
   containers: ContainerEquipment[];
   routeMap?: TrackingRouteMap;
   liveAis?: TrackingLiveAisPosition;
+}
+
+/** Compact payload attached to share-mail requests. */
+export interface ShareTrackingMailSummary {
+  searchKey: string;
+  bookingNo: string;
+  blNo: string;
+  vesselName: string;
+  voyage: string;
+  bound: string;
+  polPortCode: string;
+  podPortCode: string;
+  etd: string;
+  eta: string;
+  containerCount: number;
+  containerNos: string[];
+}
+
+export interface ShareTrackingMailInput {
+  to: string;
+  cc?: string;
+  subject: string;
+  message: string;
+  tracking: ShareTrackingMailSummary;
+}
+
+export interface ShareTrackingMailResponse {
+  success: boolean;
+  messageId: string;
+  recipientCount: number;
 }

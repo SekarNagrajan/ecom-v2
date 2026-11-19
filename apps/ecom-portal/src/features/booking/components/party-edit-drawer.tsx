@@ -2,14 +2,16 @@
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { AutoComplete, Col, Input, Row, Typography } from "antd";
 import { useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import type { BookingCustomerOption } from "../api/booking.api";
 import { bookingApi } from "../api/booking.api";
+import { filterSessionCustomers, mergeCustomerOptions } from "../utils/party-customer.utils";
 import {
   emptyPartyCard,
-  PARTY_ROLE_LABEL,
-  PARTY_ROLE_OPTIONS,
+  getPartyRoleLabel,
+  getPartyRoleOptions,
   type PartyCardData,
   type PartyRoleKey,
 } from "../utils/party-role.utils";
@@ -37,25 +39,27 @@ export function PartyEditDrawer({
   onSave,
   onClose,
 }: PartyEditDrawerProps) {
+  const { t } = useTranslation(["booking", "common"]);
   return (
     <AppDrawer
       open={open}
       onClose={onClose}
       title={
-        title ?? (roleKey ? `Edit ${PARTY_ROLE_LABEL[roleKey]}` : "Edit Party")
+        title ??
+        (roleKey
+          ? t("booking:wizard.parties.editRole", {
+              role: getPartyRoleLabel(roleKey, t),
+            })
+          : t("booking:wizard.parties.editParty"))
       }
       width={480}
       footer={
         <div className="booking-party-drawer-footer">
           <AppButton danger onClick={onClose}>
-            Cancel
+            {t("common:actions.cancel")}
           </AppButton>
-          <AppButton
-            type="primary"
-            onClick={onSave}
-            disabled={!value.company.trim()}
-          >
-            Update
+          <AppButton type="primary" onClick={onSave} disabled={!value.company.trim()}>
+            {t("common:actions.save")}
           </AppButton>
         </div>
       }
@@ -63,7 +67,7 @@ export function PartyEditDrawer({
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <label className="form-field-label">
-            Company <Text type="danger">*</Text>
+            {t("booking:wizard.parties.fields.company")} <Text type="danger">*</Text>
           </label>
           <Input
             size="large"
@@ -72,7 +76,9 @@ export function PartyEditDrawer({
           />
         </Col>
         <Col span={24}>
-          <label className="form-field-label">Contact / Code</label>
+          <label className="form-field-label">
+            {t("booking:wizard.parties.fields.contactCode")}
+          </label>
           <Input
             size="large"
             value={value.contact}
@@ -80,7 +86,7 @@ export function PartyEditDrawer({
           />
         </Col>
         <Col span={24}>
-          <label className="form-field-label">Address</label>
+          <label className="form-field-label">{t("booking:wizard.parties.fields.address")}</label>
           <Input
             size="large"
             value={value.address}
@@ -88,7 +94,7 @@ export function PartyEditDrawer({
           />
         </Col>
         <Col span={12}>
-          <label className="form-field-label">City</label>
+          <label className="form-field-label">{t("booking:wizard.parties.fields.city")}</label>
           <Input
             size="large"
             value={value.city}
@@ -96,7 +102,7 @@ export function PartyEditDrawer({
           />
         </Col>
         <Col span={12}>
-          <label className="form-field-label">Country</label>
+          <label className="form-field-label">{t("booking:wizard.parties.fields.country")}</label>
           <Input
             size="large"
             value={value.country}
@@ -104,7 +110,7 @@ export function PartyEditDrawer({
           />
         </Col>
         <Col span={12}>
-          <label className="form-field-label">Email</label>
+          <label className="form-field-label">{t("booking:wizard.parties.fields.email")}</label>
           <Input
             size="large"
             value={value.email}
@@ -112,7 +118,7 @@ export function PartyEditDrawer({
           />
         </Col>
         <Col span={12}>
-          <label className="form-field-label">Phone</label>
+          <label className="form-field-label">{t("booking:wizard.parties.fields.phone")}</label>
           <Input
             size="large"
             value={value.phone}
@@ -129,19 +135,28 @@ interface CustomerSearchAutoCompleteProps {
   onChange?: (value: string) => void;
   onSelectCustomer: (customer: BookingCustomerOption) => void;
   placeholder?: string;
+  /** Session-created customers merged into search results. */
+  sessionCustomers?: BookingCustomerOption[];
+  /** Opens the new-customer create flow (typed query is the current search text). */
+  onAddNewCustomer?: (typedQuery?: string) => void;
 }
 
 export function CustomerSearchAutoComplete({
   value,
   onChange,
   onSelectCustomer,
-  placeholder = "Type customer name or code…",
+  placeholder,
+  sessionCustomers = [],
+  onAddNewCustomer,
 }: CustomerSearchAutoCompleteProps) {
+  const { t } = useTranslation("booking");
   const [options, setOptions] = useState<BookingCustomerOption[]>([]);
   const [fetching, setFetching] = useState(false);
   const [innerValue, setInnerValue] = useState(value ?? "");
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const optionsRef = useRef<BookingCustomerOption[]>([]);
+  const sessionRef = useRef(sessionCustomers);
+  sessionRef.current = sessionCustomers;
 
   const displayValue = value !== undefined ? value : innerValue;
 
@@ -154,11 +169,13 @@ export function CustomerSearchAutoComplete({
     setFetching(true);
     try {
       const data = await bookingApi.searchCustomers(q);
-      setOptions(data);
-      optionsRef.current = data;
+      const merged = mergeCustomerOptions(data, filterSessionCustomers(sessionRef.current, q));
+      setOptions(merged);
+      optionsRef.current = merged;
     } catch {
-      setOptions([]);
-      optionsRef.current = [];
+      const sessionOnly = filterSessionCustomers(sessionRef.current, q);
+      setOptions(sessionOnly);
+      optionsRef.current = sessionOnly;
     } finally {
       setFetching(false);
     }
@@ -176,6 +193,10 @@ export function CustomerSearchAutoComplete({
     onChange?.(val);
   };
 
+  const openCreate = () => {
+    onAddNewCustomer?.(displayValue.trim() || undefined);
+  };
+
   return (
     <AutoComplete
       value={displayValue}
@@ -186,10 +207,7 @@ export function CustomerSearchAutoComplete({
         label: (
           <div className="booking-party-suggest-option">
             <Text strong>{o.customerName}</Text>
-            <Text
-              type="secondary"
-              className="booking-party-suggest-option__meta"
-            >
+            <Text type="secondary" className="booking-party-suggest-option__meta">
               {o.customerCode} · {o.city}, {o.country}
             </Text>
           </div>
@@ -205,17 +223,34 @@ export function CustomerSearchAutoComplete({
       }}
       onChange={(val) => handleChange(String(val ?? ""))}
       notFoundContent={
-        fetching
-          ? "Searching…"
-          : displayValue.trim()
-          ? "No customers found"
-          : null
+        fetching ? (
+          t("wizard.parties.searching")
+        ) : displayValue.trim() ? (
+          <div className="booking-party-search-empty">
+            <Text type="secondary">{t("wizard.parties.noCustomers")}</Text>
+            {onAddNewCustomer ? (
+              <AppButton
+                type="link"
+                size="small"
+                className="booking-party-search-empty__add"
+                icon={<AppIcon icon={Icons.userPlus} size={14} tone="create" />}
+                onMouseDown={(e) => {
+                  // Keep focus so AutoComplete does not close before click.
+                  e.preventDefault();
+                }}
+                onClick={openCreate}
+              >
+                {t("wizard.parties.addNewCustomer")}
+              </AppButton>
+            ) : null}
+          </div>
+        ) : null
       }
     >
       <Input
         size="large"
         allowClear
-        placeholder={placeholder}
+        placeholder={placeholder ?? t("wizard.parties.typeCustomerPlaceholder")}
         prefix={<AppIcon icon={Icons.search} size={16} />}
       />
     </AutoComplete>
@@ -236,9 +271,11 @@ export function RoleAssignPanel({
   onAssign,
   onClear,
 }: RoleAssignPanelProps) {
+  const { t } = useTranslation(["booking", "common"]);
   const [selected, setSelected] = useState<Record<string, boolean>>({});
+  const localizedRoleOptions = getPartyRoleOptions(t);
 
-  const selectedCount = PARTY_ROLE_OPTIONS.filter(
+  const selectedCount = localizedRoleOptions.filter(
     (role) => selected[role.key] && !assignedRoles.includes(role.key),
   ).length;
 
@@ -251,9 +288,9 @@ export function RoleAssignPanel({
   };
 
   const handleAssign = () => {
-    const roles = PARTY_ROLE_OPTIONS.filter(
-      (role) => selected[role.key] && !assignedRoles.includes(role.key),
-    ).map((role) => role.key);
+    const roles = localizedRoleOptions
+      .filter((role) => selected[role.key] && !assignedRoles.includes(role.key))
+      .map((role) => role.key);
     onAssign(roles);
     setSelected({});
   };
@@ -272,23 +309,14 @@ export function RoleAssignPanel({
             </Text>
           </div>
         </div>
-        <AppButton
-          size="small"
-          danger
-          icon={<AppIcon icon={Icons.x} size={14} tone="delete" />}
-          onClick={() => {
-            setSelected({});
-            onClear();
-          }}
-        ></AppButton>
       </div>
 
       <Text type="secondary" className="booking-party-role-panel__hint">
-        Select roles to assign this customer, then click Add Selected.
+        {t("booking:wizard.parties.assignHint")}
       </Text>
 
       <div className="booking-party-role-chips">
-        {PARTY_ROLE_OPTIONS.map((role) => {
+        {localizedRoleOptions.map((role) => {
           const already = assignedRoles.includes(role.key);
           const isSelected = !!selected[role.key] || already;
           return (
@@ -312,7 +340,9 @@ export function RoleAssignPanel({
               )}
               <span>{role.label}</span>
               {already ? (
-                <span className="booking-party-role-chip__tag">Assigned</span>
+                <span className="booking-party-role-chip__tag">
+                  {t("booking:wizard.parties.assigned")}
+                </span>
               ) : null}
             </button>
           );
@@ -321,19 +351,24 @@ export function RoleAssignPanel({
 
       <div className="booking-party-role-actions">
         <AppButton
+          danger
           onClick={() => {
             setSelected({});
             onClear();
           }}
         >
-          Cancel
+          {t("common:actions.cancel")}
         </AppButton>
         <AppButton
           icon={<AppIcon icon={Icons.userPlus} size={16} tone="view" />}
           onClick={handleAssign}
           disabled={selectedCount === 0}
         >
-          Add Selected{selectedCount > 0 ? ` (${selectedCount})` : ""}
+          {selectedCount > 0
+            ? t("booking:wizard.parties.addSelectedCount", {
+                count: selectedCount,
+              })
+            : t("booking:wizard.parties.addSelected")}
         </AppButton>
       </div>
     </div>

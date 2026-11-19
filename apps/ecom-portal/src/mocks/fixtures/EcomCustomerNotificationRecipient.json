@@ -1,0 +1,14 @@
+[
+ {
+  "id": "6",
+  "customerUserId": "5",
+  "category": "BILL_OF_LADING",
+  "emailAddress": "raymundo14@example.com"
+ },
+ {
+  "id": "5",
+  "customerUserId": "5",
+  "category": "BOOKING",
+  "emailAddress": "raymundo14@example.com"
+ }
+]

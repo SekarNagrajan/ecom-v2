@@ -1,65 +1,34 @@
-// Modified by Sekar Nagarajan (2026-08-31 17:03)
-import { useAuthStore } from "@solverminds/auth";
+// Modified by Sekar Nagarajan (2026-11-12 23:50)
+import { useAuthStore, useTenantStore } from "@solverminds/auth";
+import { env, queryClient } from "@solverminds/platform";
 import {
   createRootRoute,
   createRoute,
   createRouter,
+  isRedirect,
+  lazyRouteComponent,
   Outlet,
   redirect,
 } from "@tanstack/react-router";
 
+import { RootErrorComponent } from "../components/error/root-error";
 import { AuthenticatedLayout } from "../components/layout/AuthenticatedLayout";
+import { LayoutSkeleton } from "../components/layout/layout-skeleton";
 import { PublicLayout } from "../components/layout/PublicLayout";
-import { AdminRoute } from "../features/admin/admin-route";
-import {
-  DEFAULT_ADMIN_SECTION,
-  isAdminSectionKey,
-  resolveAllowedAdminSections,
-  resolveDefaultAdminSection,
-  type AdminSectionKey,
-} from "../features/admin/utils/admin-menu-access";
-import { ArrivalNoticeRoute } from "../features/arrival-notice/arrival-notice-route";
-import { ActivationRoute } from "../features/auth/activation-route";
+import { AppRoutePendingFallback } from "../components/pending/app-route-pending";
+import { PublicPendingFallback } from "../components/pending/public-pending";
+import { NotFound } from "../components/shared/not-found";
+import { adminRoute } from "../features/admin/admin-route";
+import { resolveAdminLandingSearch } from "../features/admin/utils/admin-landing";
+import { rehydrateSession } from "../features/auth/api/rehydrate-session";
+import { SESSION_EXPIRED_SEARCH_REASON } from "../features/auth/api/session-expiry";
+import { redirectForMissingCapability } from "../features/auth/utils/capability-guard";
 import { AdminLoginPage } from "../features/auth/components/admin-login-page";
 import { ImpersonationLoginPage } from "../features/auth/components/impersonation-login-page";
 import { VendorLoginPage } from "../features/auth/components/vendor-login-page";
-import { BillOfLadingBatchPrintRoute } from "../features/bill-of-lading/bill-of-lading-batch-print-route";
-import { BillOfLadingDashboardRoute } from "../features/bill-of-lading/bill-of-lading-dashboard-route";
-import {
-  BillOfLadingMcnListRoute,
-  BillOfLadingMcnViewRoute,
-} from "../features/bill-of-lading/bill-of-lading-mcn-route";
-import { BillOfLadingMcnEditRoute } from "../features/bill-of-lading/bill-of-lading-mcn-edit-route";
-import { BillOfLadingViewRoute } from "../features/bill-of-lading/bill-of-lading-view-route";
-import { BillOfLadingWizardRoute } from "../features/bill-of-lading/bill-of-lading-wizard-route";
-import { BillOfLadingSubmitResultRoute } from "../features/bill-of-lading/bill-of-lading-submit-result-route";
-import { BookingAmendRoute } from "../features/booking/booking-amend-route";
-import { BookingDashboardRoute } from "../features/booking/booking-dashboard-route";
-import { BookingViewRoute } from "../features/booking/booking-view-route";
-import { BookingWizardRoute } from "../features/booking/booking-wizard-route";
-import { CarbonCalculatorRoute } from "../features/carbon-calculator/carbon-calculator-route";
-import { ContactUsRoute } from "../features/contact-us/contact-us-route";
-import { ContainerReleaseOrderRoute } from "../features/container-release-order/container-release-order-route";
-import { CustomerStatementRoute } from "../features/customer-statement/customer-statement-route";
-import { EnhancedDashboardView } from "../features/dashboard/components/EnhancedDashboardView";
-import { DeliveryOrderRoute } from "../features/delivery-order/delivery-order-route";
-import { RatesRoute } from "../features/rates/rates-route";
-import { RegistrationRoute } from "../features/registration/registration-route";
-import { SchedulesRoute } from "../features/schedules/schedules-route";
-import { ShippingInstructionDashboardRoute } from "../features/shipping-instruction/shipping-instruction-dashboard-route";
-import { ShippingInstructionViewRoute } from "../features/shipping-instruction/shipping-instruction-view-route";
-import { ShippingInstructionWizardRoute } from "../features/shipping-instruction/shipping-instruction-wizard-route";
-import { TrackingRoute } from "../features/tracking/tracking-route";
+import { publicTenantQueryOptions } from "../features/tenant/api/tenant.queries";
 import { userCreationRoute } from "../features/user-creation/user-creation-route";
-import {
-  ChangePasswordRoute,
-  MyAlertsRoute,
-  PaymentHistoryRoute,
-  ProfileRoute,
-  QuotesRoute,
-} from "../features/user-modules/user-modules-routes";
 import { vendorApprovalsRoute } from "../features/vendor-approvals/vendor-approvals-route";
-import { VgmDashboardRoute } from "../features/vgm/vgm-dashboard-route";
 
 // ---------------------------------------------------------------------------
 // Route guard helpers
@@ -78,7 +47,6 @@ function assertCapability(code: string) {
     if (!user) {
       throw redirect({ to: "/", search: { login: true } as never });
     }
-    // Modified by Sekar Nagarajan (2026-08-31 17:03) — tenant admin bypass (STMT/CO2 parity)
     if (
       user.role === "ADMIN" ||
       user.isTenantAdmin ||
@@ -88,18 +56,18 @@ function assertCapability(code: string) {
       return;
     }
     if (!user.capabilities.includes(code)) {
-      throw redirect({ to: "/app/dashboard" });
+      redirectForMissingCapability(`You do not have access to this module (${code}).`);
     }
   };
 }
 
-function assertAdminAccess() {
+export function assertAdminAccess() {
   const user = useAuthStore.getState().user;
   if (!user) {
     throw redirect({ to: "/", search: { login: true } as never });
   }
   if (user.role !== "ADMIN") {
-    throw redirect({ to: "/app/dashboard" });
+    redirectForMissingCapability("You do not have access to the admin control panel.");
   }
 }
 
@@ -109,7 +77,7 @@ function assertVendorAccess() {
     throw redirect({ to: "/", search: { login: true } as never });
   }
   if (user.role !== "VENDOR" && user.role !== "ADMIN") {
-    throw redirect({ to: "/app/dashboard" });
+    redirectForMissingCapability("You do not have vendor access.");
   }
 }
 
@@ -119,14 +87,182 @@ function assertSuperuserAccess() {
     throw redirect({ to: "/", search: { login: true } as never });
   }
   if (!user.isSessionAdmin && user.role !== "ADMIN") {
-    throw redirect({ to: "/app/dashboard" });
+    redirectForMissingCapability("You do not have superuser access.");
   }
 }
+
+function resolveSessionSplashTitle(): string {
+  const tenantName = useTenantStore.getState().activeTenant?.name;
+  return tenantName || env.VITE_APP_TITLE;
+}
+
+// ---------------------------------------------------------------------------
+// 0. Lazy feature pages
+// ---------------------------------------------------------------------------
+// Every feature page is its own chunk, fetched on first navigation (and preloaded on hover
+// through `defaultPreload: "intent"`). Layouts, login pages and fallbacks stay eager so the
+// first paint needs nothing but the entry bundle. Keep the admin pattern in features/admin.
+
+const RegistrationPage = lazyRouteComponent(
+  () => import("../features/registration/registration-route"),
+  "RegistrationRoute",
+);
+const ActivationPage = lazyRouteComponent(
+  () => import("../features/auth/activation-route"),
+  "ActivationRoute",
+);
+const ContactUsPage = lazyRouteComponent(
+  () => import("../features/contact-us/contact-us-route"),
+  "ContactUsRoute",
+);
+const DashboardPage = lazyRouteComponent(
+  () => import("../features/dashboard/components/EnhancedDashboardView"),
+  "EnhancedDashboardView",
+);
+const SchedulesPage = lazyRouteComponent(
+  () => import("../features/schedules/schedules-route"),
+  "SchedulesRoute",
+);
+const TrackingPage = lazyRouteComponent(
+  () => import("../features/tracking/tracking-route"),
+  "TrackingRoute",
+);
+const RatesPage = lazyRouteComponent(() => import("../features/rates/rates-route"), "RatesRoute");
+const BookingDashboardPage = lazyRouteComponent(
+  () => import("../features/booking/booking-dashboard-route"),
+  "BookingDashboardRoute",
+);
+const BookingImportPage = lazyRouteComponent(
+  () => import("../features/booking-import/booking-import-route"),
+  "BookingImportRoute",
+);
+const BookingWizardPage = lazyRouteComponent(
+  () => import("../features/booking/booking-wizard-route"),
+  "BookingWizardRoute",
+);
+const BookingViewPage = lazyRouteComponent(
+  () => import("../features/booking/booking-view-route"),
+  "BookingViewRoute",
+);
+const BookingAmendPage = lazyRouteComponent(
+  () => import("../features/booking/booking-amend-route"),
+  "BookingAmendRoute",
+);
+const ShippingInstructionDashboardPage = lazyRouteComponent(
+  () => import("../features/shipping-instruction/shipping-instruction-dashboard-route"),
+  "ShippingInstructionDashboardRoute",
+);
+const ShippingInstructionWizardPage = lazyRouteComponent(
+  () => import("../features/shipping-instruction/shipping-instruction-wizard-route"),
+  "ShippingInstructionWizardRoute",
+);
+const ShippingInstructionViewPage = lazyRouteComponent(
+  () => import("../features/shipping-instruction/shipping-instruction-view-route"),
+  "ShippingInstructionViewRoute",
+);
+const VgmDashboardPage = lazyRouteComponent(
+  () => import("../features/vgm/vgm-dashboard-route"),
+  "VgmDashboardRoute",
+);
+const BillOfLadingDashboardPage = lazyRouteComponent(
+  () => import("../features/bill-of-lading/bill-of-lading-dashboard-route"),
+  "BillOfLadingDashboardRoute",
+);
+const BillOfLadingViewPage = lazyRouteComponent(
+  () => import("../features/bill-of-lading/bill-of-lading-view-route"),
+  "BillOfLadingViewRoute",
+);
+const BillOfLadingWizardPage = lazyRouteComponent(
+  () => import("../features/bill-of-lading/bill-of-lading-wizard-route"),
+  "BillOfLadingWizardRoute",
+);
+const BillOfLadingSubmitResultPage = lazyRouteComponent(
+  () => import("../features/bill-of-lading/bill-of-lading-submit-result-route"),
+  "BillOfLadingSubmitResultRoute",
+);
+const BillOfLadingMcnEditPage = lazyRouteComponent(
+  () => import("../features/bill-of-lading/bill-of-lading-mcn-edit-route"),
+  "BillOfLadingMcnEditRoute",
+);
+const BillOfLadingBatchPrintPage = lazyRouteComponent(
+  () => import("../features/bill-of-lading/bill-of-lading-batch-print-route"),
+  "BillOfLadingBatchPrintRoute",
+);
+const BillOfLadingMcnListPage = lazyRouteComponent(
+  () => import("../features/bill-of-lading/bill-of-lading-mcn-route"),
+  "BillOfLadingMcnListRoute",
+);
+const BillOfLadingMcnViewPage = lazyRouteComponent(
+  () => import("../features/bill-of-lading/bill-of-lading-mcn-route"),
+  "BillOfLadingMcnViewRoute",
+);
+const DeliveryOrderPage = lazyRouteComponent(
+  () => import("../features/delivery-order/delivery-order-route"),
+  "DeliveryOrderRoute",
+);
+const ContainerReleaseOrderPage = lazyRouteComponent(
+  () => import("../features/container-release-order/container-release-order-route"),
+  "ContainerReleaseOrderRoute",
+);
+const ArrivalNoticePage = lazyRouteComponent(
+  () => import("../features/arrival-notice/arrival-notice-route"),
+  "ArrivalNoticeRoute",
+);
+const CustomerStatementPage = lazyRouteComponent(
+  () => import("../features/customer-statement/customer-statement-route"),
+  "CustomerStatementRoute",
+);
+const CarbonCalculatorPage = lazyRouteComponent(
+  () => import("../features/carbon-calculator/carbon-calculator-route"),
+  "CarbonCalculatorRoute",
+);
+const PaymentHistoryPage = lazyRouteComponent(
+  () => import("../features/user-modules/user-modules-routes"),
+  "PaymentHistoryRoute",
+);
+const ProfilePage = lazyRouteComponent(
+  () => import("../features/user-modules/user-modules-routes"),
+  "ProfileRoute",
+);
+const ChangePasswordPage = lazyRouteComponent(
+  () => import("../features/user-modules/user-modules-routes"),
+  "ChangePasswordRoute",
+);
+const QuotesPage = lazyRouteComponent(
+  () => import("../features/user-modules/user-modules-routes"),
+  "QuotesRoute",
+);
+const MyAlertsPage = lazyRouteComponent(
+  () => import("../features/user-modules/user-modules-routes"),
+  "MyAlertsRoute",
+);
 
 // ---------------------------------------------------------------------------
 // 1. Root Route
 // ---------------------------------------------------------------------------
 const rootRoute = createRootRoute({
+  beforeLoad: async () => {
+    await rehydrateSession();
+
+    try {
+      const tenant = await queryClient.ensureQueryData(publicTenantQueryOptions());
+      useTenantStore.getState().setCustomTenant(tenant);
+    } catch (error) {
+      if (isRedirect(error)) throw error;
+      throw error instanceof Error
+        ? error
+        : new Error(
+            "Failed to load organization configuration. Please refresh the page or contact support.",
+          );
+    }
+  },
+  pendingComponent: () => (
+    <PublicPendingFallback
+      title={resolveSessionSplashTitle()}
+      message="Verifying your session..."
+    />
+  ),
+  errorComponent: ({ error, reset }) => <RootErrorComponent error={error} reset={reset} />,
   component: () => <Outlet />,
 });
 
@@ -149,6 +285,8 @@ const indexRoute = createRoute({
   path: "/",
   validateSearch: (search: Record<string, unknown>) => ({
     login: search.login as boolean | undefined,
+    reason:
+      search.reason === SESSION_EXPIRED_SEARCH_REASON ? SESSION_EXPIRED_SEARCH_REASON : undefined,
   }),
   component: () => null,
 });
@@ -156,17 +294,13 @@ const indexRoute = createRoute({
 const registerRoute = createRoute({
   getParentRoute: () => publicRoute,
   path: "/register",
-  component: () => (
-    <RegistrationRoute onCancel={() => window.history.back()} />
-  ),
+  component: () => <RegistrationPage onCancel={() => window.history.back()} />,
 });
 
 const activationRoute = createRoute({
   getParentRoute: () => publicRoute,
   path: "/activation",
-  component: () => (
-    <ActivationRoute onProceedToLogin={() => window.history.back()} />
-  ),
+  component: () => <ActivationPage onProceedToLogin={() => window.history.back()} />,
 });
 
 const contactUsRoute = createRoute({
@@ -175,7 +309,7 @@ const contactUsRoute = createRoute({
   validateSearch: (search: Record<string, unknown>) => ({
     fromRegistration: search.fromRegistration as string | undefined,
   }),
-  component: () => <ContactUsRoute />,
+  component: ContactUsPage,
 });
 
 // ---------------------------------------------------------------------------
@@ -189,7 +323,7 @@ const cpanelLoginRoute = createRoute({
     if (useAuthStore.getState().isAuthenticated) {
       throw redirect({
         to: "/app/admin",
-        search: { section: DEFAULT_ADMIN_SECTION } as never,
+        search: resolveAdminLandingSearch() as never,
       });
     }
   },
@@ -226,6 +360,9 @@ export const appRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/app",
   component: () => <AuthenticatedLayout />,
+  pendingComponent: () => <LayoutSkeleton />,
+  // Avoid full-layout skeleton flash for fast SPA navigations (landing search)
+  pendingMs: 400,
   beforeLoad: ({ location }) => {
     const isPublicSearchModule =
       location.pathname.startsWith("/app/schedules") ||
@@ -243,85 +380,75 @@ const dashboardRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/dashboard",
   beforeLoad: requireAuth,
-  component: EnhancedDashboardView,
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: DashboardPage,
 });
 
 // 3.2 Schedules (public search)
 const schedulesRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/schedules",
-  component: () => <SchedulesRoute />,
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: SchedulesPage,
 });
 
 // 3.3 Tracking (public search)
 const trackingRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/tracking",
-  component: () => <TrackingRoute />,
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: TrackingPage,
 });
 
 // 3.4 Rates (public search)
 const ratesRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/rates",
-  component: () => <RatesRoute />,
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: RatesPage,
 });
 
-// 3.5 System Admin Control Panel — ADMIN only
-const adminRoute = createRoute({
-  getParentRoute: () => appRoute,
-  path: "/admin",
-  validateSearch: (search: Record<string, unknown>): {
-    section: AdminSectionKey;
-  } => ({
-    section: isAdminSectionKey(search.section)
-      ? search.section
-      : DEFAULT_ADMIN_SECTION,
-  }),
-  beforeLoad: ({ search }) => {
-    assertAdminAccess();
-    const user = useAuthStore.getState().user;
-    const allowed = resolveAllowedAdminSections(user?.vendorMenuList);
-    const fallback = resolveDefaultAdminSection(allowed);
-    const section =
-      allowed.includes(search.section) ? search.section : fallback;
-    if (section !== search.section) {
-      throw redirect({
-        to: "/app/admin",
-        search: { section } as never,
-      });
-    }
-  },
-  component: () => <AdminRoute />,
-});
+// 3.5 System Admin Control Panel — ADMIN only: owned by features/admin/admin-route.tsx
 
 // 3.6 Booking — capability BKG
 const bookingDashboardRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/booking",
   beforeLoad: assertCapability("BKG"),
-  component: () => <BookingDashboardRoute />,
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: BookingDashboardPage,
+});
+
+const bookingImportRoute = createRoute({
+  getParentRoute: () => appRoute,
+  path: "/booking/import",
+  beforeLoad: assertCapability("BKG"),
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: BookingImportPage,
 });
 
 const bookingWizardRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/booking/new",
   beforeLoad: assertCapability("BKG"),
-  component: () => <BookingWizardRoute />,
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: BookingWizardPage,
 });
 
 const bookingViewRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/booking/$bookingId",
   beforeLoad: assertCapability("BKG"),
-  component: () => <BookingViewRoute />,
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: BookingViewPage,
 });
 
 const bookingAmendRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/booking/$bookingId/amend",
   beforeLoad: assertCapability("BKG"),
-  component: () => <BookingAmendRoute />,
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: BookingAmendPage,
 });
 
 // 3.7 Shipping Instruction — capability SI
@@ -329,7 +456,8 @@ const shippingInstructionDashboardRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/shipping-instruction",
   beforeLoad: assertCapability("SI"),
-  component: () => <ShippingInstructionDashboardRoute />,
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: ShippingInstructionDashboardPage,
 });
 
 const shippingInstructionWizardRoute = createRoute({
@@ -338,27 +466,24 @@ const shippingInstructionWizardRoute = createRoute({
   // Modified by Sekar Nagarajan (2026-09-01 12:41) — dashboard Create SI search seed
   validateSearch: (search: Record<string, unknown>) => ({
     fromDashboard:
-      search.fromDashboard === true || search.fromDashboard === "true"
-        ? true
-        : undefined,
-    onlineRefNo:
-      typeof search.onlineRefNo === "string" ? search.onlineRefNo : undefined,
+      search.fromDashboard === true || search.fromDashboard === "true" ? true : undefined,
+    onlineRefNo: typeof search.onlineRefNo === "string" ? search.onlineRefNo : undefined,
     origin: typeof search.origin === "string" ? search.origin : undefined,
-    delivery:
-      typeof search.delivery === "string" ? search.delivery : undefined,
-    containerNo:
-      typeof search.containerNo === "string" ? search.containerNo : undefined,
+    delivery: typeof search.delivery === "string" ? search.delivery : undefined,
+    containerNo: typeof search.containerNo === "string" ? search.containerNo : undefined,
     blNo: typeof search.blNo === "string" ? search.blNo : undefined,
   }),
   beforeLoad: assertCapability("SI"),
-  component: () => <ShippingInstructionWizardRoute />,
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: ShippingInstructionWizardPage,
 });
 
 const shippingInstructionViewRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/shipping-instruction/$siId",
   beforeLoad: assertCapability("SI"),
-  component: () => <ShippingInstructionViewRoute />,
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: ShippingInstructionViewPage,
 });
 
 // 3.8 VGM — capability VGM
@@ -366,7 +491,8 @@ const vgmDashboardRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/vgm",
   beforeLoad: assertCapability("VGM"),
-  component: () => <VgmDashboardRoute />,
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: VgmDashboardPage,
 });
 
 // 3.9 Bill of Lading — capability BL
@@ -374,56 +500,64 @@ const blDashboardRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/bl",
   beforeLoad: assertCapability("BL"),
-  component: () => <BillOfLadingDashboardRoute />,
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: BillOfLadingDashboardPage,
 });
 
 const blViewRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/bl/$blNo",
   beforeLoad: assertCapability("BL"),
-  component: () => <BillOfLadingViewRoute />,
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: BillOfLadingViewPage,
 });
 
 const blWizardRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/bl/$blNo/edit",
   beforeLoad: assertCapability("BL"),
-  component: () => <BillOfLadingWizardRoute />,
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: BillOfLadingWizardPage,
 });
 
 const blSubmitResultRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/bl/$blNo/submit-result",
   beforeLoad: assertCapability("BL"),
-  component: () => <BillOfLadingSubmitResultRoute />,
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: BillOfLadingSubmitResultPage,
 });
 
 const blMcnEditRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/bl/mcn/$mcnId/edit",
   beforeLoad: assertCapability("BL"),
-  component: () => <BillOfLadingMcnEditRoute />,
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: BillOfLadingMcnEditPage,
 });
 
 const blBatchPrintRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/bl/batch-print",
   beforeLoad: assertCapability("BL"),
-  component: () => <BillOfLadingBatchPrintRoute />,
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: BillOfLadingBatchPrintPage,
 });
 
 const blMcnListRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/bl/mcn",
   beforeLoad: assertCapability("BL"),
-  component: () => <BillOfLadingMcnListRoute />,
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: BillOfLadingMcnListPage,
 });
 
 const blMcnViewRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/bl/mcn/$mcnId",
   beforeLoad: assertCapability("BL"),
-  component: () => <BillOfLadingMcnViewRoute />,
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: BillOfLadingMcnViewPage,
 });
 
 // 3.10 Delivery Order — capability DO
@@ -431,7 +565,8 @@ const deliveryOrderRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/delivery-order",
   beforeLoad: assertCapability("DO"),
-  component: DeliveryOrderRoute,
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: DeliveryOrderPage,
 });
 
 // 3.11 Container Release Order — capability CRO
@@ -439,7 +574,8 @@ const containerReleaseOrderRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/cro",
   beforeLoad: assertCapability("CRO"),
-  component: ContainerReleaseOrderRoute,
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: ContainerReleaseOrderPage,
 });
 
 // 3.12 Arrival Notice — capability ARN
@@ -447,7 +583,8 @@ const arrivalNoticeRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/arrival-notice",
   beforeLoad: assertCapability("ARN"),
-  component: ArrivalNoticeRoute,
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: ArrivalNoticePage,
 });
 
 // 3.13 Customer Statement — capability STMT (isTenantAdmin also bypasses)
@@ -469,7 +606,8 @@ const customerStatementRoute = createRoute({
       throw redirect({ to: "/app/dashboard" });
     }
   },
-  component: CustomerStatementRoute,
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: CustomerStatementPage,
 });
 
 // 3.14 Carbon Calculator — capability CO2 (isTenantAdmin also bypasses)
@@ -491,7 +629,8 @@ const carbonCalculatorRoute = createRoute({
       throw redirect({ to: "/app/dashboard" });
     }
   },
-  component: CarbonCalculatorRoute,
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: CarbonCalculatorPage,
 });
 
 // 3.15 Payment History — capability PAY
@@ -499,7 +638,8 @@ const paymentsRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/payments",
   beforeLoad: assertCapability("PAY"),
-  component: () => <PaymentHistoryRoute />,
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: PaymentHistoryPage,
 });
 
 // 3.18 User profile routes — auth required, no capability
@@ -507,40 +647,39 @@ const profileRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/profile",
   beforeLoad: requireAuth,
-  component: () => <ProfileRoute />,
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: ProfilePage,
 });
 
 const changePasswordRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/change-password",
   beforeLoad: requireAuth,
-  component: () => <ChangePasswordRoute />,
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: ChangePasswordPage,
 });
 
 const quotesRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/quotes",
   beforeLoad: requireAuth,
-  component: () => <QuotesRoute />,
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: QuotesPage,
 });
 
 const myAlertsRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/my-alerts",
   beforeLoad: requireAuth,
-  component: () => <MyAlertsRoute />,
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: MyAlertsPage,
 });
 
 // ---------------------------------------------------------------------------
 // 4. Route Tree
 // ---------------------------------------------------------------------------
 const routeTree = rootRoute.addChildren([
-  publicRoute.addChildren([
-    indexRoute,
-    registerRoute,
-    activationRoute,
-    contactUsRoute,
-  ]),
+  publicRoute.addChildren([indexRoute, registerRoute, activationRoute, contactUsRoute]),
   cpanelLoginRoute,
   eadminLoginRoute,
   adminLoginRoute,
@@ -550,6 +689,7 @@ const routeTree = rootRoute.addChildren([
     trackingRoute,
     ratesRoute,
     bookingDashboardRoute,
+    bookingImportRoute,
     bookingWizardRoute,
     bookingViewRoute,
     bookingAmendRoute,
@@ -584,8 +724,16 @@ const routeTree = rootRoute.addChildren([
 // ---------------------------------------------------------------------------
 // 5. Create Router
 // ---------------------------------------------------------------------------
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const router = createRouter({ routeTree } as any);
+
+export const router = createRouter({
+  routeTree,
+  defaultPreload: "intent",
+  defaultPreloadDelay: 200,
+  defaultPendingMs: 200,
+  defaultPendingMinMs: 300,
+  defaultPendingComponent: () => <PublicPendingFallback message="Loading page..." />,
+  defaultNotFoundComponent: () => <NotFound />,
+} as any);
 
 declare module "@tanstack/react-router" {
   interface Register {

@@ -1,0 +1,737 @@
+{
+  "extractedAt": "2026-11-16T09:44:04.835Z",
+  "database": "Ecomm_JSF",
+  "top": 50,
+  "childCap": 400,
+  "anonymized": true,
+  "dateShiftMs": 308656535,
+  "datasets": {
+    "bookings": {
+      "table": "ecombooking",
+      "rows": 84,
+      "strategy": "top 50 by dateup desc + rows linked to sampled parents"
+    },
+    "bookingCust": {
+      "table": "ecombooking_cust",
+      "rows": 332,
+      "strategy": "rows of sampled ecombooking (282) + top 50 recent"
+    },
+    "bookingCargo": {
+      "table": "ecombooking_cargo",
+      "rows": 114,
+      "strategy": "rows of sampled ecombooking (107) + top 50 recent"
+    },
+    "bookingCommodity": {
+      "table": "ecombooking_commodity",
+      "rows": 114,
+      "strategy": "rows of sampled ecombooking (107) + top 50 recent"
+    },
+    "bookingDg": {
+      "table": "ecombooking_dg",
+      "rows": 51,
+      "strategy": "rows of sampled ecombooking (1) + top 50 recent"
+    },
+    "bookingOog": {
+      "table": "ecombooking_oog",
+      "rows": 50,
+      "strategy": "rows of sampled ecombooking (0) + top 50 recent"
+    },
+    "bookingRefer": {
+      "table": "ecombooking_refer",
+      "rows": 52,
+      "strategy": "rows of sampled ecombooking (11) + top 50 recent"
+    },
+    "bookingLeg": {
+      "table": "ecombooking_leg",
+      "rows": 98,
+      "strategy": "rows of sampled ecombooking (89) + top 50 recent"
+    },
+    "bookingHaulage": {
+      "table": "ecombooking_haulage",
+      "rows": 50,
+      "strategy": "rows of sampled ecombooking (1) + top 50 recent"
+    },
+    "bookingConf": {
+      "table": "ecombooking_conf",
+      "rows": 85,
+      "strategy": "rows of sampled ecombooking (35) + top 50 recent"
+    },
+    "bookingFiles": {
+      "table": "ecombooking_files",
+      "rows": 50,
+      "strategy": "rows of sampled ecombooking (0) + top 50 recent"
+    },
+    "bookingIcs": {
+      "table": "ecombooking_ics_new",
+      "rows": 50,
+      "strategy": "rows of sampled ecombooking (2) + top 50 recent"
+    },
+    "bookingCancel": {
+      "table": "ecombooking_cancel",
+      "rows": 23,
+      "strategy": "rows of sampled ecombooking (0) + top 50 recent"
+    },
+    "bookingReference": {
+      "table": "ecombooking_reference",
+      "rows": 50,
+      "strategy": "rows of sampled ecombooking (0) + top 50 recent"
+    },
+    "bookingSummary": {
+      "table": "ecombookingsummarygeneration",
+      "rows": 400,
+      "strategy": "rows of sampled ecombooking (400) + top 50 recent"
+    },
+    "insurance": {
+      "table": "ecom_insurance",
+      "rows": 50,
+      "strategy": "rows of sampled ecombooking (0) + top 50 recent"
+    },
+    "insuranceSurvey": {
+      "table": "ecom_insurance_survey",
+      "rows": 43,
+      "strategy": "rows of sampled ecombooking (0) + top 50 recent"
+    },
+    "vgm": {
+      "table": "ecom_vgmsolas",
+      "rows": 50,
+      "strategy": "rows of sampled ecombooking (19) + top 50 recent"
+    },
+    "siRequestMaster": {
+      "table": "ecomSIRequestMaster",
+      "rows": 74,
+      "strategy": "rows of sampled ecombooking (60) + top 50 recent"
+    },
+    "siLocks": {
+      "table": "ECOMSILOCK",
+      "rows": 18,
+      "strategy": "rows of sampled ecombooking (0) + top 50 recent"
+    },
+    "siSummary": {
+      "table": "ecomSISummaryGeneration",
+      "rows": 1,
+      "strategy": "rows of sampled ecombooking (0) + top 50 recent"
+    },
+    "shippingInstructions": {
+      "table": "ecomSI",
+      "rows": 104,
+      "strategy": "top 50 by ChgDate desc + rows linked to sampled parents"
+    },
+    "siCust": {
+      "table": "ecomSI_cust",
+      "rows": 282,
+      "strategy": "rows of sampled ecomSI (279) + top 50 recent"
+    },
+    "siCargo": {
+      "table": "ecomSI_cargo",
+      "rows": 158,
+      "strategy": "rows of sampled ecomSI (143) + top 50 recent"
+    },
+    "siCommodity": {
+      "table": "ecomSI_commodity",
+      "rows": 158,
+      "strategy": "rows of sampled ecomSI (141) + top 50 recent"
+    },
+    "siDg": {
+      "table": "ecomSI_dg",
+      "rows": 50,
+      "strategy": "rows of sampled ecomSI (1) + top 50 recent"
+    },
+    "siOog": {
+      "table": "ecomSI_oog",
+      "rows": 50,
+      "strategy": "rows of sampled ecomSI (0) + top 50 recent"
+    },
+    "siReefer": {
+      "table": "ecomSI_reefer",
+      "rows": 68,
+      "strategy": "rows of sampled ecomSI (25) + top 50 recent"
+    },
+    "siCharges": {
+      "table": "ecomsi_charges",
+      "rows": 258,
+      "strategy": "rows of sampled ecomSI (258) + top 50 recent"
+    },
+    "siFiles": {
+      "table": "ecomSI_files",
+      "rows": 50,
+      "strategy": "rows of sampled ecomSI (0) + top 50 recent"
+    },
+    "siIcs": {
+      "table": "ecomsi_ics_new",
+      "rows": 50,
+      "strategy": "rows of sampled ecomSI (0) + top 50 recent"
+    },
+    "siPayers": {
+      "table": "ecomsi_payers",
+      "rows": 63,
+      "strategy": "rows of sampled ecomSI (48) + top 50 recent"
+    },
+    "siReference": {
+      "table": "ecomsi_reference",
+      "rows": 83,
+      "strategy": "rows of sampled ecomSI (66) + top 50 recent"
+    },
+    "payments": {
+      "table": "Ecom_OnlinePayment",
+      "rows": 33,
+      "strategy": "top 50 by createdAt desc"
+    },
+    "paymentReferences": {
+      "table": "Ecom_OnlinePayment_Reference",
+      "rows": 41,
+      "strategy": "rows of sampled Ecom_OnlinePayment (41) + top 50 recent"
+    },
+    "users": {
+      "table": "eCom_Reg_Details",
+      "rows": 112,
+      "strategy": "top 50 by Registered_Date desc + rows linked to sampled parents"
+    },
+    "userDetails": {
+      "table": "ecomuserdetails",
+      "rows": 75,
+      "strategy": "rows of sampled eCom_Reg_Details (58) + top 50 recent"
+    },
+    "mailAlerts": {
+      "table": "ecom_mailalert",
+      "rows": 50,
+      "strategy": "rows of sampled eCom_Reg_Details (10) + top 50 recent"
+    },
+    "adminMenus": {
+      "table": "adminmenu",
+      "rows": 2,
+      "strategy": "top 50"
+    },
+    "Companydetails": {
+      "table": "Companydetails",
+      "rows": 0,
+      "strategy": "top 50"
+    },
+    "activities": {
+      "table": "ecom_activity",
+      "rows": 10,
+      "strategy": "top 50"
+    },
+    "adminUsers": {
+      "table": "ecom_adminuser_details",
+      "rows": 12,
+      "strategy": "top 50"
+    },
+    "ecom_amend_audit": {
+      "table": "ecom_amend_audit",
+      "rows": 50,
+      "strategy": "top 50"
+    },
+    "ecom_amend_state": {
+      "table": "ecom_amend_state",
+      "rows": 45,
+      "strategy": "top 50"
+    },
+    "cargoProtectRestrictions": {
+      "table": "Ecom_CargoProtectRestriction",
+      "rows": 50,
+      "strategy": "top 50"
+    },
+    "customerMapping": {
+      "table": "ecom_customer_mapping",
+      "rows": 11,
+      "strategy": "top 50"
+    },
+    "cutoffConfig": {
+      "table": "ecom_cutoffconfig",
+      "rows": 8,
+      "strategy": "top 50"
+    },
+    "languages": {
+      "table": "ECOM_LANG",
+      "rows": 5,
+      "strategy": "top 50"
+    },
+    "messages": {
+      "table": "ecom_MessageFormat",
+      "rows": 50,
+      "strategy": "top 50"
+    },
+    "messagesLang": {
+      "table": "ecom_messageformatlang",
+      "rows": 50,
+      "strategy": "top 50"
+    },
+    "modules": {
+      "table": "ecom_modules",
+      "rows": 3,
+      "strategy": "top 50"
+    },
+    "notices": {
+      "table": "Ecom_Notice",
+      "rows": 50,
+      "strategy": "top 50"
+    },
+    "kycConfig": {
+      "table": "ecom_reg_kyc_config",
+      "rows": 50,
+      "strategy": "top 50"
+    },
+    "serviceRestrictions": {
+      "table": "ecom_service_restrict",
+      "rows": 2,
+      "strategy": "top 50"
+    },
+    "statusDescriptions": {
+      "table": "ecom_statusdescription",
+      "rows": 14,
+      "strategy": "top 50"
+    },
+    "adminUserAccounts": {
+      "table": "EcomAdminUser",
+      "rows": 3,
+      "strategy": "top 50"
+    },
+    "EcomApiEndpoint": {
+      "table": "EcomApiEndpoint",
+      "rows": 50,
+      "strategy": "top 50"
+    },
+    "EcomBookingReferencePin": {
+      "table": "EcomBookingReferencePin",
+      "rows": 1,
+      "strategy": "top 50"
+    },
+    "configuration": {
+      "table": "EcomConfiguration",
+      "rows": 35,
+      "strategy": "top 50"
+    },
+    "EcomContainerReleaseOrderRequest": {
+      "table": "EcomContainerReleaseOrderRequest",
+      "rows": 11,
+      "strategy": "top 50"
+    },
+    "EcomContent": {
+      "table": "EcomContent",
+      "rows": 1,
+      "strategy": "top 50"
+    },
+    "advisories": {
+      "table": "EcomCustomerAdvisory",
+      "rows": 5,
+      "strategy": "top 50"
+    },
+    "customerNotifications": {
+      "table": "EcomCustomerNotification",
+      "rows": 7,
+      "strategy": "top 50"
+    },
+    "EcomCustomerNotificationRecipient": {
+      "table": "EcomCustomerNotificationRecipient",
+      "rows": 2,
+      "strategy": "top 50"
+    },
+    "customerUsers": {
+      "table": "EcomCustomerUser",
+      "rows": 6,
+      "strategy": "top 50"
+    },
+    "emailTemplates": {
+      "table": "EcomEmailTemplate",
+      "rows": 39,
+      "strategy": "top 50"
+    },
+    "hotlineContacts": {
+      "table": "ecomhotlinecontacts",
+      "rows": 50,
+      "strategy": "top 50"
+    },
+    "loginImages": {
+      "table": "EcomImageUpload",
+      "rows": 3,
+      "strategy": "top 50"
+    },
+    "lookups": {
+      "table": "EcomLookup",
+      "rows": 26,
+      "strategy": "top 50"
+    },
+    "EcomMailRetry": {
+      "table": "EcomMailRetry",
+      "rows": 2,
+      "strategy": "top 50"
+    },
+    "ecomMdlIndex": {
+      "table": "ecomMdlIndex",
+      "rows": 6,
+      "strategy": "top 50"
+    },
+    "menuTree": {
+      "table": "EcomMenu",
+      "rows": 26,
+      "strategy": "top 50"
+    },
+    "EcommuserlogDetails": {
+      "table": "EcommuserlogDetails",
+      "rows": 50,
+      "strategy": "top 50"
+    },
+    "notificationDetails": {
+      "table": "EcomNotificationDetails",
+      "rows": 50,
+      "strategy": "top 50"
+    },
+    "notificationMaster": {
+      "table": "EcomNotificationMaster",
+      "rows": 50,
+      "strategy": "top 50"
+    },
+    "notificationSettings": {
+      "table": "EcomNotificationSetting",
+      "rows": 11,
+      "strategy": "top 50"
+    },
+    "EcomNotificationStatus": {
+      "table": "EcomNotificationStatus",
+      "rows": 50,
+      "strategy": "top 50"
+    },
+    "ECOMRegHistory": {
+      "table": "ECOMRegHistory",
+      "rows": 50,
+      "strategy": "top 50"
+    },
+    "ecomRouteSearchLog": {
+      "table": "ecomRouteSearchLog",
+      "rows": 50,
+      "strategy": "top 50"
+    },
+    "settings": {
+      "table": "EcomSetting",
+      "rows": 16,
+      "strategy": "top 50"
+    },
+    "ecomsi_commodity_template": {
+      "table": "ecomsi_commodity_template",
+      "rows": 3,
+      "strategy": "top 50"
+    },
+    "ecomsi_party_template": {
+      "table": "ecomsi_party_template",
+      "rows": 3,
+      "strategy": "top 50"
+    },
+    "ecomsi_party_template_cust": {
+      "table": "ecomsi_party_template_cust",
+      "rows": 11,
+      "strategy": "top 50"
+    },
+    "trackingMovementCodes": {
+      "table": "ecomtrackingmovementcode",
+      "rows": 12,
+      "strategy": "top 50"
+    },
+    "ecomUsageAnalyticsLog": {
+      "table": "ecomUsageAnalyticsLog",
+      "rows": 50,
+      "strategy": "top 50"
+    },
+    "ecomusercookies": {
+      "table": "ecomusercookies",
+      "rows": 20,
+      "strategy": "top 50"
+    },
+    "EcomUserInvitation": {
+      "table": "EcomUserInvitation",
+      "rows": 6,
+      "strategy": "top 50"
+    },
+    "userMenuAccess": {
+      "table": "EcomUserMenuAccess",
+      "rows": 50,
+      "strategy": "top 50"
+    },
+    "ecomWorkflowAnalyticsLog": {
+      "table": "ecomWorkflowAnalyticsLog",
+      "rows": 50,
+      "strategy": "top 50"
+    },
+    "fieldConfig": {
+      "table": "fieldconfigdetails",
+      "rows": 10,
+      "strategy": "top 50"
+    },
+    "fieldnameconfig": {
+      "table": "fieldnameconfig",
+      "rows": 4,
+      "strategy": "top 50"
+    },
+    "globalConfig": {
+      "table": "globalconfigproduct",
+      "rows": 36,
+      "strategy": "top 50"
+    },
+    "insertmisexpreport_dup": {
+      "table": "insertmisexpreport_dup",
+      "rows": 44,
+      "strategy": "top 50"
+    },
+    "menus": {
+      "table": "MenuRegistration",
+      "rows": 38,
+      "strategy": "top 50"
+    },
+    "oprts": {
+      "table": "oprts",
+      "rows": 3,
+      "strategy": "top 50"
+    },
+    "customerMenus": {
+      "table": "SplPrivilegeMenu",
+      "rows": 50,
+      "strategy": "top 50"
+    },
+    "serviceConfig": {
+      "table": "v1v2serviceconfig",
+      "rows": 6,
+      "strategy": "top 50"
+    },
+    "vendorModuleMapping": {
+      "table": "vendormodulemapping",
+      "rows": 11,
+      "strategy": "top 50"
+    },
+    "videoHelp": {
+      "table": "Videohelpdetails",
+      "rows": 6,
+      "strategy": "top 50"
+    },
+    "viewmapping": {
+      "table": "viewmapping",
+      "rows": 0,
+      "strategy": "top 50"
+    },
+    "ports": {
+      "db": "MASTERDB",
+      "rows": 1796,
+      "source": "ports"
+    },
+    "portCountryMap": {
+      "db": "MASTERDB",
+      "rows": 1799,
+      "source": "ports"
+    },
+    "countries": {
+      "db": "MASTERDB",
+      "rows": 276,
+      "source": "Country"
+    },
+    "states": {
+      "db": "MASTERDB",
+      "rows": 60,
+      "source": "Statesmaster"
+    },
+    "commodities": {
+      "db": "MASTERDB",
+      "rows": 238,
+      "source": "commodity"
+    },
+    "packages": {
+      "db": "MASTERDB",
+      "rows": 73,
+      "source": "package"
+    },
+    "equipments": {
+      "db": "MASTERDB",
+      "rows": 105,
+      "source": "Equipments"
+    },
+    "terminals": {
+      "db": "MASTERDB",
+      "rows": 526,
+      "source": "TerminalandDepot"
+    },
+    "transportServices": {
+      "db": "MASTERDB",
+      "rows": 67,
+      "source": "transportservice"
+    },
+    "depots": {
+      "db": "MASTERDB",
+      "rows": 300,
+      "source": "DepotCode"
+    },
+    "inTransitPods": {
+      "db": "MASTERDB",
+      "rows": 183,
+      "source": "DMSInTransit"
+    },
+    "carriers": {
+      "db": "MASTERDB",
+      "rows": 5,
+      "source": "carrier"
+    },
+    "shipmentTerms": {
+      "db": "MASTERDB",
+      "rows": 14,
+      "source": "shipmentterms"
+    },
+    "charges": {
+      "db": "MASTERDB",
+      "rows": 479,
+      "source": "charges"
+    },
+    "customerMaster": {
+      "db": "MASTERDB",
+      "rows": 57,
+      "source": "CustomerMaster"
+    },
+    "vessels": {
+      "db": "VSSDB",
+      "rows": 884,
+      "source": "Vesselmaster"
+    },
+    "services": {
+      "db": "VSSDB",
+      "rows": 184,
+      "source": "service"
+    },
+    "schedules": {
+      "db": "VSSDB",
+      "rows": 2500,
+      "source": "allschedules_ecom"
+    },
+    "portCalls": {
+      "db": "VSSDB",
+      "rows": 300,
+      "source": "arrival_master"
+    },
+    "lrpBookings": {
+      "db": "LRPV1DS",
+      "rows": 119,
+      "source": "booking"
+    },
+    "lrpBookingLegs": {
+      "db": "LRPV1DS",
+      "rows": 131,
+      "source": "booking_leg"
+    },
+    "lrpBookingCargo": {
+      "db": "LRPV1DS",
+      "rows": 173,
+      "source": "booking_cargo"
+    },
+    "lrpBookingCust": {
+      "db": "LRPV1DS",
+      "rows": 460,
+      "source": "booking_cust"
+    },
+    "lrpBl": {
+      "db": "LRPV1DS",
+      "rows": 59,
+      "source": "bl"
+    },
+    "lrpBlCargo": {
+      "db": "LRPV1DS",
+      "rows": 64,
+      "source": "bl_cargo"
+    },
+    "lrpBlCust": {
+      "db": "LRPV1DS",
+      "rows": 230,
+      "source": "bl_cust"
+    },
+    "telexReleases": {
+      "db": "LRPV1DS",
+      "rows": 0,
+      "source": "bltelexrelease"
+    },
+    "containerMoves": {
+      "db": "LRPV1DS",
+      "rows": 118,
+      "source": "operationDetail"
+    },
+    "routes": {
+      "db": "COMDB",
+      "rows": 500,
+      "source": "Routedetail"
+    },
+    "tariffs": {
+      "db": "COMDB",
+      "rows": 800,
+      "source": "bookingrates_tariff"
+    },
+    "contracts": {
+      "db": "COMDB",
+      "rows": 80,
+      "source": "corporateMaster"
+    },
+    "contractLines": {
+      "db": "COMDB",
+      "rows": 800,
+      "source": "corporateDetailN"
+    },
+    "contractSurcharges": {
+      "db": "COMDB",
+      "rows": 660,
+      "source": "CorporateSurcharge"
+    },
+    "contractRouting": {
+      "db": "COMDB",
+      "rows": 400,
+      "source": "Corporaterouting"
+    },
+    "contractCustomers": {
+      "db": "COMDB",
+      "rows": 94,
+      "source": "CorporateCustomer"
+    },
+    "contractCommodities": {
+      "db": "COMDB",
+      "rows": 189,
+      "source": "CorporateCommodity"
+    },
+    "lclTariffs": {
+      "db": "COMDB",
+      "rows": 0,
+      "source": "bookingrates_lcltariff"
+    },
+    "invoices": {
+      "db": "ACCDB",
+      "rows": 400,
+      "source": "invoicemaster"
+    },
+    "invoiceBls": {
+      "db": "ACCDB",
+      "rows": 68,
+      "source": "invoicedbls"
+    },
+    "invoiceCharges": {
+      "db": "ACCDB",
+      "rows": 1237,
+      "source": "invoicedetail"
+    },
+    "receipts": {
+      "db": "ACCDB",
+      "rows": 200,
+      "source": "receiptmaster"
+    },
+    "receiptAllocations": {
+      "db": "ACCDB",
+      "rows": 349,
+      "source": "receiptdetail"
+    },
+    "arrivalNotices": {
+      "db": "IMPDB",
+      "rows": 200,
+      "source": "reportcargoarrival"
+    },
+    "deliveryOrderVersions": {
+      "db": "IMPDB",
+      "rows": 100,
+      "source": "deliveryorderversion"
+    }
+  },
+  "sampling": {
+    "SAMPLE_CUSTOMERS": 15,
+    "SAMPLE_BOOKINGS": 120,
+    "SAMPLE_SI": 80,
+    "SAMPLE_VGM": 60,
+    "SAMPLE_PAYMENTS": 40
+  }
+}

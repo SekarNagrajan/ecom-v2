@@ -1,0 +1,294 @@
+[
+ {
+  "packagecode": "BAGS",
+  "description": "BAGS"
+ },
+ {
+  "packagecode": "BALE",
+  "description": "BALES1"
+ },
+ {
+  "packagecode": "BALN",
+  "description": "BALONS"
+ },
+ {
+  "packagecode": "BARL",
+  "description": "BARRELSS"
+ },
+ {
+  "packagecode": "BARS",
+  "description": "BARS"
+ },
+ {
+  "packagecode": "BASK",
+  "description": "BASKETS"
+ },
+ {
+  "packagecode": "BINS",
+  "description": "BINS"
+ },
+ {
+  "packagecode": "BOTL",
+  "description": "BOTTLE"
+ },
+ {
+  "packagecode": "BX",
+  "description": "BOX"
+ },
+ {
+  "packagecode": "BOXS",
+  "description": "Boxes"
+ },
+ {
+  "packagecode": "BOXE",
+  "description": "BOXES"
+ },
+ {
+  "packagecode": "BUCK",
+  "description": "BUCKETS"
+ },
+ {
+  "packagecode": "GASB",
+  "description": "BULK GAS"
+ },
+ {
+  "packagecode": "SAIL",
+  "description": "BULK LIQUEFIED GAS AT ABNORMAL TEMPERATURE PRESSURE CELCIUS"
+ },
+ {
+  "packagecode": "LIQB",
+  "description": "BULK LIQUID"
+ },
+ {
+  "packagecode": "BULK",
+  "description": "BULKS"
+ },
+ {
+  "packagecode": "BUND",
+  "description": "BUNDLES"
+ },
+ {
+  "packagecode": "CAGE",
+  "description": "CAGE"
+ },
+ {
+  "packagecode": "CANS",
+  "description": "CANS"
+ },
+ {
+  "packagecode": "CRBX",
+  "description": "CARDBOARD BOXES"
+ },
+ {
+  "packagecode": "CTNS",
+  "description": "CARTONS"
+ },
+ {
+  "packagecode": "CASE",
+  "description": "CASES"
+ },
+ {
+  "packagecode": "COIL",
+  "description": "COILS"
+ },
+ {
+  "packagecode": "CMPK",
+  "description": "COMPOSITE PACKAGINGS"
+ },
+ {
+  "packagecode": "CONE",
+  "description": "CONES"
+ },
+ {
+  "packagecode": "CON",
+  "description": "CONTAINER"
+ },
+ {
+  "packagecode": "CRAT",
+  "description": "CRATES"
+ },
+ {
+  "packagecode": "CYLI",
+  "description": "CYLINDERS"
+ },
+ {
+  "packagecode": "DRAW",
+  "description": "DRAWER"
+ },
+ {
+  "packagecode": "DRUM",
+  "description": "DRUMS"
+ },
+ {
+  "packagecode": "EMTY",
+  "description": "EMPTY CONTAINERS"
+ },
+ {
+  "packagecode": "DFDS",
+  "description": "ew"
+ },
+ {
+  "packagecode": "FLTK",
+  "description": "FLEXI TANK"
+ },
+ {
+  "packagecode": "GS00",
+  "description": "GENSETS"
+ },
+ {
+  "packagecode": "INGO",
+  "description": "INGOTS"
+ },
+ {
+  "packagecode": "JRCN",
+  "description": "JERRICANS"
+ },
+ {
+  "packagecode": "JUMB",
+  "description": "JUMBOS"
+ },
+ {
+  "packagecode": "LOTS",
+  "description": "LOTS"
+ },
+ {
+  "packagecode": "CARS",
+  "description": "MOTOR CARS"
+ },
+ {
+  "packagecode": "OBIN",
+  "description": "OCTABINS"
+ },
+ {
+  "packagecode": "PACK",
+  "description": "PACKAGES"
+ },
+ {
+  "packagecode": "PACT",
+  "description": "PACKETS"
+ },
+ {
+  "packagecode": "EM",
+  "description": "Packets"
+ },
+ {
+  "packagecode": "PAIL",
+  "description": "PAILS"
+ },
+ {
+  "packagecode": "PAIR",
+  "description": "PAIRS"
+ },
+ {
+  "packagecode": "PA21",
+  "description": "PALLET AMERICAN , HEIGHT 2.10"
+ },
+ {
+  "packagecode": "PA11",
+  "description": "PALLET AMERICAN, HEIGHT 1.10"
+ },
+ {
+  "packagecode": "PM11",
+  "description": "PALLET APPLES, HEIGHT 1.10"
+ },
+ {
+  "packagecode": "PM21",
+  "description": "PALLET APPLES, HEIGHT 2.10"
+ },
+ {
+  "packagecode": "PE11",
+  "description": "PALLET EUROPEAN, HEIGHT 1.10"
+ },
+ {
+  "packagecode": "PE21",
+  "description": "PALLET EUROPEAN, HEIGHT 2.10"
+ },
+ {
+  "packagecode": "PALL",
+  "description": "PALLETS"
+ },
+ {
+  "packagecode": "PIEC",
+  "description": "PIECES"
+ },
+ {
+  "packagecode": "REEL",
+  "description": "REELS"
+ },
+ {
+  "packagecode": "ROLL",
+  "description": "ROLLS"
+ },
+ {
+  "packagecode": "SACK",
+  "description": "SACKS"
+ },
+ {
+  "packagecode": "SSDF",
+  "description": "sample packagesss"
+ },
+ {
+  "packagecode": "SETS",
+  "description": "SET"
+ },
+ {
+  "packagecode": "SHET",
+  "description": "SHEETS"
+ },
+ {
+  "packagecode": "SKID",
+  "description": "SKIDS"
+ },
+ {
+  "packagecode": "TANK",
+  "description": "TANKS"
+ },
+ {
+  "packagecode": "FROM",
+  "description": "Testing"
+ },
+ {
+  "packagecode": "DARK",
+  "description": "Testing"
+ },
+ {
+  "packagecode": "TINS",
+  "description": "TINS and CANNED TINS"
+ },
+ {
+  "packagecode": "TIRE",
+  "description": "TIRES"
+ },
+ {
+  "packagecode": "TOTE",
+  "description": "TOTES"
+ },
+ {
+  "packagecode": "TRAI",
+  "description": "TRAILER"
+ },
+ {
+  "packagecode": "TUBE",
+  "description": "TUBES"
+ },
+ {
+  "packagecode": "UNBX",
+  "description": "UNBOXED"
+ },
+ {
+  "packagecode": "UNIT",
+  "description": "UNITS"
+ },
+ {
+  "packagecode": "VEHI",
+  "description": "VEHICLES(OTHER VEHICLES)"
+ },
+ {
+  "packagecode": "WIRE",
+  "description": "WIRE"
+ },
+ {
+  "packagecode": "WOOB",
+  "description": "WOODEN BOX"
+ }
+]

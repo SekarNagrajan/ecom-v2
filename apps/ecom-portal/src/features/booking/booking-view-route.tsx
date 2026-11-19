@@ -2,19 +2,20 @@
 import { AppButton } from "@solverminds/shared-ui";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { Card, Space } from "antd";
+import { useTranslation } from "react-i18next";
 
-import { AppIcon, Icons } from "../../components/icons";
+import { AppIcon, Icons, NavBookingIcon } from "../../components/icons";
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
-import {
-  MODULE_TITLES,
-  formatModuleScreenTitle,
-} from "../../constants/module-titles";
+import { formatModuleScreenTitle } from "../../constants/module-titles";
+import { useModuleTitles } from "../../i18n/use-module-titles";
 import { BookingModuleStyles } from "./components/booking-module-styles";
 import { BookingDetailsViewer } from "./components/view/BookingDetailsViewer";
 import { HaulageTrackingGrid } from "./components/view/HaulageTrackingGrid";
 
 export function BookingViewRoute() {
+  const { t } = useTranslation(["booking", "common", "modules"]);
+  const MODULE_TITLES = useModuleTitles();
   const navigate = useNavigate();
   const { bookingId } = useParams({ strict: false });
 
@@ -28,7 +29,7 @@ export function BookingViewRoute() {
       >
         <Card className="feature-page-card" bordered={false}>
           <ModuleScreenHeader
-            icon={Icons.bookOpen}
+            icon={NavBookingIcon}
             title={formatModuleScreenTitle(
               MODULE_TITLES.viewBooking,
               bookingId,
@@ -36,18 +37,15 @@ export function BookingViewRoute() {
             marginBottom={0}
             extra={
               <Space wrap className="custom-scroll">
-                extra=
-                {
-                  <AppButton
-                    danger
-                    icon={
-                      <AppIcon icon={Icons.arrowLeft} size={16} tone="delete" />
-                    }
-                    onClick={() => navigate({ to: "/app/booking" })}
-                  >
-                    Back to Booking
-                  </AppButton>
-                }
+                <AppButton
+                  danger
+                  icon={
+                    <AppIcon icon={Icons.arrowLeft} size={16} tone="delete" />
+                  }
+                  onClick={() => navigate({ to: "/app/booking" })}
+                >
+                  {t("actions.backToBooking")}
+                </AppButton>
                 <AppButton
                   type="primary"
                   icon={<AppIcon icon={Icons.edit} size={16} tone="edit" />}
@@ -55,7 +53,7 @@ export function BookingViewRoute() {
                     navigate({ to: `/app/booking/${bookingId}/amend` })
                   }
                 >
-                  Amend Booking
+                  {MODULE_TITLES.amendBooking}
                 </AppButton>
               </Space>
             }

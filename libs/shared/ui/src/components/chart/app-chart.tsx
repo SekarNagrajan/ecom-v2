@@ -1,3 +1,4 @@
+// Modified by Sekar Nagarajan (2026-11-13 02:40)
 import * as echarts from 'echarts/core';
 import { useEffect, useRef } from 'react';
 
@@ -5,6 +6,7 @@ import { ChartEmptyState } from './chart-empty-state';
 import { ChartLoadingState } from './chart-loading-state';
 import type {
   AppChartProps,
+  ChartEventHandlers,
   ChartTokens,
   EChartsInstance,
 } from './chart-types';
@@ -21,10 +23,7 @@ function ensureThemeRegistered(tokens: ChartTokens): void {
   // type). Cast through the function's own parameter type so we don't reach
   // into ECharts internals.
   type RegisterThemeArgs = Parameters<typeof echarts.registerTheme>;
-  echarts.registerTheme(
-    tokens.themeName,
-    createBaseChartTheme(tokens) as RegisterThemeArgs[1]
-  );
+  echarts.registerTheme(tokens.themeName, createBaseChartTheme(tokens) as RegisterThemeArgs[1]);
   registeredThemes.add(tokens.themeName);
 }
 
@@ -62,6 +61,8 @@ export function AppChart({
   replaceMerge,
   lazyUpdate,
   onChartReady,
+  onEvents,
+  accessible = true,
   className,
   style,
   height,
@@ -73,6 +74,9 @@ export function AppChart({
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const chartRef = useRef<EChartsInstance | null>(null);
+  // Latest handlers, read at dispatch time so consumers can pass inline functions.
+  const eventsRef = useRef<ChartEventHandlers | undefined>(onEvents);
+  eventsRef.current = onEvents;
 
   // Init / dispose. Re-runs only when the underlying chart instance must be
   // recreated — i.e. theme name or renderer changes. Option updates are
@@ -95,6 +99,9 @@ export function AppChart({
     const chart = echarts.init(container, tokens.themeName, { renderer });
     restorePassivePatch();
     chartRef.current = chart;
+    for (const eventName of Object.keys(eventsRef.current ?? {})) {
+      chart.on(eventName, (params: unknown) => eventsRef.current?.[eventName]?.(params));
+    }
     onChartReady?.(chart);
 
     // ResizeObserver fires synchronously on every layout settle. AntD layout
@@ -122,7 +129,7 @@ export function AppChart({
     // re-init; all visual token changes flow through the hash. `option` is
     // intentionally excluded — see the option effect below.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tokens.themeName, renderer]);
+  }, [tokens.themeName, renderer, Object.keys(onEvents ?? {}).join('|')]);
 
   // Apply option. Runs:
   // - on first mount, immediately after the init effect set up `chartRef`
@@ -134,8 +141,10 @@ export function AppChart({
   useEffect(() => {
     const chart = chartRef.current;
     if (!chart) return;
-    chart.setOption(option, { notMerge, replaceMerge, lazyUpdate });
-  }, [option, notMerge, replaceMerge, lazyUpdate, tokens.themeName, renderer]);
+    const hasAria = Object.prototype.hasOwnProperty.call(option, 'aria');
+    const next = accessible && !hasAria ? { ...option, aria: { enabled: true } } : option;
+    chart.setOption(next, { notMerge, replaceMerge, lazyUpdate });
+  }, [option, notMerge, replaceMerge, lazyUpdate, tokens.themeName, renderer, accessible]);
 
   const showOverlay = Boolean(loading || empty);
 
@@ -147,14 +156,18 @@ export function AppChart({
       style={{
         position: 'relative',
         width: '100%',
-        height: height ?? DEFAULT_HEIGHT,
+        // `height="auto"` sets no inline height so the consumer's CSS (fixed height, flex, min-height)
+        // decides the size; the absolutely positioned canvas below follows it.
+        height: height === 'auto' ? undefined : (height ?? DEFAULT_HEIGHT),
         minHeight,
         ...style,
       }}
     >
       <div
         ref={containerRef}
-        style={{ width: '100%', height: '100%' }}
+        // Absolute so the canvas tracks the root's rendered size even when `height="auto"` lets
+        // CSS (flex, min-height) decide it; percentage heights would collapse in that case.
+        style={{ position: 'absolute', inset: 0 }}
         // Hide the chart visually while overlaying, but keep it mounted so
         // the ECharts instance doesn't churn between init/dispose cycles on
         // every loading flip.

@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-01 16:46)
+// Modified by Sekar Nagarajan (2026-09-16 15:52)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -9,6 +9,7 @@ export function CargoLinesEditorStyles() {
   const successBg = tokenMix(token.colorSuccess, 12);
   const warningBg = tokenMix(token.colorWarning, 12);
   const fillHover = token.colorFillAlter;
+  const headerBg = token.colorFillAlter;
 
   return (
     <style>{`
@@ -44,37 +45,6 @@ export function CargoLinesEditorStyles() {
       }
       .si-cargo-toolbar__actions {
         justify-content: flex-end;
-      }
-      /* Modified by Sekar Nagarajan (2026-08-28 18:02) — icon + label baseline align */
-      .si-cargo-view-opt {
-        display: inline-flex;
-        align-items: center;
-        gap: ${token.marginXXS}px;
-        line-height: 1;
-      }
-      .si-cargo-view-opt .app-icon {
-        display: block;
-        flex: none;
-      }
-      /* Modified by Sekar Nagarajan (2026-09-01 11:11) — default segment style (not primary) */
-      .si-cargo-view-segmented.ant-segmented .ant-segmented-item-selected {
-        background: ${token.colorBgElevated} !important;
-        color: ${token.colorText} !important;
-      }
-      .si-cargo-view-segmented.ant-segmented
-        .ant-segmented-item-selected
-        .ant-segmented-item-label {
-        color: ${token.colorText} !important;
-      }
-      .si-cargo-view-segmented.ant-segmented .ant-segmented-thumb {
-        background: ${token.colorBgElevated} !important;
-        box-shadow: ${token.boxShadowSecondary} !important;
-      }
-      .si-cargo-view-segmented.ant-segmented
-        .ant-segmented-item-selected
-        .si-cargo-view-opt
-        .app-icon {
-        color: ${token.colorText};
       }
       .si-cargo-toolbar__search {
         flex: 1 1 220px;
@@ -374,17 +344,23 @@ export function CargoLinesEditorStyles() {
         overflow: auto;
       }
       .si-cargo-grid {
+        display: table;
         width: max-content;
         min-width: 100%;
         border-collapse: separate;
         border-spacing: 0;
         font-size: ${token.fontSize}px;
+        table-layout: auto;
+        height: auto;
+        min-height: 0;
       }
       .si-cargo-grid thead th {
         position: sticky;
         top: 0;
-        z-index: 2;
-        background: ${token.colorFillAlter};
+        z-index: 20;
+        /* Opaque sticky header so scrolling rows never bleed through */
+        background-color: ${token.colorBgContainer};
+        background-image: linear-gradient(${headerBg}, ${headerBg});
         text-align: left;
         font-size: ${token.fontSizeSM}px;
         font-weight: 600;
@@ -392,12 +368,15 @@ export function CargoLinesEditorStyles() {
         padding: ${token.paddingSM}px ${token.paddingXS}px;
         white-space: nowrap;
         border-bottom: 1px solid ${token.colorBorderSecondary};
+        box-shadow: 0 1px 0 ${token.colorBorderSecondary};
       }
       .si-cargo-grid tbody td {
         padding: ${token.paddingXXS}px ${token.paddingXS}px;
         border-top: 1px solid ${token.colorBorderSecondary};
         vertical-align: middle;
         background: ${token.colorBgContainer};
+        position: relative;
+        z-index: 0;
       }
       .si-cargo-grid tbody tr:hover td {
         background: ${fillHover};
@@ -405,24 +384,88 @@ export function CargoLinesEditorStyles() {
       .si-cargo-grid tbody tr.si-cargo-grid__grp td {
         border-top: 2px solid ${token.colorBorder};
       }
-      .si-cargo-grid__th-actions,
-      .si-cargo-grid__td-actions {
+      /* Keep AntD cell controls under sticky header while scrolling */
+      .si-cargo-grid tbody td .ant-select,
+      .si-cargo-grid tbody td .ant-select-selector,
+      .si-cargo-grid tbody td .ant-input,
+      .si-cargo-grid tbody td .ant-input-affix-wrapper,
+      .si-cargo-grid tbody td .ant-input-number,
+      .si-cargo-grid tbody td .ant-input-number-group-wrapper,
+      .si-cargo-grid tbody td .ant-switch,
+      .si-cargo-grid tbody td .list-actions-row {
+        position: relative;
+        z-index: 0;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-15 11:15)
+         Sticky Actions + Container No + Type (booking cargo grid parity).
+         Must beat .si-cargo-grid tbody td position:relative (higher specificity). */
+      .si-cargo-grid thead th.si-cargo-grid__th-actions,
+      .si-cargo-grid tbody td.si-cargo-grid__td-actions {
         position: sticky;
         left: 0;
-        z-index: 3;
         width: 112px;
         min-width: 112px;
-        box-shadow: 1px 0 0 ${token.colorBorderSecondary};
+        max-width: 112px;
+        box-shadow: none;
+        overflow: hidden;
       }
-      .si-cargo-grid__th-actions {
-        z-index: 4;
-        background: ${token.colorFillAlter};
+      .si-cargo-grid thead th.si-cargo-grid__th-actions {
+        z-index: 32;
+        background-color: ${token.colorBgContainer};
+        background-image: linear-gradient(${headerBg}, ${headerBg});
       }
-      .si-cargo-grid__td-actions {
+      .si-cargo-grid tbody td.si-cargo-grid__td-actions {
+        z-index: 12;
         background: ${token.colorBgContainer};
       }
-      .si-cargo-grid tbody tr:hover .si-cargo-grid__td-actions {
+      .si-cargo-grid tbody tr:hover td.si-cargo-grid__td-actions {
         background: ${fillHover};
+      }
+      .si-cargo-grid thead th.si-cargo-grid__th-container,
+      .si-cargo-grid tbody td.si-cargo-grid__td-container {
+        position: sticky;
+        left: 112px;
+        width: 160px;
+        min-width: 160px;
+        max-width: 160px;
+        box-shadow: none;
+        overflow: hidden;
+      }
+      .si-cargo-grid thead th.si-cargo-grid__th-type,
+      .si-cargo-grid tbody td.si-cargo-grid__td-type {
+        position: sticky;
+        left: 272px;
+        width: 112px;
+        min-width: 112px;
+        max-width: 112px;
+        box-shadow: 1px 0 0 ${token.colorBorderSecondary};
+        overflow: hidden;
+      }
+      .si-cargo-grid thead th.si-cargo-grid__th-container,
+      .si-cargo-grid thead th.si-cargo-grid__th-type {
+        z-index: 31;
+        background-color: ${token.colorBgContainer};
+        background-image: linear-gradient(${headerBg}, ${headerBg});
+      }
+      .si-cargo-grid thead th.si-cargo-grid__th-type {
+        z-index: 30;
+      }
+      .si-cargo-grid tbody td.si-cargo-grid__td-container {
+        z-index: 11;
+        background: ${token.colorBgContainer};
+      }
+      .si-cargo-grid tbody td.si-cargo-grid__td-type {
+        z-index: 10;
+        background: ${token.colorBgContainer};
+      }
+      .si-cargo-grid tbody tr:hover td.si-cargo-grid__td-container,
+      .si-cargo-grid tbody tr:hover td.si-cargo-grid__td-type {
+        background: ${fillHover};
+      }
+      .si-cargo-grid tbody td.si-cargo-grid__td-container .si-cargo-grid__field--container {
+        min-width: 0 !important;
+        width: 100%;
+        max-width: 100%;
       }
       .si-cargo-grid__td-actions .list-actions-row {
         display: inline-flex;
@@ -546,6 +589,155 @@ export function CargoLinesEditorStyles() {
         .si-cargo-ct-meta--kg { grid-column: 2; grid-row: 4; }
         .si-cargo-ct-meta--cbm { display: none; }
         .si-cargo-ct-status { grid-column: 2 / 4; grid-row: 5; justify-self: start; }
+      }
+
+      /* Shared SI / BL cargo Excel + Smart Import toolbar */
+      .cargo-excel-import-toolbar {
+        border: none;
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+        margin-bottom: ${token.marginMD}px;
+        margin-top: ${token.marginMD}px;
+        padding-inline: ${token.paddingMD}px;
+      }
+      .cargo-excel-import-toolbar .cargo-excel-import {
+        display: inline-flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-end;
+        gap: ${token.marginSM}px;
+      }
+      .cargo-excel-import-modal.ant-modal {
+        width: 90vw !important;
+        max-width: 90vw;
+        top: 1vh;
+        padding-bottom: 0;
+      }
+      .cargo-excel-import-modal .ant-modal-content {
+        max-height: 84vh;
+        display: flex;
+        flex-direction: column;
+      }
+      .cargo-excel-import-modal__body {
+        padding: ${token.paddingMD}px !important;
+        flex: 1;
+        min-height: 0;
+        max-height: none;
+        overflow: auto;
+      }
+      .cargo-excel-import-modal__content {
+        display: flex;
+        flex-direction: column;
+        min-height: 60vh;
+        height: 70vh;
+      }
+      .cargo-excel-import-modal__content .booking-import-page,
+      .cargo-excel-import-modal__content > * {
+        flex: 1;
+        min-height: 0;
+      }
+
+      /* Smart Import modal — autoHeight grid; scroll shell for many rows */
+      .cargo-smart-import-modal.ant-modal {
+        width: 92vw !important;
+        max-width: 92vw;
+        top: 1vh;
+        padding-bottom: 0;
+      }
+      .cargo-smart-import-modal .ant-modal-content {
+        max-height: 88vh;
+        display: flex;
+        flex-direction: column;
+      }
+      .cargo-smart-import-modal .ant-modal-header,
+      .cargo-smart-import-modal .ant-modal-footer {
+        flex-shrink: 0;
+      }
+      .cargo-smart-import-modal__body {
+        padding: ${token.paddingMD}px !important;
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        overflow: auto !important;
+        display: flex !important;
+        flex-direction: column;
+      }
+      .cargo-smart-import-modal__content {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginSM}px;
+        min-height: 0;
+      }
+      .cargo-smart-import-modal__banner {
+        flex-shrink: 0;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        background: ${token.colorFillAlter};
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG}px;
+      }
+      .cargo-smart-import-modal__hint {
+        margin-bottom: 0 !important;
+        font-size: ${token.fontSize}px;
+        color: ${token.colorTextSecondary};
+        line-height: ${token.lineHeight};
+      }
+      .cargo-smart-import-grid {
+        width: 100%;
+        max-height: 62vh;
+        overflow: auto;
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorBgContainer};
+      }
+      .cargo-smart-import-grid--empty {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 160px;
+        padding: ${token.paddingLG}px;
+      }
+      .cargo-smart-import-list {
+        width: 100%;
+        height: auto !important;
+      }
+      .cargo-smart-import-cell--readonly {
+        background: ${token.colorFillAlter} !important;
+        color: ${token.colorTextSecondary};
+      }
+      .cargo-smart-import-col--readonly {
+        background: ${token.colorFillAlter} !important;
+      }
+      .cargo-smart-import-cell--editable {
+        background: ${token.colorBgContainer};
+      }
+      .cargo-smart-import-cell--numeric {
+        text-align: right;
+      }
+      .cargo-smart-import-cell--row-no {
+        text-align: center;
+        font-variant-numeric: tabular-nums;
+        justify-content: center;
+      }
+      .cargo-smart-import-cell--soc {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .cargo-smart-import-cell--soc .ag-checkbox-input-wrapper,
+      .cargo-smart-import-cell--soc .ag-cell-wrapper {
+        justify-content: center;
+      }
+      .cargo-smart-import-modal__footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: ${token.marginMD}px;
+        width: 100%;
+        flex-wrap: wrap;
+      }
+      .cargo-smart-import-modal__footer-meta {
+        font-size: ${token.fontSizeSM}px;
       }
     `}</style>
   );

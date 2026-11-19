@@ -1,8 +1,9 @@
-// Modified by Sekar Nagarajan (2026-09-01 17:50)
+// Modified by Sekar Nagarajan (2026-09-16 16:17)
 import { CargoLinesEditor } from "../../../shipping-instruction/components/cargo-lines-editor";
 import { useBLWizardConfig } from "../../hooks/use-bl-wizard-config";
 import { BlCargoExtensions } from "../bl-cargo-extensions";
 import { BlExcelImport } from "../bl-excel-import";
+import { BlSmartImport } from "../bl-smart-import";
 import type { BLWizardStepProps } from "./MasterDetailsStep";
 
 export function ContainersCargoStep({
@@ -14,20 +15,45 @@ export function ContainersCargoStep({
   isSubmitting,
 }: BLWizardStepProps) {
   const { data: config } = useBLWizardConfig();
+  // Remount editor when container / cargo-line ids change (Excel replace or
+  // Smart Import update). RHF defaultValues alone do not pick up external updates.
+  const cargoEditorKey =
+    data.containers
+      .map(
+        (container) =>
+          `${container.id}:${container.containerNo}:${container.cargoLines
+            .map((line) => line.id)
+            .join(",")}`,
+      )
+      .join("|") || "empty";
+
+  const showExcel = Boolean(config?.showExcelImport);
+  const showSmart = Boolean(config?.showSmartImport);
 
   return (
     <div className="form-step-layout">
-      {config?.showExcelImport ? (
-        <div className="form-step-toolbar bl-excel-import-toolbar">
-          <BlExcelImport
-            blNo={data.blNo}
-            containerCount={data.containers.length}
-            onImported={(containers) => onUpdate({ containers })}
-          />
+      {showExcel || showSmart ? (
+        <div className="form-step-toolbar cargo-excel-import-toolbar">
+          <div className="cargo-excel-import">
+            {showExcel ? (
+              <BlExcelImport
+                blNo={data.blNo}
+                containerCount={data.containers.length}
+                onImported={(containers) => onUpdate({ containers })}
+              />
+            ) : null}
+            {showSmart ? (
+              <BlSmartImport
+                containers={data.containers}
+                onApplied={(containers) => onUpdate({ containers })}
+              />
+            ) : null}
+          </div>
         </div>
       ) : null}
 
       <CargoLinesEditor
+        key={cargoEditorKey}
         containers={data.containers}
         renderContainerFooter={(container, index) => (
           <BlCargoExtensions

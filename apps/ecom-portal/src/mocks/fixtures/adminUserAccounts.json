@@ -1,0 +1,50 @@
+[
+ {
+  "id": "1",
+  "username": "superadmin",
+  "fullName": "Super Admin",
+  "email": "cooper.morissette56@example.com",
+  "role": "SUPERADMIN",
+  "failedAttempts": 0,
+  "lockedUntil": null,
+  "passwordChangedAt": null,
+  "lastLoginAt": "2026-11-16T11:10:08.858Z",
+  "status": "A",
+  "createdAt": "2026-10-10T05:26:20.158Z",
+  "createdBy": "system",
+  "updatedAt": "2026-11-16T11:10:08.858Z",
+  "updatedBy": "superadmin"
+ },
+ {
+  "id": "3",
+  "username": "svmadmin",
+  "fullName": "SOLVERMINDS SHIPPING LTD",
+  "email": "kelly.metz99@example.com",
+  "role": "ADMIN",
+  "failedAttempts": 0,
+  "lockedUntil": null,
+  "passwordChangedAt": "2026-10-30T05:18:19.725Z",
+  "lastLoginAt": null,
+  "status": "A",
+  "createdAt": "2026-10-30T05:18:19.725Z",
+  "createdBy": "SYSTEM",
+  "updatedAt": null,
+  "updatedBy": null
+ },
+ {
+  "id": "2",
+  "username": "esladmin",
+  "fullName": "Emirates Shipping Line",
+  "email": "daphnee_kuhic@example.com",
+  "role": "ADMIN",
+  "failedAttempts": 0,
+  "lockedUntil": null,
+  "passwordChangedAt": "2026-10-30T05:18:19.722Z",
+  "lastLoginAt": null,
+  "status": "A",
+  "createdAt": "2026-10-30T05:18:19.722Z",
+  "createdBy": "SYSTEM",
+  "updatedAt": null,
+  "updatedBy": null
+ }
+]

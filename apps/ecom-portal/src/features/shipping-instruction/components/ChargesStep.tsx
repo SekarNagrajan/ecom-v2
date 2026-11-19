@@ -1,7 +1,8 @@
-// Modified by Sekar Nagarajan (2026-08-28 12:58)
+// Modified by Sekar Nagarajan (2026-09-29 16:55)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
 import { Card, Input, InputNumber, Select, Typography } from "antd";
+import { useMemo } from "react";
 import {
   Controller,
   useFieldArray,
@@ -9,6 +10,7 @@ import {
   type Control,
   type FieldErrors,
 } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import {
@@ -20,15 +22,9 @@ import type {
   SIPrepaidCollect,
   SIWizardStepProps,
 } from "../types/si.types";
-import { siChargesStepSchema } from "../types/si.types";
+import { createSiChargesStepSchema } from "../types/si.types";
 
 const { Text, Title } = Typography;
-
-const PC_OPTIONS: { value: SIPrepaidCollect; label: string }[] = [
-  { value: "PREPAID", label: "Prepaid" },
-  { value: "COLLECT", label: "Collect" },
-  { value: "PAY_AT", label: "Pay At" },
-];
 
 function createEmptyCharge(): SiChargesStepValues["charges"][number] {
   return {
@@ -49,18 +45,23 @@ function ChargeLineFields({
   control,
   index,
   errors,
+  pcOptions,
+  payorOptions,
 }: {
   control: Control<SiChargesStepValues>;
   index: number;
   errors: FieldErrors<SiChargesStepValues>;
+  pcOptions: { value: SIPrepaidCollect; label: string }[];
+  payorOptions: { value: string; label: string }[];
 }) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
   const rowErrors = errors.charges?.[index];
 
   return (
     <div className="si-charges-form-grid">
       <div className="form-field-cell">
         <label className="form-field-label">
-          Code <Text type="danger">*</Text>
+          {t("columns.code")} <Text type="danger">*</Text>
         </label>
         <Controller
           control={control}
@@ -75,7 +76,7 @@ function ChargeLineFields({
       </div>
       <div className="form-field-cell">
         <label className="form-field-label">
-          Description <Text type="danger">*</Text>
+          {t("columns.description")} <Text type="danger">*</Text>
         </label>
         <Controller
           control={control}
@@ -85,7 +86,7 @@ function ChargeLineFields({
       </div>
       <div className="form-field-cell">
         <label className="form-field-label">
-          Amount <Text type="danger">*</Text>
+          {t("columns.amount")} <Text type="danger">*</Text>
         </label>
         <Controller
           control={control}
@@ -101,7 +102,7 @@ function ChargeLineFields({
         />
       </div>
       <div className="form-field-cell">
-        <label className="form-field-label">Currency</label>
+        <label className="form-field-label">{t("labels.currency")}</label>
         <Controller
           control={control}
           name={`charges.${index}.currency`}
@@ -120,7 +121,9 @@ function ChargeLineFields({
         />
       </div>
       <div className="form-field-cell">
-        <label className="form-field-label">P/C</label>
+        <label className="form-field-label">
+          {t("wizard.charges.pceShort")}
+        </label>
         <Controller
           control={control}
           name={`charges.${index}.prepaidCollect`}
@@ -129,13 +132,13 @@ function ChargeLineFields({
               {...field}
               size="large"
               className="form-field-full-width"
-              options={PC_OPTIONS}
+              options={pcOptions}
             />
           )}
         />
       </div>
       <div className="form-field-cell">
-        <label className="form-field-label">Payor</label>
+        <label className="form-field-label">{t("labels.payor")}</label>
         <Controller
           control={control}
           name={`charges.${index}.payByCustType`}
@@ -144,11 +147,7 @@ function ChargeLineFields({
               {...field}
               size="large"
               className="form-field-full-width"
-              options={[
-                { value: "Shipper", label: "Shipper" },
-                { value: "Consignee", label: "Consignee" },
-                { value: "Notify", label: "Notify" },
-              ]}
+              options={payorOptions}
             />
           )}
         />
@@ -165,12 +164,31 @@ export function ChargesStep({
   isFirstStep,
   isSubmitting,
 }: SIWizardStepProps) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
+  const schema = useMemo(() => createSiChargesStepSchema(t), [t]);
+  const pcOptions: { value: SIPrepaidCollect; label: string }[] = useMemo(
+    () => [
+      { value: "PREPAID", label: t("labels.prepaid") },
+      { value: "COLLECT", label: t("labels.collect") },
+      { value: "PAY_AT", label: t("labels.payAt") },
+    ],
+    [t],
+  );
+  const payorOptions = useMemo(
+    () => [
+      { value: "Shipper", label: t("parties.shipper") },
+      { value: "Consignee", label: t("parties.consignee") },
+      { value: "Notify", label: t("parties.notify") },
+    ],
+    [t],
+  );
+
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm<SiChargesStepValues>({
-    resolver: zodResolver(siChargesStepSchema),
+    resolver: zodResolver(schema),
     defaultValues: {
       charges:
         data.charges && data.charges.length > 0
@@ -200,7 +218,7 @@ export function ChargesStep({
           className="form-step-card form-step-section si-master-step-card"
           title={
             <Title level={5} className="form-step-card-title">
-              Freight Charges
+              {t("wizard.charges.title")}
             </Title>
           }
           extra={
@@ -209,7 +227,7 @@ export function ChargesStep({
               icon={<AppIcon icon={Icons.filePlus} size={14} />}
               onClick={() => append(createEmptyCharge())}
             >
-              Add Charge
+              {t("actions.addCharge")}
             </AppButton>
           }
         >
@@ -219,12 +237,12 @@ export function ChargesStep({
                 key={field.id}
                 size="small"
                 className="form-step-card form-step-section si-master-step-card"
-                title={`Charge ${index + 1}`}
+                title={t("wizard.charges.chargeLineTitle", { n: index + 1 })}
                 extra={
                   fields.length > 1 ? (
                     <ListActionsRow>
                       <ListActionButton
-                        title="Remove charge"
+                        title={t("actions.removeCharge")}
                         icon={
                           <AppIcon icon={Icons.x} size={16} tone="delete" />
                         }
@@ -239,6 +257,8 @@ export function ChargesStep({
                   control={control}
                   index={index}
                   errors={errors}
+                  pcOptions={pcOptions}
+                  payorOptions={payorOptions}
                 />
               </Card>
             ))}
@@ -251,10 +271,10 @@ export function ChargesStep({
           onClick={onPrevious}
           disabled={isFirstStep || isSubmitting}
         >
-          Previous
+          {t("common:actions.previous")}
         </AppButton>
         <AppButton type="primary" htmlType="submit" disabled={isSubmitting}>
-          Next
+          {t("common:actions.next")}
         </AppButton>
       </div>
     </form>

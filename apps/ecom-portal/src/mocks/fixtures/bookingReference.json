@@ -1,0 +1,302 @@
+[
+ {
+  "id": "164",
+  "ebookno": "BKON7334",
+  "refid": "EOF",
+  "refval": "C"
+ },
+ {
+  "id": "163",
+  "ebookno": "BKON7394",
+  "refid": "EOF",
+  "refval": "P"
+ },
+ {
+  "id": "162",
+  "ebookno": "BKON7377",
+  "refid": "ACI",
+  "refval": "7890"
+ },
+ {
+  "id": "161",
+  "ebookno": "BKON7377",
+  "refid": "CRN",
+  "refval": "890-"
+ },
+ {
+  "id": "160",
+  "ebookno": "BKON7377",
+  "refid": "EPD",
+  "refval": "2026-10-29"
+ },
+ {
+  "id": "159",
+  "ebookno": "BKON7377",
+  "refid": "EPP",
+  "refval": "INNSABMCT0"
+ },
+ {
+  "id": "158",
+  "ebookno": "BKON7377",
+  "refid": "EOP",
+  "refval": "T"
+ },
+ {
+  "id": "157",
+  "ebookno": "BKON7377",
+  "refid": "HAU",
+  "refval": "789"
+ },
+ {
+  "id": "156",
+  "ebookno": "BKON7377",
+  "refid": "NAT",
+  "refval": "4567"
+ },
+ {
+  "id": "155",
+  "ebookno": "BKON7377",
+  "refid": "EOF",
+  "refval": "P"
+ },
+ {
+  "id": "154",
+  "ebookno": "BKON7377",
+  "refid": "AGR",
+  "refval": "456"
+ },
+ {
+  "id": "153",
+  "ebookno": "BKON7377",
+  "refid": "EOR",
+  "refval": "234"
+ },
+ {
+  "id": "152",
+  "ebookno": "BKON7373",
+  "refid": "UCR",
+  "refval": "UCR-CLAUDE-TEST"
+ },
+ {
+  "id": "151",
+  "ebookno": "BKON7355",
+  "refid": "AGR",
+  "refval": "AG123456"
+ },
+ {
+  "id": "150",
+  "ebookno": "BKON7354",
+  "refid": "AGR",
+  "refval": "AG112232"
+ },
+ {
+  "id": "149",
+  "ebookno": "BKON7353",
+  "refid": "EPD",
+  "refval": "2026-10-27"
+ },
+ {
+  "id": "148",
+  "ebookno": "BKON7353",
+  "refid": "EPP",
+  "refval": "INNSAJNP00"
+ },
+ {
+  "id": "147",
+  "ebookno": "BKON7353",
+  "refid": "EOP",
+  "refval": "T"
+ },
+ {
+  "id": "146",
+  "ebookno": "BKON7353",
+  "refid": "HAU",
+  "refval": "11111"
+ },
+ {
+  "id": "145",
+  "ebookno": "BKON7353",
+  "refid": "EOR",
+  "refval": "1121122"
+ },
+ {
+  "id": "141",
+  "ebookno": "BKON7351",
+  "refid": "AGR",
+  "refval": "AR224466"
+ },
+ {
+  "id": "140",
+  "ebookno": "BKON7351",
+  "refid": "UCR",
+  "refval": "456"
+ },
+ {
+  "id": "139",
+  "ebookno": "BKON7351",
+  "refid": "DPT",
+  "refval": "A"
+ },
+ {
+  "id": "138",
+  "ebookno": "BKON7351",
+  "refid": "DPW",
+  "refval": "234"
+ },
+ {
+  "id": "137",
+  "ebookno": "BKON7350",
+  "refid": "AGR",
+  "refval": "AR2244"
+ },
+ {
+  "id": "136",
+  "ebookno": "BKON7350",
+  "refid": "UCR",
+  "refval": "456"
+ },
+ {
+  "id": "135",
+  "ebookno": "BKON7350",
+  "refid": "DPT",
+  "refval": "A"
+ },
+ {
+  "id": "134",
+  "ebookno": "BKON7350",
+  "refid": "DPW",
+  "refval": "3456"
+ },
+ {
+  "id": "133",
+  "ebookno": "BKON7349",
+  "refid": "UCR",
+  "refval": "246"
+ },
+ {
+  "id": "132",
+  "ebookno": "BKON7349",
+  "refid": "DPT",
+  "refval": "C"
+ },
+ {
+  "id": "131",
+  "ebookno": "BKON7349",
+  "refid": "DPW",
+  "refval": "2345"
+ },
+ {
+  "id": "124",
+  "ebookno": "BKON7348",
+  "refid": "UCR",
+  "refval": "345"
+ },
+ {
+  "id": "123",
+  "ebookno": "BKON7345",
+  "refid": "UCR",
+  "refval": "246"
+ },
+ {
+  "id": "122",
+  "ebookno": "BKON7344",
+  "refid": "UCR",
+  "refval": "56"
+ },
+ {
+  "id": "121",
+  "ebookno": "BKON7343",
+  "refid": "UCR",
+  "refval": "246"
+ },
+ {
+  "id": "120",
+  "ebookno": "BKON7342",
+  "refid": "UCR",
+  "refval": "246"
+ },
+ {
+  "id": "119",
+  "ebookno": "BKON7341",
+  "refid": "UCR",
+  "refval": "5050"
+ },
+ {
+  "id": "118",
+  "ebookno": "BKON7340",
+  "refid": "ERR",
+  "refval": "BKON6715"
+ },
+ {
+  "id": "117",
+  "ebookno": "BKON7340",
+  "refid": "ERT",
+  "refval": "Normal"
+ },
+ {
+  "id": "116",
+  "ebookno": "BKON7340",
+  "refid": "EOF",
+  "refval": "P~~Prepaid"
+ },
+ {
+  "id": "115",
+  "ebookno": "BKON7340",
+  "refid": "BSR",
+  "refval": "SVMIM ~ SOLVER"
+ },
+ {
+  "id": "114",
+  "ebookno": "BKON7339",
+  "refid": "ERR",
+  "refval": "BKON6715"
+ },
+ {
+  "id": "113",
+  "ebookno": "BKON7339",
+  "refid": "ERT",
+  "refval": "Normal"
+ },
+ {
+  "id": "112",
+  "ebookno": "BKON7339",
+  "refid": "EOF",
+  "refval": "P~~Prepaid"
+ },
+ {
+  "id": "111",
+  "ebookno": "BKON7339",
+  "refid": "BSR",
+  "refval": "SVMIM ~ SOLVER"
+ },
+ {
+  "id": "110",
+  "ebookno": "BKON7240",
+  "refid": "UCR",
+  "refval": "12121"
+ },
+ {
+  "id": "109",
+  "ebookno": "BKON7240",
+  "refid": "ERR",
+  "refval": "BKON6715"
+ },
+ {
+  "id": "108",
+  "ebookno": "BKON7240",
+  "refid": "ERT",
+  "refval": "Normal"
+ },
+ {
+  "id": "107",
+  "ebookno": "BKON7240",
+  "refid": "EOF",
+  "refval": "P"
+ },
+ {
+  "id": "106",
+  "ebookno": "BKON7240",
+  "refid": "BSR",
+  "refval": "SVMIM ~ SOLVER"
+ }
+]

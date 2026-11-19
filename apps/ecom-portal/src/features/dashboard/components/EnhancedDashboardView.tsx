@@ -1,44 +1,76 @@
-// Modified by Sekar Nagarajan (2026-09-01 12:52)
+// Modified by Sekar Nagarajan (2026-10-16 23:50)
 /**
  * Enhanced Dashboard — JSP parity with enhancedDashboard.jsp:
  * KPI filter cards → Upcoming Shipment Planning → Ongoing Transactions, plus analytics sections.
  */
 import { AppButton } from "@solverminds/shared-ui";
-import { Col, Empty, Row, Space, Spin } from "antd";
+import { Space, Spin } from "antd";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { NavDashboardIcon } from "../../../components/icons/nav-svg-icons";
 import { FeaturePageShell } from "../../../components/shared/feature-page-shell";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
-import { MODULE_TITLES } from "../../../constants/module-titles";
 import { BlModuleStyles } from "../../bill-of-lading/components/bl-module-styles";
 import { BlViewDrawer } from "../../bill-of-lading/components/view/BlViewDrawer";
 import { BookingModuleStyles } from "../../booking/components/booking-module-styles";
 import { BookingViewDrawer } from "../../booking/components/view/BookingViewDrawer";
+import type {
+  IntelligenceBreakdowns,
+  PlanningKpi,
+} from "../api/dashboard.api";
 import { useDashboardController } from "../hooks/use-dashboard-controller";
+import { filterDashboardShipments } from "../utils/filter-dashboard-shipments";
 import {
-  MOCK_CALENDAR_WEEKS,
-  MOCK_CONTRACTED_LANES,
-  MOCK_LAST_USED_LANES,
-  MOCK_OPPORTUNITY_LANES,
-  MOCK_PLANNING_KPIS,
-  MOCK_TOP_CONSIGNEES,
-  MOCK_TOP_LANES,
-  MOCK_VOLUME_KPIS,
-  MOCK_VOLUME_TREND,
-} from "../mocks/dashboard.mock";
+  DashboardAnalyticsViewAllModal,
+  type DashboardAnalyticsViewAllState,
+} from "./dashboard-analytics-view-all-modal";
+import { DashboardExportButton } from "./dashboard-export-button";
 import { DashboardModuleStyles } from "./dashboard-module-styles";
 import { DashboardKpiCards } from "./DashboardKpiCards";
 import { DashboardOngoingTable } from "./DashboardOngoingTable";
 import { LaneOpportunitySection, TopActiveLanesSection } from "./LanesSection";
-import { ShipmentIntelligenceSection } from "./ShipmentIntelligenceSection";
+import { PlanningDayBookingsDrawer } from "./PlanningDayBookingsDrawer";
+import {
+  InteractiveShipmentIntelligenceCard,
+  TopConsigneesCard,
+} from "./ShipmentIntelligenceSection";
 import { ShipmentPlanningSection } from "./ShipmentPlanningSection";
 import { VolumeAnalyticsSection } from "./VolumeAnalyticsSection";
 
+/** Zero-state props while the summary is loading or unavailable. */
+const EMPTY_PLANNING_KPIS: PlanningKpi = {
+  bookingsNext7Days: 0,
+  feusNext7Days: 0,
+  missingSI: 0,
+  atRisk: 0,
+};
+const EMPTY_BREAKDOWNS: IntelligenceBreakdowns = {
+  origin: [],
+  pol: [],
+  pod: [],
+  pickup: [],
+  consignee: [],
+  destination: [],
+};
+
 export function EnhancedDashboardView() {
+  const { t } = useTranslation(["dashboard", "common", "modules"]);
   const controller = useDashboardController();
+  const [viewAllState, setViewAllState] =
+    useState<DashboardAnalyticsViewAllState | null>(null);
   const counts = controller.summary?.counts;
   const shipments = controller.summary?.shipments ?? [];
+  const planning = controller.summary?.planning;
+  const lanes = controller.summary?.lanes;
+  const intelligence = controller.summary?.intelligence;
+  // Modified by Sekar Nagarajan (2026-09-08 16:10)
+  const filteredShipmentCount = filterDashboardShipments(
+    shipments,
+    controller.activeFilter,
+  ).length;
 
   return (
     <FeaturePageShell>
@@ -47,8 +79,8 @@ export function EnhancedDashboardView() {
       <BlModuleStyles />
       <ModuleScreenHeader
         icon={NavDashboardIcon}
-        title={MODULE_TITLES.dashboard}
-        subtitle="Shipment KPIs, ongoing transactions, and operational analytics — parity with the legacy enhanced dashboard."
+        title={t("title")}
+        subtitle={t("subtitle")}
         extra={
           <Space wrap>
             <AppButton
@@ -56,15 +88,22 @@ export function EnhancedDashboardView() {
               icon={<AppIcon icon={Icons.plus} size={16} tone="create" />}
               onClick={controller.handleCreateBooking}
             >
-              Create Booking
+              {t("createBooking")}
             </AppButton>
+            <DashboardExportButton
+              activeFilter={controller.activeFilter}
+              filterLabel={controller.filterLabel}
+              shipmentCount={filteredShipmentCount}
+              totalShipmentCount={shipments.length}
+              disabled={!controller.summary || controller.isLoading}
+            />
             <AppButton
               danger
               icon={<AppIcon icon={Icons.refreshCw} size={16} tone="delete" />}
               onClick={() => void controller.loadSummary()}
               loading={controller.isLoading}
             >
-              Refresh
+              {t("refresh")}
             </AppButton>
           </Space>
         }
@@ -77,16 +116,24 @@ export function EnhancedDashboardView() {
               counts={counts}
               activeFilter={controller.activeFilter}
               onFilterChange={controller.handleFilterChange}
+              onViewShipments={controller.handleViewShipments}
             />
           ) : !controller.isLoading ? (
-            <Empty description="Dashboard summary unavailable" />
+            <ModuleEmptyState
+              variant="error"
+              title={t("summaryUnavailableTitle")}
+              message={t("summaryUnavailableMessage")}
+              artSize="md"
+            />
           ) : null}
         </Spin>
 
         <Spin spinning={controller.isLoading}>
           <ShipmentPlanningSection
-            kpis={MOCK_PLANNING_KPIS}
-            calendar={MOCK_CALENDAR_WEEKS}
+            kpis={planning?.kpis ?? EMPTY_PLANNING_KPIS}
+            calendar={planning?.calendar ?? []}
+            onDayClick={controller.handlePlanningDayClick}
+            onViewAll={controller.handleViewAllPlanning}
           />
         </Spin>
 
@@ -101,38 +148,68 @@ export function EnhancedDashboardView() {
           />
         </Spin>
 
-        <Spin spinning={controller.isLoading}>
+        <Spin spinning={controller.isVolumeLoading}>
           <VolumeAnalyticsSection
-            kpis={MOCK_VOLUME_KPIS}
-            trend={MOCK_VOLUME_TREND}
+            kpis={controller.volumeAnalytics?.kpis ?? []}
+            trend={controller.volumeAnalytics?.trend ?? []}
             trendPeriod={controller.trendPeriod}
-            onTrendPeriodChange={controller.setTrendPeriod}
+            volumeStage={controller.volumeStage}
+            onTrendPeriodChange={controller.handleTrendPeriodChange}
+            onVolumeStageChange={controller.handleVolumeStageChange}
           />
         </Spin>
 
-        <div className="dashboard-twin-sections">
-          <Spin spinning={controller.isLoading}>
-            <Row gutter={[16, 16]} className="dashboard-equal-row">
-              <Col xs={24} lg={12}>
-                <TopActiveLanesSection
-                  lanes={MOCK_TOP_LANES}
-                  lastUsed={MOCK_LAST_USED_LANES}
-                />
-              </Col>
-              <Col xs={24} lg={12}>
-                <LaneOpportunitySection
-                  contracted={MOCK_CONTRACTED_LANES}
-                  opportunities={MOCK_OPPORTUNITY_LANES}
-                />
-              </Col>
-            </Row>
-          </Spin>
-
-          <Spin spinning={controller.isLoading}>
-            <ShipmentIntelligenceSection consignees={MOCK_TOP_CONSIGNEES} />
-          </Spin>
-        </div>
+        <Spin spinning={controller.isLoading}>
+          <div className="dashboard-analytics-grid">
+            <div className="dashboard-analytics-grid__cell dashboard-analytics-grid__cell--lanes">
+              <TopActiveLanesSection
+                lanes={lanes?.top ?? []}
+                lastUsed={lanes?.lastUsed ?? []}
+                onViewAllLanes={() => setViewAllState({ kind: "top-lanes" })}
+                onViewAllLastUsed={() => setViewAllState({ kind: "last-used" })}
+              />
+            </div>
+            <div className="dashboard-analytics-grid__cell dashboard-analytics-grid__cell--opportunities">
+              <LaneOpportunitySection
+                contracted={lanes?.contracted ?? []}
+                opportunities={lanes?.opportunities ?? []}
+                onViewAll={() => setViewAllState({ kind: "opportunities" })}
+              />
+            </div>
+            <div className="dashboard-analytics-grid__cell dashboard-analytics-grid__cell--intelligence">
+              <InteractiveShipmentIntelligenceCard
+                breakdowns={intelligence?.breakdowns ?? EMPTY_BREAKDOWNS}
+                onViewReport={() => setViewAllState({ kind: "intelligence" })}
+              />
+            </div>
+            <div className="dashboard-analytics-grid__cell dashboard-analytics-grid__cell--consignees">
+              <TopConsigneesCard
+                consignees={intelligence?.consignees ?? []}
+                onViewAll={() => setViewAllState({ kind: "consignees" })}
+              />
+            </div>
+          </div>
+        </Spin>
       </Space>
+
+      <DashboardAnalyticsViewAllModal
+        state={viewAllState}
+        onClose={() => setViewAllState(null)}
+        topLanes={lanes?.top ?? []}
+        lastUsed={lanes?.lastUsed ?? []}
+        contracted={lanes?.contracted ?? []}
+        opportunities={lanes?.opportunities ?? []}
+        consignees={intelligence?.consignees ?? []}
+        breakdowns={intelligence?.breakdowns ?? EMPTY_BREAKDOWNS}
+      />
+
+      {controller.planningDay ? (
+        <PlanningDayBookingsDrawer
+          selection={controller.planningDay}
+          onClose={controller.handleClosePlanningDayDrawer}
+          onViewBooking={controller.handleViewPlanningBooking}
+        />
+      ) : null}
 
       {controller.selectedBooking ? (
         <BookingViewDrawer
@@ -147,6 +224,8 @@ export function EnhancedDashboardView() {
           onClose={controller.handleCloseBlDrawer}
         />
       ) : null}
+
+      {/* <DashboardScrollTopButton /> */}
     </FeaturePageShell>
   );
 }

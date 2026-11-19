@@ -1,0 +1,62 @@
+[
+ {
+  "id": 10,
+  "module": "BOL",
+  "activity": "Declined By the Agency",
+  "activitycode": "DDA "
+ },
+ {
+  "id": 9,
+  "module": "BOL",
+  "activity": "Accepted By the Agency",
+  "activitycode": "DAA "
+ },
+ {
+  "id": 8,
+  "module": "BOL",
+  "activity": "Send to Agency",
+  "activitycode": "DSA "
+ },
+ {
+  "id": 7,
+  "module": "SHI",
+  "activity": "Declined By the Agency",
+  "activitycode": "SDA "
+ },
+ {
+  "id": 6,
+  "module": "SHI",
+  "activity": "Accepted By the Agency",
+  "activitycode": "SAA "
+ },
+ {
+  "id": 5,
+  "module": "SHI",
+  "activity": "Send to Agency",
+  "activitycode": "SSA "
+ },
+ {
+  "id": 4,
+  "module": "BKG",
+  "activity": "Amendment Send to Agency",
+  "activitycode": "BMA "
+ },
+ {
+  "id": 3,
+  "module": "BKG",
+  "activity": "Declined By the Agency",
+  "activitycode": "BDA "
+ },
+ {
+  "id": 2,
+  "module": "BKG",
+  "activity": "Accepted By the Agency",
+  "activitycode": "BAA "
+ },
+ {
+  "id": 1,
+  "module": "BKG",
+  "activity": "Send to Agency",
+  "activitycode": "BSA "
+ }
+]

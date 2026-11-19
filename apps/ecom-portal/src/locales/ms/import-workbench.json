@@ -1,0 +1,169 @@
+{
+  "header": {
+    "defaultSubtitle": "Muat naik buku kerja, semak baris, kemudian serah baris yang sah.",
+    "replaceFile": "Ganti Fail",
+    "downloadTemplate": "Muat Turun Templat",
+    "exportReview": "Eksport Semakan",
+    "columnGuide": "Panduan Lajur"
+  },
+  "empty": {
+    "uploadAria": "Muat naik buku kerja",
+    "uploadTitle": "Muat naik buku kerja",
+    "uploadHint": "Lepaskan fail Excel di sini, atau muat turun templat dahulu supaya pengepala sepadan dengan lajur yang diperlukan.",
+    "xlsxOnly": ".xlsx sahaja",
+    "headerRequired": "Baris pengepala diperlukan",
+    "maxSize": "Maks {{maxMb}} MB",
+    "dropTitle": "Lepaskan buku kerja",
+    "dropDescription": "Seret dan lepas atau klik untuk melayari",
+    "columnGuideAria": "Panduan lajur",
+    "columnGuideTitle": "Panduan lajur",
+    "columnGuideHint": "Medan wajib muncul dahulu dalam templat dan dalam senarai ini."
+  },
+  "metrics": {
+    "ariaLabel": "Metrik semakan import",
+    "file": "Fail",
+    "rows": "Baris",
+    "invalid": "Tidak sah",
+    "issues": "Isu",
+    "valid": "Sah"
+  },
+  "toolbar": {
+    "allColumns": "Semua Lajur",
+    "sheet": "Helaian",
+    "allRows": "Semua baris",
+    "errors": "Ralat",
+    "addCountryCode": "Tambah Kod Negara",
+    "replaceInvalid": "Ganti Tidak Sah",
+    "fillEmpty": "Isi Kosong",
+    "prev": "Sebelum",
+    "hideErrors": "Sembunyikan Ralat",
+    "invalidCount": "{{count}} tidak sah",
+    "emptyCount": "{{count}} kosong"
+  },
+  "actions": {
+    "submitDefault": "Serah {{count}} {{entityLabel}}"
+  },
+  "status": {
+    "row": "Baris",
+    "status": "Status",
+    "ready": "Sedia",
+    "fixed": "Dibaiki",
+    "errorsCount": "{{count}} ralat"
+  },
+  "confirms": {
+    "leaveTitle": "Tinggalkan import?",
+    "leaveMessage": "Buku kerja yang dimuatkan dan pembetulan akan hilang. Kekal di halaman ini untuk teruskan, atau buang dan tinggalkan."
+  },
+  "toasts": {
+    "templateFailed": "Tidak dapat menjana templat import. Sila cuba lagi."
+  },
+  "errors": {
+    "maxRows": "Helaian ini mempunyai {{rowCount}} baris. Import pukal menerima maksimum {{maxRowCount}} {{entityLabel}} setiap fail. Pecahkan buku kerja dan cuba lagi.",
+    "unableToRead": "Tidak dapat membaca fail Excel yang dipilih."
+  },
+  "a11y": {
+    "previousError": "Ralat sebelumnya",
+    "nextError": "Ralat seterusnya",
+    "toggleErrors": "Togol ralat",
+    "hideErrors": "Sembunyikan ralat"
+  },
+  "grid": {
+    "analyzing": "Menganalisis buku kerja..."
+  },
+  "badges": {
+    "required": "Wajib",
+    "optional": "Pilihan"
+  },
+  "errorsDrawer": {
+    "title": "Ralat",
+    "titleWithCount": "Ralat ({{count}})",
+    "noErrors": "Tiada ralat pengesahan.",
+    "ignoredColumns": "Lajur diabaikan: {{columns}}",
+    "rowField": "Baris {{rowNumber}} · {{fieldLabel}}",
+    "serverPrefix": "Pelayan: {{message}}",
+    "serverField": "Pelayan",
+    "kinds": {
+      "required": "Wajib",
+      "selectValid": "Pilih pilihan yang sah",
+      "invalidLength": "Panjang tidak sah",
+      "invalidPhone": "Telefon tidak sah",
+      "invalidEmail": "E-mel tidak sah"
+    }
+  },
+  "bulkFix": {
+    "modes": {
+      "invalid": "Ganti Nilai Tidak Sah",
+      "countryCode": "Tambah Kod Negara",
+      "empty": "Isi Nilai Kosong"
+    },
+    "descriptions": {
+      "invalid": "Hanya sel yang gagal pengesahan untuk lajur ini akan diubah. Sel kosong dibiarkan.",
+      "countryCode": "Hanya nombor telefon yang tiada kod negara akan dikemas kini apabila ia boleh dinormalkan.",
+      "empty": "Hanya sel kosong dalam lajur ini akan diubah. Nilai sedia ada kekal."
+    },
+    "labels": {
+      "countryCode": "Kod negara",
+      "replacementFor": "Nilai gantian untuk {{field}}",
+      "fillInto": "Nilai untuk diisi ke dalam sel {{field}} yang kosong",
+      "matchingCells": "Sel yang sepadan",
+      "valueType": "Jenis nilai",
+      "format": "Format",
+      "missingCountryCode": "Kod negara tiada",
+      "otherInvalidPhones": "Telefon tidak sah lain",
+      "empty": "Kosong",
+      "phoneE164": "Telefon (E.164)"
+    },
+    "placeholders": {
+      "select": "Pilih…",
+      "selectField": "Pilih {{field}}",
+      "enterAmount": "Masukkan jumlah",
+      "enter": "Masukkan…",
+      "enterField": "Masukkan {{field}}",
+      "selectCountryCode": "Pilih kod negara"
+    },
+    "options": {
+      "clearValue": "Kosongkan nilai"
+    },
+    "hints": {
+      "clearOptional": "Biarkan kosong untuk mengosongkan medan pilihan ini dalam sel yang sepadan.",
+      "countryCodeConvert": "Pilih negara dan nombor yang sepadan akan ditukar kepada format antarabangsa.",
+      "enterValid": "Masukkan {{field}} yang sah untuk mendayakan guna."
+    },
+    "apply": {
+      "replaceCells_one": "Ganti {{count}} sel",
+      "replaceCells_other": "Ganti {{count}} sel",
+      "updateNumbers_one": "Kemas kini {{count}} nombor",
+      "updateNumbers_other": "Kemas kini {{count}} nombor",
+      "fillCells_one": "Isi {{count}} sel",
+      "fillCells_other": "Isi {{count}} sel"
+    }
+  },
+  "fieldOverview": {
+    "requiredFields": "Medan wajib",
+    "optionalFields": "Medan pilihan",
+    "required": "Wajib",
+    "optional": "Pilihan",
+    "eg": "cth. {{value}}",
+    "default": "Lalai: {{value}}",
+    "header": "Pengepala: {{headers}}",
+    "example": "Contoh: {{value}}"
+  },
+  "columnGuide": {
+    "intro": "Gunakan format contoh ini semasa menyemak atau membaiki nilai buku kerja.",
+    "alsoAccepts": "Juga menerima: {{aliases}}",
+    "format": "Format: {{format}}",
+    "defaultsTo": "Lalai kepada {{value}} apabila kosong",
+    "freeText": "Teks bebas"
+  },
+  "formatHints": {
+    "phone": "Format antarabangsa dengan kod negara",
+    "email": "Alamat e-mel standard",
+    "currency": "Jumlah berangka",
+    "number": "Nilai berangka"
+  },
+  "phone": {
+    "required": "Nombor telefon diperlukan",
+    "invalid": "Nombor telefon tidak sah",
+    "countryCodeRequired": "Kod negara diperlukan. Gunakan format antarabangsa seperti +919876543210."
+  }
+}

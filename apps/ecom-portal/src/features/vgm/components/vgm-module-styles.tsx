@@ -1,5 +1,7 @@
-// Modified by Sekar Nagarajan (2026-08-26 17:24)
+// Modified by Sekar Nagarajan (2026-10-19 17:25)
 import { theme } from "antd";
+
+import { tokenMix } from "../../theme/utils/token-mix";
 
 export function VgmModuleStyles() {
   const { token } = theme.useToken();
@@ -144,25 +146,279 @@ export function VgmModuleStyles() {
         font-weight: ${token.fontWeightStrong};
         color: ${token.colorText};
       }
-      /* Modified by Sekar Nagarajan (2026-09-01 00:47) — meta details in card header (right side) */
-      .vgm-header-extra {
+      /* Booking / B/L Details — TrackingOverview-style meta + expand */
+      /* Modified by Sekar Nagarajan (2026-10-19 17:25) — Booking / B/L reference strip */
+      .vgm-reference-card > .ant-card-head {
         display: flex;
         align-items: center;
-        justify-content: flex-end;
+      }
+      .vgm-reference-card__ref-tag.ant-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        margin-inline-end: 0;
+        padding-inline: ${token.paddingSM}px;
+        line-height: ${token.controlHeightSM - 2}px;
+        border-radius: ${token.borderRadiusLG * 2}px;
+      }
+      .vgm-reference-card__ref-kind {
+        opacity: 0.8;
+      }
+      .vgm-reference-card__ref-kind::after {
+        content: " ·";
+      }
+      .vgm-reference-card__ref-no {
+        font-weight: ${token.fontWeightStrong};
+        font-variant-numeric: tabular-nums;
+      }
+      .vgm-reference-layout {
+        display: grid;
+        grid-template-columns: minmax(240px, 1fr) minmax(0, 2.2fr);
+        gap: ${token.marginLG}px;
+        align-items: stretch;
+        width: 100%;
+      }
+      .vgm-reference-parties {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginSM}px;
+        min-width: 0;
+      }
+      .vgm-reference-fact {
+        display: flex;
+        align-items: center;
+        flex: 1 1 0;
+        gap: ${token.marginSM}px;
+        min-width: 0;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${token.colorFillAlter};
+      }
+      .vgm-reference-fact__icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: ${token.controlHeight}px;
+        height: ${token.controlHeight}px;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorBgContainer};
+        color: ${token.colorTextSecondary};
+      }
+      .vgm-reference-fact__icon--ap {
+        color: ${token.geekblue};
+        background: ${tokenMix(token.geekblue, 10)};
+        border-color: ${tokenMix(token.geekblue, 30)};
+      }
+      .vgm-reference-fact__icon--shipper {
+        color: ${token.colorWarning};
+        background: ${tokenMix(token.colorWarning, 10)};
+        border-color: ${tokenMix(token.colorWarning, 35)};
+      }
+      .vgm-reference-fact__copy {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS / 2}px;
+        min-width: 0;
+      }
+      .vgm-reference-fact__label {
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: ${token.colorTextTertiary};
+        line-height: 1.2;
+      }
+      .vgm-reference-fact__value {
+        font-size: ${token.fontSize}px;
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+        line-height: 1.4;
+        word-break: break-word;
+      }
+      .vgm-reference-route {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginSM}px;
+        min-width: 0;
+        padding: ${token.paddingMD}px ${token.paddingLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG + 2}px;
+        background: linear-gradient(
+          180deg,
+          ${tokenMix(token.colorPrimary, 8)} 0%,
+          ${token.colorBgContainer} 100%
+        );
+      }
+      .vgm-reference-route__band {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(140px, 1.2fr) minmax(0, 1fr);
+        gap: ${token.marginMD}px;
+        align-items: center;
+      }
+      .vgm-reference-route__stop {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: ${token.marginXXS}px;
+        min-width: 0;
+      }
+      .vgm-reference-route__stop--dest {
+        align-items: flex-end;
+        text-align: right;
+      }
+      .vgm-reference-route__eyebrow {
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: ${token.colorPrimary};
+        line-height: 1.2;
+      }
+      .vgm-reference-route__stop--dest .vgm-reference-route__eyebrow {
+        color: ${token.colorSuccess};
+      }
+      .vgm-reference-route__place {
+        font-size: ${token.fontSizeLG}px;
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+        line-height: 1.25;
+        word-break: break-word;
+      }
+      .vgm-reference-route__code {
+        font-size: ${token.fontSizeSM}px;
+        letter-spacing: 0.04em;
+        color: ${token.colorTextSecondary};
+        line-height: 1.3;
+      }
+      .vgm-reference-route__pill {
+        display: inline-flex;
+        align-items: center;
+        margin-top: ${token.marginXXS}px;
+        padding: ${token.paddingXXS / 2}px ${token.paddingSM}px;
+        border-radius: ${token.borderRadiusSM}px;
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        line-height: 1.4;
+        white-space: nowrap;
+      }
+      .vgm-reference-route__pill--etd {
+        color: ${token.colorInfo};
+        background: ${tokenMix(token.colorInfo, 8)};
+        border: 1px solid ${tokenMix(token.colorInfo, 14)};
+      }
+      .vgm-reference-route__pill--eta {
+        color: ${token.colorSuccess};
+        background: ${tokenMix(token.colorSuccess, 8)};
+        border: 1px solid ${tokenMix(token.colorSuccess, 14)};
+      }
+      .vgm-reference-route__connector {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginXS}px;
+        width: 100%;
+        min-width: 0;
+      }
+      .vgm-reference-route__dot {
+        flex-shrink: 0;
+        width: ${token.marginXS + 2}px;
+        height: ${token.marginXS + 2}px;
+        border-radius: 50%;
+      }
+      .vgm-reference-route__dot--origin {
+        background: ${token.colorInfo};
+      }
+      .vgm-reference-route__dot--dest {
+        background: ${token.colorSuccess};
+      }
+      .vgm-reference-route__dash {
+        flex: 1 1 0;
+        min-width: ${token.marginSM}px;
+        height: 0;
+        border-top: ${token.lineWidthBold}px dashed ${tokenMix(token.colorInfo, 45)};
+      }
+      .vgm-reference-route__transit {
+        display: inline-flex;
+        align-items: center;
+        flex-shrink: 0;
+        gap: ${token.marginXXS}px;
+        padding: ${token.paddingXXS}px ${token.paddingMD}px;
+        border-radius: ${token.borderRadiusLG * 2}px;
+        border: 1px solid ${tokenMix(token.colorInfo, 35)};
+        background: ${tokenMix(token.colorInfo, 8)};
+        color: ${token.colorInfo};
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        white-space: nowrap;
+      }
+      .vgm-reference-route__ports {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: ${token.marginSM}px;
+        padding-top: ${token.paddingSM}px;
+        border-top: 1px solid ${token.colorBorderSecondary};
+      }
+      .vgm-reference-port {
+        display: inline-flex;
+        align-items: baseline;
         flex-wrap: wrap;
-        gap: ${token.marginMD}px ${token.marginLG}px;
+        gap: ${token.marginXXS}px ${token.marginXS}px;
+        min-width: 0;
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
       }
-      .vgm-meta-row--header {
-        margin-bottom: 0;
-        gap: ${token.marginSM}px ${token.marginLG}px;
+      .vgm-reference-port .app-icon {
+        align-self: center;
+        color: ${token.colorTextTertiary};
       }
-      .vgm-meta-row--header .vgm-meta-item {
-        min-width: auto;
+      .vgm-reference-port--pod {
+        justify-content: flex-end;
+        text-align: right;
       }
-      /* Modified by Sekar Nagarajan (2026-09-01 10:58) — schedule-card embed in collapsible card */
-      .vgm-reference-schedule-wrap {
-        margin: calc(-1 * ${token.paddingLG}px);
-        margin-top: 0;
+      .vgm-reference-port__label {
+        font-weight: ${token.fontWeightStrong};
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: ${token.colorTextTertiary};
+      }
+      .vgm-reference-port__code {
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+      }
+      .vgm-reference-port__name {
+        word-break: break-word;
+      }
+      @media (max-width: 1199px) {
+        .vgm-reference-layout {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .vgm-reference-parties {
+          flex-direction: row;
+        }
+      }
+      @media (max-width: 767px) {
+        .vgm-reference-parties {
+          flex-direction: column;
+        }
+        .vgm-reference-route {
+          padding: ${token.paddingMD}px;
+        }
+        .vgm-reference-route__band {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .vgm-reference-route__stop--dest {
+          align-items: flex-start;
+          text-align: left;
+        }
+        .vgm-reference-route__ports {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .vgm-reference-port--pod {
+          justify-content: flex-start;
+          text-align: left;
+        }
       }
       /* Modified by Sekar Nagarajan (2026-09-01 00:56) — declaration fields 5-column grid */
       .vgm-declaration-grid {

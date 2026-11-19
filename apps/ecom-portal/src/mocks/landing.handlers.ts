@@ -1,50 +1,15 @@
-// Modified by Sekar Nagarajan (2026-08-31 17:03)
+// Modified by Sekar Nagarajan (2026-10-17 00:20)
 import { PRECONFIGURED_TENANTS } from "@solverminds/auth";
 import { http, HttpResponse } from "msw";
 import type { LoginSuccessResponse } from "../features/auth/types/auth.types";
-import { registerMockToken } from "./auth-admin.mock-data";
-import type {
-  EquipmentType,
-  PortOption,
-  TabConfig,
-} from "../features/landing/types/landing.types";
+import type { TabConfig } from "../features/landing/types/landing.types";
+import { registerMockToken } from "./auth-token-registry";
+import { fixtureEquipmentTypes, fixturePorts } from "./fixture-api/bridges/lookups.bridge";
 
 // ---------------------------------------------------------------------------
-// Mock data
+// Origin / Delivery typeahead and equipment types come from the extracted masters
+// (ports / equipments fixtures) via fixture-api/bridges/lookups.bridge.ts.
 // ---------------------------------------------------------------------------
-const MOCK_PORTS: PortOption[] = [
-  { portCode: "SGSIN", portName: "Singapore", label: "SGSIN - Singapore" },
-  { portCode: "CNSHA", portName: "Shanghai", label: "CNSHA - Shanghai" },
-  { portCode: "USNYC", portName: "New York", label: "USNYC - New York" },
-  { portCode: "GBFXT", portName: "Felixstowe", label: "GBFXT - Felixstowe" },
-  {
-    portCode: "AEDXB",
-    portName: "Dubai (Jebel Ali)",
-    label: "AEDXB - Dubai (Jebel Ali)",
-  },
-  { portCode: "DEHAM", portName: "Hamburg", label: "DEHAM - Hamburg" },
-  { portCode: "NLRTM", portName: "Rotterdam", label: "NLRTM - Rotterdam" },
-  { portCode: "INMAA", portName: "Chennai", label: "INMAA - Chennai" },
-  {
-    portCode: "INMUN",
-    portName: "Mumbai (JNPT)",
-    label: "INMUN - Mumbai (JNPT)",
-  },
-  { portCode: "INPAV", portName: "Pipavav", label: "INPAV - Pipavav" },
-  { portCode: "HKHKG", portName: "Hong Kong", label: "HKHKG - Hong Kong" },
-  { portCode: "JPYOK", portName: "Yokohama", label: "JPYOK - Yokohama" },
-];
-
-const MOCK_EQUIPMENT_TYPES: EquipmentType[] = [
-  { code: "20GP", name: "20' General Purpose" },
-  { code: "40GP", name: "40' General Purpose" },
-  { code: "40HC", name: "40' High Cube" },
-  { code: "20RF", name: "20' Reefer" },
-  { code: "40RF", name: "40' Reefer" },
-  { code: "20OT", name: "20' Open Top" },
-  { code: "40OT", name: "40' Open Top" },
-];
-
 const MOCK_TAB_CONFIG: TabConfig = {
   schedules: "public",
   tracking: "public",
@@ -442,21 +407,16 @@ registerMockToken(MOCK_SUPERUSER_USER.token, MOCK_SUPERUSER_USER.user);
 // MSW Handlers
 // ---------------------------------------------------------------------------
 export const landingHandlers = [
-  // Port search
+  // Port search — ports master (portcode / portname), label "CODE - NAME"
   http.get("/api/ports/search", ({ request }) => {
     const url = new URL(request.url);
-    const q = (url.searchParams.get("q") ?? "").toLowerCase();
-    const results = MOCK_PORTS.filter(
-      (p) =>
-        p.portCode.toLowerCase().includes(q) ||
-        p.portName.toLowerCase().includes(q),
-    );
-    return HttpResponse.json({ data: results });
+    const q = url.searchParams.get("q") ?? "";
+    return HttpResponse.json({ data: fixturePorts(q) });
   }),
 
-  // Equipment types
+  // Equipment types — equipments master (status A), label from equipdesc
   http.get("/api/equipment-types", () => {
-    return HttpResponse.json({ data: MOCK_EQUIPMENT_TYPES });
+    return HttpResponse.json({ data: fixtureEquipmentTypes() });
   }),
 
   // Tab config (menu access) — handled by auth-admin.handlers.ts
@@ -473,14 +433,19 @@ export const landingHandlers = [
     });
   }),
 
-  // Captcha validation
-  http.get("/api/captcha/validate", () => {
-    return HttpResponse.json({ valid: true });
+  // Captcha validation — mock image shows "A8K2F" (case-insensitive).
+  http.get("/api/captcha/validate", ({ request }) => {
+    const url = new URL(request.url);
+    const code = (url.searchParams.get("code") ?? "").trim().toUpperCase();
+    const valid = code === "A8K2F";
+    return HttpResponse.json({ valid });
   }),
 
   // Login — mock success/failure
   http.post("/api/auth/login", async ({ request }) => {
-    const body = (await request.json()) as {
+    // Read a clone: when no tenant pattern matches we fall through to auth.handlers.ts, which must
+    // still be able to read the body (a consumed body would make the next handler fail with 500).
+    const body = (await request.clone().json()) as {
       userName: string;
       password: string;
     };
@@ -563,7 +528,8 @@ export const landingHandlers = [
       return HttpResponse.json({ data: MOCK_TENANT_USERS.TENANT_10 });
     }
 
-    // Default to Tenant 01 (SVM Shipping Lines)
-    return HttpResponse.json({ data: MOCK_TENANT_USERS.TENANT_01 });
+    // Modified by Sekar Nagarajan (2026-10-17 00:05) — anything else (test/test, any fixture
+    // login name) falls through to auth.handlers.ts, which resolves users from the SQL fixtures.
+    return undefined;
   }),
 ];

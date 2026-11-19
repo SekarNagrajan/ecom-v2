@@ -1,287 +1,406 @@
-// Modified by Sekar Nagarajan (2026-08-26 16:57)
+// Modified by Sekar Nagarajan (2026-11-12 18:00)
+/**
+ * Customer Advisories — operational notices in a DataView grid with a publish drawer (severity,
+ * headline, message, validity window) and a read-only detail popup.
+ */
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AppButton,
-  AppDrawer,
+  AppModal,
+  FormDatePicker,
   FormInput,
-  FormSelect,
+  FormSegmented,
   FormTextarea,
+  FormattedDate,
 } from "@solverminds/shared-ui";
-import { useToast } from "@solverminds/shared-ui/hooks";
-import { Table, Tag, Typography } from "antd";
-import type { ColumnsType } from "antd/es/table";
-import { useState } from "react";
+import { DataView, type DataViewColumn } from "@solverminds/shared-ui/data-view";
+import { useConfirm } from "@solverminds/shared-ui/hooks";
+import { Col, Descriptions, Row, Typography } from "antd";
+import { DateTime } from "luxon";
+import { useRef, useState } from "react";
 import { useForm, type Resolver } from "react-hook-form";
-import { z } from "zod";
 
 import { AppIcon, Icons } from "../../../components/icons";
-import type { CustomerAdvisory } from "../types/admin.types";
-import { AdminPanelShell } from "./AdminPanelShell";
+import { buildActionsColumn } from "../../../components/shared/build-actions-column";
+import {
+  FIELD_GUTTER,
+  FIELD_ITEM_PROPS,
+  optLabel,
+  reqLabel,
+} from "../../../components/shared/form-field-label";
+import {
+  ListActionButton,
+  ListActionsRow,
+} from "../../../components/shared/list-action-button";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
+import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
+import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
+import { useAiTextAssist } from "../../ai-assist";
+import {
+  ADVISORY_SEVERITY_OPTIONS,
+  AdvisoryUpsertSchema,
+  type AdvisorySeverity,
+  type AdvisoryUpsertValues,
+  type CustomerAdvisory,
+} from "../types/admin.types";
+import { advisoryStatus, todayIsoDate, type AdvisoryStatus } from "../utils/admin.utils";
+import { AdminDrawer } from "./shared/AdminDrawer";
+import { AdminFormSection } from "./shared/AdminFormSection";
+import { AdminSectionPage } from "./shared/AdminSectionPage";
+import { AdminStatusPill, type AdminPillTone } from "./shared/AdminStatusPill";
 
-const { Text } = Typography;
+const { Text, Paragraph } = Typography;
 
-const FIELD_ITEM_PROPS = {
-  layout: "vertical" as const,
-  colon: false,
+const STATUS_META: Record<AdvisoryStatus, { label: string; tone: AdminPillTone }> = {
+  active: { label: "Active", tone: "success" },
+  scheduled: { label: "Scheduled", tone: "processing" },
+  expired: { label: "Expired", tone: "neutral" },
+  inactive: { label: "Inactive", tone: "neutral" },
 };
 
-const SEVERITY_OPTIONS = [
-  { label: "Info (General Update)", value: "INFO" },
-  { label: "Warning (Operational Delay)", value: "WARNING" },
-  { label: "Urgent (Port Closure / Severe Weather)", value: "URGENT" },
-] as const;
-
-const advisoryCreateSchema = z.object({
-  severity: z.enum(["INFO", "WARNING", "URGENT"]),
-  title: z.string().min(1, "Advisory headline is required"),
-  message: z.string().min(1, "Announcement message is required"),
-});
-
-type AdvisoryCreateForm = z.infer<typeof advisoryCreateSchema>;
-
-const DEFAULT_ADVISORY_FORM: AdvisoryCreateForm = {
-  severity: "WARNING",
-  title: "",
-  message: "",
+const SEVERITY_META: Record<
+  AdvisorySeverity,
+  { label: string; tone: AdminPillTone; icon: typeof Icons.info }
+> = {
+  INFO: { label: "Info", tone: "info", icon: Icons.info },
+  WARNING: { label: "Warning", tone: "warning", icon: Icons.alertTriangle },
+  URGENT: { label: "Urgent", tone: "error", icon: Icons.megaphone },
 };
 
 interface CustomerAdvisoryViewProps {
   advisories: CustomerAdvisory[];
-  onCreate: (adv: Omit<CustomerAdvisory, "id">) => Promise<CustomerAdvisory>;
+  onCreate: (advisory: Omit<CustomerAdvisory, "id">) => Promise<CustomerAdvisory>;
+  isCreating: boolean;
+  isFetching: boolean;
 }
 
-function advisoriesSignature(items: CustomerAdvisory[]) {
-  return items
-    .map(
-      (item) =>
-        `${item.id}:${item.isActive}:${item.severity}:${item.title}:${item.message}`,
-    )
-    .join("|");
-}
-
-function reqLabel(label: string) {
+function SeverityPill({ severity }: { severity: AdvisorySeverity }) {
+  const meta = SEVERITY_META[severity];
   return (
-    <span className="form-field-label">
-      {label} <Text type="danger">*</Text>
-    </span>
+    <AdminStatusPill tone={meta.tone} icon={meta.icon}>
+      {meta.label}
+    </AdminStatusPill>
   );
-}
-
-function optLabel(label: string) {
-  return <span className="form-field-label">{label}</span>;
 }
 
 export function CustomerAdvisoryView({
   advisories,
   onCreate,
+  isCreating,
+  isFetching,
 }: CustomerAdvisoryViewProps) {
-  const toast = useToast();
-  const [draft, setDraft] = useState<CustomerAdvisory[]>(advisories);
-  const [appliedSignature, setAppliedSignature] = useState(() =>
-    advisoriesSignature(advisories),
-  );
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
+  const confirm = useConfirm();
+  const { profileHandlers } = useLocalGridProfiles("admin-advisories");
+  const { textareaAssistProps } = useAiTextAssist();
+  const publishButtonRef = useRef<HTMLSpanElement>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [viewing, setViewing] = useState<CustomerAdvisory | null>(null);
 
-  const nextSignature = advisoriesSignature(advisories);
-  if (nextSignature !== appliedSignature) {
-    setAppliedSignature(nextSignature);
-    setDraft(advisories);
-  }
+  const today = todayIsoDate();
+  const rows = advisories.map((a) => ({ ...a, status: advisoryStatus(a, today) }));
 
-  const form = useForm<AdvisoryCreateForm>({
-    resolver: zodResolver(advisoryCreateSchema) as Resolver<AdvisoryCreateForm>,
-    defaultValues: DEFAULT_ADVISORY_FORM,
+  const defaults = (): AdvisoryUpsertValues => ({
+    severity: "WARNING",
+    title: "",
+    message: "",
+    effectiveFrom: today,
+    effectiveTo: "",
+  });
+
+  const form = useForm<AdvisoryUpsertValues>({
+    resolver: zodResolver(AdvisoryUpsertSchema) as Resolver<AdvisoryUpsertValues>,
+    defaultValues: defaults(),
     mode: "onChange",
   });
+  const effectiveFrom = form.watch("effectiveFrom");
 
-  const activeCount = draft.filter((item) => item.isActive).length;
-  const urgentCount = draft.filter((item) => item.severity === "URGENT").length;
-
+  const openDrawer = () => {
+    form.reset(defaults());
+    setDrawerOpen(true);
+  };
   const closeDrawer = () => {
-    setIsDrawerOpen(false);
-    form.reset(DEFAULT_ADVISORY_FORM);
+    setDrawerOpen(false);
+    form.reset(defaults());
   };
 
-  const handleSave = form.handleSubmit(async (values) => {
-    setIsSaving(true);
+  const publish = async (values: AdvisoryUpsertValues) => {
     try {
       await onCreate({
-        title: values.title.trim(),
-        message: values.message.trim(),
+        title: values.title,
+        message: values.message,
         severity: values.severity,
-        effectiveFrom: new Date().toISOString().split("T")[0],
-        effectiveTo: "2026-12-31",
+        effectiveFrom: values.effectiveFrom,
+        effectiveTo: values.effectiveTo || "",
         isActive: true,
       });
-      toast.success("Operational advisory published successfully");
       closeDrawer();
     } catch {
-      toast.error("Failed to publish advisory");
-    } finally {
-      setIsSaving(false);
+      /* surfaced by the mutation's onError toast */
     }
+  };
+
+  const handlePublish = form.handleSubmit((values) => {
+    if (values.severity === "URGENT") {
+      confirm.show({
+        title: "Publish Urgent Advisory",
+        content: "Urgent advisories are shown prominently to every customer. Publish now?",
+        okText: "Publish",
+        cancelText: "Cancel",
+        onOk: () => publish(values),
+      });
+      return;
+    }
+    return publish(values);
   });
 
-  const columns: ColumnsType<CustomerAdvisory> = [
+  type Row = CustomerAdvisory & { status: AdvisoryStatus };
+  const columnDefs: DataViewColumn<Row>[] = [
     {
-      title: "Actions",
-      key: "actions",
-      width: 110,
-      fixed: "left",
-      render: (_: unknown, record: CustomerAdvisory) => (
-        <Tag
-          className="admin-status-tag"
-          color={record.isActive ? "success" : "default"}
-        >
-          {record.isActive ? "Active" : "Expired"}
-        </Tag>
+      ...buildActionsColumn<Row>({
+        field: "id",
+        width: 72,
+        cellRenderer: (params) => {
+          const row = params.data;
+          if (!row) return null;
+          return (
+            <ListActionsRow>
+              <ListActionButton
+                title="View Details"
+                tone="view"
+                icon={<AppIcon icon={Icons.eye} size={16} />}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setViewing(row);
+                }}
+              />
+            </ListActionsRow>
+          );
+        },
+      }),
+      colId: "actions",
+    },
+    {
+      headerName: "Status",
+      field: "status",
+      width: 130,
+      cellRenderer: (params: { value?: AdvisoryStatus }) =>
+        params.value ? (
+          <AdminStatusPill tone={STATUS_META[params.value].tone}>
+            {STATUS_META[params.value].label}
+          </AdminStatusPill>
+        ) : null,
+      valueFormatter: (params) => (params.value ? STATUS_META[params.value as AdvisoryStatus].label : ""),
+    },
+    {
+      headerName: "Severity",
+      field: "severity",
+      width: 130,
+      cellRenderer: (params: { value?: AdvisorySeverity }) =>
+        params.value ? <SeverityPill severity={params.value} /> : null,
+      valueFormatter: (params) => (params.value ? SEVERITY_META[params.value as AdvisorySeverity].label : ""),
+    },
+    {
+      headerName: "Headline",
+      field: "title",
+      flex: 1.3,
+      minWidth: 200,
+      cellRenderer: (params: { value?: string }) => <Text strong>{params.value}</Text>,
+    },
+    {
+      headerName: "Message",
+      field: "message",
+      flex: 2,
+      minWidth: 240,
+      tooltipField: "message",
+    },
+    {
+      headerName: "Effective From",
+      field: "effectiveFrom",
+      width: 150,
+      cellRenderer: (params: { value?: string }) => <FormattedDate value={params.value || null} />,
+    },
+    {
+      headerName: "Effective To",
+      field: "effectiveTo",
+      width: 150,
+      cellRenderer: (params: { value?: string }) => (
+        <FormattedDate value={params.value || null} fallback={<Text type="secondary">Open-ended</Text>} />
       ),
-    },
-    {
-      title: "Severity",
-      dataIndex: "severity",
-      key: "severity",
-      render: (sev: CustomerAdvisory["severity"]) => {
-        const colorMap = {
-          INFO: "blue",
-          WARNING: "orange",
-          URGENT: "red",
-        } as const;
-        const labelMap = {
-          INFO: "Info",
-          WARNING: "Warning",
-          URGENT: "Urgent",
-        } as const;
-        return (
-          <Tag className="admin-status-tag" color={colorMap[sev]}>
-            {labelMap[sev]}
-          </Tag>
-        );
-      },
-    },
-    {
-      title: "Advisory Title",
-      dataIndex: "title",
-      key: "title",
-      render: (val: string) => <Text strong>{val}</Text>,
-    },
-    {
-      title: "Announcement Content",
-      dataIndex: "message",
-      key: "message",
-    },
-    {
-      title: "Effective Period",
-      key: "period",
-      render: (_: unknown, record: CustomerAdvisory) =>
-        `${record.effectiveFrom} ~ ${record.effectiveTo}`,
     },
   ];
 
   return (
-    <AdminPanelShell
-      icon={Icons.bell}
-      title="Customer Advisory Admin"
-      subtitle="Publish operational advisories, port congestion alerts, and announcements."
+    <AdminSectionPage
       extra={
-        <AppButton
-          type="primary"
-          size="large"
-          icon={<AppIcon icon={Icons.plus} size={16} />}
-          onClick={() => setIsDrawerOpen(true)}
-        >
-          Publish New Advisory
-        </AppButton>
+        <span ref={publishButtonRef} className="admin-section__action">
+          <AppButton
+            type="primary"
+            icon={<AppIcon icon={Icons.plus} size={16} />}
+            onClick={openDrawer}
+          >
+            Publish Advisory
+          </AppButton>
+        </span>
       }
     >
       <div className="admin-advisory-form">
-        <div className="admin-menu-summary" aria-label="Advisory summary">
-          <span className="admin-menu-summary__chip">
-            <AppIcon icon={Icons.bell} size={14} />
-            <Text>
-              {draft.length} Advisor{draft.length === 1 ? "y" : "ies"}
-            </Text>
-          </span>
-          <span className="admin-menu-summary__chip admin-menu-summary__chip--success">
-            <AppIcon icon={Icons.checkCircle} size={14} />
-            <Text>{activeCount} Active</Text>
-          </span>
-          <span className="admin-menu-summary__chip admin-menu-summary__chip--warning">
-            <AppIcon icon={Icons.stopCircle} size={14} />
-            <Text>{urgentCount} Urgent</Text>
-          </span>
-        </div>
-
-        <div className="responsive-table-wrap custom-scroll">
-          <Table<CustomerAdvisory>
-            dataSource={draft}
-            columns={columns}
-            rowKey="id"
-            pagination={false}
-            scroll={{ x: true }}
-            size="middle"
+        <div className="admin-grid-wrap responsive-table-wrap custom-scroll">
+          <DataView
+            rowData={rows}
+            columnDefs={columnDefs}
+            loading={isFetching}
+            emptyState={
+              <ModuleEmptyState
+                variant="blank"
+                title="No advisories published"
+                message="Publish an operational advisory to inform customers."
+                actions={[{ key: "publish", label: "Publish Advisory", type: "primary", onClick: openDrawer }]}
+              />
+            }
+            allowedViewModes={["list"]}
+            defaultViewMode="list"
+            renderToolbar={() => null}
+            className="admin-data-view"
+            listOptions={{
+              ...profileHandlers,
+              showToolbar: { showTotalCount: true, fullScreen: true },
+              sideBar: true,
+              pagination: true,
+              paginationPageSize: 20,
+              pageSizeOptions: [10, 20, 50, 100],
+              defaultColDef: { filter: true },
+              gridOptions: {
+                domLayout: "autoHeight",
+                getRowId: (params: { data: Row }) => params.data.id,
+              },
+            }}
           />
         </div>
       </div>
 
-      <AppDrawer
-        open={isDrawerOpen}
-        onClose={closeDrawer}
-        title="Publish Operational Advisory"
-        placement="right"
-        dialogSize="md"
-        destroyOnClose
-        maskClosable={!isSaving}
-        keyboard={!isSaving}
-        classNames={{
-          body: "custom-scroll",
-          footer: "admin-drawer-footer-bar",
-        }}
-        footer={
-          <div className="admin-drawer-actions form-step-footer">
-            <AppButton onClick={closeDrawer} disabled={isSaving}>
-              Cancel
-            </AppButton>
-            <AppButton
-              type="primary"
-              icon={<AppIcon icon={Icons.save} size={16} />}
-              loading={isSaving}
-              onClick={handleSave}
-            >
-              Save
-            </AppButton>
+      {drawerOpen ? (
+        <AdminDrawer
+          open={drawerOpen}
+          onClose={closeDrawer}
+          icon={Icons.megaphone}
+          title="Publish Advisory"
+          subtitle="Shown to customers on the portal while it is in effect."
+          isPending={isCreating}
+          isDirty={form.formState.isDirty}
+          primaryLabel="Publish Advisory"
+          primaryIcon={Icons.send}
+          onPrimary={() => void handlePublish()}
+          returnFocusRef={publishButtonRef}
+        >
+          <AdminFormSection step={1} title="Classification" hint="How prominently the notice is shown.">
+            <FormSegmented
+              control={form.control}
+              name="severity"
+              label={reqLabel("Severity")}
+              options={ADVISORY_SEVERITY_OPTIONS}
+              block
+              formItemProps={FIELD_ITEM_PROPS}
+              aria-label="Severity"
+            />
+          </AdminFormSection>
+
+          <AdminFormSection step={2} title="Content" hint="Keep the headline short; details go in the message.">
+            <FormInput
+              control={form.control}
+              name="title"
+              label={reqLabel("Headline")}
+              size="large"
+              maxLength={120}
+              showCount
+              placeholder="e.g. Typhoon delay at Shanghai"
+              formItemProps={FIELD_ITEM_PROPS}
+            />
+            <FormTextarea
+              control={form.control}
+              name="message"
+              label={reqLabel("Message")}
+              rows={5}
+              maxLength={1000}
+              showCount
+              className="custom-scroll"
+              formItemProps={FIELD_ITEM_PROPS}
+              {...textareaAssistProps}
+            />
+          </AdminFormSection>
+
+          <AdminFormSection step={3} title="Validity" hint="Leave the end date empty for an open-ended advisory.">
+            <Row gutter={FIELD_GUTTER}>
+              <Col {...RESPONSIVE_COL.formHalf}>
+                <FormDatePicker
+                  control={form.control}
+                  name="effectiveFrom"
+                  label={reqLabel("Effective From")}
+                  size="large"
+                  valueFormat="calendar-date"
+                  className="admin-stack-full"
+                  formItemProps={FIELD_ITEM_PROPS}
+                />
+              </Col>
+              <Col {...RESPONSIVE_COL.formHalf}>
+                <FormDatePicker
+                  control={form.control}
+                  name="effectiveTo"
+                  label={optLabel("Effective To")}
+                  size="large"
+                  valueFormat="calendar-date"
+                  minDate={effectiveFrom ? DateTime.fromISO(effectiveFrom) : undefined}
+                  className="admin-stack-full"
+                  formItemProps={FIELD_ITEM_PROPS}
+                />
+              </Col>
+            </Row>
+          </AdminFormSection>
+        </AdminDrawer>
+      ) : null}
+
+      {viewing ? (
+        <AppModal
+          open
+          centered
+          dialogSize="sm"
+          destroyOnHidden
+          onCancel={() => setViewing(null)}
+          className="admin-detail-modal"
+          title={
+            <div className="admin-drawer-title">
+              <span className="admin-drawer-title__icon" aria-hidden>
+                <AppIcon icon={SEVERITY_META[viewing.severity].icon} size={20} />
+              </span>
+              <div className="admin-drawer-title__copy">
+                <div className="admin-drawer-title__text">{viewing.title}</div>
+                <span className="admin-drawer-title__pills">
+                  <SeverityPill severity={viewing.severity} />
+                  <AdminStatusPill tone={STATUS_META[advisoryStatus(viewing, today)].tone}>
+                    {STATUS_META[advisoryStatus(viewing, today)].label}
+                  </AdminStatusPill>
+                </span>
+              </div>
+            </div>
+          }
+          footer={
+           null
+          }
+        >
+          <div className="admin-detail-modal__body">
+            <Descriptions column={{ xs: 1, sm: 2 }} size="small" colon={false} className="admin-descriptions">
+              <Descriptions.Item label="Effective From">
+                <FormattedDate value={viewing.effectiveFrom || null} />
+              </Descriptions.Item>
+              <Descriptions.Item label="Effective To">
+                <FormattedDate value={viewing.effectiveTo || null} fallback="Open-ended" />
+              </Descriptions.Item>
+            </Descriptions>
+            <div className="admin-detail-modal__message custom-scroll">
+              <Paragraph className="admin-prewrap">{viewing.message}</Paragraph>
+            </div>
           </div>
-        }
-      >
-        <div className="admin-drawer-body">
-          <FormSelect
-            control={form.control}
-            name="severity"
-            label={optLabel("Alert Severity")}
-            size="large"
-            options={[...SEVERITY_OPTIONS]}
-            className="admin-stack-full"
-            formItemProps={FIELD_ITEM_PROPS}
-          />
-          <FormInput
-            control={form.control}
-            name="title"
-            label={reqLabel("Advisory Headline")}
-            size="large"
-            placeholder="e.g. Typhoon Delay at Shanghai Port"
-            formItemProps={FIELD_ITEM_PROPS}
-          />
-          <FormTextarea
-            control={form.control}
-            name="message"
-            label={reqLabel("Detailed Announcement Message")}
-            rows={4}
-            className="custom-scroll"
-            formItemProps={FIELD_ITEM_PROPS}
-          />
-        </div>
-      </AppDrawer>
-    </AdminPanelShell>
+        </AppModal>
+      ) : null}
+    </AdminSectionPage>
   );
 }

@@ -1,0 +1,95 @@
+{
+  "subtitle": "按日期范围筛选，查看船舶与费用，并打印到货通知。",
+  "search": {
+    "fromDate": "开始日期",
+    "toDate": "结束日期",
+    "show": "查询"
+  },
+  "columns": {
+    "anNo": "AN 编号",
+    "blNumber": "B/L 号",
+    "vessel": "船名",
+    "voyage": "航次",
+    "discharge": "卸货港",
+    "terminal": "码头",
+    "eta": "ETA",
+    "arrival": "到港",
+    "lastFreeDay": "免柜截止日",
+    "chargesDue": "应付费用"
+  },
+  "actions": {
+    "viewDetails": "查看详情",
+    "printArrivalNotice": "打印到货通知",
+    "downloadPdf": "下载 PDF",
+    "copyAnNumber": "复制 AN 编号",
+    "copied": "已复制"
+  },
+  "empty": {
+    "loadErrorTitle": "无法加载到货通知",
+    "loadErrorMessage": "请求未完成。请检查网络连接后重试。",
+    "noResultsTitle": "没有符合条件的到货通知",
+    "noResultsMessage": "该日期范围内没有结果。请扩大日期范围或清除筛选条件。",
+    "noContainers": "此通知没有集装箱"
+  },
+  "errors": {
+    "fetchList": "获取到货通知列表失败",
+    "fetchDetail": "获取到货通知详情失败",
+    "download": "下载到货通知文件失败"
+  },
+  "toasts": {
+    "documentDownloaded": "到货通知 {{anNo}} 文件已下载"
+  },
+  "status": {
+    "printed": "已打印",
+    "notPrinted": "未打印"
+  },
+  "validation": {
+    "fromDateRequired": "开始日期为必填项",
+    "toDateRequired": "结束日期为必填项",
+    "fromBeforeTo": "开始日期必须早于或等于结束日期"
+  },
+  "drawer": {
+    "blPrefix": "B/L:",
+    "routeEyebrow": "船舶至港口",
+    "vessel": "船名",
+    "arriving": "抵达中",
+    "discharge": "卸货港",
+    "sections": {
+      "details": "到货通知详情",
+      "shipment": "货物详情",
+      "freeTime": "免柜期",
+      "charges": "费用",
+      "containers": "集装箱"
+    },
+    "labels": {
+      "anNumber": "AN 编号",
+      "blNumber": "B/L 号",
+      "eta": "ETA",
+      "arrivalDate": "到港日期",
+      "chargesDue": "应付费用",
+      "printStatus": "打印状态",
+      "vessel": "船名",
+      "voyage": "航次",
+      "terminal": "码头",
+      "consignee": "收货人",
+      "notifyParty": "通知方",
+      "manifestIgm": "舱单 / IGM",
+      "freeDays": "免柜天数",
+      "lastFreeDay": "免柜截止日",
+      "demurrageFrom": "滞期起始"
+    },
+    "chargeColumns": {
+      "code": "代码",
+      "description": "描述",
+      "amount": "金额"
+    },
+    "containerColumns": {
+      "containerNo": "箱号",
+      "sizeType": "尺寸/箱型",
+      "sealNo": "铅封号"
+    },
+    "alerts": {
+      "freeTimeEndsOn": "免柜期于 <date/> 结束。"
+    }
+  }
+}

@@ -9,11 +9,7 @@ import {
   type ReactNode,
 } from "react";
 
-import {
-  AppIcon,
-  type AppIconActionTone,
-  type AppIconProps,
-} from "../icons/app-icon";
+import { AppIcon, type AppIconActionTone, type AppIconProps } from "../icons/app-icon";
 
 const ACTION_TOOLTIP_DELAY = 0.5; // 500ms
 
@@ -28,10 +24,7 @@ export interface ListActionButtonProps {
   tone?: AppIconActionTone;
 }
 
-function withGridActionIcon(
-  icon: ReactNode,
-  tone?: AppIconActionTone,
-): ReactNode {
+function withGridActionIcon(icon: ReactNode, tone?: AppIconActionTone): ReactNode {
   if (isValidElement<AppIconProps>(icon) && icon.type === AppIcon) {
     return cloneElement(icon as ReactElement<AppIconProps>, {
       gridAction: true,
@@ -50,22 +43,23 @@ export function ListActionButton({
   ariaLabel,
   tone,
 }: ListActionButtonProps) {
-  const resolvedTone: AppIconActionTone | undefined = danger
-    ? "reject"
-    : tone;
+  const resolvedTone: AppIconActionTone | undefined = danger ? "reject" : tone;
 
+  // Span wrapper keeps tooltips working when the button is disabled (no pointer events).
   return (
     <Tooltip title={title} mouseEnterDelay={ACTION_TOOLTIP_DELAY}>
-      <AppButton
-        type="link"
-        size="small"
-        icon={withGridActionIcon(icon, resolvedTone)}
-        aria-label={ariaLabel ?? title}
-        danger={danger}
-        disabled={disabled}
-        onClick={onClick}
-        className="list-action-button"
-      />
+      <span className="list-action-button-wrap">
+        <AppButton
+          type="link"
+          size="small"
+          icon={withGridActionIcon(icon, resolvedTone)}
+          aria-label={ariaLabel ?? title}
+          danger={danger}
+          disabled={disabled}
+          onClick={onClick}
+          className="list-action-button"
+        />
+      </span>
     </Tooltip>
   );
 }

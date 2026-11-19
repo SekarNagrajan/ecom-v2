@@ -3,45 +3,32 @@ import { AppButton } from "@solverminds/shared-ui";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { Card, Result, Spin, Steps, Typography, theme } from "antd";
-import { useEffect, useState } from "react";
-import { AppIcon, Icons } from "../../components/icons";
+import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { AppIcon, Icons, NavBookingIcon } from "../../components/icons";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
-import {
-  MODULE_TITLES,
-  WIZARD_STEP_TITLES,
-  formatModuleScreenTitle,
-} from "../../constants/module-titles";
+import { formatModuleScreenTitle } from "../../constants/module-titles";
+import { useModuleTitles, useWizardStepTitles } from "../../i18n/use-module-titles";
 import { bookingApi } from "./api/booking.api";
 import { bookingKeys } from "./api/booking.keys";
 import { BookingModuleStyles } from "./components/booking-module-styles";
-import { CargoStep } from "./components/CargoStep";
-import { CustomerDetailsStep } from "./components/CustomerDetailsStep";
-import { ENSStep } from "./components/ENSStep";
-import { FileUploadStep } from "./components/FileUploadStep";
-import { InsuranceStep } from "./components/InsuranceStep";
-import { MasterDetailsStep } from "./components/MasterDetailsStep";
-import { PreviewStep } from "./components/PreviewStep";
-import { ReferenceInformationStep } from "./components/ReferenceInformationStep";
+import { DEFAULT_BOOKING_WIZARD_CONFIG } from "./config/booking-wizard-config";
+import { buildBookingWizardSteps, getBookingStepIcon } from "./config/booking-wizard-steps";
 import { useBookingWizard } from "./hooks/use-booking-wizard";
 import { useBookingStore } from "./stores/booking.store";
 import { defaultCargoData, migrateLegacyCargo } from "./types/booking.types";
 
 const { Text } = Typography;
 
-const PIPELINE_ICON_SIZE = 25;
-
 export function BookingAmendRoute() {
+  const { t } = useTranslation(["booking", "common", "modules"]);
+  const MODULE_TITLES = useModuleTitles();
+  const WIZARD_STEP_TITLES = useWizardStepTitles();
   const { token } = theme.useToken();
   const navigate = useNavigate();
   const { bookingId } = useParams({ strict: false });
-  const {
-    currentStep,
-    setCurrentStep,
-    isSubmitting,
-    handleSubmit,
-    confirmation,
-    handleStartOver,
-  } = useBookingWizard(true); // pass isEditMode
+  const { currentStep, setCurrentStep, isSubmitting, handleSubmit, confirmation } =
+    useBookingWizard(true); // pass isEditMode
   const { initializeFromBooking } = useBookingStore();
   const [isInitialized, setIsInitialized] = useState(false);
 
@@ -59,9 +46,7 @@ export function BookingAmendRoute() {
     if (booking && !isInitialized) {
       initializeFromBooking({
         ...booking,
-        cargo: booking.cargo
-          ? migrateLegacyCargo(booking.cargo)
-          : defaultCargoData(),
+        cargo: booking.cargo ? migrateLegacyCargo(booking.cargo) : defaultCargoData(),
         documents: booking.documents ?? [],
         referenceFields: booking.referenceFields ?? [],
       });
@@ -69,87 +54,27 @@ export function BookingAmendRoute() {
     }
   }, [booking, initializeFromBooking, isInitialized]);
 
-  const stepsConfig = [
-    {
-      title: WIZARD_STEP_TITLES.masterDetails,
-      icon: <AppIcon icon={Icons.settings} size={PIPELINE_ICON_SIZE} />,
-    },
-    {
-      title: WIZARD_STEP_TITLES.customerDetails,
-      icon: <AppIcon icon={Icons.user} size={PIPELINE_ICON_SIZE} />,
-    },
-    {
-      title: WIZARD_STEP_TITLES.cargoDetails,
-      icon: <AppIcon icon={Icons.container} size={PIPELINE_ICON_SIZE} />,
-    },
-    {
-      title: WIZARD_STEP_TITLES.ensDetails,
-      icon: <AppIcon icon={Icons.fileCheck} size={PIPELINE_ICON_SIZE} />,
-    },
-    {
-      title: WIZARD_STEP_TITLES.insurance,
-      icon: <AppIcon icon={Icons.checkCircle} size={PIPELINE_ICON_SIZE} />,
-    },
-    {
-      title: WIZARD_STEP_TITLES.fileUpload,
-      icon: <AppIcon icon={Icons.upload} size={PIPELINE_ICON_SIZE} />,
-    },
-    {
-      title: WIZARD_STEP_TITLES.references,
-      icon: <AppIcon icon={Icons.fileText} size={PIPELINE_ICON_SIZE} />,
-    },
-    {
-      title: WIZARD_STEP_TITLES.preview,
-      icon: <AppIcon icon={Icons.eye} size={PIPELINE_ICON_SIZE} />,
-    },
-  ];
+  const wizardSteps = useMemo(
+    () =>
+      buildBookingWizardSteps(DEFAULT_BOOKING_WIZARD_CONFIG, {
+        master: WIZARD_STEP_TITLES.masterDetails,
+        parties: WIZARD_STEP_TITLES.customerDetails,
+        cargo: WIZARD_STEP_TITLES.cargoDetails,
+        ens: WIZARD_STEP_TITLES.ensDetails,
+        insurance: WIZARD_STEP_TITLES.insurance,
+        files: WIZARD_STEP_TITLES.fileUpload,
+        references: WIZARD_STEP_TITLES.references,
+        preview: WIZARD_STEP_TITLES.preview,
+      }),
+    [WIZARD_STEP_TITLES],
+  );
 
-  const getStepIcon = (
-    icon: React.ReactNode,
-    index: number,
-    current: number,
-  ) => {
-    const isCompleted = index < current;
-    const isActive = index === current;
-
-    let background = token.colorBgContainer;
-    let borderColor = token.colorBorder;
-    let color = token.colorTextQuaternary;
-
-    if (isCompleted) {
-      background = token.colorSuccess;
-      borderColor = token.colorSuccess;
-      color = token.colorWhite;
-    } else if (isActive) {
-      background = token.colorPrimary;
-      borderColor = token.colorPrimary;
-      color = token.colorWhite;
-    }
-
-    return (
-      <span
-        className={[
-          "wizard-step-icon",
-          isActive ? "pipeline-stage-current-badge" : undefined,
-          "app-icon-inherit",
-        ]
-          .filter(Boolean)
-          .join(" ")}
-        style={{
-          background,
-          border: `2px solid ${borderColor}`,
-          color,
-        }}
-      >
-        {icon}
-      </span>
-    );
-  };
-
-  const steps = stepsConfig.map((step, index) => ({
+  const steps = wizardSteps.map((step, index) => ({
     title: step.title,
-    icon: getStepIcon(step.icon, index, currentStep),
+    icon: getBookingStepIcon(step.icon, index, currentStep, token),
   }));
+
+  const activeStep = wizardSteps[currentStep];
 
   if (isLoading || !isInitialized) {
     return (
@@ -165,7 +90,7 @@ export function BookingAmendRoute() {
       >
         <Spin
           size="medium"
-          description="Loading Booking Details..."
+          description={t("booking:wizard.amend.loading")}
           style={{ justifyContent: "center", alignItems: "center" }}
         />
       </Card>
@@ -175,7 +100,7 @@ export function BookingAmendRoute() {
   if (error) {
     return (
       <Card>
-        <Result status="error" title="Failed to load booking for amendment." />
+        <Result status="error" title={t("booking:wizard.amend.loadFailed")} />
       </Card>
     );
   }
@@ -185,7 +110,7 @@ export function BookingAmendRoute() {
       <BookingModuleStyles />
       <div className="wizard-page-header">
         <ModuleScreenHeader
-          icon={Icons.bookOpen}
+          icon={NavBookingIcon}
           title={formatModuleScreenTitle(MODULE_TITLES.amendBooking, bookingId)}
           marginBottom={0}
           extra={
@@ -194,7 +119,7 @@ export function BookingAmendRoute() {
               icon={<AppIcon icon={Icons.arrowLeft} size={16} tone="delete" />}
               onClick={() => navigate({ to: "/app/booking" })}
             >
-              Back to Booking
+              {t("booking:actions.backToBooking")}
             </AppButton>
           }
         />
@@ -205,17 +130,17 @@ export function BookingAmendRoute() {
           <Result
             status="success"
             icon={<AppIcon icon={Icons.checkCircle} size={16} tone="approve" />}
-            title="Booking Amendment Submitted Successfully"
+            title={t("booking:wizard.amend.submittedTitle")}
             subTitle={
               <div>
-                Your amendment request has been forwarded to the carrier.
+                {t("booking:wizard.amend.submittedMessage")}
                 <div
                   style={{
                     marginTop: token.marginSM,
                     fontSize: token.fontSizeLG,
                   }}
                 >
-                  Booking Reference:{" "}
+                  {t("booking:wizard.confirm.bookingReference")}:{" "}
                   <Text
                     copyable
                     strong
@@ -235,7 +160,7 @@ export function BookingAmendRoute() {
                 key="dashboard"
                 onClick={() => navigate({ to: "/app/booking" })}
               >
-                Go to Dashboard
+                {t("booking:wizard.actions.goToDashboard")}
               </AppButton>,
             ]}
           />
@@ -255,19 +180,10 @@ export function BookingAmendRoute() {
           </div>
 
           <div className="wizard-step-content">
-            {currentStep === 0 && <MasterDetailsStep />}
-            {currentStep === 1 && <CustomerDetailsStep />}
-            {currentStep === 2 && <CargoStep />}
-            {currentStep === 3 && <ENSStep />}
-            {currentStep === 4 && <InsuranceStep />}
-            {currentStep === 5 && <FileUploadStep />}
-            {currentStep === 6 && <ReferenceInformationStep />}
-            {currentStep === 7 && (
-              <PreviewStep
-                onSubmit={handleSubmit}
-                isSubmitting={isSubmitting}
-              />
-            )}
+            {activeStep?.render({
+              onSubmit: handleSubmit,
+              isSubmitting,
+            })}
           </div>
         </div>
       )}

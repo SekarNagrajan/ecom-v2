@@ -3,6 +3,7 @@ import { AppDrawer } from '@solverminds/shared-ui';
 import { AppButton } from '@solverminds/shared-ui';
 import { useNavigate, useParams } from '@tanstack/react-router';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { FeaturePageShell } from '../../components/shared/feature-page-shell';
 import {
@@ -17,6 +18,7 @@ import { BillOfLadingView } from './components/BillOfLadingView';
 import { BlModuleStyles } from './components/bl-module-styles';
 
 export function BillOfLadingViewRoute() {
+  const { t } = useTranslation(['bill-of-lading', 'common', 'modules']);
   const navigate = useNavigate();
   const { blNo } = useParams({ strict: false }) as { blNo: string };
   const [chargesOpen, setChargesOpen] = useState(false);
@@ -43,11 +45,15 @@ export function BillOfLadingViewRoute() {
       />
 
       <AppDrawer
-        title="B/L Charge Summary"
+        title={t('drawers.chargeSummary')}
         open={chargesOpen}
         onClose={() => setChargesOpen(false)}
         width={720}
-        footer={<AppButton onClick={() => setChargesOpen(false)}>Close</AppButton>}
+        footer={
+          <AppButton onClick={() => setChargesOpen(false)}>
+            {t('actions.close')}
+          </AppButton>
+        }
       >
         <BillOfLadingCharges charges={charges} loading={chargesLoading} />
       </AppDrawer>

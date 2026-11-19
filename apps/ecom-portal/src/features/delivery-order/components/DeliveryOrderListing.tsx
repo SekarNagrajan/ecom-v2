@@ -8,6 +8,7 @@ import type { RowDoubleClickedEvent } from "ag-grid-community";
 import { Tag } from "antd";
 import { DateTime } from "luxon";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { buildActionsColumn } from "../../../components/shared/build-actions-column";
@@ -15,8 +16,14 @@ import {
   ListActionButton,
   ListActionsRow,
 } from "../../../components/shared/list-action-button";
+import {
+  ModuleEmptyState,
+  buildClearFiltersAction,
+  buildRetryAction,
+} from "../../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
-import { MODULE_TITLES } from "../../../constants/module-titles";
+import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
+import { useModuleTitles } from "../../../i18n/use-module-titles";
 import {
   useDODownloadMutation,
   useDOSummaryQuery,
@@ -42,17 +49,28 @@ const initialFilters: DOListFilters = {
 };
 
 export function DeliveryOrderListing() {
+  const { t } = useTranslation(["delivery-order", "common", "modules"]);
+  const MODULE_TITLES = useModuleTitles();
+  const { profileHandlers } = useLocalGridProfiles("delivery-order");
   const [filters, setFilters] = useState<DOListFilters>(initialFilters);
   const [selectedRecord, setSelectedRecord] = useState<DOSummaryRow | null>(
     null,
   );
 
-  const { data: rows = [], isLoading, isFetching } = useDOSummaryQuery(filters);
+  const {
+    data: rows = [],
+    isLoading,
+    isFetching,
+    isError,
+    refetch,
+  } = useDOSummaryQuery(filters);
   const { mutate: downloadDoc } = useDODownloadMutation();
 
   const handleSearch = (values: DOSearchValues) => {
     setFilters({ fromDate: values.fromDate, toDate: values.toDate });
   };
+
+  const handleClearFilters = () => setFilters(initialFilters);
 
   const handleView = (record: DOSummaryRow) => {
     setSelectedRecord(record);
@@ -75,7 +93,7 @@ export function DeliveryOrderListing() {
           return (
             <ListActionsRow>
               <ListActionButton
-                title="View Details"
+                title={t("actions.viewDetails")}
                 icon={<AppIcon icon={Icons.eye} size={16} tone="view" />}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -83,7 +101,7 @@ export function DeliveryOrderListing() {
                 }}
               />
               <ListActionButton
-                title="Print Delivery Order"
+                title={t("actions.printDeliveryOrder")}
                 icon={<AppIcon icon={Icons.printer} size={16} tone="print" />}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -96,36 +114,41 @@ export function DeliveryOrderListing() {
       }),
       colId: "actions",
     },
-    { field: "delordno", headerName: "DO No", width: 140, pinned: "left" },
+    {
+      field: "delordno",
+      headerName: t("columns.doNo"),
+      width: 140,
+      pinned: "left",
+    },
     {
       field: "delorddate",
-      headerName: "DO Date",
+      headerName: t("columns.doDate"),
       width: 140,
       cellRenderer: (p: { value?: string }) =>
         p.value ? <FormattedDate value={p.value} /> : "-",
     },
-    { field: "blnumber", headerName: "B/L Number", width: 150 },
-    { field: "vessel", headerName: "Vessel", width: 150 },
-    { field: "voyage", headerName: "Voyage", width: 100 },
-    { field: "loadport", headerName: "POL", width: 160 },
-    { field: "dischargeport", headerName: "POD", width: 160 },
-    { field: "terminal", headerName: "Terminal", width: 130 },
+    { field: "blnumber", headerName: t("columns.blNumber"), width: 150 },
+    { field: "vessel", headerName: t("columns.vessel"), width: 150 },
+    { field: "voyage", headerName: t("columns.voyage"), width: 100 },
+    { field: "loadport", headerName: t("columns.pol"), width: 160 },
+    { field: "dischargeport", headerName: t("columns.pod"), width: 160 },
+    { field: "terminal", headerName: t("columns.terminal"), width: 130 },
     {
       field: "arrdate",
-      headerName: "Arrival",
+      headerName: t("columns.arrival"),
       width: 140,
       cellRenderer: (p: { value?: string }) =>
         p.value ? <FormattedDate value={p.value} /> : "-",
     },
     {
       field: "dovaliditydate",
-      headerName: "Valid Till",
+      headerName: t("columns.validTill"),
       width: 140,
       cellRenderer: (p: { value?: string }) =>
         p.value ? <FormattedDate value={p.value} /> : "-",
     },
     {
-      headerName: "Status",
+      headerName: t("columns.status"),
       field: "printstatus",
       width: 130,
       cellRenderer: (params: { data?: DOSummaryRow }) => {
@@ -135,7 +158,7 @@ export function DeliveryOrderListing() {
             className="do-status-tag"
             color={getDoPrintStatusColor(params.data.printstatus)}
           >
-            {getDoPrintStatusLabel(params.data.printstatus)}
+            {getDoPrintStatusLabel(params.data.printstatus, t)}
           </Tag>
         );
       },
@@ -143,6 +166,21 @@ export function DeliveryOrderListing() {
   ];
 
   const showLoading = isLoading && rows.length === 0;
+  const emptyState = isError ? (
+    <ModuleEmptyState
+      variant="error"
+      title={t("empty.loadErrorTitle")}
+      message={t("empty.loadErrorMessage")}
+      actions={[buildRetryAction(() => void refetch())]}
+    />
+  ) : (
+    <ModuleEmptyState
+      variant="filtered"
+      title={t("empty.noResultsTitle")}
+      message={t("empty.noResultsMessage")}
+      actions={[buildClearFiltersAction(handleClearFilters)]}
+    />
+  );
 
   return (
     <div className="do-page-layout">
@@ -150,7 +188,7 @@ export function DeliveryOrderListing() {
         <ModuleScreenHeader
           icon={NavContainerReleaseIcon}
           title={MODULE_TITLES.deliveryOrder}
-          subtitle="Filter by date range, review POL to POD routing, and print delivery order documents."
+          subtitle={t("subtitle")}
           marginBottom={0}
         />
       </div>
@@ -159,18 +197,27 @@ export function DeliveryOrderListing() {
 
       {showLoading ? (
         <DoLoadingCenter fill />
+      ) : isError && rows.length === 0 ? (
+        emptyState
       ) : (
         <div className="do-grid-wrap responsive-table-wrap custom-scroll">
           <DataView
             rowData={rows}
             columnDefs={columns}
             loading={isFetching}
+            emptyState={emptyState}
             allowedViewModes={["list"]}
             defaultViewMode="list"
             renderToolbar={() => null}
             className="do-data-view"
             listOptions={{
-              showToolbar: false,
+              ...profileHandlers,
+              showToolbar: { showTotalCount: true, fullScreen: true },
+              sideBar: true,
+              pagination: true,
+              paginationPageSize: 20,
+              pageSizeOptions: [10, 20, 50, 100],
+              defaultColDef: { filter: true },
               gridOptions: {
                 getRowId: (params) => params.data.delordno,
                 onRowDoubleClicked: handleRowDoubleClick,

@@ -1,5 +1,6 @@
-// Modified by Sekar Nagarajan (2026-08-31 14:46)
+// Modified by Sekar Nagarajan (2026-09-03 16:17)
 import { create } from "zustand";
+import { getBookingWizardLastStepIndex } from "../config/booking-wizard-config";
 import type {
   BookingDocument,
   BookingPayload,
@@ -31,9 +32,11 @@ interface BookingState {
   clearEns: () => void;
   clearInsurance: () => void;
   initializeFromBooking: (payload: BookingPayload) => void;
+  /** Prefill wizard from an existing booking as a new (duplicate) submission. */
+  initializeAsDuplicate: (payload: BookingPayload, sourceId: string) => void;
 }
 
-const BOOKING_WIZARD_LAST_STEP = 7; // Preview (References is step 6)
+const BOOKING_WIZARD_LAST_STEP = getBookingWizardLastStepIndex();
 
 const initialPayload: BookingPayload = {
   masterDetails: null,
@@ -52,40 +55,52 @@ export const useBookingStore = create<BookingState>((set) => ({
     set((state) => ({
       currentStep: Math.min(state.currentStep + 1, BOOKING_WIZARD_LAST_STEP),
     })),
-  prevStep: () =>
-    set((state) => ({ currentStep: Math.max(state.currentStep - 1, 0) })),
+  prevStep: () => set((state) => ({ currentStep: Math.max(state.currentStep - 1, 0) })),
   resetWizard: () => set({ currentStep: 0, payload: initialPayload }),
 
   payload: initialPayload,
 
   updateMasterDetails: (data) =>
     set((state) => ({ payload: { ...state.payload, masterDetails: data } })),
-  updateParties: (data) =>
-    set((state) => ({ payload: { ...state.payload, parties: data } })),
-  updateCargo: (data) =>
-    set((state) => ({ payload: { ...state.payload, cargo: data } })),
-  updateEns: (data) =>
-    set((state) => ({ payload: { ...state.payload, ens: data } })),
-  updateInsurance: (data) =>
-    set((state) => ({ payload: { ...state.payload, insurance: data } })),
-  updateDocuments: (documents) =>
-    set((state) => ({ payload: { ...state.payload, documents } })),
+  updateParties: (data) => set((state) => ({ payload: { ...state.payload, parties: data } })),
+  updateCargo: (data) => set((state) => ({ payload: { ...state.payload, cargo: data } })),
+  updateEns: (data) => set((state) => ({ payload: { ...state.payload, ens: data } })),
+  updateInsurance: (data) => set((state) => ({ payload: { ...state.payload, insurance: data } })),
+  updateDocuments: (documents) => set((state) => ({ payload: { ...state.payload, documents } })),
   updateReferenceFields: (referenceFields) =>
     set((state) => ({ payload: { ...state.payload, referenceFields } })),
-  clearEns: () =>
-    set((state) => ({ payload: { ...state.payload, ens: null } })),
-  clearInsurance: () =>
-    set((state) => ({ payload: { ...state.payload, insurance: null } })),
+  clearEns: () => set((state) => ({ payload: { ...state.payload, ens: null } })),
+  clearInsurance: () => set((state) => ({ payload: { ...state.payload, insurance: null } })),
   initializeFromBooking: (payload) =>
     set({
       currentStep: 0,
       payload: {
         ...payload,
-        cargo: payload.cargo
-          ? migrateLegacyCargo(payload.cargo)
-          : defaultCargoData(),
+        cargo: payload.cargo ? migrateLegacyCargo(payload.cargo) : defaultCargoData(),
         documents: payload.documents ?? [],
         referenceFields: payload.referenceFields ?? [],
+        forceCreateNew: undefined,
+        duplicatedFromId: undefined,
+      },
+    }),
+  initializeAsDuplicate: (payload, sourceId) =>
+    set({
+      currentStep: 0,
+      payload: {
+        ...payload,
+        draftId: undefined,
+        forceCreateNew: true,
+        duplicatedFromId: sourceId,
+        cargo: payload.cargo ? migrateLegacyCargo(payload.cargo) : defaultCargoData(),
+        documents: payload.documents ?? [],
+        referenceFields: payload.referenceFields ?? [],
+        masterDetails: payload.masterDetails
+          ? {
+              ...payload.masterDetails,
+              onlineBookingNo: undefined,
+              agencyReference: undefined,
+            }
+          : null,
       },
     }),
 }));

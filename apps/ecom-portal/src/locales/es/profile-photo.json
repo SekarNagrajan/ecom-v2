@@ -1,0 +1,30 @@
+{
+  "steps": {
+    "view": "Foto de perfil",
+    "select": "Subir foto",
+    "crop": "Recortar foto de perfil"
+  },
+  "actions": {
+    "changeImage": "Cambiar imagen",
+    "removePhoto": "Eliminar foto"
+  },
+  "upload": {
+    "title": "Arrastre aquí una foto de perfil",
+    "selectButton": "Seleccionar una foto de su equipo",
+    "or": "o"
+  },
+  "helper": "Compatible: .jpg, .jpeg, .png, .gif · Tamaño máximo: 2MB",
+  "confirms": {
+    "removeTitle": "¿Eliminar foto de perfil?",
+    "removeContent": "Su avatar volverá a mostrar sus iniciales."
+  },
+  "toasts": {
+    "updated": "Foto de perfil actualizada",
+    "removed": "Foto de perfil eliminada",
+    "cropFailed": "No se pudo procesar la imagen recortada. Inténtelo de nuevo."
+  },
+  "errors": {
+    "uploadFailed": "Error al subir la foto de perfil",
+    "removeFailed": "Error al eliminar la foto de perfil"
+  }
+}

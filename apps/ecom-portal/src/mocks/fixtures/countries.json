@@ -1,0 +1,1658 @@
+[
+ {
+  "countryname": "2123132132132133213213212",
+  "countrycode": "11",
+  "isdcode": "221321",
+  "currency": null
+ },
+ {
+  "countryname": "Afghanistan",
+  "countrycode": "AF",
+  "isdcode": "93",
+  "currency": "   "
+ },
+ {
+  "countryname": "Albania",
+  "countrycode": "AL",
+  "isdcode": "355",
+  "currency": "   "
+ },
+ {
+  "countryname": "Algeria",
+  "countrycode": "DZ",
+  "isdcode": "213",
+  "currency": "   "
+ },
+ {
+  "countryname": "American Samoa",
+  "countrycode": "AS",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "AN",
+  "countrycode": "AX",
+  "isdcode": "23",
+  "currency": null
+ },
+ {
+  "countryname": "AndorraAndorraAndorraAndorraAndorraAndorraAndorraA",
+  "countrycode": "AK",
+  "isdcode": "222",
+  "currency": null
+ },
+ {
+  "countryname": "Angola",
+  "countrycode": "AO",
+  "isdcode": "244",
+  "currency": "   "
+ },
+ {
+  "countryname": "Angola",
+  "countrycode": "EU",
+  "isdcode": "2332",
+  "currency": null
+ },
+ {
+  "countryname": "Anguilla",
+  "countrycode": "AI",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "Antarctica",
+  "countrycode": "AQ",
+  "isdcode": "672",
+  "currency": "   "
+ },
+ {
+  "countryname": "Antigua and Barbuda",
+  "countrycode": "AG",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "Argentina",
+  "countrycode": "AR",
+  "isdcode": "54",
+  "currency": "   "
+ },
+ {
+  "countryname": "Armenia",
+  "countrycode": "AM",
+  "isdcode": "374",
+  "currency": "   "
+ },
+ {
+  "countryname": "Aruba",
+  "countrycode": "AW",
+  "isdcode": "297",
+  "currency": "   "
+ },
+ {
+  "countryname": "asdf",
+  "countrycode": "A1",
+  "isdcode": "123",
+  "currency": null
+ },
+ {
+  "countryname": "ASDFGH",
+  "countrycode": "12",
+  "isdcode": "1234",
+  "currency": null
+ },
+ {
+  "countryname": "asian",
+  "countrycode": "CP",
+  "isdcode": "21",
+  "currency": null
+ },
+ {
+  "countryname": "Australia",
+  "countrycode": "AU",
+  "isdcode": "61",
+  "currency": "   "
+ },
+ {
+  "countryname": "Austria",
+  "countrycode": "AT",
+  "isdcode": "43",
+  "currency": "   "
+ },
+ {
+  "countryname": "Bahamas",
+  "countrycode": "BS",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "Bahrain",
+  "countrycode": "BH",
+  "isdcode": "973",
+  "currency": "   "
+ },
+ {
+  "countryname": "Bangladesh",
+  "countrycode": "BD",
+  "isdcode": "880",
+  "currency": "   "
+ },
+ {
+  "countryname": "BANGLADESH",
+  "countrycode": "ED",
+  "isdcode": "211234",
+  "currency": null
+ },
+ {
+  "countryname": "BANGLADESH2",
+  "countrycode": "GV",
+  "isdcode": "21",
+  "currency": null
+ },
+ {
+  "countryname": "Barbados",
+  "countrycode": "BB",
+  "isdcode": "123",
+  "currency": "   "
+ },
+ {
+  "countryname": "Belarus",
+  "countrycode": "BY",
+  "isdcode": "375",
+  "currency": "   "
+ },
+ {
+  "countryname": "Belize",
+  "countrycode": "BZ",
+  "isdcode": "501",
+  "currency": "   "
+ },
+ {
+  "countryname": "Benin",
+  "countrycode": "BJ",
+  "isdcode": "229",
+  "currency": "   "
+ },
+ {
+  "countryname": "Bermuda",
+  "countrycode": "BM",
+  "isdcode": "1-441",
+  "currency": "   "
+ },
+ {
+  "countryname": "Bhutan",
+  "countrycode": "BT",
+  "isdcode": "975",
+  "currency": "   "
+ },
+ {
+  "countryname": "Bolivia",
+  "countrycode": "BO",
+  "isdcode": "591",
+  "currency": "   "
+ },
+ {
+  "countryname": "Bosnia",
+  "countrycode": "BA",
+  "isdcode": "386",
+  "currency": "   "
+ },
+ {
+  "countryname": "Bosniaqw",
+  "countrycode": "AA",
+  "isdcode": "23",
+  "currency": null
+ },
+ {
+  "countryname": "Botswana",
+  "countrycode": "BW",
+  "isdcode": "267",
+  "currency": "   "
+ },
+ {
+  "countryname": "Brazil",
+  "countrycode": "BR",
+  "isdcode": "55",
+  "currency": "   "
+ },
+ {
+  "countryname": "British Indian Ocean Territory",
+  "countrycode": "IO",
+  "isdcode": "246",
+  "currency": "   "
+ },
+ {
+  "countryname": "Brunei Darussalam",
+  "countrycode": "BN",
+  "isdcode": "673",
+  "currency": "   "
+ },
+ {
+  "countryname": "Burkina Faso",
+  "countrycode": "BF",
+  "isdcode": "226",
+  "currency": "   "
+ },
+ {
+  "countryname": "Burundi",
+  "countrycode": "BI",
+  "isdcode": "257",
+  "currency": "   "
+ },
+ {
+  "countryname": "Cambodia",
+  "countrycode": "KH",
+  "isdcode": "855",
+  "currency": "   "
+ },
+ {
+  "countryname": "Cameroon",
+  "countrycode": "CM",
+  "isdcode": "237",
+  "currency": "   "
+ },
+ {
+  "countryname": "Canada",
+  "countrycode": "CA",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "Cape Verde",
+  "countrycode": "CV",
+  "isdcode": "238",
+  "currency": "   "
+ },
+ {
+  "countryname": "Cayman Islands",
+  "countrycode": "KY",
+  "isdcode": "1",
+  "currency": "   "
+ },
+ {
+  "countryname": "Central African Republic",
+  "countrycode": "CF",
+  "isdcode": "236",
+  "currency": "   "
+ },
+ {
+  "countryname": "Chad",
+  "countrycode": "TD",
+  "isdcode": "235",
+  "currency": "   "
+ },
+ {
+  "countryname": "Cheannai",
+  "countrycode": "KL",
+  "isdcode": "600003",
+  "currency": null
+ },
+ {
+  "countryname": "Cheannai",
+  "countrycode": "GO",
+  "isdcode": "600003",
+  "currency": null
+ },
+ {
+  "countryname": "Chile",
+  "countrycode": "CL",
+  "isdcode": "56",
+  "currency": "   "
+ },
+ {
+  "countryname": "China",
+  "countrycode": "CN",
+  "isdcode": "86",
+  "currency": "   "
+ },
+ {
+  "countryname": "Christmas Island",
+  "countrycode": "CX",
+  "isdcode": "61",
+  "currency": "   "
+ },
+ {
+  "countryname": "Cocos (Keeling) Islands",
+  "countrycode": "CC",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "Colombia",
+  "countrycode": "CO",
+  "isdcode": "57",
+  "currency": "   "
+ },
+ {
+  "countryname": "Comoros",
+  "countrycode": "KM",
+  "isdcode": "269",
+  "currency": "   "
+ },
+ {
+  "countryname": "Congo",
+  "countrycode": "CG",
+  "isdcode": "242",
+  "currency": "   "
+ },
+ {
+  "countryname": "Congo, The Democratic Republic of the union",
+  "countrycode": "CD",
+  "isdcode": "33",
+  "currency": "   "
+ },
+ {
+  "countryname": "Cook Islands",
+  "countrycode": "CK",
+  "isdcode": "682",
+  "currency": "   "
+ },
+ {
+  "countryname": "Costa Rica",
+  "countrycode": "CR",
+  "isdcode": "506",
+  "currency": "   "
+ },
+ {
+  "countryname": "Cote DIvoire",
+  "countrycode": "CI",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "Croatia",
+  "countrycode": "HR",
+  "isdcode": "385",
+  "currency": "   "
+ },
+ {
+  "countryname": "Cuba",
+  "countrycode": "CU",
+  "isdcode": "53",
+  "currency": "   "
+ },
+ {
+  "countryname": "Cyprus",
+  "countrycode": "CY",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "Czech Republic",
+  "countrycode": "CZ",
+  "isdcode": "420",
+  "currency": "   "
+ },
+ {
+  "countryname": "dcvgg",
+  "countrycode": "OO",
+  "isdcode": "345",
+  "currency": null
+ },
+ {
+  "countryname": "dd",
+  "countrycode": "DD",
+  "isdcode": "1133",
+  "currency": null
+ },
+ {
+  "countryname": "Denmark",
+  "countrycode": "DK",
+  "isdcode": "45",
+  "currency": "   "
+ },
+ {
+  "countryname": "dfsaf",
+  "countrycode": "ZS",
+  "isdcode": "432",
+  "currency": null
+ },
+ {
+  "countryname": "Djibouti",
+  "countrycode": "DJ",
+  "isdcode": "253",
+  "currency": "   "
+ },
+ {
+  "countryname": "Dominica",
+  "countrycode": "DM",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "Dominican Republic",
+  "countrycode": "DO",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "DUMMY Code",
+  "countrycode": "C1",
+  "isdcode": "41",
+  "currency": "   "
+ },
+ {
+  "countryname": "DUMMY Code",
+  "countrycode": "J1",
+  "isdcode": "962",
+  "currency": "   "
+ },
+ {
+  "countryname": "DUMMY CODE",
+  "countrycode": "ZZ",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "DUMMY CODE",
+  "countrycode": "YY",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "DUMMY CODE PORTUCAL",
+  "countrycode": "PZ",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "DUMMY CODE SPAIN",
+  "countrycode": "EZ",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "DUMMY PAKISTAN CODE",
+  "countrycode": "P1",
+  "isdcode": "92",
+  "currency": "   "
+ },
+ {
+  "countryname": "Ecuador",
+  "countrycode": "EC",
+  "isdcode": "593",
+  "currency": "   "
+ },
+ {
+  "countryname": "Egypt",
+  "countrycode": "EG",
+  "isdcode": "20",
+  "currency": "   "
+ },
+ {
+  "countryname": "El Salvador",
+  "countrycode": "SV",
+  "isdcode": "503",
+  "currency": "   "
+ },
+ {
+  "countryname": "Equatorial Guinea",
+  "countrycode": "GQ",
+  "isdcode": "240",
+  "currency": "   "
+ },
+ {
+  "countryname": "Eritrea",
+  "countrycode": "ER",
+  "isdcode": "291",
+  "currency": "   "
+ },
+ {
+  "countryname": "Estonia",
+  "countrycode": "EE",
+  "isdcode": "372",
+  "currency": "   "
+ },
+ {
+  "countryname": "Ethiopia",
+  "countrycode": "ET",
+  "isdcode": "251",
+  "currency": "   "
+ },
+ {
+  "countryname": "Falkland Islands (Malvinas)",
+  "countrycode": "FK",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "Faroe Islands",
+  "countrycode": "FO",
+  "isdcode": "298",
+  "currency": "   "
+ },
+ {
+  "countryname": "FFF",
+  "countrycode": "RR",
+  "isdcode": "2123",
+  "currency": null
+ },
+ {
+  "countryname": "Fiji",
+  "countrycode": "FJ",
+  "isdcode": "679",
+  "currency": "   "
+ },
+ {
+  "countryname": "Finland",
+  "countrycode": "FI",
+  "isdcode": "358",
+  "currency": "   "
+ },
+ {
+  "countryname": "France",
+  "countrycode": "FR",
+  "isdcode": "33",
+  "currency": "   "
+ },
+ {
+  "countryname": "French Guiana",
+  "countrycode": "GF",
+  "isdcode": "594",
+  "currency": "   "
+ },
+ {
+  "countryname": "French Polynesia",
+  "countrycode": "PF",
+  "isdcode": "689",
+  "currency": "   "
+ },
+ {
+  "countryname": "Gabon",
+  "countrycode": "GA",
+  "isdcode": "241",
+  "currency": "   "
+ },
+ {
+  "countryname": "Gambia",
+  "countrycode": "GM",
+  "isdcode": "220",
+  "currency": "   "
+ },
+ {
+  "countryname": "Georgia",
+  "countrycode": "GE",
+  "isdcode": "995",
+  "currency": "   "
+ },
+ {
+  "countryname": "Germany",
+  "countrycode": "DE",
+  "isdcode": "49",
+  "currency": "   "
+ },
+ {
+  "countryname": "Ghana",
+  "countrycode": "GH",
+  "isdcode": "233",
+  "currency": "   "
+ },
+ {
+  "countryname": "Gibraltar",
+  "countrycode": "GI",
+  "isdcode": "350",
+  "currency": "   "
+ },
+ {
+  "countryname": "Gquaderq",
+  "countrycode": "KV",
+  "isdcode": "8499",
+  "currency": null
+ },
+ {
+  "countryname": "Greece",
+  "countrycode": "GR",
+  "isdcode": "30",
+  "currency": "   "
+ },
+ {
+  "countryname": "Greenland",
+  "countrycode": "GL",
+  "isdcode": "299",
+  "currency": "   "
+ },
+ {
+  "countryname": "Grenada",
+  "countrycode": "GD",
+  "isdcode": "1",
+  "currency": "   "
+ },
+ {
+  "countryname": "Guadeloupe",
+  "countrycode": "GP",
+  "isdcode": "590",
+  "currency": "   "
+ },
+ {
+  "countryname": "Guam",
+  "countrycode": "GU",
+  "isdcode": "1",
+  "currency": "   "
+ },
+ {
+  "countryname": "GUATEMALA",
+  "countrycode": "GT",
+  "isdcode": "502",
+  "currency": "   "
+ },
+ {
+  "countryname": "Guinea",
+  "countrycode": "GN",
+  "isdcode": "224",
+  "currency": "   "
+ },
+ {
+  "countryname": "Guinea-Bissau",
+  "countrycode": "GW",
+  "isdcode": "245",
+  "currency": "   "
+ },
+ {
+  "countryname": "Guyana",
+  "countrycode": "GY",
+  "isdcode": "592",
+  "currency": "   "
+ },
+ {
+  "countryname": "Haiti",
+  "countrycode": "HT",
+  "isdcode": "509",
+  "currency": "   "
+ },
+ {
+  "countryname": "Heard Island and McDonald Islands",
+  "countrycode": "HM",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "Holy See (Vatican City State)",
+  "countrycode": "VA",
+  "isdcode": "39",
+  "currency": "   "
+ },
+ {
+  "countryname": "Honduras",
+  "countrycode": "HN",
+  "isdcode": "504",
+  "currency": "   "
+ },
+ {
+  "countryname": "HONGKONG",
+  "countrycode": "HK",
+  "isdcode": "852",
+  "currency": "   "
+ },
+ {
+  "countryname": "Hungary",
+  "countrycode": "HU",
+  "isdcode": "36",
+  "currency": "   "
+ },
+ {
+  "countryname": "Iceland",
+  "countrycode": "IS",
+  "isdcode": "354",
+  "currency": "   "
+ },
+ {
+  "countryname": "India",
+  "countrycode": "IN",
+  "isdcode": "91",
+  "currency": "   "
+ },
+ {
+  "countryname": "Indonesia",
+  "countrycode": "ID",
+  "isdcode": "62",
+  "currency": "   "
+ },
+ {
+  "countryname": "Installations in International Waters",
+  "countrycode": "XZ",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "Iran",
+  "countrycode": "IR",
+  "isdcode": "98",
+  "currency": "   "
+ },
+ {
+  "countryname": "Iraq",
+  "countrycode": "IQ",
+  "isdcode": "964",
+  "currency": "   "
+ },
+ {
+  "countryname": "Ireland",
+  "countrycode": "IE",
+  "isdcode": "353",
+  "currency": "   "
+ },
+ {
+  "countryname": "isle of man",
+  "countrycode": "IM",
+  "isdcode": "607",
+  "currency": null
+ },
+ {
+  "countryname": "Israel",
+  "countrycode": "IL",
+  "isdcode": "972",
+  "currency": "   "
+ },
+ {
+  "countryname": "Italy",
+  "countrycode": "IT",
+  "isdcode": "39",
+  "currency": "   "
+ },
+ {
+  "countryname": "Jada",
+  "countrycode": "JD",
+  "isdcode": "123",
+  "currency": null
+ },
+ {
+  "countryname": "Jamaica",
+  "countrycode": "JM",
+  "isdcode": "1",
+  "currency": "   "
+ },
+ {
+  "countryname": "JAPA",
+  "countrycode": "JA",
+  "isdcode": "353546",
+  "currency": null
+ },
+ {
+  "countryname": "Japan",
+  "countrycode": "JP",
+  "isdcode": "81",
+  "currency": "   "
+ },
+ {
+  "countryname": "Jordan",
+  "countrycode": "JO",
+  "isdcode": "962",
+  "currency": "   "
+ },
+ {
+  "countryname": "Kazakhstan",
+  "countrycode": "KZ",
+  "isdcode": "7",
+  "currency": "   "
+ },
+ {
+  "countryname": "Kenya",
+  "countrycode": "KE",
+  "isdcode": "254",
+  "currency": "   "
+ },
+ {
+  "countryname": "Kiribati",
+  "countrycode": "KI",
+  "isdcode": "686",
+  "currency": "   "
+ },
+ {
+  "countryname": "Kuwait",
+  "countrycode": "KW",
+  "isdcode": "965",
+  "currency": "   "
+ },
+ {
+  "countryname": "Kyrgyzstan",
+  "countrycode": "KG",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "Lakshadeep",
+  "countrycode": "LP",
+  "isdcode": "259",
+  "currency": null
+ },
+ {
+  "countryname": "Lao People s Democratic Republic",
+  "countrycode": "LA",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "Latvia",
+  "countrycode": "LV",
+  "isdcode": "371",
+  "currency": "   "
+ },
+ {
+  "countryname": "Lebanon",
+  "countrycode": "LB",
+  "isdcode": "961",
+  "currency": "   "
+ },
+ {
+  "countryname": "Lesotho",
+  "countrycode": "LS",
+  "isdcode": "266",
+  "currency": "   "
+ },
+ {
+  "countryname": "Liberia",
+  "countrycode": "LR",
+  "isdcode": "231",
+  "currency": "   "
+ },
+ {
+  "countryname": "Libya",
+  "countrycode": "LY",
+  "isdcode": "218",
+  "currency": "   "
+ },
+ {
+  "countryname": "Liechtenstein",
+  "countrycode": "LI",
+  "isdcode": "423",
+  "currency": "   "
+ },
+ {
+  "countryname": "Lithuania",
+  "countrycode": "LT",
+  "isdcode": "370",
+  "currency": "   "
+ },
+ {
+  "countryname": "Luxembourg",
+  "countrycode": "LU",
+  "isdcode": "352",
+  "currency": "   "
+ },
+ {
+  "countryname": "Macao",
+  "countrycode": "MO",
+  "isdcode": "853",
+  "currency": "   "
+ },
+ {
+  "countryname": "Macedonia, The former Yugoslav Republic of",
+  "countrycode": "MK",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "Madagascar",
+  "countrycode": "MG",
+  "isdcode": "261",
+  "currency": "   "
+ },
+ {
+  "countryname": "Malawi",
+  "countrycode": "MW",
+  "isdcode": "265",
+  "currency": "   "
+ },
+ {
+  "countryname": "Malaysia",
+  "countrycode": "MY",
+  "isdcode": "60",
+  "currency": "   "
+ },
+ {
+  "countryname": "Maldives",
+  "countrycode": "MV",
+  "isdcode": "960",
+  "currency": "   "
+ },
+ {
+  "countryname": "Mali",
+  "countrycode": "ML",
+  "isdcode": "223",
+  "currency": "   "
+ },
+ {
+  "countryname": "Malta",
+  "countrycode": "MT",
+  "isdcode": "356",
+  "currency": "   "
+ },
+ {
+  "countryname": "Marshall Islands",
+  "countrycode": "MH",
+  "isdcode": "692",
+  "currency": "   "
+ },
+ {
+  "countryname": "Martinique",
+  "countrycode": "MQ",
+  "isdcode": "596",
+  "currency": "   "
+ },
+ {
+  "countryname": "Mauritania",
+  "countrycode": "MR",
+  "isdcode": "222",
+  "currency": "   "
+ },
+ {
+  "countryname": "Mauritius",
+  "countrycode": "MU",
+  "isdcode": "230",
+  "currency": "   "
+ },
+ {
+  "countryname": "Mayotte",
+  "countrycode": "YT",
+  "isdcode": "269",
+  "currency": "   "
+ },
+ {
+  "countryname": "Mexico",
+  "countrycode": "MX",
+  "isdcode": "52",
+  "currency": "   "
+ },
+ {
+  "countryname": "Micronesia, Federated States of",
+  "countrycode": "FM",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "Moldova, Republic of",
+  "countrycode": "MD",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "Monaco",
+  "countrycode": "MC",
+  "isdcode": "377",
+  "currency": "   "
+ },
+ {
+  "countryname": "Mongolia",
+  "countrycode": "MN",
+  "isdcode": "976",
+  "currency": "   "
+ },
+ {
+  "countryname": "Montenegro",
+  "countrycode": "ME",
+  "isdcode": "382",
+  "currency": null
+ },
+ {
+  "countryname": "Montserrat",
+  "countrycode": "MS",
+  "isdcode": "1664",
+  "currency": "   "
+ },
+ {
+  "countryname": "Morocco",
+  "countrycode": "MA",
+  "isdcode": "212",
+  "currency": "   "
+ },
+ {
+  "countryname": "Mozambique",
+  "countrycode": "MZ",
+  "isdcode": "258",
+  "currency": "   "
+ },
+ {
+  "countryname": "Myanmar",
+  "countrycode": "MM",
+  "isdcode": "95",
+  "currency": "   "
+ },
+ {
+  "countryname": "Namibia",
+  "countrycode": "NA",
+  "isdcode": "264",
+  "currency": "   "
+ },
+ {
+  "countryname": "Nauru",
+  "countrycode": "NR",
+  "isdcode": "674",
+  "currency": "   "
+ },
+ {
+  "countryname": "Nepal",
+  "countrycode": "NP",
+  "isdcode": "977",
+  "currency": "   "
+ },
+ {
+  "countryname": "Netherlands",
+  "countrycode": "NL",
+  "isdcode": "31",
+  "currency": "   "
+ },
+ {
+  "countryname": "Netherlands Antilles",
+  "countrycode": "AN",
+  "isdcode": "599",
+  "currency": "   "
+ },
+ {
+  "countryname": "New Caledonia",
+  "countrycode": "NC",
+  "isdcode": "687",
+  "currency": "   "
+ },
+ {
+  "countryname": "New Zealand",
+  "countrycode": "NZ",
+  "isdcode": "64",
+  "currency": "   "
+ },
+ {
+  "countryname": "Nicaragua",
+  "countrycode": "NI",
+  "isdcode": "505",
+  "currency": "   "
+ },
+ {
+  "countryname": "Niger",
+  "countrycode": "NE",
+  "isdcode": "227",
+  "currency": "   "
+ },
+ {
+  "countryname": "Nigeria",
+  "countrycode": "NG",
+  "isdcode": "234",
+  "currency": "   "
+ },
+ {
+  "countryname": "Niue",
+  "countrycode": "NU",
+  "isdcode": "683",
+  "currency": "   "
+ },
+ {
+  "countryname": "Norfolk Island",
+  "countrycode": "NF",
+  "isdcode": "672",
+  "currency": "   "
+ },
+ {
+  "countryname": "North Korea, Democratic People s Republic of",
+  "countrycode": "KP",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "Northern Mariana Islands",
+  "countrycode": "MP",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "Norway",
+  "countrycode": "NO",
+  "isdcode": "47",
+  "currency": "   "
+ },
+ {
+  "countryname": "Oman",
+  "countrycode": "OM",
+  "isdcode": "968",
+  "currency": "   "
+ },
+ {
+  "countryname": "Pakistan",
+  "countrycode": "PK",
+  "isdcode": "92",
+  "currency": "   "
+ },
+ {
+  "countryname": "Palau",
+  "countrycode": "PW",
+  "isdcode": "680",
+  "currency": "   "
+ },
+ {
+  "countryname": "Panama",
+  "countrycode": "PA",
+  "isdcode": "507",
+  "currency": "   "
+ },
+ {
+  "countryname": "Papua New Guinea",
+  "countrycode": "PG",
+  "isdcode": "675",
+  "currency": "   "
+ },
+ {
+  "countryname": "Paraguay",
+  "countrycode": "PY",
+  "isdcode": "595",
+  "currency": "   "
+ },
+ {
+  "countryname": "Peru",
+  "countrycode": "PE",
+  "isdcode": "51",
+  "currency": "   "
+ },
+ {
+  "countryname": "Philippines",
+  "countrycode": "PH",
+  "isdcode": "63",
+  "currency": "   "
+ },
+ {
+  "countryname": "Pitcairn",
+  "countrycode": "PN",
+  "isdcode": "872",
+  "currency": "   "
+ },
+ {
+  "countryname": "Poland",
+  "countrycode": "PL",
+  "isdcode": "48",
+  "currency": "   "
+ },
+ {
+  "countryname": "Portugal",
+  "countrycode": "PT",
+  "isdcode": "351",
+  "currency": "   "
+ },
+ {
+  "countryname": "Puerto Rico",
+  "countrycode": "PR",
+  "isdcode": "1787",
+  "currency": "   "
+ },
+ {
+  "countryname": "Qatar",
+  "countrycode": "QA",
+  "isdcode": "974",
+  "currency": "   "
+ },
+ {
+  "countryname": "REPORT Documentation",
+  "countrycode": "RD",
+  "isdcode": "343",
+  "currency": null
+ },
+ {
+  "countryname": "Republic of Korea",
+  "countrycode": "KR",
+  "isdcode": "82",
+  "currency": "   "
+ },
+ {
+  "countryname": "Reunion",
+  "countrycode": "RE",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "Romania",
+  "countrycode": "RO",
+  "isdcode": "40",
+  "currency": "   "
+ },
+ {
+  "countryname": "Russian Federation",
+  "countrycode": "RU",
+  "isdcode": "7",
+  "currency": "   "
+ },
+ {
+  "countryname": "Rwanda",
+  "countrycode": "RW",
+  "isdcode": "250",
+  "currency": "   "
+ },
+ {
+  "countryname": "Saint Helena",
+  "countrycode": "SH",
+  "isdcode": "290",
+  "currency": "   "
+ },
+ {
+  "countryname": "Saint Kitts and Nevis",
+  "countrycode": "KN",
+  "isdcode": "1",
+  "currency": "   "
+ },
+ {
+  "countryname": "Saint Lucia",
+  "countrycode": "LC",
+  "isdcode": "758",
+  "currency": "   "
+ },
+ {
+  "countryname": "Saint Pierre and Miquelon",
+  "countrycode": "PM",
+  "isdcode": "508",
+  "currency": "   "
+ },
+ {
+  "countryname": "Saint Vincent and the Grenadines",
+  "countrycode": "VC",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "Samoa",
+  "countrycode": "WS",
+  "isdcode": "685",
+  "currency": "   "
+ },
+ {
+  "countryname": "san",
+  "countrycode": "AD",
+  "isdcode": "376",
+  "currency": "   "
+ },
+ {
+  "countryname": "San Marino",
+  "countrycode": "SM",
+  "isdcode": "378",
+  "currency": "   "
+ },
+ {
+  "countryname": "Sao Tome and Principe",
+  "countrycode": "ST",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "Saudi Arabia",
+  "countrycode": "SA",
+  "isdcode": "966",
+  "currency": "   "
+ },
+ {
+  "countryname": "Senegal",
+  "countrycode": "SN",
+  "isdcode": "221",
+  "currency": "   "
+ },
+ {
+  "countryname": "Serbia",
+  "countrycode": "RS",
+  "isdcode": "381",
+  "currency": null
+ },
+ {
+  "countryname": "Seychelles",
+  "countrycode": "SC",
+  "isdcode": "248",
+  "currency": "   "
+ },
+ {
+  "countryname": "Sierra Leone",
+  "countrycode": "SL",
+  "isdcode": "232",
+  "currency": "   "
+ },
+ {
+  "countryname": "Singapore",
+  "countrycode": "SG",
+  "isdcode": "65",
+  "currency": "   "
+ },
+ {
+  "countryname": "Slovakia",
+  "countrycode": "SK",
+  "isdcode": "421",
+  "currency": "   "
+ },
+ {
+  "countryname": "Slovenia",
+  "countrycode": "SI",
+  "isdcode": "386",
+  "currency": "   "
+ },
+ {
+  "countryname": "Solomon Islands",
+  "countrycode": "SB",
+  "isdcode": "677",
+  "currency": "   "
+ },
+ {
+  "countryname": "Somalia",
+  "countrycode": "SO",
+  "isdcode": "252",
+  "currency": "   "
+ },
+ {
+  "countryname": "South Africa",
+  "countrycode": "ZA",
+  "isdcode": "27",
+  "currency": "   "
+ },
+ {
+  "countryname": "South Georgia and the South Sandwich Islands",
+  "countrycode": "GS",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "Spain",
+  "countrycode": "ES",
+  "isdcode": "34",
+  "currency": "   "
+ },
+ {
+  "countryname": "Sri Lanka",
+  "countrycode": "LK",
+  "isdcode": "94",
+  "currency": "   "
+ },
+ {
+  "countryname": "ss dd",
+  "countrycode": "SS",
+  "isdcode": "2233",
+  "currency": null
+ },
+ {
+  "countryname": "Sudan",
+  "countrycode": "SD",
+  "isdcode": "249",
+  "currency": "   "
+ },
+ {
+  "countryname": "Svalbard and Jan Mayen",
+  "countrycode": "SJ",
+  "isdcode": "47",
+  "currency": "   "
+ },
+ {
+  "countryname": "Swaziland",
+  "countrycode": "SZ",
+  "isdcode": "268",
+  "currency": "   "
+ },
+ {
+  "countryname": "Sweden",
+  "countrycode": "SE",
+  "isdcode": "46",
+  "currency": "   "
+ },
+ {
+  "countryname": "Switzerland",
+  "countrycode": "CH",
+  "isdcode": "41",
+  "currency": "   "
+ },
+ {
+  "countryname": "Syrian Arab Republic",
+  "countrycode": "SY",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "Taiwan",
+  "countrycode": "TW",
+  "isdcode": "886",
+  "currency": "   "
+ },
+ {
+  "countryname": "Tajikistan",
+  "countrycode": "TJ",
+  "isdcode": "992",
+  "currency": "   "
+ },
+ {
+  "countryname": "Tanzania, United Republic of",
+  "countrycode": "TZ",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "tesrd",
+  "countrycode": "XC",
+  "isdcode": "543789",
+  "currency": null
+ },
+ {
+  "countryname": "Test Country",
+  "countrycode": "QC",
+  "isdcode": "315315",
+  "currency": null
+ },
+ {
+  "countryname": "tested-sd",
+  "countrycode": "RF",
+  "isdcode": "109865",
+  "currency": null
+ },
+ {
+  "countryname": "testtesttest",
+  "countrycode": "WZ",
+  "isdcode": "043215",
+  "currency": null
+ },
+ {
+  "countryname": "Thailand",
+  "countrycode": "TH",
+  "isdcode": "66",
+  "currency": "   "
+ },
+ {
+  "countryname": "Timor-Leste",
+  "countrycode": "TL",
+  "isdcode": "670",
+  "currency": "   "
+ },
+ {
+  "countryname": "Togo",
+  "countrycode": "TG",
+  "isdcode": "228",
+  "currency": "   "
+ },
+ {
+  "countryname": "Tokelau",
+  "countrycode": "TK",
+  "isdcode": "690",
+  "currency": "   "
+ },
+ {
+  "countryname": "Tonga",
+  "countrycode": "TO",
+  "isdcode": "676",
+  "currency": "   "
+ },
+ {
+  "countryname": "Trinidad and Tobago",
+  "countrycode": "TT",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "Tunisia",
+  "countrycode": "TN",
+  "isdcode": "216",
+  "currency": "   "
+ },
+ {
+  "countryname": "Turkey",
+  "countrycode": "TR",
+  "isdcode": "90",
+  "currency": "   "
+ },
+ {
+  "countryname": "Turkmenistan",
+  "countrycode": "TM",
+  "isdcode": "993",
+  "currency": "   "
+ },
+ {
+  "countryname": "Turks and Caicos Islands",
+  "countrycode": "TC",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "TUVAL0",
+  "countrycode": "DY",
+  "isdcode": "2349",
+  "currency": null
+ },
+ {
+  "countryname": "Tuvalu",
+  "countrycode": "TV",
+  "isdcode": "688",
+  "currency": "   "
+ },
+ {
+  "countryname": "Uganda",
+  "countrycode": "UG",
+  "isdcode": "256",
+  "currency": "   "
+ },
+ {
+  "countryname": "UK",
+  "countrycode": "DX",
+  "isdcode": "342",
+  "currency": null
+ },
+ {
+  "countryname": "Ukraine",
+  "countrycode": "UA",
+  "isdcode": "380",
+  "currency": "   "
+ },
+ {
+  "countryname": "United Arab Emirates",
+  "countrycode": "AE",
+  "isdcode": "971",
+  "currency": "   "
+ },
+ {
+  "countryname": "United Kingdom",
+  "countrycode": "GB",
+  "isdcode": "44",
+  "currency": "   "
+ },
+ {
+  "countryname": "United States",
+  "countrycode": "US",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "United States Minor Outlying Islands",
+  "countrycode": "UM",
+  "isdcode": "699",
+  "currency": "   "
+ },
+ {
+  "countryname": "Uruguay",
+  "countrycode": "UY",
+  "isdcode": "598",
+  "currency": "   "
+ },
+ {
+  "countryname": "Uzbekistan",
+  "countrycode": "UZ",
+  "isdcode": "998",
+  "currency": "   "
+ },
+ {
+  "countryname": "Vanuatu",
+  "countrycode": "VU",
+  "isdcode": "678",
+  "currency": "   "
+ },
+ {
+  "countryname": "vasich",
+  "countrycode": "VD",
+  "isdcode": "2345",
+  "currency": null
+ },
+ {
+  "countryname": "vdfvdvf",
+  "countrycode": "FV",
+  "isdcode": "34",
+  "currency": null
+ },
+ {
+  "countryname": "Venezuela",
+  "countrycode": "VE",
+  "isdcode": "58",
+  "currency": "   "
+ },
+ {
+  "countryname": "Viet Nam",
+  "countrycode": "VN",
+  "isdcode": "84",
+  "currency": "   "
+ },
+ {
+  "countryname": "vietnam",
+  "countrycode": "NN",
+  "isdcode": "123",
+  "currency": null
+ },
+ {
+  "countryname": "Virgin Islands, British",
+  "countrycode": "VG",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "Virgin Islands, U.S.",
+  "countrycode": "VI",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "Wallis and Futuna",
+  "countrycode": "WF",
+  "isdcode": null,
+  "currency": "   "
+ },
+ {
+  "countryname": "werewr4",
+  "countrycode": "WE",
+  "isdcode": "312312",
+  "currency": null
+ },
+ {
+  "countryname": "Western Sahara",
+  "countrycode": "EH",
+  "isdcode": "212",
+  "currency": "   "
+ },
+ {
+  "countryname": "Yemen",
+  "countrycode": "YE",
+  "isdcode": "967",
+  "currency": "   "
+ },
+ {
+  "countryname": "Zambia",
+  "countrycode": "ZM",
+  "isdcode": "260",
+  "currency": "   "
+ },
+ {
+  "countryname": "zdfdsf",
+  "countrycode": "Z1",
+  "isdcode": "123123",
+  "currency": null
+ },
+ {
+  "countryname": "Zimbabwe",
+  "countrycode": "ZW",
+  "isdcode": "263",
+  "currency": "   "
+ },
+ {
+  "countryname": "zz",
+  "countrycode": "ZY",
+  "isdcode": "234423",
+  "currency": null
+ }
+]

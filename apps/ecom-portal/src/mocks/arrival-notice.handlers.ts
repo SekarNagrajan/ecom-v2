@@ -1,15 +1,18 @@
-// Modified by Sekar Nagarajan (2026-08-26 14:50)
+// Modified by Sekar Nagarajan (2026-10-17 00:33)
+/**
+ * Arrival Notice MSW handlers, served from the SQL-extracted fixtures through
+ * fixture-api/bridges/arrival-notice.bridge.ts (arrivalNotices / invoices / invoiceCharges /
+ * lrpBl / lrpBlCargo / lrpBlCust). Downloading the document marks the notice printed in-session.
+ */
 import { delay, http, HttpResponse } from "msw";
 
-import type { ArrivalNoticeDTO } from "../features/arrival-notice/types/arrival-notice.types";
 import {
-  filterArnByArrivalDate,
-  getMockArrivalNoticeDetail,
-  markArnPrinted,
-  mockArrivalNoticeDetails,
-  mockArrivalNotices,
-  resetMockArrivalNotices,
-} from "../features/arrival-notice/mocks/arn.mock";
+  arrivalNoticeDetail,
+  arrivalNoticeList,
+  filterArrivalNotices,
+  markArrivalNoticePrinted as markPrinted,
+} from "./fixture-api/bridges/arrival-notice.bridge";
+import { resetDb } from "./fixture-api/db";
 
 /**
  * Specific paths before `/:anNo` so list / document
@@ -21,7 +24,7 @@ export const arrivalNoticeHandlers = [
     const url = new URL(request.url);
     const fromDate = url.searchParams.get("fromDate");
     const toDate = url.searchParams.get("toDate");
-    const data = filterArnByArrivalDate(mockArrivalNotices, fromDate, toDate);
+    const data = filterArrivalNotices(arrivalNoticeList(), fromDate, toDate);
     return HttpResponse.json({ data });
   }),
 
@@ -30,7 +33,7 @@ export const arrivalNoticeHandlers = [
     async ({ params }) => {
       await delay(400);
       const anNo = String(params.anNo);
-      if (!markArnPrinted(anNo)) {
+      if (!markPrinted(anNo)) {
         return HttpResponse.json(
           {
             error: {
@@ -57,9 +60,8 @@ export const arrivalNoticeHandlers = [
   http.get("*/api/ecom/imp/arrival-notices/:anNo", async ({ params }) => {
     await delay(200);
     const anNo = String(params.anNo);
-    const live =
-      mockArrivalNoticeDetails[anNo] ?? getMockArrivalNoticeDetail(anNo);
-    if (!live) {
+    const data = arrivalNoticeDetail(anNo);
+    if (!data) {
       return HttpResponse.json(
         {
           error: {
@@ -70,24 +72,19 @@ export const arrivalNoticeHandlers = [
         { status: 404 },
       );
     }
-    const listRow = mockArrivalNotices.find((r) => r.anNo === anNo);
-    const data: ArrivalNoticeDTO = {
-      ...live,
-      printStatus: listRow?.printStatus ?? live.printStatus,
-    };
     return HttpResponse.json({ data });
   }),
 ];
 
-/** Reset store for tests */
+/** Reset store for tests (restores the pristine fixtures). */
 export function resetArrivalNoticeMockStore() {
-  resetMockArrivalNotices();
+  resetDb();
 }
 
 export function markArrivalNoticePrinted(anNo: string): boolean {
-  return markArnPrinted(anNo);
+  return markPrinted(anNo);
 }
 
 export function getArrivalNoticeListSnapshot() {
-  return mockArrivalNotices.map((row) => ({ ...row }));
+  return arrivalNoticeList();
 }

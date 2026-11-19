@@ -1,16 +1,11 @@
-import nx from '@nx/eslint-plugin';
-
+// Modified by Sekar Nagarajan (2026-11-12 23:20)
+/**
+ * The shared-ui library is linted by the workspace config (run `pnpm lint` from the repo root).
+ * This file exists so editors and `eslint` invoked from inside the library resolve the same rules.
+ */
 import baseConfig from '../../../eslint.config.mjs';
 
 export default [
   ...baseConfig,
-  ...nx.configs['flat/react'],
-  {
-    files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
-    // Override or add rules here
-    rules: {},
-  },
-  {
-    ignores: ['**/dist/**', '**/out-tsc', 'eslint.config.mjs'],
-  },
+  { ignores: ['**/dist/**', '**/out-tsc/**', '**/storybook-static/**'] },
 ];

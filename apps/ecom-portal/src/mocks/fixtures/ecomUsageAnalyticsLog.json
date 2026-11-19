@@ -1,0 +1,402 @@
+[
+ {
+  "id": "30884",
+  "countrycode": "CN",
+  "custcode": "20001374",
+  "modulecode": "BOL",
+  "starttime": "2026-11-20T04:25:13.652Z",
+  "endtime": null
+ },
+ {
+  "id": "30883",
+  "countrycode": null,
+  "custcode": null,
+  "modulecode": "DBD",
+  "starttime": "2026-11-20T04:25:08.122Z",
+  "endtime": "2026-11-20T04:25:13.648Z"
+ },
+ {
+  "id": "30882",
+  "countrycode": "IN",
+  "custcode": "2026000100",
+  "modulecode": "SHI",
+  "starttime": "2026-11-20T03:39:27.372Z",
+  "endtime": "2026-11-20T04:07:10.962Z"
+ },
+ {
+  "id": "30881",
+  "countrycode": "IN",
+  "custcode": "2026000100",
+  "modulecode": "BOL",
+  "starttime": "2026-11-20T03:31:43.882Z",
+  "endtime": "2026-11-20T03:39:27.355Z"
+ },
+ {
+  "id": "30880",
+  "countrycode": "IN",
+  "custcode": "2026000100",
+  "modulecode": "BKG",
+  "starttime": "2026-11-20T03:29:10.802Z",
+  "endtime": "2026-11-20T03:31:43.875Z"
+ },
+ {
+  "id": "30879",
+  "countrycode": null,
+  "custcode": null,
+  "modulecode": "DBD",
+  "starttime": "2026-11-20T03:29:05.952Z",
+  "endtime": "2026-11-20T03:29:10.798Z"
+ },
+ {
+  "id": "30878",
+  "countrycode": null,
+  "custcode": null,
+  "modulecode": "TAR",
+  "starttime": "2026-11-20T03:21:46.328Z",
+  "endtime": "2026-11-20T03:29:05.935Z"
+ },
+ {
+  "id": "30877",
+  "countrycode": null,
+  "custcode": null,
+  "modulecode": "DBD",
+  "starttime": "2026-11-20T01:51:33.752Z",
+  "endtime": "2026-11-20T02:19:39.615Z"
+ },
+ {
+  "id": "30876",
+  "countrycode": null,
+  "custcode": null,
+  "modulecode": "DBD",
+  "starttime": "2026-11-20T01:12:57.915Z",
+  "endtime": "2026-11-20T01:40:41.538Z"
+ },
+ {
+  "id": "30875",
+  "countrycode": "IN",
+  "custcode": "2026000100",
+  "modulecode": "BOL",
+  "starttime": "2026-11-20T00:39:37.208Z",
+  "endtime": null
+ },
+ {
+  "id": "30874",
+  "countrycode": "IN",
+  "custcode": "2026000100",
+  "modulecode": "BKG",
+  "starttime": "2026-11-20T00:36:01.638Z",
+  "endtime": "2026-11-20T00:39:37.202Z"
+ },
+ {
+  "id": "30873",
+  "countrycode": null,
+  "custcode": null,
+  "modulecode": "DBD",
+  "starttime": "2026-11-20T00:31:23.315Z",
+  "endtime": "2026-11-20T00:36:01.635Z"
+ },
+ {
+  "id": "30872",
+  "countrycode": "CN",
+  "custcode": "20001374",
+  "modulecode": "BKG",
+  "starttime": "2026-11-20T00:29:12.862Z",
+  "endtime": null
+ },
+ {
+  "id": "30871",
+  "countrycode": null,
+  "custcode": null,
+  "modulecode": "DBD",
+  "starttime": "2026-11-20T00:29:08.185Z",
+  "endtime": "2026-11-20T00:29:12.858Z"
+ },
+ {
+  "id": "30870",
+  "countrycode": "CN",
+  "custcode": "20001374",
+  "modulecode": "BKG",
+  "starttime": "2026-11-19T23:33:11.598Z",
+  "endtime": "2026-11-20T00:25:18.075Z"
+ },
+ {
+  "id": "30869",
+  "countrycode": null,
+  "custcode": null,
+  "modulecode": "DBD",
+  "starttime": "2026-11-19T23:32:11.795Z",
+  "endtime": "2026-11-19T23:33:11.595Z"
+ },
+ {
+  "id": "30868",
+  "countrycode": null,
+  "custcode": null,
+  "modulecode": "DBD",
+  "starttime": "2026-11-17T09:29:29.585Z",
+  "endtime": null
+ },
+ {
+  "id": "30867",
+  "countrycode": "CN",
+  "custcode": "20001374",
+  "modulecode": "SHI",
+  "starttime": "2026-11-17T09:27:24.872Z",
+  "endtime": null
+ },
+ {
+  "id": "30866",
+  "countrycode": "CN",
+  "custcode": "20001374",
+  "modulecode": "BKG",
+  "starttime": "2026-11-17T09:25:38.295Z",
+  "endtime": "2026-11-17T09:27:23.778Z"
+ },
+ {
+  "id": "30865",
+  "countrycode": null,
+  "custcode": null,
+  "modulecode": "DBD",
+  "starttime": "2026-11-17T09:25:17.928Z",
+  "endtime": "2026-11-17T09:25:38.295Z"
+ },
+ {
+  "id": "30864",
+  "countrycode": null,
+  "custcode": null,
+  "modulecode": "DBD",
+  "starttime": "2026-11-17T09:22:26.878Z",
+  "endtime": "2026-11-17T09:24:47.145Z"
+ },
+ {
+  "id": "30863",
+  "countrycode": null,
+  "custcode": null,
+  "modulecode": "DBD",
+  "starttime": "2026-11-17T07:10:10.322Z",
+  "endtime": "2026-11-17T07:50:05.605Z"
+ },
+ {
+  "id": "30862",
+  "countrycode": null,
+  "custcode": null,
+  "modulecode": "DBD",
+  "starttime": "2026-11-17T04:13:02.252Z",
+  "endtime": "2026-11-17T05:10:17.922Z"
+ },
+ {
+  "id": "30861",
+  "countrycode": null,
+  "custcode": null,
+  "modulecode": "DBD",
+  "starttime": "2026-11-17T00:46:45.582Z",
+  "endtime": "2026-11-17T01:40:59.362Z"
+ },
+ {
+  "id": "30860",
+  "countrycode": null,
+  "custcode": null,
+  "modulecode": "DBD",
+  "starttime": "2026-11-16T10:39:52.228Z",
+  "endtime": null
+ },
+ {
+  "id": "30859",
+  "countrycode": "CN",
+  "custcode": "20001374",
+  "modulecode": "BKG",
+  "starttime": "2026-11-16T09:42:59.878Z",
+  "endtime": "2026-11-16T10:14:46.428Z"
+ },
+ {
+  "id": "30858",
+  "countrycode": "CN",
+  "custcode": "20001374",
+  "modulecode": "SHI",
+  "starttime": "2026-11-16T09:34:03.278Z",
+  "endtime": "2026-11-16T09:42:59.875Z"
+ },
+ {
+  "id": "30857",
+  "countrycode": "CN",
+  "custcode": "20001374",
+  "modulecode": "BKG",
+  "starttime": "2026-11-16T09:33:41.975Z",
+  "endtime": "2026-11-16T09:34:03.272Z"
+ },
+ {
+  "id": "30856",
+  "countrycode": null,
+  "custcode": null,
+  "modulecode": "DBD",
+  "starttime": "2026-11-16T09:33:34.702Z",
+  "endtime": "2026-11-16T09:33:41.845Z"
+ },
+ {
+  "id": "30855",
+  "countrycode": null,
+  "custcode": null,
+  "modulecode": "BLS",
+  "starttime": "2026-11-16T09:07:48.045Z",
+  "endtime": "2026-11-16T09:33:34.695Z"
+ },
+ {
+  "id": "30854",
+  "countrycode": "CN",
+  "custcode": "20001374",
+  "modulecode": "BLS",
+  "starttime": "2026-11-16T09:06:45.628Z",
+  "endtime": "2026-11-16T09:07:39.875Z"
+ },
+ {
+  "id": "30853",
+  "countrycode": null,
+  "custcode": null,
+  "modulecode": "DBD",
+  "starttime": "2026-11-16T09:06:38.662Z",
+  "endtime": "2026-11-16T09:06:45.542Z"
+ },
+ {
+  "id": "30852",
+  "countrycode": null,
+  "custcode": null,
+  "modulecode": "BLS",
+  "starttime": "2026-11-16T09:03:10.452Z",
+  "endtime": "2026-11-16T09:04:45.528Z"
+ },
+ {
+  "id": "30851",
+  "countrycode": null,
+  "custcode": null,
+  "modulecode": "BLS",
+  "starttime": "2026-11-16T08:59:17.165Z",
+  "endtime": null
+ },
+ {
+  "id": "30850",
+  "countrycode": null,
+  "custcode": null,
+  "modulecode": "BLS",
+  "starttime": "2026-11-16T08:55:31.012Z",
+  "endtime": "2026-11-16T08:59:26.552Z"
+ },
+ {
+  "id": "30849",
+  "countrycode": "CN",
+  "custcode": "20001374",
+  "modulecode": "VGM",
+  "starttime": "2026-11-16T08:28:38.448Z",
+  "endtime": null
+ },
+ {
+  "id": "30848",
+  "countrycode": "CN",
+  "custcode": "20001374",
+  "modulecode": "SHI",
+  "starttime": "2026-11-16T08:26:28.075Z",
+  "endtime": "2026-11-16T08:28:38.442Z"
+ },
+ {
+  "id": "30847",
+  "countrycode": null,
+  "custcode": null,
+  "modulecode": "DBD",
+  "starttime": "2026-11-16T08:26:12.478Z",
+  "endtime": "2026-11-16T08:26:28.005Z"
+ },
+ {
+  "id": "30846",
+  "countrycode": "CN",
+  "custcode": "20001374",
+  "modulecode": "BKG",
+  "starttime": "2026-11-16T07:51:51.635Z",
+  "endtime": null
+ },
+ {
+  "id": "30845",
+  "countrycode": null,
+  "custcode": null,
+  "modulecode": "DBD",
+  "starttime": "2026-11-16T07:51:41.948Z",
+  "endtime": "2026-11-16T07:51:51.585Z"
+ },
+ {
+  "id": "30844",
+  "countrycode": null,
+  "custcode": null,
+  "modulecode": "BKG",
+  "starttime": "2026-11-16T07:51:37.335Z",
+  "endtime": "2026-11-16T07:51:37.518Z"
+ },
+ {
+  "id": "30843",
+  "countrycode": "IN",
+  "custcode": "2026000100",
+  "modulecode": "BOL",
+  "starttime": "2026-11-16T07:32:44.678Z",
+  "endtime": null
+ },
+ {
+  "id": "30842",
+  "countrycode": "IN",
+  "custcode": "2026000100",
+  "modulecode": "SHI",
+  "starttime": "2026-11-16T07:16:02.412Z",
+  "endtime": "2026-11-16T07:32:44.315Z"
+ },
+ {
+  "id": "30841",
+  "countrycode": "IN",
+  "custcode": "2026000100",
+  "modulecode": "BOL",
+  "starttime": "2026-11-16T07:14:03.275Z",
+  "endtime": "2026-11-16T07:16:02.245Z"
+ },
+ {
+  "id": "30840",
+  "countrycode": null,
+  "custcode": null,
+  "modulecode": "DBD",
+  "starttime": "2026-11-16T07:13:57.138Z",
+  "endtime": "2026-11-16T07:14:03.258Z"
+ },
+ {
+  "id": "30839",
+  "countrycode": "CN",
+  "custcode": "20001374",
+  "modulecode": "BKG",
+  "starttime": "2026-11-16T07:12:51.625Z",
+  "endtime": null
+ },
+ {
+  "id": "30838",
+  "countrycode": null,
+  "custcode": null,
+  "modulecode": "DBD",
+  "starttime": "2026-11-16T07:11:13.368Z",
+  "endtime": "2026-11-16T07:12:51.618Z"
+ },
+ {
+  "id": "30837",
+  "countrycode": "IN",
+  "custcode": "2026000100",
+  "modulecode": "SHI",
+  "starttime": "2026-11-16T07:09:43.125Z",
+  "endtime": "2026-11-16T07:13:29.715Z"
+ },
+ {
+  "id": "30836",
+  "countrycode": null,
+  "custcode": null,
+  "modulecode": "DBD",
+  "starttime": "2026-11-16T07:09:32.602Z",
+  "endtime": "2026-11-16T07:09:42.608Z"
+ },
+ {
+  "id": "30835",
+  "countrycode": null,
+  "custcode": null,
+  "modulecode": "DBD",
+  "starttime": "2026-11-16T07:00:01.142Z",
+  "endtime": "2026-11-16T07:08:16.355Z"
+ }
+]

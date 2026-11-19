@@ -2,12 +2,18 @@
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { useNavigate } from "@tanstack/react-router";
 import type { RowDoubleClickedEvent } from "ag-grid-community";
-import { Space, Typography } from "antd";
+import { Space } from "antd";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons, NavIcons } from "../../../components/icons";
+import { useModuleViewMode } from "../../../components/shared/hooks/use-module-view-mode";
+import {
+  ModuleEmptyState,
+  buildRetryAction,
+} from "../../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
-import { MODULE_TITLES } from "../../../constants/module-titles";
+import { useModuleTitles } from "../../../i18n/use-module-titles";
 import {
   useBLBatchPrintMutation,
   useBLCancelMutation,
@@ -26,13 +32,14 @@ import { BlPaymentBar } from "./bl-payment-bar";
 import { ManifestDrawer } from "./ManifestDrawer";
 import { BlViewDrawer } from "./view/BlViewDrawer";
 
-const { Text } = Typography;
-
 export function BillOfLadingListing() {
+  const { t } = useTranslation(["bill-of-lading", "common", "modules"]);
+  const MODULE_TITLES = useModuleTitles();
   const navigate = useNavigate();
-  const { data, isLoading } = useBLListQuery({});
+  const { data, isLoading, isError, refetch } = useBLListQuery({});
   const { data: config } = useBLWizardConfig();
   const rows = data?.rows ?? [];
+  const { viewMode, setViewMode } = useModuleViewMode("ecom.bl.viewMode");
 
   const [selectedRecord, setSelectedRecord] = useState<BLListDTO | null>(null);
   const [selectedBlNos, setSelectedBlNos] = useState<string[]>([]);
@@ -83,28 +90,44 @@ export function BillOfLadingListing() {
     setSelectedRecord(record);
   };
 
+  const emptyState = isError ? (
+    <ModuleEmptyState
+      variant="error"
+      title={t("empty.loadErrorTitle")}
+      message={t("empty.loadErrorMessage")}
+      actions={[buildRetryAction(() => void refetch())]}
+    />
+  ) : (
+    <ModuleEmptyState
+      variant="blank"
+      title={t("empty.noResultsTitle")}
+      message={t("empty.noResultsMessage")}
+    />
+  );
+
   return (
     <div className="bl-page-layout">
       <div className="bl-page-header">
         <ModuleScreenHeader
           icon={NavIcons.billOfLading}
           title={MODULE_TITLES.billOfLading}
-          subtitle="Review B/L status, verify drafts, and print transport documents."
+          // recordCount={rows.length}
+          subtitle={t("subtitle")}
           marginBottom={0}
+          viewMode={viewMode}
+          onViewModeChange={setViewMode}
+          viewModePlacement="after"
+          extra={
+            <Space wrap align="center" className="custom-scroll">
+              <AppButton
+                icon={<AppIcon icon={Icons.printer} size={16} tone="print" />}
+                onClick={() => setBatchOpen(true)}
+              >
+                {t("actions.batchOriginalPrint")}
+              </AppButton>
+            </Space>
+          }
         />
-        <div className="bl-toolbar custom-scroll">
-          <Space>
-            <AppButton
-              icon={<AppIcon icon={Icons.printer} size={16} tone="print" />}
-              onClick={() => setBatchOpen(true)}
-            >
-              Batch Original Print
-            </AppButton>
-            {/* <AppButton onClick={() => navigate({ to: "/app/bl/batch-print" })}>
-              Batch Print Page
-            </AppButton> */}
-          </Space>
-        </div>
       </div>
 
       <BlPaymentBar
@@ -114,23 +137,30 @@ export function BillOfLadingListing() {
         enabled={config?.enableStripePayment}
       />
 
-      <BillOfLadingListGrid
-        rows={rows}
-        loading={isLoading}
-        hideAgencyRefColumn={config?.hideAgencyRefColumn}
-        showChargeSummary={config?.showChargeSummary}
-        showNnPrint={config?.showNnPrint}
-        showReadyToConfirm={config?.showReadyToConfirm}
-        enableTermsOnConfirmedEdit={config?.enableTermsOnConfirmedEdit}
-        onView={handleView}
-        onEdit={(blNo) => navigate({ to: `/app/bl/${blNo}/edit` })}
-        onPrint={handlePrint}
-        onVerify={(blNo) => verifyBl(blNo)}
-        onCancel={(blNo) => cancelBl(blNo)}
-        onCharges={setChargesBlNo}
-        onManifest={openManifest}
-        onRowDoubleClicked={handleRowDoubleClick}
-      />
+      {isError && rows.length === 0 && !isLoading ? (
+        emptyState
+      ) : (
+        <BillOfLadingListGrid
+          rows={rows}
+          loading={isLoading}
+          emptyState={emptyState}
+          viewMode={viewMode}
+          onViewModeChange={setViewMode}
+          hideAgencyRefColumn={config?.hideAgencyRefColumn}
+          showChargeSummary={config?.showChargeSummary}
+          showNnPrint={config?.showNnPrint}
+          showReadyToConfirm={config?.showReadyToConfirm}
+          enableTermsOnConfirmedEdit={config?.enableTermsOnConfirmedEdit}
+          onView={handleView}
+          onEdit={(blNo) => navigate({ to: `/app/bl/${blNo}/edit` })}
+          onPrint={handlePrint}
+          onVerify={(blNo) => verifyBl(blNo)}
+          onCancel={(blNo) => cancelBl(blNo)}
+          onCharges={setChargesBlNo}
+          onManifest={openManifest}
+          onRowDoubleClicked={handleRowDoubleClick}
+        />
+      )}
 
       {selectedRecord ? (
         <BlViewDrawer
@@ -140,7 +170,7 @@ export function BillOfLadingListing() {
       ) : null}
 
       <AppDrawer
-        title="B/L Charge Summary"
+        title={t("drawers.chargeSummary")}
         open={Boolean(chargesBlNo)}
         onClose={() => setChargesBlNo(null)}
         width={720}

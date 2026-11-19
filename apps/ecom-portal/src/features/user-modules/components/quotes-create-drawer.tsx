@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-26 16:15)
+// Modified by Sekar Nagarajan (2026-09-11 18:25)
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AppButton,
@@ -11,9 +11,10 @@ import {
 import { Col, Row, Typography } from "antd";
 import { useForm, type Resolver } from "react-hook-form";
 
-import { AppIcon, Icons } from "../../../components/icons";
-import { MODULE_TITLES } from "../../../constants/module-titles";
+import { AppIcon, Icons, NavRatesIcon } from "../../../components/icons";
+import { useModuleTitles } from "../../../i18n/use-module-titles";
 import { RESPONSIVE_COL } from "../../../constants/responsive-grid";
+import { useAiTextAssist } from "../../ai-assist";
 import { useCreateQuoteMutation } from "../api/user-modules.queries";
 import type { CreateQuoteRequestPayload } from "../types/user-modules.types";
 import { createQuoteRequestSchema } from "../types/user-modules.types";
@@ -80,6 +81,7 @@ export interface QuotesCreateDrawerProps {
 }
 
 export function QuotesCreateDrawer({ open, onClose }: QuotesCreateDrawerProps) {
+  const MODULE_TITLES = useModuleTitles();
   const { mutateAsync: createQuote, isPending: isSubmitting } =
     useCreateQuoteMutation();
 
@@ -100,12 +102,14 @@ export function QuotesCreateDrawer({ open, onClose }: QuotesCreateDrawerProps) {
     handleClose();
   });
 
+  const { textareaAssistProps } = useAiTextAssist();
+
   return (
     <AppDrawer
       open={open}
       onClose={handleClose}
       placement="right"
-      dialogSize="md"
+      dialogSize="sm"
       destroyOnClose
       maskClosable={!isSubmitting}
       keyboard={!isSubmitting}
@@ -117,9 +121,9 @@ export function QuotesCreateDrawer({ open, onClose }: QuotesCreateDrawerProps) {
       styles={{ body: { padding: 0 } }}
       title={
         <UmPanelHeader
-          icon={Icons.edit}
+          icon={NavRatesIcon}
           title={MODULE_TITLES.quotes}
-          description="Submit a new ocean freight rate quotation request for the selected trade lane."
+          description="Submit a new ocean freight rate quotation request."
           compact
         />
       }
@@ -130,7 +134,7 @@ export function QuotesCreateDrawer({ open, onClose }: QuotesCreateDrawerProps) {
           </AppButton>
           <AppButton
             type="primary"
-            icon={<AppIcon icon={Icons.save} size={16} />}
+           
             loading={isSubmitting}
             onClick={handleSave}
           >
@@ -202,6 +206,7 @@ export function QuotesCreateDrawer({ open, onClose }: QuotesCreateDrawerProps) {
               rows={4}
               placeholder="Enter any special handling notes, target rates, or commodity specs..."
               formItemProps={FIELD_ITEM_PROPS}
+              {...textareaAssistProps}
             />
           </Col>
         </Row>

@@ -1,18 +1,12 @@
 // Modified by Sekar Nagarajan (2026-09-15 13:15)
-import {
-  DataView,
-  type DataViewColumn,
-} from "@solverminds/shared-ui/data-view";
+import { DataView, type DataViewColumn } from "@solverminds/shared-ui/data-view";
 import type { RowDoubleClickedEvent } from "ag-grid-community";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { buildActionsColumn } from "../../../components/shared/build-actions-column";
-import {
-  ListActionButton,
-  ListActionsRow,
-} from "../../../components/shared/list-action-button";
+import { ListActionButton, ListActionsRow } from "../../../components/shared/list-action-button";
 import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
 import type { ScheduleItem } from "../types/schedules.types";
@@ -52,7 +46,7 @@ export function ScheduleList({
           return (
             <ListActionsRow>
               <ListActionButton
-                title={t("actions.bookNow")}
+                title={record.bookingAllowed ? t("actions.bookNow") : t("bookingNotAllowedToast")}
                 icon={<AppIcon icon={Icons.plus} size={16} tone="create" />}
                 tone="create"
                 disabled={!record.bookingAllowed}
@@ -63,9 +57,7 @@ export function ScheduleList({
               />
               <ListActionButton
                 title={t("actions.getAQuote")}
-                icon={
-                  <AppIcon icon={Icons.fileText} size={16} tone="navigate" />
-                }
+                icon={<AppIcon icon={Icons.fileText} size={16} tone="navigate" />}
                 tone="navigate"
                 onClick={(e) => {
                   e.stopPropagation();
@@ -111,9 +103,7 @@ export function ScheduleList({
         valueGetter: (params: { data?: ScheduleItem }) => {
           const record = params.data;
           if (!record) return "";
-          return record.bound
-            ? `${record.voyage} ${record.bound}`
-            : record.voyage;
+          return record.bound ? `${record.voyage} ${record.bound}` : record.voyage;
         },
       },
       {
@@ -129,9 +119,7 @@ export function ScheduleList({
               {/* <Tag className="module-status-tag" color="blue"> */}
               {record.serviceCode}
               {/* </Tag> */}
-              <div className="schedule-list-cell__sub">
-                {record.serviceName}
-              </div>
+              <div className="schedule-list-cell__sub">{record.serviceName}</div>
             </div>
           );
         },
@@ -217,9 +205,7 @@ export function ScheduleList({
         width: 100,
         minWidth: 90,
         valueFormatter: (params: { value?: number }) =>
-          params.value != null
-            ? t("card.days", { count: params.value })
-            : "",
+          params.value != null ? t("card.days", { count: params.value }) : "",
       },
       {
         headerName: t("list.columns.gateIn"),
@@ -286,12 +272,8 @@ export function ScheduleList({
             gridOptions: {
               getRowId: (params) => params.data.id,
               getRowClass: (params) =>
-                params.data?.isDefaultRoute
-                  ? "schedule-list-row--recommended"
-                  : undefined,
-              onRowDoubleClicked: (
-                event: RowDoubleClickedEvent<ScheduleItem>,
-              ) => {
+                params.data?.isDefaultRoute ? "schedule-list-row--recommended" : undefined,
+              onRowDoubleClicked: (event: RowDoubleClickedEvent<ScheduleItem>) => {
                 if (event.data?.bookingAllowed) {
                   onBookNow(event.data);
                 }
@@ -301,15 +283,9 @@ export function ScheduleList({
         />
       </div>
       {hasRecommendedRoute ? (
-        <div
-          className="schedule-list-legend"
-          role="note"
-          aria-label={t("a11y.recommendedLegend")}
-        >
+        <div className="schedule-list-legend" role="note" aria-label={t("a11y.recommendedLegend")}>
           <span className="schedule-list-legend__swatch" aria-hidden />
-          <span className="schedule-list-legend__text">
-            {t("list.recommendedLegend")}
-          </span>
+          <span className="schedule-list-legend__text">{t("list.recommendedLegend")}</span>
         </div>
       ) : null}
     </div>

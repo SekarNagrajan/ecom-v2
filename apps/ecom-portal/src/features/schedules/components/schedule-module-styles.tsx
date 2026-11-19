@@ -595,6 +595,10 @@ export function ScheduleModuleStyles() {
         padding-top: ${token.paddingSM}px;
         border-top: 1px solid ${token.colorBorderSecondary};
       }
+      .schedule-card__book-now-wrap {
+        display: block;
+        width: 100%;
+      }
       .schedule-card__actions-secondary {
         display: grid;
         grid-template-columns: 1fr 1fr;

@@ -1,6 +1,6 @@
 // Modified by Sekar Nagarajan (2026-10-27 12:45)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
-import { Select, Switch, Table, Typography } from "antd";
+import { Select, Switch, Table, Tooltip, Typography } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -234,17 +234,29 @@ export function ScheduleRatesModal({
           <AppButton danger onClick={onClose}>
             {t("common:actions.cancel")}
           </AppButton>
-          <AppButton
-            type="primary"
-            disabled={!schedule.bookingAllowed || estimate.containerCount === 0}
-            onClick={() => {
-              if (!schedule.bookingAllowed) return;
-              onClose();
-              onProceedBooking(schedule);
-            }}
+          <Tooltip
+            title={
+              !schedule.bookingAllowed
+                ? t("bookingNotAllowedToast")
+                : estimate.containerCount === 0
+                  ? t("ratesModal.emptyBreakdown")
+                  : undefined
+            }
           >
-            {t("actions.bookNow")}
-          </AppButton>
+            <span className="schedule-rates-drawer__book-now-wrap">
+              <AppButton
+                type="primary"
+                disabled={!schedule.bookingAllowed || estimate.containerCount === 0}
+                onClick={() => {
+                  if (!schedule.bookingAllowed) return;
+                  onClose();
+                  onProceedBooking(schedule);
+                }}
+              >
+                {t("actions.bookNow")}
+              </AppButton>
+            </span>
+          </Tooltip>
         </div>
       }
     >
@@ -396,9 +408,7 @@ export function ScheduleRatesModal({
           </div>
 
           <div className="schedule-rates-total">
-            <Text className="schedule-rates-total__label">
-              {t("ratesModal.totalLabel")}
-            </Text>
+            <Text className="schedule-rates-total__label">{t("ratesModal.totalLabel")}</Text>
             <Title level={4} className="schedule-rates-total__value">
               {t("ratesModal.totalValue", {
                 amount: estimate.grandTotal.toLocaleString(),

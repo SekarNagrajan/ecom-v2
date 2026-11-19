@@ -710,15 +710,19 @@ function ScheduleCard({
         </div>
 
         <div className="schedule-card__actions">
-          <AppButton
-            type="primary"
-            // icon={<AppIcon icon={NavBookingDocIcon} size={16} />}
-            onClick={() => onBookNow(item)}
-            disabled={!item.bookingAllowed}
-            block
-          >
-            {t("actions.bookNow")}
-          </AppButton>
+          <Tooltip title={!item.bookingAllowed ? t("bookingNotAllowedToast") : undefined}>
+            <span className="schedule-card__book-now-wrap">
+              <AppButton
+                type="primary"
+                // icon={<AppIcon icon={NavBookingDocIcon} size={16} />}
+                onClick={() => onBookNow(item)}
+                disabled={!item.bookingAllowed}
+                block
+              >
+                {t("actions.bookNow")}
+              </AppButton>
+            </span>
+          </Tooltip>
           <AppButton
             type="primary"
             // icon={<AppIcon icon={NavRatesIcon} size={16} />}

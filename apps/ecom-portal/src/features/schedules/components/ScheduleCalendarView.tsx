@@ -7,10 +7,7 @@ import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import { NavVesselIcon } from "../../../components/icons/nav-svg-icons";
-import {
-  ListActionButton,
-  ListActionsRow,
-} from "../../../components/shared/list-action-button";
+import { ListActionButton, ListActionsRow } from "../../../components/shared/list-action-button";
 import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import { useResponsiveLayout } from "../../../hooks/use-responsive-layout";
 import type { ScheduleItem } from "../types/schedules.types";
@@ -23,22 +20,11 @@ import {
   resolveInitialCalendarMonth,
   type ScheduleDateAnchor,
 } from "../utils/schedule-calendar";
-import {
-  formatCutoffValue,
-  ScheduleListRoutingCell,
-} from "./list/schedule-list-cells";
+import { formatCutoffValue, ScheduleListRoutingCell } from "./list/schedule-list-cells";
 
 const { Text, Title } = Typography;
 
-const WEEKDAY_KEYS = [
-  "sun",
-  "mon",
-  "tue",
-  "wed",
-  "thu",
-  "fri",
-  "sat",
-] as const;
+const WEEKDAY_KEYS = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"] as const;
 
 interface ScheduleCalendarViewProps {
   schedules: ScheduleItem[];
@@ -48,10 +34,7 @@ interface ScheduleCalendarViewProps {
   onOpenCarbonModal: (schedule: ScheduleItem) => void;
 }
 
-function eventClassName(
-  item: ScheduleItem,
-  isActive: boolean,
-): string {
+function eventClassName(item: ScheduleItem, isActive: boolean): string {
   const classes = ["schedule-calendar__event"];
   if (item.isDefaultRoute) {
     classes.push("schedule-calendar__event--recommended");
@@ -82,7 +65,7 @@ function ScheduleCalendarActions({
   return (
     <ListActionsRow>
       <ListActionButton
-        title={t("actions.bookNow")}
+        title={schedule.bookingAllowed ? t("actions.bookNow") : t("bookingNotAllowedToast")}
         icon={<AppIcon icon={Icons.plus} size={16} tone="create" />}
         tone="create"
         disabled={!schedule.bookingAllowed}
@@ -143,18 +126,14 @@ function ScheduleDaySailingRow({
       className={[
         "schedule-calendar-day-row",
         isSelected ? "schedule-calendar-day-row--selected" : undefined,
-        schedule.isDefaultRoute
-          ? "schedule-calendar-day-row--recommended"
-          : undefined,
+        schedule.isDefaultRoute ? "schedule-calendar-day-row--recommended" : undefined,
       ]
         .filter(Boolean)
         .join(" ")}
       onClick={onSelect}
       aria-pressed={isSelected}
     >
-      <span className="schedule-calendar-day-row__time">
-        {anchorTime || "—"}
-      </span>
+      <span className="schedule-calendar-day-row__time">{anchorTime || "—"}</span>
       <span className="schedule-calendar-day-row__main">
         <Text strong className="schedule-calendar-day-row__route">
           {schedule.polPortId} → {schedule.podPortId}
@@ -195,9 +174,7 @@ function ScheduleDayDetailCard({
     <article
       className={[
         "schedule-calendar-day-card",
-        schedule.isDefaultRoute
-          ? "schedule-calendar-day-card--recommended"
-          : undefined,
+        schedule.isDefaultRoute ? "schedule-calendar-day-card--recommended" : undefined,
       ]
         .filter(Boolean)
         .join(" ")}
@@ -288,10 +265,7 @@ function ScheduleDayPanel({
   onOpenCarbonModal: (schedule: ScheduleItem) => void;
 }) {
   const { t } = useTranslation(["schedules", "common", "modules"]);
-  const selected =
-    sailings.find((item) => item.id === selectedScheduleId) ??
-    sailings[0] ??
-    null;
+  const selected = sailings.find((item) => item.id === selectedScheduleId) ?? sailings[0] ?? null;
 
   if (!selectedDate) {
     return (
@@ -315,8 +289,7 @@ function ScheduleDayPanel({
           {dayjs(selectedDate).format("ddd, MMM D, YYYY")}
         </Title>
         <Text type="secondary">
-          {t("calendar.sailingsCount", { count: sailings.length })} ·{" "}
-          {dateAnchor.toUpperCase()}
+          {t("calendar.sailingsCount", { count: sailings.length })} · {dateAnchor.toUpperCase()}
         </Text>
       </div>
 
@@ -425,12 +398,8 @@ function ScheduleAgendaView({
               key={sch.id}
               className={[
                 "schedule-agenda__item",
-                selectedScheduleId === sch.id
-                  ? "schedule-agenda__item--selected"
-                  : undefined,
-                sch.isDefaultRoute
-                  ? "schedule-agenda__item--recommended"
-                  : undefined,
+                selectedScheduleId === sch.id ? "schedule-agenda__item--selected" : undefined,
+                sch.isDefaultRoute ? "schedule-agenda__item--recommended" : undefined,
               ]
                 .filter(Boolean)
                 .join(" ")}
@@ -483,9 +452,7 @@ export function ScheduleCalendarView({
     resolveInitialCalendarMonth(schedules, "etd"),
   );
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [selectedScheduleId, setSelectedScheduleId] = useState<string | null>(
-    null,
-  );
+  const [selectedScheduleId, setSelectedScheduleId] = useState<string | null>(null);
 
   useEffect(() => {
     setCurrentMonth(resolveInitialCalendarMonth(schedules, dateAnchor));
@@ -496,25 +463,17 @@ export function ScheduleCalendarView({
   useEffect(() => {
     if (!selectedDate) return;
     const dayItems =
-      groupSchedulesByDate(schedules, currentMonth, dateAnchor).get(
-        selectedDate,
-      ) ?? [];
+      groupSchedulesByDate(schedules, currentMonth, dateAnchor).get(selectedDate) ?? [];
     setSelectedScheduleId((prev) => {
       if (prev && dayItems.some((item) => item.id === prev)) return prev;
       return dayItems[0]?.id ?? null;
     });
   }, [selectedDate, schedules, currentMonth, dateAnchor]);
 
-  const schedulesByDate = groupSchedulesByDate(
-    schedules,
-    currentMonth,
-    dateAnchor,
-  );
+  const schedulesByDate = groupSchedulesByDate(schedules, currentMonth, dateAnchor);
   const monthCells = buildMonthMatrix(currentMonth);
   const agendaGroups = buildAgendaGroups(schedulesByDate);
-  const selectedDaySailings = selectedDate
-    ? (schedulesByDate.get(selectedDate) ?? [])
-    : [];
+  const selectedDaySailings = selectedDate ? (schedulesByDate.get(selectedDate) ?? []) : [];
 
   function selectDay(dateKey: string, preferScheduleId?: string) {
     setSelectedDate(dateKey);
@@ -558,9 +517,7 @@ export function ScheduleCalendarView({
             <Tooltip title={t("calendar.previousMonth")}>
               <AppButton
                 aria-label={t("calendar.previousMonth")}
-                icon={
-                  <AppIcon icon={Icons.chevronLeft} size={16} tone="navigate" />
-                }
+                icon={<AppIcon icon={Icons.chevronLeft} size={16} tone="navigate" />}
                 onClick={() => setCurrentMonth((m) => m.subtract(1, "month"))}
               />
             </Tooltip>
@@ -570,9 +527,7 @@ export function ScheduleCalendarView({
             <Tooltip title={t("calendar.nextMonth")}>
               <AppButton
                 aria-label={t("calendar.nextMonth")}
-                icon={
-                  <AppIcon icon={Icons.chevronRight} size={16} tone="navigate" />
-                }
+                icon={<AppIcon icon={Icons.chevronRight} size={16} tone="navigate" />}
                 onClick={() => setCurrentMonth((m) => m.add(1, "month"))}
               />
             </Tooltip>
@@ -587,9 +542,7 @@ export function ScheduleCalendarView({
           selectedDate={selectedDate}
           selectedScheduleId={selectedScheduleId}
           onSelectDay={(dateKey) => selectDay(dateKey)}
-          onSelectSchedule={(dateKey, scheduleId) =>
-            selectDay(dateKey, scheduleId)
-          }
+          onSelectSchedule={(dateKey, scheduleId) => selectDay(dateKey, scheduleId)}
           onBookNow={onBookNow}
           onViewVessel={onViewVessel}
           onViewRates={onViewRates}
@@ -608,8 +561,7 @@ export function ScheduleCalendarView({
                 const daySailings = cell.inCurrentMonth
                   ? (schedulesByDate.get(cell.dateKey) ?? [])
                   : [];
-                const { visible, overflowCount } =
-                  getVisibleCalendarEvents(daySailings);
+                const { visible, overflowCount } = getVisibleCalendarEvents(daySailings);
                 const isSelected = selectedDate === cell.dateKey;
 
                 return (
@@ -617,18 +569,10 @@ export function ScheduleCalendarView({
                     key={cell.dateKey}
                     className={[
                       "schedule-calendar__cell",
-                      !cell.inCurrentMonth
-                        ? "schedule-calendar__cell--outside"
-                        : undefined,
-                      cell.isToday
-                        ? "schedule-calendar__cell--today"
-                        : undefined,
-                      isSelected
-                        ? "schedule-calendar__cell--selected"
-                        : undefined,
-                      daySailings.length > 0
-                        ? "schedule-calendar__cell--has-sailings"
-                        : undefined,
+                      !cell.inCurrentMonth ? "schedule-calendar__cell--outside" : undefined,
+                      cell.isToday ? "schedule-calendar__cell--today" : undefined,
+                      isSelected ? "schedule-calendar__cell--selected" : undefined,
+                      daySailings.length > 0 ? "schedule-calendar__cell--has-sailings" : undefined,
                     ]
                       .filter(Boolean)
                       .join(" ")}
@@ -670,9 +614,7 @@ export function ScheduleCalendarView({
                         {cell.date.date()}
                       </span>
                       {daySailings.length > 0 ? (
-                        <span className="schedule-calendar__cell-count">
-                          {daySailings.length}
-                        </span>
+                        <span className="schedule-calendar__cell-count">{daySailings.length}</span>
                       ) : null}
                     </div>
                     <div className="schedule-calendar__cell-events">
@@ -681,10 +623,7 @@ export function ScheduleCalendarView({
                         return (
                           <div
                             key={sch.id}
-                            className={eventClassName(
-                              sch,
-                              selectedScheduleId === sch.id,
-                            )}
+                            className={eventClassName(sch, selectedScheduleId === sch.id)}
                             title={`${sch.vesselName} · ${sch.serviceCode} · ${sch.polPortId}→${sch.podPortId}`}
                             onClick={(e) => {
                               e.stopPropagation();
@@ -703,9 +642,7 @@ export function ScheduleCalendarView({
                             role="button"
                             tabIndex={0}
                           >
-                            <span className="schedule-calendar__event-time">
-                              {time || "—"}
-                            </span>
+                            <span className="schedule-calendar__event-time">{time || "—"}</span>
                             <span className="schedule-calendar__event-label">
                               {sch.polPortId}→{sch.podPortId}
                             </span>

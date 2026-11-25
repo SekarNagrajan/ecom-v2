@@ -30,6 +30,7 @@ import { schedulesHandlers } from './schedules.handlers';
 import { siHandlers } from './si.handlers';
 import { trackingHandlers } from './tracking.handlers';
 import { userCreationHandlers } from './user-creation.handlers';
+import { paymentsHandlers } from './payments.handlers';
 import { userModulesHandlers } from './user-modules.handlers';
 import { vgmHandlers } from './vgm.handlers';
 
@@ -45,6 +46,7 @@ export const handlers = [
   ...adminHandlers,
   ...userCreationHandlers,
   ...userModulesHandlers,
+  ...paymentsHandlers,
   ...accessibilityHandlers,
   ...profilePhotoHandlers,
   ...dashboardExportHandlers,

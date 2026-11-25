@@ -52,14 +52,14 @@ function applyMcnBody(row: Row, body: Partial<MCNDTO>) {
     const collect = terms.includes('COLLECT');
     row.Freight = collect ? 'C' : 'P';
     const eSINo = str(row.eSINo);
-    for (const charge of db.siCharges.filter((c) => eq(c.esino, eSINo) && eq(c.chargeid, 'OFR'))) {
+    for (const charge of db.siCharges.filter(c => eq(c.esino, eSINo) && eq(c.chargeid, 'OFR'))) {
       charge.prepaidcollect = collect ? 'C' : 'P';
     }
   }
 
   if (body.cargoDescription !== undefined) {
     const eSINo = str(row.eSINo);
-    const commodities = db.siCommodity.filter((c) => eq(c.eSINo, eSINo));
+    const commodities = db.siCommodity.filter(c => eq(c.eSINo, eSINo));
     if (commodities.length) {
       commodities[0].marksDesc = body.cargoDescription;
       for (let i = 1; i < commodities.length; i++) commodities[i].marksDesc = '';
@@ -93,11 +93,35 @@ const csvCell = (v: unknown) => `"${String(v ?? '').replace(/"/g, '""')}"`;
 
 /** One CSV line per cargo line of the B/L — the "Excel" cargo template the import step reads back. */
 function cargoCsv(detail: BLDTO, template: string): string {
-  const header = ['Container No', 'Size/Type', 'Carrier Seal', 'Shipper Seal', 'Marks & Numbers', 'Description', 'HS Code', 'Package Qty', 'Package Type', 'Gross Weight', 'Volume'];
+  const header = [
+    'Container No',
+    'Size/Type',
+    'Carrier Seal',
+    'Shipper Seal',
+    'Marks & Numbers',
+    'Description',
+    'HS Code',
+    'Package Qty',
+    'Package Type',
+    'Gross Weight',
+    'Volume',
+  ];
   if (template !== 'standard') header.push('UN No', 'IMO Class');
   const lines = detail.containers.flatMap(c =>
     c.cargoLines.map(l => {
-      const cells = [c.containerNo, c.eqpSize, c.carrierSeal, c.shipperSeal, l.marksAndNumbers, l.description, l.hsCode, l.packageCount, l.packageType, l.grossWeight, l.volume];
+      const cells = [
+        c.containerNo,
+        c.eqpSize,
+        c.carrierSeal,
+        c.shipperSeal,
+        l.marksAndNumbers,
+        l.description,
+        l.hsCode,
+        l.packageCount,
+        l.packageType,
+        l.grossWeight,
+        l.volume,
+      ];
       if (template !== 'standard') cells.push(l.unNumber ?? '', l.dgClass ?? '');
       return cells.map(csvCell).join(',');
     }),
@@ -186,13 +210,20 @@ export const blHandlers = [
     return HttpResponse.json({ data: insurance });
   }),
 
+  // Legacy stub kept for older callers; prefer POST /api/v1/payments/checkout.
   http.post('*/api/bl/payment/intent', async ({ request }) => {
     await delay(300);
     const body = (await request.json()) as { blNos?: string[]; amountUsd?: number };
     const blNos = body.blNos ?? [];
     const amountUsd = body.amountUsd ?? 0;
     return HttpResponse.json({
-      data: { clientSecret: `mock_secret_${blNos.join('_')}`, amountUsd, blNos },
+      data: {
+        clientSecret: `deprecated_use_v1_checkout_${blNos.join('_')}`,
+        amountUsd,
+        blNos,
+        deprecated: true,
+        message: 'Use POST /api/v1/payments/checkout',
+      },
     });
   }),
 
@@ -292,7 +323,9 @@ export const blHandlers = [
     detail.submitResult = {
       success: true,
       messages: ['B/L submitted successfully.'],
-      insuranceMessage: detail.insurance?.isInsuranceRequired ? 'Insurance policy will be issued within 24 hours.' : undefined,
+      insuranceMessage: detail.insurance?.isInsuranceRequired
+        ? 'Insurance policy will be issued within 24 hours.'
+        : undefined,
       fileRestrictionMessage: undefined,
     };
     return HttpResponse.json({ data: detail });

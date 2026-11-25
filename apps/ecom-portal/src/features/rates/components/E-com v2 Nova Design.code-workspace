@@ -2,6 +2,9 @@
 	"folders": [
 		{
 			"path": "../../../../../.."
+		},
+		{
+			"path": "../../../../../../../../E-Commerce Portal/GWFC-6740"
 		}
 	],
 	"settings": {}

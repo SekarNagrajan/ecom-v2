@@ -17,6 +17,7 @@ interface PlanningDayBookingsDrawerProps {
   selection: PlanningDaySelection;
   onClose: () => void;
   onViewBooking: (booking: BookingListDTO) => void;
+  onPayBooking?: (booking: PlanningBookingDTO) => void;
 }
 
 /** Split "AEJEA - JEBEL ALI" into code + display name. */
@@ -74,9 +75,11 @@ function BookingAttentionCues({
 function PlanningBookingCard({
   booking,
   onViewBooking,
+  onPayBooking,
 }: {
   booking: PlanningBookingDTO;
   onViewBooking: (booking: BookingListDTO) => void;
+  onPayBooking?: (booking: PlanningBookingDTO) => void;
 }) {
   const { t } = useTranslation(["dashboard", "common", "modules"]);
   const origin = splitPortLabel(booking.origin);
@@ -161,6 +164,15 @@ function PlanningBookingCard({
         </div>
 
         <div className="dashboard-planning-day-card__action">
+          {booking.pendingPaymentFlag && onPayBooking ? (
+            <AppButton
+              size="middle"
+              icon={<AppIcon icon={Icons.creditCard} size={14} />}
+              onClick={() => onPayBooking(booking)}
+            >
+              {t("planningDrawer.pay")}
+            </AppButton>
+          ) : null}
           <AppButton
             type="primary"
             size="middle"
@@ -179,6 +191,7 @@ export function PlanningDayBookingsDrawer({
   selection,
   onClose,
   onViewBooking,
+  onPayBooking,
 }: PlanningDayBookingsDrawerProps) {
   const { t } = useTranslation(["dashboard", "common", "modules"]);
 
@@ -224,6 +237,7 @@ export function PlanningDayBookingsDrawer({
               key={`${booking.id}-${booking.bookingNo}`}
               booking={booking}
               onViewBooking={onViewBooking}
+              onPayBooking={onPayBooking}
             />
           ))}
         </ul>

@@ -19,6 +19,7 @@ interface DashboardOngoingTableProps {
   onViewBooking?: (shipment: DashboardShipment) => void;
   onViewBl?: (shipment: DashboardShipment) => void;
   onCreateSi?: (shipment: DashboardShipment) => void;
+  onPay?: (shipment: DashboardShipment) => void;
 }
 
 export function DashboardOngoingTable({
@@ -28,20 +29,17 @@ export function DashboardOngoingTable({
   onViewBooking,
   onViewBl,
   onCreateSi,
+  onPay,
 }: DashboardOngoingTableProps) {
   const { t } = useTranslation(["dashboard", "common", "modules"]);
-  const filteredShipments = filterDashboardShipments(
-    shipments,
-    activeFilter,
-    "",
-  );
+  const filteredShipments = filterDashboardShipments(shipments, activeFilter, "");
 
   const columnDefs: DataViewColumn<DashboardShipment>[] = [
     {
       headerName: t("ongoing.columns.actions"),
       field: "bookNo",
       sortable: false,
-      width: 140,
+      width: 168,
       pinned: "left",
       cellRenderer: (params: { data?: DashboardShipment }) => {
         const rec = params.data;
@@ -53,14 +51,7 @@ export function DashboardOngoingTable({
                 <AppButton
                   type="text"
                   size="small"
-                  icon={
-                    <AppIcon
-                      icon={Icons.eye}
-                      size={16}
-                      gridAction
-                      tone="view"
-                    />
-                  }
+                  icon={<AppIcon icon={Icons.eye} size={16} gridAction tone="view" />}
                   onClick={() => onViewBooking?.(rec)}
                 />
               </Tooltip>
@@ -70,14 +61,7 @@ export function DashboardOngoingTable({
                 <AppButton
                   type="text"
                   size="small"
-                  icon={
-                    <AppIcon
-                      icon={Icons.fileText}
-                      size={16}
-                      gridAction
-                      tone="view"
-                    />
-                  }
+                  icon={<AppIcon icon={Icons.fileText} size={16} gridAction tone="view" />}
                   onClick={() => onViewBl?.(rec)}
                 />
               </Tooltip>
@@ -86,18 +70,21 @@ export function DashboardOngoingTable({
                 <AppButton
                   type="text"
                   size="small"
-                  icon={
-                    <AppIcon
-                      icon={Icons.filePlus}
-                      size={16}
-                      gridAction
-                      tone="create"
-                    />
-                  }
+                  icon={<AppIcon icon={Icons.filePlus} size={16} gridAction tone="create" />}
                   onClick={() => onCreateSi?.(rec)}
                 />
               </Tooltip>
             )}
+            {rec.amtBal > 0 && onPay ? (
+              <Tooltip title={t("ongoing.actions.pay")}>
+                <AppButton
+                  type="text"
+                  size="small"
+                  icon={<AppIcon icon={Icons.creditCard} size={16} gridAction tone="view" />}
+                  onClick={() => onPay(rec)}
+                />
+              </Tooltip>
+            ) : null}
           </Space>
         );
       },
@@ -148,8 +135,7 @@ export function DashboardOngoingTable({
       field: "onlineRefNo",
       sortable: true,
       width: 140,
-      cellRenderer: (params: { value?: string }) =>
-        params.value || <Text type="secondary">-</Text>,
+      cellRenderer: (params: { value?: string }) => params.value || <Text type="secondary">-</Text>,
     },
     {
       headerName: t("ongoing.columns.originPort"),
@@ -194,8 +180,7 @@ export function DashboardOngoingTable({
       field: "polAt",
       sortable: true,
       width: 130,
-      cellRenderer: (params: { value?: string }) =>
-        params.value || <Text type="secondary">-</Text>,
+      cellRenderer: (params: { value?: string }) => params.value || <Text type="secondary">-</Text>,
     },
     {
       headerName: t("ongoing.columns.blStatus"),
@@ -205,11 +190,7 @@ export function DashboardOngoingTable({
       cellRenderer: (params: { value?: string }) => {
         const val = params.value || "";
         const st = getDashboardBlStatusDisplay(val, t);
-        return st ? (
-          <Tag color={st.color}>{st.label}</Tag>
-        ) : (
-          <Text type="secondary">-</Text>
-        );
+        return st ? <Tag color={st.color}>{st.label}</Tag> : <Text type="secondary">-</Text>;
       },
     },
     {
@@ -217,16 +198,14 @@ export function DashboardOngoingTable({
       field: "containerNo",
       sortable: true,
       width: 140,
-      cellRenderer: (params: { value?: string }) =>
-        params.value || <Text type="secondary">-</Text>,
+      cellRenderer: (params: { value?: string }) => params.value || <Text type="secondary">-</Text>,
     },
     {
       headerName: t("ongoing.columns.teus"),
       field: "teus",
       sortable: true,
       width: 80,
-      cellRenderer: (params: { value?: string }) =>
-        params.value || <Text type="secondary">-</Text>,
+      cellRenderer: (params: { value?: string }) => params.value || <Text type="secondary">-</Text>,
     },
     {
       headerName: t("ongoing.columns.siStatus"),
@@ -277,10 +256,7 @@ export function DashboardOngoingTable({
   ];
 
   return (
-    <div
-      id="dashboard-ongoing-transactions"
-      className="dashboard-ongoing-panel custom-scroll"
-    >
+    <div id="dashboard-ongoing-transactions" className="dashboard-ongoing-panel custom-scroll">
       <DataView
         className="dashboard-ongoing-grid"
         columnDefs={columnDefs}
@@ -290,9 +266,7 @@ export function DashboardOngoingTable({
             variant={activeFilter ? "filtered" : "blank"}
             title={t("ongoing.empty.title")}
             message={
-              activeFilter
-                ? t("ongoing.empty.filteredMessage")
-                : t("ongoing.empty.blankMessage")
+              activeFilter ? t("ongoing.empty.filteredMessage") : t("ongoing.empty.blankMessage")
             }
           />
         }
@@ -308,9 +282,7 @@ export function DashboardOngoingTable({
             <Space align="center">
               <Text strong>
                 {t("ongoing.title")}
-                {activeFilter !== "all" && filterLabel
-                  ? ` — ${filterLabel}`
-                  : ""}
+                {activeFilter !== "all" && filterLabel ? ` — ${filterLabel}` : ""}
               </Text>
             </Space>
           </Flex>

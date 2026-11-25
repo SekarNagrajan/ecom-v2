@@ -129,12 +129,45 @@ interface PlanningStatProps {
   value: number;
   icon: LucideIcon;
   tone: PlanningStatTone;
+  onClick?: () => void;
+  clickableHint?: string;
 }
 
 /** Inline planning stat — strip layout, not a bordered summary card. */
-function PlanningStat({ label, value, icon, tone }: PlanningStatProps) {
+function PlanningStat({ label, value, icon, tone, onClick, clickableHint }: PlanningStatProps) {
+  const clickable = Boolean(onClick);
+  const className = [
+    "dashboard-planning-stat",
+    `dashboard-planning-stat--${tone}`,
+    clickable ? "dashboard-planning-stat--clickable" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  if (clickable) {
+    return (
+      <button
+        type="button"
+        className={className}
+        onClick={onClick}
+        title={clickableHint}
+        aria-label={clickableHint ? `${label}: ${value}. ${clickableHint}` : undefined}
+      >
+        <span
+          className={`dashboard-planning-stat__icon dashboard-planning-stat__icon--${tone} app-icon-inherit`}
+        >
+          <AppIcon icon={icon} size={15} />
+        </span>
+        <div className="dashboard-planning-stat__copy">
+          <Text className="dashboard-planning-stat__label">{label}</Text>
+          <Text className="dashboard-planning-stat__value">{value}</Text>
+        </div>
+      </button>
+    );
+  }
+
   return (
-    <div className={`dashboard-planning-stat dashboard-planning-stat--${tone}`}>
+    <div className={className}>
       <span
         className={`dashboard-planning-stat__icon dashboard-planning-stat__icon--${tone} app-icon-inherit`}
       >
@@ -153,6 +186,7 @@ interface ShipmentPlanningProps {
   calendar: CalendarWeek[];
   onDayClick?: (selection: PlanningDaySelection) => void;
   onViewAll?: () => void;
+  onPaymentPendingClick?: () => void;
 }
 
 export function ShipmentPlanningSection({
@@ -160,6 +194,7 @@ export function ShipmentPlanningSection({
   calendar,
   onDayClick,
   onViewAll,
+  onPaymentPendingClick,
 }: ShipmentPlanningProps) {
   const { t } = useTranslation(["dashboard", "common", "modules"]);
 
@@ -229,6 +264,8 @@ export function ShipmentPlanningSection({
           value={kpis.atRisk}
           icon={Icons.creditCard}
           tone="payment"
+          onClick={onPaymentPendingClick}
+          clickableHint={t("payPending.openFromPlanning")}
         />
       </div>
 

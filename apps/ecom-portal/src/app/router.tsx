@@ -220,6 +220,14 @@ const PaymentHistoryPage = lazyRouteComponent(
   () => import("../features/user-modules/user-modules-routes"),
   "PaymentHistoryRoute",
 );
+const PaymentCheckoutSuccessPage = lazyRouteComponent(
+  () => import("../features/payments/payments-routes"),
+  "PaymentCheckoutSuccessRoute",
+);
+const PaymentCheckoutCancelPage = lazyRouteComponent(
+  () => import("../features/payments/payments-routes"),
+  "PaymentCheckoutCancelRoute",
+);
 const ProfilePage = lazyRouteComponent(
   () => import("../features/user-modules/user-modules-routes"),
   "ProfileRoute",
@@ -642,6 +650,29 @@ const paymentsRoute = createRoute({
   component: PaymentHistoryPage,
 });
 
+// 3.15a Checkout return — mock gateway success / cancel (same PAY capability)
+const paymentCheckoutSuccessRoute = createRoute({
+  getParentRoute: () => appRoute,
+  path: "/payments/checkout/success",
+  validateSearch: (search: Record<string, unknown>) => ({
+    requestId: String(search.requestId ?? ""),
+  }),
+  beforeLoad: assertCapability("PAY"),
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: PaymentCheckoutSuccessPage,
+});
+
+const paymentCheckoutCancelRoute = createRoute({
+  getParentRoute: () => appRoute,
+  path: "/payments/checkout/cancel",
+  validateSearch: (search: Record<string, unknown>) => ({
+    requestId: String(search.requestId ?? ""),
+  }),
+  beforeLoad: assertCapability("PAY"),
+  pendingComponent: () => <AppRoutePendingFallback />,
+  component: PaymentCheckoutCancelPage,
+});
+
 // 3.18 User profile routes — auth required, no capability
 const profileRoute = createRoute({
   getParentRoute: () => appRoute,
@@ -710,6 +741,8 @@ const routeTree = rootRoute.addChildren([
     arrivalNoticeRoute,
     customerStatementRoute,
     carbonCalculatorRoute,
+    paymentCheckoutSuccessRoute,
+    paymentCheckoutCancelRoute,
     adminRoute,
     userCreationRoute,
     vendorApprovalsRoute,

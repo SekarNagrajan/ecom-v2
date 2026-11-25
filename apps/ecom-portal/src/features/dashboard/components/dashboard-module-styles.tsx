@@ -1383,6 +1383,10 @@ export function DashboardModuleStyles() {
       .dashboard-planning-day-card__action {
         flex-shrink: 0;
         margin-inline-start: auto;
+        display: flex;
+        flex-wrap: wrap;
+        gap: ${token.marginXS}px;
+        justify-content: flex-end;
       }
       .dashboard-planning-day-card .dashboard-planning-day-cues {
         align-items: flex-start;
@@ -1480,9 +1484,10 @@ export function DashboardModuleStyles() {
         .dashboard-planning-day-card__action {
           margin-inline-start: 0;
           width: 100%;
+          justify-content: stretch;
         }
         .dashboard-planning-day-card__action .ant-btn {
-          width: 100%;
+          flex: 1 1 auto;
         }
       }
       @media (max-width: 575px) {

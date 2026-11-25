@@ -17,10 +17,9 @@ import { BlModuleStyles } from "../../bill-of-lading/components/bl-module-styles
 import { BlViewDrawer } from "../../bill-of-lading/components/view/BlViewDrawer";
 import { BookingModuleStyles } from "../../booking/components/booking-module-styles";
 import { BookingViewDrawer } from "../../booking/components/view/BookingViewDrawer";
-import type {
-  IntelligenceBreakdowns,
-  PlanningKpi,
-} from "../api/dashboard.api";
+import { PayPendingDrawer } from "../../payments/components/PayPendingDrawer";
+import { PayPendingModuleStyles } from "../../payments/components/pay-pending-module-styles";
+import type { IntelligenceBreakdowns, PlanningKpi } from "../api/dashboard.api";
 import { useDashboardController } from "../hooks/use-dashboard-controller";
 import { filterDashboardShipments } from "../utils/filter-dashboard-shipments";
 import {
@@ -59,24 +58,21 @@ const EMPTY_BREAKDOWNS: IntelligenceBreakdowns = {
 export function EnhancedDashboardView() {
   const { t } = useTranslation(["dashboard", "common", "modules"]);
   const controller = useDashboardController();
-  const [viewAllState, setViewAllState] =
-    useState<DashboardAnalyticsViewAllState | null>(null);
+  const [viewAllState, setViewAllState] = useState<DashboardAnalyticsViewAllState | null>(null);
   const counts = controller.summary?.counts;
   const shipments = controller.summary?.shipments ?? [];
   const planning = controller.summary?.planning;
   const lanes = controller.summary?.lanes;
   const intelligence = controller.summary?.intelligence;
   // Modified by Sekar Nagarajan (2026-09-08 16:10)
-  const filteredShipmentCount = filterDashboardShipments(
-    shipments,
-    controller.activeFilter,
-  ).length;
+  const filteredShipmentCount = filterDashboardShipments(shipments, controller.activeFilter).length;
 
   return (
     <FeaturePageShell>
       <DashboardModuleStyles />
       <BookingModuleStyles />
       <BlModuleStyles />
+      <PayPendingModuleStyles />
       <ModuleScreenHeader
         icon={NavDashboardIcon}
         title={t("title")}
@@ -134,6 +130,7 @@ export function EnhancedDashboardView() {
             calendar={planning?.calendar ?? []}
             onDayClick={controller.handlePlanningDayClick}
             onViewAll={controller.handleViewAllPlanning}
+            onPaymentPendingClick={controller.handlePlanningPaymentPendingClick}
           />
         </Spin>
 
@@ -145,6 +142,7 @@ export function EnhancedDashboardView() {
             onViewBooking={controller.handleViewBooking}
             onViewBl={controller.handleViewBl}
             onCreateSi={controller.handleCreateSi}
+            onPay={controller.handlePayShipment}
           />
         </Spin>
 
@@ -208,6 +206,7 @@ export function EnhancedDashboardView() {
           selection={controller.planningDay}
           onClose={controller.handleClosePlanningDayDrawer}
           onViewBooking={controller.handleViewPlanningBooking}
+          onPayBooking={controller.handlePayPlanningBooking}
         />
       ) : null}
 
@@ -219,11 +218,15 @@ export function EnhancedDashboardView() {
       ) : null}
 
       {controller.selectedBl ? (
-        <BlViewDrawer
-          record={controller.selectedBl}
-          onClose={controller.handleCloseBlDrawer}
-        />
+        <BlViewDrawer record={controller.selectedBl} onClose={controller.handleCloseBlDrawer} />
       ) : null}
+
+      <PayPendingDrawer
+        open={controller.payPendingOpen}
+        items={controller.payPendingItems}
+        selectedIds={controller.payPendingSelectedIds}
+        onClose={controller.handleClosePayPending}
+      />
 
       {/* <DashboardScrollTopButton /> */}
     </FeaturePageShell>

@@ -38,7 +38,8 @@
       "viewBookingDetails": "View Booking Details",
       "viewBillOfLading": "View Bill of Lading",
       "createShippingInstruction": "Create Shipping Instruction (SI)",
-      "createSi": "Create SI"
+      "createSi": "Create SI",
+      "pay": "Pay outstanding balance"
     },
     "empty": {
       "title": "No ongoing transactions found",
@@ -162,7 +163,12 @@
     "siPending": "SI pending",
     "paymentDue": "Payment due",
     "viewDetails": "View details",
+    "pay": "Pay",
     "empty": "No bookings for this day"
+  },
+  "payPending": {
+    "openFromPlanning": "Pay outstanding balances for upcoming shipments",
+    "noItems": "No outstanding balances found for payment pending"
   },
   "intelligence": {
     "title": "Shipment Intelligence",

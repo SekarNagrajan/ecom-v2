@@ -11,10 +11,17 @@ import { useTranslation } from "react-i18next";
 import type { BLListDTO } from "../../bill-of-lading/types/bl.types";
 import type { BookingListDTO } from "../../booking/types/booking-list.types";
 import { useBookingStore } from "../../booking/stores/booking.store";
+import type { PayPendingItem } from "../../payments/types/payments.types";
+import {
+  planningPendingPaymentBookNos,
+  shipmentToPayPendingItem,
+  shipmentsToPayPendingItems,
+} from "../../payments/utils/build-pay-pending-items";
 import {
   dashboardApi,
   type DashboardShipment,
   type DashboardSummaryResponse,
+  type PlanningBookingDTO,
   type PlanningDaySelection,
   type VolumeAnalyticsResponse,
   type VolumeAnalyticsStage,
@@ -26,10 +33,7 @@ import { mapDashboardShipmentToBookingList } from "../utils/map-dashboard-shipme
 
 const ONGOING_TRANSACTIONS_ANCHOR_ID = "dashboard-ongoing-transactions";
 
-function formatDashboardPort(
-  portId?: string,
-  portDesc?: string,
-): string | undefined {
+function formatDashboardPort(portId?: string, portDesc?: string): string | undefined {
   if (portId && portDesc) return `${portId} - ${portDesc}`;
   return portId || portDesc || undefined;
 }
@@ -47,24 +51,31 @@ export function useDashboardController() {
   const [summary, setSummary] = useState<DashboardSummaryResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState("all");
-  const [filterLabel, setFilterLabel] = useState(() =>
-    getDashboardFilterLabel("all", t),
-  );
+  const [filterLabel, setFilterLabel] = useState(() => getDashboardFilterLabel("all", t));
   const [trendPeriod, setTrendPeriod] = useState<VolumeTrendPeriod>("Monthly");
   const [volumeStage, setVolumeStage] = useState<VolumeAnalyticsStage>("all");
-  const [volumeAnalytics, setVolumeAnalytics] =
-    useState<VolumeAnalyticsResponse | null>(null);
+  const [volumeAnalytics, setVolumeAnalytics] = useState<VolumeAnalyticsResponse | null>(null);
   const [isVolumeLoading, setIsVolumeLoading] = useState(true);
   // Modified by Sekar Nagarajan (2026-09-01 12:45) — booking view drawer from ongoing table
-  const [selectedBooking, setSelectedBooking] = useState<BookingListDTO | null>(
-    null,
-  );
+  const [selectedBooking, setSelectedBooking] = useState<BookingListDTO | null>(null);
   // Modified by Sekar Nagarajan (2026-09-01 12:52) — BL view drawer from ongoing table
   const [selectedBl, setSelectedBl] = useState<BLListDTO | null>(null);
   // Modified by Sekar Nagarajan (2026-09-07 18:42) — planning calendar day bookings
-  const [planningDay, setPlanningDay] = useState<PlanningDaySelection | null>(
-    null,
-  );
+  const [planningDay, setPlanningDay] = useState<PlanningDaySelection | null>(null);
+  // Modified by Sekar Nagarajan (2026-11-25 14:40) — pay pending drawer
+  const [payPendingOpen, setPayPendingOpen] = useState(false);
+  const [payPendingItems, setPayPendingItems] = useState<PayPendingItem[]>([]);
+  const [payPendingSelectedIds, setPayPendingSelectedIds] = useState<string[]>([]);
+
+  const openPayPending = (items: PayPendingItem[], selectedIds?: string[]) => {
+    if (items.length === 0) {
+      toast.error(t("payPending.noItems"));
+      return;
+    }
+    setPayPendingItems(items);
+    setPayPendingSelectedIds(selectedIds ?? items.map((item) => item.id));
+    setPayPendingOpen(true);
+  };
 
   const loadSummary = async () => {
     setIsLoading(true);
@@ -191,14 +202,8 @@ export function useDashboardController() {
       search: {
         fromDashboard: true,
         onlineRefNo: shipment.onlineRefNo || undefined,
-        origin: formatDashboardPort(
-          shipment.originPortId,
-          shipment.originPortDesc,
-        ),
-        delivery: formatDashboardPort(
-          shipment.finalPortId,
-          shipment.finalPortDesc,
-        ),
+        origin: formatDashboardPort(shipment.originPortId, shipment.originPortDesc),
+        delivery: formatDashboardPort(shipment.finalPortId, shipment.finalPortDesc),
         containerNo: shipment.containerNo || undefined,
         blNo: shipment.blNo || undefined,
       } as never,
@@ -223,6 +228,48 @@ export function useDashboardController() {
     setVolumeStage(stage);
   };
 
+  const handlePlanningPaymentPendingClick = () => {
+    const shipments = summary?.shipments ?? [];
+    const calendar = summary?.planning?.calendar ?? [];
+    const bookNos = planningPendingPaymentBookNos(calendar);
+    const scoped = shipments.filter(
+      (s) => s.amtBal > 0 && (!bookNos.size || bookNos.has(s.bookNo)),
+    );
+    const items =
+      scoped.length > 0
+        ? shipmentsToPayPendingItems(scoped)
+        : shipmentsToPayPendingItems(shipments.filter((s) => s.amtBal > 0));
+    openPayPending(items);
+  };
+
+  const handlePayPlanningBooking = (booking: PlanningBookingDTO) => {
+    const shipment = (summary?.shipments ?? []).find(
+      (s) => s.bookNo === booking.bookingNo || s.id === booking.id,
+    );
+    const item = shipment ? shipmentToPayPendingItem(shipment) : null;
+    if (!item) {
+      toast.error(t("payPending.noItems"));
+      return;
+    }
+    setPlanningDay(null);
+    openPayPending([item], [item.id]);
+  };
+
+  const handlePayShipment = (shipment: DashboardShipment) => {
+    const item = shipmentToPayPendingItem(shipment);
+    if (!item) {
+      toast.error(t("payPending.noItems"));
+      return;
+    }
+    openPayPending([item], [item.id]);
+  };
+
+  const handleClosePayPending = () => {
+    setPayPendingOpen(false);
+    setPayPendingItems([]);
+    setPayPendingSelectedIds([]);
+  };
+
   return {
     summary,
     isLoading,
@@ -235,6 +282,9 @@ export function useDashboardController() {
     selectedBooking,
     selectedBl,
     planningDay,
+    payPendingOpen,
+    payPendingItems,
+    payPendingSelectedIds,
     loadSummary,
     handleFilterChange,
     handleViewShipments,
@@ -250,5 +300,9 @@ export function useDashboardController() {
     handleViewAllPlanning,
     handleTrendPeriodChange,
     handleVolumeStageChange,
+    handlePlanningPaymentPendingClick,
+    handlePayPlanningBooking,
+    handlePayShipment,
+    handleClosePayPending,
   };
 }

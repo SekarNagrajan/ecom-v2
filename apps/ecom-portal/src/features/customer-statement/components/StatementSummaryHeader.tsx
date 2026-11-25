@@ -28,9 +28,6 @@ export function StatementSummaryHeader({
     <div className="stmt-summary-header">
       <div className="stmt-summary-header__top">
         <div className="stmt-summary-header__meta">
-          <span className="stmt-summary-header__account">
-            {statement.accountName}
-          </span>
           {/* <span className="stmt-summary-header__period">
             <FormattedDate value={statement.period.from} />
             {" – "}
@@ -63,31 +60,19 @@ export function StatementSummaryHeader({
 
       <div className="stmt-summary-cards">
         <div className="stmt-summary-card stmt-summary-card--opening">
-          <span className="stmt-summary-card__label">
-            {t("summary.openingBalance")}
-          </span>
+          <span className="stmt-summary-card__label">{t("summary.openingBalance")}</span>
           <span className="stmt-summary-card__value">
-            {formatStatementAmount(
-              statement.openingBalance,
-              statement.currency,
-            )}
+            {formatStatementAmount(statement.openingBalance, statement.currency)}
           </span>
         </div>
         <div className="stmt-summary-card stmt-summary-card--closing">
-          <span className="stmt-summary-card__label">
-            {t("summary.closingBalance")}
-          </span>
+          <span className="stmt-summary-card__label">{t("summary.closingBalance")}</span>
           <span className="stmt-summary-card__value">
-            {formatStatementAmount(
-              statement.closingBalance,
-              statement.currency,
-            )}
+            {formatStatementAmount(statement.closingBalance, statement.currency)}
           </span>
         </div>
         <div className="stmt-summary-card stmt-summary-card--net">
-          <span className="stmt-summary-card__label">
-            {t("summary.netMovement")}
-          </span>
+          <span className="stmt-summary-card__label">{t("summary.netMovement")}</span>
           <span className="stmt-summary-card__value">
             {formatStatementAmount(statement.totals.net, statement.currency)}
           </span>

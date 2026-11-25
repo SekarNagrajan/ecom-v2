@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons, NavBookingIcon } from "../../../../components/icons";
 import { formatModuleScreenTitle } from "../../../../constants/module-titles";
+import { useBookingDetail } from "../../api/booking.queries";
 import type { BookingListDTO, BookingListStatus } from "../../types/booking-list.types";
 import { getBookingListStatusColor } from "../../types/booking-list.types";
 import { getBookingStatusLabel } from "../../utils/booking-status";
@@ -32,9 +33,29 @@ function dash(value?: string | number | null): string {
   return text === "" ? "—" : text;
 }
 
+/**
+ * Route/selectedRoute stores "yyyy-MM-dd HH:mm" (space). FormattedDate / Luxon
+ * fromISO needs a T separator — otherwise valid sail dates render as "-".
+ */
+function normalizeStoredDateTime(value?: string | null): string | null {
+  const raw = value?.trim();
+  if (!raw) return null;
+  if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}/.test(raw)) {
+    return raw.replace(" ", "T");
+  }
+  return raw;
+}
+
 /** Date-only rendering (portal date format), no time part. */
 function dateOnly(value?: string | null): ReactNode {
-  return value && value.trim() !== "" ? <FormattedDate value={value} /> : "—";
+  const normalized = normalizeStoredDateTime(value);
+  return normalized ? <FormattedDate value={normalized} /> : "—";
+}
+
+/** ETD / ETA from selectedRoute — include time like the amend route pills. */
+function sailDateTime(value?: string | null): ReactNode {
+  const normalized = normalizeStoredDateTime(value);
+  return normalized ? <FormattedDate value={normalized} showTime /> : "—";
 }
 
 /** Split "CODE - Name" port labels; a bare code yields no separate name. */
@@ -106,6 +127,11 @@ export function BookingViewDrawer({ booking, onClose }: BookingViewDrawerProps) 
   const lifecycle = buildLifecycle(booking.status, t);
   const origin = splitPort(booking.origin);
   const delivery = splitPort(booking.delivery);
+  /** List rows rarely carry sail dates; detail selectedRoute does when legs exist. */
+  const { data: bookingDetail } = useBookingDetail(booking.id);
+  const selectedRoute = bookingDetail?.masterDetails?.selectedRoute;
+  const etd = booking.etd || selectedRoute?.etd || "";
+  const eta = booking.eta || selectedRoute?.eta || "";
 
   const handleEdit = () => {
     onClose();
@@ -223,7 +249,7 @@ export function BookingViewDrawer({ booking, onClose }: BookingViewDrawerProps) 
             <span className="booking-view-route__code">{dash(origin.code)}</span>
             {origin.name ? <span className="booking-view-route__name">{origin.name}</span> : null}
             <span className="booking-view-route__sail booking-view-route__sail--etd">
-              {t("labels.etd")} {dateOnly(booking.etd)}
+              {t("labels.etd")} {sailDateTime(etd)}
             </span>
           </div>
           <div className="booking-view-route__connector" aria-hidden>
@@ -244,7 +270,7 @@ export function BookingViewDrawer({ booking, onClose }: BookingViewDrawerProps) 
               <span className="booking-view-route__name">{delivery.name}</span>
             ) : null}
             <span className="booking-view-route__sail booking-view-route__sail--eta">
-              {t("labels.eta")} {dateOnly(booking.eta)}
+              {t("labels.eta")} {sailDateTime(eta)}
             </span>
           </div>
         </div>

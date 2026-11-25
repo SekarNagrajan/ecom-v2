@@ -1,21 +1,15 @@
 // Modified by Sekar Nagarajan (2026-08-26 14:26)
 import { FormattedDate } from "@solverminds/shared-ui";
-import {
-  DataView,
-  type DataViewColumn,
-} from "@solverminds/shared-ui/data-view";
+import { DataView, type DataViewColumn } from "@solverminds/shared-ui/data-view";
 import type { RowDoubleClickedEvent } from "ag-grid-community";
 import { Tag } from "antd";
 import { DateTime } from "luxon";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { AppIcon, Icons } from "../../../components/icons";
+import { AppIcon, Icons, NavIcons } from "../../../components/icons";
 import { buildActionsColumn } from "../../../components/shared/build-actions-column";
-import {
-  ListActionButton,
-  ListActionsRow,
-} from "../../../components/shared/list-action-button";
+import { ListActionButton, ListActionsRow } from "../../../components/shared/list-action-button";
 import {
   ModuleEmptyState,
   buildClearFiltersAction,
@@ -24,24 +18,12 @@ import {
 import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
 import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
 import { useModuleTitles } from "../../../i18n/use-module-titles";
-import {
-  useDODownloadMutation,
-  useDOSummaryQuery,
-} from "../api/delivery-order.queries";
-import type {
-  DOListFilters,
-  DOSearchValues,
-  DOSummaryRow,
-} from "../types/delivery-order.types";
-import {
-  getDoPrintStatusColor,
-  getDoPrintStatusLabel,
-} from "../utils/do-status";
+import { useDODownloadMutation, useDOSummaryQuery } from "../api/delivery-order.queries";
+import type { DOListFilters, DOSearchValues, DOSummaryRow } from "../types/delivery-order.types";
+import { getDoPrintStatusColor, getDoPrintStatusLabel } from "../utils/do-status";
 import { DoLoadingCenter } from "./do-loading-center";
 import { DoSearchPanel } from "./do-search-panel";
 import { DoViewDrawer } from "./view/DoViewDrawer";
-// Modified by Sekar Nagarajan (2026-09-02 15:01)
-import { NavContainerReleaseIcon } from "../../../components/icons/nav-svg-icons";
 
 const initialFilters: DOListFilters = {
   fromDate: DateTime.now().minus({ days: 60 }).toISODate() ?? undefined,
@@ -53,17 +35,9 @@ export function DeliveryOrderListing() {
   const MODULE_TITLES = useModuleTitles();
   const { profileHandlers } = useLocalGridProfiles("delivery-order");
   const [filters, setFilters] = useState<DOListFilters>(initialFilters);
-  const [selectedRecord, setSelectedRecord] = useState<DOSummaryRow | null>(
-    null,
-  );
+  const [selectedRecord, setSelectedRecord] = useState<DOSummaryRow | null>(null);
 
-  const {
-    data: rows = [],
-    isLoading,
-    isFetching,
-    isError,
-    refetch,
-  } = useDOSummaryQuery(filters);
+  const { data: rows = [], isLoading, isFetching, isError, refetch } = useDOSummaryQuery(filters);
   const { mutate: downloadDoc } = useDODownloadMutation();
 
   const handleSearch = (values: DOSearchValues) => {
@@ -124,8 +98,7 @@ export function DeliveryOrderListing() {
       field: "delorddate",
       headerName: t("columns.doDate"),
       width: 140,
-      cellRenderer: (p: { value?: string }) =>
-        p.value ? <FormattedDate value={p.value} /> : "-",
+      cellRenderer: (p: { value?: string }) => (p.value ? <FormattedDate value={p.value} /> : "-"),
     },
     { field: "blnumber", headerName: t("columns.blNumber"), width: 150 },
     { field: "vessel", headerName: t("columns.vessel"), width: 150 },
@@ -137,15 +110,13 @@ export function DeliveryOrderListing() {
       field: "arrdate",
       headerName: t("columns.arrival"),
       width: 140,
-      cellRenderer: (p: { value?: string }) =>
-        p.value ? <FormattedDate value={p.value} /> : "-",
+      cellRenderer: (p: { value?: string }) => (p.value ? <FormattedDate value={p.value} /> : "-"),
     },
     {
       field: "dovaliditydate",
       headerName: t("columns.validTill"),
       width: 140,
-      cellRenderer: (p: { value?: string }) =>
-        p.value ? <FormattedDate value={p.value} /> : "-",
+      cellRenderer: (p: { value?: string }) => (p.value ? <FormattedDate value={p.value} /> : "-"),
     },
     {
       headerName: t("columns.status"),
@@ -154,10 +125,7 @@ export function DeliveryOrderListing() {
       cellRenderer: (params: { data?: DOSummaryRow }) => {
         if (!params.data) return null;
         return (
-          <Tag
-            className="do-status-tag"
-            color={getDoPrintStatusColor(params.data.printstatus)}
-          >
+          <Tag className="do-status-tag" color={getDoPrintStatusColor(params.data.printstatus)}>
             {getDoPrintStatusLabel(params.data.printstatus, t)}
           </Tag>
         );
@@ -186,7 +154,7 @@ export function DeliveryOrderListing() {
     <div className="do-page-layout">
       <div className="do-page-header">
         <ModuleScreenHeader
-          icon={NavContainerReleaseIcon}
+          icon={NavIcons.deliveryOrder}
           title={MODULE_TITLES.deliveryOrder}
           subtitle={t("subtitle")}
           marginBottom={0}
@@ -228,10 +196,7 @@ export function DeliveryOrderListing() {
       )}
 
       {selectedRecord ? (
-        <DoViewDrawer
-          record={selectedRecord}
-          onClose={() => setSelectedRecord(null)}
-        />
+        <DoViewDrawer record={selectedRecord} onClose={() => setSelectedRecord(null)} />
       ) : null}
     </div>
   );

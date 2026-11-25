@@ -127,12 +127,18 @@ export type CalendarWeekday = "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "s
 
 /** Planning calendar booking with SI / payment flags (JSP missingSIFlag / pendingPaymentFlag). */
 export interface PlanningBookingDTO extends BookingListDTO {
+  /** ISO date (YYYY-MM-DD) — vessel departure (ETD) this calendar cell is keyed on. */
+  etd: string;
+  /** ISO date (YYYY-MM-DD) — vessel arrival (ETA) when known. */
+  eta: string;
   missingSIFlag?: boolean;
   pendingPaymentFlag?: boolean;
 }
 
 export interface CalendarDayCell {
   count: number;
+  /** ISO date (YYYY-MM-DD) for this weekday column. */
+  date: string;
   /** Bookings awaiting SI on this day */
   missingSI: number;
   /** Bookings with payment pending on this day */
@@ -155,6 +161,8 @@ export interface PlanningDaySelection {
   week: string;
   day: CalendarWeekday;
   dayLabel: string;
+  /** ISO date (YYYY-MM-DD) for the clicked calendar day (booking ETD). */
+  departureDate: string;
   dateRange: string;
   bookings: PlanningBookingDTO[];
 }

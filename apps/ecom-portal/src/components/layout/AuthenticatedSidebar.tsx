@@ -50,11 +50,14 @@ function navIcon(Icon: LucideIcon, size = 18, locked = false) {
   return <AppIcon icon={Icon} size={size} variant={locked ? "navLocked" : "nav"} />;
 }
 
-/** Label + tooltip title for expanded vs icon-rail collapsed menu. */
-function sidebarMenuLabel(text: string, locked: boolean, lockedLabel: string) {
+/** Label + tooltip title for expanded vs icon-rail collapsed menu.
+ *  Pass `hoverTitle` when the visible label is abbreviated (e.g. CRO). */
+function sidebarMenuLabel(text: string, locked: boolean, lockedLabel: string, hoverTitle?: string) {
+  const tip = hoverTitle ?? (locked ? lockedLabel : text);
+  const needsTooltip = Boolean(hoverTitle) || locked || tip !== text;
   return {
-    title: locked ? lockedLabel : text,
-    label: locked ? <Tooltip title={lockedLabel}>{text}</Tooltip> : text,
+    title: tip,
+    label: needsTooltip ? <Tooltip title={tip}>{text}</Tooltip> : text,
   };
 }
 
@@ -269,6 +272,13 @@ export function AuthenticatedSidebar({
       className: lock("booking") ? "ant-menu-item-locked" : undefined,
     },
     {
+      key: "cro",
+      icon: navIcon(NavIcons.containerRelease, 20, lock("cro")),
+      ...sidebarMenuLabel(t("nav.cro"), lock("cro"), lockedLabel, t("nav.containerReleaseOrder")),
+      disabled: !isGuest && !can("CRO"),
+      className: lock("cro") ? "ant-menu-item-locked" : undefined,
+    },
+    {
       key: "si",
       icon: navIcon(NavIcons.shippingInstruction, 20, lock("si")),
       ...sidebarMenuLabel(t("nav.shippingInstruction"), lock("si"), lockedLabel),
@@ -301,13 +311,7 @@ export function AuthenticatedSidebar({
       ...sidebarMenuLabel(t("nav.arrivalNotice"), lock("arrival-notice"), lockedLabel),
       className: lock("arrival-notice") ? "ant-menu-item-locked" : undefined,
     },
-    {
-      key: "cro",
-      icon: navIcon(NavIcons.containerRelease, 20, lock("cro")),
-      ...sidebarMenuLabel(t("nav.containerReleaseOrder"), lock("cro"), lockedLabel),
-      disabled: !isGuest && !can("CRO"),
-      className: lock("cro") ? "ant-menu-item-locked" : undefined,
-    },
+
     {
       key: "customer-stmt",
       icon: navIcon(NavIcons.customerStatement, 20, lock("customer-stmt")),

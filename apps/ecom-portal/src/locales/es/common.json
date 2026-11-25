@@ -22,6 +22,7 @@
     "deliveryOrder": "Orden de Entrega",
     "arrivalNotice": "Aviso de Llegada",
     "containerReleaseOrder": "Orden de Liberación de Contenedor",
+    "cro": "CRO",
     "customerStatement": "Estado de Cuenta del Cliente",
     "more": "Más",
     "controlPanelAdmin": "Panel de Control",

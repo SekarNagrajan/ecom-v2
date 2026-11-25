@@ -7,10 +7,7 @@ import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons, NavBookingIcon } from "../../../../components/icons";
 import { formatModuleScreenTitle } from "../../../../constants/module-titles";
-import type {
-  BookingListDTO,
-  BookingListStatus,
-} from "../../types/booking-list.types";
+import type { BookingListDTO, BookingListStatus } from "../../types/booking-list.types";
 import { getBookingListStatusColor } from "../../types/booking-list.types";
 import { getBookingStatusLabel } from "../../utils/booking-status";
 import { BookingDetailsViewer } from "./BookingDetailsViewer";
@@ -53,10 +50,7 @@ function splitPort(value?: string | null): { code: string; name: string } {
  * Acceptance sits at the Submitted stage; Rejected / Cancelled replace the
  * next step with a red terminal marker.
  */
-function buildLifecycle(
-  status: BookingListStatus,
-  t: (key: string) => string,
-): LifecycleStep[] {
+function buildLifecycle(status: BookingListStatus, t: (key: string) => string): LifecycleStep[] {
   const base: { key: BookingListStatus; label: string }[] = [
     { key: "Draft", label: t("status.draft") },
     { key: "Submitted", label: t("status.submitted") },
@@ -146,7 +140,10 @@ export function BookingViewDrawer({ booking, onClose }: BookingViewDrawerProps) 
             <Title level={4} className="booking-drawer-title__text">
               {formatModuleScreenTitle(t("modules:titles.viewBooking"), booking.bookingNo)}
             </Title>
-            <Text type="secondary" className="booking-drawer-title__meta booking-drawer-title__meta--row">
+            <Text
+              type="secondary"
+              className="booking-drawer-title__meta booking-drawer-title__meta--row"
+            >
               <span className="booking-drawer-title__meta-item">
                 {t("labels.onlineRef")}: <strong>{dash(booking.onlineRefNo)}</strong>
               </span>
@@ -225,6 +222,9 @@ export function BookingViewDrawer({ booking, onClose }: BookingViewDrawerProps) 
             </span>
             <span className="booking-view-route__code">{dash(origin.code)}</span>
             {origin.name ? <span className="booking-view-route__name">{origin.name}</span> : null}
+            <span className="booking-view-route__sail booking-view-route__sail--etd">
+              {t("labels.etd")} {dateOnly(booking.etd)}
+            </span>
           </div>
           <div className="booking-view-route__connector" aria-hidden>
             <span className="booking-view-route__track" />
@@ -243,6 +243,9 @@ export function BookingViewDrawer({ booking, onClose }: BookingViewDrawerProps) 
             {delivery.name ? (
               <span className="booking-view-route__name">{delivery.name}</span>
             ) : null}
+            <span className="booking-view-route__sail booking-view-route__sail--eta">
+              {t("labels.eta")} {dateOnly(booking.eta)}
+            </span>
           </div>
         </div>
 

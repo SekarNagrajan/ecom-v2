@@ -28,9 +28,10 @@ function navIcon(Icon: LucideIcon, size = 20, locked = false) {
   return <AppIcon icon={Icon} size={size} variant={locked ? "navLocked" : "nav"} />;
 }
 
-function menuLabel(text: string, locked: boolean) {
-  if (!locked) return text;
-  return <Tooltip title="Sign In Required">{text}</Tooltip>;
+function menuLabel(text: string, locked: boolean, hoverTitle?: string) {
+  const tip = hoverTitle ?? (locked ? "Sign In Required" : undefined);
+  if (!tip) return text;
+  return <Tooltip title={tip}>{text}</Tooltip>;
 }
 
 export function PublicLayout() {
@@ -116,6 +117,13 @@ export function PublicLayout() {
       className: "ant-menu-item-locked",
     },
     {
+      key: "cro",
+      icon: navIcon(NavIcons.containerRelease, 20, true),
+      title: "Container Release Order",
+      label: menuLabel("CRO", true, "Container Release Order"),
+      className: "ant-menu-item-locked",
+    },
+    {
       key: "si",
       icon: navIcon(NavIcons.shippingInstruction, 20, true),
       label: menuLabel("Shipping Instruction", true),
@@ -145,12 +153,7 @@ export function PublicLayout() {
       label: menuLabel("Arrival Notice", true),
       className: "ant-menu-item-locked",
     },
-    {
-      key: "cro",
-      icon: navIcon(NavIcons.containerRelease, 20, true),
-      label: menuLabel("Container Release Order", true),
-      className: "ant-menu-item-locked",
-    },
+
     {
       key: "more-group",
       icon: navIcon(NavIcons.more, 20),

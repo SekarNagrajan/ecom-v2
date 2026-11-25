@@ -46,7 +46,7 @@ export function RateDataView({ activeMode, onModeChange }: RateDataViewProps) {
       },
       {
         key: "contract",
-        label: t("modes.serviceContracts"),
+        label: t("modes.serviceContract"),
         children: <ContractView />,
       },
       {
@@ -62,9 +62,7 @@ export function RateDataView({ activeMode, onModeChange }: RateDataViewProps) {
     <Card className="rates-dataview-shell" bordered={false}>
       <AppTabs
         activeKey={tabKeyMap[activeMode] || "tariff"}
-        onChange={(key) =>
-          onModeChange(reverseTabKeyMap[key] || "PUBLISHED_TARIFF")
-        }
+        onChange={(key) => onModeChange(reverseTabKeyMap[key] || "PUBLISHED_TARIFF")}
         items={items}
       />
     </Card>

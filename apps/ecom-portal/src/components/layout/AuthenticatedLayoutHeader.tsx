@@ -228,9 +228,6 @@ export function AuthenticatedLayoutHeader({
       case "contact-us":
         setContactUsDrawerOpen(true);
         break;
-      case "quote":
-        navigate({ to: "/app/quotes" as any });
-        break;
       case "my-alert":
         setMyAlertDrawerOpen(true);
         break;
@@ -290,11 +287,6 @@ export function AuthenticatedLayoutHeader({
       key: "contact-us",
       label: t("account.contactUs"),
       icon: <AppIcon icon={Icons.headphones} size={16} />,
-    },
-    {
-      key: "quote",
-      label: t("account.quote"),
-      icon: <AppIcon icon={Icons.dollarSign} size={16} />,
     },
     {
       key: "my-alert",

@@ -153,6 +153,9 @@
   "planningDrawer": {
     "eyebrow": "TEMPAHAN AKAN DATANG",
     "route": "Laluan",
+    "departureDate": "Tarikh Berlepas",
+    "etd": "ETD",
+    "eta": "ETA",
     "status": "Status",
     "capacity": "Kapasiti",
     "capacityTeu": "{{count}} TEU",
@@ -165,11 +168,11 @@
     "title": "Kepintaran Penghantaran",
     "viewReportTooltip": "Buka laporan kepintaran penuh",
     "topConsignees": "Penerima Teratas",
-    "viewAllConsigneesTooltip": "Lihat semua penerima mengikut volum FEU",
+    "viewAllConsigneesTooltip": "Lihat semua penerima mengikut volum TEU",
     "total": "Jumlah",
     "segments": "{{count}} segmen",
     "totalTeus": "{{count}} TEUs",
-    "tooltipFeus": "{{name}}: {{value}} FEUs ({{percent}}%)",
+    "tooltipFeus": "{{name}}: {{value}} TEUs ({{percent}}%)",
     "columns": {
       "teus": "TEUs",
       "share": "Bahagian",
@@ -196,7 +199,7 @@
   },
   "lanes": {
     "topActive": "Laluan Aktif Teratas",
-    "viewAllByFeu": "Lihat semua laluan mengikut volum FEU",
+    "viewAllByFeu": "Lihat semua laluan mengikut volum TEU",
     "recentlyUsed": "Laluan Digunakan Baru-baru Ini",
     "recentlyUsedHint": "Tempahan terkini pada koridor ini",
     "viewAllRecentlyUsed": "Lihat semua laluan digunakan baru-baru ini",
@@ -208,7 +211,7 @@
     "suggestedHint": "Berdasarkan sejarah tempahan anda",
     "noActivity": "Tiada Aktiviti",
     "lanePolPod": "Laluan (POL → POD)",
-    "feus": "FEUs",
+    "feus": "TEUs",
     "share": "Bahagian",
     "volume": "Volum",
     "suggestions": {

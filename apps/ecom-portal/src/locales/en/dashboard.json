@@ -153,6 +153,9 @@
   "planningDrawer": {
     "eyebrow": "UPCOMING BOOKINGS",
     "route": "Route",
+    "departureDate": "Departure Date",
+    "etd": "ETD",
+    "eta": "ETA",
     "status": "Status",
     "capacity": "Capacity",
     "capacityTeu": "{{count}} TEU",
@@ -165,11 +168,11 @@
     "title": "Shipment Intelligence",
     "viewReportTooltip": "Open the full intelligence report",
     "topConsignees": "Top Consignees",
-    "viewAllConsigneesTooltip": "View all consignees by FEU volume",
+    "viewAllConsigneesTooltip": "View all consignees by TEU volume",
     "total": "Total",
     "segments": "{{count}} segments",
     "totalTeus": "{{count}} TEUs",
-    "tooltipFeus": "{{name}}: {{value}} FEUs ({{percent}}%)",
+    "tooltipFeus": "{{name}}: {{value}} TEUs ({{percent}}%)",
     "columns": {
       "teus": "TEUs",
       "share": "Share",
@@ -196,7 +199,7 @@
   },
   "lanes": {
     "topActive": "Top Active Lanes",
-    "viewAllByFeu": "View all lanes by FEU volume",
+    "viewAllByFeu": "View all lanes by TEU volume",
     "recentlyUsed": "Recently Used Lanes",
     "recentlyUsedHint": "Latest bookings on these corridors",
     "viewAllRecentlyUsed": "View all recently used lanes",
@@ -208,7 +211,7 @@
     "suggestedHint": "Based on your booking history",
     "noActivity": "No Activity",
     "lanePolPod": "Lane (POL → POD)",
-    "feus": "FEUs",
+    "feus": "TEUs",
     "share": "Share",
     "volume": "Volume",
     "suggestions": {

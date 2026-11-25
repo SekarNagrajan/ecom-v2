@@ -49,6 +49,8 @@
     "nonDg": "Non-DG",
     "originPol": "Origin (POL)",
     "deliveryPod": "Delivery (POD)",
+    "etd": "ETD",
+    "eta": "ETA",
     "portToPort": "Port to Port",
     "cargoReadyDate": "Cargo ready date",
     "haulageOrigin": "Haulage origin",

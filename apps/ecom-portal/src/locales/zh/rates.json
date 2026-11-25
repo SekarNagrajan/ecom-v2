@@ -1,18 +1,18 @@
 {
-  "subtitle": "搜索已发布班轮运价、查看分项附加费明细、管理服务合同，并申请即期运价报价。",
+  "subtitle": "搜索已发布班轮运价、查看分项附加费明细、管理合同，并申请即期运价报价。",
   "exportingToast": "正在将运价搜索结果导出为 Excel…",
   "modes": {
     "tariff": "运价表",
     "surcharge": "附加费",
-    "serviceContract": "服务合同",
+    "serviceContract": "合同",
     "requestForQuote": "询价申请",
     "publishedLineTariffs": "已发布班轮运价",
     "surchargesAccessorials": "附加费与杂费",
-    "serviceContracts": "服务合同",
+    "serviceContracts": "合同",
     "spotRateQuotes": "即期运价报价",
     "results": {
       "publishedTariff": "已发布海运运价",
-      "serviceContracts": "服务合同",
+      "serviceContracts": "合同",
       "surcharges": "附加费与杂费",
       "spotQuotes": "即期运价报价"
     }

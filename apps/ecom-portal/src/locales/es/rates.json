@@ -1,18 +1,18 @@
 {
-  "subtitle": "Busque tarifas de línea publicadas, vea desgloses de recargos, gestione contratos de servicio y solicite cotizaciones spot.",
+  "subtitle": "Busque tarifas de línea publicadas, vea desgloses de recargos, gestione contratos y solicite cotizaciones spot.",
   "exportingToast": "Exportando resultados de búsqueda de tarifas a Excel...",
   "modes": {
     "tariff": "Tarifa",
     "surcharge": "Recargo",
-    "serviceContract": "Contrato de servicio",
+    "serviceContract": "Contrato",
     "requestForQuote": "Solicitud de cotización",
     "publishedLineTariffs": "Tarifas de línea publicadas",
     "surchargesAccessorials": "Recargos y accesorios",
-    "serviceContracts": "Contratos de servicio",
+    "serviceContracts": "Contratos",
     "spotRateQuotes": "Cotizaciones spot",
     "results": {
       "publishedTariff": "Tarifas de flete publicadas",
-      "serviceContracts": "Contratos de servicio",
+      "serviceContracts": "Contratos",
       "surcharges": "Recargos y accesorios",
       "spotQuotes": "Cotizaciones spot"
     }

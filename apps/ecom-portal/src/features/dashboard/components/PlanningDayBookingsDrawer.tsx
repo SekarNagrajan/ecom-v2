@@ -1,5 +1,5 @@
 // Modified by Sekar Nagarajan (2026-10-16 23:45)
-import { AppButton, AppDrawer } from "@solverminds/shared-ui";
+import { AppButton, AppDrawer, FormattedDate } from "@solverminds/shared-ui";
 import { Tag, Typography } from "antd";
 import { useTranslation } from "react-i18next";
 
@@ -9,10 +9,7 @@ import {
   getBookingListStatusColor,
   type BookingListDTO,
 } from "../../booking/types/booking-list.types";
-import type {
-  PlanningBookingDTO,
-  PlanningDaySelection,
-} from "../api/dashboard.api";
+import type { PlanningBookingDTO, PlanningDaySelection } from "../api/dashboard.api";
 
 const { Text, Title } = Typography;
 
@@ -41,11 +38,7 @@ function titleCasePortName(value: string): string {
   return value
     .toLowerCase()
     .split(/\s+/)
-    .map((word) =>
-      word.length <= 2
-        ? word.toUpperCase()
-        : word[0].toUpperCase() + word.slice(1),
-    )
+    .map((word) => (word.length <= 2 ? word.toUpperCase() : word[0].toUpperCase() + word.slice(1)))
     .join(" ");
 }
 
@@ -62,10 +55,7 @@ function BookingAttentionCues({
   return (
     <div className="dashboard-planning-day-cues" role="list">
       {booking.missingSIFlag ? (
-        <span
-          className="dashboard-planning-day-cue dashboard-planning-day-cue--si"
-          role="listitem"
-        >
+        <span className="dashboard-planning-day-cue dashboard-planning-day-cue--si" role="listitem">
           {siPendingLabel}
         </span>
       ) : null}
@@ -91,8 +81,7 @@ function PlanningBookingCard({
   const { t } = useTranslation(["dashboard", "common", "modules"]);
   const origin = splitPortLabel(booking.origin);
   const delivery = splitPortLabel(booking.delivery);
-  const needsAttention =
-    Boolean(booking.missingSIFlag) || Boolean(booking.pendingPaymentFlag);
+  const needsAttention = Boolean(booking.missingSIFlag) || Boolean(booking.pendingPaymentFlag);
 
   return (
     <li
@@ -114,13 +103,8 @@ function PlanningBookingCard({
             aria-label={t("planningDrawer.route")}
           >
             <div className="dashboard-planning-day-card__leg">
-              <Text className="dashboard-planning-day-card__port-code">
-                {origin.code}
-              </Text>
-              <Text
-                type="secondary"
-                className="dashboard-planning-day-card__port-name"
-              >
+              <Text className="dashboard-planning-day-card__port-code">{origin.code}</Text>
+              <Text type="secondary" className="dashboard-planning-day-card__port-name">
                 {origin.name}
               </Text>
             </div>
@@ -128,13 +112,8 @@ function PlanningBookingCard({
               →
             </span>
             <div className="dashboard-planning-day-card__leg">
-              <Text className="dashboard-planning-day-card__port-code">
-                {delivery.code}
-              </Text>
-              <Text
-                type="secondary"
-                className="dashboard-planning-day-card__port-name"
-              >
+              <Text className="dashboard-planning-day-card__port-code">{delivery.code}</Text>
+              <Text type="secondary" className="dashboard-planning-day-card__port-name">
                 {delivery.name}
               </Text>
             </div>
@@ -149,12 +128,25 @@ function PlanningBookingCard({
         <div className="dashboard-planning-day-card__meta">
           <div className="dashboard-planning-day-card__field">
             <Text className="dashboard-planning-day-card__field-label">
+              {t("planningDrawer.etd")}
+            </Text>
+            <Text strong className="dashboard-planning-day-card__capacity">
+              {booking.etd ? <FormattedDate value={booking.etd} /> : "—"}
+            </Text>
+          </div>
+          <div className="dashboard-planning-day-card__field">
+            <Text className="dashboard-planning-day-card__field-label">
+              {t("planningDrawer.eta")}
+            </Text>
+            <Text strong className="dashboard-planning-day-card__capacity">
+              {booking.eta ? <FormattedDate value={booking.eta} /> : "—"}
+            </Text>
+          </div>
+          <div className="dashboard-planning-day-card__field">
+            <Text className="dashboard-planning-day-card__field-label">
               {t("planningDrawer.status")}
             </Text>
-            <Tag
-              className="module-status-tag"
-              color={getBookingListStatusColor(booking.status)}
-            >
+            <Tag className="module-status-tag" color={getBookingListStatusColor(booking.status)}>
               {booking.status}
             </Tag>
           </div>
@@ -209,23 +201,22 @@ export function PlanningDayBookingsDrawer({
               <Text className="dashboard-planning-day-drawer__eyebrow">
                 {t("planningDrawer.eyebrow")}
               </Text>
-              <Title
-                level={5}
-                className="dashboard-planning-day-drawer__heading"
-              >
+              <Title level={5} className="dashboard-planning-day-drawer__heading">
                 {selection.dayLabel} · {selection.week}
               </Title>
+              {selection.departureDate ? (
+                <Text type="secondary" className="dashboard-planning-day-drawer__departure">
+                  {t("planningDrawer.departureDate")}:{" "}
+                  <FormattedDate value={selection.departureDate} />
+                </Text>
+              ) : null}
             </div>
           </div>
         </div>
       }
     >
       {selection.bookings.length === 0 ? (
-        <ModuleEmptyState
-          variant="blank"
-          title={t("planningDrawer.empty")}
-          artSize="sm"
-        />
+        <ModuleEmptyState variant="blank" title={t("planningDrawer.empty")} artSize="sm" />
       ) : (
         <ul className="dashboard-planning-day-list">
           {selection.bookings.map((booking) => (

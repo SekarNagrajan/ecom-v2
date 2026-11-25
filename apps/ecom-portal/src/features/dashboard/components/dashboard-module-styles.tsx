@@ -62,10 +62,7 @@ export function DashboardModuleStyles() {
         border: 1px solid ${token.colorBorderSecondary};
         border-radius: ${token.borderRadiusLG}px;
         background: ${token.colorBgContainer};
-        box-shadow: 0 ${token.marginXXS}px ${token.marginSM}px ${tokenMix(
-      token.colorText,
-      6,
-    )};
+        box-shadow: 0 ${token.marginXXS}px ${token.marginSM}px ${tokenMix(token.colorText, 6)};
         text-align: left;
         font: inherit;
         cursor: pointer;
@@ -91,10 +88,7 @@ export function DashboardModuleStyles() {
       .dashboard-summary-card:hover,
       .dashboard-summary-card:focus-visible,
       .dashboard-summary-card--active {
-        box-shadow: 0 ${token.marginXXS}px ${token.marginMD}px ${tokenMix(
-      token.colorText,
-      10,
-    )};
+        box-shadow: 0 ${token.marginXXS}px ${token.marginMD}px ${tokenMix(token.colorText, 10)};
         outline: none;
         transform: translateY(-1px);
       }
@@ -1224,6 +1218,11 @@ export function DashboardModuleStyles() {
       .dashboard-planning-day-drawer__heading {
         margin: 0 !important;
         line-height: 1.25 !important;
+      }
+      .dashboard-planning-day-drawer__departure {
+        font-size: ${token.fontSizeSM}px;
+        line-height: 1.3;
+        margin-top: ${token.marginXXS}px;
       }
       .dashboard-planning-day-drawer__tiles {
         display: grid;

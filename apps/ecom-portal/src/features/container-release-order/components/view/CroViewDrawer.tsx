@@ -3,19 +3,12 @@ import { AppButton, AppDrawer, FormattedDate } from "@solverminds/shared-ui";
 import { Alert, Table, Tag, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import type { ReactNode } from "react";
-import { Trans, useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 
-import {
-  AppIcon,
-  Icons,
-  NavContainerReleaseIcon,
-} from "../../../../components/icons";
+import { AppIcon, Icons, NavIcons } from "../../../../components/icons";
 import { ModuleEmptyState } from "../../../../components/shared/module-empty-state";
 import { useModuleTitles } from "../../../../i18n/use-module-titles";
-import {
-  useCRODetailQuery,
-  useCRODownloadMutation,
-} from "../../api/cro.queries";
+import { useCRODetailQuery, useCRODownloadMutation } from "../../api/cro.queries";
 import type { CROContainerRow } from "../../types/cro.types";
 import {
   getCroPrintStatusColor,
@@ -27,9 +20,6 @@ import { parsePortLabel } from "../../utils/cro.utils";
 import { CroLoadingCenter } from "../cro-loading-center";
 
 const { Text, Title } = Typography;
-
-const DAY_MS = 86_400_000;
-const SOON_WITHIN_DAYS = 3;
 
 interface CroViewDrawerProps {
   croNo: string;
@@ -56,14 +46,6 @@ function parseDate(value?: string | null): Date | null {
 function isPast(value?: string | null, now = new Date()): boolean {
   const date = parseDate(value);
   return Boolean(date && date.getTime() <= now.getTime());
-}
-
-/** Calendar days from today to `value` (negative once past); null when unknown. */
-function daysUntil(value?: string | null, now = new Date()): number | null {
-  const date = parseDate(value);
-  if (!date) return null;
-  const startOf = (d: Date) => new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
-  return Math.round((startOf(date) - startOf(now)) / DAY_MS);
 }
 
 function MetaField({ label, children }: { label: string; children: ReactNode }) {
@@ -108,15 +90,14 @@ function SectionCard({
 
 /**
  * Container Release Order view drawer — load → discharge hero with the
- * release timeline, validity / blocked banners, then full-width detail
+ * release timeline, optional blocked banner, then full-width detail
  * cards (release order, shipment, containers).
  */
 export function CroViewDrawer({ croNo, onClose }: CroViewDrawerProps) {
   const { t } = useTranslation(["container-release-order", "common", "modules"]);
   const MODULE_TITLES = useModuleTitles();
   const { data: croData, isLoading } = useCRODetailQuery(croNo);
-  const { mutate: downloadDoc, isPending: isDownloading } =
-    useCRODownloadMutation();
+  const { mutate: downloadDoc, isPending: isDownloading } = useCRODownloadMutation();
 
   const originPort = parsePortLabel(croData?.loadPort || "");
   const deliveryPort = parsePortLabel(croData?.dischargePort || "");
@@ -124,25 +105,27 @@ export function CroViewDrawer({ croNo, onClose }: CroViewDrawerProps) {
   const printColor = croData ? getCroPrintStatusColor(croData.printStatus) : "default";
   const containers = croData?.containers ?? [];
   const blockedReasons =
-    croData && croData.releaseStatus === "Blocked" ? croData.eligibility?.reasons ?? [] : [];
-
-  const validDaysLeft = daysUntil(croData?.validTo);
-  const validityAlertType =
-    validDaysLeft === null
-      ? "info"
-      : validDaysLeft < 0
-        ? "error"
-        : validDaysLeft <= SOON_WITHIN_DAYS
-          ? "warning"
-          : "info";
+    croData && croData.releaseStatus === "Blocked" ? (croData.eligibility?.reasons ?? []) : [];
 
   const milestones: { key: string; label: string; date: string | null }[] = [
     { key: "issued", label: t("drawer.timeline.issued"), date: croData?.croDate || null },
     ...(hasText(croData?.polArrival)
-      ? [{ key: "polArrival", label: t("drawer.timeline.polArrival"), date: croData?.polArrival ?? null }]
+      ? [
+          {
+            key: "polArrival",
+            label: t("drawer.timeline.polArrival"),
+            date: croData?.polArrival ?? null,
+          },
+        ]
       : []),
     ...(hasText(croData?.polDeparture)
-      ? [{ key: "polDeparture", label: t("drawer.timeline.polDeparture"), date: croData?.polDeparture ?? null }]
+      ? [
+          {
+            key: "polDeparture",
+            label: t("drawer.timeline.polDeparture"),
+            date: croData?.polDeparture ?? null,
+          },
+        ]
       : []),
     { key: "validUntil", label: t("drawer.timeline.validUntil"), date: croData?.validTo || null },
   ];
@@ -194,12 +177,10 @@ export function CroViewDrawer({ croNo, onClose }: CroViewDrawerProps) {
       title={
         <div className="cro-drawer-title">
           <span className="cro-drawer-title__icon app-icon-inherit">
-            <AppIcon icon={NavContainerReleaseIcon} size={22} />
+            <AppIcon icon={NavIcons.containerRelease} size={22} />
           </span>
           <div className="cro-drawer-title__copy">
-            <Text className="cro-drawer-title__eyebrow">
-              {MODULE_TITLES.containerReleaseOrder}
-            </Text>
+            <Text className="cro-drawer-title__eyebrow">{MODULE_TITLES.containerReleaseOrder}</Text>
             <Title
               level={5}
               className="cro-drawer-title__text"
@@ -334,26 +315,6 @@ export function CroViewDrawer({ croNo, onClose }: CroViewDrawerProps) {
               }
             />
           ) : null}
-          {hasText(croData.validTo) ? (
-            <Alert
-              type={validityAlertType}
-              showIcon
-              className="cro-drawer-alert"
-              icon={
-                <AppIcon
-                  icon={validityAlertType === "info" ? Icons.info : Icons.clock}
-                  size={16}
-                />
-              }
-              message={
-                <Trans
-                  i18nKey="drawer.alerts.validUntil"
-                  ns="container-release-order"
-                  components={{ date: <FormattedDate value={croData.validTo} /> }}
-                />
-              }
-            />
-          ) : null}
 
           {/* Detail cards — one per row */}
           <div className="cro-section-stack">
@@ -396,9 +357,7 @@ export function CroViewDrawer({ croNo, onClose }: CroViewDrawerProps) {
               <div className="cro-meta-grid">
                 <MetaField label={t("drawer.labels.vessel")}>{croData.vessel || "—"}</MetaField>
                 <MetaField label={t("drawer.labels.voyage")}>{croData.voyage || "—"}</MetaField>
-                <MetaField label={t("drawer.labels.contType")}>
-                  {croData.eqpType || "—"}
-                </MetaField>
+                <MetaField label={t("drawer.labels.contType")}>{croData.eqpType || "—"}</MetaField>
                 <MetaField label={t("drawer.labels.emptyReleaseDepot")}>
                   {croData.emptyReleaseDepot || "—"}
                 </MetaField>

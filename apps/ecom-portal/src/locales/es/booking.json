@@ -49,6 +49,8 @@
     "nonDg": "No DG",
     "originPol": "Origen (POL)",
     "deliveryPod": "Entrega (POD)",
+    "etd": "ETD",
+    "eta": "ETA",
     "portToPort": "Puerto a puerto",
     "cargoReadyDate": "Fecha de carga lista",
     "haulageOrigin": "Origen de acarreo",

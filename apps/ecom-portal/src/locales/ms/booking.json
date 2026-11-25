@@ -49,6 +49,8 @@
     "nonDg": "Bukan DG",
     "originPol": "Asal (POL)",
     "deliveryPod": "Penghantaran (POD)",
+    "etd": "ETD",
+    "eta": "ETA",
     "portToPort": "Pelabuhan ke Pelabuhan",
     "cargoReadyDate": "Tarikh kargo siap",
     "haulageOrigin": "Asal pengangkutan",

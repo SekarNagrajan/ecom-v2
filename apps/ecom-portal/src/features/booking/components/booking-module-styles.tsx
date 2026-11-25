@@ -301,6 +301,29 @@ export function BookingModuleStyles() {
         line-height: 1.4;
         word-break: break-word;
       }
+      .booking-view-route__sail {
+        display: inline-flex;
+        align-items: center;
+        gap: ${token.marginXXS}px;
+        margin-top: ${token.marginXXS}px;
+        padding: 0 ${token.paddingXS}px;
+        min-height: ${token.controlHeightSM}px;
+        border-radius: ${token.borderRadiusSM}px;
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        line-height: 1.2;
+        white-space: nowrap;
+      }
+      .booking-view-route__sail--etd {
+        background: ${token.colorPrimaryBg};
+        color: ${token.colorPrimary};
+        border: 1px solid ${token.colorPrimaryBorder};
+      }
+      .booking-view-route__sail--eta {
+        background: ${successTint8};
+        color: ${token.colorSuccess};
+        border: 1px solid ${successTint14};
+      }
       .booking-view-route__connector {
         position: relative;
         display: flex;

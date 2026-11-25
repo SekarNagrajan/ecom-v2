@@ -17,15 +17,7 @@ import type {
 
 const { Text } = Typography;
 
-const DAY_KEYS: CalendarWeekday[] = [
-  "mon",
-  "tue",
-  "wed",
-  "thu",
-  "fri",
-  "sat",
-  "sun",
-];
+const DAY_KEYS: CalendarWeekday[] = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
 
 function calCellClass(count: number, clickable: boolean): string {
   const tone =
@@ -36,11 +28,7 @@ function calCellClass(count: number, clickable: boolean): string {
         : count <= 4
           ? "dashboard-cal-cell--mid"
           : "dashboard-cal-cell--high";
-  return [
-    "dashboard-cal-cell",
-    tone,
-    clickable ? "dashboard-cal-cell--clickable" : "",
-  ]
+  return ["dashboard-cal-cell", tone, clickable ? "dashboard-cal-cell--clickable" : ""]
     .filter(Boolean)
     .join(" ");
 }
@@ -48,9 +36,7 @@ function calCellClass(count: number, clickable: boolean): string {
 type TranslateFn = (key: string, options?: Record<string, unknown>) => string;
 
 function bookingCountLabel(count: number, t: TranslateFn): string {
-  return count === 1
-    ? t("planning.bookingOne")
-    : t("planning.bookingMany", { count });
+  return count === 1 ? t("planning.bookingOne") : t("planning.bookingMany", { count });
 }
 
 function dayAriaLabel(cell: CalendarDayCell, t: TranslateFn): string {
@@ -197,6 +183,7 @@ export function ShipmentPlanningSection({
       week: week.week,
       day,
       dayLabel,
+      departureDate: cell.date,
       dateRange: week.dateRange,
       bookings: cell.bookings,
     });
@@ -260,16 +247,10 @@ export function ShipmentPlanningSection({
           </thead>
           <tbody>
             {calendar.map((week, idx) => (
-              <tr
-                key={week.week}
-                className={idx % 2 === 1 ? "is-alt" : undefined}
-              >
+              <tr key={week.week} className={idx % 2 === 1 ? "is-alt" : undefined}>
                 <td>
                   <Text strong>{week.week}</Text>
-                  <Text
-                    type="secondary"
-                    className="dashboard-metric-tile__period"
-                  >
+                  <Text type="secondary" className="dashboard-metric-tile__period">
                     {week.dateRange}
                   </Text>
                 </td>
@@ -293,9 +274,7 @@ export function ShipmentPlanningSection({
                             week: week.week,
                             summary: dayAriaLabel(cell, t),
                           })}
-                          onClick={() =>
-                            handleDayActivate(week, key, label, cell)
-                          }
+                          onClick={() => handleDayActivate(week, key, label, cell)}
                         >
                           <span className={calCellClass(cell.count, clickable)}>
                             {cell.count || "—"}

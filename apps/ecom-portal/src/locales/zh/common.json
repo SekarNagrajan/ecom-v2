@@ -22,6 +22,7 @@
     "deliveryOrder": "提货单",
     "arrivalNotice": "到货通知",
     "containerReleaseOrder": "集装箱放行单",
+    "cro": "CRO",
     "customerStatement": "客户对账单",
     "more": "更多",
     "controlPanelAdmin": "控制面板",

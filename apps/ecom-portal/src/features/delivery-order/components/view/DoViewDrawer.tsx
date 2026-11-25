@@ -2,25 +2,14 @@
 import { AppButton, AppDrawer, FormattedDate } from "@solverminds/shared-ui";
 import { Alert, Tag, Tooltip, Typography } from "antd";
 import type { ReactNode } from "react";
-import { Trans, useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 
-import {
-  AppIcon,
-  Icons,
-  NavDeliveryOrderIcon,
-} from "../../../../components/icons";
+import { AppIcon, Icons, NavIcons } from "../../../../components/icons";
 import { useModuleTitles } from "../../../../i18n/use-module-titles";
 import { useDODownloadMutation } from "../../api/delivery-order.queries";
 import type { DOSummaryRow } from "../../types/delivery-order.types";
-import {
-  getDoPrintStatusColor,
-  getDoPrintStatusLabel,
-} from "../../utils/do-status";
-import {
-  canPrintDoOnline,
-  getDoValidity,
-  parsePortLabel,
-} from "../../utils/do.utils";
+import { getDoPrintStatusColor, getDoPrintStatusLabel } from "../../utils/do-status";
+import { canPrintDoOnline, parsePortLabel } from "../../utils/do.utils";
 
 const { Text, Title } = Typography;
 
@@ -84,9 +73,7 @@ function SectionCard({
         <Text strong className="do-drawer-section__title">
           {title}
         </Text>
-        {typeof count === "number" ? (
-          <Tag className="do-drawer-section__count">{count}</Tag>
-        ) : null}
+        {typeof count === "number" ? <Tag className="do-drawer-section__count">{count}</Tag> : null}
       </div>
       {children}
     </section>
@@ -101,16 +88,13 @@ function SectionCard({
 export function DoViewDrawer({ record, onClose }: DoViewDrawerProps) {
   const { t } = useTranslation(["delivery-order", "common", "modules"]);
   const MODULE_TITLES = useModuleTitles();
-  const { mutate: downloadDoc, isPending: isDownloading } =
-    useDODownloadMutation();
+  const { mutate: downloadDoc, isPending: isDownloading } = useDODownloadMutation();
 
   const originPort = parsePortLabel(record.loadport || "");
   const deliveryPort = parsePortLabel(record.dischargeport || "");
   const statusLabel = getDoPrintStatusLabel(record.printstatus, t);
   const statusColor = getDoPrintStatusColor(record.printstatus);
   const canPrint = canPrintDoOnline(record);
-
-  const validity = getDoValidity(record.dovaliditydate);
 
   const milestones: { key: string; label: string; date: string | null }[] = [
     { key: "issued", label: t("drawer.timeline.issued"), date: record.delorddate || null },
@@ -179,12 +163,10 @@ export function DoViewDrawer({ record, onClose }: DoViewDrawerProps) {
       title={
         <div className="do-drawer-title">
           <span className="do-drawer-title__icon app-icon-inherit">
-            <AppIcon icon={NavDeliveryOrderIcon} size={22} />
+            <AppIcon icon={NavIcons.deliveryOrder} size={22} />
           </span>
           <div className="do-drawer-title__copy">
-            <Text className="do-drawer-title__eyebrow">
-              {MODULE_TITLES.deliveryOrder}
-            </Text>
+            <Text className="do-drawer-title__eyebrow">{MODULE_TITLES.deliveryOrder}</Text>
             <Title
               level={5}
               className="do-drawer-title__text"
@@ -278,7 +260,6 @@ export function DoViewDrawer({ record, onClose }: DoViewDrawerProps) {
         </ol>
       </section>
 
-      {/* Attention banners */}
       {!canPrint ? (
         <Alert
           type="warning"
@@ -286,37 +267,6 @@ export function DoViewDrawer({ record, onClose }: DoViewDrawerProps) {
           className="do-drawer-alert"
           icon={<AppIcon icon={Icons.lock} size={16} />}
           message={t("drawer.notPrintable")}
-        />
-      ) : null}
-      {validity.state === "expiring" && hasText(record.dovaliditydate) ? (
-        <Alert
-          type="warning"
-          showIcon
-          className="do-drawer-alert"
-          icon={<AppIcon icon={Icons.clock} size={16} />}
-          message={
-            <Trans
-              i18nKey="drawer.alerts.expiring"
-              ns="delivery-order"
-              values={{ count: validity.daysLeft ?? 0 }}
-              components={{ date: <FormattedDate value={record.dovaliditydate} /> }}
-            />
-          }
-        />
-      ) : null}
-      {validity.state === "expired" && hasText(record.dovaliditydate) ? (
-        <Alert
-          type="error"
-          showIcon
-          className="do-drawer-alert"
-          icon={<AppIcon icon={Icons.alertTriangle} size={16} />}
-          message={
-            <Trans
-              i18nKey="drawer.alerts.expired"
-              ns="delivery-order"
-              components={{ date: <FormattedDate value={record.dovaliditydate} /> }}
-            />
-          }
         />
       ) : null}
 
@@ -355,9 +305,7 @@ export function DoViewDrawer({ record, onClose }: DoViewDrawerProps) {
         {showParties ? (
           <SectionCard icon={Icons.users} title={t("drawer.sections.parties")}>
             <div className="do-meta-grid">
-              <MetaField label={t("drawer.labels.consignee")}>
-                {record.consignee || "—"}
-              </MetaField>
+              <MetaField label={t("drawer.labels.consignee")}>{record.consignee || "—"}</MetaField>
               <MetaField label={t("drawer.labels.freeDays")}>
                 {typeof record.freeDays === "number"
                   ? t("drawer.values.days", { count: record.freeDays })

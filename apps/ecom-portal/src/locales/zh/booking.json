@@ -49,6 +49,8 @@
     "nonDg": "非危险品",
     "originPol": "起运地 (POL)",
     "deliveryPod": "交货地 (POD)",
+    "etd": "ETD",
+    "eta": "ETA",
     "portToPort": "港到港",
     "cargoReadyDate": "货物就绪日期",
     "haulageOrigin": "拖运起运地",

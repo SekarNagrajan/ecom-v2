@@ -34,6 +34,7 @@ export function RatesRoute() {
     resultsTitle,
     cardRates,
     hasSearched,
+    resultsRevealKey,
     searchParams,
     isLoading,
     handleSearch,
@@ -95,52 +96,59 @@ export function RatesRoute() {
           onRequestQuote={handleRequestQuote}
         />
 
-        <div className="rates-results-bar">
-          <div className="rates-results-bar__lead">
-            <AppIcon icon={Icons.dollarSign} size={18} />
-            <Text className="rates-results-bar__title">{resultsTitle}</Text>
-            <span
-              className="rates-results-bar__count"
-              title={`${hasSearched ? cardRates.length : 0}`}
-              aria-label={`${hasSearched ? cardRates.length : 0}`}
-            >
-              {hasSearched ? cardRates.length : 0}
-            </span>
+        <div
+          key={resultsRevealKey}
+          className={
+            hasSearched ? "rates-results-panel rates-results-panel--reveal" : "rates-results-panel"
+          }
+        >
+          <div className="rates-results-bar">
+            <div className="rates-results-bar__lead">
+              <AppIcon icon={Icons.dollarSign} size={18} />
+              <Text className="rates-results-bar__title">{resultsTitle}</Text>
+              <span
+                className="rates-results-bar__count"
+                title={`${hasSearched ? cardRates.length : 0}`}
+                aria-label={`${hasSearched ? cardRates.length : 0}`}
+              >
+                {hasSearched ? cardRates.length : 0}
+              </span>
+            </div>
+            <ModuleViewModeTabs value={viewMode} onChange={setViewMode} />
           </div>
-          <ModuleViewModeTabs value={viewMode} onChange={setViewMode} />
-        </div>
 
-        {isLoading ? (
-          <div
-            className="rates-empty module-loading-center"
-            role="status"
-            aria-label={loadingLabel}
-          >
-            <Spin size="medium" />
-          </div>
-        ) : viewMode === "list" ? (
-          <RateList
-            rates={hasSearched ? cardRates : []}
-            isLoading={false}
-            hasSearched={hasSearched}
-            onBookNow={handleBookNow}
-            onViewSurcharges={handleViewSurcharges}
-            onShareRate={handleShareRate}
-          />
-        ) : (
-          <ModuleCardViewPanel active className="rates-card-view-panel">
-            <RateCardList
-              rates={cardRates}
+          {isLoading ? (
+            <div
+              className="rates-empty module-loading-center"
+              role="status"
+              aria-label={loadingLabel}
+            >
+              <Spin size="medium" />
+            </div>
+          ) : viewMode === "list" ? (
+            <RateList
+              rates={hasSearched ? cardRates : []}
               isLoading={false}
               hasSearched={hasSearched}
-              searchMode={searchMode}
               onBookNow={handleBookNow}
               onViewSurcharges={handleViewSurcharges}
               onShareRate={handleShareRate}
-              onRequestQuote={handleRequestQuote}
             />
-          </ModuleCardViewPanel>
-        )}
+          ) : (
+            <ModuleCardViewPanel active className="rates-card-view-panel">
+              <RateCardList
+                rates={cardRates}
+                isLoading={false}
+                hasSearched={hasSearched}
+                searchMode={searchMode}
+                onBookNow={handleBookNow}
+                onViewSurcharges={handleViewSurcharges}
+                onShareRate={handleShareRate}
+                onRequestQuote={handleRequestQuote}
+              />
+            </ModuleCardViewPanel>
+          )}
+        </div>
 
         <ContractSurchargeModal
           contract={selectedContract}

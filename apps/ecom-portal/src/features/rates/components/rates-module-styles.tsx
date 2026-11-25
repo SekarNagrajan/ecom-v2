@@ -201,6 +201,29 @@ export function RatesModuleStyles() {
         margin-bottom: 0;
       }
 
+      @keyframes rates-results-reveal {
+        from {
+          opacity: 0;
+          transform: translateY(${token.marginSM}px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .rates-results-panel {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+      }
+      .rates-results-panel--reveal {
+        animation: rates-results-reveal 0.35s ease-out;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .rates-results-panel--reveal {
+          animation: none;
+        }
+      }
       .rates-results-bar {
         display: flex;
         justify-content: space-between;

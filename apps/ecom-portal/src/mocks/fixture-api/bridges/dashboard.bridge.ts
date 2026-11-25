@@ -88,10 +88,26 @@ export interface DashboardTables {
 /** Every table empty — the starting point for unit tests. */
 export function emptyTables(): DashboardTables {
   return {
-    bookings: [], bookingCargo: [], bookingLeg: [], bookingCommodity: [], bookingCust: [],
-    shippingInstructions: [], vgm: [], payments: [], paymentReferences: [],
-    lrpBookings: [], lrpBookingLegs: [], lrpBl: [], invoices: [], invoiceBls: [],
-    notices: [], advisories: [], notificationMaster: [], cutoffConfig: [], routeSearchLog: [], ports: [],
+    bookings: [],
+    bookingCargo: [],
+    bookingLeg: [],
+    bookingCommodity: [],
+    bookingCust: [],
+    shippingInstructions: [],
+    vgm: [],
+    payments: [],
+    paymentReferences: [],
+    lrpBookings: [],
+    lrpBookingLegs: [],
+    lrpBl: [],
+    invoices: [],
+    invoiceBls: [],
+    notices: [],
+    advisories: [],
+    notificationMaster: [],
+    cutoffConfig: [],
+    routeSearchLog: [],
+    ports: [],
   };
 }
 
@@ -148,7 +164,8 @@ function asDate(v: unknown): Date | null {
   return Number.isNaN(+d) ? null : d;
 }
 const startOfDay = (d: Date) => new Date(d.getFullYear(), d.getMonth(), d.getDate());
-const addDays = (d: Date, n: number) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n, d.getHours(), d.getMinutes());
+const addDays = (d: Date, n: number) =>
+  new Date(d.getFullYear(), d.getMonth(), d.getDate() + n, d.getHours(), d.getMinutes());
 /** Monday 00:00 of the week containing d. */
 const mondayOf = (d: Date) => addDays(startOfDay(d), -((d.getDay() + 6) % 7));
 
@@ -201,7 +218,12 @@ export function portNameIndex(tables: DashboardTables): Map<string, string> {
     const { portCode, portName } = mapPort(p);
     if (portCode && portName) names.set(portCode, titleCase(portName));
   }
-  const pairs: [string, string][] = [['pol', 'polHeaderName'], ['pod', 'podHeaderName'], ['pla', 'plaHeaderName'], ['pld', 'pldHeaderName']];
+  const pairs: [string, string][] = [
+    ['pol', 'polHeaderName'],
+    ['pod', 'podHeaderName'],
+    ['pla', 'plaHeaderName'],
+    ['pld', 'pldHeaderName'],
+  ];
   for (const si of tables.shippingInstructions) {
     for (const [codeCol, nameCol] of pairs) {
       const code = up(si[codeCol]);
@@ -215,7 +237,11 @@ export function portNameIndex(tables: DashboardTables): Map<string, string> {
 // ─── Facts ───────────────────────────────────────────────────────
 type Lifecycle = 'origin' | 'inTransit' | 'delivered';
 
-interface PendingPayment { amount: number; refNo: string; agency: string }
+interface PendingPayment {
+  amount: number;
+  refNo: string;
+  agency: string;
+}
 
 export interface BookingFact {
   row: Row;
@@ -275,7 +301,11 @@ function pendingPaymentIndex(tables: DashboardTables): Map<string, PendingPaymen
     const refNo = key(ref.refNo);
     if (!payment || !refNo) continue;
     const list = out.get(refNo) ?? [];
-    list.push({ amount: num(ref.amountUsd) || num(payment.amountUsd), refNo: str(ref.refNo), agency: str(payment.agencyCode) });
+    list.push({
+      amount: num(ref.amountUsd) || num(payment.amountUsd),
+      refNo: str(ref.refNo),
+      agency: str(payment.agencyCode),
+    });
     out.set(refNo, list);
   }
   return out;
@@ -310,11 +340,16 @@ function openInvoiceIndex(tables: DashboardTables): Map<string, PendingPayment[]
 /** LRP sailing facts for a booking: first ETD / last ETA of booking_leg, else booking polAt / podAt. */
 function lrpSailing(tables: DashboardTables, bookNo: string): { etd: Date | null; eta: Date | null } {
   if (!bookNo) return { etd: null, eta: null };
-  const legs = (tables.lrpBookingLegs ?? []).filter(l => key(l.book_no) === key(bookNo)).sort((a, b) => num(a.leg_no) - num(b.leg_no));
+  const legs = (tables.lrpBookingLegs ?? [])
+    .filter(l => key(l.book_no) === key(bookNo))
+    .sort((a, b) => num(a.leg_no) - num(b.leg_no));
   if (legs.length) {
     const etds = legs.map(l => asDate(l.etdDate)).filter((d): d is Date => Boolean(d));
     const etas = legs.map(l => asDate(l.etaDate)).filter((d): d is Date => Boolean(d));
-    return { etd: etds.length ? new Date(Math.min(...etds.map(Number))) : null, eta: etas.length ? new Date(Math.max(...etas.map(Number))) : null };
+    return {
+      etd: etds.length ? new Date(Math.min(...etds.map(Number))) : null,
+      eta: etas.length ? new Date(Math.max(...etas.map(Number))) : null,
+    };
   }
   const header = (tables.lrpBookings ?? []).find(b => key(b.book_no) === key(bookNo));
   return { etd: header ? asDate(header.polAt) : null, eta: header ? asDate(header.podAt) : null };
@@ -322,7 +357,9 @@ function lrpSailing(tables: DashboardTables, bookNo: string): { etd: Date | null
 
 /** Shipped-on-board date of the booking's B/L (Documentation.bl.OnboardDate), when a B/L exists. */
 function onBoardDate(tables: DashboardTables, bookNo: string, blNo: string): Date | null {
-  const bl = (tables.lrpBl ?? []).find(r => (blNo && key(r.bl_no) === key(blNo)) || (bookNo && key(r.book_no) === key(bookNo)));
+  const bl = (tables.lrpBl ?? []).find(
+    r => (blNo && key(r.bl_no) === key(blNo)) || (bookNo && key(r.book_no) === key(bookNo)),
+  );
   return bl ? asDate(bl.OnboardDate) : null;
 }
 
@@ -335,12 +372,25 @@ export const DELIVERY_GRACE_DAYS = 30;
  * invoice of the B/L (Accounts.invoicemaster.deliveryorderno via invoicedbls).
  */
 function isReleased(tables: DashboardTables, bookNo: string, blNo: string): boolean {
-  const bl = (tables.lrpBl ?? []).find(r => (blNo && key(r.bl_no) === key(blNo)) || (bookNo && key(r.book_no) === key(bookNo)));
-  if (bl && (num(bl.printedOriginals) > 0 || asDate(bl.PrintedDate) || up(bl.isvoyageclosed) === 'Y' || ['I', 'C'].includes(up(bl.status)))) return true;
+  const bl = (tables.lrpBl ?? []).find(
+    r => (blNo && key(r.bl_no) === key(blNo)) || (bookNo && key(r.book_no) === key(bookNo)),
+  );
+  if (
+    bl &&
+    (num(bl.printedOriginals) > 0 ||
+      asDate(bl.PrintedDate) ||
+      up(bl.isvoyageclosed) === 'Y' ||
+      ['I', 'C'].includes(up(bl.status)))
+  )
+    return true;
   const refs = new Set([blNo, str(bl?.bl_no)].filter(Boolean).map(key));
   if (!refs.size) return false;
-  const invoiceNos = new Set((tables.invoiceBls ?? []).filter(r => refs.has(key(r.BLNumber))).map(r => key(r.InvoiceNumber)));
-  return (tables.invoices ?? []).some(i => (invoiceNos.has(key(i.invno)) || refs.has(key(i.invrefno))) && str(i.deliveryorderno));
+  const invoiceNos = new Set(
+    (tables.invoiceBls ?? []).filter(r => refs.has(key(r.BLNumber))).map(r => key(r.InvoiceNumber)),
+  );
+  return (tables.invoices ?? []).some(
+    i => (invoiceNos.has(key(i.invno)) || refs.has(key(i.invrefno))) && str(i.deliveryorderno),
+  );
 }
 
 /** Commodity lines with the TEUs of the container line they belong to (1 TEU when the line is unknown). */
@@ -358,7 +408,10 @@ export function buildFacts(tables: DashboardTables, now: Date): BookingFact[] {
   const commodityBy = groupBy(tables.bookingCommodity, 'ebookno');
   const custBy = groupBy(tables.bookingCust, 'ebookno');
   const siBy = liveSiIndex(tables.shippingInstructions);
-  const vgmBy = groupBy(tables.vgm.filter(v => ['A', 'C'].includes(up(v.status))), 'book_no');
+  const vgmBy = groupBy(
+    tables.vgm.filter(v => ['A', 'C'].includes(up(v.status))),
+    'book_no',
+  );
   const paymentsBy = pendingPaymentIndex(tables);
   const invoicesBy = openInvoiceIndex(tables);
 
@@ -386,9 +439,11 @@ export function buildFacts(tables: DashboardTables, now: Date): BookingFact[] {
       // Delivered = arrived and released (B/L printed / released, telex, delivery order), or arrived long ago;
       // arrived but not yet released still counts as in transit (cargo at the discharge port).
       const delivered = arrived && (isReleased(tables, bookNo, blNo) || (+now - +eta!) / DAY_MS > DELIVERY_GRACE_DAYS);
-      const lifecycle: Lifecycle | null = !etd && !onBoard ? null : delivered ? 'delivered' : sailed ? 'inTransit' : 'origin';
+      const lifecycle: Lifecycle | null =
+        !etd && !onBoard ? null : delivered ? 'delivered' : sailed ? 'inTransit' : 'origin';
       // Money due on the shipment: pending online payments plus open invoice balances (by booking / B/L number).
-      const payments = [bookNo, ebookno, blNo].filter(Boolean)
+      const payments = [bookNo, ebookno, blNo]
+        .filter(Boolean)
         .flatMap(ref => [...(paymentsBy.get(key(ref)) ?? []), ...(invoicesBy.get(key(ref)) ?? [])])
         .filter((p, i, all) => all.findIndex(q => q.refNo === p.refNo && q.amount === p.amount) === i);
       const containers = cargo.reduce((s, c) => s + containersOf(c), 0);
@@ -489,7 +544,8 @@ function countBy<T>(items: T[], keyFn: (item: T) => string): Map<string, number>
   }
   return out;
 }
-const sortedEntries = (m: Map<string, number>) => [...m.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+const sortedEntries = (m: Map<string, number>) =>
+  [...m.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
 
 /** Status distribution; colour is resolved from theme tokens at render time. */
 function statusChart(rows: Row[], column: string, labels: Record<string, string>): BookingStatusChartItem[] {
@@ -516,14 +572,17 @@ function planningBooking(f: BookingFact, portNames: Map<string, string>): Planni
     origin: port(f.row.originPortId),
     delivery: port(f.row.finalPortId),
     teusCount: f.teus,
+    etd: f.etd ? fmtIso(f.etd) : '',
+    eta: f.eta ? fmtIso(f.eta) : '',
     missingSIFlag: f.confirmed && !f.si,
     pendingPaymentFlag: f.amtBal > 0,
   };
 }
 
-function dayCell(bookings: PlanningBookingDTO[]): CalendarDayCell {
+function dayCell(date: string, bookings: PlanningBookingDTO[]): CalendarDayCell {
   return {
     count: bookings.length,
+    date,
     missingSI: bookings.filter(b => b.missingSIFlag).length,
     pendingPayment: bookings.filter(b => b.pendingPaymentFlag).length,
     bookings,
@@ -531,7 +590,12 @@ function dayCell(bookings: PlanningBookingDTO[]): CalendarDayCell {
 }
 
 /** Three calendar weeks from the Monday of the current week; bookings are placed on their ETD day. */
-export function buildPlanning(facts: BookingFact[], portNames: Map<string, string>, now: Date, weeks = 3): DashboardPlanning {
+export function buildPlanning(
+  facts: BookingFact[],
+  portNames: Map<string, string>,
+  now: Date,
+  weeks = 3,
+): DashboardPlanning {
   const sailing = facts.filter(f => f.active && f.etd);
   const byDay = new Map<string, PlanningBookingDTO[]>();
   for (const f of sailing.sort((a, b) => +a.etd! - +b.etd!)) {
@@ -550,7 +614,8 @@ export function buildPlanning(facts: BookingFact[], portNames: Map<string, strin
     let totalMissingSI = 0;
     let totalPendingPayment = 0;
     WEEKDAYS.forEach((day, i) => {
-      const cell = dayCell(byDay.get(fmtIso(addDays(start, i))) ?? []);
+      const iso = fmtIso(addDays(start, i));
+      const cell = dayCell(iso, byDay.get(iso) ?? []);
       days[day] = cell;
       total += cell.count;
       totalMissingSI += cell.missingSI;
@@ -584,26 +649,38 @@ type Granularity = 'week' | 'month' | 'quarter' | 'year';
 
 function periodStart(d: Date, g: Granularity): Date {
   switch (g) {
-    case 'week': return mondayOf(d);
-    case 'month': return new Date(d.getFullYear(), d.getMonth(), 1);
-    case 'quarter': return new Date(d.getFullYear(), Math.floor(d.getMonth() / 3) * 3, 1);
-    case 'year': return new Date(d.getFullYear(), 0, 1);
+    case 'week':
+      return mondayOf(d);
+    case 'month':
+      return new Date(d.getFullYear(), d.getMonth(), 1);
+    case 'quarter':
+      return new Date(d.getFullYear(), Math.floor(d.getMonth() / 3) * 3, 1);
+    case 'year':
+      return new Date(d.getFullYear(), 0, 1);
   }
 }
 function shiftPeriod(start: Date, g: Granularity, n: number): Date {
   switch (g) {
-    case 'week': return addDays(start, 7 * n);
-    case 'month': return new Date(start.getFullYear(), start.getMonth() + n, 1);
-    case 'quarter': return new Date(start.getFullYear(), start.getMonth() + 3 * n, 1);
-    case 'year': return new Date(start.getFullYear() + n, 0, 1);
+    case 'week':
+      return addDays(start, 7 * n);
+    case 'month':
+      return new Date(start.getFullYear(), start.getMonth() + n, 1);
+    case 'quarter':
+      return new Date(start.getFullYear(), start.getMonth() + 3 * n, 1);
+    case 'year':
+      return new Date(start.getFullYear() + n, 0, 1);
   }
 }
 function periodLabel(start: Date, g: Granularity): string {
   switch (g) {
-    case 'week': return `W${isoWeek(start).week}`;
-    case 'month': return `${MONTHS[start.getMonth()]} ${start.getFullYear()}`;
-    case 'quarter': return `Q${Math.floor(start.getMonth() / 3) + 1} ${start.getFullYear()}`;
-    case 'year': return String(start.getFullYear());
+    case 'week':
+      return `W${isoWeek(start).week}`;
+    case 'month':
+      return `${MONTHS[start.getMonth()]} ${start.getFullYear()}`;
+    case 'quarter':
+      return `Q${Math.floor(start.getMonth() / 3) + 1} ${start.getFullYear()}`;
+    case 'year':
+      return String(start.getFullYear());
   }
 }
 const sumTeus = (facts: BookingFact[], from: Date, to: Date) =>
@@ -611,11 +688,16 @@ const sumTeus = (facts: BookingFact[], from: Date, to: Date) =>
 
 function stageFacts(facts: BookingFact[], stage: VolumeAnalyticsStage): BookingFact[] {
   switch (stage) {
-    case 'all': return facts.filter(f => f.active);
-    case 'booking': return facts.filter(f => f.active && f.code !== 'D');
-    case 'si': return facts.filter(f => f.active && f.si);
-    case 'bl': return facts.filter(f => f.active && f.blNo);
-    case 'inTransit': return facts.filter(f => f.active && f.lifecycle === 'inTransit');
+    case 'all':
+      return facts.filter(f => f.active);
+    case 'booking':
+      return facts.filter(f => f.active && f.code !== 'D');
+    case 'si':
+      return facts.filter(f => f.active && f.si);
+    case 'bl':
+      return facts.filter(f => f.active && f.blNo);
+    case 'inTransit':
+      return facts.filter(f => f.active && f.lifecycle === 'inTransit');
   }
 }
 
@@ -666,9 +748,9 @@ function volumeTrendRecords(
     return name ? `${c} – ${name}` : c;
   };
   return facts
-    .filter((f) => f.volumeDate >= from && f.volumeDate < to)
+    .filter(f => f.volumeDate >= from && f.volumeDate < to)
     .sort((a, b) => +b.volumeDate - +a.volumeDate)
-    .map((f) => ({
+    .map(f => ({
       id: f.ebookno || f.bookNo || `${f.volumeDate.toISOString()}-${f.teus}`,
       bookingNo: f.bookNo || f.ebookno || '—',
       blNo: f.blNo || '',
@@ -731,12 +813,7 @@ export function fixtureVolumeTrendRecords(
   const tables = options.tables ?? dashboardTables();
   const now = options.now ?? new Date();
   const facts = stageFacts(buildFacts(tables, now), stage);
-  return volumeTrendRecords(
-    facts,
-    portNameIndex(tables),
-    TREND_SPEC[period].g,
-    periodKey,
-  );
+  return volumeTrendRecords(facts, portNameIndex(tables), TREND_SPEC[period].g, periodKey);
 }
 
 // ─── Lanes ───────────────────────────────────────────────────────
@@ -757,12 +834,14 @@ export function buildLanes(facts: BookingFact[], tables: DashboardTables): Dashb
   }
   const totalTeus = [...teusByLane.values()].reduce((s, v) => s + v, 0);
   // Full ranked list for View All; cards preview the first rows.
-  const top: TopLane[] = sortedEntries(teusByLane).filter(([, v]) => v > 0).map(([k, feus], i) => ({
-    rank: i + 1,
-    ...splitLane(k),
-    feus,
-    pctOfTotal: totalTeus ? round1((feus / totalTeus) * 100) : 0,
-  }));
+  const top: TopLane[] = sortedEntries(teusByLane)
+    .filter(([, v]) => v > 0)
+    .map(([k, feus], i) => ({
+      rank: i + 1,
+      ...splitLane(k),
+      feus,
+      pctOfTotal: totalTeus ? round1((feus / totalTeus) * 100) : 0,
+    }));
   const lastUsed: LastUsedLane[] = [...lastByLane.entries()]
     .sort((a, b) => +b[1] - +a[1])
     .map(([k, d]) => ({ ...splitLane(k), date: fmtLong(d) }));
@@ -794,7 +873,14 @@ function breakdown(facts: BookingFact[], nameOf: (f: BookingFact) => string, top
   const total = [...teusBy.values()].reduce((s, v) => s + v, 0);
   const pct = (v: number) => (total ? round1((v / total) * 100) : 0);
   const entries = sortedEntries(teusBy).filter(([, v]) => v > 0);
-  const head = entries.slice(0, top).map(([name, feus], i): IntelligenceBreakdown => ({ name, feus, pctOfTotal: pct(feus), tone: TONES[i % TONES.length] }));
+  const head = entries
+    .slice(0, top)
+    .map(([name, feus], i): IntelligenceBreakdown => ({
+      name,
+      feus,
+      pctOfTotal: pct(feus),
+      tone: TONES[i % TONES.length],
+    }));
   const rest = entries.slice(top).reduce((s, [, v]) => s + v, 0);
   return rest > 0 ? [...head, { name: 'Others', feus: rest, pctOfTotal: pct(rest), tone: 'neutral' }] : head;
 }
@@ -817,12 +903,16 @@ export function buildIntelligence(facts: BookingFact[], portNames: Map<string, s
   };
   const consignees: TopConsignee[] = breakdown(active, f => f.consignee)
     .filter(b => b.tone !== 'neutral')
-    .map((b, i) => ({ ...b, tone: (['primary', 'success', 'warning', 'purple', 'error'] as DashboardBreakdownTone[])[i % 5] }));
+    .map((b, i) => ({
+      ...b,
+      tone: (['primary', 'success', 'warning', 'purple', 'error'] as DashboardBreakdownTone[])[i % 5],
+    }));
 
   const confirmed = active.filter(f => f.confirmed);
   const transit = confirmed.filter(f => f.etd && f.eta).map(f => (+f.eta! - +f.etd!) / DAY_MS);
   const teus = active.reduce((s, f) => s + f.teus, 0);
-  const share = (pick: (f: BookingFact) => boolean) => (teus ? round1((active.filter(pick).reduce((s, f) => s + f.teus, 0) / teus) * 100) : 0);
+  const share = (pick: (f: BookingFact) => boolean) =>
+    teus ? round1((active.filter(pick).reduce((s, f) => s + f.teus, 0) / teus) * 100) : 0;
   const teusByCommodity = new Map<string, number>();
   for (const f of active) {
     for (const c of f.commodities) {
@@ -838,7 +928,9 @@ export function buildIntelligence(facts: BookingFact[], portNames: Map<string, s
     dgSharePct: share(f => f.dg),
     reeferSharePct: share(f => f.reefer),
     vgmPending: active.reduce((s, f) => s + f.vgmPending, 0),
-    topCommodities: sortedEntries(teusByCommodity).slice(0, 5).map(([name, t]) => ({ name: titleCase(name), teus: t })),
+    topCommodities: sortedEntries(teusByCommodity)
+      .slice(0, 5)
+      .map(([name, t]) => ({ name: titleCase(name), teus: t })),
   };
   return { breakdowns, consignees, stats };
 }
@@ -906,7 +998,11 @@ function recentStatus(f: BookingFact): RecentBookingStatus {
 }
 
 /** Newest live bookings; cancelled / rejected ones have no status in the row model and are left out. */
-export function buildRecentBookings(facts: BookingFact[], portNames: Map<string, string>, limit = 7): RecentBookingRow[] {
+export function buildRecentBookings(
+  facts: BookingFact[],
+  portNames: Map<string, string>,
+  limit = 7,
+): RecentBookingRow[] {
   return facts
     .filter(f => f.active)
     .sort((a, b) => +b.updated - +a.updated)
@@ -942,7 +1038,13 @@ function cutoffHours(tables: DashboardTables, port: string, terminal: string): n
  * Distinct vessel calls the customer's live bookings sail on, from today onwards. Vessel / service / port
  * codes are shown as their master names (ScheduleItem-style labels); the code stays when the master lacks it.
  */
-export function buildUpcomingSchedules(facts: BookingFact[], tables: DashboardTables, now: Date, limit = 5, portNames: Map<string, string> = portNameIndex(tables)): UpcomingScheduleItem[] {
+export function buildUpcomingSchedules(
+  facts: BookingFact[],
+  tables: DashboardTables,
+  now: Date,
+  limit = 5,
+  portNames: Map<string, string> = portNameIndex(tables),
+): UpcomingScheduleItem[] {
   const today = startOfDay(now);
   const seen = new Set<string>();
   return facts
@@ -956,17 +1058,19 @@ export function buildUpcomingSchedules(facts: BookingFact[], tables: DashboardTa
       if (seen.has(id)) return [];
       seen.add(id);
       const cutoff = new Date(+f.etd! - cutoffHours(tables, pol, up(leg.loadTerminal)) * 3_600_000);
-      return [{
-        id,
-        vessel: vesselName(str(leg.vesselCode)) || '—',
-        voyage: str(leg.voyageCode) || '—',
-        service: serviceName(str(leg.serviceCode)) || '—',
-        pol: portNames.get(pol) ?? pol,
-        pod: portNames.get(pod) ?? pod,
-        etd: fmtDay(f.etd!),
-        cutoff: fmtDay(cutoff),
-        cutoffOverdue: cutoff < now,
-      }];
+      return [
+        {
+          id,
+          vessel: vesselName(str(leg.vesselCode)) || '—',
+          voyage: str(leg.voyageCode) || '—',
+          service: serviceName(str(leg.serviceCode)) || '—',
+          pol: portNames.get(pol) ?? pol,
+          pod: portNames.get(pod) ?? pod,
+          etd: fmtDay(f.etd!),
+          cutoff: fmtDay(cutoff),
+          cutoffOverdue: cutoff < now,
+        },
+      ];
     })
     .slice(0, limit);
 }
@@ -981,18 +1085,22 @@ export function buildNotices(tables: DashboardTables, limit = 6): NoticeItem[] {
       body: str(n.FileName) ? `Attachment: ${str(n.FileName).replace(/^\d+~/, '')}` : '',
       at: asDate(n.CrDate) ?? new Date(0),
     })),
-    ...tables.advisories.filter(a => up(a.status) !== 'I').map(a => ({
-      id: `advisory-${a.id}`,
-      title: str(a.advisoryname),
-      body: firstLine(a.description),
-      at: asDate(a.createddate) ?? new Date(0),
-    })),
-    ...tables.notificationMaster.filter(n => up(n.status) !== 'I').map(n => ({
-      id: `notification-${n.id}`,
-      title: `Notification ${str(n.msgid)}`,
-      body: str(n.message),
-      at: asDate(n.crdate) ?? new Date(0),
-    })),
+    ...tables.advisories
+      .filter(a => up(a.status) !== 'I')
+      .map(a => ({
+        id: `advisory-${a.id}`,
+        title: str(a.advisoryname),
+        body: firstLine(a.description),
+        at: asDate(a.createddate) ?? new Date(0),
+      })),
+    ...tables.notificationMaster
+      .filter(n => up(n.status) !== 'I')
+      .map(n => ({
+        id: `notification-${n.id}`,
+        title: `Notification ${str(n.msgid)}`,
+        body: str(n.message),
+        at: asDate(n.crdate) ?? new Date(0),
+      })),
   ].map(i => ({ ...i, date: fmtDay(i.at) }));
   return items
     .filter(i => i.title)
@@ -1020,15 +1128,27 @@ export function fixtureDashboardSummary(options: DashboardOptions = {}): Dashboa
   return {
     counts: buildCounts(shipments),
     shipments,
-    bookingChart: statusChart(tables.bookings.filter(b => up(b.ebook_status) !== 'T'), 'ebook_status', BOOKING_LIST_STATUS),
+    bookingChart: statusChart(
+      tables.bookings.filter(b => up(b.ebook_status) !== 'T'),
+      'ebook_status',
+      BOOKING_LIST_STATUS,
+    ),
     siChart: statusChart(liveSis, 'status', SI_STATUS),
-    blChart: statusChart(liveSis.filter(si => str(si.blno)), 'status', SI_STATUS),
-    topDestinations: sortedEntries(countBy(active, f => up(f.row.finalPortId))).slice(0, 5)
+    blChart: statusChart(
+      liveSis.filter(si => str(si.blno)),
+      'status',
+      SI_STATUS,
+    ),
+    topDestinations: sortedEntries(countBy(active, f => up(f.row.finalPortId)))
+      .slice(0, 5)
       .map(([port, count]): TopDestinationItem => ({ port, count })),
-    portPairs: sortedEntries(countBy(active, f => laneKey(f.row.originPortId, f.row.finalPortId))).slice(0, 5)
+    portPairs: sortedEntries(countBy(active, f => laneKey(f.row.originPortId, f.row.finalPortId)))
+      .slice(0, 5)
       .map(([k, count]): PortPairChartItem => ({ ...splitLane(k), count })),
-    unclearedCargo: sortedEntries(countBy(arrived, s => s.finalPortId))
-      .map(([port, count]): UnclearedCargoItem => ({ port, count })),
+    unclearedCargo: sortedEntries(countBy(arrived, s => s.finalPortId)).map(([port, count]): UnclearedCargoItem => ({
+      port,
+      count,
+    })),
     unclearedDelivered: arrived.filter(s => s.status === 'I').length,
     unclearedRemaining: arrived.filter(s => s.status !== 'I').length,
     outstandingBalance: Math.round(pendingTotal * 100) / 100,
@@ -1053,11 +1173,16 @@ export interface DashboardReportArgs {
 
 function shipmentStatusLabel(status: DashboardShipment['status']): string {
   switch (status) {
-    case 'C': return 'Confirmed';
-    case 'I': return 'B/L Issued';
-    case 'D': return 'Draft';
-    case 'V': return 'Cancelled';
-    default: return status;
+    case 'C':
+      return 'Confirmed';
+    case 'I':
+      return 'B/L Issued';
+    case 'D':
+      return 'Draft';
+    case 'V':
+      return 'Cancelled';
+    default:
+      return status;
   }
 }
 

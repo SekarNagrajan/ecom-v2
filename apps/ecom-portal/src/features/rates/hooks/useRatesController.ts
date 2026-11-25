@@ -25,7 +25,7 @@ import { normalizeRateEquipment, portCodeFromLabel } from "../utils/rate-equipme
 
 // Modified by Sekar Nagarajan (2026-10-17 02:30) — default to the lane the extracted tariffs and bookings cover
 const DEFAULT_SEARCH_PARAMS: RateSearchParams = {
-  searchMode: "PUBLISHED_TARIFF",
+  searchMode: "SPOT_QUOTES",
   polCode: "INNSA",
   podCode: "AEJEA",
   eqpType: "20' Standard Dry",
@@ -59,6 +59,8 @@ export function useRatesController() {
   const [searchParams, setSearchParams] = useState<RateSearchParams>(DEFAULT_SEARCH_PARAMS);
   /** Results only after explicit Search (or deep-link from landing). */
   const [hasSearched, setHasSearched] = useState(false);
+  /** Bumps on each Search / View Quotes so the results panel can re-play its reveal. */
+  const [resultsRevealKey, setResultsRevealKey] = useState(0);
   const [isQuoteDrawerOpen, setIsQuoteDrawerOpen] = useState(false);
   const [quoteDefaults, setQuoteDefaults] = useState<Partial<CreateQuoteInput> | undefined>(
     undefined,
@@ -290,17 +292,7 @@ export function useRatesController() {
   const handleSearch = (params: RateSearchParams) => {
     setSearchParams(params);
     setHasSearched(true);
-    if (params.searchMode === "SPOT_QUOTES" && viewMode === "card") {
-      toast.info(t("search.toastSpotQuotes"));
-    } else {
-      toast.info(
-        t("search.toastSearching", {
-          title: getResultsTitle(params.searchMode, t),
-          pol: params.polCode || t("search.allPorts"),
-          pod: params.podCode || t("search.allPorts"),
-        }),
-      );
-    }
+    setResultsRevealKey((key) => key + 1);
   };
 
   const handleReset = () => {
@@ -409,6 +401,7 @@ export function useRatesController() {
       commodity: quote.commodity || searchParams.commodity,
     });
     setHasSearched(true);
+    setResultsRevealKey((key) => key + 1);
   };
 
   return {
@@ -423,6 +416,7 @@ export function useRatesController() {
     resultsTitle: getResultsTitle(mode, t),
     cardRates,
     hasSearched,
+    resultsRevealKey,
     isLoading,
     handleSearch,
     handleReset,

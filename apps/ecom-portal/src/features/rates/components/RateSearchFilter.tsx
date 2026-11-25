@@ -11,10 +11,7 @@ import { usePortSearch } from "../../landing/api/landing.queries";
 const { Text } = Typography;
 
 export type RateSearchMode =
-  | "PUBLISHED_TARIFF"
-  | "SURCHARGES"
-  | "SERVICE_CONTRACTS"
-  | "SPOT_QUOTES";
+  "PUBLISHED_TARIFF" | "SURCHARGES" | "SERVICE_CONTRACTS" | "SPOT_QUOTES";
 
 /** Form.Item adapter: AppTabs uses activeKey, Ant Form passes value. */
 function RateSearchModeTabs({
@@ -30,7 +27,7 @@ function RateSearchModeTabs({
     <AppTabs
       className="rates-search-mode-tabs"
       size="large"
-      activeKey={value ?? "PUBLISHED_TARIFF"}
+      activeKey={value ?? "SPOT_QUOTES"}
       onChange={(key) => onChange?.(key as RateSearchMode)}
       items={items.map((tab) => ({
         key: tab.key,
@@ -93,8 +90,7 @@ export function RateSearchFilter({
 }: RateSearchFilterProps) {
   const { t } = useTranslation(["rates", "common", "modules"]);
   const [form] = Form.useForm();
-  const searchMode: RateSearchMode =
-    Form.useWatch("searchMode", form) || "PUBLISHED_TARIFF";
+  const searchMode: RateSearchMode = Form.useWatch("searchMode", form) || "SPOT_QUOTES";
 
   const rateSearchModeTabs = useMemo(
     () =>
@@ -179,7 +175,14 @@ export function RateSearchFilter({
     if (params.podCode) podAC.setQuery(params.podCode);
     // The port-option hooks are stable setters; only the criteria matter here.
     // eslint-disable-next-line react-hooks/exhaustive-deps -- sync external criteria into the antd form
-  }, [params?.searchMode, params?.polCode, params?.podCode, params?.eqpType, params?.commodity, params?.fromDate]);
+  }, [
+    params?.searchMode,
+    params?.polCode,
+    params?.podCode,
+    params?.eqpType,
+    params?.commodity,
+    params?.fromDate,
+  ]);
 
   const handleSwapPorts = () => {
     const pol = form.getFieldValue("polCode");
@@ -210,9 +213,7 @@ export function RateSearchFilter({
       fromDate: values.shipmentDate
         ? (values.shipmentDate as dayjs.Dayjs).format("YYYY-MM-DD")
         : undefined,
-      toDate: values.toDate
-        ? (values.toDate as dayjs.Dayjs).format("YYYY-MM-DD")
-        : undefined,
+      toDate: values.toDate ? (values.toDate as dayjs.Dayjs).format("YYYY-MM-DD") : undefined,
     });
   };
 
@@ -224,7 +225,7 @@ export function RateSearchFilter({
           layout="vertical"
           requiredMark={false}
           initialValues={{
-            searchMode: "PUBLISHED_TARIFF",
+            searchMode: "SPOT_QUOTES",
             polCode: "INNSA",
             podCode: "AEJEA",
             eqpType: "20' Standard Dry",
@@ -265,19 +266,14 @@ export function RateSearchFilter({
                   options={polAC.options}
                   loading={polAC.isFetching}
                   notFoundContent={
-                    polAC.isFetching
-                      ? t("search.searchingPorts")
-                      : t("search.noPortsFound")
+                    polAC.isFetching ? t("search.searchingPorts") : t("search.noPortsFound")
                   }
                 />
               </Form.Item>
             </div>
 
             <div className="rates-search-field rates-search-field--swap">
-              <Form.Item
-                label={<SearchActionsLabel />}
-                className="rates-search-swap-field"
-              >
+              <Form.Item label={<SearchActionsLabel />} className="rates-search-swap-field">
                 <div className="rates-port-swap">
                   <Tooltip title={t("search.swapTooltip")}>
                     <AppButton
@@ -312,9 +308,7 @@ export function RateSearchFilter({
                   options={podAC.options}
                   loading={podAC.isFetching}
                   notFoundContent={
-                    podAC.isFetching
-                      ? t("search.searchingPorts")
-                      : t("search.noPortsFound")
+                    podAC.isFetching ? t("search.searchingPorts") : t("search.noPortsFound")
                   }
                 />
               </Form.Item>
@@ -339,11 +333,7 @@ export function RateSearchFilter({
               <div className="rates-search-field rates-search-field--commodity">
                 <Form.Item
                   name="commodity"
-                  label={
-                    <span className="form-field-label">
-                      {t("search.commodity")}
-                    </span>
-                  }
+                  label={<span className="form-field-label">{t("search.commodity")}</span>}
                 >
                   <Select size="large" options={commodities} />
                 </Form.Item>
@@ -361,11 +351,7 @@ export function RateSearchFilter({
                       </span>
                     }
                   >
-                    <DatePicker
-                      size="large"
-                      className="rates-date-range"
-                      format="YYYY-MM-DD"
-                    />
+                    <DatePicker size="large" className="rates-date-range" format="YYYY-MM-DD" />
                   </Form.Item>
                 </div>
                 <div className="rates-search-field rates-search-field--date">
@@ -377,21 +363,14 @@ export function RateSearchFilter({
                       </span>
                     }
                   >
-                    <DatePicker
-                      size="large"
-                      className="rates-date-range"
-                      format="YYYY-MM-DD"
-                    />
+                    <DatePicker size="large" className="rates-date-range" format="YYYY-MM-DD" />
                   </Form.Item>
                 </div>
               </>
             ) : null}
 
             <div className="rates-search-field rates-search-field--actions">
-              <Form.Item
-                label={<SearchActionsLabel />}
-                className="rates-search-actions-field"
-              >
+              <Form.Item label={<SearchActionsLabel />} className="rates-search-actions-field">
                 <div className="rates-search-actions">
                   {isRfqMode && onRequestQuote ? (
                     <AppButton
@@ -399,18 +378,16 @@ export function RateSearchFilter({
                       size="large"
                       icon={<AppIcon icon={Icons.dollarSign} size={16} />}
                       onClick={() => {
-                        void form
-                          .validateFields(["polCode", "podCode"])
-                          .then(() => {
-                            onSearch({
-                              searchMode: "SPOT_QUOTES",
-                              polCode: form.getFieldValue("polCode"),
-                              podCode: form.getFieldValue("podCode"),
-                              eqpType: form.getFieldValue("eqpType"),
-                              commodity: form.getFieldValue("commodity"),
-                            });
-                            onRequestQuote();
+                        void form.validateFields(["polCode", "podCode"]).then(() => {
+                          onSearch({
+                            searchMode: "SPOT_QUOTES",
+                            polCode: form.getFieldValue("polCode"),
+                            podCode: form.getFieldValue("podCode"),
+                            eqpType: form.getFieldValue("eqpType"),
+                            commodity: form.getFieldValue("commodity"),
                           });
+                          onRequestQuote();
+                        });
                       }}
                     >
                       {t("actions.requestForQuote")}
@@ -430,13 +407,7 @@ export function RateSearchFilter({
                     <AppButton
                       danger
                       size="large"
-                      icon={
-                        <AppIcon
-                          icon={Icons.refreshCw}
-                          size={16}
-                          tone="delete"
-                        />
-                      }
+                      icon={<AppIcon icon={Icons.refreshCw} size={16} tone="delete" />}
                       onClick={handleReset}
                     >
                       {t("common:actions.reset")}
@@ -454,13 +425,7 @@ export function RateSearchFilter({
                       <AppButton
                         size="large"
                         danger
-                        icon={
-                          <AppIcon
-                            icon={Icons.refreshCw}
-                            size={16}
-                            tone="delete"
-                          />
-                        }
+                        icon={<AppIcon icon={Icons.refreshCw} size={16} tone="delete" />}
                         onClick={handleReset}
                       >
                         {t("common:actions.reset")}

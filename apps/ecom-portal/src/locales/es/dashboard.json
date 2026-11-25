@@ -153,6 +153,9 @@
   "planningDrawer": {
     "eyebrow": "RESERVAS PRÓXIMAS",
     "route": "Ruta",
+    "departureDate": "Fecha de salida",
+    "etd": "ETD",
+    "eta": "ETA",
     "status": "Estado",
     "capacity": "Capacidad",
     "capacityTeu": "{{count}} TEU",
@@ -165,11 +168,11 @@
     "title": "Inteligencia de envíos",
     "viewReportTooltip": "Abrir el informe completo de inteligencia",
     "topConsignees": "Principales consignatarios",
-    "viewAllConsigneesTooltip": "Ver todos los consignatarios por volumen FEU",
+    "viewAllConsigneesTooltip": "Ver todos los consignatarios por volumen TEU",
     "total": "Total",
     "segments": "{{count}} segmentos",
     "totalTeus": "{{count}} TEUs",
-    "tooltipFeus": "{{name}}: {{value}} FEUs ({{percent}}%)",
+    "tooltipFeus": "{{name}}: {{value}} TEUs ({{percent}}%)",
     "columns": {
       "teus": "TEUs",
       "share": "Participación",
@@ -196,7 +199,7 @@
   },
   "lanes": {
     "topActive": "Rutas activas principales",
-    "viewAllByFeu": "Ver todas las rutas por volumen FEU",
+    "viewAllByFeu": "Ver todas las rutas por volumen TEU",
     "recentlyUsed": "Rutas usadas recientemente",
     "recentlyUsedHint": "Últimas reservas en estos corredores",
     "viewAllRecentlyUsed": "Ver todas las rutas usadas recientemente",
@@ -208,7 +211,7 @@
     "suggestedHint": "Según su historial de reservas",
     "noActivity": "Sin actividad",
     "lanePolPod": "Ruta (POL → POD)",
-    "feus": "FEUs",
+    "feus": "TEUs",
     "share": "Participación",
     "volume": "Volumen",
     "suggestions": {

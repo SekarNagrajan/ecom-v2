@@ -1,18 +1,18 @@
 {
-  "subtitle": "Search published line tariffs, view itemized surcharge breakdowns, manage Service Contracts, and request spot rate quotes.",
+  "subtitle": "Search published line tariffs, view itemized surcharge breakdowns, manage Contracts, and request spot rate quotes.",
   "exportingToast": "Exporting rate search results to Excel...",
   "modes": {
     "tariff": "Tariff",
     "surcharge": "Surcharge",
-    "serviceContract": "Service Contract",
+    "serviceContract": "Contract",
     "requestForQuote": "Request for Quote",
     "publishedLineTariffs": "Published Line Tariffs",
     "surchargesAccessorials": "Surcharges & Accessorials",
-    "serviceContracts": "Service Contracts",
+    "serviceContracts": "Contracts",
     "spotRateQuotes": "Spot Rate Quotes",
     "results": {
       "publishedTariff": "Published Freight Rates",
-      "serviceContracts": "Service Contracts",
+      "serviceContracts": "Contracts",
       "surcharges": "Surcharges & Accessorials",
       "spotQuotes": "Spot Rate Quotes"
     }

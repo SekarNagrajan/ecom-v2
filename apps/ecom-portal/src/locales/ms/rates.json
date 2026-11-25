@@ -1,18 +1,18 @@
 {
-  "subtitle": "Cari tarif laluan diterbitkan, lihat pecahan surcaj berbutir, urus Kontrak Perkhidmatan, dan minta sebut harga kadar spot.",
+  "subtitle": "Cari tarif laluan diterbitkan, lihat pecahan surcaj berbutir, urus Kontrak, dan minta sebut harga kadar spot.",
   "exportingToast": "Mengeksport hasil carian kadar ke Excel...",
   "modes": {
     "tariff": "Tarif",
     "surcharge": "Surcaj",
-    "serviceContract": "Kontrak Perkhidmatan",
+    "serviceContract": "Kontrak",
     "requestForQuote": "Permintaan Sebut Harga",
     "publishedLineTariffs": "Tarif Laluan Diterbitkan",
     "surchargesAccessorials": "Surcaj & Aksesori",
-    "serviceContracts": "Kontrak Perkhidmatan",
+    "serviceContracts": "Kontrak",
     "spotRateQuotes": "Sebut Harga Kadar Spot",
     "results": {
       "publishedTariff": "Kadar Pengangkutan Diterbitkan",
-      "serviceContracts": "Kontrak Perkhidmatan",
+      "serviceContracts": "Kontrak",
       "surcharges": "Surcaj & Aksesori",
       "spotQuotes": "Sebut Harga Kadar Spot"
     }

@@ -153,6 +153,9 @@
   "planningDrawer": {
     "eyebrow": "即将到来的订舱",
     "route": "航线",
+    "departureDate": "开航日期",
+    "etd": "ETD",
+    "eta": "ETA",
     "status": "状态",
     "capacity": "运力",
     "capacityTeu": "{{count}} TEU",
@@ -165,11 +168,11 @@
     "title": "货运智能分析",
     "viewReportTooltip": "打开完整智能分析报告",
     "topConsignees": "主要收货人",
-    "viewAllConsigneesTooltip": "按 FEU 运量查看全部收货人",
+    "viewAllConsigneesTooltip": "按 TEU 运量查看全部收货人",
     "total": "合计",
     "segments": "{{count}} 个分段",
     "totalTeus": "{{count}} TEUs",
-    "tooltipFeus": "{{name}}：{{value}} FEUs ({{percent}}%)",
+    "tooltipFeus": "{{name}}：{{value}} TEUs ({{percent}}%)",
     "columns": {
       "teus": "TEUs",
       "share": "占比",
@@ -196,7 +199,7 @@
   },
   "lanes": {
     "topActive": "热门活跃航线",
-    "viewAllByFeu": "按 FEU 运量查看全部航线",
+    "viewAllByFeu": "按 TEU 运量查看全部航线",
     "recentlyUsed": "最近使用的航线",
     "recentlyUsedHint": "这些走廊上的最新订舱",
     "viewAllRecentlyUsed": "查看全部最近使用的航线",
@@ -208,7 +211,7 @@
     "suggestedHint": "基于您的订舱历史",
     "noActivity": "无活动",
     "lanePolPod": "航线 (POL → POD)",
-    "feus": "FEUs",
+    "feus": "TEUs",
     "share": "占比",
     "volume": "运量",
     "suggestions": {

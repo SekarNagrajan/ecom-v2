@@ -24,6 +24,12 @@ const EnvSchema = z.object({
   VITE_AIS_PROXY_URL: z.string().optional(),
   /** Conversational assistant launcher (roadmap F11); off unless explicitly "true". */
   VITE_ASSISTANT_ENABLED: booleanFlag,
+  /** Idle timeout before the session ends (ms). Legacy parity: 30 min. */
+  VITE_SESSION_IDLE_MS: z.coerce.number().int().positive().default(30 * 60_000),
+  /** How long before the idle deadline the expiry warning shows (ms). Legacy parity: 5 min. */
+  VITE_SESSION_WARN_MS: z.coerce.number().int().positive().default(5 * 60_000),
+  /** Mock-mode access-token lifetime (ms), to demo refresh/expiry quickly. */
+  VITE_MOCK_TOKEN_TTL_MS: z.coerce.number().int().positive().default(15 * 60_000),
 });
 
 export type EnvConfig = z.infer<typeof EnvSchema>;
@@ -35,6 +41,9 @@ const FALLBACK: EnvConfig = {
   VITE_AG_GRID_LICENSE_KEY: undefined,
   VITE_AIS_PROXY_URL: undefined,
   VITE_ASSISTANT_ENABLED: false,
+  VITE_SESSION_IDLE_MS: 30 * 60_000,
+  VITE_SESSION_WARN_MS: 5 * 60_000,
+  VITE_MOCK_TOKEN_TTL_MS: 15 * 60_000,
 };
 
 /** Empty strings in `.env` files mean "unset", not "empty value". */

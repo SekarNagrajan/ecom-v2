@@ -196,12 +196,6 @@ export function PaymentCheckoutReturn({ mode }: PaymentCheckoutReturnProps) {
                     <div className="pay-checkout-return-meta__top">
                       <Tag
                         className={`pay-checkout-return-status pay-checkout-return-status--${tone}`}
-                        icon={
-                          <AppIcon
-                            icon={tone === "success" ? Icons.check : Icons.circleX}
-                            size={12}
-                          />
-                        }
                       >
                         {statusText}
                       </Tag>

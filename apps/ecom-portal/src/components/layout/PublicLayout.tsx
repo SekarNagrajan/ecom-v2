@@ -1,21 +1,17 @@
-// Modified by Sekar Nagarajan (2026-09-02 15:18)
-import {
-    Outlet,
-    useLocation,
-    useNavigate,
-    useSearch,
-} from "@tanstack/react-router";
+// Modified by Sekar Nagarajan (2026-11-16 12:55) — lock public header logo to Solverminds
+import { Outlet, useLocation, useNavigate, useSearch } from "@tanstack/react-router";
 import type { MenuProps } from "antd";
 import { Card, Drawer, Layout, Menu, Tooltip, Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
+import { SESSION_EXPIRED_SEARCH_REASON } from "../../features/auth/api/session-expiry";
 import { useLoginController } from "../../features/auth/hooks/use-login-controller";
 import { usePostLoginRedirectStore } from "../../features/auth/stores/use-post-login-redirect-store";
 import {
-    appPathnameToMenuKey,
-    isPublicMenuKey,
-    menuKeyToAppPath,
+  appPathnameToMenuKey,
+  isPublicMenuKey,
+  menuKeyToAppPath,
 } from "../../features/auth/utils/public-menu-access";
 import { HeroSearchPanel } from "../../features/landing/components/HeroSearchPanel";
 import { PublicLoginPanel } from "../../features/landing/components/PublicLoginPanel";
@@ -29,29 +25,28 @@ const { Sider, Content } = Layout;
 const { Text } = Typography;
 
 function navIcon(Icon: LucideIcon, size = 20, locked = false) {
-  return (
-    <AppIcon icon={Icon} size={size} variant={locked ? "navLocked" : "nav"} />
-  );
+  return <AppIcon icon={Icon} size={size} variant={locked ? "navLocked" : "nav"} />;
 }
 
-function menuLabel(text: string, locked: boolean) {
-  if (!locked) return text;
-  return <Tooltip title="Sign In Required">{text}</Tooltip>;
+function menuLabel(text: string, locked: boolean, hoverTitle?: string) {
+  const tip = hoverTitle ?? (locked ? "Sign In Required" : undefined);
+  if (!tip) return text;
+  return <Tooltip title={tip}>{text}</Tooltip>;
 }
 
 export function PublicLayout() {
-  const search = useSearch({ strict: false }) as { login?: boolean };
+  const search = useSearch({ strict: false }) as {
+    login?: boolean;
+    reason?: typeof SESSION_EXPIRED_SEARCH_REASON;
+  };
   const navigate = useNavigate();
   const location = useLocation();
   const { useMobileNav, stackHero, tier } = useResponsiveLayout();
   const setIntendedPath = usePostLoginRedirectStore((s) => s.setIntendedPath);
-  const clearIntendedPath = usePostLoginRedirectStore(
-    (s) => s.clearIntendedPath,
-  );
-  const consumeIntendedPath = usePostLoginRedirectStore(
-    (s) => s.consumeIntendedPath,
-  );
+  const clearIntendedPath = usePostLoginRedirectStore((s) => s.clearIntendedPath);
+  const consumeIntendedPath = usePostLoginRedirectStore((s) => s.consumeIntendedPath);
 
+  const sessionExpired = search.reason === SESSION_EXPIRED_SEARCH_REASON;
   const [loginPanelOpen, setLoginPanelOpen] = useState(Boolean(search.login));
   const [collapsed, setCollapsed] = useState(true);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -122,6 +117,13 @@ export function PublicLayout() {
       className: "ant-menu-item-locked",
     },
     {
+      key: "cro",
+      icon: navIcon(NavIcons.containerRelease, 20, true),
+      title: "Container Release Order",
+      label: menuLabel("CRO", true, "Container Release Order"),
+      className: "ant-menu-item-locked",
+    },
+    {
       key: "si",
       icon: navIcon(NavIcons.shippingInstruction, 20, true),
       label: menuLabel("Shipping Instruction", true),
@@ -151,12 +153,7 @@ export function PublicLayout() {
       label: menuLabel("Arrival Notice", true),
       className: "ant-menu-item-locked",
     },
-    {
-      key: "cro",
-      icon: navIcon(NavIcons.containerRelease, 20, true),
-      label: menuLabel("Container Release Order", true),
-      className: "ant-menu-item-locked",
-    },
+
     {
       key: "more-group",
       icon: navIcon(NavIcons.more, 20),
@@ -236,6 +233,7 @@ export function PublicLayout() {
   return (
     <Layout className="pub-layout-root" data-viewport-tier={tier}>
       <PublicLayoutHeader
+        // Temporary: always show Solverminds branding (ignore customer/tenant logoUrl).
         logoUrl="/logo.png"
         portalName="E-Com Portal"
         onLoginClick={() => openLoginPanel(null)}
@@ -278,8 +276,7 @@ export function PublicLayout() {
             {location.pathname !== "/" ? (
               <div
                 className={
-                  location.pathname === "/register" ||
-                  location.pathname === "/contact-us"
+                  location.pathname === "/register" || location.pathname === "/contact-us"
                     ? "pub-layout-page pub-layout-page--outlet pub-layout-page--outlet-locked"
                     : "pub-layout-page pub-layout-page--outlet custom-scroll"
                 }
@@ -296,23 +293,16 @@ export function PublicLayout() {
               >
                 <div
                   className={
-                    stackHero
-                      ? "pub-landing__copy"
-                      : "pub-landing__copy pub-landing__copy--narrow"
+                    stackHero ? "pub-landing__copy" : "pub-landing__copy pub-landing__copy--narrow"
                   }
                 >
-                  <span className="pub-landing__eyebrow">
-                    E-COMMERCE ONLINE PORTAL
-                  </span>
-                  <h1 className="pub-landing__title">
-                    SCHEDULES, TRACKING &amp; RATES
-                  </h1>
+                  <span className="pub-landing__eyebrow">E-COMMERCE ONLINE PORTAL</span>
+                  <h1 className="pub-landing__title">SCHEDULES, TRACKING &amp; RATES</h1>
                   <Text className="pub-landing__subtitle">
-                    Search sailings, track shipments, and request rates in
-                    seconds — all from one quick-action workspace in the Carrier
-                    Portal.
+                    Search sailings, track shipments, and request rates in seconds — all from one
+                    quick-action workspace in the Carrier Portal.
                   </Text>
-                  <div className="pub-landing__cards">
+                  <div className="pub-landing__cards custom-scroll">
                     <Card
                       size="small"
                       className={
@@ -320,15 +310,13 @@ export function PublicLayout() {
                           ? "pub-landing__card pub-landing__card--active"
                           : "pub-landing__card"
                       }
-                      onClick={() =>
-                        landingController.handleTabChange("schedules")
-                      }
+                      onClick={() => landingController.handleTabChange("schedules")}
                     >
                       <span className="pub-landing__card-icon">
                         <AppIcon icon={NavIcons.schedules} size={20} />
                       </span>
                       <Text strong className="pub-landing__card-label">
-                        Live sailing
+                        Search schedule
                       </Text>
                     </Card>
                     <Card
@@ -338,17 +326,13 @@ export function PublicLayout() {
                           ? "pub-landing__card pub-landing__card--active"
                           : "pub-landing__card"
                       }
-                      onClick={() =>
-                        landingController.handleTabChange("tracking")
-                      }
+                      onClick={() => landingController.handleTabChange("tracking")}
                     >
                       <span className="pub-landing__card-icon">
                         <AppIcon icon={NavIcons.tracking} size={20} />
                       </span>
                       <Text strong className="pub-landing__card-label">
-                        Real-time
-                        <br />
-                        tracking
+                        Track your cargo
                       </Text>
                     </Card>
                     <Card
@@ -364,9 +348,7 @@ export function PublicLayout() {
                         <AppIcon icon={NavIcons.rates} size={20} />
                       </span>
                       <Text strong className="pub-landing__card-label">
-                        Instant spot-
-                        <br />
-                        rate quotes
+                        Know your rates
                       </Text>
                     </Card>
                   </div>
@@ -374,9 +356,7 @@ export function PublicLayout() {
 
                 <div
                   className={
-                    stackHero
-                      ? "pub-landing__panel"
-                      : "pub-landing__panel pub-landing__panel--side"
+                    stackHero ? "pub-landing__panel" : "pub-landing__panel pub-landing__panel--side"
                   }
                 >
                   <HeroSearchPanel controller={landingController} />
@@ -395,6 +375,7 @@ export function PublicLayout() {
           clearIntendedPath();
         }}
         controller={loginController}
+        sessionExpired={sessionExpired}
       />
     </Layout>
   );

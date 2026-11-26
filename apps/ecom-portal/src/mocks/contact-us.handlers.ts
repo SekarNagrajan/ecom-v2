@@ -1,5 +1,7 @@
-// Modified by sekar nagarajan (2026-08-21)
+// Modified by Sekar Nagarajan (2026-10-17 00:20)
 import { delay, http, HttpResponse } from 'msw';
+
+import { fixtureCountries, fixtureStates } from './fixture-api/bridges/lookups.bridge';
 
 export const contactUsHandlers = [
   /**
@@ -44,54 +46,21 @@ export const contactUsHandlers = [
 
   /**
    * GET /api/countries
-   * Mock country list for the contact us form dropdown.
+   * Country list for the contact us form dropdown — countries master (countrycode / countryname).
    */
   http.get('/api/countries', async () => {
     await delay(300);
-    return HttpResponse.json({
-      countries: [
-        { code: 'SG', name: 'Singapore' },
-        { code: 'IN', name: 'India' },
-        { code: 'US', name: 'United States' },
-        { code: 'GB', name: 'United Kingdom' },
-        { code: 'AE', name: 'United Arab Emirates' },
-        { code: 'MY', name: 'Malaysia' },
-        { code: 'CN', name: 'China' },
-        { code: 'DE', name: 'Germany' },
-        { code: 'JP', name: 'Japan' },
-        { code: 'AU', name: 'Australia' },
-      ],
-    });
+    return HttpResponse.json({ countries: fixtureCountries() });
   }),
 
   /**
    * GET /api/states?country=XX
-   * Mock state list based on country.
+   * States of the selected country — states master (statecode / statedesc / countrycode).
    */
   http.get('/api/states', async ({ request }) => {
     await delay(200);
     const url = new URL(request.url);
     const country = url.searchParams.get('country');
-
-    const stateMap: Record<string, Array<{ code: string; name: string }>> = {
-      IN: [
-        { code: 'TN', name: 'Tamil Nadu' },
-        { code: 'KA', name: 'Karnataka' },
-        { code: 'MH', name: 'Maharashtra' },
-        { code: 'DL', name: 'Delhi' },
-        { code: 'KL', name: 'Kerala' },
-      ],
-      US: [
-        { code: 'CA', name: 'California' },
-        { code: 'NY', name: 'New York' },
-        { code: 'TX', name: 'Texas' },
-        { code: 'FL', name: 'Florida' },
-        { code: 'WA', name: 'Washington' },
-      ],
-    };
-
-    return HttpResponse.json({
-      states: country ? stateMap[country] || [] : [],
-    });
+    return HttpResponse.json({ states: country ? fixtureStates(country) : [] });
   }),
 ];

@@ -1,12 +1,13 @@
 // Modified by Sekar Nagarajan (2026-08-25 12:45)
-import { z } from 'zod';
+import type { TFunction } from "i18next";
+import { z } from "zod";
 
 export type StatementDocType =
-  | 'Invoice'
-  | 'CreditNote'
-  | 'DebitNote'
-  | 'Receipt'
-  | 'Adjustment';
+  | "Invoice"
+  | "CreditNote"
+  | "DebitNote"
+  | "Receipt"
+  | "Adjustment";
 
 export interface AccountOption {
   accountId: string;
@@ -58,15 +59,32 @@ export interface ApiResponse<T = unknown> {
   };
 }
 
-export const STATEMENT_DOCTYPE_LABELS: Record<StatementDocType, string> = {
-  Invoice: 'Invoice',
-  CreditNote: 'Credit Note',
-  DebitNote: 'Debit Note',
-  Receipt: 'Receipt',
-  Adjustment: 'Adjustment',
-};
+type TranslateFn = (key: string) => string;
 
-export type StatementExportFormat = 'pdf' | 'xlsx';
+/** Language-reactive display label for statement document types. */
+export function getStatementDocTypeLabel(
+  docType: StatementDocType,
+  t: TranslateFn,
+): string {
+  switch (docType) {
+    case "Invoice":
+      return t("docTypes.invoice");
+    case "CreditNote":
+      return t("docTypes.creditNote");
+    case "DebitNote":
+      return t("docTypes.debitNote");
+    case "Receipt":
+      return t("docTypes.receipt");
+    case "Adjustment":
+      return t("docTypes.adjustment");
+    default: {
+      const _exhaustive: never = docType;
+      return _exhaustive;
+    }
+  }
+}
+
+export type StatementExportFormat = "pdf" | "xlsx";
 
 /** Approximate inclusive month span used for the 12-month cap. */
 export function statementPeriodMonths(fromDate: string, toDate: string): number {
@@ -78,36 +96,64 @@ export function statementPeriodMonths(fromDate: string, toDate: string): number 
   return days / 30.4375;
 }
 
-export const statementCriteriaSchema = z
-  .object({
-    accountId: z.string().min(1, 'Account is required.'),
-    currency: z.string().min(1, 'Currency is required.'),
-    fromDate: z.string().min(1, 'From date is required.'),
-    toDate: z.string().min(1, 'To date is required.'),
-  })
-  .superRefine((v, ctx) => {
-    if (v.fromDate && v.toDate && v.fromDate > v.toDate) {
-      ctx.addIssue({
-        path: ['toDate'],
-        code: 'custom',
-        message: 'End date must be on or after start date.',
-      });
-    }
-    if (v.fromDate && v.toDate && statementPeriodMonths(v.fromDate, v.toDate) > 12) {
-      ctx.addIssue({
-        path: ['toDate'],
-        code: 'custom',
-        message: 'Statement period cannot exceed 12 months.',
-      });
-    }
-  });
+/** Build the criteria schema with localized validation messages. */
+export function createStatementCriteriaSchema(
+  t: TFunction<"customer-statement">,
+) {
+  return z
+    .object({
+      accountId: z.string().min(1, t("validation.accountRequired")),
+      currency: z.string().min(1, t("validation.currencyRequired")),
+      fromDate: z.string().min(1, t("validation.fromDateRequired")),
+      toDate: z.string().min(1, t("validation.toDateRequired")),
+    })
+    .superRefine((v, ctx) => {
+      if (v.fromDate && v.toDate && v.fromDate > v.toDate) {
+        ctx.addIssue({
+          path: ["toDate"],
+          code: "custom",
+          message: t("validation.endAfterStart"),
+        });
+      }
+      if (
+        v.fromDate &&
+        v.toDate &&
+        statementPeriodMonths(v.fromDate, v.toDate) > 12
+      ) {
+        ctx.addIssue({
+          path: ["toDate"],
+          code: "custom",
+          message: t("validation.periodMaxMonths"),
+        });
+      }
+    });
+}
 
-export function formatStatementAmount(amountStr: string, currency: string): string {
+const EN_VALIDATION_MESSAGES: Record<string, string> = {
+  "validation.accountRequired": "Account is required.",
+  "validation.currencyRequired": "Currency is required.",
+  "validation.fromDateRequired": "From date is required.",
+  "validation.toDateRequired": "To date is required.",
+  "validation.endAfterStart": "End date must be on or after start date.",
+  "validation.periodMaxMonths": "Statement period cannot exceed 12 months.",
+};
+
+/** English schema for mocks, handlers, and tests. */
+export const statementCriteriaSchema = createStatementCriteriaSchema(
+  ((key: string) => EN_VALIDATION_MESSAGES[key] ?? key) as TFunction<
+    "customer-statement"
+  >,
+);
+
+export function formatStatementAmount(
+  amountStr: string,
+  currency: string,
+): string {
   const numeric = Number(amountStr);
   if (!Number.isFinite(numeric)) {
     return `— ${currency}`;
   }
-  const formatted = numeric.toLocaleString('en-US', {
+  const formatted = numeric.toLocaleString("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
@@ -116,8 +162,8 @@ export function formatStatementAmount(amountStr: string, currency: string): stri
 
 export function buildStatementExportFilename(
   criteria: StatementCriteria,
-  format: StatementExportFormat
+  format: StatementExportFormat,
 ): string {
-  const ext = format === 'pdf' ? 'pdf' : 'xlsx';
+  const ext = format === "pdf" ? "pdf" : "xlsx";
   return `Statement_${criteria.accountId}_${criteria.fromDate}_${criteria.toDate}.${ext}`;
 }

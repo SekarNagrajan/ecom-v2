@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-01 15:52)
+// Modified by Sekar Nagarajan (2026-10-16 23:20)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
 import { useToast } from "@solverminds/shared-ui/hooks";
@@ -19,12 +19,13 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { Controller, useForm, type Resolver } from "react-hook-form";
 
+import { useTranslation } from "react-i18next";
 import { AppIcon, Icons } from "../../../components/icons";
 import { usePortSearch } from "../../landing/api/landing.queries";
 import { bookingApi, type BookingRateOption } from "../api/booking.api";
 import { bookingKeys } from "../api/booking.keys";
 import { useBookingLookups } from "../api/booking.queries";
-import { extractPortCode } from "../mocks/booking-routing.mock";
+import { extractPortCode } from "../../../mocks/fixture-api/bridges/booking-shared.bridge";
 import { useBookingStore } from "../stores/booking.store";
 import {
   masterDetailsSchema,
@@ -51,9 +52,14 @@ const POPULAR_PORTS = [
     label: "NLRTM - Rotterdam, Netherlands",
   },
   { value: "CNSHA - Shanghai, China", label: "CNSHA - Shanghai, China" },
+  {
+    value: "CNHUA - Huangpu (Guangzhou), China",
+    label: "CNHUA - Huangpu (Guangzhou), China",
+  },
   { value: "DEHAM - Hamburg, Germany", label: "DEHAM - Hamburg, Germany" },
   { value: "INNSA - Nhava Sheva, India", label: "INNSA - Nhava Sheva, India" },
   { value: "AEDXB - Jebel Ali, UAE", label: "AEDXB - Jebel Ali, UAE" },
+  { value: "AEJEA - Jebel Ali, UAE", label: "AEJEA - Jebel Ali, UAE" },
   { value: "GBFEL - Felixstowe, UK", label: "GBFEL - Felixstowe, UK" },
 ];
 
@@ -106,6 +112,7 @@ function usePortAutocomplete(initialQuery = "") {
 }
 
 export function MasterDetailsStep() {
+  const { t } = useTranslation(["booking", "common", "modules"]);
   const toast = useToast();
   const { payload, updateMasterDetails, nextStep, prevStep } =
     useBookingStore();
@@ -151,7 +158,7 @@ export function MasterDetailsStep() {
       : {
           origin: "",
           delivery: "",
-          cargoReadyDate: "",
+          cargoReadyDate: dayjs().format("YYYY-MM-DD"),
           haulageOriginType: "Merchant",
           haulageDestinationType: "Merchant",
           carriageContract: "",
@@ -258,10 +265,10 @@ export function MasterDetailsStep() {
 
     if (!readyDate?.trim()) {
       clearSelectedRoute();
-      toast.success(`Rate selected: ${rate.rateNo}`);
-      toast.info(
-        "Set Cargo Ready Date to auto-apply the default route, or select a vessel/route manually.",
+      toast.success(
+        t("booking:wizard.toasts.rateSelected", { rateNo: rate.rateNo }),
       );
+      toast.info(t("booking:wizard.toasts.setCargoReadyForRoute"));
       return;
     }
 
@@ -274,7 +281,10 @@ export function MasterDetailsStep() {
         selectedRoute: route,
       });
       toast.success(
-        `Rate ${rate.rateNo} selected · default route applied (${route.serviceName})`,
+        t("booking:wizard.toasts.rateSelectedWithRoute", {
+          rateNo: rate.rateNo,
+          service: route.serviceName,
+        }),
       );
       return;
     }
@@ -285,10 +295,10 @@ export function MasterDetailsStep() {
       rateReference: rate.rateNo,
       selectedRoute: null,
     });
-    toast.success(`Rate selected: ${rate.rateNo}`);
-    toast.info(
-      "No default route for this lane. Please select a vessel/route manually.",
+    toast.success(
+      t("booking:wizard.toasts.rateSelected", { rateNo: rate.rateNo }),
     );
+    toast.info(t("booking:wizard.toasts.noDefaultRoute"));
   };
 
   const handleSwapPorts = () => {
@@ -322,7 +332,12 @@ export function MasterDetailsStep() {
     });
     updateMasterDetails(nextData);
     setIsRoutingModalOpen(false);
-    toast.success(`Route selected: ${route.serviceName} · ${route.vesselName}`);
+    toast.success(
+      t("booking:wizard.toasts.routeSelected", {
+        service: route.serviceName,
+        vessel: route.vesselName,
+      }),
+    );
   };
 
   const hasValidRoute = routeMatchesPorts(
@@ -347,16 +362,15 @@ export function MasterDetailsStep() {
             <AppButton
               type="primary"
               className="booking-template-select-btn"
-              icon={<AppIcon icon={Icons.notebook} size={16} />}
               onClick={() => setIsTemplateModalOpen(true)}
             >
-              Select Template
+              {t("booking:wizard.actions.selectTemplate")}
             </AppButton>
           </div>
 
           <div className="booking-port-row">
             <label className="form-field-label booking-port-row__origin-label">
-              Origin <Text type="danger">*</Text>
+              {t("booking:columns.origin")} <Text type="danger">*</Text>
             </label>
             <div className="booking-port-row__origin-field">
               <Controller
@@ -385,7 +399,7 @@ export function MasterDetailsStep() {
                   >
                     <Input
                       size="large"
-                      placeholder="Search origin port (e.g. USNYC)"
+                      placeholder={t("booking:wizard.master.originPlaceholder")}
                       prefix={<AppIcon icon={Icons.mapPin} size={16} />}
                       allowClear
                     />
@@ -403,20 +417,20 @@ export function MasterDetailsStep() {
             ) : null}
 
             <div className="booking-port-row__swap">
-              <Tooltip title="Swap Origin and Delivery">
+              <Tooltip title={t("booking:wizard.master.swapPorts")}>
                 <AppButton
                   type="default"
                   size="large"
                   shape="circle"
                   icon={<AppIcon icon={Icons.arrowLeftRight} size={16} />}
                   onClick={handleSwapPorts}
-                  aria-label="Swap origin and delivery ports"
+                  aria-label={t("booking:wizard.master.swapPortsAria")}
                 />
               </Tooltip>
             </div>
 
             <label className="form-field-label booking-port-row__delivery-label">
-              Delivery <Text type="danger">*</Text>
+              {t("booking:columns.delivery")} <Text type="danger">*</Text>
             </label>
             <div className="booking-port-row__delivery-field">
               <Controller
@@ -445,7 +459,9 @@ export function MasterDetailsStep() {
                   >
                     <Input
                       size="large"
-                      placeholder="Search delivery port (e.g. GBFEL)"
+                      placeholder={t(
+                        "booking:wizard.master.deliveryPlaceholder",
+                      )}
                       prefix={<AppIcon icon={Icons.mapPin} size={16} />}
                       allowClear
                     />
@@ -463,7 +479,8 @@ export function MasterDetailsStep() {
             ) : null}
 
             <label className="form-field-label booking-port-row__date-label">
-              Cargo Ready Date <Text type="danger">*</Text>
+              {t("booking:wizard.master.cargoReadyDate")}{" "}
+              <Text type="danger">*</Text>
             </label>
             <div className="booking-port-row__date-field">
               <Controller
@@ -488,7 +505,9 @@ export function MasterDetailsStep() {
                         ).then((route) => {
                           if (route) {
                             toast.success(
-                              `Default route applied: ${route.serviceName}`,
+                              t("booking:wizard.toasts.defaultRouteApplied", {
+                                service: route.serviceName,
+                              }),
                             );
                           }
                         });
@@ -523,9 +542,10 @@ export function MasterDetailsStep() {
               <BookingRouteCard
                 key={selectedRoute.routeId}
                 route={selectedRoute}
+                selected
                 detailsMode="drawer"
                 action={{
-                  label: "Change Route",
+                  label: t("booking:wizard.routing.changeRoute"),
                   icon: Icons.refreshCw,
                   type: "default",
                   onClick: () => setIsRoutingModalOpen(true),
@@ -558,14 +578,25 @@ export function MasterDetailsStep() {
           {/* Modified by Sekar Nagarajan (2026-08-31 16:58) — gap from port row + five fields on one row from lg+ */}
           <Row gutter={[24, 24]} className="booking-master-options-row">
             <Col xs={24} md={12} lg={{ flex: "1 1 0%" }}>
-              <label className="form-field-label">Haulage Origin</label>
+              <label className="form-field-label">
+                {t("booking:labels.haulageOrigin")}
+              </label>
               <Controller
                 control={control}
                 name="haulageOriginType"
                 render={({ field: { value, onChange } }) => (
                   <Segmented
                     className="form-field-full-width form-segmented"
-                    options={["Carrier", "Merchant"]}
+                    options={[
+                      {
+                        label: t("booking:wizard.haulage.carrier"),
+                        value: "Carrier",
+                      },
+                      {
+                        label: t("booking:wizard.haulage.merchant"),
+                        value: "Merchant",
+                      },
+                    ]}
                     value={value}
                     onChange={onChange}
                     block
@@ -575,14 +606,25 @@ export function MasterDetailsStep() {
             </Col>
 
             <Col xs={24} md={12} lg={{ flex: "1 1 0%" }}>
-              <label className="form-field-label">Haulage Destination</label>
+              <label className="form-field-label">
+                {t("booking:labels.haulageDestination")}
+              </label>
               <Controller
                 control={control}
                 name="haulageDestinationType"
                 render={({ field: { value, onChange } }) => (
                   <Segmented
                     className="form-field-full-width form-segmented"
-                    options={["Carrier", "Merchant"]}
+                    options={[
+                      {
+                        label: t("booking:wizard.haulage.carrier"),
+                        value: "Carrier",
+                      },
+                      {
+                        label: t("booking:wizard.haulage.merchant"),
+                        value: "Merchant",
+                      },
+                    ]}
                     value={value}
                     onChange={onChange}
                     block
@@ -592,15 +634,19 @@ export function MasterDetailsStep() {
             </Col>
 
             <Col xs={24} md={12} lg={{ flex: "1 1 0%" }}>
-              <label className="form-field-label">Carriage Contract</label>
+              <label className="form-field-label">
+                {t("booking:labels.carriageContract")}
+              </label>
               <Controller
                 control={control}
                 name="carriageContract"
                 render={({ field }) => (
                   <Select
                     {...field}
-                    size="large"
-                    placeholder="Select Carriage Contract"
+                    size="medium"
+                    placeholder={t(
+                      "booking:wizard.master.carriageContractPlaceholder",
+                    )}
                     options={carriageContracts}
                     className="form-field-full-width"
                     allowClear
@@ -612,12 +658,14 @@ export function MasterDetailsStep() {
             </Col>
 
             <Col xs={24} md={12} lg={{ flex: "1 1 0%" }}>
-              <label className="form-field-label">Online Booking No</label>
+              <label className="form-field-label">
+                {t("booking:wizard.master.onlineBookingNo")}
+              </label>
               <Controller
                 control={control}
                 name="onlineBookingNo"
                 render={({ field }) => (
-                  <Input {...field} disabled size="large" />
+                  <Input {...field} disabled size="medium" />
                 )}
               />
             </Col>
@@ -638,20 +686,22 @@ export function MasterDetailsStep() {
             </Col> */}
 
             <Col xs={24} md={12} lg={{ flex: "1 1 0%" }}>
-              <label className="form-field-label">Preferred Agency</label>
+              <label className="form-field-label">
+                {t("booking:wizard.master.preferredAgency")}
+              </label>
               <Controller
                 control={control}
                 name="preferredAgency"
                 render={({ field }) => (
                   <Select
                     {...field}
-                    size="large"
+                    size="medium"
                     options={agencies}
                     className="form-field-full-width"
                     allowClear
                     showSearch
                     optionFilterProp="label"
-                    placeholder="Select Agency"
+                    placeholder={t("booking:wizard.master.agencyPlaceholder")}
                   />
                 )}
               />
@@ -1059,14 +1109,16 @@ export function MasterDetailsStep() {
       </div>
 
       <div className="form-step-footer">
-        <AppButton onClick={prevStep}>Previous</AppButton>
+        <AppButton onClick={prevStep}>{t("common:actions.previous")}</AppButton>
         <AppButton
           type="primary"
           htmlType="submit"
           loading={isApplyingDefaultRoute}
           disabled={isApplyingDefaultRoute}
         >
-          {hasValidRoute ? "Next" : "Select Vessel / Route"}
+          {hasValidRoute
+            ? t("common:actions.next")
+            : t("booking:wizard.routing.selectVesselRoute")}
         </AppButton>
       </div>
 
@@ -1080,6 +1132,7 @@ export function MasterDetailsStep() {
         origin={originValue || ""}
         delivery={deliveryValue || ""}
         cargoReadyDate={cargoReadyDate || ""}
+        selectedRouteId={selectedRoute?.routeId ?? null}
         onCancel={() => setIsRoutingModalOpen(false)}
         onSelect={handleRouteSelect}
       />

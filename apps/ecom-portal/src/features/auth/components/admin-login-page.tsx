@@ -1,7 +1,9 @@
-// Modified by Sekar Nagarajan (2026-08-27 13:05)
+// Modified by Sekar Nagarajan (2026-11-12 12:40)
 import { useNavigate } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { resolveAdminLandingSearch } from "../../admin/utils/admin-landing";
 import { useAdminLoginController } from "../hooks/use-admin-login-controller";
 import { AdminLoginShell } from "./admin-login-shell";
 
@@ -12,6 +14,7 @@ export const CPANEL_DEFAULT_CUSTOMER = {
 } as const;
 
 export function AdminLoginPage() {
+  const { t } = useTranslation("auth");
   const navigate = useNavigate();
 
   const { form, handleSubmit, serverError, isSubmitting } =
@@ -20,7 +23,7 @@ export function AdminLoginPage() {
       onSuccess: () => {
         navigate({
           to: "/app/admin",
-          search: { section: "special-privileges" },
+          search: resolveAdminLandingSearch(),
         } as never);
       },
     });
@@ -33,11 +36,11 @@ export function AdminLoginPage() {
   return (
     <AdminLoginShell
       entryType="cpanel"
-      title="System Administration"
-      subtitle="Enter your admin User ID and password to continue."
+      title={t("adminLogin.title")}
+      subtitle={t("adminLogin.subtitle")}
       icon={Icons.shieldUser}
-      submitLabel="Sign In to Control Panel"
-      userIdPlaceholder="e.g. admin or sysadmin"
+      submitLabel={t("adminLogin.submit")}
+      userIdPlaceholder={t("adminLogin.userIdPlaceholder")}
       control={control}
       errors={errors}
       handleSubmit={handleSubmit}
@@ -52,7 +55,7 @@ export function AdminLoginPage() {
           <AppIcon icon={Icons.building} size={18} />
           <div>
             <span className="admin-login-page__default-customer-title">
-              Default customer account
+              {t("adminLogin.defaultCustomerTitle")}
             </span>
             <span className="admin-login-page__default-customer-value">
               {CPANEL_DEFAULT_CUSTOMER.custCode} —{" "}

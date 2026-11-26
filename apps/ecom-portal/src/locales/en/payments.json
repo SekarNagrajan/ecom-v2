@@ -1,0 +1,85 @@
+{
+  "title": "Pay Pending",
+  "subtitle": "Select outstanding balances by agency, then continue to checkout.",
+  "eyebrow": "ONLINE PAYMENT",
+  "agencyGroup": "Agency {{agency}}",
+  "agencyItemCount": "{{count}} item",
+  "agencyItemCount_other": "{{count}} items",
+  "rowSelectAria": "Select {{ref}} for payment",
+  "columns": {
+    "booking": "Booking",
+    "bl": "B/L",
+    "invoice": "Invoice",
+    "route": "Route",
+    "amount": "Amount (USD)",
+    "type": "Type"
+  },
+  "type": {
+    "invoice": "Invoice",
+    "bl": "B/L",
+    "booking": "Booking"
+  },
+  "summary": {
+    "label": "Payment summary",
+    "items": "Outstanding items",
+    "outstanding": "Total due",
+    "selected": "Selected"
+  },
+  "actions": {
+    "paySelected": "Pay Selected",
+    "pay": "Pay",
+    "cancel": "Cancel",
+    "selectAll": "Select All",
+    "clearSelection": "Clear Selection",
+    "copy": "Copy {{label}}",
+    "copied": "Copied {{label}}",
+    "expand": "Expand agency group",
+    "collapse": "Collapse agency group",
+    "backToDashboard": "Back to Dashboard",
+    "viewHistory": "Payment History",
+    "paymentHistory": "Payment History"
+  },
+  "empty": {
+    "title": "No payment pending",
+    "message": "There are no outstanding balances to pay right now."
+  },
+  "selectedCount": "{{count}} selected · ${{amount}}",
+  "bar": {
+    "selectHint": "Select at least one item to continue",
+    "agency": "Paying via {{agency}}"
+  },
+  "mixedAgencies": "Select items from a single agency to pay together.",
+  "toasts": {
+    "selectItems": "Select at least one outstanding item to pay",
+    "sameAgencyRequired": "Selected items must belong to the same agency",
+    "checkoutFailed": "Could not start checkout",
+    "checkoutCreated": "Redirecting to {{gateway}} checkout…",
+    "completed": "Payment completed successfully",
+    "alreadyCompleted": "This payment was already completed",
+    "cancelled": "Payment was cancelled",
+    "cancelFailed": "Could not cancel payment",
+    "completeFailed": "Could not complete payment",
+    "missingRequest": "Payment reference is missing",
+    "copied": "Copied {{value}}",
+    "copyFailed": "Could not copy to clipboard"
+  },
+  "return": {
+    "successTitle": "Payment Successful!",
+    "successMessage": "Your online payment has been recorded. Outstanding balances will refresh on the dashboard.",
+    "failedTitle": "Payment could not be confirmed",
+    "failedMessage": "We could not confirm this checkout session. You can return to the dashboard and try again.",
+    "cancelTitle": "Payment cancelled",
+    "cancelMessage": "The checkout was cancelled. You can retry from Payment Pending on the dashboard.",
+    "processing": "Confirming payment…",
+    "referenceLabel": "Payment Reference",
+    "amountPaid": "Amount Paid",
+    "status": "Status",
+    "statusPaid": "Paid",
+    "statusCancelled": "Cancelled",
+    "statusFailed": "Failed",
+    "gateway": "Gateway",
+    "agency": "Agency",
+    "paidAt": "Paid On",
+    "requestId": "Payment ref: {{requestId}}"
+  }
+}

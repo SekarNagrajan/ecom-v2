@@ -1,0 +1,30 @@
+[
+ {
+  "id": "2",
+  "initiatorId": "ECOM-REG",
+  "reference": "REG714",
+  "toList": "isom67@example.com",
+  "mailSubject": "ESEA Registration verification link",
+  "mailJson": null,
+  "status": "F",
+  "attempts": 2,
+  "lastError": "The integration API refused the request.",
+  "createdAt": "2026-11-06T08:58:31.588Z",
+  "lastAttemptAt": "2026-11-06T09:02:02.102Z",
+  "updatedAt": "2026-11-06T09:02:02.162Z"
+ },
+ {
+  "id": "1",
+  "initiatorId": "ECOM-REG",
+  "reference": "REG706",
+  "toList": "leonie82@example.com",
+  "mailSubject": "ESEA registration verification",
+  "mailJson": null,
+  "status": "S",
+  "attempts": 2,
+  "lastError": null,
+  "createdAt": "2026-10-15T19:57:56.412Z",
+  "lastAttemptAt": "2026-10-15T20:04:49.342Z",
+  "updatedAt": "2026-10-15T20:04:52.315Z"
+ }
+]

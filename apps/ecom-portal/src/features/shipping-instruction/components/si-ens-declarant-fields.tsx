@@ -2,6 +2,7 @@
 import { Input, Segmented, Typography } from "antd";
 import type { Control, FieldErrors } from "react-hook-form";
 import { Controller } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import type { SiEnsStepForm } from "../types/si.types";
 
@@ -21,17 +22,23 @@ function FieldError({ message }: { message?: string }) {
   );
 }
 
+function RequiredMark() {
+  return <Text type="danger"> *</Text>;
+}
+
 export function SiEnsDeclarantFields({
   control,
   errors,
 }: SiEnsDeclarantFieldsProps) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
   const dErrors = errors.declarant;
 
   return (
     <div className="form-ens-party-grid">
       <div className="form-field-cell">
         <label className="form-field-label">
-          Declarant Name <Text type="danger"> *</Text>
+          {t("wizard.ens.declarant.name")}
+          <RequiredMark />
         </label>
         <Controller
           control={control}
@@ -53,7 +60,8 @@ export function SiEnsDeclarantFields({
 
       <div className="form-field-cell">
         <label className="form-field-label">
-          Address <Text type="danger"> *</Text>
+          {t("wizard.ens.declarant.address")}
+          <RequiredMark />
         </label>
         <Controller
           control={control}
@@ -75,7 +83,8 @@ export function SiEnsDeclarantFields({
 
       <div className="form-field-cell">
         <label className="form-field-label">
-          Address 2 <Text type="danger"> *</Text>
+          {t("wizard.ens.declarant.address2")}
+          <RequiredMark />
         </label>
         <Controller
           control={control}
@@ -97,7 +106,8 @@ export function SiEnsDeclarantFields({
 
       <div className="form-field-cell">
         <label className="form-field-label">
-          City <Text type="danger"> *</Text>
+          {t("wizard.ens.declarant.city")}
+          <RequiredMark />
         </label>
         <Controller
           control={control}
@@ -118,7 +128,9 @@ export function SiEnsDeclarantFields({
       </div>
 
       <div className="form-field-cell">
-        <label className="form-field-label">Zip Code</label>
+        <label className="form-field-label">
+          {t("wizard.ens.declarant.zipCode")}
+        </label>
         <Controller
           control={control}
           name="declarant.zip"
@@ -138,7 +150,8 @@ export function SiEnsDeclarantFields({
 
       <div className="form-field-cell">
         <label className="form-field-label">
-          Country <Text type="danger"> *</Text>
+          {t("wizard.ens.declarant.country")}
+          <RequiredMark />
         </label>
         <Controller
           control={control}
@@ -160,7 +173,8 @@ export function SiEnsDeclarantFields({
 
       <div className="form-field-cell">
         <label className="form-field-label">
-          State <Text type="danger"> *</Text>
+          {t("wizard.ens.declarant.state")}
+          <RequiredMark />
         </label>
         <Controller
           control={control}
@@ -182,7 +196,8 @@ export function SiEnsDeclarantFields({
 
       <div className="form-field-cell">
         <label className="form-field-label">
-          Telephone <Text type="danger"> *</Text>
+          {t("wizard.ens.declarant.telephone")}
+          <RequiredMark />
         </label>
         <Controller
           control={control}
@@ -204,7 +219,8 @@ export function SiEnsDeclarantFields({
 
       <div className="form-field-cell">
         <label className="form-field-label">
-          EORI <Text type="danger"> *</Text>
+          {t("wizard.ens.declarant.eori")}
+          <RequiredMark />
         </label>
         <Controller
           control={control}
@@ -226,7 +242,8 @@ export function SiEnsDeclarantFields({
 
       <div className="form-field-cell">
         <label className="form-field-label">
-          Email <Text type="danger"> *</Text>
+          {t("wizard.ens.declarant.email")}
+          <RequiredMark />
         </label>
         <Controller
           control={control}
@@ -249,7 +266,8 @@ export function SiEnsDeclarantFields({
 
       <div className="form-field-cell">
         <label className="form-field-label">
-          Declarant Filing Type <Text type="danger"> *</Text>
+          {t("wizard.ens.declarant.filingType")}
+          <RequiredMark />
         </label>
         <Controller
           control={control}
@@ -261,8 +279,14 @@ export function SiEnsDeclarantFields({
               value={value ?? "House BL"}
               onChange={onChange}
               options={[
-                { label: "House BL", value: "House BL" },
-                { label: "Sub-House BL", value: "Sub-House BL" },
+                {
+                  label: t("wizard.ens.options.houseBl"),
+                  value: "House BL",
+                },
+                {
+                  label: t("wizard.ens.options.subHouseBl"),
+                  value: "Sub-House BL",
+                },
               ]}
             />
           )}

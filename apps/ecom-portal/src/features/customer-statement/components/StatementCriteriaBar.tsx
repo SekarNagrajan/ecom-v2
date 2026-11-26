@@ -1,12 +1,13 @@
 // Modified by Sekar Nagarajan (2026-08-25 13:00)
-import { AppButton } from '@solverminds/shared-ui';
-import { Col, DatePicker, Row, Select } from 'antd';
-import dayjs from 'dayjs';
+import { AppButton } from "@solverminds/shared-ui";
+import { Col, DatePicker, Row, Select } from "antd";
+import dayjs from "dayjs";
+import { useTranslation } from "react-i18next";
 
-import { AppIcon, Icons, NavIcons } from '../../../components/icons';
-import { ModuleScreenHeader } from '../../../components/shared/module-screen-header';
-import { MODULE_TITLES } from '../../../constants/module-titles';
-import { useStatementAccountsQuery } from '../api/customer-statement.queries';
+import { AppIcon, Icons, NavIcons } from "../../../components/icons";
+import { ModuleScreenHeader } from "../../../components/shared/module-screen-header";
+import { useModuleTitles } from "../../../i18n/use-module-titles";
+import { useStatementAccountsQuery } from "../api/customer-statement.queries";
 
 /** Five fields in one row on md+ (spans sum to 24). Stack on mobile. */
 const CRITERIA_COL = {
@@ -22,14 +23,12 @@ interface StatementCriteriaBarProps {
   fromDate: string;
   toDate: string;
   criteriaError: string | null;
+  recordCount?: number;
   onAccountChange: (accountId: string, currency: string) => void;
   onCurrencyChange: (currency: string) => void;
   onFromDateChange: (value: string) => void;
   onToDateChange: (value: string) => void;
-  onSearch: (override?: {
-    accountId?: string;
-    currency?: string;
-  }) => void;
+  onSearch: (override?: { accountId?: string; currency?: string }) => void;
 }
 
 export function StatementCriteriaBar({
@@ -38,16 +37,23 @@ export function StatementCriteriaBar({
   fromDate,
   toDate,
   criteriaError,
+  recordCount,
   onAccountChange,
   onCurrencyChange,
   onFromDateChange,
   onToDateChange,
   onSearch,
 }: StatementCriteriaBarProps) {
+  const { t } = useTranslation([
+    "customer-statement",
+    "common",
+    "modules",
+  ]);
+  const MODULE_TITLES = useModuleTitles();
   const { data: accounts = [], isLoading } = useStatementAccountsQuery();
 
   const currencyOptions = Array.from(
-    new Set(accounts.map((a) => a.currency).filter(Boolean))
+    new Set(accounts.map((a) => a.currency).filter(Boolean)),
   ).map((code) => ({ value: code, label: code }));
 
   const resolvedAccountId = accountId || accounts[0]?.accountId;
@@ -62,7 +68,7 @@ export function StatementCriteriaBar({
         <ModuleScreenHeader
           icon={NavIcons.customerStatement}
           title={MODULE_TITLES.customerStatement}
-          subtitle="Select account, currency, and period to view and export your statement."
+          // recordCount={recordCount}
           marginBottom={0}
         />
       </div>
@@ -72,12 +78,12 @@ export function StatementCriteriaBar({
           <Row gutter={[16, 16]} align="bottom" className="stmt-criteria-row">
             <Col {...CRITERIA_COL.account}>
               <div className="stmt-search-field">
-                <span className="form-field-label">Account</span>
+                <span className="form-field-label">{t("criteria.account")}</span>
                 <Select
                   size="large"
                   loading={isLoading}
                   value={resolvedAccountId}
-                  placeholder="Select account"
+                  placeholder={t("placeholders.selectAccount")}
                   options={accounts.map((a) => ({
                     value: a.accountId,
                     label: `${a.name} (${a.currency})`,
@@ -91,11 +97,13 @@ export function StatementCriteriaBar({
             </Col>
             <Col {...CRITERIA_COL.currency}>
               <div className="stmt-search-field">
-                <span className="form-field-label">Currency</span>
+                <span className="form-field-label">
+                  {t("criteria.currency")}
+                </span>
                 <Select
                   size="large"
                   value={resolvedCurrency}
-                  placeholder="Currency"
+                  placeholder={t("placeholders.currency")}
                   options={currencyOptions}
                   onChange={onCurrencyChange}
                 />
@@ -103,29 +111,37 @@ export function StatementCriteriaBar({
             </Col>
             <Col {...CRITERIA_COL.date}>
               <div className="stmt-search-field">
-                <span className="form-field-label">From Date</span>
+                <span className="form-field-label">
+                  {t("criteria.fromDate")}
+                </span>
                 <DatePicker
                   size="large"
                   value={fromDate ? dayjs(fromDate) : null}
-                  onChange={(d) => onFromDateChange(d ? d.format('YYYY-MM-DD') : '')}
+                  onChange={(d) =>
+                    onFromDateChange(d ? d.format("YYYY-MM-DD") : "")
+                  }
                   allowClear={false}
                 />
               </div>
             </Col>
             <Col {...CRITERIA_COL.date}>
               <div className="stmt-search-field">
-                <span className="form-field-label">To Date</span>
+                <span className="form-field-label">{t("criteria.toDate")}</span>
                 <DatePicker
                   size="large"
                   value={toDate ? dayjs(toDate) : null}
-                  onChange={(d) => onToDateChange(d ? d.format('YYYY-MM-DD') : '')}
+                  onChange={(d) =>
+                    onToDateChange(d ? d.format("YYYY-MM-DD") : "")
+                  }
                   allowClear={false}
                 />
               </div>
             </Col>
             <Col {...CRITERIA_COL.action}>
               <div className="stmt-search-actions-field">
-                <span className="stmt-search-actions-field__spacer form-field-label">Show</span>
+                <span className="stmt-search-actions-field__spacer form-field-label">
+                  {t("criteria.show")}
+                </span>
                 <div className="stmt-search-actions">
                   <AppButton
                     type="primary"
@@ -138,7 +154,7 @@ export function StatementCriteriaBar({
                       })
                     }
                   >
-                    Show
+                    {t("criteria.show")}
                   </AppButton>
                 </div>
               </div>
@@ -147,7 +163,9 @@ export function StatementCriteriaBar({
         </div>
       </div>
 
-      {criteriaError ? <p className="stmt-criteria-error">{criteriaError}</p> : null}
+      {criteriaError ? (
+        <p className="stmt-criteria-error">{criteriaError}</p>
+      ) : null}
     </>
   );
 }

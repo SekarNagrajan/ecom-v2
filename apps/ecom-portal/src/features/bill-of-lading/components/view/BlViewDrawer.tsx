@@ -1,11 +1,17 @@
-// Modified by Sekar Nagarajan (2026-09-01 13:04)
-import { AppButton, AppDrawer } from "@solverminds/shared-ui";
+// Modified by Sekar Nagarajan (2026-10-19 19:05)
+import { AppButton, AppDrawer, FormattedDate } from "@solverminds/shared-ui";
 import { useNavigate } from "@tanstack/react-router";
-import { Space, Tag, Tooltip, Typography } from "antd";
+import { Tag, Tooltip, Typography } from "antd";
+import type { ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 
-import { AppIcon, Icons } from "../../../../components/icons";
+import {
+  AppIcon,
+  Icons,
+  NavBillOfLadingIcon,
+} from "../../../../components/icons";
 import { formatModuleScreenTitle } from "../../../../constants/module-titles";
-import type { BLListDTO } from "../../types/bl.types";
+import type { BLListDTO, BLRowStatus } from "../../types/bl.types";
 import {
   canOpenBlWizard,
   getBLListStatusColor,
@@ -16,19 +22,52 @@ import { BlDetailsViewer } from "./BlDetailsViewer";
 
 const { Title, Text } = Typography;
 
+const LIFECYCLE_KEYS: BLRowStatus[] = ["D", "S", "C", "I"];
+
 interface BlViewDrawerProps {
   record: BLListDTO;
   onClose: () => void;
 }
 
+function dash(value?: string | null): string {
+  return value && value.trim() !== "" ? value : "—";
+}
+
+/** Date-only rendering (portal date format), no time part. */
+function dateOnly(value?: string | null): ReactNode {
+  return value && value.trim() !== "" ? <FormattedDate value={value} /> : "—";
+}
+
+/** Split "CODE - Name" port labels; a bare code yields no separate name. */
+function splitPort(value?: string | null): { code: string; name: string } {
+  const raw = (value ?? "").trim();
+  const parts = raw.split(" - ");
+  if (parts.length < 2) return { code: raw, name: "" };
+  return { code: parts[0].trim(), name: parts.slice(1).join(" - ").trim() };
+}
+
 export function BlViewDrawer({ record, onClose }: BlViewDrawerProps) {
+  const { t } = useTranslation(["bill-of-lading", "common", "modules"]);
   const navigate = useNavigate();
   const showEdit = canOpenBlWizard(record);
+  const statusIndex = LIFECYCLE_KEYS.indexOf(record.status);
+
+  const origin = splitPort(record.origin);
+  const delivery = splitPort(record.delivery);
 
   const handleEdit = () => {
     onClose();
     navigate({ to: `/app/bl/${record.blNo}/edit` });
   };
+
+  const facts: { key: string; label: string; value: ReactNode }[] = [
+    { key: "blNo", label: t("columns.blNo"), value: dash(record.blNo) },
+    { key: "siNo", label: t("columns.siNo"), value: dash(record.siNo) },
+    { key: "mcn", label: t("labels.mcn"), value: dash(record.mcnNo) },
+    { key: "agencyRef", label: t("labels.agencyRef"), value: dash(record.agencyRefNo) },
+    { key: "created", label: t("labels.created"), value: dateOnly(record.createdDate) },
+    { key: "confirmed", label: t("status.confirmed"), value: dateOnly(record.confirmedDate) },
+  ];
 
   return (
     <>
@@ -36,125 +75,135 @@ export function BlViewDrawer({ record, onClose }: BlViewDrawerProps) {
       <AppDrawer
         open
         onClose={onClose}
-        dialogSize="md"
-        classNames={{ body: "bl-drawer-body custom-scroll" }}
+        dialogSize="lg"
+        classNames={{
+          body: "bl-drawer-body custom-scroll",
+          footer: "bl-drawer-footer-bar",
+        }}
         title={
           <div className="bl-drawer-title">
-            <AppIcon icon={Icons.fileCheck} size={22} />
-            <div>
+            <span className="bl-drawer-title__icon">
+              <AppIcon icon={NavBillOfLadingIcon} size={20} />
+            </span>
+            <div className="bl-drawer-title__copy">
               <Title level={4} className="bl-drawer-title__text">
-                {formatModuleScreenTitle("View Bill of Lading", record.blNo)}
+                {formatModuleScreenTitle(t("drawers.viewBillOfLading"), record.blNo)}
               </Title>
               <Text type="secondary" className="bl-drawer-title__meta">
-                Booking: <strong>{record.bookingNo}</strong>
+                <span className="bl-drawer-title__meta-item">
+                  {t("labels.booking")}: <strong>{record.bookingNo}</strong>
+                </span>
                 {record.agencyRefNo ? (
-                  <>
-                    {" "}
-                    · Agency: <strong>{record.agencyRefNo}</strong>
-                  </>
+                  <span className="bl-drawer-title__meta-item">
+                    {t("labels.agencyRef")}: <strong>{record.agencyRefNo}</strong>
+                  </span>
                 ) : null}
               </Text>
-              <div className="bl-drawer-title__tags">
-                <Tag
-                  className="bl-status-tag"
-                  color={getBLListStatusColor(record)}
-                >
-                  {record.isLocked ? "Locked" : getBLStatusLabel(record.status)}
-                </Tag>
-                {record.mcnNo ? (
-                  <Tag color="default">MCN: {record.mcnNo}</Tag>
-                ) : null}
-              </div>
             </div>
           </div>
         }
-        extra={
-          <div className="bl-drawer-actions custom-scroll">
-            <Space size="small" wrap>
-              {showEdit ? (
-                <Tooltip title="Edit Bill of Lading">
-                  <AppButton
-                    type="primary"
-                    icon={
-                      <AppIcon icon={Icons.squarePen} size={16} tone="edit" />
-                    }
-                    onClick={handleEdit}
-                  >
-                    Edit
-                  </AppButton>
-                </Tooltip>
-              ) : null}
-            </Space>
-          </div>
+        footer={
+          showEdit ? (
+            <div className="bl-drawer-actions custom-scroll">
+              <Tooltip title={t("actions.editBillOfLading")}>
+                <AppButton
+                  type="primary"
+                  icon={<AppIcon icon={Icons.squarePen} size={16} tone="edit" />}
+                  onClick={handleEdit}
+                >
+                  {t("actions.edit")}
+                </AppButton>
+              </Tooltip>
+            </div>
+          ) : undefined
         }
       >
-        <div className="bl-view-route-strip">
-          <div className="bl-view-route-port bl-view-route-port--origin">
-            <div className="bl-view-route-port__label">
-              <AppIcon icon={Icons.mapPin} size={14} />
-              Origin
+        <section className="bl-view-hero" aria-label={t("drawers.viewBillOfLading")}>
+          {/* Status + lifecycle */}
+          <div className="bl-view-hero__status">
+            <div className="bl-view-hero__tags">
+              <Tag className="bl-status-tag" color={getBLListStatusColor(record)}>
+                {record.isLocked ? t("status.locked") : getBLStatusLabel(record.status, t)}
+              </Tag>
+              {record.isLocked ? (
+                <Tag className="bl-status-tag" color="default">
+                  {getBLStatusLabel(record.status, t)}
+                </Tag>
+              ) : null}
+              {record.mcnNo ? (
+                <Tag className="bl-status-tag" color="default">
+                  {t("labels.mcn")}: {record.mcnNo}
+                </Tag>
+              ) : null}
             </div>
-            <Title level={4} className="bl-view-route-port__code">
-              {record.origin}
-            </Title>
+
+            <ol className="bl-status-stepper" aria-label={t("labels.statusProgress")}>
+              {LIFECYCLE_KEYS.map((key, index) => {
+                const isDone = index < statusIndex;
+                const isCurrent = index === statusIndex;
+                return (
+                  <li
+                    key={key}
+                    className={[
+                      "bl-status-stepper__step",
+                      isDone ? "is-done" : "",
+                      isCurrent ? "is-current" : "",
+                    ]
+                      .filter(Boolean)
+                      .join(" ")}
+                    aria-current={isCurrent ? "step" : undefined}
+                  >
+                    <span className="bl-status-stepper__dot app-icon-inherit">
+                      {isDone ? <AppIcon icon={Icons.check} size={12} /> : <span>{index + 1}</span>}
+                    </span>
+                    <span className="bl-status-stepper__label">{getBLStatusLabel(key, t)}</span>
+                  </li>
+                );
+              })}
+            </ol>
           </div>
 
-          <div className="bl-view-route-connector">
-            <span className="bl-view-route-connector__label">Port to Port</span>
-            <div className="bl-view-route-connector__line">
-              <span className="bl-view-route-connector__track" />
-              <AppIcon icon={Icons.arrowRight} size={14} />
-              <span className="bl-view-route-connector__track" />
+          {/* Route */}
+          <div className="bl-view-route">
+            <div className="bl-view-route__stop">
+              <span className="bl-view-route__eyebrow app-icon-inherit">
+                <AppIcon icon={Icons.mapPin} size={12} />
+                {t("labels.origin")}
+              </span>
+              <span className="bl-view-route__code">{dash(origin.code)}</span>
+              {origin.name ? <span className="bl-view-route__name">{origin.name}</span> : null}
             </div>
-            <AppIcon icon={Icons.ship} size={16} />
-          </div>
-
-          <div className="bl-view-route-port bl-view-route-port--delivery">
-            <div className="bl-view-route-port__label">
-              <AppIcon icon={Icons.mapPin} size={14} />
-              Delivery
+            <div className="bl-view-route__connector" aria-hidden>
+              <span className="bl-view-route__track" />
+              <span className="bl-view-route__ship app-icon-inherit">
+                <AppIcon icon={Icons.ship} size={14} />
+              </span>
+              <span className="bl-view-route__track" />
+              <span className="bl-view-route__label">{t("labels.route")}</span>
             </div>
-            <Title level={4} className="bl-view-route-port__code">
-              {record.delivery}
-            </Title>
-          </div>
-        </div>
-
-        <div className="bl-summary-chips">
-          <div className="bl-summary-chip">
-            <span>
-              <span className="bl-summary-chip__label">B/L No</span>
-              <span className="bl-summary-chip__value">{record.blNo}</span>
-            </span>
-          </div>
-          <div className="bl-summary-chip">
-            <span>
-              <span className="bl-summary-chip__label">SI No</span>
-              <span className="bl-summary-chip__value">
-                {record.siNo || "—"}
+            <div className="bl-view-route__stop bl-view-route__stop--dest">
+              <span className="bl-view-route__eyebrow app-icon-inherit">
+                <AppIcon icon={Icons.mapPin} size={12} />
+                {t("labels.delivery")}
               </span>
-            </span>
+              <span className="bl-view-route__code">{dash(delivery.code)}</span>
+              {delivery.name ? <span className="bl-view-route__name">{delivery.name}</span> : null}
+            </div>
           </div>
-          <div className="bl-summary-chip">
-            <span>
-              <span className="bl-summary-chip__label">Created</span>
-              <span className="bl-summary-chip__value">
-                {record.createdDate || "—"}
-              </span>
-            </span>
-          </div>
-          <div className="bl-summary-chip">
-            <span>
-              <span className="bl-summary-chip__label">Confirmed</span>
-              <span className="bl-summary-chip__value">
-                {record.confirmedDate || "—"}
-              </span>
-            </span>
-          </div>
-        </div>
+          {/* Key references */}
+          <dl className="bl-view-facts">
+            {facts.map((fact) => (
+              <div key={fact.key} className="bl-view-fact">
+                <dt className="bl-view-fact__label">{fact.label}</dt>
+                <dd className="bl-view-fact__value">{fact.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
 
         <BlDetailsViewer
           blNo={record.blNo}
+          showRouting={false}
           activityHints={{
             createdDate: record.createdDate,
             confirmedDate: record.confirmedDate,

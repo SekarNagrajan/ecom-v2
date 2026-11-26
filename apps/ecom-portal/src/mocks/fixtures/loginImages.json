@@ -1,0 +1,23 @@
+[
+ {
+  "id": 5,
+  "imagename": "Im3",
+  "imagepath": "/bgimage/Im3.jpg",
+  "displayorder": 3,
+  "status": "A"
+ },
+ {
+  "id": 4,
+  "imagename": "image2",
+  "imagepath": "/Ecommaster//bgimage/image2.jpg",
+  "displayorder": 2,
+  "status": "A"
+ },
+ {
+  "id": 1,
+  "imagename": "image1",
+  "imagepath": "/bgimage/image1.jpg",
+  "displayorder": 1,
+  "status": "A"
+ }
+]

@@ -1,44 +1,27 @@
-// Modified by Sekar Nagarajan (2026-08-28 15:09)
+// Modified by Sekar Nagarajan (2026-11-16 16:37) — primary route connector; drop duplicate SOC fact
 import { AppButton } from "@solverminds/shared-ui";
-import { Empty, Space, Spin, Tag, Tooltip, Typography } from "antd";
+import { Spin, Tooltip, Typography } from "antd";
+import type { TFunction } from "i18next";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
-import type { SurchargeDTO } from "../types/rates.types";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
+import type { CombinedRateItem } from "../types/rates.types";
 import type { RateSearchMode } from "./RateSearchFilter";
+import { rateTypeLabel } from "./list/rate-list-cells";
+
+export type { CombinedRateItem } from "../types/rates.types";
 
 const { Text } = Typography;
 
-export interface CombinedRateItem {
-  id: string;
-  type: "TARIFF" | "CONTRACT" | "SURCHARGE" | "QUOTE";
-  title: string;
-  code: string;
-  originPort: string;
-  originPortName: string;
-  deliveryPort: string;
-  deliveryPortName: string;
-  eqpType: string;
-  commodity: string;
-  commodityName: string;
-  currency: string;
-  baseAmount: number;
-  surchargeAmount: number;
-  totalEstimatedAmount: number;
-  effectiveFrom: string;
-  effectiveTo: string;
-  isRecommended?: boolean;
-  surcharges?: SurchargeDTO[];
-  soc?: string;
-  nor?: boolean;
-  carrTerms?: string;
-  transService?: string;
-  quoteStatus?: string;
-}
+type RatesTranslateFn = TFunction<"rates">;
 
 interface RateCardListProps {
   rates: CombinedRateItem[];
   isLoading?: boolean;
+  /** False until the user clicks Search — show idle empty state. */
+  hasSearched?: boolean;
   searchMode?: RateSearchMode;
   onBookNow: (rate: CombinedRateItem) => void;
   onViewSurcharges: (rate: CombinedRateItem) => void;
@@ -48,292 +31,480 @@ interface RateCardListProps {
 
 interface RateCardProps {
   item: CombinedRateItem;
+  t: RatesTranslateFn;
+  defaultExpanded?: boolean;
   onBookNow: (rate: CombinedRateItem) => void;
   onViewSurcharges: (rate: CombinedRateItem) => void;
   onShareRate: (rate: CombinedRateItem) => void;
 }
 
-function typeLabel(type: CombinedRateItem["type"]): string {
+function connectorTypeLabel(type: CombinedRateItem["type"], t: RatesTranslateFn): string {
   switch (type) {
-    case "CONTRACT":
-      return "Contract";
     case "SURCHARGE":
-      return "Surcharge";
+      return t("rateCard.connector.accessorial");
     case "QUOTE":
-      return "Quote";
-    default:
-      return "Tariff";
-  }
-}
-
-function typeTagColor(type: CombinedRateItem["type"]): string {
-  switch (type) {
+      return t("rateCard.connector.quotedAmount");
+    case "TARIFF":
     case "CONTRACT":
-      return "purple";
-    case "SURCHARGE":
-      return "orange";
-    case "QUOTE":
-      return "geekblue";
-    default:
-      return "blue";
+      return t("rateCard.connector.allInEstimate");
+    default: {
+      const _exhaustive: never = type;
+      return _exhaustive;
+    }
   }
 }
 
 function portCity(name: string): string {
-  return name.replace(/\s*\([^)]*\)\s*/g, "").trim();
+  return name
+    .replace(/\s*\([^)]*\)\s*/g, "")
+    .replace(/,/g, ", ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function portCountry(code: string, t: RatesTranslateFn): string | undefined {
+  const label = t(`options.ports.${code}`, { defaultValue: "" });
+  if (!label) return undefined;
+  const afterDash = label.includes(" - ") ? label.split(" - ").slice(1).join(" - ") : label;
+  const parts = afterDash
+    .split(",")
+    .map((part) => part.trim())
+    .filter(Boolean);
+  if (parts.length < 2) return undefined;
+  return parts[parts.length - 1];
+}
+
+/** Secondary place line under the port code (city [, country]). */
+function routePlaceLine(portName: string, country?: string): string {
+  const city = portCity(portName);
+  if (!city) return country || "—";
+  if (!country) return city;
+  if (city.toLowerCase().includes(country.toLowerCase())) return city;
+  return `${city}, ${country}`;
+}
+
+interface RateRouteLaneProps {
+  originCode: string;
+  originPlace: string;
+  destCode: string;
+  destPlace: string;
+  compact?: boolean;
+}
+
+/** Origin → delivery lane: bold code, place below, ship on a connecting rail. */
+function RateRouteLane({
+  originCode,
+  originPlace,
+  destCode,
+  destPlace,
+  compact = false,
+}: RateRouteLaneProps) {
+  return (
+    <div className={compact ? "rates-card__summary-route" : "rates-card__route-panel"}>
+      <div className="rates-card__endpoint">
+        <Text strong className="rates-card__port-code">
+          {originCode || "—"}
+        </Text>
+        <Text type="secondary" className="rates-card__place" ellipsis={{ tooltip: originPlace }}>
+          {originPlace}
+        </Text>
+      </div>
+
+      <div className="rates-card__route-connector" aria-hidden>
+        <span className="rates-card__route-track" />
+        <span className="rates-card__route-ship app-icon-inherit">
+          <AppIcon icon={Icons.ship} size={compact ? 12 : 14} />
+        </span>
+        <span className="rates-card__route-track" />
+      </div>
+
+      <div className="rates-card__endpoint rates-card__endpoint--dest">
+        <Text strong className="rates-card__port-code">
+          {destCode || "—"}
+        </Text>
+        <Text type="secondary" className="rates-card__place" ellipsis={{ tooltip: destPlace }}>
+          {destPlace}
+        </Text>
+      </div>
+    </div>
+  );
+}
+
+function formatMoney(currency: string, amount: number): string {
+  return `${currency} ${amount.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`;
+}
+
+function RateFieldChip({ label, value }: { label: string; value: string }) {
+  return (
+    <span className="rates-card__field-chip">
+      <span className="rates-card__field-chip-label">{label} :</span>
+      <span className="rates-card__field-chip-value">{value}</span>
+    </span>
+  );
+}
+
+function RateFlagChip({ label, tip }: { label: string; tip?: string }) {
+  const chip = (
+    <span className="rates-card__flag-chip">
+      <span className="rates-card__flag-chip-text">{label}</span>
+      <span className="rates-card__flag-chip-icon app-icon-inherit">
+        <AppIcon icon={Icons.info} size={12} />
+      </span>
+    </span>
+  );
+  return tip ? <Tooltip title={tip}>{chip}</Tooltip> : chip;
+}
+
+function serviceValue(transService?: string): string | undefined {
+  const raw = transService?.trim();
+  if (!raw) return undefined;
+  return raw.replace(/^T-Svc\s+/i, "").trim() || raw;
+}
+
+function RateMetaTags({
+  item,
+  t,
+  compact = false,
+}: {
+  item: CombinedRateItem;
+  t: RatesTranslateFn;
+  compact?: boolean;
+}) {
+  const socActive = item.soc && item.soc !== "No" && item.soc.trim() !== "" ? item.soc : undefined;
+  const service = serviceValue(item.transService);
+  const commodity = item.commodity || item.commodityName;
+
+  return (
+    <>
+      {!compact ? (
+        <span className="rates-card__meta-code" title={item.title}>
+          {item.code}
+        </span>
+      ) : null}
+      {!compact && item.isRecommended ? (
+        <span className="rates-card__lowest-badge">
+          <span className="rates-card__lowest-badge-icon app-icon-inherit">
+            <AppIcon icon={Icons.badgeCheck} size={12} />
+          </span>
+          {t("rateCard.lowestPrice")}
+        </span>
+      ) : null}
+      {item.eqpType ? (
+        <RateFieldChip label={t("rateCard.chipEquipment")} value={item.eqpType} />
+      ) : null}
+      {service ? <RateFieldChip label={t("rateCard.chipService")} value={service} /> : null}
+      {compact && commodity ? (
+        <RateFieldChip label={t("rateCard.commodity")} value={commodity} />
+      ) : null}
+      {!compact && socActive ? (
+        <RateFlagChip
+          label={t("contract.columns.soc")}
+          tip={t("rateCard.socFlagTip", { value: socActive })}
+        />
+      ) : null}
+      {!compact && item.nor ? (
+        <RateFlagChip label={t("surchargeView.columns.nor")} tip={t("rateCard.norApplicable")} />
+      ) : null}
+      {!compact && item.carrTerms ? (
+        <RateFieldChip label={t("rateCard.chipTerms")} value={item.carrTerms} />
+      ) : null}
+      {!compact && item.quoteStatus ? (
+        <RateFieldChip
+          label={t("rateCard.chipStatus")}
+          value={item.quoteStatus.replace(/_/g, " ")}
+        />
+      ) : null}
+    </>
+  );
 }
 
 function RateCard({
   item,
+  t,
+  defaultExpanded = false,
   onBookNow,
   onViewSurcharges,
   onShareRate,
 }: RateCardProps) {
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(defaultExpanded);
   const hasSurcharges = Boolean(item.surcharges && item.surcharges.length > 0);
   const showBook = item.type === "TARIFF" || item.type === "CONTRACT";
   const showSurcharges =
     item.type === "TARIFF" ||
     item.type === "CONTRACT" ||
     (item.type === "SURCHARGE" && hasSurcharges);
-  const socLabel =
-    item.soc && item.soc !== "No" && item.soc.trim() !== ""
-      ? item.soc
-      : undefined;
+  const showBreakdownHint = item.type === "TARIFF" || item.type === "CONTRACT";
 
+  const originCountry = portCountry(item.originPort, t);
+  const destinationCountry = portCountry(item.deliveryPort, t);
+  const originPlace = routePlaceLine(item.originPortName, originCountry);
+  const destinationPlace = routePlaceLine(item.deliveryPortName, destinationCountry);
   return (
     <article
       className={[
         "rates-card",
+        expanded ? "rates-card--expanded" : "rates-card--collapsed",
         item.isRecommended ? "rates-card--recommended" : undefined,
       ]
         .filter(Boolean)
         .join(" ")}
     >
-      <div className="rates-card__main">
-        <div className="rates-card__content">
-          <div className="rates-card__meta">
-            {item.isRecommended ? (
-              <Tag color="gold">Lowest Published Freight</Tag>
-            ) : null}
-            <Tag color={typeTagColor(item.type)}>
-              {item.code} — {item.title}
-            </Tag>
-            <Tag color="cyan">{item.eqpType}</Tag>
-            {socLabel ? <Tag color="magenta">SOC {socLabel}</Tag> : null}
-            {item.nor ? <Tag color="volcano">NOR</Tag> : null}
-            {item.transService ? (
-              <Tag color="processing">T-Svc {item.transService}</Tag>
-            ) : null}
-            {item.carrTerms ? <Tag>{item.carrTerms}</Tag> : null}
-            {item.quoteStatus ? (
-              <Tag color="blue">{item.quoteStatus.replace(/_/g, " ")}</Tag>
-            ) : null}
-            <Text type="secondary" className="rates-card__ref">
-              Ref: {item.id}
+      <div
+        className={[
+          "rates-card__panel",
+          "rates-card__panel--summary",
+          expanded ? "rates-card__panel--closed" : "rates-card__panel--open",
+        ].join(" ")}
+        aria-hidden={expanded}
+      >
+        <div className="rates-card__panel-inner">
+          <div className="rates-card__summary">
+            <RateRouteLane
+              compact
+              originCode={item.originPort}
+              originPlace={originPlace}
+              destCode={item.deliveryPort}
+              destPlace={destinationPlace}
+            />
+
+            <div className="rates-card__summary-price">
+              <Text strong className="rates-card__price-value">
+                {formatMoney(item.currency, item.totalEstimatedAmount)}
+              </Text>
+              <Text type="secondary" className="rates-card__price-label">
+                {connectorTypeLabel(item.type, t)}
+              </Text>
+            </div>
+
+            <div className="rates-card__summary-tags">
+              <RateMetaTags item={item} t={t} compact />
+            </div>
+
+            <Text type="secondary" className="rates-card__summary-valid">
+              {t("rateCard.validRange", {
+                from: item.effectiveFrom,
+                to: item.effectiveTo,
+              })}
             </Text>
-          </div>
 
-          <div className="rates-card__route">
-            <div className="rates-card__endpoint rates-card__endpoint--origin">
-              <Text className="rates-card__place">
-                {portCity(item.originPortName).toUpperCase()},{" "}
-                <span className="rates-card__port-code">{item.originPort}</span>
-              </Text>
-              <div className="rates-card__etime">
-                <Tag color="blue">{item.commodityName || "Commodity"}</Tag>
-              </div>
-              <Text className="rates-card__terminal">
-                Commodity: {item.commodity || "—"}
-              </Text>
-            </div>
-
-            <div className="rates-card__connector">
-              <div className="rates-card__connector-line">
-                <span className="rates-card__connector-dot" />
-                <span className="rates-card__connector-rail" />
-                <span className="rates-card__connector-pill">
-                  {item.currency} ${item.totalEstimatedAmount.toFixed(2)}
-                </span>
-                <span className="rates-card__connector-rail" />
-                <span className="rates-card__connector-dot" />
-              </div>
-              <Text className="rates-card__connector-type">
-                {item.type === "SURCHARGE"
-                  ? "Accessorial"
-                  : item.type === "QUOTE"
-                  ? "Quoted amount"
-                  : "All-in estimate"}
-              </Text>
-              {item.type !== "SURCHARGE" && item.type !== "QUOTE" ? (
-                <Text className="rates-card__connector-hint">
-                  OFR ${item.baseAmount.toFixed(2)} + surcharges $
-                  {item.surchargeAmount.toFixed(2)}
-                </Text>
+            <div className="rates-card__summary-actions">
+              {showBook ? (
+                <AppButton
+                  type="primary"
+                  size="small"
+                  tabIndex={expanded ? -1 : undefined}
+                  onClick={() => onBookNow(item)}
+                >
+                  {t("actions.book")}
+                </AppButton>
               ) : null}
-            </div>
-
-            <div className="rates-card__endpoint rates-card__endpoint--dest">
-              <Text className="rates-card__place">
-                {portCity(item.deliveryPortName).toUpperCase()},{" "}
-                <span className="rates-card__port-code">
-                  {item.deliveryPort}
-                </span>
-              </Text>
-              <div className="rates-card__etime">
-                <Tag color="green">
-                  OFR {item.currency} ${item.baseAmount.toFixed(2)}
-                </Tag>
-                {item.surchargeAmount > 0 ? (
-                  <Tag color="orange">
-                    + {item.currency} ${item.surchargeAmount.toFixed(2)}
-                  </Tag>
-                ) : null}
-              </div>
-              <Text className="rates-card__terminal">
-                Valid {item.effectiveFrom} → {item.effectiveTo}
-              </Text>
-            </div>
-          </div>
-        </div>
-
-        <div className="rates-card__actions">
-          {showBook ? (
-            <AppButton
-              type="primary"
-              icon={<AppIcon icon={Icons.notebook} size={16} tone="create" />}
-              onClick={() => onBookNow(item)}
-              block
-            >
-              Book at This Rate
-            </AppButton>
-          ) : null}
-          {showSurcharges ? (
-            <AppButton
-              icon={<AppIcon icon={Icons.tag} size={16} tone="view" />}
-              onClick={() => onViewSurcharges(item)}
-              block
-            >
-              View Surcharges
-            </AppButton>
-          ) : null}
-          {/* <AppButton
-            type="link"
-            icon={
-              expanded ? (
-                <AppIcon icon={Icons.chevronUp} size={14} />
-              ) : (
-                <AppIcon icon={Icons.chevronDown} size={14} />
-              )
-            }
-            onClick={() => setExpanded(!expanded)}
-            block
-            disabled={!hasSurcharges && item.type !== "QUOTE"}
-          >
-            {expanded ? "Close Details" : "Show Details"}
-          </AppButton> */}
-          <div className="rates-card__actions-secondary">
-            <Tooltip title="Share Rate Quote">
               <AppButton
-                size="small"
-                icon={<AppIcon icon={Icons.mail} size={14} tone="navigate" />}
-                onClick={() => onShareRate(item)}
-              >
-                Share
-              </AppButton>
-            </Tooltip>
+                type="text"
+                className="rates-card__expand-toggle"
+                aria-expanded={false}
+                aria-label={t("rateCard.expandDetails")}
+                tabIndex={expanded ? -1 : undefined}
+                onClick={() => setExpanded(true)}
+                icon={
+                  <span className="app-icon-inherit">
+                    <AppIcon icon={Icons.chevronDown} size={18} />
+                  </span>
+                }
+              />
+            </div>
           </div>
         </div>
       </div>
 
-      {expanded && hasSurcharges ? (
-        <div className="rates-card__surcharges">
-          <Text strong>Itemized Surcharge Breakdown</Text>
-          {item.surcharges!.map((sur) => (
-            <div key={sur.id} className="rates-card__surcharge-row">
-              <div>
-                <Tag color="purple">{sur.chargeCode}</Tag>{" "}
-                <Text strong>{sur.chargeName}</Text>
-                {sur.isNor ? <Tag color="volcano">NOR</Tag> : null}
-              </div>
-              <Text className="text-amount-error rates-amount">
-                {sur.currency} ${sur.amount.toFixed(2)}
+      <div
+        className={[
+          "rates-card__panel",
+          "rates-card__panel--detail",
+          expanded ? "rates-card__panel--open" : "rates-card__panel--closed",
+        ].join(" ")}
+        aria-hidden={!expanded}
+      >
+        <div className="rates-card__panel-inner">
+          <div className="rates-card__top">
+            <div className="rates-card__meta">
+              <RateMetaTags item={item} t={t} />
+            </div>
+            <div className="rates-card__top-end">
+              <Text type="secondary" className="rates-card__ref">
+                {t("rateCard.ref", { id: item.id })}
               </Text>
+              <AppButton
+                type="text"
+                className="rates-card__expand-toggle rates-card__expand-toggle--open"
+                aria-expanded
+                aria-label={t("rateCard.collapseDetails")}
+                tabIndex={expanded ? undefined : -1}
+                onClick={() => setExpanded(false)}
+                icon={
+                  <span className="app-icon-inherit">
+                    <AppIcon icon={Icons.chevronUp} size={18} />
+                  </span>
+                }
+              />
             </div>
-          ))}
-        </div>
-      ) : null}
+          </div>
 
-      <div className="rates-card__footer">
-        <div className="rates-card__validity">
-          <Tooltip title="Rate Valid From Date">
-            <div className="rates-card__validity-chip">
-              <span className="rates-card__validity-icon rates-card__validity-icon--from app-icon-inherit">
-                <AppIcon icon={Icons.calendar} size={14} />
-              </span>
-              <span>
-                <span className="rates-card__validity-label">Valid From</span>
-                <span className="rates-card__validity-value">
-                  {item.effectiveFrom}
-                </span>
-              </span>
+          <div className="rates-card__body">
+            <RateRouteLane
+              originCode={item.originPort}
+              originPlace={originPlace}
+              destCode={item.deliveryPort}
+              destPlace={destinationPlace}
+            />
+
+            <div className="rates-card__price-panel">
+              <Text type="secondary" className="rates-card__price-label">
+                {connectorTypeLabel(item.type, t)}
+              </Text>
+              <Text strong className="rates-card__price-value rates-card__price-value--lg">
+                {formatMoney(item.currency, item.totalEstimatedAmount)}
+              </Text>
+              {showBreakdownHint ? (
+                <Text type="secondary" className="rates-card__price-breakdown">
+                  <span className="rates-card__price-ofr">
+                    OFR {formatMoney(item.currency, item.baseAmount)}
+                  </span>
+                  {item.surchargeAmount > 0 ? (
+                    <>
+                      {" + "}
+                      <span className="rates-card__price-surcharge">
+                        Surcharges {formatMoney(item.currency, item.surchargeAmount)}
+                      </span>
+                    </>
+                  ) : null}
+                </Text>
+              ) : null}
             </div>
-          </Tooltip>
-          <Tooltip title="Rate Valid To Date">
-            <div className="rates-card__validity-chip">
-              <span className="rates-card__validity-icon rates-card__validity-icon--to app-icon-inherit">
-                <AppIcon icon={Icons.clock} size={14} />
-              </span>
-              <span>
-                <span className="rates-card__validity-label">Valid To</span>
-                <span className="rates-card__validity-value">
-                  {item.effectiveTo}
+
+            <div className="rates-card__facts-panel">
+              <div className="rates-card__fact">
+                <span className="rates-card__fact-icon app-icon-inherit">
+                  <AppIcon icon={Icons.boxes} size={13} />
                 </span>
-              </span>
+                <div className="rates-card__fact-copy">
+                  <Text type="secondary" className="rates-card__fact-label">
+                    {t("rateCard.commodity")}
+                  </Text>
+                  <Text
+                    strong
+                    className="rates-card__fact-value"
+                    ellipsis={{
+                      tooltip:
+                        item.commodityName || item.commodity || t("rateCard.commodityFallback"),
+                    }}
+                  >
+                    {item.commodity || item.commodityName || t("rateCard.commodityFallback")}
+                  </Text>
+                </div>
+              </div>
+              <div className="rates-card__fact">
+                <span className="rates-card__fact-icon app-icon-inherit">
+                  <AppIcon icon={Icons.calendar} size={13} />
+                </span>
+                <div className="rates-card__fact-copy">
+                  <Text type="secondary" className="rates-card__fact-label">
+                    {t("rateCard.validFrom")}
+                  </Text>
+                  <Text strong className="rates-card__fact-value">
+                    {item.effectiveFrom}
+                  </Text>
+                </div>
+              </div>
+              <div className="rates-card__fact">
+                <span className="rates-card__fact-icon app-icon-inherit">
+                  <AppIcon icon={Icons.clock} size={13} />
+                </span>
+                <div className="rates-card__fact-copy">
+                  <Text type="secondary" className="rates-card__fact-label">
+                    {t("rateCard.validTo")}
+                  </Text>
+                  <Text strong className="rates-card__fact-value">
+                    {item.effectiveTo}
+                  </Text>
+                </div>
+              </div>
+              <div className="rates-card__fact">
+                <span className="rates-card__fact-icon app-icon-inherit">
+                  <AppIcon
+                    icon={
+                      item.type === "CONTRACT"
+                        ? Icons.shieldCheck
+                        : item.type === "QUOTE"
+                          ? Icons.zap
+                          : Icons.tag
+                    }
+                    size={13}
+                  />
+                </span>
+                <div className="rates-card__fact-copy">
+                  <Text type="secondary" className="rates-card__fact-label">
+                    {t("rateCard.rateType")}
+                  </Text>
+                  <Text strong className="rates-card__fact-value">
+                    {rateTypeLabel(item.type, t)}
+                  </Text>
+                </div>
+              </div>
+              {item.nor ? (
+                <div className="rates-card__fact">
+                  <span className="rates-card__fact-icon app-icon-inherit">
+                    <AppIcon icon={Icons.alertTriangle} size={13} />
+                  </span>
+                  <div className="rates-card__fact-copy">
+                    <Text type="secondary" className="rates-card__fact-label">
+                      NOR
+                    </Text>
+                    <Text strong className="rates-card__fact-value">
+                      Yes
+                    </Text>
+                  </div>
+                </div>
+              ) : null}
             </div>
-          </Tooltip>
-          <Tooltip title={`${typeLabel(item.type)} rate`}>
-            <div className="rates-card__validity-chip">
-              <span
-                className={[
-                  "rates-card__validity-icon",
-                  item.type === "CONTRACT"
-                    ? "rates-card__validity-icon--contract"
-                    : "rates-card__validity-icon--tariff",
-                  "app-icon-inherit",
-                ].join(" ")}
+
+            <div className="rates-card__actions">
+              {showBook ? (
+                <AppButton
+                  type="primary"
+                  size="small"
+                  tabIndex={expanded ? undefined : -1}
+                  onClick={() => onBookNow(item)}
+                  block
+                >
+                  {t("actions.bookAtThisRate")}
+                </AppButton>
+              ) : null}
+              {showSurcharges ? (
+                <AppButton
+                  size="small"
+                  className="rates-card__actions-button rates-card__actions-button--surcharge"
+                  tabIndex={expanded ? undefined : -1}
+                  onClick={() => onViewSurcharges(item)}
+                  block
+                >
+                  {t("actions.viewSurcharges")}
+                </AppButton>
+              ) : null}
+
+              <AppButton
+                size="small"
+                block
+                tabIndex={expanded ? undefined : -1}
+                icon={<AppIcon icon={Icons.mail} size={14} tone="navigate" />}
+                onClick={() => onShareRate(item)}
               >
-                <AppIcon
-                  icon={
-                    item.type === "CONTRACT"
-                      ? Icons.shieldCheck
-                      : item.type === "QUOTE"
-                      ? Icons.zap
-                      : Icons.tag
-                  }
-                  size={14}
-                />
-              </span>
-              <span>
-                <span className="rates-card__validity-label">Rate Type</span>
-                <span className="rates-card__validity-value">
-                  {typeLabel(item.type)}
-                </span>
-              </span>
+                {t("actions.share")}
+              </AppButton>
             </div>
-          </Tooltip>
-          {socLabel ? (
-            <div className="rates-card__validity-chip">
-              <span className="rates-card__validity-label">SOC</span>
-              <span className="rates-card__validity-value">{socLabel}</span>
-            </div>
-          ) : null}
-          {item.nor ? (
-            <div className="rates-card__validity-chip">
-              <span className="rates-card__validity-label">NOR</span>
-              <span className="rates-card__validity-value">Yes</span>
-            </div>
-          ) : null}
+          </div>
         </div>
       </div>
     </article>
@@ -343,12 +514,15 @@ function RateCard({
 export function RateCardList({
   rates,
   isLoading,
+  hasSearched = true,
   searchMode = "PUBLISHED_TARIFF",
   onBookNow,
   onViewSurcharges,
   onShareRate,
   onRequestQuote,
 }: RateCardListProps) {
+  const { t } = useTranslation(["rates", "common", "modules"]);
+
   const allowRfqEmpty =
     searchMode === "PUBLISHED_TARIFF" ||
     searchMode === "SERVICE_CONTRACTS" ||
@@ -359,34 +533,47 @@ export function RateCardList({
       <div className="rates-empty">
         <Spin size="medium" />
         <Text type="secondary" className="rates-empty__text">
-          Searching freight rates…
+          {t("rateCard.searching")}
         </Text>
       </div>
     );
   }
 
-  if (rates.length === 0) {
+  if (!hasSearched) {
     return (
       <div className="rates-empty">
-        <Empty
-          image={Empty.PRESENTED_IMAGE_SIMPLE}
-          description={
-            <Space direction="vertical" size={8}>
-              <Text strong>No rates found</Text>
-              <Text type="secondary">
-                Try adjusting your ports, equipment, or commodity filters.
-              </Text>
-              {allowRfqEmpty && onRequestQuote ? (
-                <AppButton
-                  type="primary"
-                  icon={<AppIcon icon={Icons.zap} size={16} />}
-                  onClick={onRequestQuote}
-                >
-                  Request for Quote
-                </AppButton>
-              ) : null}
-            </Space>
-          }
+        <ModuleEmptyState
+          variant="blank"
+          title={t("empty.searchTitle")}
+          message={t("empty.searchMessageCard")}
+          artSize="md"
+        />
+      </div>
+    );
+  }
+
+  if (rates.length === 0) {
+    const actions =
+      allowRfqEmpty && onRequestQuote
+        ? [
+            {
+              key: "request-quote",
+              label: t("actions.requestForQuote"),
+              type: "primary" as const,
+              icon: <AppIcon icon={Icons.zap} size={16} />,
+              onClick: onRequestQuote,
+            },
+          ]
+        : undefined;
+
+    return (
+      <div className="rates-empty">
+        <ModuleEmptyState
+          variant="filtered"
+          title={t("empty.noResultsTitle")}
+          message={t("empty.noResultsMessageCard")}
+          actions={actions}
+          artSize="md"
         />
       </div>
     );
@@ -398,6 +585,8 @@ export function RateCardList({
         <RateCard
           key={item.id}
           item={item}
+          t={t}
+          defaultExpanded
           onBookNow={onBookNow}
           onViewSurcharges={onViewSurcharges}
           onShareRate={onShareRate}

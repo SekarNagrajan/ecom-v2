@@ -1,13 +1,15 @@
-// Created by Sekar Nagarajan (2026-08-28 00:45)
+// Modified by Sekar Nagarajan (2026-09-29 16:55)
 import { AppButton } from "@solverminds/shared-ui";
 import { Typography } from "antd";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import type { BookingCustomerOption } from "../../booking/api/booking.api";
 import { PartyEditDrawer } from "../../booking/components/party-edit-drawer";
 import {
-  SI_PARTY_ROLE_LABEL,
+  getSiPartyRoleLabel,
+  getSiPartyRoleOptionLabel,
   SI_PARTY_ROLE_OPTIONS,
   type SiPartyCardData,
   type SiPartyRoleKey,
@@ -18,6 +20,7 @@ const { Text } = Typography;
 interface SiPartyEditDrawerProps {
   open: boolean;
   roleKey: SiPartyRoleKey | null;
+  title?: string;
   value: SiPartyCardData;
   onChange: (next: SiPartyCardData) => void;
   onSave: () => void;
@@ -27,16 +30,24 @@ interface SiPartyEditDrawerProps {
 export function SiPartyEditDrawer({
   open,
   roleKey,
+  title,
   value,
   onChange,
   onSave,
   onClose,
 }: SiPartyEditDrawerProps) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
+  const resolvedTitle =
+    title ??
+    (roleKey
+      ? t("parties.editPartyRole", { role: getSiPartyRoleLabel(roleKey, t) })
+      : t("parties.editParty"));
+
   return (
     <PartyEditDrawer
       open={open}
       roleKey={null}
-      title={roleKey ? `Edit ${SI_PARTY_ROLE_LABEL[roleKey]}` : "Edit Party"}
+      title={resolvedTitle}
       value={value}
       onChange={(next) => onChange({ ...value, ...next })}
       onSave={onSave}
@@ -58,6 +69,7 @@ export function SiRoleAssignPanel({
   onAssign,
   onClear,
 }: SiRoleAssignPanelProps) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
   const [selected, setSelected] = useState<Record<string, boolean>>({});
 
   const selectedCount = SI_PARTY_ROLE_OPTIONS.filter(
@@ -106,7 +118,7 @@ export function SiRoleAssignPanel({
       </div>
 
       <Text type="secondary" className="booking-party-role-panel__hint">
-        Select roles to assign this customer, then click Add Selected.
+        {t("parties.assignHint")}
       </Text>
 
       <div className="booking-party-role-chips">
@@ -132,9 +144,9 @@ export function SiRoleAssignPanel({
               ) : (
                 <AppIcon icon={Icons.plus} size={14} />
               )}
-              <span>{role.label}</span>
+              <span>{getSiPartyRoleOptionLabel(role.key, t)}</span>
               {already ? (
-                <span className="booking-party-role-chip__tag">Assigned</span>
+                <span className="booking-party-role-chip__tag">{t("parties.assigned")}</span>
               ) : null}
             </button>
           );
@@ -148,14 +160,16 @@ export function SiRoleAssignPanel({
             onClear();
           }}
         >
-          Cancel
+          {t("common:actions.cancel")}
         </AppButton>
         <AppButton
           icon={<AppIcon icon={Icons.userPlus} size={16} tone="view" />}
           onClick={handleAssign}
           disabled={selectedCount === 0}
         >
-          Add Selected{selectedCount > 0 ? ` (${selectedCount})` : ""}
+          {selectedCount > 0
+            ? t("actions.addSelectedCount", { count: selectedCount })
+            : t("actions.addSelected")}
         </AppButton>
       </div>
     </div>

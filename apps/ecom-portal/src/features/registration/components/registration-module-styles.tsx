@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-27 22:15)
+// Modified by Sekar Nagarajan (2026-09-15 10:40)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -15,8 +15,8 @@ export function RegistrationModuleStyles() {
         flex: 1;
         display: flex;
         flex-direction: column;
+        justify-content: flex-start;
         width: 100%;
-        height: 100%;
         min-height: 0;
         overflow: hidden;
       }
@@ -31,19 +31,20 @@ export function RegistrationModuleStyles() {
         border: 1px solid ${token.colorPrimary};
         display: flex;
         flex-direction: column;
-        flex: 1;
+        flex: 1 1 auto;
+        width: 100%;
         min-height: 0;
         overflow: hidden;
       }
       .reg-page-card > .ant-card-body {
         display: flex;
         flex-direction: column;
-        flex: 1;
+        flex: 1 1 auto;
         min-height: 0;
         overflow: hidden;
         border: none;
         border-radius: 0;
-        padding: ${token.paddingLG}px ${token.paddingXL}px;
+        padding: ${token.paddingMD}px ${token.paddingXL}px;
       }
       .reg-page__title {
         margin: 0;
@@ -51,7 +52,7 @@ export function RegistrationModuleStyles() {
         font-size: ${token.fontSizeHeading4}px;
       }
       .reg-page__body {
-        flex: 1;
+        flex: 1 1 auto;
         min-height: 0;
         overflow: hidden;
         display: flex;
@@ -67,26 +68,33 @@ export function RegistrationModuleStyles() {
         flex-shrink: 0;
       }
       .reg-form {
-        flex: 1;
+        flex: 1 1 auto;
         display: flex;
         flex-direction: column;
         min-height: 0;
         overflow: hidden;
+        gap: ${token.marginSM}px;
       }
+      /* Form fields scroll here; footer stays pinned below (avoids Previous over phone fields) */
       .reg-form__scroll {
-        flex: 1;
+        flex: 1 1 auto;
         min-height: 0;
-        overflow-y: auto;
         overflow-x: hidden;
+        overflow-y: auto;
         background: ${token.colorBgContainer};
         border-radius: ${token.borderRadiusLG}px;
-        padding-right: ${token.paddingSM}px;
+        padding-right: ${token.paddingXXS}px;
       }
       .reg-page .form-step-footer {
         flex-shrink: 0;
+        margin-top: 0;
+        padding: ${token.paddingSM}px 0 0;
+        background: ${token.colorBgContainer};
+        border-top: 1px solid ${token.colorBorderSecondary};
+        z-index: 1;
       }
       .reg-step-body {
-        padding: ${token.paddingMD}px 0;
+        padding: ${token.paddingSM}px 0 0;
       }
       .reg-step-body .ant-row {
         width: 100%;
@@ -105,7 +113,7 @@ export function RegistrationModuleStyles() {
         min-width: 0;
       }
       .reg-success {
-        flex: 1;
+        flex: 1 1 auto;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -123,6 +131,11 @@ export function RegistrationModuleStyles() {
       .reg-terms-box__para {
         display: block;
         margin-bottom: ${token.marginSM}px;
+      }
+      .reg-terms-box__para a,
+      .reg-step-body .form-field-label a {
+        color: ${token.colorPrimary};
+        text-decoration: underline;
       }
       .reg-upload-dragger.ant-upload-wrapper .ant-upload-drag {
         padding: ${token.paddingXL}px 0;
@@ -203,24 +216,6 @@ export function RegistrationModuleStyles() {
         }
       }
 
-      /* House custom-scroll — 6px thin thumb (agenct.md) */
-      .reg-form__scroll.custom-scroll {
-        scrollbar-width: thin;
-        scrollbar-color: ${token.colorTextQuaternary} transparent;
-      }
-      .reg-form__scroll.custom-scroll::-webkit-scrollbar {
-        width: 6px;
-      }
-      .reg-form__scroll.custom-scroll::-webkit-scrollbar-track {
-        background: transparent;
-      }
-      .reg-form__scroll.custom-scroll::-webkit-scrollbar-thumb {
-        background-color: ${token.colorTextQuaternary};
-        border-radius: 20px;
-      }
-      .reg-form__scroll.custom-scroll::-webkit-scrollbar-thumb:hover {
-        background-color: ${token.colorTextTertiary};
-      }
       .reg-terms-box.custom-scroll {
         scrollbar-width: thin;
         scrollbar-color: ${token.colorTextQuaternary} transparent;

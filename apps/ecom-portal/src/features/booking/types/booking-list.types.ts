@@ -22,13 +22,17 @@ export interface BookingListDTO {
   dgStatus: "Y" | "N";
   teusCount: number;
   submittedDate: string;
+  /** ISO date (YYYY-MM-DD) — vessel departure when known (e.g. planning calendar). */
+  etd?: string;
+  /** ISO date (YYYY-MM-DD) — vessel arrival when known. */
+  eta?: string;
 }
 
 /** Ant Design Tag color for booking list / drawer status badges. */
 export function getBookingListStatusColor(status: BookingListStatus): string {
   switch (status) {
     case "Draft":
-      return "default";
+      return "warning";
     case "Submitted":
     case "Awaiting Acceptance":
       return "processing";
@@ -41,7 +45,9 @@ export function getBookingListStatusColor(status: BookingListStatus): string {
       return "error";
     case "Rejected":
       return "error";
-    default:
-      return "default";
+    default: {
+      const _exhaustive: never = status;
+      return _exhaustive;
+    }
   }
 }

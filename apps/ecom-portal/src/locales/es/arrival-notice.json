@@ -1,0 +1,95 @@
+{
+  "subtitle": "Filtre por rango de fechas, revise el buque y los cargos, e imprima avisos de llegada.",
+  "search": {
+    "fromDate": "Fecha desde",
+    "toDate": "Fecha hasta",
+    "show": "Mostrar"
+  },
+  "columns": {
+    "anNo": "N.º AN",
+    "blNumber": "Número B/L",
+    "vessel": "Buque",
+    "voyage": "Viaje",
+    "discharge": "Descarga",
+    "terminal": "Terminal",
+    "eta": "ETA",
+    "arrival": "Llegada",
+    "lastFreeDay": "Último día libre",
+    "chargesDue": "Cargos pendientes"
+  },
+  "actions": {
+    "viewDetails": "Ver detalles",
+    "printArrivalNotice": "Imprimir aviso de llegada",
+    "downloadPdf": "Descargar PDF",
+    "copyAnNumber": "Copiar número AN",
+    "copied": "Copiado"
+  },
+  "empty": {
+    "loadErrorTitle": "No se pudieron cargar los avisos de llegada",
+    "loadErrorMessage": "La solicitud no se completó. Compruebe su conexión e inténtelo de nuevo.",
+    "noResultsTitle": "Ningún aviso de llegada coincide con su búsqueda",
+    "noResultsMessage": "No hay resultados para este rango de fechas. Amplíe las fechas o borre los filtros para ver más resultados.",
+    "noContainers": "No hay contenedores en este aviso"
+  },
+  "errors": {
+    "fetchList": "Error al obtener los avisos de llegada",
+    "fetchDetail": "Error al obtener el detalle del aviso de llegada",
+    "download": "Error al descargar el documento del aviso de llegada"
+  },
+  "toasts": {
+    "documentDownloaded": "Documento del aviso de llegada {{anNo}} descargado"
+  },
+  "status": {
+    "printed": "Impreso",
+    "notPrinted": "No impreso"
+  },
+  "validation": {
+    "fromDateRequired": "La fecha desde es obligatoria",
+    "toDateRequired": "La fecha hasta es obligatoria",
+    "fromBeforeTo": "La fecha desde debe ser anterior o igual a la fecha hasta"
+  },
+  "drawer": {
+    "blPrefix": "B/L:",
+    "routeEyebrow": "Buque a puerto",
+    "vessel": "Buque",
+    "arriving": "En llegada",
+    "discharge": "Descarga",
+    "sections": {
+      "details": "Detalles del aviso de llegada",
+      "shipment": "Detalles del envío",
+      "freeTime": "Tiempo libre",
+      "charges": "Cargos",
+      "containers": "Contenedores"
+    },
+    "labels": {
+      "anNumber": "Número AN",
+      "blNumber": "Número B/L",
+      "eta": "ETA",
+      "arrivalDate": "Fecha de llegada",
+      "chargesDue": "Cargos pendientes",
+      "printStatus": "Estado de impresión",
+      "vessel": "Buque",
+      "voyage": "Viaje",
+      "terminal": "Terminal",
+      "consignee": "Consignatario",
+      "notifyParty": "Parte a notificar",
+      "manifestIgm": "Manifiesto / IGM",
+      "freeDays": "Días libres",
+      "lastFreeDay": "Último día libre",
+      "demurrageFrom": "Demora desde"
+    },
+    "chargeColumns": {
+      "code": "Código",
+      "description": "Descripción",
+      "amount": "Importe"
+    },
+    "containerColumns": {
+      "containerNo": "N.º de contenedor",
+      "sizeType": "Tamaño/Tipo",
+      "sealNo": "N.º de precinto"
+    },
+    "alerts": {
+      "freeTimeEndsOn": "El tiempo libre termina el <date/>."
+    }
+  }
+}

@@ -1,4 +1,4 @@
-// Created by Sekar Nagarajan (2026-09-02 11:27)
+// Modified by Sekar Nagarajan (2026-09-10 23:03)
 import type { FieldErrors } from "react-hook-form";
 
 import type {
@@ -31,12 +31,7 @@ export function countContainerIssues(container: ContainerItem): number {
 
   for (const line of container.commodities ?? []) {
     if (!line.hsCode?.trim()) n += 1;
-    if (!line.packageType?.trim()) n += 1;
-    if (!line.packageQuantity || line.packageQuantity < 1) n += 1;
     if (!line.weight || line.weight < 1) n += 1;
-    if (line.volume === undefined || line.volume === null || line.volume < 0) {
-      n += 1;
-    }
     if (line.isDangerousGoods) {
       if (!line.unNumber?.trim()) n += 1;
       if (!line.dgClass?.trim()) n += 1;

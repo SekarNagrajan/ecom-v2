@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-01 16:32)
+// Modified by Sekar Nagarajan (2026-10-19 19:05)
 import { theme } from "antd";
 
 import { tokenMix } from "../../theme/utils/token-mix";
@@ -59,8 +59,179 @@ export function BlModuleStyles() {
       }
       .bl-page-header {
         flex-shrink: 0;
-        padding: ${token.paddingMD}px ${token.paddingLG}px 0;
+        padding: ${token.paddingMD}px ${token.paddingXL}px 0;
       }
+      .bl-page-header .module-screen-header__actions {
+        align-items: center;
+      }
+      .bl-page-header .module-screen-header__actions .ant-space {
+        align-items: center;
+      }
+      .bl-page-header .module-view-mode-tabs.ant-segmented {
+        flex-shrink: 0;
+      }
+      .bl-page-header .module-view-mode-tabs.ant-segmented
+        .ant-segmented-item:not(.ant-segmented-item-selected)
+        .app-icon {
+        color: ${token.colorPrimary} !important;
+      }
+      .bl-page-header .module-view-mode-tabs.ant-segmented
+        .ant-segmented-thumb {
+        background: ${token.colorPrimary} !important;
+      }
+      .bl-page-header .module-view-mode-tabs.ant-segmented
+        .ant-segmented-item-selected {
+        background: ${token.colorPrimary} !important;
+        color: ${token.colorTextLightSolid} !important;
+      }
+      .bl-page-header .module-view-mode-tabs.ant-segmented
+        .ant-segmented-item-selected
+        .app-icon {
+        color: ${token.colorTextLightSolid} !important;
+      }
+      /* Card view — compact action row icon alignment */
+      .bl-grid-wrap .list-actions-row {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: ${token.marginXXS}px;
+      }
+      .bl-grid-wrap .list-action-button.ant-btn {
+        align-items: center;
+        display: inline-flex;
+        height: ${token.controlHeightSM}px;
+        justify-content: center;
+        min-width: ${token.controlHeightSM}px;
+        padding-inline: ${token.paddingXXS}px;
+      }
+
+      /* BL record card — padding / margin for scannable layout */
+      .bl-record-card {
+        height: 100%;
+      }
+      .bl-record-card__body {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        gap: ${token.marginSM}px;
+        min-height: 0;
+        padding: ${token.paddingMD}px ${token.paddingMD}px ${token.paddingSM}px;
+      }
+      .bl-record-card__header {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXS}px;
+        min-width: 0;
+      }
+      .bl-record-card__title-row {
+        align-items: center;
+        display: flex;
+        gap: ${token.marginSM}px;
+        min-width: 0;
+      }
+      .bl-record-card__title {
+        color: ${token.colorTextHeading};
+        flex: 1;
+        font-size: ${token.fontSizeLG}px;
+        font-weight: ${token.fontWeightStrong};
+        line-height: 1.3;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .bl-record-card__status.ant-tag {
+        flex-shrink: 0;
+        margin-inline-end: 0;
+        max-width: 40%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .bl-record-card__lane {
+        align-items: center;
+        color: ${token.colorTextSecondary};
+        display: flex;
+        font-size: ${token.fontSizeSM}px;
+        gap: ${token.marginXS}px;
+        line-height: ${token.lineHeightSM};
+        min-width: 0;
+      }
+      .bl-record-card__lane > span {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .bl-record-card__lane .app-icon {
+        color: ${token.colorPrimary};
+        flex-shrink: 0;
+      }
+      .bl-record-card__meta {
+        align-content: flex-start;
+        background: ${token.colorFillTertiary};
+        border-radius: ${token.borderRadius}px;
+        display: grid;
+        flex: 1;
+        gap: ${token.marginSM}px ${token.marginMD}px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        margin-top: ${token.marginXXS}px;
+        min-height: 0;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+      }
+      .bl-record-card__meta-item {
+        align-items: flex-start;
+        display: flex;
+        gap: ${token.marginXS}px;
+        min-width: 0;
+      }
+      .bl-record-card__meta-icon {
+        color: ${token.colorPrimary};
+        display: inline-flex;
+        flex-shrink: 0;
+        line-height: 1;
+        margin-top: 2px;
+      }
+      .bl-record-card__meta-copy {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        gap: 2px;
+        min-width: 0;
+      }
+      .bl-record-card__meta-label {
+        color: ${token.colorTextTertiary};
+        font-size: ${Math.max(Number(token.fontSizeSM) - 1, 11)}px;
+        letter-spacing: 0.02em;
+        line-height: 1.2;
+        text-transform: uppercase;
+      }
+      .bl-record-card__meta-value {
+        color: ${token.colorText};
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        line-height: 1.35;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .bl-record-card__footer {
+        border-top: 1px solid ${token.colorBorderSecondary};
+        display: flex;
+        flex-shrink: 0;
+        margin-top: auto;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+      }
+      .bl-record-card__footer .list-actions-row {
+        gap: ${token.marginXS}px;
+        height: auto;
+        width: 100%;
+      }
+      .bl-record-card__footer .list-action-button.ant-btn {
+        height: ${token.controlHeightSM}px;
+        min-width: ${token.controlHeightSM}px;
+      }
+
       .bl-toolbar {
         display: flex;
         flex-wrap: wrap;
@@ -87,18 +258,19 @@ export function BlModuleStyles() {
         flex: 1;
         min-height: calc(100vh - 280px);
         width: 100%;
-        padding: 0 ${token.paddingLG}px ${token.paddingLG}px;
+        padding: 0 ${token.paddingXL}px ${token.paddingLG}px;
         display: flex;
         flex-direction: column;
-      }
-      /* Hide DataView search / view-mode / Filters & Sort toolbar card */
-      .bl-grid-wrap > .ant-flex > .ant-card:first-child {
-        display: none;
       }
       .bl-grid-wrap > * {
         flex: 1;
         min-height: 0;
         height: 100%;
+      }
+      /* MCN (and other list-only hosts) still pass renderToolbar={() => null} */
+      .bl-grid-wrap--no-toolbar > .ant-flex > .ant-card:first-child,
+      .bl-grid-wrap--no-toolbar .bl-data-view > .ant-card:first-child {
+        display: none;
       }
       .bl-grid-wrap .bl-data-view {
         min-height: calc(100vh - 280px);
@@ -148,29 +320,50 @@ export function BlModuleStyles() {
         max-height: calc(100vh - 105px);
         padding: ${token.paddingLG}px;
       }
+      /* Modified by Sekar Nagarajan (2026-10-19 18:40) — BL view drawer title, hero, route, facts */
       .bl-drawer-title {
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         gap: ${token.marginSM}px;
+        min-width: 0;
+      }
+      .bl-drawer-title__icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: ${token.controlHeight}px;
+        height: ${token.controlHeight}px;
+        border-radius: ${token.borderRadiusLG}px;
+        background: ${primaryTint8};
+        border: 1px solid ${token.colorPrimaryBorder};
+      }
+      .bl-drawer-title__copy {
+        min-width: 0;
+        flex: 1;
       }
       .bl-drawer-title__text {
         margin: 0 !important;
         line-height: 1.25 !important;
       }
       .bl-drawer-title__meta {
-        font-size: ${token.fontSizeSM}px;
-        display: block;
-        margin-top: ${token.marginXXS}px;
-      }
-      .bl-drawer-title__tags {
         display: flex;
         flex-wrap: wrap;
-        gap: ${token.marginXXS}px;
+        gap: ${token.marginXXS}px ${token.marginSM}px;
         margin-top: ${token.marginXXS}px;
+        font-size: ${token.fontSizeSM}px;
+        line-height: 1.4;
       }
-      /* Modified by Sekar Nagarajan (2026-08-31 17:25) — light Confirmed / success badge */
-      .bl-drawer-title__tags .ant-tag-success,
-      .bl-drawer-title__tags .ant-tag-filled.ant-tag-success,
+      .bl-drawer-title__meta-item {
+        white-space: nowrap;
+      }
+      .bl-drawer-title__meta-item + .bl-drawer-title__meta-item {
+        padding-left: ${token.paddingSM}px;
+        border-left: 1px solid ${token.colorBorderSecondary};
+      }
+      .bl-drawer-footer-bar.ant-drawer-footer {
+        padding: ${token.paddingSM}px ${token.paddingLG}px;
+      }
       .bl-status-tag.ant-tag-success,
       .bl-status-tag.ant-tag-filled.ant-tag-success {
         color: ${token.colorSuccessText || token.colorSuccess};
@@ -179,95 +372,158 @@ export function BlModuleStyles() {
       }
       .bl-drawer-actions {
         display: flex;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         gap: ${token.marginXS}px;
         align-items: center;
-      }
-      .bl-view-route-strip {
-        display: flex;
-        align-items: stretch;
-        gap: ${token.marginMD}px;
+        justify-content: flex-end;
         width: 100%;
+        overflow-x: auto;
       }
-      .bl-view-route-port {
-        flex: 1;
-        min-width: 0;
-        padding: ${token.paddingMD}px;
-        border-radius: ${token.borderRadiusLG}px;
-        background: ${token.colorFillAlter};
-        border: 1px solid ${token.colorBorderSecondary};
-      }
-      .bl-view-route-port--origin {
-        border-left: 4px solid ${token.colorPrimary};
-        background: linear-gradient(180deg, ${primaryTint8} 0%, ${
-      token.colorFillAlter
-    } 100%);
-      }
-      .bl-view-route-port--delivery {
-        border-left: 4px solid ${token.colorSuccess};
-        background: linear-gradient(180deg, ${successTint8} 0%, ${
-      token.colorFillAlter
-    } 100%);
-      }
-      .bl-view-route-port__label {
-        display: flex;
-        align-items: center;
-        gap: ${token.marginXXS}px;
-        font-size: ${token.fontSizeSM}px;
-        color: ${token.colorTextSecondary};
-        margin-bottom: ${token.marginXXS}px;
-      }
-      .bl-view-route-port__code {
-        margin: 0 !important;
-        word-break: break-word;
-      }
-      .bl-view-route-connector {
+      .bl-view-hero {
         display: flex;
         flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: ${token.marginXXS}px;
-        min-width: 88px;
-        padding-top: ${token.paddingLG}px;
-      }
-      .bl-view-route-connector__label {
-        font-size: ${token.fontSizeSM}px;
-        color: ${token.colorTextSecondary};
-        white-space: nowrap;
-      }
-      .bl-view-route-connector__line {
-        display: flex;
-        align-items: center;
-        gap: ${token.marginXXS}px;
+        gap: ${token.marginMD}px;
         width: 100%;
+        padding: ${token.paddingLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG + 2}px;
+        background: linear-gradient(
+          180deg,
+          ${primaryTint8} 0%,
+          ${token.colorBgContainer} 100%
+        );
       }
-      .bl-view-route-connector__track {
-        flex: 1;
-        height: ${token.lineWidth}px;
-        background: ${token.colorBorder};
-      }
-      .bl-summary-chips {
+      .bl-view-hero__status {
         display: flex;
+        align-items: center;
+        justify-content: space-between;
         flex-wrap: wrap;
-        gap: ${token.marginSM}px;
+        gap: ${token.marginSM}px ${token.marginXL}px;
       }
-      .bl-summary-chip {
+      .bl-view-hero__tags {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: ${token.marginXXS}px;
+      }
+      .bl-view-hero__tags .bl-status-tag.ant-tag {
+        margin-inline-end: 0;
+      }
+      .bl-view-route {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginMD}px;
+        width: 100%;
+        padding-top: ${token.paddingMD}px;
+        border-top: 1px solid ${token.colorBorderSecondary};
+      }
+      .bl-view-route__stop {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: ${token.marginXXS}px;
+        flex: 1 1 0;
+        min-width: 0;
+      }
+      .bl-view-route__stop--dest {
+        align-items: flex-end;
+        text-align: right;
+      }
+      .bl-view-route__eyebrow {
         display: inline-flex;
         align-items: center;
-        gap: ${token.marginXS}px;
-        padding: ${token.paddingXS}px ${token.paddingSM}px;
-        border-radius: ${token.borderRadiusLG}px;
-        background: ${token.colorFillAlter};
-        border: 1px solid ${token.colorBorderSecondary};
+        gap: ${token.marginXXS}px;
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: ${token.colorPrimary};
+        line-height: 1.2;
       }
-      .bl-summary-chip__label {
-        display: block;
+      .bl-view-route__stop--dest .bl-view-route__eyebrow {
+        color: ${token.colorSuccess};
+      }
+      .bl-view-route__code {
+        font-size: ${token.fontSizeHeading4}px;
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+        line-height: 1.2;
+        word-break: break-word;
+      }
+      .bl-view-route__name {
         font-size: ${token.fontSizeSM}px;
         color: ${token.colorTextSecondary};
+        line-height: 1.4;
+        word-break: break-word;
       }
-      .bl-summary-chip__value {
-        display: block;
+      .bl-view-route__connector {
+        position: relative;
+        display: flex;
+        align-items: center;
+        flex: 1 1 auto;
+        min-width: 120px;
+        gap: ${token.marginXS}px;
+        padding-bottom: ${token.paddingMD}px;
+      }
+      .bl-view-route__track {
+        flex: 1 1 auto;
+        height: 0;
+        border-top: ${token.lineWidthBold}px dashed ${tokenMix(token.colorPrimary, 40)};
+      }
+      .bl-view-route__ship {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: ${token.controlHeightSM}px;
+        height: ${token.controlHeightSM}px;
+        border-radius: 50%;
+        border: ${token.lineWidth}px solid ${token.colorPrimaryBorder};
+        background: ${token.colorBgContainer};
+        color: ${token.colorPrimary};
+      }
+      .bl-view-route__label {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        text-align: center;
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextTertiary};
+        white-space: nowrap;
+        line-height: 1.2;
+      }
+      .bl-view-facts {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: ${token.marginSM}px ${token.marginMD}px;
+        margin: 0;
+        padding-top: ${token.paddingMD}px;
+        border-top: 1px solid ${token.colorBorderSecondary};
+      }
+      .bl-view-fact {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+        min-width: 0;
+      }
+      .bl-view-fact__label {
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+        line-height: 1.3;
+      }
+      .bl-view-fact__value {
+        margin: 0;
+        font-size: ${token.fontSize}px;
         font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+        line-height: 1.4;
+        word-break: break-word;
+      }
+      @media (max-width: 1199px) {
+        .bl-view-facts {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
       }
       .bl-section-title {
         margin: 0 !important;
@@ -277,12 +533,20 @@ export function BlModuleStyles() {
         align-items: center;
         gap: ${token.marginXS}px;
       }
-      /* Modified by Sekar Nagarajan (2026-09-01 13:06) — section stack + side-by-side lines */
+      /* Modified by Sekar Nagarajan (2026-09-08 15:03) — airy preview stack (Booking/SI parity) */
       .bl-view-sections {
         display: flex;
         flex-direction: column;
         gap: ${token.marginLG}px;
         width: 100%;
+      }
+      .bl-view-sections--single {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginLG}px;
+      }
+      .bl-view-sections--single .booking-review__section {
+        margin: 0;
       }
       .bl-view-row-line {
         width: 100%;
@@ -637,29 +901,6 @@ export function BlModuleStyles() {
       .bl-status-tag.ant-tag {
         border-radius: ${token.borderRadiusSM}px;
       }
-      .bl-view-timeline {
-        display: flex;
-        flex-wrap: wrap;
-        gap: ${token.marginSM}px;
-        padding: ${token.paddingMD}px 0;
-      }
-      .bl-view-timeline__step {
-        padding: ${token.paddingXS}px ${token.paddingSM}px;
-        border-radius: ${token.borderRadius}px;
-        border: 1px solid ${token.colorBorderSecondary};
-        background: ${token.colorFillAlter};
-        font-size: ${token.fontSizeSM}px;
-      }
-      .bl-view-timeline__step.is-done {
-        border-color: ${token.colorSuccess};
-        background: ${successTint8};
-        color: ${token.colorSuccess};
-      }
-      .bl-view-timeline__step.is-current {
-        border-color: ${token.colorPrimary};
-        background: ${primaryTint8};
-        color: ${token.colorPrimary};
-      }
       .bl-party-block {
         display: flex;
         flex-direction: column;
@@ -743,18 +984,31 @@ export function BlModuleStyles() {
           margin-left: ${token.paddingSM}px;
           margin-right: ${token.paddingSM}px;
         }
-        .bl-view-route-strip {
-          flex-direction: column;
-        }
-        .bl-view-route-connector {
-          min-width: 0;
-          width: 100%;
-          flex-direction: row;
-          justify-content: center;
-          padding-top: 0;
-        }
         .bl-drawer-body.custom-scroll {
           padding: ${token.paddingMD}px;
+        }
+        .bl-view-hero {
+          padding: ${token.paddingMD}px;
+        }
+        .bl-view-hero__status {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .bl-view-route {
+          flex-direction: column;
+          align-items: stretch;
+          gap: ${token.marginSM}px;
+        }
+        .bl-view-route__stop--dest {
+          align-items: flex-start;
+          text-align: left;
+        }
+        .bl-view-route__connector {
+          min-width: 0;
+          width: 100%;
+        }
+        .bl-view-facts {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
         }
         .bl-view-row--2 {
           grid-template-columns: 1fr;
@@ -1343,16 +1597,67 @@ export function BlModuleStyles() {
         gap: ${token.marginXS}px;
         flex-wrap: wrap;
       }
-      /* Modified by Sekar Nagarajan (2026-09-01 17:50) — excel actions right, no card border */
+      /* Modified by Sekar Nagarajan (2026-09-16 15:12) — shared cargo Excel modal (aliases keep BL parity) */
+      .cargo-excel-import-modal.ant-modal,
+      .bl-cargo-import-modal.ant-modal {
+        width: 90vw !important;
+        max-width: 90vw;
+        top: 1vh;
+        padding-bottom: 0;
+      }
+      .cargo-excel-import-modal .ant-modal-content,
+      .bl-cargo-import-modal .ant-modal-content {
+        max-height: 84vh;
+        display: flex;
+        flex-direction: column;
+      }
+      .cargo-excel-import-modal__body,
+      .bl-cargo-import-modal__body {
+        padding: ${token.paddingMD}px !important;
+        flex: 1;
+        min-height: 0;
+        max-height: none;
+        overflow: auto;
+      }
+      .cargo-excel-import-modal__content,
+      .bl-cargo-import-modal__content {
+        display: flex;
+        flex-direction: column;
+        min-height: 60vh;
+        height: 70vh;
+      }
+      .cargo-excel-import-modal__content .booking-import-page,
+      .cargo-excel-import-modal__content > *,
+      .bl-cargo-import-modal__content .booking-import-page,
+      .bl-cargo-import-modal__content > * {
+        flex: 1;
+        min-height: 0;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-16 15:12) — excel actions right, no card border */
+      .cargo-excel-import-toolbar,
       .bl-excel-import-toolbar {
         border: none;
         margin-bottom: ${token.marginMD}px;
         margin-right: ${token.marginXXL}px;
         margin-top: ${token.marginXL}px;
       }
-      .bl-excel-import-toolbar .bl-excel-import {
+      .cargo-excel-import-toolbar .cargo-excel-import,
+      .bl-excel-import-toolbar .bl-excel-import,
+      .bl-excel-import-toolbar .cargo-excel-import {
         display: inline-flex;
         justify-content: flex-end;
+      }
+      /* Modified by Sekar Nagarajan (2026-09-15 11:10) — booking FileUploadStep parity */
+      .bl-upload-type-row {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+        margin-bottom: ${token.marginLG}px;
+        max-width: 420px;
+      }
+      .bl-upload-list {
+        margin: ${token.marginMD}px 0 0;
+        padding-inline-start: ${token.paddingLG}px;
       }
       @media (max-width: 1199px) {
         .bl-preview-fields-grid--4,
@@ -1371,6 +1676,528 @@ export function BlModuleStyles() {
         .bl-preview-fields-grid--2,
         .bl-preview-fields-grid--4,
         .bl-preview-fields-grid--6 {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+
+      /* Modified by Sekar Nagarajan (2026-10-19 14:33) — B/L view page: header summary, lifecycle stepper, actions */
+      .bl-view-actions {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: ${token.marginXS}px;
+      }
+      .bl-view-summary {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: ${token.marginMD}px ${token.marginXL}px;
+        margin-top: ${token.marginMD}px;
+        padding-top: ${token.paddingMD}px;
+        border-top: 1px solid ${token.colorBorderSecondary};
+      }
+      .bl-view-summary__meta {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: ${token.marginXS}px ${token.marginSM}px;
+        min-width: 0;
+      }
+      .bl-view-summary__meta .bl-status-tag.ant-tag {
+        margin-inline-end: ${token.marginXXS}px;
+      }
+      .bl-view-meta {
+        display: inline-flex;
+        align-items: baseline;
+        gap: ${token.marginXXS}px;
+        min-width: 0;
+        font-size: ${token.fontSizeSM}px;
+        line-height: 1.4;
+      }
+      .bl-view-meta + .bl-view-meta {
+        padding-left: ${token.paddingSM}px;
+        border-left: 1px solid ${token.colorBorderSecondary};
+      }
+      .bl-view-meta__label {
+        color: ${token.colorTextSecondary};
+        white-space: nowrap;
+      }
+      .bl-view-meta__label::after {
+        content: ":";
+      }
+      .bl-view-meta__value {
+        color: ${token.colorText};
+        font-weight: ${token.fontWeightStrong};
+        word-break: break-word;
+      }
+      .bl-status-stepper {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        flex: 1 1 auto;
+        min-width: 0;
+        max-width: 560px;
+      }
+      .bl-status-stepper__step {
+        display: flex;
+        align-items: center;
+        flex: 1 1 0;
+        min-width: 0;
+        gap: ${token.marginXS}px;
+        color: ${token.colorTextTertiary};
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+      }
+      .bl-status-stepper__step:last-child {
+        flex: 0 0 auto;
+      }
+      .bl-status-stepper__step:not(:last-child)::after {
+        content: "";
+        flex: 1 1 auto;
+        min-width: ${token.marginSM}px;
+        height: ${token.lineWidthBold}px;
+        margin: 0 ${token.marginXS}px;
+        border-radius: ${token.lineWidthBold}px;
+        background: ${token.colorBorderSecondary};
+      }
+      .bl-status-stepper__dot {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: ${token.controlHeightSM - 2}px;
+        height: ${token.controlHeightSM - 2}px;
+        border-radius: 50%;
+        border: ${token.lineWidth}px solid ${token.colorBorder};
+        background: ${token.colorBgContainer};
+        color: ${token.colorTextTertiary};
+        font-size: ${token.fontSizeSM - 1}px;
+        line-height: 1;
+      }
+      .bl-status-stepper__label {
+        white-space: nowrap;
+      }
+      .bl-status-stepper__step.is-done {
+        color: ${token.colorSuccess};
+      }
+      .bl-status-stepper__step.is-done .bl-status-stepper__dot {
+        background: ${token.colorSuccess};
+        border-color: ${token.colorSuccess};
+        color: ${token.colorTextLightSolid};
+      }
+      .bl-status-stepper__step.is-done::after {
+        background: ${tokenMix(token.colorSuccess, 45)};
+      }
+      .bl-status-stepper__step.is-current {
+        color: ${token.colorPrimary};
+      }
+      .bl-status-stepper__step.is-current .bl-status-stepper__dot {
+        background: ${token.colorPrimary};
+        border-color: ${token.colorPrimary};
+        color: ${token.colorTextLightSolid};
+        box-shadow: 0 0 0 ${token.lineWidthBold * 2}px ${primaryTint14};
+      }
+
+      /* B/L view page body — airy sections inside a single card */
+      .feature-page-card.bl-view-body-card > .ant-card-body {
+        padding: ${token.paddingXS}px ${token.paddingLG}px ${token.paddingLG}px;
+      }
+      .bl-view-body-card .bl-view-sections--single {
+        gap: 0;
+      }
+      .bl-view-body-card .bl-view-sections--single > .booking-review__section:first-child {
+        border-top: none;
+      }
+      .bl-view-body-card .bl-view-sections--single > .booking-review__section:last-child,
+      .bl-view-body-card .bl-view-sections--single > .bl-view-row:last-child > .booking-review__section {
+        padding-bottom: 0;
+      }
+      .bl-view-row--sections {
+        column-gap: ${token.marginXL}px;
+        row-gap: 0;
+      }
+      .bl-view-row--sections > .booking-review__section {
+        min-width: 0;
+      }
+
+      /* Routing band — equal Origin | Mid | Delivery columns */
+      .bl-route-band {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginLG}px;
+        width: 100%;
+      }
+      .bl-route-band__journey {
+        display: grid;
+        grid-template-columns: minmax(140px, 1fr) minmax(220px, 1.6fr) minmax(140px, 1fr);
+        align-items: start;
+        column-gap: ${token.marginLG}px;
+        width: 100%;
+        padding: ${token.paddingLG}px ${token.paddingXL}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadiusLG + 2}px;
+        background: linear-gradient(
+          180deg,
+          ${primaryTint8} 0%,
+          ${token.colorBgContainer} 100%
+        );
+      }
+      .bl-route-band__endpoint {
+        display: grid;
+        grid-template-rows: auto auto minmax(1.45em, auto) auto;
+        align-content: start;
+        justify-items: start;
+        gap: ${token.marginXXS}px;
+        min-width: 0;
+      }
+      .bl-route-band__endpoint--dest {
+        justify-items: end;
+        text-align: right;
+      }
+      .bl-route-band__eyebrow {
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: ${token.colorTextTertiary};
+        line-height: 1.2;
+      }
+      .bl-route-band__code.ant-typography {
+        margin: 0 !important;
+        font-size: ${token.fontSizeLG}px !important;
+        font-weight: ${token.fontWeightStrong} !important;
+        color: ${token.colorText} !important;
+        line-height: 1.25 !important;
+        word-break: break-word;
+      }
+      .bl-route-band__place {
+        font-size: ${token.fontSizeSM}px;
+        color: ${token.colorTextSecondary};
+        line-height: 1.45;
+        word-break: break-word;
+        min-height: 1.45em;
+      }
+      .bl-route-band__date-pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: calc(${token.fontSizeSM}px * 1.4 + 6px);
+        margin-top: ${token.marginXXS}px;
+        padding: 2px ${token.paddingSM}px;
+        border-radius: ${token.borderRadiusSM}px;
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        line-height: 1.4;
+        white-space: nowrap;
+      }
+      .bl-route-band__date-pill--etd {
+        color: ${token.colorInfo};
+        background: ${infoTint8};
+        border: 1px solid ${infoTint14};
+      }
+      .bl-route-band__date-pill--eta {
+        color: ${token.colorSuccess};
+        background: ${successTint8};
+        border: 1px solid ${successTint14};
+      }
+      .bl-route-band__date-pill--empty {
+        visibility: hidden;
+        border-color: transparent;
+        background: transparent;
+      }
+      .bl-route-band__mid {
+        display: grid;
+        grid-template-rows: auto auto auto;
+        align-content: start;
+        justify-items: center;
+        row-gap: ${token.marginSM}px;
+        min-width: 0;
+        width: 100%;
+        padding-top: 2px;
+      }
+      .bl-route-band__vessel {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: ${token.marginXS}px;
+        max-width: 100%;
+        min-height: calc(${token.fontSizeSM}px * 1.4 + ${token.paddingXXS}px * 2);
+        padding: ${token.paddingXXS}px ${token.paddingSM}px;
+        border-radius: ${token.borderRadiusSM}px;
+        border: 1px solid ${token.colorPrimaryBorder};
+        background: ${primaryTint8};
+        color: ${token.colorPrimary};
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        line-height: 1.4;
+        text-align: center;
+        word-break: break-word;
+      }
+      .bl-route-band__vessel--empty {
+        visibility: hidden;
+        border-color: transparent;
+        background: transparent;
+      }
+      .bl-route-band__rail {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: ${token.marginXS}px;
+        width: 100%;
+        min-height: 28px;
+      }
+      .bl-route-band__node {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .bl-route-band__node--origin {
+        background: ${token.colorInfo};
+      }
+      .bl-route-band__node--dest {
+        background: ${token.colorSuccess};
+      }
+      .bl-route-band__track {
+        flex: 1 1 0;
+        min-width: ${token.marginSM}px;
+        border-top: 2px dashed ${tokenMix(token.colorInfo, 45)};
+      }
+      .bl-route-band__via-row {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: ${token.marginXS}px;
+        max-width: 100%;
+        min-height: 36px;
+        color: ${token.colorTextSecondary};
+      }
+      .bl-route-band__via-row--empty {
+        visibility: hidden;
+      }
+      .bl-route-band__via {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1px;
+        flex-shrink: 0;
+        min-width: 0;
+        max-width: 120px;
+        padding: ${token.paddingXXS}px ${token.paddingXS}px;
+        border-radius: ${token.borderRadiusSM}px;
+        background: ${token.colorBgContainer};
+        border: 1px solid ${token.colorBorderSecondary};
+        text-align: center;
+        line-height: 1.25;
+      }
+      .bl-route-band__via-label {
+        font-size: 10px;
+        font-weight: ${token.fontWeightStrong};
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        color: ${token.colorTextTertiary};
+        white-space: nowrap;
+      }
+      .bl-route-band__via-code {
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+        word-break: break-word;
+      }
+      .bl-route-band__transit {
+        flex: 0 0 auto;
+        padding: ${token.paddingXXS}px ${token.paddingMD}px;
+        border-radius: ${token.borderRadiusLG}px;
+        color: ${token.colorInfo};
+        background: ${infoTint8};
+        border: 1px solid ${tokenMix(token.colorInfo, 35)};
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        line-height: 1.4;
+        white-space: nowrap;
+        text-align: center;
+      }
+
+      .bl-route-legs {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+      .bl-route-leg {
+        display: grid;
+        grid-template-columns: 16px minmax(0, 1fr);
+        gap: ${token.marginSM}px;
+        align-items: stretch;
+      }
+      .bl-route-leg__marker {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: ${token.paddingSM}px;
+      }
+      .bl-route-leg__dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        background: ${token.colorPrimary};
+        border: 2px solid ${primaryTint14};
+      }
+      .bl-route-leg__stem {
+        flex: 1 1 auto;
+        width: 0;
+        margin-top: ${token.marginXXS}px;
+        border-left: 2px dashed ${token.colorBorder};
+      }
+      .bl-route-leg__body {
+        display: grid;
+        grid-template-columns:
+          minmax(64px, auto)
+          minmax(120px, 1.1fr)
+          minmax(140px, 1.4fr)
+          minmax(160px, auto);
+        align-items: center;
+        column-gap: ${token.marginMD}px;
+        row-gap: ${token.marginXXS}px;
+        min-width: 0;
+        margin-bottom: ${token.marginSM}px;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorBgContainer};
+        font-size: ${token.fontSizeSM}px;
+      }
+      .bl-route-leg:last-child .bl-route-leg__body {
+        margin-bottom: 0;
+      }
+      .bl-route-leg__type {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: fit-content;
+        padding: 0 ${token.paddingXS}px;
+        border-radius: ${token.borderRadiusSM}px;
+        background: ${token.colorFillAlter};
+        border: 1px solid ${token.colorBorderSecondary};
+        color: ${token.colorTextSecondary};
+        font-size: ${token.fontSizeSM}px;
+        font-weight: ${token.fontWeightStrong};
+        line-height: 1.6;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+      }
+      .bl-route-leg__vessel {
+        min-width: 0;
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+        word-break: break-word;
+      }
+      .bl-route-leg__ports {
+        display: inline-flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: ${token.marginXXS}px;
+        min-width: 0;
+        color: ${token.colorTextSecondary};
+      }
+      .bl-route-leg__port {
+        min-width: 0;
+        word-break: break-word;
+      }
+      .bl-route-leg__dates {
+        display: inline-flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: ${token.marginXS}px ${token.marginMD}px;
+        color: ${token.colorTextSecondary};
+        white-space: nowrap;
+      }
+      .bl-route-leg__dates strong {
+        color: ${token.colorText};
+      }
+
+      /* Documents as chips */
+      .bl-doc-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: ${token.marginSM}px;
+        width: 100%;
+      }
+      .bl-doc-chip__file.ant-typography {
+        flex: 1 1 auto;
+        min-width: 0;
+        margin: 0 !important;
+      }
+      .bl-doc-chip__meta {
+        display: block;
+        font-size: ${token.fontSizeSM}px;
+      }
+
+      @media (max-width: 991px) {
+        .bl-route-band__journey {
+          grid-template-columns: 1fr;
+          row-gap: ${token.marginMD}px;
+          padding: ${token.paddingMD}px;
+        }
+        .bl-route-band__endpoint,
+        .bl-route-band__endpoint--dest {
+          justify-items: start;
+          text-align: left;
+        }
+        .bl-route-leg__body {
+          grid-template-columns: auto minmax(0, 1fr);
+        }
+        .bl-route-leg__ports,
+        .bl-route-leg__dates {
+          grid-column: 1 / -1;
+          justify-content: flex-start;
+          white-space: normal;
+        }
+      }
+      @media (max-width: 767px) {
+        .bl-view-actions {
+          width: 100%;
+          flex-wrap: nowrap;
+          justify-content: flex-start;
+          overflow-x: auto;
+          padding-bottom: ${token.paddingXXS}px;
+        }
+        .bl-view-actions .ant-btn {
+          flex-shrink: 0;
+        }
+        .bl-view-summary {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .bl-status-stepper {
+          max-width: none;
+        }
+        .bl-status-stepper__label {
+          white-space: normal;
+        }
+        .feature-page-card.bl-view-body-card > .ant-card-body {
+          padding: 0 ${token.paddingSM}px ${token.paddingMD}px;
+        }
+        .bl-view-row--sections {
+          row-gap: 0;
+        }
+      }
+      @media (max-width: 575px) {
+        .bl-doc-grid {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .bl-route-band__via-label {
+          display: none;
+        }
+        .bl-route-leg__body {
           grid-template-columns: minmax(0, 1fr);
         }
       }

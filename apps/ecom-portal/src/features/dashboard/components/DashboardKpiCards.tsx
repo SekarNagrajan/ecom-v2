@@ -1,166 +1,188 @@
-// Modified by Sekar Nagarajan (2026-09-01 11:25)
+// Modified by Sekar Nagarajan (2026-09-17 18:32)
 /**
- * KPI cards — enhancedDashboard.jsp parity (Total / Confirmed / SI / Payment / lifecycle).
- * Visual layout matches dashboard stat cards: eyebrow label, metric, trend, icon top-right.
+ * KPI summary cards — enhancedDashboard.jsp filter keys with depot-style card chrome
+ * (icon tile + title + large total + pipe breakdown + tone accent wash).
+ * Payment pending uses verdigris / maritime teal (not error red) — industry-safe.
+ * In Transit uses terra-cotta (#d66853) via BE_COLOR_MAP.TERRA_COTTA.
  */
-import { Card, Typography } from "antd";
+import { Typography } from "antd";
 import type { LucideIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
-import { AppIcon, Icons } from "../../../components/icons";
+import {
+  AppIcon,
+  Icons,
+  NavBookingIcon,
+  NavPaymentHistoryIcon,
+  NavShippingInstructionIcon,
+} from "../../../components/icons";
 import type { DashboardCounts } from "../api/dashboard.api";
 
-const { Text, Title } = Typography;
+const { Text } = Typography;
 
-type KpiTone = "primary" | "success" | "warning" | "error" | "purple" | "info";
-type KpiTrendDirection = "up" | "down" | "neutral";
+type SummaryTone =
+  | "primary"
+  | "success"
+  | "warning"
+  | "verdigris"
+  | "terra"
+  | "info"
+  | "purple";
 
 interface DashboardKpiCardsProps {
   counts: DashboardCounts;
   onFilterChange: (filter: string, label: string) => void;
+  onViewShipments: () => void;
   activeFilter: string;
 }
 
-interface KpiCard {
-  key: string;
+interface SummaryBreakdown {
   label: string;
-  value: string;
-  trend: string;
-  trendDirection: KpiTrendDirection;
+  value: string | number;
+}
+
+interface SummaryCard {
+  key: string;
+  filterKey: string;
+  title: string;
+  value: number;
   icon: LucideIcon;
-  tone: KpiTone;
+  tone: SummaryTone;
+  breakdown: SummaryBreakdown[];
 }
 
 export function DashboardKpiCards({
   counts,
   onFilterChange,
+  onViewShipments: _onViewShipments,
   activeFilter,
 }: DashboardKpiCardsProps) {
-  const cards: KpiCard[] = [
+  const { t } = useTranslation(["dashboard", "common", "modules"]);
+
+  const cards: SummaryCard[] = [
     {
-      key: "all",
-      label: "Total Shipments",
-      value: String(counts.totCou),
-      trend: "Across all lifecycle stages",
-      trendDirection: "neutral",
+      key: "total",
+      filterKey: "all",
+      title: t("kpi.totalShipments"),
+      value: counts.totCou,
       icon: Icons.ship,
-      tone: "primary",
-    },
-    {
-      key: "bkConfirmed",
-      label: "Booking Confirmed",
-      value: String(counts.bkConfirmed),
-      trend: "+2 confirmed this week",
-      trendDirection: "up",
-      icon: Icons.notebook,
-      tone: "success",
-    },
-    {
-      key: "siPending",
-      label: "SI Pending",
-      value: String(counts.siPending),
-      trend: "2 overdue cutoff",
-      trendDirection: "down",
-      icon: Icons.fileText,
-      tone: "warning",
-    },
-    {
-      key: "payPending",
-      label: "Payment Pending",
-      value: String(counts.payPending),
-      trend: `USD ${counts.pendingAmount.toLocaleString("en-US", {
-        minimumFractionDigits: 0,
-      })} outstanding`,
-      trendDirection: "down",
-      icon: Icons.creditCard,
-      tone: "error",
-    },
-    {
-      key: "origin",
-      label: "At Origin",
-      value: String(counts.orgCou),
-      trend: "Awaiting departure",
-      trendDirection: "neutral",
-      icon: Icons.mapPin,
       tone: "purple",
+      breakdown: [
+        { label: t("kpi.confirmed"), value: counts.bkConfirmed },
+        { label: t("kpi.siPending"), value: counts.siPending },
+      ],
     },
     {
-      key: "inTransit",
-      label: "In Transit",
-      value: String(counts.inTransitCou),
-      trend: "2 arriving this week",
-      trendDirection: "up",
-      icon: Icons.anchor,
+      key: "confirmed",
+      filterKey: "bkConfirmed",
+      title: t("kpi.bookingConfirmed"),
+      value: counts.bkConfirmed,
+      icon: NavBookingIcon,
       tone: "info",
+      breakdown: [
+        { label: t("kpi.atOrigin"), value: counts.orgCou },
+        { label: t("kpi.inTransit"), value: counts.inTransitCou },
+        { label: t("kpi.delivered"), value: counts.delCou },
+      ],
     },
     {
-      key: "delivered",
-      label: "Delivered",
-      value: String(counts.delCou),
-      trend: "Completed shipments",
-      trendDirection: "up",
+      key: "si",
+      filterKey: "siPending",
+      title: t("kpi.siPending"),
+      value: counts.siPending,
+      icon: NavShippingInstructionIcon,
+      tone: "warning",
+      breakdown: [
+        { label: t("kpi.awaitingSi"), value: counts.siPending },
+        { label: t("kpi.confirmed"), value: counts.bkConfirmed },
+      ],
+    },
+    {
+      key: "payment",
+      filterKey: "payPending",
+      title: t("kpi.paymentPending"),
+      value: counts.payPending,
+      icon: NavPaymentHistoryIcon,
+      tone: "verdigris",
+      breakdown: [
+        {
+          label: t("kpi.outstanding"),
+          value: `USD ${counts.pendingAmount.toLocaleString("en-US", {
+            maximumFractionDigits: 0,
+          })}`,
+        },
+        { label: t("kpi.invoices"), value: counts.payPending },
+      ],
+    },
+    {
+      key: "transit",
+      filterKey: "inTransit",
+      title: t("kpi.inTransit"),
+      value: counts.inTransitCou,
       icon: Icons.truck,
-      tone: "success",
+      tone: "terra",
+      breakdown: [
+        { label: t("kpi.atOrigin"), value: counts.orgCou },
+        { label: t("kpi.inTransit"), value: counts.inTransitCou },
+        { label: t("kpi.delivered"), value: counts.delCou },
+      ],
     },
   ];
 
   return (
-    <div className="dashboard-kpi-row">
+    <div className="dashboard-kpi-overview">
       {cards.map((card) => {
-        const isActive = activeFilter === card.key;
-        const trendIcon =
-          card.trendDirection === "up"
-            ? Icons.arrowUp
-            : card.trendDirection === "down"
-              ? Icons.arrowDown
-              : null;
-
+        const isActive = activeFilter === card.filterKey;
         return (
-          <div key={card.key} className="dashboard-kpi-col">
-            <Card
-              hoverable
-              className={[
-                "dashboard-kpi-card",
-                `dashboard-kpi-card--tone-${card.tone}`,
-                isActive ? "dashboard-kpi-card--active" : "",
-              ]
-                .filter(Boolean)
-                .join(" ")}
-              onClick={() => onFilterChange(card.key, card.label)}
-            >
-              <div className="dashboard-kpi-card__body">
-                <div className="dashboard-kpi-card__head">
-                  <div className="dashboard-kpi-card__main">
-                    <Text className="dashboard-kpi-card__eyebrow">
-                      {card.label}
-                    </Text>
-                    <Title
-                      level={3}
-                      className={`dashboard-kpi-card__metric dashboard-kpi-card__metric--${card.tone}`}
-                    >
-                      {card.value}
-                    </Title>
-                  </div>
-                  <div
-                    className={`dashboard-kpi-card__icon dashboard-kpi-card__icon--${card.tone}`}
-                  >
-                    <AppIcon icon={card.icon} size={20} />
-                  </div>
-                </div>
-                <div
-                  className={`dashboard-kpi-card__trend dashboard-kpi-card__trend--${card.trendDirection}`}
+          <button
+            key={card.key}
+            type="button"
+            className={[
+              "dashboard-summary-card",
+              `dashboard-summary-card--tone-${card.tone}`,
+              isActive ? "dashboard-summary-card--active" : "",
+            ]
+              .filter(Boolean)
+              .join(" ")}
+            onClick={() => onFilterChange(card.filterKey, card.title)}
+            aria-pressed={isActive}
+            aria-label={t("a11y.kpiCard", {
+              title: card.title,
+              value: card.value,
+            })}
+          >
+            <div className="dashboard-summary-card__head">
+              <span
+                className={`dashboard-summary-card__icon dashboard-summary-card__icon--${card.tone} app-icon-inherit`}
+              >
+                <AppIcon icon={card.icon} size={16} />
+              </span>
+              <Text className="dashboard-summary-card__title">
+                {card.title}
+              </Text>
+            </div>
+            <Text className="dashboard-summary-card__value">{card.value}</Text>
+            <div className="dashboard-summary-card__meta custom-scroll">
+              {card.breakdown.map((part, index) => (
+                <span
+                  key={`${card.key}-${part.label}`}
+                  className="dashboard-summary-card__meta-item"
                 >
-                  {trendIcon ? (
-                    <span className="dashboard-kpi-card__trend-icon app-icon-inherit">
-                      <AppIcon icon={trendIcon} size={11} />
+                  {index > 0 ? (
+                    <span className="dashboard-summary-card__sep" aria-hidden>
+                      |
                     </span>
                   ) : null}
-                  <Text className="dashboard-kpi-card__trend-text">
-                    {card.trend}
-                  </Text>
-                </div>
-              </div>
-            </Card>
-          </div>
+                  <span className="dashboard-summary-card__meta-label">
+                    {part.label}:
+                  </span>
+                  <span className="dashboard-summary-card__meta-value">
+                    {part.value}
+                  </span>
+                </span>
+              ))}
+            </div>
+          </button>
         );
       })}
     </div>

@@ -1,6 +1,8 @@
 // Modified by Sekar Nagarajan (2026-08-25 19:25)
 import { AppTabs } from "@solverminds/shared-ui";
 import { Card } from "antd";
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 import type { RateSearchMode } from "./RateSearchFilter";
 import { ContractView } from "./ContractView";
@@ -14,6 +16,8 @@ interface RateDataViewProps {
 }
 
 export function RateDataView({ activeMode, onModeChange }: RateDataViewProps) {
+  const { t } = useTranslation(["rates", "common", "modules"]);
+
   const tabKeyMap: Record<RateSearchMode, string> = {
     PUBLISHED_TARIFF: "tariff",
     SURCHARGES: "surcharge",
@@ -28,36 +32,37 @@ export function RateDataView({ activeMode, onModeChange }: RateDataViewProps) {
     quotes: "SPOT_QUOTES",
   };
 
-  const items = [
-    {
-      key: "tariff",
-      label: "Published Line Tariffs",
-      children: <TariffView />,
-    },
-    {
-      key: "surcharge",
-      label: "Surcharges & Accessorials",
-      children: <SurchargeView />,
-    },
-    {
-      key: "contract",
-      label: "Service Contracts",
-      children: <ContractView />,
-    },
-    {
-      key: "quotes",
-      label: "Spot Rate Quotes",
-      children: <QuotesView />,
-    },
-  ];
+  const items = useMemo(
+    () => [
+      {
+        key: "tariff",
+        label: t("modes.publishedLineTariffs"),
+        children: <TariffView />,
+      },
+      {
+        key: "surcharge",
+        label: t("modes.surchargesAccessorials"),
+        children: <SurchargeView />,
+      },
+      {
+        key: "contract",
+        label: t("modes.serviceContract"),
+        children: <ContractView />,
+      },
+      {
+        key: "quotes",
+        label: t("modes.spotRateQuotes"),
+        children: <QuotesView />,
+      },
+    ],
+    [t],
+  );
 
   return (
     <Card className="rates-dataview-shell" bordered={false}>
       <AppTabs
         activeKey={tabKeyMap[activeMode] || "tariff"}
-        onChange={(key) =>
-          onModeChange(reverseTabKeyMap[key] || "PUBLISHED_TARIFF")
-        }
+        onChange={(key) => onModeChange(reverseTabKeyMap[key] || "PUBLISHED_TARIFF")}
         items={items}
       />
     </Card>

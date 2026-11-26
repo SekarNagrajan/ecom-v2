@@ -1,0 +1,92 @@
+[
+ {
+  "id": 14,
+  "fieldcode": "SHC",
+  "searchtype": "C",
+  "searchvalue": "AE",
+  "shipmenttype": "I",
+  "inputtype": "E ",
+  "status": "A"
+ },
+ {
+  "id": 13,
+  "fieldcode": "SHC",
+  "searchtype": "C",
+  "searchvalue": "MY",
+  "shipmenttype": "I",
+  "inputtype": "E ",
+  "status": "A"
+ },
+ {
+  "id": 12,
+  "fieldcode": "SHC",
+  "searchtype": "C",
+  "searchvalue": "IN",
+  "shipmenttype": "I",
+  "inputtype": "E ",
+  "status": "A"
+ },
+ {
+  "id": 10,
+  "fieldcode": "SHS",
+  "searchtype": "C",
+  "searchvalue": "CA",
+  "shipmenttype": "E",
+  "inputtype": "M ",
+  "status": "A"
+ },
+ {
+  "id": 9,
+  "fieldcode": "SHS",
+  "searchtype": "C",
+  "searchvalue": "US",
+  "shipmenttype": "E",
+  "inputtype": "M ",
+  "status": "A"
+ },
+ {
+  "id": 8,
+  "fieldcode": "SHS",
+  "searchtype": "C",
+  "searchvalue": "US",
+  "shipmenttype": "E",
+  "inputtype": "M ",
+  "status": "A"
+ },
+ {
+  "id": 6,
+  "fieldcode": "HSC",
+  "searchtype": "P",
+  "searchvalue": "INMAA",
+  "shipmenttype": "I",
+  "inputtype": "M ",
+  "status": "A"
+ },
+ {
+  "id": 3,
+  "fieldcode": "HSC",
+  "searchtype": "P",
+  "searchvalue": "KEMBA",
+  "shipmenttype": "I",
+  "inputtype": "N ",
+  "status": "I"
+ },
+ {
+  "id": 2,
+  "fieldcode": "HSC",
+  "searchtype": "C",
+  "searchvalue": "KE",
+  "shipmenttype": "I",
+  "inputtype": "M ",
+  "status": "A"
+ },
+ {
+  "id": 1,
+  "fieldcode": "NAT",
+  "searchtype": "C",
+  "searchvalue": "MY",
+  "shipmenttype": "I",
+  "inputtype": "M ",
+  "status": "A"
+ }
+]

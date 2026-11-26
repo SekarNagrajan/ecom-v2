@@ -1,42 +1,10 @@
-// Modified by Sekar Nagarajan (2026-08-27 11:40)
+// Modified by Sekar Nagarajan (2026-10-18 23:30)
 import { setupWorker } from 'msw/browser';
-import { adminHandlers } from './admin.handlers';
-import { arrivalNoticeHandlers } from './arrival-notice.handlers';
-import { authAdminHandlers } from './auth-admin.handlers';
-import { authHandlers } from './auth.handlers';
-import { blHandlers } from './bl.handlers';
-import { bookingHandlers } from './booking.handlers';
-import { carbonHandlers } from './carbon.handlers';
-import { contactUsHandlers } from './contact-us.handlers';
-import { croHandlers } from './cro.handlers';
-import { customerStatementHandlers } from './customer-statement.handlers';
-import { deliveryOrderHandlers } from './delivery-order.handlers';
-import { landingHandlers } from './landing.handlers';
-import { ratesHandlers } from './rates.handlers';
-import { registrationHandlers } from './registration.handlers';
-import { userCreationHandlers } from './user-creation.handlers';
-import { userModulesHandlers } from './user-modules.handlers';
+import { handlers } from './handlers';
 
 /**
- * MSW browser service worker — active in development only.
- * Import and start this in main.tsx before ReactDOM.createRoot.
+ * MSW browser service worker.
+ * Started from main.tsx before React renders when VITE_API_MODE is mock,
+ * including production demo builds. The handler list lives in ./handlers.ts.
  */
-export const worker = setupWorker(
-  ...authAdminHandlers,
-  ...landingHandlers,
-  ...registrationHandlers,
-  ...authHandlers,
-  ...contactUsHandlers,
-  ...adminHandlers,
-  ...userCreationHandlers,
-  ...userModulesHandlers,
-  ...ratesHandlers,
-  ...bookingHandlers,
-  ...deliveryOrderHandlers,
-  ...blHandlers,
-  ...croHandlers,
-  ...arrivalNoticeHandlers,
-  ...customerStatementHandlers,
-  ...carbonHandlers,
-);
-
+export const worker = setupWorker(...handlers);

@@ -1,72 +1,180 @@
-// Modified by Sekar Nagarajan (2026-08-31 17:10)
-import { ListView } from "@solverminds/shared-ui/data-view/list-view";
+// Modified by Sekar Nagarajan (2026-09-29 16:45)
+import {
+  DataView,
+  type DataViewColumn,
+} from "@solverminds/shared-ui/data-view";
 import { useConfirm, useToast } from "@solverminds/shared-ui/hooks";
 import { useNavigate } from "@tanstack/react-router";
 import type { RowDoubleClickedEvent } from "ag-grid-community";
 import { Card, Tag } from "antd";
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
-import { AppIcon, Icons } from "../../components/icons";
+import { NavShippingInstructionIcon } from "../../components/icons/nav-svg-icons";
 import { buildActionsColumn } from "../../components/shared/build-actions-column";
 import { FeaturePageShell } from "../../components/shared/feature-page-shell";
+import { useModuleCardPagination } from "../../components/shared/hooks/use-module-card-pagination";
+import { useModuleViewMode } from "../../components/shared/hooks/use-module-view-mode";
+import { ModuleCardViewPanel } from "../../components/shared/module-card-view-panel";
 import {
-  ListActionButton,
-  ListActionsRow,
-} from "../../components/shared/list-action-button";
+  ModuleEmptyState,
+  buildRetryAction,
+} from "../../components/shared/module-empty-state";
 import { ModuleScreenHeader } from "../../components/shared/module-screen-header";
-import { MODULE_TITLES } from "../../constants/module-titles";
+import { useLocalGridProfiles } from "../../components/shared/use-local-grid-profiles";
+import { useModuleTitles } from "../../i18n/use-module-titles";
 import { useCancelSiMutation, useSiListQuery } from "./api/si.queries";
+import { SiListActions } from "./components/list/si-list-actions";
+import { SiListCard } from "./components/list/si-list-card";
 import { SiModuleStyles } from "./components/si-module-styles";
 import { SiViewDrawer } from "./components/view/SiViewDrawer";
-import type { SIListDTO } from "./types/si.types";
-import { getSiStatusTagColor } from "./utils/si-status";
-// Modified by Sekar Nagarajan (2026-09-02 14:59)
-import { NavShippingInstructionIcon } from "../../components/icons/nav-svg-icons";
+import type { SIListDTO, SIStatus } from "./types/si.types";
+import { getSiStatusLabel, getSiStatusTagColor } from "./utils/si-status";
+
+const VIEW_MODE_KEY = "ecom.si.viewMode";
+
 export function ShippingInstructionDashboardRoute() {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
+  const MODULE_TITLES = useModuleTitles();
   const navigate = useNavigate();
   const confirm = useConfirm();
   const toast = useToast();
+  const { profileHandlers } = useLocalGridProfiles("shipping-instruction");
   const [selectedRecord, setSelectedRecord] = useState<SIListDTO | null>(null);
+  const { viewMode, setViewMode } = useModuleViewMode(VIEW_MODE_KEY);
+  const {
+    page: cardPage,
+    pageSize: cardPageSize,
+    onPaginationChange: onCardPaginationChange,
+  } = useModuleCardPagination();
 
-  const { data: siList = [], isLoading } = useSiListQuery();
+  const { data: siList = [], isLoading, isError, refetch } = useSiListQuery();
   const cancelMutation = useCancelSiMutation();
 
-  const openWizard = (id: string) => {
-    navigate({ to: `/app/shipping-instruction/wizard/${id}` });
-  };
+  const openWizard = useCallback(
+    (id: string) => {
+      navigate({ to: `/app/shipping-instruction/wizard/${id}` });
+    },
+    [navigate],
+  );
 
-  const handleView = (record: SIListDTO) => {
+  const handleView = useCallback((record: SIListDTO) => {
     setSelectedRecord(record);
-  };
+  }, []);
 
-  const handleRowDoubleClick = (event: RowDoubleClickedEvent<SIListDTO>) => {
-    const record = event.data;
-    if (!record) return;
-    if (record.status === "Create SI" || record.status === "Draft") {
-      openWizard(record.id);
-      return;
-    }
-    handleView(record);
-  };
+  const handleRowDoubleClick = useCallback(
+    (event: RowDoubleClickedEvent<SIListDTO>) => {
+      const record = event.data;
+      if (!record) return;
+      if (record.status === "Create SI" || record.status === "Draft") {
+        openWizard(record.id);
+        return;
+      }
+      handleView(record);
+    },
+    [handleView, openWizard],
+  );
 
-  const handleCancel = (record: SIListDTO) => {
-    confirm.danger({
-      title: "Cancel Shipping Instruction",
-      content: "Are you sure you want to cancel this Shipping Instruction?",
-      okText: "Yes",
-      cancelText: "No",
-      onOk: async () => {
-        try {
-          await cancelMutation.mutateAsync(record.id);
-          toast.success(
-            `Shipping Instruction ${record.siNo || record.id} cancelled.`,
+  const handleCancel = useCallback(
+    (record: SIListDTO) => {
+      confirm.danger({
+        title: t("confirms.cancelTitle"),
+        content: t("confirms.cancelContent"),
+        okText: t("common:actions.yes"),
+        cancelText: t("common:actions.no"),
+        onOk: async () => {
+          try {
+            await cancelMutation.mutateAsync(record.id);
+            toast.success(
+              t("toasts.cancelSuccess", {
+                siNo: record.siNo || record.id,
+              }),
+            );
+          } catch {
+            toast.error(t("toasts.cancelFailed"));
+          }
+        },
+      });
+    },
+    [cancelMutation, confirm, t, toast],
+  );
+
+  const emptyState = isError ? (
+    <ModuleEmptyState
+      variant="error"
+      title={t("empty.loadErrorTitle")}
+      message={t("empty.loadErrorMessage")}
+      actions={[buildRetryAction(() => void refetch())]}
+    />
+  ) : (
+    <ModuleEmptyState
+      variant="blank"
+      title={t("empty.noResultsTitle")}
+      message={t("empty.noResultsMessage")}
+    />
+  );
+
+  const columnDefs = useMemo<DataViewColumn<SIListDTO>[]>(
+    () => [
+      buildActionsColumn<SIListDTO>({
+        field: "id",
+        width: 150,
+        cellRenderer: (params: { data?: SIListDTO }) => {
+          const data = params.data;
+          if (!data) return null;
+          return (
+            <SiListActions
+              record={data}
+              onOpenWizard={openWizard}
+              onView={handleView}
+              onCancel={handleCancel}
+            />
           );
-        } catch {
-          toast.error("Failed to cancel Shipping Instruction.");
-        }
+        },
+      }),
+      {
+        field: "status",
+        headerName: t("columns.status"),
+        cellRenderer: (params: { value?: string }) => {
+          const status = (params.value ?? "") as SIStatus;
+          return (
+            <Tag
+              className="module-status-tag"
+              color={getSiStatusTagColor(status)}
+            >
+              {params.value ? getSiStatusLabel(status, t) : params.value}
+            </Tag>
+          );
+        },
       },
-    });
-  };
+      {
+        field: "bookingNo",
+        headerName: t("columns.bookingNo"),
+        isPrimary: true,
+      },
+      { field: "blNo", headerName: t("columns.blNo") },
+      { field: "siNo", headerName: t("columns.siNo") },
+      { field: "agencyRefNo", headerName: t("columns.agencyRefNo") },
+      { field: "origin", headerName: t("columns.origin"), isSecondary: true },
+      { field: "delivery", headerName: t("columns.delivery") },
+      { field: "createdDate", headerName: t("columns.createdDate") },
+      { field: "submittedDate", headerName: t("columns.submittedDate") },
+    ],
+    [handleCancel, handleView, openWizard, t],
+  );
+
+  const renderCard = useCallback(
+    (item: SIListDTO, state: { isSelected: boolean }) => (
+      <SiListCard
+        record={item}
+        isSelected={state.isSelected}
+        onOpenWizard={openWizard}
+        onView={handleView}
+        onCancel={handleCancel}
+      />
+    ),
+    [handleCancel, handleView, openWizard],
+  );
 
   return (
     <FeaturePageShell>
@@ -77,183 +185,61 @@ export function ShippingInstructionDashboardRoute() {
             <ModuleScreenHeader
               icon={NavShippingInstructionIcon}
               title={MODULE_TITLES.shippingInstructions}
-              subtitle="Review SI status, open drafts, and submit shipping instructions for confirmed bookings."
+              // recordCount={siList.length}
+              subtitle={t("subtitle")}
               marginBottom={0}
+              viewMode={viewMode}
+              onViewModeChange={setViewMode}
+              viewModePlacement="after"
             />
           </div>
 
-          <div className="si-grid-wrap">
+          <div className="si-grid-wrap si-grid-wrap--no-toolbar">
             <div className="si-list-grid responsive-table-wrap custom-scroll ag-theme-alpine">
-              <ListView
-                rowData={siList}
-                loading={isLoading}
-                defaultColDef={{ filter: true }}
-                columnDefs={[
-                  buildActionsColumn<SIListDTO>({
-                    field: "id",
-                    width: 150,
-                    cellRenderer: (params: { data?: SIListDTO }) => {
-                      const data = params.data;
-                      if (!data) return null;
-                      return (
-                        <ListActionsRow>
-                          {data.status === "Accepted" ? (
-                            <ListActionButton
-                              title="Locked"
-                              icon={
-                                <AppIcon
-                                  icon={Icons.lock}
-                                  size={16}
-                                  tone="muted"
-                                />
-                              }
-                              danger
-                              onClick={(e) => {
-                                e.stopPropagation();
-                              }}
-                            />
-                          ) : null}
-
-                          {data.status === "Create SI" ? (
-                            <ListActionButton
-                              title="Create SI"
-                              icon={
-                                <AppIcon
-                                  icon={Icons.plus}
-                                  size={16}
-                                  tone="create"
-                                />
-                              }
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                openWizard(data.id);
-                              }}
-                            />
-                          ) : null}
-
-                          {data.status === "Draft" ? (
-                            <ListActionButton
-                              title="Edit Draft"
-                              icon={
-                                <AppIcon
-                                  icon={Icons.edit}
-                                  size={16}
-                                  tone="edit"
-                                />
-                              }
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                openWizard(data.id);
-                              }}
-                            />
-                          ) : null}
-
-                          {["Submitted", "Accepted", "Declined"].includes(
-                            data.status,
-                          ) ? (
-                            <ListActionButton
-                              title="View Details"
-                              icon={
-                                <AppIcon
-                                  icon={Icons.eye}
-                                  size={16}
-                                  tone="view"
-                                />
-                              }
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleView(data);
-                              }}
-                            />
-                          ) : null}
-
-                          {data.status === "Submitted" ? (
-                            <ListActionButton
-                              title="Edit SI"
-                              icon={
-                                <AppIcon
-                                  icon={Icons.edit}
-                                  size={16}
-                                  tone="edit"
-                                />
-                              }
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                openWizard(data.id);
-                              }}
-                            />
-                          ) : null}
-
-                          {data.status === "Declined" ||
-                          data.blStatus === "Cancelled" ? (
-                            <ListActionButton
-                              title="Resubmit"
-                              icon={
-                                <AppIcon
-                                  icon={Icons.refreshCw}
-                                  size={16}
-                                  tone="history"
-                                />
-                              }
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                if (data.status === "Declined") {
-                                  confirm.warning({
-                                    title: "Carrier Remarks",
-                                    content:
-                                      "Please review and correct the reported discrepancies before resubmitting.",
-                                    onOk: () => openWizard(data.id),
-                                  });
-                                } else {
-                                  openWizard(data.id);
-                                }
-                              }}
-                            />
-                          ) : null}
-
-                          {data.status === "Submitted" ? (
-                            <ListActionButton
-                              title="Cancel SI"
-                              icon={
-                                <AppIcon
-                                  icon={Icons.circleX}
-                                  size={16}
-                                  tone="reject"
-                                />
-                              }
-                              danger
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleCancel(data);
-                              }}
-                            />
-                          ) : null}
-                        </ListActionsRow>
-                      );
-                    },
-                  }),
-                  {
-                    field: "status",
-                    headerName: "Status",
-                    cellRenderer: (params: { value?: string }) => (
-                      <Tag color={getSiStatusTagColor(params.value ?? "")}>
-                        {params.value}
-                      </Tag>
-                    ),
-                  },
-                  { field: "bookingNo", headerName: "Booking No" },
-                  { field: "blNo", headerName: "B/L No" },
-                  { field: "siNo", headerName: "SI No" },
-                  { field: "agencyRefNo", headerName: "Agency Ref No" },
-                  { field: "origin", headerName: "Origin" },
-                  { field: "delivery", headerName: "Delivery" },
-                  { field: "createdDate", headerName: "Created Date" },
-                  { field: "submittedDate", headerName: "Submitted Date" },
-                ]}
-                gridOptions={{
-                  onRowDoubleClicked: handleRowDoubleClick,
-                }}
-              />
+              {isError && siList.length === 0 && !isLoading ? (
+                emptyState
+              ) : (
+                <ModuleCardViewPanel active={viewMode === "card"}>
+                  <DataView
+                    key={viewMode}
+                    rowData={siList}
+                    loading={isLoading}
+                    emptyState={emptyState}
+                    columnDefs={columnDefs}
+                    defaultViewMode={viewMode}
+                    allowedViewModes={["list", "card"]}
+                    onViewModeChange={setViewMode}
+                    renderToolbar={() => null}
+                    className="si-data-view"
+                    listOptions={{
+                      ...profileHandlers,
+                      showToolbar: { showTotalCount: true, fullScreen: true },
+                      sideBar: true,
+                      pagination: true,
+                      paginationPageSize: 20,
+                      pageSizeOptions: [10, 20, 50, 100],
+                      defaultColDef: { filter: true },
+                      gridOptions: {
+                        getRowId: (params) => params.data.id,
+                        onRowDoubleClicked: handleRowDoubleClick,
+                      },
+                    }}
+                    cardOptions={{
+                      renderCard,
+                      minCardWidth: 360,
+                      paginationMode: "pagination",
+                      page: cardPage,
+                      pageSize: cardPageSize,
+                      totalCount: siList.length,
+                      onPaginationChange: onCardPaginationChange,
+                      enableLongPressSelection: false,
+                      surfacePadding: 16,
+                      gutter: [16, 16],
+                      surfaceBackground: "transparent",
+                    }}
+                  />
+                </ModuleCardViewPanel>
+              )}
             </div>
           </div>
         </div>

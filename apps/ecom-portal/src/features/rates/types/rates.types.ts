@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-28 15:07)
+// Modified by Sekar Nagarajan (2026-10-18 10:30)
 
 export interface TariffDTO {
   id: string;
@@ -87,6 +87,8 @@ export interface TariffFilters {
   dischPort?: string;
   eqpType?: string;
   commodity?: string;
+  /** Planned shipment date: only tariffs valid on that day are returned. */
+  date?: string;
 }
 
 export interface SurchargeFilters {
@@ -113,4 +115,67 @@ export interface CreateQuoteInput {
   cargoWeightKg: number;
   expectedAmountUsd?: number;
   comments?: string;
+}
+
+/** Unified search-result row for Rates list + card views. */
+export interface CombinedRateItem {
+  id: string;
+  type: "TARIFF" | "CONTRACT" | "SURCHARGE" | "QUOTE";
+  title: string;
+  code: string;
+  originPort: string;
+  originPortName: string;
+  deliveryPort: string;
+  deliveryPortName: string;
+  eqpType: string;
+  commodity: string;
+  commodityName: string;
+  currency: string;
+  baseAmount: number;
+  surchargeAmount: number;
+  totalEstimatedAmount: number;
+  effectiveFrom: string;
+  effectiveTo: string;
+  isRecommended?: boolean;
+  surcharges?: SurchargeDTO[];
+  soc?: string;
+  nor?: boolean;
+  carrTerms?: string;
+  transService?: string;
+  quoteStatus?: string;
+}
+
+// Modified by Sekar Nagarajan (2026-09-11 16:25) — share rate quote via email
+export interface ShareRateMailRateSummary {
+  id: string;
+  type: string;
+  code: string;
+  title: string;
+  originPort: string;
+  originPortName: string;
+  deliveryPort: string;
+  deliveryPortName: string;
+  eqpType: string;
+  commodity: string;
+  commodityName: string;
+  currency: string;
+  baseAmount: number;
+  surchargeAmount: number;
+  totalEstimatedAmount: number;
+  effectiveFrom: string;
+  effectiveTo: string;
+}
+
+export interface ShareRateMailInput {
+  to: string;
+  cc?: string;
+  subject: string;
+  message: string;
+  rates: ShareRateMailRateSummary[];
+}
+
+export interface ShareRateMailResponse {
+  success: boolean;
+  messageId: string;
+  recipientCount: number;
 }

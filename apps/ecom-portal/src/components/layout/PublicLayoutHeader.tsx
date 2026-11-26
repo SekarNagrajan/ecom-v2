@@ -1,52 +1,13 @@
-// Modified by Sekar Nagarajan (2026-08-25 17:25)
+// Modified by Sekar Nagarajan (2026-09-17 11:56)
 import { AppButton } from "@solverminds/shared-ui";
 import { Link } from "@tanstack/react-router";
-import type { MenuProps } from "antd";
-import { Dropdown, Layout } from "antd";
-import { useState } from "react";
+import { Layout } from "antd";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../icons";
+import { HeaderLanguageSelect } from "./header-language-select";
 
 const { Header } = Layout;
-
-export type PublicLanguageCode = "en" | "zh" | "ma" | "es";
-
-const PUBLIC_LANGUAGES: Array<{
-  key: PublicLanguageCode;
-  label: string;
-  nativeName: string;
-  detail: string;
-  shortCode: string;
-}> = [
-  {
-    key: "en",
-    label: "English",
-    nativeName: "English",
-    detail: "Default portal language",
-    shortCode: "EN",
-  },
-  {
-    key: "zh",
-    label: "Chinese",
-    nativeName: "中文",
-    detail: "Simplified Chinese (中文)",
-    shortCode: "ZH",
-  },
-  {
-    key: "ma",
-    label: "Malay",
-    nativeName: "Bahasa Melayu",
-    detail: "Bahasa Melayu",
-    shortCode: "MS",
-  },
-  {
-    key: "es",
-    label: "Spanish",
-    nativeName: "Español",
-    detail: "Español (Spanish)",
-    shortCode: "ES",
-  },
-];
 
 interface PublicLayoutHeaderProps {
   /** Company logo URL — loaded from config / static asset */
@@ -66,32 +27,13 @@ interface PublicLayoutHeaderProps {
  */
 export function PublicLayoutHeader({
   logoUrl,
-  portalName = "E-Commerce Portal",
+  portalName,
   onLoginClick,
   collapsed,
   onToggleCollapse,
 }: PublicLayoutHeaderProps) {
-  const [language, setLanguage] = useState<PublicLanguageCode>("en");
-  const selectedLanguage =
-    PUBLIC_LANGUAGES.find((item) => item.key === language) ??
-    PUBLIC_LANGUAGES[0];
-
-  const languageItems: MenuProps["items"] = PUBLIC_LANGUAGES.map((item) => ({
-    key: item.key,
-    label: (
-      <div className="pub-header-lang-item">
-        <span className="pub-header-lang-item__name">
-          {item.nativeName}
-          {item.nativeName !== item.label ? ` · ${item.label}` : ""}
-        </span>
-        <span className="pub-header-lang-item__detail">{item.detail}</span>
-      </div>
-    ),
-  }));
-
-  const onLanguageClick: MenuProps["onClick"] = ({ key }) => {
-    setLanguage(key as PublicLanguageCode);
-  };
+  const { t } = useTranslation("common");
+  const resolvedPortalName = portalName ?? t("portalName");
 
   return (
     <Header className="pub-layout-header">
@@ -99,7 +41,7 @@ export function PublicLayoutHeader({
         {onToggleCollapse ? (
           <AppButton
             type="text"
-            aria-label={collapsed ? "Expand menu" : "Collapse menu"}
+            aria-label={collapsed ? t("nav.expandMenu") : t("nav.collapseMenu")}
             icon={<AppIcon icon={Icons.menu} size={25} />}
             onClick={onToggleCollapse}
           />
@@ -112,10 +54,10 @@ export function PublicLayoutHeader({
               <AppIcon icon={Icons.globe} size={18} />
               <div className="pub-layout-header__brand-text">
                 <span className="pub-layout-header__brand-name">
-                  SOLVERMINDS
+                  {t("brand")}
                 </span>
                 <span className="pub-layout-header__brand-portal">
-                  {portalName}
+                  {resolvedPortalName}
                 </span>
               </div>
             </div>
@@ -130,9 +72,11 @@ export function PublicLayoutHeader({
             className="pub-header-action"
             id="nav-contact-us"
             icon={<AppIcon icon={Icons.headphones} size={16} />}
-            aria-label="Contact Us"
+            aria-label={t("header.contactUs")}
           >
-            <span className="pub-header-action__label">Contact Us</span>
+            <span className="pub-header-action__label">
+              {t("header.contactUs")}
+            </span>
           </AppButton>
         </Link>
 
@@ -142,9 +86,11 @@ export function PublicLayoutHeader({
             className="pub-header-action"
             id="nav-register"
             icon={<AppIcon icon={Icons.userPlus} size={16} />}
-            aria-label="Register"
+            aria-label={t("header.register")}
           >
-            <span className="pub-header-action__label">Register</span>
+            <span className="pub-header-action__label">
+              {t("header.register")}
+            </span>
           </AppButton>
         </Link>
 
@@ -154,41 +100,14 @@ export function PublicLayoutHeader({
           id="nav-login-btn"
           icon={<AppIcon icon={Icons.logIn} size={16} />}
           onClick={onLoginClick}
-          aria-label="Login"
+          aria-label={t("header.login")}
         >
-          <span className="pub-header-action__label">Login</span>
+          <span className="pub-header-action__label">{t("header.login")}</span>
         </AppButton>
 
         {/* <HeaderThemeToggle /> */}
 
-        <Dropdown
-          trigger={["click"]}
-          placement="bottomRight"
-          menu={{
-            items: languageItems,
-            selectable: true,
-            selectedKeys: [language],
-            onClick: onLanguageClick,
-          }}
-        >
-          <AppButton
-            type="text"
-            className="pub-header-action"
-            aria-label={`Language: ${selectedLanguage.label}`}
-            aria-haspopup="menu"
-          >
-            <span className="pub-header-lang-trigger">
-              <AppIcon icon={Icons.globe} size={16} />
-              <span className="pub-header-lang-trigger__code">
-                {selectedLanguage.shortCode}
-              </span>
-              <span className="pub-header-action__label">
-                {selectedLanguage.label}
-              </span>
-              <AppIcon icon={Icons.chevronDown} size={14} />
-            </span>
-          </AppButton>
-        </Dropdown>
+        <HeaderLanguageSelect buttonClassName="pub-header-action" />
       </div>
     </Header>
   );

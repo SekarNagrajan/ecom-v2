@@ -1,16 +1,29 @@
+// Modified by Sekar Nagarajan (2026-11-13 02:40)
 import type {
   BarSeriesOption,
   FunnelSeriesOption,
+  GaugeSeriesOption,
+  HeatmapSeriesOption,
   LineSeriesOption,
   PieSeriesOption,
+  RadarSeriesOption,
+  SankeySeriesOption,
+  ScatterSeriesOption,
   TreemapSeriesOption,
 } from 'echarts/charts';
 import type {
+  AriaComponentOption,
   DatasetComponentOption,
+  DataZoomComponentOption,
+  GraphicComponentOption,
   GridComponentOption,
   LegendComponentOption,
+  MarkLineComponentOption,
+  MarkPointComponentOption,
   TitleComponentOption,
+  ToolboxComponentOption,
   TooltipComponentOption,
+  VisualMapComponentOption,
 } from 'echarts/components';
 import type { ComposeOption, EChartsType } from 'echarts/core';
 import type { CSSProperties, ReactNode } from 'react';
@@ -27,12 +40,27 @@ export type ECOption = ComposeOption<
   | PieSeriesOption
   | FunnelSeriesOption
   | TreemapSeriesOption
+  | GaugeSeriesOption
+  | ScatterSeriesOption
+  | HeatmapSeriesOption
+  | SankeySeriesOption
+  | RadarSeriesOption
   | GridComponentOption
   | TooltipComponentOption
   | LegendComponentOption
   | DatasetComponentOption
   | TitleComponentOption
+  | DataZoomComponentOption
+  | GraphicComponentOption
+  | MarkLineComponentOption
+  | MarkPointComponentOption
+  | VisualMapComponentOption
+  | ToolboxComponentOption
+  | AriaComponentOption
 >;
+
+/** ECharts event handlers keyed by event name (`click`, `legendselectchanged`, …). */
+export type ChartEventHandlers = Record<string, (params: unknown) => void>;
 
 export type EChartsInstance = EChartsType;
 export type ChartRenderer = 'canvas' | 'svg';
@@ -96,10 +124,19 @@ export interface AppChartProps {
   lazyUpdate?: boolean;
   /** Fires once after `init`, then again on each re-init (theme change). */
   onChartReady?: (chart: EChartsInstance) => void;
-  /** Fires for every ECharts event registered via `chart.on(eventName, ...)`. */
+  /**
+   * ECharts events to subscribe to. Handlers are read through a ref, so passing a new object on
+   * every render is fine and never re-binds the instance.
+   */
+  onEvents?: ChartEventHandlers;
+  /**
+   * Enable ECharts' built-in screen-reader description (`aria.enabled`) unless the option sets
+   * `aria` itself. Defaults to true.
+   */
+  accessible?: boolean;
   className?: string;
   style?: CSSProperties;
-  /** Convenience prop: applied as `style.height`. */
+  /** Convenience prop: applied as `style.height`. `"auto"` leaves sizing to the consumer's CSS. */
   height?: number | string;
   /** Convenience prop: applied as `style.minHeight`. */
   minHeight?: number | string;

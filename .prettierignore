@@ -1,0 +1,24 @@
+# build outputs and caches
+node_modules
+dist
+build
+coverage
+storybook-static
+.nx
+.vercel
+.pnpm-store
+pnpm-lock.yaml
+
+# generated or dumped data (large JSON fixtures, DB dumps)
+apps/ecom-portal/mock-data
+apps/ecom-portal/src/mocks/fixtures
+apps/ecom-portal/public
+apps/ai-service
+
+# dead libraries scheduled for deletion (roadmap B4)
+libs/theme
+libs/shared-ui
+libs/shared-util
+
+# documents are hand-formatted
+*.md

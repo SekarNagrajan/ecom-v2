@@ -1,0 +1,32 @@
+[
+ {
+  "mdlId": "EDI",
+  "mdlPrefix": "EBKON",
+  "mdlIndex": 9463
+ },
+ {
+  "mdlId": "BKG",
+  "mdlPrefix": "BKON",
+  "mdlIndex": 7460
+ },
+ {
+  "mdlId": "ESI",
+  "mdlPrefix": "ESION",
+  "mdlIndex": 3998
+ },
+ {
+  "mdlId": "SI",
+  "mdlPrefix": "SIREQ",
+  "mdlIndex": 3160
+ },
+ {
+  "mdlId": "REG",
+  "mdlPrefix": "REG",
+  "mdlIndex": 722
+ },
+ {
+  "mdlId": "NEC",
+  "mdlPrefix": "EN",
+  "mdlIndex": 179
+ }
+]

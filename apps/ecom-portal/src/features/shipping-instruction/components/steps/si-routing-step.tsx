@@ -1,39 +1,18 @@
-// Modified by Sekar Nagarajan (2026-08-28 12:50)
+// Modified by Sekar Nagarajan (2026-09-29 16:55)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton } from "@solverminds/shared-ui";
 import { Card, Input, Typography } from "antd";
+import { useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import type {
   SIWizardStepProps,
   SiRoutingStepValues,
 } from "../../types/si.types";
-import { siRoutingStepSchema } from "../../types/si.types";
+import { createSiRoutingStepSchema } from "../../types/si.types";
 
 const { Text, Title } = Typography;
-
-const ROUTING_PRINT_FIELDS = [
-  {
-    name: "originPrint",
-    label: "Origin (Print)",
-    bookingKey: "origin" as const,
-  },
-  {
-    name: "polPrint",
-    label: "Load Port (Print)",
-    bookingKey: "loadPort" as const,
-  },
-  {
-    name: "podPrint",
-    label: "Discharge Port (Print)",
-    bookingKey: "dischargePort" as const,
-  },
-  {
-    name: "deliveryPrint",
-    label: "Delivery (Print)",
-    bookingKey: "delivery" as const,
-  },
-] as const;
 
 export function SiRoutingStep({
   data,
@@ -42,6 +21,9 @@ export function SiRoutingStep({
   onUpdate,
   isSubmitting,
 }: SIWizardStepProps) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
+  const schema = useMemo(() => createSiRoutingStepSchema(t), [t]);
+
   const routing = data.routing ?? {
     originPrint: data.origin ?? "",
     polPrint: data.loadPort ?? "",
@@ -56,7 +38,7 @@ export function SiRoutingStep({
     handleSubmit,
     formState: { errors },
   } = useForm<SiRoutingStepValues>({
-    resolver: zodResolver(siRoutingStepSchema),
+    resolver: zodResolver(schema),
     defaultValues: {
       originPrint: routing.originPrint,
       polPrint: routing.polPrint,
@@ -65,6 +47,29 @@ export function SiRoutingStep({
       vesselVoyage: routing.vesselVoyage,
     },
   });
+
+  const routingPrintFields = [
+    {
+      name: "originPrint" as const,
+      label: t("wizard.routing.originPrint"),
+      bookingKey: "origin" as const,
+    },
+    {
+      name: "polPrint" as const,
+      label: t("wizard.routing.loadPortPrint"),
+      bookingKey: "loadPort" as const,
+    },
+    {
+      name: "podPrint" as const,
+      label: t("wizard.routing.dischargePortPrint"),
+      bookingKey: "dischargePort" as const,
+    },
+    {
+      name: "deliveryPrint" as const,
+      label: t("wizard.routing.deliveryPrint"),
+      bookingKey: "delivery" as const,
+    },
+  ];
 
   const onValid = (values: SiRoutingStepValues) => {
     onUpdate({ routing: { ...routing, ...values } });
@@ -82,12 +87,12 @@ export function SiRoutingStep({
           className="form-step-card form-step-section si-master-step-card"
           title={
             <Title level={5} className="form-step-card-title">
-              Routing — Print Text
+              {t("wizard.routing.printTextTitle")}
             </Title>
           }
         >
           <div className="si-routing-form-grid">
-            {ROUTING_PRINT_FIELDS.map(({ name, label, bookingKey }) => {
+            {routingPrintFields.map(({ name, label, bookingKey }) => {
               const bookingValue = data[bookingKey] ?? "—";
               return (
                 <div className="form-field-cell" key={name}>
@@ -95,7 +100,7 @@ export function SiRoutingStep({
                     {label} <Text type="danger">*</Text>
                   </label>
                   <Text type="secondary" className="si-routing-booking-hint">
-                    Booking: {bookingValue}
+                    {t("wizard.routing.bookingHint", { value: bookingValue })}
                   </Text>
                   <Controller
                     control={control}
@@ -113,12 +118,14 @@ export function SiRoutingStep({
               );
             })}
             <div className="form-field-cell">
-              <label className="form-field-label">Vessel / Voyage</label>
+              <label className="form-field-label">
+                {t("labels.vesselVoyage")}
+              </label>
               <Text
                 type="secondary"
                 className="si-routing-booking-hint si-routing-booking-hint--placeholder"
               >
-                Optional schedule reference
+                {t("wizard.routing.vesselOptionalHint")}
               </Text>
               <Controller
                 control={control}
@@ -127,7 +134,7 @@ export function SiRoutingStep({
                   <Input
                     {...field}
                     size="large"
-                    placeholder="Vessel / Voyage"
+                    placeholder={t("labels.vesselVoyage")}
                   />
                 )}
               />
@@ -140,7 +147,7 @@ export function SiRoutingStep({
             className="form-step-card form-step-section si-master-step-card"
             title={
               <Title level={5} className="form-step-card-title">
-                Schedule Legs
+                {t("wizard.routing.scheduleLegsTitle")}
               </Title>
             }
           >
@@ -152,8 +159,9 @@ export function SiRoutingStep({
                     {leg.voyage ? ` / ${leg.voyage}` : ""}
                   </Text>
                   <Text type="secondary">
-                    {leg.polPortName} → {leg.podPortName} · ETD {leg.etd} · ETA{" "}
-                    {leg.eta}
+                    {leg.polPortName} → {leg.podPortName} ·{" "}
+                    {t("wizard.routing.etd")} {leg.etd} ·{" "}
+                    {t("wizard.routing.eta")} {leg.eta}
                   </Text>
                 </div>
               ))}
@@ -164,10 +172,10 @@ export function SiRoutingStep({
 
       <div className="form-step-footer">
         <AppButton onClick={onPrevious} disabled={isSubmitting}>
-          Previous
+          {t("common:actions.previous")}
         </AppButton>
         <AppButton type="primary" htmlType="submit" disabled={isSubmitting}>
-          Next
+          {t("common:actions.next")}
         </AppButton>
       </div>
     </form>

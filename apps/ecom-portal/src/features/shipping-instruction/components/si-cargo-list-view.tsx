@@ -8,12 +8,14 @@ import {
   type UseFormGetValues,
   type UseFormSetValue,
 } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
 import {
   ListActionButton,
   ListActionsRow,
 } from "../../../components/shared/list-action-button";
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import {
   createEmptyCargoLine,
   createEmptyContainer,
@@ -68,19 +70,17 @@ export function SiCargoListView({
   onDelete,
   renderContainerFooter,
 }: SiCargoListViewProps) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
+
   if (pageIndexes.length === 0) {
     return (
-      <div className="si-cargo-empty">
-        <div className="si-cargo-empty__icon">
-          <AppIcon icon={Icons.inbox} size={22} />
-        </div>
-        <Text strong>No containers match</Text>
-        <div>
-          <Text type="secondary">
-            Adjust the search or the &quot;Incomplete only&quot; filter.
-          </Text>
-        </div>
-      </div>
+      <ModuleEmptyState
+        artSize="sm"
+        variant="filtered"
+        title={t("wizard.cargo.emptyFiltered.title")}
+        message={t("wizard.cargo.emptyFiltered.message")}
+        style={{ padding: 12 }}
+      />
     );
   }
 
@@ -136,44 +136,54 @@ export function SiCargoListView({
                   .filter(Boolean)
                   .join(" ")}
               >
-                {hasNumber ? container?.containerNo : "No number"}
+                {hasNumber
+                  ? container?.containerNo
+                  : t("wizard.cargo.list.noNumber")}
               </Text>
               <span className="si-cargo-type-badge">
                 {container?.eqpSize || "—"}
               </span>
               <Text type="secondary" className="si-cargo-ct-seal">
-                Seal {seal}
+                {t("wizard.cargo.list.seal", { value: seal })}
               </Text>
               <div className="si-cargo-ct-meta si-cargo-ct-meta--commod">
                 <Text className="si-cargo-ct-meta__value">{lineCount}</Text>
-                <span className="si-cargo-ct-meta__label">Commodities</span>
+                <span className="si-cargo-ct-meta__label">
+                  {t("wizard.cargo.list.commoditiesLabel")}
+                </span>
               </div>
               <div className="si-cargo-ct-meta si-cargo-ct-meta--pkgs">
                 <Text className="si-cargo-ct-meta__value">
                   {sums.packages.toLocaleString()}
                 </Text>
-                <span className="si-cargo-ct-meta__label">Packages</span>
+                <span className="si-cargo-ct-meta__label">
+                  {t("wizard.cargo.list.packagesLabel")}
+                </span>
               </div>
               <div className="si-cargo-ct-meta si-cargo-ct-meta--end si-cargo-ct-meta--kg">
                 <Text className="si-cargo-ct-meta__value">
                   {sums.grossWeight.toLocaleString()}
                 </Text>
-                <span className="si-cargo-ct-meta__label">kg</span>
+                <span className="si-cargo-ct-meta__label">
+                  {t("wizard.cargo.list.kg")}
+                </span>
               </div>
               <div className="si-cargo-ct-meta si-cargo-ct-meta--end si-cargo-ct-meta--cbm">
                 <Text className="si-cargo-ct-meta__value">
                   {sums.volume.toFixed(1)}
                 </Text>
-                <span className="si-cargo-ct-meta__label">CBM</span>
+                <span className="si-cargo-ct-meta__label">
+                  {t("wizard.cargo.list.cbm")}
+                </span>
               </div>
               <span className="si-cargo-ct-status">
                 {issues === 0 ? (
                   <span className="si-cargo-vchip si-cargo-vchip--ok">
-                    Complete
+                    {t("wizard.cargo.list.statusComplete")}
                   </span>
                 ) : (
                   <span className="si-cargo-vchip si-cargo-vchip--warn">
-                    {issues} to fix
+                    {t("wizard.cargo.list.statusToFix", { count: issues })}
                   </span>
                 )}
               </span>
@@ -184,12 +194,12 @@ export function SiCargoListView({
               >
                 <ListActionsRow>
                   <ListActionButton
-                    title="Duplicate Container"
+                    title={t("wizard.cargo.list.duplicateContainer")}
                     icon={<AppIcon icon={Icons.copy} size={16} tone="view" />}
                     onClick={() => onDuplicate(ci)}
                   />
                   <ListActionButton
-                    title="Delete Container"
+                    title={t("wizard.cargo.list.deleteContainer")}
                     icon={
                       <AppIcon icon={Icons.trash} size={16} tone="delete" />
                     }
@@ -246,6 +256,7 @@ function ContainerEditorPanel({
   toastError,
   footer,
 }: ContainerEditorPanelProps) {
+  const { t } = useTranslation(["shipping-instruction", "common", "modules"]);
   const { fields, remove, insert } = useFieldArray({
     control,
     name: `containers.${ci}.cargoLines`,
@@ -257,7 +268,8 @@ function ContainerEditorPanel({
       <div className="si-cargo-editor-fields">
         <div className="form-field-cell">
           <label className="form-field-label">
-            Container No. <Text type="danger">*</Text>
+            {t("wizard.cargo.fields.containerNo")}{" "}
+            <Text type="danger">*</Text>
           </label>
           <Controller
             control={control}
@@ -267,7 +279,7 @@ function ContainerEditorPanel({
                 {...field}
                 value={field.value ?? ""}
                 size="large"
-                placeholder="Container No."
+                placeholder={t("wizard.cargo.fields.containerNo")}
                 className="form-field-full-width"
               />
             )}
@@ -291,7 +303,9 @@ function ContainerEditorPanel({
           />
         </div> */}
         <div className="form-field-cell">
-          <label className="form-field-label">Carrier Seal</label>
+          <label className="form-field-label">
+            {t("wizard.cargo.fields.carrierSeal")}
+          </label>
           <Controller
             control={control}
             name={`containers.${ci}.carrierSeal`}
@@ -300,14 +314,16 @@ function ContainerEditorPanel({
                 {...field}
                 value={field.value ?? ""}
                 size="large"
-                placeholder="Carrier Seal"
+                placeholder={t("wizard.cargo.fields.carrierSeal")}
                 className="form-field-full-width"
               />
             )}
           />
         </div>
         <div className="form-field-cell">
-          <label className="form-field-label">Shipper Seal</label>
+          <label className="form-field-label">
+            {t("wizard.cargo.fields.shipperSeal")}
+          </label>
           <Controller
             control={control}
             name={`containers.${ci}.shipperSeal`}
@@ -316,7 +332,7 @@ function ContainerEditorPanel({
                 {...field}
                 value={field.value ?? ""}
                 size="large"
-                placeholder="Shipper Seal"
+                placeholder={t("wizard.cargo.fields.shipperSeal")}
                 className="form-field-full-width"
               />
             )}
@@ -343,7 +359,7 @@ function ContainerEditorPanel({
           }}
           onRemove={() => {
             if (fields.length <= 1) {
-              toastError("At least one commodity is required");
+              toastError(t("wizard.cargo.toasts.minCommodity"));
               return;
             }
             remove(mi);

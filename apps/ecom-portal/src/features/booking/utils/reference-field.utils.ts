@@ -167,3 +167,43 @@ export function initialReferenceFields(
   }
   return [];
 }
+
+type TranslateFn = (key: string, options?: Record<string, unknown>) => string;
+
+const CATALOG_LABEL_KEY: Record<ReferenceFieldKey, string> = {
+  rateRefNo: "wizard.references.catalog.rateReferenceNo",
+  agencyRefNo: "wizard.references.catalog.agencyRefNo",
+  oceanFreightTerms: "wizard.references.catalog.oceanFreightTerms",
+  natCode: "wizard.references.catalog.natCode",
+  emptyPickupLocation: "wizard.references.catalog.emptyPickupLocation",
+  finalReceiptPlace: "wizard.references.catalog.finalReceiptPlace",
+  haulierCode: "wizard.references.catalog.haulierCode",
+};
+
+const CATALOG_PLACEHOLDER_KEY: Partial<Record<ReferenceFieldKey, string>> = {
+  rateRefNo: "wizard.references.catalog.rateReferenceNoPlaceholder",
+  agencyRefNo: "wizard.references.catalog.agencyRefNoPlaceholder",
+  natCode: "wizard.references.catalog.natCodePlaceholder",
+  emptyPickupLocation: "wizard.references.catalog.emptyPickupLocationPlaceholder",
+  finalReceiptPlace: "wizard.references.catalog.finalReceiptPlacePlaceholder",
+  haulierCode: "wizard.references.catalog.haulierCodePlaceholder",
+};
+
+export function localizeReferenceCatalogItem(
+  item: ReferenceFieldCatalogItem,
+  t: TranslateFn,
+): ReferenceFieldCatalogItem {
+  return {
+    ...item,
+    label: t(CATALOG_LABEL_KEY[item.key]),
+    placeholder: CATALOG_PLACEHOLDER_KEY[item.key]
+      ? t(CATALOG_PLACEHOLDER_KEY[item.key]!)
+      : item.placeholder,
+  };
+}
+
+export function getLocalizedReferenceCatalog(
+  t: TranslateFn,
+): ReferenceFieldCatalogItem[] {
+  return REFERENCE_FIELD_CATALOG.map((item) => localizeReferenceCatalogItem(item, t));
+}

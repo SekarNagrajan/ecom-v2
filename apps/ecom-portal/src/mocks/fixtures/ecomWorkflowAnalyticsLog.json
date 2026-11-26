@@ -1,0 +1,352 @@
+[
+ {
+  "id": "24232",
+  "custcode": "20001374",
+  "modulecode": "BKG",
+  "actionStatus": "C",
+  "crDate": "2026-11-16T09:43:03.655Z"
+ },
+ {
+  "id": "24231",
+  "custcode": "20001374",
+  "modulecode": "SHI",
+  "actionStatus": "S",
+  "crDate": "2026-11-16T09:34:21.832Z"
+ },
+ {
+  "id": "24230",
+  "custcode": "20001374",
+  "modulecode": "VGM",
+  "actionStatus": "S",
+  "crDate": "2026-11-16T08:28:59.102Z"
+ },
+ {
+  "id": "24229",
+  "custcode": "20001374",
+  "modulecode": "VGM",
+  "actionStatus": "C",
+  "crDate": "2026-11-16T08:28:38.458Z"
+ },
+ {
+  "id": "24228",
+  "custcode": "20001374",
+  "modulecode": "SHI",
+  "actionStatus": "C",
+  "crDate": "2026-11-16T08:26:35.212Z"
+ },
+ {
+  "id": "24227",
+  "custcode": "20001374",
+  "modulecode": "BKG",
+  "actionStatus": "C",
+  "crDate": "2026-11-16T07:51:56.598Z"
+ },
+ {
+  "id": "24226",
+  "custcode": null,
+  "modulecode": "BKG",
+  "actionStatus": "S",
+  "crDate": "2026-11-16T07:51:37.435Z"
+ },
+ {
+  "id": "24225",
+  "custcode": "2026000100",
+  "modulecode": "SHI",
+  "actionStatus": "S",
+  "crDate": "2026-11-16T07:18:12.218Z"
+ },
+ {
+  "id": "24224",
+  "custcode": "2026000100",
+  "modulecode": "SHI",
+  "actionStatus": "S",
+  "crDate": "2026-11-16T07:13:29.565Z"
+ },
+ {
+  "id": "24223",
+  "custcode": "20001374",
+  "modulecode": "BKG",
+  "actionStatus": "C",
+  "crDate": "2026-11-16T07:13:01.748Z"
+ },
+ {
+  "id": "24222",
+  "custcode": "2026000100",
+  "modulecode": "BKG",
+  "actionStatus": "S",
+  "crDate": "2026-11-16T04:19:10.142Z"
+ },
+ {
+  "id": "24221",
+  "custcode": "2026000100",
+  "modulecode": "SHI",
+  "actionStatus": "C",
+  "crDate": "2026-11-16T04:09:16.305Z"
+ },
+ {
+  "id": "24220",
+  "custcode": "2026000100",
+  "modulecode": "BKG",
+  "actionStatus": "C",
+  "crDate": "2026-11-16T04:07:06.188Z"
+ },
+ {
+  "id": "24219",
+  "custcode": "2026000100",
+  "modulecode": "SHI",
+  "actionStatus": "S",
+  "crDate": "2026-11-16T02:49:47.362Z"
+ },
+ {
+  "id": "24218",
+  "custcode": "2026000100",
+  "modulecode": "SHI",
+  "actionStatus": "S",
+  "crDate": "2026-11-16T02:42:40.475Z"
+ },
+ {
+  "id": "24217",
+  "custcode": "2026000100",
+  "modulecode": "SHI",
+  "actionStatus": "S",
+  "crDate": "2026-11-16T02:42:09.465Z"
+ },
+ {
+  "id": "24216",
+  "custcode": "2026000100",
+  "modulecode": "SHI",
+  "actionStatus": "S",
+  "crDate": "2026-11-16T02:41:59.455Z"
+ },
+ {
+  "id": "24215",
+  "custcode": "2026000100",
+  "modulecode": "BKG",
+  "actionStatus": "C",
+  "crDate": "2026-11-16T02:38:50.265Z"
+ },
+ {
+  "id": "24214",
+  "custcode": "2026000100",
+  "modulecode": "BKG",
+  "actionStatus": "C",
+  "crDate": "2026-11-16T02:30:57.432Z"
+ },
+ {
+  "id": "24213",
+  "custcode": "20001374",
+  "modulecode": "SHI",
+  "actionStatus": "S",
+  "crDate": "2026-11-16T02:20:23.218Z"
+ },
+ {
+  "id": "24212",
+  "custcode": "20001374",
+  "modulecode": "BKG",
+  "actionStatus": "S",
+  "crDate": "2026-11-16T01:37:25.202Z"
+ },
+ {
+  "id": "24211",
+  "custcode": "20001374",
+  "modulecode": "BKG",
+  "actionStatus": "S",
+  "crDate": "2026-11-16T01:37:05.925Z"
+ },
+ {
+  "id": "24210",
+  "custcode": "20001374",
+  "modulecode": "BKG",
+  "actionStatus": "S",
+  "crDate": "2026-11-16T01:36:41.015Z"
+ },
+ {
+  "id": "24209",
+  "custcode": "20001374",
+  "modulecode": "BKG",
+  "actionStatus": "S",
+  "crDate": "2026-11-16T01:36:31.375Z"
+ },
+ {
+  "id": "24208",
+  "custcode": "20001374",
+  "modulecode": "BKG",
+  "actionStatus": "C",
+  "crDate": "2026-11-16T01:35:45.142Z"
+ },
+ {
+  "id": "24207",
+  "custcode": "20001374",
+  "modulecode": "SHI",
+  "actionStatus": "S",
+  "crDate": "2026-11-16T01:12:55.275Z"
+ },
+ {
+  "id": "24206",
+  "custcode": "20001374",
+  "modulecode": "SHI",
+  "actionStatus": "S",
+  "crDate": "2026-11-16T00:55:36.892Z"
+ },
+ {
+  "id": "24205",
+  "custcode": "20001374",
+  "modulecode": "SHI",
+  "actionStatus": "S",
+  "crDate": "2026-11-16T00:52:23.272Z"
+ },
+ {
+  "id": "24204",
+  "custcode": "20001374",
+  "modulecode": "SHI",
+  "actionStatus": "S",
+  "crDate": "2026-11-15T07:57:10.685Z"
+ },
+ {
+  "id": "24203",
+  "custcode": "20001374",
+  "modulecode": "BKG",
+  "actionStatus": "S",
+  "crDate": "2026-11-15T07:53:00.195Z"
+ },
+ {
+  "id": "24202",
+  "custcode": "20001374",
+  "modulecode": "BKG",
+  "actionStatus": "S",
+  "crDate": "2026-11-15T07:41:01.365Z"
+ },
+ {
+  "id": "24201",
+  "custcode": "20001374",
+  "modulecode": "SHI",
+  "actionStatus": "S",
+  "crDate": "2026-11-15T05:41:05.118Z"
+ },
+ {
+  "id": "24200",
+  "custcode": "20001374",
+  "modulecode": "SHI",
+  "actionStatus": "S",
+  "crDate": "2026-11-15T04:51:23.902Z"
+ },
+ {
+  "id": "24199",
+  "custcode": "20001374",
+  "modulecode": "SHI",
+  "actionStatus": "S",
+  "crDate": "2026-11-15T04:41:53.105Z"
+ },
+ {
+  "id": "24198",
+  "custcode": "20001374",
+  "modulecode": "SHI",
+  "actionStatus": "S",
+  "crDate": "2026-11-15T04:41:34.738Z"
+ },
+ {
+  "id": "24197",
+  "custcode": "20001374",
+  "modulecode": "SHI",
+  "actionStatus": "S",
+  "crDate": "2026-11-15T04:28:13.782Z"
+ },
+ {
+  "id": "24196",
+  "custcode": "20001374",
+  "modulecode": "SHI",
+  "actionStatus": "S",
+  "crDate": "2026-11-15T04:11:25.065Z"
+ },
+ {
+  "id": "24195",
+  "custcode": "20001374",
+  "modulecode": "BOL",
+  "actionStatus": "S",
+  "crDate": "2026-11-15T04:09:28.518Z"
+ },
+ {
+  "id": "24194",
+  "custcode": "20001374",
+  "modulecode": "SHI",
+  "actionStatus": "S",
+  "crDate": "2026-11-15T02:47:23.155Z"
+ },
+ {
+  "id": "24193",
+  "custcode": "20001374",
+  "modulecode": "SHI",
+  "actionStatus": "S",
+  "crDate": "2026-11-15T02:44:20.785Z"
+ },
+ {
+  "id": "24192",
+  "custcode": "20001374",
+  "modulecode": "SHI",
+  "actionStatus": "C",
+  "crDate": "2026-11-15T02:42:56.555Z"
+ },
+ {
+  "id": "24191",
+  "custcode": "20001374",
+  "modulecode": "BKG",
+  "actionStatus": "C",
+  "crDate": "2026-11-15T02:19:49.288Z"
+ },
+ {
+  "id": "24190",
+  "custcode": "20001374",
+  "modulecode": "SHI",
+  "actionStatus": "S",
+  "crDate": "2026-11-15T02:17:42.175Z"
+ },
+ {
+  "id": "24189",
+  "custcode": "20001374",
+  "modulecode": "BOL",
+  "actionStatus": "S",
+  "crDate": "2026-11-15T02:17:08.852Z"
+ },
+ {
+  "id": "24188",
+  "custcode": "20001374",
+  "modulecode": "SHI",
+  "actionStatus": "S",
+  "crDate": "2026-11-15T01:56:38.825Z"
+ },
+ {
+  "id": "24187",
+  "custcode": "20001374",
+  "modulecode": "SHI",
+  "actionStatus": "S",
+  "crDate": "2026-11-15T01:55:18.662Z"
+ },
+ {
+  "id": "24186",
+  "custcode": "20001374",
+  "modulecode": "SHI",
+  "actionStatus": "S",
+  "crDate": "2026-11-15T01:54:49.325Z"
+ },
+ {
+  "id": "24185",
+  "custcode": "20001374",
+  "modulecode": "SHI",
+  "actionStatus": "S",
+  "crDate": "2026-11-15T01:43:55.352Z"
+ },
+ {
+  "id": "24184",
+  "custcode": "20001374",
+  "modulecode": "SHI",
+  "actionStatus": "S",
+  "crDate": "2026-11-15T01:43:50.675Z"
+ },
+ {
+  "id": "24183",
+  "custcode": "20001374",
+  "modulecode": "SHI",
+  "actionStatus": "S",
+  "crDate": "2026-11-15T01:43:28.295Z"
+ }
+]

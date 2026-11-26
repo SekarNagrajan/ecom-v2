@@ -1,9 +1,13 @@
+// Modified by Sekar Nagarajan (2026-09-28 16:17)
 import { App, type NotificationArgsProps } from 'antd';
-import { useCallback, useMemo, type ReactNode } from 'react';
+import { useCallback, useContext, useMemo, type ReactNode } from 'react';
 
+import { resolveToastDuration } from '../providers/accessibility-utils';
+import { AppConfigContext } from '../providers/app-config-context';
+import type { ToastNotificationType } from '../providers/types';
 import { useAntdBreakpoint } from './use-antd-breakpoint';
 
-type ToastType = 'success' | 'error' | 'info' | 'warning';
+type ToastType = ToastNotificationType;
 
 interface ToastOptions
   extends Omit<NotificationArgsProps, 'title' | 'message' | 'type'> {
@@ -13,21 +17,26 @@ interface ToastOptions
 export const useToast = () => {
   const { notification } = App.useApp();
   const { isMobile } = useAntdBreakpoint();
+  const appConfig = useContext(AppConfigContext);
 
   const showToast = useCallback(
     (type: ToastType, message: ReactNode, options?: ToastOptions) => {
       const { title, ...rest } = options || {};
+      const duration =
+        rest.duration !== undefined
+          ? rest.duration
+          : resolveToastDuration(type, appConfig?.notifications);
 
       notification[type]({
         title: title || type.charAt(0).toUpperCase() + type.slice(1),
         description: message,
         placement: isMobile ? 'top' : 'topRight',
-        duration: 3,
         closable: true,
         ...rest,
+        duration,
       });
     },
-    [notification, isMobile]
+    [notification, isMobile, appConfig?.notifications]
   );
 
   return useMemo(

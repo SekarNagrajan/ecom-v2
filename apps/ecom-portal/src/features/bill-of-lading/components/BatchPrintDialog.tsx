@@ -1,11 +1,16 @@
-// Modified by Sekar Nagarajan (2026-08-31 15:25)
+// Modified by Sekar Nagarajan (2026-09-29 12:50)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
-import { Empty, Table, Tag, Typography } from "antd";
+import { Table, Tag, Typography } from "antd";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
+import { ModuleEmptyState } from "../../../components/shared/module-empty-state";
 import type { BLListDTO } from "../types/bl.types";
-import { BL_STATUS_LABELS } from "../types/bl.types";
-import { getBLStatusColor, isBatchOriginalPrintEligible } from "../utils/bl-status";
+import {
+  getBLStatusColor,
+  getBLStatusLabel,
+  isBatchOriginalPrintEligible,
+} from "../utils/bl-status";
 
 const { Text } = Typography;
 
@@ -24,6 +29,7 @@ export function BatchPrintDialog({
   onPrint,
   printing = false,
 }: BatchPrintDialogProps) {
+  const { t } = useTranslation(["bill-of-lading", "common", "modules"]);
   const eligible = rows.filter(isBatchOriginalPrintEligible);
   const [selected, setSelected] = useState<string[]>([]);
 
@@ -34,7 +40,7 @@ export function BatchPrintDialog({
 
   return (
     <AppDrawer
-      title="Batch Original Print"
+      title={t("drawers.batchOriginalPrint")}
       open={open}
       onClose={handleClose}
       width={880}
@@ -51,23 +57,24 @@ export function BatchPrintDialog({
               setSelected([]);
             }}
           >
-            Print Selected ({selected.length})
+            {t("actions.printSelected", { count: selected.length })}
           </AppButton>
         </div>
       }
     >
       <div className="bl-batch-print-intro">
-        <Text type="secondary">
-          Select confirmed B/Ls that are eligible for original print. Locked or
-          unprinted drafts are excluded.
-        </Text>
-        <Tag color="blue">{eligible.length} eligible</Tag>
+        <Text type="secondary">{t("batchPrint.intro")}</Text>
+        <Tag color="blue">
+          {t("batchPrint.eligibleCount", { count: eligible.length })}
+        </Tag>
       </div>
 
       {eligible.length === 0 ? (
-        <Empty
-          image={Empty.PRESENTED_IMAGE_SIMPLE}
-          description="No confirmed B/Ls eligible for batch original print."
+        <ModuleEmptyState
+          variant="blank"
+          title={t("empty.batchPrintTitle")}
+          message={t("empty.batchPrintMessage")}
+          artSize="sm"
         />
       ) : (
         <div className="responsive-table-wrap custom-scroll">
@@ -82,15 +89,20 @@ export function BatchPrintDialog({
               onChange: (keys) => setSelected(keys as string[]),
             }}
             columns={[
-              { title: "B/L No", dataIndex: "blNo", key: "blNo", width: 140 },
               {
-                title: "Booking No",
+                title: t("columns.blNo"),
+                dataIndex: "blNo",
+                key: "blNo",
+                width: 140,
+              },
+              {
+                title: t("columns.bookingNo"),
                 dataIndex: "bookingNo",
                 key: "bookingNo",
                 width: 140,
               },
               {
-                title: "Status",
+                title: t("columns.status"),
                 dataIndex: "status",
                 key: "status",
                 width: 120,
@@ -99,12 +111,12 @@ export function BatchPrintDialog({
                     className="bl-status-tag"
                     color={getBLStatusColor(status)}
                   >
-                    {BL_STATUS_LABELS[status]}
+                    {getBLStatusLabel(status, t)}
                   </Tag>
                 ),
               },
               {
-                title: "Route",
+                title: t("columns.route"),
                 key: "route",
                 render: (_, row) => (
                   <Text>

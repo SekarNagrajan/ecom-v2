@@ -1,0 +1,29 @@
+[
+ {
+  "templateid": 4,
+  "templatename": "T1",
+  "custcode": "20001374",
+  "usercr": "baylee.howe87@example.com",
+  "datecr": "2026-11-03T04:56:28.745Z",
+  "chguser": null,
+  "chgdate": null
+ },
+ {
+  "templateid": 3,
+  "templatename": "Test1",
+  "custcode": "20001374",
+  "usercr": "baylee.howe87@example.com",
+  "datecr": "2026-11-03T04:32:26.088Z",
+  "chguser": null,
+  "chgdate": null
+ },
+ {
+  "templateid": 2,
+  "templatename": "Test",
+  "custcode": "20001374",
+  "usercr": "baylee.howe87@example.com",
+  "datecr": "2026-11-03T04:32:07.102Z",
+  "chguser": null,
+  "chgdate": null
+ }
+]

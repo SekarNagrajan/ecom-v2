@@ -1,10 +1,21 @@
 // Modified by Sekar Nagarajan (2026-08-25 19:25)
-import { AppButton } from "@solverminds/shared-ui";
 import { DataView, DataViewColumn } from "@solverminds/shared-ui/data-view";
-import { Card, Flex, Select, Space, Spin, Tag, Tooltip, Typography } from "antd";
+import { Card, Flex, Select, Space, Spin, Tag, Typography } from "antd";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppIcon, Icons } from "../../../components/icons";
+import { buildActionsColumn } from "../../../components/shared/build-actions-column";
+import {
+  ListActionButton,
+  ListActionsRow,
+} from "../../../components/shared/list-action-button";
+import {
+  ModuleEmptyState,
+  buildClearFiltersAction,
+  buildRetryAction,
+} from "../../../components/shared/module-empty-state";
+import { useLocalGridProfiles } from "../../../components/shared/use-local-grid-profiles";
 import { useContractsQuery } from "../api/rates.queries";
 import type { ContractDTO } from "../types/rates.types";
 import { ContractSurchargeModal } from "./ContractSurchargeModal";
@@ -12,6 +23,8 @@ import { ContractSurchargeModal } from "./ContractSurchargeModal";
 const { Text } = Typography;
 
 export function ContractView() {
+  const { t } = useTranslation(["rates", "common", "modules"]);
+  const { profileHandlers } = useLocalGridProfiles("rates-contract");
   const [pol, setPol] = useState<string | undefined>();
   const [pod, setPod] = useState<string | undefined>();
   const [selectedContract, setSelectedContract] = useState<ContractDTO | null>(
@@ -19,7 +32,12 @@ export function ContractView() {
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data: contracts = [], isLoading } = useContractsQuery({ pol, pod });
+  const {
+    data: contracts = [],
+    isLoading,
+    isError,
+    refetch,
+  } = useContractsQuery({ pol, pod });
 
   const handleOpenSurcharges = (contract: ContractDTO) => {
     setSelectedContract(contract);
@@ -27,31 +45,27 @@ export function ContractView() {
   };
 
   const columnDefs: DataViewColumn<ContractDTO>[] = [
-    {
-      headerName: "Actions",
+    buildActionsColumn<ContractDTO>({
       field: "id",
-      sortable: false,
       width: 120,
-      pinned: "left",
       cellRenderer: (params: { data?: ContractDTO }) => {
         const record = params.data;
         if (!record) return null;
         return (
-          <Tooltip title="View Subject to Charges Breakdown">
-            <AppButton
-              type="text"
-              size="small"
+          <ListActionsRow>
+            <ListActionButton
+              title={t("actions.viewSubjectToCharges")}
               icon={
                 <AppIcon icon={Icons.eye} size={16} gridAction tone="view" />
               }
               onClick={() => handleOpenSurcharges(record)}
             />
-          </Tooltip>
+          </ListActionsRow>
         );
       },
-    },
+    }),
     {
-      headerName: "Contract No",
+      headerName: t("contract.columns.contractNo"),
       field: "contractNo",
       minWidth: 160,
       cellRenderer: (params: { data?: ContractDTO }) => (
@@ -61,7 +75,7 @@ export function ContractView() {
       ),
     },
     {
-      headerName: "Rate No",
+      headerName: t("contract.columns.rateNo"),
       field: "rateNo",
       minWidth: 150,
       cellRenderer: (params: { data?: ContractDTO }) => (
@@ -69,12 +83,12 @@ export function ContractView() {
       ),
     },
     {
-      headerName: "Customer Name",
+      headerName: t("contract.columns.customerName"),
       field: "customerName",
       minWidth: 200,
     },
     {
-      headerName: "Port of Load",
+      headerName: t("tariff.columns.portOfLoad"),
       field: "originPort",
       minWidth: 160,
       cellRenderer: (params: { data?: ContractDTO }) => (
@@ -85,7 +99,7 @@ export function ContractView() {
       ),
     },
     {
-      headerName: "Port of Discharge",
+      headerName: t("tariff.columns.portOfDischarge"),
       field: "deliveryPort",
       minWidth: 160,
       cellRenderer: (params: { data?: ContractDTO }) => (
@@ -98,7 +112,7 @@ export function ContractView() {
       ),
     },
     {
-      headerName: "Eqp Type",
+      headerName: t("tariff.columns.eqpType"),
       field: "eqpType",
       minWidth: 160,
       cellRenderer: (params: { data?: ContractDTO }) => (
@@ -106,12 +120,12 @@ export function ContractView() {
       ),
     },
     {
-      headerName: "Commodity",
+      headerName: t("tariff.columns.commodity"),
       field: "commodityName",
       minWidth: 180,
     },
     {
-      headerName: "Agreed Rate",
+      headerName: t("contract.columns.agreedRate"),
       field: "oceanFreight",
       minWidth: 160,
       cellRenderer: (params: { data?: ContractDTO }) => (
@@ -121,7 +135,7 @@ export function ContractView() {
       ),
     },
     {
-      headerName: "Subject to Charges",
+      headerName: t("contract.columns.subjectToCharges"),
       field: "subjectToChargesAmount",
       minWidth: 160,
       cellRenderer: (params: { data?: ContractDTO }) => (
@@ -132,26 +146,54 @@ export function ContractView() {
       ),
     },
     {
-      headerName: "SOC",
+      headerName: t("contract.columns.soc"),
       field: "soc",
       width: 90,
     },
     {
-      headerName: "Trans. Service",
+      headerName: t("contract.columns.transService"),
       field: "carrTerms",
       minWidth: 130,
     },
     {
-      headerName: "Validity Window",
+      headerName: t("contract.columns.validityWindow"),
       field: "effectiveFrom",
       minWidth: 180,
       cellRenderer: (params: { data?: ContractDTO }) => (
         <Text className="rates-cell-sub">
-          {params.data?.effectiveFrom} to {params.data?.effectiveTo}
+          {t("contract.validityRange", {
+            from: params.data?.effectiveFrom,
+            to: params.data?.effectiveTo,
+          })}
         </Text>
       ),
     },
   ];
+
+  const emptyState = isError ? (
+    <ModuleEmptyState
+      variant="error"
+      title={t("errors.contractsLoadTitle")}
+      message={t("errors.loadFailedMessage")}
+      actions={[buildRetryAction(() => void refetch())]}
+    />
+  ) : (
+    <ModuleEmptyState
+      variant={pol || pod ? "filtered" : "blank"}
+      title={t("empty.contractsTitle")}
+      message={t("empty.contractsMessage")}
+      actions={
+        pol || pod
+          ? [
+              buildClearFiltersAction(() => {
+                setPol(undefined);
+                setPod(undefined);
+              }),
+            ]
+          : undefined
+      }
+    />
+  );
 
   return (
     <div className="rates-stack">
@@ -159,46 +201,55 @@ export function ContractView() {
         <Flex gap="middle" align="center" wrap="wrap">
           <Space>
             <AppIcon icon={Icons.filter} size={16} />
-            <Text strong>Filter Contract Rates:</Text>
+            <Text strong>{t("contract.filterHeading")}</Text>
           </Space>
 
           <Select
-            placeholder="Port of Load"
+            placeholder={t("tariff.portOfLoad")}
             allowClear
             size="large"
             className="rates-filter-select"
             value={pol}
             onChange={setPol}
             options={[
-              { label: "USNYC - New York", value: "USNYC" },
-              { label: "DEHAM - Hamburg", value: "DEHAM" },
+              { label: t("options.ports.USNYC_short"), value: "USNYC" },
+              { label: t("options.ports.DEHAM_short"), value: "DEHAM" },
             ]}
           />
 
           <Select
-            placeholder="Port of Discharge"
+            placeholder={t("tariff.portOfDischarge")}
             allowClear
             size="large"
             className="rates-filter-select"
             value={pod}
             onChange={setPod}
             options={[
-              { label: "SGSIN - Singapore", value: "SGSIN" },
-              { label: "CNSHA - Shanghai", value: "CNSHA" },
+              { label: t("options.ports.SGSIN_short"), value: "SGSIN" },
+              { label: t("options.ports.CNSHA_short"), value: "CNSHA" },
             ]}
           />
         </Flex>
       </Card>
 
-      <Spin spinning={isLoading} tip="Loading service contract rates...">
+      <Spin spinning={isLoading} tip={t("contract.loading")}>
         <Card className="rates-grid-panel">
           <div className="rates-grid responsive-table-wrap custom-scroll">
             <DataView
-              data={contracts}
+              rowData={contracts}
+              emptyState={emptyState}
               columnDefs={columnDefs}
-              pagination
-              paginationPageSize={10}
+              listOptions={{
+                ...profileHandlers,
+                showToolbar: { showTotalCount: true, fullScreen: true },
+                sideBar: true,
+                pagination: true,
+                paginationPageSize: 10,
+                pageSizeOptions: [10, 20, 50, 100],
+                defaultColDef: { filter: true },
+              }}
               className="rates-grid"
+              renderToolbar={() => null}
             />
           </div>
         </Card>

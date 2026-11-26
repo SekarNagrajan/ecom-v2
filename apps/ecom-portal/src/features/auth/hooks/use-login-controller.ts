@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-29 12:40)
+// Modified by Sekar Nagarajan (2026-11-26 20:50)
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuthStore, useTenantStore } from "@solverminds/auth";
 import { useMutation } from "@tanstack/react-query";
@@ -8,13 +8,11 @@ import { useTranslation } from "react-i18next";
 import { create } from "zustand";
 
 import { loginUser } from "../api/auth.api";
-import {
-  loginStep1,
-  resetOtpLoginMockSession,
-} from "../api/otp-login.api";
+import { loginStep1, resetOtpLoginMockSession } from "../api/otp-login.api";
 import { OTP_LOGIN_CONFIG } from "../config/otp-login-config";
 import { createLoginSchema, type LoginForm } from "../types/auth.types";
 import type { OtpSessionSnapshot } from "./use-otp-login-controller";
+import { sessionMetaOf } from "../utils/session-meta";
 
 // ---------------------------------------------------------------------------
 // Failed-attempt counter — parity with JSP `InvalidpassattemptCount` session
@@ -52,19 +50,14 @@ interface UseLoginControllerOptions {
   onOtpRequired?: () => void;
 }
 
-export function useLoginController({
-  onSuccess,
-  onOtpRequired,
-}: UseLoginControllerOptions = {}) {
+export function useLoginController({ onSuccess, onOtpRequired }: UseLoginControllerOptions = {}) {
   const { t } = useTranslation("auth");
   const { login } = useAuthStore();
   const { setTenant } = useTenantStore();
   const { failedAttempts, increment, reset } = useLoginAttemptStore();
   const [serverError, setServerError] = useState<string | null>(null);
   const [phase, setPhase] = useState<LoginPhase>("credentials");
-  const [otpSession, setOtpSession] = useState<OtpSessionSnapshot | null>(
-    null,
-  );
+  const [otpSession, setOtpSession] = useState<OtpSessionSnapshot | null>(null);
   const schema = useMemo(() => createLoginSchema(t), [t]);
 
   const otpEnabled = OTP_LOGIN_CONFIG.enableOtpLogin;
@@ -87,7 +80,7 @@ export function useLoginController({
       if (result.mode === "direct") {
         reset();
         setServerError(null);
-        login(result.data.token, result.data.user);
+        login(result.data.token, result.data.user, sessionMetaOf(result.data));
         if (result.data.user.tenantId) {
           setTenant(result.data.user.tenantId);
         }

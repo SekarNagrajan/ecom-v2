@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-29 12:40)
+// Modified by Sekar Nagarajan (2026-11-26 20:50)
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { SubCustomerAccount } from "@solverminds/auth";
 import { useAuthStore, useTenantStore } from "@solverminds/auth";
@@ -13,16 +13,14 @@ import {
   type AdminLoginForm,
   type LoginEntryType,
 } from "../types/auth.types";
+import { sessionMetaOf } from "../utils/session-meta";
 
 interface UseAdminLoginControllerOptions {
   entryType: LoginEntryType;
   onSuccess?: (customerList?: SubCustomerAccount[]) => void;
 }
 
-export function useAdminLoginController({
-  entryType,
-  onSuccess,
-}: UseAdminLoginControllerOptions) {
+export function useAdminLoginController({ entryType, onSuccess }: UseAdminLoginControllerOptions) {
   const { t } = useTranslation("auth");
   const { login, setActiveSubCustomer } = useAuthStore();
   const { setTenant } = useTenantStore();
@@ -38,7 +36,7 @@ export function useAdminLoginController({
     mutationFn: (values: AdminLoginForm) => loginAdmin(values, entryType),
     onSuccess: (data) => {
       setServerError(null);
-      login(data.token, data.user);
+      login(data.token, data.user, sessionMetaOf(data));
       if (data.user.tenantId) {
         setTenant(data.user.tenantId);
       }

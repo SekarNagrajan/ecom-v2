@@ -1,31 +1,27 @@
-// Created by Sekar Nagarajan (2026-08-27 12:10)
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+// Modified by Sekar Nagarajan (2026-11-26 16:50)
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
-import type { SubCustomerAccount } from '@solverminds/auth';
-import { useAuthStore } from '@solverminds/auth';
-import {
-  exitImpersonation,
-  fetchCustomerList,
-  impersonateCustomer,
-} from '../api/auth.api';
+import type { SubCustomerAccount } from "@solverminds/auth";
+import { useAuthStore } from "@solverminds/auth";
+import { getStoredToken } from "@solverminds/platform";
+import { exitImpersonation, fetchCustomerList, impersonateCustomer } from "../api/auth.api";
 
 export function useImpersonationController() {
-  const { user, setImpersonatedCustomer, clearImpersonation, login } =
-    useAuthStore();
+  const { user, setImpersonatedCustomer, clearImpersonation, login } = useAuthStore();
   const [showPicker, setShowPicker] = useState(false);
 
   const customerListQuery = useQuery({
-    queryKey: ['admin', 'customers'],
+    queryKey: ["admin", "customers"],
     queryFn: fetchCustomerList,
-    enabled: Boolean(user?.role === 'ADMIN' || user?.adminUserType === 'C'),
+    enabled: Boolean(user?.role === "ADMIN" || user?.adminUserType === "C"),
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
   const impersonateMutation = useMutation({
     mutationFn: impersonateCustomer,
     onSuccess: (updatedUser) => {
-      const token = localStorage.getItem('ecom_auth_token');
+      const token = getStoredToken();
       if (token) {
         login(token, updatedUser);
       }
@@ -36,7 +32,7 @@ export function useImpersonationController() {
     mutationFn: exitImpersonation,
     onSuccess: (adminUser) => {
       clearImpersonation();
-      const token = localStorage.getItem('ecom_auth_token');
+      const token = getStoredToken();
       if (token) {
         login(token, adminUser);
       }

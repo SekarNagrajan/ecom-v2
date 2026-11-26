@@ -1,5 +1,5 @@
-// Modified by Sekar Nagarajan (2026-11-12 23:50)
-import { useAuthStore, useTenantStore } from "@solverminds/auth";
+// Modified by Sekar Nagarajan (2026-11-26 22:35)
+import { sessionManager, useAuthStore, useTenantStore } from "@solverminds/auth";
 import { env, queryClient } from "@solverminds/platform";
 import {
   createRootRoute,
@@ -22,6 +22,7 @@ import { adminRoute } from "../features/admin/admin-route";
 import { resolveAdminLandingSearch } from "../features/admin/utils/admin-landing";
 import { rehydrateSession } from "../features/auth/api/rehydrate-session";
 import { SESSION_EXPIRED_SEARCH_REASON } from "../features/auth/api/session-expiry";
+import { usePostLoginRedirectStore } from "../features/auth/stores/use-post-login-redirect-store";
 import { redirectForMissingCapability } from "../features/auth/utils/capability-guard";
 import { AdminLoginPage } from "../features/auth/components/admin-login-page";
 import { ImpersonationLoginPage } from "../features/auth/components/impersonation-login-page";
@@ -34,7 +35,17 @@ import { vendorApprovalsRoute } from "../features/vendor-approvals/vendor-approv
 // Route guard helpers
 // ---------------------------------------------------------------------------
 
+/**
+ * Settle the session before a guard reads the store: a tab that slept or was throttled past its
+ * idle/absolute deadline is expired here instead of passing on a stale `isAuthenticated`.
+ * (Access-token expiry is NOT checked: the silent refresh recovers it on the next API call.)
+ */
+function settleSession() {
+  sessionManager.evaluate();
+}
+
 function requireAuth() {
+  settleSession();
   const { isAuthenticated } = useAuthStore.getState();
   if (!isAuthenticated) {
     throw redirect({ to: "/", search: { login: true } as never });
@@ -43,6 +54,7 @@ function requireAuth() {
 
 function assertCapability(code: string) {
   return () => {
+    settleSession();
     const user = useAuthStore.getState().user;
     if (!user) {
       throw redirect({ to: "/", search: { login: true } as never });
@@ -62,6 +74,7 @@ function assertCapability(code: string) {
 }
 
 export function assertAdminAccess() {
+  settleSession();
   const user = useAuthStore.getState().user;
   if (!user) {
     throw redirect({ to: "/", search: { login: true } as never });
@@ -72,6 +85,7 @@ export function assertAdminAccess() {
 }
 
 function assertVendorAccess() {
+  settleSession();
   const user = useAuthStore.getState().user;
   if (!user) {
     throw redirect({ to: "/", search: { login: true } as never });
@@ -82,6 +96,7 @@ function assertVendorAccess() {
 }
 
 function assertSuperuserAccess() {
+  settleSession();
   const user = useAuthStore.getState().user;
   if (!user) {
     throw redirect({ to: "/", search: { login: true } as never });
@@ -249,8 +264,20 @@ const MyAlertsPage = lazyRouteComponent(
 // 1. Root Route
 // ---------------------------------------------------------------------------
 const rootRoute = createRootRoute({
-  beforeLoad: async () => {
-    await rehydrateSession();
+  beforeLoad: async ({ location }) => {
+    // A stored session that could not be restored (idle too long, rejected, server unreachable)
+    // always lands on the login panel — never on a module — and resumes where the user was.
+    if ((await rehydrateSession()) === "expired") {
+      if (location.pathname.startsWith("/app")) {
+        usePostLoginRedirectStore
+          .getState()
+          .setIntendedPath(`${location.pathname}${location.searchStr}`);
+      }
+      throw redirect({
+        to: "/",
+        search: { login: true, reason: SESSION_EXPIRED_SEARCH_REASON } as never,
+      });
+    }
 
     try {
       const tenant = await queryClient.ensureQueryData(publicTenantQueryOptions());

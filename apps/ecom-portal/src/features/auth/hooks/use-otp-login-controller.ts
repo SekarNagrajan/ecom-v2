@@ -1,20 +1,14 @@
-// Modified by Sekar Nagarajan (2026-09-29 12:40)
+// Modified by Sekar Nagarajan (2026-11-26 20:50)
 import { useAuthStore, useTenantStore } from "@solverminds/auth";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import {
-  resendLoginOtp,
-  verifyLoginOtp,
-  type OtpLoginStep1Response,
-} from "../api/otp-login.api";
+import { resendLoginOtp, verifyLoginOtp, type OtpLoginStep1Response } from "../api/otp-login.api";
 import { OTP_LOGIN_CONFIG } from "../config/otp-login-config";
+import { sessionMetaOf } from "../utils/session-meta";
 
-export type OtpSessionSnapshot = Extract<
-  OtpLoginStep1Response,
-  { status: "OTP_REQUIRED" }
->;
+export type OtpSessionSnapshot = Extract<OtpLoginStep1Response, { status: "OTP_REQUIRED" }>;
 
 interface UseOtpLoginControllerOptions {
   session: OtpSessionSnapshot | null;
@@ -45,9 +39,7 @@ export function useOtpLoginController({
   const [code, setCode] = useState("");
   const [devCode, setDevCode] = useState(session?.devCode ?? "");
   const [secondsLeft, setSecondsLeft] = useState(session?.ttl ?? 0);
-  const [resendCooldownLeft, setResendCooldownLeft] = useState(
-    session?.resendCooldown ?? 0,
-  );
+  const [resendCooldownLeft, setResendCooldownLeft] = useState(session?.resendCooldown ?? 0);
   const [resendsLeft, setResendsLeft] = useState(session?.maxResends ?? 0);
   const [inlineError, setInlineError] = useState<string | null>(null);
   const [shake, setShake] = useState(false);
@@ -55,9 +47,7 @@ export function useOtpLoginController({
   const [timerEpoch, setTimerEpoch] = useState(0);
   const [cooldownEpoch, setCooldownEpoch] = useState(0);
 
-  const sessionKey = session
-    ? `${session.maskedEmail}:${session.devCode}:${session.ttl}`
-    : null;
+  const sessionKey = session ? `${session.maskedEmail}:${session.devCode}:${session.ttl}` : null;
   const lastSessionKey = useRef<string | null>(null);
 
   useEffect(() => {
@@ -123,7 +113,7 @@ export function useOtpLoginController({
       switch (data.status) {
         case "VERIFIED":
           setInlineError(null);
-          login(data.token, data.user);
+          login(data.token, data.user, sessionMetaOf(data));
           if (data.user.tenantId) {
             setTenant(data.user.tenantId);
           }
@@ -131,9 +121,7 @@ export function useOtpLoginController({
           return;
         case "INVALID":
           setShake(true);
-          setInlineError(
-            t("otp.incorrectCode", { attemptsLeft: data.attemptsLeft }),
-          );
+          setInlineError(t("otp.incorrectCode", { attemptsLeft: data.attemptsLeft }));
           setCode("");
           window.setTimeout(() => setShake(false), 450);
           return;
@@ -171,9 +159,7 @@ export function useOtpLoginController({
       setCode("");
       setTimerEpoch((n) => n + 1);
       setCooldownEpoch((n) => n + 1);
-      onCodeSent?.(
-        t("otp.newCodeSent", { resendsLeft: data.resendsLeft }),
-      );
+      onCodeSent?.(t("otp.newCodeSent", { resendsLeft: data.resendsLeft }));
     },
     onError: (err: Error) => {
       setInlineError(err.message || t("otp.resendFailed"));
@@ -183,9 +169,7 @@ export function useOtpLoginController({
   const codeLength = session?.codeLength ?? OTP_LOGIN_CONFIG.codeLength;
 
   const canVerify =
-    code.replace(/\D/g, "").length === codeLength &&
-    !expired &&
-    !verifyMutation.isPending;
+    code.replace(/\D/g, "").length === codeLength && !expired && !verifyMutation.isPending;
 
   const canResend =
     resendCooldownLeft <= 0 &&

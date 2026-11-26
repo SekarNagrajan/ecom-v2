@@ -1,7 +1,13 @@
-// Modified by Sekar Nagarajan (2026-11-13 00:40)
-import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
+// Modified by Sekar Nagarajan (2026-11-26 17:10)
+import axios, { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from "axios";
 import { env } from "./env";
 import { resolveApiBaseUrl } from "./http/paths";
+import {
+  isAuthRecoveryExempt,
+  notifySessionExpired,
+  refreshAccessToken,
+} from "./session/auth-recovery";
+import { getStoredToken } from "./session/token-storage";
 
 export interface ApiResponse<T = any> {
   status: "SUCCESS" | "ERROR";
@@ -29,29 +35,35 @@ export const apiClient: AxiosInstance = axios.create({
 
 // Request interceptor to attach Bearer token
 apiClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem("ecom_auth_token");
+  const token = getStoredToken();
   if (token && config.headers) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
 
-// Response interceptor — 401 clears session and opens login with session-expired reason
+type RetriableConfig = InternalAxiosRequestConfig & { _retry?: boolean };
+
+// Response interceptor — on 401, silently refresh the access token once (single-flight across
+// all concurrent requests) and replay; if that fails the session is expired (debounced event).
 apiClient.interceptors.response.use(
   (response: AxiosResponse<ApiResponse>) => {
     return response;
   },
   async (error: AxiosError<ApiResponse>) => {
-    if (error.response?.status === 401) {
-      const url = error.config?.url ?? "";
-      // Session probe / login failures are handled by callers — don't hard-redirect.
-      const isAuthProbe = /\/auth\/(me|login|admin-login)(\?|$)/.test(url);
-      if (!isAuthProbe) {
-        window.dispatchEvent(
-          new CustomEvent("ecom:unauthorized", {
-            detail: { reason: "session-expired" },
-          }),
-        );
+    const config = error.config as RetriableConfig | undefined;
+    if (error.response?.status === 401 && config && !isAuthRecoveryExempt(config.url)) {
+      if (config._retry) {
+        // Replayed with a fresh token and still rejected — the session really is gone.
+        notifySessionExpired();
+      } else {
+        const token = await refreshAccessToken();
+        if (token) {
+          config._retry = true;
+          config.headers.Authorization = `Bearer ${token}`;
+          return apiClient(config);
+        }
+        notifySessionExpired();
       }
     }
     return Promise.reject(error);

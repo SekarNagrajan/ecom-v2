@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-29 12:40)
+// Modified by Sekar Nagarajan (2026-11-26 20:50)
 import type { SubCustomerAccount, UserProfile } from "@solverminds/auth";
 import { apiClient, extractApiError } from "@solverminds/platform";
 
@@ -9,6 +9,7 @@ import type {
   LoginEntryType,
   LoginForm,
   LoginSuccessResponse,
+  SessionTiming,
 } from "../types/auth.types";
 
 async function hashPassword(password: string): Promise<string> {
@@ -21,24 +22,17 @@ async function hashPassword(password: string): Promise<string> {
 }
 
 /** POST /api/auth/login — customer login */
-export async function loginUser(
-  credentials: LoginForm,
-): Promise<LoginSuccessResponse> {
+export async function loginUser(credentials: LoginForm): Promise<LoginSuccessResponse> {
   const hashedPassword = await hashPassword(credentials.password);
 
   try {
-    const response = await apiClient.post<{ data: LoginSuccessResponse }>(
-      "/api/auth/login",
-      {
-        userName: credentials.userName,
-        password: hashedPassword,
-      },
-    );
+    const response = await apiClient.post<{ data: LoginSuccessResponse }>("/api/auth/login", {
+      userName: credentials.userName,
+      password: hashedPassword,
+    });
     return response.data.data;
   } catch (error) {
-    throw new Error(
-      extractApiError(error) || i18n.t("auth:errors.invalidUsernamePassword"),
-    );
+    throw new Error(extractApiError(error) || i18n.t("auth:errors.invalidUsernamePassword"));
   }
 }
 
@@ -60,33 +54,58 @@ export async function loginAdmin(
     );
     return response.data.data;
   } catch (error) {
-    throw new Error(
-      extractApiError(error) || i18n.t("auth:errors.invalidCredentials"),
-    );
+    throw new Error(extractApiError(error) || i18n.t("auth:errors.invalidCredentials"));
+  }
+}
+
+/** GET /api/auth/me — validate token; returns the profile plus the session timing when the server sends it */
+export async function fetchCurrentSession(
+  token: string,
+): Promise<{ user: UserProfile } & SessionTiming> {
+  try {
+    const response = await apiClient.get<{
+      data: { user: UserProfile } & SessionTiming;
+    }>("/api/auth/me", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data.data;
+  } catch {
+    throw new Error(i18n.t("auth:errors.sessionExpired"));
   }
 }
 
 /** GET /api/auth/me — validate token and return current user profile */
 export async function fetchCurrentUser(token: string): Promise<UserProfile> {
+  return (await fetchCurrentSession(token)).user;
+}
+
+/**
+ * POST /api/auth/refresh — exchange the HttpOnly refresh cookie for a new access token.
+ * Contract: docs in plan §2 (`{ token, expiresAt }`); 401 means the session cannot be renewed.
+ */
+export async function refreshSession(): Promise<{
+  token: string;
+  expiresAt?: string | number | null;
+}> {
+  const response = await apiClient.post<{
+    data: { token: string; expiresAt?: string | number | null };
+  }>("/api/auth/refresh", undefined, { withCredentials: true });
+  return response.data.data;
+}
+
+/** POST /api/auth/logout — revoke the refresh token server-side. Best effort; never throws. */
+export async function logoutServer(): Promise<void> {
   try {
-    const response = await apiClient.get<{ data: { user: UserProfile } }>(
-      "/api/auth/me",
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      },
-    );
-    return response.data.data.user;
+    await apiClient.post("/api/auth/logout", undefined, { withCredentials: true });
   } catch {
-    throw new Error(i18n.t("auth:errors.sessionExpired"));
+    /* already logged out / offline — client state is cleared regardless */
   }
 }
 
 /** GET /api/admin/customers — list all customers for impersonation picker */
 export async function fetchCustomerList(): Promise<SubCustomerAccount[]> {
   try {
-    const response = await apiClient.get<{ data: SubCustomerAccount[] }>(
-      "/api/admin/customers",
-    );
+    const response = await apiClient.get<{ data: SubCustomerAccount[] }>("/api/admin/customers");
     return response.data.data;
   } catch {
     throw new Error(i18n.t("auth:errors.loadCustomerList"));
@@ -94,9 +113,7 @@ export async function fetchCustomerList(): Promise<SubCustomerAccount[]> {
 }
 
 /** POST /api/auth/impersonate — switch to a customer context */
-export async function impersonateCustomer(
-  custCode: string,
-): Promise<UserProfile> {
+export async function impersonateCustomer(custCode: string): Promise<UserProfile> {
   try {
     const response = await apiClient.post<{ data: { user: UserProfile } }>(
       "/api/auth/impersonate",
@@ -121,19 +138,14 @@ export async function exitImpersonation(): Promise<UserProfile> {
 }
 
 /** POST /api/auth/activate — activate user account via token */
-export async function activateUser(
-  activationToken: string,
-): Promise<{ message: string }> {
+export async function activateUser(activationToken: string): Promise<{ message: string }> {
   try {
-    const response = await apiClient.post<{ message: string }>(
-      "/api/auth/activate",
-      { token: activationToken },
-    );
+    const response = await apiClient.post<{ message: string }>("/api/auth/activate", {
+      token: activationToken,
+    });
     return response.data;
   } catch (error) {
-    throw new Error(
-      extractApiError(error) || i18n.t("auth:errors.activateAccount"),
-    );
+    throw new Error(extractApiError(error) || i18n.t("auth:errors.activateAccount"));
   }
 }
 
@@ -143,14 +155,9 @@ export async function requestPasswordReset(data: {
   captcha: string;
 }): Promise<{ message: string }> {
   try {
-    const response = await apiClient.post<{ message: string }>(
-      "/api/auth/forgot-password",
-      data,
-    );
+    const response = await apiClient.post<{ message: string }>("/api/auth/forgot-password", data);
     return response.data;
   } catch (error) {
-    throw new Error(
-      extractApiError(error) || i18n.t("auth:errors.passwordReset"),
-    );
+    throw new Error(extractApiError(error) || i18n.t("auth:errors.passwordReset"));
   }
 }

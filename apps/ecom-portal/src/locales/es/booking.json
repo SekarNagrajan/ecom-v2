@@ -129,6 +129,7 @@
       "saveDraft": "Guardar borrador",
       "goToDashboard": "Ir al panel",
       "createAnother": "Crear otra reserva",
+      "viewBooking": "Ver reserva",
       "selectTemplate": "Seleccionar plantilla",
       "submitBooking": "Enviar reserva"
     },

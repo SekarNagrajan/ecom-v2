@@ -1,8 +1,16 @@
-// Modified by Sekar Nagarajan (2026-10-16 23:35)
+// Modified by Sekar Nagarajan (2026-11-26 20:40)
 import type { UserProfile } from '@solverminds/auth';
 import { http, HttpResponse } from 'msw';
 import type { LoginEntryType } from '../features/auth/types/auth.types';
-import { bearerToken, bearerUser, registerMockToken, resolveMockToken } from './auth-token-registry';
+import {
+  bearerToken,
+  bearerUser,
+  canonicalToken,
+  registerMockToken,
+  resolveMockToken,
+  sessionTimingFor,
+  withSession,
+} from './auth-token-registry';
 import { menuCategories } from './fixture-api/bridges/menus.bridge';
 import {
   adminToken,
@@ -21,10 +29,14 @@ import {
 /** Token → the admin profile before impersonation, so exit-impersonation can restore it. */
 const adminBaseByToken = new Map<string, UserProfile>();
 
-function adminFor(request: Request, entryType: LoginEntryType, userType: 'A' | 'C'): { token: string; user: UserProfile } | null {
+function adminFor(
+  request: Request,
+  entryType: LoginEntryType,
+  userType: 'A' | 'C',
+): { token: string; user: UserProfile } | null {
   const token = bearerToken(request);
   const current = resolveMockToken(token);
-  if (token && current) return { token, user: adminBaseByToken.get(token) ?? current };
+  if (token && current) return { token, user: adminBaseByToken.get(canonicalToken(token)) ?? current };
   const account = defaultAdminAccount(userType);
   if (!account) return null;
   const fallbackToken = adminToken(entryType, account);
@@ -50,9 +62,9 @@ export const authAdminHandlers = [
     const token = adminToken(entryType, account);
     const user = buildAdminProfile(account, entryType);
     registerMockToken(token, user);
-    adminBaseByToken.set(token, user);
+    adminBaseByToken.set(canonicalToken(token), user);
     return HttpResponse.json({
-      data: entryType === 'admin' ? { token, user, customerList: customerAccounts() } : { token, user },
+      data: withSession(entryType === 'admin' ? { token, user, customerList: customerAccounts() } : { token, user }),
     });
   }),
 
@@ -62,7 +74,7 @@ export const authAdminHandlers = [
       return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
     const user = bearerUser(request);
-    if (user) return HttpResponse.json({ data: { user } });
+    if (user) return HttpResponse.json({ data: { user, ...sessionTimingFor(bearerToken(request)) } });
     return HttpResponse.json({ message: 'Invalid or expired token' }, { status: 401 });
   }),
 
@@ -75,7 +87,7 @@ export const authAdminHandlers = [
     const admin = adminFor(request, 'admin', 'C');
     if (!admin) return HttpResponse.json({ message: 'No admin account in fixtures' }, { status: 404 });
     const user = buildImpersonatedUser(admin.user, body.custCode);
-    adminBaseByToken.set(admin.token, admin.user);
+    adminBaseByToken.set(canonicalToken(admin.token), admin.user);
     registerMockToken(admin.token, user);
     return HttpResponse.json({ data: { user } });
   }),

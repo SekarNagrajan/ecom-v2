@@ -1,5 +1,5 @@
-// Modified by Sekar Nagarajan (2026-09-28 15:25)
-import { useAuthStore } from "@solverminds/auth";
+// Modified by Sekar Nagarajan (2026-11-26 19:20)
+import { sessionManager, useAuthStore } from "@solverminds/auth";
 import { Outlet, useNavigate } from "@tanstack/react-router";
 import { Layout } from "antd";
 import { useState } from "react";
@@ -24,12 +24,8 @@ export function AuthenticatedLayout() {
   const { useMobileNav, compactHeader, tier } = useResponsiveLayout();
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const setIntendedPath = usePostLoginRedirectStore((s) => s.setIntendedPath);
-  const clearIntendedPath = usePostLoginRedirectStore(
-    (s) => s.clearIntendedPath,
-  );
-  const consumeIntendedPath = usePostLoginRedirectStore(
-    (s) => s.consumeIntendedPath,
-  );
+  const clearIntendedPath = usePostLoginRedirectStore((s) => s.clearIntendedPath);
+  const consumeIntendedPath = usePostLoginRedirectStore((s) => s.consumeIntendedPath);
 
   const openLoginPanel = (intendedPath?: string | null) => {
     if (intendedPath) {
@@ -51,9 +47,10 @@ export function AuthenticatedLayout() {
     },
   });
 
+  // Revokes the refresh token, clears local state, notifies other tabs, then navigates home
+  // (the `onSignedOut` hook wired in main.tsx).
   const onLogout = () => {
-    useAuthStore.getState().logout();
-    navigate({ to: "/" });
+    void sessionManager.signOut();
   };
 
   return (

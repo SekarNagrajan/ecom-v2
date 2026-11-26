@@ -1,6 +1,6 @@
-// Modified by Sekar Nagarajan (2026-11-16 12:55) — lock accent to default (no tenant brand)
-import { useAuthStore } from "@solverminds/auth";
-import { env, queryClient } from "@solverminds/platform";
+// Modified by Sekar Nagarajan (2026-11-26 19:20)
+import { sessionManager, startSessionSync } from "@solverminds/auth";
+import { env, queryClient, UNAUTHORIZED_EVENT } from "@solverminds/platform";
 import { AppConfigProvider } from "@solverminds/shared-ui/providers";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider } from "@tanstack/react-router";
@@ -10,7 +10,12 @@ import ReactDOM from "react-dom/client";
 import { router } from "./app/router";
 import { TenantDocumentHead } from "./components/providers/TenantDocumentHead";
 import { TenantThemeProvider } from "./components/providers/TenantThemeProvider";
+import { logoutServer } from "./features/auth/api/auth.api";
+import { wireSessionCleanup } from "./features/auth/api/session-cleanup";
 import { SESSION_EXPIRED_SEARCH_REASON } from "./features/auth/api/session-expiry";
+import { wireSessionRefresher } from "./features/auth/api/session-refresher";
+import { SessionExpiryModal } from "./features/auth/components/SessionExpiryModal";
+import { usePostLoginRedirectStore } from "./features/auth/stores/use-post-login-redirect-store";
 import { ThemePreferencesProvider } from "./features/theme/providers/theme-preferences-provider";
 import { useAppConfigStore } from "./features/theme/stores/app-config.store";
 import { BE_COLOR_MAP } from "./features/theme/utils/config-mapper";
@@ -52,22 +57,52 @@ function AppRoot() {
         <TenantThemeProvider>
           <TenantDocumentHead primaryColor={mergedConfig.primaryColor} />
           <RouterProvider router={router} />
+          <SessionExpiryModal />
         </TenantThemeProvider>
       </ThemePreferencesProvider>
     </AppConfigProvider>
   );
 }
 
-function wireUnauthorizedListener(): void {
-  window.addEventListener("ecom:unauthorized", () => {
-    useAuthStore.getState().logout();
+/**
+ * One path for every way a session can end (idle timeout, absolute cap, refresh rejected, 401):
+ * the session manager clears auth state, then this hook sends the user to the login panel.
+ */
+function wireSessionManager(): void {
+  /** Remember where the user was so signing back in resumes there (PublicLayout consumes it). */
+  const rememberReturnPath = () => {
+    const { pathname, searchStr } = router.state.location;
+    if (pathname.startsWith("/app")) {
+      usePostLoginRedirectStore.getState().setIntendedPath(`${pathname}${searchStr}`);
+    }
+  };
+
+  /** Session ended involuntarily: explain why on the login panel, then resume after sign-in. */
+  const goToExpiredLogin = () => {
+    rememberReturnPath();
     void router.navigate({
       to: "/",
-      search: {
-        login: true,
-        reason: SESSION_EXPIRED_SEARCH_REASON,
-      } as never,
+      search: { login: true, reason: SESSION_EXPIRED_SEARCH_REASON } as never,
     });
+  };
+
+  sessionManager.configure({
+    onExpired: goToExpiredLogin,
+    // Revoke the refresh token while the Bearer is still available, before local state is cleared.
+    onSignOut: () => logoutServer(),
+    onSignedOut: () => void router.navigate({ to: "/" }),
+  });
+  // 401s that survive refresh+retry arrive as a (debounced) window event from libs/platform.
+  window.addEventListener(UNAUTHORIZED_EVENT, () => sessionManager.expire("session-expired"));
+  sessionManager.start();
+
+  // Multi-tab: logout / token refresh / activity / "stay signed in" propagate to every open tab.
+  startSessionSync({
+    manager: sessionManager,
+    onRemoteLogout: (reason) => {
+      if (reason === "idle" || reason === "session-expired") goToExpiredLogin();
+      else void router.navigate({ to: "/" });
+    },
   });
 }
 
@@ -89,7 +124,9 @@ async function bootstrap() {
     await rehydrateUserDb();
   }
 
-  wireUnauthorizedListener();
+  wireSessionRefresher();
+  wireSessionCleanup();
+  wireSessionManager();
   syncInitialLocale();
 
   // Session + tenant restore run in root beforeLoad so PublicPendingFallback can show.

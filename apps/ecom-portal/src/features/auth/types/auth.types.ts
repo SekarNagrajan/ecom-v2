@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-09-29 12:40)
+// Modified by Sekar Nagarajan (2026-11-26 20:50)
 import type { LoginEntryType, SubCustomerAccount, UserProfile } from "@solverminds/auth";
 import type { TFunction } from "i18next";
 import { z } from "zod";
@@ -29,10 +29,7 @@ export type LoginForm = {
 // ---------------------------------------------------------------------------
 export function createAdminLoginSchema(t: TFunction<"auth">) {
   return z.object({
-    userId: z
-      .string()
-      .min(1, t("validation.userIdRequired"))
-      .max(50, t("validation.userIdMax")),
+    userId: z.string().min(1, t("validation.userIdRequired")).max(50, t("validation.userIdMax")),
     password: z
       .string()
       .min(1, t("validation.passwordRequired"))
@@ -63,13 +60,21 @@ export type ForgotPasswordForm = {
 // ---------------------------------------------------------------------------
 // Auth API response shapes
 // ---------------------------------------------------------------------------
-export interface LoginSuccessResponse {
+/** Server-provided session timing (ISO string or epoch ms). Absent until the backend ships it. */
+export interface SessionTiming {
+  /** Access-token expiry. */
+  expiresAt?: string | number | null;
+  /** Absolute session cap. */
+  sessionExpiresAt?: string | number | null;
+}
+
+export interface LoginSuccessResponse extends SessionTiming {
   token: string;
   user: UserProfile;
   redirectUrl?: string;
 }
 
-export interface AdminLoginSuccessResponse {
+export interface AdminLoginSuccessResponse extends SessionTiming {
   token: string;
   user: UserProfile;
   customerList?: SubCustomerAccount[];

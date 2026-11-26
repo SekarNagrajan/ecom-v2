@@ -1,4 +1,4 @@
-// Modified by Sekar Nagarajan (2026-08-25 16:30)
+// Modified by Sekar Nagarajan (2026-11-26 18:37)
 import { theme } from "antd";
 
 /** Token-backed styles for the public login drawer panel. */
@@ -74,6 +74,64 @@ export function PublicLoginPanelStyles() {
       }
       .pub-login-panel__alert {
         margin-bottom: ${token.marginLG}px;
+      }
+      .pub-login-panel__session-expired {
+        display: flex;
+        align-items: center;
+        gap: ${token.marginSM}px;
+        margin-bottom: ${token.marginLG}px;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
+        border-radius: ${token.borderRadiusLG}px;
+        border: 1px solid ${token.colorWarningBorder};
+        background: ${token.colorWarningBg};
+        animation: pub-login-session-in ${token.motionDurationMid} ${token.motionEaseOut};
+      }
+      .pub-login-panel__session-expired-icon {
+        flex-shrink: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: ${token.colorBgContainer};
+        color: ${token.colorWarning};
+      }
+      .pub-login-panel__session-expired-icon .app-icon {
+        color: ${token.colorWarning};
+      }
+      .pub-login-panel__session-expired-copy {
+        display: flex;
+        flex-direction: column;
+        gap: ${token.marginXXS}px;
+        min-width: 0;
+      }
+      .pub-login-panel__session-expired-title {
+        display: block;
+        font-size: ${token.fontSize}px;
+        line-height: ${token.lineHeight};
+        color: ${token.colorText};
+      }
+      .pub-login-panel__session-expired-desc {
+        display: block;
+        font-size: ${token.fontSizeSM}px;
+        line-height: ${token.lineHeight};
+        color: ${token.colorTextSecondary};
+      }
+      @keyframes pub-login-session-in {
+        from {
+          opacity: 0;
+          transform: translateY(-4px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .pub-login-panel__session-expired {
+          animation: none;
+        }
       }
       .pub-login-panel__captcha {
         margin-bottom: ${token.marginLG}px;

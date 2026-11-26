@@ -1,17 +1,8 @@
-// Modified by Sekar Nagarajan (2026-09-11 16:08)
+// Modified by Sekar Nagarajan (2026-11-26 18:25)
 import { AppButton, AppDrawer } from "@solverminds/shared-ui";
 import { useConfirm, useToast } from "@solverminds/shared-ui/hooks";
 import { useNavigate } from "@tanstack/react-router";
-import {
-  Alert,
-  Checkbox,
-  Flex,
-  Input,
-  Spin,
-  Tooltip,
-  Typography,
-  theme,
-} from "antd";
+import { Alert, Checkbox, Flex, Input, Spin, Tooltip, Typography, theme } from "antd";
 import { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -170,13 +161,19 @@ export function PublicLoginPanel({
 
           <div className="pub-login-panel__body">
             {sessionExpired && (
-              <Alert
-                type="warning"
-                showIcon
-                title={t("sessionExpiredTitle")}
-                description={t("sessionExpiredDesc")}
-                className="pub-login-panel__alert"
-              />
+              <div className="pub-login-panel__session-expired" role="status" aria-live="polite">
+                <span className="pub-login-panel__session-expired-icon" aria-hidden>
+                  <AppIcon icon={Icons.clock} size={18} />
+                </span>
+                <div className="pub-login-panel__session-expired-copy">
+                  <Text strong className="pub-login-panel__session-expired-title">
+                    {t("sessionExpiredTitle")}
+                  </Text>
+                  <Text className="pub-login-panel__session-expired-desc">
+                    {t("sessionExpiredDesc")}
+                  </Text>
+                </div>
+              </div>
             )}
             {serverError && (
               <Alert
@@ -214,9 +211,7 @@ export function PublicLoginPanel({
                       maxLength={50}
                       autoComplete="off"
                       autoFocus
-                      status={
-                        errors.userName || serverError ? "error" : undefined
-                      }
+                      status={errors.userName || serverError ? "error" : undefined}
                     />
                   )}
                 />
@@ -244,9 +239,7 @@ export function PublicLoginPanel({
                       size="large"
                       maxLength={20}
                       autoComplete="off"
-                      status={
-                        errors.password || serverError ? "error" : undefined
-                      }
+                      status={errors.password || serverError ? "error" : undefined}
                       iconRender={(visible) =>
                         visible ? (
                           <AppIcon icon={Icons.eye} size={16} />
@@ -264,15 +257,8 @@ export function PublicLoginPanel({
                 )}
               </div>
 
-              <Flex
-                justify="space-between"
-                align="center"
-                className="pub-login-panel__meta"
-              >
-                <Checkbox
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                >
+              <Flex justify="space-between" align="center" className="pub-login-panel__meta">
+                <Checkbox checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)}>
                   {t("rememberMe")}
                 </Checkbox>
                 <button
@@ -287,10 +273,7 @@ export function PublicLoginPanel({
               {showCaptcha && (
                 <div className="pub-login-panel__captcha">
                   <span className="form-field-label">{t("securityCheck")}</span>
-                  <div
-                    id="login-captcha-container"
-                    className="pub-login-panel__captcha-box"
-                  >
+                  <div id="login-captcha-container" className="pub-login-panel__captcha-box">
                     <AppIcon icon={Icons.shieldCheck} size={16} />
                     <span>{t("captchaHint")}</span>
                   </div>
@@ -306,10 +289,7 @@ export function PublicLoginPanel({
                   type="primary"
                   icon={
                     isSubmitting ? (
-                      <Spin
-                        size="small"
-                        style={{ color: token.colorPrimaryBg }}
-                      />
+                      <Spin size="small" style={{ color: token.colorPrimaryBg }} />
                     ) : undefined
                   }
                 >
@@ -325,9 +305,7 @@ export function PublicLoginPanel({
                 </AppButton>
               </div>
 
-              <Text className="pub-login-panel__register-hint">
-                {t("registerHint")}
-              </Text>
+              <Text className="pub-login-panel__register-hint">{t("registerHint")}</Text>
               {/* <Text className="pub-login-panel__register-hint">
                 Demo OTP login: demo@solverminds.com / Demo@1234
               </Text> */}

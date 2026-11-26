@@ -1,8 +1,8 @@
-// Modified by Sekar Nagarajan (2026-09-01 12:09)
+// Modified by Sekar Nagarajan (2026-11-26 19:05)
 import { AppButton } from "@solverminds/shared-ui";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "@tanstack/react-router";
-import { Card, Result, Spin, Steps, Typography, theme } from "antd";
+import { Card, Result, Space, Spin, Steps, Typography, theme } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AppIcon, Icons, NavBookingIcon } from "../../components/icons";
@@ -18,7 +18,7 @@ import { useBookingWizard } from "./hooks/use-booking-wizard";
 import { useBookingStore } from "./stores/booking.store";
 import { defaultCargoData, migrateLegacyCargo } from "./types/booking.types";
 
-const { Text } = Typography;
+const { Text, Title } = Typography;
 
 export function BookingAmendRoute() {
   const { t } = useTranslation(["booking", "common", "modules"]);
@@ -26,11 +26,32 @@ export function BookingAmendRoute() {
   const WIZARD_STEP_TITLES = useWizardStepTitles();
   const { token } = theme.useToken();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { bookingId } = useParams({ strict: false });
   const { currentStep, setCurrentStep, isSubmitting, handleSubmit, confirmation } =
     useBookingWizard(true); // pass isEditMode
   const { initializeFromBooking } = useBookingStore();
   const [isInitialized, setIsInitialized] = useState(false);
+
+  const goToBookingList = () => {
+    void queryClient.invalidateQueries({
+      queryKey: bookingKeys.list(),
+      refetchType: "all",
+    });
+    void navigate({ to: "/app/booking" });
+  };
+
+  const goToBookingView = () => {
+    if (!bookingId) {
+      goToBookingList();
+      return;
+    }
+    void queryClient.invalidateQueries({
+      queryKey: bookingKeys.detail(bookingId),
+      refetchType: "all",
+    });
+    void navigate({ to: `/app/booking/${bookingId}` });
+  };
 
   const {
     data: booking,
@@ -127,43 +148,35 @@ export function BookingAmendRoute() {
 
       {confirmation ? (
         <div className="wizard-confirmation">
-          <Result
-            status="success"
-            icon={<AppIcon icon={Icons.checkCircle} size={16} tone="approve" />}
-            title={t("booking:wizard.amend.submittedTitle")}
-            subTitle={
-              <div>
-                {t("booking:wizard.amend.submittedMessage")}
-                <div
-                  style={{
-                    marginTop: token.marginSM,
-                    fontSize: token.fontSizeLG,
-                  }}
-                >
-                  {t("booking:wizard.confirm.bookingReference")}:{" "}
-                  <Text
-                    copyable
-                    strong
-                    style={{
-                      fontSize: token.fontSizeHeading5,
-                      color: token.colorPrimary,
-                    }}
-                  >
-                    {confirmation.bookingReference}
-                  </Text>
-                </div>
+          <Card variant="outlined" className="booking-confirmation-card">
+            <div className="booking-confirmation-card__body">
+              <div className="booking-confirmation-card__icon" aria-hidden>
+                <AppIcon icon={Icons.checkCircle} size={36} tone="approve" />
               </div>
-            }
-            extra={[
-              <AppButton
-                type="primary"
-                key="dashboard"
-                onClick={() => navigate({ to: "/app/booking" })}
-              >
-                {t("booking:wizard.actions.goToDashboard")}
-              </AppButton>,
-            ]}
-          />
+              <Title level={3} className="booking-confirmation-card__title">
+                {t("booking:wizard.amend.submittedTitle")}
+              </Title>
+              <Text type="secondary" className="booking-confirmation-card__message">
+                {t("booking:wizard.amend.submittedMessage")}
+              </Text>
+              <div className="booking-confirmation-card__ref">
+                <Text type="secondary" className="booking-confirmation-card__ref-label">
+                  {t("booking:wizard.confirm.bookingReference")}
+                </Text>
+                <Text copyable strong className="booking-confirmation-card__ref-value">
+                  {confirmation.bookingReference}
+                </Text>
+              </div>
+              <Space wrap size="middle" className="booking-confirmation-card__actions">
+                <AppButton type="primary" onClick={goToBookingList}>
+                  {t("booking:wizard.actions.goToDashboard")}
+                </AppButton>
+                <AppButton onClick={goToBookingView}>
+                  {t("booking:wizard.actions.viewBooking")}
+                </AppButton>
+              </Space>
+            </div>
+          </Card>
         </div>
       ) : (
         <div className="wizard-page-body">

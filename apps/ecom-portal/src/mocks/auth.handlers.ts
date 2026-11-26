@@ -1,7 +1,7 @@
-// Modified by Sekar Nagarajan (2026-10-16 23:35)
-import { delay, http, HttpResponse } from "msw";
-import type { LoginForm, LoginSuccessResponse } from "../features/auth/types/auth.types";
-import { registerMockToken } from "./auth-token-registry";
+// Modified by Sekar Nagarajan (2026-11-26 20:40)
+import { delay, http, HttpResponse } from 'msw';
+import type { LoginForm, LoginSuccessResponse } from '../features/auth/types/auth.types';
+import { registerMockToken, withSession } from './auth-token-registry';
 import {
   activateUser,
   buildCustomerProfile,
@@ -9,11 +9,8 @@ import {
   DEMO_BASELINE_CAPABILITIES,
   resetUserPassword,
   resolveCustomerLogin,
-} from "./fixture-api/bridges/users.bridge";
-import {
-  ensureUserDbReady,
-  persistUserDb,
-} from "./fixture-api/user-persistence";
+} from './fixture-api/bridges/users.bridge';
+import { ensureUserDbReady, persistUserDb } from './fixture-api/user-persistence';
 
 /**
  * Customer auth served from the SQL-extracted fixtures:
@@ -27,66 +24,61 @@ import {
  */
 export const authHandlers = [
   // 1. Login
-  http.post("/api/auth/login", async ({ request }) => {
+  http.post('/api/auth/login', async ({ request }) => {
     await delay(800); // Simulate network latency
 
     const body = (await request.json()) as LoginForm;
     const resolved = body.password ? resolveCustomerLogin(body.userName) : null;
-    if (resolved && (resolved.demo ? body.password === "test" || body.password.length > 0 : true)) {
-      const user = buildCustomerProfile(resolved.user, resolved.details, resolved.demo ? DEMO_BASELINE_CAPABILITIES : []);
-      const successResponse: LoginSuccessResponse = { token: customerToken(resolved.user), user };
+    if (resolved && (resolved.demo ? body.password === 'test' || body.password.length > 0 : true)) {
+      const user = buildCustomerProfile(
+        resolved.user,
+        resolved.details,
+        resolved.demo ? DEMO_BASELINE_CAPABILITIES : [],
+      );
+      const successResponse: LoginSuccessResponse = withSession({ token: customerToken(resolved.user), user });
       registerMockToken(successResponse.token, user);
       return HttpResponse.json({ data: successResponse });
     }
 
     // Invalid credentials
-    return HttpResponse.json(
-      { message: "Invalid username or password. Please try again." },
-      { status: 401 },
-    );
+    return HttpResponse.json({ message: 'Invalid username or password. Please try again.' }, { status: 401 });
   }),
 
   // 2. Activation — the token is the registration e-mail / reg_no; a known user is marked valid in-session
-  http.post("/api/auth/activate", async ({ request }) => {
+  http.post('/api/auth/activate', async ({ request }) => {
     await delay(1500); // Simulate network latency
     await ensureUserDbReady();
 
     const body = (await request.json()) as { token: string };
 
-    if (!body.token || body.token === "invalid") {
-      return HttpResponse.json(
-        { message: "Invalid or expired activation link." },
-        { status: 400 },
-      );
+    if (!body.token || body.token === 'invalid') {
+      return HttpResponse.json({ message: 'Invalid or expired activation link.' }, { status: 400 });
     }
 
     activateUser(body.token);
     persistUserDb();
     return HttpResponse.json({
-      message: "Account successfully activated!",
-      status: "success",
+      message: 'Account successfully activated!',
+      status: 'success',
     });
   }),
 
   // 3. Forgot password — resets the lock counters of a known login; unknown logins get the same answer (no enumeration)
-  http.post("/api/auth/forgot-password", async ({ request }) => {
+  http.post('/api/auth/forgot-password', async ({ request }) => {
     await delay(1200); // Simulate network latency
     await ensureUserDbReady();
 
     const body = (await request.json()) as { userName: string; captcha: string };
 
     if (!body.userName || !body.captcha) {
-      return HttpResponse.json(
-        { message: "Username and captcha are required." },
-        { status: 400 },
-      );
+      return HttpResponse.json({ message: 'Username and captcha are required.' }, { status: 400 });
     }
 
     resetUserPassword(body.userName);
     persistUserDb();
     return HttpResponse.json({
-      message: "Password reset instructions have been sent to your registered email.",
-      status: "success",
+      message: 'Password reset instructions have been sent to your registered email.',
+      status: 'success',
     });
   }),
 ];
